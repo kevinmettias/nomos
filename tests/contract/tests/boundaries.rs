@@ -28,6 +28,7 @@ const BANDS: &[(&str, u32)] = &[
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),
     ("nomos-spec-store", 12),
+    ("nomos-spec-ingest", 13),
     ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.

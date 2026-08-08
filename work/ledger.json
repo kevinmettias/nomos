@@ -162,7 +162,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P2-STORE"
       ],
@@ -177,7 +177,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "exit_code": 0,
+        "output_tail": "\ntest gate::tests::Test_A_Missing_Document_Should_Be_Reported ... ok\ntest gate::tests::Test_An_Empty_Manifest_Should_Not_Pass ... ok\ntest phases::tests::Test_An_Empty_Statement_File_Should_Not_Pass ... ok\ntest phases::tests::Test_A_Matching_Statement_Should_Ingest_Cleanly ... ok\ntest phases::tests::Test_Catalog_Entities_Should_Become_Nodes_With_Aliases ... ok\ntest phases::tests::Test_A_Divergent_Hash_Should_Be_Reported_By_Id ... ok\ntest phases::tests::Test_Non_Canonical_Text_Should_Be_Reported ... ok\ntest phases::tests::Test_Ingest_Should_Be_Idempotent ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 6 tests\ntest Test_The_Statement_Slice_Should_Contain_Non_Ascii ... ok\ntest Test_Front_Matter_Should_Be_Outside_The_Gate ... ok\ntest Test_An_Altered_Source_Should_Fail_The_Gate ... ok\ntest Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer ... ok\ntest Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks ... ok\ntest Test_Real_Statements_Should_Ingest_Without_Divergence ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_I1_Should_Reproduce_Every_Recorded_Block ... ok\ntest Test_The_Whole_Corpus_Should_Ingest_Into_One_Store ... ok\ntest Test_I2_Should_Ingest_Every_Statement_Without_Divergence ... ok\ntest Test_Re_Ingesting_The_Corpus_Should_Be_A_No_Op ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-df2b803a72da1f96.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-a7f963d93477383d.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-0741795cbc67785d.exe)\n   Doc-tests nomos_spec_ingest\n",
+        "verified_at": 1786214296
+      }
     },
     {
       "id": "P2-VALIDATE",
