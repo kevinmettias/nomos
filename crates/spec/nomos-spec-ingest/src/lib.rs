@@ -6,11 +6,16 @@
 #![forbid(unsafe_code)]
 
 mod gate;
+mod lineage;
 mod phases;
 
 pub use gate::{
     BlockLineage, BlockMismatch, Check_Against_Manifest, GateReport, Parse_Block_Lineage,
     RecordedBlock,
+};
+pub use lineage::{
+    Ingest_Block_Dispositions, Ingest_Section_Lineage, Parse_Section_Lineage, RecordedSection,
+    SectionLineage, SectionReport,
 };
 pub use phases::{
     CatalogEntity, CatalogReport, IngestError, Ingest_Blob, Ingest_Catalog, Ingest_Source_Document,

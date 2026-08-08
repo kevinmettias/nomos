@@ -29,8 +29,7 @@ pub const MIGRATIONS: &[Migration] = &[Migration {
              ordinal      INTEGER NOT NULL,
              depth        INTEGER NOT NULL,
              title        TEXT NOT NULL,
-             heading_path TEXT NOT NULL,
-             UNIQUE (document_uid, ordinal)
+             UNIQUE (document_uid, title, depth)
          )",
         "CREATE TABLE source_blocks (
              uid             INTEGER PRIMARY KEY,
@@ -98,12 +97,24 @@ pub const MIGRATIONS: &[Migration] = &[Migration {
         // What became of each source block. NSV-PRESERVE-002 and -006 are queries over
         // this table and `omissions`.
         "CREATE TABLE lineage (
-             uid               INTEGER PRIMARY KEY,
-             source_block_uid  INTEGER NOT NULL REFERENCES source_blocks(uid),
-             disposition       TEXT NOT NULL,
-             target_node_uid   INTEGER REFERENCES nodes(uid),
-             target_statement  INTEGER REFERENCES normative_statements(uid),
-             UNIQUE (source_block_uid, disposition, target_node_uid, target_statement)
+             uid                INTEGER PRIMARY KEY,
+             source_block_uid   INTEGER REFERENCES source_blocks(uid),
+             source_heading_uid INTEGER REFERENCES source_headings(uid),
+             disposition        TEXT NOT NULL,
+             target_node_uid    INTEGER REFERENCES nodes(uid),
+             target_statement   INTEGER REFERENCES normative_statements(uid),
+             CHECK (source_block_uid IS NOT NULL OR source_heading_uid IS NOT NULL)
+         )",
+        // Not a plain UNIQUE. SQL treats two NULLs as distinct, so a UNIQUE over these
+        // columns never fires while any of them is null -- which is every row that
+        // records a disposition and nothing else. `INSERT OR IGNORE` then inserts a
+        // duplicate every time, and re-ingest stops being idempotent without erroring.
+        "CREATE UNIQUE INDEX lineage_unique ON lineage (
+             coalesce(source_block_uid, -1),
+             coalesce(source_heading_uid, -1),
+             disposition,
+             coalesce(target_node_uid, -1),
+             coalesce(target_statement, -1)
          )",
         // A dropped block is recorded, justified and pointed at a decision. This is the
         // only sanctioned way for content to leave, and it is itself validated.
