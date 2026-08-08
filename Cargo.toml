@@ -6,6 +6,11 @@ members = [
 
     # Band 1 — kernel. Canonical identity and the content-addressed document store.
     "crates/kernel/nomos-model",
+
+    # Band 1p — platform port. Traits in `nomos-platform`, implementations beside it.
+    # `nomos-platform-xvpe` is deliberately absent until XVPE stabilizes.
+    "crates/platform/nomos-platform",
+    "crates/platform/nomos-platform-std",
 ]
 
 resolver = "3"
