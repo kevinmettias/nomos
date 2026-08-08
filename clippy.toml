@@ -1,0 +1,6 @@
+# Workspace clippy configuration.
+
+# `unwrap()` is permitted in test code; the `clippy::unwrap_used` lint denied in
+# Cargo.toml's [workspace.lints.clippy] therefore does not fire inside
+# `#[cfg(test)]` / test functions. A bench body is not test code and is not exempt.
+allow-unwrap-in-tests = true

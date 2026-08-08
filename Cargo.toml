@@ -1,0 +1,64 @@
+[workspace]
+members = [
+    # Band 0 — contracts. The only authoritative statement of Nomos semantics.
+    # Depends on serde and nothing else; `contracts_names_nothing` asserts it.
+    "crates/contracts/nomos-contracts",
+
+    # Band 1 — kernel. Canonical identity and the content-addressed document store.
+    "crates/kernel/nomos-model",
+]
+
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.85"
+license = "UNLICENSED"
+publish = false
+
+[workspace.dependencies]
+nomos-contracts = { path = "crates/contracts/nomos-contracts" }
+nomos-model = { path = "crates/kernel/nomos-model" }
+nomos-platform = { path = "crates/platform/nomos-platform" }
+nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
+nomos-ledger = { path = "crates/substrate/nomos-ledger" }
+
+serde = { version = "1", default-features = false, features = ["derive", "std"] }
+serde_json = "1"
+blake3 = "1"
+
+# Workspace-wide lint policy, mirrored from F:\repos\xvpe\Cargo.toml. Crates inherit
+# it by declaring `lints.workspace = true`. The severity choices are XVPE's and the
+# reasoning is recorded there; the two that matter most here are `unwrap_used` and
+# `indexing_slicing`, because a panic inside the analysis kernel is a determinism
+# defect (a replay must reach the same panic at the same step) and not merely a bug.
+[workspace.lints.rust]
+# Project-owned function names use command-style `Pascal_Snake_Case` instead of
+# Rust's lower-snake convention. This is the workspace convention, not an oversight.
+non_snake_case = "allow"
+unsafe_code = "warn"
+private_interfaces = "deny"
+private_bounds = "deny"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+# `priority = -1` lets the specific lints below override these group levels.
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+float_cmp = "deny"
+# Explicit `return` is the workspace convention — a deliberate departure from Rust's
+# tail-expression idiom — so this lint is silenced.
+needless_return = "allow"
+# `unwrap()` is forbidden outside tests; `expect("<invariant>")` is the sanctioned
+# form, so `expect_used` is intentionally NOT enabled. Tests are exempted via
+# `allow-unwrap-in-tests` in clippy.toml.
+unwrap_used = "deny"
+arithmetic_side_effects = "deny"
+indexing_slicing = "deny"
+
+[profile.dev]
+debug = 1
+
+[profile.release]
+codegen-units = 1
+lto = "thin"

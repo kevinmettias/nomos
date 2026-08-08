@@ -1,0 +1,34 @@
+chain_width = 60
+max_width = 120
+tab_spaces = 4
+edition = "2024"
+reorder_imports = true
+reorder_modules = true
+use_small_heuristics = "Default"
+
+# Allman / BSD brace placement, matching the sibling xvpe workspace. Both repos
+# deliberately depart from Rust's K&R default. `brace_style = "AlwaysNextLine"` is a
+# nightly-only rustfmt option, so `unstable_features` is enabled here and the
+# toolchain is pinned to nightly via `rust-toolchain.toml`.
+#
+# WARNING — this only gets us HALF the rule, and the half it misses is a footgun:
+# `brace_style` governs ITEM braces (fn / impl / struct / trait / mod) and nothing
+# else. rustfmt has NO option that puts a control-flow opening brace (`if`, `else`,
+# `for`, `while`, `loop`, `match`) on its own line, so it will happily rewrite this
+# workspace's `if cond\n{` back to `if cond {` every time it is run. `cargo fmt`
+# therefore CANNOT produce this codebase's style, and running it damages the tree
+# rather than tidying it.
+#
+# `cargo fmt --check` is consequently NOT wired into any gate here, for the reason
+# xvpe records: a gate containing two mutually contradictory checks — where
+# satisfying one guarantees failing the other — is a gate that can never be green,
+# and a gate that can never be green is a gate everybody learns to ignore.
+#
+# The deterministic authority for brace placement will be this repo's own brace
+# check once the rule engine exists (Phase 8). Until then it is a review rule, and
+# it says so rather than claiming an enforcement it does not have.
+unstable_features = true
+brace_style = "AlwaysNextLine"
+fn_single_line = false
+match_block_trailing_comma = true
+where_single_line = false

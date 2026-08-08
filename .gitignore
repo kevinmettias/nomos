@@ -1,0 +1,15 @@
+/target/
+**/*.rs.bk
+*.pdb
+
+# Generated projections are never committed. They are rebuild artifacts, and the
+# validator fails when a generated file is treated as a canonical source.
+/build/
+/release-artifacts/
+.nomos/
+
+# Local coordination state. Claims, leases and heartbeats are ephemeral and must not
+# become high-frequency git changes; `work/ledger.json` itself IS committed, because
+# its readability under `git diff` is load-bearing for the multi-agent workflow.
+/work/*.lock
+/work/*.tmp

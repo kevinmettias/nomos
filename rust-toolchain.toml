@@ -1,0 +1,6 @@
+# Pinned to nightly so `cargo fmt` can use the unstable `brace_style =
+# "AlwaysNextLine"` option that expresses the workspace's Allman brace style.
+# See `rustfmt.toml` — and read its warning before running `cargo fmt`.
+[toolchain]
+channel = "nightly"
+components = ["rustfmt", "clippy"]

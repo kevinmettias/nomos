@@ -1,0 +1,49 @@
+[graph]
+all-features = false
+
+[advisories]
+version = 2
+yanked = "deny"
+
+[licenses]
+version = 2
+allow = [
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "MIT",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-3.0",
+    "Zlib",
+]
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+# A headless Nomos must not acquire a GPU, windowing or UI stack transitively.
+#
+# This is not a preference. `nomos-host-local` is a service composition root, and
+# the platform contract Nomos consumes says a headless application resolves only the
+# platform components its own closure requires. The nearest sibling composition,
+# `xvpe-composer-headless`, is an OFFSCREEN GPU composer — it depends on wgpu and
+# egui to render a bounded number of frames without a window — so "headless" there
+# means "no window system", not "no graphics". Reusing it would put a GPU stack
+# under a CLI. This ban is what makes the distinction hold mechanically rather than
+# by intention, and it is why `nomos-host-local` takes the documented
+# bypass-the-composer lane instead.
+#
+# Lift an entry here only when a desktop client crate exists that legitimately needs
+# it, and scope the lift to that crate rather than to the workspace.
+deny = [
+    { name = "wgpu" },
+    { name = "egui" },
+    { name = "winit" },
+    { name = "ash" },
+    { name = "naga" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
