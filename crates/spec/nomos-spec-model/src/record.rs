@@ -5,7 +5,11 @@ use serde::Deserialize;
 pub struct RecordRelation
 {
     pub target: String,
-    #[serde(rename = "type")]
+    /// v14 and most of v15 spell this `type`; v15's `spec-governance` records spell it
+    /// `relation`. `validate_bundle.py` reads either (`relation.get('type') or
+    /// relation.get('relation')`), so one reader has to as well — accepting only the
+    /// first spelling would make a whole governance suite unreadable.
+    #[serde(rename = "type", alias = "relation")]
     pub relation: String,
 }
 
@@ -124,7 +128,7 @@ pub fn Parse_Record(markdown: &str) -> Result<Record, RecordError>
         });
     };
 
-    if heading != front_matter.title
+    if !Corroborates(&heading, &front_matter.id, &front_matter.title)
     {
         return Err(RecordError::TitleDiverges {
             id: front_matter.id,
@@ -155,6 +159,33 @@ fn Split_At_Closing_Fence(text: &str) -> Option<(&str, &str)>
     }
 
     return None;
+}
+
+/// Whether a heading says the same thing the front matter does.
+///
+/// Two spellings are accepted: the title alone, and the record's own identifier followed
+/// by a separator and the title. The v15.0 archives write the second — `# ARC-FACT-001 —
+/// Shared analysis` — and this repository's records write the first.
+///
+/// This is still corroboration, not tolerance. Only the record's *declared* identifier is
+/// allowed as the prefix, so a heading naming a different concept still diverges, which
+/// is what the refusal exists for. Widening it here rather than adding a second reader is
+/// deliberate: two readers for one format is how the two come to disagree.
+fn Corroborates(heading: &str, id: &str, title: &str) -> bool
+{
+    if heading == title
+    {
+        return true;
+    }
+
+    let Some(rest) = heading.strip_prefix(id)
+    else
+    {
+        return false;
+    };
+    let separated = rest.trim_start_matches([' ', '-', '\u{2013}', '\u{2014}', ':']);
+
+    return !separated.eq(rest) && separated == title;
 }
 
 fn First_Heading(body: &str) -> Option<String>
@@ -205,6 +236,55 @@ mod tests
         assert_ne!(divergent, RECORD, "the negative control changed nothing");
 
         let refusal = Parse_Record(&divergent).expect_err("two titles must be refused");
+
+        assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{refusal}");
+    }
+
+    /// v15's `spec-governance` records spell the relation key `relation`, not `type`.
+    #[test]
+    fn Test_Either_Spelling_Of_The_Relation_Key_Should_Read()
+    {
+        let spelled_relation = RECORD.replace("    type: supersedes", "    relation: supersedes");
+        assert_ne!(spelled_relation, RECORD, "the negative control changed nothing");
+
+        assert_eq!(
+            Parse_Record(&spelled_relation).expect("reads").front_matter.relations,
+            Parse_Record(RECORD).expect("reads").front_matter.relations
+        );
+    }
+
+    /// The v15.0 archives prefix a record's heading with its own identifier.
+    #[test]
+    fn Test_A_Heading_May_Name_The_Record_Before_Its_Title()
+    {
+        for separator in [" \u{2014} ", " - ", ": ", " \u{2013} "]
+        {
+            let prefixed = RECORD.replace("# A title", &format!("# D-129{separator}A title"));
+            assert_ne!(prefixed, RECORD, "the {separator:?} case changed nothing");
+
+            let record =
+                Parse_Record(&prefixed).unwrap_or_else(|error| panic!("{separator:?}: {error}"));
+            assert_eq!(record.front_matter.title, "A title");
+        }
+    }
+
+    /// Widening the heading check must not let a different concept through.
+    #[test]
+    fn Test_Another_Records_Identifier_Should_Not_Corroborate()
+    {
+        let wrong = RECORD.replace("# A title", "# D-130 \u{2014} A title");
+
+        let refusal = Parse_Record(&wrong).expect_err("a foreign identifier must be refused");
+
+        assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{refusal}");
+    }
+
+    #[test]
+    fn Test_A_Prefixed_Heading_With_A_Different_Title_Should_Be_Refused()
+    {
+        let wrong = RECORD.replace("# A title", "# D-129 \u{2014} Another title");
+
+        let refusal = Parse_Record(&wrong).expect_err("two titles must be refused");
 
         assert!(matches!(refusal, RecordError::TitleDiverges { .. }), "{refusal}");
     }

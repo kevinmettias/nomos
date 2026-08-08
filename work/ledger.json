@@ -709,7 +709,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P3-ROWS",
         "P3-ARCHIVE",
@@ -728,7 +728,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "overlay"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest Test_Absent_And_Reworded_Should_Not_Collapse ... ok\ntest Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes ... ok\ntest Test_Every_Filler_Block_Should_Carry_A_Lineage_Row ... ok\ntest Test_The_Report_Should_Name_What_It_Lost ... ok\ntest Test_Every_Identifier_Should_Reconcile_By_Name ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-9a18142abc7da213.exe)\n",
+        "verified_at": 1786226619
+      }
     },
     {
       "id": "P3-FAMILIES",

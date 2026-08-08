@@ -8,6 +8,7 @@
 mod archive;
 mod gate;
 mod lineage;
+mod overlay;
 mod phases;
 
 pub use archive::{Archive, ArchiveError, Archives_In};
@@ -18,6 +19,11 @@ pub use gate::{
 pub use lineage::{
     Ingest_Block_Dispositions, Ingest_Section_Lineage, Parse_Section_Lineage, RecordedSection,
     SectionLineage, SectionReport,
+};
+pub use overlay::{
+    Artifact, Disposition, Family, FillerBlock, FILLER_PATTERNS, IdentifierOutcome,
+    Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, OverlayReport, Parse_Artifact,
+    ReconciliationReport, Reconcile, Statements_In,
 };
 pub use phases::{
     CatalogEntity, CatalogReport, IngestError, Ingest_Blob, Ingest_Catalog, Ingest_Source_Document,
