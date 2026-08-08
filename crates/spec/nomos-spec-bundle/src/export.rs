@@ -1,0 +1,407 @@
+use crate::BundleError;
+use crate::bundle::Bundle;
+use crate::model::{
+    Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
+    Omission, OrdinalRef, Record, Relation, RelationType, SourceBlock, SourceDocument,
+    SourceHeading,
+};
+use base64::Engine as _;
+use base64::engine::general_purpose::STANDARD;
+use nomos_spec_store::{SpecificationStore, Table};
+use rusqlite::Connection;
+
+/// Writes the whole store out as text.
+///
+/// Every ordering is by natural key rather than by `uid`, so a bundle exported from a
+/// database built by importing a bundle comes back in the same order even though the
+/// surrogates were assigned differently.
+///
+/// # Errors
+///
+/// Returns [`BundleError::Incomplete`] if any table holds rows this function did not
+/// emit, and [`BundleError::Sql`] on any query failure.
+pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
+{
+    let connection = store.Connection();
+    let mut records: Vec<Record> = Vec::new();
+
+    Blobs(connection, &mut records)?;
+    Source_Documents(connection, &mut records)?;
+    Source_Headings(connection, &mut records)?;
+    Source_Blocks(connection, &mut records)?;
+    Nodes(connection, &mut records)?;
+    Node_Aliases(connection, &mut records)?;
+    Node_Histories(connection, &mut records)?;
+    Relation_Types(connection, &mut records)?;
+    Relations(connection, &mut records)?;
+    Normative_Statements(connection, &mut records)?;
+    Lineages(connection, &mut records)?;
+    Omissions(connection, &mut records)?;
+
+    Assert_Complete(store, &records)?;
+
+    return Bundle::New(store.Version(), records);
+}
+
+/// Every row in the store reached the bundle.
+///
+/// Without this a new table joins the schema, nothing exports it, and the round trip
+/// still passes — because both sides are equally blind to it.
+fn Assert_Complete(store: &SpecificationStore, records: &[Record]) -> Result<(), BundleError>
+{
+    for table in Table::All()
+    {
+        let in_store = store.Count(*table)?;
+        let exported = u32::try_from(
+            records
+                .iter()
+                .filter(|record| record.Table() == table.Name())
+                .count(),
+        )
+        .unwrap_or(u32::MAX);
+
+        if in_store != exported
+        {
+            return Err(BundleError::Incomplete {
+                table: table.Name().to_owned(),
+                in_store,
+                exported,
+            });
+        }
+    }
+
+    return Ok(());
+}
+
+fn Blobs(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement =
+        connection.prepare("SELECT sha256, byte_length, content FROM blobs ORDER BY sha256")?;
+    let rows = statement
+        .query_map([], |row| {
+            let sha256: String = row.get(0)?;
+            let byte_length: i64 = row.get(1)?;
+            let content: Vec<u8> = row.get(2)?;
+            return Ok((sha256, byte_length, content));
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    for (sha256, byte_length, content) in rows
+    {
+        let (encoding, spelled) = match String::from_utf8(content)
+        {
+            Ok(text) => (BlobEncoding::Utf8, text),
+            Err(error) => (BlobEncoding::Base64, STANDARD.encode(error.as_bytes())),
+        };
+
+        records.push(Record::Blob(Blob {
+            sha256,
+            byte_length,
+            encoding,
+            content: spelled,
+        }));
+    }
+
+    return Ok(());
+}
+
+fn Source_Documents(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT d.path, d.revision, b.sha256
+         FROM source_documents d JOIN blobs b ON b.uid = d.blob_uid
+         ORDER BY d.path, d.revision",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(SourceDocument {
+                path: row.get(0)?,
+                revision: row.get(1)?,
+                blob_sha256: row.get(2)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::SourceDocument));
+    return Ok(());
+}
+
+fn Source_Headings(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT d.path, d.revision, h.ordinal, h.depth, h.title
+         FROM source_headings h JOIN source_documents d ON d.uid = h.document_uid
+         ORDER BY d.path, d.revision, h.ordinal",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(SourceHeading {
+                document: DocumentRef {
+                    path: row.get(0)?,
+                    revision: row.get(1)?,
+                },
+                ordinal: row.get(2)?,
+                depth: row.get(3)?,
+                title: row.get(4)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::SourceHeading));
+    return Ok(());
+}
+
+fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT d.path, d.revision, b.ordinal, b.kind, b.heading_path, b.text,
+                b.content_hash, b.normalized_hash
+         FROM source_blocks b JOIN source_documents d ON d.uid = b.document_uid
+         ORDER BY d.path, d.revision, b.ordinal",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(SourceBlock {
+                document: DocumentRef {
+                    path: row.get(0)?,
+                    revision: row.get(1)?,
+                },
+                ordinal: row.get(2)?,
+                kind: row.get(3)?,
+                heading_path: row.get(4)?,
+                text: row.get(5)?,
+                content_hash: row.get(6)?,
+                normalized_hash: row.get(7)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::SourceBlock));
+    return Ok(());
+}
+
+fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT node_id, kind, authority, representation, title, deleted_at
+         FROM nodes ORDER BY node_id",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(Node {
+                node_id: row.get(0)?,
+                kind: row.get(1)?,
+                authority: row.get(2)?,
+                representation: row.get(3)?,
+                title: row.get(4)?,
+                deleted_at: row.get(5)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::Node));
+    return Ok(());
+}
+
+fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT a.alias, n.node_id
+         FROM node_aliases a JOIN nodes n ON n.uid = a.node_uid
+         ORDER BY a.alias",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(NodeAlias {
+                alias: row.get(0)?,
+                node_id: row.get(1)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::NodeAlias));
+    return Ok(());
+}
+
+fn Node_Histories(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT n.node_id, h.ordinal, h.event, h.reason, h.previous_event_hash,
+                h.event_hash, h.recorded_at
+         FROM node_history h JOIN nodes n ON n.uid = h.node_uid
+         ORDER BY n.node_id, h.ordinal",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(NodeHistory {
+                node_id: row.get(0)?,
+                ordinal: row.get(1)?,
+                event: row.get(2)?,
+                reason: row.get(3)?,
+                previous_event_hash: row.get(4)?,
+                event_hash: row.get(5)?,
+                recorded_at: row.get(6)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::NodeHistory));
+    return Ok(());
+}
+
+fn Relation_Types(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement =
+        connection.prepare("SELECT name, tier, inverse_of FROM relation_types ORDER BY name")?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(RelationType {
+                name: row.get(0)?,
+                tier: row.get(1)?,
+                inverse_of: row.get(2)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::RelationType));
+    return Ok(());
+}
+
+fn Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT f.node_id, r.relation_type, t.node_id
+         FROM relations r
+         JOIN nodes f ON f.uid = r.from_node_uid
+         JOIN nodes t ON t.uid = r.to_node_uid
+         ORDER BY f.node_id, r.relation_type, t.node_id",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(Relation {
+                from_node_id: row.get(0)?,
+                relation_type: row.get(1)?,
+                to_node_id: row.get(2)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::Relation));
+    return Ok(());
+}
+
+fn Normative_Statements(
+    connection: &Connection,
+    records: &mut Vec<Record>,
+) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT s.statement_id, n.node_id, s.kind, s.canonical_text, s.canonical_hash,
+                s.supersedes_hash
+         FROM normative_statements s JOIN nodes n ON n.uid = s.node_uid
+         ORDER BY s.statement_id",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(NormativeStatement {
+                statement_id: row.get(0)?,
+                node_id: row.get(1)?,
+                kind: row.get(2)?,
+                canonical_text: row.get(3)?,
+                canonical_hash: row.get(4)?,
+                supersedes_hash: row.get(5)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::NormativeStatement));
+    return Ok(());
+}
+
+/// Every join here is a LEFT JOIN because both source references are nullable. An inner
+/// join would drop exactly the rows that record a disposition and nothing else, which is
+/// the same silent-loss shape this crate exists to make impossible.
+fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT bd.path, bd.revision, b.ordinal,
+                hd.path, hd.revision, h.ordinal,
+                l.disposition, n.node_id, s.statement_id
+         FROM lineage l
+         LEFT JOIN source_blocks b ON b.uid = l.source_block_uid
+         LEFT JOIN source_documents bd ON bd.uid = b.document_uid
+         LEFT JOIN source_headings h ON h.uid = l.source_heading_uid
+         LEFT JOIN source_documents hd ON hd.uid = h.document_uid
+         LEFT JOIN nodes n ON n.uid = l.target_node_uid
+         LEFT JOIN normative_statements s ON s.uid = l.target_statement
+         ORDER BY coalesce(bd.path, ''), coalesce(bd.revision, ''), coalesce(b.ordinal, -1),
+                  coalesce(hd.path, ''), coalesce(hd.revision, ''), coalesce(h.ordinal, -1),
+                  l.disposition, coalesce(n.node_id, ''), coalesce(s.statement_id, '')",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(Lineage {
+                source_block: Ordinal_Reference(row, 0, 1, 2)?,
+                source_heading: Ordinal_Reference(row, 3, 4, 5)?,
+                disposition: row.get(6)?,
+                target_node_id: row.get(7)?,
+                target_statement_id: row.get(8)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::Lineage));
+    return Ok(());
+}
+
+fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT bd.path, bd.revision, b.ordinal,
+                hd.path, hd.revision, h.ordinal,
+                o.reason, o.justification, o.decision_record
+         FROM omissions o
+         LEFT JOIN source_blocks b ON b.uid = o.source_block_uid
+         LEFT JOIN source_documents bd ON bd.uid = b.document_uid
+         LEFT JOIN source_headings h ON h.uid = o.source_heading_uid
+         LEFT JOIN source_documents hd ON hd.uid = h.document_uid
+         ORDER BY coalesce(bd.path, ''), coalesce(bd.revision, ''), coalesce(b.ordinal, -1),
+                  coalesce(hd.path, ''), coalesce(hd.revision, ''), coalesce(h.ordinal, -1),
+                  o.reason, o.justification, o.decision_record",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(Omission {
+                source_block: Ordinal_Reference(row, 0, 1, 2)?,
+                source_heading: Ordinal_Reference(row, 3, 4, 5)?,
+                reason: row.get(6)?,
+                justification: row.get(7)?,
+                decision_record: row.get(8)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::Omission));
+    return Ok(());
+}
+
+fn Ordinal_Reference(
+    row: &rusqlite::Row<'_>,
+    path: usize,
+    revision: usize,
+    ordinal: usize,
+) -> rusqlite::Result<Option<OrdinalRef>>
+{
+    let path: Option<String> = row.get(path)?;
+    let revision: Option<String> = row.get(revision)?;
+    let ordinal: Option<i64> = row.get(ordinal)?;
+
+    return Ok(match (path, revision, ordinal)
+    {
+        (Some(path), Some(revision), Some(ordinal)) => Some(OrdinalRef {
+            document: DocumentRef { path, revision },
+            ordinal,
+        }),
+        _ => None,
+    });
+}

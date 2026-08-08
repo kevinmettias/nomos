@@ -133,7 +133,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P2-STORE"
       ],
@@ -148,7 +148,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 7 tests\ntest bundle::tests::Test_Every_Line_Should_End_With_A_Newline_And_No_Carriage_Return ... ok\ntest bundle::tests::Test_A_Reformatted_Bundle_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Newer_Format_Should_Be_Refused ... ok\ntest bundle::tests::Test_An_Altered_Record_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Bundle_Should_Round_Trip_Through_Text ... ok\ntest bundle::tests::Test_An_Empty_Bundle_Should_Still_Be_Well_Formed ... ok\ntest bundle::tests::Test_A_Removed_Record_Should_Be_Refused ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 8 tests\ntest Test_Every_Table_Should_Be_Exercised ... ok\ntest Test_An_Unresolvable_Reference_Should_Be_Refused ... ok\ntest Test_Importing_Into_A_Populated_Store_Should_Be_Refused ... ok\ntest Test_Import_Should_Land_Every_Row_The_Bundle_Declared ... ok\ntest Test_Binary_Blobs_Should_Survive_As_Bytes ... ok\ntest Test_Two_Stores_Of_The_Same_Corpus_Should_Export_Identically ... ok\ntest Test_A_Bundle_Should_Survive_A_Database_Round_Trip_Byte_For_Byte ... ok\ntest Test_A_Row_The_Export_Query_Drops_Should_Fail_The_Export ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-model v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-model)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.34s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-f22493311533ed45.exe)\n     Running tests\\round_trip.rs (target\\debug\\deps\\round_trip-8adab446563dda29.exe)\n   Doc-tests nomos_spec_bundle\n",
+        "verified_at": 1786217507
+      }
     },
     {
       "id": "P2-INGEST",

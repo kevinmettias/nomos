@@ -28,6 +28,9 @@ const BANDS: &[(&str, u32)] = &[
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),
     ("nomos-spec-store", 12),
+    // Bundle and ingest are peers over the store: one reads the corpus in, the other
+    // writes it back out. Neither may name the other.
+    ("nomos-spec-bundle", 13),
     ("nomos-spec-ingest", 13),
     ("nomos-spec-validate", 14),
     ("nomos-cli", 90),

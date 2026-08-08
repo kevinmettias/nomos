@@ -19,6 +19,7 @@ members = [
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
     "crates/spec/nomos-spec-store",
+    "crates/spec/nomos-spec-bundle",
     "crates/spec/nomos-spec-ingest",
     "crates/spec/nomos-spec-validate",
 
@@ -46,11 +47,13 @@ nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
 nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
+nomos-spec-bundle = { path = "crates/spec/nomos-spec-bundle" }
 nomos-spec-ingest = { path = "crates/spec/nomos-spec-ingest" }
 nomos-spec-validate = { path = "crates/spec/nomos-spec-validate" }
 
 serde = { version = "1", default-features = false, features = ["derive", "std"] }
 serde_json = "1"
+base64 = "0.22"
 blake3 = "1"
 sha2 = "0.10"
 rusqlite = { version = "0.32", features = ["bundled"] }
