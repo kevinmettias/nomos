@@ -30,6 +30,12 @@ const RECORDS: &[(&str, &str)] = &[
         include_str!("../../../../docs/records/OD-SPEC-001-the-storage-backend-question.md"),
     ),
     (
+        "docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md",
+        include_str!(
+            "../../../../docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md"
+        ),
+    ),
+    (
         "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md",
         include_str!(
             "../../../../docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md"
@@ -47,6 +53,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "D-130",
     "D-131",
     "OD-SPEC-001",
+    "OD-SPEC-002",
     "OD-LEDGER-001",
 ];
 

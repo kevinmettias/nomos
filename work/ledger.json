@@ -295,13 +295,17 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P2-VALIDATE",
         "P3-BOM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-p3",
+        "acquired_at": 1786221460,
+        "lease_expires_at": 1786228660
+      },
       "verification": {
         "argv": [
           "cargo",
