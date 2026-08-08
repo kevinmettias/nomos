@@ -6,10 +6,12 @@
 
 #![forbid(unsafe_code)]
 
+mod governing;
 mod record;
 mod schema;
 mod store;
 
+pub use governing::{GOVERNING_RECORD_IDS, Seed_Governing_Records, SeedReport};
 pub use record::{Disposition, Kind_Label};
 pub use schema::{Latest_Version, MIGRATIONS, Migration};
-pub use store::{SpecificationStore, StoreError, Table};
+pub use store::{AUTHORED, EXTERNAL, SpecificationStore, StoreError, Table};

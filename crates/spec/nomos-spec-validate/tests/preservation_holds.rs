@@ -211,3 +211,22 @@ fn Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules()
         "the block rule saw nothing in a store with four blocks"
     );
 }
+
+/// The payoff for seeding the governing records: the validator that governs them runs
+/// over them and reports clean having actually looked. Both heading and block rules must
+/// be non-vacuous, because a seed that produced identity without content would satisfy
+/// every rule by giving it nothing to examine.
+#[test]
+fn Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously()
+{
+    let mut store = SpecificationStore::In_Memory().expect("opens");
+    nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
+
+    let run = Validate(&store, &Registered());
+
+    assert!(run.Passed(), "{}\n{:?}", run.Summary(), run.Violations());
+
+    let vacuous = run.Vacuous_Rules();
+    assert!(!vacuous.contains(&"NSV-PRESERVE-001"), "the heading rule examined nothing");
+    assert!(!vacuous.contains(&"NSV-PRESERVE-002"), "the block rule examined nothing");
+}

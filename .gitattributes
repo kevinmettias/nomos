@@ -1,0 +1,13 @@
+# Line endings are load-bearing, not cosmetic.
+#
+# Content hashes are computed over file bytes, and the governing records are embedded
+# into the binary with `include_str!`. A clone with `core.autocrlf=true` would hand
+# every one of them CRLF, changing every block hash and every bundle digest — so the
+# same commit would validate on one machine and not on another.
+#
+# `nomos-spec-store` asserts this rather than trusting it: an embedded record carrying
+# a carriage return fails a test.
+* text=auto eol=lf
+*.png binary
+*.zip binary
+*.docx binary

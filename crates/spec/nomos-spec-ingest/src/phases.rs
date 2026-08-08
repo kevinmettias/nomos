@@ -163,11 +163,11 @@ pub fn Ingest_Statements(
             report.non_canonical_text.push(statement.id.clone());
         }
 
-        let node_uid = Upsert_Node(
-            store,
+        let node_uid = store.Upsert_Node(
             &statement.id,
             &statement.kind,
             "canonical",
+            "record",
             &statement.source_document,
         )?;
 
@@ -242,11 +242,11 @@ pub fn Ingest_Catalog(
 
     for entity in entities
     {
-        let node_uid = Upsert_Node(
-            store,
+        let node_uid = store.Upsert_Node(
             &entity.id,
             &entity.kind,
             if entity.authority.is_empty() { "unstated" } else { &entity.authority },
+            "record",
             &entity.title,
         )?;
         report.nodes = report.nodes.saturating_add(1);
@@ -265,33 +265,6 @@ pub fn Ingest_Catalog(
     }
 
     return Ok(report);
-}
-
-fn Upsert_Node(
-    store: &mut SpecificationStore,
-    node_id: &str,
-    kind: &str,
-    authority: &str,
-    title: &str,
-) -> Result<i64, IngestError>
-{
-    store
-        .Connection()
-        .execute(
-            "INSERT OR IGNORE INTO nodes (node_id, kind, authority, representation, title)
-             VALUES (?1, ?2, ?3, 'record', ?4)",
-            rusqlite::params![node_id, kind, authority, title],
-        )
-        .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
-
-    return store
-        .Connection()
-        .query_row(
-            "SELECT uid FROM nodes WHERE node_id = ?1",
-            rusqlite::params![node_id],
-            |row| row.get(0),
-        )
-        .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())));
 }
 
 #[cfg(test)]

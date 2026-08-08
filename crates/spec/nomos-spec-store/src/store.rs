@@ -3,6 +3,15 @@ use nomos_spec_model::{ContentHash, SourceBlock};
 use rusqlite::{Connection, OptionalExtension, params};
 use std::path::Path;
 
+/// The revision label for content this repository authors itself.
+///
+/// Distinct from an ingested corpus revision like `v14.36`, so a query can tell what
+/// Nomos said about itself from what it read out of an archive.
+pub const AUTHORED: &str = "authored";
+
+/// The authority of a node that exists only because something points at it.
+pub const EXTERNAL: &str = "external";
+
 #[derive(Debug)]
 pub enum StoreError
 {
@@ -17,6 +26,12 @@ pub enum StoreError
     {
         found: u32,
         supported: u32,
+    },
+    /// An authored record this build embeds does not read.
+    Record
+    {
+        path: String,
+        cause: String,
     },
 }
 
@@ -35,6 +50,7 @@ impl core::fmt::Display for StoreError
                 "the store is at schema version {found}; this build understands {supported}. \
                  Refusing to open it rather than reading tables whose meaning may have changed"
             ),
+            Self::Record { path, cause } => write!(formatter, "{path}: {cause}"),
         };
     }
 }
@@ -207,10 +223,20 @@ impl SpecificationStore
     {
         let transaction = self.connection.transaction()?;
         {
+            // Not `INSERT OR REPLACE`. REPLACE deletes the conflicting row and inserts a
+            // new one, which hands the block a new `uid` — and `uid` is what every
+            // lineage and omission row points at. Re-ingesting a document would silently
+            // renumber its blocks and take their dispositions with them.
             let mut insert = transaction.prepare(
-                "INSERT OR REPLACE INTO source_blocks
+                "INSERT INTO source_blocks
                  (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
-                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+                 ON CONFLICT(document_uid, ordinal) DO UPDATE SET
+                     kind = excluded.kind,
+                     heading_path = excluded.heading_path,
+                     text = excluded.text,
+                     content_hash = excluded.content_hash,
+                     normalized_hash = excluded.normalized_hash",
             )?;
 
             for block in blocks
@@ -229,6 +255,154 @@ impl SpecificationStore
         transaction.commit()?;
 
         return Ok(blocks.len());
+    }
+
+    /// Writes a node, upgrading a placeholder but never overwriting a real one.
+    ///
+    /// A relation whose target has not been ingested yet needs somewhere to point, so
+    /// [`Self::Reference_Node`] creates one at authority [`EXTERNAL`]. When the real
+    /// record arrives it fills that row in. Any other node is left alone: the first
+    /// writer of a real node is its author, and a later pass must not quietly restate it.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Upsert_Node(
+        &mut self,
+        node_id: &str,
+        kind: &str,
+        authority: &str,
+        representation: &str,
+        title: &str,
+    ) -> Result<i64, StoreError>
+    {
+        self.connection.execute(
+            "INSERT INTO nodes (node_id, kind, authority, representation, title)
+             VALUES (?1, ?2, ?3, ?4, ?5)
+             ON CONFLICT(node_id) DO UPDATE SET
+                 kind = excluded.kind,
+                 authority = excluded.authority,
+                 representation = excluded.representation,
+                 title = excluded.title
+             WHERE nodes.authority = ?6",
+            params![node_id, kind, authority, representation, title, EXTERNAL],
+        )?;
+
+        return Ok(self.connection.query_row(
+            "SELECT uid FROM nodes WHERE node_id = ?1",
+            params![node_id],
+            |row| row.get(0),
+        )?);
+    }
+
+    /// A node that exists only because something points at it.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Reference_Node(&mut self, node_id: &str) -> Result<i64, StoreError>
+    {
+        return self.Upsert_Node(node_id, "unknown", EXTERNAL, "record", node_id);
+    }
+
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Node_Uid(&self, node_id: &str) -> Result<Option<i64>, StoreError>
+    {
+        return Ok(self
+            .connection
+            .query_row(
+                "SELECT uid FROM nodes WHERE node_id = ?1",
+                params![node_id],
+                |row| row.get(0),
+            )
+            .optional()?);
+    }
+
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Put_Relation_Type(&mut self, name: &str, tier: &str) -> Result<(), StoreError>
+    {
+        self.connection.execute(
+            "INSERT OR IGNORE INTO relation_types (name, tier) VALUES (?1, ?2)",
+            params![name, tier],
+        )?;
+        return Ok(());
+    }
+
+    /// Pairs a relation type with its inverse.
+    ///
+    /// Separate from [`Self::Put_Relation_Type`] because `inverse_of` points back into
+    /// the same table, so no single insertion order satisfies it — the first of any pair
+    /// names a row that does not exist yet. Naming both halves first and pairing them
+    /// afterwards keeps the foreign key enforced the whole way through, rather than
+    /// deferring it and finding out at commit.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] if either name is not a relation type.
+    pub fn Pair_Relation_Type(&mut self, name: &str, inverse: &str) -> Result<(), StoreError>
+    {
+        let changed = self.connection.execute(
+            "UPDATE relation_types SET inverse_of = ?2 WHERE name = ?1",
+            params![name, inverse],
+        )?;
+
+        if changed == 0
+        {
+            return Err(StoreError::Sql(format!(
+                "no relation type named {name}, so it cannot be paired with {inverse}"
+            )));
+        }
+
+        return Ok(());
+    }
+
+    /// Records an edge and its inverse, so `verifies` and `verified_by` are one fact.
+    ///
+    /// Both endpoints must already exist as nodes; use [`Self::Reference_Node`] for a
+    /// target that has not been ingested yet.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Put_Relation(
+        &mut self,
+        from_node_id: &str,
+        relation_type: &str,
+        to_node_id: &str,
+    ) -> Result<(), StoreError>
+    {
+        self.connection.execute(
+            "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
+             SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
+             WHERE f.node_id = ?1 AND t.node_id = ?3",
+            params![from_node_id, relation_type, to_node_id],
+        )?;
+
+        let inverse: Option<String> = self
+            .connection
+            .query_row(
+                "SELECT inverse_of FROM relation_types WHERE name = ?1",
+                params![relation_type],
+                |row| row.get(0),
+            )
+            .optional()?
+            .flatten();
+
+        if let Some(inverse) = inverse
+        {
+            self.connection.execute(
+                "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
+                 SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
+                 WHERE f.node_id = ?1 AND t.node_id = ?3",
+                params![to_node_id, inverse, from_node_id],
+            )?;
+        }
+
+        return Ok(());
     }
 
     /// # Errors

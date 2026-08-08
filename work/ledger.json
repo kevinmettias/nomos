@@ -250,7 +250,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P2-STORE"
       ],
@@ -267,7 +267,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "governing_records_are_present"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One ... ok\ntest Test_Authored_Content_Should_Be_Distinguishable_From_An_Ingested_Revision ... ok\ntest Test_An_Unseeded_Store_Should_Hold_None_Of_Them ... ok\ntest Test_Every_Governing_Record_Should_Resolve_By_Id ... ok\ntest Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge ... ok\ntest Test_No_Governing_Record_Should_Carry_A_Carriage_Return ... ok\ntest Test_The_Records_Should_Be_Present_As_Disposed_Content ... ok\ntest Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder ... ok\ntest Test_Seeding_Should_Be_Idempotent ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Blocks ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-87a2d04f8517868a.exe)\n",
+        "verified_at": 1786218394
+      }
     },
     {
       "id": "P3-RESTORE",
