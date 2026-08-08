@@ -16,6 +16,14 @@ impl ContentHash
     }
 
     #[must_use]
+    pub fn Of_Bytes(content: &[u8]) -> Self
+    {
+        let mut hasher = Sha256::new();
+        hasher.update(content);
+        return Self(format!("{HASH_PREFIX}{:x}", hasher.finalize()));
+    }
+
+    #[must_use]
     pub fn Of_Normalized(text: &str) -> Self
     {
         return Self::Of(&Normalize(text));

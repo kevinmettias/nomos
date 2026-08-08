@@ -94,7 +94,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P1-MODEL"
       ],
@@ -109,7 +109,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 4 tests\ntest record::tests::Test_Dispositions_Should_Round_Trip ... ok\ntest record::tests::Test_Only_Preserved_Dispositions_Should_Count_As_Preservation ... ok\ntest schema::tests::Test_No_Migration_Should_Be_Empty ... ok\ntest schema::tests::Test_Versions_Should_Be_Dense_And_Ascending ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 13 tests\ntest Test_Filler_Should_Never_Count_As_Preservation ... ok\ntest Test_Identical_Blobs_Should_Be_Stored_Once ... ok\ntest Test_A_Fresh_Store_Should_Be_At_The_Latest_Version ... ok\ntest Test_A_Failed_Transaction_Should_Roll_Back_Every_Table ... ok\ntest Test_An_Unjustified_Omission_Should_Be_Refused ... ok\ntest Test_Every_Declared_Table_Should_Exist ... ok\ntest Test_Re_Ingesting_A_Document_Should_Be_Idempotent ... ok\ntest Test_Two_Revisions_Of_One_Path_Should_Be_Distinct ... ok\ntest Test_A_Dangling_Reference_Should_Be_Refused ... ok\ntest Test_Block_Hashes_Should_Survive_Storage ... ok\ntest Test_A_Successful_Transaction_Should_Commit_Every_Table ... ok\ntest Test_A_Future_Schema_Version_Should_Be_Refused ... ok\ntest Test_Reopening_Should_Not_Re_Run_Migrations ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-11511dab48bec877.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-69b38be179abad28.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786213834
+      }
     },
     {
       "id": "P2-BUNDLE",
