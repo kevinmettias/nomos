@@ -85,7 +85,7 @@ impl ClaimRefusal
                 "a lease of {requested:?} exceeds the {maximum:?} ceiling"
             ),
             Self::NotClaimable { item, state } => {
-                format!("{item} is {state} and cannot be claimed")
+                format!("{item} is {state}, so the operation was refused")
             }
             Self::NoSuchItem { item } => format!("no item named {item}"),
         };
