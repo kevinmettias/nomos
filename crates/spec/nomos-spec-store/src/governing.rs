@@ -26,6 +26,10 @@ const RECORDS: &[(&str, &str)] = &[
         ),
     ),
     (
+        "docs/records/D-132-the-plan-is-a-game-plan.md",
+        include_str!("../../../../docs/records/D-132-the-plan-is-a-game-plan.md"),
+    ),
+    (
         "docs/records/OD-SPEC-001-the-storage-backend-question.md",
         include_str!("../../../../docs/records/OD-SPEC-001-the-storage-backend-question.md"),
     ),
@@ -52,6 +56,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "D-129",
     "D-130",
     "D-131",
+    "D-132",
     "OD-SPEC-001",
     "OD-SPEC-002",
     "OD-LEDGER-001",

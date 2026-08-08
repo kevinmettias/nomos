@@ -1,0 +1,319 @@
+[
+  {
+    "id": "table.pipe_lines",
+    "family": "table_row",
+    "measured": 282,
+    "unit": "pipe line",
+    "definition": "Lines that, once trimmed, begin and end with a pipe, over every block the segmenter produces.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": {
+      "figure": 282,
+      "named": "markdown table rows",
+      "status": "superseded",
+      "note": "Right as a line count, wrong as a row count. 24 of the 282 are delimiters and carry no authored text. Settled in OD-SPEC-002."
+    }
+  },
+  {
+    "id": "table.header_rows",
+    "family": "table_row",
+    "measured": 24,
+    "unit": "header row",
+    "definition": "Pipe lines preceding their table's delimiter. One per table here, though a table may have more.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": null
+  },
+  {
+    "id": "table.content_rows",
+    "family": "table_row",
+    "measured": 234,
+    "unit": "data row",
+    "definition": "Pipe lines following their table's delimiter.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": null
+  },
+  {
+    "id": "table.separator_rows",
+    "family": "table_row",
+    "measured": 24,
+    "unit": "delimiter row",
+    "definition": "Pipe lines whose every non-empty cell is two or more dashes with optional alignment colons.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": null
+  },
+  {
+    "id": "table.non_separator_rows",
+    "family": "table_row",
+    "measured": 258,
+    "unit": "authored row",
+    "definition": "Pipe lines that are not delimiters: header and data together.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": null
+  },
+  {
+    "id": "table.tables",
+    "family": "table_row",
+    "measured": 24,
+    "unit": "table",
+    "definition": "Runs of consecutive pipe lines within one block. Each carries exactly one delimiter or the store refuses the block.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": null
+  },
+  {
+    "id": "code.fence_lines",
+    "family": "code_block",
+    "measured": 6,
+    "unit": "fence line",
+    "definition": "Lines whose trimmed form begins with three backticks, opening and closing alike.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": {
+      "figure": 6,
+      "named": "code blocks",
+      "status": "superseded",
+      "note": "The fence-line count. Three blocks counted at both ends, all three in volume 06. Settled in OD-SPEC-002."
+    }
+  },
+  {
+    "id": "code.blocks",
+    "family": "code_block",
+    "measured": 3,
+    "unit": "fenced block",
+    "definition": "Blocks the segmenter types as code.",
+    "corpus": "v14.36 01_authoring/domain_volumes, all ten documents",
+    "plan": null
+  },
+  {
+    "id": "domain_model.pipe_lines",
+    "family": "canonical_domain_model",
+    "measured": 30,
+    "unit": "pipe line",
+    "definition": "Pipe lines of the single table under heading '5. Canonical domain model'.",
+    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "plan": {
+      "figure": 30,
+      "named": "canonical domain models",
+      "status": "superseded",
+      "note": "The pipe-line count of the table that lists them. One header and one delimiter are not models."
+    }
+  },
+  {
+    "id": "domain_model.models",
+    "family": "canonical_domain_model",
+    "measured": 28,
+    "unit": "domain model",
+    "definition": "Data rows of the single table under heading '5. Canonical domain model'.",
+    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "plan": null
+  },
+  {
+    "id": "roadmap.milestones",
+    "family": "roadmap_milestone",
+    "measured": 8,
+    "unit": "roadmap milestone",
+    "definition": "Depth-3 headings whose title begins 'Foundation <n>' or 'Release <n>'.",
+    "corpus": "v14.36 08-roadmap-quality-decisions-traceability.md",
+    "plan": {
+      "figure": 8,
+      "named": "roadmap release definitions",
+      "status": "superseded",
+      "note": "Right as a milestone count, wrong as a release count. The eighth is Foundation 0; there is no Release 8."
+    }
+  },
+  {
+    "id": "roadmap.releases",
+    "family": "roadmap_milestone",
+    "measured": 7,
+    "unit": "release",
+    "definition": "Depth-3 headings whose title begins 'Release <n>'.",
+    "corpus": "v14.36 08-roadmap-quality-decisions-traceability.md",
+    "plan": null
+  },
+  {
+    "id": "scenario.appendix_g_sections",
+    "family": "scenario",
+    "measured": 8,
+    "unit": "appendix-G section",
+    "definition": "Depth-3 headings whose title begins 'G.<n> '.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": {
+      "figure": 8,
+      "named": "worked scenarios",
+      "status": "superseded",
+      "note": "The appendix-G section count. Four are scenarios; the others are the catalog, the cross-scenario consistency checks, the traceability table and a reference agent workflow."
+    }
+  },
+  {
+    "id": "scenario.end_to_end",
+    "family": "scenario",
+    "measured": 4,
+    "unit": "end-to-end scenario",
+    "definition": "Depth-3 headings whose title begins 'G.<n> End-to-end scenario:'.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": null
+  },
+  {
+    "id": "service.section_6_headings",
+    "family": "service",
+    "measured": 56,
+    "unit": "heading",
+    "definition": "Every heading at any depth from '6. Systems and subsystem responsibilities' to the next heading of depth 2 or less, the section heading included.",
+    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "plan": null
+  },
+  {
+    "id": "service.leaf_headings",
+    "family": "service",
+    "measured": 51,
+    "unit": "leaf heading",
+    "definition": "Depth-4 headings within section 6.",
+    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "plan": null
+  },
+  {
+    "id": "service.service_headings",
+    "family": "service",
+    "measured": 40,
+    "unit": "service description",
+    "definition": "Depth-4 headings within section 6 whose title contains the word 'Service'.",
+    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "plan": {
+      "figure": 54,
+      "named": "54 service descriptions",
+      "status": "superseded",
+      "note": "The only figure in the plan that no extraction reproduces. The near readings are 56 headings in section 6 at every depth, 51 of them leaves, 40 of those naming a Service, and 29 rows in the section's subsystem table. Recorded as unreproducible rather than fitted to a definition chosen to hit it."
+    }
+  },
+  {
+    "id": "service.subsystem_table_rows",
+    "family": "service",
+    "measured": 29,
+    "unit": "subsystem",
+    "definition": "Data rows of the single table directly under '6. Systems and subsystem responsibilities'.",
+    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "plan": null
+  },
+  {
+    "id": "appendix_d.sections",
+    "family": "appendix_d",
+    "measured": 8,
+    "unit": "appendix-D section",
+    "definition": "Depth-3 headings whose title begins 'D.<n> '.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": {
+      "figure": null,
+      "named": "all Appendix-D schemas/manifests/projection profiles",
+      "status": "unnumbered",
+      "note": "The plan names the family without a figure, so there is nothing to supersede. Recorded so the restoration has a target."
+    }
+  },
+  {
+    "id": "appendix_d.report_profiles",
+    "family": "appendix_d",
+    "measured": 8,
+    "unit": "report profile",
+    "definition": "Depth-4 headings whose title begins 'D.<n>.<m> '.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": null
+  },
+  {
+    "id": "appendix_h.sections",
+    "family": "appendix_h",
+    "measured": 7,
+    "unit": "appendix-H section",
+    "definition": "Depth-3 headings whose title begins 'H.<n> '.",
+    "corpus": "v14.36 06-agents-models-knowledge-evidence-telemetry.md",
+    "plan": {
+      "figure": null,
+      "named": "all Appendix-H junction-telemetry sections",
+      "status": "unnumbered",
+      "note": "The plan names the family without a figure."
+    }
+  },
+  {
+    "id": "headless_inventory.sections",
+    "family": "headless_inventory",
+    "measured": 11,
+    "unit": "inventory section",
+    "definition": "Depth-4 headings whose title begins 'E.1.<n> '.",
+    "corpus": "v14.36 07-clients-interfaces-deployment-administration.md",
+    "plan": {
+      "figure": null,
+      "named": "the E.1 headless inventory",
+      "status": "unnumbered",
+      "note": "The plan names the family without a figure."
+    }
+  },
+  {
+    "id": "ide_profiles.sections",
+    "family": "ide_profile",
+    "measured": 6,
+    "unit": "IDE profile",
+    "definition": "Depth-4 headings whose title begins 'F.1.<n> '.",
+    "corpus": "v14.36 07-clients-interfaces-deployment-administration.md",
+    "plan": {
+      "figure": null,
+      "named": "F.1 IDE profiles",
+      "status": "unnumbered",
+      "note": "The plan names the family without a figure. The sixth is the shared projection rules rather than an editor."
+    }
+  },
+  {
+    "id": "glossary.table_terms",
+    "family": "glossary_term",
+    "measured": 31,
+    "unit": "glossary term",
+    "definition": "Data rows of the single table directly under the 'Glossary' heading.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": null
+  },
+  {
+    "id": "glossary.extended_terms",
+    "family": "glossary_term",
+    "measured": 19,
+    "unit": "extended term",
+    "definition": "Depth-4 headings whose heading path passes through 'Extended operational terms'.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": null
+  },
+  {
+    "id": "glossary.definitions",
+    "family": "glossary_term",
+    "measured": 50,
+    "unit": "glossary definition",
+    "definition": "Every term the glossary defines, whether as a table row or as its own section.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": {
+      "figure": null,
+      "named": "N glossary_term",
+      "status": "unnumbered",
+      "note": "The plan writes the count as N. This is the number, and it is two shapes rather than one: 31 table rows and 19 sections."
+    }
+  },
+  {
+    "id": "catalog.entities",
+    "family": "catalog_entity",
+    "measured": 2619,
+    "unit": "catalog entity",
+    "definition": "Top-level elements of the catalog array.",
+    "corpus": "v14.36 02_machine/catalog/catalog.json",
+    "plan": {
+      "figure": 1632,
+      "named": "catalog (1,632 entities)",
+      "status": "superseded",
+      "note": "No extraction over this file yields 1,632. The figure predates the corpus it describes."
+    }
+  },
+  {
+    "id": "v15.records",
+    "family": "v15_record",
+    "measured": 66,
+    "unit": "record",
+    "definition": "Archive entries ending '.md' whose path contains '/records/'.",
+    "corpus": "nomos-spec-v15.0.zip",
+    "plan": {
+      "figure": 64,
+      "named": "64 records (records/ + spec-governance/records/)",
+      "status": "superseded",
+      "note": "54 under records/ and 12 under spec-governance/records/. Independently asserted by P3-OVERLAY."
+    }
+  }
+]
