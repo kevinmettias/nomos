@@ -60,6 +60,9 @@ blake3 = "1"
 sha2 = "0.10"
 rusqlite = { version = "0.32", features = ["bundled"] }
 serde_yaml_ng = "0.10"
+# Deflate only. The archives are ordinary zips, and the other backends are
+# compression formats this corpus does not contain.
+zip = { version = "4", default-features = false, features = ["deflate"] }
 
 # Workspace-wide lint policy, mirrored from F:\repos\xvpe\Cargo.toml. Crates inherit
 # it by declaring `lints.workspace = true`. The severity choices are XVPE's and the

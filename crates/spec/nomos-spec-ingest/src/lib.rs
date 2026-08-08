@@ -5,10 +5,12 @@
 
 #![forbid(unsafe_code)]
 
+mod archive;
 mod gate;
 mod lineage;
 mod phases;
 
+pub use archive::{Archive, ArchiveError, Archives_In};
 pub use gate::{
     BlockLineage, BlockMismatch, Check_Against_Manifest, GateReport, Parse_Block_Lineage,
     RecordedBlock,

@@ -663,7 +663,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -678,7 +678,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "archive_reads"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest Test_An_Archive_Holding_Nothing_Should_Be_Refused_Not_Reported_Empty ... ok\ntest Test_The_v15_Archive_Should_Yield_Its_Records ... ok\ntest Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry ... ok\ntest Test_An_Entry_Should_Be_Addressable_By_Its_Path ... ok\ntest Test_A_Binary_Entry_Should_Refuse_To_Be_Read_As_Text ... ok\ntest Test_An_Archive_Should_List_Its_Files_Sorted ... ok\ntest Test_Reading_Should_Not_Unpack ... ok\ntest Test_Every_Real_Archive_Should_Open_And_Hold_Files ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-b919ac3a2553cb9c.exe)\n",
+        "verified_at": 1786225073
+      }
     },
     {
       "id": "P3-OVERLAY",
