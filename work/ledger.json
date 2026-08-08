@@ -417,6 +417,181 @@
         "output_tail": "_Read_Its_Declared_Identity ... ok\ntest statement::tests::Test_A_Pinned_Statement_Hash_Should_Reproduce ... ok\ntest statement::tests::Test_Canonicalizing_Should_Reach_A_Fixed_Point ... ok\ntest statement::tests::Test_Malformed_Identifiers_Should_Be_Refused ... ok\ntest statement::tests::Test_Prefix_Should_Be_Everything_Before_The_Number ... ok\ntest statement::tests::Test_Real_Identifiers_Should_Parse ... ok\ntest normalize::tests::Test_Normalization_Should_Be_Idempotent ... ok\ntest record::tests::Test_Missing_Required_Identity_Should_Be_Refused ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_Every_Authored_Document_Should_Segment_Past_Its_Front_Matter ... ok\ntest Test_A_Marked_Record_Should_Have_Its_Front_Matter_Skipped ... ok\ntest Test_The_Mark_Should_Not_Change_A_Single_Block ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_The_Whole_Corpus_Should_Reproduce_When_Available ... ok\ntest Test_The_Sample_Should_Contain_Non_Ascii_Statements ... ok\ntest Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash ... ok\ntest Test_Every_Canonical_Text_Should_Be_A_Fixed_Point ... ok\ntest Test_Every_Block_Of_A_Real_Document_Should_Reproduce_Its_Hashes ... ok\ntest Test_The_Normalizer_Should_Reproduce_The_Discriminating_Hashes ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-8be0ef2383460849.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-89e5286106565ee2.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-03f96db1e432acca.exe)\n   Doc-tests nomos_spec_model\n",
         "verified_at": 1786220828
       }
+    },
+    {
+      "id": "P7-CAPABILITY",
+      "title": "nomos-capability: the contract registry whose answer is never a bare no",
+      "why": "A capability nobody registered must answer Unknown, not No. Collapsing those is how 'we cannot tell whether this rule applies' becomes 'this rule does not apply', which is the same defect as a validator that never ran. The registry is also the seam every provider and every check resolves through, so it exists before either.",
+      "done_when": "An unregistered capability yields Unknown and a registered-but-unavailable one yields a distinct answer naming why. A test asserts the two are not the same value and that no code path turns either into a grant.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-capability"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-capability"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P7-ANALYSIS",
+      "title": "nomos-analysis: FactIdentity, FactReader, FactStore and invalidation",
+      "why": "The load-bearing architectural bet, still untested. FactIdentity is the cache key AND the identity, one type, so a fact cannot be reused under a key that does not describe it. FactReader is the only read path and records a dependency edge on every read, which is what makes invalidation dependency-complete rather than hopeful.",
+      "done_when": "A change in any one of FactIdentity's components invalidates, asserted component by component rather than in aggregate. Require() returns the honest degraded Applicability on failure and never a fabricated fact. Reading through FactReader records an edge; a test proves a read that recorded no edge is not possible.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-CAPABILITY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P7-RUST",
+      "title": "nomos-lang-rust: recognition and syntax facts from syn",
+      "why": "The first thing in this repository that reads somebody else's code. A provider with a declared Guarantee, so that what it can and cannot answer is a value rather than an assumption a check makes about it.",
+      "done_when": "Syntax facts over real files from F:/repos/xvpe, with the provider's Guarantee declared and asserted to match what it actually produces. A file it cannot parse yields Unparseable, never zero findings.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "packages/languages/nomos-lang-rust"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-ANALYSIS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P7-SLICE",
+      "title": "The vertical slice: real facts over the real xvpe corpus",
+      "why": "Answers whether any of this works before more of it is built. Three checks the prototype learned the hard way: a rule firing thousands of times is background hum, a check that found zero findings corpus-wide was broken rather than satisfied, and a negative control that has never failed is not a control.",
+      "done_when": "Facts materialize over F:/repos/xvpe's Rust files. A second run materializes zero. Touching one file recomputes exactly its descendants and no more, asserted by naming them rather than by counting. Every number reported comes with what it was measured over.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration",
+          "tests/corpus/analysis"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-RUST"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "analysis_slice"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P7-STORE",
+      "title": "nomos-store: content-addressed documents with one write door per authority",
+      "why": "Observed facts and authored specification never share a store. The snapshot document is the only door in, so nothing can write a fact by another route and leave the index describing something that was never recorded.",
+      "done_when": "A snapshot written and reread is byte-identical, and the derived index is rebuildable from the documents alone — proven by deleting it and rebuilding to an identical state.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-store"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-ANALYSIS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P7-WORKSPACE",
+      "title": "nomos-workspace: snapshots, build variants and the single change door",
+      "why": "Every change source — correction, IDE edit, git checkout, agent edit, code generator — enters through one WorkspaceChangeSet and produces one new generation. A second path would be a second answer to what the workspace currently is.",
+      "done_when": "A portable snapshot over F:/repos/xvpe is interpretable by a process with no access to that tree, and 100 ingestion-order permutations yield byte-identical queries.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-workspace"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-STORE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
