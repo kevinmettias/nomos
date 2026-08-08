@@ -12,7 +12,7 @@ use nomos_model::{Content_Digest, SetResolution, SubjectSet};
 use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem};
 use nomos_contracts::SubjectId;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 /// A clock the tests hold still, so lease expiry is reached by arithmetic rather than by
@@ -106,7 +106,6 @@ fn Ledger_At<'clock>(
     );
 }
 
-use std::path::Path;
 
 // ---------------------------------------------------------------------------
 // Acceptance 1 — two active claims on overlapping territory are refused.

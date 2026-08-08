@@ -14,6 +14,10 @@ members = [
 
     # Band 2 — substrate. The work ledger and, later, capability and applicability.
     "crates/substrate/nomos-ledger",
+
+    # Assertions about the workspace itself: dependency bands, the contracts
+    # allowlist, and module reachability.
+    "tests/contract",
 ]
 
 resolver = "3"
