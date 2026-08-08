@@ -97,9 +97,29 @@ pub fn Segment(markdown: &str) -> Vec<SourceBlock>
     return blocks;
 }
 
+/// v14's readers consume this as part of the opening front matter fence.
+///
+/// `str::trim` does not remove it — U+FEFF is not whitespace under Unicode — so a first
+/// line carrying one does not compare equal to `---` unless it is stripped here.
+const BYTE_ORDER_MARK: char = '\u{feff}';
+
+/// Where the authored content of a document begins.
+///
+/// Both v14 readers that ship match front matter as `^\ufeff?---\n`, so a byte order mark
+/// belongs to the opening fence and leaves with it. All 2187 authored v14 documents match
+/// that pattern, 1637 of them with a mark, and none carries one into its body.
+///
+/// Where no front matter follows, v14 returned the text as it found it. The mark is kept
+/// in that case, so the only bytes this drops are a delimiter's.
 fn Skip_Front_Matter(lines: &[&str]) -> usize
 {
-    if lines.first().map(|line| line.trim()) != Some("---")
+    let Some(first) = lines.first()
+    else
+    {
+        return 0;
+    };
+
+    if first.strip_prefix(BYTE_ORDER_MARK).unwrap_or(first).trim() != "---"
     {
         return 0;
     }
@@ -159,6 +179,37 @@ mod tests
         assert_eq!(blocks.len(), 2);
         assert_eq!(blocks.first().map(|block| block.kind), Some(BlockKind::Heading));
         assert_eq!(blocks.get(1).map(|block| block.text.as_str()), Some("Body."));
+    }
+
+    /// P3-BOM. 1637 of v14's 2187 authored documents carry a mark, including every
+    /// decision record I4 ingests, and both shipped v14 readers match `^\ufeff?---\n`.
+    #[test]
+    fn Test_A_Byte_Order_Mark_Should_Not_Turn_Front_Matter_Into_Content()
+    {
+        const DOCUMENT: &str = "---\nid: D-045\n---\n\n# Runtime capture boundary\n\nBody.\n";
+
+        let marked = Segment(&format!("\u{feff}{DOCUMENT}"));
+
+        assert_eq!(marked, Segment(DOCUMENT), "the mark changed how the document read");
+        assert_eq!(marked.first().map(|block| block.kind), Some(BlockKind::Heading));
+        assert!(
+            !marked.iter().any(|block| block.text.contains(BYTE_ORDER_MARK)),
+            "the mark reached a block"
+        );
+    }
+
+    /// The one case v14's manifest cannot corroborate, because it never occurs: all 2187
+    /// authored documents have front matter. Settled by what v14's reader did rather than
+    /// by preference — no fence matched, so it dropped nothing.
+    #[test]
+    fn Test_A_Byte_Order_Mark_Should_Survive_Where_No_Front_Matter_Follows()
+    {
+        let blocks = Segment("\u{feff}# Title\n\nBody.\n");
+
+        assert_eq!(
+            blocks.first().map(|block| block.text.as_str()),
+            Some("\u{feff}# Title")
+        );
     }
 
     #[test]

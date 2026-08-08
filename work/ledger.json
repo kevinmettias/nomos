@@ -389,7 +389,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -402,7 +402,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-model"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Read_Its_Declared_Identity ... ok\ntest statement::tests::Test_A_Pinned_Statement_Hash_Should_Reproduce ... ok\ntest statement::tests::Test_Canonicalizing_Should_Reach_A_Fixed_Point ... ok\ntest statement::tests::Test_Malformed_Identifiers_Should_Be_Refused ... ok\ntest statement::tests::Test_Prefix_Should_Be_Everything_Before_The_Number ... ok\ntest statement::tests::Test_Real_Identifiers_Should_Parse ... ok\ntest normalize::tests::Test_Normalization_Should_Be_Idempotent ... ok\ntest record::tests::Test_Missing_Required_Identity_Should_Be_Refused ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_Every_Authored_Document_Should_Segment_Past_Its_Front_Matter ... ok\ntest Test_A_Marked_Record_Should_Have_Its_Front_Matter_Skipped ... ok\ntest Test_The_Mark_Should_Not_Change_A_Single_Block ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_The_Whole_Corpus_Should_Reproduce_When_Available ... ok\ntest Test_The_Sample_Should_Contain_Non_Ascii_Statements ... ok\ntest Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash ... ok\ntest Test_Every_Canonical_Text_Should_Be_A_Fixed_Point ... ok\ntest Test_Every_Block_Of_A_Real_Document_Should_Reproduce_Its_Hashes ... ok\ntest Test_The_Normalizer_Should_Reproduce_The_Discriminating_Hashes ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-8be0ef2383460849.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-89e5286106565ee2.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-03f96db1e432acca.exe)\n   Doc-tests nomos_spec_model\n",
+        "verified_at": 1786220828
+      }
     }
   ]
 }

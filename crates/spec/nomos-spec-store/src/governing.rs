@@ -20,6 +20,12 @@ const RECORDS: &[(&str, &str)] = &[
         include_str!("../../../../docs/records/D-130-no-xvpe-dependency-before-phase-5.md"),
     ),
     (
+        "docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md",
+        include_str!(
+            "../../../../docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md"
+        ),
+    ),
+    (
         "docs/records/OD-SPEC-001-the-storage-backend-question.md",
         include_str!("../../../../docs/records/OD-SPEC-001-the-storage-backend-question.md"),
     ),
@@ -39,6 +45,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "ARC-SPECDB-001",
     "D-129",
     "D-130",
+    "D-131",
     "OD-SPEC-001",
     "OD-LEDGER-001",
 ];
