@@ -4,7 +4,8 @@
 //! feature in a schema dump and is not one — the sibling `KnowledgeWorkbench` measured
 //! that directly and states the rule as "a schema is not a feature".
 
-pub const MIGRATIONS: &[Migration] = &[Migration {
+pub const MIGRATIONS: &[Migration] = &[
+    Migration {
     version: 1,
     name: "source-truth-and-node-graph",
     statements: &[
@@ -128,7 +129,33 @@ pub const MIGRATIONS: &[Migration] = &[Migration {
              CHECK (source_block_uid IS NOT NULL OR source_heading_uid IS NOT NULL)
          )",
     ],
-}];
+    },
+    Migration {
+        version: 2,
+        name: "table-rows-as-typed-subjects",
+        statements: &[
+            // Every pipe line of a table block, typed. The block above stays the
+            // preservation authority — it holds the verbatim text and both v14 hashes —
+            // so these rows are what lets a loss report name a row by identity instead
+            // of reporting a count. `kind` is what keeps the line count and the content
+            // count two queries over one table rather than one number bent to fit.
+            "CREATE TABLE source_table_rows (
+                 uid              INTEGER PRIMARY KEY,
+                 source_block_uid INTEGER NOT NULL REFERENCES source_blocks(uid),
+                 ordinal          INTEGER NOT NULL,
+                 table_ordinal    INTEGER NOT NULL,
+                 kind             TEXT NOT NULL CHECK (kind IN ('content', 'separator')),
+                 cells_json       TEXT NOT NULL,
+                 text             TEXT NOT NULL,
+                 content_hash     TEXT NOT NULL,
+                 normalized_hash  TEXT NOT NULL,
+                 UNIQUE (source_block_uid, ordinal)
+             )",
+            "CREATE INDEX source_table_rows_block ON source_table_rows(source_block_uid)",
+            "CREATE INDEX source_table_rows_content ON source_table_rows(content_hash)",
+        ],
+    },
+];
 
 pub struct Migration
 {

@@ -55,6 +55,7 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
         Insert_Source_Documents(transaction, bundle)?;
         Insert_Source_Headings(transaction, bundle)?;
         Insert_Source_Blocks(transaction, bundle)?;
+        Insert_Source_Table_Rows(transaction, bundle)?;
         Insert_Nodes(transaction, bundle)?;
         Insert_Node_Aliases(transaction, bundle)?;
         Insert_Node_History(transaction, bundle)?;
@@ -236,6 +237,43 @@ fn Insert_Source_Blocks(transaction: &Transaction<'_>, bundle: &Bundle) -> Resul
                 block.text,
                 block.content_hash,
                 block.normalized_hash
+            ],
+        )?;
+    }
+
+    return Ok(());
+}
+
+fn Insert_Source_Table_Rows(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+) -> Result<(), BundleError>
+{
+    for record in bundle.Records()
+    {
+        let Record::SourceTableRow(row) = record
+        else
+        {
+            continue;
+        };
+
+        let block_uid = Block_Uid(transaction, &row.block)?;
+        let cells = serde_json::to_string(&row.cells)
+            .map_err(|error| BundleError::Sql(error.to_string()))?;
+        transaction.execute(
+            "INSERT INTO source_table_rows
+             (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+              content_hash, normalized_hash)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            params![
+                block_uid,
+                row.ordinal,
+                row.table_ordinal,
+                row.kind,
+                cells,
+                row.text,
+                row.content_hash,
+                row.normalized_hash
             ],
         )?;
     }
@@ -542,30 +580,33 @@ fn Optional_Statement_Uid(
         .transpose();
 }
 
+fn Block_Uid(transaction: &Transaction<'_>, reference: &OrdinalRef) -> Result<i64, BundleError>
+{
+    return Resolve(
+        transaction,
+        "SELECT b.uid FROM source_blocks b
+         JOIN source_documents d ON d.uid = b.document_uid
+         WHERE d.path = ?1 AND d.revision = ?2 AND b.ordinal = ?3",
+        &[
+            &reference.document.path,
+            &reference.document.revision,
+            &reference.ordinal,
+        ],
+        "source block",
+        format!(
+            "{}@{}#{}",
+            reference.document.path, reference.document.revision, reference.ordinal
+        ),
+    );
+}
+
 fn Optional_Block_Uid(
     transaction: &Transaction<'_>,
     reference: Option<&OrdinalRef>,
 ) -> Result<Option<i64>, BundleError>
 {
     return reference
-        .map(|reference| {
-            return Resolve(
-                transaction,
-                "SELECT b.uid FROM source_blocks b
-                 JOIN source_documents d ON d.uid = b.document_uid
-                 WHERE d.path = ?1 AND d.revision = ?2 AND b.ordinal = ?3",
-                &[
-                    &reference.document.path,
-                    &reference.document.revision,
-                    &reference.ordinal,
-                ],
-                "source block",
-                format!(
-                    "{}@{}#{}",
-                    reference.document.path, reference.document.revision, reference.ordinal
-                ),
-            );
-        })
+        .map(|reference| return Block_Uid(transaction, reference))
         .transpose();
 }
 

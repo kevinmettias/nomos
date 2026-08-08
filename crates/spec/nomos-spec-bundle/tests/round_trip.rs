@@ -281,7 +281,9 @@ fn Test_An_Unresolvable_Reference_Should_Be_Refused()
         "the negative control removed nothing"
     );
 
-    let broken = Bundle::New(1, salvaged).expect("builds");
+    // The exporter's own version, not a literal: this test is about a dangling reference,
+    // and pinning the number here makes every migration fail it for the wrong reason.
+    let broken = Bundle::New(complete.Header().schema_version, salvaged).expect("builds");
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
 
     let refusal = Import(&mut rebuilt, &broken).expect_err("a dangling reference must be refused");
@@ -360,4 +362,50 @@ fn Test_The_Governing_Records_Should_Survive_The_Bundle()
         Export(&rebuilt).expect("re-exports").Write().expect("writes"),
         first
     );
+}
+
+/// The fixture carries a table, and the bundle carries its rows.
+///
+/// `Test_Every_Table_Should_Be_Exercised` already refuses an empty `source_table_rows`, so
+/// this is the half it does not cover: that the rows survive with their kinds intact.
+/// Without the kind surviving, the pipe-line count and the content count collapse into
+/// one number and OD-SPEC-002's whole point is lost on the far side of a round trip.
+#[test]
+fn Test_The_Bundle_Should_Carry_Typed_Table_Rows()
+{
+    let store = Populated();
+    let rows = store.Count(Table::SourceTableRows).expect("counts");
+
+    assert!(
+        rows >= 3,
+        "the fixture no longer holds a table, so the row round trip is not being tested"
+    );
+
+    let bundle = Export(&store).expect("exports");
+    let exported = bundle
+        .Records()
+        .iter()
+        .filter(|record| record.Table() == Table::SourceTableRows.Name())
+        .count();
+    assert_eq!(u32::try_from(exported).unwrap_or(u32::MAX), rows);
+
+    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
+    Import(&mut rebuilt, &bundle).expect("imports");
+
+    assert_eq!(rebuilt.Count(Table::SourceTableRows).expect("counts"), rows);
+    assert_eq!(
+        Export(&rebuilt).expect("re-exports").Write().expect("writes"),
+        bundle.Write().expect("writes"),
+        "the rows did not survive the round trip byte for byte"
+    );
+
+    let separators: u32 = rebuilt
+        .Connection()
+        .query_row(
+            "SELECT count(*) FROM source_table_rows WHERE kind = 'separator'",
+            [],
+            |row| row.get(0),
+        )
+        .expect("queries");
+    assert_eq!(separators, 1, "the row kinds did not survive, so both counts collapse to one");
 }

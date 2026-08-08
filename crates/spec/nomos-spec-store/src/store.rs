@@ -1,5 +1,5 @@
 use crate::schema::{Latest_Version, MIGRATIONS};
-use nomos_spec_model::{ContentHash, SourceBlock};
+use nomos_spec_model::{ContentHash, SourceBlock, Table_Defects, Table_Rows};
 use rusqlite::{Connection, OptionalExtension, params};
 use std::path::Path;
 
@@ -33,6 +33,13 @@ pub enum StoreError
         path: String,
         cause: String,
     },
+    /// A block carries something shaped like a table that cannot be read as one.
+    Table
+    {
+        document_uid: i64,
+        ordinal: u32,
+        cause: String,
+    },
 }
 
 impl core::fmt::Display for StoreError
@@ -51,6 +58,11 @@ impl core::fmt::Display for StoreError
                  Refusing to open it rather than reading tables whose meaning may have changed"
             ),
             Self::Record { path, cause } => write!(formatter, "{path}: {cause}"),
+            Self::Table {
+                document_uid,
+                ordinal,
+                cause,
+            } => write!(formatter, "document {document_uid} block {ordinal}: {cause}"),
         };
     }
 }
@@ -212,15 +224,36 @@ impl SpecificationStore
         )?);
     }
 
+    /// Writes blocks and, for any block carrying a table, its typed rows.
+    ///
+    /// Rows are written here rather than by a separate call so a block cannot reach the
+    /// store without them. A second entry point would mean the rows exist only where
+    /// somebody remembered to ask, and a preservation rule over rows that some documents
+    /// have and others do not is a rule that reports clean on the ones it cannot see.
+    ///
     /// # Errors
     ///
-    /// Returns [`StoreError`] on any SQL failure.
+    /// Returns [`StoreError::Table`] if a block's tables do not each carry exactly one
+    /// delimiter, and [`StoreError`] on any SQL failure.
     pub fn Put_Source_Blocks(
         &mut self,
         document_uid: i64,
         blocks: &[SourceBlock],
     ) -> Result<usize, StoreError>
     {
+        for block in blocks
+        {
+            let defects = Table_Defects(&Table_Rows(block));
+            if let Some(defect) = defects.first()
+            {
+                return Err(StoreError::Table {
+                    document_uid,
+                    ordinal: block.ordinal,
+                    cause: defect.to_string(),
+                });
+            }
+        }
+
         let transaction = self.connection.transaction()?;
         {
             // Not `INSERT OR REPLACE`. REPLACE deletes the conflicting row and inserts a
@@ -250,6 +283,53 @@ impl SpecificationStore
                     block.Content_Hash().As_Str(),
                     block.Normalized_Hash().As_Str(),
                 ])?;
+            }
+
+            let mut block_uid = transaction.prepare(
+                "SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal = ?2",
+            )?;
+            // Same reasoning as the blocks above: update in place rather than REPLACE, so
+            // a re-ingest does not hand a row a new uid.
+            let mut insert_row = transaction.prepare(
+                "INSERT INTO source_table_rows
+                 (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+                  content_hash, normalized_hash)
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+                 ON CONFLICT(source_block_uid, ordinal) DO UPDATE SET
+                     table_ordinal = excluded.table_ordinal,
+                     kind = excluded.kind,
+                     cells_json = excluded.cells_json,
+                     text = excluded.text,
+                     content_hash = excluded.content_hash,
+                     normalized_hash = excluded.normalized_hash",
+            )?;
+
+            for block in blocks
+            {
+                let rows = Table_Rows(block);
+                if rows.is_empty()
+                {
+                    continue;
+                }
+
+                let uid: i64 =
+                    block_uid.query_row(params![document_uid, block.ordinal], |row| row.get(0))?;
+
+                for row in &rows
+                {
+                    let cells = serde_json::to_string(&row.cells)
+                        .map_err(|error| StoreError::Sql(error.to_string()))?;
+                    insert_row.execute(params![
+                        uid,
+                        row.ordinal,
+                        row.table_ordinal,
+                        row.kind.Label(),
+                        cells,
+                        row.text,
+                        row.Content_Hash().As_Str(),
+                        row.Normalized_Hash().As_Str(),
+                    ])?;
+                }
             }
         }
         transaction.commit()?;
@@ -432,6 +512,7 @@ pub enum Table
     SourceDocuments,
     SourceHeadings,
     SourceBlocks,
+    SourceTableRows,
     Nodes,
     NodeAliases,
     NodeHistory,
@@ -453,6 +534,7 @@ impl Table
             Self::SourceDocuments => "source_documents",
             Self::SourceHeadings => "source_headings",
             Self::SourceBlocks => "source_blocks",
+            Self::SourceTableRows => "source_table_rows",
             Self::Nodes => "nodes",
             Self::NodeAliases => "node_aliases",
             Self::NodeHistory => "node_history",
@@ -472,6 +554,7 @@ impl Table
             Self::SourceDocuments,
             Self::SourceHeadings,
             Self::SourceBlocks,
+            Self::SourceTableRows,
             Self::Nodes,
             Self::NodeAliases,
             Self::NodeHistory,

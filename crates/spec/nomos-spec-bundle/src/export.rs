@@ -3,7 +3,7 @@ use crate::bundle::Bundle;
 use crate::model::{
     Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
     Omission, OrdinalRef, Record, Relation, RelationType, SourceBlock, SourceDocument,
-    SourceHeading,
+    SourceHeading, SourceTableRow,
 };
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
@@ -29,6 +29,7 @@ pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
     Source_Documents(connection, &mut records)?;
     Source_Headings(connection, &mut records)?;
     Source_Blocks(connection, &mut records)?;
+    Source_Table_Rows(connection, &mut records)?;
     Nodes(connection, &mut records)?;
     Node_Aliases(connection, &mut records)?;
     Node_Histories(connection, &mut records)?;
@@ -177,6 +178,52 @@ fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(
         .collect::<Result<Vec<_>, _>>()?;
 
     records.extend(rows.into_iter().map(Record::SourceBlock));
+    return Ok(());
+}
+
+fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Record>)
+    -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT d.path, d.revision, b.ordinal, r.ordinal, r.table_ordinal, r.kind,
+                r.cells_json, r.text, r.content_hash, r.normalized_hash
+         FROM source_table_rows r
+         JOIN source_blocks b ON b.uid = r.source_block_uid
+         JOIN source_documents d ON d.uid = b.document_uid
+         ORDER BY d.path, d.revision, b.ordinal, r.ordinal",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            let cells: String = row.get(6)?;
+            return Ok((
+                SourceTableRow {
+                    block: OrdinalRef {
+                        document: DocumentRef {
+                            path: row.get(0)?,
+                            revision: row.get(1)?,
+                        },
+                        ordinal: row.get(2)?,
+                    },
+                    ordinal: row.get(3)?,
+                    table_ordinal: row.get(4)?,
+                    kind: row.get(5)?,
+                    cells: Vec::new(),
+                    text: row.get(7)?,
+                    content_hash: row.get(8)?,
+                    normalized_hash: row.get(9)?,
+                },
+                cells,
+            ));
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    for (mut record, cells) in rows
+    {
+        record.cells =
+            serde_json::from_str(&cells).map_err(|error| BundleError::Sql(error.to_string()))?;
+        records.push(Record::SourceTableRow(record));
+    }
+
     return Ok(());
 }
 

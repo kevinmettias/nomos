@@ -295,17 +295,13 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [
         "P2-VALIDATE",
         "P3-BOM"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p3",
-        "acquired_at": 1786221460,
-        "lease_expires_at": 1786228660
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -625,7 +621,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -640,7 +636,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "table_rows"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_And_258 ... ok\ntest Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest Test_The_Store_Should_Answer_Both_Counts ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-8b75d145481cbc53.exe)\n",
+        "verified_at": 1786223570
+      }
     },
     {
       "id": "P3-ARCHIVE",
