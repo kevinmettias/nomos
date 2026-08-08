@@ -36,12 +36,6 @@ const RECORDS: &[(&str, &str)] = &[
         ),
     ),
     (
-        "docs/records/OD-SPEC-003-the-family-counts-and-the-missing-row-lineage.md",
-        include_str!(
-            "../../../../docs/records/OD-SPEC-003-the-family-counts-and-the-missing-row-lineage.md"
-        ),
-    ),
-    (
         "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md",
         include_str!(
             "../../../../docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md"
@@ -60,7 +54,6 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "D-131",
     "OD-SPEC-001",
     "OD-SPEC-002",
-    "OD-SPEC-003",
     "OD-LEDGER-001",
 ];
 
