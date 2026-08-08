@@ -24,6 +24,7 @@ const BANDS: &[(&str, u32)] = &[
     ("nomos-platform", 15),
     ("nomos-platform-std", 16),
     ("nomos-ledger", 20),
+    ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.
     ("nomos-contract-tests", 100),

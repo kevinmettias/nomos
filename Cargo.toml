@@ -15,6 +15,9 @@ members = [
     # Band 2 — substrate. The work ledger and, later, capability and applicability.
     "crates/substrate/nomos-ledger",
 
+    # Band 10 — host. Composition roots and binaries.
+    "crates/host/nomos-cli",
+
     # Assertions about the workspace itself: dependency bands, the contracts
     # allowlist, and module reachability.
     "tests/contract",

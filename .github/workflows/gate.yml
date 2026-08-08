@@ -1,0 +1,34 @@
+name: gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The toolchain is pinned in rust-toolchain.toml and honoured automatically.
+      # It is nightly because rustfmt's Allman brace option is unstable -- see
+      # rustfmt.toml, which also records why `cargo fmt --check` is NOT a gate step.
+      - name: Show toolchain
+        run: cargo --version && rustc --version
+
+      # Denied lints are part of the gate, not advice. unwrap_used, indexing_slicing
+      # and arithmetic_side_effects all deny: a panic on the analysis path is a
+      # determinism defect, because a replay must reach the same panic at the same step.
+      - name: Lint
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Test
+        run: cargo test --workspace
+
+      # The boundary assertions run as ordinary tests above. This step names them
+      # separately so a failure is legible in the job list rather than buried among
+      # a hundred unit tests -- these are the ones that fail when the architecture
+      # has quietly stopped being true.
+      - name: Boundaries
+        run: cargo test -p nomos-contract-tests

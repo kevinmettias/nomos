@@ -1,0 +1,20 @@
+[package]
+name = "nomos-cli"
+version = "0.1.0"
+description = "Band 10. The `nomos` binary."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "nomos"
+path = "src/main.rs"
+
+[dependencies]
+nomos-ledger = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true
