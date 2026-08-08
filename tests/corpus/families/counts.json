@@ -92,15 +92,24 @@
       "figure": 30,
       "named": "canonical domain models",
       "status": "superseded",
-      "note": "The pipe-line count of the table that lists them. One header and one delimiter are not models."
+      "note": "The pipe-line count of the table that lists them. The table has 28 data rows and those rows name 38 models, because nine rows name more than one — so 30 is neither the rows nor the models."
     }
   },
   {
-    "id": "domain_model.models",
+    "id": "domain_model.rows",
     "family": "canonical_domain_model",
     "measured": 28,
-    "unit": "domain model",
+    "unit": "table row",
     "definition": "Data rows of the single table under heading '5. Canonical domain model'.",
+    "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
+    "plan": null
+  },
+  {
+    "id": "domain_model.named_models",
+    "family": "canonical_domain_model",
+    "measured": 38,
+    "unit": "domain model",
+    "definition": "Model names in the first cell of each data row, splitting a cell that names several on commas and on the word 'and'. Nine of the 28 rows name more than one, so the row count is not the model count.",
     "corpus": "v14.36 02-core-architecture-identity-and-configuration.md",
     "plan": null
   },
@@ -211,6 +220,15 @@
     "measured": 8,
     "unit": "report profile",
     "definition": "Depth-4 headings whose title begins 'D.<n>.<m> '.",
+    "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
+    "plan": null
+  },
+  {
+    "id": "appendix_d.members",
+    "family": "appendix_d",
+    "measured": 16,
+    "unit": "appendix-D member",
+    "definition": "Every section and every report profile of appendix D, which is what the restoration mints a node for.",
     "corpus": "v14.36 09-reference-glossary-schemas-scenarios.md",
     "plan": null
   },

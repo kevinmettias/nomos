@@ -10,6 +10,7 @@ mod gate;
 mod lineage;
 mod overlay;
 mod phases;
+mod restore;
 
 pub use archive::{Archive, ArchiveError, Archives_In};
 pub use gate::{
@@ -24,6 +25,9 @@ pub use overlay::{
     Artifact, Disposition, Family, FillerBlock, FILLER_PATTERNS, IdentifierOutcome,
     Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, OverlayReport, Parse_Artifact,
     ReconciliationReport, Reconcile, Statements_In,
+};
+pub use restore::{
+    Collision, Extract, Member, Models_In, Origin, Resolve, RestorationReport, Restore, Restored,
 };
 pub use phases::{
     CatalogEntity, CatalogReport, IngestError, Ingest_Blob, Ingest_Catalog, Ingest_Source_Document,

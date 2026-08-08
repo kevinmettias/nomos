@@ -755,7 +755,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P3-OVERLAY",
         "P3-ROW-LINEAGE",
@@ -774,7 +774,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "restoration"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest Test_The_Canonical_Domain_Models_Should_Resolve_By_Name_And_Trace_To_Their_Rows ... ok\ntest Test_Every_Restored_Member_Should_Carry_A_Lineage_To_What_Produced_It ... ok\ntest Test_Every_Restored_Member_Should_Resolve_By_Its_Identifier ... ok\ntest Test_Every_Family_Should_Restore_The_Count_The_Register_Declares ... ok\ntest Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing ... ok\ntest Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-041670c8391664c9.exe)\n",
+        "verified_at": 1786232451
+      }
     },
     {
       "id": "P3-SIBLINGS",

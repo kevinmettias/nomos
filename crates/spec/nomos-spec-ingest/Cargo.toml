@@ -16,5 +16,11 @@ serde_yaml_ng = { workspace = true }
 zip = { workspace = true }
 rusqlite = { workspace = true }
 
+[dev-dependencies]
+# The restoration's own acceptance is a preservation run over the reconciled store, so the
+# test needs the validator. A dev-dependency, so band 13 does not acquire a band 14 edge:
+# the boundary test excludes dev-dependencies from the ordering for exactly this case.
+nomos-spec-validate = { workspace = true }
+
 [lints]
 workspace = true

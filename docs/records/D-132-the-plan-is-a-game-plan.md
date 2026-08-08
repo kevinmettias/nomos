@@ -33,7 +33,7 @@ held for every family measured:
 
 - `282 markdown table rows` is the pipe-line count. 24 of them are delimiters.
 - `6 code blocks` is the fence-line count. Three blocks, counted at both ends.
-- `30 canonical domain models` is the pipe-line count of the table that lists them. 28 are models.
+- `30 canonical domain models` is the pipe-line count of the table that lists them. The table has 28 data rows, and those rows name 38 models.
 - `8 roadmap release definitions` is the milestone count. The eighth is Foundation 0; there is no Release 8.
 - `8 worked scenarios` is the appendix-G section count. Four are scenarios.
 - `1,632 catalog entities` and `64 v15 records` are simply older than the files they describe: 2,619 and 66.
@@ -67,6 +67,14 @@ The register is the single home for these numbers. A restoration, a regression r
 projection quotes it rather than re-deriving, and the store's own row census answers the
 same three questions — pipe lines, authored rows, data rows — as three queries over a typed
 column rather than one number and two subtractions.
+
+A count can be wrong in both directions, and the register is where that becomes visible.
+The canonical domain model is the case: 30 is the pipe-line count, the table holds 28 data
+rows, and those rows name 38 models because nine of them name more than one. The register
+first carried 28 as "domain models" — a row count wearing the name of the thing the rows
+list — and the restoration is what found it, because `ModelUsageObservation` shares a row
+with `CostObservation` and could not resolve individually until the two were told apart.
+The register now carries all three numbers with the extraction that produced each.
 
 One figure survives as unreproducible and is recorded that way. No extraction over v14.36
 yields the plan's **54 service descriptions**: section 6 of volume 02 holds 56 headings at

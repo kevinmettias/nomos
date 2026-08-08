@@ -292,12 +292,16 @@ fn Test_The_Domain_Volumes_Should_Answer_282_258_And_234()
     );
 }
 
-/// Section 5's canonical domain model: 30 pipe lines, 28 models.
+/// Section 5's canonical domain model: 30 pipe lines, 28 data rows.
 ///
 /// The count the plan states as 30 is the pipe-line count of the table that carries them,
 /// and this is the query that tells the two apart. Naming the table by the content of its
 /// first data row rather than by an ordinal, because an ordinal moves when the document
 /// above it is edited and the row does not.
+///
+/// 28 is the rows. The rows name 38 models, because nine of them name more than one —
+/// that count belongs to the restoration, which reads the cells, not to the census, which
+/// counts lines.
 #[test]
 fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
 {
@@ -340,7 +344,7 @@ fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
     );
 
     assert_eq!(census.lines, 30, "pipe lines");
-    assert_eq!(census.content, 28, "canonical domain models");
+    assert_eq!(census.content, 28, "data rows, which is not the model count");
     assert_eq!(census.header, 1);
     assert_eq!(census.separator, 1);
 }

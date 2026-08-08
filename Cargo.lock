@@ -368,6 +368,7 @@ version = "0.1.0"
 dependencies = [
  "nomos-spec-model",
  "nomos-spec-store",
+ "nomos-spec-validate",
  "rusqlite",
  "serde",
  "serde_json",

@@ -234,7 +234,8 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
         "code.blocks" => Code_Blocks(&volumes),
 
         "domain_model.pipe_lines" => Table_Under(corpus, "02-core", "5. Canonical domain model").0,
-        "domain_model.models" => Table_Under(corpus, "02-core", "5. Canonical domain model").1,
+        "domain_model.rows" => Table_Under(corpus, "02-core", "5. Canonical domain model").1,
+        "domain_model.named_models" => Named_Models(corpus),
 
         "roadmap.milestones" => Headings_Matching(corpus, "08-roadmap", 3, &["Foundation ", "Release "]),
         "roadmap.releases" => Headings_Matching(corpus, "08-roadmap", 3, &["Release "]),
@@ -251,6 +252,8 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
 
         "appendix_d.sections" => Lettered(corpus, "09-reference", 3, 'D', 1),
         "appendix_d.report_profiles" => Lettered(corpus, "09-reference", 4, 'D', 2),
+        "appendix_d.members" => Lettered(corpus, "09-reference", 3, 'D', 1)
+            .saturating_add(Lettered(corpus, "09-reference", 4, 'D', 2)),
         "appendix_h.sections" => Lettered(corpus, "06-agents", 3, 'H', 1),
         "headless_inventory.sections" => Prefixed(corpus, "07-clients", 4, "E.1."),
         "ide_profiles.sections" => Prefixed(corpus, "07-clients", 4, "F.1."),
@@ -417,6 +420,34 @@ fn Table_Under(corpus: &Path, stem: &str, heading: &str) -> (u32, u32)
     .unwrap_or(u32::MAX);
 
     return (lines, content);
+}
+
+/// Counted through the restoration's own reader, not a second implementation of the split.
+/// Two readings of "does this cell name one model or three" would be two authorities on
+/// how many models the corpus has.
+fn Named_Models(corpus: &Path) -> u32
+{
+    let markdown = Volume(corpus, "02-core");
+    let mut models = 0_u32;
+
+    for block in Segment(&markdown)
+    {
+        if block.heading_path.last().map(String::as_str) != Some("5. Canonical domain model")
+        {
+            continue;
+        }
+        for row in nomos_spec_model::Table_Rows(&block)
+            .iter()
+            .filter(|row| return row.kind == nomos_spec_model::RowKind::Content)
+        {
+            let cell = row.cells.first().map_or("", |cell| return cell.trim());
+            models = models.saturating_add(
+                u32::try_from(nomos_spec_ingest::Models_In(cell).len()).unwrap_or(u32::MAX),
+            );
+        }
+    }
+
+    return models;
 }
 
 struct Heading
