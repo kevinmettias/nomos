@@ -746,7 +746,7 @@
       "id": "P3-FAMILIES",
       "title": "I5: restore the families v15.0 destroyed",
       "why": "The 8 roadmap releases, Appendix-D schemas and profiles, 8 worked scenarios, Appendix-H telemetry, 54 service descriptions, the E.1 headless inventory, F.1 IDE profiles and the glossary. Section 5's canonical domain model comes back as one table block plus a concept node per row, each with a lineage row to its originating row — one canonical source, two projections, never two authorities.",
-      "done_when": "Every restored family resolves by identifier and the reconciled store reports zero NSV-PRESERVE errors over a non-zero subject count. The 30 domain models resolve individually, named, not counted.",
+      "done_when": "Every restored family resolves by identifier, and the reconciled store reports zero NSV-PRESERVE errors over a non-zero subject count. The canonical domain models resolve individually and by name — WorkspaceContext, FindingGeometry, MetricTradeoffProjection through ModelUsageObservation — each tracing to the table row it came from. Counts come from P3-COUNTS with their definitions attached; the plan's figures are recorded as superseded, never asserted.",
       "territory": {
         "resolution": "File",
         "paths": [
@@ -755,12 +755,18 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
-        "P3-OVERLAY"
+        "P3-OVERLAY",
+        "P3-ROW-LINEAGE",
+        "P3-COUNTS"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-p3",
+        "acquired_at": 1786226707,
+        "lease_expires_at": 1786233907
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -832,6 +838,65 @@
           "nomos-spec-ingest",
           "--test",
           "revisions"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-ROW-LINEAGE",
+      "title": "Lineage to a table row, a header row type, and a column-level completeness guard",
+      "why": "A concept node derived from a table row must trace to that row, not to the block that contains it, or the one-canonical-source property the restoration exists to establish is not expressible. Restoration also mints a node per model row, so a header that cannot be told from data becomes a concept node named after the column titles.",
+      "done_when": "Lineage references a table row, and a node restored from a row traces to it. Rows are typed header, content or separator, so 282 pipe lines, 258 non-separator and 28 data rows are three queries and none is arithmetic at the call site. The bundle carries every lineage column: a column-level guard compares each table's columns against what the exporter writes and fails on one it does not, because the row-count guard cannot see a dropped column and this change is what walks into that.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model",
+          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-bundle"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-COUNTS",
+      "title": "Measure every restored family, and record the definition with the count",
+      "why": "Every count in the plan is a heading or line count under a looser definition than the thing it names: 282 pipe lines for 258 content rows, 6 fences for 3 code blocks, 30 pipe lines for 28 models, 8 scenario headings for 4 end-to-end scenarios. Roadmap releases are the exception and simply wrong, since Release 8 does not exist. D-120 already says game-plan notes are lineage and never sole authority, and the plan is a game plan.",
+      "done_when": "Each family carries a measured count, the extraction definition that produced it, and the corpus it was measured over, with the plan's figure recorded as superseded rather than silently corrected. A record generalises D-120 to the plan document so the next divergence is resolved by rule instead of by argument.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records",
+          "tests/corpus/families"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "family_counts"
         ],
         "timeout_seconds": 600
       },
