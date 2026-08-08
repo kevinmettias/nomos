@@ -11,6 +11,9 @@ members = [
     # `nomos-platform-xvpe` is deliberately absent until XVPE stabilizes.
     "crates/platform/nomos-platform",
     "crates/platform/nomos-platform-std",
+
+    # Band 2 — substrate. The work ledger and, later, capability and applicability.
+    "crates/substrate/nomos-ledger",
 ]
 
 resolver = "3"
