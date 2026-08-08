@@ -4,7 +4,7 @@ use crate::exclusion::{
     Check_Lease, ClaimRefusal, ExclusionLedger, Refusal_From, ReleaseOutcome, Reservation,
 };
 use crate::item::{Claim, ItemId, ItemState, LedgerItem};
-use nomos_model::SubjectSet;
+use crate::territory::Territory;
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timestamp};
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
@@ -117,6 +117,18 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     pub fn Path(&self) -> &Path
     {
         return &self.path;
+    }
+
+    /// The time this ledger judges claims and leases against.
+    ///
+    /// Exposed so that a record written alongside a ledger operation carries the same
+    /// clock the operation was decided by. A caller reading the wall clock separately
+    /// would stamp evidence from one time base onto a decision made in another, which
+    /// is a defect this workspace has already shipped once, in the file lock.
+    #[must_use]
+    pub fn Now(&self) -> Timestamp
+    {
+        return self.clock.Now();
     }
 
     /// Reads the ledger.
@@ -298,6 +310,29 @@ pub fn Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
         {
             violations.push(format!(
                 "{} carries a verification predicate that cannot be run",
+                item.id
+            ));
+        }
+
+        for (first, second) in item.territory.Ambiguous_Paths()
+        {
+            violations.push(format!(
+                "{}'s territory lists `{first}` and `{second}`, which name the same \
+                 subject; whoever wrote it probably believed they were reserving two things",
+                item.id
+            ));
+        }
+
+        // An item somebody can pick up must say what it touches. An empty territory is
+        // disjoint from every other territory, so two agents working an unstated item
+        // are told they may both proceed — the ledger answers the exclusion question
+        // confidently and wrongly. Silence about territory is not a claim of touching
+        // nothing.
+        if matches!(item.state, ItemState::Ready | ItemState::Claimed)
+            && item.territory.Is_Empty()
+        {
+            violations.push(format!(
+                "{} is workable but reserves nothing, so it excludes nobody",
                 item.id
             ));
         }
@@ -525,11 +560,15 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
                 Some(claim) if claim.holder == holder =>
                 {
                     candidate.claim = None;
-                    candidate.state = match &outcome
+                    match &outcome
                     {
-                        ReleaseOutcome::Finished => ItemState::Done,
-                        ReleaseOutcome::Abandoned { .. } => ItemState::Ready,
-                    };
+                        ReleaseOutcome::Finished(record) =>
+                        {
+                            candidate.state = ItemState::Done;
+                            candidate.verified = Some(record.clone());
+                        }
+                        ReleaseOutcome::Abandoned { .. } => candidate.state = ItemState::Ready,
+                    }
                     released = true;
                 }
                 Some(claim) =>
@@ -560,7 +599,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
             .map_err(|_| ClaimRefusal::NoSuchItem { item: item.clone() });
     }
 
-    fn Conflicts(&self, territory: &SubjectSet) -> Vec<ClaimRefusal>
+    fn Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>
     {
         let now = self.clock.Now();
         let Ok(document) = self.Load()

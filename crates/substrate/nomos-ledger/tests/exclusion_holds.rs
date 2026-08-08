@@ -5,13 +5,13 @@
 //! checks were deleted.
 
 use nomos_ledger::{
-    Claim, ClaimRefusal, ExclusionLedger, FileLedger, ItemId, ItemState, LedgerDocument,
-    LedgerError, LedgerItem, Validate, VerificationPredicate, VerificationRecord,
+    Claim, ClaimRefusal, ExclusionLedger, FileLedger, Finish, FinishRefusal, ItemId, ItemState,
+    LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome, Territory as ItemTerritory, Validate,
+    VerificationPredicate, VerificationRecord,
 };
-use nomos_model::{Content_Digest, SetResolution, SubjectSet};
+use nomos_model::SetResolution;
 use nomos_platform::{Clock, Timestamp};
-use nomos_platform_std::{FileLock, StdFileSystem};
-use nomos_contracts::SubjectId;
+use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
@@ -35,14 +35,9 @@ fn At(seconds: i64) -> Timestamp
     return Timestamp::From_Unix_Seconds(seconds);
 }
 
-fn Subject(name: &str) -> SubjectId
+fn Territory(files: &[&str]) -> ItemTerritory
 {
-    return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
-}
-
-fn Territory(files: &[&str]) -> SubjectSet
-{
-    return SubjectSet::Of(SetResolution::File, files.iter().map(|name| Subject(name)));
+    return ItemTerritory::Of_Files(files.iter().copied());
 }
 
 fn Item(id: &str, files: &[&str]) -> LedgerItem
@@ -167,8 +162,8 @@ fn Test_A_Lapsed_Claim_Should_Not_Conflict()
 #[test]
 fn Test_Incomparable_Territory_Should_Be_Reported_Not_Ignored()
 {
-    let mut second = Item("T-2", &[]);
-    second.territory = SubjectSet::Of(SetResolution::Symbol, [Subject("src/b.rs::foo")]);
+    let mut second = Item("T-2", &["src/b.rs"]);
+    second.territory.resolution = SetResolution::Symbol;
 
     let document = Document(vec![
         Held_By(Item("T-1", &["src/b.rs"]), "agent-a", NOW + 3_600),
@@ -329,6 +324,227 @@ fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
         .expect("disjoint territory must be claimable concurrently");
 
     ledger.Validate_Current().expect("both claims are legitimate");
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+// ---------------------------------------------------------------------------
+// Acceptance 5 — finishing runs the predicate, and believes it.
+// ---------------------------------------------------------------------------
+
+/// A command that exits with the given code, on either platform family.
+fn Exits_With(code: i32) -> Vec<String>
+{
+    return if cfg!(windows)
+    {
+        vec!["cmd".to_owned(), "/C".to_owned(), format!("exit {code}")]
+    }
+    else
+    {
+        vec!["sh".to_owned(), "-c".to_owned(), format!("exit {code}")]
+    };
+}
+
+fn Item_Verified_By(id: &str, files: &[&str], argv: Vec<String>) -> LedgerItem
+{
+    let mut item = Item(id, files);
+    item.verification = Some(VerificationPredicate::New(argv));
+    return item;
+}
+
+/// The Phase 0 acceptance criterion: a completion whose predicate exits non-zero is
+/// refused, and the item does not become done.
+#[test]
+fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
+{
+    let directory = Temp_Dir("finish-fails");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item_Verified_By(
+            "T-1",
+            &["src/a.rs"],
+            Exits_With(1),
+        )]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let refusal = Finish(
+        &mut ledger,
+        &StdProcessLauncher,
+        &ItemId::New("T-1"),
+        "agent-a",
+        None,
+    )
+    .expect_err("a predicate that exits non-zero must refuse the completion");
+
+    assert!(matches!(refusal, FinishRefusal::PredicateFailed { .. }));
+    assert!(refusal.Judged_The_Work());
+
+    let after = ledger.Load().expect("readable");
+    assert_eq!(
+        after.items.first().map(|item| &item.state),
+        Some(&ItemState::Claimed),
+        "a refused completion must leave the item claimed, not done"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The negative control. Without it, a `Finish` that refused everything unconditionally
+/// would pass the test above.
+#[test]
+fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
+{
+    let directory = Temp_Dir("finish-passes");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item_Verified_By(
+            "T-1",
+            &["src/a.rs"],
+            Exits_With(0),
+        )]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let record = Finish(
+        &mut ledger,
+        &StdProcessLauncher,
+        &ItemId::New("T-1"),
+        "agent-a",
+        None,
+    )
+    .expect("a passing predicate must finish the item");
+
+    assert_eq!(record.exit_code, 0);
+    assert_eq!(record.verified_at, At(NOW));
+
+    let after = ledger.Load().expect("readable");
+    let finished = after.items.first().expect("the item survives");
+    assert_eq!(finished.state, ItemState::Done);
+    assert!(
+        finished.verified.is_some(),
+        "a done item carries the evidence that made it done"
+    );
+    ledger
+        .Validate_Current()
+        .expect("a verified done item is a valid ledger");
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// An item with nothing to run cannot be shown to be finished. "There was nothing to
+/// check" must not read the same as "everything checked out".
+#[test]
+fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
+{
+    let directory = Temp_Dir("finish-no-predicate");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let refusal = Finish(
+        &mut ledger,
+        &StdProcessLauncher,
+        &ItemId::New("T-1"),
+        "agent-a",
+        None,
+    )
+    .expect_err("an item with no predicate cannot be finished");
+
+    assert!(matches!(refusal, FinishRefusal::NoPredicate { .. }));
+    assert!(
+        !refusal.Judged_The_Work(),
+        "nothing was learned about the work"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// A predicate that cannot be started says nothing about the work. Reporting it as a
+/// failed check would tell an author their code is wrong when their tooling is missing.
+#[test]
+fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
+{
+    let directory = Temp_Dir("finish-unstartable");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item_Verified_By(
+            "T-1",
+            &["src/a.rs"],
+            vec!["nomos-no-such-program-exists".to_owned()],
+        )]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let refusal = Finish(
+        &mut ledger,
+        &StdProcessLauncher,
+        &ItemId::New("T-1"),
+        "agent-a",
+        None,
+    )
+    .expect_err("a missing program is not a verdict");
+
+    assert!(matches!(refusal, FinishRefusal::CouldNotRun { .. }));
+    assert!(!refusal.Judged_The_Work());
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The state transition to `Done` carries its own evidence, so an item cannot arrive
+/// there by any route that skipped verification.
+#[test]
+fn Test_Releasing_As_Finished_Should_Record_The_Verification()
+{
+    let directory = Temp_Dir("finish-records");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    ledger
+        .Release(
+            &ItemId::New("T-1"),
+            "agent-a",
+            ReleaseOutcome::Finished(VerificationRecord {
+                argv: vec!["cargo".to_owned(), "test".to_owned()],
+                exit_code: 0,
+                output_tail: "ok".to_owned(),
+                verified_at: At(NOW),
+            }),
+        )
+        .expect("a release carrying evidence must be accepted");
+
+    let after = ledger.Load().expect("readable");
+    let finished = after.items.first().expect("the item survives");
+    assert_eq!(finished.state, ItemState::Done);
+    assert_eq!(
+        finished.verified.as_ref().map(|record| record.exit_code),
+        Some(0)
+    );
 
     let _ = std::fs::remove_dir_all(&directory);
 }

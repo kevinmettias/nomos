@@ -1,6 +1,6 @@
 //! What a unit of work is, and what it means to have finished one.
 
-use nomos_model::SubjectSet;
+use crate::territory::Territory;
 use nomos_platform::Timestamp;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
@@ -43,7 +43,10 @@ impl core::fmt::Display for ItemId
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
-        return formatter.write_str(&self.0);
+        // `pad`, not `write_str`. Writing to the formatter directly discards the width
+        // and alignment the caller asked for, so `{:<10}` silently does nothing and a
+        // listing that was supposed to be columns comes out ragged.
+        return formatter.pad(&self.0);
     }
 }
 
@@ -225,7 +228,7 @@ pub struct LedgerItem
     /// [`LedgerItem::verification`].
     pub done_when: String,
     /// What the work touches. The basis for mutual exclusion.
-    pub territory: SubjectSet,
+    pub territory: Territory,
     /// Current state.
     pub state: ItemState,
     /// Items that must finish first.
@@ -265,7 +268,6 @@ impl LedgerItem
 mod tests
 {
     use super::*;
-    use nomos_model::SetResolution;
 
     fn Item(id: &str) -> LedgerItem
     {
@@ -274,7 +276,7 @@ mod tests
             title: "an item".to_owned(),
             why: "because".to_owned(),
             done_when: "when it is done".to_owned(),
-            territory: SubjectSet::Empty(SetResolution::File),
+            territory: Territory::Empty(),
             state: ItemState::Ready,
             depends_on: Vec::new(),
             blocked: None,
@@ -343,6 +345,15 @@ mod tests
         assert!(!VerificationPredicate::New(Vec::new()).Is_Runnable());
         assert!(!VerificationPredicate::New(vec![String::new()]).Is_Runnable());
         assert!(VerificationPredicate::New(vec!["cargo".to_owned(), "test".to_owned()]).Is_Runnable());
+    }
+
+    /// A listing is columns, and columns need the width the caller asked for. A `Display`
+    /// that writes straight to the formatter drops it without any error.
+    #[test]
+    fn Test_An_Item_Id_Should_Honor_Format_Width()
+    {
+        assert_eq!(format!("{:<10}|", ItemId::New("P1-MODEL")), "P1-MODEL  |");
+        assert_eq!(format!("{}", ItemId::New("P1-MODEL")), "P1-MODEL");
     }
 
     #[test]

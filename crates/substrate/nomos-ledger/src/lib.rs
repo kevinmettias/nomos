@@ -31,12 +31,15 @@
 #![forbid(unsafe_code)]
 
 mod exclusion;
+mod finish;
 mod item;
 mod store;
+mod territory;
 
 pub use exclusion::{
     Check_Lease, ClaimRefusal, ExclusionLedger, Refusal_From, ReleaseOutcome, Reservation,
 };
+pub use finish::{Finish, FinishRefusal};
 pub use item::{
     Blocker, Claim, DEFAULT_LEASE, ItemId, ItemState, LedgerItem, MAXIMUM_LEASE,
     VerificationPredicate, VerificationRecord,
@@ -44,3 +47,4 @@ pub use item::{
 pub use store::{
     FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, LedgerError, Validate,
 };
+pub use territory::{Normalize_Path, Subject_Of, Territory};

@@ -1,10 +1,10 @@
 //! `nomos work` — the ledger, from a terminal.
 
 use nomos_ledger::{
-    ClaimRefusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, ItemId, ItemState, LedgerError,
-    ReleaseOutcome,
+    ClaimRefusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish, FinishRefusal, ItemId,
+    ItemState, LedgerError, LedgerItem, ReleaseOutcome, Territory, VerificationPredicate,
 };
-use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
+use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
 use std::path::Path;
 use std::time::Duration;
 
@@ -52,6 +52,20 @@ pub enum WorkCommand
     {
         /// Only items in this state.
         state: Option<String>,
+    },
+    /// Put a new item on the ledger.
+    Add
+    {
+        /// The item to record.
+        item: Box<LedgerItem>,
+    },
+    /// Run an item's verification predicate and record it done if it passes.
+    Finish
+    {
+        /// Which item.
+        item: ItemId,
+        /// Who holds it.
+        holder: String,
     },
     /// Take an item.
     Claim
@@ -102,16 +116,30 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
         return Err(Usage_Text());
     };
 
-    let Some(value_of) = Some(|name: &str| Named_Value(arguments, name))
-    else
+    // Everything after a bare `--` is the verification argv, so a predicate carrying its
+    // own flags needs no quoting and no escaping. The named arguments are parsed from
+    // the part before it, which is why the split happens here rather than per-command.
+    let separator = arguments.iter().position(|argument| argument == "--");
+    let (named, predicate_argv) = match separator
     {
-        return Err(Usage_Text());
+        Some(index) => (
+            arguments.get(..index).unwrap_or_default(),
+            arguments.get(index.saturating_add(1)..).unwrap_or_default(),
+        ),
+        None => (arguments, &[] as &[String]),
     };
+
+    let value_of = |name: &str| Named_Value(named, name);
 
     return match verb.as_str()
     {
         "list" => Ok(WorkCommand::List {
             state: value_of("--state"),
+        }),
+        "add" => Parse_Add(named, predicate_argv),
+        "finish" => Ok(WorkCommand::Finish {
+            item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
+            holder: Required(value_of("--holder").as_ref(), "--holder")?,
         }),
         "claim" | "renew" =>
         {
@@ -148,10 +176,88 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
     };
 }
 
+/// Builds an item from `add`'s arguments.
+///
+/// Territory is required and has no default. An item that reserves nothing excludes
+/// nobody, so letting `--territory` be omitted would mean the easiest item to write is
+/// the one that silently opts out of the exclusion the ledger exists to provide.
+fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand, String>
+{
+    let value_of = |name: &str| Named_Value(named, name);
+
+    let paths = Named_Values(named, "--territory");
+    let patterns = Named_Values(named, "--territory-pattern");
+    if paths.is_empty() && patterns.is_empty()
+    {
+        return Err(format!(
+            "--territory is required: an item that reserves nothing excludes nobody.\n\n{}",
+            Usage_Text()
+        ));
+    }
+
+    let mut territory = Territory::Of_Files(paths);
+    for pattern in patterns
+    {
+        territory = territory.With_Pattern(pattern);
+    }
+
+    let verification = if predicate_argv.is_empty()
+    {
+        None
+    }
+    else
+    {
+        Some(VerificationPredicate::New(predicate_argv.to_vec()))
+    };
+
+    return Ok(WorkCommand::Add {
+        item: Box::new(LedgerItem {
+            id: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
+            title: Required(value_of("--title").as_ref(), "--title")?,
+            why: Required(value_of("--why").as_ref(), "--why")?,
+            done_when: Required(value_of("--done-when").as_ref(), "--done-when")?,
+            territory,
+            state: ItemState::Ready,
+            depends_on: Named_Values(named, "--depends-on")
+                .into_iter()
+                .map(ItemId::New)
+                .collect(),
+            blocked: None,
+            claim: None,
+            verification,
+            verified: None,
+        }),
+    });
+}
+
 fn Named_Value(arguments: &[String], name: &str) -> Option<String>
 {
     let position = arguments.iter().position(|argument| argument == name)?;
     return arguments.get(position.saturating_add(1)).cloned();
+}
+
+/// Every value given for a repeatable flag.
+///
+/// Repeating rather than comma-splitting, because a path may contain a comma and a
+/// separator character invents a quoting problem the argument vector already solved.
+fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
+{
+    let mut values = Vec::new();
+    let mut index = 0_usize;
+
+    while let Some(argument) = arguments.get(index)
+    {
+        if argument == name
+            && let Some(value) = arguments.get(index.saturating_add(1))
+        {
+            values.push(value.clone());
+            index = index.saturating_add(2);
+            continue;
+        }
+        index = index.saturating_add(1);
+    }
+
+    return values;
 }
 
 fn Required(value: Option<&String>, name: &str) -> Result<String, String>
@@ -187,11 +293,19 @@ fn Usage_Text() -> String
     return "usage: nomos work <command>\n\
             \n\
             \x20 list     [--state ready|claimed|blocked|done|declined]\n\
+            \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
+            \x20          --territory <path> [--territory <path> …]\n\
+            \x20          [--territory-pattern <glob> …] [--depends-on <id> …]\n\
+            \x20          [-- <program> <args…>]\n\
             \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
             \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
+            \x20 finish   --item <id> --holder <name>\n\
             \x20 abandon  --item <id> --holder <name> --reason <text>\n\
             \x20 validate\n\
             \x20 audit\n\
+            \n\
+            everything after `--` is the verification predicate, run directly with no \
+            shell. `finish` runs it and records the item done only if it exits zero.\n\
             \n\
             exit codes: 0 ok, 1 validation error, 2 usage, 3 claim unavailable \
             (retryable), 4 conflict, 5 store error"
@@ -217,6 +331,15 @@ pub fn Run(
     return match command
     {
         WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
+        WorkCommand::Add { item } => Add(&ledger, item, output),
+        WorkCommand::Finish { item, holder } => Report_Finish(
+            // No working directory: the predicate runs where the user invoked `nomos`,
+            // which for a repository tool run inside a repository is the repository. A
+            // predicate silently relocated into `work/` would fail in ways that look
+            // like the work being wrong.
+            Finish(&mut ledger, &StdProcessLauncher, item, holder, None),
+            output,
+        ),
         WorkCommand::Claim {
             item,
             holder,
@@ -287,6 +410,86 @@ fn List(
     }
 
     return ExitCode::Ok;
+}
+
+/// Records a new item, refusing one whose territory is already spoken for.
+///
+/// The whole document is validated before the write, so an item that would break an
+/// invariant never lands. The alternative — write now, notice later — leaves every agent
+/// reading a ledger the system itself says is wrong.
+fn Add(
+    ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
+    item: &LedgerItem,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let mut document = match ledger.Load()
+    {
+        Ok(document) => document,
+        Err(error) => return Report_Error(&error, output),
+    };
+
+    if document
+        .items
+        .iter()
+        .any(|existing| existing.id == item.id)
+    {
+        let _ = writeln!(output, "{} is already on the ledger", item.id);
+        return ExitCode::Conflict;
+    }
+
+    document.items.push(item.clone());
+
+    return match ledger.Save(&document)
+    {
+        Ok(()) =>
+        {
+            let _ = writeln!(
+                output,
+                "added {} reserving {} path(s)",
+                item.id,
+                item.territory.paths.len()
+            );
+            ExitCode::Ok
+        }
+        Err(error) => Report_Error(&error, output),
+    };
+}
+
+fn Report_Finish(
+    result: Result<nomos_ledger::VerificationRecord, FinishRefusal>,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    return match result
+    {
+        Ok(record) =>
+        {
+            let _ = writeln!(
+                output,
+                "verified by `{}` at unix {}",
+                record.argv.join(" "),
+                record.verified_at.Unix_Seconds()
+            );
+            ExitCode::Ok
+        }
+        Err(refusal) =>
+        {
+            let _ = writeln!(output, "not finished: {}", refusal.Describe());
+
+            // A failing predicate is a validation error: the work was judged and found
+            // incomplete. Everything else prevented the judgment, and reporting that as
+            // the same thing would send an author to fix code that may be fine.
+            if refusal.Judged_The_Work()
+            {
+                ExitCode::ValidationError
+            }
+            else
+            {
+                ExitCode::Conflict
+            }
+        }
+    };
 }
 
 fn State_Label(state: &ItemState) -> &'static str
@@ -467,6 +670,87 @@ mod tests
 
         assert!(error.contains("frobnicate"));
         assert!(error.contains("usage"));
+    }
+
+    fn Added(text: &str) -> LedgerItem
+    {
+        return match Parse(&Arguments(text)).unwrap()
+        {
+            WorkCommand::Add { item } => *item,
+            other => panic!("expected an add, got {other:?}"),
+        };
+    }
+
+    #[test]
+    fn Test_Add_Should_Collect_Repeated_Territory_Flags()
+    {
+        let item = Added(
+            "add --item T-1 --title t --why w --done-when d \
+             --territory src/a.rs --territory src/b.rs",
+        );
+
+        assert_eq!(item.territory.paths, vec!["src/a.rs", "src/b.rs"]);
+        assert_eq!(item.state, ItemState::Ready);
+    }
+
+    /// The predicate is everything after `--`, so a command carrying its own flags needs
+    /// no quoting and no escaping — and the named arguments before the separator are
+    /// still parsed normally.
+    #[test]
+    fn Test_Add_Should_Take_The_Predicate_After_The_Separator()
+    {
+        let item = Added(
+            "add --item T-1 --title t --why w --done-when d --territory src/a.rs \
+             -- cargo test -p nomos-spec-model --lib",
+        );
+
+        assert_eq!(
+            item.verification.map(|predicate| predicate.argv),
+            Some(vec![
+                "cargo".to_owned(),
+                "test".to_owned(),
+                "-p".to_owned(),
+                "nomos-spec-model".to_owned(),
+                "--lib".to_owned(),
+            ])
+        );
+    }
+
+    /// A flag that looks like a named argument but sits after the separator belongs to
+    /// the predicate. Without the split, `--lib` above would be read as an option to
+    /// `nomos work`.
+    #[test]
+    fn Test_Arguments_After_The_Separator_Should_Not_Be_Read_As_Options()
+    {
+        let item = Added(
+            "add --item T-1 --title t --why w --done-when d --territory src/a.rs \
+             -- prog --title stolen",
+        );
+
+        assert_eq!(item.title, "t");
+    }
+
+    /// An item that reserves nothing excludes nobody, so the ledger would hand two
+    /// agents the same files and call it disjoint.
+    #[test]
+    fn Test_Add_Should_Refuse_An_Item_With_No_Territory()
+    {
+        let error =
+            Parse(&Arguments("add --item T-1 --title t --why w --done-when d")).unwrap_err();
+
+        assert!(error.contains("--territory"));
+    }
+
+    #[test]
+    fn Test_Finish_Should_Parse()
+    {
+        assert_eq!(
+            Parse(&Arguments("finish --item T-1 --holder agent-a")).unwrap(),
+            WorkCommand::Finish {
+                item: ItemId::New("T-1"),
+                holder: "agent-a".to_owned(),
+            }
+        );
     }
 
     /// The exit codes are a contract agents branch on, so their values are pinned.

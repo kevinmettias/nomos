@@ -1,4 +1,304 @@
 {
   "schema_version": 1,
-  "items": []
+  "items": [
+    {
+      "id": "P1-MODEL",
+      "title": "nomos-spec-model: types, ID grammar, canonical normalizer",
+      "why": "Every hash in the specification store is computed here. Nothing downstream can be trusted until this crate is the single authority on what content hashes to.",
+      "done_when": "The crate exposes the node/relation/statement types, the ID grammar, the canonical text normalizer and SHA-256, and its own tests pass.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-model"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P1-GATE",
+      "title": "The normalizer reproduces v14's real canonical_hash",
+      "why": "This single test gates everything after it. If our normalizer disagrees with the corpus, every downstream hash is untrustworthy and the preservation ledger is measuring nothing.",
+      "done_when": "Twenty statements sampled from the real normative-source-statements.yaml recompute to their recorded canonical_hash, byte for byte.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model/tests",
+          "tests/corpus/v14-statements"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P1-MODEL"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-model",
+          "--test",
+          "normalizer_gate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P2-STORE",
+      "title": "nomos-spec-store: schema, migrations, transactions",
+      "why": "The corpus stops being a pile of zips and becomes something queryable. Three identifiers stay distinct here — node_id, uid and content_hash — and conflating them later is expensive.",
+      "done_when": "The full DDL applies, migrations run forward, and a transaction that fails rolls back every table it touched.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P1-MODEL"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P2-BUNDLE",
+      "title": "nomos-spec-bundle: deterministic JSONL export and import",
+      "why": "The bundle is the portable authority committed to git. If it is not byte-identical across a round trip it cannot be diffed, and a diff nobody can read is a review nobody does.",
+      "done_when": "P1 holds: database to export to import into an empty database to export yields an identical bundle.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P2-STORE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P2-INGEST",
+      "title": "Ingest I0-I3: blobs, v14.36 source truth, statements, node graph",
+      "why": "The gate is I1: every block hash we recompute must match the real 1.5 MB source-block-lineage.yaml. A mismatch means our segmenter disagrees with the corpus, and a clean match independently validates it.",
+      "done_when": "I0 through I3 run as idempotent transactions and the recomputed block hashes match the recorded manifest exactly. A mismatch is a hard stop, not a warning.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P2-STORE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P2-VALIDATE",
+      "title": "Preservation rules NSV-PRESERVE-001/002/003/006",
+      "why": "This is the mechanism that would have caught v15.0. 282 table rows and 6 code blocks disappeared silently because the validator that could have seen it never ran.",
+      "done_when": "Every source heading and source block has a disposition, a changed canonical_hash requires a reason, and every statement traces to a source block. A declared-but-unregistered rule makes the run error, never skip.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P2-INGEST"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P2-RECORDS",
+      "title": "Author ARC-SPECDB-001, D-129, D-130 and OD-SPEC-001 into the store",
+      "why": "The records governing this system must be in the store before the validator they govern is trusted. D-129 supersedes ADR-DOC-001 explicitly rather than leaving two live answers to what the source of truth is.",
+      "done_when": "All four records resolve by ID from the store, and ADR-DOC-001 carries an explicit supersession edge.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P2-STORE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "governing_records_are_present"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-RESTORE",
+      "title": "Ingest I4-I8: v15 overlay, the lost families, siblings, lineage",
+      "why": "The roadmap releases, Appendix-D schemas, worked scenarios, service descriptions and the 30-row canonical domain model come back. Merge is block-level, because 132 v15 files mix real prose with filler and file-level preference would discard real improvements.",
+      "done_when": "Every restored family resolves by ID and the reconciled store reports zero NSV-PRESERVE errors.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/overlay.rs",
+          "crates/spec/nomos-spec-ingest/src/restore.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P2-VALIDATE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "restoration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-REGRESSION",
+      "title": "The cross-revision regression report",
+      "why": "Appeared, disappeared, changed-in-place and reappeared, per adjacent revision pair. Reappeared is the strongest signature of accidental loss, and no current tool can see it.",
+      "done_when": "The v14.36 to v15.0 headline reproduces from the real archives and names lost content by identity, not by count. If it does not, the archaeology is wrong.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/archaeology.rs",
+          "tests/corpus/regression"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P3-RESTORE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "regression_report"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P4-PROJECT",
+      "title": "nomos-spec-project: profiles and renderers for md, yaml, json, html",
+      "why": "Generated documentation becomes a projection instead of a second source. Five independent barriers stop it becoming source again, because one barrier is a convention and conventions lose.",
+      "done_when": "P3 holds: a rebuild is byte-identical, and building from a fresh import equals building from the original. No timestamp, hostname or absolute path appears in any rendered body.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P2-BUNDLE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    }
+  ]
 }

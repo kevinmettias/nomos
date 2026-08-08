@@ -34,12 +34,30 @@ claim rather than granting it.
 
 ```
 nomos work list [--state ready|claimed|blocked|done|declined]
+nomos work add     --item <id> --title <text> --why <text> --done-when <text>
+                   --territory <path> [--territory <path> …]
+                   [--territory-pattern <glob> …] [--depends-on <id> …]
+                   [-- <program> <args…>]
 nomos work claim   --item <id> --holder <name> [--lease 2h]
 nomos work renew   --item <id> --holder <name> [--lease 2h]
+nomos work finish  --item <id> --holder <name>
 nomos work abandon --item <id> --holder <name> --reason <text>
 nomos work validate
 nomos work audit
 ```
+
+**Territory** is written as repository paths, not identifiers, because the ledger is
+committed and reviewed in a `git diff` — a diff of digests is a diff nobody reads. Paths
+are compared after normalization, so `./crates\A\src\Lib.rs` and `crates/a/src/lib.rs`
+are one subject, and a directory contains the files beneath it. An item that reserves
+nothing is refused: it would exclude nobody while looking like work.
+
+**Finishing runs something.** `done_when` is prose for a human; everything after `--` is
+an argument vector that gets executed, with no shell between what was written and what
+runs. `finish` records the item done only if that exits zero, and it keeps three answers
+apart — the predicate failed (the work is not done), the predicate could not be started
+or timed out (nobody found out), and there is no predicate at all (nothing was checked,
+which must never read like everything checked out).
 
 Exit codes are a contract, because agents branch on them rather than parsing output:
 

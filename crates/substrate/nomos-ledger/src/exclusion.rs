@@ -1,7 +1,8 @@
 //! Taking and holding territory.
 
-use crate::item::{ItemId, MAXIMUM_LEASE};
-use nomos_model::{Intersection, SubjectSet, UnknownReason};
+use crate::item::{ItemId, MAXIMUM_LEASE, VerificationRecord};
+use crate::territory::Territory;
+use nomos_model::{Intersection, UnknownReason};
 use nomos_platform::Timestamp;
 use std::time::Duration;
 
@@ -114,11 +115,19 @@ pub struct Reservation
 }
 
 /// How a release ended.
+///
+/// The finished arm carries the [`VerificationRecord`], which is what makes a finished
+/// item structurally impossible without one. An earlier shape had a bare `Finished`
+/// variant, and it did not work: the release set the item to `Done`, the item had no
+/// recorded verification, and the ledger's own validation then refused the write — so
+/// the only way to finish anything was a path that could never succeed, reported as
+/// "no such item". Carrying the record moves the requirement from a rule that rejects
+/// the write to a signature that cannot express it.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ReleaseOutcome
 {
-    /// The work was finished and verified.
-    Finished,
+    /// The work was finished, and this is the evidence.
+    Finished(VerificationRecord),
     /// The work was abandoned; the item returns to being claimable.
     Abandoned
     {
@@ -174,7 +183,7 @@ pub trait ExclusionLedger
     ) -> Result<(), ClaimRefusal>;
 
     /// Everything that would stop `territory` from being claimed right now.
-    fn Conflicts(&self, territory: &SubjectSet) -> Vec<ClaimRefusal>;
+    fn Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>;
 }
 
 /// Checks a requested lease against the ceiling.
