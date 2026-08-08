@@ -54,7 +54,7 @@ non_snake_case = "allow"
 unsafe_code = "warn"
 private_interfaces = "deny"
 private_bounds = "deny"
-missing_docs = "warn"
+missing_docs = "allow"
 
 [workspace.lints.clippy]
 # `priority = -1` lets the specific lints below override these group levels.
