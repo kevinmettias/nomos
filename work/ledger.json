@@ -295,7 +295,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Split into P3-ROWS, P3-ARCHIVE, P3-OVERLAY, P3-FAMILIES, P3-SIBLINGS and P3-ARCHAEOLOGY. Its predicate, cargo test -p nomos-spec-ingest --test restoration, is now P3-FAMILIES', so the restoration proper still lands on one item. Declined rather than deleted: an item that was planned and reorganised is a different fact from one that was never planned."
+        }
+      },
       "depends_on": [
         "P2-VALIDATE",
         "P3-BOM"
