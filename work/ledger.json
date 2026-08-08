@@ -755,18 +755,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [
         "P3-OVERLAY",
         "P3-ROW-LINEAGE",
         "P3-COUNTS"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p3",
-        "acquired_at": 1786226707,
-        "lease_expires_at": 1786233907
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
