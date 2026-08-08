@@ -334,7 +334,7 @@
       },
       "state": "Ready",
       "depends_on": [
-        "P3-RESTORE"
+        "P3-ARCHAEOLOGY"
       ],
       "blocked": null,
       "claim": null,
@@ -463,7 +463,9 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "crates/substrate/nomos-analysis"
+          "crates/substrate/nomos-analysis",
+          "Cargo.toml",
+          "tests/contract/tests/boundaries.rs"
         ],
         "patterns": []
       },
@@ -492,7 +494,9 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "packages/languages/nomos-lang-rust"
+          "packages/languages/nomos-lang-rust",
+          "Cargo.toml",
+          "tests/contract/tests/boundaries.rs"
         ],
         "patterns": []
       },
@@ -553,7 +557,9 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "crates/kernel/nomos-store"
+          "crates/kernel/nomos-store",
+          "Cargo.toml",
+          "tests/contract/tests/boundaries.rs"
         ],
         "patterns": []
       },
@@ -582,7 +588,9 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "crates/substrate/nomos-workspace"
+          "crates/substrate/nomos-workspace",
+          "Cargo.toml",
+          "tests/contract/tests/boundaries.rs"
         ],
         "patterns": []
       },
@@ -598,6 +606,196 @@
           "test",
           "-p",
           "nomos-workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-ROWS",
+      "title": "Table rows as typed subjects: content and separator",
+      "why": "A block already guarantees byte completeness, so rows are not what makes a document reconstructible. Rows exist so a loss report can name what went missing by identity — the MetricTradeoffProjection row — rather than by count, which is the plan's own stated bar. Typing them keeps 282 and 258 as two queries over one table instead of one number bent to match the other.",
+      "done_when": "Every pipe line in a table block is stored as a typed row. Over the six v14 domain volumes the store answers 282 pipe lines and 258 content rows, both measured rather than asserted. Exactly one separator per table is enforced, so a content row cannot be mistyped out of NSV-PRESERVE-002's view. The bundle exporter carries the new table and P1 byte identity still holds.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model",
+          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-bundle"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--test",
+          "table_rows"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-ARCHIVE",
+      "title": "Read the versioned archives without unpacking them",
+      "why": "About twenty archives hold every revision. Reading them in memory keeps the corpus out of the working tree, so nothing can mistake an extracted revision for authored source — which is the same barrier that stops generated output becoming source.",
+      "done_when": "Every archive opens and its entries are addressable by path without writing to disk. An archive that cannot be read is an error naming which one, never an empty listing that reads as an archive containing nothing.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest",
+          "Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "archive_reads"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-OVERLAY",
+      "title": "I4: the v15.0 overlay, merged block by block",
+      "why": "132 v15 files mix real prose with filler, so file-level preference would discard real v15 improvements along with the filler. Each filler paragraph is ingested as derived authority with a regression-filler lineage row pointing at the v14 block it displaced. Stubs are evidence, not rubbish.",
+      "done_when": "The 363 requirement, 169 story and 157 acceptance identifiers reconcile against v14 hashes, reported per identifier and never summarised. Every filler block carries a lineage row naming what it displaced, and the 64 records that exist only in v15 are ingested as new authored nodes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest",
+          "tests/corpus/v15"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P3-ROWS",
+        "P3-ARCHIVE",
+        "P3-BOM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "overlay"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-FAMILIES",
+      "title": "I5: restore the families v15.0 destroyed",
+      "why": "The 8 roadmap releases, Appendix-D schemas and profiles, 8 worked scenarios, Appendix-H telemetry, 54 service descriptions, the E.1 headless inventory, F.1 IDE profiles and the glossary. Section 5's canonical domain model comes back as one table block plus a concept node per row, each with a lineage row to its originating row — one canonical source, two projections, never two authorities.",
+      "done_when": "Every restored family resolves by identifier and the reconciled store reports zero NSV-PRESERVE errors over a non-zero subject count. The 30 domain models resolve individually, named, not counted.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest",
+          "tests/corpus/families"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P3-OVERLAY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "restoration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-SIBLINGS",
+      "title": "I6 and I8: sibling suites, and the game plans as lineage",
+      "why": "The XVPE, KWB and ecosystem seeds enter as non-root suites, so a cross-suite relation is an ordinary row rather than a special case. The game plans enter as commentary authority under D-120: lineage, never sole authority, and a rule enforces that rather than a convention asking people to remember it.",
+      "done_when": "Sibling suites carry authority_root=0 and their schemas resolve as nodes. Every game-plan block is commentary authority, and a test asserts no normative statement traces to one as its only source.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P3-OVERLAY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "siblings"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-ARCHAEOLOGY",
+      "title": "I7: revision fingerprints across every archive",
+      "why": "Appeared, disappeared, changed in place, and reappeared. Reappeared is the strongest signature of accidental loss and no existing tool can see it, because a file tree cannot tell a deletion from a reorganisation.",
+      "done_when": "Every adjacent revision pair yields the four sets. Counts carry the unit and the corpus they were measured over: 282 pipe lines of which 258 carry content, and 3 code blocks over the six domain volumes, with the plan's 6 recorded as a fence count rather than silently corrected.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P3-ARCHIVE",
+        "P3-FAMILIES"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "revisions"
         ],
         "timeout_seconds": 600
       },
