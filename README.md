@@ -6,10 +6,19 @@ Nomos builds and maintains a canonical, multi-resolution model of software, and 
 to keep intent, architecture, implementation, runtime evidence, automated
 transformations and agent work aligned.
 
-This repository is at **Phase 0**. What exists is the coordination substrate every later
-phase needs — the protocol vocabulary, the canonical model kernel, the platform port,
-the work ledger, and the boundary tests that keep the architecture from eroding. There
-is no analysis engine yet.
+This repository is at **Phase 2 complete**. Two things exist.
+
+The coordination substrate every later phase needs — the protocol vocabulary, the
+canonical model kernel, the platform port, the work ledger, and the boundary tests that
+keep the architecture from eroding.
+
+And the specification system: the corpus lives in a database behind a preservation ledger
+that makes silent content loss fail rather than pass. It exists because the previous
+specification revision destroyed 282 markdown table rows, all 6 code blocks and 132
+sections of narrative, and the mechanism that would have caught it was present and never
+ran. See `docs/records/ARC-SPECDB-001-the-specification-is-a-database.md`.
+
+There is no analysis engine yet.
 
 ## Layout
 
@@ -24,6 +33,24 @@ band, and `tests/contract` asserts it.
 | 16 | `nomos-platform-std` | The std implementation of those traits. |
 | 20 | `nomos-ledger` | Territory-based mutual exclusion over `work/ledger.json`. |
 | 90 | `nomos-cli` | The `nomos` binary. |
+
+The specification system sits beside the kernel rather than above it. It reaches the
+product only through a knowledge capability, so nothing in the product may name it.
+
+| Band | Crate | Owns |
+|---|---|---|
+| 11 | `nomos-spec-model` | The canonical normalizer and hashing. The single authority on what content hashes to. |
+| 12 | `nomos-spec-store` | Schema, migrations, and this repository's own governing records. |
+| 13 | `nomos-spec-bundle` | Deterministic JSONL export and import — the portable authority committed to git. |
+| 13 | `nomos-spec-ingest` | Parsers and the manifest gate against the real v14 corpus. |
+| 14 | `nomos-spec-validate` | The `NSV-PRESERVE-*` rules and the run that fails closed. |
+
+The normalizer was **recovered from the corpus, not chosen**: v14's hash generator does
+not ship, so the algorithm was reconstructed and verified against all 2,533 recorded
+block hashes and all 493 recorded statement hashes. A disagreement in `nomos-spec-model`
+makes the entire preservation ledger measure nothing, which is why it is gated by
+`crates/spec/nomos-spec-model/tests/normalizer_gate.rs` before anything downstream is
+trusted.
 
 ## Coordinating concurrent work
 
@@ -66,7 +93,7 @@ Exit codes are a contract, because agents branch on them rather than parsing out
 | 0 | ok |
 | 1 | validation error |
 | 2 | usage |
-| 3 | claim unavailable — **retryable**, try another item |
+| 3 | claim unavailable, or a dependency is unfinished — **retryable**, try another item |
 | 4 | conflict — a human has to resolve it |
 | 5 | the ledger or its lock could not be used at all |
 

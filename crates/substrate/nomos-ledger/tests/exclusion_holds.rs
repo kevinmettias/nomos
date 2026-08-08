@@ -680,3 +680,60 @@ fn Test_The_Ledger_Should_Round_Trip_Losslessly()
 
     let _ = std::fs::remove_dir_all(&directory);
 }
+
+/// A dependency edge that only `validate` reads is a comment. Claiming has to refuse an
+/// item whose prerequisite is unfinished, or the ordering is advice.
+#[test]
+fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
+{
+    let directory = Temp_Dir("claim-dependency");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    let mut dependent = Item("T-2", &["src/b.rs"]);
+    dependent.depends_on = vec![ItemId::New("T-1")];
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"]), dependent]))
+        .expect("a fresh ledger is valid");
+
+    let refusal = ledger
+        .Claim(&ItemId::New("T-2"), "agent-a", Duration::from_secs(3_600))
+        .expect_err("an unfinished dependency must refuse the claim");
+
+    assert!(matches!(refusal, ClaimRefusal::DependencyUnmet { .. }), "{}", refusal.Describe());
+    assert!(refusal.Is_Retryable(), "finishing T-1 is what resolves this");
+    assert!(refusal.Describe().contains("T-1"), "{}", refusal.Describe());
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The negative control. A satisfied dependency must not stand in the way.
+#[test]
+fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
+{
+    let directory = Temp_Dir("claim-dependency-met");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    let mut finished = Item("T-1", &["src/a.rs"]);
+    finished.state = ItemState::Done;
+    finished.verified = Some(VerificationRecord {
+        argv: vec!["cargo".to_owned(), "test".to_owned()],
+        exit_code: 0,
+        output_tail: "ok".to_owned(),
+        verified_at: At(NOW),
+    });
+    let mut dependent = Item("T-2", &["src/b.rs"]);
+    dependent.depends_on = vec![ItemId::New("T-1")];
+
+    ledger
+        .Save(&Document(vec![finished, dependent]))
+        .expect("a fresh ledger is valid");
+
+    ledger
+        .Claim(&ItemId::New("T-2"), "agent-a", Duration::from_secs(3_600))
+        .expect("a met dependency must not refuse");
+
+    let _ = std::fs::remove_dir_all(&directory);
+}

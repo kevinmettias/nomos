@@ -394,7 +394,7 @@ fn List(
             .claim
             .as_ref()
             .map_or_else(String::new, |claim| format!("  [{}]", claim.holder));
-        let _ = writeln!(output, "{:<10} {:<9}{holder}  {}", item.id, label, item.title);
+        let _ = writeln!(output, "{:<13} {:<9}{holder}  {}", item.id, label, item.title);
         shown = shown.saturating_add(1);
     }
 

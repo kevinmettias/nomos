@@ -427,6 +427,26 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
             });
         }
 
+        for dependency in &target.depends_on
+        {
+            let state = document
+                .items
+                .iter()
+                .find(|candidate| &candidate.id == dependency)
+                .map_or_else(|| "not in the ledger".to_owned(), |found| {
+                    format!("{:?}", found.state)
+                });
+
+            if state != format!("{:?}", ItemState::Done)
+            {
+                return Err(ClaimRefusal::DependencyUnmet {
+                    item: item.clone(),
+                    dependency: dependency.clone(),
+                    state,
+                });
+            }
+        }
+
         let territory = target.territory.clone();
         for other in &document.items
         {

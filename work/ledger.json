@@ -289,14 +289,16 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "crates/spec/nomos-spec-ingest/src/overlay.rs",
-          "crates/spec/nomos-spec-ingest/src/restore.rs"
+          "crates/spec/nomos-spec-ingest",
+          "crates/spec/nomos-spec-store/src/schema.rs",
+          "tests/corpus"
         ],
         "patterns": []
       },
       "state": "Ready",
       "depends_on": [
-        "P2-VALIDATE"
+        "P2-VALIDATE",
+        "P3-BOM"
       ],
       "blocked": null,
       "claim": null,
@@ -369,6 +371,34 @@
           "test",
           "-p",
           "nomos-spec-project"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P3-BOM",
+      "title": "Settle how v14 segmented a document carrying a byte order mark",
+      "why": "The v14 decision records carry a BOM and Segment does not strip one, so their front matter is currently treated as content. Every block hash downstream depends on which way v14 read them, and guessing moves hashes the P1-GATE depends on. This gates I4, which ingests records/.",
+      "done_when": "The behaviour is decided against the real v14 files and pinned by a test that fails if it is reversed. If v14's own manifest does not cover a BOM'd document, that is recorded as the reason rather than resolved by preference.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model",
+          "tests/corpus"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-model"
         ],
         "timeout_seconds": 600
       },

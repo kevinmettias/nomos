@@ -52,6 +52,20 @@ pub enum ClaimRefusal
         /// What state it is in.
         state: String,
     },
+    /// Something this item depends on is not finished.
+    ///
+    /// A dependency edge that only `validate` reads is a comment. This is the arm that
+    /// makes it a constraint, and it is retryable because finishing the dependency is
+    /// what resolves it.
+    DependencyUnmet
+    {
+        /// The item that was refused.
+        item: ItemId,
+        /// The dependency that is not done.
+        dependency: ItemId,
+        /// What state that dependency is in.
+        state: String,
+    },
     /// No such item.
     NoSuchItem
     {
@@ -87,6 +101,11 @@ impl ClaimRefusal
             Self::NotClaimable { item, state } => {
                 format!("{item} is {state}, so the operation was refused")
             }
+            Self::DependencyUnmet {
+                item,
+                dependency,
+                state,
+            } => format!("{item} depends on {dependency}, which is {state}"),
             Self::NoSuchItem { item } => format!("no item named {item}"),
         };
     }
@@ -98,7 +117,7 @@ impl ClaimRefusal
     #[must_use]
     pub const fn Is_Retryable(&self) -> bool
     {
-        return matches!(self, Self::HeldBy { .. });
+        return matches!(self, Self::HeldBy { .. } | Self::DependencyUnmet { .. });
     }
 }
 

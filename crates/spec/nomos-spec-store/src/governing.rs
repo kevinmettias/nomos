@@ -23,13 +23,25 @@ const RECORDS: &[(&str, &str)] = &[
         "docs/records/OD-SPEC-001-the-storage-backend-question.md",
         include_str!("../../../../docs/records/OD-SPEC-001-the-storage-backend-question.md"),
     ),
+    (
+        "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md",
+        include_str!(
+            "../../../../docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
 ///
 /// Compared against what a seeded store actually holds, so a record that stops being
 /// embedded fails a test rather than quietly leaving the store.
-pub const GOVERNING_RECORD_IDS: &[&str] = &["ARC-SPECDB-001", "D-129", "D-130", "OD-SPEC-001"];
+pub const GOVERNING_RECORD_IDS: &[&str] = &[
+    "ARC-SPECDB-001",
+    "D-129",
+    "D-130",
+    "OD-SPEC-001",
+    "OD-LEDGER-001",
+];
 
 /// The relation vocabulary the governing records use.
 ///
