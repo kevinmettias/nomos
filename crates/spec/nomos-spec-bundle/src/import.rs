@@ -1,6 +1,6 @@
 use crate::BundleError;
 use crate::bundle::Bundle;
-use crate::model::{BlobEncoding, DocumentRef, OrdinalRef, Record};
+use crate::model::{BlobEncoding, DocumentRef, OrdinalRef, Record, TableRowRef};
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use nomos_spec_model::ContentHash;
@@ -447,17 +447,20 @@ fn Insert_Lineage(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), 
 
         let block_uid = Optional_Block_Uid(transaction, lineage.source_block.as_ref())?;
         let heading_uid = Optional_Heading_Uid(transaction, lineage.source_heading.as_ref())?;
+        let row_uid = Optional_Table_Row_Uid(transaction, lineage.source_table_row.as_ref())?;
         let node_uid = Optional_Node_Uid(transaction, lineage.target_node_id.as_deref())?;
         let statement_uid =
             Optional_Statement_Uid(transaction, lineage.target_statement_id.as_deref())?;
 
         transaction.execute(
             "INSERT INTO lineage
-             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
-             VALUES (?1, ?2, ?3, ?4, ?5)",
+             (source_block_uid, source_heading_uid, source_table_row_uid, disposition,
+              target_node_uid, target_statement)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
             params![
                 block_uid,
                 heading_uid,
+                row_uid,
                 lineage.disposition,
                 node_uid,
                 statement_uid
@@ -598,6 +601,38 @@ fn Block_Uid(transaction: &Transaction<'_>, reference: &OrdinalRef) -> Result<i6
             reference.document.path, reference.document.revision, reference.ordinal
         ),
     );
+}
+
+fn Optional_Table_Row_Uid(
+    transaction: &Transaction<'_>,
+    reference: Option<&TableRowRef>,
+) -> Result<Option<i64>, BundleError>
+{
+    return reference
+        .map(|reference| {
+            return Resolve(
+                transaction,
+                "SELECT r.uid FROM source_table_rows r
+                 JOIN source_blocks b ON b.uid = r.source_block_uid
+                 JOIN source_documents d ON d.uid = b.document_uid
+                 WHERE d.path = ?1 AND d.revision = ?2 AND b.ordinal = ?3 AND r.ordinal = ?4",
+                &[
+                    &reference.block.document.path,
+                    &reference.block.document.revision,
+                    &reference.block.ordinal,
+                    &reference.ordinal,
+                ],
+                "source table row",
+                format!(
+                    "{}@{}#{}.{}",
+                    reference.block.document.path,
+                    reference.block.document.revision,
+                    reference.block.ordinal,
+                    reference.ordinal
+                ),
+            );
+        })
+        .transpose();
 }
 
 fn Optional_Block_Uid(

@@ -8,10 +8,12 @@
 
 mod governing;
 mod record;
+mod rows;
 mod schema;
 mod store;
 
 pub use governing::{GOVERNING_RECORD_IDS, Seed_Governing_Records, SeedReport};
 pub use record::{Disposition, Kind_Label};
+pub use rows::{RowCensus, RowScope};
 pub use schema::{Latest_Version, MIGRATIONS, Migration};
 pub use store::{AUTHORED, EXTERNAL, SpecificationStore, StoreError, Table};

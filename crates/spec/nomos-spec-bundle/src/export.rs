@@ -1,9 +1,10 @@
 use crate::BundleError;
 use crate::bundle::Bundle;
+use crate::columns::Assert_Columns_Covered;
 use crate::model::{
     Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
     Omission, OrdinalRef, Record, Relation, RelationType, SourceBlock, SourceDocument,
-    SourceHeading, SourceTableRow,
+    SourceHeading, SourceTableRow, TableRowRef,
 };
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
@@ -16,10 +17,15 @@ use rusqlite::Connection;
 /// database built by importing a bundle comes back in the same order even though the
 /// surrogates were assigned differently.
 ///
+/// Two completeness guards, because they catch two different losses. The row guard counts
+/// rows and cannot see a column: a table whose every row is exported one field short
+/// passes it exactly. The column guard is the one that sees that.
+///
 /// # Errors
 ///
 /// Returns [`BundleError::Incomplete`] if any table holds rows this function did not
-/// emit, and [`BundleError::Sql`] on any query failure.
+/// emit, [`BundleError::UncoveredColumn`] if the schema holds a column the exporter does
+/// not carry, and [`BundleError::Sql`] on any query failure.
 pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
 {
     let connection = store.Connection();
@@ -40,6 +46,7 @@ pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
     Omissions(connection, &mut records)?;
 
     Assert_Complete(store, &records)?;
+    Assert_Columns_Covered(connection, &records)?;
 
     return Bundle::New(store.Version(), records);
 }
@@ -373,16 +380,22 @@ fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bu
     let mut statement = connection.prepare(
         "SELECT bd.path, bd.revision, b.ordinal,
                 hd.path, hd.revision, h.ordinal,
+                rd.path, rd.revision, rb.ordinal, r.ordinal,
                 l.disposition, n.node_id, s.statement_id
          FROM lineage l
          LEFT JOIN source_blocks b ON b.uid = l.source_block_uid
          LEFT JOIN source_documents bd ON bd.uid = b.document_uid
          LEFT JOIN source_headings h ON h.uid = l.source_heading_uid
          LEFT JOIN source_documents hd ON hd.uid = h.document_uid
+         LEFT JOIN source_table_rows r ON r.uid = l.source_table_row_uid
+         LEFT JOIN source_blocks rb ON rb.uid = r.source_block_uid
+         LEFT JOIN source_documents rd ON rd.uid = rb.document_uid
          LEFT JOIN nodes n ON n.uid = l.target_node_uid
          LEFT JOIN normative_statements s ON s.uid = l.target_statement
          ORDER BY coalesce(bd.path, ''), coalesce(bd.revision, ''), coalesce(b.ordinal, -1),
                   coalesce(hd.path, ''), coalesce(hd.revision, ''), coalesce(h.ordinal, -1),
+                  coalesce(rd.path, ''), coalesce(rd.revision, ''), coalesce(rb.ordinal, -1),
+                  coalesce(r.ordinal, -1),
                   l.disposition, coalesce(n.node_id, ''), coalesce(s.statement_id, '')",
     )?;
     let rows = statement
@@ -390,9 +403,10 @@ fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bu
             return Ok(Lineage {
                 source_block: Ordinal_Reference(row, 0, 1, 2)?,
                 source_heading: Ordinal_Reference(row, 3, 4, 5)?,
-                disposition: row.get(6)?,
-                target_node_id: row.get(7)?,
-                target_statement_id: row.get(8)?,
+                source_table_row: Table_Row_Reference(row, 6, 7, 8, 9)?,
+                disposition: row.get(10)?,
+                target_node_id: row.get(11)?,
+                target_statement_id: row.get(12)?,
             });
         })?
         .collect::<Result<Vec<_>, _>>()?;
@@ -430,6 +444,24 @@ fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), B
 
     records.extend(rows.into_iter().map(Record::Omission));
     return Ok(());
+}
+
+fn Table_Row_Reference(
+    row: &rusqlite::Row<'_>,
+    path: usize,
+    revision: usize,
+    block_ordinal: usize,
+    row_ordinal: usize,
+) -> rusqlite::Result<Option<TableRowRef>>
+{
+    let block = Ordinal_Reference(row, path, revision, block_ordinal)?;
+    let ordinal: Option<i64> = row.get(row_ordinal)?;
+
+    return Ok(match (block, ordinal)
+    {
+        (Some(block), Some(ordinal)) => Some(TableRowRef { block, ordinal }),
+        _ => None,
+    });
 }
 
 fn Ordinal_Reference(

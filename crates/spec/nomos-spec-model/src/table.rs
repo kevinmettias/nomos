@@ -5,13 +5,19 @@ use serde::{Deserialize, Serialize};
 /// What a line inside a table is.
 ///
 /// A separator carries no authored content — it is the delimiter telling a reader where
-/// the header stops. Typing rows rather than discarding separators keeps the line count
-/// and the content count as two queries over one table, so neither number has to be bent
-/// to match the other.
+/// the header stops. A header names the columns; it is authored text, but it is not a
+/// datum. Typing all three rather than discarding any of them keeps the line count, the
+/// non-separator count and the data count as three queries over one table, so no number
+/// has to be bent to match another.
+///
+/// Restoration is what forces the header to be its own kind. Minting a node per data row
+/// of the canonical domain model, over a table whose header cannot be told from its data,
+/// mints a concept named after the column titles.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum RowKind
 {
+    Header,
     Content,
     Separator,
 }
@@ -23,6 +29,7 @@ impl RowKind
     {
         return match self
         {
+            Self::Header => "header",
             Self::Content => "content",
             Self::Separator => "separator",
         };
@@ -33,10 +40,18 @@ impl RowKind
     {
         return match label
         {
+            "header" => Some(Self::Header),
             "content" => Some(Self::Content),
             "separator" => Some(Self::Separator),
             _ => None,
         };
+    }
+
+    /// Every kind, so a census cannot quietly omit one.
+    #[must_use]
+    pub const fn All() -> &'static [Self]
+    {
+        return &[Self::Header, Self::Content, Self::Separator];
     }
 }
 
@@ -152,7 +167,39 @@ pub fn Table_Rows(block: &SourceBlock) -> Vec<TableRow>
         });
     }
 
+    Retype_Headers(&mut rows);
+
     return rows;
+}
+
+/// Everything a table places before its delimiter is header.
+///
+/// A second pass rather than a decision taken while reading, because a line cannot be
+/// known to precede the delimiter until the delimiter has been seen. A table carrying no
+/// delimiter keeps every line as content and is refused by [`Table_Defects`] — guessing
+/// where its header stopped would be inventing the answer the defect exists to report.
+fn Retype_Headers(rows: &mut [TableRow])
+{
+    let tables = rows.iter().map(|row| row.table_ordinal).max().unwrap_or(0);
+
+    for table_ordinal in 1..=tables
+    {
+        let Some(delimiter) = rows
+            .iter()
+            .find(|row| row.table_ordinal == table_ordinal && row.kind == RowKind::Separator)
+            .map(|row| row.ordinal)
+        else
+        {
+            continue;
+        };
+
+        for row in rows
+            .iter_mut()
+            .filter(|row| row.table_ordinal == table_ordinal && row.ordinal < delimiter)
+        {
+            row.kind = RowKind::Header;
+        }
+    }
 }
 
 /// Exactly one delimiter per table.
@@ -278,20 +325,85 @@ mod tests
         return blocks.iter().flat_map(Table_Rows).collect();
     }
 
+    fn Of_Kind(rows: &[TableRow], kind: RowKind) -> usize
+    {
+        return rows.iter().filter(|row| row.kind == kind).count();
+    }
+
     #[test]
     fn Test_A_Table_Should_Yield_Every_Pipe_Line_Typed()
     {
         let rows = Rows("| Model | Responsibility |\n| --- | --- |\n| WorkspaceContext | Repository. |\n");
 
         assert_eq!(rows.len(), 3);
-        assert_eq!(rows.first().map(|row| row.kind), Some(RowKind::Content));
+        assert_eq!(rows.first().map(|row| row.kind), Some(RowKind::Header));
         assert_eq!(rows.get(1).map(|row| row.kind), Some(RowKind::Separator));
         assert_eq!(rows.get(2).map(|row| row.kind), Some(RowKind::Content));
+        assert_eq!(Of_Kind(&rows, RowKind::Content), 1, "the column titles are a datum");
+    }
+
+    /// The three counts the loss report has to carry, from one table and no arithmetic.
+    #[test]
+    fn Test_The_Three_Counts_Should_Partition_The_Pipe_Lines()
+    {
+        let rows = Rows("| Model | Owns |\n| --- | --- |\n| A | one |\n| B | two |\n");
+
+        assert_eq!(rows.len(), 4, "pipe lines");
+        assert_eq!(Of_Kind(&rows, RowKind::Header), 1);
+        assert_eq!(Of_Kind(&rows, RowKind::Content), 2);
+        assert_eq!(Of_Kind(&rows, RowKind::Separator), 1);
         assert_eq!(
-            rows.iter().filter(|row| row.kind == RowKind::Content).count(),
-            2,
-            "the separator is counted as content"
+            RowKind::All().iter().map(|kind| Of_Kind(&rows, *kind)).sum::<usize>(),
+            rows.len(),
+            "a pipe line landed in no kind, so one of the counts is measuring something else"
         );
+    }
+
+    /// A header spanning two lines is two header rows, not one header and one datum.
+    #[test]
+    fn Test_Every_Line_Before_The_Delimiter_Should_Be_Header()
+    {
+        let rows = Rows("| Model | Owns |\n| (id) | (scope) |\n| --- | --- |\n| A | one |\n");
+
+        assert_eq!(Of_Kind(&rows, RowKind::Header), 2);
+        assert_eq!(Of_Kind(&rows, RowKind::Content), 1);
+    }
+
+    /// A table with no delimiter has no known header, and the defect says so rather than
+    /// the typing guessing one.
+    #[test]
+    fn Test_A_Table_Without_A_Delimiter_Should_Type_Nothing_As_Header()
+    {
+        let rows = Rows("| a | b |\n| 1 | 2 |\n");
+
+        assert_eq!(Of_Kind(&rows, RowKind::Header), 0);
+        assert_eq!(Of_Kind(&rows, RowKind::Content), 2);
+        assert!(!Table_Defects(&rows).is_empty(), "the defect is what reports it");
+    }
+
+    /// Two tables in one block each get their own header.
+    #[test]
+    fn Test_A_Header_Should_Belong_To_Its_Own_Table()
+    {
+        let block = SourceBlock {
+            ordinal: 1,
+            kind: crate::block::BlockKind::Prose,
+            heading_path: Vec::new(),
+            text: "| a |\n| --- |\n| 1 |\nbetween\n| b |\n| --- |\n| 2 |".to_owned(),
+        };
+        let rows = Table_Rows(&block);
+
+        assert_eq!(Of_Kind(&rows, RowKind::Header), 2);
+        assert_eq!(Of_Kind(&rows, RowKind::Content), 2);
+    }
+
+    #[test]
+    fn Test_Every_Kind_Should_Round_Trip_Through_Its_Label()
+    {
+        for kind in RowKind::All()
+        {
+            assert_eq!(RowKind::Parse(kind.Label()), Some(*kind));
+        }
     }
 
     #[test]

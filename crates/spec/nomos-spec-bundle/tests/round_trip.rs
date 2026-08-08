@@ -123,6 +123,15 @@ fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
              WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
                AND b.ordinal = 1;
 
+             -- The concept comes from one row of the domain-model table, not from the
+             -- table. Without this the new column is never exercised by the round trip.
+             INSERT INTO lineage
+             (source_table_row_uid, disposition, target_node_uid)
+             SELECT r.uid, 'preserved-verbatim', n.uid
+             FROM source_table_rows r, nodes n
+             WHERE r.cells_json LIKE '%WorkspaceContext%'
+               AND n.node_id = 'CON-WORKSPACE-001';
+
              INSERT INTO omissions
              (source_block_uid, source_heading_uid, reason, justification, decision_record)
              SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
@@ -399,13 +408,84 @@ fn Test_The_Bundle_Should_Carry_Typed_Table_Rows()
         "the rows did not survive the round trip byte for byte"
     );
 
-    let separators: u32 = rebuilt
+    let census = rebuilt
+        .Row_Census(nomos_spec_store::RowScope::Everything)
+        .expect("takes a census");
+    assert_eq!(census.separator, 1, "the row kinds did not survive");
+    assert_eq!(census.header, 1, "the header kind did not survive");
+    assert_eq!(census.content, 1, "the data kind did not survive");
+    assert_ne!(
+        census.lines, census.non_separator,
+        "the kinds collapsed, so both counts became one number"
+    );
+}
+
+/// A concept restored from a table row must still trace to that row on the far side.
+///
+/// If it did not, the bundle — the authority committed to git — would carry the concept
+/// and lose what produced it, which is exactly the shape the preservation ledger exists
+/// to make impossible.
+#[test]
+fn Test_A_Lineage_To_A_Table_Row_Should_Survive_The_Round_Trip()
+{
+    let source = Populated();
+    let bundle = Export(&source).expect("exports");
+
+    let carried = bundle
+        .Records()
+        .iter()
+        .filter(|record| {
+            return matches!(record, Record::Lineage(lineage) if lineage.source_table_row.is_some());
+        })
+        .count();
+    assert_eq!(carried, 1, "the fixture's row lineage did not reach the bundle");
+
+    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
+    Import(&mut rebuilt, &bundle).expect("imports");
+
+    let traced: String = rebuilt
         .Connection()
         .query_row(
-            "SELECT count(*) FROM source_table_rows WHERE kind = 'separator'",
+            "SELECT r.text FROM lineage l
+             JOIN source_table_rows r ON r.uid = l.source_table_row_uid
+             JOIN nodes n ON n.uid = l.target_node_uid
+             WHERE n.node_id = 'CON-WORKSPACE-001'",
             [],
             |row| row.get(0),
         )
-        .expect("queries");
-    assert_eq!(separators, 1, "the row kinds did not survive, so both counts collapse to one");
+        .expect("the concept traces to no row");
+
+    assert!(traced.contains("WorkspaceContext"), "it traced to the wrong row: {traced}");
+    assert_eq!(
+        Export(&rebuilt).expect("re-exports").Write().expect("writes"),
+        bundle.Write().expect("writes")
+    );
+}
+
+/// The guard the row count cannot be: a column joins the schema and nothing exports it.
+///
+/// Every row still counts on both sides, so `Assert_Complete` passes and the round trip is
+/// a fixpoint — the second export drops the same column the first did. Only a column-level
+/// check sees it.
+#[test]
+fn Test_A_Column_The_Export_Does_Not_Carry_Should_Fail_The_Export()
+{
+    let store = Populated();
+    assert!(Export(&store).is_ok(), "the fixture must export cleanly before it is broken");
+
+    store
+        .Connection()
+        .execute("ALTER TABLE lineage ADD COLUMN note TEXT", [])
+        .expect("adds a column");
+
+    let refusal = Export(&store).expect_err("an uncarried column must fail the export");
+
+    assert!(
+        matches!(
+            refusal,
+            BundleError::UncoveredColumn { ref table, ref column }
+                if table == "lineage" && column == "note"
+        ),
+        "{refusal}"
+    );
 }

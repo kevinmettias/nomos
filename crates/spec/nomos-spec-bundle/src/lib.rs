@@ -7,6 +7,7 @@
 #![forbid(unsafe_code)]
 
 mod bundle;
+mod columns;
 mod export;
 mod import;
 mod model;
@@ -17,7 +18,7 @@ pub use import::{Import, ImportReport};
 pub use model::{
     Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
     Omission, OrdinalRef, Record, Relation, RelationType, SourceBlock, SourceDocument,
-    SourceHeading,
+    SourceHeading, SourceTableRow, TableRowRef,
 };
 
 /// Everything that stops a bundle from being written, read or trusted.
@@ -37,6 +38,28 @@ pub enum BundleError
         table: String,
         in_store: u32,
         exported: u32,
+    },
+    /// A column the exporter does not carry.
+    ///
+    /// The loss the row count cannot see. Every row exported, one field short, and both
+    /// sides of the round trip equally blind to the difference.
+    UncoveredColumn
+    {
+        table: String,
+        column: String,
+    },
+    /// A declared column the schema does not have.
+    PhantomColumn
+    {
+        table: String,
+        column: String,
+    },
+    /// A declared column names a record field that does not exist.
+    Uncarried
+    {
+        table: String,
+        column: String,
+        field: String,
     },
     /// The digest in the manifest does not match the content it covers.
     Tampered
@@ -95,6 +118,24 @@ impl core::fmt::Display for BundleError
                 formatter,
                 "{table} holds {in_store} row(s) but the export emitted {exported}. \
                  Refusing to write a bundle that is missing content"
+            ),
+            Self::UncoveredColumn { table, column } => write!(
+                formatter,
+                "{table}.{column} reaches no bundle record. Refusing to write a bundle whose \
+                 rows all count and are each missing a field"
+            ),
+            Self::PhantomColumn { table, column } => write!(
+                formatter,
+                "the exporter claims to carry {table}.{column}, which the schema does not have"
+            ),
+            Self::Uncarried {
+                table,
+                column,
+                field,
+            } => write!(
+                formatter,
+                "{table}.{column} claims to travel as `{field}`, which is not a field of a \
+                 {table} record"
             ),
             Self::Tampered { declared, computed } => write!(
                 formatter,

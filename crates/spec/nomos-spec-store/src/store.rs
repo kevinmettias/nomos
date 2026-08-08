@@ -1,3 +1,4 @@
+use crate::rows::{RowCensus, RowScope};
 use crate::schema::{Latest_Version, MIGRATIONS};
 use nomos_spec_model::{ContentHash, SourceBlock, Table_Defects, Table_Rows};
 use rusqlite::{Connection, OptionalExtension, params};
@@ -335,6 +336,64 @@ impl SpecificationStore
         transaction.commit()?;
 
         return Ok(blocks.len());
+    }
+
+    /// The surrogate for one table row, addressed the way a person addresses one.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Table_Row_Uid(
+        &self,
+        document_uid: i64,
+        block_ordinal: u32,
+        row_ordinal: u32,
+    ) -> Result<Option<i64>, StoreError>
+    {
+        return Ok(self
+            .connection
+            .query_row(
+                "SELECT r.uid FROM source_table_rows r
+                 JOIN source_blocks b ON b.uid = r.source_block_uid
+                 WHERE b.document_uid = ?1 AND b.ordinal = ?2 AND r.ordinal = ?3",
+                params![document_uid, block_ordinal, row_ordinal],
+                |row| row.get(0),
+            )
+            .optional()?);
+    }
+
+    /// Records what became of one table row.
+    ///
+    /// Separate from a block disposition rather than a nullable extra argument on it,
+    /// because the two answer different questions: a block disposition says the table
+    /// survived, and this says which row a given node came out of. Restoration needs the
+    /// second — thirty concepts all pointing at one block is not a lineage.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Put_Row_Lineage(
+        &mut self,
+        row_uid: i64,
+        disposition: &str,
+        target_node_uid: Option<i64>,
+    ) -> Result<(), StoreError>
+    {
+        self.connection.execute(
+            "INSERT OR IGNORE INTO lineage (source_table_row_uid, disposition, target_node_uid)
+             VALUES (?1, ?2, ?3)",
+            params![row_uid, disposition, target_node_uid],
+        )?;
+
+        return Ok(());
+    }
+
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Row_Census(&self, scope: RowScope) -> Result<RowCensus, StoreError>
+    {
+        return crate::rows::Census(&self.connection, scope);
     }
 
     /// Writes a node, upgrading a placeholder but never overwriting a real one.

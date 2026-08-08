@@ -857,7 +857,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -870,7 +870,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle"
+        ],
+        "exit_code": 0,
+        "output_tail": "efused ... ok\ntest columns::tests::Test_Every_Table_Should_Have_A_Coverage_Entry ... ok\ntest bundle::tests::Test_A_Removed_Record_Should_Be_Refused ... ok\ntest columns::tests::Test_A_Declared_Field_The_Record_Lacks_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Newer_Format_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Bundle_Should_Round_Trip_Through_Text ... ok\ntest bundle::tests::Test_An_Empty_Bundle_Should_Still_Be_Well_Formed ... ok\ntest bundle::tests::Test_An_Altered_Record_Should_Be_Refused ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 12 tests\ntest Test_A_Row_The_Export_Query_Drops_Should_Fail_The_Export ... ok\ntest Test_Every_Table_Should_Be_Exercised ... ok\ntest Test_A_Column_The_Export_Does_Not_Carry_Should_Fail_The_Export ... ok\ntest Test_The_Bundle_Should_Carry_Typed_Table_Rows ... ok\ntest Test_Import_Should_Land_Every_Row_The_Bundle_Declared ... ok\ntest Test_An_Unresolvable_Reference_Should_Be_Refused ... ok\ntest Test_Importing_Into_A_Populated_Store_Should_Be_Refused ... ok\ntest Test_Two_Stores_Of_The_Same_Corpus_Should_Export_Identically ... ok\ntest Test_Binary_Blobs_Should_Survive_As_Bytes ... ok\ntest Test_A_Lineage_To_A_Table_Row_Should_Survive_The_Round_Trip ... ok\ntest Test_A_Bundle_Should_Survive_A_Database_Round_Trip_Byte_For_Byte ... ok\ntest Test_The_Governing_Records_Should_Survive_The_Bundle ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.95s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-a632b903f72395d4.exe)\n     Running tests\\round_trip.rs (target\\debug\\deps\\round_trip-d1bb06e969e9ea64.exe)\n   Doc-tests nomos_spec_bundle\n",
+        "verified_at": 1786229244
+      }
     },
     {
       "id": "P3-COUNTS",

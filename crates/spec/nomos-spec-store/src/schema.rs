@@ -155,6 +155,87 @@ pub const MIGRATIONS: &[Migration] = &[
             "CREATE INDEX source_table_rows_content ON source_table_rows(content_hash)",
         ],
     },
+    Migration {
+        version: 3,
+        name: "row-lineage-and-header-rows",
+        statements: &[
+            // SQLite cannot widen a CHECK in place, so the row table is rebuilt. `uid` is
+            // carried across explicitly rather than reassigned: it is what a lineage row
+            // points at, and renumbering here would be the silent-loss shape this schema
+            // exists to prevent, committed by the migration itself.
+            "CREATE TABLE source_table_rows_next (
+                 uid              INTEGER PRIMARY KEY,
+                 source_block_uid INTEGER NOT NULL REFERENCES source_blocks(uid),
+                 ordinal          INTEGER NOT NULL,
+                 table_ordinal    INTEGER NOT NULL,
+                 kind             TEXT NOT NULL
+                                  CHECK (kind IN ('header', 'content', 'separator')),
+                 cells_json       TEXT NOT NULL,
+                 text             TEXT NOT NULL,
+                 content_hash     TEXT NOT NULL,
+                 normalized_hash  TEXT NOT NULL,
+                 UNIQUE (source_block_uid, ordinal)
+             )",
+            "INSERT INTO source_table_rows_next
+             (uid, source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+              content_hash, normalized_hash)
+             SELECT uid, source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+                    content_hash, normalized_hash
+             FROM source_table_rows",
+            "DROP TABLE source_table_rows",
+            "ALTER TABLE source_table_rows_next RENAME TO source_table_rows",
+            "CREATE INDEX source_table_rows_block ON source_table_rows(source_block_uid)",
+            "CREATE INDEX source_table_rows_content ON source_table_rows(content_hash)",
+            // Rows written under version 2 typed a header as content, because there was no
+            // header. Re-deriving here rather than leaving them is what keeps one store's
+            // answer to "how many data rows" independent of when it was built. A table with
+            // no delimiter yields NULL from the subquery, so the comparison is NULL and the
+            // row is left alone — the same refusal to guess the typing makes.
+            "UPDATE source_table_rows SET kind = 'header'
+             WHERE kind = 'content'
+               AND ordinal < (
+                   SELECT delimiter.ordinal FROM source_table_rows delimiter
+                   WHERE delimiter.source_block_uid = source_table_rows.source_block_uid
+                     AND delimiter.table_ordinal = source_table_rows.table_ordinal
+                     AND delimiter.kind = 'separator'
+               )",
+            // A concept minted from a table row must trace to that row. Pointing it at the
+            // containing block instead would say the whole table produced it, and the
+            // one-canonical-source property the restoration exists to establish would not
+            // be expressible — thirty concepts and one block is not a lineage.
+            "CREATE TABLE lineage_next (
+                 uid                  INTEGER PRIMARY KEY,
+                 source_block_uid     INTEGER REFERENCES source_blocks(uid),
+                 source_heading_uid   INTEGER REFERENCES source_headings(uid),
+                 source_table_row_uid INTEGER REFERENCES source_table_rows(uid),
+                 disposition          TEXT NOT NULL,
+                 target_node_uid      INTEGER REFERENCES nodes(uid),
+                 target_statement     INTEGER REFERENCES normative_statements(uid),
+                 CHECK (source_block_uid IS NOT NULL
+                     OR source_heading_uid IS NOT NULL
+                     OR source_table_row_uid IS NOT NULL)
+             )",
+            "INSERT INTO lineage_next
+             (uid, source_block_uid, source_heading_uid, disposition, target_node_uid,
+              target_statement)
+             SELECT uid, source_block_uid, source_heading_uid, disposition, target_node_uid,
+                    target_statement
+             FROM lineage",
+            "DROP TABLE lineage",
+            "ALTER TABLE lineage_next RENAME TO lineage",
+            // Same reasoning as version 1: SQL treats two NULLs as distinct, so a plain
+            // UNIQUE never fires on the rows that carry nulls, and `INSERT OR IGNORE`
+            // stops being idempotent without erroring.
+            "CREATE UNIQUE INDEX lineage_unique ON lineage (
+                 coalesce(source_block_uid, -1),
+                 coalesce(source_heading_uid, -1),
+                 coalesce(source_table_row_uid, -1),
+                 disposition,
+                 coalesce(target_node_uid, -1),
+                 coalesce(target_statement, -1)
+             )",
+        ],
+    },
 ];
 
 pub struct Migration
