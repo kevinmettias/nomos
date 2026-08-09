@@ -1808,6 +1808,37 @@
         "timeout_seconds": 600
       },
       "verified": null
+    },
+    {
+      "id": "P10-SPEC-DETERMINISM",
+      "title": "Two rows of the determinism table are undeclared, and both are in crates/spec",
+      "why": "P9-DETERMINISM declared four execution domains and checked each against behaviour. The domain table in nomos-contracts has six rows. The two it did not reach are spec-bundle serialization and the projection engine output, both in crates/spec, which that item did not claim and did not touch. The gap is currently a sentence in Test_The_Declared_Domains_Should_Be_The_Ones_This_Item_Covered and a paragraph in OD-DETERMINISM-001, which is better than silence and is not a schedule. It also sits outside the guard that was built: Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy fires on crates that construct a MaterializedFact, and neither spec crate produces facts - they serialize and project - so the completeness check that would catch a missing declaration cannot see these two. The bundle row matters most. Its declared scope is CrossBinary, the strongest in the table, because a bundle is an interchange artefact read by a build that did not write it, and nothing has ever compared one across two builds.",
+      "done_when": "Both remaining rows of the domain table declare a Strategy, each checked against behaviour by the harness in tests/integration rather than by assertion, with the obligation derived from the declared scope as it is for the existing four. The completeness guard is extended to reach domains that do not construct facts, so that the next undeclared row fails a test rather than being noticed - and it must fail if either new declaration is removed. At least one negative control is confirmed red. If a declared scope turns out to be false, the honest repair is lowering the declaration and saying so in the record, not deleting the check.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle",
+          "crates/spec/nomos-spec-project",
+          "crates/spec/nomos-spec-store",
+          "tests/integration",
+          "tests/contract",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
