@@ -1379,7 +1379,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -1396,7 +1396,21 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "run",
+          "-q",
+          "-p",
+          "nomos-cli",
+          "--",
+          "work",
+          "validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "ledger is valid\n",
+        "verified_at": 1786298618
+      }
     },
     {
       "id": "P9-PHASE-GAP",

@@ -42,9 +42,15 @@
 //! Measured, not estimated. With all three variables set to nonexistent paths,
 //! `cargo test --workspace --no-fail-fast` fails exactly [`GATED_TOTAL`] tests; with none
 //! set, the same tests pass. Re-run that to reproduce the table.
+//!
+//! The measurement is no longer the only thing standing behind the table. Every column is
+//! now derived from the source and compared against what is declared here — the file set,
+//! the variables each file reads, the tests each file holds, and, by way of
+//! [`nomos_contract_tests::Corpus_Gates`], how many of those tests are gated. The two
+//! derivations were built independently and agree on all fourteen rows.
 
-use nomos_contract_tests::Workspace;
-use std::collections::BTreeSet;
+use nomos_contract_tests::{Corpus_Gates, Workspace, CORPUS_VARIABLES};
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 /// One test file that reaches a corpus.
@@ -55,6 +61,12 @@ struct Gate
     /// The variables this file reads, sorted.
     variables: &'static [&'static str],
     /// How many of its tests do nothing when their corpus is absent.
+    ///
+    /// Declared rather than derived, and then checked against the derivation by
+    /// [`Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source`]. Both halves
+    /// matter: deriving it outright would let a fifteenth gated assertion appear in the
+    /// headline with nobody deciding it should, and declaring it outright is what left
+    /// the most-cited number in this file the least checked one.
     gated: usize,
     /// How many tests the file has in total. Declared so that a test added to a gated file
     /// cannot inherit the file's silence without somebody deciding it should.
@@ -289,6 +301,96 @@ fn Test_The_Declared_Total_Should_Be_The_Sum_Of_The_Table()
         "every test in every gated file is gated, which would mean the files hold nothing \
          that runs without a corpus — check the table rather than believing it"
     );
+}
+
+/// The gated count is the one figure the source can settle, so it does.
+///
+/// Everything else in the table was already derived and compared: the file set, the
+/// variables, the test counts, the headline. `gated` was not. It was asserted to be no
+/// larger than its file's test count, which `gated: 1` satisfies in every row — and it is
+/// the column [`GATED_TOTAL`] sums, OD-GATE-001 cites and the gate workflow prints. The
+/// most-load-bearing number here was the least checked.
+///
+/// The derivation resolves a test to the corpora it reaches through the helpers it calls.
+/// It has to: almost no gated test names a variable itself, so counting the tests in a file
+/// that mention one would find nearly none of them.
+///
+/// This does not replace the declaration. A derived count would let a fifteenth gated
+/// assertion join the headline without anybody deciding it should, which is the silence
+/// this file exists to break — one level further in.
+#[test]
+fn Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source()
+{
+    let derived = Gated_Tests_Per_File();
+
+    assert!(
+        !derived.is_empty(),
+        "the scanner found no corpus-gated test anywhere in the workspace.\n\
+         Every comparison below would then pass over an empty set, reporting that the \
+         table is correct because nothing contradicted it — which is the shape of defect \
+         this whole file is about."
+    );
+
+    let mut wrong = Vec::new();
+
+    for gate in GATES
+    {
+        let found = derived.get(gate.path).copied().unwrap_or(0);
+        if found != gate.gated
+        {
+            wrong.push(format!(
+                "{}: declares {} gated, source has {found}",
+                gate.path, gate.gated
+            ));
+        }
+    }
+
+    let declared: BTreeSet<&str> = GATES.iter().map(|gate| return gate.path).collect();
+    for (path, found) in &derived
+    {
+        if !declared.contains(path.as_str())
+        {
+            wrong.push(format!("{path}: not in GATES, source has {found} gated"));
+        }
+    }
+
+    assert!(
+        wrong.is_empty(),
+        "the table and the source disagree about what is gated: {wrong:#?}.\n\
+         Set GATES to what the source now holds, deliberately. A test that inherits its \
+         file's silence should be a decision somebody made rather than a consequence of \
+         where it was written."
+    );
+}
+
+/// The two spellings of the same three variables must not drift apart.
+///
+/// This file assembles the names with `concat!` so that it does not contain the strings it
+/// searches for; the scanner spells them out, and excludes this crate from its own walk.
+/// Two defences against the same problem, and therefore two lists — so the fact that they
+/// are one fact is worth asserting. If they drift, one of them quietly stops seeing a
+/// corpus and reports a smaller hole.
+#[test]
+fn Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables()
+{
+    let here: BTreeSet<&str> = VARIABLES.iter().copied().collect();
+    let there: BTreeSet<&str> = CORPUS_VARIABLES.iter().copied().collect();
+
+    assert_eq!(here, there);
+}
+
+/// How many gated tests the source holds, per file, repo-relative with forward slashes.
+fn Gated_Tests_Per_File() -> BTreeMap<String, usize>
+{
+    let mut counts: BTreeMap<String, usize> = BTreeMap::new();
+
+    for gate in Corpus_Gates()
+    {
+        let entry = counts.entry(gate.file).or_default();
+        *entry = entry.saturating_add(1);
+    }
+
+    return counts;
 }
 
 /// Says how much of this suite did not run, whatever the answer is.

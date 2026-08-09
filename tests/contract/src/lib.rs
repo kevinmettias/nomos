@@ -8,6 +8,8 @@
 
 #![forbid(unsafe_code)]
 
+mod gates;
 mod metadata;
 
+pub use gates::{Corpus_Gates, CorpusGate, CORPUS_VARIABLES};
 pub use metadata::{Package, Workspace};
