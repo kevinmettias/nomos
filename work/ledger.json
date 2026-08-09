@@ -1275,8 +1275,12 @@
       "territory": {
         "resolution": "File",
         "paths": [
+          "Cargo.toml",
+          "crates/capabilities",
           "crates/languages",
           "crates/substrate",
+          "tests/contract",
+          "tests/integration",
           "docs/records"
         ],
         "patterns": []
@@ -1291,6 +1295,12 @@
         "argv": [
           "cargo",
           "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
           "-p",
           "nomos-contract-tests",
           "-p",
