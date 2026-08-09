@@ -843,7 +843,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P3-ARCHIVE",
         "P3-FAMILIES"
@@ -861,7 +861,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "revisions"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 12 tests\ntest Test_The_Revision_Set_Should_Be_Ordered_And_Name_Its_Gaps ... ok\ntest Test_A_Scope_The_Revision_Does_Not_Have_Should_Be_Refused ... ok\ntest Test_The_Headline_Counts_Should_Name_Their_Unit_And_Their_Scope ... ok\ntest Test_Fingerprinting_Should_Be_Stable ... ok\ntest Test_v15_Should_Retain_Almost_No_Table_And_No_Code_At_All ... ok\ntest Test_The_Archaeology_Should_Cover_Every_Revision_Exactly_Once ... ok\ntest Test_Dropping_A_Revision_Should_Change_The_Walk ... ok\ntest Test_The_Last_Pair_Should_Carry_Its_Measured_Sizes ... ok\ntest Test_Every_Adjacent_Pair_Should_Yield_The_Four_Sets ... ok\ntest Test_No_Document_Should_Have_Disappeared_And_Come_Back ... ok\ntest Test_The_Last_Pair_Should_Show_The_Whole_Narrative_Tree_Disappearing ... ok\ntest Test_A_Pair_Summary_Should_Name_What_It_Counted ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.34s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-dbbc87a368d07786.exe)\n",
+        "verified_at": 1786234226
+      }
     },
     {
       "id": "P3-ROW-LINEAGE",

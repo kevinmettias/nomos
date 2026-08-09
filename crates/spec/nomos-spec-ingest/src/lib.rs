@@ -11,6 +11,7 @@ mod lineage;
 mod overlay;
 mod phases;
 mod restore;
+mod revisions;
 mod siblings;
 
 pub use archive::{Archive, ArchiveError, Archives_In};
@@ -29,6 +30,10 @@ pub use overlay::{
 };
 pub use restore::{
     Collision, Extract, Member, Models_In, Origin, Resolve, RestorationReport, Restore, Restored,
+};
+pub use revisions::{
+    Census, DOMAIN_VOLUMES, Fingerprint, Gaps, KindCensus, PairChange, RevisionFingerprint,
+    Revisions_In, Scope, Walk,
 };
 pub use siblings::{
     COMMENTARY, Ingest_Game_Plan, Ingest_Sibling_Suite, LINEAGE_NOTES, Prepare_Commentary_View,
