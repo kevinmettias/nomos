@@ -491,7 +491,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P7-CAPABILITY"
       ],
@@ -506,7 +506,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis"
+        ],
+        "exit_code": 0,
+        "output_tail": "st_A_Provider_At_The_Requested_Granularity_Should_Not_Report_Broadening ... ok\ntest Test_A_Superseded_Read_Should_Record_Its_Supersession ... ok\ntest Test_Invalidation_Should_Follow_Edges_Transitively ... ok\ntest Test_An_Invalidated_Fact_Should_Stay_Readable_As_History ... ok\ntest Test_A_Read_That_Misses_Should_Record_Its_Miss ... ok\ntest Test_A_Later_Generation_Should_Still_Answer_The_Same_Key ... ok\ntest Test_An_Unrelated_Fact_Should_Be_Retained ... ok\ntest Test_Require_Should_Refuse_A_Provider_Below_The_Requirement ... ok\ntest Test_An_Edge_Recorded_By_A_Missed_Read_Should_Still_Carry_Invalidation ... ok\ntest Test_Every_Component_Should_Reach_The_Key_Digest ... ok\ntest Test_Invalidation_Should_Follow_Dependency_Edges ... ok\ntest Test_Two_Components_Should_Not_Cancel_Each_Other_Out ... ok\ntest Test_Require_Should_Answer_When_The_Registry_Resolves_And_The_Fact_Exists ... ok\ntest Test_Require_Should_Not_Fabricate_A_Fact_The_Store_Does_Not_Hold ... ok\ntest Test_Require_Should_Refuse_A_Fact_Whose_Inputs_Differ ... ok\ntest Test_A_Live_Fact_Should_Have_No_History ... ok\ntest Test_Require_Should_Return_MissingCapability_When_Nothing_Declares_It ... ok\ntest Test_The_Component_List_Should_Cover_Every_Part_Of_The_Key ... ok\ntest Test_The_Same_Question_Twice_Should_Materialize_Once ... ok\ntest Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies ... ok\ntest Test_Every_Read_Should_Record_An_Edge ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-2c894aa384b420f3.exe)\n     Running tests\\fact_identity.rs (target\\debug\\deps\\fact_identity-4fafc4db49dd9245.exe)\n   Doc-tests nomos_analysis\n",
+        "verified_at": 1786239408
+      }
     },
     {
       "id": "P7-RUST",

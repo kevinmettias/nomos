@@ -27,6 +27,7 @@ const BANDS: &[(&str, u32)] = &[
     // The product substrate. Capability sits above the model and below everything
     // that resolves a provider through it.
     ("nomos-capability", 21),
+    ("nomos-analysis", 22),
     // The spec system sits beside the kernel, not above it. It reaches the product only
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),

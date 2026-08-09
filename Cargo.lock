@@ -286,6 +286,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-analysis"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+]
+
+[[package]]
 name = "nomos-capability"
 version = "0.1.0"
 dependencies = [

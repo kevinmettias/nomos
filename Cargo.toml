@@ -15,6 +15,7 @@ members = [
     # Band 2 — substrate. The work ledger and, later, capability and applicability.
     "crates/substrate/nomos-ledger",
     "crates/substrate/nomos-capability",
+    "crates/substrate/nomos-analysis",
 
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
@@ -48,6 +49,7 @@ nomos-platform = { path = "crates/platform/nomos-platform" }
 nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
 nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-capability = { path = "crates/substrate/nomos-capability" }
+nomos-analysis = { path = "crates/substrate/nomos-analysis" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
 nomos-spec-bundle = { path = "crates/spec/nomos-spec-bundle" }
