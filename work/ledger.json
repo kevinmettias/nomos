@@ -800,7 +800,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P3-OVERLAY"
       ],
@@ -817,7 +817,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "siblings"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 9 tests\ntest Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught ... ok\ntest Test_Every_Sibling_Schema_Should_Resolve_As_A_Node_In_Its_Own_Suite ... ok\ntest Test_A_Sibling_Record_Should_Resolve_By_Its_Own_Identifier ... ok\ntest Test_Every_Sibling_Suite_Should_Be_Non_Root ... ok\ntest Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row ... ok\ntest Test_No_Statement_Should_Rest_On_A_Game_Plan_Alone ... ok\ntest Test_Re_Ingesting_The_Suites_Should_Change_Nothing ... ok\ntest Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors ... ok\ntest Test_Every_Game_Plan_Block_Should_Be_Commentary ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.60s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-6e7e7edfd1ddd306.exe)\n",
+        "verified_at": 1786233668
+      }
     },
     {
       "id": "P3-ARCHAEOLOGY",

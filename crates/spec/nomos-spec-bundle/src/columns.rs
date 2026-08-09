@@ -93,6 +93,15 @@ const COVERAGE: &[Coverage] = &[
         ],
     },
     Coverage {
+        table: "suites",
+        columns: &[
+            ("uid", Carried::Surrogate),
+            ("suite_id", Carried::Field("suite_id")),
+            ("title", Carried::Field("title")),
+            ("authority_root", Carried::Field("authority_root")),
+        ],
+    },
+    Coverage {
         table: "nodes",
         columns: &[
             ("uid", Carried::Surrogate),
@@ -102,6 +111,7 @@ const COVERAGE: &[Coverage] = &[
             ("representation", Carried::Field("representation")),
             ("title", Carried::Field("title")),
             ("deleted_at", Carried::Field("deleted_at")),
+            ("suite_uid", Carried::Field("suite_id")),
         ],
     },
     Coverage {

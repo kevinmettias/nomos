@@ -434,6 +434,73 @@ impl SpecificationStore
         )?);
     }
 
+    /// Records a suite and whether it is this repository's own.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Put_Suite(
+        &mut self,
+        suite_id: &str,
+        title: &str,
+        authority_root: bool,
+    ) -> Result<i64, StoreError>
+    {
+        self.connection.execute(
+            "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)
+             ON CONFLICT(suite_id) DO UPDATE SET title = excluded.title,
+                                                 authority_root = excluded.authority_root",
+            params![suite_id, title, i64::from(authority_root)],
+        )?;
+
+        return Ok(self.connection.query_row(
+            "SELECT uid FROM suites WHERE suite_id = ?1",
+            params![suite_id],
+            |row| row.get(0),
+        )?);
+    }
+
+    /// Places a node in a suite.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Assign_Suite(&mut self, node_uid: i64, suite_uid: i64) -> Result<(), StoreError>
+    {
+        self.connection.execute(
+            "UPDATE nodes SET suite_uid = ?2 WHERE uid = ?1",
+            params![node_uid, suite_uid],
+        )?;
+
+        return Ok(());
+    }
+
+    /// The suite a node belongs to and whether that suite is the root.
+    ///
+    /// `None` where no suite is recorded, which is not the same as the root and must not
+    /// read as it. A node nothing placed is a node whose ownership was never established.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] on any SQL failure.
+    pub fn Suite_Of(&self, node_id: &str) -> Result<Option<(String, bool)>, StoreError>
+    {
+        return Ok(self
+            .connection
+            .query_row(
+                "SELECT s.suite_id, s.authority_root FROM nodes n
+                 JOIN suites s ON s.uid = n.suite_uid
+                 WHERE n.node_id = ?1",
+                params![node_id],
+                |row| {
+                    let suite: String = row.get(0)?;
+                    let root: i64 = row.get(1)?;
+                    return Ok((suite, root != 0));
+                },
+            )
+            .optional()?);
+    }
+
     /// A node that exists only because something points at it.
     ///
     /// # Errors
@@ -572,6 +639,7 @@ pub enum Table
     SourceHeadings,
     SourceBlocks,
     SourceTableRows,
+    Suites,
     Nodes,
     NodeAliases,
     NodeHistory,
@@ -594,6 +662,7 @@ impl Table
             Self::SourceHeadings => "source_headings",
             Self::SourceBlocks => "source_blocks",
             Self::SourceTableRows => "source_table_rows",
+            Self::Suites => "suites",
             Self::Nodes => "nodes",
             Self::NodeAliases => "node_aliases",
             Self::NodeHistory => "node_history",
@@ -614,6 +683,7 @@ impl Table
             Self::SourceHeadings,
             Self::SourceBlocks,
             Self::SourceTableRows,
+            Self::Suites,
             Self::Nodes,
             Self::NodeAliases,
             Self::NodeHistory,

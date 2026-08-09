@@ -11,6 +11,7 @@ mod lineage;
 mod overlay;
 mod phases;
 mod restore;
+mod siblings;
 
 pub use archive::{Archive, ArchiveError, Archives_In};
 pub use gate::{
@@ -28,6 +29,10 @@ pub use overlay::{
 };
 pub use restore::{
     Collision, Extract, Member, Models_In, Origin, Resolve, RestorationReport, Restore, Restored,
+};
+pub use siblings::{
+    COMMENTARY, Ingest_Game_Plan, Ingest_Sibling_Suite, LINEAGE_NOTES, Prepare_Commentary_View,
+    ROOT_SUITE, Sibling, Statements_Sourced_Only_From_Commentary, SuiteReport,
 };
 pub use phases::{
     CatalogEntity, CatalogReport, IngestError, Ingest_Blob, Ingest_Catalog, Ingest_Source_Document,

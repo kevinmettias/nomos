@@ -236,6 +236,32 @@ pub const MIGRATIONS: &[Migration] = &[
              )",
         ],
     },
+    Migration {
+        version: 4,
+        name: "sibling-suites",
+        statements: &[
+            // A suite is whose specification this is. `authority_root` is the whole point:
+            // this repository's own suite is the root, and the XVPE, KWB and ecosystem
+            // seeds are not. Without it a cross-suite relation looks exactly like an
+            // internal one, and a sibling's decision reads as ours.
+            //
+            // Its own table rather than a value on `nodes.authority`. Authority says how
+            // far a statement may be trusted; rootness says whose statement it is. Merging
+            // them would give one column two meanings and no way to ask either question
+            // cleanly — the same collapse the deliberate non-collapses warn about.
+            "CREATE TABLE suites (
+                 uid            INTEGER PRIMARY KEY,
+                 suite_id       TEXT NOT NULL UNIQUE,
+                 title          TEXT NOT NULL,
+                 authority_root INTEGER NOT NULL CHECK (authority_root IN (0, 1))
+             )",
+            // Nullable, and deliberately so. Every node ingested before suites existed
+            // belongs to no recorded suite, and defaulting them to the root would assert
+            // ownership nothing established. Unrecorded stays unrecorded and answerable.
+            "ALTER TABLE nodes ADD COLUMN suite_uid INTEGER REFERENCES suites(uid)",
+            "CREATE INDEX nodes_suite ON nodes(suite_uid)",
+        ],
+    },
 ];
 
 pub struct Migration

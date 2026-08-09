@@ -4,7 +4,7 @@ use crate::columns::Assert_Columns_Covered;
 use crate::model::{
     Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
     Omission, OrdinalRef, Record, Relation, RelationType, SourceBlock, SourceDocument,
-    SourceHeading, SourceTableRow, TableRowRef,
+    SourceHeading, SourceTableRow, Suite, TableRowRef,
 };
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
@@ -36,6 +36,7 @@ pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
     Source_Headings(connection, &mut records)?;
     Source_Blocks(connection, &mut records)?;
     Source_Table_Rows(connection, &mut records)?;
+    Suites(connection, &mut records)?;
     Nodes(connection, &mut records)?;
     Node_Aliases(connection, &mut records)?;
     Node_Histories(connection, &mut records)?;
@@ -234,11 +235,32 @@ fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Record>)
     return Ok(());
 }
 
+fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement =
+        connection.prepare("SELECT suite_id, title, authority_root FROM suites ORDER BY suite_id")?;
+    let rows = statement
+        .query_map([], |row| {
+            let root: i64 = row.get(2)?;
+            return Ok(Suite {
+                suite_id: row.get(0)?,
+                title: row.get(1)?,
+                authority_root: root != 0,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::Suite));
+    return Ok(());
+}
+
 fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     let mut statement = connection.prepare(
-        "SELECT node_id, kind, authority, representation, title, deleted_at
-         FROM nodes ORDER BY node_id",
+        "SELECT n.node_id, n.kind, n.authority, n.representation, n.title, n.deleted_at,
+                s.suite_id
+         FROM nodes n LEFT JOIN suites s ON s.uid = n.suite_uid
+         ORDER BY n.node_id",
     )?;
     let rows = statement
         .query_map([], |row| {
@@ -249,6 +271,7 @@ fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bundl
                 representation: row.get(3)?,
                 title: row.get(4)?,
                 deleted_at: row.get(5)?,
+                suite_id: row.get(6)?,
             });
         })?
         .collect::<Result<Vec<_>, _>>()?;

@@ -92,6 +92,15 @@ pub struct SourceTableRow
     pub normalized_hash: String,
 }
 
+/// Whose specification a set of nodes is.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Suite
+{
+    pub suite_id: String,
+    pub title: String,
+    pub authority_root: bool,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Node
 {
@@ -101,6 +110,8 @@ pub struct Node
     pub representation: String,
     pub title: String,
     pub deleted_at: Option<String>,
+    /// `None` where no suite is recorded, which is not the root.
+    pub suite_id: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -188,6 +199,8 @@ pub enum Record
     SourceBlock(SourceBlock),
     #[serde(rename = "source_table_rows")]
     SourceTableRow(SourceTableRow),
+    #[serde(rename = "suites")]
+    Suite(Suite),
     #[serde(rename = "nodes")]
     Node(Node),
     #[serde(rename = "node_aliases")]
@@ -218,6 +231,7 @@ impl Record
             Self::SourceHeading(_) => "source_headings",
             Self::SourceBlock(_) => "source_blocks",
             Self::SourceTableRow(_) => "source_table_rows",
+            Self::Suite(_) => "suites",
             Self::Node(_) => "nodes",
             Self::NodeAlias(_) => "node_aliases",
             Self::NodeHistory(_) => "node_history",

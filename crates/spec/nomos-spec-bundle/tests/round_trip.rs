@@ -60,6 +60,17 @@ fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
         store.Put_Blob(BINARY).expect("stores a binary blob");
     }
 
+    Populate_Graph(&store);
+
+    return store;
+}
+
+/// Everything above the source documents: suites, nodes, relations, statements, lineage.
+///
+/// Split out of the fixture rather than inlined so the document-ordering half stays
+/// readable. Both halves are one fixture and neither is useful alone.
+fn Populate_Graph(store: &SpecificationStore)
+{
     store
         .Connection()
         .execute_batch(
@@ -73,12 +84,26 @@ fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
              SELECT uid, 1, 1, 'Conformance' FROM source_documents
              WHERE path = 'volumes/03-conformance.md';
 
-             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at)
-             VALUES ('AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Agent execution', NULL),
-                    ('CON-WORKSPACE-001', 'concept', 'canonical', 'record', 'WorkspaceContext',
-                     NULL),
-                    ('REQ-RETIRED-009', 'requirement', 'superseded', 'record', 'Retired',
-                     '2026-01-14T00:00:00Z');
+             -- Two suites, one root and one not, so the round trip carries a value in both
+             -- states rather than proving the column survives only when it is true.
+             INSERT INTO suites (suite_id, title, authority_root)
+             VALUES ('nomos', 'The Nomos specification', 1),
+                    ('xvpe-seed', 'XVPE spec seed', 0);
+
+             -- The third node is left in no suite on purpose: unrecorded is a state the
+             -- bundle has to carry, and it is not the root.
+             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                                suite_uid)
+             SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Agent execution',
+                    NULL, uid FROM suites WHERE suite_id = 'nomos';
+             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                                suite_uid)
+             SELECT 'CON-WORKSPACE-001', 'concept', 'canonical', 'record', 'WorkspaceContext',
+                    NULL, uid FROM suites WHERE suite_id = 'xvpe-seed';
+             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                                suite_uid)
+             VALUES ('REQ-RETIRED-009', 'requirement', 'superseded', 'record', 'Retired',
+                     '2026-01-14T00:00:00Z', NULL);
 
              INSERT INTO node_aliases (alias, node_uid)
              SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
@@ -140,8 +165,6 @@ fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
                AND b.ordinal = 2;",
         )
         .expect("populates every table");
-
-    return store;
 }
 
 /// The guard against a vacuous round trip.

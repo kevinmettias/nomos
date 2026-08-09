@@ -18,7 +18,7 @@ pub use import::{Import, ImportReport};
 pub use model::{
     Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
     Omission, OrdinalRef, Record, Relation, RelationType, SourceBlock, SourceDocument,
-    SourceHeading, SourceTableRow, TableRowRef,
+    SourceHeading, SourceTableRow, Suite, TableRowRef,
 };
 
 /// Everything that stops a bundle from being written, read or trusted.

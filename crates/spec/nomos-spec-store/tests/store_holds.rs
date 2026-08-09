@@ -37,6 +37,46 @@ fn Test_Every_Declared_Table_Should_Exist()
     }
 }
 
+/// The other direction, which is the one that bites.
+///
+/// `Table::All()` is a list kept beside the enum, and a migration that adds a table
+/// without adding it here leaves that table out of every completeness guard built on
+/// `All()` — the bundle's row count, its column coverage, the import's landed check — all
+/// of which then pass by not looking. Nothing else notices, because each of them is
+/// exactly as blind as the list.
+#[test]
+fn Test_Every_Table_In_The_Schema_Should_Be_Declared()
+{
+    let store = SpecificationStore::In_Memory().expect("opens");
+
+    let present: Vec<String> = store
+        .Connection()
+        .prepare(
+            "SELECT name FROM sqlite_master
+             WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name",
+        )
+        .and_then(|mut statement| {
+            return statement
+                .query_map([], |row| row.get(0))
+                .and_then(std::iter::Iterator::collect);
+        })
+        .expect("reads the schema");
+
+    assert!(present.len() > 5, "the schema reported almost nothing, so this checked nothing");
+
+    let declared: Vec<&str> = Table::All().iter().map(|table| return table.Name()).collect();
+    let undeclared: Vec<&String> = present
+        .iter()
+        .filter(|name| return !declared.contains(&name.as_str()))
+        .collect();
+
+    assert!(
+        undeclared.is_empty(),
+        "in the schema and absent from Table::All(), so every guard built on it is blind \
+         to them: {undeclared:?}"
+    );
+}
+
 /// Migration must be idempotent across process restarts, or a second open destroys or
 /// duplicates the schema.
 #[test]

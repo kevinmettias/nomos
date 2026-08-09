@@ -56,6 +56,7 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
         Insert_Source_Headings(transaction, bundle)?;
         Insert_Source_Blocks(transaction, bundle)?;
         Insert_Source_Table_Rows(transaction, bundle)?;
+        Insert_Suites(transaction, bundle)?;
         Insert_Nodes(transaction, bundle)?;
         Insert_Node_Aliases(transaction, bundle)?;
         Insert_Node_History(transaction, bundle)?;
@@ -281,6 +282,25 @@ fn Insert_Source_Table_Rows(
     return Ok(());
 }
 
+fn Insert_Suites(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
+{
+    for record in bundle.Records()
+    {
+        let Record::Suite(suite) = record
+        else
+        {
+            continue;
+        };
+
+        transaction.execute(
+            "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)",
+            params![suite.suite_id, suite.title, i64::from(suite.authority_root)],
+        )?;
+    }
+
+    return Ok(());
+}
+
 fn Insert_Nodes(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
     for record in bundle.Records()
@@ -291,21 +311,42 @@ fn Insert_Nodes(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), Bu
             continue;
         };
 
+        let suite_uid = Optional_Suite_Uid(transaction, node.suite_id.as_deref())?;
         transaction.execute(
-            "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at)
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+            "INSERT INTO nodes
+             (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
             params![
                 node.node_id,
                 node.kind,
                 node.authority,
                 node.representation,
                 node.title,
-                node.deleted_at
+                node.deleted_at,
+                suite_uid
             ],
         )?;
     }
 
     return Ok(());
+}
+
+fn Optional_Suite_Uid(
+    transaction: &Transaction<'_>,
+    suite_id: Option<&str>,
+) -> Result<Option<i64>, BundleError>
+{
+    return suite_id
+        .map(|id| {
+            return Resolve(
+                transaction,
+                "SELECT uid FROM suites WHERE suite_id = ?1",
+                &[&id],
+                "suite",
+                id.to_owned(),
+            );
+        })
+        .transpose();
 }
 
 fn Insert_Node_Aliases(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
