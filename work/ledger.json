@@ -1817,7 +1817,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -1834,7 +1834,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "uld_Narrow_To_One_Table ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.19s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0d15ec647d8d8ae9.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-a58c109867fe042c.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-3c9d86c3c4fc240e.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-13d2b89649f9172e.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-8b168059c0aa6fbb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-a632b903f72395d4.exe)\n     Running tests\\round_trip.rs (target\\debug\\deps\\round_trip-d1bb06e969e9ea64.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-48ec5f65bba5821b.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-894c6f6fe24d1a64.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-fa52182fed3f8bde.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-8b75d145481cbc53.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786312687,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      }
     },
     {
       "id": "P10-FIRST-CHECK",

@@ -2,8 +2,8 @@
 id: OD-COMPLETENESS-001
 type: decision
 title: A completeness guard is only as complete as the universe it quantifies over
-status: open
-version: 1
+status: closed
+version: 2
 authority: canonical-normative-record
 tags:
   - verification
@@ -95,6 +95,37 @@ Two corollaries worth stating, because both were violated by real code above:
   against a store seeded from `GOVERNING_RECORD_IDS` is not a check, and it reported success
   for as long as it existed.
 
+## What The Check Holds
+
+Built in `tests/contract/tests/completeness_universes.rs`, on the mechanism this record
+predicted. `Declared_Universes` derives every declared universe from the workspace source —
+`pub const NAME: &[…]` and `Type::All()` — and finds **sixteen**. The classification of each
+is declared in a table beside it, and the two are checked against each other in both
+directions: a universe nobody classified fails, and a row naming a universe that no longer
+exists fails.
+
+Four of the sixteen are mirrored. `Table::All` by
+`Test_Every_Table_In_The_Schema_Should_Be_Declared`, `GOVERNING_RECORD_IDS` by
+`Test_Every_Canonical_Record_On_Disk_Should_Be_Governing`, `CORPUS_VARIABLES` by
+`Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables`, and `DECLARED_RULES` by
+`Test_A_Rule_Nobody_Declared_Should_Fail_The_Run`. A named mirror is asserted to exist in the
+source, because a row citing a renamed or deleted test reads as coverage while checking
+nothing — the same defect one level up, and the check found one such row while it was being
+written.
+
+**Twelve are not mirrored**, and the count is declared as `UNMIRRORED_TOTAL`. That is the
+remedy `OD-GATE-001` uses rather than a gate that can never be green: adding an unmirrored
+universe fails until somebody raises the number deliberately, and closing one is what earns
+lowering it. Nine of the twelve are `All()` lists over enums, where the compiler checks
+nothing and a new variant silently leaves every guard built on that list.
+
+On the item's own bar — all three instances failing the check as originally written — none
+can be replayed, because each was repaired at the site. Each is reconstructed instead:
+`Test_The_Three_Instances_Should_Have_Failed_This_Check` removes each mirror in turn and
+asserts the universe lands in the counted hole, one above the declared total. The
+enforcement itself was confirmed red by adding a new constant slice to
+`nomos-store/src/document.rs`, which failed the table check by name.
+
 ## What Would Close This
 
 A test that fails when a completeness guard is added without its mirror. The intended
@@ -111,12 +142,16 @@ types, and `tests/contract` deliberately has none. So the enforcement is the sha
 and check the two against each other so the table cannot go stale in the direction that
 flatters.
 
-Not built here. `P9-ONE-DIRECTION` carries it.
+Built by `P9-ONE-DIRECTION`, on exactly this mechanism. What it holds is above.
 
 ## Status
 
-Open. The shape is named and the three instances are analysed; nothing yet fails when a
-one-directional guard is added. Closed when `P9-ONE-DIRECTION` lands the enforcement, at
-which point this record should be amended to say what the check actually holds — including
-whether all three instances above fail it as originally written, which is the item's own
-bar and is not met by this record alone.
+Closed by `P9-ONE-DIRECTION`. The shape is named, the three instances are analysed, and the
+enforcement runs: sixteen universes derived, four mirrored, twelve declared as holes with the
+number checked, and each of the three instances reconstructed to confirm it would have been
+caught.
+
+What is closed is *discovery and accounting*, not coverage. Twelve universes still have no
+mirror. Anyone reading this record as "completeness is now guarded" has read it wrong — what
+is guarded is that a new unmirrored universe cannot arrive unnoticed, and that the size of the
+hole is a figure somebody chose.
