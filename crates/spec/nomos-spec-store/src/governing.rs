@@ -110,6 +110,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md"
         ),
     ),
+    (
+        "docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md",
+        include_str!(
+            "../../../../docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -136,6 +142,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "D-133",
     "OD-DETERMINISM-001",
     "OD-LEDGER-003",
+    "OD-COMPLETENESS-001",
 ];
 
 /// The relation vocabulary the governing records use.
