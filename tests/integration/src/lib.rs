@@ -37,7 +37,9 @@ pub use context::{
     Configuration_Rendering, Host_Variant, Resolved_Configuration, CONFIGURATION_SCHEMA,
 };
 pub use corpus::{Corpus, SourceFile, Subject_Of_Path, Walk};
-pub use slice::{Edited, Recompute, RunReport, Slice};
+pub use slice::{
+    Approximate_Floor, Edited, Parsed_Floor, Recompute, RunReport, Slice,
+};
 pub use surface::{
     Decode_Surface, Public_Items, Surface, CAPABILITY as SURFACE_CAPABILITY,
 };

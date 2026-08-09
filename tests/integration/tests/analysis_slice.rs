@@ -20,11 +20,13 @@ use nomos_capability::Requirement;
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity,
 };
+use nomos_analysis::FactStore;
 use nomos_integration_tests::{
-    Corpus, Decode_Surface, Edited, Host_Variant, Resolved_Configuration, Slice, Walk,
-    SURFACE_CAPABILITY,
+    Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Resolved_Configuration, Slice,
+    Walk, SURFACE_CAPABILITY,
 };
 use nomos_lang_rust as rust;
+use nomos_lang_rust_scan as scan;
 use nomos_workspace::ChangeSource;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
@@ -777,6 +779,303 @@ fn Rust_Files(root: &Path) -> Vec<PathBuf>
     }
 
     return found;
+}
+
+// ---------------------------------------------------------------------------------
+// Two providers of one capability
+// ---------------------------------------------------------------------------------
+
+/// A floor only one offer clears resolves to that one.
+#[test]
+fn Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One()
+{
+    let corpus = Precision_Corpus();
+
+    let (parsed, how) = Slice::Over(&corpus).Resolved();
+    assert_eq!(parsed.provider.As_Str(), rust::PROVIDER);
+    assert_eq!(how, Applicability::Supported);
+
+    // The scanner is registered and cannot serve this floor. Without that, the assertion
+    // above passes over a registry that still has only one offer in it.
+    assert_eq!(
+        Slice::Over(&corpus)
+            .Accepting(Approximate_Floor())
+            .Preferring(scan::PROVIDER)
+            .Resolved()
+            .0
+            .provider
+            .As_Str(),
+        scan::PROVIDER,
+        "the scanner is in the registry and can be reached"
+    );
+}
+
+/// A preference that cannot be served is a fallback, and the caller is told.
+///
+/// This is the branch that was unreachable with one provider: naming a preference always
+/// got it, so `SupportedWithFallback` had never been produced. The answer still stands —
+/// the floor was met — and its provenance is not what was asked for, which is a thing the
+/// caller has to be able to record.
+#[test]
+fn Test_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback()
+{
+    let corpus = Precision_Corpus();
+
+    let (offer, how) = Slice::Over(&corpus).Preferring(scan::PROVIDER).Resolved();
+
+    assert_eq!(
+        offer.provider.As_Str(),
+        rust::PROVIDER,
+        "the preference cannot meet the floor, so it must not be honoured"
+    );
+    assert_eq!(
+        how,
+        Applicability::SupportedWithFallback,
+        "and the caller must be told, or it cannot record why the answer came from \
+         somewhere else"
+    );
+
+    // The positive control. A preference that *can* be served is not a fallback, and
+    // without this the assertion above would pass over a registry that never honours one.
+    assert_eq!(
+        Slice::Over(&corpus)
+            .Accepting(Approximate_Floor())
+            .Preferring(scan::PROVIDER)
+            .Resolved()
+            .1,
+        Applicability::Supported
+    );
+}
+
+/// Two providers' answers about one file are two facts.
+///
+/// The key names the provider and its guarantee, so a store holding both holds them apart.
+/// Filing them together would make "what does this file declare" answerable two ways under
+/// one address, and whichever was written last would win.
+#[test]
+fn Test_Facts_From_Two_Providers_Should_Not_Share_A_Key()
+{
+    let corpus = Precision_Corpus();
+    let file = corpus
+        .files
+        .iter()
+        .find(|file| return file.path == "alpha/one.rs")
+        .expect("the precision corpus contains alpha/one.rs");
+
+    let parsed = Slice::Over(&corpus).Syntax_Key(file);
+    let scanned = Slice::Over(&corpus)
+        .Accepting(Approximate_Floor())
+        .Preferring(scan::PROVIDER)
+        .Syntax_Key(file);
+
+    assert_eq!(parsed.subject, scanned.subject, "one file");
+    assert_eq!(
+        parsed.semantic_inputs, scanned.semantic_inputs,
+        "and one set of bytes, so the two are answering the same question"
+    );
+    assert_ne!(parsed.provider, scanned.provider);
+    assert_ne!(parsed.guarantee, scanned.guarantee);
+    assert_ne!(
+        parsed.Digest(),
+        scanned.Digest(),
+        "a weak answer and a strong one about one file must not share an address"
+    );
+}
+
+/// The disagreement, over the corpus that can name it.
+///
+/// A parser refuses `gamma/broken.rs` — a stray byte order mark mid-file, which is not
+/// valid Rust — so `gamma`'s rollup covers one of its two members and says so. A
+/// line-reader has no refusal case: it answers for every file, weakly.
+///
+/// This is the trade the capability system exists to make explicit. Not "is there an
+/// answer" but "what is this answer worth, and did the caller ask for one that good".
+#[test]
+fn Test_The_Weaker_Provider_Should_Answer_Where_The_Parser_Refuses()
+{
+    let corpus = Precision_Corpus();
+
+    let mut strict = Slice::Over(&corpus);
+    let parsed = strict.Run(&corpus);
+
+    assert_eq!(parsed.refused.len(), 1, "{:?}", parsed.refused);
+    assert_eq!(parsed.degraded, vec!["gamma"]);
+
+    let mut loose = Slice::Over(&corpus)
+        .Accepting(Approximate_Floor())
+        .Preferring(scan::PROVIDER);
+    let scanned = loose.Run(&corpus);
+
+    assert!(
+        scanned.refused.is_empty(),
+        "a line-reader has no refusal case: {:?}",
+        scanned.refused
+    );
+    assert!(
+        scanned.degraded.is_empty(),
+        "and so no rollup is missing a member: {:?}",
+        scanned.degraded
+    );
+    assert_eq!(
+        scanned.syntax_materialized, 6,
+        "six files, six answers, where the parser managed five"
+    );
+
+    // What the coverage cost. The scanner reads gamma's second file and reports items in
+    // it, which the parser could not — and the rollup that follows is an approximation,
+    // which is exactly what the caller asked for by lowering its floor.
+    let gamma = loose
+        .Surface_Of(&corpus.In_Group("gamma"))
+        .expect("gamma has a rollup");
+    let surface = Decode_Surface(&gamma.payload.bytes).expect("the rollup wrote this");
+
+    assert_eq!(surface.files, 2, "both of gamma's files answered");
+    assert_eq!(surface.unreachable, 0);
+}
+
+/// The two providers do not merely differ in guarantee — they differ in what they say.
+///
+/// Asserted over a file both can read, so the disagreement is about method rather than
+/// about one of them having refused. If their payloads were identical the whole
+/// arrangement would be theatre: two names for one answer, and no reason for a caller to
+/// care which one it got.
+#[test]
+fn Test_The_Two_Providers_Should_Disagree_About_A_File_Both_Can_Read()
+{
+    let corpus = Precision_Corpus();
+    let file = corpus
+        .files
+        .iter()
+        .find(|file| return file.path == "alpha/one.rs")
+        .expect("the precision corpus contains alpha/one.rs");
+
+    let mut strict = Slice::Over(&corpus);
+    strict.Run(&corpus);
+    let mut loose = Slice::Over(&corpus)
+        .Accepting(Approximate_Floor())
+        .Preferring(scan::PROVIDER);
+    loose.Run(&corpus);
+
+    let parsed = strict
+        .Store()
+        .Current(&strict.Syntax_Key(file).At(strict.Generation()), strict.Generation())
+        .expect("the parser answered for alpha/one.rs");
+    let scanned = loose
+        .Store()
+        .Current(&loose.Syntax_Key(file).At(loose.Generation()), loose.Generation())
+        .expect("the scanner answered for alpha/one.rs");
+
+    assert_eq!(
+        parsed.payload.schema, scanned.payload.schema,
+        "one schema: what they share is the shape of an answer, which is the interface"
+    );
+    assert_ne!(
+        parsed.payload.bytes, scanned.payload.bytes,
+        "and different bytes, or there would be no reason for a caller to care which \
+         provider answered"
+    );
+    assert_ne!(
+        parsed.evidence, scanned.evidence,
+        "a parse is verified and a pattern match is approximate, and the fact says which"
+    );
+
+    eprintln!(
+        "alpha/one.rs — parsed: {:?}\n              scanned: {:?}",
+        String::from_utf8_lossy(&parsed.payload.bytes),
+        String::from_utf8_lossy(&scanned.payload.bytes)
+    );
+}
+
+/// Coverage bought at scale, and what it cost.
+#[test]
+fn Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus()
+{
+    let Some(corpus) = Scale_Corpus_Or_Skip()
+    else
+    {
+        return;
+    };
+
+    let mut strict = Slice::Over(&corpus);
+    let parsed = strict.Run(&corpus);
+
+    let mut loose = Slice::Over(&corpus)
+        .Accepting(Approximate_Floor())
+        .Preferring(scan::PROVIDER);
+    let scanned = loose.Run(&corpus);
+
+    eprintln!(
+        "coverage: parser {} of {} files, {} degraded rollups; \
+         scanner {} of {} files, {} degraded rollups",
+        parsed.syntax_materialized,
+        parsed.files_seen,
+        parsed.degraded.len(),
+        scanned.syntax_materialized,
+        scanned.files_seen,
+        scanned.degraded.len()
+    );
+
+    assert!(
+        !parsed.refused.is_empty(),
+        "the parser refuses nothing in this corpus, so there is no coverage to buy and \
+         this test is measuring nothing"
+    );
+    assert_eq!(
+        scanned.syntax_materialized, scanned.files_seen,
+        "the scanner answers for every file or it is not the provider this describes"
+    );
+    assert!(
+        scanned.degraded.len() < parsed.degraded.len(),
+        "the weaker provider bought no coverage: {} degraded rollups against {}",
+        scanned.degraded.len(),
+        parsed.degraded.len()
+    );
+}
+
+/// What the registry does when more than one offer clears the floor.
+///
+/// # Why this is asserted rather than assumed
+///
+/// It picks the first usable offer in provider-name order. `nomos.lang.rust.scan` sorts
+/// before `nomos.lang.rust.syn`, so a caller that lowers its floor to get coverage is
+/// served the weaker provider for *every* file — including the seven thousand the parser
+/// could have handled exactly.
+///
+/// That is the current behaviour and it is not obviously anybody's intent. Recorded as a
+/// test rather than left to be discovered, and as `docs/records/OD-CAPABILITY-001` rather
+/// than fixed here: `Registry::Resolve` is a substrate crate, and which of several usable
+/// offers should win is a decision, not a bug fix. P8-SELECTION carries it.
+#[test]
+fn Test_Two_Usable_Offers_Should_Resolve_By_Name_Order_Until_Something_Says_Otherwise()
+{
+    let corpus = Precision_Corpus();
+
+    let (offer, how) = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
+
+    assert_eq!(
+        offer.provider.As_Str(),
+        scan::PROVIDER,
+        "both offers clear this floor, and the weaker one answers because its name sorts \
+         first — not because anything decided it should"
+    );
+    assert_eq!(
+        how,
+        Applicability::Supported,
+        "and nothing in the answer says the caller might have had better"
+    );
+
+    // The remedy available today, so the finding is a cost rather than a trap: a caller
+    // that knows it wants the parser can say so, and gets it.
+    assert_eq!(
+        Slice::Over(&corpus)
+            .Accepting(Approximate_Floor())
+            .Preferring(rust::PROVIDER)
+            .Resolved()
+            .0
+            .provider
+            .As_Str(),
+        rust::PROVIDER
+    );
 }
 
 // ---------------------------------------------------------------------------------

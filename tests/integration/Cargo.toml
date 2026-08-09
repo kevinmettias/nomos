@@ -14,6 +14,7 @@ nomos-capability = { workspace = true }
 nomos-workspace = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-lang-rust = { workspace = true }
+nomos-lang-rust-scan = { workspace = true }
 
 [lints]
 workspace = true

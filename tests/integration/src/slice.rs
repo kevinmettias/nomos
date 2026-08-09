@@ -7,12 +7,14 @@ use nomos_analysis::{
     Context, Dependency, FactIdentity, FactKey, FactPayload, FactReader, FactStore, GuaranteeDigest,
     InputDigest, InvalidationReport, MaterializedFact, MemoryFactStore, Reader,
 };
-use nomos_capability::{Registry, Requirement};
+use nomos_capability::{ProviderOffer, Registry, Requirement, Resolution};
 use nomos_contracts::{
-    Assurance, BuildVariantId, CapabilityId, ConfigurationId, Digest128, EvidenceClass,
-    FactVariant, GenerationId, Guarantee, IncrementalGranularity, ProviderId, SnapshotId, SubjectId,
+    Applicability, Assurance, BuildVariantId, CapabilityId, ConfigurationId, Digest128,
+    EvidenceClass, FactVariant, GenerationId, Guarantee, IncrementalGranularity, ProviderId,
+    SnapshotId, SubjectId,
 };
 use nomos_lang_rust as rust;
+use nomos_lang_rust_scan as scan;
 use nomos_model::Digest_Of_Parts;
 use nomos_workspace::{Applied, ChangeSource, Workspace, WorkspaceChangeSet};
 use std::collections::BTreeSet;
@@ -122,6 +124,39 @@ impl Edited
     }
 }
 
+/// What a caller needs when it needs the file actually parsed.
+///
+/// Syntactic resolution is enough to count declarations, and soundness is not optional: a
+/// rollup over facts that might include items the files do not contain is a number about
+/// nothing. This is the floor every run used before there was anything else to resolve to,
+/// and it is still the default.
+#[must_use]
+pub const fn Parsed_Floor() -> Guarantee
+{
+    return Guarantee::New(
+        FactVariant::Syntactic,
+        Assurance::Sound,
+        Assurance::Unknown,
+        IncrementalGranularity::File,
+    );
+}
+
+/// What a caller needs when it would rather have a weak answer than none.
+///
+/// Below the parser on every axis it can be below, so both offers clear it. That is what
+/// makes a *preference* meaningful: with two usable providers, which one answers is a
+/// choice rather than a consequence.
+#[must_use]
+pub const fn Approximate_Floor() -> Guarantee
+{
+    return Guarantee::New(
+        FactVariant::Approximate,
+        Assurance::Unknown,
+        Assurance::Unknown,
+        IncrementalGranularity::File,
+    );
+}
+
 /// The composed system: a workspace that says what is there, a registry that resolves
 /// providers, and a store that holds what they produced.
 pub struct Slice
@@ -146,6 +181,19 @@ pub struct Slice
     variant: BuildVariantId,
     configuration: ConfigurationId,
     generation: GenerationId,
+    /// The weakest syntax answer this run will accept.
+    ///
+    /// A floor rather than a choice of provider. With two offers on the table the run says
+    /// what it needs and the registry says who can serve it — a composition root that named
+    /// a provider directly would be deciding the thing the registry exists to decide, and
+    /// the two would disagree the day a third provider arrived.
+    floor: Guarantee,
+    /// A provider this run would rather have, if it can serve the floor.
+    ///
+    /// A name, not a second guarantee. Whether it was honoured is what makes
+    /// [`Applicability::SupportedWithFallback`] a fact about which provider answered rather
+    /// than a judgement about how good the answer was.
+    preferred: Option<ProviderId>,
 }
 
 impl Slice
@@ -169,6 +217,12 @@ impl Slice
         registry
             .Offer(rust::Provider_Offer())
             .expect("the Rust provider's offer is within its capability's ceiling");
+        // The second offer against the same contract. It is accepted because the ceiling
+        // bounds what may be *claimed*, not how weak an offer may be — a provider that
+        // promises less than the ceiling is exactly what a ceiling is for.
+        registry
+            .Offer(scan::Provider_Offer())
+            .expect("the scanner's offer is within the same ceiling");
         registry
             .Declare(surface::Capability_Contract())
             .expect("the surface capability is declared once");
@@ -199,6 +253,8 @@ impl Slice
             generation: workspace.Generation(),
             workspace,
             registry,
+            floor: Parsed_Floor(),
+            preferred: None,
         };
     }
 
@@ -237,6 +293,29 @@ impl Slice
         slice.snapshot = applied.Snapshot();
 
         return slice;
+    }
+
+    /// Runs against a different floor.
+    ///
+    /// The whole point of two offers: a caller that will take an approximation gets an
+    /// answer for files a parser refuses, and one that needs a parse does not.
+    #[must_use]
+    pub fn Accepting(mut self, floor: Guarantee) -> Self
+    {
+        self.floor = floor;
+        return self;
+    }
+
+    /// Names a provider this run would rather have.
+    ///
+    /// A preference is not a floor. If the named provider cannot serve the floor, the
+    /// registry serves one that can and reports [`Applicability::SupportedWithFallback`] —
+    /// the answer still stands, and its provenance is not what was asked for.
+    #[must_use]
+    pub fn Preferring(mut self, provider: &str) -> Self
+    {
+        self.preferred = Some(ProviderId::New(provider));
+        return self;
     }
 
     #[must_use]
@@ -296,7 +375,60 @@ impl Slice
     }
 
 
+    /// What this run needs from a syntax provider.
+    ///
+    /// Held rather than hard-coded, because with two providers offering
+    /// `nomos.cap.syntax.items` the floor is what decides which one answers — and the run's
+    /// results are only comparable between two runs that asked for the same thing.
+    #[must_use]
+    pub fn Requirement(&self) -> Requirement
+    {
+        let need = Requirement::New(
+            CapabilityId::New(rust::CAPABILITY),
+            rust::CONTRACT_VERSION,
+            self.floor,
+        );
+
+        return match &self.preferred
+        {
+            Some(provider) => need.Preferring(provider.clone()),
+            None => need,
+        };
+    }
+
+    /// Which provider answers, and how the registry describes the choice.
+    ///
+    /// # Panics
+    ///
+    /// If nothing satisfies the floor. The alternative would be a run that materialized no
+    /// facts and reported a clean corpus, which is the single most repeated defect in the
+    /// prototype: a check that could not run reading like a check that found nothing.
+    #[must_use]
+    pub fn Resolved(&self) -> (ProviderOffer, Applicability)
+    {
+        let resolution = self.registry.Resolve(&self.Requirement());
+
+        let Resolution::Satisfied {
+            offer,
+            applicability,
+        } = resolution
+        else
+        {
+            panic!("no provider offers {} at this run's floor: {resolution:?}", rust::CAPABILITY)
+        };
+
+        return (offer, applicability);
+    }
+
     /// The key a syntax fact about this file is filed under.
+    ///
+    /// # Why the provider is resolved rather than named
+    ///
+    /// It used to be `rust::PROVIDER`, written into the key by the composition root. That
+    /// compiled and was right for as long as there was one provider, and it was a
+    /// composition root deciding what the registry is for deciding. With two offers it
+    /// would file the scanner's answer under the parser's name, and a store holding facts
+    /// mislabelled with their producer is worse than one holding none.
     ///
     /// Public so that a test can compare one file's identity across two workspace states.
     /// That comparison is what closed OD-ANALYSIS-001 — the two keys used to differ and now
@@ -304,14 +436,16 @@ impl Slice
     #[must_use]
     pub fn Syntax_Key(&self, file: &SourceFile) -> FactKey
     {
+        let (offer, _) = self.Resolved();
+
         return FactKey {
             contract: CapabilityId::New(rust::CAPABILITY),
-            contract_version: rust::CONTRACT_VERSION,
+            contract_version: offer.version,
             subject: file.subject,
             semantic_inputs: Self::Syntax_Inputs(&file.source),
-            provider: ProviderId::New(rust::PROVIDER),
-            provider_version: rust::CONTRACT_VERSION,
-            guarantee: GuaranteeDigest::Of(&rust::Declared_Guarantee()),
+            provider: offer.provider,
+            provider_version: offer.version,
+            guarantee: GuaranteeDigest::Of(&offer.guarantee),
             variant: self.variant,
             configuration: self.configuration,
         };
@@ -364,6 +498,65 @@ impl Slice
         return self.store.Current(&identity, self.generation);
     }
 
+    /// Asks whichever provider the registry resolved.
+    ///
+    /// # Why the composition root holds the table and not the registry
+    ///
+    /// A `ProviderOffer` is a claim, not a function pointer, and deliberately so:
+    /// `nomos-capability` sits below every provider and must not know what any of them can
+    /// be called. So somebody has to turn a resolved `ProviderId` into a call, and the only
+    /// thing that legitimately knows every provider is the composition root — the same
+    /// place that registered them.
+    ///
+    /// The `unreachable` arm is the cost of that split, and it is a real one: a provider
+    /// registered and not dispatched would resolve and then fail to answer. It is written
+    /// as a panic naming the provider rather than as a silent skip, because a run that
+    /// quietly produced no facts for a provider it selected would report a clean corpus it
+    /// never read.
+    ///
+    /// # Panics
+    ///
+    /// If the resolved provider has no dispatch here.
+    fn Dispatch(&self, file: &SourceFile) -> rust::Materialization
+    {
+        let (offer, _) = self.Resolved();
+        let provider = offer.provider.As_Str();
+
+        if provider == rust::PROVIDER
+        {
+            return rust::Materialize(
+                file.subject,
+                &file.source,
+                rust::FactContext {
+                    snapshot: self.snapshot,
+                    variant: self.variant,
+                    configuration: self.configuration,
+                    generation: self.generation,
+                },
+            );
+        }
+
+        if provider == scan::PROVIDER
+        {
+            // A scan has no refusal case, so this arm cannot produce `Unparseable`. That
+            // asymmetry is the interesting half of having two providers: they do not
+            // merely differ in how good the answer is, they differ in which inputs they
+            // can answer for at all.
+            return rust::Materialization::Materialized(Box::new(scan::Materialize(
+                file.subject,
+                &file.source,
+                scan::FactContext {
+                    snapshot: self.snapshot,
+                    variant: self.variant,
+                    configuration: self.configuration,
+                    generation: self.generation,
+                },
+            )));
+        }
+
+        panic!("{provider} was resolved and this composition cannot call it");
+    }
+
     /// Whether the store already holds this fact at the current generation.
     fn Held(&self, key: &FactKey) -> bool
     {
@@ -404,16 +597,7 @@ impl Slice
                 continue;
             }
 
-            match rust::Materialize(
-                file.subject,
-                &file.source,
-                rust::FactContext {
-                        snapshot: self.snapshot,
-                    variant: self.variant,
-                    configuration: self.configuration,
-                    generation: self.generation,
-                },
-            )
+            match self.Dispatch(file)
             {
                 rust::Materialization::Materialized(fact) =>
                 {
@@ -497,19 +681,14 @@ impl Slice
     /// claim about what was read, and this is a record of it.
     fn Roll_Up(&self, members: &[&SourceFile]) -> (Surface, Vec<Dependency>)
     {
-        // The floor a rollup needs, not a preference. Syntactic resolution is enough to
-        // count declarations; soundness is not, because a rollup over facts that might
-        // include items the files do not contain is a number about nothing.
-        let need = Requirement::New(
-            CapabilityId::New(rust::CAPABILITY),
-            rust::CONTRACT_VERSION,
-            Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Unknown,
-                IncrementalGranularity::File,
-            ),
-        );
+        // The run's own requirement, not a second one written here.
+        //
+        // It was a separate literal until there were two providers, and that was a latent
+        // defect rather than a duplication: the rollup looks facts up by rebuilding their
+        // key, and a key names the provider that answered. A rollup asking for a floor the
+        // run did not ask for would resolve a different provider, rebuild a key nobody
+        // wrote, and report every member unreachable — loudly, but for the wrong reason.
+        let need = self.Requirement();
 
         let mut reader = Reader::On(&self.store, &self.registry, self.Context());
         let mut surface = Surface::default();

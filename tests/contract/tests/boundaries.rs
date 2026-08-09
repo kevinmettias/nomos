@@ -37,6 +37,11 @@ const BANDS: &[(&str, u32)] = &[
     // all: two languages are two providers of one capability, and the registry is the
     // only thing that knows both.
     ("nomos-lang-rust", 25),
+    // Its peer, deliberately at the same band. Two providers of one capability must not
+    // be able to name each other: this file's downward rule forbids an edge between
+    // crates at one band, which is what stops the second answer from being derived from
+    // the first. Two providers that shared a parser could not disagree.
+    ("nomos-lang-rust-scan", 25),
     // The spec system sits beside the kernel, not above it. It reaches the product only
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),

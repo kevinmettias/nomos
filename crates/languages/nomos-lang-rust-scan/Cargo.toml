@@ -1,0 +1,21 @@
+[package]
+name = "nomos-lang-rust-scan"
+version = "0.1.0"
+description = "Band 2. The same capability as nomos-lang-rust, read off the lines rather than parsed — weaker, and able to answer where a parser refuses."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No syn, and no nomos-lang-rust. Both absences are the point: a second provider that
+# shared the first one's parser could not disagree with it, and one that shared its types
+# would agree by construction on the payload format this whole crate exists to write
+# independently.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+
+[lints]
+workspace = true

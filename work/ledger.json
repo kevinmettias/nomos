@@ -1130,7 +1130,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P7-RUST",
         "P7-SLICE"
@@ -1146,7 +1146,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "est_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback ... ok\ntest Test_Facts_From_Two_Providers_Should_Not_Share_A_Key ... ok\ntest Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One ... ok\ntest Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing ... ok\ntest Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_The_Two_Providers_Should_Disagree_About_A_File_Both_Can_Read ... ok\ntest Test_The_Weaker_Provider_Should_Answer_Where_The_Parser_Refuses ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_The_Fact_Context_Should_Come_From_The_Workspace ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus ... ok\n\ntest result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.27s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.78s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-3a05ca0dd6090e4d.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-20acccc0be755c24.exe)\n   Doc-tests nomos_integration_tests\n",
+        "verified_at": 1786261684
+      }
     },
     {
       "id": "P8-PIN",
@@ -1192,6 +1202,72 @@
         "output_tail": "ng_In_The_Slice_Should_Invent_An_Identity ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_The_Fact_Context_Should_Come_From_The_Workspace ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.30s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-182bb53448016fc6.exe)\n     Running tests\\fact_identity.rs (target\\debug\\deps\\fact_identity-83964a67786ab7dc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-fa3d8ed04547fee3.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-d3c66287d7b06991.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_integration_tests\n",
         "verified_at": 1786253011
       }
+    },
+    {
+      "id": "P8-SELECTION",
+      "title": "Which of several usable offers wins",
+      "why": "Registry::Resolve picks the first usable offer in provider-name order. With one provider that was invisible; with two it means a caller that lowers its floor to Approximate — to get an answer for the 7 files a parser refuses — is served the scanner for all 7,580, including the 7,573 the parser would have read exactly, and is told Supported. Strongest-wins is the reflex answer and is not free: a Guarantee says how good an answer is and nothing about what it costs, so always reaching for the strongest turns 'I will accept an approximation' into 'give me the best you have'. OD-CAPABILITY-001 states the three candidates and why none is obvious.",
+      "done_when": "Selection among usable offers is decided rather than incidental: Registry::Resolve applies a stated rule, the rule is named in the type or documented at the method with what decided it, and renaming a provider cannot change which one answers. A caller that would have been served a weaker offer than one available can tell — either by the rule making that impossible or by the resolution saying so. OD-CAPABILITY-001 is closed with what decided it, and tests/integration's assertion of the current name-order behaviour is replaced by an assertion of the new rule.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-capability",
+          "tests/integration",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P8-SECOND-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P8-CONTRACT-HOME",
+      "title": "A capability contract is not a provider's property",
+      "why": "nomos.cap.syntax.items is declared by nomos-lang-rust and offered by both it and nomos-lang-rust-scan. A CapabilityContract is the agreed meaning of a question and the ceiling on what any answer may claim — an agreement is not the property of one party to it. Today the scanner offers against a contract its peer authors, which it cannot even name (same band), so the coupling is by string and invisible. Registry::Declare refusing a second contract is what currently protects the invariant, which is the registry compensating for the layering rather than the layering being right. The contract's home is below both providers and no crate is there.",
+      "done_when": "nomos.cap.syntax.items is declared somewhere neither provider owns, both offer against it, and removing either provider from the workspace leaves the contract intact. The band table places that home below both language providers and tests/contract's downward rule passes. nomos-lang-rust no longer exports Capability_Contract, or a decision record states why it still should.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages",
+          "crates/substrate",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P8-SECOND-PROVIDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }

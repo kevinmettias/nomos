@@ -24,6 +24,7 @@ members = [
     # nothing below it, so a language can be added or dropped without a recompile
     # anywhere else.
     "crates/languages/nomos-lang-rust",
+    "crates/languages/nomos-lang-rust-scan",
 
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
@@ -67,6 +68,7 @@ nomos-capability = { path = "crates/substrate/nomos-capability" }
 nomos-workspace = { path = "crates/substrate/nomos-workspace" }
 nomos-analysis = { path = "crates/substrate/nomos-analysis" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
+nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
