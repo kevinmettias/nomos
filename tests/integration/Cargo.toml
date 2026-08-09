@@ -1,0 +1,18 @@
+[package]
+name = "nomos-integration-tests"
+version = "0.1.0"
+description = "Band 100. The vertical slice: real facts over a real corpus, through every seam at once."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-lang-rust = { workspace = true }
+
+[lints]
+workspace = true

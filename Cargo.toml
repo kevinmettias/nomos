@@ -39,6 +39,12 @@ members = [
     # Assertions about the workspace itself: dependency bands, the contracts
     # allowlist, and module reachability.
     "tests/contract",
+
+    # The vertical slice. A peer of tests/contract rather than a layer over it: that
+    # crate watches the workspace's shape from outside and compiles against almost
+    # nothing, this one drives the product through every seam. Neither may name the
+    # other.
+    "tests/integration",
 ]
 
 resolver = "3"
@@ -59,6 +65,7 @@ nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-capability = { path = "crates/substrate/nomos-capability" }
 nomos-analysis = { path = "crates/substrate/nomos-analysis" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
+nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
 nomos-spec-bundle = { path = "crates/spec/nomos-spec-bundle" }

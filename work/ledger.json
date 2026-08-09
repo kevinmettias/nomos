@@ -568,11 +568,13 @@
         "resolution": "File",
         "paths": [
           "tests/integration",
-          "tests/corpus/analysis"
+          "tests/corpus/analysis",
+          "Cargo.toml",
+          "tests/contract/tests/boundaries.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P7-RUST"
       ],
@@ -583,13 +585,25 @@
           "cargo",
           "test",
           "-p",
-          "nomos-contract-tests",
+          "nomos-integration-tests",
           "--test",
           "analysis_slice"
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "analysis_slice"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.13s\n\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.98s\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-db81fa924d1628f6.exe)\n",
+        "verified_at": 1786242659
+      }
     },
     {
       "id": "P7-STORE",

@@ -48,6 +48,12 @@ const BANDS: &[(&str, u32)] = &[
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.
     ("nomos-contract-tests", 100),
+    // The vertical slice is their peer, not their superior. Both are terminal, and
+    // sharing a band is what makes them unable to name each other: this file's
+    // downward rule forbids an edge between two crates at the same band. That is the
+    // property wanted — an observer of the workspace that also participates in it
+    // could no longer be trusted to report on it.
+    ("nomos-integration-tests", 100),
 ];
 
 /// Everything `nomos-contracts` is permitted to reach, transitively.
