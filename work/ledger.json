@@ -1817,10 +1817,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-p9-one-direction",
+        "acquired_at": 1786308729,
+        "lease_expires_at": 1786323129
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -1895,6 +1899,37 @@
           "cargo",
           "test",
           "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P10-RECORD-LOCK",
+      "title": "Every item claims docs/records, so the ledger runs one item at a time",
+      "why": "All eight open items on this ledger reserve docs/records. Not most - all of them, measured. So exactly one item can be held at a time, whatever else the ledger says about parallelism, and nomos-ledger opens by stating that territory-based exclusion exists \"so that several agents can work one repository without silently overwriting each other\". Observed three times in one afternoon on 2026-08-09: P9-DETERMINISM held, and all six Ready items refused; the same claim widened, still all six; then P9-ONE-DIRECTION held, and all seven remaining items refused - six on territory and the seventh on a dependency. Each time work list reported every one of them ready. The cause is not an authoring mistake. OD-LEDGER-001 second authoring rule says an item that will produce a decision claims docs/records, and any item whose why names an open question or a suspected defect will produce a record. On an audit ledger every item names a suspected defect, so the rule that was written to stop territory being under-declared now guarantees that every item excludes every other one. Two agents cannot work this repository concurrently by construction, and the mechanism reports that as a queue rather than as a design limit.",
+      "done_when": "Two items that will each write a different record can be held at the same time. Whether that comes from an item claiming the record it will write rather than the directory the records live in, from a finer resolution over that path, or from an authoring rule that stops sending every item to one directory, the check is the same: with two such items on the ledger both claims are granted, and a test asserts it over the case that exists right now. Amending OD-LEDGER-001 second authoring rule is part of the answer rather than a separate item, because that rule is what produces the collision. A negative control confirms that two items which genuinely would write the same record are still refused, so the fix cannot be a blanket exemption for docs/records.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
         ],
         "timeout_seconds": 600
       },
