@@ -1031,6 +1031,100 @@
         "output_tail": "\nrunning 6 tests\ntest Test_Every_Entry_Should_Say_What_It_Counted_And_Over_What ... ok\ntest Test_Entry_Identifiers_Should_Be_Unique ... ok\ntest Test_The_Registered_Families_Should_Be_Exactly_The_Required_Ones ... ok\ntest Test_A_Plan_Figure_Should_Be_Superseded_Exactly_When_It_Differs ... ok\ntest Test_The_Register_Should_Agree_With_The_Store_Census ... ok\ntest Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\family_counts.rs (target\\debug\\deps\\family_counts-c27f57cecec7061b.exe)\n",
         "verified_at": 1786230184
       }
+    },
+    {
+      "id": "P8-COMPOSE",
+      "title": "The slice's context comes from a real workspace",
+      "why": "The slice invents its SnapshotId, BuildVariantId and ConfigurationId as three byte-fill constants. Every fact in the store is keyed on them, so a fact's identity currently rests on values nobody derived from anything, and the invalidation the slice demonstrates is over a workspace state that does not exist. nomos-workspace now produces the real ones.",
+      "done_when": "The slice's context comes from a Workspace built by applying change sets over the corpus, an edit enters through WorkspaceChangeSet and the generation it produces is the one facts materialize into, and the exact-descendants assertion still names its facts. Nothing under tests/integration constructs a SnapshotId, BuildVariantId or ConfigurationId by hand.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-SLICE",
+        "P7-WORKSPACE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "analysis_slice"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P8-KIND",
+      "title": "The store learns what a workspace state is",
+      "why": "Two different things are called a snapshot. DocumentKind::Snapshot means a commit manifest, and the index decodes every document of that kind as one, so a workspace state is recorded as a Fact. That is honest and it makes 'which facts are workspace states' a question about a schema string. The third thing to be called a snapshot will not have a schema string anybody remembers to check.",
+      "done_when": "A decision record states whether the store gains a kind for a workspace state or one stays a Fact, and what decided it. If it gains one, DocumentKind::All covers it, the test that walks every kind for exactly one authority still passes, and nomos-workspace records under it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-store",
+          "crates/substrate/nomos-workspace",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-WORKSPACE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P8-SECOND-PROVIDER",
+      "title": "Two providers of one capability, disagreeing",
+      "why": "The ceiling, the guarantee ordering and SupportedWithFallback have never met two offers that actually differ. With one provider, Registry::Resolve is a lookup: a caller naming a preference always gets it, no offer is ever below a requirement, and no result is ever a fallback. Every branch that makes the registry worth having is currently unreachable. What the second provider should be is the item's first decision, and the registry's behaviour is checkable whatever it turns out to be.",
+      "done_when": "A second provider offers nomos.cap.syntax.items at a guarantee that differs on at least one axis. Over the real corpus: a requirement only one satisfies resolves to that one, a caller preferring the provider that cannot serve it is told the answer was SupportedWithFallback rather than silently served, and facts from the two providers do not share a key.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages",
+          "tests/integration"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P7-RUST",
+        "P7-SLICE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
