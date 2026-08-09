@@ -35,10 +35,12 @@
 
 #![forbid(unsafe_code)]
 
+mod determinism;
 mod guarantee;
 mod provider;
 mod scan;
 
+pub use determinism::ScanFactProduction;
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
 pub use provider::{Encode_Payload, FactContext, Materialize};
 pub use scan::{ItemKind, Scan, ScannedFile, ScannedItem, Visibility};

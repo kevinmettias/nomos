@@ -10,6 +10,8 @@
 
 mod gates;
 mod metadata;
+mod strategies;
 
 pub use gates::{Corpus_Gates, CorpusGate, CORPUS_VARIABLES};
 pub use metadata::{Package, Workspace};
+pub use strategies::{Fact_Domains, FactDomain};

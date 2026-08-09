@@ -98,6 +98,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md"
         ),
     ),
+    (
+        "docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md",
+        include_str!(
+            "../../../../docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -122,6 +128,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-GATE-001",
     "OD-SPEC-005",
     "D-133",
+    "OD-DETERMINISM-001",
 ];
 
 /// The relation vocabulary the governing records use.

@@ -1473,14 +1473,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p9-determinism",
-        "acquired_at": 1786306132,
-        "lease_expires_at": 1786320532
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -1489,7 +1485,16 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "exit_code": 0,
+        "output_tail": "e30d2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-48edbcc871df3710.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-55b6c675156f8a5a.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-b52836aa7b25e28c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-3de20786aadc77ad.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-f86a6915fbdf7b4f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2596f725576ffee8.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-81a2ce5c1466bfe2.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-76ddf6dfcfe2915e.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-a648d8a02a8e5061.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-843c8339c058e731.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-a58766822646adee.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_store-70f0ad0a6e79ff60.exe)\n     Running tests\\one_door.rs (target\\debug\\deps\\one_door-7137bddc95a4c22d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workspace-b923fa7763130556.exe)\n     Running tests\\portable.rs (target\\debug\\deps\\portable-6288a12c0ad205a2.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_capability\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n   Doc-tests nomos_ledger\n   Doc-tests nomos_model\n   Doc-tests nomos_platform\n   Doc-tests nomos_platform_std\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_spec_validate\n   Doc-tests nomos_store\n   Doc-tests nomos_workspace\n",
+        "verified_at": 1786307763
+      }
     },
     {
       "id": "P9-READ-SURFACE",

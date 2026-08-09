@@ -38,11 +38,13 @@
 
 #![forbid(unsafe_code)]
 
+mod determinism;
 mod guarantee;
 mod provider;
 mod recognition;
 mod syntax;
 
+pub use determinism::SyntaxFactProduction;
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
 pub use provider::{Encode_Payload, FactContext, Materialization, Materialize};
 pub use recognition::{Recognition, RUST_EXTENSION};

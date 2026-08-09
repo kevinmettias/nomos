@@ -332,6 +332,20 @@ fn Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone()
 /// The permutation is a deterministic shuffle rather than a random one. A random order
 /// that failed once would be a failure nobody could reproduce, and this test exists to
 /// produce a reproducible one.
+///
+/// # What this is evidence for
+///
+/// [`nomos_workspace::SnapshotSerialization`], and specifically its
+/// [`nomos_contracts::DeterminismStrength::State`] half — a hundred arrival orders
+/// reaching one encoding is exactly the claim that the sequence inputs arrived in cannot
+/// reach the output. The declaration did not exist when this was written; the property
+/// did, which is the gap `P9-DETERMINISM` closed.
+///
+/// Gated on the scale corpus, so it does not run in CI. The same declaration is checked
+/// over an in-repository fixture in `tests/integration/tests/determinism.rs`, including
+/// the `CrossBinary` half that this test does not reach at all — a hundred permutations
+/// inside one process say nothing about what a different build of this analyzer would
+/// encode.
 #[test]
 fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
 {

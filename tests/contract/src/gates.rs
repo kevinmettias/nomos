@@ -688,7 +688,87 @@ fn Is_Code(mask: &[bool], index: usize) -> bool
 }
 
 /// Every `.rs` file under a directory.
-fn Source_Files(root: &Path) -> Vec<PathBuf>
+/// A file's text with every `#[cfg(test)]` item body blanked out.
+///
+/// `pub(crate)` for `strategies.rs`, which asks whether a crate declares a determinism
+/// strategy and must not be answered by one written inside a unit-test module.
+/// `nomos-contracts` declares two — `AnalysisKernel` and `AgentHost` — as compile-time
+/// examples of the trait it defines, and counting those as domains would have credited the
+/// contracts crate with occupying rows of a table it exists to describe.
+///
+/// The bodies are blanked rather than removed so that byte offsets are unchanged and a
+/// caller may still line up the result with the original.
+///
+/// Brace matching runs over the same masks the rest of this module uses, because a
+/// `panic!("{} ...")` inside a test module would otherwise desynchronise the scan and
+/// blank the remainder of the file — which would hide real declarations and report a clean
+/// result, the failure direction that flatters.
+pub(crate) fn Without_Test_Modules(text: &str) -> String
+{
+    let bytes = text.as_bytes();
+    let masks = Scan(text);
+    // A byte buffer rather than an in-place edit of the `String`: this crate forbids
+    // unsafe, so there is no mutable view of a `String`'s bytes to reach for, and blanking
+    // to spaces keeps every offset and every line break where it was.
+    let mut blanked = bytes.to_vec();
+    let mut index = 0_usize;
+
+    while index < bytes.len()
+    {
+        if !Is_Code(&masks.code, index) || !Starts_Marker(bytes, index)
+        {
+            index = index.saturating_add(1);
+            continue;
+        }
+
+        let Some(open) = Next_Code_Byte(bytes, &masks.code, index, b'{')
+        else
+        {
+            break;
+        };
+
+        let Some(close) = Matching_Brace(bytes, &masks.code, open)
+        else
+        {
+            break;
+        };
+
+        for offset in open..=close
+        {
+            if let Some(slot) = blanked.get_mut(offset)
+            {
+                if *slot != b'\n'
+                {
+                    *slot = b' ';
+                }
+            }
+        }
+
+        index = close.saturating_add(1);
+    }
+
+    // Blanking replaces whole bytes of what was valid UTF-8 with ASCII spaces, so the
+    // result is still valid UTF-8 — but a multi-byte character partially overwritten would
+    // not be, and the lossy conversion is what keeps a scanner bug from becoming a panic in
+    // a check that is supposed to report.
+    return String::from_utf8_lossy(&blanked).into_owned();
+}
+
+/// Whether a `#[cfg(test)]` attribute begins at an offset.
+fn Starts_Marker(bytes: &[u8], index: usize) -> bool
+{
+    const MARKER: &[u8] = b"#[cfg(test)]";
+
+    return bytes
+        .get(index..index.saturating_add(MARKER.len()))
+        .is_some_and(|window| return window == MARKER);
+}
+
+/// Every `.rs` file under a directory, recursively.
+///
+/// `pub(crate)` because `strategies.rs` walks the same trees for a different property,
+/// and two walkers would eventually disagree about what counts as a source file.
+pub(crate) fn Source_Files(root: &Path) -> Vec<PathBuf>
 {
     let mut found = Vec::new();
     let mut pending = vec![root.to_path_buf()];

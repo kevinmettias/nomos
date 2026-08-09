@@ -410,6 +410,20 @@ fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
 /// the count and the stride are reported, and the property being checked is determinism,
 /// for which a spread sample of the corpus is the right instrument and the whole corpus
 /// is only slower.
+///
+/// # What this is evidence for
+///
+/// [`nomos_lang_rust::SyntaxFactProduction`], the declaration this test predates by
+/// several phases. It asserted the property and named nothing, so nothing said which
+/// promise it was keeping, and the promise itself was not written down anywhere until
+/// `P9-DETERMINISM`.
+///
+/// It is the strongest instrument for that declaration and the weakest one available to
+/// CI, because it is gated: without `NOMOS_RUST_CORPUS` this returns early and prints
+/// `ok`, which `docs/records/OD-GATE-001` measures across the suite at 68 assertions. The
+/// declaration is therefore also checked over in-repository fixtures in
+/// `tests/integration/tests/determinism.rs`, which is where a gate run actually verifies
+/// it. Read the two together: this one has the scale, that one has the reach.
 #[test]
 fn Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts()
 {

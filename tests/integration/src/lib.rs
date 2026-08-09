@@ -30,6 +30,7 @@
 
 mod context;
 mod corpus;
+mod determinism;
 mod slice;
 mod surface;
 
@@ -37,6 +38,10 @@ pub use context::{
     Configuration_Rendering, Host_Variant, Resolved_Configuration, CONFIGURATION_SCHEMA,
 };
 pub use corpus::{Corpus, SourceFile, Subject_Of_Path, Walk};
+pub use determinism::{
+    Child_Variable, Cross_Environment_Owed, CrossEnvironment, Digest_In, Production, Report_Line,
+    Verification, Verify,
+};
 pub use slice::{
     Approximate_Floor, Edited, Parsed_Floor, Recompute, RunReport, Slice,
 };

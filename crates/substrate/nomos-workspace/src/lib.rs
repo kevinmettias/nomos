@@ -41,11 +41,13 @@
 #![allow(clippy::missing_errors_doc)]
 
 mod change;
+mod determinism;
 mod snapshot;
 mod variant;
 mod workspace;
 
 pub use change::{Change, ChangeSet, ChangeSource, WorkspaceChangeSet};
+pub use determinism::SnapshotSerialization;
 pub use snapshot::{Member, WorkspaceSnapshot, SNAPSHOT_SCHEMA};
 pub use variant::BuildVariant;
 pub use workspace::{Applied, Effect, Workspace, WorkspaceError};
