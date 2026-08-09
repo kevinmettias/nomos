@@ -2015,6 +2015,40 @@
         "timeout_seconds": 600
       },
       "verified": null
+    },
+    {
+      "id": "P10-LAUNCHER-PIPE",
+      "title": "A loud predicate is recorded as no verdict, because nothing drains its pipe",
+      "why": "StdProcessLauncher pipes a predicate stdout and stderr and reads neither until after the child has exited. The wait loop calls try_wait, sleeps, and never drains. A child that writes past the pipe buffer blocks on the write, never exits, and is killed at the timeout, so a predicate that passed is recorded as no verdict at all. Demonstrated on a scratch ledger on 2026-08-09, same program and same 60 second timeout, only the volume changed: 840,000 bytes emitted in one second timed out after 60 seconds, and 4,000 bytes emitted the same way verified in zero. Met for real while finishing P10-FIRST-CHECK, whose predicate is cargo test --workspace: 75,751 bytes of output, 103 seconds by hand, TimedOut twice at 600 seconds under work finish. Every earlier item on this ledger scoped its predicate to one or two crates and stayed under the buffer, which is why four phases of work never met this. The consequence is the one shape this repository keeps recording. P9-PREDICATE separated GateFailed from PredicateFailed because a failing gate and failing work are different facts, and NoVerdict was added so that nobody found out could not read as bad work. This defect turns the failure direction into a lie in the other direction: a run that did find out, and found nothing wrong, is written down as nobody found out. Worse for a failing run, where the failure detail is exactly what makes the output large: the louder the failure, the more likely it is reported as a timeout rather than as a failure.",
+      "done_when": "A predicate that writes more than the pipe buffer is verified on its result rather than killed on its volume. The check is a test in nomos-platform-std that runs a program emitting several hundred kilobytes quickly under a short timeout and asserts ExitOutcome::Exited with the real code, which fails against todays launcher. Both negative controls hold: a program that genuinely exceeds its timeout must still report TimedOut, and the captured output must still be the program actual output rather than a truncated prefix that happens to fit. Whether the fix drains on threads, uses a growing buffer, or moves to a platform crate that already solves it is open. Once it lands, P10-FIRST-CHECK predicate can drop the -q it carries only to fit the buffer, and the ledger recorded evidence for that item stops being a run of empty doctest sections.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std",
+          "crates/platform/nomos-platform",
+          "crates/substrate/nomos-ledger",
+          "crates/spec/nomos-spec-store",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-q",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
