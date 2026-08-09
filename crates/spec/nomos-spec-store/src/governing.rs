@@ -122,6 +122,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md"
         ),
     ),
+    (
+        "docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md",
+        include_str!(
+            "../../../../docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -155,6 +161,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-LEDGER-003",
     "OD-COMPLETENESS-001",
     "D-134",
+    "OD-LEDGER-004",
 ];
 
 /// The relation vocabulary the governing records use.
