@@ -1817,14 +1817,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p9-one-direction",
-        "acquired_at": 1786308729,
-        "lease_expires_at": 1786323129
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
