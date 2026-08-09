@@ -595,7 +595,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P7-ANALYSIS"
       ],
@@ -610,7 +610,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 16 tests\ntest Test_A_Snapshot_That_Records_Nothing_Should_Be_Refused ... ok\ntest Test_A_Changed_Record_Should_Address_A_Different_Snapshot ... ok\ntest Test_A_Snapshot_Written_And_Reread_Should_Be_Byte_Identical ... ok\ntest Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store ... ok\ntest Test_Every_Document_Kind_Should_Belong_To_Exactly_One_Authority ... ok\ntest Test_A_Reread_Snapshot_Should_Decode_To_What_Was_Committed ... ok\ntest Test_Decoding_Something_That_Is_Not_A_Snapshot_Should_Be_Refused ... ok\ntest Test_An_Absent_Document_Should_Be_Refused_Rather_Than_Empty ... ok\ntest Test_A_Committed_Document_Should_Not_Change_When_Another_Snapshot_Arrives ... ok\ntest Test_Committing_The_Same_Snapshot_Twice_Should_Address_The_Same_Document ... ok\ntest Test_Every_Document_Should_Be_Reachable_From_A_Snapshot ... ok\ntest Test_The_Index_Should_Reach_Every_Recorded_Document ... ok\ntest Test_The_Index_Should_Group_By_Kind_And_Schema ... ok\ntest Test_An_Observed_Document_Should_Not_Enter_An_Authored_Store ... ok\ntest Test_The_Index_Should_Be_Rebuildable_From_The_Documents_Alone ... ok\ntest Test_Two_Stores_Given_The_Same_Snapshots_In_Any_Order_Should_Index_Identically ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-store v0.1.0 (F:\\repos\\nomos\\crates\\kernel\\nomos-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.79s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_store-669dc54b7e689a8d.exe)\n     Running tests\\one_door.rs (target\\debug\\deps\\one_door-9d9791538d04221d.exe)\n   Doc-tests nomos_store\n",
+        "verified_at": 1786240088
+      }
     },
     {
       "id": "P7-WORKSPACE",

@@ -6,6 +6,7 @@ members = [
 
     # Band 1 — kernel. Canonical identity and the content-addressed document store.
     "crates/kernel/nomos-model",
+    "crates/kernel/nomos-store",
 
     # Band 1p — platform port. Traits in `nomos-platform`, implementations beside it.
     # `nomos-platform-xvpe` is deliberately absent until XVPE stabilizes.
@@ -45,6 +46,7 @@ publish = false
 [workspace.dependencies]
 nomos-contracts = { path = "crates/contracts/nomos-contracts" }
 nomos-model = { path = "crates/kernel/nomos-model" }
+nomos-store = { path = "crates/kernel/nomos-store" }
 nomos-platform = { path = "crates/platform/nomos-platform" }
 nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
 nomos-ledger = { path = "crates/substrate/nomos-ledger" }

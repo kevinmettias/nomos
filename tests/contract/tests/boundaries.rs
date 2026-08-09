@@ -18,6 +18,7 @@ use std::path::{Path, PathBuf};
 const BANDS: &[(&str, u32)] = &[
     ("nomos-contracts", 0),
     ("nomos-model", 10),
+    ("nomos-store", 12),
     // The port and its implementations are not peers. The traits sit below, so that
     // swapping an implementation cannot recompile anything that only knows the port —
     // which is the entire reason the seam exists.
