@@ -20,8 +20,13 @@ use nomos_capability::Requirement;
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity,
 };
-use nomos_integration_tests::{Corpus, Decode_Surface, Slice, Walk, SURFACE_CAPABILITY};
+use nomos_integration_tests::{
+    Corpus, Decode_Surface, Edited, Host_Variant, Resolved_Configuration, Slice, Walk,
+    SURFACE_CAPABILITY,
+};
 use nomos_lang_rust as rust;
+use nomos_workspace::ChangeSource;
+use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 /// The corpus small enough to know entirely.
@@ -93,12 +98,17 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
         return;
     };
 
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
     let first = slice.Run(&corpus);
 
     eprintln!(
-        "{}: {} files, {} syntax facts materialized, {} refused, {} groups, {} rollups, \
+        "{}: {} members ingested as one checkout, snapshot {}, variant {:?}\n\
+         {}: {} files, {} syntax facts materialized, {} refused, {} groups, {} rollups, \
          {} degraded",
+        corpus.root.display(),
+        slice.Workspace().Snapshot().Len(),
+        slice.Pinned(),
+        slice.Workspace().Snapshot().Variant(),
         corpus.root.display(),
         first.files_seen,
         first.syntax_materialized,
@@ -132,6 +142,16 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
         "{} groups produced no rollups; the derived layer never ran",
         first.groups_seen
     );
+
+    // The workspace read the same corpus the providers did. A member count that disagreed
+    // with the file count would mean the checkout and the walk saw different trees, and
+    // every fact would be keyed on a workspace state that does not describe what was
+    // parsed.
+    assert_eq!(
+        slice.Workspace().Snapshot().Len(),
+        first.files_seen,
+        "the ingested workspace and the walked corpus must be the same tree"
+    );
 }
 
 /// The claim a content-addressed fact key exists to make: unchanged input, no work.
@@ -144,7 +164,7 @@ fn Test_A_Second_Run_Should_Materialize_Zero()
         return;
     };
 
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
     let first = slice.Run(&corpus);
     let second = slice.Run(&corpus);
 
@@ -195,26 +215,29 @@ fn Test_A_Second_Run_Should_Materialize_Zero()
 fn Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants()
 {
     let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
 
     let first = slice.Run(&corpus);
     assert_eq!(first.syntax_materialized, 5, "five of six files parse");
     assert_eq!(first.surface_materialized, 3, "three groups");
 
-    let touched = corpus
-        .files
-        .iter()
-        .find(|file| return file.path == "alpha/one.rs")
-        .map(|file| return file.subject)
-        .expect("the precision corpus contains alpha/one.rs");
-
-    assert!(
-        corpus.Rewrite("alpha/one.rs", "//! Rewritten.\n\npub fn Added() {}\n"),
-        "the file must be there to rewrite; a silent no-op would make this test assert \
-         that changing nothing invalidates nothing"
+    let before = slice.Generation();
+    let edited = slice.Edit(
+        &mut corpus,
+        ChangeSource::IdeEdit,
+        "alpha/one.rs",
+        "//! Rewritten.\n\npub fn Added() {}\n",
     );
 
-    let invalidated = slice.Touch(touched);
+    let Edited::Advanced { invalidated, .. } = edited
+    else
+    {
+        panic!("rewriting a file is a change to the workspace: {edited:?}")
+    };
+    assert!(
+        slice.Generation() > before,
+        "the generation facts materialize into is the one the workspace produced"
+    );
 
     assert_eq!(
         Slice::Name_Keys(&corpus, &invalidated.direct),
@@ -256,20 +279,22 @@ fn Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants()
 fn Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group()
 {
     let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
 
     slice.Run(&corpus);
 
-    let touched = corpus
-        .files
-        .iter()
-        .find(|file| return file.path == "gamma/five.rs")
-        .map(|file| return file.subject)
-        .expect("the precision corpus contains gamma/five.rs");
+    let edited = slice.Edit(
+        &mut corpus,
+        ChangeSource::AgentEdit,
+        "gamma/five.rs",
+        "//! Rewritten.\n\nstruct Other;\n",
+    );
 
-    assert!(corpus.Rewrite("gamma/five.rs", "//! Rewritten.\n\nstruct Other;\n"));
-
-    let invalidated = slice.Touch(touched);
+    let Edited::Advanced { invalidated, .. } = edited
+    else
+    {
+        panic!("rewriting a file is a change to the workspace: {edited:?}")
+    };
     let reached = Slice::Name_Keys(&corpus, &invalidated.dependent);
 
     assert_eq!(reached, vec!["nomos.cap.module.surface of gamma"]);
@@ -306,14 +331,26 @@ fn Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group()
 fn Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale()
 {
     let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
 
     let first = slice.Run(&corpus);
     assert_eq!(first.surface_materialized, 3, "three groups");
 
+    let workspace = slice.Workspace().Id();
+
+    // Deliberately not through `Slice::Edit`. The corpus on disk is now something the
+    // workspace has never been told about, which is what a checkout behind a running
+    // process, or a store reopened over a tree that moved, actually looks like.
     assert!(corpus.Rewrite("beta/four.rs", "//! Rewritten.\n\npub fn Now_Public() {}\n"));
 
-    // Deliberately no `Touch`. Nothing has invalidated anything, and nothing may.
+    assert_eq!(
+        slice.Workspace().Id(),
+        workspace,
+        "nothing announced the change, so the workspace must not have moved — this test is \
+         about identity, and a workspace that somehow knew would explain the recomputation \
+         a second way"
+    );
+
     let second = slice.Run(&corpus);
 
     assert_eq!(
@@ -347,19 +384,22 @@ fn Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale()
 fn Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So()
 {
     let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
 
     slice.Run(&corpus);
 
-    let touched = corpus
-        .files
-        .iter()
-        .find(|file| return file.path == "alpha/two.rs")
-        .map(|file| return file.subject)
-        .expect("the precision corpus contains alpha/two.rs");
-    assert!(corpus.Rewrite("alpha/two.rs", "//! Rewritten.\n\nfn Changed() {}\n"));
+    let edited = slice.Edit(
+        &mut corpus,
+        ChangeSource::IdeEdit,
+        "alpha/two.rs",
+        "//! Rewritten.\n\nfn Changed() {}\n",
+    );
 
-    let invalidated = slice.Touch(touched);
+    let Edited::Advanced { invalidated, .. } = edited
+    else
+    {
+        panic!("rewriting a file is a change to the workspace: {edited:?}")
+    };
 
     let broadened: Vec<String> = invalidated
         .broadened
@@ -390,6 +430,262 @@ fn Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So()
 }
 
 // ---------------------------------------------------------------------------------
+// The context is derived, not invented
+// ---------------------------------------------------------------------------------
+
+/// Every component of a fact's context comes from something real.
+///
+/// The slice used to supply three byte-fill constants. An invented identity component
+/// cannot be wrong, which is exactly why it is dangerous: two machines, two toolchains and
+/// two policies all agree under it, and the disagreement they should have had is the one
+/// the fact key exists to detect.
+#[test]
+fn Test_The_Fact_Context_Should_Come_From_The_Workspace()
+{
+    let corpus = Precision_Corpus();
+    let slice = Slice::Over(&corpus);
+    let snapshot = slice.Workspace().Snapshot();
+
+    assert_eq!(
+        slice.Pinned(),
+        slice.Workspace().Id(),
+        "the pinned snapshot is the state the corpus was ingested into"
+    );
+    assert_eq!(snapshot.Len(), corpus.files.len(), "one member per file");
+    assert_eq!(
+        snapshot.Variant(),
+        &Host_Variant(),
+        "the variant is what this binary was compiled as"
+    );
+    assert_eq!(
+        snapshot.Configuration(),
+        Resolved_Configuration(slice.Registry()),
+        "the configuration is the composition that was just built, not a constant beside it"
+    );
+
+    // The negative control, and the one that matters. If the snapshot were still a
+    // constant, every one of the assertions above would pass while two entirely different
+    // corpora shared one workspace identity — and one corpus's facts would answer for the
+    // other's.
+    let mut other = Precision_Corpus();
+    assert!(other.Rewrite("beta/four.rs", "//! Different.\n\npub fn Elsewhere() {}\n"));
+
+    assert_ne!(
+        Slice::Over(&other).Pinned(),
+        slice.Pinned(),
+        "two corpora that differ in one file are two workspace states"
+    );
+}
+
+/// The cost of keying a fact on a workspace state, measured rather than argued.
+///
+/// # What this test records
+///
+/// `alpha/one.rs` is byte-identical in both corpora below. Its syntax fact is computed from
+/// that file and from nothing else — same provider, same guarantee, same semantic inputs.
+/// The two keys differ anyway, because a [`nomos_analysis::FactKey`] carries a
+/// [`nomos_contracts::SnapshotId`] and a workspace snapshot is a digest over *all* of its
+/// members, so a change to `beta/four.rs` re-addresses the fact about `alpha/one.rs`.
+///
+/// That is why [`Slice`] pins its snapshot instead of following the workspace: taking
+/// `workspace.Id()` at materialization time makes one keystroke recompute the whole corpus.
+/// Pinning avoids it here and does not fix it — the component is still in the key, and any
+/// consumer that re-pins pays this in full. `docs/records/OD-ANALYSIS-001` states the
+/// finding and P8-PIN carries the substrate change.
+#[test]
+fn Test_An_Unchanged_File_Should_Still_Be_Re_Addressed_By_A_Change_Elsewhere()
+{
+    let corpus = Precision_Corpus();
+    let mut other = Precision_Corpus();
+    assert!(other.Rewrite("beta/four.rs", "//! Different.\n\npub fn Elsewhere() {}\n"));
+
+    let one = Slice::Over(&corpus);
+    let two = Slice::Over(&other);
+
+    let key_of = |slice: &Slice, from: &Corpus| {
+        let file = from
+            .files
+            .iter()
+            .find(|file| return file.path == "alpha/one.rs")
+            .expect("the precision corpus contains alpha/one.rs");
+
+        return slice.Syntax_Key(file);
+    };
+
+    let left = key_of(&one, &corpus);
+    let right = key_of(&two, &other);
+
+    assert_eq!(
+        left.semantic_inputs, right.semantic_inputs,
+        "the file itself did not change, so what the fact is computed from did not either"
+    );
+    assert_ne!(
+        left.snapshot, right.snapshot,
+        "and the workspace did, because a snapshot is a digest over every member"
+    );
+    assert_ne!(
+        left.Digest(),
+        right.Digest(),
+        "so one unchanged file has two identities under two workspace states. This is the \
+         measurement behind OD-ANALYSIS-001: the snapshot component is coarser than \
+         semantic_inputs and overrides it"
+    );
+}
+
+/// A save that changed nothing must not cost anything.
+///
+/// The workspace answers `Applied::Unchanged` for a change set that says what it already
+/// said, and the slice does not invalidate on it. An editor's save hook does not consult
+/// the previous generation before writing, so this arrives constantly — and invalidating on
+/// it would discard every fact reachable from the file in order to recompute the answers
+/// the store already held.
+#[test]
+fn Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing()
+{
+    let mut corpus = Precision_Corpus();
+    let mut slice = Slice::Over(&corpus);
+
+    let first = slice.Run(&corpus);
+    let before = (slice.Generation(), slice.Workspace().Id());
+
+    let unchanged = corpus
+        .files
+        .iter()
+        .find(|file| return file.path == "alpha/one.rs")
+        .map(|file| return file.source.clone())
+        .expect("the precision corpus contains alpha/one.rs");
+
+    let edited = slice.Edit(&mut corpus, ChangeSource::IdeEdit, "alpha/one.rs", &unchanged);
+
+    assert!(
+        matches!(edited, Edited::Unchanged { .. }),
+        "an editor rewriting a file with its own contents changed nothing: {edited:?}"
+    );
+    assert_eq!(
+        (slice.Generation(), slice.Workspace().Id()),
+        before,
+        "and neither the generation nor the workspace may move for it"
+    );
+
+    let second = slice.Run(&corpus);
+
+    assert_eq!(
+        second.Recomputed(),
+        Vec::<String>::new(),
+        "nothing changed, so nothing recomputes"
+    );
+    assert_eq!(
+        second.syntax_reused, first.syntax_materialized,
+        "and every fact is still there to be reused, which is what makes the line above an \
+         assertion about reuse rather than about a store that lost everything"
+    );
+
+    // The positive control. If `Edit` reported `Unchanged` for everything, the assertions
+    // above would pass over a door that cannot register a change at all.
+    let changed = slice.Edit(
+        &mut corpus,
+        ChangeSource::IdeEdit,
+        "alpha/one.rs",
+        "//! Actually different.\n\npub fn Moved() {}\n",
+    );
+    assert!(matches!(changed, Edited::Advanced { .. }), "{changed:?}");
+}
+
+/// Nothing in this crate invents an identity.
+///
+/// The literal form of the defect this item removed: `[0x51; 16]` as a snapshot,
+/// `[0x52; 16]` as a variant, `[0x53; 16]` as a configuration. Asserted by reading the
+/// crate's own source, because the type system cannot tell a digest of something from
+/// sixteen bytes somebody typed — both are a [`nomos_contracts::Digest128`].
+///
+/// The banned spelling is assembled from its parts so that this file is subject to its own
+/// rule. A scanner that had to exempt itself would leave the one file nobody is checking as
+/// the easiest place to put the exemption.
+#[test]
+fn Test_Nothing_In_The_Slice_Should_Invent_An_Identity()
+{
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let banned = ["Digest128", "From_Bytes"].join("::");
+    let mut scanned = BTreeSet::new();
+    let mut offending = Vec::new();
+    let mut derived = 0_usize;
+
+    for directory in ["src", "tests"]
+    {
+        for file in Rust_Files(&root.join(directory))
+        {
+            let text = std::fs::read_to_string(&file)
+                .unwrap_or_else(|error| panic!("{} is this crate's own source: {error}", file.display()));
+            let named = file.strip_prefix(&root).unwrap_or(&file).display().to_string();
+            scanned.insert(named.clone());
+
+            if text.contains(&banned)
+            {
+                offending.push(named);
+            }
+            if text.contains("Content_Digest") || text.contains("Digest_Of_Parts")
+            {
+                derived = derived.saturating_add(1);
+            }
+        }
+    }
+
+    // The guard against a vacuous pass. A scan that found no files reports a clean result
+    // over nothing, which is the defect `Test_The_Workspace_Should_Not_Appear_Empty` exists
+    // for one crate up.
+    assert!(
+        scanned.len() >= 5,
+        "scanned {} files under {}, which is not this crate: {scanned:?}",
+        scanned.len(),
+        root.display()
+    );
+    assert!(
+        derived > 0,
+        "not one scanned file mentions a content digest, so the reader is not reading Rust"
+    );
+
+    assert!(
+        offending.is_empty(),
+        "these files build an identity out of literal bytes: {offending:?}.\n\
+         An invented identity component cannot be wrong, so it can never be observed to be \
+         wrong — two machines, two toolchains and two policies all agree under it. Every \
+         identity here comes from a workspace, a digest of content, or a resolved \
+         composition."
+    );
+}
+
+/// Every `.rs` file under a directory, recursively.
+fn Rust_Files(root: &Path) -> Vec<PathBuf>
+{
+    let mut found = Vec::new();
+    let mut pending = vec![root.to_path_buf()];
+
+    while let Some(directory) = pending.pop()
+    {
+        let Ok(entries) = std::fs::read_dir(&directory)
+        else
+        {
+            continue;
+        };
+
+        for entry in entries.flatten()
+        {
+            let path = entry.path();
+            if path.is_dir()
+            {
+                pending.push(path);
+            }
+            else if path.extension().is_some_and(|extension| return extension == "rs")
+            {
+                found.push(path);
+            }
+        }
+    }
+
+    return found;
+}
+
+// ---------------------------------------------------------------------------------
 // The three prototype lessons
 // ---------------------------------------------------------------------------------
 
@@ -409,7 +705,7 @@ fn Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum()
         return;
     };
 
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
     slice.Run(&corpus);
 
     let mut groups = 0_usize;
@@ -460,7 +756,7 @@ fn Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum()
 fn Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer()
 {
     let corpus = Precision_Corpus();
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
 
     let report = slice.Run(&corpus);
 
@@ -503,7 +799,7 @@ fn Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer()
 fn Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims()
 {
     let corpus = Precision_Corpus();
-    let mut slice = Slice::Composed();
+    let mut slice = Slice::Over(&corpus);
     slice.Run(&corpus);
 
     for (group, files, items, public) in [("alpha", 2, 7, 3), ("beta", 2, 7, 3), ("gamma", 1, 3, 0)]

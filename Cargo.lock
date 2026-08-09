@@ -333,6 +333,7 @@ dependencies = [
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-model",
+ "nomos-workspace",
 ]
 
 [[package]]

@@ -11,6 +11,7 @@ publish.workspace = true
 nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
 nomos-capability = { workspace = true }
+nomos-workspace = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-lang-rust = { workspace = true }
 

@@ -1,10 +1,11 @@
 //! The run: syntax facts per file, a rollup per directory, and what a change costs.
 
-use crate::corpus::{Corpus, SourceFile};
+use crate::context::{Host_Variant, Resolved_Configuration};
+use crate::corpus::{Corpus, SourceFile, Subject_Of_Path};
 use crate::surface::{self, Surface};
 use nomos_analysis::{
     Context, Dependency, FactIdentity, FactKey, FactPayload, FactReader, FactStore, GuaranteeDigest,
-    InputDigest, MaterializedFact, MemoryFactStore, Reader,
+    InputDigest, InvalidationReport, MaterializedFact, MemoryFactStore, Reader,
 };
 use nomos_capability::{Registry, Requirement};
 use nomos_contracts::{
@@ -13,6 +14,7 @@ use nomos_contracts::{
 };
 use nomos_lang_rust as rust;
 use nomos_model::Digest_Of_Parts;
+use nomos_workspace::{Applied, ChangeSource, Workspace, WorkspaceChangeSet};
 
 /// What one pass over a corpus did.
 ///
@@ -81,13 +83,72 @@ impl RunReport
     }
 }
 
-/// The composed system: a registry that resolves providers, a store that holds facts, and
-/// a generation counter that says which of them are current.
+/// What an edit did.
+///
+/// Two arms rather than a report and a flag, mirroring [`Applied`] for the same reason: a
+/// caller has to be told which world it is in, and an empty [`InvalidationReport`] would
+/// make "nothing was invalidated because nothing changed" indistinguishable from
+/// "invalidation ran over a changed workspace and reached nothing", which is a bug.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Edited
+{
+    /// The workspace is now something else, and the store was told.
+    Advanced
+    {
+        applied: Applied,
+        invalidated: InvalidationReport,
+    },
+    /// The edit said what the workspace already said, so nothing was invalidated.
+    ///
+    /// An editor saving an unmodified file arrives here. Invalidating anyway would discard
+    /// every fact reachable from that file in order to recompute the answers the store
+    /// already held.
+    Unchanged
+    {
+        applied: Applied,
+    },
+}
+
+impl Edited
+{
+    #[must_use]
+    pub const fn Outcome(&self) -> &Applied
+    {
+        return match self
+        {
+            Self::Advanced { applied, .. } | Self::Unchanged { applied } => applied,
+        };
+    }
+}
+
+/// The composed system: a workspace that says what is there, a registry that resolves
+/// providers, and a store that holds what they produced.
 pub struct Slice
 {
     store: MemoryFactStore,
     registry: Registry,
-    snapshot: SnapshotId,
+    workspace: Workspace,
+    /// The snapshot every fact key this slice writes names.
+    ///
+    /// # Why it does not follow the workspace
+    ///
+    /// [`nomos_analysis::FactKey`] carries a [`SnapshotId`], so a fact is filed under one
+    /// workspace state. Taking `workspace.Id()` at materialization time — the obvious
+    /// reading of "the context comes from the workspace" — makes every key in the store
+    /// change the moment any one file is edited, because a workspace snapshot is a digest
+    /// over all of its members. One keystroke would recompute the corpus, and this slice
+    /// measured exactly that: over the precision corpus, editing `alpha/one.rs` recomputes
+    /// six facts instead of two.
+    ///
+    /// So the slice pins. The snapshot names the workspace state this store was opened
+    /// against, edits advance the *generation*, and the store's own generation bookkeeping
+    /// is what decides which facts are still current. `docs/records/OD-ANALYSIS-001`
+    /// records the finding underneath: the snapshot component of a fact key is a third
+    /// answer to a question `semantic_inputs` and the generation already answer between
+    /// them, and being the coarsest of the three it silently defeats both.
+    pinned: SnapshotId,
+    /// Taken from the workspace once. Neither can change — [`Workspace`] has no door for
+    /// them — so recomputing a digest per fact key would buy nothing.
     variant: BuildVariantId,
     configuration: ConfigurationId,
     generation: GenerationId,
@@ -104,7 +165,7 @@ impl Slice
     /// rather than a runtime condition — and continuing past it would produce a run whose
     /// facts nobody offered.
     #[must_use]
-    pub fn Composed() -> Self
+    pub fn Registered() -> Registry
     {
         let mut registry = Registry::New();
 
@@ -121,14 +182,67 @@ impl Slice
             .Offer(surface::Provider_Offer())
             .expect("the rollup's offer is within its capability's ceiling");
 
+        return registry;
+    }
+
+    /// A slice over an empty workspace.
+    ///
+    /// The context is real and derived even here: the variant is what this binary was
+    /// compiled as, the configuration is the composition that was just built, and the
+    /// snapshot is the identity of a workspace holding nothing — which is a state, and is
+    /// not the same state as one holding a file.
+    #[must_use]
+    pub fn Composed() -> Self
+    {
+        let registry = Self::Registered();
+        let workspace = Workspace::Empty(Host_Variant(), Resolved_Configuration(&registry));
+
         return Self {
             store: MemoryFactStore::New(),
+            pinned: workspace.Id(),
+            variant: workspace.Snapshot().Variant().Id(),
+            configuration: workspace.Snapshot().Configuration(),
+            generation: workspace.Generation(),
+            workspace,
             registry,
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([0x51; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([0x52; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([0x53; 16])),
-            generation: GenerationId::INITIAL,
         };
+    }
+
+    /// A slice over a corpus, ingested through the workspace's one door.
+    ///
+    /// The whole corpus arrives as a single [`ChangeSource::GitCheckout`] change set,
+    /// because a checkout is one event. Applying a file at a time would produce one
+    /// generation per file, and every intermediate one would describe a tree that never
+    /// existed.
+    ///
+    /// # Panics
+    ///
+    /// If the workspace refuses the set. The two ways that happens are both worth a stop
+    /// rather than a degraded run: an empty corpus is a walk that read nothing, and a
+    /// conflict is two corpus paths that normalize to one workspace member — which would
+    /// otherwise become one subject silently answering for two files.
+    #[must_use]
+    pub fn Over(corpus: &Corpus) -> Self
+    {
+        let mut slice = Self::Composed();
+        let mut checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
+
+        for file in &corpus.files
+        {
+            checkout = checkout.Present(file.path.clone(), file.source.clone());
+        }
+
+        let applied = slice.workspace.Apply(&checkout).unwrap_or_else(|error| {
+            panic!(
+                "the corpus at {} could not be ingested: {error}",
+                corpus.root.display()
+            )
+        });
+
+        slice.generation = applied.Generation();
+        slice.pinned = applied.Snapshot();
+
+        return slice;
     }
 
     #[must_use]
@@ -149,10 +263,24 @@ impl Slice
         return &self.registry;
     }
 
+    #[must_use]
+    pub const fn Workspace(&self) -> &Workspace
+    {
+        return &self.workspace;
+    }
+
+    /// The snapshot this slice's fact keys name. See the field's own note for why it is not
+    /// `self.workspace.Id()`.
+    #[must_use]
+    pub const fn Pinned(&self) -> SnapshotId
+    {
+        return self.pinned;
+    }
+
     fn Context(&self) -> Context
     {
         return Context {
-            snapshot: self.snapshot,
+            snapshot: self.pinned,
             variant: self.variant,
             configuration: self.configuration,
             generation: self.generation,
@@ -171,7 +299,14 @@ impl Slice
         return InputDigest::Of(&[source.as_bytes()]);
     }
 
-    fn Syntax_Key(&self, file: &SourceFile) -> FactKey
+    /// The key a syntax fact about this file is filed under.
+    ///
+    /// Public so that a test can compare one file's identity across two slices pinned to
+    /// two different workspace states. That comparison is the evidence for the pinning
+    /// decision recorded on [`Slice::pinned`], and it cannot be made from outside without
+    /// this.
+    #[must_use]
+    pub fn Syntax_Key(&self, file: &SourceFile) -> FactKey
     {
         return FactKey {
             contract: CapabilityId::New(rust::CAPABILITY),
@@ -181,7 +316,7 @@ impl Slice
             provider: ProviderId::New(rust::PROVIDER),
             provider_version: rust::CONTRACT_VERSION,
             guarantee: GuaranteeDigest::Of(&rust::Declared_Guarantee()),
-            snapshot: self.snapshot,
+            snapshot: self.pinned,
             variant: self.variant,
             configuration: self.configuration,
         };
@@ -214,7 +349,7 @@ impl Slice
             provider: ProviderId::New(surface::PROVIDER),
             provider_version: surface::CONTRACT_VERSION,
             guarantee: GuaranteeDigest::Of(&surface::Declared_Guarantee()),
-            snapshot: self.snapshot,
+            snapshot: self.pinned,
             variant: self.variant,
             configuration: self.configuration,
         };
@@ -279,7 +414,7 @@ impl Slice
                 file.subject,
                 &file.source,
                 rust::FactContext {
-                    snapshot: self.snapshot,
+                    snapshot: self.pinned,
                     variant: self.variant,
                     configuration: self.configuration,
                     generation: self.generation,
@@ -416,17 +551,54 @@ impl Slice
         return (surface, reader.Into_Dependencies());
     }
 
-    /// Advances to the next generation and invalidates everything reached from `subject`.
+    /// One edit, through the one door.
     ///
-    /// The returned report names what it invalidated rather than counting it, which is
-    /// what makes the descendant assertions possible.
-    pub fn Touch(&mut self, subject: SubjectId) -> nomos_analysis::InvalidationReport
+    /// There is deliberately no second way to advance this slice's generation. The change
+    /// goes to [`Workspace::Apply`], the workspace says whether it turned out to be a
+    /// change, and the generation the slice materializes into is the one the workspace
+    /// produced — never a counter this crate incremented on its own. A composition root
+    /// that kept its own counter beside the workspace's would be two answers to which
+    /// analysis state the store is in.
+    ///
+    /// The corpus is rewritten to match, because it is the reading of the tree the
+    /// providers actually parse. Letting the two drift apart is a real scenario — a change
+    /// nobody announced — and it is modelled by calling [`Corpus::Rewrite`] alone.
+    ///
+    /// # Panics
+    ///
+    /// If the workspace refuses the change, or if the corpus does not hold `path`. A silent
+    /// no-op on either would make an invalidation test assert that changing nothing
+    /// invalidates nothing.
+    pub fn Edit(
+        &mut self,
+        corpus: &mut Corpus,
+        source: ChangeSource,
+        path: &str,
+        content: &str,
+    ) -> Edited
     {
-        self.generation = self.generation.Next();
+        let applied = self
+            .workspace
+            .Apply(&WorkspaceChangeSet::From(source).Present(path, content))
+            .unwrap_or_else(|error| panic!("`{path}` could not be edited: {error}"));
 
-        return self.store.Invalidate(
+        assert!(
+            corpus.Rewrite(path, content),
+            "`{path}` is not in the corpus, so this edit changed the workspace and nothing \
+             the providers read"
+        );
+
+        let Applied::Advanced { generation, .. } = applied
+        else
+        {
+            return Edited::Unchanged { applied };
+        };
+
+        self.generation = generation;
+
+        let invalidated = self.store.Invalidate(
             &nomos_analysis::GenerationCause::SubjectChanged {
-                subject,
+                subject: Subject_Of_Path(path),
                 // A file changed, so the cause is file-granular. The engine broadens it to
                 // whatever each affected provider can actually deliver, and records having
                 // done so — the rollup will be broadened to Project.
@@ -434,6 +606,11 @@ impl Slice
             },
             self.generation,
         );
+
+        return Edited::Advanced {
+            applied,
+            invalidated,
+        };
     }
 
     /// The subjects named by a set of invalidated keys, resolved back to corpus paths.

@@ -1044,7 +1044,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P7-SLICE",
         "P7-WORKSPACE"
@@ -1062,7 +1062,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "analysis_slice"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt ... ok\ntest Test_Nothing_In_The_Slice_Should_Invent_An_Identity ... ok\ntest Test_The_Fact_Context_Should_Come_From_The_Workspace ... ok\ntest Test_An_Unchanged_File_Should_Still_Be_Re_Addressed_By_A_Change_Elsewhere ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.49s\n\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-d3c66287d7b06991.exe)\n",
+        "verified_at": 1786251587
+      }
     },
     {
       "id": "P8-KIND",
@@ -1119,6 +1131,39 @@
         "argv": [
           "cargo",
           "test",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P8-PIN",
+      "title": "A fact's identity stops naming a workspace state",
+      "why": "FactKey carries a SnapshotId, and a workspace snapshot is a digest over every member. A fact key that names one therefore changes for every fact in the corpus when any one file is edited: over the six-file precision corpus, editing alpha/one.rs recomputed eight facts where two changed, and at corpus scale that is 9,440 per keystroke. Two components already answer what the snapshot is there for and answer them finer — semantic_inputs says what a fact was computed from, and the generation says which state it is current at. The snapshot is a third answer, it is the coarsest, and it erases both. OD-ANALYSIS-001 records the measurement; tests/integration works around it by pinning, which is why the component currently does no work at all.",
+      "done_when": "FactKey no longer carries a snapshot, and a fact's relation to a workspace state is provenance on MaterializedFact rather than part of what the fact is. GenerationCause::SnapshotReplaced is re-expressed in terms a caller replacing a snapshot actually has — the members that differ — rather than by matching a key component that no longer exists. Component::All and the test that walks every key component agree with the new shape. tests/integration stops pinning: Slice takes the workspace's current snapshot, and the exact-descendants assertion still names exactly two facts. OD-ANALYSIS-001 is closed with what decided it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "tests/integration",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P8-COMPOSE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
           "-p",
           "nomos-integration-tests"
         ],
