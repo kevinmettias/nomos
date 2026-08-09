@@ -414,6 +414,94 @@ fn Overlapping_Claims(document: &LedgerDocument, now: Timestamp) -> Vec<String>
     return violations;
 }
 
+/// What would refuse a claim on `item` as of `now`, if anything.
+///
+/// # Why this is a function rather than a check inside `Claim`
+///
+/// Two callers need this answer and they must not compute it twice. [`ExclusionLedger::Claim`]
+/// asks it to decide whether to grant; a listing asks it to decide what to *call* an item.
+/// When those were separate, `work list` read the `state` field alone and printed `ready`
+/// for items nothing could take — on 2026-08-09 it said `ready` for eight items while a
+/// single held claim refused all eight. An agent picking work off that column burns a round
+/// trip per item and learns to distrust the column.
+///
+/// The fix is not a second guard. Two implementations of one rule is how they come to
+/// disagree, and a listing that disagreed with claiming would be worse than one that says
+/// too little. So this is the only implementation, and `Claim` is one of its callers.
+///
+/// The order of the checks is the order a claim refuses in, so the reason reported is the
+/// first reason a claimant would actually hit.
+#[must_use]
+pub fn Claim_Refusal(
+    document: &LedgerDocument,
+    item: &ItemId,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let Some(target) = document
+        .items
+        .iter()
+        .find(|candidate| &candidate.id == item)
+    else
+    {
+        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
+    };
+
+    if !target.state.Is_Claimable()
+    {
+        return Some(ClaimRefusal::NotClaimable {
+            item: item.clone(),
+            state: format!("{:?}", target.state),
+        });
+    }
+
+    for dependency in &target.depends_on
+    {
+        let state = document
+            .items
+            .iter()
+            .find(|candidate| &candidate.id == dependency)
+            .map_or_else(|| "not in the ledger".to_owned(), |found| {
+                format!("{:?}", found.state)
+            });
+
+        if state != format!("{:?}", ItemState::Done)
+        {
+            return Some(ClaimRefusal::DependencyUnmet {
+                item: item.clone(),
+                dependency: dependency.clone(),
+                state,
+            });
+        }
+    }
+
+    for other in &document.items
+    {
+        if &other.id == item || !other.Has_Active_Claim(now)
+        {
+            continue;
+        }
+
+        let Some(claim) = &other.claim
+        else
+        {
+            continue;
+        };
+
+        if let Some(refusal) = Refusal_From(
+            &target.territory.Intersect(&other.territory),
+            &other.id,
+            &claim.holder,
+            claim.lease_expires_at,
+        )
+        {
+            return Some(refusal);
+        }
+    }
+
+    return None;
+}
+
 impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedger<F, C, L>
 {
     fn Claim(
@@ -431,63 +519,9 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
             item: item.clone(),
         })?;
 
-        let target = document
-            .items
-            .iter()
-            .find(|candidate| &candidate.id == item)
-            .ok_or_else(|| ClaimRefusal::NoSuchItem { item: item.clone() })?;
-
-        if !target.state.Is_Claimable()
+        if let Some(refusal) = Claim_Refusal(&document, item, now)
         {
-            return Err(ClaimRefusal::NotClaimable {
-                item: item.clone(),
-                state: format!("{:?}", target.state),
-            });
-        }
-
-        for dependency in &target.depends_on
-        {
-            let state = document
-                .items
-                .iter()
-                .find(|candidate| &candidate.id == dependency)
-                .map_or_else(|| "not in the ledger".to_owned(), |found| {
-                    format!("{:?}", found.state)
-                });
-
-            if state != format!("{:?}", ItemState::Done)
-            {
-                return Err(ClaimRefusal::DependencyUnmet {
-                    item: item.clone(),
-                    dependency: dependency.clone(),
-                    state,
-                });
-            }
-        }
-
-        let territory = target.territory.clone();
-        for other in &document.items
-        {
-            if &other.id == item || !other.Has_Active_Claim(now)
-            {
-                continue;
-            }
-
-            let Some(claim) = &other.claim
-            else
-            {
-                continue;
-            };
-
-            if let Some(refusal) = Refusal_From(
-                &territory.Intersect(&other.territory),
-                &other.id,
-                &claim.holder,
-                claim.lease_expires_at,
-            )
-            {
-                return Err(refusal);
-            }
+            return Err(refusal);
         }
 
         for candidate in &mut document.items

@@ -128,6 +128,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md"
         ),
     ),
+    (
+        "docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md",
+        include_str!(
+            "../../../../docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -162,6 +168,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-COMPLETENESS-001",
     "D-134",
     "OD-LEDGER-004",
+    "OD-LEDGER-005",
 ];
 
 /// The relation vocabulary the governing records use.

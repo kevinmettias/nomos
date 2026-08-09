@@ -1781,11 +1781,12 @@
         "paths": [
           "crates/substrate/nomos-ledger",
           "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store",
           "docs/records/OD-LEDGER-005"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -1800,7 +1801,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": " ... ok\ntest Test_A_Passing_Predicate_Should_Not_Finish_An_Item_While_The_Gate_Is_Red ... ok\ntest Test_The_Gate_Should_Run_Before_The_Predicate_And_Short_Circuit ... ok\ntest Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item ... ok\ntest Test_Changing_The_Workflow_Should_Change_What_Finish_Runs ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 6 tests\ntest Test_Two_Spellings_Of_One_Record_Should_Still_Collide ... ok\ntest Test_The_Board_Should_Have_Record_Writing_Items_To_Talk_About ... ok\ntest Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory ... ok\ntest Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest Test_Two_Items_Writing_Different_Records_Should_Be_Claimable_At_Once ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.84s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-51842239e9e38230.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-c1421495100087d6.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-ad87b675e3989839.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-d837d0637d000ea2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1786319802,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      }
     },
     {
       "id": "P9-ONE-DIRECTION",

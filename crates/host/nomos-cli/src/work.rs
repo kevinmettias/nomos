@@ -2,9 +2,11 @@
 
 use crate::arguments::{Named_Value, Named_Values};
 use nomos_ledger::{
-    ClaimRefusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish, FinishRefusal, ItemId,
-    ItemState, LedgerError, LedgerItem, ReleaseOutcome, Territory, VerificationPredicate,
+    ClaimRefusal, Claim_Refusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish,
+    FinishRefusal, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome,
+    Territory, VerificationPredicate,
 };
+use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
 use std::path::Path;
 use std::time::Duration;
@@ -261,7 +263,11 @@ fn Usage_Text() -> String
 {
     return "usage: nomos work <command>\n\
             \n\
-            \x20 list     [--state ready|claimed|blocked|done|declined]\n\
+            \x20 list     [--state ready|waiting|held|snagged|claimed|blocked|done|declined]\n\
+            \x20          `ready` means claimable now. An item nothing can claim is \
+            reported as `waiting` (a dependency is unfinished), `held` (somebody holds \
+            overlapping territory) or `snagged` (independence cannot be established), \
+            from the same refusal `claim` would give.\n\
             \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
             \x20          --territory <path> [--territory <path> …]\n\
             \x20          [--territory-pattern <glob> …] [--depends-on <id> …]\n\
@@ -353,10 +359,12 @@ fn List(
         Err(error) => return Report_Error(&error, output),
     };
 
+    let now = SystemClock.Now();
+
     let mut shown = 0_u32;
     for item in &document.items
     {
-        let label = State_Label(&item.state);
+        let label = Listing_Label(&document, item, now);
         if state.is_some_and(|wanted| !label.eq_ignore_ascii_case(wanted))
         {
             continue;
@@ -461,6 +469,39 @@ fn Report_Finish(
                 ExitCode::Conflict
             }
         }
+    };
+}
+
+/// What to call an item in a listing.
+///
+/// For everything except a `Ready` item this is just the state. `Ready` is the word that
+/// was lying: it means "nobody has taken this", and a reader takes it to mean "I can take
+/// this". Those came apart whenever a dependency was unfinished or somebody held
+/// overlapping ground — on 2026-08-09 the column said `ready` for eight items that a single
+/// held claim refused, three separate times.
+///
+/// The answer comes from [`Claim_Refusal`], which is the function `claim` itself refuses
+/// with. That is the point rather than an implementation detail: a listing computing its own
+/// idea of claimability would be a second guard for one rule, and the two would eventually
+/// disagree about whether an agent may proceed.
+fn Listing_Label(document: &LedgerDocument, item: &LedgerItem, now: Timestamp) -> &'static str
+{
+    if !matches!(item.state, ItemState::Ready)
+    {
+        return State_Label(&item.state);
+    }
+
+    return match Claim_Refusal(document, &item.id, now)
+    {
+        None => "ready",
+        // Retryable and not the reader's problem to solve: something else has to finish or
+        // lapse first. `waiting` rather than `blocked`, because `blocked` is already a state
+        // an author sets by hand and conflating them would lose that distinction.
+        Some(ClaimRefusal::DependencyUnmet { .. }) => "waiting",
+        Some(ClaimRefusal::HeldBy { .. }) => "held",
+        // Not retryable: somebody has to close a modelling gap. Reporting it as `ready`
+        // would send an agent to discover that by being refused.
+        Some(_) => "snagged",
     };
 }
 

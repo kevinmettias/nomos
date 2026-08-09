@@ -47,6 +47,7 @@ pub use item::{
     VerificationPredicate, VerificationRecord,
 };
 pub use store::{
-    FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, LedgerError, Validate,
+    Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, LedgerError,
+    Validate,
 };
 pub use territory::{Normalize_Path, Subject_Of, Territory};
