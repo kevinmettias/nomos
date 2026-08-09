@@ -32,6 +32,7 @@
 
 mod exclusion;
 mod finish;
+mod gate;
 mod item;
 mod store;
 mod territory;
@@ -40,8 +41,9 @@ pub use exclusion::{
     Check_Lease, ClaimRefusal, ExclusionLedger, Refusal_From, ReleaseOutcome, Reservation,
 };
 pub use finish::{Finish, FinishRefusal};
+pub use gate::{Derive_Step, GATE_WORKFLOW, GateUnknown, LINT_STEP, Workflow_Path};
 pub use item::{
-    Blocker, Claim, DEFAULT_LEASE, ItemId, ItemState, LedgerItem, MAXIMUM_LEASE,
+    Blocker, Claim, DEFAULT_LEASE, GateOutcome, ItemId, ItemState, LedgerItem, MAXIMUM_LEASE,
     VerificationPredicate, VerificationRecord,
 };
 pub use store::{

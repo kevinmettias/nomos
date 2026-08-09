@@ -82,7 +82,31 @@ fn Temp_Dir(name: &str) -> PathBuf
     path.push(format!("nomos-ledger-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&path);
     std::fs::create_dir_all(&path).expect("test needs a temp directory");
+    Write_Gate(&path);
     return path;
+}
+
+/// Every tree these tests build is a repository with a gate, because finishing now reads
+/// one and refuses when it cannot.
+///
+/// The lint step is `cargo --version` rather than the real clippy invocation. These tests
+/// are about what a *predicate's* exit code does to an item; running a real workspace lint
+/// in each of them would make the suite take minutes and would couple it to whatever the
+/// workspace currently contains. What the derived step actually is, and that it comes from
+/// the workflow rather than from a constant, is covered in `gate_covers_finish.rs`.
+fn Write_Gate(directory: &Path)
+{
+    let workflows = directory.join(".github").join("workflows");
+    std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
+    std::fs::write(
+        workflows.join("gate.yml"),
+        "jobs:\n\
+         \x20 gate:\n\
+         \x20   steps:\n\
+         \x20     - name: Lint\n\
+         \x20       run: cargo --version\n",
+    )
+    .expect("test needs a workflow");
 }
 
 fn Ledger_At<'clock>(
@@ -211,6 +235,7 @@ fn Test_A_Verified_Done_Item_Should_Be_Accepted()
         exit_code: 0,
         output_tail: "test result: ok".to_owned(),
         verified_at: At(NOW),
+        gate: None,
     });
 
     assert_eq!(Validate(&Document(vec![finished]), At(NOW)), Vec::<String>::new());
@@ -377,7 +402,7 @@ fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
         &StdProcessLauncher,
         &ItemId::New("T-1"),
         "agent-a",
-        None,
+        Some(&directory),
     )
     .expect_err("a predicate that exits non-zero must refuse the completion");
 
@@ -419,7 +444,7 @@ fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
         &StdProcessLauncher,
         &ItemId::New("T-1"),
         "agent-a",
-        None,
+        Some(&directory),
     )
     .expect("a passing predicate must finish the item");
 
@@ -461,7 +486,7 @@ fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
         &StdProcessLauncher,
         &ItemId::New("T-1"),
         "agent-a",
-        None,
+        Some(&directory),
     )
     .expect_err("an item with no predicate cannot be finished");
 
@@ -499,7 +524,7 @@ fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
         &StdProcessLauncher,
         &ItemId::New("T-1"),
         "agent-a",
-        None,
+        Some(&directory),
     )
     .expect_err("a missing program is not a verdict");
 
@@ -534,6 +559,7 @@ fn Test_Releasing_As_Finished_Should_Record_The_Verification()
                 exit_code: 0,
                 output_tail: "ok".to_owned(),
                 verified_at: At(NOW),
+                gate: None,
             }),
         )
         .expect("a release carrying evidence must be accepted");
@@ -723,6 +749,7 @@ fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
         exit_code: 0,
         output_tail: "ok".to_owned(),
         verified_at: At(NOW),
+        gate: None,
     });
     let mut dependent = Item("T-2", &["src/b.rs"]);
     dependent.depends_on = vec![ItemId::New("T-1")];

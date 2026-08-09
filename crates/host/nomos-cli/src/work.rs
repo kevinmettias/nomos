@@ -274,7 +274,10 @@ fn Usage_Text() -> String
             \x20 audit\n\
             \n\
             everything after `--` is the verification predicate, run directly with no \
-            shell. `finish` runs it and records the item done only if it exits zero.\n\
+            shell. `finish` runs the gate's own lint step first, derived from \
+            .github/workflows/gate.yml rather than written here, then the item's \
+            predicate, and records the item done only if both exit zero. An item whose \
+            predicate passes while the gate is red is not finished.\n\
             \n\
             exit codes: 0 ok, 1 validation error, 2 usage, 3 claim unavailable \
             (retryable), 4 conflict, 5 store error"

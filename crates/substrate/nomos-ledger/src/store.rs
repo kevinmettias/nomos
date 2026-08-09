@@ -119,6 +119,24 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
         return &self.path;
     }
 
+    /// Reads a file from the working tree through the ledger's own filesystem.
+    ///
+    /// Exposed for one reason: finishing an item has to read what the gate checks, and a
+    /// caller that reached for `std::fs` instead would bypass the filesystem this ledger
+    /// was constructed with, so a test could no longer control what finishing sees.
+    ///
+    /// # Errors
+    ///
+    /// Returns the path and the underlying cause, which the caller reports as an
+    /// undetermined gate rather than as failing work.
+    pub fn Read_File(&self, path: &Path) -> Result<String, String>
+    {
+        return self
+            .filesystem
+            .Read_To_String(path)
+            .map_err(|error| format!("{error}"));
+    }
+
     /// The time this ledger judges claims and leases against.
     ///
     /// Exposed so that a record written alongside a ledger operation carries the same

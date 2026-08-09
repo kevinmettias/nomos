@@ -200,6 +200,20 @@ impl VerificationPredicate
     }
 }
 
+/// What the derived gate step did, alongside the item's own predicate.
+///
+/// Recorded rather than merely run. Without it a reader cannot tell an item finished
+/// under the gate from one finished before the gate was derived at all, and every
+/// `verified` block written earlier would silently read as though it had been checked.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GateOutcome
+{
+    /// What was run, as derived from the workflow.
+    pub argv: Vec<String>,
+    /// What it exited with.
+    pub exit_code: i32,
+}
+
 /// What happened when the predicate was run.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct VerificationRecord
@@ -212,6 +226,12 @@ pub struct VerificationRecord
     pub output_tail: String,
     /// When it ran.
     pub verified_at: Timestamp,
+    /// The gate step that ran first, when one could be derived.
+    ///
+    /// `None` on every record written before the gate was part of finishing. That is a
+    /// fact about those records and is left visible rather than backfilled.
+    #[serde(default)]
+    pub gate: Option<GateOutcome>,
 }
 
 /// One unit of work.

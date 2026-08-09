@@ -9,7 +9,8 @@
 //! observation.
 
 use crate::exclusion::{ClaimRefusal, ExclusionLedger, ReleaseOutcome};
-use crate::item::{ItemId, VerificationRecord};
+use crate::gate::{Derive_Step, GateUnknown, LINT_STEP, Workflow_Path};
+use crate::item::{GateOutcome, ItemId, VerificationRecord};
 use crate::store::FileLedger;
 use nomos_platform::{
     Clock, Command, CrossProcessLock, ExitOutcome, FileSystem, ProcessLauncher,
@@ -77,6 +78,36 @@ pub enum FinishRefusal
         /// The tail of what it printed.
         output_tail: String,
     },
+    /// What the gate checks could not be established.
+    ///
+    /// Not a licence to run the item's predicate alone. An item finished without knowing
+    /// what the gate checks is the defect this arm exists to prevent, and the rule is the
+    /// one [`ClaimRefusal::UnknownIndependence`] already applies one level up: an
+    /// unanswered question refuses rather than grants.
+    GateUndetermined
+    {
+        /// The item.
+        item: ItemId,
+        /// Why the gate could not be derived.
+        cause: GateUnknown,
+    },
+    /// The gate's own step ran, and the answer was no.
+    ///
+    /// Separate from [`FinishRefusal::PredicateFailed`] because the remedy differs. A
+    /// failing predicate says the work does not do what the item asked. A failing gate
+    /// step says the work may be exactly right and still cannot land, and telling an
+    /// author the first when the truth is the second sends them to rewrite working code.
+    GateFailed
+    {
+        /// The item.
+        item: ItemId,
+        /// What ran, as derived from the workflow.
+        argv: Vec<String>,
+        /// What it exited with.
+        exit_code: i32,
+        /// The tail of what it printed.
+        output_tail: String,
+    },
     /// The result could not be written to the ledger.
     NotRecorded
     {
@@ -111,6 +142,21 @@ impl FinishRefusal
                 exit_code,
                 output_tail,
             } => format!("{item}'s predicate exited {exit_code}, so it is not finished:\n{output_tail}"),
+            Self::GateUndetermined { item, cause } => format!(
+                "{item} cannot be finished because {}. An item finished against a check \
+                 weaker than the gate is the defect this refusal exists to prevent",
+                cause.Describe()
+            ),
+            Self::GateFailed {
+                item,
+                argv,
+                exit_code,
+                output_tail,
+            } => format!(
+                "{item}'s work may be right and still cannot land: the gate's own step \
+                 `{}` exited {exit_code}. The item's predicate was not run.\n{output_tail}",
+                argv.join(" ")
+            ),
             Self::NotRecorded { cause } => {
                 format!("the predicate passed but the result could not be recorded: {cause}")
             }
@@ -119,13 +165,18 @@ impl FinishRefusal
 
     /// Whether the work itself was judged, as opposed to the check having been prevented.
     ///
-    /// Only [`FinishRefusal::PredicateFailed`] says anything about the work. Everything
-    /// else says something about the tooling, and a report that does not separate the
-    /// two sends an author to fix the wrong thing.
+    /// [`FinishRefusal::PredicateFailed`] and [`FinishRefusal::GateFailed`] say something
+    /// about the work; they differ in what the author does next, not in whether an answer
+    /// was reached. Everything else says something about the tooling, and a report that
+    /// does not separate the two sends an author to fix the wrong thing.
+    ///
+    /// [`FinishRefusal::GateUndetermined`] is deliberately on the tooling side. Nobody
+    /// found out whether the work passes the gate, and reporting that as failing work
+    /// would be the same conflation one arm further down.
     #[must_use]
     pub const fn Judged_The_Work(&self) -> bool
     {
-        return matches!(self, Self::PredicateFailed { .. });
+        return matches!(self, Self::PredicateFailed { .. } | Self::GateFailed { .. });
     }
 }
 
@@ -178,10 +229,13 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
         });
     }
 
-    let mut command = Command::New(
-        predicate.argv.clone(),
-        std::time::Duration::from_secs(predicate.timeout_seconds),
-    );
+    let timeout = std::time::Duration::from_secs(predicate.timeout_seconds);
+
+    // The gate's own step runs first and short-circuits. An author told "your tests
+    // passed" and "you cannot land" in one breath reads only the first sentence.
+    let gate = Run_Gate_Step(ledger, launcher, item, working_directory, timeout)?;
+
+    let mut command = Command::New(predicate.argv.clone(), timeout);
     command.working_directory = working_directory.map(std::path::Path::to_path_buf);
 
     let output = launcher
@@ -216,6 +270,7 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
         exit_code: code,
         output_tail: tail,
         verified_at: ledger.Now(),
+        gate: Some(gate),
     };
 
     ledger
@@ -223,6 +278,80 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
         .map_err(|refusal| FinishRefusal::NotHeld { refusal })?;
 
     return Ok(record);
+}
+
+/// Runs the gate's lint step, derived from the workflow rather than written here.
+///
+/// Separate from [`Finish`] because it is a separate question. [`Finish`] asks whether the
+/// item's own predicate holds; this asks whether the work can land at all, and the second
+/// question is the one every item's predicate was silently skipping.
+///
+/// # Errors
+///
+/// Returns [`FinishRefusal::GateUndetermined`] when what the gate checks cannot be
+/// established — which is a refusal, not a licence to run the predicate alone — and
+/// [`FinishRefusal::GateFailed`] when the step ran and the answer was no.
+fn Run_Gate_Step<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+    launcher: &impl ProcessLauncher,
+    item: &ItemId,
+    working_directory: Option<&Path>,
+    timeout: std::time::Duration,
+) -> Result<GateOutcome, FinishRefusal>
+{
+    let workflow_path = Workflow_Path(working_directory.unwrap_or_else(|| Path::new(".")));
+    let workflow = ledger
+        .Read_File(&workflow_path)
+        .map_err(|cause| FinishRefusal::GateUndetermined {
+            item: item.clone(),
+            cause: GateUnknown::Unreadable {
+                path: workflow_path.display().to_string(),
+                cause,
+            },
+        })?;
+
+    let argv =
+        Derive_Step(&workflow, LINT_STEP).map_err(|cause| FinishRefusal::GateUndetermined {
+            item: item.clone(),
+            cause,
+        })?;
+
+    let mut command = Command::New(argv.clone(), timeout);
+    command.working_directory = working_directory.map(std::path::Path::to_path_buf);
+
+    let output = launcher
+        .Run(&command)
+        .map_err(|cause| FinishRefusal::CouldNotRun {
+            item: item.clone(),
+            cause,
+        })?;
+
+    let ExitOutcome::Exited { code } = output.outcome
+    else
+    {
+        return Err(FinishRefusal::NoVerdict {
+            item: item.clone(),
+            outcome: output.outcome,
+        });
+    };
+
+    if code != 0
+    {
+        return Err(FinishRefusal::GateFailed {
+            item: item.clone(),
+            argv,
+            exit_code: code,
+            output_tail: Tail_Of(
+                &format!("{}{}", output.stdout, output.stderr),
+                OUTPUT_TAIL_LIMIT,
+            ),
+        });
+    }
+
+    return Ok(GateOutcome {
+        argv,
+        exit_code: code,
+    });
 }
 
 /// The last `limit` bytes of `text`, on a character boundary.
@@ -294,7 +423,26 @@ mod tests
             .Judged_The_Work()
         );
 
+        // A red gate is an answer about the work too. The author's next move differs
+        // from a failing test, which is why it is a separate variant, but "nobody found
+        // out" it is not.
+        assert!(
+            FinishRefusal::GateFailed {
+                item: item.clone(),
+                argv: vec!["cargo".to_owned(), "clippy".to_owned()],
+                exit_code: 101,
+                output_tail: String::new(),
+            }
+            .Judged_The_Work()
+        );
+
         for prevented in [
+            FinishRefusal::GateUndetermined {
+                item: item.clone(),
+                cause: GateUnknown::NoSuchStep {
+                    step: LINT_STEP.to_owned(),
+                },
+            },
             FinishRefusal::NoPredicate {
                 item: item.clone(),
                 done_when: "when it works".to_owned(),
@@ -341,9 +489,22 @@ mod tests
                 outcome: ExitOutcome::TimedOut,
             },
             FinishRefusal::PredicateFailed {
-                item,
+                item: item.clone(),
                 exit_code: 101,
                 output_tail: "assertion failed".to_owned(),
+            },
+            FinishRefusal::GateUndetermined {
+                item: item.clone(),
+                cause: GateUnknown::NotASingleCommand {
+                    step: LINT_STEP.to_owned(),
+                    run: "a && b".to_owned(),
+                },
+            },
+            FinishRefusal::GateFailed {
+                item,
+                argv: vec!["cargo".to_owned(), "clippy".to_owned()],
+                exit_code: 101,
+                output_tail: "indexing may panic".to_owned(),
             },
             FinishRefusal::NotRecorded {
                 cause: "locked".to_owned(),
