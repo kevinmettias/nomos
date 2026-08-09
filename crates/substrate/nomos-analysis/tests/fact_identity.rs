@@ -8,6 +8,7 @@ use nomos_contracts::{
     Digest128, EvidenceClass, FactVariant, GenerationId, Guarantee, IncrementalGranularity,
     ProviderId, SchemaId, SnapshotId, SubjectId,
 };
+use std::collections::BTreeSet;
 
 const SYNTAX: &str = "nomos.cap.syntax.tree";
 
@@ -68,7 +69,6 @@ fn Base() -> FactKey
         provider: ProviderId::New("nomos.provider.rust-syntax"),
         provider_version: ContractVersion::New(1, 0),
         guarantee: GuaranteeDigest::Of(&Syntactic()),
-        snapshot: Snapshot(2),
         variant: Variant(3),
         configuration: Configuration(4),
     };
@@ -86,7 +86,6 @@ fn Varied(component: Component) -> FactKey
         Component::Provider => key.provider = ProviderId::New("nomos.provider.other"),
         Component::ProviderVersion => key.provider_version = ContractVersion::New(1, 1),
         Component::Guarantee => key.guarantee = GuaranteeDigest::Of(&Coarse()),
-        Component::Snapshot => key.snapshot = Snapshot(9),
         Component::Variant => key.variant = Variant(9),
         Component::Configuration => key.configuration = Configuration(9),
     }
@@ -98,6 +97,7 @@ fn Fact(key: &FactKey, generation: GenerationId) -> MaterializedFact
 {
     return MaterializedFact {
         identity: key.clone().At(generation),
+        snapshot: Snapshot(2),
         evidence: EvidenceClass::Derived,
         guarantee: Syntactic(),
         payload: FactPayload::New(SchemaId::New("nomos.syntax.v1"), b"tree".to_vec()),
@@ -227,11 +227,124 @@ fn Test_Two_Components_Should_Not_Cancel_Each_Other_Out()
 {
     let mut both = Base();
     both.subject = Subject(9);
-    both.snapshot = Snapshot(9);
+    both.configuration = Configuration(9);
 
     assert_ne!(both.Digest(), Base().Digest());
     assert_ne!(both.Digest(), Varied(Component::Subject).Digest());
-    assert_ne!(both.Digest(), Varied(Component::Snapshot).Digest());
+    assert_ne!(both.Digest(), Varied(Component::Configuration).Digest());
+}
+
+/// The property that closed OD-ANALYSIS-001.
+///
+/// A workspace state is not part of what a fact is. The same subject, the same content and
+/// the same provider under the same guarantee is one fact whichever tree it was read from.
+/// While a key carried a snapshot, it was two — so a corpus recomputed whenever any one
+/// file anywhere in the workspace changed, because a workspace snapshot is a digest over
+/// all of its members.
+#[test]
+fn Test_Two_Workspace_States_Should_Not_Produce_Two_Facts()
+{
+    let key = Base();
+    let mut store = MemoryFactStore::New();
+
+    let mut measured = Fact(&key, GenerationId::INITIAL);
+    measured.snapshot = Snapshot(2);
+    let mut asked_again = Fact(&key, GenerationId::INITIAL);
+    asked_again.snapshot = Snapshot(9);
+
+    assert_eq!(
+        measured.Key().Digest(),
+        asked_again.Key().Digest(),
+        "the tree reached the identity, so one file's fact is re-addressed by a change to \
+         another file entirely"
+    );
+
+    store.Materialize(measured, &[]).expect("materializes");
+
+    let served = store
+        .Current(&asked_again.identity, GenerationId::INITIAL)
+        .expect("the store holds the answer to the question the second one asks");
+
+    assert_eq!(
+        served.snapshot,
+        Snapshot(2),
+        "and what it serves still names the tree it was read from. A reused fact is not a \
+         repeated observation, so its provenance must not be restamped"
+    );
+}
+
+/// A checkout invalidates what actually differs.
+///
+/// The cause used to name only the new snapshot and match it against a key component, which
+/// meant every fact in the store — the whole corpus, for a checkout that touched one file.
+/// It now names the members that differ, which is what the caller doing the replacing
+/// already has: two content-addressed maps, and the paths where they disagree.
+#[test]
+fn Test_Replacing_A_Snapshot_Should_Invalidate_Exactly_The_Members_That_Differ()
+{
+    let changed = Base();
+    let mut untouched = Base();
+    untouched.subject = Subject(9);
+
+    let mut store = Stored(&changed);
+    store
+        .Materialize(Fact(&untouched, GenerationId::INITIAL), &[])
+        .expect("materializes");
+    let next = GenerationId::INITIAL.Next();
+
+    let report = store.Invalidate(
+        &GenerationCause::SnapshotReplaced {
+            from: Snapshot(2),
+            to: Snapshot(9),
+            differing: BTreeSet::from([changed.subject]),
+        },
+        next,
+    );
+
+    assert_eq!(report.direct, vec![changed]);
+    assert!(
+        store.Current(&untouched.At(next), next).is_some(),
+        "a checkout that touched one file discarded a fact about another"
+    );
+    assert_eq!(
+        report.cause.Granularity(),
+        IncrementalGranularity::File,
+        "a replacement that names its differing members is a statement about files, and \
+         reporting it as WholeWorkspace makes every provider's broadening look unavoidable"
+    );
+}
+
+/// A replacement that changes no member is visible as one.
+///
+/// Two states can hold identical members and differ in variant or configuration, and those
+/// have causes of their own. What must not happen is that a caller whose diff iterated zero
+/// times reads a clean result — the prototype's most repeated defect, one level down.
+#[test]
+fn Test_A_Replacement_That_Differs_In_Nothing_Should_Say_So()
+{
+    let key = Base();
+    let mut store = Stored(&key);
+    let next = GenerationId::INITIAL.Next();
+
+    let report = store.Invalidate(
+        &GenerationCause::SnapshotReplaced {
+            from: Snapshot(2),
+            to: Snapshot(9),
+            differing: BTreeSet::new(),
+        },
+        next,
+    );
+
+    assert_eq!(report.Invalidated(), 0);
+    assert!(
+        report.Report().contains("0 member(s) differ"),
+        "the report reads as a clean invalidation rather than as an empty one: {}",
+        report.Report()
+    );
+    assert!(
+        store.Current(&key.At(next), next).is_some(),
+        "nothing differed, so nothing may be discarded"
+    );
 }
 
 #[test]

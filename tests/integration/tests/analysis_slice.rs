@@ -107,7 +107,7 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
          {} degraded",
         corpus.root.display(),
         slice.Workspace().Snapshot().Len(),
-        slice.Pinned(),
+        slice.Workspace().Id(),
         slice.Workspace().Snapshot().Variant(),
         corpus.root.display(),
         first.files_seen,
@@ -443,15 +443,15 @@ fn Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So()
 fn Test_The_Fact_Context_Should_Come_From_The_Workspace()
 {
     let corpus = Precision_Corpus();
-    let slice = Slice::Over(&corpus);
-    let snapshot = slice.Workspace().Snapshot();
+    let mut slice = Slice::Over(&corpus);
+    let snapshot = slice.Workspace().Snapshot().clone();
 
-    assert_eq!(
-        slice.Pinned(),
-        slice.Workspace().Id(),
-        "the pinned snapshot is the state the corpus was ingested into"
-    );
     assert_eq!(snapshot.Len(), corpus.files.len(), "one member per file");
+    assert_eq!(
+        slice.Snapshot(),
+        slice.Workspace().Id(),
+        "the held snapshot is what the workspace is, not a second answer to it"
+    );
     assert_eq!(
         snapshot.Variant(),
         &Host_Variant(),
@@ -471,29 +471,44 @@ fn Test_The_Fact_Context_Should_Come_From_The_Workspace()
     assert!(other.Rewrite("beta/four.rs", "//! Different.\n\npub fn Elsewhere() {}\n"));
 
     assert_ne!(
-        Slice::Over(&other).Pinned(),
-        slice.Pinned(),
+        Slice::Over(&other).Workspace().Id(),
+        slice.Workspace().Id(),
         "two corpora that differ in one file are two workspace states"
+    );
+
+    // And the state a fact records is the one it was measured against, which is a fact
+    // about the fact rather than about the key it is filed under.
+    slice.Run(&corpus);
+    let fact = slice
+        .Surface_Of(&corpus.In_Group("alpha"))
+        .expect("alpha has a rollup");
+
+    assert_eq!(
+        fact.snapshot,
+        slice.Workspace().Id(),
+        "a fact names the tree it was read from"
+    );
+    assert_eq!(
+        slice.Snapshot(),
+        slice.Workspace().Id(),
+        "and the held value still agrees after a run"
     );
 }
 
-/// The cost of keying a fact on a workspace state, measured rather than argued.
+/// The assertion that closed OD-ANALYSIS-001.
 ///
-/// # What this test records
+/// # What this test used to say
 ///
-/// `alpha/one.rs` is byte-identical in both corpora below. Its syntax fact is computed from
-/// that file and from nothing else — same provider, same guarantee, same semantic inputs.
-/// The two keys differ anyway, because a [`nomos_analysis::FactKey`] carries a
-/// [`nomos_contracts::SnapshotId`] and a workspace snapshot is a digest over *all* of its
-/// members, so a change to `beta/four.rs` re-addresses the fact about `alpha/one.rs`.
+/// It said the opposite, and the opposite was true. `alpha/one.rs` is byte-identical in
+/// both corpora below — same provider, same guarantee, same semantic inputs — and the two
+/// keys differed anyway, because a `FactKey` carried a `SnapshotId` and a workspace
+/// snapshot is a digest over *all* of its members. A change to `beta/four.rs` re-addressed
+/// the fact about `alpha/one.rs`, and the whole corpus with it.
 ///
-/// That is why [`Slice`] pins its snapshot instead of following the workspace: taking
-/// `workspace.Id()` at materialization time makes one keystroke recompute the whole corpus.
-/// Pinning avoids it here and does not fix it — the component is still in the key, and any
-/// consumer that re-pins pays this in full. `docs/records/OD-ANALYSIS-001` states the
-/// finding and P8-PIN carries the substrate change.
+/// The component is gone. A file's identity is now a statement about that file, and the two
+/// workspace states it appears in are recorded beside its fact rather than folded into it.
 #[test]
-fn Test_An_Unchanged_File_Should_Still_Be_Re_Addressed_By_A_Change_Elsewhere()
+fn Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States()
 {
     let corpus = Precision_Corpus();
     let mut other = Precision_Corpus();
@@ -515,21 +530,100 @@ fn Test_An_Unchanged_File_Should_Still_Be_Re_Addressed_By_A_Change_Elsewhere()
     let left = key_of(&one, &corpus);
     let right = key_of(&two, &other);
 
+    // The premise. If the two slices sat over one workspace state, the equality below
+    // would hold for a reason that has nothing to do with what this test is about.
+    assert_ne!(
+        one.Workspace().Id(),
+        two.Workspace().Id(),
+        "the two corpora must differ, or there is nothing here to be robust against"
+    );
+
     assert_eq!(
         left.semantic_inputs, right.semantic_inputs,
         "the file itself did not change, so what the fact is computed from did not either"
     );
-    assert_ne!(
-        left.snapshot, right.snapshot,
-        "and the workspace did, because a snapshot is a digest over every member"
-    );
-    assert_ne!(
+    assert_eq!(
         left.Digest(),
         right.Digest(),
-        "so one unchanged file has two identities under two workspace states. This is the \
-         measurement behind OD-ANALYSIS-001: the snapshot component is coarser than \
-         semantic_inputs and overrides it"
+        "and one unchanged file is one fact under both workspace states. A change to \
+         beta/four.rs is not a fact about alpha/one.rs"
     );
+
+    // The negative control. If a key ignored the file, every file in the corpus would
+    // share one identity and the equality above would be worthless.
+    let elsewhere = corpus
+        .files
+        .iter()
+        .find(|file| return file.path == "alpha/two.rs")
+        .expect("the precision corpus contains alpha/two.rs");
+    assert_ne!(left.Digest(), one.Syntax_Key(elsewhere).Digest());
+}
+
+/// A checkout invalidates the files it touched, and stops there.
+///
+/// The property the substrate change bought, stated over the corpus that can name its
+/// facts. `GenerationCause::SnapshotReplaced` used to match a snapshot on the key, which
+/// meant every fact in the store — the whole corpus, for a checkout of one file. It now
+/// names the members that differ, which is what a caller replacing a workspace state
+/// actually has.
+#[test]
+fn Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More()
+{
+    let mut corpus = Precision_Corpus();
+    let mut slice = Slice::Over(&corpus);
+    slice.Run(&corpus);
+
+    let before = slice.Workspace().Id();
+    let replaced = slice.Checkout(
+        &mut corpus,
+        &[
+            ("alpha/one.rs", "//! Checked out.\n\npub fn Landed() {}\n"),
+            ("gamma/five.rs", "//! Checked out.\n\nstruct Also;\n"),
+        ],
+    );
+
+    let Edited::Advanced { invalidated, .. } = replaced
+    else
+    {
+        panic!("a checkout that landed two files changed the workspace: {replaced:?}")
+    };
+    assert_ne!(slice.Workspace().Id(), before, "the workspace is another state");
+    assert_eq!(
+        slice.Snapshot(),
+        slice.Workspace().Id(),
+        "and the slice followed it. A held snapshot that stops following the workspace is \
+         the pin this item removed, wearing a cache"
+    );
+
+    assert_eq!(
+        Slice::Name_Keys(&corpus, &invalidated.direct),
+        vec![
+            "nomos.cap.syntax.items of alpha/one.rs",
+            "nomos.cap.syntax.items of gamma/five.rs",
+        ],
+        "exactly the two members that differ"
+    );
+    assert_eq!(
+        Slice::Name_Keys(&corpus, &invalidated.dependent),
+        vec![
+            "nomos.cap.module.surface of alpha",
+            "nomos.cap.module.surface of gamma",
+        ],
+        "and the rollups that read them, along edges the Reader recorded"
+    );
+    assert_eq!(
+        invalidated.cause.Granularity(),
+        IncrementalGranularity::File,
+        "a replacement that names its members is a statement about files"
+    );
+
+    let second = slice.Run(&corpus);
+
+    assert_eq!(
+        second.syntax_reused, 3,
+        "beta's two files and alpha/two.rs survived a checkout that did not touch them"
+    );
+    assert_eq!(second.surface_reused, 1, "and beta's rollup with them");
 }
 
 /// A save that changed nothing must not cost anything.

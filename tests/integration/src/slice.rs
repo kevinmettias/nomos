@@ -15,6 +15,7 @@ use nomos_contracts::{
 use nomos_lang_rust as rust;
 use nomos_model::Digest_Of_Parts;
 use nomos_workspace::{Applied, ChangeSource, Workspace, WorkspaceChangeSet};
+use std::collections::BTreeSet;
 
 /// What one pass over a corpus did.
 ///
@@ -128,25 +129,18 @@ pub struct Slice
     store: MemoryFactStore,
     registry: Registry,
     workspace: Workspace,
-    /// The snapshot every fact key this slice writes names.
+    /// What the workspace currently is, as the door last reported it.
     ///
-    /// # Why it does not follow the workspace
+    /// Held rather than asked for, and the difference matters at scale: `Workspace::Id` is
+    /// a digest over every member, so re-deriving it per fact key re-encodes the whole tree
+    /// once per file. Over the scale corpus that is 876 KB rebuilt eleven thousand times,
+    /// and it cost seventy seconds of a nine-second suite when this field was not here.
     ///
-    /// [`nomos_analysis::FactKey`] carries a [`SnapshotId`], so a fact is filed under one
-    /// workspace state. Taking `workspace.Id()` at materialization time — the obvious
-    /// reading of "the context comes from the workspace" — makes every key in the store
-    /// change the moment any one file is edited, because a workspace snapshot is a digest
-    /// over all of its members. One keystroke would recompute the corpus, and this slice
-    /// measured exactly that: over the precision corpus, editing `alpha/one.rs` recomputes
-    /// six facts instead of two.
-    ///
-    /// So the slice pins. The snapshot names the workspace state this store was opened
-    /// against, edits advance the *generation*, and the store's own generation bookkeeping
-    /// is what decides which facts are still current. `docs/records/OD-ANALYSIS-001`
-    /// records the finding underneath: the snapshot component of a fact key is a third
-    /// answer to a question `semantic_inputs` and the generation already answer between
-    /// them, and being the coarsest of the three it silently defeats both.
-    pinned: SnapshotId,
+    /// It is not a pin. Every value it takes comes from an [`Applied`] the workspace itself
+    /// produced, and it is updated at all three places a workspace can change — ingestion,
+    /// an edit, a checkout — so `Slice::Snapshot` and `Workspace::Id` never disagree.
+    /// `Test_The_Fact_Context_Should_Come_From_The_Workspace` asserts they do not.
+    snapshot: SnapshotId,
     /// Taken from the workspace once. Neither can change — [`Workspace`] has no door for
     /// them — so recomputing a digest per fact key would buy nothing.
     variant: BuildVariantId,
@@ -199,7 +193,7 @@ impl Slice
 
         return Self {
             store: MemoryFactStore::New(),
-            pinned: workspace.Id(),
+            snapshot: workspace.Id(),
             variant: workspace.Snapshot().Variant().Id(),
             configuration: workspace.Snapshot().Configuration(),
             generation: workspace.Generation(),
@@ -240,7 +234,7 @@ impl Slice
         });
 
         slice.generation = applied.Generation();
-        slice.pinned = applied.Snapshot();
+        slice.snapshot = applied.Snapshot();
 
         return slice;
     }
@@ -269,18 +263,20 @@ impl Slice
         return &self.workspace;
     }
 
-    /// The snapshot this slice's fact keys name. See the field's own note for why it is not
-    /// `self.workspace.Id()`.
+    /// What the workspace is, as the door last reported it. Always `Workspace().Id()`.
     #[must_use]
-    pub const fn Pinned(&self) -> SnapshotId
+    pub const fn Snapshot(&self) -> SnapshotId
     {
-        return self.pinned;
+        return self.snapshot;
     }
+
 
     fn Context(&self) -> Context
     {
         return Context {
-            snapshot: self.pinned,
+            // The workspace as it is now. Not a key component — see OD-ANALYSIS-001 — so
+            // it moves freely with the workspace without re-addressing a single fact.
+            snapshot: self.snapshot,
             variant: self.variant,
             configuration: self.configuration,
             generation: self.generation,
@@ -299,12 +295,12 @@ impl Slice
         return InputDigest::Of(&[source.as_bytes()]);
     }
 
+
     /// The key a syntax fact about this file is filed under.
     ///
-    /// Public so that a test can compare one file's identity across two slices pinned to
-    /// two different workspace states. That comparison is the evidence for the pinning
-    /// decision recorded on [`Slice::pinned`], and it cannot be made from outside without
-    /// this.
+    /// Public so that a test can compare one file's identity across two workspace states.
+    /// That comparison is what closed OD-ANALYSIS-001 — the two keys used to differ and now
+    /// agree — and it cannot be made from outside without this.
     #[must_use]
     pub fn Syntax_Key(&self, file: &SourceFile) -> FactKey
     {
@@ -316,7 +312,6 @@ impl Slice
             provider: ProviderId::New(rust::PROVIDER),
             provider_version: rust::CONTRACT_VERSION,
             guarantee: GuaranteeDigest::Of(&rust::Declared_Guarantee()),
-            snapshot: self.pinned,
             variant: self.variant,
             configuration: self.configuration,
         };
@@ -349,7 +344,6 @@ impl Slice
             provider: ProviderId::New(surface::PROVIDER),
             provider_version: surface::CONTRACT_VERSION,
             guarantee: GuaranteeDigest::Of(&surface::Declared_Guarantee()),
-            snapshot: self.pinned,
             variant: self.variant,
             configuration: self.configuration,
         };
@@ -414,7 +408,7 @@ impl Slice
                 file.subject,
                 &file.source,
                 rust::FactContext {
-                    snapshot: self.pinned,
+                        snapshot: self.snapshot,
                     variant: self.variant,
                     configuration: self.configuration,
                     generation: self.generation,
@@ -472,6 +466,9 @@ impl Slice
                 .Materialize(
                     MaterializedFact {
                         identity: key.At(self.generation),
+                        // Provenance: the tree this rollup was computed over. Not part of
+                        // the key, so the workspace moving re-addresses nothing.
+                        snapshot: self.snapshot,
                         // No stronger than what it derived from. A count of verified facts
                         // is derived, and promoting it to Verified would launder the
                         // rollup's own arithmetic into a measurement.
@@ -595,6 +592,7 @@ impl Slice
         };
 
         self.generation = generation;
+        self.snapshot = applied.Snapshot();
 
         let invalidated = self.store.Invalidate(
             &nomos_analysis::GenerationCause::SubjectChanged {
@@ -603,6 +601,74 @@ impl Slice
                 // whatever each affected provider can actually deliver, and records having
                 // done so — the rollup will be broadened to Project.
                 granularity: IncrementalGranularity::File,
+            },
+            self.generation,
+        );
+
+        return Edited::Advanced {
+            applied,
+            invalidated,
+        };
+    }
+
+    /// A checkout: several members land at once, and the store is told which of them differ.
+    ///
+    /// The mechanism is [`Slice::Edit`]'s — one change set, one generation. What differs is
+    /// the cause. An edit is one subject changing. A checkout replaces the workspace state
+    /// wholesale, and the store needs the set of members that are not the same in both.
+    ///
+    /// That set is not derived here. [`Workspace::Apply`] already reports an [`Effect`] per
+    /// path and already knows which of them altered anything, so the differing set is read
+    /// off what the workspace said rather than recomputed against it. A second computation
+    /// of the same thing is a second answer waiting to disagree.
+    ///
+    /// # Panics
+    ///
+    /// If the workspace refuses the set, or if the corpus does not hold one of the paths.
+    pub fn Checkout(&mut self, corpus: &mut Corpus, landing: &[(&str, &str)]) -> Edited
+    {
+        let from = self.snapshot;
+        let mut checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
+        for (path, content) in landing
+        {
+            checkout = checkout.Present(*path, *content);
+        }
+
+        let applied = self
+            .workspace
+            .Apply(&checkout)
+            .unwrap_or_else(|error| panic!("the checkout was refused: {error}"));
+
+        for (path, content) in landing
+        {
+            assert!(
+                corpus.Rewrite(path, content),
+                "`{path}` is not in the corpus, so this checkout changed the workspace and \
+                 nothing the providers read"
+            );
+        }
+
+        let Applied::Advanced { .. } = applied
+        else
+        {
+            return Edited::Unchanged { applied };
+        };
+
+        let differing: BTreeSet<SubjectId> = applied
+            .Effects()
+            .iter()
+            .filter(|effect| return effect.Altered())
+            .map(|effect| return Subject_Of_Path(effect.Path()))
+            .collect();
+
+        self.generation = applied.Generation();
+        self.snapshot = applied.Snapshot();
+
+        let invalidated = self.store.Invalidate(
+            &nomos_analysis::GenerationCause::SnapshotReplaced {
+                from,
+                to: applied.Snapshot(),
+                differing,
             },
             self.generation,
         );

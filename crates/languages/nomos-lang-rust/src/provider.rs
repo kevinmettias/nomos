@@ -68,13 +68,15 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
         provider: ProviderId::New(PROVIDER),
         provider_version: CONTRACT_VERSION,
         guarantee: GuaranteeDigest::Of(&guarantee),
-        snapshot: context.snapshot,
         variant: context.variant,
         configuration: context.configuration,
     };
 
     return Materialization::Materialized(Box::new(MaterializedFact {
         identity: key.At(context.generation),
+        // Provenance, not identity. The tree this file was read from, recorded beside the
+        // fact rather than folded into what it is — see OD-ANALYSIS-001.
+        snapshot: context.snapshot,
         // A parser either found the item in the token stream or it did not; there is no
         // inference step by which this could report something the text does not contain.
         // Not `Derived`, which is for conclusions drawn from other facts — the source is

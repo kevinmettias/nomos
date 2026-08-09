@@ -32,9 +32,17 @@ pub struct Dependency
     pub outcome: ReadOutcome,
 }
 
+/// The situation an analysis is being performed in.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Context
 {
+    /// The workspace state being analyzed.
+    ///
+    /// Not a key component — [`Reader::Key_For`] does not read it, and
+    /// `docs/records/OD-ANALYSIS-001` says why. It is what a caller stamps onto
+    /// [`crate::MaterializedFact::snapshot`] when it writes a fact: the tree the
+    /// measurement was taken from, recorded beside the fact rather than folded into what
+    /// the fact is.
     pub snapshot: SnapshotId,
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
@@ -119,7 +127,6 @@ impl<'store, 'registry> Reader<'store, 'registry>
             provider: offer.provider.clone(),
             provider_version: offer.version,
             guarantee: GuaranteeDigest::Of(&offer.guarantee),
-            snapshot: self.context.snapshot,
             variant: self.context.variant,
             configuration: self.context.configuration,
         });

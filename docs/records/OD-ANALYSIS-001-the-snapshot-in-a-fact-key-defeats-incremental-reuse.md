@@ -2,8 +2,8 @@
 id: OD-ANALYSIS-001
 type: decision
 title: The snapshot in a fact key is a third answer, and it defeats the other two
-status: open
-version: 1
+status: closed
+version: 2
 authority: canonical-normative-record
 tags:
   - analysis
@@ -33,7 +33,7 @@ The vertical slice was wired to take `workspace.Id()` at materialization time, w
 obvious reading of "the context comes from the workspace". Over the six-file precision
 corpus, editing `alpha/one.rs` then recomputed:
 
-```
+```text
 nomos.cap.module.surface of alpha        nomos.cap.syntax.items of alpha/one.rs
 nomos.cap.module.surface of beta         nomos.cap.syntax.items of alpha/two.rs
 nomos.cap.module.surface of gamma        nomos.cap.syntax.items of beta/four.rs
@@ -62,35 +62,55 @@ edit, which is the whole point of it.
 The snapshot is a third answer, it is the coarsest of the three, and coarsest wins. It does
 not add a distinction; it erases the two finer ones underneath it.
 
-`tests/integration` asserts the erasure directly:
-`Test_An_Unchanged_File_Should_Still_Be_Re_Addressed_By_A_Change_Elsewhere` takes one file
-that is byte-identical in two corpora, shows its `semantic_inputs` are equal and its key
-digests are not, and names the snapshot as the only component that differs.
+`tests/integration` asserted the erasure directly. One file, byte-identical in two corpora,
+equal `semantic_inputs`, unequal key digests, with the snapshot named as the only component
+that differed. That test is still there and now asserts the opposite — see *What Closed It*.
 
-## What The Slice Does In The Meantime
+## What The Slice Did In The Meantime
 
-It pins. `Slice` records the snapshot the store was opened against, edits advance the
-generation through `Workspace::Apply`, and the pinned snapshot does not follow. That
-restores exact-descendant recomputation and is honest about being a workaround rather than
-a fix.
+It pinned. `Slice` recorded the snapshot the store was opened against, edits advanced the
+generation through `Workspace::Apply`, and the pinned snapshot did not follow. That
+restored exact-descendant recomputation and was honest about being a workaround.
 
-Pinning is also the sharpest statement of the problem. In the current design the snapshot
-component has two available settings and neither earns its place: pinned, it never varies
-and `GenerationCause::SnapshotReplaced` can never fire, so it is dead weight in every key;
-live, it destroys all reuse. There is no configuration in which it does work that the other
-two components are not already doing.
+Pinning was also the sharpest statement of the problem. The snapshot component had two
+available settings and neither earned its place: pinned, it never varied and
+`GenerationCause::SnapshotReplaced` could never fire, so it was dead weight in every key;
+live, it destroyed all reuse. There was no configuration in which it did work the other two
+components were not already doing.
 
-## What Would Close It
+## What Closed It
 
-`FactKey` loses its `snapshot`, and a fact's relationship to a workspace state becomes
-provenance recorded on `MaterializedFact` rather than a component of what the fact *is*.
-`GenerationCause::SnapshotReplaced` then has to be re-expressed — it currently invalidates
-by matching `key.snapshot`, which is a search that would have nothing to match — most likely
-as a cause that names the members that differ between two snapshots, which is what a caller
-replacing a snapshot actually knows.
+`FactKey` lost its `snapshot`, and `Component::Snapshot` with it. A fact's relation to a
+workspace state is now `MaterializedFact::snapshot` — provenance, the tree a measurement was
+taken from, recorded beside the fact rather than folded into what it is. It is deliberately
+not restamped when a fact is reused: a reused fact is not a repeated observation.
 
-That is a change to a sealed substrate crate and to the shape of every key already written,
-so it is P8-PIN and not a patch to this item.
+`GenerationCause::SnapshotReplaced` was re-expressed. It used to name the new snapshot and
+match it against a key component, which is why it was `WholeWorkspace`-granular — it could
+not say anything narrower than "everything filed under the old state". It now carries
+`from`, `to`, and the set of subjects that differ, which is what a caller replacing a
+workspace state already has: two content-addressed maps of path to digest, and the paths
+where they disagree. That makes it `File`-granular, and strictly narrower than what it
+replaced — a checkout of two files invalidates two files and the rollups that read them.
+
+An empty `differing` set is not refused. Two states can hold identical members and differ in
+variant or configuration, and those have causes of their own. `Describe` reports the count,
+so a caller whose diff iterated zero times reads "0 member(s) differ" rather than a clean
+result.
+
+The slice no longer pins. `Slice` holds the workspace's current identity — taken from the
+`Applied` the door itself reports, at each of the three places a workspace can change — and
+`Test_The_Fact_Context_Should_Come_From_The_Workspace` asserts it never disagrees with
+`Workspace::Id`. Holding it rather than asking is not a pin but it is not free either:
+`Workspace::Id` digests every member, and deriving it per fact key re-encoded 876 KB of
+manifest eleven thousand times per run, which cost seventy seconds of a nine-second suite
+before the value was held.
+
+The measurement that opened this record was inverted rather than deleted.
+`Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States` takes the same two
+corpora, the same byte-identical file, and now asserts the key digests are *equal* — with a
+negative control beside it, because an equality that holds because keys ignore their subject
+would be worthless.
 
 ## What Was Considered And Rejected
 
@@ -107,5 +127,7 @@ of snapshot to put in the key would be a fourth answer.
 
 ## Status
 
-Open. The slice pins, the workaround is annotated at `Slice::pinned` with a pointer here,
-and the substrate change is planned rather than performed.
+Closed by P8-PIN. Three controls were confirmed red before the change was kept: folding the
+workspace state back into a fact's identity (six tests, including the scale reuse claim), a
+replacement that names no differing member, and a held workspace identity that stops
+following the workspace — the pin, wearing a cache.
