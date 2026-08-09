@@ -7,7 +7,7 @@ use nomos_analysis::{
     Context, Dependency, FactIdentity, FactKey, FactPayload, FactReader, FactStore, GuaranteeDigest,
     InputDigest, InvalidationReport, MaterializedFact, MemoryFactStore, Reader,
 };
-use nomos_capability::{ProviderOffer, Registry, Requirement, Resolution};
+use nomos_capability::{Registry, Requirement, Resolution, Selection};
 use nomos_contracts::{
     Applicability, Assurance, BuildVariantId, CapabilityId, ConfigurationId, Digest128,
     EvidenceClass, FactVariant, GenerationId, Guarantee, IncrementalGranularity, ProviderId,
@@ -396,7 +396,13 @@ impl Slice
         };
     }
 
-    /// Which provider answers, and how the registry describes the choice.
+    /// Which provider answers, what it was chosen over, and how the registry describes the
+    /// choice.
+    ///
+    /// A whole [`Selection`] rather than the winning offer, because the winner alone cannot
+    /// answer the question this run has to be able to ask: whether lowering the floor
+    /// bought anything. `Selection::Weaker` is what the lowered floor bought and the chosen
+    /// offer is what it did *not* cost.
     ///
     /// # Panics
     ///
@@ -404,12 +410,12 @@ impl Slice
     /// facts and reported a clean corpus, which is the single most repeated defect in the
     /// prototype: a check that could not run reading like a check that found nothing.
     #[must_use]
-    pub fn Resolved(&self) -> (ProviderOffer, Applicability)
+    pub fn Resolved(&self) -> (Selection, Applicability)
     {
         let resolution = self.registry.Resolve(&self.Requirement());
 
         let Resolution::Satisfied {
-            offer,
+            selection,
             applicability,
         } = resolution
         else
@@ -417,7 +423,7 @@ impl Slice
             panic!("no provider offers {} at this run's floor: {resolution:?}", rust::CAPABILITY)
         };
 
-        return (offer, applicability);
+        return (selection, applicability);
     }
 
     /// The key a syntax fact about this file is filed under.
@@ -436,7 +442,7 @@ impl Slice
     #[must_use]
     pub fn Syntax_Key(&self, file: &SourceFile) -> FactKey
     {
-        let (offer, _) = self.Resolved();
+        let offer = self.Resolved().0.chosen;
 
         return FactKey {
             contract: CapabilityId::New(rust::CAPABILITY),
@@ -519,8 +525,8 @@ impl Slice
     /// If the resolved provider has no dispatch here.
     fn Dispatch(&self, file: &SourceFile) -> rust::Materialization
     {
-        let (offer, _) = self.Resolved();
-        let provider = offer.provider.As_Str();
+        let chosen = self.Resolved().0.chosen;
+        let provider = chosen.provider.As_Str();
 
         if provider == rust::PROVIDER
         {

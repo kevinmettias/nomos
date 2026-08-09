@@ -12,6 +12,8 @@
 
 mod contract;
 mod registry;
+mod selection;
 
 pub use contract::{CapabilityContract, ProviderOffer, Requirement};
 pub use registry::{Registry, RegistryError, Resolution, Unmet};
+pub use selection::{Selection, Standing};

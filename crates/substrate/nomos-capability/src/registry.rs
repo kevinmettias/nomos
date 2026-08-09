@@ -1,4 +1,5 @@
 use crate::contract::{CapabilityContract, ProviderOffer, Requirement};
+use crate::selection::Selection;
 use nomos_contracts::{Applicability, CapabilityId, ContractVersion, ProviderId};
 use std::collections::BTreeMap;
 
@@ -77,7 +78,13 @@ pub enum Resolution
 {
     Satisfied
     {
-        offer: ProviderOffer,
+        /// Which offer answers, and every usable offer it was chosen over.
+        ///
+        /// A [`Selection`] rather than a bare offer, because the answer to "who answers"
+        /// is not complete without "instead of whom". A caller that lowered its floor to
+        /// buy coverage bought the weaker offers too, and a resolution that named only the
+        /// winner would spend the floor on its behalf and hand back one provider.
+        selection: Selection,
         applicability: Applicability,
     },
     Unsatisfied
@@ -100,12 +107,24 @@ impl Resolution
         };
     }
 
+    /// The offer that answers.
     #[must_use]
     pub const fn Offer(&self) -> Option<&ProviderOffer>
     {
         return match self
         {
-            Self::Satisfied { offer, .. } => Some(offer),
+            Self::Satisfied { selection, .. } => Some(&selection.chosen),
+            Self::Unsatisfied { .. } => None,
+        };
+    }
+
+    /// The offer that answers together with the ones it was chosen over.
+    #[must_use]
+    pub const fn Selection(&self) -> Option<&Selection>
+    {
+        return match self
+        {
+            Self::Satisfied { selection, .. } => Some(selection),
             Self::Unsatisfied { .. } => None,
         };
     }
@@ -243,6 +262,10 @@ impl Registry
         }
 
         against.push(offer);
+        // Name order, which is no longer what selects. It is here so that the input to
+        // [`Selection`] does not depend on registration order, and so the tiebreak it
+        // falls back to when the guarantee ranks nothing is at least the same tiebreak
+        // every time.
         against.sort_by(|left, right| left.provider.cmp(&right.provider));
         return Ok(());
     }
@@ -251,6 +274,19 @@ impl Registry
     ///
     /// Never returns a bare no. Every path either names a provider or names what is
     /// missing, and no path produces [`Applicability::NotApplicable`].
+    ///
+    /// # Which of several usable offers answers
+    ///
+    /// The floor decides which offers are *usable*; [`Selection`] decides which usable
+    /// offer is *chosen*, and the rule is that no usable offer is strictly stronger than
+    /// the one that answers. A named preference outranks that rule, and every offer the
+    /// rule passed over comes back in the selection. Nothing here consults a provider's
+    /// name except to break a tie the guarantee itself does not break — see
+    /// [`Selection::Unranked`], which is how a caller tells that apart from a decision.
+    ///
+    /// This used to be `offers.find(usable)` over a name-sorted list, which resolved to
+    /// whichever provider sorted first. `docs/records/OD-CAPABILITY-001` records what
+    /// decided it.
     #[must_use]
     pub fn Resolve(&self, requirement: &Requirement) -> Resolution
     {
@@ -283,23 +319,16 @@ impl Registry
             return unsatisfied(Unmet::NoProvider);
         };
 
-        let usable = |offer: &&ProviderOffer| {
-            return requirement.version.Can_Read(offer.version)
-                && offer.guarantee.Satisfies(&requirement.minimum);
-        };
+        let usable: Vec<ProviderOffer> = offers
+            .iter()
+            .filter(|offer| {
+                return requirement.version.Can_Read(offer.version)
+                    && offer.guarantee.Satisfies(&requirement.minimum);
+            })
+            .cloned()
+            .collect();
 
-        if let Some(preferred) = &requirement.preferred
-            && let Some(offer) = offers
-                .iter()
-                .find(|offer| &offer.provider == preferred && usable(offer))
-        {
-            return Resolution::Satisfied {
-                offer: offer.clone(),
-                applicability: Applicability::Supported,
-            };
-        }
-
-        let Some(offer) = offers.iter().find(usable)
+        let Some(selection) = Selection::Over(usable, requirement.preferred.as_ref())
         else
         {
             return unsatisfied(Unmet::BelowRequirement {
@@ -310,17 +339,20 @@ impl Registry
         // A named preference that was not honoured is what makes this a fallback. The
         // judgment still stands; its provenance is not what was asked for, and a caller
         // that cannot tell cannot record why.
-        let applicability = if requirement.preferred.is_some()
+        //
+        // Compared against who actually answered rather than against a second search for
+        // the preference, because those are the same question and asking it twice is how
+        // the two answers come to disagree.
+        let applicability = match &requirement.preferred
         {
-            Applicability::SupportedWithFallback
-        }
-        else
-        {
-            Applicability::Supported
+            Some(preferred) if *preferred != selection.chosen.provider => {
+                Applicability::SupportedWithFallback
+            }
+            _ => Applicability::Supported,
         };
 
         return Resolution::Satisfied {
-            offer: offer.clone(),
+            selection,
             applicability,
         };
     }

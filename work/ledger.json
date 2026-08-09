@@ -1220,7 +1220,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P8-SECOND-PROVIDER"
       ],
@@ -1245,7 +1245,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "sed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-capability v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-capability)\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.26s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-182bb53448016fc6.exe)\n     Running tests\\fact_identity.rs (target\\debug\\deps\\fact_identity-83964a67786ab7dc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-1229f9e7e289bc09.exe)\n     Running tests\\resolution_never_says_no.rs (target\\debug\\deps\\resolution_never_says_no-70bdb9fc2fac118b.exe)\n     Running tests\\selection_is_decided.rs (target\\debug\\deps\\selection_is_decided-2de9448a18f0496d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-7c55b876dd85ab8e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-3a05ca0dd6090e4d.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-20acccc0be755c24.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-92fd0861e3d88db4.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-505df16189b7793f.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-8fd73ab386c9e4ba.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-1b25cf3ec708d915.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_capability\n   Doc-tests nomos_contracts\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n",
+        "verified_at": 1786266123
+      }
     },
     {
       "id": "P8-CONTRACT-HOME",

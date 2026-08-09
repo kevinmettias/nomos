@@ -792,8 +792,14 @@ fn Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One()
     let corpus = Precision_Corpus();
 
     let (parsed, how) = Slice::Over(&corpus).Resolved();
-    assert_eq!(parsed.provider.As_Str(), rust::PROVIDER);
+    assert_eq!(parsed.chosen.provider.As_Str(), rust::PROVIDER);
     assert_eq!(how, Applicability::Supported);
+    assert!(
+        parsed.alternatives.is_empty(),
+        "only one offer clears this floor, so there is nothing to have been chosen over: \
+         {:?}",
+        parsed.alternatives
+    );
 
     // The scanner is registered and cannot serve this floor. Without that, the assertion
     // above passes over a registry that still has only one offer in it.
@@ -803,6 +809,7 @@ fn Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One()
             .Preferring(scan::PROVIDER)
             .Resolved()
             .0
+            .chosen
             .provider
             .As_Str(),
         scan::PROVIDER,
@@ -821,10 +828,10 @@ fn Test_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback()
 {
     let corpus = Precision_Corpus();
 
-    let (offer, how) = Slice::Over(&corpus).Preferring(scan::PROVIDER).Resolved();
+    let (selection, how) = Slice::Over(&corpus).Preferring(scan::PROVIDER).Resolved();
 
     assert_eq!(
-        offer.provider.As_Str(),
+        selection.chosen.provider.As_Str(),
         rust::PROVIDER,
         "the preference cannot meet the floor, so it must not be honoured"
     );
@@ -1034,47 +1041,96 @@ fn Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus()
 
 /// What the registry does when more than one offer clears the floor.
 ///
-/// # Why this is asserted rather than assumed
+/// # The rule, over the composition it was decided for
 ///
-/// It picks the first usable offer in provider-name order. `nomos.lang.rust.scan` sorts
-/// before `nomos.lang.rust.syn`, so a caller that lowers its floor to get coverage is
-/// served the weaker provider for *every* file — including the seven thousand the parser
-/// could have handled exactly.
+/// The strongest usable offer answers, and every offer it was chosen over comes back with
+/// it. `nomos.lang.rust.scan` still sorts first by name and no longer wins by it, which is
+/// the whole of what changed: selection stopped being a consequence of spelling.
 ///
-/// That is the current behaviour and it is not obviously anybody's intent. Recorded as a
-/// test rather than left to be discovered, and as `docs/records/OD-CAPABILITY-001` rather
-/// than fixed here: `Registry::Resolve` is a substrate crate, and which of several usable
-/// offers should win is a decision, not a bug fix. P8-SELECTION carries it.
+/// This test used to assert the opposite — `..._Should_Resolve_By_Name_Order_Until_
+/// Something_Says_Otherwise`, whose name recorded that the behaviour was observed rather
+/// than intended. `docs/records/OD-CAPABILITY-001` records what decided it.
 #[test]
-fn Test_Two_Usable_Offers_Should_Resolve_By_Name_Order_Until_Something_Says_Otherwise()
+fn Test_The_Strongest_Usable_Offer_Should_Answer_Whatever_The_Providers_Are_Called()
 {
     let corpus = Precision_Corpus();
 
-    let (offer, how) = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
+    let (selection, how) = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
 
     assert_eq!(
-        offer.provider.As_Str(),
-        scan::PROVIDER,
-        "both offers clear this floor, and the weaker one answers because its name sorts \
-         first — not because anything decided it should"
+        selection.chosen.provider.As_Str(),
+        rust::PROVIDER,
+        "both offers clear this floor and the parser is strictly stronger, so it answers \
+         — despite the scanner's name sorting first"
     );
+    let passed_over = selection
+        .alternatives
+        .first()
+        .expect("the scanner clears this floor too")
+        .provider
+        .clone();
+    assert!(
+        selection.chosen.provider.As_Str() > passed_over.As_Str(),
+        "and the name order really is against it here, or this test proves nothing about \
+         names: {} against {passed_over}",
+        selection.chosen.provider
+    );
+    assert_eq!(how, Applicability::Supported);
+    assert!(
+        !selection.Passed_Over_Stronger(),
+        "nothing usable was stronger than what answered, which is the rule"
+    );
+    assert!(
+        selection.Unranked().is_empty(),
+        "and the guarantee ranked them, so this composition's provider choice is a \
+         decision rather than a tiebreak: {:?}",
+        selection.Unranked()
+    );
+}
+
+/// What the lowered floor bought, and that it did not cost the files it was not for.
+///
+/// The situation that raised OD-CAPABILITY-001: a caller lowers its floor to `Approximate`
+/// because a parser refuses seven files in the scale corpus, and wants an answer for those
+/// seven without giving up the exact answer for the other 7,573.
+///
+/// Both of the reflex rules fail it. Name order serves the scanner for every file, so the
+/// coverage costs precision everywhere. Strongest-wins alone serves the parser for every
+/// file, so lowering the floor buys *nothing* — the same seven files go unanswered and the
+/// caller cannot tell its requirement changed anything. The selection is what makes the
+/// floor mean something: the parser answers, and the offer the floor admitted is reachable
+/// for the subjects the parser cannot serve.
+///
+/// The registry cannot spend it, because a requirement names a capability and not a
+/// subject, and which files a parser will refuse is not knowable until it reads them.
+/// Spending it per subject is `Slice::Dispatch`'s to do and is not done here.
+#[test]
+fn Test_A_Lowered_Floor_Should_Make_The_Weaker_Offer_Reachable_Without_Serving_It()
+{
+    let corpus = Precision_Corpus();
+
+    let (parsed, _) = Slice::Over(&corpus).Resolved();
+    let (lowered, _) = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
+
     assert_eq!(
-        how,
-        Applicability::Supported,
-        "and nothing in the answer says the caller might have had better"
+        parsed.chosen, lowered.chosen,
+        "lowering the floor must not change who answers; it widens what is admitted, and \
+         the strongest thing admitted did not change"
     );
 
-    // The remedy available today, so the finding is a cost rather than a trap: a caller
-    // that knows it wants the parser can say so, and gets it.
+    assert!(
+        parsed.Weaker().is_empty(),
+        "the strict floor admits the scanner nowhere, so there is nothing to fall back to"
+    );
     assert_eq!(
-        Slice::Over(&corpus)
-            .Accepting(Approximate_Floor())
-            .Preferring(rust::PROVIDER)
-            .Resolved()
-            .0
-            .provider
-            .As_Str(),
-        rust::PROVIDER
+        lowered
+            .Weaker()
+            .iter()
+            .map(|offer| return offer.provider.As_Str().to_owned())
+            .collect::<Vec<_>>(),
+        vec![scan::PROVIDER.to_owned()],
+        "and the lowered one admits exactly the scanner, which is what the caller widened \
+         its requirement to reach"
     );
 }
 
