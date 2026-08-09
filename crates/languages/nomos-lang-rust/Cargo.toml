@@ -1,0 +1,29 @@
+[package]
+name = "nomos-lang-rust"
+version = "0.1.0"
+description = "Band 2. What Rust source says on its face, and a declared Guarantee that says how far that goes."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+# `full` for every item form, `visit` because the walk has to reach macro invocations
+# inside function bodies, and `span-locations` so a refusal can name the line it refused
+# at. `printing` is deliberately absent: nothing here renders tokens back out.
+syn = { version = "2", default-features = false, features = [
+    "full",
+    "parsing",
+    "visit",
+    "clone-impls",
+] }
+proc-macro2 = { version = "1", default-features = false, features = [
+    "span-locations",
+] }
+
+[lints]
+workspace = true

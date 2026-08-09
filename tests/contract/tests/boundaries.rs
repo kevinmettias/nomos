@@ -29,6 +29,11 @@ const BANDS: &[(&str, u32)] = &[
     // that resolves a provider through it.
     ("nomos-capability", 21),
     ("nomos-analysis", 22),
+    // Language providers sit above analysis because they produce the facts it stores,
+    // and nothing sits above them but a composition root. They reach each other not at
+    // all: two languages are two providers of one capability, and the registry is the
+    // only thing that knows both.
+    ("nomos-lang-rust", 25),
     // The spec system sits beside the kernel, not above it. It reaches the product only
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),

@@ -325,6 +325,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-lang-rust"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "proc-macro2",
+ "syn 2.0.119",
+]
+
+[[package]]
 name = "nomos-ledger"
 version = "0.1.0"
 dependencies = [

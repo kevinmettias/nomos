@@ -526,13 +526,13 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "packages/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-rust",
           "Cargo.toml",
           "tests/contract/tests/boundaries.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P7-ANALYSIS"
       ],
@@ -547,7 +547,17 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-lang-rust"
+        ],
+        "exit_code": 0,
+        "output_tail": "uld_Reach_The_Same_Facts ... ok\ntest Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed ... ok\ntest Test_Every_Refusal_Should_Be_Named_And_Explained ... ok\ntest Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown ... ok\ntest Test_The_Corpus_Should_Yield_Syntax_Facts ... ok\ntest Test_Soundness_Should_Hold_Over_The_Whole_Corpus ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.56s\n\n\nrunning 12 tests\ntest Test_The_Granularity_Should_Not_Be_Symbol_Because_A_Failure_Costs_The_Whole_File ... ok\ntest Test_A_Refusal_Should_Name_Where_It_Refused ... ok\ntest Test_Completeness_Should_Be_Unknown_Because_Macros_Hide_Items ... ok\ntest Test_A_Failure_And_An_Empty_File_Should_Never_Be_The_Same_Answer ... ok\ntest Test_Soundness_Should_Not_Report_Things_That_Are_Not_Items ... ok\ntest Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source ... ok\ntest Test_Every_Item_Form_Should_Reach_Its_Own_Kind ... ok\ntest Test_The_Unexpanded_Count_Should_Be_A_Lower_Bound ... ok\ntest Test_The_Unexpanded_Count_Should_Expose_How_Much_Was_Out_Of_Reach ... ok\ntest Test_The_Reading_Should_Not_Depend_On_What_Was_Read_Before ... ok\ntest Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved ... ok\ntest Test_The_Granularity_Should_Be_File_Because_A_Reading_Carries_Nothing_Across ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-92fd0861e3d88db4.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-505df16189b7793f.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-8fd73ab386c9e4ba.exe)\n   Doc-tests nomos_lang_rust\n",
+        "verified_at": 1786241422
+      }
     },
     {
       "id": "P7-SLICE",
