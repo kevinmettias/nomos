@@ -155,6 +155,6 @@ Closed by P8-SELECTION. Four controls were confirmed red before the change was k
 by provider name (four tests, including the composition's own — and it caught a test of the
 new rule that passed under the old one because `parse` happens to sort before `scan`), a
 selection that returns the winner alone (six tests), alternatives drawn from every registered
-offer rather than the usable ones (five tests), and a `Standing` that reads "reaches
+offer rather than the usable ones (six tests), and a `Standing` that reads "reaches
 everything the other does" as stronger without checking whether the other reaches back (two
 tests).
