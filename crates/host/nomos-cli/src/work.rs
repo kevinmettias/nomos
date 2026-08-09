@@ -1,5 +1,6 @@
 //! `nomos work` — the ledger, from a terminal.
 
+use crate::arguments::{Named_Value, Named_Values};
 use nomos_ledger::{
     ClaimRefusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish, FinishRefusal, ItemId,
     ItemState, LedgerError, LedgerItem, ReleaseOutcome, Territory, VerificationPredicate,
@@ -230,41 +231,9 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
     });
 }
 
-fn Named_Value(arguments: &[String], name: &str) -> Option<String>
-{
-    let position = arguments.iter().position(|argument| argument == name)?;
-    return arguments.get(position.saturating_add(1)).cloned();
-}
-
-/// Every value given for a repeatable flag.
-///
-/// Repeating rather than comma-splitting, because a path may contain a comma and a
-/// separator character invents a quoting problem the argument vector already solved.
-fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
-{
-    let mut values = Vec::new();
-    let mut index = 0_usize;
-
-    while let Some(argument) = arguments.get(index)
-    {
-        if argument == name
-            && let Some(value) = arguments.get(index.saturating_add(1))
-        {
-            values.push(value.clone());
-            index = index.saturating_add(2);
-            continue;
-        }
-        index = index.saturating_add(1);
-    }
-
-    return values;
-}
-
 fn Required(value: Option<&String>, name: &str) -> Result<String, String>
 {
-    return value
-        .cloned()
-        .ok_or_else(|| format!("{name} is required.\n\n{}", Usage_Text()));
+    return crate::arguments::Required(value, name, &Usage_Text());
 }
 
 /// Parses a lease such as `2h`, `30m` or `45s`.

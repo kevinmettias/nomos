@@ -15,6 +15,12 @@ path = "src/main.rs"
 nomos-ledger = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
+# The specification system. A composition root is the only place permitted to name
+# these: the spec crates sit beside the kernel rather than above it, and nothing in the
+# product may reach them directly.
+nomos-spec-ingest = { workspace = true }
+nomos-spec-project = { workspace = true }
+nomos-spec-store = { workspace = true }
 
 [lints]
 workspace = true

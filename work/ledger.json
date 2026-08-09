@@ -1502,7 +1502,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P9-SKIP"
       ],
@@ -1519,7 +1519,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "eported ... ok\ntest metadata::tests::Test_Package_Ids_Should_Parse_In_Every_Format_Cargo_Emits ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 7 tests\ntest Test_Every_Member_Should_Declare_A_Band ... ok\ntest Test_Dependencies_Should_Run_Strictly_Downward ... ok\ntest Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else ... ok\ntest Test_The_Workspace_Should_Not_Appear_Empty ... ok\ntest Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace ... ok\ntest Test_A_Capability_Id_Should_Be_Written_In_One_Crate ... ok\ntest Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 6 tests\ntest Test_A_Run_Should_Report_What_It_Did_Not_Check ... ok\ntest Test_The_Declared_Total_Should_Be_The_Sum_Of_The_Table ... ok\ntest Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables ... ok\ntest Test_Every_Declared_File_Should_Match_What_It_Declares ... ok\ntest Test_Every_File_That_Reaches_A_Corpus_Should_Be_Declared ... ok\ntest Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.55s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-69b08ffa14dea8aa.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-9c861f6a184827ff.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-1dd9a400fd0d7729.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-f367a9983b12efc2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0e377fafb8154895.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1786303811
+      }
     },
     {
       "id": "P9-README",

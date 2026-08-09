@@ -7,12 +7,14 @@
 #![forbid(unsafe_code)]
 
 mod governing;
+mod read;
 mod record;
 mod rows;
 mod schema;
 mod store;
 
 pub use governing::{GOVERNING_RECORD_IDS, Seed_Governing_Records, SeedReport};
+pub use read::{DocumentSource, NodeSummary, PathMatch, TableLine};
 pub use record::{Disposition, Kind_Label};
 pub use rows::{RowCensus, RowScope};
 pub use schema::{Latest_Version, MIGRATIONS, Migration};

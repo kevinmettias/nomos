@@ -28,7 +28,10 @@ pub enum StoreError
         found: u32,
         supported: u32,
     },
-    /// An authored record this build embeds does not read.
+    /// A document does not read: an authored record this build embeds that will not
+    /// parse, or stored bytes that are not text. Both name the document and say what
+    /// went wrong with it, because in either case the caller's next question is which
+    /// file.
     Record
     {
         path: String,

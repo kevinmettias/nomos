@@ -316,6 +316,9 @@ dependencies = [
  "nomos-ledger",
  "nomos-platform",
  "nomos-platform-std",
+ "nomos-spec-ingest",
+ "nomos-spec-project",
+ "nomos-spec-store",
 ]
 
 [[package]]
