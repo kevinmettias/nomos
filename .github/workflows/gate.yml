@@ -32,3 +32,16 @@ jobs:
       # has quietly stopped being true.
       - name: Boundaries
         run: cargo test -p nomos-contract-tests
+
+      # None of the three corpora is present on a CI runner: they live outside this
+      # repository. So the tests that read them return early and print ok, and this
+      # step is the only place the size of that hole appears. --nocapture is what
+      # makes it appear -- cargo swallows a passing test's output, which is exactly
+      # how sixty-eight assertions came to report success having read nothing.
+      #
+      # It does not fail. A gate that can never be green is a gate everybody learns
+      # to ignore, and a runner without the corpora is the normal case rather than a
+      # misconfiguration. What is guarded is the number: tests/contract/tests/
+      # corpus_gates.rs fails if the declared count stops matching the source.
+      - name: Corpus gates (reports what did not run)
+        run: cargo test -p nomos-contract-tests --test corpus_gates -- --nocapture
