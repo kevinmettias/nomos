@@ -16,11 +16,12 @@
 //!
 //! Each has a test here, and each is stated over its denominator.
 
+use nomos_analysis::FactStore;
+use nomos_cap_syntax as syntax;
 use nomos_capability::Requirement;
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity,
 };
-use nomos_analysis::FactStore;
 use nomos_integration_tests::{
     Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Resolved_Configuration, Slice,
     Walk, SURFACE_CAPABILITY,
@@ -1039,6 +1040,62 @@ fn Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus()
     );
 }
 
+/// Two providers, one contract, and neither of them wrote it.
+///
+/// The composition is where this is observable at all. `nomos-cap-syntax` cannot name either
+/// provider — it sits below both, deliberately, so that neither party can change the terms
+/// the other is bound by. Each provider names the contract and not its peer. So the only
+/// place all three are visible at once is here, which is the same reason the rest of this
+/// file exists.
+///
+/// The ceiling is the sharp end. It bounds what *either* provider may claim, and while it
+/// lived in `nomos-lang-rust` that crate could have raised or lowered what its peer was
+/// permitted to promise, in a file the peer could not open.
+#[test]
+fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
+{
+    let registry = Slice::Registered();
+    let capability = CapabilityId::New(syntax::CAPABILITY);
+
+    let contract = registry
+        .Declared()
+        .find(|declared| return declared.id == capability)
+        .expect("the syntax capability is declared");
+
+    assert_eq!(
+        contract.ceiling,
+        syntax::Ceiling(),
+        "the terms in the registry are the contract crate's, not a provider's"
+    );
+
+    let offering: Vec<&str> = registry
+        .Offers(&capability)
+        .iter()
+        .map(|offer| return offer.provider.As_Str())
+        .collect();
+
+    assert_eq!(
+        offering,
+        vec![scan::PROVIDER, rust::PROVIDER],
+        "both providers offer against the one contract"
+    );
+
+    // The ceiling leaves room neither provider occupies. Without this the assertion above
+    // would pass over a ceiling that is merely the incumbent's guarantee restated — which
+    // is a ceiling that has to be raised whenever somebody improves something, and one that
+    // silently forbids a better second provider.
+    for offer in registry.Offers(&capability)
+    {
+        assert_ne!(
+            offer.guarantee,
+            syntax::Ceiling(),
+            "{} claims exactly the ceiling, so the ceiling is describing an implementation \
+             rather than bounding the capability",
+            offer.provider
+        );
+    }
+}
+
 /// What the registry does when more than one offer clears the floor.
 ///
 /// # The rule, over the composition it was decided for
@@ -1277,8 +1334,8 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
     let slice = Slice::Composed();
 
     let needs_resolution = Requirement::New(
-        CapabilityId::New(rust::CAPABILITY),
-        rust::CONTRACT_VERSION,
+        CapabilityId::New(syntax::CAPABILITY),
+        syntax::CONTRACT_VERSION,
         Guarantee::New(
             FactVariant::SemanticallyResolved,
             Assurance::Sound,
@@ -1300,8 +1357,8 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
     // The positive control. If resolution refused everything the assertion above would
     // pass over a composition that serves nobody.
     let servable = Requirement::New(
-        CapabilityId::New(rust::CAPABILITY),
-        rust::CONTRACT_VERSION,
+        CapabilityId::New(syntax::CAPABILITY),
+        syntax::CONTRACT_VERSION,
         rust::Declared_Guarantee(),
     );
     assert!(slice.Registry().Resolve(&servable).Offer().is_some());

@@ -7,6 +7,7 @@ use nomos_analysis::{
     Context, Dependency, FactIdentity, FactKey, FactPayload, FactReader, FactStore, GuaranteeDigest,
     InputDigest, InvalidationReport, MaterializedFact, MemoryFactStore, Reader,
 };
+use nomos_cap_syntax as syntax;
 use nomos_capability::{Registry, Requirement, Resolution, Selection};
 use nomos_contracts::{
     Applicability, Assurance, BuildVariantId, CapabilityId, ConfigurationId, Digest128,
@@ -212,7 +213,7 @@ impl Slice
         let mut registry = Registry::New();
 
         registry
-            .Declare(rust::Capability_Contract())
+            .Declare(syntax::Capability_Contract())
             .expect("the syntax capability is declared once");
         registry
             .Offer(rust::Provider_Offer())
@@ -384,8 +385,8 @@ impl Slice
     pub fn Requirement(&self) -> Requirement
     {
         let need = Requirement::New(
-            CapabilityId::New(rust::CAPABILITY),
-            rust::CONTRACT_VERSION,
+            CapabilityId::New(syntax::CAPABILITY),
+            syntax::CONTRACT_VERSION,
             self.floor,
         );
 
@@ -420,7 +421,7 @@ impl Slice
         } = resolution
         else
         {
-            panic!("no provider offers {} at this run's floor: {resolution:?}", rust::CAPABILITY)
+            panic!("no provider offers {} at this run's floor: {resolution:?}", syntax::CAPABILITY)
         };
 
         return (selection, applicability);
@@ -445,7 +446,7 @@ impl Slice
         let offer = self.Resolved().0.chosen;
 
         return FactKey {
-            contract: CapabilityId::New(rust::CAPABILITY),
+            contract: CapabilityId::New(syntax::CAPABILITY),
             contract_version: offer.version,
             subject: file.subject,
             semantic_inputs: Self::Syntax_Inputs(&file.source),
@@ -615,7 +616,7 @@ impl Slice
                         .expect("a fact is never written behind the generation it names");
                     report.syntax_materialized = report.syntax_materialized.saturating_add(1);
                     report.recomputed.push(Recompute {
-                        capability: rust::CAPABILITY.to_owned(),
+                        capability: syntax::CAPABILITY.to_owned(),
                         subject: file.path.clone(),
                     });
                 }
@@ -702,7 +703,7 @@ impl Slice
         for member in members
         {
             let read = reader.Require(
-                &CapabilityId::New(rust::CAPABILITY),
+                &CapabilityId::New(syntax::CAPABILITY),
                 &member.subject,
                 Self::Syntax_Inputs(&member.source),
                 &need,

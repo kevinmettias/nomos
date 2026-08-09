@@ -2,44 +2,27 @@
 //!
 //! # Why there is no `Capability_Contract` here
 //!
-//! `nomos.cap.syntax.items` is not this crate's capability. It is not `nomos-lang-rust`'s
-//! either — a capability contract is the agreed meaning of a question and the ceiling on
-//! what any answer may claim, and an agreement is not the property of one party to it.
+//! `nomos.cap.syntax.items` is not this crate's capability, and it is not
+//! `nomos-lang-rust`'s either — a capability contract is the agreed meaning of a question
+//! and the ceiling on what any answer may claim, and an agreement is not the property of one
+//! party to it. It lives in `nomos-cap-syntax`, below both providers, and both offer against
+//! it.
 //!
-//! Today the contract is authored in `nomos-lang-rust` because it was the only provider,
-//! and `Registry::Declare` refuses a second contract for one capability, so nothing here
-//! could declare it even if this crate wanted to. That is the registry protecting the
-//! invariant rather than the layering being right: the contract's home should be below both
-//! providers, and there is no crate there yet. P8-CONTRACT-HOME carries it.
+//! It used to live in `nomos-lang-rust`, because that was the only provider when it was
+//! written. This crate then agreed with its peer by retyping the peer's string constants —
+//! two providers at one band cannot name each other, so there was no other way — and nothing
+//! would have noticed the day one of them was retyped differently. What held the invariant
+//! was `Registry::Declare` refusing a second contract for one capability, which is the
+//! registry compensating for the layering rather than the layering being right.
 //!
-//! What this crate does is *offer*, against a capability it names by string and does not
-//! own. That is exactly the relationship a second provider is supposed to have.
+//! What this crate does is *offer*. That is exactly the relationship a second provider is
+//! supposed to have, and now the first one has it too.
 
+use nomos_cap_syntax::{Capability, CONTRACT_VERSION};
 use nomos_capability::ProviderOffer;
-use nomos_contracts::{
-    Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee, IncrementalGranularity,
-    ProviderId, SchemaId,
-};
-
-/// The capability answered, named by string.
-///
-/// The same string `nomos-lang-rust` uses, written out again rather than imported. Two
-/// providers at one band cannot name each other — `tests/contract` forbids the edge — and
-/// that is the design: what they share is a name and a payload format, which is an
-/// interface, and nothing else.
-pub const CAPABILITY: &str = "nomos.cap.syntax.items";
+use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
 
 pub const PROVIDER: &str = "nomos.lang.rust.scan";
-
-/// The same payload schema, for the same reason.
-///
-/// A schema is the shape of an answer, not a claim about its accuracy — that is what the
-/// guarantee is for. Two providers of one capability that wrote different shapes would
-/// force every consumer to know which one answered, and the point of resolving through a
-/// registry is that it does not have to.
-pub const SCHEMA: &str = "nomos.syntax.items.v1";
-
-pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);
 
 /// What a line-reader can promise.
 ///
@@ -74,16 +57,10 @@ pub fn Provider_Offer() -> ProviderOffer
 {
     return ProviderOffer {
         provider: ProviderId::New(PROVIDER),
-        capability: CapabilityId::New(CAPABILITY),
+        capability: Capability(),
         version: CONTRACT_VERSION,
         guarantee: Declared_Guarantee(),
     };
-}
-
-#[must_use]
-pub fn Payload_Schema() -> SchemaId
-{
-    return SchemaId::New(SCHEMA);
 }
 
 #[cfg(test)]

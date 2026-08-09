@@ -295,6 +295,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-syntax"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-capability"
 version = "0.1.0"
 dependencies = [
@@ -329,6 +337,7 @@ name = "nomos-integration-tests"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
  "nomos-lang-rust",
@@ -342,6 +351,7 @@ name = "nomos-lang-rust"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
@@ -354,6 +364,7 @@ name = "nomos-lang-rust-scan"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",

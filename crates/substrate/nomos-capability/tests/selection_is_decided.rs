@@ -19,7 +19,7 @@ const V1: ContractVersion = ContractVersion::New(1, 0);
 
 fn Capability() -> CapabilityId
 {
-    return CapabilityId::New("nomos.cap.syntax.items");
+    return CapabilityId::New("nomos.cap.test.items");
 }
 
 /// A parse: exact within what it can see, one file at a time.

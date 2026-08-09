@@ -6,12 +6,13 @@
 //! any of them wrong would be invalidated at the wrong time rather than merely labelled
 //! badly.
 
-use crate::guarantee::{Declared_Guarantee, Payload_Schema, CAPABILITY, CONTRACT_VERSION, PROVIDER};
+use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::syntax::{ParseFailure, Reading, Read_Source, SyntaxFacts};
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
+use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
 use nomos_contracts::{
-    BuildVariantId, CapabilityId, ConfigurationId, EvidenceClass, GenerationId, ProviderId,
-    SnapshotId, SubjectId,
+    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, ProviderId, SnapshotId,
+    SubjectId,
 };
 
 /// Where in the workspace's history a fact is being produced.
@@ -61,7 +62,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
     // modification time, which would make an untouched file look changed after a
     // checkout.
     let key = nomos_analysis::FactKey {
-        contract: CapabilityId::New(CAPABILITY),
+        contract: Capability(),
         contract_version: CONTRACT_VERSION,
         subject,
         semantic_inputs: InputDigest::Of(&[source.as_bytes()]),

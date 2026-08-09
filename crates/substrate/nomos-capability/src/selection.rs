@@ -233,7 +233,7 @@ mod tests
     {
         return ProviderOffer {
             provider: ProviderId::New(provider),
-            capability: CapabilityId::New("nomos.cap.syntax.items"),
+            capability: CapabilityId::New("nomos.cap.test.items"),
             version: ContractVersion::New(1, 0),
             guarantee,
         };

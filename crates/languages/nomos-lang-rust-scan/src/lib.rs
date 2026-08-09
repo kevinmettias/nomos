@@ -39,9 +39,6 @@ mod guarantee;
 mod provider;
 mod scan;
 
-pub use guarantee::{
-    Declared_Guarantee, Payload_Schema, Provider_Offer, CAPABILITY, CONTRACT_VERSION, PROVIDER,
-    SCHEMA,
-};
+pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
 pub use provider::{Encode_Payload, FactContext, Materialize};
 pub use scan::{ItemKind, Scan, ScannedFile, ScannedItem, Visibility};

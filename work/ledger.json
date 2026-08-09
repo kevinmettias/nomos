@@ -1285,7 +1285,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P8-SECOND-PROVIDER"
       ],
@@ -1308,7 +1308,25 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ssed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-cap-syntax v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-syntax)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_syntax-15fece4fc590b71c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0d15ec647d8d8ae9.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-a58c109867fe042c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-7c524ccf5f5374ad.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-61dd92c8a1297c60.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-c0d3013487db468f.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-6dea91e8c3074c08.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-aa5222c5e1f41e84.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-965059082ad6841b.exe)\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n",
+        "verified_at": 1786267999
+      }
     }
   ]
 }

@@ -32,6 +32,10 @@ const BANDS: &[(&str, u32)] = &[
     // that resolves a provider through it.
     ("nomos-capability", 21),
     ("nomos-analysis", 22),
+    // A capability contract sits above the registry that resolves it and below every
+    // provider that offers against it. Not beside the providers: an agreement that lives
+    // with one party to it is that party's to change, and the other cannot see the file.
+    ("nomos-cap-syntax", 23),
     // Language providers sit above analysis because they produce the facts it stores,
     // and nothing sits above them but a composition root. They reach each other not at
     // all: two languages are two providers of one capability, and the registry is the
@@ -215,6 +219,123 @@ fn Test_Dependencies_Should_Run_Strictly_Downward()
             );
         }
     }
+}
+
+/// The prefix every capability id in this workspace carries.
+const CAPABILITY_PREFIX: &str = "nomos.cap.";
+
+/// A capability id is written in one crate's library source and nowhere else.
+///
+/// A capability contract is the agreed meaning of a question and the ceiling on what any
+/// answer may claim, and an agreement is not the property of one party to it. Two crates
+/// spelling one capability id are two parties who agree because somebody retyped a string,
+/// and nothing notices the day one of them is retyped differently.
+///
+/// That is not hypothetical. `nomos.cap.syntax.items` was declared in `nomos-lang-rust` and
+/// spelled again in `nomos-lang-rust-scan`, which offers against it and cannot name its
+/// peer — two providers of one capability sit at the same band and the rule above forbids
+/// the edge. The remedy is a home below both, and `nomos-cap-syntax` is it.
+///
+/// # Why only `src`
+///
+/// A declaration is library code. A test may name any capability it likes, including one
+/// another crate declares, because naming is not declaring — `tests/integration` asserts
+/// over `nomos.cap.syntax.items of alpha/one.rs` and is not a second party to anything.
+#[test]
+fn Test_A_Capability_Id_Should_Be_Written_In_One_Crate()
+{
+    let workspace = Workspace::Load();
+    let mut spelled_by: std::collections::BTreeMap<String, BTreeSet<String>> =
+        std::collections::BTreeMap::new();
+
+    for member in workspace.Members()
+    {
+        let source_root = member.root.join("src");
+        if !source_root.is_dir()
+        {
+            continue;
+        }
+
+        for file in Source_Files(&source_root)
+        {
+            let Ok(text) = std::fs::read_to_string(&file)
+            else
+            {
+                continue;
+            };
+
+            for line in text.lines()
+            {
+                let trimmed = line.trim();
+                // A capability named in prose is a reference, not a declaration. Every
+                // doc comment in this workspace that explains a capability would
+                // otherwise read as a second party to it.
+                if trimmed.starts_with("//")
+                {
+                    continue;
+                }
+
+                for id in Capability_Ids(trimmed)
+                {
+                    spelled_by.entry(id).or_default().insert(member.name.clone());
+                }
+            }
+        }
+    }
+
+    assert!(
+        !spelled_by.is_empty(),
+        "no capability id was found in any crate's source. Every assertion below iterates \
+         over this map, so an empty one passes having checked nothing — and this workspace \
+         has capabilities"
+    );
+
+    let shared: Vec<(&String, &BTreeSet<String>)> = spelled_by
+        .iter()
+        .filter(|(_, crates)| crates.len() > 1)
+        .collect();
+
+    assert!(
+        shared.is_empty(),
+        "these capability ids are written in more than one crate: {shared:#?}.\n\
+         A capability contract is an agreement, and an agreement is not the property of a \
+         party to it. Move the id to a crate below everything that offers against it, and \
+         let the parties import it."
+    );
+}
+
+/// Every `nomos.cap.…` id in a line, as written.
+fn Capability_Ids(line: &str) -> Vec<String>
+{
+    let mut found = Vec::new();
+    let mut rest = line;
+
+    while let Some(start) = rest.find(CAPABILITY_PREFIX)
+    {
+        let Some(after) = rest.get(start..)
+        else
+        {
+            break;
+        };
+
+        let id: String = after
+            .chars()
+            .take_while(|character| {
+                return character.is_ascii_alphanumeric() || matches!(character, '.' | '_' | '-');
+            })
+            .collect();
+
+        let Some(remainder) = after.get(id.len()..)
+        else
+        {
+            break;
+        };
+
+        found.push(id);
+        rest = remainder;
+    }
+
+    return found;
 }
 
 /// A crate cannot join the workspace without declaring where it sits.

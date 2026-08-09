@@ -14,6 +14,7 @@ publish.workspace = true
 [dependencies]
 nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
+nomos-cap-syntax = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-analysis = { workspace = true }
 

@@ -19,6 +19,12 @@ members = [
     "crates/substrate/nomos-workspace",
     "crates/substrate/nomos-analysis",
 
+    # Band 2 — capability contracts. What providers agree a question means, above the
+    # registry that resolves it and below everything that offers against it. A contract
+    # gets a home here once more than one party names it; until then it may live beside
+    # its only provider.
+    "crates/capabilities/nomos-cap-syntax",
+
     # Band 2 — language providers. The first crates that read code this workspace did
     # not write. Each one offers a capability through the registry and is named by
     # nothing below it, so a language can be added or dropped without a recompile
@@ -67,6 +73,7 @@ nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-capability = { path = "crates/substrate/nomos-capability" }
 nomos-workspace = { path = "crates/substrate/nomos-workspace" }
 nomos-analysis = { path = "crates/substrate/nomos-analysis" }
+nomos-cap-syntax = { path = "crates/capabilities/nomos-cap-syntax" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-integration-tests = { path = "tests/integration" }

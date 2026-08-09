@@ -43,10 +43,7 @@ mod provider;
 mod recognition;
 mod syntax;
 
-pub use guarantee::{
-    Capability_Contract, Declared_Guarantee, Payload_Schema, Provider_Offer, CAPABILITY,
-    CONTRACT_VERSION, PROVIDER, SCHEMA,
-};
+pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
 pub use provider::{Encode_Payload, FactContext, Materialization, Materialize};
 pub use recognition::{Recognition, RUST_EXTENSION};
 pub use syntax::{ItemKind, ParseFailure, Read_Source, Reading, SyntaxFacts, SyntaxItem, Visibility};

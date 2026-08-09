@@ -5,19 +5,9 @@
 //! own work. Upward, `tests/guarantee.rs` asserts one property per axis against what the
 //! provider actually emits, so the declaration is not merely permitted but true.
 
-use nomos_capability::{CapabilityContract, ProviderOffer};
-use nomos_contracts::{
-    Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee, IncrementalGranularity,
-    ProviderId, SchemaId,
-};
-
-/// The capability this provider offers.
-///
-/// Named for what a caller gets — the items a file declares — rather than for how it is
-/// obtained. `nomos.cap.syn.parse` would make the contract a description of this
-/// implementation, and the second provider of the same capability could not honestly
-/// offer it.
-pub const CAPABILITY: &str = "nomos.cap.syntax.items";
+use nomos_cap_syntax::{Capability, CONTRACT_VERSION};
+use nomos_capability::ProviderOffer;
+use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
 
 /// This implementation.
 ///
@@ -26,13 +16,6 @@ pub const CAPABILITY: &str = "nomos.cap.syntax.items";
 /// [`FactVariant::SemanticallyResolved`] — a caller comparing two results needs to see
 /// which one it is looking at without consulting a table.
 pub const PROVIDER: &str = "nomos.lang.rust.syn";
-
-/// The payload schema. Versioned separately from the contract because the shape of the
-/// bytes and the meaning of the capability change for different reasons.
-pub const SCHEMA: &str = "nomos.syntax.items.v1";
-
-/// The contract version. Not the crate version: a caller reads against the contract.
-pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);
 
 /// What this provider claims, on every axis.
 ///
@@ -82,65 +65,33 @@ pub const fn Declared_Guarantee() -> Guarantee
     );
 }
 
-/// The capability's ceiling — the strongest anything may claim for it.
+/// This provider's offer against [`nomos_cap_syntax::Capability_Contract`].
 ///
-/// [`FactVariant::Syntactic`] is the ceiling because the capability is about what a file
-/// says on its face. A compiler-backed provider that resolves names is answering a
-/// different question and belongs behind a different contract; letting it offer this one
-/// at [`FactVariant::SemanticallyResolved`] would mean two providers of one capability
-/// disagreeing about what the capability means.
-///
-/// Completeness and granularity are *not* pinned to what this provider achieves.
-/// [`Assurance::Sound`] and [`IncrementalGranularity::Region`] leave room for a provider
-/// that expands macros or reparses incrementally. A ceiling set to today's best
-/// implementation is a ceiling that has to be raised every time somebody improves
-/// something, and a ceiling that moves is not a ceiling.
-#[must_use]
-pub fn Capability_Contract() -> CapabilityContract
-{
-    return CapabilityContract {
-        id: CapabilityId::New(CAPABILITY),
-        version: CONTRACT_VERSION,
-        summary: "The items a source file declares, as written, with the visibility each \
-                  one declares and a count of the places the parse tree ends in \
-                  unexpanded tokens."
-            .to_owned(),
-        ceiling: Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Region,
-        ),
-    };
-}
-
-/// This provider's offer against [`Capability_Contract`].
+/// The capability, its version and the ceiling this is checked against are all
+/// `nomos-cap-syntax`'s. What is decided here is only what this implementation promises,
+/// which is the one part of the arrangement a provider is entitled to state about itself.
 #[must_use]
 pub fn Provider_Offer() -> ProviderOffer
 {
     return ProviderOffer {
         provider: ProviderId::New(PROVIDER),
-        capability: CapabilityId::New(CAPABILITY),
+        capability: Capability(),
         version: CONTRACT_VERSION,
         guarantee: Declared_Guarantee(),
     };
-}
-
-/// The schema every payload this provider writes is stamped with.
-#[must_use]
-pub fn Payload_Schema() -> SchemaId
-{
-    return SchemaId::New(SCHEMA);
 }
 
 #[cfg(test)]
 mod tests
 {
     use super::*;
+    use nomos_cap_syntax::Capability_Contract;
     use nomos_capability::{Registry, RegistryError, Requirement};
 
+    /// Not "its own contract". This provider does not author the terms it offers under,
+    /// and every test below declares them from `nomos-cap-syntax` for that reason.
     #[test]
-    fn Test_The_Offer_Should_Be_Accepted_Under_Its_Own_Contract()
+    fn Test_The_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
     {
         let mut registry = Registry::New();
         registry
@@ -174,7 +125,7 @@ mod tests
         assert_eq!(
             registry.Offer(overreaching),
             Err(RegistryError::ExceedsCeiling {
-                capability: CapabilityId::New(CAPABILITY),
+                capability: Capability(),
                 provider: ProviderId::New(PROVIDER),
             })
         );
@@ -195,7 +146,7 @@ mod tests
             .expect("the offer is within the ceiling");
 
         let needs_every_item = Requirement::New(
-            CapabilityId::New(CAPABILITY),
+            Capability(),
             CONTRACT_VERSION,
             Guarantee::New(
                 FactVariant::Syntactic,
@@ -226,7 +177,7 @@ mod tests
             .expect("the offer is within the ceiling");
 
         let needs_what_is_there = Requirement::New(
-            CapabilityId::New(CAPABILITY),
+            Capability(),
             CONTRACT_VERSION,
             Guarantee::New(
                 FactVariant::Syntactic,

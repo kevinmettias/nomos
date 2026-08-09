@@ -1,0 +1,18 @@
+[package]
+name = "nomos-cap-syntax"
+version = "0.1.0"
+description = "Band 23. The nomos.cap.syntax.items contract: the agreed meaning of the question both Rust providers answer, owned by neither of them."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No provider. That is the whole content of this crate's position: an agreement is not
+# the property of a party to it, so the contract may not name anything that offers
+# against it. `tests/contract` holds the line — band 23 cannot reach band 25.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+
+[lints]
+workspace = true

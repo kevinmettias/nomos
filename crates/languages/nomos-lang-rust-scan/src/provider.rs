@@ -1,11 +1,12 @@
 //! Turning a scan into a fact the analysis kernel can store.
 
-use crate::guarantee::{Declared_Guarantee, Payload_Schema, CAPABILITY, CONTRACT_VERSION, PROVIDER};
+use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::scan::{Scan, ScannedFile};
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
+use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
 use nomos_contracts::{
-    BuildVariantId, CapabilityId, ConfigurationId, EvidenceClass, GenerationId, ProviderId,
-    SnapshotId, SubjectId,
+    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, ProviderId, SnapshotId,
+    SubjectId,
 };
 
 /// Where in the workspace's history a fact is being produced.
@@ -36,7 +37,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
     let guarantee = Declared_Guarantee();
 
     let key = nomos_analysis::FactKey {
-        contract: CapabilityId::New(CAPABILITY),
+        contract: Capability(),
         contract_version: CONTRACT_VERSION,
         subject,
         // The file text and only the file text, by the same rule and for the same reason as
