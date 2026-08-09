@@ -238,9 +238,18 @@ pub fn Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerp
         let text = archive
             .Read_Text(&entry)
             .map_err(|error| return IngestError::Parse(error.to_string()))?;
-        documents.insert(Within(&entry), ContentHash::Of_Normalized(&text).As_Str().to_owned());
+        documents.insert(Within(&entry), text);
     }
 
+    return Fingerprint_Of(label, &documents);
+}
+
+#[allow(clippy::missing_errors_doc)]
+pub fn Fingerprint_Of(
+    label: &str,
+    documents: &BTreeMap<String, String>,
+) -> Result<RevisionFingerprint, IngestError>
+{
     if documents.is_empty()
     {
         return Err(IngestError::Parse(format!(
@@ -251,7 +260,12 @@ pub fn Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerp
 
     return Ok(RevisionFingerprint {
         label: label.to_owned(),
-        documents,
+        documents: documents
+            .iter()
+            .map(|(path, text)| {
+                return (path.clone(), ContentHash::Of_Normalized(text).As_Str().to_owned());
+            })
+            .collect(),
     });
 }
 
@@ -259,7 +273,7 @@ pub fn Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerp
 ///
 /// Without this every path differs between revisions by the version in its first segment
 /// and every pair reports the whole corpus twice.
-fn Within(entry: &str) -> String
+pub(crate) fn Within(entry: &str) -> String
 {
     return entry.split_once('/').map_or_else(|| return entry.to_owned(), |(_, rest)| return rest.to_owned());
 }

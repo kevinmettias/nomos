@@ -5,6 +5,7 @@
 
 #![forbid(unsafe_code)]
 
+mod archaeology;
 mod archive;
 mod gate;
 mod lineage;
@@ -14,6 +15,10 @@ mod restore;
 mod revisions;
 mod siblings;
 
+pub use archaeology::{
+    DocumentFate, Fate, FillerCensus, Hollow, MemberFate, Regression, RegressionReport,
+    Relocation, Relocations, Revision, SHARED_BY, Tally, Template,
+};
 pub use archive::{Archive, ArchiveError, Archives_In};
 pub use gate::{
     BlockLineage, BlockMismatch, Check_Against_Manifest, GateReport, Parse_Block_Lineage,
@@ -32,8 +37,8 @@ pub use restore::{
     Collision, Extract, Member, Models_In, Origin, Resolve, RestorationReport, Restore, Restored,
 };
 pub use revisions::{
-    Census, DOMAIN_VOLUMES, Fingerprint, Gaps, KindCensus, PairChange, RevisionFingerprint,
-    Revisions_In, Scope, Walk,
+    Census, DOMAIN_VOLUMES, Fingerprint, Fingerprint_Of, Gaps, KindCensus, PairChange,
+    RevisionFingerprint, Revisions_In, Scope, Walk,
 };
 pub use siblings::{
     COMMENTARY, Ingest_Game_Plan, Ingest_Sibling_Suite, LINEAGE_NOTES, Prepare_Commentary_View,

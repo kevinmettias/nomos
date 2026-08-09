@@ -2,8 +2,8 @@
 id: OD-SPEC-002
 type: decision
 title: The regression headline counts lines, not blocks, and 24 of them are separators
-status: open
-version: 1
+status: closed
+version: 2
 authority: canonical-normative-record
 tags:
   - preservation
@@ -69,8 +69,22 @@ Either way the substantive claim the plan makes is unaffected and confirmed: eve
 and every code block in the ten domain volumes is absent from v15.0, which retains 11 table
 rows tree-wide and no code blocks at all.
 
+## Resolution
+
+Closed by P3-REGRESSION, which asserts the first option. The regression headline states the
+block and row counts and quotes the counts register for both readings, so `282` and `6`
+appear as the plan's basis rather than as the report's claim, and the report never counts a
+separator line as content to reach a number.
+
+The substantive claim held and became more exact. All ten domain volumes are absent from
+v15.0 and no path survived at its old location, so every row and every code block went with
+the document carrying it — the loss is of documents, and the rows are lost because of it.
+The reading of v15.0's own retained table stands as recorded here: 11 authored rows, which
+this record names correctly and which the header row kind now resolves as 1 header and 10
+data rows.
+
 ## Status
 
-Open. Recorded before P3-RESTORE builds the report it feeds, because the two readings
+Closed. Recorded before P3-RESTORE built the report it feeds, because the two readings
 differ in what the ingest has to record per row, and discovering that after the fact would
-mean rebuilding it.
+have meant rebuilding it.

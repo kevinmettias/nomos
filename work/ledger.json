@@ -332,7 +332,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P3-ARCHAEOLOGY"
       ],
@@ -349,7 +349,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--test",
+          "regression_report"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_Every_Headline_Clause_Should_Be_Answered_Once ... ok\ntest Test_Every_Restored_Family_Should_Carry_A_Fate ... ok\ntest Test_A_Family_Should_Sum_To_The_Size_The_Counts_Register_Measured ... ok\ntest Test_Every_Quoted_Count_Should_Exist_In_The_Counts_Register ... ok\ntest Test_Every_Entry_Should_Say_What_The_Clause_Resolved_To ... ok\ntest Test_A_Revision_Without_The_Volumes_Should_Be_Refused ... ok\ntest Test_The_Filler_The_Blocklist_Does_Not_See_Should_Be_Named ... ok\ntest Test_The_Records_The_Plan_Calls_New_Should_Be_Relocations ... ok\ntest Test_The_Headline_Should_Reproduce_From_The_Archives ... ok\ntest Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent ... ok\ntest Test_The_Content_That_Really_Went_Should_Be_Named ... ok\ntest Test_The_Summary_Should_Name_What_It_Counted ... ok\ntest Test_Every_Measured_Figure_Should_Reproduce ... ok\ntest Test_An_Ordinary_Pair_Should_Preserve_Every_Member ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.99s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\regression_report.rs (target\\debug\\deps\\regression_report-7eddf9f11408230b.exe)\n",
+        "verified_at": 1786236239
+      }
     },
     {
       "id": "P4-PROJECT",
