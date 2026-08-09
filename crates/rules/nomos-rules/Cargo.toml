@@ -1,0 +1,27 @@
+[package]
+name = "nomos-rules"
+version = "0.1.0"
+description = "Band 3. Rules that judge source, as pure functions over text."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+# A parser, not a scanner. "Is this a declaration" has an exact answer, and a line
+# scanner kept reporting this crate's own test fixtures as real declarations. `full` for
+# every item form; `span-locations` so a refusal can name the line it refused at.
+# `printing` is deliberately absent — nothing here renders tokens back out.
+syn = { version = "2", default-features = false, features = [
+    "full",
+    "parsing",
+    "clone-impls",
+] }
+proc-macro2 = { version = "1", default-features = false, features = [
+    "span-locations",
+] }
+
+[lints]
+workspace = true

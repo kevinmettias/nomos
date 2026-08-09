@@ -39,7 +39,7 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
     // Declared, and checked against `docs/records` in both directions by the test below.
     // Raising it is the deliberate step adding a governing record is meant to cost;
     // OD-COMPLETENESS-001 was the twentieth.
-    assert_eq!(GOVERNING_RECORD_IDS.len(), 20);
+    assert_eq!(GOVERNING_RECORD_IDS.len(), 21);
 }
 
 /// Every record on disk that claims to be canonical and normative is in the store.

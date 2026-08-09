@@ -56,6 +56,13 @@ const BANDS: &[(&str, u32)] = &[
     ("nomos-spec-ingest", 13),
     ("nomos-spec-validate", 14),
     ("nomos-spec-project", 14),
+    // Rules sit above everything they could ever need to judge and below the only thing
+    // that runs them. Deliberately well clear of the language providers at 25: a rule is
+    // a pure function from source text to findings and names no provider today, but the
+    // moment one needs a parsed tree it must be able to reach a provider rather than
+    // vendor a second parser — and a band below them would have forbidden that edge and
+    // made the second parser the easy answer.
+    ("nomos-rules", 30),
     ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.

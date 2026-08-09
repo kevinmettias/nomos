@@ -116,12 +116,23 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md"
         ),
     ),
+    (
+        "docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md",
+        include_str!(
+            "../../../../docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
 ///
 /// Compared against what a seeded store actually holds, so a record that stops being
 /// embedded fails a test rather than quietly leaving the store.
+///
+/// Mirrored by `Test_Every_Canonical_Record_On_Disk_Should_Be_Governing`. That is the
+/// comparison that matters, and it is deliberately not the one against the seeded store:
+/// the store is seeded *from this list*, so comparing the two cannot fail. Six governing
+/// records sat outside it for months for exactly that reason — OD-SPEC-005.
 pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "ARC-SPECDB-001",
     "D-129",
@@ -143,6 +154,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-DETERMINISM-001",
     "OD-LEDGER-003",
     "OD-COMPLETENESS-001",
+    "D-134",
 ];
 
 /// The relation vocabulary the governing records use.

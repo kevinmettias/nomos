@@ -18,6 +18,7 @@
 #![forbid(unsafe_code)]
 
 mod arguments;
+mod check;
 mod corpus;
 mod spec;
 mod work;
@@ -68,12 +69,25 @@ fn main() -> std::process::ExitCode
                 }
             }
         }
+        Some((group, rest)) if group == "check" =>
+        {
+            match check::Parse(rest)
+            {
+                Ok(command) => check::Run(&command, &mut stdout, &mut stderr).Value(),
+                Err(message) =>
+                {
+                    eprintln!("{message}");
+                    check::ExitCode::Usage.Value()
+                }
+            }
+        }
         _ =>
         {
             eprintln!(
                 "usage: nomos <group> <command>\n\n  \
                  work   coordinate concurrent work over this repository\n  \
-                 spec   read the specification store and render its projections"
+                 spec   read the specification store and render its projections\n  \
+                 check  run the rules over a tree and report what they find"
             );
             work::ExitCode::Usage.Value()
         }

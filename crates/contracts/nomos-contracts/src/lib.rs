@@ -31,6 +31,11 @@
 //! | [`Assurance`] | Does the producer of this fact claim soundness or completeness? |
 //!
 //! None of them has a `Default`, and none of them has an `is_ok`.
+//!
+//! [`Finding`] is where several of those answers arrive together about one subject. It
+//! is a type rather than a formatted line because every one of them is destroyed by
+//! printing: prose cannot be asked whether the rule reached its subject, how the claim
+//! was come by, or whether anything would actually have failed a build over it.
 
 #![forbid(unsafe_code)]
 
@@ -39,6 +44,7 @@ mod authority;
 mod determinism;
 mod enforcement;
 mod evidence;
+mod finding;
 mod guarantee;
 mod identity;
 mod package;
@@ -51,6 +57,7 @@ pub use determinism::{
 };
 pub use enforcement::{EnforcementBreach, EnforcementReach, EnforcerRef, GateCategory};
 pub use evidence::EvidenceClass;
+pub use finding::Finding;
 pub use guarantee::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 pub use identity::{
     BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, Digest128, GenerationId,

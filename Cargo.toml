@@ -32,6 +32,12 @@ members = [
     "crates/languages/nomos-lang-rust",
     "crates/languages/nomos-lang-rust-scan",
 
+    # Band 3 — rules. The first thing here that judges code rather than paperwork. A
+    # rule is a pure function from source text to findings: it names no language
+    # provider and opens no file, so the caller decides what tree is being judged and a
+    # test can hand it code that no longer exists anywhere.
+    "crates/rules/nomos-rules",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -76,6 +82,7 @@ nomos-analysis = { path = "crates/substrate/nomos-analysis" }
 nomos-cap-syntax = { path = "crates/capabilities/nomos-cap-syntax" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
+nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

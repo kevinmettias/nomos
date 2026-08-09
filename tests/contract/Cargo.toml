@@ -8,6 +8,11 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
+# The rule crate, for recognising a declared universe in a file. Named here rather
+# than reimplemented: `nomos check` runs the same recognition, and two scanners for one
+# rule is how they come to disagree. Band 3 observed from band 100, which is the
+# direction this crate exists to watch.
+nomos-rules = { workspace = true }
 serde_json = { workspace = true }
 
 [lints]

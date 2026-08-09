@@ -677,6 +677,10 @@ impl Table
         };
     }
 
+    /// Every table in the schema — a list kept beside the enum, which the compiler does
+    /// not check against the schema it claims to enumerate.
+    ///
+    /// Mirrored by `Test_Every_Table_In_The_Schema_Should_Be_Declared`.
     #[must_use]
     pub const fn All() -> &'static [Self]
     {

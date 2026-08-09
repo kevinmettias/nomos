@@ -20,6 +20,8 @@ use std::path::{Path, PathBuf};
 /// repository does not contain, and the only thing naming it is the variable. Adding a
 /// fourth corpus without adding it here makes its tests invisible to the count, so the
 /// list is short on purpose and belongs next to the scanner that reads it.
+///
+/// Mirrored by `Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables`.
 pub const CORPUS_VARIABLES: &[&str] =
     &["NOMOS_V14_CORPUS", "NOMOS_SPEC_ARCHIVES", "NOMOS_RUST_CORPUS"];
 
