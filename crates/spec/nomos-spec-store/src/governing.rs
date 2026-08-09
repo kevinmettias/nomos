@@ -45,6 +45,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md"
         ),
     ),
+    (
+        "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md",
+        include_str!(
+            "../../../../docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -60,6 +66,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-SPEC-001",
     "OD-SPEC-002",
     "OD-LEDGER-001",
+    "OD-SPEC-004",
 ];
 
 /// The relation vocabulary the governing records use.

@@ -36,7 +36,7 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
         .collect();
 
     assert!(missing.is_empty(), "not in the store: {missing:?}");
-    assert_eq!(GOVERNING_RECORD_IDS.len(), 8);
+    assert_eq!(GOVERNING_RECORD_IDS.len(), 9);
 }
 
 /// The negative control. Without it the assertion above would pass on a store that
@@ -218,7 +218,7 @@ fn Test_The_Records_Should_Be_Present_As_Disposed_Content()
 {
     let store = Seeded();
 
-    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 8);
+    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 9);
     assert!(store.Count(Table::SourceBlocks).expect("counts") >= 40);
     assert!(store.Count(Table::SourceHeadings).expect("counts") >= 16);
 

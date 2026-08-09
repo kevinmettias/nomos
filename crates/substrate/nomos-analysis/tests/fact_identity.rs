@@ -720,3 +720,18 @@ fn Test_Require_Should_Refuse_A_Fact_Whose_Inputs_Differ()
         "a fact about other inputs was served as this subject's analysis"
     );
 }
+
+#[test]
+fn Test_The_Store_Trait_Should_Be_Sealed()
+{
+    let key = Base();
+    let store = Stored(&key);
+    let sealed: &dyn FactStore = &store;
+
+    assert!(
+        sealed
+            .Current(&key.At(GenerationId::INITIAL), GenerationId::INITIAL)
+            .is_some(),
+        "the trait is reachable as an object and answers nothing"
+    );
+}

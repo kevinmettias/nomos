@@ -120,7 +120,12 @@ impl InvalidationReport
     }
 }
 
-pub trait FactStore
+mod sealed
+{
+    pub trait Sealed {}
+}
+
+pub trait FactStore: sealed::Sealed
 {
     fn Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>;
 
@@ -270,6 +275,8 @@ impl MemoryFactStore
         return true;
     }
 }
+
+impl sealed::Sealed for MemoryFactStore {}
 
 impl FactStore for MemoryFactStore
 {
