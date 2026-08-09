@@ -376,7 +376,12 @@ fn Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables()
     let here: BTreeSet<&str> = VARIABLES.iter().copied().collect();
     let there: BTreeSet<&str> = CORPUS_VARIABLES.iter().copied().collect();
 
-    assert_eq!(here, there);
+    assert_eq!(
+        here, there,
+        "this table and the scanner name different sets of corpus variables. One of them \
+         has stopped looking for a corpus the other still counts, and whichever it is now \
+         reports a hole smaller than the one that exists"
+    );
 }
 
 /// How many gated tests the source holds, per file, repo-relative with forward slashes.

@@ -3,7 +3,7 @@ id: D-129
 type: decision
 title: The specification store is the identity substrate; markdown is an editing surface
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - specification-system
@@ -56,6 +56,34 @@ including whether normative wording moved.
 
 ADR-DOC-001 stays in the store as a superseded node. Its prose is restored from the v14
 corpus in Phase 3; until then it is present by identity and by this edge, not by content.
+
+## What Is Not Built (amended at version 2)
+
+The round trip does not exist. Nothing reads a record out of the store as markdown, and
+nothing writes an edit back. There is no claim, stage, preview or commit against the store
+for an authored record; the preview this record calls mandatory has never run.
+
+So the second paragraph of the decision describes an intent, and until now it read as a
+description of the system. That is the specific failure mode this whole build is organised
+against — a governing record asserting a capability, validated, in the store, and nothing
+exercising it — and the honest correction is to say so in the record rather than to leave a
+reader to discover it from the absence of a command.
+
+What is built is the first paragraph, and it is load-bearing: the store holds identity, a
+`node_id` is stable across databases and travels in a bundle, and `P3-*` restored content
+against those identities across five revisions. Nothing here is retracted. The supersession
+of ADR-DOC-001 stands, because it is about where identity lives and not about how an author
+types.
+
+What follows from the gap, and is the reason it is worth recording rather than merely
+fixing: **markdown files under `docs/records` are still the substrate in practice.** These
+records are authored as files, seeded into the store from those files by `include_str!`, and
+edited as files. The store holds a copy. Identity is stable because the seed says so, not
+because an authoring transaction ever produced it — and the direction of that dependency is
+the opposite of what this record decides.
+
+`P9-AUTHORING` carries the round trip. It is a phase of work rather than a defect to patch,
+and stating the gap is what makes it schedulable.
 
 ## Alternatives Considered
 

@@ -15,7 +15,7 @@ relations:
     type: relates-to
 ---
 
-# A capability contract is not a provider's property
+# A capability contract is not a provider's property, and a contract earns a crate when a second party exists
 
 ## Question
 

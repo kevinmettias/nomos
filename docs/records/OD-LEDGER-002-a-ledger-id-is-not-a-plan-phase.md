@@ -15,7 +15,7 @@ relations:
     type: relates-to
 ---
 
-# A ledger id's number is the ledger's own
+# A ledger id's number is the ledger's own, and P8 is not the plan's Phase 8
 
 ## Question
 

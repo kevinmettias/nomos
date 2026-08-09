@@ -36,7 +36,86 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
         .collect();
 
     assert!(missing.is_empty(), "not in the store: {missing:?}");
-    assert_eq!(GOVERNING_RECORD_IDS.len(), 9);
+    assert_eq!(GOVERNING_RECORD_IDS.len(), 16);
+}
+
+/// Every record on disk that claims to be canonical and normative is in the store.
+///
+/// The direction nothing checked. `GOVERNING_RECORD_IDS` was compared against a seeded store
+/// and never against `docs/records`, so a record could be written, declare itself
+/// `canonical-normative-record`, be cited in commits and other records, and never reach the
+/// store — which is what happened to six of them, including `OD-STORE-001` and
+/// `OD-ANALYSIS-001`, two records that decide how the store and the analysis kernel behave.
+///
+/// `D-129` says the store holds identity and markdown is an editing surface. A governing
+/// record that exists only as a file is that decision failing in the one place it is easiest
+/// to check.
+#[test]
+fn Test_Every_Canonical_Record_On_Disk_Should_Be_Governing()
+{
+    let directory =
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../docs/records");
+    let entries = std::fs::read_dir(&directory)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
+
+    let mut canonical = Vec::new();
+
+    for entry in entries.flatten()
+    {
+        let path = entry.path();
+        if path.extension().is_none_or(|extension| extension != "md")
+        {
+            continue;
+        }
+
+        let Ok(text) = std::fs::read_to_string(&path)
+        else
+        {
+            continue;
+        };
+        if !text.contains("authority: canonical-normative-record")
+        {
+            continue;
+        }
+
+        let Some(id) = text
+            .lines()
+            .find_map(|line| return line.strip_prefix("id: "))
+        else
+        {
+            panic!("{} claims canonical authority and declares no id", path.display());
+        };
+
+        canonical.push(id.trim().to_owned());
+    }
+
+    assert!(
+        !canonical.is_empty(),
+        "no canonical record was found under {}. Every assertion here iterates over that \
+         set, so an empty one passes having checked nothing",
+        directory.display()
+    );
+
+    let unseeded: Vec<&String> = canonical
+        .iter()
+        .filter(|id| return !GOVERNING_RECORD_IDS.contains(&id.as_str()))
+        .collect();
+    assert!(
+        unseeded.is_empty(),
+        "these records claim canonical normative authority and are not seeded into the \
+         store: {unseeded:?}.\n\
+         Add them to RECORDS and GOVERNING_RECORD_IDS in governing.rs. A governing record \
+         that lives only as a file is D-129 failing where it is easiest to check."
+    );
+
+    let phantom: Vec<&&str> = GOVERNING_RECORD_IDS
+        .iter()
+        .filter(|id| return !canonical.iter().any(|found| return found == *id))
+        .collect();
+    assert!(
+        phantom.is_empty(),
+        "the store seeds these and no file under docs/records declares them: {phantom:?}"
+    );
 }
 
 /// The negative control. Without it the assertion above would pass on a store that
@@ -218,7 +297,12 @@ fn Test_The_Records_Should_Be_Present_As_Disposed_Content()
 {
     let store = Seeded();
 
-    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 9);
+    assert_eq!(
+        store.Count(Table::SourceDocuments).expect("counts") as usize,
+        GOVERNING_RECORD_IDS.len(),
+        "one source document per governing record, or a record reached the store as an \
+         identity with no content behind it"
+    );
     assert!(store.Count(Table::SourceBlocks).expect("counts") >= 40);
     assert!(store.Count(Table::SourceHeadings).expect("counts") >= 16);
 

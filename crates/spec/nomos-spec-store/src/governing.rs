@@ -51,6 +51,47 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md"
         ),
     ),
+    // The records the product phases produced. Every one of them was written as a file and
+    // none reached the store until P9-PHASE-GAP went looking — including two that decide
+    // how the store itself behaves.
+    (
+        "docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md",
+        include_str!("../../../../docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md"),
+    ),
+    (
+        "docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md",
+        include_str!(
+            "../../../../docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md"
+        ),
+    ),
+    (
+        "docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md",
+        include_str!(
+            "../../../../docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md"
+        ),
+    ),
+    (
+        "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md",
+        include_str!(
+            "../../../../docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md"
+        ),
+    ),
+    (
+        "docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md",
+        include_str!(
+            "../../../../docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md"
+        ),
+    ),
+    (
+        "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md",
+        include_str!("../../../../docs/records/OD-GATE-001-a-skipped-test-reports-ok.md"),
+    ),
+    (
+        "docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md",
+        include_str!(
+            "../../../../docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -65,8 +106,15 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "D-132",
     "OD-SPEC-001",
     "OD-SPEC-002",
-    "OD-LEDGER-001",
     "OD-SPEC-004",
+    "OD-LEDGER-001",
+    "OD-LEDGER-002",
+    "OD-ANALYSIS-001",
+    "OD-STORE-001",
+    "OD-CAPABILITY-001",
+    "OD-CAPABILITY-002",
+    "OD-GATE-001",
+    "OD-SPEC-005",
 ];
 
 /// The relation vocabulary the governing records use.
@@ -79,6 +127,17 @@ const RELATION_TYPES: &[(&str, &str)] = &[
     ("superseded_by", "supersedes"),
     ("affects", "affected_by"),
     ("affected_by", "affects"),
+    // Its own inverse, because it is symmetric: two records that bear on each other bear on
+    // each other. Added when six product-phase records were first seeded and three of them
+    // used a term this vocabulary did not contain — the foreign key refused them, which is
+    // the mechanism working, and it had never run because the records were files.
+    //
+    // The alternative was rewriting those relations as `affects`, and that would have been
+    // false. OD-CAPABILITY-002 borrows OD-STORE-001's criterion; it does not affect it, and a
+    // wrong edge in the graph this system exists to keep honest is worse than a vocabulary
+    // one term short. Still a seed term: ADR-ARTIFACT-GRAPH-002's vocabulary arrives with the
+    // corpus and supersedes this whole table.
+    ("relates-to", "relates-to"),
 ];
 
 const SEED_TIER: &str = "seed";

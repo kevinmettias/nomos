@@ -1425,7 +1425,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -1440,7 +1440,19 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "exit_code": 0,
+        "output_tail": "number_Its_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.92s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-713a0ed9323c79ba.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-26d438937750d159.exe)\n     Running tests\\family_counts.rs (target\\debug\\deps\\family_counts-43616118a16fd54e.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-8f19bf22c70d1ac2.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-f61000b9415d65f5.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-39bb6b339c4bd6c9.exe)\n     Running tests\\regression_report.rs (target\\debug\\deps\\regression_report-7eddf9f11408230b.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-041670c8391664c9.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-dbbc87a368d07786.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-6e7e7edfd1ddd306.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ebede03d52a4360a.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-7f6a76e168ecb3b4.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-88488aeeb729e3ab.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-09e2aa6a27753fde.exe)\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786299069
+      }
     },
     {
       "id": "P9-DETERMINISM",
@@ -1603,6 +1615,43 @@
           "nomos-analysis",
           "-p",
           "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-AUTHORING",
+      "title": "The markdown round trip D-129 decided and nobody built",
+      "why": "D-129 is a governing record, accepted, in the store, and it says markdown remains the surface people author through via a round trip that reads a record out as markdown and writes the edit back, as a transaction against the store: claim, stage, preview, commit, with the preview mandatory. None of that exists. Nothing reads a record out and nothing writes one back. Amended at version 2 to say so, which makes the gap schedulable and does not close it. What follows is the part that matters: records under docs/records are still the substrate in practice — authored as files, seeded into the store from those files by include_str!, edited as files — so the store holds a copy and the direction of that dependency is the opposite of what D-129 decides.",
+      "done_when": "A record can be read out of the store as markdown byte-identical to what would be seeded from it, and an edit to that markdown can be written back as a transaction that previews what it changes before committing. Identity survives the round trip: the node_id, the blocks and the relations are the same afterwards, and a rename is an ordinary edit. The preview names whether normative wording moved, because D-129 calls that mandatory and a preview that cannot say it is not the preview the record decided. Either docs/records stops being the authoring substrate, or a record states why it remains one and D-129 is amended again to agree with the tree.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec",
+          "crates/host/nomos-cli",
+          "docs/records",
+          "Cargo.toml",
+          "tests/contract"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P9-READ-SURFACE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-cli"
         ],
         "timeout_seconds": 600
       },

@@ -14,7 +14,7 @@ relations:
     type: affects
 ---
 
-# A skipped test reports ok
+# A skipped test reports ok, so the size of the hole is declared rather than the hole being closed
 
 ## Question
 
