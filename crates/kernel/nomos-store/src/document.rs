@@ -31,7 +31,7 @@ impl Authority
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum DocumentKind
 {
-    Snapshot,
+    Commit,
     Fact,
     Finding,
     Run,
@@ -47,7 +47,7 @@ impl DocumentKind
     {
         return match self
         {
-            Self::Snapshot => "snapshot",
+            Self::Commit => "commit",
             Self::Fact => "fact",
             Self::Finding => "finding",
             Self::Run => "run",
@@ -62,7 +62,7 @@ impl DocumentKind
     {
         return match self
         {
-            Self::Snapshot | Self::Fact | Self::Finding | Self::Run => Authority::Observed,
+            Self::Commit | Self::Fact | Self::Finding | Self::Run => Authority::Observed,
             Self::Specification | Self::Record | Self::Projection => Authority::Authored,
         };
     }
@@ -71,7 +71,7 @@ impl DocumentKind
     pub const fn All() -> &'static [Self]
     {
         return &[
-            Self::Snapshot,
+            Self::Commit,
             Self::Fact,
             Self::Finding,
             Self::Run,

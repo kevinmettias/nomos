@@ -4,7 +4,7 @@ use crate::change::{Change, WorkspaceChangeSet};
 use crate::snapshot::WorkspaceSnapshot;
 use crate::variant::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
-use nomos_store::{Authority, DocumentKind, DocumentStore, Recorded, Snapshot, StoreError};
+use nomos_store::{Authority, Commit, DocumentKind, DocumentStore, Recorded, StoreError};
 
 /// What one change actually did.
 ///
@@ -327,17 +327,21 @@ impl Workspace
     /// to a tree. A store that has them can answer every question this workspace answers
     /// without the tree ever having existed for it.
     ///
-    /// # Why the record is a `Fact` and not a `Snapshot`
+    /// # Why the record is a `Fact` and not a kind of its own
     ///
-    /// [`DocumentKind::Snapshot`] is already spoken for: `nomos-store` uses it for its own
-    /// commit manifest, and its index decodes every document of that kind as one. A
-    /// workspace state filed under it would break the index for the whole store.
+    /// Settled by P8-KIND and recorded in `docs/records/OD-STORE-001`. A [`DocumentKind`]
+    /// earns its place when the store must *behave* differently for documents of that kind
+    /// — it decides which authority may hold them, and [`nomos_store::Index`] decodes every
+    /// [`DocumentKind::Commit`] as a commit manifest. Neither is true of a workspace state:
+    /// it is observed, like a fact, and the store makes no structural promise about it.
     ///
-    /// So the kind here means "an observed measurement", which a workspace state honestly
-    /// is, and the schema is what distinguishes it. The collision is worth recording: two
-    /// different things are called a snapshot in this system, and the day a third arrives
-    /// the store's kinds will need a name for a workspace state. That is a change to a
-    /// sealed crate and belongs to an item of its own.
+    /// A kind added for a label rather than for behaviour is the first step to one kind per
+    /// schema, at which point `DocumentKind` says nothing `SchemaId` did not already say.
+    ///
+    /// What was wrong was the *name*. `DocumentKind::Snapshot` never meant a snapshot; it
+    /// meant a commit, and the collision with a workspace state was the confusion this
+    /// comment used to describe as unavoidable. It is now `DocumentKind::Commit`, and the
+    /// two concepts no longer share a word.
     pub fn Record(&self, store: &mut DocumentStore) -> Result<(), WorkspaceError>
     {
         let recorded = Recorded::New(
@@ -346,7 +350,7 @@ impl Workspace
             self.snapshot.Encode(),
         );
 
-        let snapshot = Snapshot::Of(
+        let commit = Commit::Under(
             self.Id(),
             self.snapshot.Variant().Id(),
             self.snapshot.Configuration(),
@@ -354,7 +358,7 @@ impl Workspace
         )
         .Recording(recorded);
 
-        store.Commit(&snapshot)?;
+        store.Commit(&commit)?;
 
         return Ok(());
     }

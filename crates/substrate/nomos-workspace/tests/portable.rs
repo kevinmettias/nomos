@@ -298,13 +298,24 @@ fn Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone()
     assert_eq!(from_store.Id(), workspace.Id());
     assert_eq!(from_store.Len(), members.len());
 
-    // The index has to survive it. A workspace state filed under DocumentKind::Snapshot
-    // would be decoded as a store manifest and break the index for every document in it.
+    // The index has to survive it. A workspace state filed under DocumentKind::Commit
+    // would be decoded as a commit manifest and break the index for every document in the
+    // store — which is the behaviour that decides a kind, and the reason a workspace state
+    // does not get one of its own. OD-STORE-001.
     assert!(store.Index().is_ok(), "the store's index still derives");
     assert_eq!(
         store.Authority(),
         Authority::Observed,
         "a measurement of a tree is observed, not authored"
+    );
+
+    // And the commit it arrived in is reachable under the state it was taken against, which
+    // is what makes "read the store, find the workspace" a question the index can answer
+    // without knowing this crate's schema string.
+    assert_eq!(
+        store.Index().expect("indexes").Commits_Under(workspace.Id()).len(),
+        1,
+        "the workspace's own commit is not filed under the state it recorded"
     );
 }
 

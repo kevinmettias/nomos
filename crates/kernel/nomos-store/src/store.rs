@@ -1,6 +1,6 @@
 use crate::document::{Authority, Document, DocumentId, DocumentKind};
 use crate::index::Index;
-use crate::snapshot::{Snapshot, SNAPSHOT_SCHEMA};
+use crate::commit::{Commit, COMMIT_SCHEMA};
 use crate::StoreError;
 use nomos_contracts::SchemaId;
 use std::collections::BTreeMap;
@@ -30,16 +30,16 @@ impl DocumentStore
         return self.authority;
     }
 
-    pub fn Commit(&mut self, snapshot: &Snapshot) -> Result<DocumentId, StoreError>
+    pub fn Commit(&mut self, commit: &Commit) -> Result<DocumentId, StoreError>
     {
-        if snapshot.records.is_empty()
+        if commit.records.is_empty()
         {
             return Err(StoreError::Vacuous {
-                snapshot: snapshot.snapshot.to_string(),
+                snapshot: commit.snapshot.to_string(),
             });
         }
 
-        for record in &snapshot.records
+        for record in &commit.records
         {
             if !self.authority.Admits(record.kind)
             {
@@ -52,9 +52,9 @@ impl DocumentStore
         }
 
         let manifest = Document::New(
-            DocumentKind::Snapshot,
-            SchemaId::New(SNAPSHOT_SCHEMA),
-            snapshot.Encode()?,
+            DocumentKind::Commit,
+            SchemaId::New(COMMIT_SCHEMA),
+            commit.Encode()?,
         );
         if !self.authority.Admits(manifest.kind)
         {
@@ -65,7 +65,7 @@ impl DocumentStore
             });
         }
 
-        for record in &snapshot.records
+        for record in &commit.records
         {
             let document = record.Document();
             self.documents.insert(document.Id(), document);

@@ -5,7 +5,7 @@ use nomos_contracts::{
 };
 use serde::{Deserialize, Serialize};
 
-pub const SNAPSHOT_SCHEMA: &str = "nomos.snapshot.v1";
+pub const COMMIT_SCHEMA: &str = "nomos.commit.v1";
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Recorded
@@ -35,7 +35,7 @@ impl Recorded
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Snapshot
+pub struct Commit
 {
     pub snapshot: SnapshotId,
     pub variant: BuildVariantId,
@@ -44,10 +44,10 @@ pub struct Snapshot
     pub records: Vec<Recorded>,
 }
 
-impl Snapshot
+impl Commit
 {
     #[must_use]
-    pub fn Of(
+    pub fn Under(
         snapshot: SnapshotId,
         variant: BuildVariantId,
         configuration: ConfigurationId,
@@ -74,7 +74,7 @@ impl Snapshot
     pub fn Encode(&self) -> Result<Vec<u8>, StoreError>
     {
         let manifest = Manifest {
-            schema: SNAPSHOT_SCHEMA.to_owned(),
+            schema: COMMIT_SCHEMA.to_owned(),
             snapshot: self.snapshot,
             variant: self.variant,
             configuration: self.configuration,
@@ -104,10 +104,10 @@ impl Snapshot
         let manifest: Manifest = serde_json::from_slice(bytes)
             .map_err(|error| return StoreError::Malformed(error.to_string()))?;
 
-        if manifest.schema != SNAPSHOT_SCHEMA
+        if manifest.schema != COMMIT_SCHEMA
         {
             return Err(StoreError::Malformed(format!(
-                "{} is not {SNAPSHOT_SCHEMA}",
+                "{} is not {COMMIT_SCHEMA}",
                 manifest.schema
             )));
         }

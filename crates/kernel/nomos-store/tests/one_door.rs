@@ -2,7 +2,7 @@ use nomos_contracts::{
     BuildVariantId, ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId,
 };
 use nomos_store::{
-    Authority, DocumentKind, DocumentStore, Recorded, Snapshot, StoreError, SNAPSHOT_SCHEMA,
+    Authority, Commit, DocumentKind, DocumentStore, Recorded, StoreError, COMMIT_SCHEMA,
 };
 
 fn Digest(seed: u8) -> Digest128
@@ -28,9 +28,9 @@ fn Finding(payload: &str) -> Recorded
     );
 }
 
-fn Taken(seed: u8) -> Snapshot
+fn Taken(seed: u8) -> Commit
 {
-    return Snapshot::Of(
+    return Commit::Under(
         SnapshotId::From_Digest(Digest(seed)),
         BuildVariantId::From_Digest(Digest(2)),
         ConfigurationId::From_Digest(Digest(3)),
@@ -70,9 +70,9 @@ fn Test_A_Reread_Snapshot_Should_Decode_To_What_Was_Committed()
     let mut store = Observed();
     let id = store.Commit(&snapshot).expect("commits");
 
-    let manifest = Snapshot::Decode(&store.Read(id).expect("reads").bytes).expect("decodes");
+    let manifest = Commit::Decode(&store.Read(id).expect("reads").bytes).expect("decodes");
 
-    assert_eq!(manifest.schema, SNAPSHOT_SCHEMA);
+    assert_eq!(manifest.schema, COMMIT_SCHEMA);
     assert_eq!(manifest.snapshot, snapshot.snapshot);
     assert_eq!(manifest.generation, snapshot.generation);
     assert_eq!(manifest.records.len(), snapshot.records.len());
@@ -104,7 +104,7 @@ fn Test_Committing_The_Same_Snapshot_Twice_Should_Address_The_Same_Document()
 fn Test_A_Changed_Record_Should_Address_A_Different_Snapshot()
 {
     let mut store = Observed();
-    let edited = Snapshot::Of(
+    let edited = Commit::Under(
         SnapshotId::From_Digest(Digest(1)),
         BuildVariantId::From_Digest(Digest(2)),
         ConfigurationId::From_Digest(Digest(3)),
@@ -145,7 +145,7 @@ fn Test_The_Index_Should_Reach_Every_Recorded_Document()
     let index = store.Index().expect("indexes");
     let members = index.In_Snapshot(snapshot.snapshot);
 
-    assert_eq!(index.Snapshot_Document(snapshot.snapshot), Some(id));
+    assert_eq!(index.Commits_Under(snapshot.snapshot), vec![id]);
     assert_eq!(members.len(), snapshot.records.len() + 1, "{members:?}");
     for record in &snapshot.records
     {
@@ -166,9 +166,63 @@ fn Test_The_Index_Should_Group_By_Kind_And_Schema()
 
     assert_eq!(index.Of_Kind(DocumentKind::Fact).len(), 2);
     assert_eq!(index.Of_Kind(DocumentKind::Finding).len(), 1);
-    assert_eq!(index.Of_Kind(DocumentKind::Snapshot).len(), 1);
+    assert_eq!(index.Of_Kind(DocumentKind::Commit).len(), 1);
     assert_eq!(index.Of_Schema("nomos.syntax.v1").len(), 2);
     assert!(index.Of_Schema("nomos.absent.v1").is_empty());
+}
+
+/// A workspace state is a tree. A commit is one write against it. Nothing says there is
+/// one of the second per one of the first.
+///
+/// # Why this test exists
+///
+/// The index held one `DocumentId` per `SnapshotId` and silently kept the last. Nothing
+/// looked wrong, because while a commit manifest was called a snapshot, "the snapshot
+/// document for snapshot S" read as a tautology — obviously one per state.
+///
+/// It is not obvious and it is not true. Analyzing a tree, recording what was found, then
+/// analyzing it again for something else produces two commits and no edit between them.
+/// Under the old map the first became unreachable through `Snapshots`, and
+/// `Test_Every_Document_Should_Be_Reachable_From_A_Snapshot` would have started reporting
+/// documents nothing recorded.
+#[test]
+fn Test_Two_Commits_Under_One_Workspace_State_Should_Both_Be_Reachable()
+{
+    let state = SnapshotId::From_Digest(Digest(1));
+    let first = Commit::Under(
+        state,
+        BuildVariantId::From_Digest(Digest(2)),
+        ConfigurationId::From_Digest(Digest(3)),
+        GenerationId::INITIAL,
+    )
+    .Recording(Fact("fn main() {}"));
+    let second = Commit::Under(
+        state,
+        BuildVariantId::From_Digest(Digest(2)),
+        ConfigurationId::From_Digest(Digest(3)),
+        GenerationId::INITIAL,
+    )
+    .Recording(Finding("unused import at nomos.rs"));
+
+    let mut store = Observed();
+    let one = store.Commit(&first).expect("commits");
+    let other = store.Commit(&second).expect("commits");
+
+    assert_ne!(one, other, "two different commits addressed as one document");
+
+    let commits = store.Index().expect("indexes").Commits_Under(state);
+
+    assert_eq!(commits.len(), 2, "one commit under this state is unreachable: {commits:?}");
+    assert!(commits.contains(&one) && commits.contains(&other));
+    assert_eq!(
+        store.Index().expect("indexes").Snapshots(),
+        vec![state],
+        "and both are under one workspace state, not two"
+    );
+    assert!(
+        store.Unreachable().expect("indexes").is_empty(),
+        "a commit that fell out of the index takes its records with it"
+    );
 }
 
 #[test]
@@ -208,7 +262,7 @@ fn Test_Every_Document_Should_Be_Reachable_From_A_Snapshot()
 fn Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store()
 {
     let mut store = Observed();
-    let authored = Snapshot::Of(
+    let authored = Commit::Under(
         SnapshotId::From_Digest(Digest(1)),
         BuildVariantId::From_Digest(Digest(2)),
         ConfigurationId::From_Digest(Digest(3)),
@@ -263,7 +317,7 @@ fn Test_Every_Document_Kind_Should_Belong_To_Exactly_One_Authority()
 fn Test_A_Snapshot_That_Records_Nothing_Should_Be_Refused()
 {
     let mut store = Observed();
-    let empty = Snapshot::Of(
+    let empty = Commit::Under(
         SnapshotId::From_Digest(Digest(1)),
         BuildVariantId::From_Digest(Digest(2)),
         ConfigurationId::From_Digest(Digest(3)),
@@ -304,7 +358,7 @@ fn Test_A_Committed_Document_Should_Not_Change_When_Another_Snapshot_Arrives()
 #[test]
 fn Test_Decoding_Something_That_Is_Not_A_Snapshot_Should_Be_Refused()
 {
-    let refusal = Snapshot::Decode(b"{\"schema\":\"nomos.other.v1\"}").expect_err("must refuse");
+    let refusal = Commit::Decode(b"{\"schema\":\"nomos.other.v1\"}").expect_err("must refuse");
 
     assert!(matches!(refusal, StoreError::Malformed(_)), "{refusal}");
 }

@@ -1,14 +1,14 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::missing_errors_doc)]
 
+mod commit;
 mod document;
 mod index;
-mod snapshot;
 mod store;
 
 pub use document::{Authority, Document, DocumentId, DocumentKind};
 pub use index::Index;
-pub use snapshot::{Manifest, Recorded, Reference, Snapshot, SNAPSHOT_SCHEMA};
+pub use commit::{Commit, Manifest, Recorded, Reference, COMMIT_SCHEMA};
 pub use store::DocumentStore;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -56,8 +56,8 @@ impl core::fmt::Display for StoreError
             ),
             Self::Vacuous { snapshot } => write!(
                 formatter,
-                "snapshot {snapshot} records nothing. Refusing to commit it, because a \
-                 snapshot that recorded nothing is indistinguishable from a run that never \
+                "a commit under snapshot {snapshot} records nothing. Refusing it, because a \
+                 commit that recorded nothing is indistinguishable from a run that never \
                  happened"
             ),
             Self::Malformed(cause) => write!(formatter, "malformed document: {cause}"),
