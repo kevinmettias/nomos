@@ -1871,9 +1871,11 @@
         "resolution": "File",
         "paths": [
           "crates/rules",
-          "crates/contracts/nomos-contracts/src/enforcement.rs",
+          "crates/contracts/nomos-contracts",
           "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store",
           "tests/contract",
+          "tests/integration",
           "docs/records",
           "Cargo.toml"
         ],
