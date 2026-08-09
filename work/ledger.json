@@ -1956,6 +1956,40 @@
         "timeout_seconds": 600
       },
       "verified": null
+    },
+    {
+      "id": "P10-ABANDON-REASON",
+      "title": "Abandoning an item destroys more of the record than crashing does",
+      "why": "Measured against the code rather than the commit message that noticed it. nomos work abandon requires --reason and the ledger drops it. ReleaseOutcome::Abandoned carries reason: String non-optionally, which is the same technique the doc comment on ReleaseOutcome praises for the finished arm - carrying the evidence in the signature so that a release cannot express itself without one. The store then destructures it away: in Release, the Finished arm writes verified = Some(record) and the Abandoned arm is a `{ .. }` pattern that sets state = Ready and nothing else. Adjacent arms of one match, one persisting its evidence and one discarding it. The claim goes to None, the item goes back to Ready, and afterwards nothing on the item says it was ever held. The one reason this ledger does persist belongs to ItemState::Declined, where the doc comment says it is carried in the variant so an item cannot be declined reasonlessly - and it survives because it is part of the state rather than part of the transition. That is the structural line: a reason attached to a state is kept, a reason attached to a transition is not, and only one of the two is enforced at the type level. The consequence inverts the crate own stated intent. item.rs says a lapsed claim does not release itself, and stays visible so that a person can see the work was abandoned rather than never started. So an agent that dies holding a claim leaves a visible record, and an agent that abandons deliberately, having been made to write down why, leaves none. The well-behaved path is the lossy one. Observed on 2026-08-09 releasing P9-ONE-DIRECTION: the reason given said where the work had got to and why it stopped, and it survives only in the message of commit a749f9a, which is the half-recorded shape OD-SPEC-005 and commit 20296d9 both exist to name.",
+      "done_when": "An abandonment is readable from the ledger after the fact. The reason the holder gave, who gave it, and when, survive on the item that was abandoned, and are reachable through the surface that reports an item rather than only by reading the file. A test asserts this over a claim-then-abandon cycle. The negative control is confirmed red: the test must fail when the abandoned arm goes back to discarding the reason, which means asserting the stored text itself and not merely that a field is present. A second control holds the line the crate already draws - abandoning must still return the item to Ready and still clear the claim, because a record of an abandonment must not go on excluding anyone. Whether a lapsed claim is owed the same treatment, which the crate deliberately leaves visible and for which nobody writes a reason, is settled either way in the record rather than left open.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
