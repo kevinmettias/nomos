@@ -1769,6 +1769,39 @@
         "timeout_seconds": 600
       },
       "verified": null
+    },
+    {
+      "id": "P10-FIRST-CHECK",
+      "title": "The enforcement module is declared in full and implemented by nothing",
+      "why": "Measured against the tree rather than the plan: ten public types in nomos-contracts are referenced by no file outside that crate, and four of them - GateCategory, EnforcerRef, EnforcementBreach, EnforcementReach - are the whole of enforcement.rs. It is the only module in that crate that is wholly unimplemented; every other family has consumers, including the four determinism types, which acquired theirs while this item was being written. What enforcement.rs describes is what the plan calls Phase 8: a rules engine, findings, gates, and the commands nomos check and nomos gate. None of the named crates is a workspace member and the binary has two groups, work and spec. A schema is not a feature is this project own rule, and nomos-contracts is the crate whose every type is reimplemented by peers that will never compile it, so a declaration there with no implementation is a published protocol commitment accruing cost. OD-LEDGER-002 recorded the numbering half of this and deliberately opened no item for the work. The wider fact is that nothing in this tree has yet judged anyone code: P8 was six follow-ups to P7, P9 is nine findings against P8 and the tree, and two consecutive batches have produced correction and audit rather than capability.",
+      "done_when": "One rule runs end to end and judges real code. It is reachable from the binary as a command rather than from a test only, it produces a typed Finding rather than a printed line, and the enforcement vocabulary it reports through is the one already declared in nomos-contracts rather than a second one invented next to it. A negative control is confirmed red: code that violates the rule must fail, and the test proving that must fail if the rule is weakened. The rule chosen is the completeness-mirror rule from P9-ONE-DIRECTION, because it is the one rule in this tree with three recorded instances and therefore three historical cases to test a judgment against. Scope is one rule, not three; a second rule is a later item, and this one is done when a single check is honest end to end.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules",
+          "crates/contracts/nomos-contracts/src/enforcement.rs",
+          "crates/host/nomos-cli",
+          "tests/contract",
+          "docs/records",
+          "Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P9-ONE-DIRECTION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
