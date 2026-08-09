@@ -1211,7 +1211,10 @@
       "territory": {
         "resolution": "File",
         "paths": [
+          "crates/contracts/nomos-contracts",
           "crates/substrate/nomos-capability",
+          "crates/substrate/nomos-analysis",
+          "crates/languages",
           "tests/integration",
           "docs/records"
         ],
@@ -1228,7 +1231,15 @@
           "cargo",
           "test",
           "-p",
+          "nomos-contracts",
+          "-p",
           "nomos-capability",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
           "-p",
           "nomos-integration-tests"
         ],
