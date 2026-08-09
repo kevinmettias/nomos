@@ -24,6 +24,9 @@ const BANDS: &[(&str, u32)] = &[
     // which is the entire reason the seam exists.
     ("nomos-platform", 15),
     ("nomos-platform-std", 16),
+    // What the workspace currently is: above the document store it records into, below
+    // everything that keys a fact on a snapshot or a build variant.
+    ("nomos-workspace", 18),
     ("nomos-ledger", 20),
     // The product substrate. Capability sits above the model and below everything
     // that resolves a provider through it.

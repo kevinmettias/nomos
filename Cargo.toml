@@ -16,6 +16,7 @@ members = [
     # Band 2 — substrate. The work ledger and, later, capability and applicability.
     "crates/substrate/nomos-ledger",
     "crates/substrate/nomos-capability",
+    "crates/substrate/nomos-workspace",
     "crates/substrate/nomos-analysis",
 
     # Band 2 — language providers. The first crates that read code this workspace did
@@ -63,6 +64,7 @@ nomos-platform = { path = "crates/platform/nomos-platform" }
 nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
 nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-capability = { path = "crates/substrate/nomos-capability" }
+nomos-workspace = { path = "crates/substrate/nomos-workspace" }
 nomos-analysis = { path = "crates/substrate/nomos-analysis" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-integration-tests = { path = "tests/integration" }
