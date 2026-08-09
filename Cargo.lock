@@ -387,6 +387,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-spec-project"
+version = "0.1.0"
+dependencies = [
+ "nomos-spec-bundle",
+ "nomos-spec-ingest",
+ "nomos-spec-model",
+ "nomos-spec-store",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "serde_yaml_ng",
+]
+
+[[package]]
 name = "nomos-spec-store"
 version = "0.1.0"
 dependencies = [

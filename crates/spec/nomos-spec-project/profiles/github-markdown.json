@@ -1,0 +1,23 @@
+{
+  "id": "github-markdown",
+  "title": "Specification overview",
+  "format": "markdown",
+  "output": "README.projection.md",
+  "sections": [
+    {
+      "title": "Suites",
+      "content": "suites"
+    },
+    {
+      "title": "Decisions",
+      "content": "nodes",
+      "filter": {
+        "kind": "decision"
+      }
+    },
+    {
+      "title": "Documents",
+      "content": "documents"
+    }
+  ]
+}

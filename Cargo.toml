@@ -23,6 +23,7 @@ members = [
     "crates/spec/nomos-spec-bundle",
     "crates/spec/nomos-spec-ingest",
     "crates/spec/nomos-spec-validate",
+    "crates/spec/nomos-spec-project",
 
     # Band 10 — host. Composition roots and binaries.
     "crates/host/nomos-cli",
@@ -52,6 +53,7 @@ nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
 nomos-spec-bundle = { path = "crates/spec/nomos-spec-bundle" }
 nomos-spec-ingest = { path = "crates/spec/nomos-spec-ingest" }
 nomos-spec-validate = { path = "crates/spec/nomos-spec-validate" }
+nomos-spec-project = { path = "crates/spec/nomos-spec-project" }
 
 serde = { version = "1", default-features = false, features = ["derive", "std"] }
 serde_json = "1"

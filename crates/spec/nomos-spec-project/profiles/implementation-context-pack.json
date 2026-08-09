@@ -1,0 +1,26 @@
+{
+  "id": "implementation-context-pack",
+  "title": "Implementation context",
+  "format": "contextpack",
+  "output": "context/implementation.json",
+  "sections": [
+    {
+      "title": "Decisions",
+      "content": "nodes",
+      "filter": {
+        "kind": "decision"
+      }
+    },
+    {
+      "title": "Statements",
+      "content": "statements"
+    },
+    {
+      "title": "Prose",
+      "content": "blocks",
+      "filter": {
+        "kind": "prose"
+      }
+    }
+  ]
+}

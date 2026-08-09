@@ -1,0 +1,19 @@
+{
+  "id": "release-specification",
+  "title": "Releases",
+  "format": "markdown",
+  "output": "spec/releases.md",
+  "sections": [
+    {
+      "title": "Milestones",
+      "content": "nodes",
+      "filter": {
+        "kind": "release"
+      }
+    },
+    {
+      "title": "Relations",
+      "content": "relations"
+    }
+  ]
+}

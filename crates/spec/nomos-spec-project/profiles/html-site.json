@@ -1,0 +1,20 @@
+{
+  "id": "html-site",
+  "title": "Specification site",
+  "format": "html",
+  "output": "site/index.html",
+  "sections": [
+    {
+      "title": "Documents",
+      "content": "documents"
+    },
+    {
+      "title": "Sections",
+      "content": "headings"
+    },
+    {
+      "title": "Source blocks",
+      "content": "blocks"
+    }
+  ]
+}

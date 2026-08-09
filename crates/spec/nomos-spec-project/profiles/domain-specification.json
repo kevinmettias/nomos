@@ -1,0 +1,20 @@
+{
+  "id": "domain-specification",
+  "title": "Domain specification",
+  "format": "markdown",
+  "output": "spec/domain-specification.md",
+  "sections": [
+    {
+      "title": "Documents",
+      "content": "documents"
+    },
+    {
+      "title": "Sections",
+      "content": "headings"
+    },
+    {
+      "title": "Source blocks",
+      "content": "blocks"
+    }
+  ]
+}

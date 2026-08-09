@@ -1,0 +1,22 @@
+{
+  "id": "api-documentation",
+  "title": "Service interfaces",
+  "format": "markdown",
+  "output": "spec/api.md",
+  "sections": [
+    {
+      "title": "Services",
+      "content": "nodes",
+      "filter": {
+        "kind": "service"
+      }
+    },
+    {
+      "title": "Obligations",
+      "content": "statements",
+      "filter": {
+        "kind": "requirement"
+      }
+    }
+  ]
+}

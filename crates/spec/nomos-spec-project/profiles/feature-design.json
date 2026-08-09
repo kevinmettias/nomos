@@ -1,0 +1,26 @@
+{
+  "id": "feature-design",
+  "title": "Feature design",
+  "format": "markdown",
+  "output": "spec/feature-design.md",
+  "sections": [
+    {
+      "title": "Concepts",
+      "content": "nodes",
+      "filter": {
+        "kind": "concept"
+      }
+    },
+    {
+      "title": "Scenarios",
+      "content": "nodes",
+      "filter": {
+        "kind": "scenario"
+      }
+    },
+    {
+      "title": "Relations",
+      "content": "relations"
+    }
+  ]
+}

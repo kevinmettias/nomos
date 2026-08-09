@@ -1,0 +1,20 @@
+{
+  "id": "contract-yaml",
+  "title": "Specification contract",
+  "format": "yaml",
+  "output": "contracts/specification.yaml",
+  "sections": [
+    {
+      "title": "Nodes",
+      "content": "nodes"
+    },
+    {
+      "title": "Relations",
+      "content": "relations"
+    },
+    {
+      "title": "Statements",
+      "content": "statements"
+    }
+  ]
+}

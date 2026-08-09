@@ -36,6 +36,7 @@ const BANDS: &[(&str, u32)] = &[
     ("nomos-spec-bundle", 13),
     ("nomos-spec-ingest", 13),
     ("nomos-spec-validate", 14),
+    ("nomos-spec-project", 14),
     ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.

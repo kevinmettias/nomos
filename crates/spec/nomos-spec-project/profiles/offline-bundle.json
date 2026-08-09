@@ -1,0 +1,48 @@
+{
+  "id": "offline-bundle",
+  "title": "Offline specification",
+  "format": "json",
+  "output": "offline/specification.json",
+  "sections": [
+    {
+      "title": "Suites",
+      "content": "suites"
+    },
+    {
+      "title": "Documents",
+      "content": "documents"
+    },
+    {
+      "title": "Sections",
+      "content": "headings"
+    },
+    {
+      "title": "Blocks",
+      "content": "blocks"
+    },
+    {
+      "title": "Table rows",
+      "content": "rows"
+    },
+    {
+      "title": "Nodes",
+      "content": "nodes"
+    },
+    {
+      "title": "Statements",
+      "content": "statements"
+    },
+    {
+      "title": "Relations",
+      "content": "relations"
+    },
+    {
+      "title": "Lineage",
+      "content": "lineage"
+    },
+    {
+      "title": "Omissions",
+      "content": "omissions"
+    }
+  ]
+}
