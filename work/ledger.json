@@ -1735,6 +1735,40 @@
         "timeout_seconds": 600
       },
       "verified": null
+    },
+    {
+      "id": "P9-ONE-DIRECTION",
+      "title": "A completeness check that runs one direction, three times over",
+      "why": "Three completeness checks in this workspace compared one side against the other and never the reverse, and all three were found by accident. Assert_Complete in nomos-spec-bundle counts every row in the store against every record in the bundle, and a new column exported cleanly until Assert_Columns_Covered was written as its mirror. Import needed the same treatment: Assert_Landed documents itself as \"the mirror of the exporter completeness guard\". GOVERNING_RECORD_IDS was compared against a seeded store and never against docs/records, so six governing records - among them OD-STORE-001 and OD-ANALYSIS-001, which decide how the store and the analysis kernel behave - declared canonical-normative authority, were cited in commits and in other records, and never reached the store. The test that closed it, Test_Every_Canonical_Record_On_Disk_Should_Be_Governing, calls itself \"the direction nothing checked\" in its own doc comment. Each instance was repaired where it was found and the shape was never named, so the fourth one is unguarded and the third was found by hunting rather than by looking it up. That is the argument OD-LEDGER-001 already had to make once and P9-PREDICATE is making again: a defect caught by somebody being careful is not caught.",
+      "done_when": "The rule is written down and enforced rather than remembered. A record names the shape - a completeness assertion compares two sets, and asserting one containment is half a check - and something fails when a one-directional completeness check is added, rather than a reviewer noticing. Enumerating the completeness assertions the workspace already has, each paired with its mirror, is part of the answer and not a substitute for it. Whichever form the enforcement takes, all three instances above would have failed it as originally written, and a test says so.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
