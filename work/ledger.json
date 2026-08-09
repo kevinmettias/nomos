@@ -1466,6 +1466,7 @@
           "crates/substrate",
           "crates/languages",
           "crates/capabilities",
+          "crates/spec/nomos-spec-store",
           "tests/integration",
           "tests/contract",
           "docs/records"
