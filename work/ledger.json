@@ -1656,6 +1656,69 @@
         "timeout_seconds": 600
       },
       "verified": null
+    },
+    {
+      "id": "P9-PREDICATE",
+      "title": "An item's verification is weaker than the gate it stands in for",
+      "why": "work finish runs the item's argv and records the item done if it exits zero. Every item's argv is a cargo test invocation. The gate in .github/workflows/gate.yml is clippy with -D warnings and then cargo test, and the workspace denies unwrap_used, indexing_slicing and arithmetic_side_effects — a panic on the analysis path is a determinism defect rather than a bug, which is why they deny. So an item can be recorded verified while the gate that follows it is red. That is not hypothetical: P9-SKIP and P9-PHASE-GAP were both recorded verified with a clippy error in a file the item had just written, caught by running clippy by hand afterwards. Twice in three items, by somebody being careful — which is the arrangement the ledger exists to stop relying on, and the same sentence OD-LEDGER-001 already had to write once.",
+      "done_when": "An item cannot be finished by a predicate that checks less than the gate does. Either finish refuses an argv that does not cover the gate, or the ledger derives the predicate rather than taking it from the author, or a record states why a weaker predicate is right and what the author is expected to run instead. Whichever is chosen, the two instances above would have failed under it, and a test says so.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli",
+          "docs/records",
+          ".github"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-DEPENDS-ON",
+      "title": "depends_on does not gate a claim, and nothing says whether it should",
+      "why": "P9-README declares depends_on P9-READ-SURFACE. P9-READ-SURFACE is not done, and work list reports P9-README ready. P9-AUTHORING is the same. So depends_on is either advisory documentation or an unenforced constraint, and which one it is has never been stated — a reader of the field cannot tell whether claiming an item with unmet dependencies is forbidden, discouraged, or fine. This is the shape OD-LEDGER-001 names for territory: a field that looks like a mechanism and is a note. It is worth less than territory is, because at least territory refuses an overlapping claim.",
+      "done_when": "Either claim refuses an item whose dependencies are unfinished, or a record states that depends_on is ordering advice and says what it is for, and work list stops reporting such an item with the same word it uses for one that is genuinely claimable. A test covers whichever was chosen, over an item with an unfinished dependency — the case that exists in the ledger right now.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
