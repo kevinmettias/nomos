@@ -1472,10 +1472,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-p9-determinism",
+        "acquired_at": 1786306132,
+        "lease_expires_at": 1786320532
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -1703,9 +1707,9 @@
     },
     {
       "id": "P9-DEPENDS-ON",
-      "title": "depends_on does not gate a claim, and nothing says whether it should",
-      "why": "P9-README declares depends_on P9-READ-SURFACE. P9-READ-SURFACE is not done, and work list reports P9-README ready. P9-AUTHORING is the same. So depends_on is either advisory documentation or an unenforced constraint, and which one it is has never been stated — a reader of the field cannot tell whether claiming an item with unmet dependencies is forbidden, discouraged, or fine. This is the shape OD-LEDGER-001 names for territory: a field that looks like a mechanism and is a note. It is worth less than territory is, because at least territory refuses an overlapping claim.",
-      "done_when": "Either claim refuses an item whose dependencies are unfinished, or a record states that depends_on is ordering advice and says what it is for, and work list stops reporting such an item with the same word it uses for one that is genuinely claimable. A test covers whichever was chosen, over an item with an unfinished dependency — the case that exists in the ledger right now.",
+      "title": "work list calls an item ready when nothing can claim it",
+      "why": "This item was authored on a false premise and is rewritten rather than deleted, because the premise is the interesting part. It said depends_on is unenforced. It is enforced: Claim walks the item's dependencies and returns ClaimRefusal::DependencyUnmet, retryable, exit 3. Verified against the case the item cites — `work claim --item P9-README` answers `refused: P9-README depends on P9-READ-SURFACE, which is Claimed`. The defect is one layer out. `work list` reads the item's state field, which is Ready, and prints the same word it prints for an item anybody can take. An agent picking work off that column burns a round trip per blocked item and learns to distrust the column. Whoever takes this must not add a second enforcement: two guards for one rule is how they come to disagree.",
+      "done_when": "work list distinguishes an item whose dependencies are unfinished from one that is claimable, without consulting a second source of truth about what blocks a claim. A test covers it over an item with an unfinished dependency, and a negative control covers one with none, so the new label cannot be printed for everything. Claim's refusal is unchanged and still tested.",
       "territory": {
         "resolution": "File",
         "paths": [
