@@ -1327,6 +1327,262 @@
         "output_tail": "ssed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-cap-syntax v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-syntax)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_syntax-15fece4fc590b71c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0d15ec647d8d8ae9.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-a58c109867fe042c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-7c524ccf5f5374ad.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-61dd92c8a1297c60.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-c0d3013487db468f.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-6dea91e8c3074c08.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-aa5222c5e1f41e84.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-965059082ad6841b.exe)\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n",
         "verified_at": 1786267999
       }
+    },
+    {
+      "id": "P9-SKIP",
+      "title": "A skipped test must not report ok",
+      "why": "Measured: 697 tests pass with no corpus configured, and 68 of them are corpus-gated — they return early and print ok having read nothing. CI (.github/workflows/gate.yml) sets none of NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES or NOMOS_RUST_CORPUS, so the normalizer reproduction, the byte order mark sweep, the 282/258 and 30/28 counts, restoration, the family counts and the ingestion-order determinism claim are all reporting ok on every pull request without touching their subject. Misconfiguration is already loud — every helper asserts root.is_dir() with the reasoning written at the assertion — so the defect is absence, not error. This is exactly what Test_The_Workspace_Should_Not_Appear_Empty exists to prevent one level up: a check that cannot find its subject must fail loudly rather than quietly verify nothing. The repository states the rule and does not apply it to its own gating.",
+      "done_when": "The set of corpus-gated tests is declared in one place and checked against the source, so a test cannot become gated without appearing in the declaration and a declaration cannot name a test that no longer gates. The three corpus variables are documented together with what each one covers and how many assertions it carries. A run without a corpus reports the count of what it did not check, in a form CI surfaces, rather than leaving 68 ok lines to speak for it. The count is measured rather than estimated, and changing it fails.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract",
+          "docs/records",
+          ".github"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-PHASE-NUMBERS",
+      "title": "The ledger's phase numbers are not the plan's",
+      "why": "The ledger carries six P8-* items, all of them Phase 7 follow-ups. The approved plan's Phase 8 is nomos-rules, nomos-applicability, nomos-findings, nomos-gates, a rules core with three checks, and the check and gate commands — none of which exists. A reader of work list in three months concludes Phase 8 is nearly finished. D-132 already rules that the plan is a game plan rather than sole authority, so this is not a contradiction to be resolved in the plan's favour; it is a legend nobody wrote down.",
+      "done_when": "A decision record states that a ledger id's phase number is the ledger's own and maps each prefix in use to what it actually covers, including that P5 and P6 have no items and why the plan's Phase 8 work is unstarted. No completed item is renamed, and the record states why renaming was rejected — five commit messages name these ids and renaming falsifies them. The ledger validates unchanged.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "run",
+          "-q",
+          "-p",
+          "nomos-cli",
+          "--",
+          "work",
+          "validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-PHASE-GAP",
+      "title": "Phases 5 and 6 are absent rather than declined, and D-129 promises a surface nobody built",
+      "why": "D-129 is a governing record, validated and in the store, and it says markdown remains the surface people author through via a round trip that reads a record out as markdown and writes the edit back. There is no such round trip. Phases 5 and 6 were never put on the ledger at all — not deferred, absent. Compare P3-RESTORE, which was declined with a stated reason and reads as a decision. Skipping them may well be right; what is wrong is that a record asserts a surface exists and nothing records that it does not.",
+      "done_when": "Either items exist for the two phases or a record declines them in the shape P3-RESTORE used, with the reason stated. D-129's round-trip claim is reconciled with the tree: implemented, or amended to say what is not built and what rests on it. If the record is amended, the copy in the store is amended with it — a governing record that disagrees with its own store is worse than either.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records",
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-DETERMINISM",
+      "title": "Nothing in the workspace declares its determinism",
+      "why": "Strategy, DeterminismStrength, ReproducibilityScope and TraceEquivalence are defined in nomos-contracts and implemented by nothing: zero files outside that crate name any of the four. A schema is not a feature is this project's own rule, and it is sitting unenforced in its own contracts crate — the one whose every type is reimplemented by peers that will never compile it, so an unimplemented declaration there is a published protocol commitment accruing cost. The properties are not absent from the code, only from the declarations: Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries and Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts already assert determinism that nothing claims.",
+      "done_when": "Every execution domain that produces a fact declares a Strategy, and each declaration is checked against behaviour rather than asserted — a repeated run under the declared scope produces what the declaration claims, and a domain that cannot meet its declared strength fails a test rather than a review. At least one declaration carries a negative control confirmed red: weakening the implementation must fail the test that claims the property. The existing determinism assertions are attached to the declaration they were always about.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts",
+          "crates/substrate",
+          "crates/languages",
+          "crates/capabilities",
+          "tests/integration",
+          "tests/contract",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-READ-SURFACE",
+      "title": "Four phases of specification system with no way to read it",
+      "why": "nomos has exactly one group: work. Phase 2's stated day-one payoff — ask what the canonical domain model said, verbatim, and get the real rows — is still not answerable from a command line, and Phase 4 shipped fourteen projection profiles and renderers with no command that runs one. The gap was flagged closing P2-BUNDLE and is further away now, because there is more behind it. It also compounds P9-SKIP: the store is built from a corpus that lives outside this repository, so a read command is only as reachable as the corpus, and that has to be said rather than discovered.",
+      "done_when": "A group on the nomos binary answers the query Phase 2 named — a record or table read out verbatim by identifier — and renders at least one Phase 4 profile to a file. A missing or unreadable corpus is reported as an absence with what was expected, never as an empty result. The commands are exercised by a test that runs the built binary rather than calling the library, because the argument parsing is the part that has never run.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/spec",
+          "Cargo.toml",
+          "tests/contract",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P9-SKIP"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-README",
+      "title": "README is hand-maintained where it is supposed to be a profile output",
+      "why": "README, ARCHITECTURE and ARTIFACT_MAP are specified as profile outputs and D-128 is the freshness requirement. P4 is done, README carries no generated marker anywhere in it, and it has been edited by hand — which is the drift the requirement exists to catch, performed by the people who wrote the requirement.",
+      "done_when": "README is produced by a renderer and carries a marker naming what produced it and from what, or a record states that it stays hand-authored and why, naming D-128 and what that costs. Either way a hand edit to a generated file is caught rather than noticed.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project",
+          "crates/host/nomos-cli",
+          "README.md",
+          "tests/contract",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P9-READ-SURFACE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-PUBLIC-API",
+      "title": "The public API snapshot test was never built",
+      "why": "Five anti-leak tests were named. Three are in boundaries.rs, module reachability shipped, and the transport check is legitimately not applicable with no transports. The cargo-public-api snapshot is simply missing: nothing in the tree mentions public_api at all. Without it, a type that leaks out of a crate's surface is a review question, and the other four assertions exist precisely because review questions are the ones that get answered wrong quietly.",
+      "done_when": "Each crate's public surface is checked in as a snapshot and compared by a test, so an addition fails until the snapshot is updated deliberately. The tool's absence on a machine is a failure or an explicitly declared skip counted by P9-SKIP's mechanism — a check that silently does not run is the defect this whole item is about.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract",
+          "Cargo.toml",
+          ".github",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P9-SKIP"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
+    },
+    {
+      "id": "P9-FALLBACK",
+      "title": "Nothing walks the selection the floor bought",
+      "why": "P8-SELECTION made Selection::Weaker reachable and nothing spends it. A caller lowers its floor to Approximate because a parser refuses seven files, the registry hands back the parser and the scanner in order, and Slice::Dispatch asks the parser and degrades the run on refusal — so the coverage the floor admitted is available and unused. The prior question is not the dispatch loop: a FactKey names the provider that answered, so per-subject fallback files one capability's facts under two providers within one run. Whether that is a coherent store or two answers to one question under one address is a decision, and it has to be reached before the loop is written.",
+      "done_when": "The decision is recorded first, against a stated criterion. Then either the run walks the selection per subject — with the store still single-valued for what a file declares at a given generation, and RunReport naming which provider answered for how many subjects — or a record states why per-subject fallback is refused and what a caller should do instead. A negative control confirmed red either way: with fallback, a run where the strong provider refuses must not report the corpus clean.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "crates/languages",
+          "tests/integration",
+          "docs/records"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
