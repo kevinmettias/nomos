@@ -1587,6 +1587,7 @@
         "resolution": "File",
         "paths": [
           "crates/spec/nomos-spec-project",
+          "crates/spec/nomos-spec-store",
           "crates/host/nomos-cli",
           "README.md",
           "tests/contract",
@@ -1606,6 +1607,10 @@
           "test",
           "-p",
           "nomos-spec-project",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-cli",
           "-p",
           "nomos-contract-tests"
         ],
