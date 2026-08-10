@@ -2913,9 +2913,9 @@
       "depends_on": [],
       "blocked": null,
       "claim": {
-        "holder": "claude-lapse-takeover-w16",
-        "acquired_at": 1786344651,
-        "lease_expires_at": 1786355451
+        "holder": "claude-lapse-takeover-w32",
+        "acquired_at": 1786380024,
+        "lease_expires_at": 1786390824
       },
       "verification": {
         "argv": [
@@ -2940,7 +2940,13 @@
           "abandoned_at": 1786344635
         }
       ],
-      "displaced": []
+      "displaced": [
+        {
+          "holder": "claude-lapse-takeover-w16",
+          "acquired_at": 1786344651,
+          "lease_expires_at": 1786355451
+        }
+      ]
     },
     {
       "id": "P10-FACT-BYPASS",
@@ -5125,7 +5131,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -5139,7 +5145,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Be_Refused ... ok\ntest Test_Reopening_Should_Not_Re_Run_Migrations ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n\nrunning 16 tests\ntest Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest Test_A_Census_Should_Narrow_To_One_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-79e22d39019203d6.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-f7dc0d942c75731f.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-9f1e4a630321b491.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-790d1d7a443043a4.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-ad97dbebf370ad64.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786380145,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
@@ -5156,10 +5185,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-submission-validation-w33",
+        "acquired_at": 1786380006,
+        "lease_expires_at": 1786387206
+      },
       "verification": {
         "argv": [
           "cargo",
