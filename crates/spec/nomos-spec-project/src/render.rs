@@ -1,5 +1,8 @@
-use crate::profile::Format;
-use crate::projection::{Item, Projection, Section, DO_NOT_EDIT};
+use crate::format::Format;
+use crate::item::Item;
+use crate::projection::Projection;
+use crate::section::Section;
+use crate::projection::DO_NOT_EDIT;
 use crate::ProjectError;
 use core::fmt::Write as _;
 use serde::Serialize;

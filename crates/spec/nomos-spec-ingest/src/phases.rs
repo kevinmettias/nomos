@@ -1,6 +1,11 @@
+use crate::catalog_report::CatalogReport;
+use crate::catalog_entity::CatalogEntity;
+use crate::statement_divergence::StatementDivergence;
+use crate::recorded_statement::RecordedStatement;
+use crate::statement_report::StatementReport;
+use crate::statement_file::StatementFile;
 use nomos_spec_model::{ContentHash, Is_Normalized, Segment};
 use nomos_spec_store::{SpecificationStore, StoreError};
-use serde::Deserialize;
 
 #[derive(Debug)]
 pub enum IngestError
@@ -40,52 +45,6 @@ impl From<StoreError> for IngestError
     fn from(error: StoreError) -> Self
     {
         return Self::Store(error);
-    }
-}
-
-#[derive(Debug, Deserialize)]
-pub struct RecordedStatement
-{
-    pub id: String,
-    pub kind: String,
-    pub canonical_text: String,
-    pub canonical_hash: String,
-    #[serde(default)]
-    pub source_document: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct StatementFile
-{
-    pub statements: Vec<RecordedStatement>,
-}
-
-/// A statement whose recorded hash does not match its recorded text.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct StatementDivergence
-{
-    pub id: String,
-    pub recorded: String,
-    pub recomputed: String,
-    pub text_is_canonical: bool,
-}
-
-#[derive(Debug, Default)]
-pub struct StatementReport
-{
-    pub ingested: u32,
-    pub divergences: Vec<StatementDivergence>,
-    pub non_canonical_text: Vec<String>,
-}
-
-impl StatementReport
-{
-    #[must_use]
-    pub fn Passed(&self) -> bool
-    {
-        return self.divergences.is_empty()
-            && self.non_canonical_text.is_empty()
-            && self.ingested > 0;
     }
 }
 
@@ -224,32 +183,6 @@ fn Store_Text(
         .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
 
     return Ok(());
-}
-
-#[derive(Debug, Deserialize)]
-pub struct CatalogEntity
-{
-    pub id: String,
-    pub kind: String,
-    #[serde(default)]
-    pub title: String,
-    #[serde(default)]
-    pub authority: String,
-    #[serde(default)]
-    pub representation: String,
-    #[serde(default)]
-    pub aliases: Vec<String>,
-}
-
-#[derive(Debug, Default)]
-pub struct CatalogReport
-{
-    pub nodes: u32,
-    pub aliases: u32,
-    pub relations: u32,
-    /// Edges naming an identifier the catalog does not contain, listed per edge rather
-    /// than summarized.
-    pub dangling_edges: Vec<String>,
 }
 
 /// # Errors

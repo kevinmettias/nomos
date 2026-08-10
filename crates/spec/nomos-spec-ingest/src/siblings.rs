@@ -10,7 +10,9 @@
 //! sole authority, and [`Statements_Sourced_Only_From_Commentary`] is that sentence turned
 //! into a query — a rule rather than a convention asking people to remember it.
 
-use crate::archive::{Archive, ArchiveError};
+use crate::suite_report::SuiteReport;
+use crate::archive::Archive;
+use crate::archive_error::ArchiveError;
 use crate::phases::IngestError;
 use nomos_spec_model::{Parse_Record, Segment};
 use nomos_spec_store::{SpecificationStore, StoreError};
@@ -87,25 +89,6 @@ struct SchemaHeader
     id: String,
     #[serde(default)]
     title: String,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct SuiteReport
-{
-    pub suite: String,
-    pub documents: u32,
-    pub blocks: u32,
-    /// Record identifiers, named rather than counted.
-    pub records: Vec<String>,
-    /// Schema node identifiers: the files declaring a shape.
-    pub schemas: Vec<String>,
-    /// The rest of the machine layer: instance documents, not schemas.
-    pub machine_documents: Vec<String>,
-    /// Identifiers another suite already owns, so this suite did not take them.
-    ///
-    /// Named rather than merged. Two suites declaring one identifier is a real ecosystem
-    /// problem and reassigning the node would hide it by making the last writer right.
-    pub contested: Vec<String>,
 }
 
 /// I6 — one sibling suite, as a non-root suite.

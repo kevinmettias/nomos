@@ -15,6 +15,10 @@
 //! Counts are not asserted here. They live in `tests/corpus/families/counts.json` with the
 //! extraction that produced each one, per D-132.
 
+use crate::origin::Origin;
+use crate::collision::Collision;
+use crate::restored::Restored;
+use crate::member::Member;
 use crate::phases::IngestError;
 use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, TableRow, Table_Rows};
 use nomos_spec_store::{SpecificationStore, StoreError};
@@ -30,155 +34,6 @@ const DOMAIN_MODEL: &str = "5. Canonical domain model";
 const GLOSSARY: &str = "Glossary";
 
 const EXTENDED_TERMS: &str = "Extended operational terms";
-
-/// A family v15.0 dropped.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Restored
-{
-    RoadmapMilestone,
-    Scenario,
-    Service,
-    AppendixD,
-    AppendixH,
-    HeadlessInventory,
-    IdeProfile,
-    GlossaryTerm,
-    CanonicalDomainModel,
-}
-
-impl Restored
-{
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::RoadmapMilestone => "roadmap_milestone",
-            Self::Scenario => "scenario",
-            Self::Service => "service",
-            Self::AppendixD => "appendix_d",
-            Self::AppendixH => "appendix_h",
-            Self::HeadlessInventory => "headless_inventory",
-            Self::IdeProfile => "ide_profile",
-            Self::GlossaryTerm => "glossary_term",
-            Self::CanonicalDomainModel => "canonical_domain_model",
-        };
-    }
-
-    /// The node kind a restored member takes.
-    #[must_use]
-    pub const fn Node_Kind(self) -> &'static str
-    {
-        return match self
-        {
-            Self::RoadmapMilestone => "release",
-            Self::Scenario => "scenario",
-            Self::Service => "service",
-            Self::AppendixD => "schema",
-            Self::AppendixH => "section",
-            Self::HeadlessInventory => "inventory",
-            Self::IdeProfile => "projection_profile",
-            Self::GlossaryTerm => "glossary_term",
-            Self::CanonicalDomainModel => "concept",
-        };
-    }
-
-    #[must_use]
-    pub const fn Prefix(self) -> &'static str
-    {
-        return match self
-        {
-            Self::RoadmapMilestone => "RMAP",
-            Self::Scenario => "SCEN",
-            Self::Service => "SVC",
-            Self::AppendixD => "APX-D",
-            Self::AppendixH => "APX-H",
-            Self::HeadlessInventory => "HLS",
-            Self::IdeProfile => "IDE",
-            Self::GlossaryTerm => "GLS",
-            Self::CanonicalDomainModel => "CDM",
-        };
-    }
-
-    /// The volume a family lives in, by filename stem.
-    ///
-    /// Scoped rather than searched tree-wide so a family's membership is the same set the
-    /// register measured. A recognition that matched across every volume would count
-    /// whatever else happened to be shaped like it.
-    #[must_use]
-    pub const fn Volume(self) -> &'static str
-    {
-        return match self
-        {
-            Self::RoadmapMilestone => "08-roadmap",
-            Self::Scenario | Self::AppendixD | Self::GlossaryTerm => "09-reference",
-            Self::Service | Self::CanonicalDomainModel => "02-core",
-            Self::AppendixH => "06-agents",
-            Self::HeadlessInventory | Self::IdeProfile => "07-clients",
-        };
-    }
-
-    #[must_use]
-    pub const fn All() -> &'static [Self]
-    {
-        return &[
-            Self::RoadmapMilestone,
-            Self::Scenario,
-            Self::Service,
-            Self::AppendixD,
-            Self::AppendixH,
-            Self::HeadlessInventory,
-            Self::IdeProfile,
-            Self::GlossaryTerm,
-            Self::CanonicalDomainModel,
-        ];
-    }
-}
-
-/// Where a restored member came from.
-///
-/// A row is addressed as a row and not as the block around it. Thirty concepts all
-/// pointing at one table block is not a lineage, and it is the property the restoration
-/// exists to establish.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Origin
-{
-    Block
-    {
-        ordinal: u32,
-    },
-    Row
-    {
-        block_ordinal: u32,
-        row_ordinal: u32,
-    },
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Member
-{
-    pub id: String,
-    pub family: Restored,
-    /// The name as the document gives it.
-    pub name: String,
-    pub document: String,
-    pub origin: Origin,
-    /// The name an alias resolves, where the document names the member rather than
-    /// numbering it. `None` for a heading whose title is a sentence.
-    pub alias: Option<String>,
-}
-
-/// Two members that would take one identifier.
-///
-/// Refused rather than merged. Merging would give one node two origins and make "which row
-/// did this come from" unanswerable, which is the question the restoration is for.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Collision
-{
-    pub id: String,
-    pub first: String,
-    pub second: String,
-}
 
 #[derive(Clone, Debug, Default)]
 pub struct RestorationReport
@@ -308,19 +163,6 @@ fn Refuse_Collisions(members: &[Member]) -> Result<(), IngestError>
     }
 
     return Ok(());
-}
-
-impl core::fmt::Display for Collision
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(
-            formatter,
-            "{} would identify both \"{}\" and \"{}\". Refusing to mint one node for two \
-             members, because the second's origin would be unrecoverable",
-            self.id, self.first, self.second
-        );
-    }
 }
 
 /// The volume is checked once here rather than at each recognition, because a heading only

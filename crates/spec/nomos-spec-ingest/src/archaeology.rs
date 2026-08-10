@@ -1,12 +1,27 @@
 #![allow(clippy::missing_errors_doc)]
 
+use crate::template::Template;
+use crate::filler_census::FillerCensus;
+use crate::hollow::Hollow;
+use crate::fate::Fate;
+use crate::relocation::Relocation;
+use crate::document_fate::DocumentFate;
+use crate::member_fate::MemberFate;
+use crate::regression_report::RegressionReport;
 use crate::archive::Archive;
 use crate::overlay::Is_Filler;
 use crate::phases::IngestError;
-use crate::restore::{Extract, Member, Models_In, Restored};
-use crate::revisions::{Fingerprint_Of, PairChange, RevisionFingerprint, Walk, Within, DOMAIN_VOLUMES};
+use crate::restore::Extract;
+use crate::member::Member;
+use crate::restore::Models_In;
+use crate::restored::Restored;
+use crate::revisions::Fingerprint_Of;
+use crate::pair_change::PairChange;
+use crate::revisions::RevisionFingerprint;
+use crate::revisions::Walk;
+use crate::revisions::Within;
+use crate::revisions::DOMAIN_VOLUMES;
 use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, TableRow, Table_Rows};
-use core::fmt::Write as _;
 use std::collections::{BTreeMap, BTreeSet};
 
 pub const SHARED_BY: u32 = 3;
@@ -68,285 +83,6 @@ impl Revision
                 return (name.to_owned(), text.clone());
             })
             .collect();
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Fate
-{
-    Preserved
-    {
-        document: String,
-    },
-    Hollowed
-    {
-        document: String,
-        evidence: Hollow,
-    },
-    Mentioned
-    {
-        documents: Vec<String>,
-    },
-    Gone,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Hollow
-{
-    Template
-    {
-        shared_with: u32,
-        declared: Option<&'static str>,
-    },
-    NoBody,
-}
-
-impl Fate
-{
-    #[must_use]
-    pub const fn Label(&self) -> &'static str
-    {
-        return match self
-        {
-            Self::Preserved { .. } => "preserved",
-            Self::Hollowed { .. } => "hollowed",
-            Self::Mentioned { .. } => "mentioned",
-            Self::Gone => "gone",
-        };
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct MemberFate
-{
-    pub id: String,
-    pub family: Restored,
-    pub name: String,
-    pub was: String,
-    pub fate: Fate,
-}
-
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
-pub struct Tally
-{
-    pub preserved: u32,
-    pub hollowed: u32,
-    pub mentioned: u32,
-    pub gone: u32,
-}
-
-impl Tally
-{
-    #[must_use]
-    pub const fn Total(&self) -> u32
-    {
-        return self
-            .preserved
-            .saturating_add(self.hollowed)
-            .saturating_add(self.mentioned)
-            .saturating_add(self.gone);
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Relocation
-{
-    pub to: String,
-    pub from: Vec<String>,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct DocumentFate
-{
-    pub appeared: Vec<String>,
-    pub disappeared: Vec<String>,
-    pub changed: Vec<String>,
-    pub relocated: Vec<Relocation>,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Template
-{
-    pub text: String,
-    pub sections: u32,
-    pub documents: Vec<String>,
-    pub declared: Option<&'static str>,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct FillerCensus
-{
-    pub templates: Vec<Template>,
-    pub declared: Vec<String>,
-    pub stubs: Vec<String>,
-}
-
-impl FillerCensus
-{
-    #[must_use]
-    pub fn Undeclared(&self) -> Vec<&Template>
-    {
-        return self
-            .templates
-            .iter()
-            .filter(|template| return template.declared.is_none())
-            .collect();
-    }
-
-    #[must_use]
-    pub fn Widest_Undeclared(&self) -> Option<&Template>
-    {
-        return self.Undeclared().into_iter().next();
-    }
-}
-
-#[derive(Clone, Debug, Default)]
-pub struct RegressionReport
-{
-    pub from: String,
-    pub to: String,
-    pub documents: DocumentFate,
-    pub members: Vec<MemberFate>,
-    pub filler: FillerCensus,
-}
-
-impl RegressionReport
-{
-    #[must_use]
-    pub fn In(&self, family: Restored) -> Vec<&MemberFate>
-    {
-        return self
-            .members
-            .iter()
-            .filter(|member| return member.family == family)
-            .collect();
-    }
-
-    #[must_use]
-    pub fn Tally(&self, family: Restored) -> Tally
-    {
-        let mut tally = Tally::default();
-
-        for member in self.In(family)
-        {
-            let counter = match member.fate
-            {
-                Fate::Preserved { .. } => &mut tally.preserved,
-                Fate::Hollowed { .. } => &mut tally.hollowed,
-                Fate::Mentioned { .. } => &mut tally.mentioned,
-                Fate::Gone => &mut tally.gone,
-            };
-            *counter = counter.saturating_add(1);
-        }
-
-        return tally;
-    }
-
-    #[must_use]
-    pub fn Named(&self, name: &str) -> Option<&MemberFate>
-    {
-        return self
-            .members
-            .iter()
-            .find(|member| return member.name == name || member.id == name);
-    }
-
-    #[must_use]
-    pub fn Summary(&self) -> String
-    {
-        let documents = self.Documents_Line();
-        let mut lines = vec![format!("{} -> {}", self.from, self.to), documents];
-
-        for family in Restored::All()
-        {
-            if let Some(line) = self.Family_Line(*family)
-            {
-                lines.push(line);
-            }
-        }
-
-        let filler = self.Filler_Line();
-        lines.push(filler);
-
-        return lines.join("\n");
-    }
-
-    /// What moved between the two revisions, at the level of whole documents.
-    fn Documents_Line(&self) -> String
-    {
-        return format!(
-            "  documents: {} appeared, {} disappeared, {} changed in place, {} relocated",
-            self.documents.appeared.len(),
-            self.documents.disappeared.len(),
-            self.documents.changed.len(),
-            self.documents.relocated.len()
-        );
-    }
-
-    /// One family's tallies, or nothing at all when the revision carried no member of it.
-    ///
-    /// A family with a zero total is left out rather than printed as four zeroes, because a
-    /// summary that lists every family the build knows about buries the one that moved.
-    fn Family_Line(&self, family: Restored) -> Option<String>
-    {
-        let tally = self.Tally(family);
-        if tally.Total() == 0
-        {
-            return None;
-        }
-
-        let named = self.Named_Losses(family);
-        let mut line = format!(
-            "  {}: {} preserved, {} hollowed, {} mentioned, {} gone",
-            family.Label(),
-            tally.preserved,
-            tally.hollowed,
-            tally.mentioned,
-            tally.gone
-        );
-        if !named.is_empty()
-        {
-            let _ = write!(line, " ({})", named.join(", "));
-        }
-
-        return Some(line);
-    }
-
-    /// Up to three members of a family that did not survive.
-    ///
-    /// Naming a few is what makes a tally actionable; naming all of them would make the
-    /// summary the report it is supposed to introduce.
-    fn Named_Losses(&self, family: Restored) -> Vec<&str>
-    {
-        return self
-            .In(family)
-            .iter()
-            .filter(|member| return !matches!(member.fate, Fate::Preserved { .. }))
-            .take(3)
-            .map(|member| return member.name.as_str())
-            .collect();
-    }
-
-    /// What the blocklist matched, and the widest thing standing on filler that it did not.
-    fn Filler_Line(&self) -> String
-    {
-        let mut filler = format!(
-            "  filler: {} documents the blocklist matches, {} carrying nothing but filler",
-            self.filler.declared.len(),
-            self.filler.stubs.len()
-        );
-        if let Some(widest) = self.filler.Widest_Undeclared()
-        {
-            let _ = write!(
-                filler,
-                "\n  undeclared: {} sections across {} documents stand on \"{}\"",
-                widest.sections,
-                widest.documents.len(),
-                widest.text.chars().take(72).collect::<String>()
-            );
-        }
-
-        return filler;
     }
 }
 
@@ -958,7 +694,6 @@ fn Stubs(later: &Later) -> Vec<String>
 
     return stubs;
 }
-
 
 #[cfg(test)]
 mod tests

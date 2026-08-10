@@ -3,17 +3,35 @@
 
 mod build;
 mod catalogue;
+mod content;
 mod determinism;
+mod filter;
+mod format;
+mod freshness;
+mod input;
+mod item;
+mod output;
 mod profile;
+mod profile_section;
 mod projection;
 mod render;
+mod section;
 mod select;
 
-pub use build::{Build, Check, Freshness, Output, Stamp, SIDECAR_SUFFIX};
+pub use build::{Build, Check, Stamp, SIDECAR_SUFFIX};
 pub use catalogue::{Catalogue, Shipped, SHIPPED};
+pub use content::Content;
 pub use determinism::ProjectionOutput;
-pub use profile::{Content, Filter, Format, Profile, Section as ProfileSection, SUBJECT};
-pub use projection::{Input, Item, Projection, Section, DO_NOT_EDIT};
+pub use filter::Filter;
+pub use format::Format;
+pub use freshness::Freshness;
+pub use input::Input;
+pub use item::Item;
+pub use output::Output;
+pub use profile::{Profile, SUBJECT};
+pub use profile_section::Section as ProfileSection;
+pub use projection::{Projection, DO_NOT_EDIT};
+pub use section::Section;
 pub use render::Render;
 pub use select::Select;
 

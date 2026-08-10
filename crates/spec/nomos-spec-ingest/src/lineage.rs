@@ -1,24 +1,7 @@
+use crate::recorded_section::RecordedSection;
+use crate::section_lineage::SectionLineage;
 use crate::phases::IngestError;
 use nomos_spec_store::{SpecificationStore, StoreError};
-use serde::Deserialize;
-
-#[derive(Debug, Deserialize)]
-pub struct RecordedSection
-{
-    pub source_document: String,
-    pub source_heading: String,
-    #[serde(default)]
-    pub heading_level: i64,
-    pub disposition: String,
-    #[serde(default)]
-    pub stable_ids: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct SectionLineage
-{
-    pub sections: Vec<RecordedSection>,
-}
 
 #[derive(Debug, Default)]
 pub struct SectionReport

@@ -1,3 +1,7 @@
+use crate::rule::Rule;
+use crate::violation::Violation;
+use crate::rule_outcome::RuleOutcome;
+use crate::rule_result::RuleResult;
 use nomos_spec_model::ContentHash;
 use nomos_spec_store::SpecificationStore;
 
@@ -21,42 +25,6 @@ pub const DECLARED_RULES: &[&str] = &[
     "NSV-PRESERVE-003",
     "NSV-PRESERVE-006",
 ];
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Violation
-{
-    pub subject: String,
-    pub detail: String,
-}
-
-/// What a rule concluded.
-///
-/// `Satisfied` carries what it looked at. A rule that examined nothing and concluded
-/// nothing is wrong is not evidence, and without the count the two are indistinguishable.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum RuleOutcome
-{
-    Satisfied
-    {
-        checked: u32,
-    },
-    Violated(Vec<Violation>),
-    Errored(String),
-}
-
-pub trait Rule
-{
-    fn Id(&self) -> &'static str;
-    fn Describe(&self) -> &'static str;
-    fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome;
-}
-
-#[derive(Clone, Debug)]
-pub struct RuleResult
-{
-    pub id: String,
-    pub outcome: RuleOutcome,
-}
 
 #[derive(Debug)]
 pub struct ValidationRun

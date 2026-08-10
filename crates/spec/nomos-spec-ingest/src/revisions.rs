@@ -9,10 +9,12 @@
 //! Nothing is unpacked and nothing is stored. A fingerprint is a path and a normalized
 //! hash, which is all four sets need, and it keeps 156 MB of archives out of the store.
 
+use crate::kind_census::KindCensus;
+use crate::scope::Scope;
+use crate::pair_change::PairChange;
 use crate::archive::Archive;
 use crate::phases::IngestError;
 use nomos_spec_model::{BlockKind, ContentHash, RowKind, Segment, SourceBlock, Table_Rows};
-use core::fmt::Write as _;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
@@ -28,103 +30,6 @@ pub struct RevisionFingerprint
     /// normalized hash of the document. Normalized rather than verbatim, so a reflow
     /// nobody can see is not reported as a change in place.
     pub documents: BTreeMap<String, String>,
-}
-
-/// What became of every path between two adjacent revisions.
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct PairChange
-{
-    pub from: String,
-    pub to: String,
-    pub appeared: Vec<String>,
-    pub disappeared: Vec<String>,
-    pub changed: Vec<String>,
-    /// Absent in `from`, present in `to`, and present in some revision before `from`.
-    pub reappeared: Vec<String>,
-}
-
-impl PairChange
-{
-    /// Names the pair and the size of each set, then a few members of each.
-    ///
-    /// Never a bare total: "38 disappeared" is the number that starts an argument, and the
-    /// paths are what ends it.
-    #[must_use]
-    pub fn Summary(&self) -> String
-    {
-        let mut line = format!("{} -> {}", self.from, self.to);
-        for (label, set) in [
-            ("appeared", &self.appeared),
-            ("disappeared", &self.disappeared),
-            ("changed in place", &self.changed),
-            ("reappeared", &self.reappeared),
-        ]
-        {
-            if set.is_empty()
-            {
-                continue;
-            }
-            let named: Vec<&str> = set.iter().take(3).map(String::as_str).collect();
-            let _ = write!(
-                line,
-                "\n  {label}: {} ({}{})",
-                set.len(),
-                named.join(", "),
-                if set.len() > named.len() { ", …" } else { "" }
-            );
-        }
-
-        return line;
-    }
-}
-
-/// What a census counted over.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Scope
-{
-    /// The ten volumes the block manifest covers. v15.0 has no such directory at all.
-    DomainVolumes,
-    /// Every markdown document in the revision, wherever it lives.
-    EveryMarkdown,
-}
-
-impl Scope
-{
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::DomainVolumes => "01_authoring/domain_volumes",
-            Self::EveryMarkdown => "every markdown document",
-        };
-    }
-
-    fn Covers(self, path: &str) -> bool
-    {
-        return match self
-        {
-            Self::DomainVolumes => path.contains(DOMAIN_VOLUMES),
-            Self::EveryMarkdown => true,
-        };
-    }
-}
-
-/// Counts of content kinds in one revision, each naming its unit.
-///
-/// Both readings of a table and both readings of a code block, because the plan states
-/// the line counts and the store answers the block counts, and D-132 says a figure that
-/// disagrees is recorded rather than replaced.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
-pub struct KindCensus
-{
-    pub documents: u32,
-    pub documents_with_tables: u32,
-    pub pipe_lines: u32,
-    pub non_separator_rows: u32,
-    pub content_rows: u32,
-    pub fence_lines: u32,
-    pub code_blocks: u32,
 }
 
 /// The revision archives, in version order.

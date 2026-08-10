@@ -1,5 +1,11 @@
-use crate::profile::{Content, Filter, Profile, SUBJECT};
-use crate::projection::{Input, Item, Projection, Section};
+use crate::content::Content;
+use crate::filter::Filter;
+use crate::profile::Profile;
+use crate::profile::SUBJECT;
+use crate::input::Input;
+use crate::item::Item;
+use crate::projection::Projection;
+use crate::section::Section;
 use crate::ProjectError;
 use core::fmt::Write as _;
 use nomos_spec_store::SpecificationStore;
@@ -199,7 +205,7 @@ pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projectio
 fn Selected(
     connection: &Connection,
     profile: &Profile,
-    declared: &crate::profile::Section,
+    declared: &crate::profile_section::Section,
 ) -> Result<Section, ProjectError>
 {
     Refuse_Unhonoured(profile, declared.content, &declared.filter)?;
@@ -239,7 +245,7 @@ fn Inputs_Of(content: Content, items: &[Item]) -> Vec<Input>
 /// is indistinguishable from one whose subject genuinely has nothing to say.
 fn Refuse_Empty(
     profile: &Profile,
-    declared: &crate::profile::Section,
+    declared: &crate::profile_section::Section,
     items: &[Item],
 ) -> Result<(), ProjectError>
 {

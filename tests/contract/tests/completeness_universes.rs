@@ -135,7 +135,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-ingest/src/overlay.rs",
+        path: "crates/spec/nomos-spec-ingest/src/family.rs",
         name: "Family::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
@@ -143,7 +143,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-ingest/src/restore.rs",
+        path: "crates/spec/nomos-spec-ingest/src/restored.rs",
         name: "Restored::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
@@ -177,7 +177,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-project/src/profile.rs",
+        path: "crates/spec/nomos-spec-project/src/content.rs",
         name: "Content::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
@@ -185,7 +185,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-project/src/profile.rs",
+        path: "crates/spec/nomos-spec-project/src/format.rs",
         name: "Format::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

@@ -1,0 +1,9 @@
+//! Where a section came from.
+
+use crate::recorded_section::RecordedSection;
+use serde::Deserialize;
+#[derive(Debug, Deserialize)]
+pub struct SectionLineage
+{
+    pub sections: Vec<RecordedSection>,
+}
