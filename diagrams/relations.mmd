@@ -4,7 +4,8 @@
 graph LR
   subgraph "Relations"
     adr_doc_001["ADR-DOC-001"] -->|"superseded_by"| d_129["D-129"]
-    arc_ecosystem_001["ARC-ECOSYSTEM-001"] -->|"relates-to"| arc_specdb_001["ARC-SPECDB-001"]
+    arc_ecosystem_001["ARC-ECOSYSTEM-001"] -->|"affected_by"| arc_harness_001["ARC-HARNESS-001"]
+    arc_ecosystem_001 -->|"relates-to"| arc_specdb_001["ARC-SPECDB-001"]
     arc_ecosystem_001 -->|"relates-to"| d_085["D-085"]
     arc_ecosystem_001 -->|"relates-to"| d_086["D-086"]
     arc_ecosystem_001 -->|"relates-to"| d_090["D-090"]
@@ -15,6 +16,13 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| od_capability_004["OD-CAPABILITY-004"]
     arc_ecosystem_001 -->|"relates-to"| od_contracts_001["OD-CONTRACTS-001"]
     arc_ecosystem_001 -->|"relates-to"| od_ledger_001["OD-LEDGER-001"]
+    arc_harness_001 -->|"affects"| arc_ecosystem_001
+    arc_harness_001 -->|"relates-to"| od_agent_001
+    arc_harness_001 -->|"relates-to"| od_capability_001["OD-CAPABILITY-001"]
+    arc_harness_001 -->|"relates-to"| od_capability_003["OD-CAPABILITY-003"]
+    arc_harness_001 -->|"relates-to"| od_contracts_002["OD-CONTRACTS-002"]
+    arc_harness_001 -->|"relates-to"| od_package_001["OD-PACKAGE-001"]
+    arc_harness_001 -->|"relates-to"| od_platform_001["OD-PLATFORM-001"]
     arc_specdb_001 -->|"affected_by"| d_129
     arc_specdb_001 -->|"affected_by"| d_130
     arc_specdb_001 -->|"affected_by"| d_131["D-131"]
@@ -63,13 +71,13 @@ graph LR
     d_129 -->|"supersedes"| adr_doc_001
     d_130 -->|"affects"| arc_specdb_001
     d_130 -->|"relates-to"| arc_ecosystem_001
-    d_130 -->|"relates-to"| od_platform_001["OD-PLATFORM-001"]
+    d_130 -->|"relates-to"| od_platform_001
     d_131 -->|"affects"| arc_specdb_001
     d_131 -->|"affects"| d_129
     d_132 -->|"affects"| arc_specdb_001
     d_132 -->|"affects"| d_120
     d_132 -->|"affects"| od_ledger_017["OD-LEDGER-017"]
-    d_132 -->|"affects"| od_package_001["OD-PACKAGE-001"]
+    d_132 -->|"affects"| od_package_001
     d_132 -->|"affects"| od_package_002["OD-PACKAGE-002"]
     d_132 -->|"affects"| od_spec_002
     d_132 -->|"relates-to"| od_ledger_002["OD-LEDGER-002"]
@@ -88,28 +96,31 @@ graph LR
     d_134 -->|"relates-to"| od_rules_002["OD-RULES-002"]
     d_134 -->|"relates-to"| od_trace_001
     od_agent_001 -->|"relates-to"| arc_ecosystem_001
+    od_agent_001 -->|"relates-to"| arc_harness_001
     od_agent_001 -->|"relates-to"| od_contracts_001
     od_agent_001 -->|"relates-to"| od_gate_001
     od_agent_001 -->|"relates-to"| od_ledger_001
     od_agent_001 -->|"relates-to"| od_project_001
     od_analysis_001 -->|"affects"| d_129
     od_analysis_001 -->|"relates-to"| od_analysis_002["OD-ANALYSIS-002"]
-    od_analysis_001 -->|"relates-to"| od_capability_001["OD-CAPABILITY-001"]
-    od_analysis_001 -->|"relates-to"| od_capability_003["OD-CAPABILITY-003"]
+    od_analysis_001 -->|"relates-to"| od_capability_001
+    od_analysis_001 -->|"relates-to"| od_capability_003
     od_analysis_002 -->|"relates-to"| od_analysis_001
     od_analysis_002 -->|"relates-to"| od_capability_002["OD-CAPABILITY-002"]
     od_analysis_002 -->|"relates-to"| od_capability_003
+    od_capability_001 -->|"relates-to"| arc_harness_001
     od_capability_001 -->|"relates-to"| od_analysis_001
     od_capability_001 -->|"relates-to"| od_capability_002
     od_capability_001 -->|"relates-to"| od_capability_003
     od_capability_001 -->|"relates-to"| od_capability_004
-    od_capability_001 -->|"relates-to"| od_contracts_002["OD-CONTRACTS-002"]
+    od_capability_001 -->|"relates-to"| od_contracts_002
     od_capability_002 -->|"relates-to"| od_analysis_002
     od_capability_002 -->|"relates-to"| od_capability_001
     od_capability_002 -->|"relates-to"| od_capability_004
     od_capability_002 -->|"relates-to"| od_rules_001
     od_capability_002 -->|"relates-to"| od_store_001
     od_capability_002 -->|"relates-to"| od_syntax_001["OD-SYNTAX-001"]
+    od_capability_003 -->|"relates-to"| arc_harness_001
     od_capability_003 -->|"relates-to"| od_analysis_001
     od_capability_003 -->|"relates-to"| od_analysis_002
     od_capability_003 -->|"relates-to"| od_capability_001
@@ -142,6 +153,7 @@ graph LR
     od_contracts_001 -->|"relates-to"| arc_ecosystem_001
     od_contracts_001 -->|"relates-to"| od_agent_001
     od_contracts_001 -->|"relates-to"| od_contracts_002
+    od_contracts_002 -->|"relates-to"| arc_harness_001
     od_contracts_002 -->|"relates-to"| od_capability_001
     od_contracts_002 -->|"relates-to"| od_capability_004
     od_contracts_002 -->|"relates-to"| od_completeness_001
@@ -347,6 +359,7 @@ graph LR
     od_model_001 -->|"relates-to"| od_rules_001
     od_model_001 -->|"relates-to"| od_spec_006
     od_package_001 -->|"affected_by"| d_132
+    od_package_001 -->|"relates-to"| arc_harness_001
     od_package_001 -->|"relates-to"| d_134
     od_package_001 -->|"relates-to"| od_ledger_017
     od_package_001 -->|"relates-to"| od_package_002
@@ -356,6 +369,7 @@ graph LR
     od_package_002 -->|"relates-to"| od_gate_002
     od_package_002 -->|"relates-to"| od_ledger_017
     od_package_002 -->|"relates-to"| od_package_001
+    od_platform_001 -->|"relates-to"| arc_harness_001
     od_platform_001 -->|"relates-to"| d_130
     od_platform_001 -->|"relates-to"| od_gate_001
     od_platform_001 -->|"relates-to"| od_ledger_015

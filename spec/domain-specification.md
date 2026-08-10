@@ -11,6 +11,7 @@ profile: domain-specification
 | identity | path | revision | blocks | headings | hash |
 | --- | --- | --- | --- | --- | --- |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 58 | 14 | sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4 |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 30 | 8 | sha256:7f8a419ab2f083e0769c6f6b70adad1818f4983d2e54447924eec4973b05b692 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -100,6 +101,14 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49 | authored | 2 | Conflicts With Existing Decisions |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54 | authored | 2 | What This Record Does Not Do |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57 | authored | 2 | Status |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#1 | authored | 1 | An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#2 | authored | 2 | Question |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#6 | authored | 2 | The Sentence That Decides It |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#12 | authored | 2 | Ownership, Component By Component |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#15 | authored | 2 | What This Record Does Not Decide |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#18 | authored | 2 | Nothing Here Is Built, And That Is The Present Answer |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#23 | authored | 2 | Why Location Will Argue Against This |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#27 | authored | 2 | Alternatives Considered |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1 | authored | 1 | The specification is a database with an enforced preservation ledger |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#2 | authored | 2 | Context |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#6 | authored | 2 | Decision |
@@ -1251,6 +1260,258 @@ enough to enforce exists, has a criterion to be derived from.
 Closed by `P10-ECOSYSTEM-BOUNDARY`. Amended to version 2 by `P10-SEAM-CITATION`, which found
 the seam already recorded in the sibling suites this build ingests, declared the edges to it,
 and adopted `D-122`.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#1
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now · hash: sha256:e8164580ad50ab38188c2673083c6f66108a3481d49f679f20939647af16ef22*
+
+# An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#2
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#3
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Question · hash: sha256:1fcda30be604f78d9c1ac8835d66c2c377d489616488ed25d21522350dc20916*
+
+A design has accumulated for an autonomous engineering harness: a goal above the board, a
+typed work graph, a deterministic scheduler, a context builder, an execution supervisor, a
+model and effort selector, budget accounting, run history, and a workspace materialization
+step that installs an agent's integration files for the length of a run and removes them
+afterwards. It was proposed as `crates/autonomous/nomos-*`, packaged as a Nomos capability,
+with agent runtimes underneath as adapters.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#4
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Question · hash: sha256:b30ea002e96770a7a31e061ba96308d228a18d260c1301e8ea8d8209b726fce9*
+
+`ARC-ECOSYSTEM-001` decides ownership by semantics rather than by location, and it does not
+answer this. It answers the four products and the two crossings it drew. A harness is not
+one subsystem, and asking which of the four owns *it* produces an argument rather than an
+answer, because the honest answer differs component by component.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#5
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Question · hash: sha256:1d4532b56628a2db780736f751f95204140d6a2d50602a7e9afcff084b1ad71f*
+
+The cost of leaving it open is the cost that record names for itself: work accumulated across
+an unstated seam has to be re-litigated. The design had already reached crate names, and a
+crate name is the placement made rather than proposed.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#6
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / The Sentence That Decides It · hash: sha256:e6595e336ed68b005d276fcbc8491885256c528073807a32b68e3450051a5ebf*
+
+## The Sentence That Decides It
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#7
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / The Sentence That Decides It · hash: sha256:8cdd3b57df0ce3089155f81d8bf274fa5171032bdc0d31c14642da22c45cd787*
+
+> **The scheduler decides what should run. Coordination decides whether it can run now. The
+> executor decides how to perform the assigned step.**
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#8
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / The Sentence That Decides It · hash: sha256:d54e7a8ccf181186c712b8cb9086e03df72f372f4e0d6a356b1e11f408f84c91*
+
+Three questions, and each has a different owner because each has a different subject.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#9
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / The Sentence That Decides It · hash: sha256:acb6a170f5845752a8d2b2aa819d568f15e7a51411dcca9127a8a211b328aa4b*
+
+*What should run* is a question about a codebase. It cannot be asked without one: its
+answer depends on which rules bind, which obligations are unmet, and what a change is
+supposed to achieve. `ARC-ECOSYSTEM-001` grants Nomos "change planning and the validation
+that execution satisfied it", and that sentence is this question.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#10
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / The Sentence That Decides It · hash: sha256:dfb8295d87a2e9985844e3eced124d8dc7d8aefa5175b3ac988262551b50e55c*
+
+*Whether it can run now* is a question about resources. Territory, leases, concurrency,
+whether a machine has the executable. Nothing in it mentions software engineering, and the
+same machinery would be correct under a product that had nothing to do with code.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#11
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / The Sentence That Decides It · hash: sha256:47247435db3aa28f4517be64f3c9e773634ed3ea2414c303791a0203f2dc00f6*
+
+*How to perform the step* is a question for whatever performs it — a model, a compiler, a
+test runner, a person. It is the executor's, and `OD-AGENT-001`'s reasoning applies to it
+directly: an executor that also decides the process is deciding through the least reviewed
+surface in the system.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#12
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:550e344e74900c81e798cb7c0be49a3b757fbcf1c398074b53a5d79c6854ff62*
+
+## Ownership, Component By Component
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#13
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:5728f45e66f685800575f2184419f4cbd84404bb6ecb695f4b06d180bbdf5aab*
+
+| Component | Owner | Why the semantics require it |
+|---|---|---|
+| Goal, design and the work graph | Nomos | The node kinds are engineering operations and the edges are rule barriers. A graph whose edges are rule validations cannot be defined without a codebase. |
+| Convergence validation | Nomos | "The validation that execution satisfied it" is Nomos's clause in `ARC-ECOSYSTEM-001`, and a goal satisfied is a claim about a codebase. |
+| Readiness, ordering and dispatch mechanics | XVPE | Computing an eligible set, breaking ties and dispatching a compatible wave is a task scheduler, which is that record's first named example of a generic primitive. |
+| Execution supervision | XVPE | A stalled child, an undrained pipe and a process tree are "a process substrate". Nothing about a hung subprocess is about software engineering. |
+| Selection among admissible executors | XVPE mechanism, Nomos requirement | The optimization is generic. What is being optimized for — which quality floor this step needs and what a failure here costs — is engineering. `OD-CAPABILITY-001` already drew this line once: "the registry ranks; the caller spends". |
+| Context construction | Nomos content, XVPE transport | Which architecture, rules, facts and findings bear on a step is Nomos's subject matter. Budgeting, deduplication and delivery are not. |
+| Budget accounting | XVPE mechanism, Nomos policy | Counting tokens, cost and latency is telemetry. Deciding what a feature is worth spending is an engineering judgment about consequences. |
+| Run history | XVPE store, Nomos content | A storage primitive holds it; what is stored — that this step on this subject was verified by this rule — is a fact about a codebase. |
+| Workspace materialization | XVPE | Staging, backup, journalling, atomic replacement, rollback and recovery are a package platform. `OD-PACKAGE-001` records that this build has no package at all, so nothing here extends an existing family. |
+| The harness as it exists in this repository today | Repository and bootstrap tooling | `AGENTS.md`, `CLAUDE.md`, the skills and the board were written to get this built. Nothing in the list above is built. |
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#14
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:bbb172d8e5ef4a247f0e18ad4ae8ca9a9155de61e40b6458e80bf0ae7a34462a*
+
+Two entries deliberately say two owners. That is not indecision. It is the same shape
+`ARC-ECOSYSTEM-001` used for the crossings it drew: a generic primitive is consumed by
+adaptation, and the adapter carries the meaning while the primitive carries the mechanism.
+A selector that learns what a rule barrier is in order to rank executors is a primitive that
+has been taught software engineering, which that record forbids by name.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#15
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#16
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / What This Record Does Not Decide · hash: sha256:f6f90d735a48c010cc3d4262844245e572b14118f0b74bfb85d78acc45141ad1*
+
+It decides ownership. It decides no mechanism, and several mechanisms are open items held by
+other territories. Reading an answer to any of them out of this record would be reading a
+second authority into it.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#17
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / What This Record Does Not Decide · hash: sha256:6a97d7d118498eb378d11f7325ce5a903e777f2ed14c03c17d2f12433e356e65*
+
+Where the choice of next work is computed, and whether the board computes it at all, belongs
+to `P11-NEXT-WORK`. How engineering readiness is told apart from dispatchability belongs to
+`P11-DISPATCH-SPLIT`. How a stall is distinguished from a long run belongs to
+`P11-EXEC-IDLE`. What a handoff may carry belongs to `P11-AGENT-CONTINUATION`. Whether a
+named choice may be required rather than preferred belongs to `P11-PREFERENCE-STRENGTH`.
+Whether a run's observations may become KWB knowledge belongs to `P11-ECOSYSTEM-UPWARD`, and
+this record does not draw that arrow.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#18
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:15dc001a5e1f7f824f1a010c3307a99daa8f2844fc19e08d77fe763e1be74a50*
+
+## Nothing Here Is Built, And That Is The Present Answer
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#19
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:adf3c45548c2de10a3e032e0e6f6f08a7660a6941a285effe58577f2b5e909c1*
+
+The table above is a rule for placements not yet made. It is not a description of this
+repository, and the distinction matters enough to state rather than imply.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#20
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:e8f9a909ff6b0d137b16cc4ade3dd2f7ebbbe146417ad1a3ddcb0b2d10e72def*
+
+What exists today is bootstrap. The ledger coordinates sessions; the contract file routes an
+agent to authority; two skills carry procedures; the contract tests preserve the workspace.
+`ARC-ECOSYSTEM-001` already names the ledger and the contract tests as things whose address
+is not their ownership, and this record adds the rest of the harness to that list rather than
+removing any of it.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#21
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:bacf7d10040f40b8370c6eb7ec1170017329a624ac69294c4b7e60f695fa6dd9*
+
+So the answer to "is the harness a product surface" is **not yet, and not by accumulation**.
+A component becomes one when something is built to the description in the table, under the
+owner the table names. Until then the correct reading of every file in this repository that
+looks like harness machinery is the sentence `ARC-ECOSYSTEM-001` wrote for exactly this: what
+was written to get Nomos built is not thereby part of Nomos.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#22
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:d42bedfec8c57b1c01223b54f8203973427dc4926abf5f7ddffc7cc94b6cf486*
+
+What would change it, stated so that a later reader does not have to guess: a component
+leaves bootstrap when it is required by something other than the development of this
+repository. Not when it is good, not when it is reusable, and not when a second project
+copies it — `ARC-ECOSYSTEM-001`'s anti-drift clause already refuses reuse as a criterion,
+and this is that clause applied to the harness.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#23
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:826351b3ab774df283282aa638ab4706b60a8fbcb78c0deb68d48b39efa02575*
+
+## Why Location Will Argue Against This
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#24
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:6d0572836a4e9e203b362144468c38327edd659a8a6d894ac88236834ed75779*
+
+The prediction is worth writing down because the argument will be made, and it will be made
+by someone reading the tree rather than this record.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#25
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:04143efd61ab7143f614cc922de147de864d885d8467d7525eaf295bd3d7035e*
+
+Every component in the table that gets built first will be built here, in a crate named
+`nomos-something`, because that is where the work is and where the tests are. `P11-EXEC-IDLE`
+will land wall and idle bounds in `nomos-platform`. A selector, if one is written, will be
+written beside the registry it consults. Each of those is a bootstrap placement and none of
+them is evidence.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#26
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:88c180309144d48021d988f8f868948bcf85060fa9fa94e10eb614a26696810b*
+
+`ARC-ECOSYSTEM-001` supplies the rule that disposes of the argument in advance — current
+repository location alone does not make something Nomos — and this record is the reason it
+will need to be cited: a harness is the case most likely to be argued from its address,
+because its address is the only thing about it that exists.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#27
+
+*revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#28
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:fcd630e9556d3c04d5a4b998ceeb11b37d9cde748544b63ec56850d7adc4b934*
+
+**One owner for the whole harness.** Rejected because the components do not share a subject.
+Whichever owner is chosen, at least three entries in the table are wrong under it, and a
+record that is wrong in three places is cited for the two it got right.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#29
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:3e55c056638dc14e2b398f78c85432339acf0e63ccb99353d6c673f69e015198*
+
+**Defer until something is built.** Rejected on `ARC-ECOSYSTEM-001`'s own reasoning: the
+longer work accumulates across an unstated seam, the more of it is re-litigated. The design
+reached crate names before this record existed, which is the deferral already failing once.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#30
+
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:ed4fd4ccc2058b20df5f1675de19a290868e849d3d9d8af37e97a9dadb15ac38*
+
+**Decide it in `AGENTS.md`.** Refused, and this is the second time. `OD-AGENT-001` refused to
+put the ecosystem boundary in an instruction file because such a file is read by a machine
+every session and reviewed by a person approximately never, which promotes an undecided
+architecture to normative status through the least reviewed surface in the repository.
+`ARC-ECOSYSTEM-001` exists because of that refusal, and this record exists because that
+record left a subsystem it did not reach.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 

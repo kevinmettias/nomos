@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:90459fe9c8d3bffd247c0cd1cb398050872eff8583d821cb7532f4b50b2329c3",
-  "inputs_digest": "sha256:d346fc2ed7e6d97e21cf888f14a5bd11770f4d0b048fec6691684e735f1f34e2",
+  "content_digest": "sha256:04ca0980dad3b864d15c70d6677813e97d94ff0aa546ffa76665a3253102c678",
+  "inputs_digest": "sha256:418e9fe09c33d62903d6c8983cbd16351dc624e4dee428eaa9a94499c3f78227",
   "sections": [
     [
       "Documents",
-      71
+      72
     ],
     [
       "Sections",
-      673
+      681
     ],
     [
       "Source blocks",
-      2650
+      2680
     ]
   ],
   "inputs": [
@@ -24,6 +24,11 @@
       "content": "documents",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored",
       "hash": "sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored",
+      "hash": "sha256:7f8a419ab2f083e0769c6f6b70adad1818f4983d2e54447924eec4973b05b692"
     },
     {
       "content": "documents",
@@ -444,6 +449,46 @@
       "content": "headings",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57",
       "hash": "sha256:1d39f84ea80004933a0e437d0063286348516124238c3f2daaa9465e43c157fd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#1",
+      "hash": "sha256:b62a74b07078efaf970eea7da6259d3ae001334326be01ca98145a5acccb1a59"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#2",
+      "hash": "sha256:424cfac96171424707dc407139978626bb1f4138e250f94b97b5badca82c96ce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#6",
+      "hash": "sha256:1aed6489083d1877c27b43705cdd2c3269682d63ca000646a3b8d0661864c4fe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#12",
+      "hash": "sha256:7153bfd44230db559b1ae652e70da5102086b5683865906d7fcbbc0522768e6e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#15",
+      "hash": "sha256:ed2445f22892b828771ef7e43714f37c4e425d53d242ca79fdba854ada46e8eb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#18",
+      "hash": "sha256:92decee0ec830a99136cefc88134f71d9c8500ab057fb5012461737e0c522086"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#23",
+      "hash": "sha256:f552badcaff84c9886b163ba67821d2b74710fd644928b2917892704274910ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#27",
+      "hash": "sha256:4023894e023b0e709de4301687eaca33fa059d509e65fa23c7112dfebe6021b0"
     },
     {
       "content": "headings",
@@ -4029,6 +4074,156 @@
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#58",
       "hash": "sha256:fd2661e7493ebad2777a2d7fbb5bb66670c0ee20b7fd671efa9c722595bcf869"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#1",
+      "hash": "sha256:e8164580ad50ab38188c2673083c6f66108a3481d49f679f20939647af16ef22"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#3",
+      "hash": "sha256:1fcda30be604f78d9c1ac8835d66c2c377d489616488ed25d21522350dc20916"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#4",
+      "hash": "sha256:b30ea002e96770a7a31e061ba96308d228a18d260c1301e8ea8d8209b726fce9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#5",
+      "hash": "sha256:1d4532b56628a2db780736f751f95204140d6a2d50602a7e9afcff084b1ad71f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#6",
+      "hash": "sha256:e6595e336ed68b005d276fcbc8491885256c528073807a32b68e3450051a5ebf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#7",
+      "hash": "sha256:8cdd3b57df0ce3089155f81d8bf274fa5171032bdc0d31c14642da22c45cd787"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#8",
+      "hash": "sha256:d54e7a8ccf181186c712b8cb9086e03df72f372f4e0d6a356b1e11f408f84c91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#9",
+      "hash": "sha256:acb6a170f5845752a8d2b2aa819d568f15e7a51411dcca9127a8a211b328aa4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#10",
+      "hash": "sha256:dfb8295d87a2e9985844e3eced124d8dc7d8aefa5175b3ac988262551b50e55c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#11",
+      "hash": "sha256:47247435db3aa28f4517be64f3c9e773634ed3ea2414c303791a0203f2dc00f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#12",
+      "hash": "sha256:550e344e74900c81e798cb7c0be49a3b757fbcf1c398074b53a5d79c6854ff62"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#13",
+      "hash": "sha256:5728f45e66f685800575f2184419f4cbd84404bb6ecb695f4b06d180bbdf5aab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#14",
+      "hash": "sha256:bbb172d8e5ef4a247f0e18ad4ae8ca9a9155de61e40b6458e80bf0ae7a34462a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#15",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#16",
+      "hash": "sha256:f6f90d735a48c010cc3d4262844245e572b14118f0b74bfb85d78acc45141ad1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#17",
+      "hash": "sha256:6a97d7d118498eb378d11f7325ce5a903e777f2ed14c03c17d2f12433e356e65"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#18",
+      "hash": "sha256:15dc001a5e1f7f824f1a010c3307a99daa8f2844fc19e08d77fe763e1be74a50"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#19",
+      "hash": "sha256:adf3c45548c2de10a3e032e0e6f6f08a7660a6941a285effe58577f2b5e909c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#20",
+      "hash": "sha256:e8f9a909ff6b0d137b16cc4ade3dd2f7ebbbe146417ad1a3ddcb0b2d10e72def"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#21",
+      "hash": "sha256:bacf7d10040f40b8370c6eb7ec1170017329a624ac69294c4b7e60f695fa6dd9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#22",
+      "hash": "sha256:d42bedfec8c57b1c01223b54f8203973427dc4926abf5f7ddffc7cc94b6cf486"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#23",
+      "hash": "sha256:826351b3ab774df283282aa638ab4706b60a8fbcb78c0deb68d48b39efa02575"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#24",
+      "hash": "sha256:6d0572836a4e9e203b362144468c38327edd659a8a6d894ac88236834ed75779"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#25",
+      "hash": "sha256:04143efd61ab7143f614cc922de147de864d885d8467d7525eaf295bd3d7035e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#26",
+      "hash": "sha256:88c180309144d48021d988f8f868948bcf85060fa9fa94e10eb614a26696810b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#27",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#28",
+      "hash": "sha256:fcd630e9556d3c04d5a4b998ceeb11b37d9cde748544b63ec56850d7adc4b934"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#29",
+      "hash": "sha256:3e55c056638dc14e2b398f78c85432339acf0e63ccb99353d6c673f69e015198"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#30",
+      "hash": "sha256:ed4fd4ccc2058b20df5f1675de19a290868e849d3d9d8af37e97a9dadb15ac38"
     },
     {
       "content": "blocks",

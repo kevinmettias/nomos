@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:4dec726cf02110d6149d1d9832cb6a08aac8f05a6805034d49b344688ea2e46e",
-  "inputs_digest": "sha256:37ca234356b64c7f7b99843f7d19728b72b6bb6731f5cc8f2ac1f654a6e21412",
+  "content_digest": "sha256:9ffe72345fc8afb637b23ccebbcbeb50f18e0cab805bfb653db805ccbcdfdbfe",
+  "inputs_digest": "sha256:74aa784c134f575f4649b476d240b7a4cbaa7f783d337a2b598d78465daf3497",
   "sections": [
     [
       "Relations",
-      472
+      486
     ],
     [
       "Decisions",
@@ -20,6 +20,11 @@
       "content": "relations",
       "identity": "ADR-DOC-001 superseded_by D-129",
       "hash": "sha256:095772f5c25cd27b5afaf37856d922b39a00f31318acfd43d0e3af1dd8d4e547"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 affected_by ARC-HARNESS-001",
+      "hash": "sha256:9d63347c11ff10d6de094da161e5acb25a3cbfcd6695b494ede5119e2253c11a"
     },
     {
       "content": "relations",
@@ -75,6 +80,41 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-001",
       "hash": "sha256:8ed0ae34289d169eacb61a39ca62426b9c88dd67d77ffd0538fc19847a1a7237"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 affects ARC-ECOSYSTEM-001",
+      "hash": "sha256:9c7fc70f9bc74394f2c0cb38502aee0369d6d044caf171ed5e5411a4ebfe2a7a"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to OD-AGENT-001",
+      "hash": "sha256:ad40bc7df370572d124014dc7d1cd00bfdb1ee85c8f5af7a42be17dfa916c084"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to OD-CAPABILITY-001",
+      "hash": "sha256:0914a629ea97500d83a6a4089731c43851e0f7009684db2d98f0d4b4d30c8ba3"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to OD-CAPABILITY-003",
+      "hash": "sha256:9086d4ea14518459a1393131cf704da6c3f7990de016de031258dcfe4b4296fd"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to OD-CONTRACTS-002",
+      "hash": "sha256:647a436fe3fcb83630b91cecb071ff52d3c959a7e410bdf48396ff1619e09499"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to OD-PACKAGE-001",
+      "hash": "sha256:d875c32a9036a19a31adc5b2f716dcf9aec27a0deadb570abee806ff639e2835"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to OD-PLATFORM-001",
+      "hash": "sha256:aa94e7c1fe05e7b81022ed71ccfe5e43eebdce429ecc79c2a62a95674bd1287c"
     },
     {
       "content": "relations",
@@ -443,6 +483,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-AGENT-001 relates-to ARC-HARNESS-001",
+      "hash": "sha256:0baf0a03a305353a14610110f2d6981aa3a0b087b1f20f21f6afc649cd648073"
+    },
+    {
+      "content": "relations",
       "identity": "OD-AGENT-001 relates-to OD-CONTRACTS-001",
       "hash": "sha256:c0106af6c42f43b037cc17b076552acaa6b2aa22707ea10e5a60f6c036e76484"
     },
@@ -498,6 +543,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-001 relates-to ARC-HARNESS-001",
+      "hash": "sha256:159cc7a51e22bf55de490354f7d64bf0f64866f02824a9d701ebb51f3113fd22"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CAPABILITY-001 relates-to OD-ANALYSIS-001",
       "hash": "sha256:24432eb5ee86d95c2dc55b664e12735761270a4b8e32e0a2563a81b1d5d80fa3"
     },
@@ -550,6 +600,11 @@
       "content": "relations",
       "identity": "OD-CAPABILITY-002 relates-to OD-SYNTAX-001",
       "hash": "sha256:eccfb8d9934dedf1961799c47c601c80ac475c43b054456e3b999d03aaab6173"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-003 relates-to ARC-HARNESS-001",
+      "hash": "sha256:e6d9b3c479b0bdb7f97257fc51e1bd7e637a5b04f4e20331906d495b5059bc91"
     },
     {
       "content": "relations",
@@ -710,6 +765,11 @@
       "content": "relations",
       "identity": "OD-CONTRACTS-001 relates-to OD-CONTRACTS-002",
       "hash": "sha256:ee0514f31768ddc062610a51276f4583358e8ace5f591c8c70c5099ebbbc8fa3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONTRACTS-002 relates-to ARC-HARNESS-001",
+      "hash": "sha256:07a19b34b079d0a7db652fddaeac371cc5caaada46540d1bfbe9ca7c5ba0873d"
     },
     {
       "content": "relations",
@@ -1738,6 +1798,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-001 relates-to ARC-HARNESS-001",
+      "hash": "sha256:6db6a651ab1412faa22163fe746a349de556d670205457ada7af2fc822a91c09"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-001 relates-to D-134",
       "hash": "sha256:7b9a0cb0d6fd3913f0163a82c6cba861c9519cf1a6790e70383f7ea3ee224afb"
     },
@@ -1780,6 +1845,11 @@
       "content": "relations",
       "identity": "OD-PACKAGE-002 relates-to OD-PACKAGE-001",
       "hash": "sha256:a380f57e6e891eea9d70fc77f6cf34900a13fe9d773e44e57ed4168998cf10c9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PLATFORM-001 relates-to ARC-HARNESS-001",
+      "hash": "sha256:31d583926f6d956281f5bd5f2d115094e88686cb8bed0081e7b63ebf291b4319"
     },
     {
       "content": "relations",
