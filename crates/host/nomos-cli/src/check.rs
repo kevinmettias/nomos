@@ -751,6 +751,54 @@ mod tests
         );
     }
 
+    /// ---- one unreadable file does not silence the rest of the tree ----
+    ///
+    /// The measurement `OD-RULES-002` was opened against, reproduced as a directory. Two
+    /// files: one the real parser reads, declaring a mirror that resolves to nothing, and
+    /// one the real parser refuses. Before that record this run exited `0` and printed the
+    /// phantom as `[Advisory]`, because `broken.rs` set one incompleteness flag over the
+    /// whole run — and this workspace always holds such a file, so the guard could never
+    /// block on anything.
+    ///
+    /// Asserted through `Run` and not through the rule, because the thing that was wrong
+    /// was the exit code of the shipped binary. The provider here is the registered one, so
+    /// the refusal is a real refusal rather than a withheld fixture.
+    #[test]
+    fn Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses()
+    {
+        let root = std::env::temp_dir().join("nomos-check-phantom-beside-broken");
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+        std::fs::write(
+            root.join("a.rs"),
+            "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        )
+        .expect("writable");
+        std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
+
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+
+        let _ignored = std::fs::remove_dir_all(&root);
+
+        assert_eq!(code, ExitCode::Violations, "{rendered}");
+        assert_ne!(code.Value(), ExitCode::Ok.Value(), "{rendered}");
+        assert!(
+            rendered.contains("2 file(s) examined, 1 with a syntax fact"),
+            "the run must still report what it could not read: {rendered}"
+        );
+        assert!(
+            rendered.contains("1 of which can fail a build"),
+            "the phantom is the finding that blocks: {rendered}"
+        );
+        assert!(
+            rendered.contains("[Blocking]") && rendered.contains("Test_Renamed_Away"),
+            "{rendered}"
+        );
+    }
+
     /// The floor is the rule's, and the run this command composes meets it.
     ///
     /// Asserted here because this is the only place in the workspace where the rule's
