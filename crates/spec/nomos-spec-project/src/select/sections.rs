@@ -1,314 +1,8 @@
-use crate::content::Content;
-use crate::filter::Filter;
-use crate::profile::Profile;
-use crate::profile::SUBJECT;
-use crate::input::Input;
-use crate::item::Item;
-use crate::projection::Projection;
-use crate::section::Section;
-use crate::ProjectError;
-use core::fmt::Write as _;
-use nomos_spec_store::SpecificationStore;
-use rusqlite::{params_from_iter, Connection, Row};
+//! One reader per kind of section a profile can ask for.
 
-impl Filter
-{
-    #[must_use]
-    pub fn Named(&self) -> Vec<(&'static str, &String)>
-    {
-        let mut named = Vec::new();
-        for (name, value) in [
-            ("kind", &self.kind),
-            ("authority", &self.authority),
-            ("representation", &self.representation),
-            ("suite", &self.suite),
-            ("document", &self.document),
-            ("revision", &self.revision),
-            ("relation_type", &self.relation_type),
-            ("disposition", &self.disposition),
-            ("row_kind", &self.row_kind),
-            ("identifier_prefix", &self.identifier_prefix),
-            ("node_id", &self.node_id),
-        ]
-        {
-            if let Some(set) = value
-            {
-                named.push((name, set));
-            }
-        }
+use super::{Connection, Filter, Item, ProjectError, Query, Text, Narrow_To_Nodes, Row};
 
-        return named;
-    }
-
-    /// Replaces the subject placeholder in every value this filter carries.
-    ///
-    /// Every value rather than `node_id` alone. A subject narrows different content in
-    /// different ways — a node by identity, its statements by the node they belong to, a
-    /// document by path — and deciding here which of those is allowed would put the
-    /// profile's vocabulary in the substitution rather than in the profile.
-    pub fn Substitute(&mut self, subject: &str)
-    {
-        for set in [
-            &mut self.kind,
-            &mut self.authority,
-            &mut self.representation,
-            &mut self.suite,
-            &mut self.document,
-            &mut self.revision,
-            &mut self.relation_type,
-            &mut self.disposition,
-            &mut self.row_kind,
-            &mut self.identifier_prefix,
-            &mut self.node_id,
-        ]
-        .into_iter()
-        .flatten()
-        {
-            *set = set.replace(SUBJECT, subject);
-        }
-    }
-}
-
-impl Content
-{
-    #[must_use]
-    pub const fn Honours(self) -> &'static [&'static str]
-    {
-        return match self
-        {
-            Self::Suites => &["identifier_prefix"],
-            Self::Documents | Self::Headings => &["document", "revision"],
-            Self::Blocks => &["document", "revision", "kind"],
-            Self::Rows => &["document", "revision", "row_kind"],
-            Self::Nodes => &[
-                "kind",
-                "authority",
-                "representation",
-                "suite",
-                "identifier_prefix",
-                "node_id",
-            ],
-            Self::Statements => &["kind", "identifier_prefix", "node_id"],
-            Self::Relations => &["relation_type", "suite", "identifier_prefix", "node_id"],
-            Self::Lineage => &["disposition", "document"],
-            Self::Omissions => &["document"],
-        };
-    }
-}
-
-struct Query
-{
-    sql: String,
-    values: Vec<String>,
-}
-
-impl Query
-{
-    fn On(base: &str) -> Self
-    {
-        return Self {
-            sql: base.to_owned(),
-            values: Vec::new(),
-        };
-    }
-
-    fn Equal(&mut self, column: &str, value: Option<&String>)
-    {
-        if let Some(value) = value
-        {
-            self.values.push(value.clone());
-            let _ = write!(self.sql, " AND {column} = ?{}", self.values.len());
-        }
-    }
-
-    fn Prefix(&mut self, column: &str, value: Option<&String>)
-    {
-        if let Some(value) = value
-        {
-            self.values.push(format!("{}%", value.replace('%', "\\%")));
-            let _ = write!(
-                self.sql,
-                " AND {column} LIKE ?{} ESCAPE '\\'",
-                self.values.len()
-            );
-        }
-    }
-
-    /// One value matched against either of two columns.
-    ///
-    /// A relation has two ends and a subject sits at one or the other. Narrowing only the
-    /// end an edge starts from would show a subject what it declares and hide what is
-    /// declared about it, which is the half of a graph a reader is usually looking for.
-    fn Either(&mut self, first: &str, second: &str, value: Option<&String>)
-    {
-        if let Some(value) = value
-        {
-            self.values.push(value.clone());
-            let position = self.values.len();
-            let _ = write!(self.sql, " AND ({first} = ?{position} OR {second} = ?{position})");
-        }
-    }
-
-    fn Ordered_By(mut self, columns: &str) -> Self
-    {
-        self.sql.push_str(" ORDER BY ");
-        self.sql.push_str(columns);
-
-        return self;
-    }
-
-    fn Run<F>(&self, connection: &Connection, read: F) -> Result<Vec<Item>, ProjectError>
-    where
-        F: Fn(&Row<'_>) -> rusqlite::Result<Item>,
-    {
-        let mut statement = connection.prepare(&self.sql)?;
-        let rows = statement.query_map(params_from_iter(self.values.iter()), |row| return read(row))?;
-
-        let mut items = Vec::new();
-        for item in rows
-        {
-            items.push(item?);
-        }
-
-        return Ok(items);
-    }
-}
-
-pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projection, ProjectError>
-{
-    let connection = store.Connection();
-    let mut sections = Vec::new();
-    let mut inputs = Vec::new();
-
-    for declared in &profile.sections
-    {
-        let section = Selected(connection, profile, declared)?;
-        let contributed = Inputs_Of(declared.content, &section.items);
-        inputs.extend(contributed);
-        sections.push(section);
-    }
-
-    return Ok(Projection {
-        profile: profile.id.clone(),
-        title: profile.title.clone(),
-        format: profile.format,
-        output: profile.output.clone(),
-        sections,
-        inputs,
-    });
-}
-
-/// One declared section, gathered and checked.
-///
-/// Both refusals come before the rows are used, because a section that cannot be honoured
-/// or that came back empty is a defect in the profile rather than a thin projection.
-fn Selected(
-    connection: &Connection,
-    profile: &Profile,
-    declared: &crate::profile_section::Section,
-) -> Result<Section, ProjectError>
-{
-    Refuse_Unhonoured(profile, declared.content, &declared.filter)?;
-    let items = Gather(connection, declared.content, &declared.filter)?;
-    Refuse_Empty(profile, declared, &items)?;
-
-    return Ok(Section {
-        title: declared.title.clone(),
-        content: declared.content,
-        items,
-    });
-}
-
-/// What a section's items contribute to the projection's input set.
-///
-/// An item's own hash where it has one, a digest of its fields where it has none. The
-/// freshness check compares this set, so an item that carries no hash still has to move the
-/// set when its content changes or the output would report itself current over stale rows.
-fn Inputs_Of(content: Content, items: &[Item]) -> Vec<Input>
-{
-    return items
-        .iter()
-        .map(|item| {
-            return Input {
-                content,
-                identity: item.identity.clone(),
-                hash: item.Field("hash").map_or_else(|| return item.Digest(), str::to_owned),
-            };
-        })
-        .collect();
-}
-
-/// A section that gathered nothing and did not say it might.
-///
-/// Refused rather than rendered empty. A profile whose corpus is absent selects nothing
-/// from every section, and a projection published with the headings and none of the content
-/// is indistinguishable from one whose subject genuinely has nothing to say.
-fn Refuse_Empty(
-    profile: &Profile,
-    declared: &crate::profile_section::Section,
-    items: &[Item],
-) -> Result<(), ProjectError>
-{
-    if !items.is_empty() || declared.may_be_empty
-    {
-        return Ok(());
-    }
-
-    return Err(ProjectError::Empty {
-        profile: profile.id.clone(),
-        section: declared.title.clone(),
-        content: declared.content.Label(),
-    });
-}
-
-fn Refuse_Unhonoured(
-    profile: &Profile,
-    content: Content,
-    filter: &Filter,
-) -> Result<(), ProjectError>
-{
-    for (name, _) in filter.Named()
-    {
-        if !content.Honours().contains(&name)
-        {
-            return Err(ProjectError::UnsupportedFilter {
-                profile: profile.id.clone(),
-                content: content.Label(),
-                filter: name,
-            });
-        }
-    }
-
-    return Ok(());
-}
-
-fn Gather(
-    connection: &Connection,
-    content: Content,
-    filter: &Filter,
-) -> Result<Vec<Item>, ProjectError>
-{
-    return match content
-    {
-        Content::Suites => Suites(connection, filter),
-        Content::Documents => Documents(connection, filter),
-        Content::Headings => Headings(connection, filter),
-        Content::Blocks => Blocks(connection, filter),
-        Content::Rows => Rows(connection, filter),
-        Content::Nodes => Nodes(connection, filter),
-        Content::Statements => Statements(connection, filter),
-        Content::Relations => Relations(connection, filter),
-        Content::Lineage => Lineage(connection, filter),
-        Content::Omissions => Omissions(connection, filter),
-    };
-}
-
-fn Text(row: &Row<'_>, index: usize) -> rusqlite::Result<String>
-{
-    return row.get::<usize, Option<String>>(index).map(Option::unwrap_or_default);
-}
-
-fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT suite_id, title, authority_root FROM suites WHERE 1 = 1",
@@ -326,7 +20,7 @@ fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Project
     });
 }
 
-fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, b.sha256,
@@ -354,7 +48,7 @@ fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proj
     });
 }
 
-fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, h.ordinal, h.depth, h.title
@@ -380,7 +74,7 @@ fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proje
         });
 }
 
-fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, b.ordinal, b.kind, b.heading_path, b.text, b.content_hash
@@ -411,7 +105,7 @@ fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Project
         });
 }
 
-fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT d.path, d.revision, b.ordinal, r.ordinal, r.table_ordinal, r.kind,
@@ -449,30 +143,7 @@ fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectEr
         });
 }
 
-/// Every way a node section may be narrowed, in one place.
-///
-/// `identifier_prefix` is a prefix and the rest are equalities, which is the whole of what
-/// distinguishes them: a section selecting `OD-LEDGER-` wants a family and one selecting
-/// `OD-LEDGER-019` wants a record. Spelled out at each call site, the two were free to
-/// disagree about which columns a node section honours — and `Content::Honours` is checked
-/// against that list.
-fn Narrow_To_Nodes(query: &mut Query, filter: &Filter)
-{
-    for (column, value) in [
-        ("n.kind", filter.kind.as_ref()),
-        ("n.authority", filter.authority.as_ref()),
-        ("n.representation", filter.representation.as_ref()),
-        ("s.suite_id", filter.suite.as_ref()),
-        ("n.node_id", filter.node_id.as_ref()),
-    ]
-    {
-        query.Equal(column, value);
-    }
-
-    query.Prefix("n.node_id", filter.identifier_prefix.as_ref());
-}
-
-fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT n.node_id, n.kind, n.authority, n.representation, n.title, s.suite_id
@@ -498,7 +169,7 @@ fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectE
     });
 }
 
-fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT s.statement_id, s.kind, n.node_id, s.canonical_text, s.canonical_hash,
@@ -527,7 +198,7 @@ fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Pro
     });
 }
 
-fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT f.node_id, r.relation_type, t.node_id, y.tier, s.suite_id
@@ -590,7 +261,7 @@ const LINEAGE_ORDER: &str = "coalesce(d.path, hd.path, rd.path, ''), coalesce(b.
      coalesce(r.ordinal, -1), l.disposition, coalesce(n.node_id, ''), \
      coalesce(st.statement_id, '')";
 
-fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(LINEAGE_ROWS);
     query.Equal("l.disposition", filter.disposition.as_ref());
@@ -620,7 +291,7 @@ fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Projec
 /// A row addresses a table row, a block, or a heading, and `-1` is the sentinel each join
 /// leaves behind when it matched nothing. Citing the block for a row-level disposition
 /// would make thirty rows of one table cite the same place.
-fn Cited(row: &Row<'_>) -> rusqlite::Result<String>
+pub(super) fn Cited(row: &Row<'_>) -> rusqlite::Result<String>
 {
     let block: i64 = row.get(2)?;
     let ordinal: i64 = row.get(3)?;
@@ -635,7 +306,7 @@ fn Cited(row: &Row<'_>) -> rusqlite::Result<String>
     });
 }
 
-fn Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
+pub(super) fn Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
         "SELECT coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1),
