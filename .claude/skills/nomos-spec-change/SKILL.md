@@ -84,6 +84,72 @@ no check.
 
 Never hand-edit a rendered body. If the text is wrong, the store is wrong.
 
+### Render from the record set your commit will publish
+
+Not from your working tree. `OD-GATE-005` is why, and it is the step whose absence left the
+gate red for eleven commits.
+
+The store is assembled from `crates/spec/nomos-spec-store/records/` **on disk**, so a binary
+built in the shared tree holds whatever every live session has lying in it. Measured on
+2026-08-10: 50 records in the working tree against 49 at `HEAD`, the difference being one
+peer's unlanded file. Render there and you commit their unpublished work into an artifact CI
+rebuilds without it, and the gate fails on *your* commit.
+
+The rule is exact in both directions:
+
+> The tree you render in holds exactly the registered records your commit will publish — no
+> more, and no fewer.
+
+"Everything is committed" fails it twice over. It is satisfied by a tree carrying a peer's
+uncommitted record, and it is *not* satisfied by the tree you are in when you add a record of
+your own, which must be on disk or the projection is stale the instant you commit.
+
+Construct that tree rather than waiting for one:
+
+```
+git worktree add --detach <scratch>/render HEAD
+cp docs/records/<your-record>.md          <scratch>/render/docs/records/
+cp crates/spec/nomos-spec-store/records/<ID>.record <scratch>/render/crates/spec/nomos-spec-store/records/
+cd <scratch>/render
+CARGO_TARGET_DIR=<scratch>/render-target cargo build -q --bin nomos
+<scratch>/render-target/debug/nomos spec render    --profile diagram-set --into .
+<scratch>/render-target/debug/nomos spec freshness --into . --require diagram-set   # must exit 0
+```
+
+Then copy **both** halves back — the body and the sidecar beside it,
+`diagrams/relations.mmd.nomos-projection.json` — and commit them with the record that moved
+them. Build in the worktree: a binary built in the
+shared tree has the wrong records compiled into it, which is the whole point.
+
+Two things follow that surprise people:
+
+- **`spec freshness` in your working tree is not the verdict.** It reports stale over a
+  correct file whenever a peer holds an unlanded record, so exit 8 there is not evidence you
+  rendered wrongly. The clean worktree and CI are the trees where the question is well posed.
+  Do not plan on waiting for the shared tree to go quiet: polled every minute for an hour on
+  2026-08-10, while seven commits landed from three sessions, it never once did.
+- **`work finish` does not run this check**, deliberately, for the same reason. Adding a
+  governing record is one of the few changes whose obligation the ledger cannot enforce for
+  you.
+- **If your item's own predicate is a projection check, run `finish` from the worktree**, with
+  `NOMOS_WORK_DIR` pointing at the real `work/` so the transition lands on the shared board.
+  The worktree is byte-for-byte what CI checks out; the shared tree would answer about a record
+  set nobody will publish. Do not wait for the shared tree instead — a session that lapses
+  leaves its unlanded records stranded there, and no one else can clear them.
+
+Every edit to a record body changes the store, so **render after the last word is written**, not
+before. A record you touch again is a diagram you render again.
+
+### The diagram is nobody's territory, and you may re-render it
+
+`diagrams/relations.mmd` is reserved by no item and re-rendering it is not a territory
+violation. It is a derived output: two authors cannot disagree about its contents, only about
+which record set it was taken over, and the later render subsumes the earlier one. Reserving
+it in every record writer's territory was refused because it would serialize the whole board
+on a file nobody can conflict over — `OD-GATE-005`, decisions 1 and 2.
+
+So do not reserve it, and do not leave it stale because you did not.
+
 ## 5. If you are adding a store table, budget the bundle
 
 A new table is a bundle change, because the bundle is the authority committed to git and a
@@ -103,3 +169,6 @@ compared against each other both ways — so a record that stops being registere
 test rather than quietly leaving the store.
 
 Reserve both in your item's territory before you start.
+
+Reserve those two and no more. The diagram your record moves is deliberately not a third —
+see step 4 — and adding it would refill a register `OD-LEDGER-011` spent two items emptying.
