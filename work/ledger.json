@@ -4325,16 +4325,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [
         "P10-REQUIRED-PROJECTIONS"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-rerender-hazard-w18",
-        "acquired_at": 1786346072,
-        "lease_expires_at": 1786353272
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -4348,7 +4344,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-rerender-hazard-w18",
+          "reason": "Work is complete and committed as ea3c167: AGENTS.md carries the re-render obligation and the uncommitted-record trap, the retired P10-STALE-WRITER hazard is gone from AGENTS.md and the nomos-task skill, and TEMPORARY_HAZARDS is empty with the reason stated. tests/contract/tests/agent_harness.rs passes 10 of 10 and AGENTS.md is 102 lines against a budget of 120. Only the ledger transition is outstanding, blocked by the same nomos-cap-syntax clippy failure as P10-SUBJECT-PROJECTIONS. Released rather than left to lapse, for the P10-LAPSE-TAKEOVER reason recorded there.",
+          "abandoned_at": 1786346680
+        }
+      ],
       "displaced": []
     },
     {
@@ -4448,14 +4450,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-subject-projections-w18",
-        "acquired_at": 1786344570,
-        "lease_expires_at": 1786355370
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -4471,7 +4469,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-subject-projections-w18",
+          "reason": "Work is complete and committed as c42f93b, verified in an isolated checkout at HEAD: workspace clippy clean under -D warnings, and the item predicate green. Only the ledger transition is outstanding. work finish refuses on the gate lint step because crates/capabilities/nomos-cap-syntax/src/payload.rs, uncommitted under P10-SYNTAX-V2, fails clippy::match_same_arms at line 585. Released rather than left to lapse: lapse recovery is P10-LAPSE-TAKEOVER and that item is still open, so a lease that expires may only be recoverable by the agent that died holding it. Re-claim and run finish once cargo clippy --workspace --all-targets -- -D warnings is green; the predicate should pass without touching a file.",
+          "abandoned_at": 1786346680
+        }
+      ],
       "displaced": []
     }
   ]
