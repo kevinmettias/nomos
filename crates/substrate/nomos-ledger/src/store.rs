@@ -221,6 +221,33 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// window in which two agents lose each other's update; it does not close it, and
     /// the prototype recorded a near-miss where one claim was almost lost that way.
     ///
+    /// That sentence was false for eleven weeks, which is what `OD-LEDGER-015` records.
+    /// `Claim`, `Renew` and `Release` — the three verbs that change the board — each did
+    /// their own `Load`, decided, and `Save`d with nothing held in between, so two sessions
+    /// overlapping lost one of the two writes whole. It is stated here rather than only in
+    /// the record because a doc comment that describes an arrangement is the thing that
+    /// stops being true when the arrangement is bypassed, and nothing checked it.
+    ///
+    /// # What this must never be wrapped around
+    ///
+    /// The span held is a read, a decision and a write, all of them milliseconds. It is
+    /// **not** the span in which work is verified: [`crate::Finish`] runs an item's
+    /// predicate — a test suite, minutes of it — and only then calls `Release`, so what
+    /// takes the lock is the recording of the verdict and never the reaching of it. A
+    /// caller that put a subprocess inside `modify` would hold a cross-process lock for as
+    /// long as that subprocess ran, and every other session on the machine would sit in
+    /// [`LOCK_WAIT_LIMIT`] and then fail.
+    ///
+    /// # Why the write is conditional
+    ///
+    /// A modification that leaves the document exactly as it was read writes nothing. The
+    /// three verbs above all have refusal paths — the item is held by somebody else, the
+    /// item does not exist — that decide against changing anything, and rewriting the file
+    /// on those paths would mean a refused claim rewrites the roadmap. It also means a
+    /// document that is already invalid on disk refuses reads of itself: `Save` validates,
+    /// so an unconditional write would turn "your claim is held by agent-b" into "the
+    /// ledger is unusable" for a reason having nothing to do with the caller's question.
+    ///
     /// # Errors
     ///
     /// Returns [`LedgerError::Locked`] if the lock cannot be taken, and whatever the
@@ -238,15 +265,62 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
                 cause: error.to_string(),
             })?;
 
-        let mut document = self.Load()?;
+        let read = self.Load()?;
+        let mut document = read.clone();
         let outcome = modify(&mut document)?;
-        self.Save(&document)?;
+
+        if document != read
+        {
+            self.Save(&document)?;
+        }
 
         // The takeover travels out with the result rather than being logged here. A
         // caller that surfaces it can tell the user their predecessor abandoned an
         // update; a caller that drops it has made a choice, and this signature is what
         // makes that choice visible in review.
         return Ok((outcome, acquisition.broke_stale));
+    }
+
+    /// Runs a decision that may refuse, over the document, inside one lock acquisition.
+    ///
+    /// The three [`ExclusionLedger`] verbs share a shape that [`Self::With_Lock`] cannot
+    /// express on its own: they answer with a [`ClaimRefusal`] rather than a
+    /// [`LedgerError`], and a refusal is an *answer*, not a failure of the store. Carrying
+    /// it out through the error channel would put "agent-b holds this" and "the file will
+    /// not parse" in one type, which is the conflation `OD-LEDGER-009` already had to undo
+    /// once. So the refusal rides out as the modification's value, and only genuine store
+    /// failures use the error.
+    ///
+    /// Written once and called three times rather than spelled out in each verb. Three
+    /// copies of "take the lock, read the clock, decide, write" is three chances for one of
+    /// them to stop taking the lock — which is the defect this exists to have fixed.
+    ///
+    /// `now` is read **inside** the acquisition and handed to the decision, so the clock a
+    /// claim is judged against and the clock its lease is measured from are one reading
+    /// taken after the wait for the lock. Read before, a claim that waited on a contended
+    /// lock would be granted a lease shortened by however long it waited, and would judge
+    /// other holders' leases against a time that had already passed.
+    fn Decide_Under_Lock<T>(
+        &self,
+        holder: &str,
+        decide: impl FnOnce(&mut LedgerDocument, Timestamp) -> Result<T, ClaimRefusal>,
+    ) -> Result<T, ClaimRefusal>
+    {
+        // The stale takeover is dropped here, deliberately and visibly. None of the three
+        // verbs' return types can carry one — `Reservation` and `ClaimRefusal` are public
+        // and adding a field or a variant to either is a change to the crate's surface,
+        // which this item did not have. What is lost is a diagnostic and not consistency:
+        // a broken lock is only ever broken after `LOCK_STALE_AFTER`, and `Save` replaces
+        // the file atomically, so the document a takeover finds is whole either way.
+        let (outcome, _takeover) = self
+            .With_Lock(holder, |document| {
+                let now = self.clock.Now();
+
+                return Ok(decide(document, now));
+            })
+            .map_err(|error| return Unusable(&error))?;
+
+        return outcome;
     }
 
     /// Whether the ledger currently satisfies its invariants.
@@ -543,35 +617,36 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
     {
         Check_Lease(lease)?;
 
-        let now = self.clock.Now();
-        let expires_at = now.Plus(lease);
-        let mut document = self.Load().map_err(|error| return Unusable(&error))?;
+        // The refusal is decided and the grant is written under one acquisition. Deciding
+        // outside it is not a narrower window, it is the same defect: what the check reads
+        // and what the write is based on are the same snapshot, and another session can
+        // replace the file between them.
+        return self.Decide_Under_Lock(holder, |document, now| {
+            let expires_at = now.Plus(lease);
 
-        if let Some(refusal) = Claim_Refusal(&document, item, now)
-        {
-            return Err(refusal);
-        }
-
-        for candidate in &mut document.items
-        {
-            if &candidate.id == item
+            if let Some(refusal) = Claim_Refusal(document, item, now)
             {
-                candidate.state = ItemState::Claimed;
-                candidate.claim = Some(Claim {
-                    holder: holder.to_owned(),
-                    acquired_at: now,
-                    lease_expires_at: expires_at,
-                });
+                return Err(refusal);
             }
-        }
 
-        self.Save(&document)
-            .map_err(|error| return Unusable(&error))?;
+            for candidate in &mut document.items
+            {
+                if &candidate.id == item
+                {
+                    candidate.state = ItemState::Claimed;
+                    candidate.claim = Some(Claim {
+                        holder: holder.to_owned(),
+                        acquired_at: now,
+                        lease_expires_at: expires_at,
+                    });
+                }
+            }
 
-        return Ok(Reservation {
-            item: item.clone(),
-            holder: holder.to_owned(),
-            expires_at,
+            return Ok(Reservation {
+                item: item.clone(),
+                holder: holder.to_owned(),
+                expires_at,
+            });
         });
     }
 
@@ -584,54 +659,54 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
     {
         Check_Lease(lease)?;
 
-        let now = self.clock.Now();
-        let expires_at = now.Plus(lease);
-        let mut document = self.Load().map_err(|error| return Unusable(&error))?;
+        // A lost renewal does not look like a lost write. It looks like a lease that ran
+        // out early, which reads as an agent that died — so this verb being outside the
+        // lock sent whoever noticed to investigate the wrong thing.
+        return self.Decide_Under_Lock(holder, |document, now| {
+            let expires_at = now.Plus(lease);
 
-        let mut renewed = false;
-        for candidate in &mut document.items
-        {
-            if &candidate.id != item
+            let mut renewed = false;
+            for candidate in &mut document.items
             {
-                continue;
+                if &candidate.id != item
+                {
+                    continue;
+                }
+                match &mut candidate.claim
+                {
+                    Some(claim) if claim.holder == holder =>
+                    {
+                        claim.lease_expires_at = expires_at;
+                        renewed = true;
+                    }
+                    Some(claim) =>
+                    {
+                        return Err(ClaimRefusal::HeldBy {
+                            holder: claim.holder.clone(),
+                            until: claim.lease_expires_at,
+                            item: item.clone(),
+                        });
+                    }
+                    None =>
+                    {
+                        return Err(ClaimRefusal::NotClaimable {
+                            item: item.clone(),
+                            state: "unclaimed".to_owned(),
+                        });
+                    }
+                }
             }
-            match &mut candidate.claim
+
+            if !renewed
             {
-                Some(claim) if claim.holder == holder =>
-                {
-                    claim.lease_expires_at = expires_at;
-                    renewed = true;
-                }
-                Some(claim) =>
-                {
-                    return Err(ClaimRefusal::HeldBy {
-                        holder: claim.holder.clone(),
-                        until: claim.lease_expires_at,
-                        item: item.clone(),
-                    });
-                }
-                None =>
-                {
-                    return Err(ClaimRefusal::NotClaimable {
-                        item: item.clone(),
-                        state: "unclaimed".to_owned(),
-                    });
-                }
+                return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
             }
-        }
 
-        if !renewed
-        {
-            return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
-        }
-
-        self.Save(&document)
-            .map_err(|error| return Unusable(&error))?;
-
-        return Ok(Reservation {
-            item: item.clone(),
-            holder: holder.to_owned(),
-            expires_at,
+            return Ok(Reservation {
+                item: item.clone(),
+                holder: holder.to_owned(),
+                expires_at,
+            });
         });
     }
 
@@ -642,52 +717,64 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
         outcome: ReleaseOutcome,
     ) -> Result<(), ClaimRefusal>
     {
-        let now = self.clock.Now();
-        let mut document = self.Load().map_err(|error| return Unusable(&error))?;
-
-        let mut released = false;
-        for candidate in &mut document.items
-        {
-            if &candidate.id != item
+        // This is the write [`crate::Finish`] performs once its predicate has passed, and
+        // the reason the lock is taken here rather than around finishing: the predicate is
+        // minutes of somebody else's test suite and holds nothing, while the recording of
+        // its verdict is this, and is milliseconds. A verdict recorded outside the lock is
+        // an agent told its work was written down over a board that has since forgotten it.
+        return self.Decide_Under_Lock(holder, |document, now| {
+            let mut released = false;
+            for candidate in &mut document.items
             {
-                continue;
+                if &candidate.id != item
+                {
+                    continue;
+                }
+                match &candidate.claim
+                {
+                    Some(claim) if claim.holder == holder =>
+                    {
+                        // Both arms, written once, in `ReleaseOutcome::Record_On`. Spelling
+                        // them out here is what let this store keep the finished arm's
+                        // evidence and drop the abandoned arm's.
+                        outcome.Record_On(candidate, holder, now);
+                        released = true;
+                    }
+                    Some(claim) =>
+                    {
+                        return Err(ClaimRefusal::HeldBy {
+                            holder: claim.holder.clone(),
+                            until: claim.lease_expires_at,
+                            item: item.clone(),
+                        });
+                    }
+                    None =>
+                    {
+                        return Err(ClaimRefusal::NotClaimable {
+                            item: item.clone(),
+                            state: "unclaimed".to_owned(),
+                        });
+                    }
+                }
             }
-            match &candidate.claim
+
+            if !released
             {
-                Some(claim) if claim.holder == holder =>
-                {
-                    // Both arms, written once, in `ReleaseOutcome::Record_On`. Spelling
-                    // them out here is what let this store keep the finished arm's
-                    // evidence and drop the abandoned arm's.
-                    outcome.Record_On(candidate, holder, now);
-                    released = true;
-                }
-                Some(claim) =>
-                {
-                    return Err(ClaimRefusal::HeldBy {
-                        holder: claim.holder.clone(),
-                        until: claim.lease_expires_at,
-                        item: item.clone(),
-                    });
-                }
-                None =>
-                {
-                    return Err(ClaimRefusal::NotClaimable {
-                        item: item.clone(),
-                        state: "unclaimed".to_owned(),
-                    });
-                }
+                return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
             }
-        }
 
-        if !released
-        {
-            return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
-        }
-
-        return self.Save(&document).map_err(|error| return Unusable(&error));
+            return Ok(());
+        });
     }
 
+    /// Deliberately the one verb here that takes no lock.
+    ///
+    /// It reads and answers; it never writes. `Save` replaces the file atomically, so a
+    /// reader sees one whole document or another whole document and never half of one, and
+    /// there is no read-modify-write for a concurrent write to land inside. Taking the lock
+    /// would only make every listing queue behind every writer while answering exactly the
+    /// same question. The answer can be stale by the time the caller acts on it — which is
+    /// why acting on it goes through `Claim`, which re-asks under the lock.
     fn Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>
     {
         let now = self.clock.Now();

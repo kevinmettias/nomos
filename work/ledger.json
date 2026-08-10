@@ -3089,14 +3089,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-lock-bypass-w6",
-        "acquired_at": 1786337441,
-        "lease_expires_at": 1786348241
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3109,7 +3105,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Should_Write_One_Row ... ok\ntest Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contracts v0.1.0 (F:\\repos\\nomos\\crates\\contracts\\nomos-contracts)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-model v0.1.0 (F:\\repos\\nomos\\crates\\kernel\\nomos-model)\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.62s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-1afcd92160e5df68.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-4a08fbfdcb38d532.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-bbd63b4e0120614c.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-99134fb2521fbdfa.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-79e22d39019203d6.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-f7dc0d942c75731f.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-9f1e4a630321b491.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-790d1d7a443043a4.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-ad97dbebf370ad64.exe)\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786339932,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "probe2",
@@ -3399,6 +3420,39 @@
           "nomos-cli",
           "-p",
           "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-BLESS-SCOPE",
+      "title": "Blessing one crates surface rewrites every crates surface, so a concurrent worker loses its own",
+      "why": "tests/contract/tests/public_surface.rs:15 says the variable rewrites every snapshot, and it does. That is harmless for one author working alone and wrong for this tree, which is worked by several agent sessions at once by design and says so in README. Observed on 2026-08-09 between two live claims: the holder of P10-FACT-BYPASS blessed to update tests/contract/surface/nomos-rules.txt, which rewrote the three snapshots the holder of P10-SPEC-DETERMINISM had deliberately changed and not yet committed; that holder reverted the three foreign files, and the other holder found its own work silently reverted mid-lease and re-applied it by hand. Both behaved correctly and the data survived because a human-shaped agent noticed. Nothing in the mechanism noticed. The failure mode is worse than it looks: blessing rewrites a snapshot to whatever the current tree exports, so a foreign snapshot carrying an uncommitted change is not merely reverted to HEAD but rewritten from a half-finished tree, and the result still passes the surface test. It is territory violation by a tool rather than by an author, and territory cannot express it because the writer is a test the other worker also has to run.",
+      "done_when": "Blessing writes only the snapshots the blesser asked for. The variable names what to rewrite - a crate, or a list of them - and naming nothing rewrites nothing rather than rewriting everything, so the widest possible action is not the easiest one to reach for. The deliberate failure after a bless stays, because a bless that passes is a check anybody can switch off, and that reasoning is unchanged. A test asserts that blessing one crate leaves another crates snapshot byte-identical, including when that other snapshot disagrees with the tree - which is the case that actually bit, and the negative control is that restoring the rewrite-everything behaviour turns it red. The doc comment at the top of the file stops saying every snapshot. No new record: OD-GATE-002 already states what the surface check is for and this does not change it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/public_surface.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-bless-scope-w10",
+        "acquired_at": 1786339776,
+        "lease_expires_at": 1786346976
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
         ],
         "timeout_seconds": 600
       },

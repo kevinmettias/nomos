@@ -10,9 +10,12 @@ use nomos_ledger::{
     VerificationPredicate, VerificationRecord,
 };
 use nomos_model::SetResolution;
-use nomos_platform::{Clock, Timestamp};
+use nomos_platform::{Clock, FileSystem, FileSystemError, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher};
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Condvar, Mutex};
+use std::thread::ThreadId;
 use std::time::Duration;
 
 /// A clock the tests hold still, so lease expiry is reached by arithmetic rather than by
@@ -1211,6 +1214,407 @@ fn Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item()
         !unusable.Describe().contains("no item named"),
         "a broken ledger still sends the operator to check a spelling: {}",
         unusable.Describe()
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+// ---------------------------------------------------------------------------
+// Two writers, one ledger, and neither update is lost. P10-LOCK-BYPASS.
+// ---------------------------------------------------------------------------
+
+/// How long the harness lets the second writer run before it releases the first one.
+///
+/// This is not a timing assumption about the machine. Under the arrangement these tests
+/// exist to hold, the second writer *cannot* finish while the first one is between its read
+/// and its write, so this wait is expected to expire — it is the bound on how long the
+/// harness waits to learn that. Without the arrangement the second writer finishes in well
+/// under a millisecond and the wait ends immediately, so the failing case is fast and the
+/// passing case pays this once.
+const SECOND_WRITER_LIMIT: Duration = Duration::from_millis(750);
+
+/// A one-way gate: opened once, and waited on by whoever needs to know it opened.
+///
+/// A [`std::sync::Barrier`] would be shorter and cannot express the wait that is *meant* to
+/// time out, which is the whole of what the second half of this harness observes.
+struct Gate
+{
+    open: Mutex<bool>,
+    changed: Condvar,
+}
+
+impl Gate
+{
+    fn New() -> Self
+    {
+        return Self {
+            open: Mutex::new(false),
+            changed: Condvar::new(),
+        };
+    }
+
+    fn Open(&self)
+    {
+        let mut open = self.open.lock().expect("the harness never panics under this lock");
+        *open = true;
+        self.changed.notify_all();
+    }
+
+    fn Wait(&self)
+    {
+        let open = self.open.lock().expect("the harness never panics under this lock");
+        let _held = self
+            .changed
+            .wait_while(open, |open| return !*open)
+            .expect("the harness never panics under this lock");
+    }
+
+    /// Waits up to `limit`, and reports whether the gate opened within it.
+    fn Opened_Within(&self, limit: Duration) -> bool
+    {
+        let open = self.open.lock().expect("the harness never panics under this lock");
+        let (_held, timing) = self
+            .changed
+            .wait_timeout_while(open, limit, |open| return !*open)
+            .expect("the harness never panics under this lock");
+        return !timing.timed_out();
+    }
+}
+
+/// A filesystem that holds one thread still between its read of the ledger and its write.
+///
+/// # Why the seam is here and not in the store
+///
+/// Two writers that merely run at the same time reproduce a lost update by luck, and a test
+/// that reproduces by luck is one that goes green on a slower machine while the defect is
+/// still there. What is needed is the interleaving itself: one writer's read must be known
+/// to have happened before the other writer's whole operation, and its write must be known
+/// to happen after.
+///
+/// [`FileLedger`] already takes the filesystem it reads through, for a reason its own doc
+/// comment gives — a caller reaching for `std::fs` would put the store beyond a test's
+/// control. That injection point is enough, so nothing test-only is added to the store: this
+/// is an ordinary [`FileSystem`] that happens to stop after handing back the bytes.
+struct Interleaving
+{
+    ledger: PathBuf,
+    /// The thread that gets held, registered by that thread itself.
+    held: Mutex<Option<ThreadId>>,
+    /// Opened when the held thread has read the document it is about to write back.
+    read: Gate,
+    /// Opened by the harness when the held thread may proceed to its write.
+    resume: Gate,
+    /// Whether the hold has already happened, so it happens once rather than per read.
+    stopped: AtomicBool,
+}
+
+impl Interleaving
+{
+    fn Over(ledger: PathBuf) -> Self
+    {
+        return Self {
+            ledger,
+            held: Mutex::new(None),
+            read: Gate::New(),
+            resume: Gate::New(),
+            stopped: AtomicBool::new(false),
+        };
+    }
+
+    /// Registers the calling thread as the one to hold.
+    fn Hold_This_Thread(&self)
+    {
+        let mut held = self.held.lock().expect("the harness never panics under this lock");
+        *held = Some(std::thread::current().id());
+    }
+
+    fn Holds(&self, path: &Path) -> bool
+    {
+        if path != self.ledger
+        {
+            return false;
+        }
+
+        let held = *self.held.lock().expect("the harness never panics under this lock");
+
+        return held == Some(std::thread::current().id());
+    }
+
+    /// Whether the hold ever happened. The harness asserts this: a run in which the seam
+    /// never fired proves nothing about interleaving, however green it is.
+    fn Stopped(&self) -> bool
+    {
+        return self.stopped.load(Ordering::SeqCst);
+    }
+}
+
+impl FileSystem for &Interleaving
+{
+    fn Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
+    {
+        let text = StdFileSystem.Read_To_String(path);
+
+        // After the read, never before it. The point of the hold is that this thread is
+        // carrying a snapshot of the document that somebody else is about to change.
+        if self.Holds(path) && !self.stopped.swap(true, Ordering::SeqCst)
+        {
+            self.read.Open();
+            self.resume.Wait();
+        }
+
+        return text;
+    }
+
+    fn Replace_Atomically(&self, path: &Path, contents: &str) -> Result<(), FileSystemError>
+    {
+        return StdFileSystem.Replace_Atomically(path, contents);
+    }
+
+    fn Exists(&self, path: &Path) -> bool
+    {
+        return StdFileSystem.Exists(path);
+    }
+}
+
+type InterleavedLedger<'shared> =
+    FileLedger<&'shared Interleaving, &'shared FixedClock, FileLock>;
+
+fn Ledger_Over<'shared>(
+    filesystem: &'shared Interleaving,
+    directory: &Path,
+    clock: &'shared FixedClock,
+) -> InterleavedLedger<'shared>
+{
+    return FileLedger::At(
+        directory.join("ledger.json"),
+        filesystem,
+        clock,
+        FileLock::At(directory.join("ledger.lock")),
+    );
+}
+
+/// Runs two writers against one ledger with `first` held between its read and its write.
+///
+/// The order is fixed rather than raced. `second` does not start until `first` has read, and
+/// `first` does not write until `second` has either finished or been kept waiting for
+/// [`SECOND_WRITER_LIMIT`]. Both outcomes are legitimate and they are what the two
+/// arrangements look like from outside: without exclusion `second` completes inside the
+/// window and `first` then writes over it; with exclusion `second` is still waiting for the
+/// lock when the window closes, and it reads `first`'s write when it finally gets in.
+fn Two_Writers(
+    directory: &Path,
+    clock: &FixedClock,
+    first: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
+    second: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
+)
+{
+    let filesystem = Interleaving::Over(directory.join("ledger.json"));
+    let shared = &filesystem;
+    let finished = Gate::New();
+    let done = &finished;
+
+    std::thread::scope(|scope| {
+        scope.spawn(move || {
+            shared.Hold_This_Thread();
+            let mut ledger = Ledger_Over(shared, directory, clock);
+            first(&mut ledger);
+        });
+
+        shared.read.Wait();
+
+        scope.spawn(move || {
+            let mut ledger = Ledger_Over(shared, directory, clock);
+            second(&mut ledger);
+            done.Open();
+        });
+
+        finished.Opened_Within(SECOND_WRITER_LIMIT);
+        shared.resume.Open();
+    });
+
+    assert!(
+        filesystem.Stopped(),
+        "the seam never fired, so nothing was interleaved and this run proves nothing"
+    );
+}
+
+fn Holder_Of(document: &LedgerDocument, id: &str) -> Option<String>
+{
+    return document
+        .items
+        .iter()
+        .find(|item| return item.id == ItemId::New(id))
+        .and_then(|item| return item.claim.as_ref())
+        .map(|claim| return claim.holder.clone());
+}
+
+/// The defect `P10-LOCK-BYPASS` is open for, at the verb that starts every piece of work.
+///
+/// `Claim` read the whole document, decided against it and wrote the whole document back,
+/// with no lock held anywhere in between — while [`FileLedger::With_Lock`] sat beside it
+/// saying every mutation went through it. Two sessions overlapping therefore lost one of the
+/// two writes, and what was lost was not a field: it was every change the other session had
+/// made to any item, because the document written back was a snapshot taken before that
+/// session existed.
+///
+/// The two items here reserve disjoint territory, so exclusion has nothing to say about
+/// them. Both claims are legitimate and both must survive. That is the point: this is not a
+/// test about refusing a claim, it is a test about not losing one that was granted.
+#[test]
+fn Test_Two_Concurrent_Claims_Should_Both_Survive()
+{
+    let directory = Temp_Dir("concurrent-claims");
+    let clock = FixedClock(NOW);
+
+    Ledger_At(&directory, &clock)
+        .Save(&Document(vec![
+            Item("T-1", &["src/a.rs"]),
+            Item("T-2", &["src/b.rs"]),
+        ]))
+        .expect("a fresh ledger is valid");
+
+    Two_Writers(
+        &directory,
+        &clock,
+        |ledger| {
+            ledger
+                .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+                .expect("T-1 is uncontended");
+        },
+        |ledger| {
+            ledger
+                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+                .expect("T-2 shares no territory with T-1");
+        },
+    );
+
+    let after = Ledger_At(&directory, &clock).Load().expect("readable");
+
+    assert_eq!(
+        Holder_Of(&after, "T-1"),
+        Some("agent-a".to_owned()),
+        "the first writer's claim is not in the ledger it wrote"
+    );
+    assert_eq!(
+        Holder_Of(&after, "T-2"),
+        Some("agent-b".to_owned()),
+        "the second writer was told its claim was granted and the ledger does not have it: \
+         one writer wrote back a document it had read before the other one existed"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The same loss at the verb that ends a piece of work.
+///
+/// `Release` is the write `Finish` performs after its predicate passes, so a lost one is an
+/// agent that ran its verification, was told the item was recorded as done, and left behind
+/// a board that still calls the item claimed — or, as here, a board that has forgotten
+/// somebody else's claim entirely.
+#[test]
+fn Test_A_Release_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
+{
+    let directory = Temp_Dir("concurrent-release");
+    let clock = FixedClock(NOW);
+
+    Ledger_At(&directory, &clock)
+        .Save(&Document(vec![
+            Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 3_600),
+            Item("T-2", &["src/b.rs"]),
+        ]))
+        .expect("a fresh ledger is valid");
+
+    Two_Writers(
+        &directory,
+        &clock,
+        |ledger| {
+            ledger
+                .Release(
+                    &ItemId::New("T-1"),
+                    "agent-a",
+                    ReleaseOutcome::Abandoned {
+                        reason: REASON.to_owned(),
+                    },
+                )
+                .expect("a holder may give up its own claim");
+        },
+        |ledger| {
+            ledger
+                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+                .expect("T-2 shares no territory with T-1");
+        },
+    );
+
+    let after = Ledger_At(&directory, &clock).Load().expect("readable");
+
+    assert_eq!(
+        Holder_Of(&after, "T-2"),
+        Some("agent-b".to_owned()),
+        "a release wrote back a document read before the other writer's claim, so the claim \
+         it was granted is gone"
+    );
+    assert_eq!(
+        after
+            .items
+            .iter()
+            .find(|item| return item.id == ItemId::New("T-1"))
+            .map(|item| return item.abandoned.len()),
+        Some(1),
+        "the abandonment the first writer was told had been recorded is not in the ledger"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// And at the verb an agent runs most often, which is the one that hides best.
+///
+/// A renewal that is lost does not look like a lost write. It looks like a lease that ran out
+/// early, which reads as an agent that died — so the wrong thing gets investigated.
+#[test]
+fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
+{
+    let directory = Temp_Dir("concurrent-renew");
+    let clock = FixedClock(NOW);
+
+    Ledger_At(&directory, &clock)
+        .Save(&Document(vec![
+            Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 10),
+            Item("T-2", &["src/b.rs"]),
+        ]))
+        .expect("a fresh ledger is valid");
+
+    Two_Writers(
+        &directory,
+        &clock,
+        |ledger| {
+            ledger
+                .Renew(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+                .expect("a holder may renew its own claim");
+        },
+        |ledger| {
+            ledger
+                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+                .expect("T-2 shares no territory with T-1");
+        },
+    );
+
+    let after = Ledger_At(&directory, &clock).Load().expect("readable");
+
+    assert_eq!(
+        Holder_Of(&after, "T-2"),
+        Some("agent-b".to_owned()),
+        "a renewal wrote back a document read before the other writer's claim, so the claim \
+         it was granted is gone"
+    );
+    assert_eq!(
+        after
+            .items
+            .iter()
+            .find(|item| return item.id == ItemId::New("T-1"))
+            .and_then(|item| return item.claim.as_ref())
+            .map(|claim| return claim.lease_expires_at),
+        Some(At(NOW + 3_600)),
+        "the renewal the first writer was told had been recorded is not in the ledger"
     );
 
     let _ = std::fs::remove_dir_all(&directory);
