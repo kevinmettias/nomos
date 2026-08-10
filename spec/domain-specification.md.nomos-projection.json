@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:22c6d6f41ffd0b8ce1a355585ee28505ace88015d808366a1d49d3d62930ffff",
-  "inputs_digest": "sha256:3c8074afc4e55138e1a1dc09dfccdef8fcab994c8a1b16ae08d21c5e72411ecb",
+  "content_digest": "sha256:cd5483f0b11379141b8330ea06dc5d8cb4863dc54b92665c933c422c33ae38c9",
+  "inputs_digest": "sha256:f15286f1f03d6d2a52ef209b4e7bcb5c41e1832341a4bbba3b2ac0094818fedf",
   "sections": [
     [
       "Documents",
-      61
+      62
     ],
     [
       "Sections",
-      558
+      568
     ],
     [
       "Source blocks",
-      2262
+      2294
     ]
   ],
   "inputs": [
@@ -138,7 +138,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored",
-      "hash": "sha256:ea37484adfc9bc36165a945428b4ec7bb4d9e575967674072fd21adbfd4c0843"
+      "hash": "sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922"
     },
     {
       "content": "documents",
@@ -199,6 +199,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored",
       "hash": "sha256:5f21272705557881d9d73abe392ba0fc106a8185353907cc918aa75c666879be"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md@authored",
+      "hash": "sha256:05e72e68c8f9a965c72f529769f7093ba245682cf6bbb6c9f80dd9f0e93e74b3"
     },
     {
       "content": "documents",
@@ -1292,33 +1297,33 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#7",
-      "hash": "sha256:6ca58d93b29d015a2cf4450625c8d904954530a9b06d26f141789913b67d562f"
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#8",
+      "hash": "sha256:4e562da32f83b96d84e12b4d47564e333d5792ca981d5b3bccb571b5e3217c93"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#10",
-      "hash": "sha256:7e57f7be574c795d2d9ec628d8439153eddf735f63fa8ad9c96a05d5f9ae0094"
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#11",
+      "hash": "sha256:ee4b8ed5ccf58d15bc1f4c281c493b94c934cbb924a7043c4c120c2f31dadbef"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#17",
-      "hash": "sha256:576fd473307ef96fb45000313cef1fb53e4c0f7943df9eeca8a67c250f2416bc"
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#18",
+      "hash": "sha256:e227d110eb26590af8650dac070326ae3bb548a556d5c3373db283bff66841f3"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#25",
-      "hash": "sha256:4e28b64e7279b1e5eae8547e8dd9858306225a42e0ad34cad71139f53c7ffd6d"
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#26",
+      "hash": "sha256:dab2cdfbca254979405c37cfc4b3dcc35223bc8aefc6c97e48ae90a9287d2721"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#28",
-      "hash": "sha256:ec51a206977ddccf7a610cb49ed826300418acd6f3d8d7541c3f55f90bc2e128"
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#29",
+      "hash": "sha256:0c2d49c9dab37f9edf33eac43d60fb306c275e51b39c64befb32918a01bbd2e2"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#31",
-      "hash": "sha256:446af27143f853388d1bb2090fe2ba9cb3d7a2388130b9add9b66c7a6f6b067c"
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32",
+      "hash": "sha256:c85241a70979b52d8155890171eb07dae5f399c27b5e1289d203793318e0b659"
     },
     {
       "content": "headings",
@@ -1874,6 +1879,56 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36",
       "hash": "sha256:655b1270b55ae1a60ebef821a81b197c9f41ec311d68352081b067cbfff50a05"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#1",
+      "hash": "sha256:c4c247899e9e52f5bbfe8912ca6a6c5a36073fd4acc19719a623a41261b60b38"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#2",
+      "hash": "sha256:51cdd15dc18a0aaf016fb869ec14ce7a599a269670684f26b26384f619759954"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#8",
+      "hash": "sha256:bd82b6596020d99e088c162ea413c67759fbb1960367a91948d6b6add9a07fa0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#9",
+      "hash": "sha256:ff567abc6ce9775728993421573c433d1f5af11990579eaa3437f58a4c99512c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#15",
+      "hash": "sha256:070f1302816b689c3bd097436c3287ffa1c12a420c956bf515a966c547dd4990"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#18",
+      "hash": "sha256:8b45660f38b66e98540fed3513303d7baa709e21755a156d22abf3df17d6374e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#22",
+      "hash": "sha256:cae02771db4a957b117a88957610b6da3e02cee4d6274338f355c418d019c9ad"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#26",
+      "hash": "sha256:15de7cd1ac6e4da2d09a25d928bb55650e623ddd55564b7cada05b4a473a6868"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#28",
+      "hash": "sha256:32cce8f17f5ec1d1266dfa5c8391e4a8cd237fc168cc0d49d30d4c2102183139"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#30",
+      "hash": "sha256:f12b45a24a6386814d4c98e2594a2b396fcd9f70cbd1f97899ae941ff93a9306"
     },
     {
       "content": "headings",
@@ -6798,156 +6853,161 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#5",
-      "hash": "sha256:33fb68a0dfd3c5c4c23b178a0c4ccb35c3c1c4a5ff0b97d90bf6f9239f2aa616"
+      "hash": "sha256:788bed63312d839b68bb1d8e95a3d3b39e8351bd2af55db8d7ec2d1cc4b3eaff"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#6",
-      "hash": "sha256:5b5b0f86d21cd75490a871650f513cc498e5fa23edac34ac9dc180cf662810e5"
+      "hash": "sha256:9675f9766a6517142ef03e2bb8cffd0821e7e68419cfc47a4881d95dd1d4ea38"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#7",
-      "hash": "sha256:4304963d62d201a473a5dcdfdc689cf14aa577c87c2932120e97ceaa34a5f125"
+      "hash": "sha256:5b5b0f86d21cd75490a871650f513cc498e5fa23edac34ac9dc180cf662810e5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#8",
-      "hash": "sha256:6fb314231db6e5dedb9a5dd23af9a421858fa37ae2107ef9829a87c2c0e53ead"
+      "hash": "sha256:4304963d62d201a473a5dcdfdc689cf14aa577c87c2932120e97ceaa34a5f125"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#9",
-      "hash": "sha256:dc15741d313a4078e20527c1ec091340dd66e32858f5d9a59a00351b96999954"
+      "hash": "sha256:6fb314231db6e5dedb9a5dd23af9a421858fa37ae2107ef9829a87c2c0e53ead"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#10",
-      "hash": "sha256:496c0fbd95d830b7dac8602cf9a2adeccc0c3eb7c50387d3a9150aff09cd42f2"
+      "hash": "sha256:dc15741d313a4078e20527c1ec091340dd66e32858f5d9a59a00351b96999954"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#11",
-      "hash": "sha256:0dbde656862e6ae1c35fba6debf3c53bfc9548758103bbf5ccbc0756213e8aae"
+      "hash": "sha256:496c0fbd95d830b7dac8602cf9a2adeccc0c3eb7c50387d3a9150aff09cd42f2"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#12",
-      "hash": "sha256:79c55d8f5a8d32b3fb83386846638350a77b2543210634a1ca15640a7766d1e1"
+      "hash": "sha256:0dbde656862e6ae1c35fba6debf3c53bfc9548758103bbf5ccbc0756213e8aae"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#13",
-      "hash": "sha256:6e6b0bcd06daf26109d2343066c7b3b3af63ef8b9dd105e04437c3724fe87ca0"
+      "hash": "sha256:79c55d8f5a8d32b3fb83386846638350a77b2543210634a1ca15640a7766d1e1"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#14",
-      "hash": "sha256:3fce7502ae847c19408cd1a23b7d15f129054f974204a14a61c929c229cbda3b"
+      "hash": "sha256:6e6b0bcd06daf26109d2343066c7b3b3af63ef8b9dd105e04437c3724fe87ca0"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#15",
-      "hash": "sha256:267e09a1bfe75b956a5c997d8c39c810f78ff6d4b413d7063c7cc893b91772e8"
+      "hash": "sha256:3fce7502ae847c19408cd1a23b7d15f129054f974204a14a61c929c229cbda3b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#16",
-      "hash": "sha256:bc380ffce93e1a022d47a9c390686843f7fcb62969e5cee7538f4efa4769990d"
+      "hash": "sha256:267e09a1bfe75b956a5c997d8c39c810f78ff6d4b413d7063c7cc893b91772e8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#17",
-      "hash": "sha256:f13cc4e657a236daa2fdffbea0e3e2b727f4f11717de223b055cb583aa1d178d"
+      "hash": "sha256:bc380ffce93e1a022d47a9c390686843f7fcb62969e5cee7538f4efa4769990d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#18",
-      "hash": "sha256:57acbaadc9eb52faef34f117af047b3ae07a25004fdfb3edd7a1e0198416bdfe"
+      "hash": "sha256:f13cc4e657a236daa2fdffbea0e3e2b727f4f11717de223b055cb583aa1d178d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#19",
-      "hash": "sha256:615b213fe95b88e0e2727e3a871b7a4ff4ae14e6e67b67dd470619027ea261e6"
+      "hash": "sha256:57acbaadc9eb52faef34f117af047b3ae07a25004fdfb3edd7a1e0198416bdfe"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#20",
-      "hash": "sha256:be8efbaba66c07c1d4a2d7a8cbd4ccad38b54aa9db4f9f2bf876bdc77464e60c"
+      "hash": "sha256:615b213fe95b88e0e2727e3a871b7a4ff4ae14e6e67b67dd470619027ea261e6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#21",
-      "hash": "sha256:69988a8f2b8bc1f543732e9f22b0ce5b16679add532c91aaaf2c910630cf8ff5"
+      "hash": "sha256:be8efbaba66c07c1d4a2d7a8cbd4ccad38b54aa9db4f9f2bf876bdc77464e60c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#22",
-      "hash": "sha256:47eb4f8254ee406e86c326d5b5f6239c15cde694a96c1c6cbb5b4deeb1d3103a"
+      "hash": "sha256:69988a8f2b8bc1f543732e9f22b0ce5b16679add532c91aaaf2c910630cf8ff5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#23",
-      "hash": "sha256:1a5131b466a5585d7783b0c7c4207425bf4dcfd237d4df014579d03f2eb445ac"
+      "hash": "sha256:47eb4f8254ee406e86c326d5b5f6239c15cde694a96c1c6cbb5b4deeb1d3103a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#24",
-      "hash": "sha256:ffe635fef5c32929d9b29df4af06a4001bf2fb8f6ac8c63ea74371eddff4f75b"
+      "hash": "sha256:1a5131b466a5585d7783b0c7c4207425bf4dcfd237d4df014579d03f2eb445ac"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#25",
-      "hash": "sha256:630c6a16b18782594a2bb524fa37733d6c8af04c329e43ffe80259c932b72a51"
+      "hash": "sha256:ffe635fef5c32929d9b29df4af06a4001bf2fb8f6ac8c63ea74371eddff4f75b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#26",
-      "hash": "sha256:5c8082707941b3332430bd67aaed7a433d100ada315796268e0be643429f4c16"
+      "hash": "sha256:630c6a16b18782594a2bb524fa37733d6c8af04c329e43ffe80259c932b72a51"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#27",
-      "hash": "sha256:950b38a1393e19fbbd21c93935a034bee8afbdad29fe0054ae5a24c189919c04"
+      "hash": "sha256:5c8082707941b3332430bd67aaed7a433d100ada315796268e0be643429f4c16"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#28",
-      "hash": "sha256:65fa2bcddaba1d3e3696039fe8570b4b4ba1a905e43997474c5b5cc375e34933"
+      "hash": "sha256:950b38a1393e19fbbd21c93935a034bee8afbdad29fe0054ae5a24c189919c04"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#29",
-      "hash": "sha256:683a6981601776f194e17c418305c12edb0240a32ab343ced8cfd9ecb48407f8"
+      "hash": "sha256:65fa2bcddaba1d3e3696039fe8570b4b4ba1a905e43997474c5b5cc375e34933"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#30",
-      "hash": "sha256:72e914f27bb0d3b1a3640f884968aab57aeb882bdebe3760b0a8f950bda29137"
+      "hash": "sha256:683a6981601776f194e17c418305c12edb0240a32ab343ced8cfd9ecb48407f8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#31",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:72e914f27bb0d3b1a3640f884968aab57aeb882bdebe3760b0a8f950bda29137"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32",
-      "hash": "sha256:e3686342e94a683a5c305bfb0af3e2f9da7085d0a9d5b2de5607d644f94e93ae"
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#33",
-      "hash": "sha256:8d027994040f8fa27c9e2a98eef5776431b079a0d9138bbd8933de1a4e8692ac"
+      "hash": "sha256:e3686342e94a683a5c305bfb0af3e2f9da7085d0a9d5b2de5607d644f94e93ae"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#34",
-      "hash": "sha256:3e6784a3ed18f3a981310c1c59682c13b4043576525a14cc48954a528737e345"
+      "hash": "sha256:8d027994040f8fa27c9e2a98eef5776431b079a0d9138bbd8933de1a4e8692ac"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#35",
+      "hash": "sha256:3e6784a3ed18f3a981310c1c59682c13b4043576525a14cc48954a528737e345"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#36",
       "hash": "sha256:8854bab220eb77638d89a9b848e1b71a1884cbdb553ddeaebc7c1796ddd51be8"
     },
     {
@@ -9139,6 +9199,161 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#37",
       "hash": "sha256:93fcbc34b5418e23f7ba27548ac2a55f486cb52347526db2f220f33cbb5dcf66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#1",
+      "hash": "sha256:45673e3b8414583fd0ef42a1c425daa574b821208a026045fec9b1963c6834da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#3",
+      "hash": "sha256:6f10a88db072ab3ba77f0672193989c80c1783b1055a24e8368838ea16cb9bf1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#4",
+      "hash": "sha256:734d173b1d59309b5e607ce1c34955130453b2d8200caa108a501f83e68817f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#5",
+      "hash": "sha256:74609e71301f4d9d2dbd95b8b73930efc536c18931e0f637912c8d39e58366a1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#6",
+      "hash": "sha256:83705fda7ded816ba1d434b3c85bfd0b0c55fe29eb252007bbe9e871f5b0599e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#7",
+      "hash": "sha256:166e72d74085b78d0e3aefd0b23a7467a2d7cd8b00efd5aa29a5dddab07af321"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#9",
+      "hash": "sha256:b6571454e62100ababadbe61c4f6aa0feff93e90e50ed14a10e764710642025e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#10",
+      "hash": "sha256:d51ebefff773ea6ac894ce27997a75784f0a83ad987192f533f60e7b4555f624"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#11",
+      "hash": "sha256:24636096a95f91bf46e79e513de98469100cfdef239f4602e191da0c848fbeb9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#12",
+      "hash": "sha256:b8970e2005564bf52faee39bb027f8ec3a055a89166335feb419561c5c60b3b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#13",
+      "hash": "sha256:b4c3a646a2a262cfdd8f24de7e8459ae4f04a276e3de48033e2692ac9beeb426"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#14",
+      "hash": "sha256:957c8400087b19ec1f38df0023b637e37ce6cb9a2368b14eaec851e06f6446df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#15",
+      "hash": "sha256:6fe3258fca45cdb9bddcac33828a4f497732bfb7cbf6bf49d83457f0187cf65e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#16",
+      "hash": "sha256:79315865dbd41ff1c2051ec4e497392265ba642e0366208df9eaec40716dc3e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#17",
+      "hash": "sha256:10c17460db138b05bbf20ceb1b53c7d7c4478c9746b83051123d8119b7e5d541"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#18",
+      "hash": "sha256:eb095385184d53373680a7cb424e8e61d98fd1230cac38aecb7d8f02201ee222"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#19",
+      "hash": "sha256:09f885af175583339664b8fa30e7ed89e2f23b6d766373df294b6c69f0324381"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#20",
+      "hash": "sha256:c01beea02824b76ad083adea768cea528440173ae7da7b29374a46a9387bf12e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#21",
+      "hash": "sha256:d8bcf8fa1c5433a943fcd1ad81154078d2e696db92fd4da3db9f642116f6535a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#22",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#23",
+      "hash": "sha256:146c9f52c9ca54fac64339ae4ed36d86e721f81ded072ba82c121c5b6fd76257"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#24",
+      "hash": "sha256:96b8142613b508ddc76844d95943a29d080abfe3e96f8951d33918df61559450"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#25",
+      "hash": "sha256:7da0b5d63c8c8515a956bb613e401e8af930f6958c2b909892ab8c628d96012d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#26",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#27",
+      "hash": "sha256:e0ba59384a83559d6de49e41536233548b0bc30dc9b77da39dd6dbe84a671df6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#28",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#29",
+      "hash": "sha256:7aed5ed470277c9933bf3d4a445631091a5dea9569d04007048fb1a08868e9c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#31",
+      "hash": "sha256:56aa96fafa3f5c879ec3a414313c67b0a5d2d933ae0613453bef27664cf24138"
     },
     {
       "content": "blocks",

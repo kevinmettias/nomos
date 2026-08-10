@@ -33,7 +33,7 @@ profile: domain-specification
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 24 | 8 | sha256:b39496b715d80c073eaee5e8087fd9a9454131c1975bef781ec837c646ba18d8 |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 35 | 9 | sha256:ea37484adfc9bc36165a945428b4ec7bb4d9e575967674072fd21adbfd4c0843 |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md@authored | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md | authored | 40 | 11 | sha256:24377a098af14a7108359fca1224d1d1ef08d6c700415a93b4322713f2624785 |
@@ -46,6 +46,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md@authored | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md | authored | 57 | 11 | sha256:bea0117983798941618c6bb02e434e01724011b472b15ce2789eea55dffdc6bd |
 | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md@authored | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md | authored | 49 | 12 | sha256:132b3b282d6055769c5aa827f773c67e60275d3a0d43008b0591d1525f70dca4 |
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md | authored | 37 | 12 | sha256:5f21272705557881d9d73abe392ba0fc106a8185353907cc918aa75c666879be |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md@authored | docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md | authored | 31 | 10 | sha256:05e72e68c8f9a965c72f529769f7093ba245682cf6bbb6c9f80dd9f0e93e74b3 |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md@authored | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md | authored | 42 | 10 | sha256:a66618d299913629165021f9bec2bd02f4afcb0714f8dd1149db99f5391d2e71 |
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md@authored | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md | authored | 39 | 10 | sha256:cbf273e93bd704aae1337dc210a950f7f95493a727a45aef6d66b0af422aa458 |
 | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md@authored | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md | authored | 108 | 19 | sha256:37c30a7fb96b566768cb5b23df4bb92b037c769ce8f7eabc087b4dd91742d730 |
@@ -269,12 +270,12 @@ profile: domain-specification
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#7 | authored | 2 | The Evidence |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#10 | authored | 2 | It Recurred, Three Times Running |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#17 | authored | 2 | What Would Reduce It Now |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#25 | authored | 3 | Why this rule says "the record" and not "`docs/records`" |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#28 | authored | 2 | What Would Close It |
-| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#31 | authored | 2 | Status |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#8 | authored | 2 | The Evidence |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#11 | authored | 2 | It Recurred, Three Times Running |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#18 | authored | 2 | What Would Reduce It Now |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#26 | authored | 3 | Why this rule says "the record" and not "`docs/records`" |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#29 | authored | 2 | What Would Close It |
+| docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32 | authored | 2 | Status |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#1 | authored | 1 | A ledger id's number is the ledger's own, and P8 is not the plan's Phase 8 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#6 | authored | 2 | What The Ledger Actually Holds |
@@ -386,6 +387,16 @@ profile: domain-specification
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#32 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#34 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36 | authored | 2 | Status |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#1 | authored | 1 | A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#8 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#9 | authored | 3 | 1. The description never puts a name other than the refused item in subject position |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#15 | authored | 3 | 2. The workaround is deleted in the same commit |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#18 | authored | 3 | 3. `Conflicts` is removed rather than kept with a reason |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#22 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#26 | authored | 2 | What This Does Not Do |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#28 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#30 | authored | 2 | Status |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#1 | authored | 1 | The three verbs that change the board took no lock, and what a lock may span is the recording of a verdict and not the reaching of it |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#7 | authored | 2 | What Was Actually At Risk |
@@ -6861,13 +6872,22 @@ overlaps one somebody already holds. Nothing checks that the work then stayed in
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#5
 
-*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Is Actually Enforced · hash: sha256:33fb68a0dfd3c5c4c23b178a0c4ccb35c3c1c4a5ff0b97d90bf6f9239f2aa616*
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Is Actually Enforced · hash: sha256:788bed63312d839b68bb1d8e95a3d3b39e8351bd2af55db8d7ec2d1cc4b3eaff*
 
-Exclusion between competing claims, and only that. `Conflicts` compares the requested
-territory against held ones and refuses on overlap or on an unanswerable overlap question.
-That is the whole mechanism.
+Exclusion between competing claims, and only that. Claiming compares the requested territory
+against the territories of items holding a live claim, and refuses on overlap or on an
+unanswerable overlap question. That is the whole mechanism.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#6
+
+*revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Is Actually Enforced · hash: sha256:9675f9766a6517142ef03e2bb8cffd0821e7e68419cfc47a4881d95dd1d4ea38*
+
+This paragraph named `Conflicts` until `OD-LEDGER-014` removed it. The mechanism it described
+is unchanged and is now reached only through `Claim`, which asks the same question under the
+lock; the standalone method had lost its last caller and a record describing a method nobody
+can call is a promise the crate no longer keeps.
+
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#7
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Is Actually Enforced · hash: sha256:5b5b0f86d21cd75490a871650f513cc498e5fa23edac34ac9dc180cf662810e5*
 
@@ -6875,13 +6895,13 @@ An agent holding a claim may edit any file in the repository. The territory is a
 about where it intends to write, and a promise is what this system exists to stop relying
 on.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#7
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#8
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference / The Evidence · hash: sha256:4304963d62d201a473a5dcdfdc689cf14aa577c87c2932120e97ceaa34a5f125*
 
 ## The Evidence
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#8
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#9
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / The Evidence · hash: sha256:6fb314231db6e5dedb9a5dd23af9a421858fa37ae2107ef9829a87c2c0e53ead*
 
@@ -6890,7 +6910,7 @@ P2-RECORDS declared its territory as `docs/records`. Completing it required chan
 four crates, none of them named. The item finished, its predicate passed, and the ledger
 reported valid. Nothing was wrong with the work; what is wrong is that nothing could tell.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#9
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#10
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / The Evidence · hash: sha256:dc15741d313a4078e20527c1ec091340dd66e32858f5d9a59a00351b96999954*
 
@@ -6898,13 +6918,13 @@ Two failures are being conflated here and they need separating. One is that the 
 was authored too narrowly, which is an authoring mistake and will recur. The other is that
 an authoring mistake of this kind is invisible, which is a design gap.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#10
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#11
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference / It Recurred, Three Times Running · hash: sha256:496c0fbd95d830b7dac8602cf9a2adeccc0c3eb7c50387d3a9150aff09cd42f2*
 
 ## It Recurred, Three Times Running
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#11
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#12
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / It Recurred, Three Times Running · hash: sha256:0dbde656862e6ae1c35fba6debf3c53bfc9548758103bbf5ccbc0756213e8aae*
 
@@ -6912,7 +6932,7 @@ Phase 8 was four items. Three of them worked outside their claimed territory, an
 authoring mistake was the same shape each time — the item named where the *thinking* would
 happen and not where the *writing* would.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#12
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#13
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / It Recurred, Three Times Running · hash: sha256:79c55d8f5a8d32b3fb83386846638350a77b2543210634a1ca15640a7766d1e1*
 
@@ -6920,7 +6940,7 @@ happen and not where the *writing* would.
 item's own `why` was a finding waiting to happen; that a finding gets written down was not
 foreseen by the territory.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#13
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#14
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / It Recurred, Three Times Running · hash: sha256:6e6b0bcd06daf26109d2343066c7b3b3af63ef8b9dd105e04437c3724fe87ca0*
 
@@ -6929,7 +6949,7 @@ foreseen by the territory.
 removed. The item was authored against the crate that *owns* the type rather than against
 the crates that *name* it.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#14
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#15
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / It Recurred, Three Times Running · hash: sha256:3fce7502ae847c19408cd1a23b7d15f129054f974204a14a61c929c229cbda3b*
 
@@ -6938,7 +6958,7 @@ root `Cargo.toml` and `tests/contract/tests/boundaries.rs`. A new crate cannot j
 workspace without both: one to be built, the other to pass
 `Test_Every_Member_Should_Declare_A_Band`.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#15
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#16
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / It Recurred, Three Times Running · hash: sha256:267e09a1bfe75b956a5c997d8c39c810f78ff6d4b413d7063c7cc893b91772e8*
 
@@ -6946,7 +6966,7 @@ Every one was caught by the author and named in a commit message. That is not th
 working — it is the mechanism absent and somebody being careful, which is the arrangement
 this whole system exists to stop relying on.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#16
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#17
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / It Recurred, Three Times Running · hash: sha256:bc380ffce93e1a022d47a9c390686843f7fcb62969e5cee7538f4efa4769990d*
 
@@ -6956,26 +6976,26 @@ is a pattern, and it says the authoring half is the larger half — the enforcem
 made it invisible, but the check that closes the gap will *fail three items in four* until
 the authoring changes too.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#17
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#18
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:f13cc4e657a236daa2fdffbea0e3e2b727f4f11717de223b055cb583aa1d178d*
 
 ## What Would Reduce It Now
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#18
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#19
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:57acbaadc9eb52faef34f117af047b3ae07a25004fdfb3edd7a1e0198416bdfe*
 
 Two rules, both checkable by a person writing an item, neither needing the rule engine:
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#19
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#20
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:615b213fe95b88e0e2727e3a871b7a4ff4ae14e6e67b67dd470619027ea261e6*
 
 **An item that adds a crate claims the workspace manifest and the band table.** Cargo and
 `tests/contract` both require it; no new crate has ever landed without touching both.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#20
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#21
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:be8efbaba66c07c1d4a2d7a8cbd4ccad38b54aa9db4f9f2bf876bdc77464e60c*
 
@@ -6986,7 +7006,7 @@ than when it finishes. *Which* record is answerable then too: reserve
 `docs/records/OD-<AREA>-<NNN>`, the identifier the item will allocate. An item that cannot
 say which record it will write has not been thought through far enough to claim.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#21
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#22
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:69988a8f2b8bc1f543732e9f22b0ce5b16679add532c91aaaf2c910630cf8ff5*
 
@@ -6994,7 +7014,7 @@ Reserve the identifier and stop there. The slug on the end of the filename is no
 when the item is authored, and a pattern is worse than either — `Territory::Intersect`
 answers `Unknown` for a territory carrying one, and `Unknown` refuses.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#22
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#23
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:47eb4f8254ee406e86c326d5b5f6239c15cde694a96c1c6cbb5b4deeb1d3103a*
 
@@ -7006,7 +7026,7 @@ together or the workspace goes red. The declaration is now one file per record �
 `crates/spec/nomos-spec-store/records/<ID>.record`, named for the identifier the item is
 already reserving — so reserve that path and stop there.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#23
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#24
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:1a5131b466a5585d7783b0c7c4207425bf4dcfd237d4df014579d03f2eb445ac*
 
@@ -7021,20 +7041,20 @@ the reservation is now the registration file. Territories authored before that r
 name the crate; they are history rather than a rule, and they are re-authored by the pass
 that empties `KNOWN_SERIALIZERS`.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#24
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#25
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now · hash: sha256:ffe635fef5c32929d9b29df4af06a4001bf2fb8f6ac8c63ea74371eddff4f75b*
 
 None is a check and none pretends to be. They are the three cases that have actually
 recurred, written down so the next item can be authored past them.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#25
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#26
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now / Why this rule says "the record" and not "`docs/records`" · hash: sha256:630c6a16b18782594a2bb524fa37733d6c8af04c329e43ffe80259c932b72a51*
 
 ### Why this rule says "the record" and not "`docs/records`"
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#26
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#27
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now / Why this rule says "the record" and not "`docs/records`" · hash: sha256:5c8082707941b3332430bd67aaed7a433d100ada315796268e0be643429f4c16*
 
@@ -7043,7 +7063,7 @@ Every item on an audit ledger names a suspected defect in its `why`, so every it
 a record, so a rule requiring each of them to reserve one shared directory made every item
 exclude every other. Measured on 2026-08-09: one claim, eight refusals, nothing claimable.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#27
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#28
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Reduce It Now / Why this rule says "the record" and not "`docs/records`" · hash: sha256:950b38a1393e19fbbd21c93935a034bee8afbdad29fe0054ae5a24c189919c04*
 
@@ -7052,13 +7072,13 @@ expensive failure — this record exists because of three instances of it. The c
 to the granularity only, and OD-LEDGER-004 carries the evidence, the controls, and the guard
 that keeps it.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#28
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#29
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:65fa2bcddaba1d3e3696039fe8570b4b4ba1a905e43997474c5b5cc375e34933*
 
 ## What Would Close It
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#29
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#30
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:683a6981601776f194e17c418305c12edb0240a32ab343ced8cfd9ecb48407f8*
 
@@ -7066,7 +7086,7 @@ that keeps it.
 modified must be contained in the territory it claimed. That requires the changeset model
 and the rule engine, so it cannot be built earlier.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#30
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#31
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / What Would Close It · hash: sha256:72e914f27bb0d3b1a3640f884968aab57aeb882bdebe3760b0a8f950bda29137*
 
@@ -7075,13 +7095,13 @@ same ground, and does not prevent one agent from working outside its own. Declar
 plainly is worth more than a check that runs nowhere, because a stated gap can be planned
 around and a false clean cannot.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#31
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#32
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#33
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:e3686342e94a683a5c305bfb0af3e2f9da7085d0a9d5b2de5607d644f94e93ae*
 
@@ -7090,14 +7110,14 @@ against the territory at `finish` time — was considered and rejected: it canno
 already committed, it cannot distinguish an agent's writes from a concurrent one's, and a
 check that is wrong in both directions teaches people to ignore the ones that are right.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#33
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#34
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:8d027994040f8fa27c9e2a98eef5776431b079a0d9138bbd8933de1a4e8692ac*
 
 Amended at version 2 with three further instances and the two authoring rules they suggest.
 The gap is unchanged; what changed is the evidence about which half of it is expensive.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#34
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#35
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:3e6784a3ed18f3a981310c1c59682c13b4043576525a14cc48954a528737e345*
 
@@ -7107,7 +7127,7 @@ directory. The enforcement gap this record is *about* is still open and still wa
 `nomos.rules.work-ledger`; what version 3 changes is only the granularity of a declaration,
 which is the half that was already working.
 
-### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#35
+### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#36
 
 *revision: authored · kind: prose · heading: Territory is declared but not enforced, and nothing yet notices the difference / Status · hash: sha256:8854bab220eb77638d89a9b848e1b71a1884cbdb553ddeaebc7c1796ddd51be8*
 
@@ -10777,6 +10797,245 @@ pattern seconds apart would reserve different sets, and the document would not s
 *revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Status · hash: sha256:93fcbc34b5418e23f7ba27548ac2a55f486cb52347526db2f220f33cbb5dcf66*
 
 Closed by `P10-PATTERN-BRICK`.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#1
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed · hash: sha256:45673e3b8414583fd0ef42a1c425daa574b821208a026045fec9b1963c6834da*
+
+# A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#2
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#3
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Question · hash: sha256:6f10a88db072ab3ba77f0672193989c80c1783b1055a24e8368838ea16cb9bf1*
+
+Two findings, both surfaced by `P10-AUDIT-STATE` in territory it did not hold.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#4
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Question · hash: sha256:734d173b1d59309b5e607ce1c34955130453b2d8200caa108a501f83e68817f9*
+
+`ClaimRefusal::HeldBy`'s description read `{item} overlaps territory held by {holder}`, where
+`item` is the **blocker** rather than the item that was refused. That is a true sentence
+standing alone and says the reverse of what happened as soon as a caller prints it beneath the
+subject's own identifier. `work audit` does exactly that, and emitted
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#5
+
+*revision: authored · kind: code · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Question · hash: sha256:74609e71301f4d9d2dbd95b8b73930efc536c18931e0f637912c8d39e58366a1*
+
+```
+P1-MODEL      held      P9-AUTHORING overlaps territory held by agent-x until unix …
+```
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#6
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Question · hash: sha256:83705fda7ded816ba1d434b3c85bfd0b0c55fe29eb252007bbe9e871f5b0599e*
+
+for forty-four items, in which a reader can tell that one of the two names was refused and
+cannot tell which. `P10-AUDIT-STATE` could not reach `exclusion.rs`, so it re-phrased that one
+arm locally in `work.rs` — leaving one refusal with two renderings and the library's still
+wrong for the next caller.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#7
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Question · hash: sha256:166e72d74085b78d0e3aefd0b23a7467a2d7cd8b00efd5aa29a5dddab07af321*
+
+Separately, `ExclusionLedger::Conflicts` had no caller anywhere in the workspace. `work audit`
+was the last one and now goes through `Blocking_Refusal`. It was public surface and
+`OD-LEDGER-001` described it, so deleting it silently was not available.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#8
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#9
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 1. The description never puts a name other than the refused item in subject position · hash: sha256:b6571454e62100ababadbe61c4f6aa0feff93e90e50ed14a10e764710642025e*
+
+### 1. The description never puts a name other than the refused item in subject position
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#10
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 1. The description never puts a name other than the refused item in subject position · hash: sha256:d51ebefff773ea6ac894ce27997a75784f0a83ad987192f533f60e7b4555f624*
+
+Of the two branches `P10-REFUSAL-SURFACE` offered, this is the second: the blocker's identity
+is already exposed on the variant, so a caller can compose whatever sentence it needs, and
+`Describe` is documented as the form for a caller that has **not** named its subject. The held
+arm now reads
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#11
+
+*revision: authored · kind: code · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 1. The description never puts a name other than the refused item in subject position · hash: sha256:24636096a95f91bf46e79e513de98469100cfdef239f4602e191da0c848fbeb9*
+
+```
+territory overlaps {blocker}, held by {holder} until unix N
+```
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#12
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 1. The description never puts a name other than the refused item in subject position · hash: sha256:b8970e2005564bf52faee39bb027f8ec3a055a89166335feb419561c5c60b3b2*
+
+which composes correctly under an identifier and asserts nothing false without one.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#13
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 1. The description never puts a name other than the refused item in subject position · hash: sha256:b4c3a646a2a262cfdd8f24de7e8459ae4f04a276e3de48033e2692ac9beeb426*
+
+The first branch — `Describe` taking the subject — was rejected on scope rather than taste. It
+changes a widely used signature and every call site, and it is dead weight for the arms whose
+subject is already the refused item (`Lapsed`, `NotClaimable`, `DependencyUnmet`) and for
+`LedgerUnusable`, which is not about an item at all. A parameter every caller must supply and
+most arms ignore is a worse surface than a phrasing rule.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#14
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 1. The description never puts a name other than the refused item in subject position · hash: sha256:957c8400087b19ec1f38df0023b637e37ce6cb9a2368b14eaec851e06f6446df*
+
+The rule generalizes, which is why it is stated on `Describe` rather than on the one arm:
+**an arm carrying an identifier that is not the refused item must not open with it.** Two arms
+carry one today.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#15
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 2. The workaround is deleted in the same commit · hash: sha256:6fe3258fca45cdb9bddcac33828a4f497732bfb7cbf6bf49d83457f0187cf65e*
+
+### 2. The workaround is deleted in the same commit
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#16
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 2. The workaround is deleted in the same commit · hash: sha256:79315865dbd41ff1c2051ec4e497392265ba642e0366208df9eaec40716dc3e4*
+
+`Blocking_Reason` in `crates/host/nomos-cli/src/work.rs` is gone and `audit` calls `Describe`
+directly. `P10-REFUSAL-SURFACE` required this in the same commit and the requirement is right:
+the cost of the workaround was never the duplicated `format!`, it was that two renderings of
+one refusal outlive the reason for the second, and the next caller gets the wrong one.
+`OD-LEDGER-005` is the standing instance of this shape.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#17
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 2. The workaround is deleted in the same commit · hash: sha256:10c17460db138b05bbf20ceb1b53c7d7c4478c9746b83051123d8119b7e5d541*
+
+The phrasing adopted above is the workaround's own, which is the evidence it was right — it
+was written by the session that had actually read the forty-four bad lines. What was wrong was
+its address, not its wording.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#18
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 3. `Conflicts` is removed rather than kept with a reason · hash: sha256:eb095385184d53373680a7cb424e8e61d98fd1230cac38aecb7d8f02201ee222*
+
+### 3. `Conflicts` is removed rather than kept with a reason
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#19
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 3. `Conflicts` is removed rather than kept with a reason · hash: sha256:09f885af175583339664b8fa30e7ed89e2f23b6d766373df294b6c69f0324381*
+
+The trait method, its implementation, and its two lines of public surface all go.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#20
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 3. `Conflicts` is removed rather than kept with a reason · hash: sha256:c01beea02824b76ad083adea768cea528440173ae7da7b29374a46a9387bf12e*
+
+Keeping it would mean keeping a public method with no caller, whose answer is a snapshot that
+is stale the moment it returns — `Claim` re-asks the same question under the lock, which is why
+its own documentation noted it took none. A reader finding it would reasonably build the very
+thing `P10-AUDIT-STATE` removed: a second walk over the board that compares territory and knows
+nothing about state or dependencies, which over-reported forty-four `Done` items as blocked and
+was silent on every item merely waiting.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#21
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / The Decision / 3. `Conflicts` is removed rather than kept with a reason · hash: sha256:d8bcf8fa1c5433a943fcd1ad81154078d2e696db92fd4da3db9f642116f6535a*
+
+`OD-LEDGER-001`'s "What Is Actually Enforced" paragraph named it and is amended here. The
+mechanism it described has not changed — the same comparison, reached only through `Claim`.
+That is the amendment: a record describing a method nobody can call is a promise the crate no
+longer keeps.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#22
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#23
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / What Was Considered And Rejected · hash: sha256:146c9f52c9ca54fac64339ae4ed36d86e721f81ded072ba82c121c5b6fd76257*
+
+**Leave `Describe` alone and document the hazard.** Refused in advance by
+`P10-REFUSAL-SURFACE`'s `done_when`, and correctly: the hazard is a sentence that reads as
+true while naming the wrong subject, and a note in a doc comment is not read by the person
+reading the output.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#24
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / What Was Considered And Rejected · hash: sha256:96b8142613b508ddc76844d95943a29d080abfe3e96f8951d33918df61559450*
+
+**Keep `Conflicts` for future callers.** The future caller is `Claim`, which exists. An
+unused public method is a design that has not been used yet, and this one has been tried:
+`audit` used it and the result was the defect `P10-AUDIT-STATE` closed.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#25
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / What Was Considered And Rejected · hash: sha256:7da0b5d63c8c8515a956bb613e401e8af930f6958c2b909892ab8c628d96012d*
+
+**Assert the fix with a substring search for the identifiers.** Rejected because the wrong
+sentence passes it — both spellings contain both identifiers and only the order differs. The
+test asserts position, which is the property that actually moved.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#26
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#27
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / What This Does Not Do · hash: sha256:e0ba59384a83559d6de49e41536233548b0bc30dc9b77da39dd6dbe84a671df6*
+
+- It does not change which claims are refused, or any exit code. Both changes are to what is
+  said and to what is reachable, not to what is decided.
+- It does not remove the blocker's identity from the refusal. Decision 1 depends on it staying
+  there: a caller composing its own sentence needs it, and the test asserts the description
+  still names both the blocker and its holder.
+- It does not touch the arms whose subject is already correct.
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#28
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#29
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Controls · hash: sha256:7aed5ed470277c9933bf3d4a445631091a5dea9569d04007048fb1a08868e9c7*
+
+| Weakening | What it produces |
+|---|---|
+| restore `{item} overlaps territory held by …` | `P1-MODEL: P9-AUTHORING overlaps …` — forty-four lines naming the blocker as the refused item |
+| fix the library and leave `Blocking_Reason` | two renderings of one refusal, and the next caller inherits whichever is wrong |
+| add a subject parameter to `Describe` | every call site changed, and a parameter four arms ignore |
+| keep `Conflicts` unused | a stateless second walk over the board, which is the defect `P10-AUDIT-STATE` measured at forty-four wrong lines |
+| assert with a substring search | green for the sentence the item was raised about |
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#30
+
+*revision: authored · kind: heading · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-014-a-refusal-is-phrased-so-the-caller-can-name-the-subject.md#31
+
+*revision: authored · kind: prose · heading: A refusal is phrased so the caller can name the subject, and the reading method with no caller is removed / Status · hash: sha256:56aa96fafa3f5c879ec3a414313c67b0a5d2d933ae0613453bef27664cf24138*
+
+Closed by `P10-REFUSAL-SURFACE`.
 
 ### docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#1
 

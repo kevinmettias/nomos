@@ -3,7 +3,7 @@ id: ARC-ECOSYSTEM-001
 type: architecture
 title: Four products share one seam, and ownership is decided by semantics rather than by location
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - ecosystem
@@ -18,14 +18,26 @@ relations:
     type: relates-to
   - target: OD-LEDGER-001
     type: relates-to
+  - target: D-085
+    type: relates-to
+  - target: D-086
+    type: relates-to
+  - target: D-090
+    type: relates-to
+  - target: D-096
+    type: relates-to
+  - target: D-122
+    type: relates-to
 ---
 
 # Four products share one seam, and ownership is decided by semantics rather than by location
 
 ## Question
 
-Four things are being built around one another, and until now this repository has recorded
-nothing about where one ends and the next begins.
+Four things are being built around one another, and until now this repository's own records
+have said nothing about where one ends and the next begins. Version 1 of this record said
+something stronger and wrong — that *nothing* had recorded it — and the correction is
+`The Sibling Record Set Decided Most Of This First`, below.
 
 What it does record is a dependency rule. `D-130` decides that no crate here depends on the
 sibling XVPE workspace before Phase 5 and never by path, and that only a named adapter may
@@ -37,8 +49,8 @@ incidental.
 
 So the seam that decides whether a subsystem belongs to knowledge, to generic runtime, to
 software-engineering reality, or to the machinery that exists only to build this repository
-has been held in conversation. Every placement made without it is a placement that has to
-be argued about later rather than read.
+is not one a reader of `docs/records/` could find. Every placement made without it is a
+placement that has to be argued about later rather than read.
 
 ## Why This Is Recorded Now Rather Than Later
 
@@ -177,6 +189,70 @@ premature move is real and this record does not require anybody to pay it today.
 requires is that the direction be known, so that each future placement is made with it
 rather than against it.
 
+## The Sibling Record Set Decided Most Of This First
+
+Added at version 2. Version 1 claimed the seam had been held in conversation, which was true
+of `docs/records/` and false of the store this build assembles from the archives
+`NOMOS_SPEC_ARCHIVES` already names.
+
+`P3-SIBLINGS` ingests three of those archives as non-root suites — `xvpe-spec-seed-v0.1`,
+`kwb-spec-seed-v0.1` and `ecosystem-contracts-v0.1` — for exactly this reason, stated in
+`siblings.rs`: without the distinction "XVPE's `D-085` reads as a decision this repository
+made", and with it a cross-suite relation is an ordinary row. The suites had already decided
+most of what is above.
+
+| The clause here | The sibling record that reached it first | Suite |
+|---|---|---|
+| XVPE owns generic runtime, application and platform infrastructure | `D-085`, XVPE is the shared application platform | `xvpe-spec-seed` |
+| Generic capability is consumed by adaptation, never by extension of the generic thing | `D-086`, product semantics do not flow downward into XVPE Platform | `xvpe-spec-seed` |
+| Reuse alone does not make something XVPE | `D-090`, cross-product reuse by itself is insufficient reason to move product semantics into the platform | `xvpe-spec-seed` |
+| Nomos owns software reality and KWB owns knowledge | `D-096`, Nomos and KWB are sibling domain analyzers over XVPE | `ecosystem-contracts` |
+
+That two record sets reached the anti-drift clause independently is evidence for it rather
+than against it. What it is not is a licence to keep restating it: the next clause written
+here without checking the seeds is the one that will disagree with them and nobody will
+know.
+
+### The edges are declared, not described
+
+Naming those four in prose and stopping would be the mistake this system exists to refuse,
+because a summary of a checked thing is an unchecked copy of it. The front matter declares a
+relation to each instead, so *which suite decided this first* is a query rather than a
+reading. Before this record there were none: 197 relation rows across this repository's
+records, three of them naming a target no local record holds — `ADR-DOC-001`, `D-120` and
+`D-128`, all v14 corpus records — and not one naming a sibling suite.
+
+The edges resolve rather than dangle, and both halves of that already exist.
+`Seed_Governing_Records` mints an external placeholder for a target nothing has ingested and
+reports it by name rather than counting it, and `Write_Node` updates a node in place only
+where its authority is external — which is what lets `Ingest_Sibling_Suite` claim the
+identifier when the seed is read. So over a store holding only this repository's records
+these five are placeholders, and over one that has ingested the seeds they are the seeds'
+own nodes, carrying their suite. A test asserts that rather than leaving it as a reading of
+two functions.
+
+### `D-122` is adopted here, because a sibling's decision does not govern by itself
+
+A sibling suite is `authority_root = 0`. Its records are not this repository's decisions, and
+citing one does not make it one — that is the whole point of ingesting them as non-root. So
+where the two statements of this seam differ, this record governs here, and the difference is
+worth naming rather than absorbing silently.
+
+`D-122` is the case. It admits a shared analysis mechanism into XVPE only after Nomos and KWB
+slices demonstrate materially identical domain-neutral semantics. That is narrower than the
+anti-drift clause above: this record says reuse does not settle ownership, and `D-122` says
+what does, imposing a burden of proof this record never stated.
+
+**It is adopted, as a clause of this record:**
+
+> A shared analysis mechanism moves to XVPE only after two products have demonstrated
+> materially identical domain-neutral semantics over it. An argument that both products
+> *would* use it is the reuse argument, and it is refused above.
+
+Adopting it rather than citing it is this record's own projection rule applied to itself — a
+statement from another authority becomes enforceable here by a recorded step, not by being
+true and nearby. The edge to `D-122` says where it came from; the clause is why it binds.
+
 ## Conflicts With Existing Decisions
 
 Checked deliberately rather than assumed, because a record that quietly reinterprets an
@@ -208,4 +284,6 @@ enough to enforce exists, has a criterion to be derived from.
 
 ## Status
 
-Closed by `P10-ECOSYSTEM-BOUNDARY`.
+Closed by `P10-ECOSYSTEM-BOUNDARY`. Amended to version 2 by `P10-SEAM-CITATION`, which found
+the seam already recorded in the sibling suites this build ingests, declared the edges to it,
+and adopted `D-122`.
