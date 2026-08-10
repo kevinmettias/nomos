@@ -90,10 +90,13 @@ const ROUTED_AUTHORITIES: &[&str] = &["README.md", "tests/contract", "docs/recor
 ///
 /// The same defect is named in two places on purpose. A hazard belongs at the step where
 /// it bites, and the step is in the procedure while the rule is in the contract.
-const TEMPORARY_HAZARDS: &[(&str, &str)] = &[
-    ("AGENTS.md", "P10-STALE-WRITER"),
-    (".claude/skills/nomos-task/SKILL.md", "P10-STALE-WRITER"),
-];
+/// Empty is a real state and not a disabled check.
+///
+/// `P10-STALE-WRITER` closed, and both files stopped naming it in the same commit that
+/// emptied this list — which is the sequence these two tests exist to force. The direction
+/// that still has teeth while this is empty is the other one: naming any item without an
+/// entry here fails, so the list cannot be emptied to silence a warning that is still true.
+const TEMPORARY_HAZARDS: &[(&str, &str)] = &[];
 
 /// Reads a file under the workspace root, failing with the path when it is not there.
 fn Read_Harness_File(relative: &str) -> String

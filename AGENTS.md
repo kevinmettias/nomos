@@ -53,10 +53,11 @@ architectural claim; where a *why* exists, it is named.
 every time. `README.md` and `rustfmt.toml` carry the reason. `cargo fmt --check` is
 deliberately not a gate step.
 
-**Build the binary fresh, and re-copy it after every pull.** A stale `nomos` binary reads
-`work/ledger.json`, ignores every field added since it was built, writes the document back
-without them, and exits 0. Nothing reports it. Until `P10-STALE-WRITER` closes, confirm a
-ledger write survived before trusting it.
+**Build the binary fresh, and re-copy it after every pull.** A `nomos` built before a ledger
+field existed cannot write that field back. A build carrying the guard refuses the whole
+verb and says so; one copied before it carries no guard and drops the field silently at
+exit 0. `nomos work validate` prints the file's schema beside the build's, which is how you
+tell which copy you are holding.
 
 **Do not run a ledger verb through `cargo run` when its predicate is `cargo test`.** The
 rebuild deletes the binary that is the running process; the predicate then fails for a
@@ -78,6 +79,14 @@ prose bodies into arguments and the commit fails after `git add` has already run
 **A test that cannot find its corpus passes.** Three corpora live outside this repository
 and CI has none of them, so a green run is not evidence a corpus-backed claim was checked.
 `tests/contract/` declares the size of that hole; read it before believing a number.
+
+**Changing a governing record leaves a committed projection stale, and the gate fails on
+it.** `diagrams/relations.mmd` is derived from the relation graph, so a commit touching
+`docs/records/` changes it whether or not that commit meant to. Re-render before committing:
+`nomos spec render --profile diagram-set --into .`. Render last, and only from a tree whose
+records are all committed — the store is built from the files on disk, so rendering beside
+somebody else's uncommitted record bakes their unlanded work into your output and the gate
+then fails on the commit that carries it.
 
 ## What this file is not
 

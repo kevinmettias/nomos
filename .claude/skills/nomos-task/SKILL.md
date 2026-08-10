@@ -30,10 +30,10 @@ process, and a polling loop fights your own builds for the target directory lock
 
 Build, then copy the binary somewhere outside the tree and run the copy.
 
-**Re-copy after every pull or rebuild.** A stale copy reads `work/ledger.json`, ignores
-every field added since it was built, writes the document back without them and exits 0.
-Nothing reports it. After any ledger write, confirm the field count survived rather than
-trusting the exit code — `P10-STALE-WRITER` is open for this.
+**Re-copy after every pull or rebuild.** A copy built before a ledger field existed cannot
+write that field back. A build carrying the guard refuses the verb outright; one copied
+before it drops the field silently at exit 0. `nomos work validate` prints the file's schema
+beside the build's, so one command tells you which copy you are running.
 
 ## 3. Choose an item, or author one
 
