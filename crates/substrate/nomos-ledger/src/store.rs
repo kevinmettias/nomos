@@ -447,16 +447,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
             return Err(LedgerError::Invalid { violations });
         }
 
-        let stamped = LedgerDocument {
-            schema_version: SCHEMA_VERSION,
-            items: document.items.clone(),
-        };
-
-        let mut rendered =
-            serde_json::to_string_pretty(&stamped).map_err(|error| LedgerError::Unreadable {
-                cause: error.to_string(),
-            })?;
-        rendered.push('\n');
+        let rendered = Rendered(document)?;
 
         return self
             .filesystem
@@ -636,23 +627,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
                 acquired_at: now,
                 lease_expires_at: expires_at,
             };
-
-            // `Replace_Lapsed_Claim` and not two statements here. The move of the old claim
-            // and the install of the new one are one operation precisely so that this call
-            // site cannot perform half of it.
-            let mut taken = false;
-            for candidate in &mut document.items
-            {
-                if &candidate.id == item
-                {
-                    taken = candidate.Replace_Lapsed_Claim(replacement.clone(), now);
-                }
-            }
-
-            if !taken
-            {
-                return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
-            }
+            Replace_Lapsed(document, item, replacement, now)?;
 
             return Ok(Reservation {
                 item: item.clone(),
@@ -829,41 +804,60 @@ fn Refuse_A_Spent_Record(
     {
         let mine = Territory::Of_Files([reserved.clone()]);
 
-        for file in &published.paths
+        Refuse_If_Published(&mine, &reserved, published)?;
+        Refuse_If_Reserved(&mine, &reserved, document)?;
+    }
+
+    return Ok(());
+}
+
+/// Refuses an identifier some committed record already carries.
+fn Refuse_If_Published(
+    mine: &Territory,
+    reserved: &str,
+    published: &Territory,
+) -> Result<(), AddRefusal>
+{
+    for file in &published.paths
+    {
+        let theirs = Territory::Of_Files([file.clone()]);
+
+        if matches!(mine.Intersect(&theirs), Intersection::Overlaps(_))
         {
-            if matches!(
-                mine.Intersect(&Territory::Of_Files([file.clone()])),
-                Intersection::Overlaps(_)
-            )
-            {
-                return Err(AddRefusal::RecordPublished {
-                    identifier: Normalize_Path(&reserved),
-                    file: file.clone(),
-                });
-            }
+            return Err(AddRefusal::RecordPublished {
+                identifier: Normalize_Path(reserved),
+                file: file.clone(),
+            });
+        }
+    }
+
+    return Ok(());
+}
+
+/// Refuses an identifier another open item is already holding.
+///
+/// Only open items reserve. A closed item's territory is history, and refusing against it
+/// would make every finished item a permanent claim on its number — which would refuse the
+/// whole board, since almost every item ever written reserved a record.
+fn Refuse_If_Reserved(
+    mine: &Territory,
+    reserved: &str,
+    document: &LedgerDocument,
+) -> Result<(), AddRefusal>
+{
+    for other in &document.items
+    {
+        if !matches!(other.state, ItemState::Ready | ItemState::Claimed)
+        {
+            continue;
         }
 
-        for other in &document.items
+        if matches!(mine.Intersect(&other.territory), Intersection::Overlaps(_))
         {
-            // Only open items reserve. A closed item's territory is history, and refusing
-            // against it would make every finished item a permanent claim on its number —
-            // which would refuse the whole board, since almost every item ever written
-            // reserved a record.
-            if !matches!(other.state, ItemState::Ready | ItemState::Claimed)
-            {
-                continue;
-            }
-
-            if matches!(
-                mine.Intersect(&other.territory),
-                Intersection::Overlaps(_)
-            )
-            {
-                return Err(AddRefusal::RecordReserved {
-                    identifier: Normalize_Path(&reserved),
-                    item: other.id.clone(),
-                });
-            }
+            return Err(AddRefusal::RecordReserved {
+                identifier: Normalize_Path(reserved),
+                item: other.id.clone(),
+            });
         }
     }
 
@@ -905,6 +899,117 @@ fn Record_Reservations(territory: &Territory) -> Vec<String>
 /// The folded record directory, with its separator, as [`Normalize_Path`] leaves it.
 const RECORD_DIRECTORY_PREFIX: &str = "docs/records/";
 
+/// The document as it goes to disk, stamped with the schema version this build writes.
+///
+/// Stamped here rather than taken from the document read in: a file that keeps whatever
+/// version it arrived with is a file a build without a field can rewrite while still
+/// claiming to speak the newer schema.
+fn Rendered(document: &LedgerDocument) -> Result<String, LedgerError>
+{
+    let stamped = LedgerDocument {
+        schema_version: SCHEMA_VERSION,
+        items: document.items.clone(),
+    };
+
+    let mut rendered =
+        serde_json::to_string_pretty(&stamped).map_err(|error| LedgerError::Unreadable {
+            cause: error.to_string(),
+        })?;
+    rendered.push('\n');
+
+    return Ok(rendered);
+}
+
+/// Marks an item claimed and records the grant.
+fn Install_Claim(document: &mut LedgerDocument, item: &ItemId, granted: &Claim)
+{
+    for candidate in &mut document.items
+    {
+        if &candidate.id == item
+        {
+            candidate.state = ItemState::Claimed;
+            candidate.claim = Some(granted.clone());
+        }
+    }
+}
+
+/// Changes an item's own claim, once the holder has been shown entitled to change it.
+///
+/// `Renew` and `Release` differ only in what they do to a claim they may act on, so the
+/// entitlement question is answered in one place. Written out twice, the two were one edit
+/// away from disagreeing about who may act.
+fn With_Own_Claim(
+    document: &mut LedgerDocument,
+    item: &ItemId,
+    holder: &str,
+    act: impl FnOnce(&mut LedgerItem),
+) -> Result<(), ClaimRefusal>
+{
+    let found = document.items.iter_mut().find(|candidate| return &candidate.id == item);
+    let Some(candidate) = found
+    else
+    {
+        return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
+    };
+    Entitled(candidate, holder)?;
+    act(candidate);
+
+    return Ok(());
+}
+
+/// Whether `holder` may change this item's claim.
+fn Entitled(candidate: &LedgerItem, holder: &str) -> Result<(), ClaimRefusal>
+{
+    let Some(claim) = &candidate.claim
+    else
+    {
+        return Err(ClaimRefusal::NotClaimable {
+            item: candidate.id.clone(),
+            state: "unclaimed".to_owned(),
+        });
+    };
+
+    if claim.holder != holder
+    {
+        return Err(ClaimRefusal::HeldBy {
+            holder: claim.holder.clone(),
+            until: claim.lease_expires_at,
+            item: candidate.id.clone(),
+        });
+    }
+
+    return Ok(());
+}
+
+/// Moves a lapsed claim aside and installs the replacement, as one operation.
+///
+/// `Replace_Lapsed_Claim` and not two statements at the call site: the move of the old claim
+/// and the install of the new one are one operation precisely so that no caller can perform
+/// half of it.
+fn Replace_Lapsed(
+    document: &mut LedgerDocument,
+    item: &ItemId,
+    replacement: Claim,
+    now: Timestamp,
+) -> Result<(), ClaimRefusal>
+{
+    let mut taken = false;
+    for candidate in &mut document.items
+    {
+        if &candidate.id == item
+        {
+            taken = candidate.Replace_Lapsed_Claim(replacement.clone(), now);
+        }
+    }
+
+    if !taken
+    {
+        return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
+    }
+
+    return Ok(());
+}
+
 /// Every way a ledger can be internally inconsistent.
 ///
 /// Returns all violations rather than the first. An author fixing one at a time and
@@ -912,9 +1017,29 @@ const RECORD_DIRECTORY_PREFIX: &str = "docs/records/";
 #[must_use]
 pub fn Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
 {
-    let mut violations = Vec::new();
+    let mut violations = Duplicate_Identifiers(document);
+    let declared: Vec<&ItemId> = document.items.iter().map(|item| return &item.id).collect();
 
+    for item in &document.items
+    {
+        Check_Dependencies(item, &declared, &mut violations);
+        Check_State(item, &mut violations);
+        Check_Predicate(item, &mut violations);
+        Check_Territory(item, &mut violations);
+    }
+
+    let overlapping = Overlapping_Claims(document, now);
+    violations.extend(overlapping);
+
+    return violations;
+}
+
+/// Identifiers that appear more than once, which makes every lookup ambiguous.
+fn Duplicate_Identifiers(document: &LedgerDocument) -> Vec<String>
+{
+    let mut violations = Vec::new();
     let mut seen: Vec<&ItemId> = Vec::new();
+
     for item in &document.items
     {
         if seen.contains(&&item.id)
@@ -924,93 +1049,101 @@ pub fn Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
         seen.push(&item.id);
     }
 
-    for item in &document.items
+    return violations;
+}
+
+/// Dependencies naming an item the ledger does not hold.
+fn Check_Dependencies(item: &LedgerItem, declared: &[&ItemId], violations: &mut Vec<String>)
+{
+    for dependency in &item.depends_on
     {
-        for dependency in &item.depends_on
-        {
-            if !seen.contains(&dependency)
-            {
-                violations.push(format!(
-                    "{} depends on {dependency}, which is not in the ledger",
-                    item.id
-                ));
-            }
-        }
-
-        if item.state == ItemState::Blocked && item.blocked.is_none()
-        {
-            violations.push(format!("{} is blocked without saying why", item.id));
-        }
-
-        // Deliberately `claim.is_none()` and not `!Has_Active_Claim(now)`.
-        //
-        // A lease expiring is `Claimed` with an inactive claim, and it is the normal end of
-        // an agent that died rather than a corruption. Validating against the clock made a
-        // document's validity a function of when it was read: one written valid stopped
-        // being valid on its own, `Load` refuses an invalid document, and every operation
-        // loads first — so one lapsed lease refused every claim on the board, including
-        // items sharing no territory with it. `MAXIMUM_LEASE` exists to stop a crashed
-        // agent holding territory until somebody edits the file, and the lease expiring was
-        // causing exactly what the lease exists to prevent.
-        //
-        // What remains is the invariant that does not move: an item claimed by nobody
-        // records who claimed it. That is a real corruption — nothing can say whose work
-        // was abandoned — and it cannot arrive by the passage of time.
-        if item.state == ItemState::Claimed && item.claim.is_none()
+        if !declared.contains(&dependency)
         {
             violations.push(format!(
-                "{} is marked claimed and records no claim, so nothing can say who holds it \
-                 or held it",
-                item.id
-            ));
-        }
-
-        if item.state == ItemState::Done && item.verified.is_none()
-        {
-            violations.push(format!(
-                "{} is done with no recorded verification; done_when is prose, and prose \
-                 is not a predicate",
-                item.id
-            ));
-        }
-
-        if let Some(predicate) = &item.verification
-            && !predicate.Is_Runnable()
-        {
-            violations.push(format!(
-                "{} carries a verification predicate that cannot be run",
-                item.id
-            ));
-        }
-
-        for (first, second) in item.territory.Ambiguous_Paths()
-        {
-            violations.push(format!(
-                "{}'s territory lists `{first}` and `{second}`, which name the same \
-                 subject; whoever wrote it probably believed they were reserving two things",
-                item.id
-            ));
-        }
-
-        // An item somebody can pick up must say what it touches. An empty territory is
-        // disjoint from every other territory, so two agents working an unstated item
-        // are told they may both proceed — the ledger answers the exclusion question
-        // confidently and wrongly. Silence about territory is not a claim of touching
-        // nothing.
-        if matches!(item.state, ItemState::Ready | ItemState::Claimed)
-            && item.territory.Is_Empty()
-        {
-            violations.push(format!(
-                "{} is workable but reserves nothing, so it excludes nobody",
+                "{} depends on {dependency}, which is not in the ledger",
                 item.id
             ));
         }
     }
+}
 
-    let overlapping = Overlapping_Claims(document, now);
-    violations.extend(overlapping);
+/// What a state must be able to say about itself.
+///
+/// The claimed case is deliberately `claim.is_none()` and not `!Has_Active_Claim(now)`.
+///
+/// A lease expiring is `Claimed` with an inactive claim, and it is the normal end of an
+/// agent that died rather than a corruption. Validating against the clock made a document's
+/// validity a function of when it was read: one written valid stopped being valid on its
+/// own, `Load` refuses an invalid document, and every operation loads first — so one lapsed
+/// lease refused every claim on the board, including items sharing no territory with it.
+/// `MAXIMUM_LEASE` exists to stop a crashed agent holding territory until somebody edits the
+/// file, and the lease expiring was causing exactly what the lease exists to prevent.
+///
+/// What remains is the invariant that does not move: an item claimed by nobody records who
+/// claimed it. That is a real corruption — nothing can say whose work was abandoned — and it
+/// cannot arrive by the passage of time.
+fn Check_State(item: &LedgerItem, violations: &mut Vec<String>)
+{
+    if item.state == ItemState::Blocked && item.blocked.is_none()
+    {
+        violations.push(format!("{} is blocked without saying why", item.id));
+    }
+    if item.state == ItemState::Claimed && item.claim.is_none()
+    {
+        violations.push(format!(
+            "{} is marked claimed and records no claim, so nothing can say who holds it or \
+             held it",
+            item.id
+        ));
+    }
+    if item.state == ItemState::Done && item.verified.is_none()
+    {
+        violations.push(format!(
+            "{} is done with no recorded verification; done_when is prose, and prose is not \
+             a predicate",
+            item.id
+        ));
+    }
 
-    return violations;
+}
+
+/// A predicate nothing could run, which makes `done_when` unenforceable.
+fn Check_Predicate(item: &LedgerItem, violations: &mut Vec<String>)
+{
+    if let Some(predicate) = &item.verification
+        && !predicate.Is_Runnable()
+    {
+        violations.push(format!(
+            "{} carries a verification predicate that cannot be run",
+            item.id
+        ));
+    }
+}
+
+/// What a territory must be able to exclude.
+///
+/// An item somebody can pick up must say what it touches. An empty territory is disjoint
+/// from every other territory, so two agents working an unstated item are told they may both
+/// proceed — the ledger answers the exclusion question confidently and wrongly. Silence
+/// about territory is not a claim of touching nothing.
+fn Check_Territory(item: &LedgerItem, violations: &mut Vec<String>)
+{
+    for (first, second) in item.territory.Ambiguous_Paths()
+    {
+        violations.push(format!(
+            "{}'s territory lists `{first}` and `{second}`, which name the same subject; \
+             whoever wrote it probably believed they were reserving two things",
+            item.id
+        ));
+    }
+
+    if matches!(item.state, ItemState::Ready | ItemState::Claimed) && item.territory.Is_Empty()
+    {
+        violations.push(format!(
+            "{} is workable but reserves nothing, so it excludes nobody",
+            item.id
+        ));
+    }
 }
 
 /// Every pair of concurrently-claimed items whose territories are not provably disjoint.
@@ -1032,38 +1165,51 @@ fn Overlapping_Claims(document: &LedgerDocument, now: Timestamp) -> Vec<String>
     {
         for other in active.iter().skip(index.saturating_add(1))
         {
-            let holder = item
-                .claim
-                .as_ref()
-                .map_or("someone", |claim| claim.holder.as_str());
-            let other_holder = other
-                .claim
-                .as_ref()
-                .map_or("someone", |claim| claim.holder.as_str());
-
-            match item.territory.Intersect(&other.territory)
-            {
-                nomos_model::Intersection::Disjoint =>
-                {}
-                nomos_model::Intersection::Overlaps(shared) => violations.push(format!(
-                    "{} (held by {holder}) and {} (held by {other_holder}) both claim {} \
-                     overlapping subject(s)",
-                    item.id,
-                    other.id,
-                    shared.len()
-                )),
-                nomos_model::Intersection::Unknown(reason) => violations.push(format!(
-                    "{} (held by {holder}) and {} (held by {other_holder}) cannot be shown \
-                     independent: {}",
-                    item.id,
-                    other.id,
-                    reason.Describe()
-                )),
-            }
+            let contested = Not_Provably_Disjoint(item, other);
+            violations.extend(contested);
         }
     }
 
     return violations;
+}
+
+/// What one pair of active claims has to answer for, if anything.
+///
+/// `Unknown` is reported alongside `Overlaps` rather than passed over. The ledger's promise
+/// is that two holders were shown independent, and a comparison that could not decide has
+/// not shown it.
+fn Not_Provably_Disjoint(item: &LedgerItem, other: &LedgerItem) -> Option<String>
+{
+    let holder = Holder_Of(item);
+    let other_holder = Holder_Of(other);
+
+    return match item.territory.Intersect(&other.territory)
+    {
+        Intersection::Disjoint => None,
+        Intersection::Overlaps(shared) => Some(format!(
+            "{} (held by {holder}) and {} (held by {other_holder}) both claim {} overlapping \
+             subject(s)",
+            item.id,
+            other.id,
+            shared.len()
+        )),
+        Intersection::Unknown(reason) => Some(format!(
+            "{} (held by {holder}) and {} (held by {other_holder}) cannot be shown \
+             independent: {}",
+            item.id,
+            other.id,
+            reason.Describe()
+        )),
+    };
+}
+
+/// Who holds a claim, for a message that has to name somebody either way.
+fn Holder_Of(item: &LedgerItem) -> &str
+{
+    return item
+        .claim
+        .as_ref()
+        .map_or("someone", |claim| return claim.holder.as_str());
 }
 
 /// What would refuse a claim on `item` as of `now`, if anything.
@@ -1090,23 +1236,19 @@ pub fn Claim_Refusal(
     now: Timestamp,
 ) -> Option<ClaimRefusal>
 {
-    let Some(target) = document
-        .items
-        .iter()
-        .find(|candidate| &candidate.id == item)
+    let Some(target) = document.items.iter().find(|candidate| return &candidate.id == item)
     else
     {
         return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
     };
-
-    // Before the state check, because `Claimed` is the state a lapsed item is in and
-    // reporting it as merely "not claimable" is what left the operator with no next step:
-    // true of a `Done` item as well, and the two have opposite remedies. `OD-LEDGER-012`.
+    // The lapse check comes before the state check, because `Claimed` is the state a lapsed
+    // item is in and reporting it as merely "not claimable" is what left the operator with
+    // no next step: true of a `Done` item as well, and the two have opposite remedies.
+    // `OD-LEDGER-012`.
     if let Some(refusal) = Lapse_Refusal(target, now)
     {
         return Some(refusal);
     }
-
     if !target.state.Is_Claimable()
     {
         return Some(ClaimRefusal::NotClaimable {
@@ -1165,38 +1307,41 @@ fn Decline_Refusal(
     now: Timestamp,
 ) -> Option<ClaimRefusal>
 {
-    let Some(target) = document
-        .items
-        .iter()
-        .find(|candidate| &candidate.id == item)
+    let Some(target) = document.items.iter().find(|candidate| return &candidate.id == item)
     else
     {
         return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
     };
-
-    // First, because `Claimed` is the state a lapsed item is in and the remedies differ: a
-    // live holder is asked to release, and a dead one is taken over. `OD-LEDGER-012`.
+    // The lapse check is first, because `Claimed` is the state a lapsed item is in and the
+    // remedies differ: a live holder is asked to release, and a dead one is taken over.
+    // `OD-LEDGER-012`.
     if let Some(refusal) = Lapse_Refusal(target, now)
     {
         return Some(refusal);
     }
 
+    return Held_Or_Unready(target);
+}
+
+/// What a live claim or a state other than `Ready` does to a decline.
+///
+/// `Describe` rather than a bare state word, so a `Declined` item's refusal carries the
+/// reason it already holds. Told only "it is declined", a caller cannot tell a duplicate
+/// from a disagreement, and both need a person.
+fn Held_Or_Unready(target: &LedgerItem) -> Option<ClaimRefusal>
+{
     if let Some(claim) = target.claim.as_ref()
     {
         return Some(ClaimRefusal::StillHeld {
-            item: item.clone(),
+            item: target.id.clone(),
             holder: claim.holder.clone(),
             until: claim.lease_expires_at,
         });
     }
-
     if target.state != ItemState::Ready
     {
-        // `Describe` rather than a bare state word, so a `Declined` item's refusal carries
-        // the reason it already holds. Told only "it is declined", a caller cannot tell a
-        // duplicate from a disagreement, and both need a person.
         return Some(ClaimRefusal::NotClaimable {
-            item: item.clone(),
+            item: target.id.clone(),
             state: target.state.Describe(),
         });
     }
@@ -1220,53 +1365,71 @@ fn Contested_By(
     now: Timestamp,
 ) -> Option<ClaimRefusal>
 {
-    let item = &target.id;
+    if let Some(refusal) = Unmet_Dependency(document, target)
+    {
+        return Some(refusal);
+    }
+
+    return Held_Ground(document, target, now);
+}
+
+/// The first dependency of `target` that is not done, as a refusal.
+fn Unmet_Dependency(document: &LedgerDocument, target: &LedgerItem) -> Option<ClaimRefusal>
+{
+    let done = format!("{:?}", ItemState::Done);
 
     for dependency in &target.depends_on
     {
-        let state = document
-            .items
-            .iter()
-            .find(|candidate| &candidate.id == dependency)
-            .map_or_else(|| "not in the ledger".to_owned(), |found| {
-                format!("{:?}", found.state)
-            });
+        let found = document.items.iter().find(|candidate| return &candidate.id == dependency);
+        let state = found.map_or_else(
+            || return "not in the ledger".to_owned(),
+            |found| return format!("{:?}", found.state),
+        );
 
-        if state != format!("{:?}", ItemState::Done)
+        if state != done
         {
             return Some(ClaimRefusal::DependencyUnmet {
-                item: item.clone(),
+                item: target.id.clone(),
                 dependency: dependency.clone(),
                 state,
             });
         }
     }
 
+    return None;
+}
+
+/// The first active claim whose territory `target` cannot be shown independent of.
+fn Held_Ground(
+    document: &LedgerDocument,
+    target: &LedgerItem,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
     for other in &document.items
     {
-        if &other.id == item || !other.Has_Active_Claim(now)
+        if other.id == target.id || !other.Has_Active_Claim(now)
         {
             continue;
         }
 
-        let Some(claim) = &other.claim
-        else
+        let refusal = Refused_By(target, other);
+        if refusal.is_some()
         {
-            continue;
-        };
-
-        if let Some(refusal) = Refusal_From(
-            &target.territory.Intersect(&other.territory),
-            &other.id,
-            &claim.holder,
-            claim.lease_expires_at,
-        )
-        {
-            return Some(refusal);
+            return refusal;
         }
     }
 
     return None;
+}
+
+/// What `other`'s live claim does to `target`, if anything.
+fn Refused_By(target: &LedgerItem, other: &LedgerItem) -> Option<ClaimRefusal>
+{
+    let claim = other.claim.as_ref()?;
+    let overlap = target.territory.Intersect(&other.territory);
+
+    return Refusal_From(&overlap, &other.id, &claim.holder, claim.lease_expires_at);
 }
 
 /// What refuses a takeover of `item` as of `now`, if anything.
@@ -1369,18 +1532,12 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
                 return Err(refusal);
             }
 
-            for candidate in &mut document.items
-            {
-                if &candidate.id == item
-                {
-                    candidate.state = ItemState::Claimed;
-                    candidate.claim = Some(Claim {
-                        holder: holder.to_owned(),
-                        acquired_at: now,
-                        lease_expires_at: expires_at,
-                    });
-                }
-            }
+            let granted = Claim {
+                holder: holder.to_owned(),
+                acquired_at: now,
+                lease_expires_at: expires_at,
+            };
+            Install_Claim(document, item, &granted);
 
             return Ok(Reservation {
                 item: item.clone(),
@@ -1405,42 +1562,12 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
         return self.Decide_Under_Lock(holder, |document, now| {
             let expires_at = now.Plus(lease);
 
-            let mut renewed = false;
-            for candidate in &mut document.items
-            {
-                if &candidate.id != item
+            With_Own_Claim(document, item, holder, |candidate| {
+                if let Some(claim) = &mut candidate.claim
                 {
-                    continue;
+                    claim.lease_expires_at = expires_at;
                 }
-                match &mut candidate.claim
-                {
-                    Some(claim) if claim.holder == holder =>
-                    {
-                        claim.lease_expires_at = expires_at;
-                        renewed = true;
-                    }
-                    Some(claim) =>
-                    {
-                        return Err(ClaimRefusal::HeldBy {
-                            holder: claim.holder.clone(),
-                            until: claim.lease_expires_at,
-                            item: item.clone(),
-                        });
-                    }
-                    None =>
-                    {
-                        return Err(ClaimRefusal::NotClaimable {
-                            item: item.clone(),
-                            state: "unclaimed".to_owned(),
-                        });
-                    }
-                }
-            }
-
-            if !renewed
-            {
-                return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
-            }
+            })?;
 
             return Ok(Reservation {
                 item: item.clone(),
@@ -1463,47 +1590,12 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
         // its verdict is this, and is milliseconds. A verdict recorded outside the lock is
         // an agent told its work was written down over a board that has since forgotten it.
         return self.Decide_Under_Lock(holder, |document, now| {
-            let mut released = false;
-            for candidate in &mut document.items
-            {
-                if &candidate.id != item
-                {
-                    continue;
-                }
-                match &candidate.claim
-                {
-                    Some(claim) if claim.holder == holder =>
-                    {
-                        // Both arms, written once, in `ReleaseOutcome::Record_On`. Spelling
-                        // them out here is what let this store keep the finished arm's
-                        // evidence and drop the abandoned arm's.
-                        outcome.Record_On(candidate, holder, now);
-                        released = true;
-                    }
-                    Some(claim) =>
-                    {
-                        return Err(ClaimRefusal::HeldBy {
-                            holder: claim.holder.clone(),
-                            until: claim.lease_expires_at,
-                            item: item.clone(),
-                        });
-                    }
-                    None =>
-                    {
-                        return Err(ClaimRefusal::NotClaimable {
-                            item: item.clone(),
-                            state: "unclaimed".to_owned(),
-                        });
-                    }
-                }
-            }
-
-            if !released
-            {
-                return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
-            }
-
-            return Ok(());
+            // Both arms, written once, in `ReleaseOutcome::Record_On`. Spelling them out at
+            // the call site is what let this store keep the finished arm's evidence and drop
+            // the abandoned arm's.
+            return With_Own_Claim(document, item, holder, |candidate| {
+                outcome.Record_On(candidate, holder, now);
+            });
         });
     }
 
