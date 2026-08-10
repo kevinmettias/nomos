@@ -3561,6 +3561,7 @@
           "tests/contract/tests/completeness_universes.rs",
           "tests/integration/src/surface.rs",
           "tests/integration/src/slice.rs",
+          "tests/integration/tests/determinism.rs",
           "Cargo.lock",
           "crates/spec/nomos-spec-store/records/OD-SYNTAX-002.record",
           "docs/records/OD-SYNTAX-002"
@@ -3575,7 +3576,7 @@
       "claim": {
         "holder": "claude-syntax-v2-w1",
         "acquired_at": 1786344741,
-        "lease_expires_at": 1786359141
+        "lease_expires_at": 1786375568
       },
       "verification": {
         "argv": [
@@ -4293,10 +4294,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-stamp-consistency-w21",
+        "acquired_at": 1786346882,
+        "lease_expires_at": 1786354082
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4476,6 +4481,42 @@
           "abandoned_at": 1786346680
         }
       ],
+      "displaced": []
+    },
+    {
+      "id": "P10-LEDGER-CORPUS",
+      "title": "Six normative requirements govern the work ledger, none is cited, and the blocker taxonomy drops one of their seven causes",
+      "why": "Volume 12 of the v14 corpus carries six normative requirements, WORK-LEDGER-001 through WORK-LEDGER-006, at authority canonical-normative-record and maturity accepted, in section volume-12.10-4-2-work-ledger-verification-and-decomposition. They govern the work ledger. Not one of the six identifiers appears in any tracked file in this repository: not in docs/records, not in work/ledger.json, not in source, not in a test. Measured by resolving all 363 requirement ids under 01_authoring/artifacts/requirements against every file git ls-files reports.\n\nThat alone would only say the corpus is large and this build is young. What makes it an item is that the ledger demonstrably descends from these requirements and diverges from four of them without anywhere to read why.\n\nWORK-LEDGER-005 names seven typed blocker causes: dependency, decision, territory mismatch, external resource, needs-split, stale probe artifact, and other. Blocker in crates/substrate/nomos-ledger/src/item.rs enumerates six of them, in that order, with matching semantics and near-matching wording. StaleProbeArtifact is the one that is absent, and the string \"stale probe\" appears nowhere in the tree. Six of seven in the corpus order is not convergent evolution; it is derivation with one variant dropped, and because no id is cited nobody can tell whether it was declined or overlooked.\n\nWORK-LEDGER-001 lists thirteen things an item shall be addressable by. LedgerItem carries twelve of them - id, title, why, done_when, territory, state, depends_on, blocked, claim, verification, verified, and abandoned covering recorded completion evidence. The missing one is priority, and \"priority\" appears nowhere in nomos-ledger or nomos-cli. This board is worked by picking an item off a list that has no ordering, which is the cost, and it is currently paid without having been priced.\n\nWORK-LEDGER-004 requires that verification recorded at completion time be distinguished from a later reverification sweep, and that a failed sweep create a visible regression record rather than erase the original evidence. LedgerItem::verified is a single Option<VerificationRecord>. There is no sweep, and a second write to that field would overwrite the first - the same class of loss OD-LEDGER-006 recorded for abandonment reasons and fixed there by making abandoned a list.\n\nWORK-LEDGER-006 requires generated projections of the ledger by item, state, feature and testing status. Eighteen projection profiles exist and every one of them projects the specification store; none reads work/ledger.json.\n\nWORK-LEDGER-002, four testing dimensions per feature with completion requiring each done or explicitly declined, has no counterpart in the schema at all. WORK-LEDGER-003, a predicate declared before work starts, is the one the tree already honours in substance, since finish keeps \"no predicate at all\" as its own answer.\n\nP10-PACKAGE-SEAM is the precedent and the reason this is worth opening rather than noting. ARCH-001 and ARCH-002 were in exactly this position - corpus requirements about a subsystem this repository had already built - and D-132 puts the corpus above the plan. The answer there was two records that decided what the requirements bind and what they do not. This is the same question about the subsystem that has had more items spent on it than any other.",
+      "done_when": "Whether WORK-LEDGER-001 through WORK-LEDGER-006 bind this build is answered and recorded, in the shape OD-PACKAGE-001 and OD-PACKAGE-002 used for ARCH-001 and ARCH-002: each of the six accepted, deferred with what the deferral costs, or read as not reaching this build with the reason a corpus requirement does not bind the thing built to enforce it. Blanket answers are refused - the six differ, and 003 is already satisfied while 002 has no counterpart, so one verdict covering all six would be a verdict about none of them.\n\nThe record states, for WORK-LEDGER-005 specifically, whether StaleProbeArtifact is a declined variant or a missing one, because six of seven in corpus order is the strongest evidence in this item and it is the cheapest thing here to get wrong. Blocker gains that answer at the site the way D-134 put a universe mirror next to it, so the next reader of the enum does not have to re-derive the comparison.\n\nNot closed by adding fields. Any schema change this decision calls for is a follow-on item with its own territory, because the exhaustive undeclared-key probe lives in tests/exclusion_holds.rs, which three open items already reserve. This item ends at a decision that names what would have to become true.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-017",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-017.record",
+          "crates/substrate/nomos-ledger/src/item.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
       "displaced": []
     }
   ]
