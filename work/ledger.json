@@ -1715,7 +1715,9 @@
         "paths": [
           "crates/substrate/nomos-analysis",
           "crates/languages",
+          "crates/spec/nomos-spec-store",
           "tests/integration",
+          "tests/contract",
           "docs/records/OD-CAPABILITY-003"
         ],
         "patterns": []
@@ -1731,7 +1733,11 @@
           "-p",
           "nomos-analysis",
           "-p",
-          "nomos-integration-tests"
+          "nomos-integration-tests",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },
