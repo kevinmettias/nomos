@@ -3,7 +3,7 @@ id: OD-LEDGER-006
 type: decision
 title: A reason attached to a transition does not survive it, and a reason attached to a state does
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -101,9 +101,21 @@ What a lapse leaves is the claim itself, still on the item, which says who held 
 when they stopped. So both paths now leave a record, and they differ by what is genuinely
 knowable rather than by which code path ran. That is the asymmetry that should exist.
 
+*(Amended at version 2. This paragraph said the claim is "still on the item", which stopped
+being the whole truth once an item could be taken over: something has to replace it.
+`OD-LEDGER-012` moves it to `LedgerItem::displaced` rather than dropping it, and moves the
+claim itself rather than a summary of it — so what this paragraph protects is unchanged and
+only where it points has moved. No `reason` field is created for a lapse there either, for the
+reason given above: nobody was present to write one. See the amendment note below.)*
+
 ## What This Found And Did Not Fix
 
 A lapse does not make the item takeable again.
+
+*(Amended at version 2. That sentence is superseded: a lapse still does not make an item
+**claimable**, and `claim` still refuses it, but `OD-LEDGER-012` makes it **takeable** by a verb
+of its own, `nomos work takeover`. The rest of this section is the measurement that opened
+`P10-LAPSE-TAKEOVER` and is kept as it was written. See the amendment note below.)*
 
 `item.rs` says a lapsed claim "stops excluding, which is what lets the next agent take the
 item". The first half is true: `Has_Active_Claim` goes false, so the lapsed claim stops
@@ -123,6 +135,13 @@ sentence. The test written here asserts the reason and the visibility and stops 
 the claimability, because an assertion either way would pin the behaviour in place before
 that decision is made.
 
+*(Amended at version 2. That decision is now made, in `OD-LEDGER-012`, and it is neither of the
+two shapes this paragraph anticipated: a lapse does not return the item to `Ready`, and what it
+costs an agent that is merely slow is bounded by that agent's own lease rather than by a policy.
+The test did exactly what this paragraph says it was for — it is renamed and its refusal
+assertion re-pointed, and the assertion that the lapsed claim was not replaced is kept word for
+word. See the amendment note below.)*
+
 ## Consequences
 
 Every item written before this field existed has no abandonments, and `#[serde(default)]`
@@ -135,6 +154,42 @@ an abandonment is a narrative addressed to the next agent, and the shapes worth 
 are not yet known. If they turn out to be countable, they can be typed later against real
 examples instead of guessed at now.
 
+## Amendment, Version 2
+
+`P10-LAPSE-TAKEOVER` reopened this record deliberately, which its own `done_when` required of
+it: *"`OD-LEDGER-006` is reopened deliberately or it is not touched."* `OD-LEDGER-012` carries
+the new decision and this note records what moved here.
+
+**What changed is where a lapse's evidence lives once something displaces it.** This record
+decided that the evidence of stopped work must survive, and it left a lapse's evidence in the
+one place that needed no arranging: the claim, still on the item. A takeover needs that slot, so
+the claim moves to `LedgerItem::displaced` — a list, oldest first, holding each displaced claim
+exactly as it stood. `LedgerItem::Replace_Lapsed_Claim` performs the move and the install as one
+operation, which is this record's own `ReleaseOutcome::Record_On` technique applied to the field
+it created: an implementation free to spell one half of a rule at its call site eventually
+spells one half.
+
+**What did not change is the rule that put it there.** A lapse still gets no synthesized
+reason, because there is still nobody who gave one. `Abandonment::reason` remains the words the
+holder gave, `displaced` has no `reason` field to fill, and the criterion this record
+established — a transition's evidence survives only where something on the item is given the job
+of holding it, and only what somebody actually knew at the time is held — is what chose the
+shape of the new field rather than being weakened by it. `OD-LEDGER-012` states that criterion
+in this record's terms and applies it to a transition nobody was present for.
+
+**What was found here and deferred is closed.** The section above measured that a lapsed item
+was unreachable by anybody and said so rather than fixing it, on the ground that the fix was a
+different decision. That was correct and the deferral held for exactly as long as it should
+have: the decision is made in a record of its own, and the behaviour this record's test declined
+to pin is now pinned by that record's tests.
+
+The decision this record is *about* is untouched. A reason attached to a state survives and one
+attached to a transition does not, and that is why this record is amended in place rather than
+superseded — a `superseded_by` edge would tell a later reader the whole of it is dead.
+
 ## Status
 
 Accepted. Implemented in `nomos-ledger` and reported by `nomos work show`.
+
+Amended at version 2 by `OD-LEDGER-012`, which makes a lapsed item recoverable and needed
+somewhere to put the claim it replaces.

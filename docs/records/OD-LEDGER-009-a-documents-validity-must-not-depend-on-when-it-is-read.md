@@ -3,7 +3,7 @@ id: OD-LEDGER-009
 type: decision
 title: A document's validity must not depend on when it is read, and a lapsed item is not claimable
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -78,6 +78,15 @@ and giving it one means reopening what a lapse leaves behind — which is a deci
 Taking over a lapsed item is therefore a **different operation from claiming a free one**,
 and it does not exist. `P10-LAPSE-TAKEOVER` is opened for it.
 
+*(Amended at version 2. The heading above and the last clause of that sentence are superseded:
+"nobody else may take it" and "it does not exist" were true when this record was written and are
+not now. `OD-LEDGER-012` supplies the operation this section deferred — `nomos work takeover` —
+deciding that the claim it replaces moves to `LedgerItem::displaced` rather than being
+overwritten. The first clause is what the answer had to satisfy and it did: `claim` still refuses
+a lapsed item, and the one verb that does not refuse it keeps what it displaces. The paragraph
+above is kept whole because it is the reasoning that record had to answer, and without it the new
+criterion reads as arbitrary. See the amendment note below.)*
+
 ## What A Lapsed Item Looks Like Now
 
 `work list` calls it `lapsed` rather than `claimed`. That is the whole of what makes the
@@ -90,6 +99,14 @@ The holder's own recovery is unchanged and is now the whole recovery story. `Ren
 `Release` match on the holder and never took the validating path, so an agent that comes back
 can always rescue its own claim. While the board was bricked that was the only recovery
 there was; now it is the only thing a lapse blocks rather than the only thing it permits.
+
+*(Amended at version 2. "The whole recovery story" is superseded — at version 2 it is the cheap
+half of one. An agent that comes back renews; an agent that does not is taken over by somebody
+who says so. And `lapsed` is no longer the word for the one state on this board that needs a
+*person*: it is the word for the one state that needs a *decision*, and it now says a takeover is
+available rather than that an editor is. The holder's own recovery is itself unchanged, and the
+test that pins it is untouched — it is now also the control on `Take_Over` not having loosened
+`Renew`'s holder match. See the amendment note below.)*
 
 ## The Second Defect: Two Causes Wearing One Name
 
@@ -108,6 +125,37 @@ its own code: an agent told the item is taken picks up something else, and an ag
 ledger is broken stops and fetches a person. This refusal used to arrive as `4`, after
 arriving as the wrong sentence.
 
+## Amendment, Version 2
+
+`P10-LAPSE-TAKEOVER` supplies the operation this record deferred, and `OD-LEDGER-012` carries the
+decision. This note records what moved.
+
+**Only the second half of one of this record's two decisions moves.** The first decision — that
+validity is a property of the document and not of the clock — is untouched, and so is the test to
+apply to the next rule anybody wants to add to validation. The second decision was in two parts:
+a lapsed item stays `Claimed`, and nobody else may take it. The first part stands, and a takeover
+does not change an item's state. The second part is replaced.
+
+**What this record protected is not weakened.** Its stated ground was that `Claim` overwrites
+`claim`, that `claim` is the only thing on a lapsed item recording that the work was ever started,
+and that a takeover therefore had nowhere to put what it replaces. All three were correct.
+`OD-LEDGER-012` answers the third rather than overruling the first two: it gives the takeover
+somewhere to put it. `Claim` still does not displace a lapsed holder — a plain `claim` refuses,
+now with `ClaimRefusal::Lapsed`, which names the holder it would have displaced and the verb that
+does it — and the only operation that does displace one keeps what it displaced.
+
+**This record's title stays literally true.** A lapsed item is still not *claimable*. What exists
+now is a different verb, which is exactly the distinction the superseded section drew and then
+declined to build.
+
+**One thing this record got right is worth restating rather than amending.** It settled the
+lapsed item's fate deliberately instead of leaving it as a consequence, and named what stood in
+the way. That is why the item it opened could be decided on a criterion rather than on whichever
+shape was easiest to write — a deferral that records its own reasoning is what makes the next
+decision cheap.
+
 ## Status
 
-Closed by `P10-LAPSE-BRICKS`.
+Closed by `P10-LAPSE-BRICKS`. Amended at version 2 by `P10-LAPSE-TAKEOVER` and
+`OD-LEDGER-012`, which supplies the operation this record deferred. The first of its two
+decisions — that a document's validity must not depend on when it is read — is untouched.

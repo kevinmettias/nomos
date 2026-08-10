@@ -96,6 +96,19 @@ pub enum WorkCommand
         /// How much longer.
         lease: Duration,
     },
+    /// Take over an item whose holder's lease ran out, keeping the claim it displaces.
+    ///
+    /// Separate from [`WorkCommand::Claim`] because taking another agent's abandoned work is
+    /// a decision, and a decision belongs in a verb somebody typed — `OD-LEDGER-012`.
+    TakeOver
+    {
+        /// Which item.
+        item: ItemId,
+        /// Who is taking it over.
+        holder: String,
+        /// How long to hold it.
+        lease: Duration,
+    },
     /// Give up a claim without finishing.
     Abandon
     {
@@ -153,29 +166,40 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
             item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
             holder: Required(value_of("--holder").as_ref(), "--holder")?,
         }),
-        "claim" | "renew" =>
+        // One parse for three verbs. `claim`, `renew` and `takeover` take exactly the same
+        // three arguments and default the lease the same way, so sharing this is what stops
+        // them drifting apart in what they accept — which they would be free to do while
+        // being documented as identical.
+        "claim" | "renew" | "takeover" =>
         {
-            let item = Required(value_of("--item").as_ref(), "--item")?;
+            let item = ItemId::New(Required(value_of("--item").as_ref(), "--item")?);
             let holder = Required(value_of("--holder").as_ref(), "--holder")?;
             let lease = value_of("--lease")
                 .map_or(Ok(DEFAULT_LEASE), |text| Parse_Duration(&text))?;
 
-            if verb == "claim"
+            // The two verbs that do something unusual are named and `claim` is the
+            // fallthrough, deliberately. A fourth verb added to the pattern above and
+            // forgotten here becomes a plain claim, which refuses anything that is not
+            // `Ready`; had `takeover` been the fallthrough it would displace a holder
+            // instead.
+            Ok(match verb.as_str()
             {
-                Ok(WorkCommand::Claim {
-                    item: ItemId::New(item),
+                "takeover" => WorkCommand::TakeOver {
+                    item,
                     holder,
                     lease,
-                })
-            }
-            else
-            {
-                Ok(WorkCommand::Renew {
-                    item: ItemId::New(item),
+                },
+                "renew" => WorkCommand::Renew {
+                    item,
                     holder,
                     lease,
-                })
-            }
+                },
+                _ => WorkCommand::Claim {
+                    item,
+                    holder,
+                    lease,
+                },
+            })
         }
         "abandon" => Ok(WorkCommand::Abandon {
             item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
@@ -239,6 +263,7 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
             verification,
             verified: None,
             abandoned: Vec::new(),
+            displaced: Vec::new(),
         }),
     });
 }
@@ -288,6 +313,10 @@ fn Usage_Text() -> String
             \x20          [-- <program> <args…>]\n\
             \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
             \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
+            \x20 takeover --item <id> --holder <name> [--lease 2h]\n\
+            \x20          takes over an item listed `lapsed` — one whose holder's lease ran \
+            out. `claim` never takes over a lapsed item; `takeover` does, and records the \
+            claim it displaced, which `show` then reports.\n\
             \x20 finish   --item <id> --holder <name>\n\
             \x20 abandon  --item <id> --holder <name> --reason <text>\n\
             \x20 validate\n\
@@ -343,6 +372,14 @@ pub fn Run(
             holder,
             lease,
         } => Report_Claim(ledger.Renew(item, holder, *lease), output),
+        // `Report_Claim` and `Code_For` unchanged, which is the point: one mapping from a
+        // refusal to an exit code, so `claim` and `takeover` cannot come to disagree about
+        // what a refusal means. No new code is introduced and the README's table does not move.
+        WorkCommand::TakeOver {
+            item,
+            holder,
+            lease,
+        } => Report_Claim(ledger.Take_Over(item, holder, *lease), output),
         WorkCommand::Abandon {
             item,
             holder,
@@ -451,6 +488,22 @@ fn Show(
             claim.holder,
             claim.acquired_at.Unix_Seconds(),
             claim.lease_expires_at.Unix_Seconds()
+        );
+    }
+
+    // Reported, not merely stored. `OD-LEDGER-006`'s rule and `OD-LEDGER-012`'s reason for
+    // obeying it here: a record no surface reports is one only somebody willing to read the
+    // JSON can find, which is most of the way back to not keeping it. Each line names the
+    // holder a takeover displaced and the window they held — who displaced them is the next
+    // line's holder, or the live claim above.
+    for displaced in &found.displaced
+    {
+        let _ = writeln!(
+            output,
+            "taken over from {}, who held it from unix {} until unix {}",
+            displaced.holder,
+            displaced.acquired_at.Unix_Seconds(),
+            displaced.lease_expires_at.Unix_Seconds()
         );
     }
 
@@ -582,17 +635,20 @@ fn Report_Finish(
 
 /// What stands between `item` and an agent that would take it, if anything.
 ///
-/// The one place any surface asks that question, and the reason it is a function is the
-/// reason [`Claim_Refusal`] is one: two implementations of a rule is how they come to
-/// disagree — `OD-LEDGER-005`. The listing reads it to choose a word and `audit` reads it
-/// to choose whom to report, so an item the listing calls `held` cannot be an item `audit`
-/// is silent about, and an item the listing calls `done` cannot be one `audit` describes as
-/// blocked.
+/// The reason this is a function is the reason [`Claim_Refusal`] is one: two implementations
+/// of a rule is how they come to disagree — `OD-LEDGER-005`. What it adds over
+/// `Claim_Refusal` is one filter, and `audit` is what needs it.
 ///
 /// An item that is not `Ready` returns `None` rather than its refusal. `Claim_Refusal`
 /// would answer `NotClaimable` for every `Done` and `Declined` item on the board, which is
 /// true and useless: nobody is queued behind finished work, and reporting it buries the
 /// handful of refusals somebody could actually act on.
+///
+/// That filter is why [`Listing_Label`] reads `Claim_Refusal` directly and not this. A
+/// listing has to name the state of every item including the ones nothing is queued behind,
+/// and the answer it most needs — `lapsed` — is one this function is deliberately silent
+/// about. Both still label from [`Refusal_Label`], so the two reports cannot disagree about
+/// the word for a refusal they both see.
 fn Blocking_Refusal(
     document: &LedgerDocument,
     item: &LedgerItem,
@@ -620,6 +676,10 @@ const fn Refusal_Label(refusal: &ClaimRefusal) -> &'static str
         // an author sets by hand and conflating them would lose that distinction.
         ClaimRefusal::DependencyUnmet { .. } => "waiting",
         ClaimRefusal::HeldBy { .. } => "held",
+        // The one word here that names an operation rather than a wait. An item whose holder
+        // is gone is not queued behind anybody and is not a dead end either: it is takeable by
+        // whoever says so, with `nomos work takeover`.
+        ClaimRefusal::Lapsed { .. } => "lapsed",
         // Not retryable: somebody has to close a modelling gap. Reporting it as `ready`
         // would send an agent to discover that by being refused.
         _ => "snagged",
@@ -634,28 +694,31 @@ const fn Refusal_Label(refusal: &ClaimRefusal) -> &'static str
 /// overlapping ground — on 2026-08-09 the column said `ready` for eight items that a single
 /// held claim refused, three separate times.
 ///
-/// The answer comes from [`Blocking_Refusal`], and through it from [`Claim_Refusal`], which
-/// is the function `claim` itself refuses with. That is the point rather than an
-/// implementation detail: a listing computing its own idea of claimability would be a second
-/// guard for one rule, and the two would eventually disagree about whether an agent may
-/// proceed.
+/// `claimed` is the second word that lied, for the same reason `ready` was the first. An item
+/// whose lease ran out four hours ago reads as work in progress, and it is work whose holder is
+/// gone. It excludes nobody — `OD-LEDGER-009` — and since `OD-LEDGER-012` it is takeable, by
+/// `nomos work takeover` rather than by `claim`. So `lapsed` now says an operation is available
+/// rather than that an editor is.
+///
+/// The answer comes from [`Claim_Refusal`], the function `claim` itself refuses with. That is
+/// the point rather than an implementation detail: a listing computing its own idea of
+/// claimability would be a second guard for one rule, and the two would eventually disagree
+/// about whether an agent may proceed.
+///
+/// This function *was* that second guard. It decided `lapsed` itself, in a branch above the
+/// refusal it now reads, and after `OD-LEDGER-012` that branch was a second implementation of
+/// the predicate deciding whether `takeover` succeeds — the exact arrangement the paragraph
+/// above forbids, in the function whose doc comment forbids it. Every label is unchanged for
+/// every input; what changed is that one function decides.
 fn Listing_Label(document: &LedgerDocument, item: &LedgerItem, now: Timestamp) -> &'static str
 {
-    // `claimed` is the second word that lies, for the same reason `ready` was the first.
-    // An item whose lease ran out four hours ago reads as work in progress, and it is work
-    // whose holder is gone. It excludes nobody now — `OD-LEDGER-009` — and nobody else can
-    // take it either, so it is the one state on this board that needs a person. Saying so
-    // is the whole of what makes that tolerable.
-    if matches!(item.state, ItemState::Claimed) && !item.Has_Active_Claim(now)
+    return match Claim_Refusal(document, &item.id, now)
     {
-        return "lapsed";
-    }
-
-    return match Blocking_Refusal(document, item, now)
-    {
-        // Nothing refuses it, or nothing is meant to: the state word is the honest answer
-        // in both cases, and for a `Ready` item that word is `ready`.
-        None => State_Label(&item.state),
+        // Nothing refuses it, or nothing is meant to: the state word is the honest answer in
+        // both cases, and for a `Ready` item that word is `ready`. `NotClaimable` is the arm
+        // every `Blocked`, `Done` and `Declined` item arrives on, and its own word is better
+        // than any refusal's — nobody is queued behind finished work.
+        None | Some(ClaimRefusal::NotClaimable { .. }) => State_Label(&item.state),
         Some(refusal) => Refusal_Label(&refusal),
     };
 }
@@ -914,6 +977,40 @@ mod tests
                 lease: DEFAULT_LEASE,
             }
         );
+    }
+
+    /// `takeover` shares `claim`'s parse, so it must share `claim`'s defaulting too. A verb
+    /// that silently required `--lease` where its two siblings default it is a verb agents
+    /// learn by being refused.
+    #[test]
+    fn Test_Takeover_Should_Parse_With_A_Default_Lease()
+    {
+        let parsed = Parse(&Arguments("takeover --item T-1 --holder agent-b")).unwrap();
+
+        assert_eq!(
+            parsed,
+            WorkCommand::TakeOver {
+                item: ItemId::New("T-1"),
+                holder: "agent-b".to_owned(),
+                lease: DEFAULT_LEASE,
+            }
+        );
+    }
+
+    /// One word, no hyphen, matching the other nine verbs — and not a spelling of `claim`.
+    ///
+    /// The second assertion is the one worth making: the shared parse arm hands three verbs
+    /// the same arguments, so the only thing keeping them distinct is which variant it
+    /// returns. A `takeover` that parsed as a `Claim` would refuse every lapsed item while
+    /// appearing to be the remedy for one.
+    #[test]
+    fn Test_Takeover_Should_Not_Parse_As_A_Claim()
+    {
+        let parsed = Parse(&Arguments("takeover --item T-1 --holder agent-b --lease 30m")).unwrap();
+
+        assert!(matches!(parsed, WorkCommand::TakeOver { .. }), "{parsed:?}");
+        assert!(Parse(&Arguments("takeover --holder agent-b")).is_err());
+        assert!(Parse(&Arguments("takeover --item T-1")).is_err());
     }
 
     #[test]

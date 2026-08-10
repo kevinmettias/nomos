@@ -32,7 +32,12 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// [`crate::LedgerItem`] and raised nothing, so a guard resting on the bump would report clean
 /// on the next instance of the defect it was built for. Here a forgotten bump can only degrade
 /// a message, and can never cost a field.
-pub const SCHEMA_VERSION: u32 = 1;
+///
+/// `2` since `OD-LEDGER-012` added [`crate::LedgerItem::displaced`]. The bump is not
+/// discretionary: `Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version` counts the
+/// keys on a serialized item, so a field arriving without this number moving is a refusal that
+/// misstates why.
+pub const SCHEMA_VERSION: u32 = 2;
 
 /// Why a ledger operation could not be carried out.
 #[derive(Debug)]
@@ -429,6 +434,81 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
         return outcome;
     }
 
+    /// Takes a lapsed item over, keeping the claim it displaces.
+    ///
+    /// # Why this is not on [`ExclusionLedger`]
+    ///
+    /// A lapse is a property of a ledger that outlives its writers. The run-scoped
+    /// reservations a correction scheduler holds and the session-scoped leases delegated
+    /// agents hold both die with the process that made them, so there is no case in either
+    /// where the holder is gone and the record is not. Putting this on the shared trait would
+    /// oblige two instances to implement an operation about a failure they cannot have.
+    ///
+    /// # Why this is not `Claim`
+    ///
+    /// `claim` never becomes a takeover. Displacing a dead agent's claim is a decision, and a
+    /// `claim` that quietly began making it would reintroduce the loss `OD-LEDGER-009`
+    /// guarded against: the record would exist and nothing would make the agent creating one
+    /// notice that it had. `OD-LEDGER-012`.
+    ///
+    /// Read, decide and write happen inside one lock acquisition, through
+    /// [`Self::Decide_Under_Lock`], because this is a fourth verb that changes the board and
+    /// `OD-LEDGER-015` is the record of what the other three cost by deciding outside it.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ClaimRefusal::HeldBy`] if the lease has not run out, [`ClaimRefusal::
+    /// NotClaimable`] if the item is not a lapsed claim at all, and whatever a claim would be
+    /// refused with otherwise — an unfinished dependency, or ground somebody has taken since
+    /// the lapse.
+    pub fn Take_Over(
+        &mut self,
+        item: &ItemId,
+        holder: &str,
+        lease: Duration,
+    ) -> Result<Reservation, ClaimRefusal>
+    {
+        Check_Lease(lease)?;
+
+        return self.Decide_Under_Lock(holder, |document, now| {
+            let expires_at = now.Plus(lease);
+
+            if let Some(refusal) = Takeover_Refusal(document, item, now)
+            {
+                return Err(refusal);
+            }
+
+            let replacement = Claim {
+                holder: holder.to_owned(),
+                acquired_at: now,
+                lease_expires_at: expires_at,
+            };
+
+            // `Replace_Lapsed_Claim` and not two statements here. The move of the old claim
+            // and the install of the new one are one operation precisely so that this call
+            // site cannot perform half of it.
+            let mut taken = false;
+            for candidate in &mut document.items
+            {
+                if &candidate.id == item
+                {
+                    taken = candidate.Replace_Lapsed_Claim(replacement.clone(), now);
+                }
+            }
+
+            if !taken
+            {
+                return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
+            }
+
+            return Ok(Reservation {
+                item: item.clone(),
+                holder: holder.to_owned(),
+                expires_at,
+            });
+        });
+    }
+
     /// Whether the ledger currently satisfies its invariants.
     ///
     /// # Errors
@@ -642,6 +722,14 @@ pub fn Claim_Refusal(
         return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
     };
 
+    // Before the state check, because `Claimed` is the state a lapsed item is in and
+    // reporting it as merely "not claimable" is what left the operator with no next step:
+    // true of a `Done` item as well, and the two have opposite remedies. `OD-LEDGER-012`.
+    if let Some(refusal) = Lapse_Refusal(target, now)
+    {
+        return Some(refusal);
+    }
+
     if !target.state.Is_Claimable()
     {
         return Some(ClaimRefusal::NotClaimable {
@@ -649,6 +737,56 @@ pub fn Claim_Refusal(
             state: format!("{:?}", target.state),
         });
     }
+
+    return Contested_By(document, target, now);
+}
+
+/// The refusal a lapsed item earns, if it is one.
+///
+/// One implementation, two callers, for the reason [`Claim_Refusal`] itself is a function:
+/// this predicate now decides both what `claim` refuses with *and* whether
+/// [`FileLedger::Take_Over`] will succeed, and a second copy of it would eventually let a
+/// listing say `lapsed` about an item the takeover then declined.
+///
+/// `now` comes from the caller for the same reason every other judgment here takes it: a
+/// second clock read would decide half of one answer against a different instant.
+fn Lapse_Refusal(target: &LedgerItem, now: Timestamp) -> Option<ClaimRefusal>
+{
+    if target.state != ItemState::Claimed
+    {
+        return None;
+    }
+
+    let claim = target.claim.as_ref()?;
+    if !claim.Has_Lapsed(now)
+    {
+        return None;
+    }
+
+    return Some(ClaimRefusal::Lapsed {
+        item: target.id.clone(),
+        holder: claim.holder.clone(),
+        since: claim.lease_expires_at,
+    });
+}
+
+/// Everything that refuses an item for a reason outside the item's own state: an unfinished
+/// dependency, or territory somebody else is actively holding.
+///
+/// Lifted out of [`Claim_Refusal`] unchanged so that [`FileLedger::Take_Over`] re-establishes
+/// independence by the same code rather than by a second copy of it. A takeover that skipped
+/// this would grant overlapping ground, and the case is not hypothetical: a lapsed claim stops
+/// excluding, so another item may since have been claimed over exactly the files this one
+/// reserves.
+///
+/// Private. Both entry points are public and the rule is not a third one.
+fn Contested_By(
+    document: &LedgerDocument,
+    target: &LedgerItem,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let item = &target.id;
 
     for dependency in &target.depends_on
     {
@@ -695,6 +833,61 @@ pub fn Claim_Refusal(
     }
 
     return None;
+}
+
+/// What refuses a takeover of `item` as of `now`, if anything.
+///
+/// The mirror of [`Claim_Refusal`], differing in exactly one clause: a claim needs the item to
+/// be free and this needs it to be lapsed. Everything after that question is the same code,
+/// which is the point — [`Contested_By`] is called and not copied, so a takeover cannot come to
+/// disagree with a claim about whether two territories are independent.
+fn Takeover_Refusal(
+    document: &LedgerDocument,
+    item: &ItemId,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let Some(target) = document
+        .items
+        .iter()
+        .find(|candidate| &candidate.id == item)
+    else
+    {
+        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
+    };
+
+    // A takeover answers a lapse and nothing else. An item with a live claim is a queue, and
+    // everything else is the caller reaching for the wrong verb.
+    if Lapse_Refusal(target, now).is_none()
+    {
+        return Some(Wrong_Verb(target, now));
+    }
+
+    return Contested_By(document, target, now);
+}
+
+/// What to say to a caller that used `takeover` on an item that has not lapsed.
+///
+/// A live claim is [`ClaimRefusal::HeldBy`] — retryable, because the lease running out is what
+/// resolves it, and telling an agent to wait is the honest answer when somebody is working.
+/// Everything else is the state word, so that `takeover` against a `Ready` or `Done` item reads
+/// as the wrong verb rather than as a queue that will never clear.
+fn Wrong_Verb(target: &LedgerItem, now: Timestamp) -> ClaimRefusal
+{
+    if let Some(claim) = &target.claim
+        && !claim.Has_Lapsed(now)
+    {
+        return ClaimRefusal::HeldBy {
+            holder: claim.holder.clone(),
+            until: claim.lease_expires_at,
+            item: target.id.clone(),
+        };
+    }
+
+    return ClaimRefusal::NotClaimable {
+        item: target.id.clone(),
+        state: format!("{:?}", target.state),
+    };
 }
 
 /// A store failure, reported as itself rather than as a missing item.

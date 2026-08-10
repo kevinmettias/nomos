@@ -84,6 +84,7 @@ nomos work add     --item <id> --title <text> --why <text> --done-when <text>
                    [-- <program> <args…>]
 nomos work claim   --item <id> --holder <name> [--lease 2h]
 nomos work renew   --item <id> --holder <name> [--lease 2h]
+nomos work takeover --item <id> --holder <name> [--lease 2h]
 nomos work finish  --item <id> --holder <name>
 nomos work abandon --item <id> --holder <name> --reason <text>
 nomos work validate
@@ -95,6 +96,15 @@ committed and reviewed in a `git diff` — a diff of digests is a diff nobody re
 are compared after normalization, so `./crates\A\src\Lib.rs` and `crates/a/src/lib.rs`
 are one subject, and a directory contains the files beneath it. An item that reserves
 nothing is refused: it would exclude nobody while looking like work.
+
+**A claim is a lease, and a lease lapses.** An agent that dies holding one stops excluding
+everybody else the moment the lease runs out, which is what stops one crashed session holding
+territory until somebody notices. `list` calls that item `lapsed` rather than `claimed`, because
+it is not work in progress. Recovering it costs one deliberate command: the holder that comes
+back runs `renew`, and anybody else runs `takeover`, which installs a new claim and keeps the one
+it displaced on the item where `show` reports it. `claim` never does this — it refuses a lapsed
+item and names the holder it would have displaced — because taking over another agent's
+abandoned work is a decision, and a decision belongs in a verb somebody typed.
 
 **Finishing runs something.** `done_when` is prose for a human; everything after `--` is
 an argument vector that gets executed, with no shell between what was written and what
@@ -135,7 +145,7 @@ reports the file's schema version and the running build's side by side, without 
 provoke a refusal first:
 
 ```
-ledger is valid (schema 1, and this build understands 1)
+ledger is valid (schema 2, and this build understands 2)
 ```
 
 ## Reading the specification

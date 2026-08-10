@@ -46,6 +46,26 @@ pub enum ClaimRefusal
         /// The ceiling.
         maximum: Duration,
     },
+    /// The item's holder is gone: the lease ran out and nobody renewed it.
+    ///
+    /// Distinct from [`ClaimRefusal::NotClaimable`] because the remedy is distinct and
+    /// nameable. A `Done` item is a dead end; a lapsed one is takeable by anybody willing to
+    /// say so, and a refusal that does not say which of the two it is sends the caller to
+    /// read the JSON. `OD-LEDGER-005` is this repository's record of what a state word costs
+    /// when it means something other than what a reader takes it to mean, and `claimed`
+    /// covering both of these was the second instance.
+    ///
+    /// Not retryable, and that is the arm's point rather than an oversight: no amount of
+    /// waiting turns a dead holder into a live one. Somebody has to decide to take the work.
+    Lapsed
+    {
+        /// The item.
+        item: ItemId,
+        /// Who held it when the lease ran out.
+        holder: String,
+        /// When it ran out.
+        since: Timestamp,
+    },
     /// The item is not in a state that can be claimed.
     NotClaimable
     {
@@ -111,6 +131,15 @@ impl ClaimRefusal
             ),
             Self::LeaseTooLong { requested, maximum } => format!(
                 "a lease of {requested:?} exceeds the {maximum:?} ceiling"
+            ),
+            Self::Lapsed {
+                item,
+                holder,
+                since,
+            } => format!(
+                "{item} was held by {holder} and the lease ran out at unix {}; \
+                 `nomos work takeover` replaces it and keeps {holder}'s claim on the item",
+                since.Unix_Seconds()
             ),
             Self::NotClaimable { item, state } => {
                 format!("{item} is {state}, so the operation was refused")
@@ -382,6 +411,31 @@ mod tests
         assert!(refusal.Describe().contains("agent-b"));
     }
 
+    /// A lapse is the one refusal whose remedy is a verb, so the refusal has to name it.
+    ///
+    /// This is the whole difference between `Lapsed` and the `NotClaimable` it replaced for
+    /// this case. `NotClaimable` said the item was `Claimed` — true, and indistinguishable
+    /// from `Done`, which is why the operator was left with no next step. Waiting is not that
+    /// step either: a dead holder does not come back, so this must not be retryable.
+    #[test]
+    fn Test_A_Lapse_Should_Name_Its_Holder_And_Its_Remedy()
+    {
+        let refusal = ClaimRefusal::Lapsed {
+            item: ItemId::New("T-1"),
+            holder: "dead-agent".to_owned(),
+            since: At(2_000),
+        };
+
+        let said = refusal.Describe();
+        assert!(said.contains("dead-agent"), "{said}");
+        assert!(said.contains("takeover"), "the refusal must name the remedy: {said}");
+        assert!(said.contains("2000"), "{said}");
+        assert!(
+            !refusal.Is_Retryable(),
+            "waiting does not turn a dead holder into a live one; somebody has to take the work"
+        );
+    }
+
     #[test]
     fn Test_Every_Refusal_Should_Describe_Itself_Usefully()
     {
@@ -402,6 +456,11 @@ mod tests
             ClaimRefusal::NotClaimable {
                 item: ItemId::New("T-3"),
                 state: "Done".to_owned(),
+            },
+            ClaimRefusal::Lapsed {
+                item: ItemId::New("T-5"),
+                holder: "dead-agent".to_owned(),
+                since: At(2_000),
             },
             ClaimRefusal::NoSuchItem {
                 item: ItemId::New("T-4"),

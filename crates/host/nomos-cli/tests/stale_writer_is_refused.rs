@@ -12,6 +12,7 @@
 //! one binary. The end-to-end experiment for that was run by hand and its observed result is
 //! recorded in `OD-LEDGER-008`.
 
+use nomos_ledger::SCHEMA_VERSION;
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -162,12 +163,20 @@ fn Test_Validate_Should_Report_The_Files_Schema_And_The_Builds()
     let (said, code) = board.Work(&["validate"]);
 
     assert_eq!(code, 0, "{said}");
+    // A literal `1`, and it stays one: this reads the *fixture's* own version, which `Board`
+    // writes as `schema_version: 1` and which no bump to `SCHEMA_VERSION` changes. The two
+    // numbers on this line are different facts, and the next reader should not "fix" both.
     assert!(
         said.contains("schema 1"),
         "validate must report the file's own schema version:\n{said}"
     );
+    // The constant, never a literal spelling of its value. This assertion said "understands 1"
+    // until `P10-LAPSE-TAKEOVER` raised `SCHEMA_VERSION` to 2 and turned it red — a test in one
+    // item's territory pinned by a constant in another's, with nothing able to see the coupling
+    // because a file and a constant are `Disjoint` and the ledger reserves paths. Same shape as
+    // the trap `P10-RECORD-STEM` closed. Written this way the next bump cannot reach it.
     assert!(
-        said.contains("this build understands 1"),
+        said.contains(&format!("this build understands {SCHEMA_VERSION}")),
         "validate must report what the running build understands:\n{said}"
     );
 }

@@ -2909,14 +2909,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-lapse-takeover-w32",
-        "acquired_at": 1786380024,
-        "lease_expires_at": 1786390824
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2932,7 +2928,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ps\\read_surface-253c06b98188f76c.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-32c64e36d2416b1f.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-023ed72b0b5f56bc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-561a88ff4bc732e0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-f65566f9f804790f.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-ae78a8a92bf9e664.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786380288,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-lapse-takeover-w16",

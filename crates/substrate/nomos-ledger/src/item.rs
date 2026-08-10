@@ -174,13 +174,18 @@ impl Claim
     /// claimable again, which is what `MAXIMUM_LEASE` exists for — and it stays visible so
     /// that a person can see the work was abandoned rather than never started.
     ///
-    /// It does not let the next agent take *this* item, and this comment said it did until
-    /// `P10-LAPSE-BRICKS` measured it. The item stays `Claimed`, and `Claim_Refusal` rejects
-    /// anything that is not `Ready` before it ever reaches the lease. That is deliberate as
-    /// of `OD-LEDGER-009` rather than merely true: a claim overwrites `claim`, and `claim`
-    /// is the only thing recording that the work was ever started, which `OD-LEDGER-006`
-    /// decided must survive. Taking a lapsed item over is a different operation from
-    /// claiming a free one and is not one yet.
+    /// It does not let the next agent *claim* this item, and this comment said it did until
+    /// `P10-LAPSE-BRICKS` measured it. The item stays `Claimed`, and `Claim_Refusal` refuses
+    /// a plain claim on it — with [`crate::ClaimRefusal::Lapsed`], which names the holder
+    /// whose lease ran out and the remedy. That refusal is deliberate as of `OD-LEDGER-009`
+    /// rather than merely true: a claim overwrites `claim`, and `claim` is the only thing
+    /// recording that the work was ever started, which `OD-LEDGER-006` decided must survive.
+    ///
+    /// Taking a lapsed item over is therefore a different operation from claiming a free
+    /// one, and `OD-LEDGER-012` is where it became one: [`crate::FileLedger::Take_Over`]
+    /// installs the new claim and [`LedgerItem::Replace_Lapsed_Claim`] moves the claim it
+    /// replaced onto [`LedgerItem::displaced`], so what a lapse recorded survives the thing
+    /// that ends it.
     #[must_use]
     pub fn Has_Lapsed(&self, now: Timestamp) -> bool
     {
@@ -328,6 +333,28 @@ pub struct LedgerItem
     /// and that is a fact about those items rather than something to backfill.
     #[serde(default)]
     pub abandoned: Vec<Abandonment>,
+    /// Every claim on this item that lapsed and was displaced by a takeover, oldest first.
+    ///
+    /// The claim itself, kept exactly as it stood, rather than a summary of it. A summary is
+    /// a second shape that can drift from [`Claim`]; the claim cannot drift from itself. It
+    /// carries no record of who displaced it or when, because neither is new knowledge —
+    /// both are the `holder` and `acquired_at` of the claim that *replaced* it, which is
+    /// [`LedgerItem::claim`] for the most recent entry and `displaced[i + 1]` for any
+    /// earlier one. `OD-LEDGER-012` states what that indirection costs.
+    ///
+    /// A list for the reason [`LedgerItem::abandoned`] is a list: an item taken over twice
+    /// was taken over twice, and keeping only the most recent discards the earlier holder —
+    /// this same loss one scale down.
+    ///
+    /// `#[serde(default)]` because every item written before this field existed has none,
+    /// and that is a fact about those items rather than something to backfill. It carries no
+    /// `skip_serializing_if`, deliberately: `abandoned` has none either, and a field whose
+    /// presence in the file depends on its content cannot be counted. `grep -c '"abandoned"'
+    /// work/ledger.json` equalling the item count is this repository's standing check that
+    /// no stale writer has been through the file, and it only works while the shape of the
+    /// document is independent of what is in it.
+    #[serde(default)]
+    pub displaced: Vec<Claim>,
 }
 
 impl LedgerItem
@@ -343,6 +370,44 @@ impl LedgerItem
             .claim
             .as_ref()
             .is_some_and(|claim| !claim.Has_Lapsed(now));
+    }
+
+    /// Replaces a lapsed claim with a new one, keeping the claim it replaced.
+    ///
+    /// Returns `false` and changes nothing when there is no claim, or when the claim has not
+    /// lapsed. A live holder is never displaced by this, and an item recording no claim is
+    /// never given one — installing a claim over a hole would produce exactly the item
+    /// [`crate::Validate`] calls a corruption, and would destroy the fact that the record
+    /// was already missing.
+    ///
+    /// The move and the install are **one operation**, for the reason
+    /// [`crate::ReleaseOutcome::Record_On`] is one: spelled out at a call site, an
+    /// implementation is free to install the new claim and not keep the old one, and that is
+    /// the entire defect this exists to prevent. There is no ordering of the statements below
+    /// in which `replacement` lands and `previous` is not kept, and nothing else writes
+    /// `claim` during a takeover. That is where the guarantee lives — the tests are checks on
+    /// it rather than the thing providing it.
+    ///
+    /// The lapse is re-checked here rather than trusted from the caller, so the method is
+    /// still safe standing alone if a second caller ever appears.
+    #[must_use]
+    pub fn Replace_Lapsed_Claim(&mut self, replacement: Claim, now: Timestamp) -> bool
+    {
+        let Some(previous) = self.claim.as_ref()
+        else
+        {
+            return false;
+        };
+
+        if !previous.Has_Lapsed(now)
+        {
+            return false;
+        }
+
+        self.displaced.push(previous.clone());
+        self.claim = Some(replacement);
+
+        return true;
     }
 }
 
@@ -366,6 +431,7 @@ mod tests
             verification: None,
             verified: None,
             abandoned: Vec::new(),
+            displaced: Vec::new(),
         };
     }
 
@@ -420,6 +486,76 @@ mod tests
         assert!(claim.Has_Lapsed(At(2_001)));
     }
 
+    fn Claimed_By(holder: &str, expires: i64) -> Claim
+    {
+        return Claim {
+            holder: holder.to_owned(),
+            acquired_at: At(1_000),
+            lease_expires_at: At(expires),
+        };
+    }
+
+    /// The guarantee the whole of `OD-LEDGER-012` rests on, at the unit that provides it.
+    ///
+    /// A takeover must not be able to erase the previous holder. Asserted here as well as
+    /// over the store, because this method is where the property is structural: the store
+    /// tests would still pass if the push moved to a caller, and the next caller would then
+    /// be free to omit it.
+    #[test]
+    fn Test_Replacing_A_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
+    {
+        let mut item = Item("T-1");
+        item.state = ItemState::Claimed;
+        item.claim = Some(Claimed_By("dead-agent", 2_000));
+
+        assert!(item.Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+
+        assert_eq!(
+            item.claim.as_ref().map(|claim| return claim.holder.clone()),
+            Some("agent-b".to_owned())
+        );
+        assert_eq!(
+            item.displaced
+                .iter()
+                .map(|claim| return claim.holder.clone())
+                .collect::<Vec<String>>(),
+            vec!["dead-agent".to_owned()],
+            "the claim the takeover replaced was dropped, so nothing says whose work this was"
+        );
+    }
+
+    /// The two refusals, which are what keep the method safe standing alone.
+    ///
+    /// A live holder is not displaced — otherwise `takeover` is a way to steal work in
+    /// progress, which is worse than the defect it fixes. And an item recording no claim is
+    /// not given one: writing a claim over a hole would destroy the evidence that the record
+    /// was already missing, which is [`crate::Validate`]'s one remaining corruption.
+    #[test]
+    fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
+    {
+        let mut live = Item("T-1");
+        live.state = ItemState::Claimed;
+        live.claim = Some(Claimed_By("agent-a", 2_000));
+
+        assert!(!live.Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(1_999)));
+        assert_eq!(
+            live.claim.as_ref().map(|claim| return claim.holder.clone()),
+            Some("agent-a".to_owned()),
+            "a live holder was displaced"
+        );
+        assert!(live.displaced.is_empty());
+
+        let mut hollow = Item("T-2");
+        hollow.state = ItemState::Claimed;
+
+        assert!(!hollow.Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+        assert!(
+            hollow.claim.is_none(),
+            "a claim was written over an item that recorded none"
+        );
+        assert!(hollow.displaced.is_empty());
+    }
+
     /// An empty argv is a field somebody filled in, not a predicate. Accepting it would
     /// let an item claim verified completion having run nothing.
     #[test]
@@ -461,7 +597,7 @@ mod tests
 
         assert_eq!(
             fields.len(),
-            12,
+            13,
             "a field was added to `LedgerItem`. Raise `SCHEMA_VERSION` in `store.rs` and this \
              count together, or a build that predates the field will be told the ledger is \
              malformed instead of being told it is old"

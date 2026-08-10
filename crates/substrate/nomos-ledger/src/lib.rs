@@ -17,6 +17,13 @@
 //! [`Abandonment`]. Until that existed only the lapse left a trace, so an agent that died
 //! was legible afterwards and one that stopped on purpose was not.
 //!
+//! A lapsed item is recovered by a verb of its own, [`FileLedger::Take_Over`], and never by
+//! `Claim`. The claim it displaces moves to [`LedgerItem::displaced`] rather than being
+//! overwritten, because that claim is the only thing recording that the work was ever
+//! started — so the item returns to the pool without anybody editing the file by hand, and
+//! who held it, when they took it and when the lease ran out all survive the takeover.
+//! `OD-LEDGER-012`.
+//!
 //! **Finishing runs a predicate.** `done_when` is prose for a human;
 //! [`VerificationPredicate`] is an argument vector that gets executed, and an item
 //! cannot report itself done because somebody typed that it was.

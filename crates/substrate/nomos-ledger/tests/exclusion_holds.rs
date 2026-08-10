@@ -59,6 +59,7 @@ fn Item(id: &str, files: &[&str]) -> LedgerItem
         verification: None,
         verified: None,
         abandoned: Vec::new(),
+        displaced: Vec::new(),
     };
 }
 
@@ -1014,6 +1015,14 @@ fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
         reason: "went to look at something else".to_owned(),
         abandoned_at: At(NOW),
     }];
+    // The nested type `OD-LEDGER-012` added. Populated here rather than left empty because an
+    // empty list serializes as `[]` and contributes no object node, so the walk below would
+    // never reach a `Claim` inside `displaced` and the guard would be silent about it.
+    item.displaced = vec![Claim {
+        holder: "dead-agent".to_owned(),
+        acquired_at: At(NOW),
+        lease_expires_at: At(NOW + 60),
+    }];
 
     let whole = serde_json::to_value(Document(vec![item])).expect("the document serializes");
 
@@ -1039,7 +1048,7 @@ fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
     }
 
     assert!(
-        pointers.len() >= 10,
+        pointers.len() >= 11,
         "only {} object(s) were probed, so the fixture above has stopped being fully \
          populated — the guard did not shrink, the universe did",
         pointers.len()
@@ -1085,9 +1094,14 @@ fn Test_A_Ledger_Newer_Than_This_Build_Should_Say_So_Rather_Than_Malformed()
     let clock = FixedClock(NOW);
     let ledger = Ledger_At(&directory, &clock);
 
+    // The spliced key was `"displaced":[]` when this test was written, chosen as a field a
+    // later build might add. `OD-LEDGER-012` added it, so it became declared and the parse it
+    // was here to make fail started succeeding. Named for what it is instead, which is the
+    // same lesson `Raw_Ledger`'s own fixture learned: a probe key must not be one the schema
+    // can catch up with.
     std::fs::write(
         directory.join("ledger.json"),
-        Raw_Ledger(9_999, ",\"displaced\":[]"),
+        Raw_Ledger(9_999, ",\"a_field_this_build_does_not_know\":[]"),
     )
     .expect("write");
 
@@ -1209,7 +1223,7 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
         document
             .items
             .first()
-            .is_some_and(|item| item.abandoned.is_empty()),
+            .is_some_and(|item| item.abandoned.is_empty() && item.displaced.is_empty()),
         "a missing field must read as absent rather than refusing the file"
     );
 
@@ -1336,17 +1350,32 @@ fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
 
 /// Three: what the lapsed item itself does, which is a decision rather than a consequence.
 ///
-/// It stays `Claimed` and nobody else may take it. `OD-LEDGER-009` states the grounds:
-/// `Claim` overwrites `claim`, and `claim` is the only thing recording that the work was
-/// ever started — which `OD-LEDGER-006` decided must survive, having refused to synthesize
+/// It stays `Claimed` and a plain `claim` on it is refused. `OD-LEDGER-009` states the
+/// grounds: `Claim` overwrites `claim`, and `claim` is the only thing recording that the work
+/// was ever started — which `OD-LEDGER-006` decided must survive, having refused to synthesize
 /// an `Abandonment` for a lapse because `Abandonment::reason` is the words the holder gave
 /// and a lapse has none. Taking a lapsed item over is a different operation from claiming a
-/// free one, and it does not exist yet.
+/// free one, and `OD-LEDGER-012` is where it became one.
 ///
 /// Asserted rather than left implicit, because the refusal is now deliberate. What must not
 /// happen is that it becomes claimable by accident and quietly erases who was working on it.
+///
+/// # What changed here, and why it is this test working rather than a regression
+///
+/// This test was `…Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible`, and "refuse a new
+/// holder" became false once `takeover` existed: a new holder is exactly what a takeover
+/// installs. Its subject — `claim` is refused — is **not** reversed, and the refusal is
+/// stronger than it was, because `Lapsed` names the holder and the remedy where `NotClaimable`
+/// said only that the item was `Claimed`. The assertion that the lapsed claim was not replaced
+/// is kept word for word: nothing in `OD-LEDGER-012` erases a claim, and the test was written
+/// to stop it being erased *by accident*.
+///
+/// This test's own previous doc comment said it "stops short of the claimability, because an
+/// assertion either way would pin the behaviour before that decision is made". The decision is
+/// made, in `OD-LEDGER-012`. `Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_\
+/// Previous_Holder` covers the case this one could not, because the operation did not exist.
 #[test]
-fn Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible()
+fn Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover()
 {
     let directory = Temp_Dir("lapse-takeover");
     let clock = FixedClock(NOW);
@@ -1370,10 +1399,19 @@ fn Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible()
         );
 
     assert!(
-        matches!(refusal, ClaimRefusal::NotClaimable { .. }),
+        matches!(refusal, ClaimRefusal::Lapsed { .. }),
         "the refusal must say the item is not in a claimable state rather than blame \
          territory or the identifier: {}",
         refusal.Describe()
+    );
+    assert!(
+        refusal.Describe().contains("takeover"),
+        "a refusal whose remedy is a verb has to name the verb: {}",
+        refusal.Describe()
+    );
+    assert!(
+        !refusal.Is_Retryable(),
+        "waiting does not revive a dead holder; somebody has to decide to take the work"
     );
 
     let held = after.Load().expect("readable");
@@ -1382,6 +1420,10 @@ fn Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible()
         item.claim.as_ref().map(|claim| return claim.holder.clone()),
         Some("dead-agent".to_owned()),
         "the lapsed claim was replaced, so nothing says who walked away from this"
+    );
+    assert!(
+        item.displaced.is_empty(),
+        "a refused claim recorded a displacement, so `claim` has quietly become `takeover`"
     );
 
     let _ = std::fs::remove_dir_all(&directory);
@@ -1423,6 +1465,412 @@ fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
             .is_some_and(|item| return item.Has_Active_Claim(At(NOW + 7_200))),
         "renewing a lapsed claim must make it active again"
     );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+// ---------------------------------------------------------------------------
+// A lapse is taken over, and the claim it replaces is kept. P10-LAPSE-TAKEOVER,
+// decided in `OD-LEDGER-012`.
+//
+// The two tests above this comment are the boundary the decision was made against: a lapse
+// must not brick the board, and a plain `claim` must not quietly erase a dead agent's claim.
+// Everything below is the operation that does take the item, and the assertion running through
+// all of it is that nothing it does is silent.
+// ---------------------------------------------------------------------------
+
+/// The subject, and exactly the sequence `done_when` names.
+///
+/// Claim it, force the lease into the past, take it over as somebody else, and assert both
+/// halves: the takeover succeeded, and the previous holder is still named on the item. The
+/// second half is the whole point — *"a new claim overwriting the old one silently is the
+/// outcome this must not have."*
+#[test]
+fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
+{
+    let directory = Temp_Dir("takeover-keeps-predecessor");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let later = FixedClock(NOW + 7_200);
+    let mut after = Ledger_At(&directory, &later);
+
+    let reservation = after
+        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+        .unwrap_or_else(|refusal| {
+            panic!(
+                "an item whose holder died must return to the pool without a person editing \
+                 the file: {}",
+                refusal.Describe()
+            )
+        });
+
+    assert_eq!(reservation.holder, "agent-b");
+
+    let held = after.Load().expect("readable");
+    let item = held.items.first().expect("the item survives");
+
+    assert_eq!(
+        item.claim.as_ref().map(|claim| return claim.holder.clone()),
+        Some("agent-b".to_owned()),
+        "the takeover did not install the new holder"
+    );
+    assert!(
+        item.Has_Active_Claim(At(NOW + 7_200)),
+        "a takeover that leaves the lease in the past has taken nothing"
+    );
+    assert_eq!(
+        item.state,
+        ItemState::Claimed,
+        "a takeover does not move the state; the item was claimed and still is"
+    );
+
+    // The half this item exists for. Who held it, when they took it, and when the lease ran
+    // out — all three survive, and they survive as the claim itself rather than as a summary.
+    assert_eq!(
+        item.displaced.len(),
+        1,
+        "the takeover kept {} displaced claim(s) rather than exactly the one it replaced, so \
+         either nothing records who walked away from this or something records it twice",
+        item.displaced.len()
+    );
+    let displaced = item
+        .displaced
+        .first()
+        .expect("the claim the takeover replaced is kept");
+    assert_eq!(
+        displaced.holder, "dead-agent",
+        "the takeover dropped the previous holder, which is the outcome this must not have"
+    );
+    assert_eq!(displaced.acquired_at, At(NOW), "when they took it");
+    assert_eq!(
+        displaced.lease_expires_at,
+        At(NOW + 3_600),
+        "when the lease ran out"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// A live claim is not a lapse, and `takeover` is not a way to steal work in progress.
+///
+/// Without this the verb is worse than the defect it fixes: an agent that is merely slow gets
+/// its item taken by anybody who types the word. The lease is the whole of the protection and
+/// renewing it is the whole of the remedy, which is why `HeldBy` here is retryable — waiting
+/// is genuinely the right advice when somebody is working.
+#[test]
+fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
+{
+    let directory = Temp_Dir("takeover-refuses-live");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let soon = FixedClock(NOW + 60);
+    let mut during = Ledger_At(&directory, &soon);
+
+    let refusal = during
+        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+        .expect_err("a live claim must not be displaced by a takeover");
+
+    assert!(
+        matches!(refusal, ClaimRefusal::HeldBy { .. }),
+        "{}",
+        refusal.Describe()
+    );
+    assert!(
+        refusal.Is_Retryable(),
+        "the lease running out is what resolves this, so waiting is the honest advice"
+    );
+
+    let held = during.Load().expect("readable");
+    let item = held.items.first().expect("the item survives");
+    assert_eq!(
+        item.claim.as_ref().map(|claim| return claim.holder.clone()),
+        Some("agent-a".to_owned()),
+        "a takeover displaced a holder who was still working"
+    );
+    assert!(item.displaced.is_empty(), "{:?}", item.displaced);
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The wrong verb is refused rather than accommodated.
+///
+/// A `takeover` that quietly worked as a `claim` would mean two verbs doing one thing, and the
+/// whole point of a separate verb is that it means something the other does not. Both ends of
+/// the range are covered: an item nobody has ever held, and one that is finished.
+#[test]
+fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
+{
+    let directory = Temp_Dir("takeover-wrong-verb");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    let mut finished = Item("T-2", &["src/b.rs"]);
+    finished.state = ItemState::Done;
+    finished.verified = Some(VerificationRecord {
+        argv: vec!["cargo".to_owned(), "test".to_owned()],
+        exit_code: 0,
+        output_tail: "ok".to_owned(),
+        verified_at: At(NOW),
+        gate: None,
+    });
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"]), finished]))
+        .expect("a fresh ledger is valid");
+
+    for (item, what) in [("T-1", "an item nobody holds"), ("T-2", "a finished item")]
+    {
+        let refusal = ledger
+            .Take_Over(&ItemId::New(item), "agent-b", Duration::from_secs(3_600))
+            .expect_err("a takeover answers a lapse and nothing else");
+
+        assert!(
+            matches!(refusal, ClaimRefusal::NotClaimable { .. }),
+            "{what} must read as the wrong verb rather than as a queue: {}",
+            refusal.Describe()
+        );
+        assert!(
+            !refusal.Is_Retryable(),
+            "{what} will not become takeable by waiting"
+        );
+    }
+
+    let held = ledger.Load().expect("readable");
+    assert!(
+        held.items
+            .iter()
+            .all(|item| return item.claim.is_none() && item.displaced.is_empty()),
+        "a refused takeover wrote to the item anyway"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// Independence is re-established, not assumed — the case that is easy to get wrong and
+/// impossible to notice afterwards.
+///
+/// A lapsed claim stops excluding, so the ground it reserved may already have been taken by
+/// somebody else. A takeover that skipped the territory check would hand two live agents the
+/// same files and call it recovery, which is the one thing this ledger exists to prevent.
+///
+/// It passes because `Take_Over` calls `Contested_By`, the function `Claim_Refusal` calls. If it
+/// ever passes because the loop was copied instead, the two copies will drift and this test
+/// will not see it.
+#[test]
+fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
+{
+    let directory = Temp_Dir("takeover-refuses-taken-ground");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    // Two items over the same file. Concurrently claimable only while one of them is not.
+    ledger
+        .Save(&Document(vec![
+            Item("T-1", &["src/a.rs"]),
+            Item("T-2", &["src/a.rs"]),
+        ]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let later = FixedClock(NOW + 7_200);
+    let mut after = Ledger_At(&directory, &later);
+
+    // Succeeds precisely because T-1's lapsed claim no longer excludes. This is the state the
+    // takeover then has to notice.
+    after
+        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+        .expect("a lapsed claim stops excluding, so this ground is free");
+
+    let refusal = after
+        .Take_Over(&ItemId::New("T-1"), "agent-c", Duration::from_secs(3_600))
+        .expect_err("the ground T-1 reserves is held by a live claim on T-2");
+
+    assert!(
+        matches!(refusal, ClaimRefusal::HeldBy { .. }),
+        "{}",
+        refusal.Describe()
+    );
+    assert!(
+        refusal.Describe().contains("agent-b"),
+        "the refusal must name who holds the ground now: {}",
+        refusal.Describe()
+    );
+
+    let held = after.Load().expect("readable");
+    let taken = held
+        .items
+        .iter()
+        .find(|item| return item.id == ItemId::New("T-1"))
+        .expect("T-1 survives");
+    assert_eq!(
+        taken.claim.as_ref().map(|claim| return claim.holder.clone()),
+        Some("dead-agent".to_owned()),
+        "a refused takeover replaced the claim anyway"
+    );
+    assert!(taken.displaced.is_empty(), "{:?}", taken.displaced);
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// A list, not a field.
+///
+/// An item taken over twice was taken over twice, and keeping only the most recent would
+/// discard the earlier holder — `OD-LEDGER-006`'s reason for `abandoned` being a list, restated
+/// one field across. This is the test that a single-slot implementation passes B1 and fails.
+#[test]
+fn Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors()
+{
+    let directory = Temp_Dir("takeover-twice");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let second = FixedClock(NOW + 7_200);
+    let mut takes = Ledger_At(&directory, &second);
+    takes
+        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+        .expect("the first holder's lease ran out");
+
+    // Past `agent-b`'s lease too: NOW + 7_200 + 3_600.
+    let third = FixedClock(NOW + 14_400);
+    let mut again = Ledger_At(&directory, &third);
+    again
+        .Take_Over(&ItemId::New("T-1"), "agent-c", Duration::from_secs(3_600))
+        .expect("the second holder's lease ran out as well");
+
+    let held = again.Load().expect("readable");
+    let item = held.items.first().expect("the item survives");
+
+    assert_eq!(
+        item.claim.as_ref().map(|claim| return claim.holder.clone()),
+        Some("agent-c".to_owned())
+    );
+    assert_eq!(
+        item.displaced
+            .iter()
+            .map(|claim| return claim.holder.clone())
+            .collect::<Vec<String>>(),
+        vec!["dead-agent".to_owned(), "agent-b".to_owned()],
+        "oldest first, and both of them: keeping only the most recent is this same loss one \
+         scale down"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// Absence is not permission.
+///
+/// `Claimed` with no claim recorded is the one corruption `Validate` still refuses, so this
+/// document is written by hand — `Save` will not persist it and `Load` does not validate. A
+/// takeover must refuse it rather than fill the hole: writing a claim over a missing record
+/// would destroy the fact that it was missing, which is `OD-LEDGER-008`'s defect one scale down.
+#[test]
+fn Test_An_Item_Claimed_With_No_Claim_Recorded_Should_Not_Be_Taken_Over()
+{
+    let directory = Temp_Dir("takeover-refuses-a-hole");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    let path = directory.join("ledger.json");
+    std::fs::write(
+        &path,
+        format!(
+            "{{\n  \"schema_version\": {SCHEMA_VERSION},\n  \"items\": [\
+             {{\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
+             \"done_when\":\"the tests pass\",\
+             \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
+             \"patterns\":[]}},\
+             \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
+             \"verification\":null,\"verified\":null,\"abandoned\":[],\"displaced\":[]}}\
+             ]\n}}\n"
+        ),
+    )
+    .expect("write");
+    let before = std::fs::read(&path).expect("readable");
+
+    let refusal = ledger
+        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+        .expect_err("an item whose predecessor record is already missing is not taken over");
+
+    assert!(
+        matches!(refusal, ClaimRefusal::NotClaimable { .. }),
+        "{}",
+        refusal.Describe()
+    );
+    assert_eq!(
+        std::fs::read(&path).expect("readable"),
+        before,
+        "a refused takeover rewrote the file"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The new field through the strict deserializer, which is the pairing the two items exist to
+/// make safe.
+///
+/// `OD-LEDGER-008` made `Load` refuse a key it cannot account for and `Save` stamp the version
+/// rather than echo it. A field added afterwards has to survive both, and the second `Save` here
+/// is what shows the stamp is idempotent rather than incrementing on every write — a version
+/// that climbed on its own would make every file unreadable by the build that wrote it.
+#[test]
+fn Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly()
+{
+    let directory = Temp_Dir("takeover-round-trip");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let later = FixedClock(NOW + 7_200);
+    let mut after = Ledger_At(&directory, &later);
+    after
+        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+        .expect("a lapsed item is takeable");
+
+    let first = after.Load().expect("a document carrying `displaced` must read");
+    assert_eq!(first.schema_version, SCHEMA_VERSION);
+    assert!(
+        first
+            .items
+            .first()
+            .is_some_and(|item| return item.displaced.len() == 1),
+        "the displaced claim did not survive the write"
+    );
+
+    after.Save(&first).expect("valid");
+    let second = after.Load().expect("readable");
+
+    assert_eq!(second, first, "a displaced claim changed meaning on rewrite");
 
     let _ = std::fs::remove_dir_all(&directory);
 }
