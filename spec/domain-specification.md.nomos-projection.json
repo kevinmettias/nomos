@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2dc2f21d073c3fc7100523f972d7a585480f1c93a956c96f598c601c29b373de",
-  "inputs_digest": "sha256:ee0027a5c5d911964822ac100072c4f3e11e0552608e62346f176ef2904fca24",
+  "content_digest": "sha256:78a9395321be2b0421dd29d75f62b1bdea09160478c4bb8aab0e6fe6f84b5457",
+  "inputs_digest": "sha256:4b6f97e1f64b36740a275fcb10206174e2af1cc4493b4f4012c06ce86c92881a",
   "sections": [
     [
       "Documents",
-      69
+      70
     ],
     [
       "Sections",
-      650
+      661
     ],
     [
       "Source blocks",
-      2575
+      2611
     ]
   ],
   "inputs": [
@@ -94,6 +94,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored",
       "hash": "sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored",
+      "hash": "sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc"
     },
     {
       "content": "documents",
@@ -909,6 +914,61 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md#22",
       "hash": "sha256:a1a6f1f12cebf085e7071757a7ef3532436cf4893f6a230b2479c65ee9d3920c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#1",
+      "hash": "sha256:6f76e28e14983a364948bedb7518d75a548942425b9d425c375d7cce1014afbd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#2",
+      "hash": "sha256:2943e927bccc13f77ee36f3639a8d5232c012860c15c06b09e1a4b4e4b8e8639"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#5",
+      "hash": "sha256:761adeda66503f405502637591fdc3883d9169ededed39ef7df5e4ccc30f67b9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#11",
+      "hash": "sha256:af61d1ca4a82855a54a8867f89d780486f49babad0ff0eca05247dc9ef47264a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#12",
+      "hash": "sha256:647fddd255f51b8da50744e8f428dfa3e4fd1adf20f67564e4c0b313e7aa5d63"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#16",
+      "hash": "sha256:641d1d53d14207edf749b66c7aa79280fc72f692cf44b7501e29cf88332bebd0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#21",
+      "hash": "sha256:0528e75de7c19a21772e48d3d941fe24e6710ab65f29c86438877328c7572f1c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#24",
+      "hash": "sha256:ff6a793c9831f10c01cd669fe02fcf5c2c6525e5fb0c0c7fc4297f02cb0c0af8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#26",
+      "hash": "sha256:bbf7a70dc44ddcb3171e7549dec598c44b12e90d0413ae41646322c5c8792f47"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#31",
+      "hash": "sha256:597ffc222510b5e961bfd8658cd95310df30feeff98e987a2e529fc077a8b720"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35",
+      "hash": "sha256:2a7e7e580721e98cb7f0b4b1a2f27d8dcb5d8b005e66321daaa1bcb4d347f140"
     },
     {
       "content": "headings",
@@ -5689,6 +5749,186 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md#23",
       "hash": "sha256:5a52ac7d8686e537d841f8bd2d8a6a4aad0b8b20c3d2a90f1dea60823dab1881"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#1",
+      "hash": "sha256:8a546a44e70b5e42344ccbe2280ee4ded9e1444581299ea3953fefb9d6863110"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#3",
+      "hash": "sha256:f7dd5293f23e65fecf5bcd75456828a733c6ca13703f8791205e39f358518100"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#4",
+      "hash": "sha256:1a139022eaaff0b4f98e098b5e1a0781319f0b1c05dce7a7dad29575a3bb44c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#6",
+      "hash": "sha256:ef1f1a4e2e86e6c09f00d6b4b33bbe0d14a7b4018b7f4993e4cf3954aa352cf6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#7",
+      "hash": "sha256:4bd8c447ce279186e04d2915594b63050f4b7f04be41d9dde4889097e4b0a07f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#8",
+      "hash": "sha256:5b3bb7274ebd2cab0f20880d3998730768a859a0e5085ee624c98e87da53f7c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#9",
+      "hash": "sha256:1d19c3eb085d6132dcaf0f1886de812dcac2cecbe21362d1c3c6dc1792494835"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#10",
+      "hash": "sha256:ab8bc71cd6f1d7c5eac536949d08b3e82bfabb5c704a0fb774307a6837c115c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#11",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#12",
+      "hash": "sha256:94e57cc7fa57082dfb40f862d888ab09b8088f875a3f506e5146844b59ca5d2d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#13",
+      "hash": "sha256:5c221913c84d55dc2cdfc5cd5aac1a544724232b8667aedfba6d29e49dd02807"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#14",
+      "hash": "sha256:eeffcff402e9a4f6e3b3d6edc6dd260abdccf39382f372062c7a831a3fb62098"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#15",
+      "hash": "sha256:fe78834d1b78249829d0fe70526676446921e40a31c8d7018062edde2bf4196a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#16",
+      "hash": "sha256:3084dabd2e04806d2d39b2b52abd0205900803fdbb1194d37afb2eff310ef21a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#17",
+      "hash": "sha256:5f0036350e020fbb3382d9abb084f0ab9b8c84ffad6176c770677649328cb2d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#18",
+      "hash": "sha256:b71fa881598ae08214f38731a76b90a7721cc005a545dd9c65d3186299e97dc1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#19",
+      "hash": "sha256:670ac57bf3cc461db62691a7bba837563131413eb287ab681e34a84aaeb7a43d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#20",
+      "hash": "sha256:117d998312bf735a267b68959bf8c245897cff90613eb2085a93da709a588cc3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#21",
+      "hash": "sha256:fc066c1e6c2adaabe15edfc3ae4acde657879945bb526e4bc779146368d3ebc1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#22",
+      "hash": "sha256:354996a3ce3250ee213338470920bfabd8718cb00ed3979ade7890173eb5bce1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#23",
+      "hash": "sha256:6c881006e9d2ce8e74645f630c85e9d2496e2a407e63411392ecfb6099568e99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#24",
+      "hash": "sha256:57e597a4aa82df6e59a1656482b828f8e6c77ffe193ae02e2d38a93949930f5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#25",
+      "hash": "sha256:5edd27f5762d726bfd2cfe5d4de8b9fa766210da7962a3e9073c382907296d38"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#26",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#27",
+      "hash": "sha256:c1a2c60ffa832d3aecb3592726429a0a29c6e9c831d7526890c9092be79efd26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#28",
+      "hash": "sha256:f4eb57bced5b5074e51bd3237ba62c39a8117de701a0cd0bab8aaf51bdb3e391"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#29",
+      "hash": "sha256:07b9b9ac08cd8ad3c10802d18f40231b5c0e9e4701b1b4dbadb9c1cabb2f332a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#30",
+      "hash": "sha256:5fe50d208c556bc57ba180318a8109e5ab51e15a5c1fad2bbfc90bf3d6115e5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#31",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#32",
+      "hash": "sha256:448b01329bf851c32590481fc2c2e6853c8b98452c13a730bd17553bbda7f330"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#33",
+      "hash": "sha256:7b6c24fec3c75c896cae0c6f7a45f004cf882b41ea882412f5e0d058eac312c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#34",
+      "hash": "sha256:4c7b06c897c1951b2f001bc3cddd9eea0b47728d46cf4ea44c798b99ddf5bb11"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#36",
+      "hash": "sha256:acc51edccf08377da1dfd01ce57b84118d31da6cda9b19ecc8c6bb13051327b4"
     },
     {
       "content": "blocks",

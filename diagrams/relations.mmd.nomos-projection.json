@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:c14f41760761516135499e57a2b03db88e66490b8f804298895232a1b52c5518",
-  "inputs_digest": "sha256:14643b520ded361e70cc4980d0765b2bd8e87bd10b3e065ec99db5662ecfe7a2",
+  "content_digest": "sha256:0e9cbfea140e479505b5cd1583260498338a1c17fbba7657b10c10f0963649e1",
+  "inputs_digest": "sha256:0d13e52205ee14fd7987045654a08536fe3f0c423b3d5eeb983b98d3d2defd58",
   "sections": [
     [
       "Relations",
-      458
+      466
     ],
     [
       "Decisions",
-      66
+      67
     ]
   ],
   "inputs": [
@@ -60,6 +60,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-AGENT-001",
       "hash": "sha256:26ae29cf193da3f2c0b106d7c9163fc1c1fa1a2497a17ecbacd3f620c370ec59"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to OD-CAPABILITY-004",
+      "hash": "sha256:92663b78076a648407f8dfeb5a389cb45edc1d649433bb974e9373c75ca7ed75"
     },
     {
       "content": "relations",
@@ -508,6 +513,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-001 relates-to OD-CAPABILITY-004",
+      "hash": "sha256:bfa3ac3c359114ee4cc9ed0417ff470ad9dc24ec2799419fb583f83ef0af8ea9"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CAPABILITY-001 relates-to OD-CONTRACTS-002",
       "hash": "sha256:ce90c00d6bea3f9e6ab42b21b7e01a05ef8acedfde757c4cfde777de86c1d517"
     },
@@ -520,6 +530,11 @@
       "content": "relations",
       "identity": "OD-CAPABILITY-002 relates-to OD-CAPABILITY-001",
       "hash": "sha256:f314a9dc386b74d34d13a10b923a36c513e62e7e273e6c1ffc3cffe857e8cfea"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-002 relates-to OD-CAPABILITY-004",
+      "hash": "sha256:169e055c7a904f5738dc4b184393e3967fd199e3a4e22d34401f7a2798b38e60"
     },
     {
       "content": "relations",
@@ -560,6 +575,26 @@
       "content": "relations",
       "identity": "OD-CAPABILITY-003 relates-to OD-STORE-001",
       "hash": "sha256:241f07dfa7cd96d8ed7a37c42173ccc324cb0f4f1a9b631f266f6923cf1332e1"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-004 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:39edd1162c59e209c9e1d5efd218062781bb6e21ccff406dedb9f397ec898b51"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-004 relates-to OD-CAPABILITY-001",
+      "hash": "sha256:022733e19649339970c4aab295e9959e5b589eceb81f28a410f94c6a80de7bd2"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-004 relates-to OD-CAPABILITY-002",
+      "hash": "sha256:98c7186a63be6b1c1b2e9808305947b6af6da3b7cd9c9bf13baff46f5852ec69"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-004 relates-to OD-CONTRACTS-002",
+      "hash": "sha256:1ba55c8beb7ac0e4a1d9b1c0d88e6fc654a75f7361162bab70d9fd58c7eddd03"
     },
     {
       "content": "relations",
@@ -680,6 +715,11 @@
       "content": "relations",
       "identity": "OD-CONTRACTS-002 relates-to OD-CAPABILITY-001",
       "hash": "sha256:fefb2c815560b4f8a200d8ede685a6890f8f296c60595d27bce2c0220dd3fcb8"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONTRACTS-002 relates-to OD-CAPABILITY-004",
+      "hash": "sha256:ba94e665976cf0e8d182dab006b8e4080b7184eca593e3b47c0057c507111b81"
     },
     {
       "content": "relations",
@@ -2365,6 +2405,11 @@
       "content": "nodes",
       "identity": "OD-CAPABILITY-003",
       "hash": "sha256:2ce9205d6f9fd02d23849b7639ec10d401990da9ad4d02f50cb2762a910f6af1"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CAPABILITY-004",
+      "hash": "sha256:5fbceee6d3b4e021da7837806b867620089706e163966174dcc62bf558f4712a"
     },
     {
       "content": "nodes",

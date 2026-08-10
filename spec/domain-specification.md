@@ -25,6 +25,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
@@ -193,6 +194,17 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md#16 | authored | 2 | Why Not Refuse It |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md#19 | authored | 2 | What Is Not Decided Here |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md#22 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#1 | authored | 1 | An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#11 | authored | 2 | The Decision |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#12 | authored | 3 | 1. The distinction lives in the packet, which carries its resolution |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#16 | authored | 3 | 2. `Applicability` does not grow a variant, and this is where the shape stops matching `OD-CONTRACTS-002` |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#21 | authored | 3 | 3. What a run reports, and that it is never silence |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#24 | authored | 3 | 4. The registry is unchanged |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#26 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#31 | authored | 2 | What Holds It |
+| docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -4198,6 +4210,297 @@ scanner's is a question about supersession between providers, and nothing here a
 *revision: authored · kind: prose · heading: Per-subject fallback is admitted, because the provider is part of the address / Status · hash: sha256:5a52ac7d8686e537d841f8bd2d8a6a4aad0b8b20c3d2a90f1dea60823dab1881*
 
 Closed by `P9-FALLBACK`.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#1
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability · hash: sha256:8a546a44e70b5e42344ccbe2280ee4ded9e1444581299ea3953fefb9d6863110*
+
+# An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#2
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#3
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / Question · hash: sha256:f7dd5293f23e65fecf5bcd75456828a733c6ca13703f8791205e39f358518100*
+
+A context builder is proposed that asks a knowledge capability for a bounded,
+provenance-backed packet — prior decisions, known failure patterns, previously rejected
+approaches — and that stays fully functional when no such capability is installed.
+`ARC-ECOSYSTEM-001` already permits the seam. The open question is what the seam returns
+when nobody answers.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#4
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / Question · hash: sha256:1a139022eaaff0b4f98e098b5e1a0781319f0b1c05dce7a7dad29575a3bb44c4*
+
+*No relevant prior knowledge exists* and *no capability was installed to look* are different
+facts with different remedies. An empty packet reports them as the same one, and graceful
+degradation is exactly the mechanism that makes the conflation silent: the run continues and
+looks complete.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#5
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#6
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Measured · hash: sha256:ef1f1a4e2e86e6c09f00d6b4b33bbe0d14a7b4018b7f4993e4cf3954aa352cf6*
+
+Read against the registry as it stands, rather than against the description of it in the
+item.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#7
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Measured · hash: sha256:4bd8c447ce279186e04d2915594b63050f4b7f04be41d9dde4889097e4b0a07f*
+
+**The registry already tells absence from an answer.** `Registry::Resolve` returns
+`Resolution::Unsatisfied { reason: Unmet::NoProvider }` when a contract is declared and
+nothing offers it, `Unmet::Undeclared` when nothing declares it, and
+`Resolution::Satisfied { .. }` when a provider answers. Those are distinct values of a
+two-variant enum, and the two absences are distinct from each other because their remedies
+differ — authoring a contract is not installing a provider.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#8
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Measured · hash: sha256:5b3bb7274ebd2cab0f20880d3998730768a859a0e5085ee624c98e87da53f7c1*
+
+Nothing asserted any of it. Three tests in `registry.rs` now do, and the item's first branch
+is closed by them rather than by new machinery: the seam could always say this, and no test
+said so.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#9
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Measured · hash: sha256:1d19c3eb085d6132dcaf0f1886de812dcac2cecbe21362d1c3c6dc1792494835*
+
+**The registry cannot tell an empty answer from a useful one, and must not learn to.**
+Whether a provider that answered found anything *relevant* is a statement about content.
+`Resolve` never sees a payload — it is a function of declarations and offers alone — and a
+registry that reported on content would be grading a provider's work, which is the defect
+`OD-CAPABILITY-002` put a ceiling in place to prevent one level up. So the missing half of
+the distinction is not missing from the registry. It was never the registry's to hold.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#10
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Measured · hash: sha256:ab8bc71cd6f1d7c5eac536949d08b3e82bfabb5c704a0fb774307a6837c115c3*
+
+**Every absence reports as `Applicability::MissingCapability` today.** All four `Unmet`
+reasons map to it, asserted now so this record reasons from a measurement. That variant says
+no installed provider offers a capability the rule *requires*.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#11
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#12
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 1. The distinction lives in the packet, which carries its resolution · hash: sha256:94e57cc7fa57082dfb40f862d888ab09b8088f875a3f506e5146844b59ca5d2d*
+
+### 1. The distinction lives in the packet, which carries its resolution
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#13
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 1. The distinction lives in the packet, which carries its resolution · hash: sha256:5c221913c84d55dc2cdfc5cd5aac1a544724232b8667aedfba6d29e49dd02807*
+
+A context builder returns a packet that carries the `Resolution` that produced it, not a
+bare collection of entries. Then:
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#14
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 1. The distinction lives in the packet, which carries its resolution · hash: sha256:eeffcff402e9a4f6e3b3d6edc6dd260abdccf39382f372062c7a831a3fb62098*
+
+| | resolution | entries |
+|---|---|---|
+| nothing installed | `Unsatisfied { reason: NoProvider }` | none |
+| no contract at all | `Unsatisfied { reason: Undeclared }` | none |
+| answered, nothing relevant | `Satisfied { .. }` | none |
+| answered, something relevant | `Satisfied { .. }` | some |
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#15
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 1. The distinction lives in the packet, which carries its resolution · hash: sha256:fe78834d1b78249829d0fe70526676446921e40a31c8d7018062edde2bf4196a*
+
+Both values already exist and are already computed at the seam. The only way to lose the
+distinction is to discard the resolution and hand back the entries — which is precisely what
+a builder returning `Vec<Entry>` would do, and why the obligation is stated as a *type* one.
+A packet whose absence and whose emptiness are the same value is refused by this record.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#16
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 2. `Applicability` does not grow a variant, and this is where the shape stops matching `OD-CONTRACTS-002` · hash: sha256:3084dabd2e04806d2d39b2b52abd0205900803fdbb1194d37afb2eff310ef21a*
+
+### 2. `Applicability` does not grow a variant, and this is where the shape stops matching `OD-CONTRACTS-002`
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#17
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 2. `Applicability` does not grow a variant, and this is where the shape stops matching `OD-CONTRACTS-002` · hash: sha256:5f0036350e020fbb3382d9abb084f0ab9b8c84ffad6176c770677649328cb2d0*
+
+The two look identical and they are not, so the difference is stated rather than left to be
+rediscovered.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#18
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 2. `Applicability` does not grow a variant, and this is where the shape stops matching `OD-CONTRACTS-002` · hash: sha256:b71fa881598ae08214f38731a76b90a7721cc005a545dd9c65d3186299e97dc1*
+
+`OD-CONTRACTS-002` added `Applicability::AgentRequired` because a rule *binds* a subject and
+cannot reach a judgment mechanically. The thing being reported is a rule's verdict on a
+subject, which is exactly what `Applicability` is the vocabulary for; the only question was
+which value.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#19
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 2. `Applicability` does not grow a variant, and this is where the shape stops matching `OD-CONTRACTS-002` · hash: sha256:670ac57bf3cc461db62691a7bba837563131413eb287ab681e34a84aaeb7a43d*
+
+An optional knowledge packet is not a rule's verdict on a subject. It informs how work is
+planned before any rule runs, and no subject's judgment is weaker for its absence. Routing it
+through `Applicability` would be a category error, and paying for that error in
+`nomos-contracts` — the crate every non-Rust peer reimplements, where a variant is a
+published protocol commitment — would export it to systems that have never seen this
+repository.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#20
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 2. `Applicability` does not grow a variant, and this is where the shape stops matching `OD-CONTRACTS-002` · hash: sha256:117d998312bf735a267b68959bf8c245897cff90613eb2085a93da709a588cc3*
+
+`MissingCapability` is therefore also the wrong report for an absent optional capability, and
+for the same reason `OD-CONTRACTS-002` found it wrong for an agent-required subject: it
+points a reader at installing something, and produces coverage debt no installation is
+obliged to pay. The remedy differs because the diagnosis differs. There, the run had a
+verdict to give and no value to give it in. Here, the run has no verdict to give at all — the
+capability is optional, and the harness is complete without it.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#21
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 3. What a run reports, and that it is never silence · hash: sha256:fc066c1e6c2adaabe15edfc3ae4acde657879945bb526e4bc779146368d3ebc1*
+
+### 3. What a run reports, and that it is never silence
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#22
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 3. What a run reports, and that it is never silence · hash: sha256:354996a3ce3250ee213338470920bfabd8718cb00ed3979ade7890173eb5bce1*
+
+Silence is refused on the grounds `OD-CONTRACTS-002` established. What replaces it is the
+packet's own provenance, reported wherever the packet is reported: *this context was built
+without knowledge, because none was installed* is a different sentence from *this context was
+built with knowledge, which had nothing to add*, and a reader acts differently on each.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#23
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 3. What a run reports, and that it is never silence · hash: sha256:6c881006e9d2ce8e74645f630c85e9d2496e2a407e63411392ecfb6099568e99*
+
+Today no run makes the request. Nothing in this build resolves a knowledge capability, so
+there is currently nothing being reported silently — the exposure is entirely prospective,
+and saying otherwise would be inventing a defect to make this record sound urgent. What this
+record does is bind the first builder, so the packet is right before anything depends on it.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#24
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 4. The registry is unchanged · hash: sha256:57e597a4aa82df6e59a1656482b828f8e6c77ffe193ae02e2d38a93949930f5f*
+
+### 4. The registry is unchanged
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#25
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / The Decision / 4. The registry is unchanged · hash: sha256:5edd27f5762d726bfd2cfe5d4de8b9fa766210da7962a3e9073c382907296d38*
+
+No new `Unmet` reason, no optionality flag, no third kind beside providers and executors.
+`WF-006` makes executors a kind distinct from providers and the item asks whether a knowledge
+provider needs a third. It does not, because nothing here needs the registry to know that a
+requirement was optional: optionality is a property of the *caller's* reaction to
+`Unsatisfied`, not of the resolution. A caller that must have an answer treats `Unsatisfied`
+as fatal; a caller that is complete without one records it and continues. The registry gives
+both the same true answer, which is the one thing it is qualified to say.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#26
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#27
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Considered And Rejected · hash: sha256:c1a2c60ffa832d3aecb3592726429a0a29c6e9c831d7526890c9092be79efd26*
+
+**An optionality flag on `Requirement`.** It reads naturally — the caller does know whether
+it can proceed — and it puts a caller's policy inside the value that describes what is
+wanted. The registry would then have to report differently for the same installed state
+depending on who asked, which makes `Resolve` a function of the asker rather than of the
+tree. Rejected: the resolution is already correct, and only the caller's reaction differs.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#28
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Considered And Rejected · hash: sha256:f4eb57bced5b5074e51bd3237ba62c39a8117de701a0cd0bab8aaf51bdb3e391*
+
+**A `Knowledge_Unavailable` variant on `Applicability`.** Rejected in decision 2, on grounds
+of category rather than cost.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#29
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Considered And Rejected · hash: sha256:07b9b9ac08cd8ad3c10802d18f40231b5c0e9e4701b1b4dbadb9c1cabb2f332a*
+
+**An empty packet with a flag beside it.** Rejected by the item explicitly, and rightly: a
+flag nothing is required to read is exactly as silent as no flag, and the first consumer to
+ignore it reintroduces the defect with the record still on file saying it was fixed.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#30
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Was Considered And Rejected · hash: sha256:5fe50d208c556bc57ba180318a8109e5ab51e15a5c1fad2bbfc90bf3d6115e5e*
+
+**Making the knowledge capability mandatory.** This removes the distinction by removing the
+case, and it removes the property the seam exists for — the harness is complete without it.
+An absence that cannot occur is not the same as an absence that is reported.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#31
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#32
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Holds It · hash: sha256:448b01329bf851c32590481fc2c2e6853c8b98452c13a730bd17553bbda7f330*
+
+Three tests in `crates/substrate/nomos-capability/src/registry.rs`:
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#33
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Holds It · hash: sha256:7b6c24fec3c75c896cae0c6f7a45f004cf882b41ea882412f5e0d058eac312c4*
+
+- **absent and answering are different resolutions** — the item's first branch, and the one
+  a builder discards by returning a bare collection;
+- **undeclared and unoffered are different absences** — documented on `Unmet` since it was
+  written, asserted now, because the remedies differ;
+- **every absence reports `MissingCapability` today** — the measurement decision 2 argues
+  from, which fails if that mapping moves underneath this record.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#34
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / What Holds It · hash: sha256:4c7b06c897c1951b2f001bc3cddd9eea0b47728d46cf4ea44c798b99ddf5bb11*
+
+What does *not* hold it is anything in the registry about relevance, deliberately: there is
+no mechanism there and this record says why there must not be one.
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35
+
+*revision: authored · kind: heading · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#36
+
+*revision: authored · kind: prose · heading: An optional knowledge capability that is absent is reported by the packet that carries its resolution, not by the registry and not through a rule's applicability / Status · hash: sha256:acc51edccf08377da1dfd01ce57b84118d31da6cda9b19ecc8c6bb13051327b4*
+
+Closed by P11-KNOWLEDGE-ABSENT. No successor item is opened, because there is no context
+builder to build and an item reserving work nobody has scheduled would be a placeholder on a
+board that refuses them. The obligation in decision 1 binds whichever item builds the first
+one.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 

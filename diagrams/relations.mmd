@@ -12,6 +12,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| d_122["D-122"]
     arc_ecosystem_001 -->|"relates-to"| d_130["D-130"]
     arc_ecosystem_001 -->|"relates-to"| od_agent_001["OD-AGENT-001"]
+    arc_ecosystem_001 -->|"relates-to"| od_capability_004["OD-CAPABILITY-004"]
     arc_ecosystem_001 -->|"relates-to"| od_contracts_001["OD-CONTRACTS-001"]
     arc_ecosystem_001 -->|"relates-to"| od_ledger_001["OD-LEDGER-001"]
     arc_specdb_001 -->|"affected_by"| d_129
@@ -101,9 +102,11 @@ graph LR
     od_capability_001 -->|"relates-to"| od_analysis_001
     od_capability_001 -->|"relates-to"| od_capability_002
     od_capability_001 -->|"relates-to"| od_capability_003
+    od_capability_001 -->|"relates-to"| od_capability_004
     od_capability_001 -->|"relates-to"| od_contracts_002["OD-CONTRACTS-002"]
     od_capability_002 -->|"relates-to"| od_analysis_002
     od_capability_002 -->|"relates-to"| od_capability_001
+    od_capability_002 -->|"relates-to"| od_capability_004
     od_capability_002 -->|"relates-to"| od_rules_001
     od_capability_002 -->|"relates-to"| od_store_001
     od_capability_002 -->|"relates-to"| od_syntax_001["OD-SYNTAX-001"]
@@ -112,6 +115,10 @@ graph LR
     od_capability_003 -->|"relates-to"| od_capability_001
     od_capability_003 -->|"relates-to"| od_rules_001
     od_capability_003 -->|"relates-to"| od_store_001
+    od_capability_004 -->|"relates-to"| arc_ecosystem_001
+    od_capability_004 -->|"relates-to"| od_capability_001
+    od_capability_004 -->|"relates-to"| od_capability_002
+    od_capability_004 -->|"relates-to"| od_contracts_002
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"relates-to"| od_contracts_002
@@ -136,6 +143,7 @@ graph LR
     od_contracts_001 -->|"relates-to"| od_agent_001
     od_contracts_001 -->|"relates-to"| od_contracts_002
     od_contracts_002 -->|"relates-to"| od_capability_001
+    od_contracts_002 -->|"relates-to"| od_capability_004
     od_contracts_002 -->|"relates-to"| od_completeness_001
     od_contracts_002 -->|"relates-to"| od_contracts_001
     od_contracts_002 -->|"relates-to"| od_trace_001
@@ -475,6 +483,7 @@ graph LR
     od_capability_001
     od_capability_002
     od_capability_003
+    od_capability_004
     od_completeness_001
     od_completeness_002
     od_contracts_001
