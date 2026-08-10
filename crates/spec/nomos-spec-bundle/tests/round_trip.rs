@@ -300,15 +300,19 @@ fn Test_Binary_Blobs_Should_Survive_As_Bytes()
     assert_eq!(restored, BINARY);
 }
 
+/// Import places a bundle beside what a store holds and never merges into it. A store
+/// already holding this bundle's own content is the case that would have to merge, so it
+/// is refused — and refused naming the row, rather than reporting that some table was not
+/// empty, because which content collided is the reader's next question.
 #[test]
-fn Test_Importing_Into_A_Populated_Store_Should_Be_Refused()
+fn Test_Importing_Into_A_Store_That_Already_Holds_The_Content_Should_Be_Refused()
 {
     let bundle = Export(&Populated()).expect("exports");
     let mut occupied = Populated();
 
-    let refusal = Import(&mut occupied, &bundle).expect_err("a populated store must be refused");
+    let refusal = Import(&mut occupied, &bundle).expect_err("a colliding store must be refused");
 
-    assert!(matches!(refusal, BundleError::NotEmpty { .. }), "{refusal}");
+    assert!(matches!(refusal, BundleError::Occupied { .. }), "{refusal}");
 }
 
 /// A reference to something the bundle does not carry is a refusal, never a NULL. A

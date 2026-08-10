@@ -94,12 +94,19 @@ pub enum BundleError
         record: String,
         reference: String,
     },
-    /// Import targets an empty store; merging is a different operation with different
-    /// conflict semantics, and doing it by accident is how one authority becomes two.
-    NotEmpty
+    /// The store already holds something the bundle carries.
+    ///
+    /// Import places a bundle beside what a store holds and never merges into it; merging
+    /// is a different operation with different conflict semantics, and doing it by
+    /// accident is how one authority becomes two. An empty store was the old way of
+    /// guaranteeing that, and it is too strong: every store this build assembles is seeded
+    /// with the governing records first, so requiring emptiness put the durable form
+    /// `OD-SPEC-008` names out of reach of the only stores that exist. Disjointness is the
+    /// same guarantee stated over the content rather than over the table.
+    Occupied
     {
         table: String,
-        rows: u32,
+        identity: String,
     },
 }
 
@@ -165,9 +172,11 @@ impl core::fmt::Display for BundleError
                 formatter,
                 "{record} names {reference}, which the bundle does not contain"
             ),
-            Self::NotEmpty { table, rows } => write!(
+            Self::Occupied { table, identity } => write!(
                 formatter,
-                "import expects an empty store; {table} already holds {rows} row(s)"
+                "the store already holds {table} {identity}, which this bundle also carries. \
+                 Import places a bundle beside what a store holds rather than merging into \
+                 it, so it refuses rather than deciding which of the two is right"
             ),
         };
     }

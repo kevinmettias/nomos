@@ -15,7 +15,7 @@ pub enum variant nomos_spec_bundle::BundleError::Json(String)
 pub enum variant nomos_spec_bundle::BundleError::Malformed(String)
 pub enum variant nomos_spec_bundle::BundleError::Miscounted { table: String, declared: u32, present: u32, }
 pub enum variant nomos_spec_bundle::BundleError::NotCanonical { line: usize, }
-pub enum variant nomos_spec_bundle::BundleError::NotEmpty { table: String, rows: u32, }
+pub enum variant nomos_spec_bundle::BundleError::Occupied { table: String, identity: String, }
 pub enum variant nomos_spec_bundle::BundleError::PhantomColumn { table: String, column: String, }
 pub enum variant nomos_spec_bundle::BundleError::Sql(String)
 pub enum variant nomos_spec_bundle::BundleError::Store(nomos_spec_store::StoreError)

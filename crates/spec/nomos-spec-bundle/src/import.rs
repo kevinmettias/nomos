@@ -5,8 +5,8 @@ use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use nomos_spec_model::ContentHash;
 use nomos_spec_store::{SpecificationStore, Table};
-use rusqlite::{Transaction, params};
-use std::collections::BTreeMap;
+use rusqlite::{Connection, OptionalExtension, Transaction, params};
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ImportReport
@@ -15,13 +15,22 @@ pub struct ImportReport
     pub counts: BTreeMap<String, u32>,
 }
 
-/// Rebuilds a store from a bundle.
+/// Places a bundle's content in a store, beside whatever that store already holds.
+///
+/// It is not a merge and must never become one by accident. What guarantees that used to be
+/// that the store was empty, which is a guarantee no store this build assembles can offer:
+/// `Assemble` seeds the governing records first and unconditionally, so demanding emptiness
+/// put the durable text form `OD-SPEC-008` names beyond the reach of the only stores that
+/// exist. The guarantee is now stated over content instead — the bundle and the store must
+/// name nothing in common, and the bundle must resolve its own references — which is the
+/// same promise on a store that has been seeded.
 ///
 /// # Errors
 ///
-/// Returns [`BundleError::NotEmpty`] unless the store is empty, [`BundleError::Unresolved`]
-/// if a record names something the bundle does not carry, and [`BundleError::Incomplete`]
-/// if the store does not end up holding exactly what the bundle declared.
+/// Returns [`BundleError::Occupied`] if the store already holds something the bundle
+/// carries, [`BundleError::Unresolved`] if a record names something the bundle does not
+/// carry, and [`BundleError::Incomplete`] if the import does not place exactly what the
+/// bundle declared.
 pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
 {
     bundle.Verify_Counts()?;
@@ -43,7 +52,13 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
         )));
     }
 
-    Assert_Empty(store)?;
+    // Self-containment first, because it reads the bundle alone and so gives the same
+    // answer whatever the store holds. Disjointness then asks the one question that does
+    // depend on the store.
+    Assert_Self_Contained(bundle)?;
+    Assert_Disjoint(store, bundle)?;
+
+    let before = Census(store)?;
 
     return store.In_Transaction(|transaction| {
         // The relation-type vocabulary is self-referential (`inverse_of` names another
@@ -68,7 +83,7 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
         Insert_Record_Front_Matter(transaction, bundle)?;
         Insert_Record_Relations(transaction, bundle)?;
 
-        Assert_Landed(transaction, bundle)?;
+        Assert_Landed(transaction, bundle, &before)?;
 
         return Ok(ImportReport {
             records: bundle.Manifest().records,
@@ -77,16 +92,96 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
     });
 }
 
-fn Assert_Empty(store: &SpecificationStore) -> Result<(), BundleError>
+/// How many rows each table held before the import.
+///
+/// Taken rather than assumed zero. Once a store may already hold content, "the table is
+/// empty afterwards" and "the import placed nothing" stopped being the same sentence, and
+/// the completeness guard below is only a guard if it measures the difference.
+fn Census(store: &SpecificationStore) -> Result<BTreeMap<&'static str, u32>, BundleError>
 {
+    let mut census: BTreeMap<&'static str, u32> = BTreeMap::new();
     for table in Table::All()
     {
-        let rows = store.Count(*table)?;
-        if rows > 0
+        census.insert(table.Name(), store.Count(*table)?);
+    }
+
+    return Ok(census);
+}
+
+/// The store holds nothing this bundle also carries.
+///
+/// Only the tables whose identity a bundle states in its own right are asked about. Every
+/// other table is reached through one of these — a block through its document, a history
+/// entry through its node, a table row through its block — so once these are disjoint a
+/// child row cannot collide either: the parent it hangs from is one this import just
+/// inserted. Listing the pass-through kinds explicitly rather than matching `_` so that a
+/// new record kind has to be thought about here instead of defaulting to unchecked.
+fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Result<(), BundleError>
+{
+    let connection = store.Connection();
+
+    for record in bundle.Records()
+    {
+        let collision = match record
         {
-            return Err(BundleError::NotEmpty {
-                table: table.Name().to_owned(),
-                rows,
+            Record::Blob(blob) => Already_Holds(
+                connection,
+                "SELECT 1 FROM blobs WHERE sha256 = ?1",
+                &[&blob.sha256],
+            )?
+            .then(|| return blob.sha256.clone()),
+            Record::SourceDocument(document) => Already_Holds(
+                connection,
+                "SELECT 1 FROM source_documents WHERE path = ?1 AND revision = ?2",
+                &[&document.path, &document.revision],
+            )?
+            .then(|| return format!("{}@{}", document.path, document.revision)),
+            Record::Suite(suite) => Already_Holds(
+                connection,
+                "SELECT 1 FROM suites WHERE suite_id = ?1",
+                &[&suite.suite_id],
+            )?
+            .then(|| return suite.suite_id.clone()),
+            Record::Node(node) => Already_Holds(
+                connection,
+                "SELECT 1 FROM nodes WHERE node_id = ?1",
+                &[&node.node_id],
+            )?
+            .then(|| return node.node_id.clone()),
+            Record::NodeAlias(alias) => Already_Holds(
+                connection,
+                "SELECT 1 FROM node_aliases WHERE alias = ?1",
+                &[&alias.alias],
+            )?
+            .then(|| return alias.alias.clone()),
+            Record::RelationType(relation_type) => Already_Holds(
+                connection,
+                "SELECT 1 FROM relation_types WHERE name = ?1",
+                &[&relation_type.name],
+            )?
+            .then(|| return relation_type.name.clone()),
+            Record::NormativeStatement(statement) => Already_Holds(
+                connection,
+                "SELECT 1 FROM normative_statements WHERE statement_id = ?1",
+                &[&statement.statement_id],
+            )?
+            .then(|| return statement.statement_id.clone()),
+            Record::SourceHeading(_)
+            | Record::SourceBlock(_)
+            | Record::SourceTableRow(_)
+            | Record::NodeHistory(_)
+            | Record::Relation(_)
+            | Record::Lineage(_)
+            | Record::Omission(_)
+            | Record::RecordFrontMatter(_)
+            | Record::RecordRelation(_) => None,
+        };
+
+        if let Some(identity) = collision
+        {
+            return Err(BundleError::Occupied {
+                table: record.Table().to_owned(),
+                identity,
             });
         }
     }
@@ -94,17 +189,335 @@ fn Assert_Empty(store: &SpecificationStore) -> Result<(), BundleError>
     return Ok(());
 }
 
-/// The store holds exactly what the bundle said it would.
+fn Already_Holds(
+    connection: &Connection,
+    sql: &str,
+    arguments: &[&dyn rusqlite::ToSql],
+) -> Result<bool, BundleError>
+{
+    return Ok(connection
+        .query_row(sql, arguments, |row| return row.get::<_, i64>(0))
+        .optional()?
+        .is_some());
+}
+
+/// Every reference the bundle makes is to something the bundle itself carries.
+///
+/// On an empty store this held for free: a reference to something absent found no row and
+/// became [`BundleError::Unresolved`]. A store that already holds content withdraws that
+/// for free — the same reference would find a row that was already there and silently bind
+/// to it, and a bundle stitched onto rows it never mentioned is the merge this import
+/// refuses to perform by accident. Answered from the bundle rather than the database, so
+/// the answer does not depend on what the store happens to hold.
+fn Assert_Self_Contained(bundle: &Bundle) -> Result<(), BundleError>
+{
+    let carried = Carried_By(bundle);
+
+    for record in bundle.Records()
+    {
+        Assert_Resolves(record, &carried)?;
+    }
+
+    return Ok(());
+}
+
+/// The identities a bundle states in its own right, indexed for lookup.
+struct Identities
+{
+    blobs: BTreeSet<String>,
+    documents: BTreeSet<String>,
+    headings: BTreeSet<String>,
+    blocks: BTreeSet<String>,
+    rows: BTreeSet<String>,
+    suites: BTreeSet<String>,
+    nodes: BTreeSet<String>,
+    relation_types: BTreeSet<String>,
+    statements: BTreeSet<String>,
+}
+
+fn Carried_By(bundle: &Bundle) -> Identities
+{
+    let mut blobs: BTreeSet<String> = BTreeSet::new();
+    let mut documents: BTreeSet<String> = BTreeSet::new();
+    let mut headings: BTreeSet<String> = BTreeSet::new();
+    let mut blocks: BTreeSet<String> = BTreeSet::new();
+    let mut rows: BTreeSet<String> = BTreeSet::new();
+    let mut suites: BTreeSet<String> = BTreeSet::new();
+    let mut nodes: BTreeSet<String> = BTreeSet::new();
+    let mut relation_types: BTreeSet<String> = BTreeSet::new();
+    let mut statements: BTreeSet<String> = BTreeSet::new();
+
+    for record in bundle.Records()
+    {
+        match record
+        {
+            Record::Blob(blob) =>
+            {
+                blobs.insert(blob.sha256.clone());
+            }
+            Record::SourceDocument(document) =>
+            {
+                documents.insert(Document_Key_Of(&document.path, &document.revision));
+            }
+            Record::SourceHeading(heading) =>
+            {
+                headings.insert(Ordinal_Key(&heading.document, heading.ordinal));
+            }
+            Record::SourceBlock(block) =>
+            {
+                blocks.insert(Ordinal_Key(&block.document, block.ordinal));
+            }
+            Record::SourceTableRow(row) =>
+            {
+                rows.insert(Row_Key(&row.block, row.ordinal));
+            }
+            Record::Suite(suite) =>
+            {
+                suites.insert(suite.suite_id.clone());
+            }
+            Record::Node(node) =>
+            {
+                nodes.insert(node.node_id.clone());
+            }
+            Record::RelationType(relation_type) =>
+            {
+                relation_types.insert(relation_type.name.clone());
+            }
+            Record::NormativeStatement(statement) =>
+            {
+                statements.insert(statement.statement_id.clone());
+            }
+            Record::NodeAlias(_)
+            | Record::NodeHistory(_)
+            | Record::Relation(_)
+            | Record::Lineage(_)
+            | Record::Omission(_)
+            | Record::RecordFrontMatter(_)
+            | Record::RecordRelation(_) =>
+            {}
+        }
+    }
+
+    return Identities {
+        blobs,
+        documents,
+        headings,
+        blocks,
+        rows,
+        suites,
+        nodes,
+        relation_types,
+        statements,
+    };
+}
+
+/// One record's references, each against what the bundle carries.
+fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
+{
+    match record
+    {
+        Record::SourceDocument(document) =>
+        {
+            Carried(&carried.blobs, &document.blob_sha256, "blob")?;
+        }
+        Record::SourceHeading(heading) =>
+        {
+            Carried(
+                &carried.documents,
+                &Document_Key(&heading.document),
+                "source document",
+            )?;
+        }
+        Record::SourceBlock(block) =>
+        {
+            Carried(
+                &carried.documents,
+                &Document_Key(&block.document),
+                "source document",
+            )?;
+        }
+        Record::SourceTableRow(row) =>
+        {
+            Carried(
+                &carried.blocks,
+                &Ordinal_Key(&row.block.document, row.block.ordinal),
+                "source block",
+            )?;
+        }
+        Record::Node(node) =>
+        {
+            if let Some(suite_id) = node.suite_id.as_deref()
+            {
+                Carried(&carried.suites, suite_id, "suite")?;
+            }
+        }
+        Record::NodeAlias(alias) => Carried(&carried.nodes, &alias.node_id, "node")?,
+        Record::NodeHistory(entry) => Carried(&carried.nodes, &entry.node_id, "node")?,
+        Record::RelationType(relation_type) =>
+        {
+            if let Some(inverse) = relation_type.inverse_of.as_deref()
+            {
+                Carried(&carried.relation_types, inverse, "relation type")?;
+            }
+        }
+        Record::Relation(relation) =>
+        {
+            Carried(&carried.nodes, &relation.from_node_id, "node")?;
+            Carried(&carried.nodes, &relation.to_node_id, "node")?;
+            Carried(
+                &carried.relation_types,
+                &relation.relation_type,
+                "relation type",
+            )?;
+        }
+        Record::NormativeStatement(statement) =>
+        {
+            Carried(&carried.nodes, &statement.node_id, "node")?;
+        }
+        Record::Lineage(lineage) => Assert_Lineage_Resolves(lineage, carried)?,
+        Record::Omission(omission) =>
+        {
+            Assert_Source_Resolves(
+                omission.source_block.as_ref(),
+                omission.source_heading.as_ref(),
+                carried,
+            )?;
+        }
+        Record::RecordFrontMatter(front_matter) =>
+        {
+            Carried(
+                &carried.documents,
+                &Document_Key(&front_matter.document),
+                "source document",
+            )?;
+            Carried(&carried.nodes, &front_matter.node_id, "node")?;
+        }
+        Record::RecordRelation(relation) =>
+        {
+            Carried(
+                &carried.documents,
+                &Document_Key(&relation.document),
+                "source document",
+            )?;
+        }
+        Record::Blob(_) | Record::Suite(_) =>
+        {}
+    }
+
+    return Ok(());
+}
+
+fn Assert_Lineage_Resolves(
+    lineage: &crate::model::Lineage,
+    carried: &Identities,
+) -> Result<(), BundleError>
+{
+    Assert_Source_Resolves(
+        lineage.source_block.as_ref(),
+        lineage.source_heading.as_ref(),
+        carried,
+    )?;
+
+    if let Some(row) = lineage.source_table_row.as_ref()
+    {
+        Carried(
+            &carried.rows,
+            &Row_Key(&row.block, row.ordinal),
+            "source table row",
+        )?;
+    }
+    if let Some(node_id) = lineage.target_node_id.as_deref()
+    {
+        Carried(&carried.nodes, node_id, "node")?;
+    }
+    if let Some(statement_id) = lineage.target_statement_id.as_deref()
+    {
+        Carried(&carried.statements, statement_id, "normative statement")?;
+    }
+
+    return Ok(());
+}
+
+/// The block and heading a lineage row and an omission row point at, which they spell
+/// the same way and which the schema lets either of them leave null.
+fn Assert_Source_Resolves(
+    block: Option<&OrdinalRef>,
+    heading: Option<&OrdinalRef>,
+    carried: &Identities,
+) -> Result<(), BundleError>
+{
+    if let Some(block) = block
+    {
+        Carried(
+            &carried.blocks,
+            &Ordinal_Key(&block.document, block.ordinal),
+            "source block",
+        )?;
+    }
+    if let Some(heading) = heading
+    {
+        Carried(
+            &carried.headings,
+            &Ordinal_Key(&heading.document, heading.ordinal),
+            "source heading",
+        )?;
+    }
+
+    return Ok(());
+}
+
+fn Carried(carried: &BTreeSet<String>, key: &str, kind: &str) -> Result<(), BundleError>
+{
+    if carried.contains(key)
+    {
+        return Ok(());
+    }
+
+    return Err(BundleError::Unresolved {
+        record: kind.to_owned(),
+        reference: key.to_owned(),
+    });
+}
+
+fn Document_Key(document: &DocumentRef) -> String
+{
+    return Document_Key_Of(&document.path, &document.revision);
+}
+
+/// The same key from the two parts a [`SourceDocument`] carries loose rather than as a
+/// [`DocumentRef`]. One spelling of the key, so the set and its lookups cannot drift.
+fn Document_Key_Of(path: &str, revision: &str) -> String
+{
+    return format!("{path}@{revision}");
+}
+
+fn Ordinal_Key(document: &DocumentRef, ordinal: i64) -> String
+{
+    return format!("{}#{ordinal}", Document_Key(document));
+}
+
+fn Row_Key(block: &OrdinalRef, ordinal: i64) -> String
+{
+    return format!("{}.{ordinal}", Ordinal_Key(&block.document, block.ordinal));
+}
+
+/// The import placed exactly what the bundle said it would.
 ///
 /// The mirror of the exporter's completeness guard: an insert that collapsed rows, or a
 /// record kind nothing inserts, fails the import instead of producing a store that is
-/// quietly smaller than its own bundle.
-fn Assert_Landed(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
+/// quietly smaller than its own bundle. Measured as a difference rather than a total,
+/// because the rows that were already there are not this bundle's to account for.
+fn Assert_Landed(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+    before: &BTreeMap<&'static str, u32>,
+) -> Result<(), BundleError>
 {
     for table in Table::All()
     {
         let sql = format!("SELECT count(*) FROM {}", table.Name());
-        let landed: u32 = transaction.query_row(&sql, [], |row| row.get(0))?;
+        let after: u32 = transaction.query_row(&sql, [], |row| row.get(0))?;
+        let landed = after.saturating_sub(before.get(table.Name()).copied().unwrap_or(0));
         let declared = bundle
             .Manifest()
             .counts
