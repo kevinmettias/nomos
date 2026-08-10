@@ -2881,6 +2881,47 @@
       },
       "verified": null,
       "abandoned": []
+    },
+    {
+      "id": "P10-REFUSAL-SURFACE",
+      "title": "The refusal sentence names the wrong subject, and the method that produced it now has no caller",
+      "why": "Both found by P10-AUDIT-STATE while replacing the second guard, and both are in territory that item did not hold. ClaimRefusal::HeldBy::Describe at crates/substrate/nomos-ledger/src/exclusion.rs:103 formats the held item as the sentence subject: \"{item} overlaps territory held by {holder}\". That reads correctly only when nothing else on the line says which item was refused. Every caller that prints the refusal beneath the subjects own identifier gets a sentence whose subject is the blocker - work audit printed \"P1-MODEL: P9-AUTHORING overlaps territory held by ...\" for 44 items, and a reader cannot tell which of the two names was refused. P10-AUDIT-STATE could not reach exclusion.rs from its territory, so it phrases that one arm itself in work.rs. That is a workaround with a cost: the arm now has two renderings and the one in the library is still wrong for the next caller, which is the shape OD-LEDGER-005 already named once. Separately, ExclusionLedger::Conflicts is now dead. grep across crates and tests finds only the trait declaration at exclusion.rs:263 and its implementation at store.rs:691 - no caller anywhere, because work audit was the last one and it now goes through Claim_Refusal. It is public surface at tests/contract/surface/nomos-ledger.txt:59 and OD-LEDGER-001 describes it, so it cannot simply be deleted without saying why the description no longer holds.",
+      "done_when": "A refusal renders correctly whether or not the caller has already named the item it refused, and there is one rendering rather than two. Either Describe takes the subject and says which of the two names was refused, or the type exposes the blockers identity so a caller can compose the sentence and Describe is documented as the caller-has-not-named-it form. Which one is the decision, and the record says why rather than only which; the workaround in crates/host/nomos-cli/src/work.rs is removed in the same commit so the two renderings do not outlive the fix. A test asserts a refusal line names the refused item unambiguously when printed under its own identifier, and the negative control is that restoring the current format makes it red. Conflicts is removed or given a stated reason to remain, and if it is removed the surface snapshot and OD-LEDGER-001 move with it, since a description of a method nobody can call is a promise the crate no longer keeps. Not closed by leaving Describe alone and documenting the hazard, because the hazard is a sentence that reads as true and names the wrong subject.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/exclusion.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "crates/spec/nomos-spec-store",
+          "docs/records/OD-LEDGER-014"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
     }
   ]
 }
