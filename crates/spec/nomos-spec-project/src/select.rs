@@ -443,6 +443,29 @@ fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectEr
         });
 }
 
+/// Every way a node section may be narrowed, in one place.
+///
+/// `identifier_prefix` is a prefix and the rest are equalities, which is the whole of what
+/// distinguishes them: a section selecting `OD-LEDGER-` wants a family and one selecting
+/// `OD-LEDGER-019` wants a record. Spelled out at each call site, the two were free to
+/// disagree about which columns a node section honours — and `Content::Honours` is checked
+/// against that list.
+fn Narrow_To_Nodes(query: &mut Query, filter: &Filter)
+{
+    for (column, value) in [
+        ("n.kind", filter.kind.as_ref()),
+        ("n.authority", filter.authority.as_ref()),
+        ("n.representation", filter.representation.as_ref()),
+        ("s.suite_id", filter.suite.as_ref()),
+        ("n.node_id", filter.node_id.as_ref()),
+    ]
+    {
+        query.Equal(column, value);
+    }
+
+    query.Prefix("n.node_id", filter.identifier_prefix.as_ref());
+}
+
 fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
     let mut query = Query::On(
@@ -450,12 +473,7 @@ fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectE
          FROM nodes n LEFT JOIN suites s ON s.uid = n.suite_uid
          WHERE n.deleted_at IS NULL",
     );
-    query.Equal("n.kind", filter.kind.as_ref());
-    query.Equal("n.authority", filter.authority.as_ref());
-    query.Equal("n.representation", filter.representation.as_ref());
-    query.Equal("s.suite_id", filter.suite.as_ref());
-    query.Prefix("n.node_id", filter.identifier_prefix.as_ref());
-    query.Equal("n.node_id", filter.node_id.as_ref());
+    Narrow_To_Nodes(&mut query, filter);
 
     return query.Ordered_By("n.node_id").Run(connection, |row| {
         let node = Text(row, 0)?;

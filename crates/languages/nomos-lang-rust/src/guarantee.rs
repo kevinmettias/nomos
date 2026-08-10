@@ -134,8 +134,12 @@ mod tests
     /// The consequence of `Unknown` completeness, made visible at the resolution site
     /// rather than left as documentation. A caller that needs to know it has seen every
     /// item does not get this provider, and does not get a weaker answer silently.
-    #[test]
-    fn Test_A_Caller_Needing_Completeness_Should_Not_Resolve_To_This_Provider()
+    /// A registry holding this provider's contract and its offer, and nothing else.
+    ///
+    /// The composition every test below asks a question of. Built once, because a test that
+    /// registered a different composition from its neighbour would be answering about a
+    /// registry nobody ships.
+    fn Serving() -> Registry
     {
         let mut registry = Registry::New();
         registry
@@ -144,6 +148,14 @@ mod tests
         registry
             .Offer(Provider_Offer())
             .expect("the offer is within the ceiling");
+
+        return registry;
+    }
+
+    #[test]
+    fn Test_A_Caller_Needing_Completeness_Should_Not_Resolve_To_This_Provider()
+    {
+        let registry = Serving();
 
         let every_item = Guarantee::New(
             FactVariant::Syntactic,
@@ -165,13 +177,7 @@ mod tests
     #[test]
     fn Test_A_Caller_Needing_Only_Soundness_Should_Resolve_To_This_Provider()
     {
-        let mut registry = Registry::New();
-        registry
-            .Declare(Capability_Contract())
-            .expect("the contract is the first declaration in a fresh registry");
-        registry
-            .Offer(Provider_Offer())
-            .expect("the offer is within the ceiling");
+        let registry = Serving();
 
         let what_is_there = Guarantee::New(
             FactVariant::Syntactic,

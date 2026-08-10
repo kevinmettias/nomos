@@ -941,26 +941,30 @@ mod tests
     /// A member that could not be read must not encode like a member that declares
     /// nothing.
     ///
+    /// An index over one module and one member, differing only in what became of it.
+    ///
+    /// The three outcomes are the point of these tests: each pair is the same member count
+    /// and a different answer, and an encoding that collapsed any two of them would let a
+    /// run report a clean module it never read.
+    fn One_Member(outcome: Outcome) -> ModuleIndex
+    {
+        return ModuleIndex {
+            module: Subject("the/module"),
+            members: vec![MemberReading {
+                subject: Subject("alpha.rs"),
+                outcome,
+            }],
+            items: Vec::new(),
+        };
+    }
+
     /// The two are the same number of items and different answers, and collapsing them is
     /// how a run comes to report a clean module it never read.
     #[test]
     fn Test_An_Unreachable_Member_Should_Not_Encode_Like_A_Silent_One()
     {
-        let unreachable = ModuleIndex {
-            module: Subject("the/module"),
-            members: vec![MemberReading {
-                subject: Subject("alpha.rs"),
-                outcome: Outcome::Unreachable,
-            }],
-            items: Vec::new(),
-        };
-        let silent = ModuleIndex {
-            members: vec![MemberReading {
-                subject: Subject("alpha.rs"),
-                outcome: Outcome::Read,
-            }],
-            ..unreachable.clone()
-        };
+        let unreachable = One_Member(Outcome::Unreachable);
+        let silent = One_Member(Outcome::Read);
 
         assert_ne!(Encode_Index(&unreachable), Encode_Index(&silent));
     }
@@ -973,21 +977,8 @@ mod tests
     #[test]
     fn Test_An_Approximated_Member_Should_Not_Encode_Like_An_Exact_One()
     {
-        let exact = ModuleIndex {
-            module: Subject("the/module"),
-            members: vec![MemberReading {
-                subject: Subject("alpha.rs"),
-                outcome: Outcome::Read,
-            }],
-            items: Vec::new(),
-        };
-        let approximated = ModuleIndex {
-            members: vec![MemberReading {
-                subject: Subject("alpha.rs"),
-                outcome: Outcome::Approximate,
-            }],
-            ..exact.clone()
-        };
+        let exact = One_Member(Outcome::Read);
+        let approximated = One_Member(Outcome::Approximate);
 
         assert_ne!(Encode_Index(&exact), Encode_Index(&approximated));
     }

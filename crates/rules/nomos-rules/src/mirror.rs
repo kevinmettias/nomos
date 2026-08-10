@@ -965,6 +965,28 @@ mod tests
     /// the checks separately keeps the tests that matter honest: a `Test_X` written inside
     /// a fixture string is *not* in the parser's output, and a test that wants one resolved
     /// has to say so rather than smuggling it through the text.
+    /// The findings over two sources, only the first of which has a fact.
+    ///
+    /// The shape every shortfall test needs, because it is the shape of the defect the
+    /// record was opened against: one file the rule could read and one it could not, and a
+    /// judgment about the first that must not inherit doubt from the second.
+    fn Judged_Beside(declaring: &SourceFile, unread: &SourceFile) -> Vec<Finding>
+    {
+        let sources = vec![declaring.clone(), unread.clone()];
+        let world = World_Over(&[(declaring, &[])]);
+        let mut reader = world.Reader();
+
+        return Check_Completeness_Mirrors(&sources, &mut reader);
+    }
+
+    /// The finding about one named universe, if the run produced one.
+    fn Named<'a>(subject: &str, findings: &'a [Finding]) -> Option<&'a Finding>
+    {
+        return findings
+            .iter()
+            .find(|finding| return finding.subject_name == subject);
+    }
+
     fn World_Over(declaring: &[(&SourceFile, &[&str])]) -> World
     {
         let mut world = World::Offering(&[(PARSER, Parser_Guarantee())]);
@@ -1396,16 +1418,8 @@ mod tests
             "/// Mirrored by `Test_In_The_Unread_File`.\npub const T: &[&str] = &[];\n",
         );
         let unread = Source("b.rs", "#[test]\nfn Test_In_The_Unread_File()\n{\n}\n");
-        let sources = vec![declaring.clone(), unread.clone()];
-
-        let world = World_Over(&[(&declaring, &[])]);
-        let mut reader = world.Reader();
-        let findings = Check_Completeness_Mirrors(&sources, &mut reader);
-
-        let claim = findings
-            .iter()
-            .find(|finding| return finding.subject_name == "T")
-            .expect("the universe is still judged");
+        let judged = Judged_Beside(&declaring, &unread);
+        let claim = Named("T", &judged).expect("the universe is still judged");
 
         assert_eq!(claim.gate, GateCategory::Advisory);
         assert_eq!(claim.applicability, Applicability::DependencyUnavailable);
@@ -1439,16 +1453,8 @@ mod tests
         );
         // The same shape as the real fixture: text no parser accepts, and no fact.
         let broken = Source("broken.rs", "pub const ??? = ;\n");
-        let sources = vec![declaring.clone(), broken.clone()];
-
-        let world = World_Over(&[(&declaring, &[])]);
-        let mut reader = world.Reader();
-        let findings = Check_Completeness_Mirrors(&sources, &mut reader);
-
-        let claim = findings
-            .iter()
-            .find(|finding| return finding.subject_name == "T")
-            .expect("the universe is judged");
+        let judged = Judged_Beside(&declaring, &broken);
+        let claim = Named("T", &judged).expect("the universe is judged");
 
         assert_eq!(claim.gate, GateCategory::Blocking);
         assert_eq!(claim.applicability, Applicability::Supported);
@@ -1471,12 +1477,12 @@ mod tests
         // used to be counted by the text side as well, which was this rule parsing the file
         // itself; there is one report because there is one reading.
         assert_eq!(
-            findings
+            judged
                 .iter()
                 .filter(|finding| return finding.subject_name == "broken.rs")
                 .count(),
             1,
-            "the unreadable file must still be reported: {findings:?}"
+            "the unreadable file must still be reported: {judged:?}"
         );
     }
 
@@ -1558,16 +1564,8 @@ mod tests
             "broken.rs",
             "// Test_Only_Mentioned used to live here.\npub const ??? = ;\n",
         );
-        let sources = vec![declaring.clone(), broken.clone()];
-
-        let world = World_Over(&[(&declaring, &[])]);
-        let mut reader = world.Reader();
-        let findings = Check_Completeness_Mirrors(&sources, &mut reader);
-
-        let claim = findings
-            .iter()
-            .find(|finding| return finding.subject_name == "T")
-            .expect("the universe is judged");
+        let judged = Judged_Beside(&declaring, &broken);
+        let claim = Named("T", &judged).expect("the universe is judged");
 
         assert_eq!(
             claim.gate,
@@ -1690,16 +1688,8 @@ mod tests
     {
         let declaring = Source("a.rs", "pub const T: &[&str] = &[];\n");
         let unread = Source("b.rs", "#[test]\nfn Test_Whatever()\n{\n}\n");
-        let sources = vec![declaring.clone(), unread.clone()];
-
-        let world = World_Over(&[(&declaring, &[])]);
-        let mut reader = world.Reader();
-        let findings = Check_Completeness_Mirrors(&sources, &mut reader);
-
-        let gap = findings
-            .iter()
-            .find(|finding| return finding.subject_name == "T")
-            .expect("the universe is judged");
+        let judged = Judged_Beside(&declaring, &unread);
+        let gap = Named("T", &judged).expect("the universe is judged");
 
         assert_eq!(gap.gate, GateCategory::Advisory);
         assert_eq!(gap.applicability, Applicability::Supported);

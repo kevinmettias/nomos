@@ -438,6 +438,40 @@ fn Refuse(assembly: &mut Assembly, input: &Layered<'_>, error: &IngestError)
     assembly.absent.push(refusal);
 }
 
+/// Reads, parses and ingests one optional corpus file.
+///
+/// The two callers differ only in what they parse and what they put in, and every step
+/// around those two is the same: the file may not be there, it may not read, and it may not
+/// go in. Written out twice, the two carried six copies of four strings between them and
+/// were one edit away from disagreeing about what an absence costs.
+fn Layer<P, R>(
+    assembly: &mut Assembly,
+    input: &Layered<'_>,
+    parse: impl FnOnce(&str) -> Result<P, IngestError>,
+    ingest: impl FnOnce(&mut SpecificationStore, &P) -> Result<R, IngestError>,
+) -> Option<R>
+{
+    let text = Text_Of(assembly, input)?;
+    let parsed = match parse(&text)
+    {
+        Ok(parsed) => parsed,
+        Err(error) =>
+        {
+            Refuse(assembly, input, &error);
+
+            return None;
+        }
+    };
+
+    match ingest(&mut assembly.store, &parsed)
+    {
+        Ok(report) => return Some(report),
+        Err(error) => Refuse(assembly, input, &error),
+    }
+
+    return None;
+}
+
 /// Records what an input contributed.
 fn Note(assembly: &mut Assembly, input: &Layered<'_>, count: u32, noun: &str)
 {
@@ -453,22 +487,13 @@ fn Ingest_Statement_File(assembly: &mut Assembly, root: &Path)
                  statements has nothing to project",
         refused: "no normative statement is in this store",
     };
-    let Some(text) = Text_Of(assembly, &input)
+    let Some(report) = Layer(assembly, &input, Parse_Statements, Ingest_Statements)
     else
     {
         return;
     };
 
-    let file = match Parse_Statements(&text)
-    {
-        Ok(file) => file,
-        Err(error) => return Refuse(assembly, &input, &error),
-    };
-    match Ingest_Statements(&mut assembly.store, &file)
-    {
-        Ok(report) => Note(assembly, &input, report.ingested, "normative statement(s)"),
-        Err(error) => Refuse(assembly, &input, &error),
-    }
+    Note(assembly, &input, report.ingested, "normative statement(s)");
 }
 
 fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
@@ -480,22 +505,13 @@ fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
                  resolves to nothing",
         refused: "the corpus contributes no node to this store",
     };
-    let Some(text) = Text_Of(assembly, &input)
+    let Some(report) = Layer(assembly, &input, Parse_Catalog, |store, entities| return Ingest_Catalog(store, entities))
     else
     {
         return;
     };
 
-    let entities = match Parse_Catalog(&text)
-    {
-        Ok(entities) => entities,
-        Err(error) => return Refuse(assembly, &input, &error),
-    };
-    match Ingest_Catalog(&mut assembly.store, &entities)
-    {
-        Ok(report) => Note(assembly, &input, report.nodes, "catalog node(s)"),
-        Err(error) => Refuse(assembly, &input, &error),
-    }
+    Note(assembly, &input, report.nodes, "catalog node(s)");
 }
 
 /// An input that was found and refused.
