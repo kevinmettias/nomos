@@ -1,0 +1,28 @@
+# The assessment of WORK-LEDGER-001 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity is
+# a second place for it to be wrong — the rule OD-SPEC-007 chose for a record registration,
+# and CHK-003.assessment states for this registry.
+#
+# WORK-LEDGER-001 requires an item be addressable as an individual artifact with stable id,
+# title, state, priority, rationale, territory, dependencies, blockers, claim lease,
+# completion condition, verification predicate, and recorded completion evidence.
+# `LedgerItem` carries every element of that list except `priority`, so the divergence is
+# exactly one element wide. OD-LEDGER-017 is the record: it corrects OD-TRACE-001's count of
+# the statement's elements, establishes that the requirement binds this build rather than
+# being read out of scope, and defers `priority` on a stated ground — the corpus wants it as
+# the first of three ranking keys and the other two are already derivable from `depends_on`
+# and `territory`, so a bare integer would satisfy the letter while buying the key that ages
+# worst. The record also names what makes the deferral wrong, which is what makes this a
+# Diverges rather than a shrug.
+#
+# Two sites, because one would not decay. `LedgerItem` is the type the requirement is about
+# and it will not vanish; `priority` occurs in this file only inside that type's doc comment,
+# where OD-LEDGER-017 put the absent element so the verdict is readable at the type and not
+# only in the record. Deleting that sentence is the change this entry must not survive.
+#
+# Not recomputed from the corpus at check time. OD-TRACE-001 records why: CI has no corpus,
+# so a guard that read one would be green by being unable to look.
+verdict: Diverges
+record: OD-LEDGER-017
+site: crates/substrate/nomos-ledger/src/item.rs#LedgerItem
+site: crates/substrate/nomos-ledger/src/item.rs#priority

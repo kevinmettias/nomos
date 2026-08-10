@@ -1,0 +1,28 @@
+# The assessment of WORK-LEDGER-005 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity is
+# a second place for it to be wrong — the rule OD-SPEC-007 chose for a record registration,
+# and CHK-003.assessment states for this registry.
+#
+# WORK-LEDGER-005 requires blocked work to classify the blocker as dependency, decision,
+# territory mismatch, external resource, needs-split, stale probe artifact, or other typed
+# cause rather than relying only on prose notes. `Blocker` declares six of the seven, in the
+# requirement's own order. `StaleProbeArtifact` is absent, and OD-LEDGER-017 is the record:
+# it decides the absence is a decline rather than an omission, on the ground that the cause
+# has no referent in this build — the nearest candidate, a committed projection going stale,
+# is inside the holder's own hands and so is not the kind of thing `Blocker` answers about —
+# and it names the event that would reverse the decline. The requirement's list ends "or
+# other typed cause" and `Blocker::Other { detail }` is declared, so every blocker this build
+# can have remains expressible as a typed cause.
+#
+# The two sites are the transcription and the membership check. `CORPUS_CAUSES` carries the
+# seven causes in the requirement's order with the declined row empty; `Corpus_Position` is
+# the exhaustive match that makes a seventh variant a compile error at the table rather than
+# a cause the assertions would never visit. If either goes, the decline stops being held by
+# anything and this verdict is about nothing.
+#
+# Not recomputed from the corpus at check time. OD-TRACE-001 records why: CI has no corpus,
+# so a guard that read one would be green by being unable to look.
+verdict: Diverges
+record: OD-LEDGER-017
+site: crates/substrate/nomos-ledger/src/item.rs#CORPUS_CAUSES
+site: crates/substrate/nomos-ledger/src/item.rs#Corpus_Position
