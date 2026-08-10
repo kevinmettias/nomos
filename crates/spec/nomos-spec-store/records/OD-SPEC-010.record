@@ -1,0 +1,3 @@
+# The registration for OD-SPEC-010. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md
