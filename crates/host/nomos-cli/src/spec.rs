@@ -23,8 +23,13 @@
 
 use crate::arguments::{Named_Value, Named_Values, Required};
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
-use nomos_spec_project::{Build, Catalogue, Check, Profile, ProjectError, SIDECAR_SUFFIX};
-use nomos_spec_store::{EditError, EditPreview, PathMatch, RowScope, StoreError};
+use nomos_spec_project::{
+    Build, Catalogue, Check, Output, Profile, ProjectError, SIDECAR_SUFFIX, Stamp,
+};
+use nomos_spec_store::{
+    CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch,
+    RecordProjection, RowCensus, RowScope, StoreError, TableLine,
+};
 use std::path::{Path, PathBuf};
 
 /// What the process exits with.
@@ -86,89 +91,146 @@ impl ExitCode
 pub enum SpecCommand
 {
     /// Print a record's source, byte for byte.
-    Record
-    {
-        /// The node identifier.
-        id: String,
-        /// Which revision of it, when more than one is held.
-        revision: Option<String>,
-    },
+    Record(RecordRequest),
     /// Print a document's table rows, as authored.
-    Table
-    {
-        /// A path, a file name, or a fragment of one.
-        document: String,
-        /// Only this block of the document.
-        block: Option<u32>,
-        /// Only this table within a block. Counted per block, so it narrows rather than
-        /// addresses on its own.
-        table: Option<u32>,
-        /// Only this revision.
-        revision: Option<String>,
-    },
+    Table(TableRequest),
     /// Build a projection profile and write it out.
-    Render
-    {
-        /// A shipped profile identifier.
-        profile: String,
-        /// The build root the profile's own relative output is placed under.
-        into: PathBuf,
-        /// The node a subject-addressed profile is pointed at.
-        ///
-        /// Absent for the whole-store profiles, which have nowhere to put it. Which kind a
-        /// profile is is decided by the profile, so this is not a mode the caller selects.
-        subject: Option<String>,
-    },
+    Render(RenderRequest),
     /// Compare the outputs already on disk against the store and their own stamps.
-    Freshness
-    {
-        /// The build root the profiles' own relative outputs are read from.
-        into: PathBuf,
-        /// Only this profile. Without it, every shipped profile is looked for.
-        profile: Option<String>,
-        /// The profiles this run requires to be there, whose absence is a failure.
-        ///
-        /// Empty by default, which is the question this command already answered: what
-        /// is here, and is what is here current. A build root legitimately holds a
-        /// subset, so absence is only a finding when a caller says which outputs it was
-        /// promised — and that promise belongs to the repository asking, not to the
-        /// profile, which describes how a projection is built and not whether anyone
-        /// ships it.
-        require: Vec<String>,
-    },
+    Freshness(FreshnessRequest),
     /// Read a record out of the store as markdown, rendered from its rows.
-    Markdown
-    {
-        /// The node identifier.
-        id: String,
-        /// Which revision of it, when more than one is held.
-        revision: Option<String>,
-    },
+    Markdown(RecordRequest),
     /// Say what committing an edited record would change, and change nothing.
-    Preview
-    {
-        id: String,
-        /// The edited markdown.
-        from: PathBuf,
-        /// The path the record should move to. A rename is an ordinary edit.
-        rename: Option<String>,
-    },
+    Preview(EditRequest),
     /// Preview an edited record and then commit it.
-    Commit
-    {
-        id: String,
-        from: PathBuf,
-        rename: Option<String>,
-        /// The tree the record's own path is written under. A record's path is repository
-        /// relative, so a commit has to be told which tree it means; `.` is the default
-        /// rather than the only option, so a test does not have to write into the tree it
-        /// is testing.
-        into: PathBuf,
-    },
+    Commit(CommitRequest),
     /// List the shipped projection profiles.
     Profiles,
     /// Say what this store was assembled from, and what was missing.
     Sources,
+}
+
+/// Which record is being asked about.
+///
+/// One type for `record` and `markdown` because they address the same thing and differ in
+/// what they answer about it, which is the distinction `Markdown`'s own documentation
+/// draws. A second identical type would let the two drift apart in what they accept.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RecordRequest
+{
+    /// The node identifier.
+    pub id: String,
+    /// Which revision of it, when more than one is held.
+    pub revision: Option<String>,
+}
+
+/// Which rows are being asked for.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct TableRequest
+{
+    /// A path, a file name, or a fragment of one.
+    pub document: String,
+    /// Only this block of the document.
+    pub block: Option<u32>,
+    /// Only this table within a block. Counted per block, so it narrows rather than
+    /// addresses on its own.
+    pub table: Option<u32>,
+    /// Only this revision.
+    pub revision: Option<String>,
+}
+
+/// Which projection is being built, and where it lands.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RenderRequest
+{
+    /// A shipped profile identifier.
+    pub profile: String,
+    /// The build root the profile's own relative output is placed under.
+    pub into: PathBuf,
+    /// The node a subject-addressed profile is pointed at.
+    ///
+    /// Absent for the whole-store profiles, which have nowhere to put it. Which kind a
+    /// profile is is decided by the profile, so this is not a mode the caller selects.
+    pub subject: Option<String>,
+}
+
+/// Which outputs are being checked, and which of them were promised.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct FreshnessRequest
+{
+    /// The build root the profiles' own relative outputs are read from.
+    pub into: PathBuf,
+    /// Only this profile. Without it, every shipped profile is looked for.
+    pub profile: Option<String>,
+    /// The profiles this run requires to be there, whose absence is a failure.
+    ///
+    /// Empty by default, which is the question this command already answered: what is
+    /// here, and is what is here current. A build root legitimately holds a subset, so
+    /// absence is only a finding when a caller says which outputs it was promised — and
+    /// that promise belongs to the repository asking, not to the profile, which describes
+    /// how a projection is built and not whether anyone ships it.
+    pub require: Vec<String>,
+}
+
+/// The edit itself, without saying whether it will be committed.
+///
+/// `preview` and `commit` take the same edit and differ only in what they do with it,
+/// which is what makes "the preview and then the commit, in that order" expressible at
+/// all: `commit` holds one of these and runs the preview from it.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct EditRequest
+{
+    /// The node identifier.
+    pub id: String,
+    /// The edited markdown.
+    pub from: PathBuf,
+    /// The path the record should move to. A rename is an ordinary edit.
+    pub rename: Option<String>,
+}
+
+/// An edit, and the tree its record's own path is written under.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CommitRequest
+{
+    /// What is being committed.
+    pub edit: EditRequest,
+    /// The tree the record's own path is written under. A record's path is repository
+    /// relative, so a commit has to be told which tree it means; `.` is the default rather
+    /// than the only option, so a test does not have to write into the tree it is testing.
+    pub into: PathBuf,
+}
+
+/// Where a command writes: content to `output`, everything about it to `notes`.
+///
+/// The two travel together through every verb because keeping them apart is the surface's
+/// whole point — a redirect has to capture exactly what the store holds and nothing about
+/// it. Passing them as one value is also what keeps the verbs inside the parameter budget.
+struct Channels<'a>
+{
+    /// What the store holds.
+    output: &'a mut dyn std::io::Write,
+    /// Everything about it.
+    notes: &'a mut dyn std::io::Write,
+}
+
+/// A section that selected nothing, as the projection machinery reported it.
+struct EmptySection<'a>
+{
+    /// The profile being built.
+    profile: &'a str,
+    /// The section of it that came back empty.
+    section: &'a str,
+    /// What that section selects.
+    content: &'static str,
+}
+
+/// Both halves of a rendered output, as they are on disk.
+struct Rendered<'a>
+{
+    /// The projection itself.
+    body: &'a str,
+    /// The stamp beside it.
+    sidecar: &'a str,
 }
 
 /// Parses `nomos spec` arguments.
@@ -184,50 +246,117 @@ pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
         return Err(Usage_Text());
     };
 
-    let value_of = |name: &str| return Named_Value(arguments, name);
-    let required = |name: &str| return Required(value_of(name).as_ref(), name, &Usage_Text());
-
     return match verb.as_str()
     {
-        "record" => Ok(SpecCommand::Record {
-            id: required("--id")?,
-            revision: value_of("--revision"),
-        }),
-        "table" => Ok(SpecCommand::Table {
-            document: required("--document")?,
-            block: Ordinal(value_of("--block").as_ref(), "--block")?,
-            table: Ordinal(value_of("--table").as_ref(), "--table")?,
-            revision: value_of("--revision"),
-        }),
-        "render" => Ok(SpecCommand::Render {
-            profile: required("--profile")?,
-            into: PathBuf::from(required("--into")?),
-            subject: value_of("--subject"),
-        }),
-        "freshness" => Ok(SpecCommand::Freshness {
-            into: PathBuf::from(required("--into")?),
-            profile: value_of("--profile"),
-            require: Named_Values(arguments, "--require"),
-        }),
-        "markdown" => Ok(SpecCommand::Markdown {
-            id: required("--id")?,
-            revision: value_of("--revision"),
-        }),
-        "preview" => Ok(SpecCommand::Preview {
-            id: required("--id")?,
-            from: PathBuf::from(required("--from")?),
-            rename: value_of("--rename"),
-        }),
-        "commit" => Ok(SpecCommand::Commit {
-            id: required("--id")?,
-            from: PathBuf::from(required("--from")?),
-            rename: value_of("--rename"),
-            into: value_of("--into").map_or_else(|| return PathBuf::from("."), PathBuf::from),
-        }),
+        "record" => Parse_Record(arguments),
+        "table" => Parse_Table(arguments),
+        "render" => Parse_Render(arguments),
+        "freshness" => Parse_Freshness(arguments),
+        "markdown" => Parse_Markdown(arguments),
+        "preview" => Parse_Preview(arguments),
+        "commit" => Parse_Commit(arguments),
         "profiles" => Ok(SpecCommand::Profiles),
         "sources" => Ok(SpecCommand::Sources),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
     };
+}
+
+/// A flag with no default, or a message naming it beside the usage.
+fn Required_Value(arguments: &[String], name: &str) -> Result<String, String>
+{
+    let value = Named_Value(arguments, name);
+
+    return Required(value.as_ref(), name, &Usage_Text());
+}
+
+/// A flag with no default, read as a path.
+fn Required_Path(arguments: &[String], name: &str) -> Result<PathBuf, String>
+{
+    let value = Required_Value(arguments, name)?;
+
+    return Ok(PathBuf::from(value));
+}
+
+/// Which record a `record` or `markdown` run is about.
+fn Parse_Record_Request(arguments: &[String]) -> Result<RecordRequest, String>
+{
+    return Ok(RecordRequest {
+        id: Required_Value(arguments, "--id")?,
+        revision: Named_Value(arguments, "--revision"),
+    });
+}
+
+/// The edit a `preview` or `commit` run carries.
+fn Parse_Edit_Request(arguments: &[String]) -> Result<EditRequest, String>
+{
+    return Ok(EditRequest {
+        id: Required_Value(arguments, "--id")?,
+        from: Required_Path(arguments, "--from")?,
+        rename: Named_Value(arguments, "--rename"),
+    });
+}
+
+fn Parse_Record(arguments: &[String]) -> Result<SpecCommand, String>
+{
+    let request = Parse_Record_Request(arguments)?;
+
+    return Ok(SpecCommand::Record(request));
+}
+
+fn Parse_Table(arguments: &[String]) -> Result<SpecCommand, String>
+{
+    let block = Named_Value(arguments, "--block");
+    let table = Named_Value(arguments, "--table");
+
+    return Ok(SpecCommand::Table(TableRequest {
+        document: Required_Value(arguments, "--document")?,
+        block: Ordinal(block.as_ref(), "--block")?,
+        table: Ordinal(table.as_ref(), "--table")?,
+        revision: Named_Value(arguments, "--revision"),
+    }));
+}
+
+fn Parse_Render(arguments: &[String]) -> Result<SpecCommand, String>
+{
+    return Ok(SpecCommand::Render(RenderRequest {
+        profile: Required_Value(arguments, "--profile")?,
+        into: Required_Path(arguments, "--into")?,
+        subject: Named_Value(arguments, "--subject"),
+    }));
+}
+
+fn Parse_Freshness(arguments: &[String]) -> Result<SpecCommand, String>
+{
+    return Ok(SpecCommand::Freshness(FreshnessRequest {
+        into: Required_Path(arguments, "--into")?,
+        profile: Named_Value(arguments, "--profile"),
+        require: Named_Values(arguments, "--require"),
+    }));
+}
+
+fn Parse_Markdown(arguments: &[String]) -> Result<SpecCommand, String>
+{
+    let request = Parse_Record_Request(arguments)?;
+
+    return Ok(SpecCommand::Markdown(request));
+}
+
+fn Parse_Preview(arguments: &[String]) -> Result<SpecCommand, String>
+{
+    let request = Parse_Edit_Request(arguments)?;
+
+    return Ok(SpecCommand::Preview(request));
+}
+
+fn Parse_Commit(arguments: &[String]) -> Result<SpecCommand, String>
+{
+    let edit = Parse_Edit_Request(arguments)?;
+    let into = Named_Value(arguments, "--into");
+
+    return Ok(SpecCommand::Commit(CommitRequest {
+        edit,
+        into: into.map_or_else(|| return PathBuf::from("."), PathBuf::from),
+    }));
 }
 
 /// A whole-number flag, or a message saying what was given instead.
@@ -300,61 +429,52 @@ pub fn Run(
     {
         // The catalogue is embedded and answers without a store, so building one would
         // make listing the profiles fail on a machine that cannot open a database.
-        return Profiles(output, notes);
+        return Profiles(&mut Channels { output, notes });
     }
+
+    let mut channels = Channels { output, notes };
 
     let mut assembly = match Assemble(request)
     {
         Ok(assembly) => assembly,
-        Err(error) => return Report_Store_Error(&error, notes),
+        Err(error) => return Report_Store_Error(&error, channels.notes),
     };
 
-    // Reported on the way through, on every command that is not about them already. A run
-    // over a whole corpus prints nothing here, so the note's absence is itself the signal
-    // — the same shape OD-GATE-001 settled on for the corpus gates.
-    if !assembly.Is_Complete() && !matches!(command, SpecCommand::Sources)
+    Note_Absences(command, &assembly, channels.notes);
+
+    return Dispatch(command, &mut assembly, &mut channels);
+}
+
+/// What the store was missing, said on the way through.
+///
+/// On every command that is not about the absences already. A run over a whole corpus
+/// prints nothing here, so the note's absence is itself the signal — the same shape
+/// `OD-GATE-001` settled on for the corpus gates.
+fn Note_Absences(command: &SpecCommand, assembly: &Assembly, notes: &mut dyn std::io::Write)
+{
+    if assembly.Is_Complete() || matches!(command, SpecCommand::Sources)
     {
-        let _ = writeln!(notes, "{}", assembly.Describe_Absences());
+        return;
     }
 
+    let _ = writeln!(notes, "{}", assembly.Describe_Absences());
+}
+
+/// The verb itself, against a store that is already assembled and already reported on.
+fn Dispatch(command: &SpecCommand, assembly: &mut Assembly, channels: &mut Channels<'_>)
+    -> ExitCode
+{
     return match command
     {
-        SpecCommand::Record { id, revision } =>
-        {
-            Record(&assembly, id, revision.as_deref(), output, notes)
-        }
-        SpecCommand::Table {
-            document,
-            block,
-            table,
-            revision,
-        } => Table(&assembly, document, *block, *table, revision.as_deref(), output, notes),
-        SpecCommand::Render {
-            profile,
-            into,
-            subject,
-        } => Render(&assembly, profile, into, subject.as_deref(), output, notes),
-        SpecCommand::Freshness {
-            into,
-            profile,
-            require,
-        } => Freshness_Of(&assembly, into, profile.as_deref(), require, output, notes),
-        SpecCommand::Markdown { id, revision } =>
-        {
-            Markdown(&assembly, id, revision.as_deref(), output, notes)
-        }
-        SpecCommand::Preview { id, from, rename } =>
-        {
-            Preview(&assembly, id, from, rename.as_deref(), output, notes)
-        }
-        SpecCommand::Commit {
-            id,
-            from,
-            rename,
-            into,
-        } => Commit(&mut assembly, id, from, rename.as_deref(), into, output, notes),
-        SpecCommand::Profiles => Profiles(output, notes),
-        SpecCommand::Sources => Sources(&assembly, output),
+        SpecCommand::Record(request) => Record(assembly, request, channels),
+        SpecCommand::Table(request) => Table(assembly, request, channels),
+        SpecCommand::Render(request) => Render(assembly, request, channels),
+        SpecCommand::Freshness(request) => Freshness_Of(assembly, request, channels),
+        SpecCommand::Markdown(request) => Markdown(assembly, request, channels),
+        SpecCommand::Preview(request) => Preview(assembly, request, channels),
+        SpecCommand::Commit(request) => Commit(assembly, request, channels),
+        SpecCommand::Profiles => Profiles(channels),
+        SpecCommand::Sources => Sources(assembly, channels.output),
     };
 }
 
@@ -379,25 +499,30 @@ const EPHEMERAL: &str = "this store was assembled for this invocation and is now
 /// same answer until now.
 fn Markdown(
     assembly: &Assembly,
-    id: &str,
-    revision: Option<&str>,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    request: &RecordRequest,
+    channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let projection = match assembly.store.Record_Markdown(id, revision)
+    let revision = request.revision.as_deref();
+    let projection = match assembly.store.Record_Markdown(&request.id, revision)
     {
         Ok(projection) => projection,
-        Err(error) => return Report_Edit_Error(assembly, &error, notes),
+        Err(error) => return Report_Edit_Error(assembly, &error, channels.notes),
     };
 
-    let _ = write!(output, "{}", projection.markdown);
+    let _ = write!(channels.output, "{}", projection.markdown);
     let _ = writeln!(
-        notes,
-        "{id}: {} at revision {}, rendered from the store's rows as {}",
-        projection.path, projection.revision, projection.projected_hash
+        channels.notes,
+        "{}: {} at revision {}, rendered from the store's rows as {}",
+        request.id, projection.path, projection.revision, projection.projected_hash
     );
 
+    return Reproducible(&projection, channels.notes);
+}
+
+/// Whether the store can write back the bytes it was given, said out loud when it cannot.
+fn Reproducible(projection: &RecordProjection, notes: &mut dyn std::io::Write) -> ExitCode
+{
     if projection.Matches_Source()
     {
         return ExitCode::Ok;
@@ -416,29 +541,22 @@ fn Markdown(
 }
 
 /// The preview, printed, changing nothing.
-fn Preview(
-    assembly: &Assembly,
-    id: &str,
-    from: &Path,
-    rename: Option<&str>,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
-) -> ExitCode
+fn Preview(assembly: &Assembly, request: &EditRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    let staged = match Staged_Text(from, notes)
+    let staged = match Staged_Text(&request.from, channels.notes)
     {
         Ok(text) => text,
         Err(code) => return code,
     };
 
-    let preview = match Previewed(assembly, id, &staged, rename, notes)
+    let preview = match Previewed(assembly, request, &staged, channels.notes)
     {
         Ok(preview) => preview,
         Err(code) => return code,
     };
 
-    let _ = writeln!(output, "{}", preview.Describe());
-    let _ = writeln!(notes, "nothing was written. {EPHEMERAL}");
+    let _ = writeln!(channels.output, "{}", preview.Describe());
+    let _ = writeln!(channels.notes, "nothing was written. {EPHEMERAL}");
 
     return ExitCode::Ok;
 }
@@ -446,41 +564,69 @@ fn Preview(
 /// The preview and then the commit, in that order, because the other order is not available.
 fn Commit(
     assembly: &mut Assembly,
-    id: &str,
-    from: &Path,
-    rename: Option<&str>,
-    into: &Path,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    request: &CommitRequest,
+    channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let staged = match Staged_Text(from, notes)
+    let text = match Staged_Text(&request.edit.from, channels.notes)
     {
         Ok(text) => text,
         Err(code) => return code,
     };
 
-    let preview = match Previewed(assembly, id, &staged, rename, notes)
+    let preview = match Previewed(assembly, &request.edit, &text, channels.notes)
     {
         Ok(preview) => preview,
         Err(code) => return code,
     };
-    let _ = writeln!(output, "{}", preview.Describe());
-    let vacated = preview.Rename().map(|(before, _)| return before.to_owned());
+    let _ = writeln!(channels.output, "{}", preview.Describe());
 
-    let report = match assembly.store.Commit_Edit(&preview)
+    return Committed(assembly, &Staged { preview, text }, request, channels);
+}
+
+/// An edit the store has already checked, and the bytes it was checked against.
+///
+/// The two travel together because the preview is what proves the edit admissible and the
+/// text is what lands on disk, and writing one without the other is the half-done commit
+/// this surface exists to prevent.
+struct Staged
+{
+    /// The edit as the store checked it.
+    preview: EditPreview,
+    /// The bytes that were staged.
+    text: String,
+}
+
+/// The edit written where the author expects it, and the round trip closed behind it.
+fn Committed(
+    assembly: &mut Assembly,
+    staged: &Staged,
+    request: &CommitRequest,
+    channels: &mut Channels<'_>,
+) -> ExitCode
+{
+    let renamed = staged.preview.Rename().map(|(before, _)| return before.to_owned());
+    let report = match assembly.store.Commit_Edit(&staged.preview)
     {
         Ok(report) => report,
-        Err(error) => return Report_Edit_Error(assembly, &error, notes),
+        Err(error) => return Report_Edit_Error(assembly, &error, channels.notes),
     };
 
-    let vacated = vacated.map(|path| return into.join(path));
-    if let Some(code) =
-        Written(&into.join(&report.path), &staged, vacated.as_deref(), output, notes)
+    let destination = request.into.join(&report.path);
+    let vacated = renamed.map(|path| return request.into.join(path));
+    if let Some(code) = Written(&destination, &staged.text, vacated.as_deref(), channels)
     {
         return code;
     }
 
+    Report_Commit(&report, channels.output);
+
+    return Reproduced(assembly, &request.edit.id, &staged.text, channels);
+}
+
+/// What the commit changed, counted.
+fn Report_Commit(report: &CommitReport, output: &mut dyn std::io::Write)
+{
     let _ = writeln!(
         output,
         "committed {} to {}: {} block(s), {} removed, {} relation(s) added, {} removed",
@@ -491,8 +637,6 @@ fn Commit(
         report.relations_added,
         report.relations_removed
     );
-
-    return Reproduced(assembly, id, &staged, output, notes);
 }
 
 /// Writes the committed record where the author expects it, and vacates the path a rename
@@ -506,9 +650,24 @@ fn Written(
     destination: &Path,
     staged: &str,
     vacated: Option<&Path>,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    channels: &mut Channels<'_>,
 ) -> Option<ExitCode>
+{
+    if let Some(code) = Placed(destination, staged, channels.notes)
+    {
+        return Some(code);
+    }
+
+    if let Some(old) = vacated
+    {
+        Vacated(destination, old, channels);
+    }
+
+    return None;
+}
+
+/// The record's own bytes, under a directory that is made if it is not there.
+fn Placed(destination: &Path, staged: &str, notes: &mut dyn std::io::Write) -> Option<ExitCode>
 {
     if let Some(parent) = destination.parent()
         && let Err(error) = std::fs::create_dir_all(parent)
@@ -525,23 +684,28 @@ fn Written(
         return Some(ExitCode::Unwritable);
     }
 
-    if let Some(old) = vacated
-    {
-        match std::fs::remove_file(old)
-        {
-            Ok(()) => drop(writeln!(output, "vacated {}", old.display())),
-            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (),
-            Err(error) => drop(writeln!(
-                notes,
-                "{} was written and {} could not be removed ({error}), so two files now \
-                 declare this record",
-                destination.display(),
-                old.display()
-            )),
-        }
-    }
-
     return None;
+}
+
+/// The path a rename left behind, removed.
+///
+/// A failure here is reported and not fatal: the new file is already written, so the run
+/// succeeded at the edit and failed at the tidying, and saying so is more use than an exit
+/// code that suggests nothing landed.
+fn Vacated(destination: &Path, old: &Path, channels: &mut Channels<'_>)
+{
+    match std::fs::remove_file(old)
+    {
+        Ok(()) => drop(writeln!(channels.output, "vacated {}", old.display())),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => (),
+        Err(error) => drop(writeln!(
+            channels.notes,
+            "{} was written and {} could not be removed ({error}), so two files now declare \
+             this record",
+            destination.display(),
+            old.display()
+        )),
+    }
 }
 
 /// The round trip, closed on the way out: the store is asked to render what was just
@@ -550,18 +714,17 @@ fn Reproduced(
     assembly: &Assembly,
     id: &str,
     staged: &str,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let _ = writeln!(notes, "{EPHEMERAL}");
+    let _ = writeln!(channels.notes, "{EPHEMERAL}");
 
     return match assembly.store.Record_Markdown(id, None)
     {
         Ok(projection) if projection.markdown == staged =>
         {
             let _ = writeln!(
-                output,
+                channels.output,
                 "the store renders it back as the same bytes ({})",
                 projection.projected_hash
             );
@@ -571,7 +734,7 @@ fn Reproduced(
         Ok(projection) =>
         {
             let _ = writeln!(
-                notes,
+                channels.notes,
                 "the commit succeeded and the store renders {} rather than what was committed, \
                  so the round trip does not close here",
                 projection.projected_hash
@@ -579,11 +742,11 @@ fn Reproduced(
 
             ExitCode::Stale
         }
-        Err(error) => Report_Edit_Error(assembly, &error, notes),
+        Err(error) => Report_Edit_Error(assembly, &error, channels.notes),
     };
 }
 
-fn Staged_Text(from: &Path, notes: &mut impl std::io::Write) -> Result<String, ExitCode>
+fn Staged_Text(from: &Path, notes: &mut dyn std::io::Write) -> Result<String, ExitCode>
 {
     return std::fs::read_to_string(from).map_err(|error| {
         let _ = writeln!(notes, "cannot read {}: {error}", from.display());
@@ -594,15 +757,16 @@ fn Staged_Text(from: &Path, notes: &mut impl std::io::Write) -> Result<String, E
 
 fn Previewed(
     assembly: &Assembly,
-    id: &str,
+    request: &EditRequest,
     staged: &str,
-    rename: Option<&str>,
-    notes: &mut impl std::io::Write,
+    notes: &mut dyn std::io::Write,
 ) -> Result<EditPreview, ExitCode>
 {
+    let rename = request.rename.as_deref();
+
     return assembly
         .store
-        .Claim_For_Edit(id, None)
+        .Claim_For_Edit(&request.id, None)
         .and_then(|claimed| return claimed.Stage(staged, rename))
         .and_then(|edit| return edit.Preview(&assembly.store))
         .map_err(|error| return Report_Edit_Error(assembly, &error, notes));
@@ -616,7 +780,7 @@ fn Previewed(
 fn Report_Edit_Error(
     assembly: &Assembly,
     error: &EditError,
-    notes: &mut impl std::io::Write,
+    notes: &mut dyn std::io::Write,
 ) -> ExitCode
 {
     let _ = writeln!(notes, "{error}");
@@ -640,52 +804,63 @@ fn Report_Edit_Error(
 /// Phase 2's question: what did this record say?
 fn Record(
     assembly: &Assembly,
-    id: &str,
-    revision: Option<&str>,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    request: &RecordRequest,
+    channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let documents = match assembly.store.Documents_Behind(id, revision)
+    let revision = request.revision.as_deref();
+    let documents = match assembly.store.Documents_Behind(&request.id, revision)
     {
         Ok(documents) => documents,
-        Err(error) => return Report_Store_Error(&error, notes),
+        Err(error) => return Report_Store_Error(&error, channels.notes),
     };
 
-    if let [only] = documents.as_slice()
+    return match documents.as_slice()
     {
-        let _ = writeln!(
-            notes,
-            "{id}: {} at revision {}, {}",
-            only.path, only.revision, only.content_hash
-        );
-        let _ = write!(output, "{}", only.text);
+        [only] => Printed_Record(&request.id, only, channels),
+        [] => Nothing_Behind(assembly, request, channels.notes),
+        held => Ambiguous_Revision(&request.id, held, channels.notes),
+    };
+}
 
-        return ExitCode::Ok;
-    }
+/// The one document behind an identifier, with a note saying which it was.
+fn Printed_Record(id: &str, only: &DocumentSource, channels: &mut Channels<'_>) -> ExitCode
+{
+    let _ = writeln!(
+        channels.notes,
+        "{id}: {} at revision {}, {}",
+        only.path, only.revision, only.content_hash
+    );
+    let _ = write!(channels.output, "{}", only.text);
 
-    if documents.len() > 1
-    {
-        // Not a concatenation. Two revisions of one record are two answers to "what did
-        // this say", and printing both under one heading is how a reader ends up quoting
-        // the wrong one.
-        let _ = writeln!(
-            notes,
-            "{id} is held at {} revisions: {}.\n\
-             Narrow it with --revision; printing them one after another would make the \
-             output a document that never existed.",
-            documents.len(),
-            documents
-                .iter()
-                .map(|document| return format!("{} ({})", document.revision, document.path))
-                .collect::<Vec<String>>()
-                .join(", ")
-        );
+    return ExitCode::Ok;
+}
 
-        return ExitCode::NotFound;
-    }
+/// One identifier held at several revisions, refused rather than concatenated.
+///
+/// Two revisions of one record are two answers to "what did this say", and printing both
+/// under one heading is how a reader ends up quoting the wrong one.
+fn Ambiguous_Revision(
+    id: &str,
+    documents: &[DocumentSource],
+    notes: &mut dyn std::io::Write,
+) -> ExitCode
+{
+    let held = documents
+        .iter()
+        .map(|document| return format!("{} ({})", document.revision, document.path))
+        .collect::<Vec<String>>()
+        .join(", ");
 
-    return Nothing_Behind(assembly, id, revision, notes);
+    let _ = writeln!(
+        notes,
+        "{id} is held at {} revisions: {held}.\n\
+         Narrow it with --revision; printing them one after another would make the output a \
+         document that never existed.",
+        documents.len()
+    );
+
+    return ExitCode::NotFound;
 }
 
 /// What to say when a record read produced no document.
@@ -694,138 +869,244 @@ fn Record(
 /// them is the reader's mistake.
 fn Nothing_Behind(
     assembly: &Assembly,
-    id: &str,
-    revision: Option<&str>,
-    notes: &mut impl std::io::Write,
+    request: &RecordRequest,
+    notes: &mut dyn std::io::Write,
 ) -> ExitCode
 {
-    let summary = match assembly.store.Node_Summary(id)
+    let summary = match assembly.store.Node_Summary(&request.id)
     {
         Ok(summary) => summary,
         Err(error) => return Report_Store_Error(&error, notes),
     };
 
-    if let Some(node) = summary
+    match summary
     {
-        let _ = writeln!(
+        Some(node) => Note_Unsourced_Node(request, &node, notes),
+        None => drop(writeln!(
             notes,
-            "{id} is in the store as a {} node ({}, {}) titled {:?}, and no source document \
-             is recorded against it{}.",
-            node.kind,
-            node.authority,
-            node.representation,
-            node.title,
-            revision.map_or_else(String::new, |wanted| return format!(" at revision {wanted}"))
-        );
-
-        return Absent_Or(assembly, ExitCode::NotFound, notes);
+            "no node in this store is identified {}.",
+            request.id
+        )),
     }
-
-    let _ = writeln!(notes, "no node in this store is identified {id}.");
 
     return Absent_Or(assembly, ExitCode::NotFound, notes);
 }
 
-/// Phase 2's other half: the real rows.
-fn Table(
-    assembly: &Assembly,
-    document: &str,
-    block: Option<u32>,
-    table: Option<u32>,
-    revision: Option<&str>,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
-) -> ExitCode
+/// A node the store holds with no source document recorded against it.
+fn Note_Unsourced_Node(
+    request: &RecordRequest,
+    node: &NodeSummary,
+    notes: &mut dyn std::io::Write,
+)
 {
-    let (matched, tier) = match assembly.store.Documents_Named(document, revision)
+    let wanted = request
+        .revision
+        .as_deref()
+        .map_or_else(String::new, |label| return format!(" at revision {label}"));
+
+    let _ = writeln!(
+        notes,
+        "{} is in the store as a {} node ({}, {}) titled {:?}, and no source document is \
+         recorded against it{wanted}.",
+        request.id, node.kind, node.authority, node.representation, node.title
+    );
+}
+
+/// Phase 2's other half: the real rows.
+fn Table(assembly: &Assembly, request: &TableRequest, channels: &mut Channels<'_>) -> ExitCode
+{
+    let (uid, tier) = match Addressed(assembly, request, channels.notes)
     {
-        Ok(found) => found,
-        Err(error) => return Report_Store_Error(&error, notes),
+        Ok(addressed) => addressed,
+        Err(code) => return code,
     };
 
-    let Some(uid) = matched.first().copied()
-    else
+    let read = match Read_Table(assembly, uid, request, channels.notes)
     {
-        let _ = writeln!(notes, "no document in this store is named {document}.");
-
-        return Absent_Or(assembly, ExitCode::NotFound, notes);
+        Ok(read) => read,
+        Err(code) => return code,
     };
 
-    if matched.len() > 1
-    {
-        let _ = writeln!(
-            notes,
-            "{document} matches {} documents by {}; give a whole path.",
-            matched.len(),
-            tier.Label()
-        );
+    Note_Document(&read, tier, &request.document, channels.notes);
 
-        return ExitCode::NotFound;
+    if read.lines.is_empty()
+    {
+        return Unselected(assembly, request, &read, channels.notes);
     }
 
+    return Printed(&read.lines, request, channels);
+}
+
+/// A document, the rows the narrowing selected from it, and the census of the whole of it.
+///
+/// The census counts the document rather than the selection deliberately: it is what
+/// distinguishes "this document has no tables" from "the block you named has none".
+struct ReadTable
+{
+    /// The document itself.
+    found: DocumentSource,
+    /// The rows under the current narrowing.
+    lines: Vec<TableLine>,
+    /// Every pipe line in the document, by kind.
+    census: RowCensus,
+}
+
+/// Everything a `table` run reads, or the code saying which read failed.
+fn Read_Table(
+    assembly: &Assembly,
+    uid: i64,
+    request: &TableRequest,
+    notes: &mut dyn std::io::Write,
+) -> Result<ReadTable, ExitCode>
+{
     let found = match assembly.store.Document(uid)
     {
         Ok(Some(found)) => found,
-        Ok(None) => return Report_Store_Error(&Vanished(uid), notes),
-        Err(error) => return Report_Store_Error(&error, notes),
+        Ok(None) => return Err(Report_Store_Error(&Vanished(uid), notes)),
+        Err(error) => return Err(Report_Store_Error(&error, notes)),
     };
-
-    let lines = match assembly.store.Table_Lines(uid, block, table)
+    let lines = match assembly.store.Table_Lines(uid, request.block, request.table)
     {
         Ok(lines) => lines,
-        Err(error) => return Report_Store_Error(&error, notes),
+        Err(error) => return Err(Report_Store_Error(&error, notes)),
     };
-
     let census = match assembly.store.Row_Census(RowScope::Document(uid))
     {
         Ok(census) => census,
-        Err(error) => return Report_Store_Error(&error, notes),
+        Err(error) => return Err(Report_Store_Error(&error, notes)),
     };
+
+    return Ok(ReadTable {
+        found,
+        lines,
+        census,
+    });
+}
+
+/// A document that was read and carried no row the narrowing selected.
+fn Unselected(
+    assembly: &Assembly,
+    request: &TableRequest,
+    read: &ReadTable,
+    notes: &mut dyn std::io::Write,
+) -> ExitCode
+{
+    let _ = writeln!(
+        notes,
+        "{} carries no table row{}.",
+        read.found.path,
+        Narrowed(request.block, request.table)
+    );
+
+    // The document was read, so this is an answer rather than a shortfall — unless the
+    // narrowing selected a table that is not there, which the census makes visible either
+    // way.
+    return Nothing_Selected(assembly, read.census.lines, notes);
+}
+
+/// Which document was read, how it was matched, and how many pipe lines it carries.
+fn Note_Document(read: &ReadTable, tier: PathMatch, asked: &str, notes: &mut dyn std::io::Write)
+{
+    let found = &read.found;
+    let census = &read.census;
 
     if tier != PathMatch::Exact
     {
-        let _ = writeln!(notes, "{document} matched {} by {}", found.path, tier.Label());
+        let _ = writeln!(notes, "{asked} matched {} by {}", found.path, tier.Label());
     }
+
     let _ = writeln!(
         notes,
         "{} at revision {}: {} pipe line(s) in the whole document — {} header, {} content, \
          {} separator",
         found.path, found.revision, census.lines, census.header, census.content, census.separator
     );
+}
 
-    if lines.is_empty()
+/// The one document an address names, or the message saying why it names none or several.
+fn Addressed(
+    assembly: &Assembly,
+    request: &TableRequest,
+    notes: &mut dyn std::io::Write,
+) -> Result<(i64, PathMatch), ExitCode>
+{
+    let revision = request.revision.as_deref();
+    let (matched, tier) = match assembly.store.Documents_Named(&request.document, revision)
     {
-        let _ = writeln!(
-            notes,
-            "{} carries no table row{}.",
-            found.path,
-            Narrowed(block, table)
-        );
+        Ok(found) => found,
+        Err(error) => return Err(Report_Store_Error(&error, notes)),
+    };
 
-        // The document was read, so this is an answer rather than a shortfall — unless
-        // the narrowing selected a table that is not there, which the census above makes
-        // visible either way.
-        return if census.lines == 0 && !assembly.Is_Complete()
-        {
-            Absent_Or(assembly, ExitCode::NotFound, notes)
-        }
-        else
-        {
-            ExitCode::NotFound
-        };
+    return match matched.as_slice()
+    {
+        [uid] => Ok((*uid, tier)),
+        [] => Err(No_Such_Document(assembly, &request.document, notes)),
+        many => Err(Several_Documents(&request.document, many.len(), tier, notes)),
+    };
+}
+
+/// An address that names nothing in this store.
+fn No_Such_Document(
+    assembly: &Assembly,
+    asked: &str,
+    notes: &mut dyn std::io::Write,
+) -> ExitCode
+{
+    let _ = writeln!(notes, "no document in this store is named {asked}.");
+
+    return Absent_Or(assembly, ExitCode::NotFound, notes);
+}
+
+/// An address that names several, which is a question rather than an answer.
+fn Several_Documents(
+    asked: &str,
+    matched: usize,
+    tier: PathMatch,
+    notes: &mut dyn std::io::Write,
+) -> ExitCode
+{
+    let _ = writeln!(
+        notes,
+        "{asked} matches {matched} documents by {}; give a whole path.",
+        tier.Label()
+    );
+
+    return ExitCode::NotFound;
+}
+
+/// A document that was read and carried no row the narrowing selected.
+fn Nothing_Selected(
+    assembly: &Assembly,
+    pipe_lines: u32,
+    notes: &mut dyn std::io::Write,
+) -> ExitCode
+{
+    if pipe_lines == 0 && !assembly.Is_Complete()
+    {
+        return Absent_Or(assembly, ExitCode::NotFound, notes);
     }
 
-    for line in &lines
+    return ExitCode::NotFound;
+}
+
+/// The rows themselves, and a note saying which blocks they came from.
+fn Printed(
+    lines: &[TableLine],
+    request: &TableRequest,
+    channels: &mut Channels<'_>,
+) -> ExitCode
+{
+    for line in lines
     {
-        let _ = writeln!(output, "{}", line.text);
+        let _ = writeln!(channels.output, "{}", line.text);
     }
 
     let _ = writeln!(
-        notes,
+        channels.notes,
         "printed {} row(s){} — block(s) {}",
         lines.len(),
-        Narrowed(block, table),
-        Ordinals(&lines)
+        Narrowed(request.block, request.table),
+        Ordinals(lines)
     );
 
     return ExitCode::Ok;
@@ -861,101 +1142,140 @@ fn Ordinals(lines: &[nomos_spec_store::TableLine]) -> String
 }
 
 /// Phase 4's renderers, run.
-fn Render(
-    assembly: &Assembly,
-    profile: &str,
-    into: &Path,
-    subject: Option<&str>,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
-) -> ExitCode
+fn Render(assembly: &Assembly, request: &RenderRequest, channels: &mut Channels<'_>) -> ExitCode
 {
     let catalogue = match Catalogue::Shipped()
     {
         Ok(catalogue) => catalogue,
-        Err(error) => return Report_Project_Error(&error, notes),
+        Err(error) => return Report_Project_Error(&error, channels.notes),
     };
 
-    let declared = match Resolved(&catalogue, profile, notes)
+    let declared = match Declared(&catalogue, request, channels.notes)
     {
         Ok(declared) => declared,
         Err(code) => return code,
     };
 
-    // Resolved against the subject before the store is touched. A profile that names a
-    // subject and a run that does not supply one disagree about what is being built, and
-    // the disagreement is answerable without reading a single row.
-    let declared = &match declared.For(subject)
-    {
-        Ok(resolved) => resolved,
-        Err(error) => return Report_Project_Error(&error, notes),
-    };
-
-    let built = match Build(&assembly.store, declared)
+    let built = match Build(&assembly.store, &declared)
     {
         Ok(built) => built,
-        Err(ProjectError::Empty {
-            profile: named,
-            section,
-            content,
-        }) =>
-        {
-            return Empty_Section(assembly, &named, &section, content, notes);
-        }
-        Err(error) => return Report_Project_Error(&error, notes),
+        Err(error) => return Report_Build_Error(assembly, &error, channels.notes),
     };
 
+    return Placed_Projection(&built, &declared.id, &request.into, channels);
+}
+
+/// The shipped profile a run names, resolved against the subject it was given.
+///
+/// Resolved before the store is touched. A profile that names a subject and a run that
+/// does not supply one disagree about what is being built, and the disagreement is
+/// answerable without reading a single row.
+fn Declared(
+    catalogue: &Catalogue,
+    request: &RenderRequest,
+    notes: &mut dyn std::io::Write,
+) -> Result<Profile, ExitCode>
+{
+    let declared = Resolved(catalogue, &request.profile, notes)?;
+
+    return match declared.For(request.subject.as_deref())
+    {
+        Ok(resolved) => Ok(resolved),
+        Err(error) => Err(Report_Project_Error(&error, notes)),
+    };
+}
+
+/// Both halves of a built projection, written where the run asked for them.
+fn Placed_Projection(
+    built: &Output,
+    id: &str,
+    into: &Path,
+    channels: &mut Channels<'_>,
+) -> ExitCode
+{
     let body = into.join(&built.path);
     let sidecar = into.join(&built.sidecar_path);
     let sheet = match built.Sidecar()
     {
         Ok(sheet) => sheet,
-        Err(error) => return Report_Project_Error(&error, notes),
+        Err(error) => return Report_Project_Error(&error, channels.notes),
     };
 
     for (path, content) in [(&body, &built.body), (&sidecar, &sheet)]
     {
-        if let Some(parent) = path.parent()
-            && let Err(error) = std::fs::create_dir_all(parent)
+        if let Some(code) = Placed(path, content, channels.notes)
         {
-            let _ = writeln!(notes, "cannot create {}: {error}", parent.display());
-
-            return ExitCode::Unwritable;
-        }
-
-        if let Err(error) = std::fs::write(path, content)
-        {
-            let _ = writeln!(notes, "cannot write {}: {error}", path.display());
-
-            return ExitCode::Unwritable;
+            return code;
         }
     }
 
+    Report_Render(id, &body, &sidecar, channels.output);
+    Report_Stamp(&built.stamp, channels.output);
+
+    return ExitCode::Ok;
+}
+
+/// A projection that could not be built.
+///
+/// The empty-section case is pulled out because it is the one a store without its corpus
+/// reaches, and answering it with the projection machinery's own message would send the
+/// reader to change a profile because of a variable that is not set.
+fn Report_Build_Error(
+    assembly: &Assembly,
+    error: &ProjectError,
+    notes: &mut dyn std::io::Write,
+) -> ExitCode
+{
+    let ProjectError::Empty {
+        profile,
+        section,
+        content,
+    } = error
+    else
+    {
+        return Report_Project_Error(error, notes);
+    };
+
+    let empty = EmptySection {
+        profile,
+        section,
+        content,
+    };
+
+    return Empty_Section(assembly, &empty, notes);
+}
+
+/// Where the two halves of a projection landed.
+fn Report_Render(id: &str, body: &Path, sidecar: &Path, output: &mut dyn std::io::Write)
+{
     let _ = writeln!(
         output,
-        "{} -> {}\nsidecar ({SIDECAR_SUFFIX}) -> {}",
-        declared.id,
+        "{id} -> {}\nsidecar ({SIDECAR_SUFFIX}) -> {}",
         body.display(),
         sidecar.display()
     );
-    for (title, count) in &built.stamp.sections
+}
+
+/// What the projection selected, and what it hashes to.
+fn Report_Stamp(stamp: &Stamp, output: &mut dyn std::io::Write)
+{
+    for (title, count) in &stamp.sections
     {
         let _ = writeln!(output, "  {title}: {count}");
     }
+
     let _ = writeln!(
         output,
         "  content {} over inputs {}",
-        built.stamp.content_digest, built.stamp.inputs_digest
+        stamp.content_digest, stamp.inputs_digest
     );
-
-    return ExitCode::Ok;
 }
 
 /// The shipped profile that identifier names, or the message saying which ones exist.
 fn Resolved<'a>(
     catalogue: &'a Catalogue,
     profile: &str,
-    notes: &mut impl std::io::Write,
+    notes: &mut dyn std::io::Write,
 ) -> Result<&'a Profile, ExitCode>
 {
     let Some(declared) = catalogue.Named(profile)
@@ -992,86 +1312,51 @@ fn Resolved<'a>(
 /// person who trips over it.
 fn Freshness_Of(
     assembly: &Assembly,
-    into: &Path,
-    only: Option<&str>,
-    require: &[String],
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    request: &FreshnessRequest,
+    channels: &mut Channels<'_>,
 ) -> ExitCode
 {
     let catalogue = match Catalogue::Shipped()
     {
         Ok(catalogue) => catalogue,
-        Err(error) => return Report_Project_Error(&error, notes),
+        Err(error) => return Report_Project_Error(&error, channels.notes),
     };
 
-    let required = match Required_Profiles(&catalogue, require, notes)
+    let only = request.profile.as_deref();
+    let (required, wanted) = match Examined(&catalogue, request, channels.notes)
     {
-        Ok(required) => required,
+        Ok(examined) => examined,
         Err(code) => return code,
     };
 
+    let mut census = Census::Over(wanted.len(), required);
+    let worst = census.Survey(assembly, &wanted, &request.into, channels);
+
+    return census.Report(&request.into, only, worst, channels.output);
+}
+
+/// Which profiles this run will look at, and which of them it was promised.
+///
+/// Both are resolved before any disk is read, so an unknown identifier stays a question
+/// about a profile rather than becoming an answer about a file.
+fn Examined<'a>(
+    catalogue: &'a Catalogue,
+    request: &FreshnessRequest,
+    notes: &mut dyn std::io::Write,
+) -> Result<(Vec<&'a str>, Vec<&'a Profile>), ExitCode>
+{
+    let only = request.profile.as_deref();
+    let required = Required_Profiles(catalogue, &request.require, notes)?;
+
     let wanted: Vec<&Profile> = match only
     {
-        Some(id) => match Resolved(&catalogue, id, notes)
-        {
-            Ok(declared) => vec![declared],
-            Err(code) => return code,
-        },
+        Some(id) => vec![Resolved(catalogue, id, notes)?],
         None => catalogue.Profiles().iter().collect(),
     };
 
-    if let Err(code) = Every_Requirement_Examined(&required, &wanted, only, notes)
-    {
-        return code;
-    }
+    Every_Requirement_Examined(&required, &wanted, only, notes)?;
 
-    let mut census = Census {
-        wanted: wanted.len(),
-        checked: 0,
-        unbuilt: Vec::new(),
-        required,
-        unmet: Vec::new(),
-    };
-    let mut worst = ExitCode::Ok;
-
-    for profile in &wanted
-    {
-        let promised = census.required.contains(&profile.id.as_str());
-
-        match Verdict(assembly, profile, into, output, notes)
-        {
-            Some(code) =>
-            {
-                census.checked = census.checked.saturating_add(1);
-                worst = Worse(worst, code);
-
-                // A promise is kept only by an output that is current. A half-present pair
-                // or an edited body has already printed its own line above, and carrying it
-                // into the requirement summary is what stops that summary from reporting a
-                // requirement as met by a file that just failed.
-                if promised && !matches!(code, ExitCode::Ok)
-                {
-                    census.unmet.push(profile.id.as_str());
-                }
-            }
-            None if promised =>
-            {
-                let _ = writeln!(
-                    output,
-                    "{}: required here, and neither {} nor its stamp is on disk, so an \
-                     output this repository promises to ship was never written or has been \
-                     deleted",
-                    profile.id, profile.output
-                );
-                census.unmet.push(profile.id.as_str());
-                worst = Worse(worst, ExitCode::Stale);
-            }
-            None => census.unbuilt.push(profile.id.as_str()),
-        }
-    }
-
-    return census.Report(into, only, worst, output);
+    return Ok((required, wanted));
 }
 
 /// The profiles a run was told it must find, resolved before any disk is read.
@@ -1083,7 +1368,7 @@ fn Freshness_Of(
 fn Required_Profiles<'a>(
     catalogue: &'a Catalogue,
     require: &[String],
-    notes: &mut impl std::io::Write,
+    notes: &mut dyn std::io::Write,
 ) -> Result<Vec<&'a str>, ExitCode>
 {
     let mut required: Vec<&str> = Vec::new();
@@ -1106,7 +1391,7 @@ fn Every_Requirement_Examined(
     required: &[&str],
     wanted: &[&Profile],
     only: Option<&str>,
-    notes: &mut impl std::io::Write,
+    notes: &mut dyn std::io::Write,
 ) -> Result<(), ExitCode>
 {
     let Some(unexamined) = required
@@ -1133,8 +1418,7 @@ fn Verdict(
     assembly: &Assembly,
     profile: &Profile,
     into: &Path,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    channels: &mut Channels<'_>,
 ) -> Option<ExitCode>
 {
     let body_path = into.join(&profile.output);
@@ -1145,71 +1429,75 @@ fn Verdict(
     return match (body, sidecar)
     {
         (None, None) => None,
-        (Some(_), None) =>
-        {
-            let _ = writeln!(
-                output,
-                "{}: {} is there and {} is not, so nothing can say whether it is what the \
-                 store produced",
-                profile.id,
-                profile.output,
-                format_args!("{}{SIDECAR_SUFFIX}", profile.output)
-            );
-
-            Some(ExitCode::Stale)
-        }
-        (None, Some(_)) =>
-        {
-            let _ = writeln!(
-                output,
-                "{}: a sidecar is there and {} is not, so a governed output was deleted or \
-                 never written",
-                profile.id, profile.output
-            );
-
-            Some(ExitCode::Stale)
-        }
+        (Some(_), None) => Some(Unstamped(profile, channels.output)),
+        (None, Some(_)) => Some(Unbodied(profile, channels.output)),
         (Some(body), Some(sidecar)) =>
         {
-            Some(Compared(assembly, profile, &body, &sidecar, output, notes))
+            let rendered = Rendered {
+                body: &body,
+                sidecar: &sidecar,
+            };
+
+            Some(Compared(assembly, profile, &rendered, channels))
         }
     };
+}
+
+/// A body with no stamp beside it.
+///
+/// A failure rather than something skipped, because otherwise deleting the sidecar is how
+/// an edit stops being caught, and a check that skipped it would teach that trick to the
+/// first person who tripped over it.
+fn Unstamped(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
+{
+    let _ = writeln!(
+        output,
+        "{}: {} is there and {}{SIDECAR_SUFFIX} is not, so nothing can say whether it is what \
+         the store produced",
+        profile.id, profile.output, profile.output
+    );
+
+    return ExitCode::Stale;
+}
+
+/// A stamp with no body beside it: a governed output was deleted or never written.
+fn Unbodied(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
+{
+    let _ = writeln!(
+        output,
+        "{}: a sidecar is there and {} is not, so a governed output was deleted or never \
+         written",
+        profile.id, profile.output
+    );
+
+    return ExitCode::Stale;
 }
 
 /// The comparison itself, with a store that may not be whole.
 fn Compared(
     assembly: &Assembly,
     profile: &Profile,
-    body: &str,
-    sidecar: &str,
-    output: &mut impl std::io::Write,
-    notes: &mut impl std::io::Write,
+    rendered: &Rendered<'_>,
+    channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let freshness = match Check(&assembly.store, profile, Some(body), Some(sidecar))
+    let body = Some(rendered.body);
+    let sidecar = Some(rendered.sidecar);
+    let freshness = match Check(&assembly.store, profile, body, sidecar)
     {
         Ok(freshness) => freshness,
-        Err(ProjectError::Empty {
-            profile: named,
-            section,
-            content,
-        }) =>
-        {
-            return Empty_Section(assembly, &named, &section, content, notes);
-        }
-        Err(error) => return Report_Project_Error(&error, notes),
+        Err(error) => return Report_Build_Error(assembly, &error, channels.notes),
     };
 
-    let _ = writeln!(output, "{}: {}", profile.id, freshness.Report(&profile.output));
+    let report = freshness.Report(&profile.output);
+    let _ = writeln!(channels.output, "{}: {report}", profile.id);
 
-    return if freshness.Is_Fresh()
+    if freshness.Is_Fresh()
     {
-        ExitCode::Ok
+        return ExitCode::Ok;
     }
-    else
-    {
-        ExitCode::Stale
-    };
+
+    return ExitCode::Stale;
 }
 
 /// What the run looked at, printed whether or not it found anything.
@@ -1232,14 +1520,103 @@ struct Census<'a>
     unmet: Vec<&'a str>,
 }
 
-impl Census<'_>
+impl<'a> Census<'a>
 {
+    /// An empty census over a run that is about to look at `wanted` profiles.
+    fn Over(wanted: usize, required: Vec<&'a str>) -> Self
+    {
+        return Self {
+            wanted,
+            checked: 0,
+            unbuilt: Vec::new(),
+            required,
+            unmet: Vec::new(),
+        };
+    }
+
+    /// Every wanted profile, examined, counted, and reduced to one code for the run.
+    fn Survey(
+        &mut self,
+        assembly: &Assembly,
+        wanted: &[&'a Profile],
+        into: &Path,
+        channels: &mut Channels<'_>,
+    ) -> ExitCode
+    {
+        let mut worst = ExitCode::Ok;
+
+        for profile in wanted
+        {
+            let found = Verdict(assembly, profile, into, channels);
+            let code = self.Record(profile, found, channels.output);
+            worst = Worse(worst, code);
+        }
+
+        return worst;
+    }
+
+    /// One profile's outcome, counted, and the code it contributes to the run.
+    ///
+    /// A promise is kept only by an output that is current. A half-present pair or an
+    /// edited body has already printed its own line, and carrying that into the
+    /// requirement summary is what stops the summary reporting a requirement as met by a
+    /// file that just failed.
+    fn Record(
+        &mut self,
+        profile: &'a Profile,
+        found: Option<ExitCode>,
+        output: &mut dyn std::io::Write,
+    ) -> ExitCode
+    {
+        let promised = self.required.contains(&profile.id.as_str());
+
+        let Some(code) = found
+        else
+        {
+            return self.Absent(profile, promised, output);
+        };
+
+        self.checked = self.checked.saturating_add(1);
+        if promised && !matches!(code, ExitCode::Ok)
+        {
+            self.unmet.push(profile.id.as_str());
+        }
+
+        return code;
+    }
+
+    /// A profile with neither half on disk: a broken promise, or simply not built here.
+    fn Absent(
+        &mut self,
+        profile: &'a Profile,
+        promised: bool,
+        output: &mut dyn std::io::Write,
+    ) -> ExitCode
+    {
+        if !promised
+        {
+            self.unbuilt.push(profile.id.as_str());
+
+            return ExitCode::Ok;
+        }
+
+        let _ = writeln!(
+            output,
+            "{}: required here, and neither {} nor its stamp is on disk, so an output this \
+             repository promises to ship was never written or has been deleted",
+            profile.id, profile.output
+        );
+        self.unmet.push(profile.id.as_str());
+
+        return ExitCode::Stale;
+    }
+
     fn Report(
         &self,
         into: &Path,
         only: Option<&str>,
         worst: ExitCode,
-        output: &mut impl std::io::Write,
+        output: &mut dyn std::io::Write,
     ) -> ExitCode
     {
         let _ = writeln!(
@@ -1257,25 +1634,42 @@ impl Census<'_>
 
         self.Requirements(output);
 
-        // Asking about one profile that is not there is a question about a named file, and
-        // "no such file" is its answer. Asking about all of them over a build root that
-        // holds three is the ordinary case and not a failure. A profile that was *required*
-        // is neither: it has already been reported as a missing promise above, and letting
-        // this branch answer for it would downgrade that finding to a lookup miss.
-        if let Some(id) = only
-            && self.checked == 0
-            && self.unmet.is_empty()
-        {
-            let _ = writeln!(
-                output,
-                "{id} has not been built under {}, so there was nothing to compare",
-                into.display()
-            );
+        return self.Outcome(into, only, worst, output);
+    }
 
-            return ExitCode::NotFound;
+    /// The code the run reports, once everything it looked at has been named.
+    ///
+    /// Asking about one profile that is not there is a question about a named file, and
+    /// "no such file" is its answer. Asking about all of them over a build root that holds
+    /// three is the ordinary case and not a failure. A profile that was *required* is
+    /// neither: it has already been reported as a missing promise, and letting this answer
+    /// for it would downgrade that finding to a lookup miss.
+    fn Outcome(
+        &self,
+        into: &Path,
+        only: Option<&str>,
+        worst: ExitCode,
+        output: &mut dyn std::io::Write,
+    ) -> ExitCode
+    {
+        let Some(id) = only
+        else
+        {
+            return worst;
+        };
+
+        if self.checked != 0 || !self.unmet.is_empty()
+        {
+            return worst;
         }
 
-        return worst;
+        let _ = writeln!(
+            output,
+            "{id} has not been built under {}, so there was nothing to compare",
+            into.display()
+        );
+
+        return ExitCode::NotFound;
     }
 
     /// What this run was promised, named whether or not it was kept.
@@ -1283,7 +1677,7 @@ impl Census<'_>
     /// The satisfied case prints too. A gate step whose green output does not say which
     /// outputs it enforced is indistinguishable from one that enforced nothing, and this
     /// whole flag exists because `checked 0 of 14` already exits zero.
-    fn Requirements(&self, output: &mut impl std::io::Write)
+    fn Requirements(&self, output: &mut dyn std::io::Write)
     {
         if self.required.is_empty()
         {
@@ -1329,49 +1723,45 @@ const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
 /// a profile because of a variable that is not set.
 fn Empty_Section(
     assembly: &Assembly,
-    profile: &str,
-    section: &str,
-    content: &'static str,
-    notes: &mut impl std::io::Write,
+    empty: &EmptySection<'_>,
+    notes: &mut dyn std::io::Write,
 ) -> ExitCode
 {
     if assembly.Is_Complete()
     {
-        let _ = writeln!(
-            notes,
-            "{}",
-            ProjectError::Empty {
-                profile: profile.to_owned(),
-                section: section.to_owned(),
-                content,
-            }
-        );
+        let reported = ProjectError::Empty {
+            profile: empty.profile.to_owned(),
+            section: empty.section.to_owned(),
+            content: empty.content,
+        };
+        let _ = writeln!(notes, "{reported}");
 
         return ExitCode::NotFound;
     }
 
     let _ = writeln!(
         notes,
-        "{profile}: section {section:?} selected no {content}, and this store is not whole. \
-         Reporting the absence above rather than the empty section: an empty projection over \
-         a store nothing was read into is not a projection of an empty specification."
+        "{}: section {:?} selected no {}, and this store is not whole. Reporting the absence \
+         above rather than the empty section: an empty projection over a store nothing was \
+         read into is not a projection of an empty specification.",
+        empty.profile, empty.section, empty.content
     );
 
     return ExitCode::Absent;
 }
 
-fn Profiles(output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+fn Profiles(channels: &mut Channels<'_>) -> ExitCode
 {
     let catalogue = match Catalogue::Shipped()
     {
         Ok(catalogue) => catalogue,
-        Err(error) => return Report_Project_Error(&error, notes),
+        Err(error) => return Report_Project_Error(&error, channels.notes),
     };
 
     for profile in catalogue.Profiles()
     {
         let _ = writeln!(
-            output,
+            channels.output,
             "{:<28} {:<12} {:<34} {}",
             profile.id,
             profile.format.Label(),
@@ -1397,16 +1787,11 @@ fn Sections(profile: &Profile) -> String
 ///
 /// Exits [`ExitCode::Absent`] when anything is missing, so this is a check rather than a
 /// description: a script can ask whether the store it is about to read is whole.
-fn Sources(assembly: &Assembly, output: &mut impl std::io::Write) -> ExitCode
+fn Sources(assembly: &Assembly, output: &mut dyn std::io::Write) -> ExitCode
 {
     for line in &assembly.read
     {
         let _ = writeln!(output, "read: {line}");
-    }
-
-    if !assembly.Is_Complete()
-    {
-        let _ = writeln!(output, "{}", assembly.Describe_Absences());
     }
 
     if assembly.Is_Complete()
@@ -1416,6 +1801,7 @@ fn Sources(assembly: &Assembly, output: &mut impl std::io::Write) -> ExitCode
         return ExitCode::Ok;
     }
 
+    let _ = writeln!(output, "{}", assembly.Describe_Absences());
     let _ = writeln!(
         output,
         "{} of this store's sources were not read",
@@ -1432,7 +1818,7 @@ fn Sources(assembly: &Assembly, output: &mut impl std::io::Write) -> ExitCode
 fn Absent_Or(
     assembly: &Assembly,
     otherwise: ExitCode,
-    notes: &mut impl std::io::Write,
+    notes: &mut dyn std::io::Write,
 ) -> ExitCode
 {
     if assembly.Is_Complete()
@@ -1461,7 +1847,7 @@ fn Vanished(uid: i64) -> StoreError
     ));
 }
 
-fn Report_Store_Error(error: &StoreError, notes: &mut impl std::io::Write) -> ExitCode
+fn Report_Store_Error(error: &StoreError, notes: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "{error}");
 
@@ -1476,7 +1862,7 @@ fn Report_Store_Error(error: &StoreError, notes: &mut impl std::io::Write) -> Ex
 /// store failed will retry; an agent told its command line was wrong will fix it. The rest
 /// stay `StoreError` because that is what they are: the projection could not be built out
 /// of what the store holds.
-fn Report_Project_Error(error: &ProjectError, notes: &mut impl std::io::Write) -> ExitCode
+fn Report_Project_Error(error: &ProjectError, notes: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "{error}");
 
@@ -1505,17 +1891,17 @@ mod tests
     {
         assert_eq!(
             Parse(&Arguments("record --id D-129")).expect("parses"),
-            SpecCommand::Record {
+            SpecCommand::Record(RecordRequest {
                 id: "D-129".to_owned(),
                 revision: None,
-            }
+            })
         );
         assert_eq!(
             Parse(&Arguments("record --id D-129 --revision authored")).expect("parses"),
-            SpecCommand::Record {
+            SpecCommand::Record(RecordRequest {
                 id: "D-129".to_owned(),
                 revision: Some("authored".to_owned()),
-            }
+            })
         );
     }
 
@@ -1547,11 +1933,11 @@ mod tests
         assert!(Parse(&Arguments("render --into build")).is_err());
         assert_eq!(
             Parse(&Arguments("render --profile github-markdown --into build")).expect("parses"),
-            SpecCommand::Render {
+            SpecCommand::Render(RenderRequest {
                 profile: "github-markdown".to_owned(),
                 into: PathBuf::from("build"),
                 subject: None,
-            }
+            })
         );
     }
 
@@ -1562,19 +1948,19 @@ mod tests
     {
         assert_eq!(
             Parse(&Arguments("freshness --into build")).expect("parses"),
-            SpecCommand::Freshness {
+            SpecCommand::Freshness(FreshnessRequest {
                 into: PathBuf::from("build"),
                 profile: None,
                 require: Vec::new(),
-            }
+            })
         );
         assert_eq!(
             Parse(&Arguments("freshness --into build --profile mcp-resource")).expect("parses"),
-            SpecCommand::Freshness {
+            SpecCommand::Freshness(FreshnessRequest {
                 into: PathBuf::from("build"),
                 profile: Some("mcp-resource".to_owned()),
                 require: Vec::new(),
-            }
+            })
         );
         assert!(Parse(&Arguments("freshness --profile mcp-resource")).is_err());
     }
@@ -1590,19 +1976,19 @@ mod tests
         assert_eq!(
             Parse(&Arguments("render --profile subject-dossier --into . --subject D-129"))
                 .expect("parses"),
-            SpecCommand::Render {
+            SpecCommand::Render(RenderRequest {
                 profile: "subject-dossier".to_owned(),
                 into: PathBuf::from("."),
                 subject: Some("D-129".to_owned()),
-            }
+            })
         );
         assert_eq!(
             Parse(&Arguments("render --profile diagram-set --into .")).expect("parses"),
-            SpecCommand::Render {
+            SpecCommand::Render(RenderRequest {
                 profile: "diagram-set".to_owned(),
                 into: PathBuf::from("."),
                 subject: None,
-            }
+            })
         );
     }
 
@@ -1616,11 +2002,11 @@ mod tests
                 "freshness --into . --require diagram-set --require html-site"
             ))
             .expect("parses"),
-            SpecCommand::Freshness {
+            SpecCommand::Freshness(FreshnessRequest {
                 into: PathBuf::from("."),
                 profile: None,
                 require: vec!["diagram-set".to_owned(), "html-site".to_owned()],
-            }
+            })
         );
     }
 
@@ -1695,24 +2081,28 @@ mod tests
     {
         assert_eq!(
             Parse(&Arguments("commit --id D-129 --from staged.md")).expect("parses"),
-            SpecCommand::Commit {
-                id: "D-129".to_owned(),
-                from: PathBuf::from("staged.md"),
-                rename: None,
+            SpecCommand::Commit(CommitRequest {
+                edit: EditRequest {
+                    id: "D-129".to_owned(),
+                    from: PathBuf::from("staged.md"),
+                    rename: None,
+                },
                 into: PathBuf::from("."),
-            }
+            })
         );
         assert_eq!(
             Parse(&Arguments(
                 "commit --id D-129 --from staged.md --rename docs/records/moved.md --into build"
             ))
             .expect("parses"),
-            SpecCommand::Commit {
-                id: "D-129".to_owned(),
-                from: PathBuf::from("staged.md"),
-                rename: Some("docs/records/moved.md".to_owned()),
+            SpecCommand::Commit(CommitRequest {
+                edit: EditRequest {
+                    id: "D-129".to_owned(),
+                    from: PathBuf::from("staged.md"),
+                    rename: Some("docs/records/moved.md".to_owned()),
+                },
                 into: PathBuf::from("build"),
-            }
+            })
         );
         assert!(Parse(&Arguments("commit --id D-129")).is_err());
     }
@@ -1722,18 +2112,18 @@ mod tests
     {
         assert_eq!(
             Parse(&Arguments("markdown --id D-129")).expect("parses"),
-            SpecCommand::Markdown {
+            SpecCommand::Markdown(RecordRequest {
                 id: "D-129".to_owned(),
                 revision: None,
-            }
+            })
         );
         assert_eq!(
             Parse(&Arguments("preview --id D-129 --from staged.md")).expect("parses"),
-            SpecCommand::Preview {
+            SpecCommand::Preview(EditRequest {
                 id: "D-129".to_owned(),
                 from: PathBuf::from("staged.md"),
                 rename: None,
-            }
+            })
         );
         assert!(Parse(&Arguments("preview --from staged.md")).is_err());
     }
