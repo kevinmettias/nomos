@@ -234,3 +234,17 @@ pub struct nomos_contracts::Finding
 pub struct nomos_contracts::GenerationId(u64)
 pub struct nomos_contracts::Guarantee
 pub trait nomos_contracts::Strategy
+
+# re-exports of items declared outside this crate
+pub use identity::BuildVariantId
+pub use identity::CapabilityId
+pub use identity::ConfigurationId
+pub use identity::OperationName
+pub use identity::PackageId
+pub use identity::ProviderId
+pub use identity::RuleId
+pub use identity::RunId
+pub use identity::SchemaId
+pub use identity::SnapshotEntityId
+pub use identity::SnapshotId
+pub use identity::SubjectId

@@ -90,3 +90,6 @@ pub struct nomos_integration_tests::Slice
 pub struct nomos_integration_tests::SourceFile
 pub struct nomos_integration_tests::Surface
 pub struct nomos_integration_tests::Verification
+
+# re-exports of items declared outside this crate
+pub use corpus::Subject_Of_Path

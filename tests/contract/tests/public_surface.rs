@@ -341,6 +341,76 @@ fn Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export()
     );
 }
 
+/// A re-exported name this reader cannot follow is reported, and its siblings still resolve.
+///
+/// The case `OD-GATE-002` version 2 records, and the reason it is asserted against a real
+/// crate rather than a fixture: the defect was never that the resolver followed a name
+/// wrongly. It followed them correctly and then asked the wrong question about the answer.
+/// `Emit_Re_Export` set one `resolved_any` flag for a whole `pub use` declaration, so a name
+/// that resolved to nothing was reported only when *every* name beside it also did.
+///
+/// `tests/integration/src/lib.rs` writes `pub use corpus::{Corpus, SourceFile,
+/// Subject_Of_Path, Walk}`. Three of those are declared in that crate. `Subject_Of_Path` is
+/// re-exported by `corpus.rs` from `nomos-model`, which this per-crate reader cannot see
+/// into — so the three that landed made the fourth look handled, and it left the snapshot
+/// while the crate went on exporting it and `slice.rs` went on calling it. `a6f0e9c` is the
+/// commit that blessed it away.
+///
+/// Both halves are in one list on purpose. The names that must resolve and the name that
+/// must not are siblings, so a reader that had simply started reporting everything as
+/// unresolved would satisfy the first assertion and fail the second in the same breath.
+#[test]
+fn Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve()
+{
+    let workspace = Workspace::Load();
+    let member = workspace
+        .Get("nomos-integration-tests")
+        .expect("nomos-integration-tests is a workspace member");
+    let surface =
+        Public_Surface(&member.name, &member.root).expect("nomos-integration-tests has a library");
+
+    assert!(
+        surface
+            .unresolved
+            .iter()
+            .any(|line| return line.contains("Subject_Of_Path")),
+        "a name re-exported from another crate is missing from both halves of the surface. \
+         It is not in `unresolved` here, and the assertion below says it is not a \
+         declaration either, so the snapshot claims the crate does not export it: {:?}",
+        surface.unresolved
+    );
+
+    assert!(
+        !surface
+            .declarations
+            .iter()
+            .any(|declaration| return declaration.contains("Subject_Of_Path")),
+        "the name resolved to a declaration in this crate, which would make the assertion \
+         above a claim about the wrong mechanism — `Subject_Of_Path` is declared in \
+         nomos-model and this reader is recorded as reading one crate"
+    );
+
+    // The negative control, and the whole reason the grain is per name rather than per
+    // declaration: its three siblings are declared in this crate and must still be found.
+    for resolved in ["Corpus", "SourceFile", "Walk"]
+    {
+        let owned = format!("nomos_integration_tests::{resolved}");
+        assert!(
+            surface
+                .declarations
+                .iter()
+                .any(|declaration| return declaration.contains(&owned)),
+            "{resolved} shares a `pub use` list with the unfollowable name and is declared \
+             in this crate, so it must still resolve. A reader reporting every re-exported \
+             name as unresolved would pass the assertion above and export nothing."
+        );
+        assert!(
+            !surface.unresolved.iter().any(|line| return line.contains(resolved)),
+            "{resolved} is declared in this crate and was reported as unfollowable"
+        );
+    }
+}
+
 /// A directory of this test's own to bless into.
 ///
 /// Never `surface/`. A test that proved blessing is well-behaved by blessing into the

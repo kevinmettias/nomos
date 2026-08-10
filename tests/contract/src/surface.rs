@@ -21,9 +21,10 @@
 //! surface and are emitted. `pub(crate)`, `pub(super)` and `pub(in …)` are not public and
 //! are not.
 //!
-//! A `pub use` this resolver cannot follow is emitted verbatim and reported by
-//! [`Surface::unresolved`] rather than dropped, because a re-export nobody could follow is
-//! the one place a leak would hide.
+//! A re-exported name this resolver cannot follow is reported by [`Surface::unresolved`]
+//! rather than dropped, because a re-export nobody could follow is the one place a leak
+//! would hide. One line per *name*, not per `pub use`: a list whose other names resolve is
+//! exactly where a dropped one hides best — `OD-GATE-002` version 2.
 
 use crate::gates::{
     Identifier_After, Is_Code, Matching_Brace, Scan, Without_Comments, Without_Test_Modules,
@@ -39,11 +40,14 @@ pub struct Surface
     pub package: String,
     /// Every exported declaration, sorted and deduplicated.
     pub declarations: Vec<String>,
-    /// Re-exports this resolver could not follow to a declaration in this crate.
+    /// Re-exported names this resolver could not follow to a declaration in this crate.
     ///
     /// Not an error. `pub use rusqlite::Connection` is a real re-export of somebody
     /// else's type and there is nothing in this crate to resolve it to. Reported so the
     /// list is visible rather than silently short.
+    ///
+    /// One entry per name a `pub use` gives, so a name that does not resolve is reported
+    /// whether or not the names beside it do.
     pub unresolved: Vec<String>,
 }
 
@@ -1031,6 +1035,20 @@ fn Emit(item: &Item, prefix: &str, into: &mut BTreeSet<String>)
 }
 
 /// Resolves a `pub use` to the declarations it exports, or records that it could not.
+///
+/// One name at a time, and that is the whole of `OD-GATE-002` version 2. This used to ask
+/// whether the *declaration* had resolved to anything: one flag for the whole list, set by
+/// the first name that landed. So `pub use corpus::{Corpus, SourceFile, Subject_Of_Path,
+/// Walk}` reported nothing unresolved because three of its four names are declared in this
+/// crate, and the fourth — re-exported from `nomos-model`, which this per-crate resolver
+/// cannot see into — was neither emitted nor reported. It was dropped, silently, from
+/// `tests/contract/surface/nomos-integration-tests.txt` while the crate still exported it.
+///
+/// That is worse than the false negatives `OD-GATE-002` writes down, because the record
+/// promises the opposite for the case it did name: a glob resolves to nothing and is
+/// reported rather than dropped. A glob was only ever reported because it is the sole name
+/// in its declaration, so the promise held by accident and failed the moment a name that
+/// resolves stood beside one that does not.
 fn Emit_Re_Export(
     target: &str,
     module: &[String],
@@ -1040,7 +1058,6 @@ fn Emit_Re_Export(
     unresolved: &mut BTreeSet<String>,
 )
 {
-    let mut resolved_any = false;
     // The re-exporting module, not the declaring one. `pub use build::Build` in a lib.rs
     // makes the item `nomos_spec_project::Build`, and recording it under the private
     // module it happens to be written in would describe a path no caller can name.
@@ -1051,6 +1068,7 @@ fn Emit_Re_Export(
         let exported = Locate(&route, &declared, module, modules);
         if exported.is_empty()
         {
+            unresolved.insert(Unfollowed(&route, &declared, &exported_as));
             continue;
         }
 
@@ -1058,13 +1076,37 @@ fn Emit_Re_Export(
         {
             Emit(&Renamed(&item, &declared, &exported_as), &prefix, into);
         }
-        resolved_any = true;
+    }
+}
+
+/// One name a re-export could not be followed to, spelled as a `pub use` of its own.
+///
+/// A grouped list is split rather than reported whole. Half a list resolving and half not
+/// is the case this exists for, and one line naming all four names would say that four
+/// items are outside this crate when one is — which is the over-reporting mirror of the
+/// defect above, and just as unreadable.
+///
+/// The route is the one this crate wrote, not the one the target eventually lives at.
+/// `pub use corpus::Subject_Of_Path` is what the source says and what a reader has to go
+/// and look at; following it to `nomos_model` is the resolution this reader is recorded as
+/// not doing.
+fn Unfollowed(route: &[String], declared: &str, exported_as: &str) -> String
+{
+    let path = if route.is_empty()
+    {
+        declared.to_owned()
+    }
+    else
+    {
+        format!("{}::{declared}", route.join("::"))
+    };
+
+    if declared == exported_as
+    {
+        return format!("pub use {path}");
     }
 
-    if !resolved_any
-    {
-        unresolved.insert(format!("pub use {target}"));
-    }
+    return format!("pub use {path} as {exported_as}");
 }
 
 /// An item under the name a re-export gives it.
@@ -1350,6 +1392,45 @@ mod tests
             Implemented("impl From<StoreError> for ProjectError"),
             Implemented("impl From<rusqlite::Error> for ProjectError")
         );
+    }
+
+    /// A name that could not be followed is spelled as the `pub use` a reader would go and
+    /// look at, one line per name.
+    ///
+    /// The route is the one the source wrote. `corpus::Subject_Of_Path` is where the search
+    /// starts and where somebody checking the report has to begin; `nomos_model`, where the
+    /// item is actually declared, is the hop this reader is recorded as not taking.
+    #[test]
+    fn Test_An_Unfollowed_Name_Should_Be_Spelled_As_Its_Own_Use()
+    {
+        assert_eq!(
+            Unfollowed(&["corpus".to_owned()], "Subject_Of_Path", "Subject_Of_Path"),
+            "pub use corpus::Subject_Of_Path"
+        );
+        // An alias is what callers write, so the report has to carry it or a reader
+        // searching for the name they use finds nothing.
+        assert_eq!(
+            Unfollowed(&["profile".to_owned()], "Section", "ProfileSection"),
+            "pub use profile::Section as ProfileSection"
+        );
+        // A whole crate re-exported by name has no route in front of it.
+        assert_eq!(Unfollowed(&[], "serde", "serde"), "pub use serde");
+    }
+
+    /// A glob keeps the spelling `OD-GATE-002` version 1 promised for it.
+    ///
+    /// It resolved to nothing then and resolves to nothing now; what changed is that it is
+    /// no longer the only shape that gets reported. If this line moved, the record's one
+    /// worked example would have been broken by the repair that generalised it.
+    #[test]
+    fn Test_A_Glob_Should_Still_Be_Reported_In_Its_Written_Form()
+    {
+        let imports = Named_Imports("module::*");
+        let (route, declared, exported_as) =
+            imports.first().expect("a glob is one name").clone();
+
+        assert_eq!(declared, "*");
+        assert_eq!(Unfollowed(&route, &declared, &exported_as), "pub use module::*");
     }
 
     #[test]

@@ -41,3 +41,7 @@ pub struct nomos_contract_tests::FactDomain
 pub struct nomos_contract_tests::Package
 pub struct nomos_contract_tests::Surface
 pub struct nomos_contract_tests::Workspace
+
+# re-exports of items declared outside this crate
+pub use universes::DeclaredUniverse
+pub use universes::UniverseKind

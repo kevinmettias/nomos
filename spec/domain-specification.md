@@ -32,7 +32,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 24 | 8 | sha256:b39496b715d80c073eaee5e8087fd9a9454131c1975bef781ec837c646ba18d8 |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
@@ -259,9 +259,10 @@ profile: domain-specification
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#5 | authored | 2 | Why Not `cargo public-api` |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#10 | authored | 2 | The Decision |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#14 | authored | 2 | What This Gives Up |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19 | authored | 2 | Blessing Is Not A Passing Run |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21 | authored | 2 | What Would Change This |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23 | authored | 2 | Status |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21 | authored | 2 | Version 2: A Name Is Reported, Not A Declaration |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27 | authored | 2 | Blessing Is Not A Passing Run |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29 | authored | 2 | What Would Change This |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31 | authored | 2 | Status |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#1 | authored | 1 | The rule layer becomes a gate step, and zero is the only exit code that passes it |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#2 | authored | 2 | Why This Identifier |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#4 | authored | 2 | Question |
@@ -6317,10 +6318,16 @@ so that the next person does not have to find out:
 
 ### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#16
 
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:7cb9b072bc3e18bdc181edeeb2328a2ed82a0ac98b37220b77017ab6374a8922*
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:1d652e4feed5e0045390d32d37cfed8a238ae0f4d95079207f19bfb1d8fda3f8*
 
 - **Glob re-exports.** `pub use module::*` names nothing, so nothing resolves. It is
   reported as an unresolved re-export rather than dropped. There are none today.
+- **Named re-exports of another crate's items.** Resolution is per crate: `Public_Surface`
+  is given one package and its root, and there is no second crate's module tree to follow
+  `pub use nomos_model::Subject_Of_Path` into. The name is reported as an unresolved
+  re-export rather than resolved to the declaration it names. This is the one entry that
+  is *reported* rather than merely absent, which is the difference version 2 bought and the
+  section below records.
 - **Blanket and generic impls.** An `impl<T> Trait for T` is recorded by its written form,
   not expanded over the types it covers.
 - **Trait inheritance.** A trait's supertrait methods are surface and are recorded against
@@ -6328,7 +6335,12 @@ so that the next person does not have to find out:
 - **`#[cfg]`.** Every branch is read, so a surface that differs by platform or feature is
   reported as the union. This workspace has no `#[cfg]`-gated exports.
 - **Macro-generated items.** A `macro_rules!` expansion that declares a `pub` item is
-  invisible. There is no such macro here.
+  invisible to the scan. *There is no such macro here* was wrong when it was written:
+  `nomos-contracts` declares its twelve identity newtypes through `Digest_Identity!` and
+  `Named_Identity!`, each expansion carrying a `pub struct` and its inherent methods. The
+  expansion is still invisible. What changed in version 2 is that those twelve are
+  re-exported by name from the crate root, so they are now *reported* as unresolved
+  re-exports instead of being absent from the snapshot altogether.
 - **Type aliases and inference.** The declaration is recorded as written, so
   `pub type Guard = …` shows the alias rather than what it resolves to.
 
@@ -6342,6 +6354,14 @@ this record exists rather than a comment in the file.
 
 ### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#18
 
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:d4475cc7279e5729e3b4be075530d5025ca182fd996f776830b3f947e871ebcd*
+
+Each of those is an absence. The entry above them is not, and the distinction is the whole
+of version 2: a name that is *reported* is a line in the snapshot, so adding or removing it
+still fails the test, while a name that is *absent* changes nothing and nobody hears.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19
+
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:bf840757080ceefa2aacf5651830582bd156c90e63920500a9917ec594ddd853*
 
 What is *not* given up is the property the item asked for. Adding a `pub fn`, widening a
@@ -6349,13 +6369,74 @@ field, adding a variant, adding a method to a public type, changing a signature,
 a name to a `pub use` list all change a committed file, and the test fails until somebody
 commits that change with the change that caused it.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#20
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:bf02c9b6cec5b7e25762ef556a5fca645ee48f694c4f9e155ba6a9f6871c42b6*
+
+That last clause was false for a cross-crate target until version 2, and it was false in
+the way that is hardest to notice: not by failing loudly, but by being true of every name
+somebody happened to test.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21
+
+*revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:d84e917a0a30b27370a65a063fe8a349a89d42f2e2b40e297bac9ad51ca33ea1*
+
+## Version 2: A Name Is Reported, Not A Declaration
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#22
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:bb3cc516f56aeba5ee9c2c254d1798e7790388447187f3b9b61d175bee617b07*
+
+`P11-REEXPORT-GRAIN`. `Emit_Re_Export` resolved each name in a `pub use` list separately
+and then asked one question about the whole list — had *anything* resolved. A name that
+resolved to nothing was reported only when every name beside it also did.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:456f55ddb500318716eebff3f8ac046938a45804ad6bafa998e9efc9648aae74*
+
+A glob is the sole name in its declaration, so the promise three paragraphs up held for the
+one case this record thought to name, and held by accident. It failed for every other:
+`pub use corpus::{Corpus, SourceFile, Subject_Of_Path, Walk}` had three names declared in
+the crate and one re-exported from `nomos-model`, so the three made the fourth look handled
+and it left `tests/contract/surface/nomos-integration-tests.txt` entirely — blessed away by
+`a6f0e9c` while the crate went on exporting the name and `slice.rs` went on calling it.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#24
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:bcaf758082147d408a268337a678390a3dabe0ee976d4e814a157491351567d7*
+
+**The report is per name.** A list is split across as many lines as it has unresolvable
+names, spelled as the `pub use` a reader would go and look at — `pub use
+corpus::Subject_Of_Path`, carrying `as` where the source renamed. The route is the one the
+source wrote, not the one the target eventually lives at, because that first hop is where
+somebody checking the report has to begin and the second hop is the resolution this reader
+is recorded as not doing.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#25
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:3d2fe470a5b2c3460fbef6bf8da92dfb9341ba263b539b1d72e87167c5d21dea*
+
+Reporting whole lists was refused for the mirror reason: one line naming four names says
+four items are outside this crate when one is, which is over-reporting, and a snapshot that
+cries wolf is re-blessed unread.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#26
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:cb5bb4d9d65e50946f48954a4e7ad9c3f27cb219ca5ef7d3d563dc4509ad08e6*
+
+Measured when the grain changed: fifteen names in three crates were being dropped. One in
+`nomos-integration-tests`, two in `nomos-contract-tests` re-exported from `nomos-rules`,
+and twelve in `nomos-contracts` from the macro above. Three snapshots moved for one
+comparison, which is the shape of the defect — it was never about one crate.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Blessing Is Not A Passing Run · hash: sha256:5fa0e3ac46acb99b145b67a28728ce1bdba39c2ad425dc0d8fbea375a08558b0*
 
 ## Blessing Is Not A Passing Run
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#20
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#28
 
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Blessing Is Not A Passing Run · hash: sha256:933e53cc0bc56ffe81a366e2a2d67ddaad671aa11a713fc3235b0a0fa66d2451*
 
@@ -6364,13 +6445,13 @@ check any environment could switch off by exporting a variable, and a CI job wit
 set would report green having compared nothing — the same failure this whole item is about,
 one level out.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What Would Change This · hash: sha256:555ac5e2947b4d7528ab7a18bac24ba8889418d9a2655d42618ef9cf79630668*
 
 ## What Would Change This
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#22
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#30
 
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What Would Change This · hash: sha256:86dc515771db13c51903f2dbb0c6a4e98ab5650009f5c93d3e8c4f55af7f5f00*
 
@@ -6380,17 +6461,19 @@ the two derivations should be compared against each other before either is trust
 the way `P9-ONE-DIRECTION` compared the corpus-gate count against the source: two
 independent readings that agree are worth more than one authoritative one.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#24
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#32
 
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:374a4973a4e0405b64cf4193816afcf13d360653e1cbc4d98cf95f72819727e5*
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:4193ff51826b0528afc76c94a023749e9f5fb7267adc4f4bb9084e37f28f060e*
 
-Closed by `P9-PUBLIC-API`.
+Version 1 closed by `P9-PUBLIC-API`. Version 2 closed by `P11-REEXPORT-GRAIN`, which
+re-authored `P11-REEXPORT-SURFACE` once the reading found the defect in three crates rather
+than the one it was opened for.
 
 ### docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#1
 
