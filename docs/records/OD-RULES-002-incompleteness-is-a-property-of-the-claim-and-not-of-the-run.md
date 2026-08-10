@@ -3,7 +3,7 @@ id: OD-RULES-002
 type: decision
 title: Incompleteness is a property of the claim and not of the run
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -274,15 +274,17 @@ what holds:
 - It does not wire `nomos check` into the gate. `P10-CHECK-GATE` still holds that, and this
   record sharpens it rather than answering it: the command now has a verdict worth gating on,
   which it did not before.
-- **It does not amend `OD-RULES-001` in place, and that record now contains one stale
-  sentence.** Its Decision section says *"the check index is marked incomplete for the whole
-  run: while it is incomplete, a claimed mirror that fails to resolve is not reported as a
-  phantom and cannot fail a build."* The first clause is no longer how the code behaves. The
-  file is outside `P10-PHANTOM-FLOOR`'s territory — the item lists `docs/records/OD-RULES-002`
-  and nothing else under `docs/records` — so it was not edited rather than being widened into
-  mid-claim, and the `affects` edge is what carries a later reader from that sentence to this
-  record. Cutting `OD-RULES-001` to version 2 with an amendment section pointing here is a
-  one-file item and it is owed.
+- **It did not amend `OD-RULES-001` in place; `P10-RULES-001-STALE` did, at that record's
+  version 2.** Its Decision section had said *"the check index is marked incomplete for the
+  whole run: while it is incomplete, a claimed mirror that fails to resolve is not reported as
+  a phantom and cannot fail a build."* The first clause stopped describing the code; the last
+  clause was outright false, which is the stronger fact and the reason the amendment could not
+  wait. The file was outside `P10-PHANTOM-FLOOR`'s territory — the item lists
+  `docs/records/OD-RULES-002` and nothing else under `docs/records` — so the sentence was left
+  standing rather than widened into mid-claim, and the one-file amendment followed as its own
+  item. `OD-RULES-001` now scopes the downgrade to the claim, quotes the superseded sentence at
+  the site, and carries an amendment note pointing here; the `affects` edge is what carries a
+  later reader between them.
 
 ## Controls
 
@@ -331,6 +333,26 @@ still passes unchanged in substance) and the claimed name sitting in the unread 
 The second is not a corner: a universe and the test that mirrors it living in one file, with
 the test under `#[cfg(test)] mod tests`, is the ordinary shape in this workspace.
 
+## Amendment, Version 2
+
+**No decision moved.** One bullet of *What This Does Not Do* recorded that amending
+`OD-RULES-001` was owed. `P10-RULES-001-STALE` did it, at that record's version 2, so the
+bullet described work that no longer existed. It now records what happened instead of what was
+outstanding.
+
+The same bullet said only that the sentence's first clause had stopped describing the code.
+That understated it: the final clause — *"cannot fail a build"* — was outright false once a
+phantom in a read subject could block, and that is the stronger fact and the reason the
+amendment could not wait. The correction says so.
+
+The reciprocal `affected_by` edge is deliberately **not** hand-authored here. `Put_Relation`
+completes inverses on the way into the store, so writing one into the front matter would
+duplicate a derivation the store already performs — which is the move this repository argues
+against everywhere else. `D-134`'s version 2 did hand-author its reciprocal; that inconsistency
+is noted rather than propagated, and settling which form is canonical belongs to whichever item
+next touches the relation vocabulary.
+
 ## Status
 
-Accepted, landed by `P10-PHANTOM-FLOOR`.
+Accepted, landed by `P10-PHANTOM-FLOOR`. Amended at version 2 while closing
+`P10-RULES-001-STALE`, in the record's own account of what it left owed.
