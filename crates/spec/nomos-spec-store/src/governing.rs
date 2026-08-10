@@ -134,6 +134,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md"
         ),
     ),
+    (
+        "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md",
+        include_str!(
+            "../../../../docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -169,6 +175,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "D-134",
     "OD-LEDGER-004",
     "OD-LEDGER-005",
+    "OD-PLATFORM-001",
 ];
 
 /// The relation vocabulary the governing records use.
