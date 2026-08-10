@@ -5,6 +5,26 @@
 //! name, CLI spelling, generated SDK method or platform implementation type is
 //! authoritative for these meanings; they are all projections of what this crate says.
 //!
+//! # What earns a place here
+//!
+//! A type is admitted when it **crosses a subsystem, process or plugin boundary and the
+//! parties on both sides need one stable shared representation of it**. Everything else
+//! stays in the crate that owns it, and crosses a boundary as a projection.
+//!
+//! The second half is the half that refuses, and it is the half a wider phrasing loses. A
+//! finding shape, a rule package, a correction plan and an agent capability are all
+//! statements of Nomos semantics, so "a statement of Nomos semantics" admits everything and
+//! decides nothing. The question that decides is narrower: *would a peer that never compiles
+//! this crate be unable to agree with us without this type?*
+//!
+//! `nomos-cap-syntax`'s `SyntaxPayload` is the worked counter-example — a real shared
+//! representation, read by more than one provider, living at band 23 rather than here,
+//! because the parties that must agree about it are the providers of one capability rather
+//! than every peer that speaks to Nomos.
+//!
+//! `OD-CONTRACTS-001` decides this and is the only place it is stated. `README.md` and
+//! `Cargo.toml` name it; neither restates it.
+//!
 //! # Why this crate names almost nothing
 //!
 //! These types are reimplemented by systems that will never compile this crate — a

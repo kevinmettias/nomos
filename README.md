@@ -33,7 +33,7 @@ band, and `tests/contract` asserts it.
 
 | Band | Crate | Owns |
 |---|---|---|
-| 0 | `nomos-contracts` | Protocol truth. Depends on `serde` and nothing else. |
+| 0 | `nomos-contracts` | Protocol truth. What earns a place in it is `OD-CONTRACTS-001`. Depends on `serde` and nothing else. |
 | 10 | `nomos-model` | Subjects, composite identity, evidence, and the `SubjectSet` exclusion primitive. |
 | 12 | `nomos-store` | Content-addressed documents, with one write door per authority. |
 | 15 | `nomos-platform` | Port traits: clock, filesystem, cross-process lock, process launcher. |

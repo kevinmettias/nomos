@@ -1,6 +1,7 @@
 [workspace]
 members = [
-    # Band 0 — contracts. The only authoritative statement of Nomos semantics.
+    # Band 0 — contracts. What earns a place here is OD-CONTRACTS-001 and the band table is
+    # README.md; neither is restated in this file, which nothing reads back.
     # Depends on serde and nothing else; `contracts_names_nothing` asserts it.
     "crates/contracts/nomos-contracts",
 
