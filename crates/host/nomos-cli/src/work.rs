@@ -479,11 +479,32 @@ fn Show(
     return ExitCode::Ok;
 }
 
-/// Records a new item, refusing one whose territory is already spoken for.
+/// Records a new item, refusing a duplicate identifier and a document that would not
+/// validate. It does **not** refuse an item whose territory somebody already holds.
 ///
 /// The whole document is validated before the write, so an item that would break an
 /// invariant never lands. The alternative — write now, notice later — leaves every agent
 /// reading a ledger the system itself says is wrong.
+///
+/// # The control this used to claim
+///
+/// This comment said "refusing one whose territory is already spoken for" from the commit
+/// that wrote the command until `OD-LEDGER-010`, and nothing here ever did that.
+/// [`nomos_ledger::Validate`] compares territories only between items holding an *active
+/// claim*; an item arriving here holds none, so the comparison has nothing to say about it
+/// and never fires.
+///
+/// The behaviour is the one to keep and the sentence is what moved. Opening an item on
+/// ground somebody holds is how this board is used — `work/ledger.json` is in nobody's
+/// territory precisely so that `add` stays available when every item on the board is held,
+/// and a refusal here would shut the one door that is open when the board is fully
+/// claimed. Exclusion belongs to `claim`, which is where an agent is about to edit files.
+/// `add` writes a sentence about work that may not start for days.
+///
+/// What is guaranteed is therefore smaller than the old sentence promised, and it is
+/// stated exactly because the promise is what the next reader will act on: the identifier
+/// is unused, and the document that results still satisfies its own invariants. Nothing
+/// here says two agents may edit one file, and nothing here is what stops them.
 fn Add(
     ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
     item: &LedgerItem,

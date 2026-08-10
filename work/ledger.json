@@ -2588,14 +2588,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-add-promise-w3",
-        "acquired_at": 1786339541,
-        "lease_expires_at": 1786350341
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2609,7 +2605,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.36s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-1e3a04fc69d2503b.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-3eb4efb2c688a3e4.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-5768c4cf37250e60.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-a688b401f0513b2f.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1b704c8ae71a3035.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-d3d2ab8041932be7.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-5a44775d9e3bafb9.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-708f2fe3f8499ca0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-4d491df5128a0538.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-2863076446f756d8.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-c3aa84c0a826cf4a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-3dff6d2b9d7b349b.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c26e900fca96d97f.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-a436a2bde8adf4d2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786339980,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": []
     },
     {
