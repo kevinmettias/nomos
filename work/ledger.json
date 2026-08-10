@@ -4695,6 +4695,46 @@
       },
       "abandoned": [],
       "displaced": []
+    },
+    {
+      "id": "P10-DIAGRAM-OWED",
+      "title": "The gate is red because a committed record was never rendered, and the diagram it names is in nobody territory",
+      "why": "The gate is red on dev right now, at the Required projections step, and has been since 401b2d0.\n\nThat commit registered OD-GATE-004 and did not re-render diagrams/relations.mmd. The diagram last moved in c42f93b, one commit earlier, so the committed body is missing every OD-GATE-004 edge - eleven of them, since the record relates to seven others and seven relate back. `nomos spec freshness --into . --require diagram-set` is gate.yml step 51 and fails on exactly this.\n\nNobody did anything wrong in a way a rule would have caught. P10-RERENDER-HAZARD wrote the obligation into AGENTS.md in ea3c167, which is after 401b2d0, so the commit that broke it predates the sentence telling authors not to. That is the ordinary way a hazard gets documented, and it leaves one artifact already broken behind it.\n\nTwo more commits have landed records since, including 840ec47 for OD-TRACE-001, so the delta is now larger than the one commit that started it.\n\nWhat keeps this from being a one-command fix somebody does in passing is that the command cannot be run correctly by most sessions, for two separate reasons.\n\nThe first is stated in AGENTS.md: the store is built from the files on disk, so rendering beside another session unlanded record bakes their work into the output, and the gate then fails on the commit that carries it. At the time this item was written OD-LEDGER-012 and OD-SYNTAX-002 were both on disk uncommitted under live claims, which is the normal condition of this tree rather than an unusual one. A correct render needs a moment when every registered record is committed, or an isolated checkout that has only the committed ones.\n\nThe second is territory, and it is the reason this is an item rather than a note. diagrams/relations.mmd is in no item territory. Every item that adds a governing record reserves its own record paths and not the diagram, so an agent that correctly re-renders after adding a record is writing outside its claim, and an agent that respects its claim leaves the gate red. OD-LEDGER-001 records that territory is declared rather than enforced, so nothing stops the write - which means the current state is that the honest agents are the ones who leave it broken.",
+      "done_when": "diagrams/relations.mmd matches what the store renders, and `nomos spec freshness --into . --require diagram-set` exits 0 against a tree whose registered records are all committed.\n\nThe render is taken from a tree with no uncommitted registered record in it, and the item says which commit it was taken at, so a reader can tell a correct render from one that happened to be taken at a quiet moment.\n\nThe recurrence is addressed rather than only the instance, because this will happen again on the next record and the obligation in AGENTS.md is prose that a machine does not read. Either the diagram is reserved by whichever item adds a record - which means saying so where item territories get authored, since the guidance to reserve both record paths is in the nomos-spec-change skill and does not mention the diagram - or something derives the obligation the way the gate lint step is derived rather than restated. Which one is the decision, and if the answer is that authors must remember, the record says why a repository that derives its gate step from gate.yml is content to leave this one to memory.\n\nNot closed by re-rendering and saying nothing. That is the instance, and the instance is the cheap half.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "diagrams/relations.mmd",
+          "docs/records/OD-GATE-005",
+          "crates/spec/nomos-spec-store/records/OD-GATE-005.record",
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "run",
+          "--quiet",
+          "-p",
+          "nomos-cli",
+          "--",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
     }
   ]
 }
