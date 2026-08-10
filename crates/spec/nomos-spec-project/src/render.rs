@@ -62,36 +62,53 @@ fn Markdown(projection: &Projection) -> String
     for section in &projection.sections
     {
         let _ = writeln!(out, "\n## {}", section.title);
-
-        if Carries_A_Body(section)
-        {
-            Bodies(&mut out, section);
-            continue;
-        }
-
-        let columns = Columns(section);
-        if columns.is_empty()
-        {
-            for item in &section.items
-            {
-                let _ = writeln!(out, "\n- {}", item.identity);
-            }
-            continue;
-        }
-
-        let _ = writeln!(out, "\n| identity | {} |", columns.join(" | "));
-        let _ = writeln!(out, "| --- |{}", " --- |".repeat(columns.len()));
-        for item in &section.items
-        {
-            let cells: Vec<String> = columns
-                .iter()
-                .map(|column| return Cell(item.Field(column).unwrap_or_default()))
-                .collect();
-            let _ = writeln!(out, "| {} | {} |", Cell(&item.identity), cells.join(" | "));
-        }
+        Section_Body(&mut out, section);
     }
 
     return out;
+}
+
+/// One section, written as whatever its items can carry.
+///
+/// Prose becomes headed bodies, fielded items become a table, and items with neither
+/// become a bare list. A table of one empty column is not a better answer than a list.
+fn Section_Body(out: &mut String, section: &Section)
+{
+    if Carries_A_Body(section)
+    {
+        Bodies(out, section);
+
+        return;
+    }
+
+    let columns = Columns(section);
+    if columns.is_empty()
+    {
+        for item in &section.items
+        {
+            let _ = writeln!(out, "\n- {}", item.identity);
+        }
+
+        return;
+    }
+
+    Table(out, section, &columns);
+}
+
+/// A section's items as a markdown table, one column per field any item states.
+fn Table(out: &mut String, section: &Section, columns: &[String])
+{
+    let _ = writeln!(out, "\n| identity | {} |", columns.join(" | "));
+    let _ = writeln!(out, "| --- |{}", " --- |".repeat(columns.len()));
+
+    for item in &section.items
+    {
+        let cells: Vec<String> = columns
+            .iter()
+            .map(|column| return Cell(item.Field(column).unwrap_or_default()))
+            .collect();
+        let _ = writeln!(out, "| {} | {} |", Cell(&item.identity), cells.join(" | "));
+    }
 }
 
 /// A section whose items carry prose, written as headed bodies rather than table rows.
@@ -136,18 +153,7 @@ fn Cell(value: &str) -> String
 
 fn Html(projection: &Projection) -> String
 {
-    let mut out = String::new();
-    let _ = writeln!(
-        out,
-        "<!doctype html>\n<html lang=\"en\" data-nomos-generated=\"true\">\n<head>\n\
-         <meta charset=\"utf-8\">\n<meta name=\"nomos-profile\" content=\"{}\">\n\
-         <meta name=\"nomos-do-not-edit\" content=\"{}\">\n<title>{}</title>\n</head>\n<body>\n\
-         <h1>{}</h1>",
-        Escaped(&projection.profile),
-        Escaped(DO_NOT_EDIT),
-        Escaped(&projection.title),
-        Escaped(&projection.title)
-    );
+    let mut out = Html_Head(projection);
 
     for section in &projection.sections
     {
@@ -167,6 +173,25 @@ fn Html(projection: &Projection) -> String
     }
 
     out.push_str("</body>\n</html>\n");
+
+    return out;
+}
+
+/// The document down to the opening heading, carrying the profile that generated it.
+fn Html_Head(projection: &Projection) -> String
+{
+    let mut out = String::new();
+    let _ = writeln!(
+        out,
+        "<!doctype html>\n<html lang=\"en\" data-nomos-generated=\"true\">\n<head>\n\
+         <meta charset=\"utf-8\">\n<meta name=\"nomos-profile\" content=\"{}\">\n\
+         <meta name=\"nomos-do-not-edit\" content=\"{}\">\n<title>{}</title>\n</head>\n<body>\n\
+         <h1>{}</h1>",
+        Escaped(&projection.profile),
+        Escaped(DO_NOT_EDIT),
+        Escaped(&projection.title),
+        Escaped(&projection.title)
+    );
 
     return out;
 }
@@ -279,6 +304,8 @@ fn Mermaid(projection: &Projection) -> String
         "%% nomos_generated: true\n%% do_not_edit: {DO_NOT_EDIT}\n%% profile: {}\ngraph LR\n",
         projection.profile
     );
+    // One name table across every section, because an edge in one subgraph routinely names
+    // a node declared in another and two tables would give that node two identifiers.
     let mut names = Names {
         known: BTreeMap::new(),
         taken: Vec::new(),
@@ -287,29 +314,45 @@ fn Mermaid(projection: &Projection) -> String
 
     for section in &projection.sections
     {
-        let _ = writeln!(out, "  subgraph {}", Quoted(&section.title));
-
-        for item in &section.items
-        {
-            if let (Some(from), Some(to)) = (item.Field("from"), item.Field("to"))
-            {
-                let relation = item.Field("relation").unwrap_or("relates");
-                let tail = names.Declared(from, from);
-                let head = names.Declared(to, to);
-                let _ = writeln!(out, "    {tail} -->|{}| {head}", Quoted(relation));
-            }
-            else
-            {
-                let label = item.Field("title").unwrap_or(&item.identity);
-                let declared = names.Declared(&item.identity, label);
-                let _ = writeln!(out, "    {declared}");
-            }
-        }
-
-        out.push_str("  end\n");
+        Subgraph(&mut out, &mut names, section);
     }
 
     return out;
+}
+
+/// One section as a subgraph.
+fn Subgraph(out: &mut String, names: &mut Names, section: &Section)
+{
+    let _ = writeln!(out, "  subgraph {}", Quoted(&section.title));
+
+    for item in &section.items
+    {
+        Node_Or_Edge(out, names, item);
+    }
+
+    out.push_str("  end\n");
+}
+
+/// An item that names both ends is an edge; anything else is a node.
+///
+/// An edge declares both of its ends, because a relation may name a node no section
+/// carried and a graph with a dangling reference does not render at all.
+fn Node_Or_Edge(out: &mut String, names: &mut Names, item: &Item)
+{
+    let Some((from, to)) = item.Field("from").zip(item.Field("to"))
+    else
+    {
+        let label = item.Field("title").unwrap_or(&item.identity);
+        let declared = names.Declared(&item.identity, label);
+        let _ = writeln!(out, "    {declared}");
+
+        return;
+    };
+
+    let relation = item.Field("relation").unwrap_or("relates");
+    let tail = names.Declared(from, from);
+    let head = names.Declared(to, to);
+    let _ = writeln!(out, "    {tail} -->|{}| {head}", Quoted(relation));
 }
 
 fn Quoted(value: &str) -> String
@@ -371,6 +414,28 @@ struct PackItem<'a>
     text: Option<&'a String>,
 }
 
+/// One section reduced to what a context pack carries: identity, title, and prose.
+///
+/// The other fields are dropped on purpose. A pack is read by something with a budget, and
+/// a field that only a table renderer uses costs that budget without answering anything.
+fn Packed(section: &Section) -> PackSection<'_>
+{
+    return PackSection {
+        title: &section.title,
+        items: section
+            .items
+            .iter()
+            .map(|item| {
+                return PackItem {
+                    identity: &item.identity,
+                    title: item.Field("title").unwrap_or_default(),
+                    text: item.body.as_ref(),
+                };
+            })
+            .collect(),
+    };
+}
+
 fn Contextpack(projection: &Projection) -> Result<String, ProjectError>
 {
     let pack = Pack {
@@ -379,26 +444,7 @@ fn Contextpack(projection: &Projection) -> Result<String, ProjectError>
         profile: &projection.profile,
         title: &projection.title,
         inputs_digest: projection.Inputs_Digest(),
-        sections: projection
-            .sections
-            .iter()
-            .map(|section| {
-                return PackSection {
-                    title: &section.title,
-                    items: section
-                        .items
-                        .iter()
-                        .map(|item| {
-                            return PackItem {
-                                identity: &item.identity,
-                                title: item.Field("title").unwrap_or_default(),
-                                text: item.body.as_ref(),
-                            };
-                        })
-                        .collect(),
-                };
-            })
-            .collect(),
+        sections: projection.sections.iter().map(Packed).collect(),
     };
 
     let mut rendered = serde_json::to_string_pretty(&pack)

@@ -176,34 +176,10 @@ pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projectio
 
     for declared in &profile.sections
     {
-        Refuse_Unhonoured(profile, declared.content, &declared.filter)?;
-        let items = Gather(connection, declared.content, &declared.filter)?;
-
-        if items.is_empty() && !declared.may_be_empty
-        {
-            return Err(ProjectError::Empty {
-                profile: profile.id.clone(),
-                section: declared.title.clone(),
-                content: declared.content.Label(),
-            });
-        }
-
-        for item in &items
-        {
-            inputs.push(Input {
-                content: declared.content,
-                identity: item.identity.clone(),
-                hash: item
-                    .Field("hash")
-                    .map_or_else(|| return item.Digest(), str::to_owned),
-            });
-        }
-
-        sections.push(Section {
-            title: declared.title.clone(),
-            content: declared.content,
-            items,
-        });
+        let section = Selected(connection, profile, declared)?;
+        let contributed = Inputs_Of(declared.content, &section.items);
+        inputs.extend(contributed);
+        sections.push(section);
     }
 
     return Ok(Projection {
@@ -213,6 +189,69 @@ pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projectio
         output: profile.output.clone(),
         sections,
         inputs,
+    });
+}
+
+/// One declared section, gathered and checked.
+///
+/// Both refusals come before the rows are used, because a section that cannot be honoured
+/// or that came back empty is a defect in the profile rather than a thin projection.
+fn Selected(
+    connection: &Connection,
+    profile: &Profile,
+    declared: &crate::profile::Section,
+) -> Result<Section, ProjectError>
+{
+    Refuse_Unhonoured(profile, declared.content, &declared.filter)?;
+    let items = Gather(connection, declared.content, &declared.filter)?;
+    Refuse_Empty(profile, declared, &items)?;
+
+    return Ok(Section {
+        title: declared.title.clone(),
+        content: declared.content,
+        items,
+    });
+}
+
+/// What a section's items contribute to the projection's input set.
+///
+/// An item's own hash where it has one, a digest of its fields where it has none. The
+/// freshness check compares this set, so an item that carries no hash still has to move the
+/// set when its content changes or the output would report itself current over stale rows.
+fn Inputs_Of(content: Content, items: &[Item]) -> Vec<Input>
+{
+    return items
+        .iter()
+        .map(|item| {
+            return Input {
+                content,
+                identity: item.identity.clone(),
+                hash: item.Field("hash").map_or_else(|| return item.Digest(), str::to_owned),
+            };
+        })
+        .collect();
+}
+
+/// A section that gathered nothing and did not say it might.
+///
+/// Refused rather than rendered empty. A profile whose corpus is absent selects nothing
+/// from every section, and a projection published with the headings and none of the content
+/// is indistinguishable from one whose subject genuinely has nothing to say.
+fn Refuse_Empty(
+    profile: &Profile,
+    declared: &crate::profile::Section,
+    items: &[Item],
+) -> Result<(), ProjectError>
+{
+    if !items.is_empty() || declared.may_be_empty
+    {
+        return Ok(());
+    }
+
+    return Err(ProjectError::Empty {
+        profile: profile.id.clone(),
+        section: declared.title.clone(),
+        content: declared.content.Label(),
     });
 }
 
@@ -496,62 +535,80 @@ fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proj
         });
 }
 
+/// Every lineage row with all three of its source kinds joined.
+///
+/// One query rather than a union of three, because a row carries exactly one source and a
+/// `coalesce` over the three is what lets a single ordering cover all of them. `-1` is what
+/// each unmatched join leaves behind, and is read back as "this row is not addressed at
+/// that grain".
+const LINEAGE_ROWS: &str = "SELECT l.disposition,
+            coalesce(d.path, hd.path, rd.path, ''),
+            coalesce(b.ordinal, rb.ordinal, -1), coalesce(r.ordinal, -1), coalesce(h.title, ''),
+            coalesce(n.node_id, ''), coalesce(st.statement_id, '')
+     FROM lineage l
+     LEFT JOIN source_blocks b ON b.uid = l.source_block_uid
+     LEFT JOIN source_documents d ON d.uid = b.document_uid
+     LEFT JOIN source_headings h ON h.uid = l.source_heading_uid
+     LEFT JOIN source_documents hd ON hd.uid = h.document_uid
+     LEFT JOIN source_table_rows r ON r.uid = l.source_table_row_uid
+     LEFT JOIN source_blocks rb ON rb.uid = r.source_block_uid
+     LEFT JOIN source_documents rd ON rd.uid = rb.document_uid
+     LEFT JOIN nodes n ON n.uid = l.target_node_uid
+     LEFT JOIN normative_statements st ON st.uid = l.target_statement
+     WHERE 1 = 1";
+
+/// Document, then position, then disposition, then target.
+///
+/// Every column is named rather than ordering by the document alone, because two rows on
+/// one block would otherwise come back in whatever order the join produced them and a
+/// projection has to render the same way twice.
+const LINEAGE_ORDER: &str = "coalesce(d.path, hd.path, rd.path, ''), coalesce(b.ordinal, -1), \
+     coalesce(r.ordinal, -1), l.disposition, coalesce(n.node_id, ''), \
+     coalesce(st.statement_id, '')";
+
 fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
-    let mut query = Query::On(
-        "SELECT l.disposition,
-                coalesce(d.path, hd.path, rd.path, ''),
-                coalesce(b.ordinal, rb.ordinal, -1), coalesce(r.ordinal, -1), coalesce(h.title, ''),
-                coalesce(n.node_id, ''), coalesce(st.statement_id, '')
-         FROM lineage l
-         LEFT JOIN source_blocks b ON b.uid = l.source_block_uid
-         LEFT JOIN source_documents d ON d.uid = b.document_uid
-         LEFT JOIN source_headings h ON h.uid = l.source_heading_uid
-         LEFT JOIN source_documents hd ON hd.uid = h.document_uid
-         LEFT JOIN source_table_rows r ON r.uid = l.source_table_row_uid
-         LEFT JOIN source_blocks rb ON rb.uid = r.source_block_uid
-         LEFT JOIN source_documents rd ON rd.uid = rb.document_uid
-         LEFT JOIN nodes n ON n.uid = l.target_node_uid
-         LEFT JOIN normative_statements st ON st.uid = l.target_statement
-         WHERE 1 = 1",
-    );
+    let mut query = Query::On(LINEAGE_ROWS);
     query.Equal("l.disposition", filter.disposition.as_ref());
     query.Equal("coalesce(d.path, hd.path, rd.path, '')", filter.document.as_ref());
 
     return query
-        .Ordered_By(
-            "coalesce(d.path, hd.path, rd.path, ''), coalesce(b.ordinal, -1), \
-             coalesce(r.ordinal, -1), l.disposition, coalesce(n.node_id, ''), \
-             coalesce(st.statement_id, '')",
-        )
+        .Ordered_By(LINEAGE_ORDER)
         .Run(connection, |row| {
-            let block: i64 = row.get(2)?;
-            let ordinal: i64 = row.get(3)?;
             let disposition = Text(row, 0)?;
-            let path = Text(row, 1)?;
-            let heading = Text(row, 4)?;
+            let source = Cited(row)?;
             let node = Text(row, 5)?;
             let statement = Text(row, 6)?;
-            let source = match (block, ordinal)
-            {
-                (-1, -1) => format!("{path}#{heading}"),
-                (block, -1) => format!("{path}#{block}"),
-                (block, ordinal) => format!("{path}#{block}:{ordinal}"),
-            };
-            let target = if statement.is_empty()
-            {
-                node
-            }
-            else
-            {
-                statement
-            };
+            // A statement is the more specific of the two and wins where both are present:
+            // saying which node a block preserved is true but answers a coarser question
+            // than the one the lineage was recorded to answer.
+            let target = if statement.is_empty() { node } else { statement };
 
             return Ok(Item::Of(&format!("{source} -> {disposition}"))
                 .With("source", &source)
                 .With("disposition", &disposition)
                 .With("target", &target));
         });
+}
+
+/// Where a lineage row points, at the finest grain the row carries.
+///
+/// A row addresses a table row, a block, or a heading, and `-1` is the sentinel each join
+/// leaves behind when it matched nothing. Citing the block for a row-level disposition
+/// would make thirty rows of one table cite the same place.
+fn Cited(row: &Row<'_>) -> rusqlite::Result<String>
+{
+    let block: i64 = row.get(2)?;
+    let ordinal: i64 = row.get(3)?;
+    let path = Text(row, 1)?;
+    let heading = Text(row, 4)?;
+
+    return Ok(match (block, ordinal)
+    {
+        (-1, -1) => format!("{path}#{heading}"),
+        (block, -1) => format!("{path}#{block}"),
+        (block, ordinal) => format!("{path}#{block}:{ordinal}"),
+    });
 }
 
 fn Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>

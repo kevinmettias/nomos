@@ -61,18 +61,7 @@ impl Output
 pub fn Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, ProjectError>
 {
     profile.Validate()?;
-
-    // The last place a template can be caught before it becomes a directory. `Resolved_For`
-    // is the only thing that removes the placeholder, so a profile arriving here with one
-    // still in it was never resolved -- and rendering it would quietly create a path named
-    // after the placeholder rather than after any subject.
-    if profile.Names_A_Subject()
-    {
-        return Err(ProjectError::SubjectUnresolved {
-            profile: profile.id.clone(),
-            output: profile.output.clone(),
-        });
-    }
+    Refuse_Unresolved(profile)?;
 
     let projection = Select(store, profile)?;
     let body = Render(&projection)?;
@@ -82,6 +71,24 @@ pub fn Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, Pr
         sidecar_path: format!("{}{SIDECAR_SUFFIX}", profile.output),
         stamp: Stamped(profile, &projection, &body),
         body,
+    });
+}
+
+/// The last place a template can be caught before it becomes a directory.
+///
+/// `Resolved_For` is the only thing that removes the placeholder, so a profile arriving
+/// here with one still in it was never resolved — and rendering it would quietly create a
+/// path named after the placeholder rather than after any subject.
+fn Refuse_Unresolved(profile: &Profile) -> Result<(), ProjectError>
+{
+    if !profile.Names_A_Subject()
+    {
+        return Ok(());
+    }
+
+    return Err(ProjectError::SubjectUnresolved {
+        profile: profile.id.clone(),
+        output: profile.output.clone(),
     });
 }
 
@@ -144,32 +151,41 @@ impl Freshness
             return format!("{output} has never been built");
         }
 
-        let mut said = Vec::new();
-        if let Some((declared, current)) = &self.stale
-        {
-            said.push(format!(
-                "stale: built over inputs {declared} and the store now holds {current}"
-            ));
-        }
-        if let Some((declared, found)) = &self.edited
-        {
-            said.push(format!(
-                "edited: the stamp declares {declared} and the file hashes to {found}"
-            ));
-        }
-        if let Some((agreed, rendered)) = &self.diverged
-        {
-            said.push(format!(
-                "diverged: the file and its stamp agree on {agreed} and the store renders \
-                 {rendered}"
-            ));
-        }
+        let said = self.Verdicts();
         if said.is_empty()
         {
             return format!("{output} is current");
         }
 
         return format!("{output} {}", said.join("; "));
+    }
+
+    /// Every verdict that applies, each naming the two values that disagree.
+    ///
+    /// More than one can hold at once and all of them are reported. A stale output that was
+    /// also hand-edited is two problems, and printing only the first sends the reader to
+    /// rebuild and find the file still wrong.
+    fn Verdicts(&self) -> Vec<String>
+    {
+        // The name, how the recorded value is introduced, and how the found one is. Written
+        // out as three `if let` blocks these were three chances for one verdict to stop
+        // naming both of the values it is about.
+        let phrasings = [
+            ("stale", "built over inputs", "the store now holds", &self.stale),
+            ("edited", "the stamp declares", "the file hashes to", &self.edited),
+            ("diverged", "the file and its stamp agree on", "the store renders", &self.diverged),
+        ];
+        let mut said = Vec::new();
+
+        for (name, recorded, found, difference) in phrasings
+        {
+            if let Some((left, right)) = difference
+            {
+                said.push(format!("{name}: {recorded} {left} and {found} {right}"));
+            }
+        }
+
+        return said;
     }
 }
 
@@ -191,39 +207,72 @@ pub fn Check(
 
     let recorded = Stamp::Parse(sidecar)?;
     let rebuilt = Build(store, profile)?;
-    let mut freshness = Freshness::default();
-
-    if recorded.inputs_digest != rebuilt.stamp.inputs_digest
-        || recorded.profile_digest != rebuilt.stamp.profile_digest
-    {
-        freshness.stale = Some((
-            recorded.inputs_digest.clone(),
-            rebuilt.stamp.inputs_digest.clone(),
-        ));
-    }
-
     let found = ContentHash::Of(body).As_Str().to_owned();
-    if recorded.content_digest != found
-    {
-        freshness.edited = Some((recorded.content_digest.clone(), found.clone()));
-    }
 
-    // The third comparison, and the only one that reads the store's own bytes. `rebuilt` has
-    // been sitting here since the stale check and its body was never looked at, so a body
-    // edited together with the `content_digest` describing it satisfied both tests above and
-    // reported current.
-    //
-    // Only asked once the other two have come back clean, because it cannot distinguish a
-    // cause. A stale output differs from `rebuilt.body` too, and so does an edited one, so
-    // reporting this whenever the bytes differ would say `diverged` alongside every other
-    // verdict and stop being the name of anything. Rendering is deterministic over the
-    // inputs and the profile, and both digests have just been found to match the rebuild, so
-    // an honest stamp guarantees these bytes are equal: reaching here means the pair was
-    // written by something other than `Build`.
-    if freshness.stale.is_none() && freshness.edited.is_none() && body != rebuilt.body
-    {
-        freshness.diverged = Some((found, rebuilt.stamp.content_digest));
-    }
+    let mut freshness = Freshness {
+        stale: Stale(&recorded, &rebuilt),
+        edited: Edited(&recorded, &found),
+        ..Freshness::default()
+    };
+    freshness.diverged = Diverged(&freshness, body, found, rebuilt);
 
     return Ok(freshness);
+}
+
+/// The stamp's inputs against what the store now holds.
+///
+/// The profile digest counts as an input: a projection built from the same rows under a
+/// changed profile is a different document, and reporting it current would be a lie about
+/// the only thing that changed.
+fn Stale(recorded: &Stamp, rebuilt: &Output) -> Option<(String, String)>
+{
+    if recorded.inputs_digest == rebuilt.stamp.inputs_digest
+        && recorded.profile_digest == rebuilt.stamp.profile_digest
+    {
+        return None;
+    }
+
+    return Some((
+        recorded.inputs_digest.clone(),
+        rebuilt.stamp.inputs_digest.clone(),
+    ));
+}
+
+/// The stamp's digest against the file it describes.
+fn Edited(recorded: &Stamp, found: &str) -> Option<(String, String)>
+{
+    if recorded.content_digest == found
+    {
+        return None;
+    }
+
+    return Some((recorded.content_digest.clone(), found.to_owned()));
+}
+
+/// The third comparison, and the only one that reads the store's own bytes.
+///
+/// `rebuilt` has been sitting there since the stale check with its body never looked at, so
+/// a body edited together with the `content_digest` describing it satisfied both tests above
+/// and reported current.
+///
+/// Only asked once the other two have come back clean, because it cannot distinguish a
+/// cause. A stale output differs from `rebuilt.body` too, and so does an edited one, so
+/// reporting this whenever the bytes differ would say `diverged` alongside every other
+/// verdict and stop being the name of anything. Rendering is deterministic over the inputs
+/// and the profile, and both digests have just been found to match the rebuild, so an honest
+/// stamp guarantees these bytes are equal: reaching here means the pair was written by
+/// something other than `Build`.
+fn Diverged(
+    freshness: &Freshness,
+    body: &str,
+    found: String,
+    rebuilt: Output,
+) -> Option<(String, String)>
+{
+    if freshness.stale.is_some() || freshness.edited.is_some() || body == rebuilt.body
+    {
+        return None;
+    }
+
+    return Some((found, rebuilt.stamp.content_digest));
 }

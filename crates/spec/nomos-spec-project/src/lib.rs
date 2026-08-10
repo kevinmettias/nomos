@@ -78,65 +78,139 @@ impl core::fmt::Display for ProjectError
             Self::Store(error) => write!(formatter, "{error}"),
             Self::Sql(cause) => write!(formatter, "projection sql error: {cause}"),
             Self::Malformed(cause) => write!(formatter, "malformed profile: {cause}"),
-            Self::NotRelative { profile, output } => write!(
-                formatter,
-                "{profile} writes to {output}. A projection output is a relative path inside \
-                 the build root: an absolute path makes the output depend on the machine that \
-                 built it"
-            ),
+            Self::Duplicate { profile } =>
+            {
+                write!(formatter, "{profile} is declared more than once")
+            }
+            Self::NotRelative { profile, output } => Not_Relative(formatter, profile, output),
             Self::Empty {
                 profile,
                 section,
                 content,
-            } => write!(
-                formatter,
-                "{profile}: section \"{section}\" selected no {content}. Refusing to render a \
-                 section that says nothing, because a projection over an empty selection reads \
-                 exactly like a projection over an empty store. Declare `may_be_empty` if \
-                 nothing is the honest answer"
-            ),
+            } => Empty_Section(formatter, profile, section, content),
             Self::UnsupportedFilter {
                 profile,
                 content,
                 filter,
-            } => write!(
-                formatter,
-                "{profile}: a {content} section filters on `{filter}`, which {content} does not \
-                 honour. Refusing to ignore it: a filter that narrows nothing renders the whole \
-                 table under a heading that claims otherwise"
-            ),
-            Self::Duplicate { profile } => {
-                write!(formatter, "{profile} is declared more than once")
-            }
+            } => Unsupported_Filter(formatter, profile, content, filter),
             Self::Colliding {
                 output,
                 first,
                 second,
-            } => write!(
-                formatter,
-                "{first} and {second} both write {output}, so one would overwrite the other and \
-                 the build would depend on profile order"
-            ),
-            Self::SubjectMissing { profile } => write!(
-                formatter,
-                "{profile} projects one subject and was not told which. It writes a path \
-                 holding {SUBJECT} and selects on it, so without a subject there is no output \
-                 to write and no rows to write into it — name one with --subject"
-            ),
-            Self::SubjectUnexpected { profile, subject } => write!(
-                formatter,
-                "{profile} projects the whole store, so it has nowhere to put the subject \
-                 {subject}. Its output path is fixed and none of its filters names a subject: \
-                 running it per subject would write the same file every time"
-            ),
-            Self::SubjectUnresolved { profile, output } => write!(
-                formatter,
-                "{profile} reached the renderer still writing to {output}. A path holding \
-                 {SUBJECT} is a template rather than a destination, and rendering it would \
-                 create a directory named after the placeholder"
-            ),
+            } => Colliding(formatter, output, first, second),
+            Self::SubjectMissing { profile } => Subject_Missing(formatter, profile),
+            Self::SubjectUnexpected { profile, subject } =>
+            {
+                Subject_Unexpected(formatter, profile, subject)
+            }
+            Self::SubjectUnresolved { profile, output } =>
+            {
+                Subject_Unresolved(formatter, profile, output)
+            }
         };
     }
+}
+
+/// An output path that would leave the build root.
+fn Not_Relative(
+    formatter: &mut core::fmt::Formatter<'_>,
+    profile: &str,
+    output: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{profile} writes to {output}. A projection output is a relative path inside the \
+         build root: an absolute path makes the output depend on the machine that built it"
+    );
+}
+
+/// A section that selected nothing and did not declare that it might.
+fn Empty_Section(
+    formatter: &mut core::fmt::Formatter<'_>,
+    profile: &str,
+    section: &str,
+    content: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{profile}: section \"{section}\" selected no {content}. Refusing to render a section \
+         that says nothing, because a projection over an empty selection reads exactly like a \
+         projection over an empty store. Declare `may_be_empty` if nothing is the honest answer"
+    );
+}
+
+/// A filter the content it narrows does not honour.
+fn Unsupported_Filter(
+    formatter: &mut core::fmt::Formatter<'_>,
+    profile: &str,
+    content: &str,
+    filter: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{profile}: a {content} section filters on `{filter}`, which {content} does not \
+         honour. Refusing to ignore it: a filter that narrows nothing renders the whole \
+         table under a heading that claims otherwise"
+    );
+}
+
+/// Two profiles writing one path.
+fn Colliding(
+    formatter: &mut core::fmt::Formatter<'_>,
+    output: &str,
+    first: &str,
+    second: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{first} and {second} both write {output}, so one would overwrite the other and the \
+         build would depend on profile order"
+    );
+}
+
+/// A per-subject profile run without a subject.
+fn Subject_Missing(formatter: &mut core::fmt::Formatter<'_>, profile: &str) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{profile} projects one subject and was not told which. It writes a path holding \
+         {SUBJECT} and selects on it, so without a subject there is no output to write and no \
+         rows to write into it — name one with --subject"
+    );
+}
+
+/// A whole-store profile handed a subject.
+fn Subject_Unexpected(
+    formatter: &mut core::fmt::Formatter<'_>,
+    profile: &str,
+    subject: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{profile} projects the whole store, so it has nowhere to put the subject {subject}. \
+         Its output path is fixed and none of its filters names a subject: running it per \
+         subject would write the same file every time"
+    );
+}
+
+/// A template that reached the renderer still holding its placeholder.
+fn Subject_Unresolved(
+    formatter: &mut core::fmt::Formatter<'_>,
+    profile: &str,
+    output: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{profile} reached the renderer still writing to {output}. A path holding {SUBJECT} \
+         is a template rather than a destination, and rendering it would create a directory \
+         named after the placeholder"
+    );
 }
 
 impl std::error::Error for ProjectError {}

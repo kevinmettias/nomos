@@ -181,14 +181,33 @@ impl Profile
 
     pub fn Validate(&self) -> Result<(), ProjectError>
     {
-        if self.id.trim().is_empty() || self.title.trim().is_empty()
+        self.Named()?;
+        self.Sections_Are_Citable()?;
+
+        return Path_Is_Relative(&self.id, &self.output);
+    }
+
+    /// A profile has to say what it is and what it renders as a heading.
+    fn Named(&self) -> Result<(), ProjectError>
+    {
+        if !self.id.trim().is_empty() && !self.title.trim().is_empty()
         {
-            return Err(ProjectError::Malformed(format!(
-                "a profile needs an identifier and a title; {:?} has {:?}",
-                self.id, self.title
-            )));
+            return Ok(());
         }
 
+        return Err(ProjectError::Malformed(format!(
+            "a profile needs an identifier and a title; {:?} has {:?}",
+            self.id, self.title
+        )));
+    }
+
+    /// Every section is present and titled.
+    ///
+    /// A profile with no section at all renders a title and nothing under it, and a section
+    /// with no title renders a heading that nothing can cite. Both are documents that look
+    /// like a build succeeded.
+    fn Sections_Are_Citable(&self) -> Result<(), ProjectError>
+    {
         if self.sections.is_empty()
         {
             return Err(ProjectError::Malformed(format!(
@@ -208,7 +227,7 @@ impl Profile
             }
         }
 
-        return Path_Is_Relative(&self.id, &self.output);
+        return Ok(());
     }
 
     #[must_use]
