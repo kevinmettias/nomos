@@ -3502,7 +3502,11 @@
         "resolution": "File",
         "paths": [
           "crates/host/nomos-cli/src/check.rs",
-          ".github/workflows/gate.yml"
+          "crates/host/nomos-cli/tests/check_command.rs",
+          "crates/host/nomos-cli/tests/gate_step.rs",
+          ".github/workflows/gate.yml",
+          "crates/spec/nomos-spec-store/records/OD-GATE-004.record",
+          "docs/records/OD-GATE-004"
         ],
         "patterns": []
       },
@@ -3519,6 +3523,10 @@
           "--no-fail-fast",
           "-p",
           "nomos-cli",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-spec-store",
           "-p",
           "nomos-contract-tests"
         ],
@@ -4077,6 +4085,36 @@
           "exit_code": 0
         }
       },
+      "abandoned": []
+    },
+    {
+      "id": "P10-STAMP-CONSISTENCY",
+      "title": "A projection that agrees with its own stamp is not thereby what the store renders",
+      "why": "Check compares two things and not the third. It rebuilds the projection, compares the recorded inputs_digest and profile_digest against the rebuild, and compares the body on disk against the stamp own content_digest. It never compares the body against rebuilt.body, which Build has already produced and which is sitting in the same function. So an edit to the body that also updates content_digest to match reports \"is current\" and exits 0. Measured on 2026-08-09 by appending a line to diagrams/relations.mmd and rewriting content_digest to the new hash: exit 0, no finding. The existing negative control, Test_A_Rewritten_Stamp_Should_Not_Excuse_The_File_It_Describes, rewrites the digest to a bogus value, so it proves the comparison reads the sidecar rather than trusting it and never probes the consistent case. This matters more now that a projection is committed and gated: P10-REQUIRED-PROJECTIONS makes CI assert that a shipped output is derivable from the store, and what it actually asserts is that the output agrees with a stamp beside it, which the same commit can rewrite.",
+      "done_when": "A body that does not match what the store renders is a finding even when its stamp has been rewritten to agree with it. Check compares the rendered bytes it already holds, and the difference between \"the store moved\" and \"somebody typed into the file\" survives the change rather than collapsing into one verdict. A test appends to a rendered body, rewrites content_digest to the appended body own hash, and asserts the comparison still refuses it. The freshness command reports the new case in its own words rather than reusing the edited sentence, if the two are distinguishable at the seam.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/src/build.rs",
+          "crates/spec/nomos-spec-project/tests/projections.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": []
     }
   ]
