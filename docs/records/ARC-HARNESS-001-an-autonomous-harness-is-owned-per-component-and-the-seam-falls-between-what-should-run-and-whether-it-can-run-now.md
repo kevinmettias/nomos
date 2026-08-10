@@ -3,7 +3,7 @@ id: ARC-HARNESS-001
 type: architecture
 title: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - ecosystem
@@ -78,16 +78,25 @@ surface in the system.
 | Execution supervision | XVPE | A stalled child, an undrained pipe and a process tree are "a process substrate". Nothing about a hung subprocess is about software engineering. |
 | Selection among admissible executors | XVPE mechanism, Nomos requirement | The optimization is generic. What is being optimized for — which quality floor this step needs and what a failure here costs — is engineering. `OD-CAPABILITY-001` already drew this line once: "the registry ranks; the caller spends". |
 | Context construction | Nomos content, XVPE transport | Which architecture, rules, facts and findings bear on a step is Nomos's subject matter. Budgeting, deduplication and delivery are not. |
+| Handoff across a session boundary | XVPE mechanism, Nomos content and its bound | Persisting a run's state and restoring it into a successor is a continuation primitive; nothing in it is about software engineering, and the same machinery would be correct under a product that had nothing to do with code. What must survive so the successor continues *this* work — the item it holds, the authorities that item's territory actually reaches, and what has already been refused — is engineering. This row differs from context construction in the one way that matters: context is assembled for a step, and a handoff crosses a session, so the successor cannot be assumed to have read anything. That is exactly why the content has a **bound** and not only an owner. `OD-AGENT-001` refuses a handoff that restates the contract, because a document written once and read every session afterwards is how an undecided architecture becomes normative through the least reviewed surface in the system. |
 | Budget accounting | XVPE mechanism, Nomos policy | Counting tokens, cost and latency is telemetry. Deciding what a feature is worth spending is an engineering judgment about consequences. |
 | Run history | XVPE store, Nomos content | A storage primitive holds it; what is stored — that this step on this subject was verified by this rule — is a fact about a codebase. |
 | Workspace materialization | XVPE | Staging, backup, journalling, atomic replacement, rollback and recovery are a package platform. `OD-PACKAGE-001` records that this build has no package at all, so nothing here extends an existing family. |
 | The harness as it exists in this repository today | Repository and bootstrap tooling | `AGENTS.md`, `CLAUDE.md`, the skills and the board were written to get this built. Nothing in the list above is built. |
 
-Two entries deliberately say two owners. That is not indecision. It is the same shape
+Several entries deliberately say two owners. That is not indecision. It is the same shape
 `ARC-ECOSYSTEM-001` used for the crossings it drew: a generic primitive is consumed by
 adaptation, and the adapter carries the meaning while the primitive carries the mechanism.
 A selector that learns what a rule barrier is in order to rank executors is a primitive that
 has been taught software engineering, which that record forbids by name.
+
+The handoff row was added at version 2. Version 1 answered for nine of the ten components
+`P11-HARNESS-SEAM` required and said nothing about who owns handoff — while saying something
+about handoff below, under what the record does *not* decide, which is a deferral of the
+mechanism and was never the ownership answer. A reader looking for the owner found a sentence
+answering a different question and stopped, which is precisely the failure this table exists to
+prevent for every other component. Nothing mechanical caught it, and the reason is worth
+keeping: the item's predicate is a test suite, and a test suite cannot read a `done_when`.
 
 ## What This Record Does Not Decide
 
@@ -98,7 +107,8 @@ second authority into it.
 Where the choice of next work is computed, and whether the board computes it at all, belongs
 to `P11-NEXT-WORK`. How engineering readiness is told apart from dispatchability belongs to
 `P11-DISPATCH-SPLIT`. How a stall is distinguished from a long run belongs to
-`P11-EXEC-IDLE`. What a handoff may carry belongs to `P11-AGENT-CONTINUATION`. Whether a
+`P11-EXEC-IDLE`. What a handoff may *carry* — its content, not its owner, which the table
+above now names — belongs to `P11-AGENT-CONTINUATION`. Whether a
 named choice may be required rather than preferred belongs to `P11-PREFERENCE-STRENGTH`.
 Whether a run's observations may become KWB knowledge belongs to `P11-ECOSYSTEM-UPWARD`, and
 this record does not draw that arrow.

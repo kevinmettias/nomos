@@ -11,7 +11,7 @@ profile: domain-specification
 | identity | path | revision | blocks | headings | hash |
 | --- | --- | --- | --- | --- | --- |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 58 | 14 | sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4 |
-| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 30 | 8 | sha256:7f8a419ab2f083e0769c6f6b70adad1818f4983d2e54447924eec4973b05b692 |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -106,10 +106,10 @@ profile: domain-specification
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#2 | authored | 2 | Question |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#6 | authored | 2 | The Sentence That Decides It |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#12 | authored | 2 | Ownership, Component By Component |
-| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#15 | authored | 2 | What This Record Does Not Decide |
-| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#18 | authored | 2 | Nothing Here Is Built, And That Is The Present Answer |
-| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#23 | authored | 2 | Why Location Will Argue Against This |
-| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#27 | authored | 2 | Alternatives Considered |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#16 | authored | 2 | What This Record Does Not Decide |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#19 | authored | 2 | Nothing Here Is Built, And That Is The Present Answer |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#24 | authored | 2 | Why Location Will Argue Against This |
+| docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#28 | authored | 2 | Alternatives Considered |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1 | authored | 1 | The specification is a database with an enforced preservation ledger |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#2 | authored | 2 | Context |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#6 | authored | 2 | Decision |
@@ -1363,7 +1363,7 @@ surface in the system.
 
 ### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#13
 
-*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:5728f45e66f685800575f2184419f4cbd84404bb6ecb695f4b06d180bbdf5aab*
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:8d76e561b22c82cd473ae9a5062e3e2f08ba5a8464fca89e9b5214421666ac14*
 
 | Component | Owner | Why the semantics require it |
 |---|---|---|
@@ -1373,6 +1373,7 @@ surface in the system.
 | Execution supervision | XVPE | A stalled child, an undrained pipe and a process tree are "a process substrate". Nothing about a hung subprocess is about software engineering. |
 | Selection among admissible executors | XVPE mechanism, Nomos requirement | The optimization is generic. What is being optimized for — which quality floor this step needs and what a failure here costs — is engineering. `OD-CAPABILITY-001` already drew this line once: "the registry ranks; the caller spends". |
 | Context construction | Nomos content, XVPE transport | Which architecture, rules, facts and findings bear on a step is Nomos's subject matter. Budgeting, deduplication and delivery are not. |
+| Handoff across a session boundary | XVPE mechanism, Nomos content and its bound | Persisting a run's state and restoring it into a successor is a continuation primitive; nothing in it is about software engineering, and the same machinery would be correct under a product that had nothing to do with code. What must survive so the successor continues *this* work — the item it holds, the authorities that item's territory actually reaches, and what has already been refused — is engineering. This row differs from context construction in the one way that matters: context is assembled for a step, and a handoff crosses a session, so the successor cannot be assumed to have read anything. That is exactly why the content has a **bound** and not only an owner. `OD-AGENT-001` refuses a handoff that restates the contract, because a document written once and read every session afterwards is how an undecided architecture becomes normative through the least reviewed surface in the system. |
 | Budget accounting | XVPE mechanism, Nomos policy | Counting tokens, cost and latency is telemetry. Deciding what a feature is worth spending is an engineering judgment about consequences. |
 | Run history | XVPE store, Nomos content | A storage primitive holds it; what is stored — that this step on this subject was verified by this rule — is a fact about a codebase. |
 | Workspace materialization | XVPE | Staging, backup, journalling, atomic replacement, rollback and recovery are a package platform. `OD-PACKAGE-001` records that this build has no package at all, so nothing here extends an existing family. |
@@ -1380,9 +1381,9 @@ surface in the system.
 
 ### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#14
 
-*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:bbb172d8e5ef4a247f0e18ad4ae8ca9a9155de61e40b6458e80bf0ae7a34462a*
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:68f092a84b538f48374e7999c3e7d9bf1c10b36fcedaecbeb0c02f952a4fe823*
 
-Two entries deliberately say two owners. That is not indecision. It is the same shape
+Several entries deliberately say two owners. That is not indecision. It is the same shape
 `ARC-ECOSYSTEM-001` used for the crossings it drew: a generic primitive is consumed by
 adaptation, and the adapter carries the meaning while the primitive carries the mechanism.
 A selector that learns what a rule barrier is in order to rank executors is a primitive that
@@ -1390,11 +1391,23 @@ has been taught software engineering, which that record forbids by name.
 
 ### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#15
 
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Ownership, Component By Component · hash: sha256:5a7d8f508beb96a4981c0c6001061f3deb4c7b20fa5cced573769624d44366ec*
+
+The handoff row was added at version 2. Version 1 answered for nine of the ten components
+`P11-HARNESS-SEAM` required and said nothing about who owns handoff — while saying something
+about handoff below, under what the record does *not* decide, which is a deferral of the
+mechanism and was never the ownership answer. A reader looking for the owner found a sentence
+answering a different question and stopped, which is precisely the failure this table exists to
+prevent for every other component. Nothing mechanical caught it, and the reason is worth
+keeping: the item's predicate is a test suite, and a test suite cannot read a `done_when`.
+
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#16
+
 *revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
 
 ## What This Record Does Not Decide
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#16
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#17
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / What This Record Does Not Decide · hash: sha256:f6f90d735a48c010cc3d4262844245e572b14118f0b74bfb85d78acc45141ad1*
 
@@ -1402,32 +1415,33 @@ It decides ownership. It decides no mechanism, and several mechanisms are open i
 other territories. Reading an answer to any of them out of this record would be reading a
 second authority into it.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#17
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#18
 
-*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / What This Record Does Not Decide · hash: sha256:6a97d7d118498eb378d11f7325ce5a903e777f2ed14c03c17d2f12433e356e65*
+*revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / What This Record Does Not Decide · hash: sha256:c942a8527c031ac14121a08cb1e66dff875b0187c3072fc0ff091ef0d9c10eb8*
 
 Where the choice of next work is computed, and whether the board computes it at all, belongs
 to `P11-NEXT-WORK`. How engineering readiness is told apart from dispatchability belongs to
 `P11-DISPATCH-SPLIT`. How a stall is distinguished from a long run belongs to
-`P11-EXEC-IDLE`. What a handoff may carry belongs to `P11-AGENT-CONTINUATION`. Whether a
+`P11-EXEC-IDLE`. What a handoff may *carry* — its content, not its owner, which the table
+above now names — belongs to `P11-AGENT-CONTINUATION`. Whether a
 named choice may be required rather than preferred belongs to `P11-PREFERENCE-STRENGTH`.
 Whether a run's observations may become KWB knowledge belongs to `P11-ECOSYSTEM-UPWARD`, and
 this record does not draw that arrow.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#18
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#19
 
 *revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:15dc001a5e1f7f824f1a010c3307a99daa8f2844fc19e08d77fe763e1be74a50*
 
 ## Nothing Here Is Built, And That Is The Present Answer
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#19
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#20
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:adf3c45548c2de10a3e032e0e6f6f08a7660a6941a285effe58577f2b5e909c1*
 
 The table above is a rule for placements not yet made. It is not a description of this
 repository, and the distinction matters enough to state rather than imply.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#20
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#21
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:e8f9a909ff6b0d137b16cc4ade3dd2f7ebbbe146417ad1a3ddcb0b2d10e72def*
 
@@ -1437,7 +1451,7 @@ agent to authority; two skills carry procedures; the contract tests preserve the
 is not their ownership, and this record adds the rest of the harness to that list rather than
 removing any of it.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#21
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#22
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:bacf7d10040f40b8370c6eb7ec1170017329a624ac69294c4b7e60f695fa6dd9*
 
@@ -1447,7 +1461,7 @@ owner the table names. Until then the correct reading of every file in this repo
 looks like harness machinery is the sentence `ARC-ECOSYSTEM-001` wrote for exactly this: what
 was written to get Nomos built is not thereby part of Nomos.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#22
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#23
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Nothing Here Is Built, And That Is The Present Answer · hash: sha256:d42bedfec8c57b1c01223b54f8203973427dc4926abf5f7ddffc7cc94b6cf486*
 
@@ -1457,20 +1471,20 @@ repository. Not when it is good, not when it is reusable, and not when a second 
 copies it — `ARC-ECOSYSTEM-001`'s anti-drift clause already refuses reuse as a criterion,
 and this is that clause applied to the harness.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#23
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#24
 
 *revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:826351b3ab774df283282aa638ab4706b60a8fbcb78c0deb68d48b39efa02575*
 
 ## Why Location Will Argue Against This
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#24
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#25
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:6d0572836a4e9e203b362144468c38327edd659a8a6d894ac88236834ed75779*
 
 The prediction is worth writing down because the argument will be made, and it will be made
 by someone reading the tree rather than this record.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#25
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#26
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:04143efd61ab7143f614cc922de147de864d885d8467d7525eaf295bd3d7035e*
 
@@ -1480,7 +1494,7 @@ will land wall and idle bounds in `nomos-platform`. A selector, if one is writte
 written beside the registry it consults. Each of those is a bootstrap placement and none of
 them is evidence.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#26
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#27
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Why Location Will Argue Against This · hash: sha256:88c180309144d48021d988f8f868948bcf85060fa9fa94e10eb614a26696810b*
 
@@ -1489,13 +1503,13 @@ repository location alone does not make something Nomos — and this record is t
 will need to be cited: a harness is the case most likely to be argued from its address,
 because its address is the only thing about it that exists.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#27
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#28
 
 *revision: authored · kind: heading · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
 
 ## Alternatives Considered
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#28
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#29
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:fcd630e9556d3c04d5a4b998ceeb11b37d9cde748544b63ec56850d7adc4b934*
 
@@ -1503,7 +1517,7 @@ because its address is the only thing about it that exists.
 Whichever owner is chosen, at least three entries in the table are wrong under it, and a
 record that is wrong in three places is cited for the two it got right.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#29
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#30
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:3e55c056638dc14e2b398f78c85432339acf0e63ccb99353d6c673f69e015198*
 
@@ -1511,7 +1525,7 @@ record that is wrong in three places is cited for the two it got right.
 longer work accumulates across an unstated seam, the more of it is re-litigated. The design
 reached crate names before this record existed, which is the deferral already failing once.
 
-### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#30
+### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#31
 
 *revision: authored · kind: prose · heading: An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now / Alternatives Considered · hash: sha256:ed4fd4ccc2058b20df5f1675de19a290868e849d3d9d8af37e97a9dadb15ac38*
 
