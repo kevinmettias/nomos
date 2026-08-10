@@ -151,7 +151,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-ingest/src/siblings.rs",
+        path: "crates/spec/nomos-spec-ingest/src/siblings/mod.rs",
         name: "Sibling::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

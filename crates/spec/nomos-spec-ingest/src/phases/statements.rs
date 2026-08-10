@@ -1,0 +1,81 @@
+//! Putting the normative statements in, and reporting the ones that disagree with their source.
+
+use super::{StatementFile, IngestError, SpecificationStore, StatementReport, RecordedStatement, ContentHash, Is_Normalized, StatementDivergence, Store_Text};
+
+/// # Errors
+///
+/// Returns [`IngestError::Parse`] if the file cannot be read as the expected shape.
+pub fn Parse_Statements(yaml: &str) -> Result<StatementFile, IngestError>
+{
+    return serde_yaml_ng::from_str(yaml)
+        .map_err(|error| IngestError::Parse(format!("statements: {error}")));
+}
+
+/// I2 — normative statements, preserving the recorded hash and recomputing it.
+///
+/// Both are kept. Preserving alone would carry a wrong hash forward unnoticed;
+/// recomputing alone would silently redefine identity for every statement in the corpus.
+/// Storing both and comparing is what makes a disagreement visible.
+///
+/// # Errors
+///
+/// Returns [`IngestError`] on any store failure.
+pub fn Ingest_Statements(
+    store: &mut SpecificationStore,
+    file: &StatementFile,
+) -> Result<StatementReport, IngestError>
+{
+    let mut report = StatementReport::default();
+
+    for statement in &file.statements
+    {
+        Note_Divergence(statement, &mut report);
+        Store_Statement(store, statement)?;
+        report.ingested = report.ingested.saturating_add(1);
+    }
+
+    return Ok(report);
+}
+
+/// Records what the recomputed hash says about the recorded one.
+///
+/// Whether the text is canonical is reported alongside, because a hash that disagrees over
+/// text that was never normalized is a different finding from one that disagrees over text
+/// that was: the first is a stale recording, the second a changed definition.
+pub(super) fn Note_Divergence(statement: &RecordedStatement, report: &mut StatementReport)
+{
+    let recomputed = ContentHash::Of(&statement.canonical_text);
+    let canonical = Is_Normalized(&statement.canonical_text);
+
+    if recomputed.As_Str() != statement.canonical_hash
+    {
+        report.divergences.push(StatementDivergence {
+            id: statement.id.clone(),
+            recorded: statement.canonical_hash.clone(),
+            recomputed: recomputed.As_Str().to_owned(),
+            text_is_canonical: canonical,
+        });
+    }
+
+    if !canonical
+    {
+        report.non_canonical_text.push(statement.id.clone());
+    }
+}
+
+/// Writes the statement's node and the recorded text hanging off it.
+pub(super) fn Store_Statement(
+    store: &mut SpecificationStore,
+    statement: &RecordedStatement,
+) -> Result<(), IngestError>
+{
+    let node_uid = store.Upsert_Node(
+        &statement.id,
+        &statement.kind,
+        "canonical",
+        "record",
+        &statement.source_document,
+    )?;
+
+    return Store_Text(store, statement, node_uid);
+}
