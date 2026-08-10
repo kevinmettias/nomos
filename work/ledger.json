@@ -3490,18 +3490,75 @@
         ],
         "patterns": []
       },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "Should_Declare_A_Strategy ... ok\ntest Test_Every_Declaration_Should_Occupy_A_Row_Of_The_Table ... ok\ntest Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness ... ok\ntest Test_Every_Occupied_Row_Of_The_Domain_Table_Should_Be_Declared ... ok\ntest Test_The_Fact_Domain_Inventory_Should_Be_Reported ... ok\ntest Test_Every_Unoccupied_Row_Should_Still_Be_A_Row_Of_The_Table ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s\n\n\nrunning 7 tests\ntest Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones ... ok\ntest Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export ... ok\ntest Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.90s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-17508d9e418f7321.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-3fe4cf225a94af29.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-eb503e7eebda3c78.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb19ae52bc859907.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-eb47cd13fafa9c5f.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-17c4307b64675421.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1786340378,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": []
+    },
+    {
+      "id": "P10-KIND-TAXONOMY",
+      "title": "Four package kinds carry a suffix the corpus taxonomy does not, and the label is what a peer reimplements",
+      "why": "Found by P10-PACKAGE-SEAM and recorded in OD-PACKAGE-001 rather than fixed, because renaming a protocol surface was outside a versioning items done_when. The game plan carries three copies of the package taxonomy and they disagree: two match volume 03s sixteen kinds exactly, the third omits RepositoryProvider and suffixes four names. PackageKind follows the third and extends its suffix to the member that copy was missing, so ToolProviderPackage, MetricProviderPackage, RepositoryProviderPackage and RuntimeProviderPackage diverge from the corpus. D-132 puts the corpus above the plan, so the copy this enum followed is the one with the least authority of the three. This is not a naming preference. PackageKind::Label is the serialized form, and nomos-contracts is deliberately dependency-free because non-Rust peers reimplement it - so the label is a protocol commitment to those peers and a divergent label is a divergent wire format, not a local identifier. It is cheapest to correct now: no code outside the crate names PackageKind, so there is nothing to migrate, and the first consumer will pin whatever is there when it arrives.",
+      "done_when": "The kinds this workspace declares are the kinds the corpus names, or each difference has a stated reason at the site naming which authority it follows and why. Volume 03 and the two agreeing plan copies are read directly and quoted in the record with resolved paths, since this repository has been bitten by citations that do not resolve, and the third copy is named as the one that was followed. If the corpus and the plan disagree about a kind, D-132 settles it and the record says so rather than choosing quietly. A test asserts every declared kind and its label against the enumeration the record fixes, so a seventeenth kind or a relabelled one cannot arrive without moving the assertion, and the negative control is that renaming one label back turns it red naming the kind. tests/contract/surface/nomos-contracts.txt moves with any rename and is re-blessed deliberately. Not closed by renaming the variants and leaving Label alone, since the label is the half a peer actually reads, and not closed by adding a consumer - PackageKind having none is OD-PACKAGE-001s subject and stays open there.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "tests/contract/surface/nomos-contracts.txt",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-002.record",
+          "docs/records/OD-PACKAGE-002"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [],
       "blocked": null,
       "claim": {
-        "holder": "claude-bless-scope-w10",
-        "acquired_at": 1786339776,
-        "lease_expires_at": 1786346976
+        "holder": "claude-kind-taxonomy-w12",
+        "acquired_at": 1786340254,
+        "lease_expires_at": 1786351054
       },
       "verification": {
         "argv": [
           "cargo",
           "test",
+          "-p",
+          "nomos-contracts",
           "-p",
           "nomos-contract-tests",
           "--no-fail-fast"
