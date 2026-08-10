@@ -1,0 +1,3 @@
+# The registration for ARC-HARNESS-001. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md
