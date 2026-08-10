@@ -5298,6 +5298,49 @@
       "verified": null,
       "abandoned": [],
       "displaced": []
+    },
+    {
+      "id": "P10-EDGE-CONSTRAINTS",
+      "title": "A lifecycle edge may join any two nodes, because a relation type declares no domain, range or cardinality",
+      "why": "OD-SPEC-010 rule 4 requires that `implements` resolve to an accepted design and `answers` to an accepted request, and states in its own text that it constrains the submission and cannot constrain the graph. Measured: relation_types carries name, tier and inverse_of and nothing else, nodes.kind is free text, and relations enforces only that both endpoints exist and the triple is unique. So an `implements` edge joining a suite to a table row is written without complaint, and the lifecycle OD-SPEC-008 describes is expressible and unenforceable at the same time. The constraint mechanism is what is missing, not the vocabulary: the seed table is five types and ADR-ARTIFACT-GRAPH-002's real vocabulary arrives with the corpus and supersedes it, so an item that invents edge names here would be inventing the thing the corpus already answers.",
+      "done_when": "A relation type declares which node kinds it may join and how many of it a node may carry, declared independently rather than inferred from the edges already present. Writing an edge whose endpoint kinds the type does not admit is refused by name, and so is one that exceeds the declared cardinality; both refusals say which type, which endpoint and what would satisfy them. The five seed types declare their own constraints, and a type that declares none is refused at registration rather than defaulting to permissive. The new columns travel in the bundle and survive export and import, with a round-trip fixture covering them. OD-SPEC-012 records what a declared constraint is, why the seed vocabulary is constrained without being extended, and what happens to declarations when ADR-ARTIFACT-GRAPH-002's vocabulary lands. Public surface snapshots move for both crates whose API moves.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-012",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-012.record",
+          "crates/spec/nomos-spec-store/src/schema.rs",
+          "crates/spec/nomos-spec-store/src/store.rs",
+          "crates/spec/nomos-spec-store/src/governing.rs",
+          "crates/spec/nomos-spec-bundle",
+          "tests/contract/surface/nomos-spec-store.txt",
+          "tests/contract/surface/nomos-spec-bundle.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-REQUEST-LAYOUT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
     }
   ]
 }
