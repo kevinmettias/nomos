@@ -165,18 +165,7 @@ impl ValidationRun
 pub fn Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> ValidationRun
 {
     let registered: Vec<&'static str> = rules.iter().map(|rule| rule.Id()).collect();
-
-    let unregistered: Vec<String> = DECLARED_RULES
-        .iter()
-        .filter(|declared| !registered.contains(*declared))
-        .map(|declared| (*declared).to_owned())
-        .collect();
-
-    let undeclared: Vec<String> = registered
-        .iter()
-        .filter(|id| !DECLARED_RULES.contains(*id))
-        .map(|id| (*id).to_owned())
-        .collect();
+    let (unregistered, undeclared) = Reconciled(&registered);
 
     let results = rules
         .iter()
@@ -192,6 +181,28 @@ pub fn Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> Validati
         undeclared,
         ruleset_hash: Ruleset_Hash(&registered),
     };
+}
+
+/// The registry against the manifest, in both directions.
+///
+/// A rule declared and not registered would be reported nowhere, and one registered and not
+/// declared would run without the manifest naming it. Checking one direction only leaves
+/// half of a disagreement invisible, which is the failure this reconciliation exists for.
+fn Reconciled(registered: &[&'static str]) -> (Vec<String>, Vec<String>)
+{
+    let unregistered: Vec<String> = DECLARED_RULES
+        .iter()
+        .filter(|declared| !registered.contains(*declared))
+        .map(|declared| (*declared).to_owned())
+        .collect();
+
+    let undeclared: Vec<String> = registered
+        .iter()
+        .filter(|id| !DECLARED_RULES.contains(*id))
+        .map(|id| (*id).to_owned())
+        .collect();
+
+    return (unregistered, undeclared);
 }
 
 /// Identifies the ruleset that produced a result.
