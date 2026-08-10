@@ -2386,10 +2386,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-mirror-w11",
+        "acquired_at": 1786340060,
+        "lease_expires_at": 1786350860
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2406,7 +2410,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "probe5",
+          "reason": "Held only to confirm the item became claimable when P10-ADD-PROMISE finished. Released unstarted; dispatched under its own holder.",
+          "abandoned_at": 1786340060
+        }
+      ]
     },
     {
       "id": "P10-SEEDING-SERIALIZES",
@@ -2712,14 +2722,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-package-seam-w9",
-        "acquired_at": 1786338964,
-        "lease_expires_at": 1786349764
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2731,7 +2737,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Characters ... ok\ntest identity::tests::Test_Digest_Should_Zero_Pad_Every_Byte ... ok\ntest identity::tests::Test_Generation_Should_Advance_And_Never_Wrap ... ok\ntest identity::tests::Test_Version_Should_Read_Its_Own_And_Older_Minors_Only ... ok\ntest package::tests::Test_Kernel_Modules_Should_Not_Be_Optional ... ok\ntest package::tests::Test_Labels_Should_Be_Distinct ... ok\ntest package::tests::Test_Provider_Kinds_Should_Be_Recognized_As_Hosting_Foreign_Code ... ok\ntest package::tests::Test_Rule_And_Language_Packages_Should_Not_Host_Foreign_Code ... ok\ntest peer::tests::Test_Divergence_Should_Require_An_Authorized_Decision ... ok\ntest peer::tests::Test_Silence_Should_Never_Read_As_Knowledge ... ok\ntest peer::tests::Test_Unavailability_Should_Carry_Its_Reason_Into_The_Description ... ok\ntest peer::tests::Test_Unavailable_Should_Not_Read_As_Current ... ok\n\ntest result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-17508d9e418f7321.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-3fe4cf225a94af29.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-eb503e7eebda3c78.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-cb19ae52bc859907.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-eb47cd13fafa9c5f.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-17c4307b64675421.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-7c55b876dd85ab8e.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1786340142,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "probe2",

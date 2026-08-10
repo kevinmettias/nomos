@@ -29,6 +29,29 @@ const FEATURE_PACK_LABEL: &str = "FeaturePack";
 /// This is the only such enum in the system. Nomos owns these semantics; a platform may
 /// materialize a package on disk without knowing any of them, and physical installation
 /// alone never establishes an effective capability.
+///
+/// # Nothing consumes this, and what it is waiting for
+///
+/// No code outside this crate names `PackageKind`, and none is written to make it look
+/// used. The reason is not a forgotten call site: this workspace contains no installable
+/// unit for a consumer to be about. No package manifest exists on disk, nothing installs
+/// or resolves one, and `PackageId` is likewise declared and never constructed.
+///
+/// `ARCH-001` and `ARCH-002` require a `LanguagePackage` and a `RulePackage` to be
+/// independently versioned, and `PKG-007` requires a package's own version, the Nomos
+/// protocol range, the language versions and the provider versions to stay four distinct
+/// domains. A Cargo `version` field is none of those and a `Cargo.toml` is not the
+/// manifest `PKG-022` asks for, so nothing here is answered by changing what this
+/// workspace publishes. `OD-PACKAGE-001` accepts both requirements and records that the
+/// missing thing is the package rather than the attribute.
+///
+/// This enum gains its first consumer when something reads a declared package manifest
+/// and refuses one it cannot resolve — a reader that maps a manifest to a `PackageId`, a
+/// `PackageKind` and `PKG-007`'s version domains. That is the change to watch for; until
+/// it lands the declaration is a protocol commitment held deliberately, which is also why
+/// `OD-PACKAGE-001` records that four of the labels below follow the game plan's spelling
+/// rather than volume 03's. That divergence costs nothing while nobody reads them and has
+/// to be settled before anybody does.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum PackageKind
 {
