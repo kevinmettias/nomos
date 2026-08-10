@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8c1c07ef1bdd11171b2e78d7113e814b1644b516c5cced1e4d4a478a74f8832b",
-  "inputs_digest": "sha256:7e02f0ffd288d5521480b0f0621654a4b5703251c394ffe53b38f1b883f94d8e",
+  "content_digest": "sha256:233ab0e9c06f280c6fcbf9e890fbe56e78337901ca2afd97f9414e7e1bfea2e2",
+  "inputs_digest": "sha256:75d2566a70ae42065695f52a7678cb208b80979840cb26c074c1f6eab7933269",
   "sections": [
     [
       "Documents",
-      63
+      64
     ],
     [
       "Sections",
-      580
+      591
     ],
     [
       "Source blocks",
-      2337
+      2368
     ]
   ],
   "inputs": [
@@ -309,6 +309,11 @@
       "content": "documents",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored",
       "hash": "sha256:268e9c1f06f11ba051c138e1af00d30954cf0ae874b93b324f917cdaa0cadf2f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored",
+      "hash": "sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db"
     },
     {
       "content": "documents",
@@ -3004,6 +3009,61 @@
       "content": "headings",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#79",
       "hash": "sha256:9a9e2fee1f1fcbc10c58f1622a91c071d88e6a1c010f8bae34227566896ed978"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#1",
+      "hash": "sha256:733ea907995c8bdd774d9e1f3586d65089f032be4fad3d11ac424e5a5dd3bd39"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#2",
+      "hash": "sha256:8c27a14bad0f4dcf79e22136256c4408754671359800381a56aff64b64696865"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#7",
+      "hash": "sha256:bd40c55a2f23864bb7904314b453937d20c90c3378e85af724eaf158a2fdab44"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#11",
+      "hash": "sha256:b8b062744180353d06435ca9f9f3292d3ed92ac24e4fa9146dc4697630ad4726"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#12",
+      "hash": "sha256:dda4564070f92c2c01f97454b72f72e5ca8c48a2a62858d667809b7217899416"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#16",
+      "hash": "sha256:535a0f661b959d75596c8963e22db206d9b31532dd67dacdaab26c2a7aa53d67"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#18",
+      "hash": "sha256:ef9f56fc2090b0990f094567c53430dae96dc59c7cff021b704aa6133d27944a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#22",
+      "hash": "sha256:352f42db90d8cc72df3d6fd0aaf6618869eada656798258a6fffeb294d457afb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#26",
+      "hash": "sha256:c69c051b2b0d9a3ab425ac86bca76acb8e68471fcbeeb48dccb985c776022f48"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#28",
+      "hash": "sha256:ea187e754385b6145f4e27d6a54d1576bc5e51cbcba5b6d219ab3f41787d5611"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30",
+      "hash": "sha256:f7bf589439e23ea627c2cb97f16d79eb1976fbd5afad001922fec13c3b9fbe1d"
     },
     {
       "content": "headings",
@@ -14074,6 +14134,161 @@
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#80",
       "hash": "sha256:7ef5b33a084cddd7688d3a1452630159a8f404702a4aaf3be3e9d233f7b15052"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#1",
+      "hash": "sha256:6dfefa0f5ae66f80f8edb3bee8e086d36a163b26cef192765500cfa46ffb8ef7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#3",
+      "hash": "sha256:fa385012510d1cb859f9207823f191f6fd5ea481ed42e0c39601ececa6f7d0bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#4",
+      "hash": "sha256:ef8edbe52c9e3abc6536eb0d79d51d9a9656b47c41dfc8eb5267c3d2a718dad1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#5",
+      "hash": "sha256:5789b8a5d14fa54863c40b6287e82eb0d5398ead77a67ceceaece89756a6540f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#6",
+      "hash": "sha256:04be4ce5bd86e60b006950e70d04ec4a1cb35c108e4aa3550babf4e2c33a32af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#7",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#8",
+      "hash": "sha256:c79ffb8b32e4954bed5e708dedceca710dbeafa77d3874ea286baf52788eb288"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#9",
+      "hash": "sha256:085d5cb21c20530b4222bb33db601a40fe04e05a496dc1cb990ed158dd0eb6a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#10",
+      "hash": "sha256:bba393a0f19ca65ef167927ef5eb65d4c766b5f0e830b410f3fc641a9547ac12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#11",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#12",
+      "hash": "sha256:33e0470eda0dfe45fc171df14e0d6e9e8986459493162053c4188dcfea8c8b8d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#13",
+      "hash": "sha256:baaa382f1fad8b09ac820ede1bc6ee4afea726e33194bcdc535190586e23c512"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#14",
+      "hash": "sha256:b2407f162631e211371b728837e400d01822ee7f0cd0f4008d65591c3a20d55a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#15",
+      "hash": "sha256:3c60f9764e6e9e2544d974596ae6e39006d173ae735418163f6b0f3aeb829499"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#16",
+      "hash": "sha256:2570be2e6ef51e138d123600d063b1b769a8f0bedc4fbaa0cb04924d7fd8d2c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#17",
+      "hash": "sha256:bfe78617ea5e69e3ed4d1180c79944ea503165200432bf78a5fae5791d15046b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#18",
+      "hash": "sha256:32170f85e60472dc32b20ece84fae661acd8d51488a10056e59d5f898689dc5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#19",
+      "hash": "sha256:ccb75db05e8366c72c6c7fab20632cbeab200041ff4226d01a293756be521eef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#20",
+      "hash": "sha256:47b8dc461cdee25bc85e3a9ec99b1202e7f1f181fe061164d504fc1d544af4bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#21",
+      "hash": "sha256:3af451cb535a69a17a8445c1bb44ff0c63b1375b6be8e3247a2936f9e87c2286"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#22",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#23",
+      "hash": "sha256:353ee46cced2f893a40326a3ee5005d9bee3fcd4519441afb721e0062c7a1ee0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#24",
+      "hash": "sha256:842d1643b9119fdaa255adbbae2376126943c7a688c1605e4c0187d7a42cd743"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#25",
+      "hash": "sha256:9dac066a670129b606fa6b551eef09b10177cf6334befc877e9f808fe41d5845"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#26",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#27",
+      "hash": "sha256:3a9ec84025ce7c6f62ac3ecc476bbfba74e94b0fc0c107c982bce65442f874ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#28",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#29",
+      "hash": "sha256:b3f48d0b05d8548a9b782e81014a0a070904b9a9d7d80ae54287c2ca2933aa76"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#31",
+      "hash": "sha256:4d14b23d154d4ff70ca5f31ab6f698d8819553c9f33a270c1e7e9ed2b5d4ec9a"
     },
     {
       "content": "blocks",

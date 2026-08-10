@@ -68,6 +68,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-008-feature-requests-designs-and-results-are-born-structured-and-their-documents-are-projections.md@authored | docs/records/OD-SPEC-008-feature-requests-designs-and-results-are-born-structured-and-their-documents-are-projections.md | authored | 45 | 11 | sha256:9e8a8fe250f468cb42ec4f2cda4aa14270d5d53418d2785a8d3f85e744828e5a |
 | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md@authored | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md | authored | 35 | 10 | sha256:21513774b8df46cc65fb4e4e677e715729d1a9fcf9e8b9b6d7801b34ea67f837 |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md | authored | 80 | 16 | sha256:268e9c1f06f11ba051c138e1af00d30954cf0ae874b93b324f917cdaa0cadf2f |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md | authored | 31 | 11 | sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md@authored | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md | authored | 29 | 8 | sha256:1c14ec80ab265a141f114e04b9391559cf6eda8cba021361e8dd4ee10aee41cf |
 | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md@authored | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md | authored | 36 | 9 | sha256:d709970235889a73988a8da5d86b42a1ba5e503826adba05f843be4b1fdce369 |
@@ -612,6 +613,17 @@ profile: domain-specification
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#73 | authored | 2 | Consequences |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#77 | authored | 2 | Controls |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#79 | authored | 2 | Status |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#1 | authored | 1 | An unknown relation type is refused by name rather than by a foreign key |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#2 | authored | 2 | Question |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#7 | authored | 2 | What Was Measured |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#11 | authored | 2 | The Decision |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#12 | authored | 3 | 1. The vocabulary is checked where the record is known |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#16 | authored | 3 | 2. The refusal reports the vocabulary from the table |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#18 | authored | 3 | 3. Unknown terms stay refused, and the fix is the diagnosis |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#22 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#26 | authored | 2 | What This Does Not Do |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#28 | authored | 2 | Controls |
+| docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30 | authored | 2 | Status |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1 | authored | 1 | A document kind is a behaviour, not a label — and one of them was misnamed |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#2 | authored | 2 | Question |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#5 | authored | 2 | The Criterion |
@@ -18904,6 +18916,247 @@ the moment one incomplete row is admitted for convenience.
 Accepted. It states the rule set, the conditional rules, what a refusal names, the draft and
 accepted boundary, the attribution shape and where an open decision is recorded. It decides
 no table, no surface, and no relation constraint.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#1
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key · hash: sha256:6dfefa0f5ae66f80f8edb3bee8e086d36a163b26cef192765500cfa46ffb8ef7*
+
+# An unknown relation type is refused by name rather than by a foreign key
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#2
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#3
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Question · hash: sha256:fa385012510d1cb859f9207823f191f6fd5ea481ed42e0c39601ececa6f7d0bf*
+
+The seeded relation vocabulary is five terms — `supersedes`, `superseded_by`, `affects`,
+`affected_by` and `relates-to` — and `relations.relation_type` carries a foreign key onto
+`relation_types`. A record declaring a sixth term is therefore refused, and that refusal is
+the mechanism working: `RELATION_TYPES` says so in the comment that added `relates-to`.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#4
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Question · hash: sha256:ef8edbe52c9e3abc6536eb0d79d51d9a9656b47c41dfc8eb5267c3d2a718dad1*
+
+What it was not is diagnosable. `Seed_Governing_Records` surfaced it as
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#5
+
+*revision: authored · kind: code · heading: An unknown relation type is refused by name rather than by a foreign key / Question · hash: sha256:5789b8a5d14fa54863c40b6287e82eb0d5398ead77a67ceceaece89756a6540f*
+
+```
+StoreError::Sql("FOREIGN KEY constraint failed")
+```
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#6
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Question · hash: sha256:04be4ce5bd86e60b006950e70d04ec4a1cb35c108e4aa3550babf4e2c33a32af*
+
+which is the same eleven words for every foreign key the schema has, and names neither the
+record that carried the term nor the term itself.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#7
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#8
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Measured · hash: sha256:c79ffb8b32e4954bed5e708dedceca710dbeafa77d3874ea286baf52788eb288*
+
+While landing `OD-LEDGER-014`, one record declared `type: amends` for an edge onto
+`OD-LEDGER-001`. Every test in this crate seeds a store before it can assert anything, so
+that one bad word in one record produced:
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#9
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Measured · hash: sha256:085d5cb21c20530b4222bb33db601a40fe04e05a496dc1cb990ed158dd0eb6a4*
+
+| | |
+|---|---|
+| suites failing | 2 |
+| tests failing | 18 |
+| failures naming the record | 0 |
+| failures naming the term | 0 |
+| failures naming an admissible term | 0 |
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#10
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Measured · hash: sha256:bba393a0f19ca65ef167927ef5eb65d4c766b5f0e830b410f3fc641a9547ac12*
+
+Eighteen unrelated-looking failures, including `Test_Seeding_Should_Be_Idempotent` and
+`Test_No_Governing_Record_Should_Carry_A_Carriage_Return`, whose names point at three
+different subsystems and none of which is where the defect was. The author's next three
+questions — which record, which term, what instead — were each answerable only by reading
+`governing.rs`.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#11
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#12
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 1. The vocabulary is checked where the record is known · hash: sha256:33e0470eda0dfe45fc171df14e0d6e9e8986459493162053c4188dcfea8c8b8d*
+
+### 1. The vocabulary is checked where the record is known
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#13
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 1. The vocabulary is checked where the record is known · hash: sha256:baaa382f1fad8b09ac820ede1bc6ee4afea726e33194bcdc535190586e23c512*
+
+`Refuse_Unknown_Relation` runs in the second seeding pass, over each record's declared
+relations, and returns `StoreError::Record { path, cause }`. That variant already exists for
+exactly this shape and its documentation already says why: a document that does not read
+names the document, "because in either case the caller's next question is which file".
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#14
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 1. The vocabulary is checked where the record is known · hash: sha256:b2407f162631e211371b728837e400d01822ee7f0cd0f4008d65591c3a20d55a*
+
+The database layer cannot do this. By the time SQLite refuses, the record's path has been out
+of scope for two call frames — the constraint knows a term and a row and has never seen a
+filename. So this is not a check duplicated from the schema; it is the same rule stated where
+the context needed to explain it still exists. The foreign key remains, and remains the
+backstop for any path that does not come through seeding.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#15
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 1. The vocabulary is checked where the record is known · hash: sha256:3c60f9764e6e9e2544d974596ae6e39006d173ae735418163f6b0f3aeb829499*
+
+It is raised before `Reference_Node`, so a record on its way out does not leave a placeholder
+node behind it.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#16
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 2. The refusal reports the vocabulary from the table · hash: sha256:2570be2e6ef51e138d123600d063b1b769a8f0bedc4fbaa0cb04924d7fd8d2c0*
+
+### 2. The refusal reports the vocabulary from the table
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#17
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 2. The refusal reports the vocabulary from the table · hash: sha256:bfe78617ea5e69e3ed4d1180c79944ea503165200432bf78a5fae5791d15046b*
+
+`Admissible_Relations` builds the list from `RELATION_TYPES` rather than restating it. A
+restated list is a second authority that goes stale silently, and this one is read by an
+author in the middle of fixing the very thing it describes — the worst moment for it to be
+wrong. A term added to the table appears in the refusal with no second edit, and
+`Test_The_Reported_Vocabulary_Should_Come_From_The_Table` asserts the count rather than a
+fixed string so it survives the table changing.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#18
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 3. Unknown terms stay refused, and the fix is the diagnosis · hash: sha256:32170f85e60472dc32b20ece84fae661acd8d51488a10056e59d5f898689dc5f*
+
+### 3. Unknown terms stay refused, and the fix is the diagnosis
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#19
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 3. Unknown terms stay refused, and the fix is the diagnosis · hash: sha256:ccb75db05e8366c72c6c7fab20632cbeab200041ff4226d01a293756be521eef*
+
+This is the part worth stating, because the obvious reading of the incident is the wrong one.
+The record that failed wanted `amends`, which is a real relation and arguably the honest one.
+Admitting it would have made the seed pass.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#20
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 3. Unknown terms stay refused, and the fix is the diagnosis · hash: sha256:47b8dc461cdee25bc85e3a9ec99b1202e7f1f181fe061164d504fc1d544af4bd*
+
+It is refused anyway. `ADR-ARTIFACT-GRAPH-002`'s vocabulary arrives with the corpus, and
+widening the seed table now would put an invented answer where a recorded one belongs — the
+reasoning `RELATION_TYPES` already carries for its tier, applied to its membership. The
+refusal message says so, so the next author reads why the table is short at the moment they
+are tempted to extend it, and reaches for an existing term where that is honest. In the
+measured case `affects` was honest and was used.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#21
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / The Decision / 3. Unknown terms stay refused, and the fix is the diagnosis · hash: sha256:3af451cb535a69a17a8445c1bb44ff0c63b1375b6be8e3247a2936f9e87c2286*
+
+The defect was never that the store refused. It was that it refused anonymously.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#22
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#23
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Considered And Rejected · hash: sha256:353ee46cced2f893a40326a3ee5005d9bee3fcd4519441afb721e0062c7a1ee0*
+
+**Widen `RELATION_TYPES` when a record needs a term.** Rejected by decision 3. It answers a
+question the corpus already answers, and each addition is one more term the real vocabulary
+has to be reconciled against later.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#24
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Considered And Rejected · hash: sha256:842d1643b9119fdaa255adbbae2376126943c7a688c1605e4c0187d7a42cd743*
+
+**Validate in `Put_Relation`.** The natural home by proximity and the wrong one by
+information: `Put_Relation` receives an identifier, a term and a target, and would report the
+same anonymous failure one layer up. The path is what the author needs and only the seeding
+loop has it.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#25
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / What Was Considered And Rejected · hash: sha256:9dac066a670129b606fa6b551eef09b10177cf6334befc877e9f808fe41d5845*
+
+**Collect every bad term and report them together.** Attractive, and refused because seeding
+is a transaction against a store that must not be left half-written. Stopping at the first
+bad record keeps the failure one record deep, which is the property `done_when` asks for when
+it says one record with one bad term must not read as eighteen failures.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#26
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#27
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / What This Does Not Do · hash: sha256:3a9ec84025ce7c6f62ac3ecc476bbfba74e94b0fc0c107c982bce65442f874ca*
+
+- It does not change which relations are admissible, or the schema, or the foreign key.
+- It does not touch the projections. A record refused at seeding never reaches a renderer.
+- It does not make every `StoreError::Sql` diagnosable. This closes the one cause a record
+  author can actually cause; the others are reached by code rather than by content.
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#28
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#29
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Controls · hash: sha256:b3f48d0b05d8548a9b782e81014a0a070904b9a9d7d80ae54287c2ca2933aa76*
+
+| Weakening | What it produces |
+|---|---|
+| leave the foreign key to report it | 18 failures across 2 suites, 0 of them naming the record or the term |
+| restate the vocabulary in the message | a list that goes stale, read by an author fixing the thing it describes |
+| admit unknown terms so the seed passes | an invented vocabulary where `ADR-ARTIFACT-GRAPH-002`'s recorded one belongs |
+| refuse everything | the first relation stops the seed, which is worse than the foreign key it replaced — the reason `Test_Every_Seeded_Term_Should_Be_Admitted` exists |
+| assert only that the message names the record | green for a message that names the record and nothing else, which every refusal here already does |
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30
+
+*revision: authored · kind: heading · heading: An unknown relation type is refused by name rather than by a foreign key / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#31
+
+*revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Status · hash: sha256:4d14b23d154d4ff70ca5f31ab6f698d8819553c9f33a270c1e7e9ed2b5d4ec9a*
+
+Closed by `P10-VOCABULARY-REFUSAL`.
 
 ### docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1
 

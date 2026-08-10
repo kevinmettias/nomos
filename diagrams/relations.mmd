@@ -34,6 +34,7 @@ graph LR
     arc_specdb_001 -->|"relates-to"| od_project_002["OD-PROJECT-002"]
     arc_specdb_001 -->|"relates-to"| od_spec_008["OD-SPEC-008"]
     arc_specdb_001 -->|"relates-to"| od_spec_010["OD-SPEC-010"]
+    arc_specdb_001 -->|"relates-to"| od_spec_011["OD-SPEC-011"]
     arc_specdb_001 -->|"relates-to"| od_trace_001["OD-TRACE-001"]
     arc_specdb_002 -->|"relates-to"| arc_specdb_001
     arc_specdb_002 -->|"relates-to"| od_spec_005
@@ -362,6 +363,7 @@ graph LR
     od_spec_006 -->|"relates-to"| od_ledger_016
     od_spec_006 -->|"relates-to"| od_spec_005
     od_spec_006 -->|"relates-to"| od_spec_008
+    od_spec_006 -->|"relates-to"| od_spec_011
     od_spec_007 -->|"affects"| od_ledger_001
     od_spec_007 -->|"relates-to"| arc_specdb_002
     od_spec_007 -->|"relates-to"| od_completeness_001
@@ -389,6 +391,8 @@ graph LR
     od_spec_010 -->|"relates-to"| od_spec_007
     od_spec_010 -->|"relates-to"| od_spec_008
     od_spec_010 -->|"relates-to"| od_spec_009
+    od_spec_011 -->|"relates-to"| arc_specdb_001
+    od_spec_011 -->|"relates-to"| od_spec_006
     od_store_001 -->|"affects"| d_129
     od_store_001 -->|"relates-to"| od_capability_002
     od_store_001 -->|"relates-to"| od_capability_003
@@ -474,6 +478,7 @@ graph LR
     od_spec_008
     od_spec_009
     od_spec_010
+    od_spec_011
     od_store_001
     od_syntax_001
     od_syntax_002
