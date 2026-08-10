@@ -2421,6 +2421,41 @@
       },
       "verified": null,
       "abandoned": []
+    },
+    {
+      "id": "P10-ADD-PROMISE",
+      "title": "work add promises to refuse territory already spoken for, and refuses only a duplicate id",
+      "why": "The doc comment on Add in crates/host/nomos-cli/src/work.rs reads: records a new item, refusing one whose territory is already spoken for. It does not do that. Add rejects a duplicate identifier and then validates the whole document, and the validation that looks at territory overlap only compares against active claims - a brand new item holds no claim, so that check has nothing to say about it and never fires. Demonstrated twice on this board rather than argued. Commits 60d0c5b and 7efc2a9 each added an item reserving crates/substrate/nomos-ledger, crates/spec/nomos-spec-store and tests/contract while another session held all three under an active claim on P10-SEEDING-SERIALIZES, and both were accepted with the message added, reserving 5 paths. Whether Add should refuse is a real question and not obviously yes. Opening an item for work that is currently blocked is the normal way this board is used - both items above were opened precisely because their territory was held - so a refusal would forbid the ordinary case. The likely resolution is that the sentence is wrong rather than the behaviour, but that is a decision to make rather than assume, which is why this reserves a record. What makes it worth an item at all is the class it belongs to. A doc comment asserting a control that does not run is the same defect this ledger has recorded repeatedly under other names - a claim of coverage written where nothing checks it. The next person to reason about whether two items can safely be opened against one territory will read that sentence and be told a check protects them.",
+      "done_when": "The sentence and the behaviour agree, and which one moved is recorded with the reason. If Add is to refuse overlapping territory, a test claims an item and then asserts that adding an overlapping one is refused and names the holder, with the negative control confirmed red alone. If the comment is what was wrong, it says what Add actually guarantees - a unique identifier and a document that still validates - and a test asserts the behaviour the comment now describes, so the correction is held in place by something other than review. Either way the record states why opening an item against held territory is or is not legitimate, since that is the question the sentence was answering wrongly.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-LEDGER-010"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
     }
   ]
 }
