@@ -4643,10 +4643,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-agent-required-w23",
+        "acquired_at": 1786348449,
+        "lease_expires_at": 1786355649
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4804,6 +4808,37 @@
           "abandoned_at": 1786348249
         }
       ],
+      "displaced": []
+    },
+    {
+      "id": "P10-LEDGER-SWEEP",
+      "title": "A commit touching the ledger carries whatever other sessions wrote since the diff, and the message describes only its own item",
+      "why": "work/ledger.json is one file and every session writes it, so git add work/ledger.json stages whatever other sessions added between the diff check and the commit. Nothing is corrupted and no territory rule is broken - territory governs who may write a path, and this is several sessions writing the same path legitimately - but commit messages systematically under-describe what they carry, and the history is the only place a reader can ask what a change was for. Verified twice inside five commits. 63d51ee asserts Nothing here is a code change; this commit is the transition, while its ledger diff adds P10-AGENT-REQUIRED and P10-CORPUS-TRACE, two items another session opened that the message never names. P10-CANONICITY-DECISION was itself introduced by bd724ee, whose subject is the P10-SYNTAX-V2 payload parser. 0b98305 is the counter-example proving this is avoidable rather than inherent: its subject is the opening of the item it carries.",
+      "done_when": "A commit that changes work/ledger.json either describes the ledger transitions it carries, or cannot carry ones its author did not make. Which of those is the answer is the decision, recorded on stated grounds rather than settled by whichever is cheaper to write. If the answer is that authors must remember, the record says why a repository that derives its gate lint step from gate.yml rather than restating it is content to leave this one to memory - P10-DIAGRAM-OWED is being asked the same question about the diagram, and two answers that disagree must say why. Not closed by a hazard line in AGENTS.md unless the record exists and argues for exactly that. A mechanical answer - a verb that stages only the items its holder transitioned, or a check over the message - brings its own predicate and its own files, which means widening this territory before starting rather than during. The record is registered under crates/spec/nomos-spec-store/records or it is not governing.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-018",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-018.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
       "displaced": []
     }
   ]
