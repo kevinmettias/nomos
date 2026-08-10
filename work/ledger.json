@@ -3229,14 +3229,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-pattern-brick-w51",
-        "acquired_at": 1786381331,
-        "lease_expires_at": 1786395731
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3250,7 +3246,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "nning unittests src\\main.rs (target\\debug\\deps\\nomos-b775cb860a2e14bd.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-08c1b26a32bf36cc.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-31debe44ae1233ee.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-c35edda1aad1ab39.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-a824ca41384b08c5.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-0749c8d63c3ceac1.exe)\n     Running tests\\gate_step.rs (target\\debug\\deps\\gate_step-651a678d29995d98.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-f325696e69b045cd.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-253c06b98188f76c.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-32c64e36d2416b1f.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-023ed72b0b5f56bc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786382312,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
