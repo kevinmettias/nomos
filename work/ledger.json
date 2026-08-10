@@ -2836,8 +2836,13 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "crates/substrate/nomos-ledger",
-          "crates/host/nomos-cli",
+          "crates/substrate/nomos-ledger/src/exclusion.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/src/item.rs",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/tests/takeover_is_recorded.rs",
           "crates/spec/nomos-spec-store/records/OD-LEDGER-012.record",
           "tests/contract/surface/nomos-ledger.txt",
           "README.md",
@@ -2847,10 +2852,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-lapse-takeover-w16",
+        "acquired_at": 1786344104,
+        "lease_expires_at": 1786354904
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -3388,6 +3397,7 @@
           "tests/contract/surface/nomos-cap-syntax.txt",
           "tests/contract/surface/nomos-lang-rust.txt",
           "tests/contract/surface/nomos-lang-rust-scan.txt",
+          "crates/spec/nomos-spec-store/records/OD-SYNTAX-001.record",
           "docs/records/OD-SYNTAX-001"
         ],
         "patterns": []
@@ -3538,12 +3548,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P10-FACT-BYPASS"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-check-gate-w17",
+        "acquired_at": 1786344104,
+        "lease_expires_at": 1786354904
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4195,6 +4209,79 @@
           "nomos-contract-tests",
           "--test",
           "agent_harness"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-SERVICE-SEAM",
+      "title": "One crate chooses the platform, runs the verb and renders the answer, and a second adapter would duplicate all three",
+      "why": "The README plans transports around a headless core, with the CLI as one adapter and IPC, gRPC and MCP as others. nomos-cli is the only place any of them could be written from today. It is 4104 lines across six modules: spec.rs 1509, work.rs 1047, check.rs 827. work.rs imports FileLock, StdFileSystem, StdProcessLauncher and SystemClock from nomos-platform-std directly, so choosing a platform, running a verb and rendering its outcome are one body of code with no seam between them.\n\nNaming a concrete provider here is not the defect. OD-RULES-001 makes nomos check a composition root deliberately, and a composition root is exactly the place permitted to name concrete things. The defect is that nothing separates composition from orchestration: a second adapter wanting the same work verbs would have to re-derive the claim, lease and finish sequence rather than call it, and the two copies would then drift with nothing able to notice.\n\nThis is cheapest to settle while there is one adapter and no second caller to migrate. It gets more expensive with every command added, and the board has more commands queued than it has adapters.",
+      "done_when": "Where application orchestration lives is decided and recorded. Either a seam exists between choosing a platform, running a verb and rendering its outcome, such that a second adapter can call the middle one without taking the other two, and the work group is the case that demonstrates it. Or the record states why one crate holding all three is right for as long as there is one adapter, names what that costs, and says what would make it wrong. Not closed by moving code into modules inside nomos-cli: a module boundary no second crate can depend on is the same coupling at a different indentation.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/surface",
+          "tests/contract/tests/boundaries.rs",
+          "crates/spec/nomos-spec-store/records/OD-HOST-001.record",
+          "docs/records/OD-HOST-001"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-BAND0-ADMISSION",
+      "title": "Two authorities describe band 0 differently, and the wider one is the copy no test reads",
+      "why": "README line 36 calls nomos-contracts protocol truth that depends on serde and nothing else. Cargo.toml line 3 calls it the only authoritative statement of Nomos semantics. AGENTS.md says that when two authorities disagree the mechanical one wins and the disagreement is a defect worth an item. Here the mechanical one is also the narrow one, and the wide claim sits in a workspace manifest comment that nothing reads back.\n\nWhat is actually missing is an admission rule rather than a phrase. Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else constrains what band 0 may depend on, and Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band constrains where a member is listed. Nothing constrains what may be added to nomos-contracts, so the criterion is whatever the comment says, and every concept in the product can argue that it is a statement of Nomos semantics. The crate holds ten modules today and the argument for the eleventh is already written for it.\n\nNothing in the crate is wrong yet, which is the reason to settle it now rather than after a finding, an architecture delta or an agent type has been admitted on the strength of a sentence nobody chose.",
+      "done_when": "One statement of what band 0 is for, in the authority that governs it, and no second wider statement anywhere else. The criterion says what earns admission rather than listing what has been admitted so far: crossing a subsystem, process or plugin boundary and needing one stable shared representation is the candidate, and the record says what a domain-local concept does instead. Not closed by deleting the Cargo.toml sentence and stating no criterion in its place, because an unstated rule admits everything the wide one did.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          "README.md",
+          "crates/contracts/nomos-contracts",
+          "tests/contract/tests/boundaries.rs",
+          "crates/spec/nomos-spec-store/records/OD-CONTRACTS-001.record",
+          "docs/records/OD-CONTRACTS-001"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },
