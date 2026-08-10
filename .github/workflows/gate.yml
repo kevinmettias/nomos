@@ -39,17 +39,28 @@ jobs:
       # governed pair would move it to "not built here" and still exit zero -- which would
       # make `rm` the way to silence a drifted publication.
       #
-      # Only `diagram-set` is named, and the reason is the runner rather than taste. Ten
-      # of the fourteen shipped profiles select corpus content, and no corpus is present
-      # here (see the step below), so requiring one would fail for a variable that is not
-      # set rather than for a file that drifted. `diagram-set` reads only the relations
-      # between the governing records compiled into the binary, so it is reconstructible
-      # on any runner. A profile that CANNOT be rebuilt here must not be required here.
+      # Two profiles are named, and which two is decided by the runner rather than by
+      # taste. Fourteen of the eighteen shipped profiles refuse over a store holding only
+      # the governing records compiled into the binary -- measured, not assumed -- because a
+      # section selects corpus content and no corpus is present here (see the step below).
+      # Requiring one of those would fail for a variable that is not set rather than for a
+      # file that drifted. A profile that CANNOT be rebuilt here must not be required here.
+      #
+      # `diagram-set` reads the relations between the governing records.
+      # `domain-specification` reads their documents, headings and blocks, which makes it
+      # the record set as one readable document and the reason it is worth the price below.
+      #
+      # `html-site` and `traceability-matrix` also rebuild here and are deliberately NOT
+      # required. Every required projection is a re-render obligation on every future record
+      # author, and `html-site` is the same content as `domain-specification` in another
+      # format. `OD-PROJECT-002` records why the list is a declared list rather than every
+      # profile that happens to render, and the pair here is mirrored by
+      # `Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store`.
       #
       # This is publication policy, not a property of the profile: the catalogue says how
       # each projection is built and nothing there says whether this repository ships it.
       - name: Required projections
-        run: cargo run --quiet -p nomos-cli -- spec freshness --into . --require diagram-set
+        run: cargo run --quiet -p nomos-cli -- spec freshness --into . --require diagram-set --require domain-specification
 
       # The only step in this gate that judges code rather than paperwork. It runs the
       # rule layer over this workspace and exits on what it found.

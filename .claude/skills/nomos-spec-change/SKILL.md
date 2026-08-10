@@ -112,13 +112,21 @@ cp docs/records/<your-record>.md          <scratch>/render/docs/records/
 cp crates/spec/nomos-spec-store/records/<ID>.record <scratch>/render/crates/spec/nomos-spec-store/records/
 cd <scratch>/render
 CARGO_TARGET_DIR=<scratch>/render-target cargo build -q --bin nomos
-<scratch>/render-target/debug/nomos spec render    --profile diagram-set --into .
-<scratch>/render-target/debug/nomos spec freshness --into . --require diagram-set   # must exit 0
+<scratch>/render-target/debug/nomos spec render    --profile diagram-set           --into .
+<scratch>/render-target/debug/nomos spec render    --profile domain-specification  --into .
+<scratch>/render-target/debug/nomos spec freshness --into . --require diagram-set --require domain-specification   # must exit 0
 ```
 
-Then copy **both** halves back — the body and the sidecar beside it,
-`diagrams/relations.mmd.nomos-projection.json` — and commit them with the record that moved
-them. Build in the worktree: a binary built in the
+**Both required profiles, every time.** The gate requires `diagram-set` and
+`domain-specification`, so rendering one and not the other leaves a stale output and the gate
+fails on your commit for the half you skipped. `freshness` with both `--require` flags is what
+tells you before you push; run it with the same pair the gate uses, which
+`.github/workflows/gate.yml` holds.
+
+Then copy **all four** halves back — each body and the sidecar beside it:
+`diagrams/relations.mmd`, `diagrams/relations.mmd.nomos-projection.json`,
+`spec/domain-specification.md` and `spec/domain-specification.md.nomos-projection.json` — and
+commit them with the record that moved them. Build in the worktree: a binary built in the
 shared tree has the wrong records compiled into it, which is the whole point.
 
 Two things follow that surprise people:

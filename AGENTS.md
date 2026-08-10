@@ -81,13 +81,17 @@ prose bodies into arguments and the commit fails after `git add` has already run
 and CI has none of them, so a green run is not evidence a corpus-backed claim was checked.
 `tests/contract/` declares the size of that hole; read it before believing a number.
 
-**Changing a governing record leaves a committed projection stale, and the gate fails on
-it.** `diagrams/relations.mmd` is derived from the relation graph, so a commit touching
-`docs/records/` changes it whether or not that commit meant to. Re-render before committing:
-`nomos spec render --profile diagram-set --into .`. Render last, and only from a tree whose
-records are all committed — the store is built from the files on disk, so rendering beside
-somebody else's uncommitted record bakes their unlanded work into your output and the gate
-then fails on the commit that carries it.
+**Changing a governing record leaves every committed projection stale, and the gate fails on
+them.** `diagrams/relations.mmd` and `spec/domain-specification.md` are both derived from the
+record set, so a commit touching `docs/records/` changes both whether or not it meant to.
+Re-render **both** before committing — the gate requires each one, so rendering only the
+diagram leaves the other stale:
+`nomos spec render --profile diagram-set --into .` and
+`nomos spec render --profile domain-specification --into .`. Render last, and only from a tree
+whose registered records are exactly the ones your commit publishes — not the tree you are
+sitting in. `.claude/skills/nomos-spec-change/SKILL.md` has the four commands that construct
+it; `docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md`
+is why the shared tree is never that tree.
 
 ## What this file is not
 
