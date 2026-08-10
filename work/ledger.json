@@ -6535,7 +6535,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-SPENT-IDENTIFIER, which is this item with a record identifier of its own. The defect is unchanged and still open; what could not be executed was this item, and the reason it could not is this item's own subject arriving one step earlier than the item describes it.\n\nThree open items reserved one identifier. This item, P10-DECLINED-DEPENDENCY and P11-SELECTION-AUTHORITY all reserved docs/records/OD-LEDGER-020 and crates/spec/nomos-spec-store/records/OD-LEDGER-020.record, authored by three sessions each reaching for the next free OD-LEDGER number. work add refuses a duplicate item id and nothing else, so nothing compared them. That is the missing check this item names, against an identifier that is unspent rather than published, which is why this item could not catch itself.\n\nThe collision was not latent, unlike the published-identifier case this item was written about. Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer claims every open record writer on its records-only projection, and two open items on one identifier refuse each other there. It was red against the repository's own board, naming this item as the holder that refused P11-SELECTION-AUTHORITY, and it reddened every predicate naming -p nomos-ledger, including this item's own.\n\nThree subjects, three records, rather than one record three items amend. OD-LEDGER-016 makes an identifier and the file it names one subject, so a shared reservation is the amendment case and it excludes correctly; the guard is right under either design and does not decide between them. What decides is that a declined dependency's effect on its dependent, what work add refuses at authoring time, and where the choice of next work is decided are three decisions and not three sections of one. P10-DECLINED-DEPENDENCY keeps OD-LEDGER-020 because its done_when names that identifier in prose. This subject takes OD-LEDGER-022, and P11-SELECTION-AUTHORITY's takes OD-LEDGER-023.\n\nThe two instances this item measured have both closed by other routes since it was written. P10-DERIVED-FACT and P10-REQUEST-LAYOUT are Declined, so no open item holds a spent identifier today. P11-SPENT-IDENTIFIER carries them forward as measurement rather than as an open obligation, and says so.\n\nNothing was written to the tree under this item."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -6556,7 +6560,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-record-id-clear-b73",
+        "declined_at": 1786386791
+      }
     },
     {
       "id": "P11-ECOSYSTEM-UPWARD",
@@ -6648,7 +6655,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-NEXT-WORK, which is this item with a record identifier of its own. The defect is unchanged and still open; nothing about the selection question was decided or given up here.\n\nThree open items reserved docs/records/OD-LEDGER-020 and crates/spec/nomos-spec-store/records/OD-LEDGER-020.record: this one, P10-DECLINED-DEPENDENCY and P11-SPENT-RECORD-ID, each authored by a session reaching for the next free OD-LEDGER number. work add refuses a duplicate item id and nothing else, so nothing compared them. Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer then went red against the repository's own board, naming this item as the one refused, and it reddened every predicate that names -p nomos-ledger.\n\nOne record per item rather than one record three items amend. OD-LEDGER-016 makes an identifier and the file it names one subject, so a shared reservation is the amendment case and it excludes correctly; the guard is right under either design and does not settle it. What settles it is that a declined dependency's effect on its dependent, what work add refuses at authoring time, and where the choice of next work is decided are three decisions and not three sections of one. P10-DECLINED-DEPENDENCY keeps OD-LEDGER-020, whose identifier its done_when names in prose. This subject takes OD-LEDGER-023.\n\nThere is an irony worth leaving on the record rather than deleting. This item is about the choice of what to work on next being a model's rather than something computed, and three sessions independently choosing the same next free record number is that choice going wrong in the smallest possible way. It is evidence for the item and it is not the item, which is why it is here and not folded into P11-NEXT-WORK's done_when.\n\nNothing was written to the tree under this item."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -6669,7 +6680,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-record-id-clear-b73",
+        "declined_at": 1786386865
+      }
     },
     {
       "id": "P11-ITEM-KIND",
@@ -6689,7 +6703,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-ITEM-DISCRIMINANT, which is this item with a record identifier of its own. The defect is unchanged and still open; nothing about the item schema was decided or given up here.\n\nTwo open items reserved docs/records/OD-LEDGER-021 and crates/spec/nomos-spec-store/records/OD-LEDGER-021.record: this one and P11-ADD-NOT-DURABLE. work add refuses a duplicate item id and nothing else, so nothing compared them, and Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer refuses two open items on one identifier, which reddened every predicate naming -p nomos-ledger.\n\nOne record per item rather than one record two items amend. OD-LEDGER-016 makes an identifier and the file it names one subject, so a shared reservation is the amendment case and it excludes correctly; the guard is right under either design and does not settle it. What settles it is that a discriminant on the item schema and a write that returned exit 0 and did not survive are two decisions and not two sections of one.\n\nWhich of the two moved was decided by the board rather than by authoring order. P11-ADD-NOT-DURABLE was claimed by claude-add-durable-b41 while this collision was being cleared, and decline refuses a held item retryably -- correctly, because ending an item is its holder's call. A held item is also the wrong one to move: its holder is writing against that identifier now, and taking it out from under them would turn one red guard into a mid-claim surprise. So the identifier stays where the live claim is, and this item, which was Ready and unclaimed, takes OD-LEDGER-024.\n\nNothing was written to the tree under this item."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -6710,7 +6728,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-record-id-clear-b73",
+        "declined_at": 1786386924
+      }
     },
     {
       "id": "P11-REEXPORT-SURFACE",
@@ -6764,10 +6785,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-add-durable-b41",
+        "acquired_at": 1786386800,
+        "lease_expires_at": 1786397600
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -6798,6 +6823,175 @@
           "tests/contract/surface/nomos-ledger.txt",
           "docs/records/OD-LEDGER-022",
           "crates/spec/nomos-spec-store/records/OD-LEDGER-022.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-SPENT-IDENTIFIER",
+      "title": "A record identifier that is already published can be reserved again, because work add compares only against open items",
+      "why": "This is P11-SPENT-RECORD-ID with a record identifier of its own. The defect it names is unchanged: work add refuses a duplicate item id and nothing else, so an author who reserves a record identifier somebody has already spent is told nothing, and the only guard is that they remember to look.\n\nP10-ADD-PROMISE closed by narrowing the doc comment rather than adding the territory check, so the promise came out of the prose and the check never went in. Nothing reddens on a spent identifier because a spent identifier excludes nobody: the collision that reddens Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer is two OPEN items on one identifier, not one open item on a published one, which is exactly why nothing will catch this. Whoever claims such an item finds the identifier taken mid-claim, and there is no work edit to move it.\n\nThe two instances P11-SPENT-RECORD-ID measured have since closed by other routes and are carried here as evidence rather than as work. P10-DERIVED-FACT reserved docs/records/OD-ANALYSIS-002 and its registration file, both published by 0bcaf6d under P10-DEPENDENT-EDGE. P10-REQUEST-LAYOUT reserved docs/records/OD-SPEC-011, published by 515fc26 under P10-VOCABULARY-REFUSAL. Both items are now Declined, so no open item carries a spent identifier today. The mechanism is untouched by that, and the next author reaches for the next free number the same way.\n\nThe unspent case is folded in here rather than opened as a third item, because it is the same comparison in the same function and a separate item would reserve the same file to make it. Three open items reserved docs/records/OD-LEDGER-020 and two reserved OD-LEDGER-021, each authored by a session taking the next free OD-LEDGER number, and that collision reddened Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer against the repository's own board and every predicate naming -p nomos-ledger with it. So work add is silent on both halves of one question: an identifier a record already has, and an identifier another open item has already spoken for. The second half is what P10-ADD-PROMISE was opened for and decided not to build.",
+      "done_when": "work add refuses a territory naming a record identifier that already resolves to a file under docs/records, and names that file in the refusal. It exits as a usage refusal rather than a store error, because the author fixes it by choosing another identifier. A test asserts the refusal, and its negative control is that an unspent identifier is still accepted.\n\nwork add also refuses a record identifier another open item already reserves, and names that item. The two refusals are distinguishable rather than one message, because choosing a different identifier is the remedy for one and retiring the other item is the remedy for the other.\n\nBoth comparisons are decided by Territory::Intersect and Normalize_Path rather than by a containment rule written beside them. OD-LEDGER-016 already makes an identifier and the file it names one subject, and a second answer to that is what OD-LEDGER-005 records the cost of.\n\nOnly open items reserve. A Done or Declined item's territory is history rather than a reservation, in the sense Is_Open in crates/substrate/nomos-ledger/tests/records_do_not_serialize.rs already gives that word, and refusing against it would make every closed item a permanent claim.\n\nNot closed by a doc comment telling authors to check, which is what P10-ADD-PROMISE already did. No item on the board carries a spent identifier as this lands, so the check is proved by its own tests rather than by what it happens to catch on the day.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/tests",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-022",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-022.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-ADD-IDENTIFIER-GUARD, which is this item with a record identifier of its own. The defect is unchanged and still open. This is the second reissue of one subject, after P11-SPENT-RECORD-ID, and both were forced by the thing the subject is about.\n\nP11-DISPATCH-SPLIT was added by another session reserving docs/records/OD-LEDGER-022 and its registration file, between the board read that chose OD-LEDGER-022 for this item and the add that took it. Both adds returned exit 0 and both are on the board; nothing compared them, because work add compares only item ids. Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer went red again, this time naming this item as the one refused.\n\nThis item moves rather than P11-DISPATCH-SPLIT. It landed second -- index 121 against 122 in the ledger's own append order -- and it belongs to the session clearing this collision, so moving it disturbs nobody else's work. P11-DISPATCH-SPLIT is Ready and unclaimed and is deliberately left alone.\n\nOD-LEDGER-025 is the identifier, checked against docs/records and against every open item's territory at the moment of authoring, which is the check this subject exists to stop being manual.\n\nNothing was written to the tree under this item."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-record-id-clear-b73",
+        "declined_at": 1786387001
+      }
+    },
+    {
+      "id": "P11-NEXT-WORK",
+      "title": "Nothing computes what to work on next, so the choice is a model's and the board has already paid for it twice",
+      "why": "This is P11-SELECTION-AUTHORITY with a record identifier of its own. The defect it names is unchanged, and the reasoning below is the reasoning it was opened with.\n\nEvery ledger verb answers the same question. Claim, Renew, Release, Decline and Claim_Refusal all answer may I have this one, and none of them answers which one. The only thing shaped like selection is work list, and README says of it that the listing column is a snapshot and means nothing seconds later, which is a warning against using it for exactly this. So the choice of what to work on next is made by whichever model read the board, and two sessions reading the same board can differ with nothing recording that they did.\n\nThe cost is on this board with a receipt rather than being argued from first principles. P10-DECLINE-VERB's rationale records that one subject became three items -- P10-REQUIRABLE-DECLARED, P10-REQUIRABLE-FLOOR which delivered the work, and P10-REQUIRABLE-SET which redid work already landed -- and that a session spent its run duplicating what was already committed. The reasons that would have prevented it existed, as two abandonments on the item, and were behind work show while the state column said Ready. A selection step would have read them; a model scanning a listing did not.\n\nThere is now a second receipt, and it is the one that closed P11-SELECTION-AUTHORITY itself. Three sessions independently reserved docs/records/OD-LEDGER-020 and two reserved OD-LEDGER-021, each having read the board and chosen the next free number, and the ledger recorded five reservations without comparing any of them. That is smaller than the P10-REQUIRABLE waste and it is the same shape: a choice made from a snapshot by whoever was reading, with nothing above the ledger to make it once.\n\nThis is not a defect in exclusion. Exclusion is what the ledger claims to do, it does it, and it refuses an unanswerable overlap rather than guessing, which is the property any scheduler above it would need and would otherwise have to reinvent. What has no home is the layer above: the eligible set, and the order over it.\n\nIt becomes load bearing rather than merely wasteful under unattended execution, because the same board read by the same policy has to yield the same choice before anything about a run is reproducible. A run whose first decision is unreproducible has no reproducible decisions after it.",
+      "done_when": "Where the choice of next work is decided is answered, and the answer is either implemented or recorded.\n\nEither an eligible set is computed from the board rather than read off it -- dependencies satisfied, not blocked, territory claimable now, refusals already known rather than discovered by attempting a claim -- and the order over that set is stable, so the same board under the same policy yields the same choice, and a different choice is a change somebody made rather than a model that read differently. Ties break on something written down rather than on document order.\n\nOr a record states that selection stays with the holder, says what that costs, names P10-REQUIRABLE as the measured instance rather than describing the risk in the abstract, and says what would change the decision.\n\nIf selection gains an authority, AGENTS.md stops instructing the agent to pick an item and names the thing that picks, and agent_harness.rs asserts that it does -- because a contract file that still says pick is the instruction any session will actually follow.\n\nNot closed by sorting the output of work list. Presentation is not selection, and a sorted snapshot is the same snapshot the README already warns about.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "AGENTS.md",
+          "tests/contract/tests/agent_harness.rs",
+          "docs/records/OD-LEDGER-023",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-023.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-ITEM-DISCRIMINANT",
+      "title": "An item a person required and one an agent proposed are the same row, and neither says what kind of work it is",
+      "why": "This is P11-ITEM-KIND with a record identifier of its own. The defect it names is unchanged and the reasoning below is the reasoning it was opened with.\n\nThe item schema is id, title, why, done_when, territory, state, depends_on, blocked, claim, verification, verified, abandoned, displaced and declined. Nothing on it says what kind of work the item is, and nothing says where it came from. work add refuses exactly one thing, an item that reserves nothing, and accepts everything else -- any prose, any territory, from anybody.\n\nThat is a reasonable board for a person to write, and it becomes load bearing the moment work is proposed by the same thing that executes it. A design in progress for this repository has an agent observe something, propose work, and the system classify that proposal into a typed form before it is allowed into the graph. The classification step has nowhere to attach: there is no kind for it to classify into, and no origin field that distinguishes a proposal from a requirement. A proposed item and a required one are the same row, so the guard against a session inventing its own next subject would have to be a convention, and a convention is what OD-LEDGER-006 already records the ledger cannot enforce.\n\nIt also makes the board unreadable in the one direction that matters for ordering. State says where an item is; nothing says what it is. A validation obligation, an architectural decision, a correction and a cleanup are indistinguishable rows, so any priority over them has to be recovered from prose by whoever is reading, which is the same recovery P11-NEXT-WORK is about not leaving to a model.\n\nThe citation moved with the identifier. P11-ITEM-KIND cited P11-SELECTION-AUTHORITY, which was itself declined and reissued as P11-NEXT-WORK over the same record-identifier collision that closed this item; the subject and the argument are unchanged and only the id it points at is different.",
+      "done_when": "An item says what kind of work it is and where it came from, or a record says why it should not.\n\nIf it does, the kinds are a closed set decided in the record rather than a free string, so an unrecognised value is refused by the same guard that already refuses an unknown field rather than being stored and ignored. Origin distinguishes at minimum work that was required from work a session proposed. Existing items are given kinds rather than left absent, because a field empty on a hundred rows and set on the next is a field nothing can be asked about -- and the migration is the schema bump the guard exists for.\n\nIf a record says otherwise, it says what reads the board instead and how that reader recovers kind, given that any ordering over ready work has to be an ordering over something.\n\nNot closed by a free-form tag list. This is a discriminant, and a list of strings is the prose it was supposed to replace.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/item.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "README.md",
+          "docs/records/OD-LEDGER-024",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-024.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-ADD-IDENTIFIER-GUARD",
+      "title": "A record identifier already published, or already reserved by another open item, can be reserved again because work add compares only item ids",
+      "why": "This is P11-SPENT-RECORD-ID, reissued a second time as P11-ADD-IDENTIFIER-GUARD. The defect it names is unchanged: work add refuses a duplicate item id and nothing else, so an author who reserves a record identifier somebody has already spent -- or one another open item has already spoken for -- is told nothing, and the only guard is that they remember to look.\n\nP10-ADD-PROMISE closed by narrowing the doc comment rather than adding the territory check, so the promise came out of the prose and the check never went in. Nothing reddens on a spent identifier because a spent identifier excludes nobody: the collision that reddens Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer is two OPEN items on one identifier, not one open item on a published one, which is exactly why nothing will catch that half. Whoever claims such an item finds the identifier taken mid-claim, and there is no work edit to move it.\n\nThe published half has two measured instances, both since closed by other routes and carried here as evidence rather than as work. P10-DERIVED-FACT reserved docs/records/OD-ANALYSIS-002 and its registration file, both published by 0bcaf6d under P10-DEPENDENT-EDGE. P10-REQUEST-LAYOUT reserved docs/records/OD-SPEC-011, published by 515fc26 under P10-VOCABULARY-REFUSAL. Both items are now Declined, so no open item carries a spent identifier today. The mechanism is untouched by that, and the next author reaches for the next free number the same way.\n\nThe unspent half is folded in here rather than opened as a separate item, because it is the same comparison in the same function and a separate item would reserve the same file to make it. It has three measured instances and the third happened to this item. Three open items reserved docs/records/OD-LEDGER-020 and two reserved OD-LEDGER-021, each authored by a session taking the next free OD-LEDGER number, which reddened the guard against the repository's own board and every predicate naming -p nomos-ledger with it. Clearing those two required declining and re-authoring four items, because there is no work edit. Then, during that clearing, P11-DISPATCH-SPLIT and this item's first reissue both took OD-LEDGER-022 -- one session's add landing between another's board read and its own add -- and the guard went red a second time for the same reason, costing this subject a second reissue.\n\nSo the cost is measured rather than asserted. Five collisions, six declines and re-authorings, and one session's remedy becoming the next session's collision. The comparison that would have refused every one of them is available at authoring time, decided from text with no filesystem access for the open-item half, and the ledger already owns both halves of it: Territory::Intersect for whether two reservations are one subject, and OD-LEDGER-016 for the rule that an identifier and the file it names are one.",
+      "done_when": "work add refuses a territory naming a record identifier that already resolves to a file under docs/records, and names that file in the refusal. It exits as a usage refusal rather than a store error, because the author fixes it by choosing another identifier. A test asserts the refusal, and its negative control is that an unspent identifier is still accepted.\n\nwork add also refuses a record identifier another open item already reserves, and names that item. The two refusals are distinguishable rather than one message, because choosing a different identifier is the remedy for one and retiring the other item is the remedy for the other.\n\nThe open-item comparison is decided inside the same lock the add is written under. A check against a document loaded before the lock is the check that just failed twice: P11-DISPATCH-SPLIT landed between a board read and an add, and a guard reading the same stale document would have agreed the identifier was free.\n\nBoth comparisons are decided by Territory::Intersect and Normalize_Path rather than by a containment rule written beside them. OD-LEDGER-016 already makes an identifier and the file it names one subject, and a second answer to that is what OD-LEDGER-005 records the cost of.\n\nOnly open items reserve. A Done or Declined item's territory is history rather than a reservation, in the sense Is_Open in crates/substrate/nomos-ledger/tests/records_do_not_serialize.rs already gives that word, and refusing against it would make every closed item a permanent claim.\n\nNot closed by a doc comment telling authors to check, which is what P10-ADD-PROMISE already did. No item on the board carries a spent or duplicated identifier as this lands, so the check is proved by its own tests rather than by what it happens to catch on the day.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/tests",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-025",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-025.record"
         ],
         "patterns": []
       },
