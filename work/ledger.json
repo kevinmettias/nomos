@@ -2446,6 +2446,7 @@
           "crates/host/nomos-cli",
           "crates/spec/nomos-spec-store",
           "tests/contract",
+          "README.md",
           "docs/records/OD-LEDGER-008"
         ],
         "patterns": []
@@ -2651,6 +2652,9 @@
           "crates/host/nomos-cli",
           "crates/spec/nomos-spec-store",
           "tests/contract",
+          "README.md",
+          "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md",
+          "docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md",
           "docs/records/OD-LEDGER-012"
         ],
         "patterns": []
@@ -2917,6 +2921,74 @@
           "nomos-spec-store",
           "-p",
           "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-LOCK-BYPASS",
+      "title": "The three verbs that change the board read and write it without taking the lock the doc comment says they take",
+      "why": "With_Lock at crates/substrate/nomos-ledger/src/store.rs:228 acquires the cross-process lock and its doc comment says every mutation goes through it. Claim, Renew and Release do not. Each does self.Load, mutates the document in memory and calls self.Save with no acquisition anywhere between - Claim at :548 and :568, Renew at :589 and :628, Release at :646 and :688. That is a read-modify-write over a whole-document file, so two sessions interleaving lose one of the two writes entirely, and what is lost is not a field but every change the other session made to any item. This board is worked by several agent sessions at once by design, which is what the lock exists for; the README says two items are concurrently claimable exactly when their territories are disjoint, and that guarantee is enforced by a function the writing path does not call. The failure is silent and looks like the ledger simply not having recorded something. It is close in shape to the loss P10-STALE-WRITER is open for, and is a different cause with the same symptom, which is why it wants separating rather than folding in: a stale binary drops fields it does not know, and this drops changes it never read. Found while designing P10-STALE-WRITER, in territory that item does not need.",
+      "done_when": "Claim, Renew and Release perform their read, their decision and their write inside one lock acquisition, or the doc comment on With_Lock stops claiming they do and the record says why an unlocked read-modify-write is acceptable for these three and not for the paths that already use it. A test drives two concurrent writers against one ledger and fails if either write is lost - not two sequential calls, since sequential calls cannot reproduce it. The negative control is that removing the acquisition again makes that test red. Whether the lock is taken by moving these three onto With_Lock or by another means is the decision, and it must account for finish, which runs a predicate that can take minutes and must not hold a cross-process lock while it does. Not closed by documenting the race, and not closed by a test that only proves the lock can be acquired.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
+          "crates/spec/nomos-spec-store",
+          "docs/records/OD-LEDGER-015"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-RECORD-STEM",
+      "title": "A record reservation is disjoint from the record it reserves, so amending an existing one excludes nobody",
+      "why": "OD-LEDGER-001s third authoring rule tells an item to reserve the record identifier it will allocate, docs/records/OD-AREA-NNN, and P10-RECORD-LOCK re-authored every open item that way to stop the record directory serializing the board. It works for the case it was designed for - two items reserving the same identifier collide, because the two paths are equal - and it silently reserves nothing against the file. Containment is right.starts_with of left plus a slash at crates/substrate/nomos-ledger/src/territory.rs:230, so docs/records/OD-LEDGER-006 and docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md are siblings and compare Disjoint. An item amending an existing record therefore excludes nobody from the file it edits unless it happens to spell the whole filename, and the two spellings do not exclude each other either. Every open item on this board reserves a stem. The guard cannot see it: Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer reduces items to their record paths and claims them, which stems do correctly, so the property it measures is true of stems and says nothing about files. Found while designing P10-LAPSE-TAKEOVER, which must amend two records that already exist and discovered that reserving their identifiers reserved neither.",
+      "done_when": "Reserving a records identifier excludes an item that will write that records file, and the two spellings of one record collide. Either containment learns that docs/records/OD-AREA-NNN covers docs/records/OD-AREA-NNN-<slug>.md, which is a change to what territory means and must say why a stem is a prefix of a name rather than of a path, or OD-LEDGER-001s rule requires the full filename once the file exists and the identifier only before it does, and something checks that rather than the author remembering. Whichever is chosen, the open items that amend an existing record are re-authored to match, and only while unclaimed. A test asserts the two spellings collide and names both; the negative control is that restoring the current comparison turns it red. The record states what P10-RECORD-LOCK actually bought, since the property it claimed is true of identifiers and was read as true of records. Not closed by re-authoring the items and leaving the comparison as it is, because the next item to amend a record will spell it the same wrong way.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/territory.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize.rs",
+          "crates/spec/nomos-spec-store",
+          "docs/records/OD-LEDGER-016"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
           "--no-fail-fast"
         ],
         "timeout_seconds": 600
