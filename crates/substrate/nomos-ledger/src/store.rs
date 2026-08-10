@@ -4,6 +4,8 @@ use crate::exclusion::{
     Check_Lease, ClaimRefusal, ExclusionLedger, Refusal_From, ReleaseOutcome, Reservation,
 };
 use crate::item::{Claim, ItemId, ItemState, LedgerItem};
+use crate::territory::{Normalize_Path, Territory};
+use nomos_model::Intersection;
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timestamp};
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
@@ -135,6 +137,44 @@ pub enum AddRefusal
         /// The identifier that is taken.
         item: ItemId,
     },
+    /// The territory reserves a record identifier this repository has already published.
+    ///
+    /// Distinct from [`AddRefusal::RecordReserved`] because the remedies are different and an
+    /// author told the wrong one does the wrong thing. A published record is spent forever —
+    /// the identifier is allocated and the file exists — so the only fix is choosing another
+    /// number. A reserved one belongs to an item that may yet be retired.
+    ///
+    /// Names the file rather than only the identifier, because an author who reads
+    /// "`OD-LEDGER-025` is taken" has to go and find out by what, and the thing that answers
+    /// that is a filename.
+    ///
+    /// A published identifier excludes nobody, which is why nothing caught this before:
+    /// `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` reddens on two *open* items
+    /// sharing an identifier, and one open item on a spent one is invisible to it.
+    RecordPublished
+    {
+        /// The identifier, in the folded form both spellings reach.
+        identifier: String,
+        /// The record file that already carries it, as the caller found it.
+        file: String,
+    },
+    /// The territory reserves a record identifier another open item already reserves.
+    ///
+    /// Decided inside the lock, and that is the whole of why it is here rather than in the
+    /// command layer. Two sessions each taking the next free number read a board without the
+    /// other's item and are both told it is free — which is exactly how `P11-DISPATCH-SPLIT`
+    /// and this item's own first reissue both took `OD-LEDGER-022`, one add landing between
+    /// the other's board read and its own.
+    ///
+    /// Only open items reserve. A `Done` or `Declined` item's territory is history, and
+    /// refusing against it would make every closed item a permanent claim on its number.
+    RecordReserved
+    {
+        /// The identifier, in the folded form both spellings reach.
+        identifier: String,
+        /// The open item that already reserves it.
+        item: ItemId,
+    },
     /// The item would leave the board violating its own invariants.
     ///
     /// The commonest of these is an item that reserves nothing, which `AGENTS.md` states as a
@@ -170,6 +210,16 @@ impl AddRefusal
         return match self
         {
             Self::AlreadyPresent { item } => format!("{item} is already on the ledger"),
+            // Each names what to do next, because the two are told apart by the remedy and
+            // an author who read only "taken" would pick the wrong one half the time.
+            Self::RecordPublished { identifier, file } => format!(
+                "{identifier} is already published as {file}. A record identifier is \
+                 allocated once; choose the next free one"
+            ),
+            Self::RecordReserved { identifier, item } => format!(
+                "{identifier} is already reserved by {item}, which is open. Choose another \
+                 identifier, or retire that item if it is not work"
+            ),
             // The wording [`LedgerError::Invalid`] would have produced, because this arm
             // exists to carry that refusal out through a different channel and not to
             // rephrase it. An operator who has seen one of these should recognise the other.
@@ -695,7 +745,28 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// [`AddRefusal::WouldBeInvalid`] if the item would leave the board violating its own
     /// invariants — [`Self::Save`] refuses that before anything reaches the disk — and
     /// [`AddRefusal::LedgerUnusable`] if the ledger could not be read or written at all.
-    pub fn Add(&mut self, item: &LedgerItem, holder: &str) -> Result<(), AddRefusal>
+    /// Adds an item to the board.
+    ///
+    /// `published` is the record files this repository has already published, supplied by the
+    /// caller rather than discovered here. The store owns the *decision* — `OD-LEDGER-021`
+    /// put `add` behind one lock for that reason — and enumerating a repository is not a
+    /// thing a general exclusion ledger should learn to do. A caller with nothing to declare
+    /// passes [`Territory::Empty`], which is honest: it is saying it does not know, and the
+    /// open-item half still holds.
+    ///
+    /// # Errors
+    ///
+    /// [`AddRefusal::AlreadyPresent`] for a duplicate identifier,
+    /// [`AddRefusal::RecordPublished`] or [`AddRefusal::RecordReserved`] for a record
+    /// identifier that is already spent or already spoken for,
+    /// [`AddRefusal::WouldBeInvalid`] for an item that would break the board's invariants,
+    /// and [`AddRefusal::LedgerUnusable`] when the file itself cannot be used.
+    pub fn Add(
+        &mut self,
+        item: &LedgerItem,
+        holder: &str,
+        published: &Territory,
+    ) -> Result<(), AddRefusal>
     {
         return self.Decide_Under_Lock(holder, |document, _now| {
             if document
@@ -707,6 +778,8 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
                     item: item.id.clone(),
                 });
             }
+
+            Refuse_A_Spent_Record(item, document, published)?;
 
             document.items.push(item.clone());
 
@@ -733,6 +806,104 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
         };
     }
 }
+
+/// Refuses an item whose territory reserves a record identifier that is already spent.
+///
+/// Two comparisons, in the order an author can act on. A published identifier is spent
+/// forever and the remedy is unconditional; a reserved one may be released, so being told
+/// about it second is being told about the one that might still resolve itself.
+///
+/// Both are decided by [`Territory::Intersect`], one authored path at a time so the refusal
+/// can name which. That is not a second containment rule beside the first: `Intersect` folds
+/// a record filename onto the identifier it carries, which is what makes
+/// `docs/records/OD-LEDGER-025` and `docs/records/OD-LEDGER-025-a-slug.md` one subject
+/// without anything here knowing the grammar. `OD-LEDGER-016` is that decision and this is
+/// the second caller to rely on it.
+fn Refuse_A_Spent_Record(
+    item: &LedgerItem,
+    document: &LedgerDocument,
+    published: &Territory,
+) -> Result<(), AddRefusal>
+{
+    for reserved in Record_Reservations(&item.territory)
+    {
+        let mine = Territory::Of_Files([reserved.clone()]);
+
+        for file in &published.paths
+        {
+            if matches!(
+                mine.Intersect(&Territory::Of_Files([file.clone()])),
+                Intersection::Overlaps(_)
+            )
+            {
+                return Err(AddRefusal::RecordPublished {
+                    identifier: Normalize_Path(&reserved),
+                    file: file.clone(),
+                });
+            }
+        }
+
+        for other in &document.items
+        {
+            // Only open items reserve. A closed item's territory is history, and refusing
+            // against it would make every finished item a permanent claim on its number —
+            // which would refuse the whole board, since almost every item ever written
+            // reserved a record.
+            if !matches!(other.state, ItemState::Ready | ItemState::Claimed)
+            {
+                continue;
+            }
+
+            if matches!(
+                mine.Intersect(&other.territory),
+                Intersection::Overlaps(_)
+            )
+            {
+                return Err(AddRefusal::RecordReserved {
+                    identifier: Normalize_Path(&reserved),
+                    item: other.id.clone(),
+                });
+            }
+        }
+    }
+
+    return Ok(());
+}
+
+/// The authored paths in a territory that name a record identifier rather than a file.
+///
+/// Scoped deliberately. `add` does not refuse overlapping territory in general and must not
+/// start: items overlap constantly and claims are what serialize them. What is being guarded
+/// is the one reservation an author cannot recover from mid-claim, because there is no
+/// `work edit` to move a record identifier once somebody else has published it.
+///
+/// Recognised through [`Normalize_Path`] rather than by re-reading the grammar here. A path
+/// names an identifier when folding lands it directly inside the record directory: both
+/// `docs/records/OD-LEDGER-025` and `docs/records/OD-LEDGER-025-a-slug.md` fold to
+/// `docs/records/od-ledger-025`, and anything nested deeper is some other thing that happens
+/// to live there. The directory itself is not an identifier — reserving all of it is a
+/// different problem, and `P10-RECORD-LOCK` is where it was answered.
+fn Record_Reservations(territory: &Territory) -> Vec<String>
+{
+    return territory
+        .paths
+        .iter()
+        .filter(|path| {
+            let folded = Normalize_Path(path);
+            let Some(within) = folded.strip_prefix(RECORD_DIRECTORY_PREFIX)
+            else
+            {
+                return false;
+            };
+
+            return !within.is_empty() && !within.contains('/');
+        })
+        .cloned()
+        .collect();
+}
+
+/// The folded record directory, with its separator, as [`Normalize_Path`] leaves it.
+const RECORD_DIRECTORY_PREFIX: &str = "docs/records/";
 
 /// Every way a ledger can be internally inconsistent.
 ///

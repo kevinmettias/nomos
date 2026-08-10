@@ -408,7 +408,7 @@ pub fn Run(
     {
         WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
         WorkCommand::Show { item } => Show(&ledger, item, output),
-        WorkCommand::Add { item } => Add(&mut ledger, item, output),
+        WorkCommand::Add { item } => Add(&mut ledger, item, &Published_Records(directory), output),
         WorkCommand::Finish { item, holder } => Report_Finish(
             // No working directory: the predicate runs where the user invoked `nomos`,
             // which for a repository tool run inside a repository is the repository. A
@@ -633,9 +633,64 @@ fn Show(
 /// lock, two sessions adding one identifier both read a board without it, and the second
 /// write produced a document `Validate` calls invalid — a board that then refuses to load,
 /// for two callers who were each told they had succeeded.
+/// Every record this repository has already published, as repository-relative paths.
+///
+/// Read here rather than in the store, and that division is the point rather than a
+/// convenience. `OD-LEDGER-021` put the *decision* behind the ledger's lock and left the
+/// command layer its input and its reporting; enumerating a repository is input. A general
+/// exclusion ledger that learned to walk a source tree would be answering a question about
+/// this repository's conventions, and `nomos-ledger` already stretches as far as it should
+/// by knowing what a record filename folds to.
+///
+/// An unreadable or absent directory yields nothing rather than refusing. That is the one
+/// judgement here worth stating, because this repository's usual rule is the opposite: a
+/// check that cannot find its subject must fail loudly. It does not apply, because this is
+/// not the check — the open-item comparison still runs, and it is the half that races. A
+/// tree with no `docs/records` is a ledger being used somewhere that has no records, and
+/// refusing every `add` in it would be this repository's convention refusing everybody
+/// else's.
+fn Published_Records(directory: &Path) -> Territory
+{
+    // The ledger lives in `work/`, so the repository is its parent. A `work/` at the root of
+    // nothing has no records, which the walk below reports as none.
+    let Some(root) = directory.parent()
+    else
+    {
+        return Territory::Empty();
+    };
+
+    let Ok(entries) = std::fs::read_dir(root.join(RECORD_DIRECTORY))
+    else
+    {
+        return Territory::Empty();
+    };
+
+    let mut published = Vec::new();
+    for entry in entries.flatten()
+    {
+        if let Some(name) = entry.file_name().to_str()
+        {
+            // Repository-relative and forward-slashed, which is the spelling a territory is
+            // authored in. `Normalize_Path` would accept either, and handing it the shape it
+            // documents keeps the refusal's text readable by whoever has to act on it.
+            published.push(format!("{RECORD_DIRECTORY}/{name}"));
+        }
+    }
+
+    // Sorted so that an item colliding with two records is refused against the same one
+    // every run. A refusal that names a different file each time reads as two defects.
+    published.sort();
+
+    return Territory::Of_Files(published);
+}
+
+/// Where this repository authors its decision records, relative to the repository root.
+const RECORD_DIRECTORY: &str = "docs/records";
+
 fn Add(
     ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
     item: &LedgerItem,
+    published: &Territory,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
@@ -643,7 +698,7 @@ fn Add(
     // identity that is checked, which is why `add` can name itself here while every other
     // verb passes the agent that asked. `add` takes no `--holder` because it takes no
     // claim: the item it writes is `Ready` and belongs to nobody yet.
-    return match ledger.Add(item, "nomos work add")
+    return match ledger.Add(item, "nomos work add", published)
     {
         Ok(()) =>
         {
@@ -668,6 +723,18 @@ fn Add(
             match refusal
             {
                 AddRefusal::AlreadyPresent { .. } => ExitCode::Conflict,
+                // The same code as a taken item identifier, and for the same reason: an
+                // identifier somebody else holds, which the author resolves by choosing
+                // another. `ExitCode::Usage` was the other candidate and is wrong — that is
+                // the parser's code for a malformed invocation, and an agent that saw it
+                // would go and inspect its own argument syntax, which is not the fix. The
+                // refusal text is what tells the two record cases apart; the code tells an
+                // agent what kind of thing happened, and this is the kind that already had
+                // one.
+                AddRefusal::RecordPublished { .. } | AddRefusal::RecordReserved { .. } =>
+                {
+                    ExitCode::Conflict
+                }
                 AddRefusal::WouldBeInvalid { .. } => ExitCode::ValidationError,
                 AddRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
             }
