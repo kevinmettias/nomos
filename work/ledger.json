@@ -2162,6 +2162,43 @@
           "exit_code": 0
         }
       }
+    },
+    {
+      "id": "P10-MIRROR-DISAGREEMENT",
+      "title": "Two guards disagree about whether DECLARED_RULES is mirrored",
+      "why": "nomos check and the contract test table give different answers to the same question about the same universe, and one of the two is a false claim of coverage. mirror.rs judges a declared universe by the mirror it names at the site, in its doc comment, and resolves that name against real parsed test functions. DECLARED_RULES in crates/spec/nomos-spec-validate/src/run.rs names none, so nomos check reports it as an admitted gap: declares no mirror, Advisory. The UNIVERSES table in tests/contract/tests/completeness_universes.rs classifies that same constant as Standing::Mirrored by Test_A_Rule_Nobody_Declared_Should_Fail_The_Run. The arithmetic isolates the disagreement exactly. Sixteen declared universes; the table calls four mirrored and twelve unmirrored, with UNMIRRORED_TOTAL at 12; nomos check finds thirteen unmirrored; the single difference between the two sets is DECLARED_RULES. The module documentation at the top of mirror.rs says thirteen, twice, so the rule and its own prose already disagree with the table.\nThe table is the one that is wrong, and it is worth saying why rather than which. Test_A_Rule_Nobody_Declared_Should_Fail_The_Run builds a synthetic Fake carrying the invented id NSV-INVENTED-001 and asserts that Validate reports it undeclared. It exercises the reconciliation mechanism against input the test made up. It never compares DECLARED_RULES against the rules this crate actually implements, and nothing else does either. Registered() in preserve.rs is a second hand-written list of the same four rules, and Validate reconciles the two hand-written lists against one another, which is precisely what makes the pair look covered: two lists agreeing catch a disagreement between two hands, never a divergence from the code. A fifth impl Rule added to preserve.rs and left out of Registered() is absent from both lists, is never run, and is reported by nothing. That it is invisible even to the scanner is a second fact: Read_Universes does not recognize a function returning Vec<Box<dyn Rule>> as a universe at all, so the list that enumerates the real thing is not judged by the rule that judges lists.\nThe severity ordering mirror.rs sets for itself is what makes this an item rather than a footnote. A phantom mirror is Blocking and an admitted gap is only Advisory, because a false claim of coverage is worse than a hole somebody wrote down and counted. This claim escapes that ordering only by being written in a hand-maintained table in another file, where the rule that judges coverage claims cannot resolve it. The three instances OD-COMPLETENESS-001 analyses were each repaired by naming the mirror at the site, which is why nomos check reports none of them; DECLARED_RULES is the one row the table calls mirrored that did not follow that convention. Noticed while finishing P10-FIRST-CHECK and recorded until now only in the Consequences section of D-134, which is the half-recorded shape OD-SPEC-005 exists to name.",
+      "done_when": "The two guards agree about DECLARED_RULES, and the agreement is checked rather than asserted once by hand. Either DECLARED_RULES gets a real mirror - a check comparing it against the rules the crate actually implements rather than against a second hand-written list, named at the site so that nomos check resolves it - or the table admits the gap and UNMIRRORED_TOTAL rises to thirteen. Which of the two is the decision this item makes, and the record says why rather than only which. A test then fails when the workspace scan and the classified table disagree, over the whole universe set and not for this one constant, so that the next divergence is caught rather than recounted by hand. That test must name the universe it disagrees about and not merely compare two totals, because two totals that happen to match conceal which row moved. The negative control is confirmed red by restoring the classification the table carries today and watching it fail with DECLARED_RULES named. If the remedy is a real mirror, a second control holds it to being one: it must go red when a rule is added to Registered() and left out of DECLARED_RULES, which is the divergence nothing catches today, and it must be watched failing rather than reasoned about. The module documentation in mirror.rs counts these universes in prose and is wrong either way it lands, so it is corrected as part of this.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate",
+          "crates/rules/nomos-rules",
+          "tests/contract",
+          "crates/spec/nomos-spec-store",
+          "docs/records/OD-COMPLETENESS-002"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
