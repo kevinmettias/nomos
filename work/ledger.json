@@ -3726,7 +3726,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P10-AGENT-HARNESS"
       ],
@@ -3744,7 +3744,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest Test_The_Contract_Should_Name_The_Work_And_Rationale_Authorities ... ok\ntest Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4bc65991099bd13c.exe)\n",
+        "verified_at": 1786341824,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": []
     },
     {
