@@ -7463,7 +7463,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory decayed under a peer's refactor rather than being authored short. This is the third reissue of this subject and the first one that was not an authoring error.\n\nP11-AMEND-RESERVATION was short because it reserved the CLI and not the ledger. P11-AMEND-TERRITORY added crates/substrate/nomos-ledger/src/store.rs, which held the guard at line 217 and the AddRefusal enum whose wording this item exists to change. That was correct when it was authored.\n\nef1c93f, \"Give every substrate type its own file\", moved AddRefusal out of store.rs into crates/substrate/nomos-ledger/src/add_refusal.rs. The refusal this item's why quotes verbatim - \"A record identifier is allocated once; choose the next free one\" - is now at add_refusal.rs:100, and done_when requires that wording to change, because it is advice that is wrong for an amendment. The guard logic stays in store.rs and is still reserved; the sentence an author reads is not. So the item can implement the distinction and cannot say which of the two cases the remaining refusal is, which is the clause it was reissued to carry.\n\nMeasured against the tree at ef1c93f while holding the claim. Nothing was written under it.\n\nThis failure mode is not specific to this item and it is live. The three refactor commits 43c5a63..ef1c93f split 49 files into 99, and eight open items reserve a file that was split: P11-EXEC-IDLE, P10-DECLINED-DEPENDENCY, P11-DISPATCH-SPLIT, P11-NEXT-WORK, P11-ITEM-DISCRIMINANT, P11-PREFERENCE-STRENGTH, P11-INVALIDATION-ORDER and this one. P11-INVALIDATION-ORDER is the worst of them: its whole subject is InvalidationReport and MemoryFactStore::Invalidate, and both now live in files it does not reserve. The same sweep is in flight across the spec crates now, so the count will grow. That is a board-wide fact and not this item's work.\n\nThe successor is P11-AMEND-GRAIN, with these six paths plus add_refusal.rs. OD-LEDGER-026 moves with it, because a declined item reserves nothing and the identifier is unspent."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -7487,10 +7491,18 @@
           "holder": "claude-amend-territory-w9",
           "reason": "Territory is correct and occupied. crates/host/nomos-cli/src/work.rs carries 52 insertions and 26 deletions uncommitted, and crates/substrate/nomos-ledger/src/store.rs one more, from a session holding no claim on either - measured 2026-08-10, the work.rs change being a refactor that extracts an --item parsing closure and restructures the Finish arm, unrelated to this guard. Editing on top of it builds on unlanded work, and committing the two paths publishes it unattributed. The fix needs work.rs because store.rs cannot tell an amendment from an allocation without a signal the caller sends, so the file cannot be avoided. Retry when those two paths are clean; nothing about the defect changed.",
           "abandoned_at": 1786391745
+        },
+        {
+          "holder": "claude-amend-territory-t7",
+          "reason": "Releasing to decline: the territory decayed under ef1c93f, which moved AddRefusal out of store.rs into add_refusal.rs. The full account is on the decline.",
+          "abandoned_at": 1786402840
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-amend-territory-t7",
+        "declined_at": 1786402846
+      }
     },
     {
       "id": "P11-INVALIDATION-ORDER",
@@ -7520,6 +7532,51 @@
           "--no-fail-fast",
           "-p",
           "nomos-analysis",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-AMEND-GRAIN",
+      "title": "A record identifier allocated once and a published record reserved for amendment are the same act to add, and both are refused",
+      "why": "work add refuses a territory naming a record identifier that is already published - \"A record identifier is allocated once; choose the next free one\", exit 4. The decision is crates/substrate/nomos-ledger/src/store.rs, in Refuse_A_Spent_Record and Refuse_If_Published; the sentence is crates/substrate/nomos-ledger/src/add_refusal.rs:100, in AddRefusal::Describe. That is right for the defect it was built for. P11-SPENT-RECORD-ID recorded that add compared only against open items, so a published identifier could be reserved twice, and five collisions were cleared one record per item in df42f5e.\n\nIt is wrong for the other reason an item names a published record. Amending one is ordinary work here: ARC-ECOSYSTEM-001 is at version 2, OD-CAPABILITY-001 at version 2, and D-134 was amended in place rather than superseded because six of its seven decisions were untouched and cited by working code. An item that amends a record must reserve it, because the amendment edits that file and territory is the only thing keeping two writers off one file.\n\nThe two acts are indistinguishable to add, and it refuses both. Measured on 2026-08-10 against ARC-HARNESS-001: refused by identifier stem, and refused again by the full published filename, so no spelling gets an amendment through.\n\nThe board already holds the proof that the refused case is legitimate. P11-ECOSYSTEM-UPWARD reserves docs/records/ARC-ECOSYSTEM-001 and its done_when is version 3 of that record. It was authored before the guard landed and could not be authored today, so the guard forbids an item the board is currently carrying.\n\nThe immediate cost is a clause that cannot be answered. ARC-HARNESS-001 owes an ownership row for handoff, which P11-HARNESS-SEAM's done_when required among its named components and the record does not carry, and no item can be opened to add it while add refuses to reserve the record it would edit. That omission survived work finish because the predicate is a test suite and a test suite cannot read a done_when.\n\nThis is the third spelling of the subject and the first two were both short of it. P11-AMEND-RESERVATION reserved only the CLI; P11-AMEND-TERRITORY added store.rs and was correct until ef1c93f moved AddRefusal into its own file. The territory here reserves the decision and the sentence, which are now two files, and the reissue reason on P11-AMEND-TERRITORY records that eight open items were left in the same state by that sweep.",
+      "done_when": "Reserving a published record for amendment is possible, and reserving an unallocated identifier twice is still refused.\n\nThe check in store.rs distinguishes the two rather than matching on the identifier alone. Whatever separates them is stated where an author meets it, and the refusal that remains says which of the two cases it is - because \"choose the next free one\" is advice that is wrong for an amendment, and an author who follows it renumbers a record that should not move. The wording lives in AddRefusal::Describe, so add_refusal.rs is reserved and the sentence changes with the check rather than a release later.\n\nexclusion_holds.rs drives both against one board: an item reserving a published record is accepted, and a second item reserving an identifier another open item already reserves is refused. The two are asserted separately rather than through one shared assertion either could satisfy.\n\nThe ledger surface snapshot moves with whatever the distinction costs the public API, since tests/contract/surface/nomos-ledger.txt carries both AddRefusal and FileLedger::Add and the predicate names nomos-contract-tests.\n\nNot closed by removing the guard - P11-SPENT-RECORD-ID measured what its absence cost, and five items were declined to clear it. Not closed by having authors reserve the registration file instead: both spellings are refused today, and a rule that turns on which of two paths an author happened to write is the kind of convention this board does not enforce. Not closed by a schema field on the item either, unless the amendment is worth keeping on the board after the item closes - a new ledger field is a stale-writer hazard on a file two sessions share, and OD-LEDGER-008 is the record that prices it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/src/add_refusal.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-026",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-026.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-amend-grain-t7",
+        "acquired_at": 1786402889,
+        "lease_expires_at": 1786410089
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
           "-p",
           "nomos-contract-tests"
         ],
