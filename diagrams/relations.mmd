@@ -43,6 +43,7 @@ graph LR
     arc_specdb_002 -->|"relates-to"| od_spec_008
     arc_specdb_002 -->|"relates-to"| od_spec_009["OD-SPEC-009"]
     arc_specdb_002 -->|"relates-to"| od_spec_010
+    arc_specdb_002 -->|"relates-to"| od_spec_013["OD-SPEC-013"]
     d_085 -->|"relates-to"| arc_ecosystem_001
     d_086 -->|"relates-to"| arc_ecosystem_001
     d_090 -->|"relates-to"| arc_ecosystem_001
@@ -403,18 +404,27 @@ graph LR
     od_spec_008 -->|"relates-to"| od_spec_007
     od_spec_008 -->|"relates-to"| od_spec_009
     od_spec_008 -->|"relates-to"| od_spec_010
+    od_spec_008 -->|"relates-to"| od_spec_013
     od_spec_009 -->|"relates-to"| arc_specdb_002
     od_spec_009 -->|"relates-to"| od_platform_001
     od_spec_009 -->|"relates-to"| od_spec_008
     od_spec_009 -->|"relates-to"| od_spec_010
+    od_spec_009 -->|"relates-to"| od_spec_013
     od_spec_009 -->|"relates-to"| od_store_001
     od_spec_010 -->|"relates-to"| arc_specdb_001
     od_spec_010 -->|"relates-to"| arc_specdb_002
     od_spec_010 -->|"relates-to"| od_spec_007
     od_spec_010 -->|"relates-to"| od_spec_008
     od_spec_010 -->|"relates-to"| od_spec_009
+    od_spec_010 -->|"relates-to"| od_spec_013
     od_spec_011 -->|"relates-to"| arc_specdb_001
     od_spec_011 -->|"relates-to"| od_spec_006
+    od_spec_011 -->|"relates-to"| od_spec_013
+    od_spec_013 -->|"relates-to"| arc_specdb_002
+    od_spec_013 -->|"relates-to"| od_spec_008
+    od_spec_013 -->|"relates-to"| od_spec_009
+    od_spec_013 -->|"relates-to"| od_spec_010
+    od_spec_013 -->|"relates-to"| od_spec_011
     od_store_001 -->|"affects"| d_129
     od_store_001 -->|"relates-to"| od_capability_002
     od_store_001 -->|"relates-to"| od_capability_003
@@ -504,6 +514,7 @@ graph LR
     od_spec_009
     od_spec_010
     od_spec_011
+    od_spec_013
     od_store_001
     od_syntax_001
     od_syntax_002

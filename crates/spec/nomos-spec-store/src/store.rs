@@ -747,6 +747,9 @@ pub enum Table
     Omissions,
     RecordFrontMatter,
     RecordRelations,
+    Submissions,
+    SubmissionValues,
+    SubmissionGaps,
 }
 
 impl Table
@@ -772,6 +775,9 @@ impl Table
             Self::Omissions => "omissions",
             Self::RecordFrontMatter => "record_front_matter",
             Self::RecordRelations => "record_relations",
+            Self::Submissions => "submissions",
+            Self::SubmissionValues => "submission_values",
+            Self::SubmissionGaps => "submission_gaps",
         };
     }
 
@@ -799,6 +805,9 @@ impl Table
             Self::Omissions,
             Self::RecordFrontMatter,
             Self::RecordRelations,
+            Self::Submissions,
+            Self::SubmissionValues,
+            Self::SubmissionGaps,
         ];
     }
 }

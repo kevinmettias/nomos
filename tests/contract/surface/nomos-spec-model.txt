@@ -1,15 +1,30 @@
+pub const fn nomos_spec_model::DecisionGap::Is_Open(&self) -> bool
+pub const fn nomos_spec_model::Origin::Label(self) -> &'static str
+pub const fn nomos_spec_model::Origin::Satisfies_Acceptance(self) -> bool
 pub const fn nomos_spec_model::RowKind::All() -> &'static [Self]
 pub const fn nomos_spec_model::RowKind::Label(self) -> &'static str
+pub const fn nomos_spec_model::Severity::Label(self) -> &'static str
+pub const fn nomos_spec_model::SubmissionKind::Label(self) -> &'static str
+pub const fn nomos_spec_model::SubmissionKind::Required_Fields(self) -> &'static [&'static str]
+pub const fn nomos_spec_model::SubmissionState::Label(self) -> &'static str
 pub const nomos_spec_model::HASH_PREFIX: &str
 pub enum nomos_spec_model::BlockKind
+pub enum nomos_spec_model::Origin
 pub enum nomos_spec_model::RecordError
 pub enum nomos_spec_model::RenderError
 pub enum nomos_spec_model::RowKind
+pub enum nomos_spec_model::Severity
 pub enum nomos_spec_model::StatementKind
+pub enum nomos_spec_model::SubmissionKind
+pub enum nomos_spec_model::SubmissionState
 pub enum nomos_spec_model::TableDefect
 pub enum variant nomos_spec_model::BlockKind::Code
 pub enum variant nomos_spec_model::BlockKind::Heading
 pub enum variant nomos_spec_model::BlockKind::Prose
+pub enum variant nomos_spec_model::Origin::Clarified
+pub enum variant nomos_spec_model::Origin::Decided
+pub enum variant nomos_spec_model::Origin::Inferred
+pub enum variant nomos_spec_model::Origin::Submitted
 pub enum variant nomos_spec_model::RecordError::NoFrontMatter
 pub enum variant nomos_spec_model::RecordError::NoHeading { id: String, }
 pub enum variant nomos_spec_model::RecordError::TitleDiverges { id: String, declared: String, heading: String, }
@@ -19,11 +34,18 @@ pub enum variant nomos_spec_model::RenderError::Unrepresentable { field: String,
 pub enum variant nomos_spec_model::RowKind::Content
 pub enum variant nomos_spec_model::RowKind::Header
 pub enum variant nomos_spec_model::RowKind::Separator
+pub enum variant nomos_spec_model::Severity::Blocking
+pub enum variant nomos_spec_model::Severity::NonBlocking
 pub enum variant nomos_spec_model::StatementKind::Acceptance
 pub enum variant nomos_spec_model::StatementKind::Concept
 pub enum variant nomos_spec_model::StatementKind::Criterion
 pub enum variant nomos_spec_model::StatementKind::Requirement
 pub enum variant nomos_spec_model::StatementKind::Story
+pub enum variant nomos_spec_model::SubmissionKind::DesignSpec
+pub enum variant nomos_spec_model::SubmissionKind::FeatureRequest
+pub enum variant nomos_spec_model::SubmissionKind::FeatureResult
+pub enum variant nomos_spec_model::SubmissionState::Accepted
+pub enum variant nomos_spec_model::SubmissionState::Draft
 pub enum variant nomos_spec_model::TableDefect::ManySeparators { table_ordinal: u32, separators: u32, }
 pub enum variant nomos_spec_model::TableDefect::NoSeparator { table_ordinal: u32, rows: u32, }
 pub fn nomos_spec_model::ContentHash::As_Str(&self) -> &str
@@ -37,31 +59,50 @@ pub fn nomos_spec_model::Normalize(text: &str) -> String
 pub fn nomos_spec_model::NormativeStatement::Canonical_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::NormativeStatement::Canonicalized(mut self) -> Self
 pub fn nomos_spec_model::NormativeStatement::Text_Is_Canonical(&self) -> bool
+pub fn nomos_spec_model::Origin::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::Parse_Record(markdown: &str) -> Result<Record, RecordError>
 pub fn nomos_spec_model::RecordError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_model::Refusal::fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result
 pub fn nomos_spec_model::RenderError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_model::Render_Record( front_matter: &RecordFrontMatter, blocks: &[SourceBlock], ) -> Result<String, RenderError>
 pub fn nomos_spec_model::Round_Trips(markdown: &str) -> bool
 pub fn nomos_spec_model::RowKind::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::Segment(markdown: &str) -> Vec<SourceBlock>
+pub fn nomos_spec_model::Severity::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::SourceBlock::Content_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::SourceBlock::Normalized_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::StatementId::As_Str(&self) -> &str
 pub fn nomos_spec_model::StatementId::Parse(text: &str) -> Option<Self>
 pub fn nomos_spec_model::StatementId::Prefix(&self) -> &str
 pub fn nomos_spec_model::StatementId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_model::Submission::Current(&self, field: &str) -> Option<&FieldValue>
+pub fn nomos_spec_model::Submission::Required_Fields(&self) -> Vec<&'static str>
+pub fn nomos_spec_model::SubmissionKind::Parse(label: &str) -> Option<Self>
+pub fn nomos_spec_model::SubmissionState::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::TableDefect::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_model::TableRow::Content_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::TableRow::Normalized_Hash(&self) -> ContentHash
 pub fn nomos_spec_model::Table_Defects(rows: &[TableRow]) -> Vec<TableDefect>
 pub fn nomos_spec_model::Table_Rows(block: &SourceBlock) -> Vec<TableRow>
+pub fn nomos_spec_model::Validate(submission: &Submission) -> Vec<Failure>
 pub impl nomos_spec_model::ContentHash implements core::fmt::Display
 pub impl nomos_spec_model::RecordError implements core::fmt::Display
 pub impl nomos_spec_model::RecordError implements std::error::Error
+pub impl nomos_spec_model::Refusal implements fmt::Display
 pub impl nomos_spec_model::RenderError implements core::fmt::Display
 pub impl nomos_spec_model::RenderError implements std::error::Error
 pub impl nomos_spec_model::StatementId implements core::fmt::Display
 pub impl nomos_spec_model::TableDefect implements core::fmt::Display
+pub struct field nomos_spec_model::DecisionGap::blocks: Vec<String>
+pub struct field nomos_spec_model::DecisionGap::closed_by: Option<String>
+pub struct field nomos_spec_model::DecisionGap::question: String
+pub struct field nomos_spec_model::DecisionGap::severity: Severity
+pub struct field nomos_spec_model::Failure::field: String
+pub struct field nomos_spec_model::Failure::remedy: String
+pub struct field nomos_spec_model::Failure::rule: String
+pub struct field nomos_spec_model::FieldValue::field: String
+pub struct field nomos_spec_model::FieldValue::origin: Origin
+pub struct field nomos_spec_model::FieldValue::value: String
 pub struct field nomos_spec_model::NormativeStatement::canonical_text: String
 pub struct field nomos_spec_model::NormativeStatement::heading_path: Vec<String>
 pub struct field nomos_spec_model::NormativeStatement::id: StatementId
@@ -79,20 +120,35 @@ pub struct field nomos_spec_model::RecordFrontMatter::title: String
 pub struct field nomos_spec_model::RecordFrontMatter::version: u32
 pub struct field nomos_spec_model::RecordRelation::relation: String
 pub struct field nomos_spec_model::RecordRelation::target: String
+pub struct field nomos_spec_model::Refusal::failures: Vec<Failure>
+pub struct field nomos_spec_model::Refusal::submission: String
 pub struct field nomos_spec_model::SourceBlock::heading_path: Vec<String>
 pub struct field nomos_spec_model::SourceBlock::kind: BlockKind
 pub struct field nomos_spec_model::SourceBlock::ordinal: u32
 pub struct field nomos_spec_model::SourceBlock::text: String
+pub struct field nomos_spec_model::Submission::form_contract_version: u32
+pub struct field nomos_spec_model::Submission::gaps: Vec<DecisionGap>
+pub struct field nomos_spec_model::Submission::id: String
+pub struct field nomos_spec_model::Submission::kind: SubmissionKind
+pub struct field nomos_spec_model::Submission::state: SubmissionState
+pub struct field nomos_spec_model::Submission::submitted_by: String
+pub struct field nomos_spec_model::Submission::submitted_through: String
+pub struct field nomos_spec_model::Submission::values: Vec<FieldValue>
 pub struct field nomos_spec_model::TableRow::cells: Vec<String>
 pub struct field nomos_spec_model::TableRow::kind: RowKind
 pub struct field nomos_spec_model::TableRow::ordinal: u32
 pub struct field nomos_spec_model::TableRow::table_ordinal: u32
 pub struct field nomos_spec_model::TableRow::text: String
 pub struct nomos_spec_model::ContentHash(String)
+pub struct nomos_spec_model::DecisionGap
+pub struct nomos_spec_model::Failure
+pub struct nomos_spec_model::FieldValue
 pub struct nomos_spec_model::NormativeStatement
 pub struct nomos_spec_model::Record
 pub struct nomos_spec_model::RecordFrontMatter
 pub struct nomos_spec_model::RecordRelation
+pub struct nomos_spec_model::Refusal
 pub struct nomos_spec_model::SourceBlock
 pub struct nomos_spec_model::StatementId(String)
+pub struct nomos_spec_model::Submission
 pub struct nomos_spec_model::TableRow

@@ -57,6 +57,49 @@ const COVERAGE: &[Coverage] = &[
             ("relation", Carried::Field("relation")),
         ],
     },
+    // The three tables `OD-SPEC-013` decides. They travel in the bundle because the bundle is
+    // the committed durable form -- `OD-SPEC-008` makes the structured record canonical, the
+    // deterministic text serialization its git-visible shape, and SQLite a derived index any
+    // checkout rebuilds. A submission that did not export would be a submission that does not
+    // survive a clone.
+    Coverage {
+        table: "submissions",
+        columns: &[
+            ("uid", Carried::Surrogate),
+            ("node_uid", Carried::Field("node_id")),
+            ("kind", Carried::Field("kind")),
+            ("form_contract_version", Carried::Field("form_contract_version")),
+            ("state", Carried::Field("state")),
+            ("submitted_by", Carried::Field("submitted_by")),
+            ("submitted_through", Carried::Field("submitted_through")),
+        ],
+    },
+    Coverage {
+        table: "submission_values",
+        columns: &[
+            ("uid", Carried::Surrogate),
+            ("submission_uid", Carried::Field("node_id")),
+            ("field", Carried::Field("field")),
+            ("ordinal", Carried::Field("ordinal")),
+            ("origin", Carried::Field("origin")),
+            ("value", Carried::Field("value")),
+            ("value_hash", Carried::Field("value_hash")),
+            ("supersedes_hash", Carried::Field("supersedes_hash")),
+            ("recorded_at", Carried::Field("recorded_at")),
+        ],
+    },
+    Coverage {
+        table: "submission_gaps",
+        columns: &[
+            ("uid", Carried::Surrogate),
+            ("submission_uid", Carried::Field("node_id")),
+            ("ordinal", Carried::Field("ordinal")),
+            ("question", Carried::Field("question")),
+            ("blocks", Carried::Field("blocks")),
+            ("severity", Carried::Field("severity")),
+            ("closed_by", Carried::Field("closed_by")),
+        ],
+    },
     Coverage {
         table: "blobs",
         columns: &[

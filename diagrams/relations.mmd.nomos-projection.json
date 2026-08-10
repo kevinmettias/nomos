@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:ff16a73e858e6beb6c789600f6eb673d984193f7a90f81b0f58184de0839ab42",
-  "inputs_digest": "sha256:7667320548ed5cacbe55a7b254e5b0c7c0bae1a83a567bee903b1447d05c92f7",
+  "content_digest": "sha256:d878b45b43305155fae14da0e08aab59e4d879fe7317761d42c96c49c58d016c",
+  "inputs_digest": "sha256:0079b45441fa7b3b1314f9b45a14314438781355a5f0f7dfdbd60cb2abf2d6a8",
   "sections": [
     [
       "Relations",
-      440
+      450
     ],
     [
       "Decisions",
-      64
+      65
     ]
   ],
   "inputs": [
@@ -215,6 +215,11 @@
       "content": "relations",
       "identity": "ARC-SPECDB-002 relates-to OD-SPEC-010",
       "hash": "sha256:423459c09f630aa75bbac78818c5d1566a0ae436b23c6902eaf120b42417b11c"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-SPECDB-002 relates-to OD-SPEC-013",
+      "hash": "sha256:99fc53671dc1061838778507d4a612795d0958705bb35e74056964ef191bbeed"
     },
     {
       "content": "relations",
@@ -2018,6 +2023,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-008 relates-to OD-SPEC-013",
+      "hash": "sha256:e1663f5e48e10237cf4b8236e6e12838eb033e085dacc15f0fe1913d4aae7288"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SPEC-009 relates-to ARC-SPECDB-002",
       "hash": "sha256:f6524f446b0f5cbea3d1064ae46b12a9a586ba6afd77988248e653f60f71b1e1"
     },
@@ -2035,6 +2045,11 @@
       "content": "relations",
       "identity": "OD-SPEC-009 relates-to OD-SPEC-010",
       "hash": "sha256:b63f9b4a25a957dd7b18c8d6dd0c7848fa655f360dd5ec80cc0d498b75dcc25e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-009 relates-to OD-SPEC-013",
+      "hash": "sha256:269d378982eea73b0a470d3c0002181599bc9cea2a56c47c19d98b1bb094f90f"
     },
     {
       "content": "relations",
@@ -2068,6 +2083,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-010 relates-to OD-SPEC-013",
+      "hash": "sha256:dd5717af1e0c087983882e90e49ae1dad255cabafe189bf98fdfc47fe236ed6f"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SPEC-011 relates-to ARC-SPECDB-001",
       "hash": "sha256:795e222b80fa8a256b33ceec24b0c720527cb128afe25ec6a4b7aaea1489c926"
     },
@@ -2075,6 +2095,36 @@
       "content": "relations",
       "identity": "OD-SPEC-011 relates-to OD-SPEC-006",
       "hash": "sha256:68e23199154adc9f5430a677efff3b1b253e7109f0723bc891ae9a52ab74a5aa"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-011 relates-to OD-SPEC-013",
+      "hash": "sha256:3868c1ec474f8b49c34de87c28ada9bc1ed6e1b7e7c83b24300906ef628043b0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-013 relates-to ARC-SPECDB-002",
+      "hash": "sha256:88f2ad00e2dd6e8bd113975c43a111f1093835b53929f442f62a83ee4bce0309"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-013 relates-to OD-SPEC-008",
+      "hash": "sha256:234b0e60c6ba51ee2b18220bfab538a5dbe023985505c852d96faa749e15718d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-013 relates-to OD-SPEC-009",
+      "hash": "sha256:a7af23760601880bcd262a34fc8c1ef2f38317c995682a546019503449aa5e99"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-013 relates-to OD-SPEC-010",
+      "hash": "sha256:de24187b00f31094b9a1f5da7ee0547582f9aebbe999f1472e4644fa4b883102"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-013 relates-to OD-SPEC-011",
+      "hash": "sha256:5c053097d5dd4c5eb381641c231234b1078ff10eaa492fe3a8fefe36d87b36cb"
     },
     {
       "content": "relations",
@@ -2510,6 +2560,11 @@
       "content": "nodes",
       "identity": "OD-SPEC-011",
       "hash": "sha256:a981db23709a4ad26a36689659ab1326bc9818f9603b2a6fda4e0beda24d2688"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-SPEC-013",
+      "hash": "sha256:75178795ec6d970ea8838bb2e453d2c854ed5889e65a2db991a872097378f565"
     },
     {
       "content": "nodes",

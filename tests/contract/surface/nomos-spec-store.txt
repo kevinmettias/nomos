@@ -5,10 +5,12 @@ pub const fn nomos_spec_store::Kind_Label(kind: BlockKind) -> &'static str
 pub const fn nomos_spec_store::PathMatch::Label(self) -> &'static str
 pub const fn nomos_spec_store::Table::All() -> &'static [Self]
 pub const fn nomos_spec_store::Table::Name(self) -> &'static str
+pub const fn nomos_spec_store::Transport_Origin() -> Origin
 pub const nomos_spec_store::AUTHORED: &str
 pub const nomos_spec_store::EXTERNAL: &str
 pub const nomos_spec_store::GOVERNING_RECORD_IDS: &[&str]
 pub const nomos_spec_store::MIGRATIONS: &[Migration]
+pub enum nomos_spec_store::AcceptError
 pub enum nomos_spec_store::BlockChange
 pub enum nomos_spec_store::Disposition
 pub enum nomos_spec_store::EditError
@@ -17,6 +19,8 @@ pub enum nomos_spec_store::PathMatch
 pub enum nomos_spec_store::RowScope
 pub enum nomos_spec_store::StoreError
 pub enum nomos_spec_store::Table
+pub enum variant nomos_spec_store::AcceptError::Refused(Refusal)
+pub enum variant nomos_spec_store::AcceptError::Store(StoreError)
 pub enum variant nomos_spec_store::BlockChange::Added { ordinal: u32, kind: String, }
 pub enum variant nomos_spec_store::BlockChange::Moved { from: u32, to: u32, }
 pub enum variant nomos_spec_store::BlockChange::Reflowed { ordinal: u32, }
@@ -66,7 +70,13 @@ pub enum variant nomos_spec_store::Table::SourceBlocks
 pub enum variant nomos_spec_store::Table::SourceDocuments
 pub enum variant nomos_spec_store::Table::SourceHeadings
 pub enum variant nomos_spec_store::Table::SourceTableRows
+pub enum variant nomos_spec_store::Table::SubmissionGaps
+pub enum variant nomos_spec_store::Table::SubmissionValues
+pub enum variant nomos_spec_store::Table::Submissions
 pub enum variant nomos_spec_store::Table::Suites
+pub fn nomos_spec_store::AcceptError::fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+pub fn nomos_spec_store::AcceptError::from(error: StoreError) -> Self
+pub fn nomos_spec_store::Accept_Submission( store: &mut SpecificationStore, submission: &Submission, ) -> Result<i64, AcceptError>
 pub fn nomos_spec_store::BlockChange::Describe(&self) -> String
 pub fn nomos_spec_store::ClaimedRecord::Markdown(&self) -> &str
 pub fn nomos_spec_store::ClaimedRecord::Node_Id(&self) -> &str
@@ -118,6 +128,8 @@ pub fn nomos_spec_store::SpecificationStore::Version(&self) -> u32
 pub fn nomos_spec_store::StagedEdit::Preview(self, store: &SpecificationStore) -> Result<EditPreview, EditError>
 pub fn nomos_spec_store::StoreError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_store::StoreError::from(error: rusqlite::Error) -> Self
+pub impl nomos_spec_store::AcceptError implements From<StoreError>
+pub impl nomos_spec_store::AcceptError implements std::fmt::Display
 pub impl nomos_spec_store::EditError implements From<RenderError>
 pub impl nomos_spec_store::EditError implements From<StoreError>
 pub impl nomos_spec_store::EditError implements From<rusqlite::Error>

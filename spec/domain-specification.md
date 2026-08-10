@@ -72,6 +72,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md@authored | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md | authored | 35 | 10 | sha256:21513774b8df46cc65fb4e4e677e715729d1a9fcf9e8b9b6d7801b34ea67f837 |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md | authored | 80 | 16 | sha256:268e9c1f06f11ba051c138e1af00d30954cf0ae874b93b324f917cdaa0cadf2f |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md | authored | 31 | 11 | sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md@authored | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md | authored | 29 | 8 | sha256:1c14ec80ab265a141f114e04b9391559cf6eda8cba021361e8dd4ee10aee41cf |
 | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md@authored | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md | authored | 36 | 9 | sha256:d709970235889a73988a8da5d86b42a1ba5e503826adba05f843be4b1fdce369 |
@@ -657,6 +658,19 @@ profile: domain-specification
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#26 | authored | 2 | What This Does Not Do |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#28 | authored | 2 | Controls |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30 | authored | 2 | Status |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#1 | authored | 1 | A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#2 | authored | 2 | Question |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#5 | authored | 2 | Why This Record Is Not `OD-SPEC-011` |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#8 | authored | 2 | Decision |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#9 | authored | 3 | 1. A submission is a node |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#13 | authored | 3 | 2. Three tables, and what decides the split |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#18 | authored | 3 | 3. A field is a sequence of rows, and a column would make the rule set unimplementable |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#22 | authored | 3 | 4. An absence is a value, not a missing row |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#25 | authored | 3 | 5. A gap is a row, closed only by a citation |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#29 | authored | 3 | 6. `answers` and `implements` join the seed vocabulary |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#34 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#38 | authored | 2 | Controls |
+| docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#40 | authored | 2 | Status |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1 | authored | 1 | A document kind is a behaviour, not a label — and one of them was misnamed |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#2 | authored | 2 | Question |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#5 | authored | 2 | The Criterion |
@@ -20132,6 +20146,340 @@ it says one record with one bad term must not read as eighteen failures.
 *revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Status · hash: sha256:4d14b23d154d4ff70ca5f31ab6f698d8819553c9f33a270c1e7e9ed2b5d4ec9a*
 
 Closed by `P10-VOCABULARY-REFUSAL`.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#1
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own · hash: sha256:e15ea0393c5938fef32a34b0ab0a3b16b7c1d511f5f63014fa4944b1b5c7d9fc*
+
+# A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#2
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#3
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Question · hash: sha256:b1c5dcf6e59241b9665cd7178a4e20db58a53a5a13454baf149bceb758cf2d4f*
+
+`OD-SPEC-008` made `FeatureRequest`, `DesignSpec` and `FeatureResult` born structured and
+deferred the physical layout, handing it one constraint: only tables something writes to
+exist, because a table nothing writes to looks like a feature in a schema dump and is not one.
+`OD-SPEC-009` fixed the seam — one accept function, transports never validate. `OD-SPEC-010`
+stated the rule set and bound this record to a layout that can express an attributed value
+sequence per field and a decision gap as a row.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#4
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Question · hash: sha256:ad41d9e7f76e8a2fe59952c67f2b1a5e4738774105ab93f5c3caaae531c2921c*
+
+So the layout is the last open question in the set, and it is asked with three answers already
+fixed. What remains is which tables exist, what a field is, and what identity a submission has.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#5
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Why This Record Is Not `OD-SPEC-011` · hash: sha256:2d00d19c3943d0e21ab8cc9f2b02d77174c969a1e597291b63eaec3c0b2e9efd*
+
+## Why This Record Is Not `OD-SPEC-011`
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#6
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Why This Record Is Not `OD-SPEC-011` · hash: sha256:429574c39b5369c050cd1113c385ec60f1dbbc816da3b2854c14fc465d7a34d1*
+
+`OD-SPEC-009` and `OD-SPEC-010` both cite `OD-SPEC-011` as this record, six times between them,
+because both were written while that identifier was reserved for it by `P10-REQUEST-LAYOUT`.
+The identifier was published for a different decision — an unknown relation type refused by
+name — and two work items had reserved one identifier, which nothing checks.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#7
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Why This Record Is Not `OD-SPEC-011` · hash: sha256:b7787fd3ecd933c17190a817b9caacec50f756001c97ee3c5c5f70c0fdde0d87*
+
+Those two records are amended to cite `OD-SPEC-013`, and this section exists so the amendment
+is not silent. A reader who finds a stale citation elsewhere should treat `OD-SPEC-013` as the
+layout record and `OD-SPEC-011` as the relation-type refusal, which is what each of them
+argues.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#8
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#9
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 1. A submission is a node · hash: sha256:8d82726afd68b4ddf9a2c46b711eba781d7c63f9b5272c81c4adabc911a566fa*
+
+### 1. A submission is a node
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#10
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 1. A submission is a node · hash: sha256:02738741b1ba5521dfc983e48bfa20c58aa9802bc69e9d1c33591704c05004ff*
+
+A `FeatureRequest`, `DesignSpec` or `FeatureResult` is a row in `nodes`, with `kind` of
+`feature-request`, `design-spec` or `feature-result`.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#11
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 1. A submission is a node · hash: sha256:c37e7bf8aa13727517fec1a02ae93c620ae37a189ac5f15191e0d438ca1c726a*
+
+It is not a new subject table, and that is the load-bearing half of this record. `nodes` is
+already the store's answer to *what is a thing that can be referred to*: it carries the
+`node_id` identity, and `node_aliases`, `node_history`, `relations` and `lineage` all address
+it. A parallel subject table would need a parallel answer to each of those, and the first one
+that mattered would be `node_history` — which `OD-SPEC-010` already requires for promotion
+from `draft` to `accepted`, by name, because its `reason` column is `NOT NULL` with a
+non-empty check and therefore refuses an acceptance nobody justified.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#12
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 1. A submission is a node · hash: sha256:2b6c9bcb9bf9412462838a2c50bc1d61acf57c24477d6a52582cce0bbe105f7a*
+
+A submission that was not a node would have to either grow its own history table or reach into
+the node one without being a node, and the second is the shape `ARC-SPECDB-001` exists to keep
+out of this store.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#13
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 2. Three tables, and what decides the split · hash: sha256:8b762d53411bba7e52909d60c4930133226fbc017d46502f27a001f4664993c2*
+
+### 2. Three tables, and what decides the split
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#14
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 2. Three tables, and what decides the split · hash: sha256:0738426c776bfbb66527f4bb886036993e516563b2a7dfdc218b3a2a91a2a1a6*
+
+| Table | What it holds |
+|---|---|
+| `submissions` | the scalars that are structural rather than submitted |
+| `submission_values` | every field value, attributed and ordered |
+| `submission_gaps` | one decision gap per row |
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#15
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 2. Three tables, and what decides the split · hash: sha256:02507ede614f437c17afb59dfcf01bcbac144e8abd0b24e4131aa9efbcceaa0b*
+
+The split is not by convenience. A column is admissible exactly when the thing it holds is
+**not** something a later reader could clarify, infer or decide — because those are the four
+origins `OD-SPEC-010` requires every *value* to carry, and a column has room for one value and
+no origin.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#16
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 2. Three tables, and what decides the split · hash: sha256:335b05e044761a60dfa762e8c38ffcbea59f880f240e9be88109b433b1de1d62*
+
+So `submissions` carries `node_uid`, `kind`, `form_contract_version`, `state`, and the two
+halves of `provenance` — who submitted it and through which surface. Each is a fact about the
+submission event, fixed when the accept function ran, and none of them is a thing anybody
+clarifies later. `state` is the one worth naming explicitly: `draft` and `accepted` are not
+submitted content, nobody types them, and giving `state` an origin would invite a submission
+that claims its own acceptance.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#17
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 2. Three tables, and what decides the split · hash: sha256:be9188835add1e27f11cd8e0cd50cb59389d51031b1d83cea3ed5cf9b46d7be7*
+
+Everything `OD-SPEC-010` lists per kind — `goal`, `behaviour`, `acceptance`, `invariants`,
+`answers`, `alternatives`, `selected`, `architecture_delta`, `implements`, `evidence`,
+`deviations`, `owed` — is a `submission_values` row. So is `title`, which the universal table
+lists and which is a sentence somebody wrote and may later rewrite.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#18
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 3. A field is a sequence of rows, and a column would make the rule set unimplementable · hash: sha256:176a2184c71721c689f39e79a057f36308f7dcd1b631638f34dbe5b71dc21cde*
+
+### 3. A field is a sequence of rows, and a column would make the rule set unimplementable
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#19
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 3. A field is a sequence of rows, and a column would make the rule set unimplementable · hash: sha256:8bf19d5e7fcf0358e30ae7f5e31eae300a4fba32d446faea3c2a7d7e557d2892*
+
+`submission_values` carries `submission_uid`, `field`, `ordinal`, `origin`, `value`,
+`value_hash`, `supersedes_hash` and `recorded_at`. `origin` is checked against `submitted`,
+`clarified`, `inferred` and `decided`. The current reading of a field is its latest ordinal;
+every earlier value stays.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#20
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 3. A field is a sequence of rows, and a column would make the rule set unimplementable · hash: sha256:dafe711bb75a3b2c0a3b1bb9e724354e981006b06fd19df3bdcf1371926cb071*
+
+The column alternative — one column per field on a `feature_requests` table — is refused, and
+on correctness rather than on taste. `OD-SPEC-010` requires that a later value supersede an
+earlier one **for reading** and never replace it **in storage**, and that every value carry
+which of four origins it has. A column holds one value and no origin. Implementing the rule
+set over columns means either a second table of superseded values, which is this table with an
+apologetic name, or overwriting, which is the weakening `OD-SPEC-010`'s controls table names
+as destroying the one thing a request exists to preserve.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#21
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 3. A field is a sequence of rows, and a column would make the rule set unimplementable · hash: sha256:af31dcca217e4e9bb301a1f5a83fab088dc158c35d9483eca357658569fc0406*
+
+`supersedes_hash` is `normative_statements.supersedes_hash` applied to a second kind of row,
+which `OD-SPEC-010` asks for by name. Two supersession models in one store would be two
+answers to what a superseded value is.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#22
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 4. An absence is a value, not a missing row · hash: sha256:e704a965c98b0f7c3179db66390cb360be41aabf5377ccc01921491dffdaddc0*
+
+### 4. An absence is a value, not a missing row
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#23
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 4. An absence is a value, not a missing row · hash: sha256:7626d2401ed52e02b96b211773effc6f4add3921b9ba722b61f33f2014b94625*
+
+`OD-SPEC-010` requires that a required field be satisfied by content or by an explicit
+statement that there is none, and never by emptiness — an empty `deviations` means nobody
+looked, `deviations: none` means somebody looked.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#24
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 4. An absence is a value, not a missing row · hash: sha256:d15958076e88bd8c4fe1fc14b5217ad714736af3c6202727bf81530fb1c3d7cd*
+
+The layout keeps those distinguishable by making the second a row like any other, with
+`value` holding the stated absence and an origin naming who stated it. The honest submission
+has a row; the abandoned one has none. Had absence been modelled as a nullable column, the two
+would be one `NULL`, which is the collapse that rule exists to prevent.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#25
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 5. A gap is a row, closed only by a citation · hash: sha256:c3f9927c8fb93f2e3480289c2ea3c3adcc7b25a1471e90219bc6a30fb148e3a1*
+
+### 5. A gap is a row, closed only by a citation
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#26
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 5. A gap is a row, closed only by a citation · hash: sha256:e2751e0a611923986f24a5b42a4a3187135045e38c4962a6c949ccf1e51ac4ba*
+
+`submission_gaps` carries `submission_uid`, `question`, `blocks` — the fields it blocks —
+`severity` checked against `blocking` and `non-blocking`, and `closed_by`, which is `NULL`
+while the gap is open and otherwise holds the citation that closed it.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#27
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 5. A gap is a row, closed only by a citation · hash: sha256:22363a40643a6a792b1e989ef350a39f66e8da12bf24c31103ece791c213d13a*
+
+`closed_by` is a citation and not a boolean, and that is the whole of what makes the rule
+enforceable rather than advisory. `OD-SPEC-010` says a gap is never closed by supplying the
+value it blocks; a boolean `closed` column could be set by whoever supplied it, and nothing
+would record that the question had been answered. A citation column can only be filled by
+naming a governing record or a recorded decision, and the value that arrives alongside it
+takes origin `decided`.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#28
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 5. A gap is a row, closed only by a citation · hash: sha256:f84bd1bb07952df16ef29c43bdfb701640917ba4c40c17f0b49ded811d6c72d4*
+
+A `blocking` gap with `closed_by IS NULL` refuses acceptance. A `non-blocking` one does not,
+and travels to the design and the result rather than being dropped at each hand-off.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#29
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 6. `answers` and `implements` join the seed vocabulary · hash: sha256:c538ce125222b209f2aa0f5285772612ce24a2b9751e1479f8da6b76c0e5f9f9*
+
+### 6. `answers` and `implements` join the seed vocabulary
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#30
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 6. `answers` and `implements` join the seed vocabulary · hash: sha256:5061087c390859e99eb175e0cd69b0c1df6cd2343200b2f129f39baf03aedb79*
+
+The lifecycle edges are `relations` rows, which is what `OD-SPEC-010` assumes. They are not
+writable today: `relations.relation_type` is a foreign key onto `relation_types`, the seeded
+vocabulary is `supersedes`, `superseded_by`, `affects`, `affected_by` and `relates-to`, and
+`OD-SPEC-011` made an unknown term refuse by name. So an `answers` edge is refused, and the
+rule set that depends on it could not be exercised.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#31
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 6. `answers` and `implements` join the seed vocabulary · hash: sha256:03828b0c7c4e95b90ced47d3da3eb1fb1ff747f240eb51f66652546bf0f24c75*
+
+Both terms are added at tier `seed`, with inverses `answered_by` and `implemented_by`.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#32
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 6. `answers` and `implements` join the seed vocabulary · hash: sha256:411680c84b4f7f68561c304f8483b6b536018670fdb80caceb101f09d45e6752*
+
+This is the `relates-to` precedent rather than a new liberty. That term was added when
+governing records used a vocabulary term the table lacked and the foreign key refused them;
+the alternative was rewriting the relations as something they were not, and a wrong edge in
+the graph this system exists to keep honest is worse than a vocabulary one term short. Here
+the terms are not invented either — `OD-SPEC-008` names the lifecycle and `OD-SPEC-010` rule 4
+names both edges and states what each must resolve to.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#33
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Decision / 6. `answers` and `implements` join the seed vocabulary · hash: sha256:77bed9820037f629785e19a070800fae1f0808fefb5ac3172d3342e03b8ac9c6*
+
+They stay `seed`. `ADR-ARTIFACT-GRAPH-002`'s vocabulary arrives with the corpus and supersedes
+this whole table, and guessing a tier would put an invented answer where a recorded one
+belongs.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#34
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#35
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / What This Does Not Decide · hash: sha256:41e1e7e15bb4278a94b5c777fc5ab67291fe4851254bbd72b07b87f472075468*
+
+It does not add domain, range or cardinality to `relation_types`. Adding `answers` and
+`implements` makes the edges writable; it does not stop one joining a suite to a table row.
+`OD-SPEC-010` rule 4 constrains the submission and cannot constrain the graph, and closing that
+is `P10-DECLINED-DEPENDENCY`'s neighbour rather than this record's — the item holding it is
+`P10-EDGE-CONSTRAINTS`.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#36
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / What This Does Not Decide · hash: sha256:e906224cfa24f57bd4f548d6f40d2a273055fb666ed03dc4d3439e0bba2e25d3*
+
+It does not decide the intake surface, which is `OD-SPEC-009`, nor the rule set, which is
+`OD-SPEC-010`. It does not govern document-first objects: governing records keep the
+preservation machinery `ARC-SPECDB-001` exists for.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#37
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / What This Does Not Decide · hash: sha256:278c4c844a7f3a9d7395270ef4c246dd50335322a07d98efcd9ac48ea3870072*
+
+It does not make the store durable by itself. The committed durable form is the bundle text,
+per `OD-SPEC-008`, and these three tables travel in it like every other.
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#38
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#39
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Controls · hash: sha256:4ddb50318be91eccff441552f4ac39d9500d9832957b6951323fb9fc001eb88d*
+
+| Weakening | What it produces |
+|---|---|
+| a column per field | the origin has nowhere to live, and supersession becomes overwriting |
+| a nullable column for a field that may be empty | the honest submission and the abandoned one become one `NULL` |
+| a `closed` boolean on a gap | the question is closed by whoever supplied the value, and nothing records that it was answered |
+| a submission as its own subject table | `node_history`, `relations` and `lineage` each need a second answer, and promotion loses the table that refuses a reasonless acceptance |
+| an origin on `state` | a submission can assert its own acceptance |
+| a quarantine or draft-holding table | refused already by `OD-SPEC-010`; a table whose writer is a bug |
+| inventing lifecycle edge names beyond the two the records name | the corpus vocabulary arrives and the invented terms are what has to be unpicked |
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#40
+
+*revision: authored · kind: heading · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#41
+
+*revision: authored · kind: prose · heading: A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own / Status · hash: sha256:49d8f7f9414407c648f4e1dc66230d33057a4652ced59aa6fb617c279ef5bf65*
+
+Accepted. The tables, the field shape, the gap shape, the identity and the two vocabulary
+terms are decided. Relation constraints, the intake surface and the rule set are not, and are
+`P10-EDGE-CONSTRAINTS`, `OD-SPEC-009` and `OD-SPEC-010` respectively.
 
 ### docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1
 

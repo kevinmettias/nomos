@@ -121,6 +121,48 @@ pub struct NodeAlias
     pub node_id: String,
 }
 
+/// A born-structured submission, addressed by the node it is.
+///
+/// `node_id` rather than `node_uid`, for the reason every other record here carries a natural
+/// key: a bundle exported from a database built by importing a bundle must come back the same
+/// even though the surrogates were assigned differently.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Submission
+{
+    pub node_id: String,
+    pub kind: String,
+    pub form_contract_version: i64,
+    pub state: String,
+    pub submitted_by: String,
+    pub submitted_through: String,
+}
+
+/// One value of one field of a submission, with the origin `OD-SPEC-010` requires it to carry.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SubmissionValue
+{
+    pub node_id: String,
+    pub field: String,
+    pub ordinal: i64,
+    pub origin: String,
+    pub value: String,
+    pub value_hash: String,
+    pub supersedes_hash: Option<String>,
+    pub recorded_at: String,
+}
+
+/// A decision the submission needs that nobody has taken yet.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SubmissionGap
+{
+    pub node_id: String,
+    pub ordinal: i64,
+    pub question: String,
+    pub blocks: String,
+    pub severity: String,
+    pub closed_by: Option<String>,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NodeHistory
 {
@@ -215,6 +257,12 @@ pub struct RecordRelation
 #[serde(tag = "table", content = "record")]
 pub enum Record
 {
+    #[serde(rename = "submissions")]
+    Submission(Submission),
+    #[serde(rename = "submission_values")]
+    SubmissionValue(SubmissionValue),
+    #[serde(rename = "submission_gaps")]
+    SubmissionGap(SubmissionGap),
     #[serde(rename = "blobs")]
     Blob(Blob),
     #[serde(rename = "source_documents")]
@@ -256,6 +304,9 @@ impl Record
     {
         return match self
         {
+            Self::Submission(_) => "submissions",
+            Self::SubmissionValue(_) => "submission_values",
+            Self::SubmissionGap(_) => "submission_gaps",
             Self::Blob(_) => "blobs",
             Self::SourceDocument(_) => "source_documents",
             Self::SourceHeading(_) => "source_headings",

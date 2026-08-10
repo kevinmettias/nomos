@@ -52,6 +52,20 @@ const RELATION_TYPES: &[(&str, &str)] = &[
     // one term short. Still a seed term: ADR-ARTIFACT-GRAPH-002's vocabulary arrives with the
     // corpus and supersedes this whole table.
     ("relates-to", "relates-to"),
+    // The lifecycle edges `OD-SPEC-008` describes and `OD-SPEC-010` rule 4 names: a design
+    // answers a request, a result implements a design. Added on the `relates-to` precedent
+    // above rather than as a new liberty — the foreign key refuses an unknown term, and the
+    // terms here are not invented but written into two governing records, one of which
+    // states what each edge must resolve to. `OD-SPEC-013`.
+    //
+    // Still `seed`, for the reason the whole table is: ADR-ARTIFACT-GRAPH-002's vocabulary
+    // arrives with the corpus and supersedes it. Adding these makes the edges writable and
+    // adds no domain, range or cardinality — nothing here stops `implements` joining a suite
+    // to a table row, which is `P10-EDGE-CONSTRAINTS`.
+    ("answers", "answered_by"),
+    ("answered_by", "answers"),
+    ("implements", "implemented_by"),
+    ("implemented_by", "implements"),
 ];
 
 const SEED_TIER: &str = "seed";

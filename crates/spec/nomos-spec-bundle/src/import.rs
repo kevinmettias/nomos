@@ -82,6 +82,9 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
         Insert_Omissions(transaction, bundle)?;
         Insert_Record_Front_Matter(transaction, bundle)?;
         Insert_Record_Relations(transaction, bundle)?;
+        Insert_Submissions(transaction, bundle)?;
+        Insert_Submission_Values(transaction, bundle)?;
+        Insert_Submission_Gaps(transaction, bundle)?;
 
         Assert_Landed(transaction, bundle, &before)?;
 
@@ -166,6 +169,15 @@ fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Result<(), Bu
                 &[&statement.statement_id],
             )?
             .then(|| return statement.statement_id.clone()),
+            // A submission's identity is the node it is, which `nodes` already collides on.
+            // Checking it here as well would report one arrival twice.
+            Record::Submission(submission) => Already_Holds(
+                connection,
+                "SELECT 1 FROM submissions s JOIN nodes n ON n.uid = s.node_uid
+                 WHERE n.node_id = ?1",
+                &[&submission.node_id],
+            )?
+            .then(|| return submission.node_id.clone()),
             Record::SourceHeading(_)
             | Record::SourceBlock(_)
             | Record::SourceTableRow(_)
@@ -174,7 +186,9 @@ fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Result<(), Bu
             | Record::Lineage(_)
             | Record::Omission(_)
             | Record::RecordFrontMatter(_)
-            | Record::RecordRelation(_) => None,
+            | Record::RecordRelation(_)
+            | Record::SubmissionValue(_)
+            | Record::SubmissionGap(_) => None,
         };
 
         if let Some(identity) = collision
@@ -233,6 +247,7 @@ struct Identities
     nodes: BTreeSet<String>,
     relation_types: BTreeSet<String>,
     statements: BTreeSet<String>,
+    submissions: BTreeSet<String>,
 }
 
 fn Carried_By(bundle: &Bundle) -> Identities
@@ -246,6 +261,7 @@ fn Carried_By(bundle: &Bundle) -> Identities
     let mut nodes: BTreeSet<String> = BTreeSet::new();
     let mut relation_types: BTreeSet<String> = BTreeSet::new();
     let mut statements: BTreeSet<String> = BTreeSet::new();
+    let mut submissions: BTreeSet<String> = BTreeSet::new();
 
     for record in bundle.Records()
     {
@@ -287,13 +303,19 @@ fn Carried_By(bundle: &Bundle) -> Identities
             {
                 statements.insert(statement.statement_id.clone());
             }
+            Record::Submission(submission) =>
+            {
+                submissions.insert(submission.node_id.clone());
+            }
             Record::NodeAlias(_)
             | Record::NodeHistory(_)
             | Record::Relation(_)
             | Record::Lineage(_)
             | Record::Omission(_)
             | Record::RecordFrontMatter(_)
-            | Record::RecordRelation(_) =>
+            | Record::RecordRelation(_)
+            | Record::SubmissionValue(_)
+            | Record::SubmissionGap(_) =>
             {}
         }
     }
@@ -308,6 +330,7 @@ fn Carried_By(bundle: &Bundle) -> Identities
         nodes,
         relation_types,
         statements,
+        submissions,
     };
 }
 
@@ -391,6 +414,18 @@ fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleEr
                 "source document",
             )?;
             Carried(&carried.nodes, &front_matter.node_id, "node")?;
+        }
+        Record::Submission(submission) =>
+        {
+            Carried(&carried.nodes, &submission.node_id, "node")?;
+        }
+        Record::SubmissionValue(value) =>
+        {
+            Carried(&carried.submissions, &value.node_id, "submission")?;
+        }
+        Record::SubmissionGap(gap) =>
+        {
+            Carried(&carried.submissions, &gap.node_id, "submission")?;
         }
         Record::RecordRelation(relation) =>
         {
@@ -1186,4 +1221,111 @@ fn Insert_Record_Relations(
     }
 
     return Ok(());
+}
+
+/// The submission rows, each onto the node it is.
+fn Insert_Submissions(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
+{
+    for record in bundle.Records()
+    {
+        let Record::Submission(submission) = record
+        else
+        {
+            continue;
+        };
+
+        transaction.execute(
+            "INSERT INTO submissions
+                 (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
+             VALUES ((SELECT uid FROM nodes WHERE node_id = ?1), ?2, ?3, ?4, ?5, ?6)",
+            params![
+                submission.node_id,
+                submission.kind,
+                submission.form_contract_version,
+                submission.state,
+                submission.submitted_by,
+                submission.submitted_through
+            ],
+        )?;
+    }
+
+    return Ok(());
+}
+
+/// Every attributed value, keeping the ordinal that decides which reading is current.
+fn Insert_Submission_Values(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+) -> Result<(), BundleError>
+{
+    for record in bundle.Records()
+    {
+        let Record::SubmissionValue(value) = record
+        else
+        {
+            continue;
+        };
+
+        transaction.execute(
+            "INSERT INTO submission_values
+                 (submission_uid, field, ordinal, origin, value, value_hash, supersedes_hash,
+                  recorded_at)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            params![
+                Submission_Uid(transaction, &value.node_id)?,
+                value.field,
+                value.ordinal,
+                value.origin,
+                value.value,
+                value.value_hash,
+                value.supersedes_hash,
+                value.recorded_at
+            ],
+        )?;
+    }
+
+    return Ok(());
+}
+
+/// Every gap, open and closed alike.
+fn Insert_Submission_Gaps(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+) -> Result<(), BundleError>
+{
+    for record in bundle.Records()
+    {
+        let Record::SubmissionGap(gap) = record
+        else
+        {
+            continue;
+        };
+
+        transaction.execute(
+            "INSERT INTO submission_gaps
+                 (submission_uid, ordinal, question, blocks, severity, closed_by)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+            params![
+                Submission_Uid(transaction, &gap.node_id)?,
+                gap.ordinal,
+                gap.question,
+                gap.blocks,
+                gap.severity,
+                gap.closed_by
+            ],
+        )?;
+    }
+
+    return Ok(());
+}
+
+/// The surrogate of the submission filed under `node_id`.
+fn Submission_Uid(transaction: &Transaction<'_>, node_id: &str) -> Result<i64, BundleError>
+{
+    return Ok(transaction.query_row(
+        "SELECT s.uid FROM submissions s JOIN nodes n ON n.uid = s.node_uid
+         WHERE n.node_id = ?1",
+        params![node_id],
+        |row| return row.get(0),
+    )?);
 }

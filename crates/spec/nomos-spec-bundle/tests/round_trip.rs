@@ -5,8 +5,11 @@
 //! [`Test_Every_Table_Should_Be_Exercised`] fails if one of them is ever empty.
 
 use nomos_spec_bundle::{Bundle, BundleError, Export, Import, Record};
-use nomos_spec_model::Segment;
-use nomos_spec_store::{SpecificationStore, Table};
+use nomos_spec_model::{
+    DecisionGap, FieldValue, Origin, Segment, Severity, Submission, SubmissionKind,
+    SubmissionState,
+};
+use nomos_spec_store::{Accept_Submission, SpecificationStore, Table};
 
 const FIRST: &str = "---\nid: V2\n---\n# Core Architecture\n\nIdentity is not a path.\n\n\
                      ## Domain Model\n\n| Model | Owns |\n| --- | --- |\n| WorkspaceContext | \
@@ -61,8 +64,53 @@ fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
     }
 
     Populate_Graph(&store);
+    Populate_Submissions(&mut store);
 
     return store;
+}
+
+/// A submission carrying the three things `OD-SPEC-013`'s tables exist to hold: an attributed
+/// value sequence, a superseded value that is still in storage, and a gap as a row.
+///
+/// Written through `Accept_Submission` rather than by SQL, deliberately. The round trip is
+/// meant to prove that what the one write door produces survives export and import; a fixture
+/// that inserted its own rows would prove the bundle round-trips rows the door might never
+/// write.
+fn Populate_Submissions(store: &mut SpecificationStore)
+{
+    let value = |field: &str, value: &str, origin: Origin| {
+        return FieldValue {
+            field: field.to_owned(),
+            value: value.to_owned(),
+            origin,
+        };
+    };
+
+    let submission = Submission {
+        id: "FR-ROUND-TRIP".to_owned(),
+        kind: SubmissionKind::FeatureRequest,
+        form_contract_version: 1,
+        state: SubmissionState::Draft,
+        submitted_by: "the fixture".to_owned(),
+        submitted_through: "test".to_owned(),
+        values: vec![
+            value("title", "A submission survives a round trip", Origin::Submitted),
+            value("goal", "what was first asked", Origin::Submitted),
+            // Supersedes the line above for reading, and never replaces it in storage.
+            value("goal", "what it became on being asked", Origin::Clarified),
+            value("behaviour", "it exports and imports unchanged", Origin::Submitted),
+            value("acceptance", "the bundle is byte-identical", Origin::Submitted),
+            value("invariants", "none", Origin::Submitted),
+        ],
+        gaps: vec![DecisionGap {
+            question: "whether a gap travels once closed".to_owned(),
+            blocks: vec!["behaviour".to_owned()],
+            severity: Severity::NonBlocking,
+            closed_by: None,
+        }],
+    };
+
+    Accept_Submission(store, &submission).expect("the door accepts it");
 }
 
 /// Everything above the source documents: suites, nodes, relations, statements, lineage.

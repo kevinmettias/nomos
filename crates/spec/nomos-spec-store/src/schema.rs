@@ -299,6 +299,81 @@ pub const MIGRATIONS: &[Migration] = &[
             "CREATE INDEX record_relations_document ON record_relations(document_uid)",
         ],
     },
+    Migration {
+        version: 6,
+        name: "born-structured-submissions",
+        statements: &[
+            // The three tables `OD-SPEC-013` decides, arriving with their writer rather than
+            // ahead of it: `OD-SPEC-008` admits only tables something writes to, so a
+            // migration landing these without `Accept_Submission` would be that refusal
+            // committed deliberately.
+            //
+            // `node_uid` rather than an identity of its own, because a submission *is* a
+            // node — which is what gives it `node_history`, and `node_history.reason` is
+            // `NOT NULL` with a non-empty check, so the promotion `OD-SPEC-010` requires
+            // cannot be recorded without saying why.
+            //
+            // Every column here is a fact about the submission event rather than something a
+            // later reader could clarify. That is the whole test for a column: a value that
+            // can be clarified, inferred or decided needs an origin, and a column has room
+            // for one value and no origin. `state` is the one worth naming — nobody types
+            // `draft` or `accepted`, and giving it an origin would let a submission assert
+            // its own acceptance.
+            "CREATE TABLE submissions (
+                 uid                   INTEGER PRIMARY KEY,
+                 node_uid              INTEGER NOT NULL UNIQUE REFERENCES nodes(uid),
+                 kind                  TEXT NOT NULL CHECK (kind IN
+                                           ('feature-request', 'design-spec', 'feature-result')),
+                 form_contract_version INTEGER NOT NULL,
+                 state                 TEXT NOT NULL CHECK (state IN ('draft', 'accepted')),
+                 submitted_by          TEXT NOT NULL CHECK (length(trim(submitted_by)) > 0),
+                 submitted_through     TEXT NOT NULL CHECK (length(trim(submitted_through)) > 0)
+             )",
+            // A field is a sequence and not a cell. `OD-SPEC-010` requires a later value to
+            // supersede an earlier one for reading and never replace it in storage, and
+            // requires every value to carry which of four origins it has; a column can do
+            // neither. The current reading of a field is its highest `ordinal`.
+            //
+            // `value` is `NOT NULL` and non-empty on purpose. An absence that somebody
+            // stated is a row whose value says so, and an absence nobody looked at is no row
+            // at all — a nullable column would make those one `NULL`, which is the collapse
+            // `OD-SPEC-010` refuses.
+            //
+            // `supersedes_hash` is `normative_statements.supersedes_hash` applied to a second
+            // kind of row, which that record asks for by name. Two supersession models in
+            // one store would be two answers to what a superseded value is.
+            "CREATE TABLE submission_values (
+                 uid             INTEGER PRIMARY KEY,
+                 submission_uid  INTEGER NOT NULL REFERENCES submissions(uid),
+                 field           TEXT NOT NULL CHECK (length(trim(field)) > 0),
+                 ordinal         INTEGER NOT NULL,
+                 origin          TEXT NOT NULL CHECK (origin IN
+                                     ('submitted', 'clarified', 'inferred', 'decided')),
+                 value           TEXT NOT NULL CHECK (length(trim(value)) > 0),
+                 value_hash      TEXT NOT NULL,
+                 supersedes_hash TEXT,
+                 recorded_at     TEXT NOT NULL,
+                 UNIQUE (submission_uid, field, ordinal)
+             )",
+            "CREATE INDEX submission_values_field
+                 ON submission_values(submission_uid, field, ordinal)",
+            // `closed_by` is a citation and not a boolean, and that is what makes
+            // `OD-SPEC-010`'s rule enforceable rather than advisory: a gap is never closed by
+            // supplying the value it blocks, and a boolean could be set by whoever supplied
+            // it. A citation can only be filled by naming a record or a recorded decision.
+            "CREATE TABLE submission_gaps (
+                 uid            INTEGER PRIMARY KEY,
+                 submission_uid INTEGER NOT NULL REFERENCES submissions(uid),
+                 ordinal        INTEGER NOT NULL,
+                 question       TEXT NOT NULL CHECK (length(trim(question)) > 0),
+                 blocks         TEXT NOT NULL,
+                 severity       TEXT NOT NULL CHECK (severity IN ('blocking', 'non-blocking')),
+                 closed_by      TEXT CHECK (closed_by IS NULL OR length(trim(closed_by)) > 0),
+                 UNIQUE (submission_uid, ordinal)
+             )",
+            "CREATE INDEX submission_gaps_submission ON submission_gaps(submission_uid)",
+        ],
+    },
 ];
 
 pub struct Migration

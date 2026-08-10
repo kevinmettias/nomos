@@ -24,6 +24,7 @@ mod registration;
 mod rows;
 mod schema;
 mod store;
+mod submission;
 
 pub use authoring::{
     BlockChange, ClaimedRecord, CommitReport, EditError, EditPreview, IdentityChange,
@@ -35,3 +36,4 @@ pub use record::{Disposition, Kind_Label, Kind_Of};
 pub use rows::{RowCensus, RowScope};
 pub use schema::{Latest_Version, MIGRATIONS, Migration};
 pub use store::{AUTHORED, EXTERNAL, SpecificationStore, StoreError, Table};
+pub use submission::{Accept_Submission, AcceptError, Transport_Origin};

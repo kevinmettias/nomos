@@ -39,6 +39,9 @@ pub enum variant nomos_spec_bundle::Record::SourceBlock(SourceBlock)
 pub enum variant nomos_spec_bundle::Record::SourceDocument(SourceDocument)
 pub enum variant nomos_spec_bundle::Record::SourceHeading(SourceHeading)
 pub enum variant nomos_spec_bundle::Record::SourceTableRow(SourceTableRow)
+pub enum variant nomos_spec_bundle::Record::Submission(Submission)
+pub enum variant nomos_spec_bundle::Record::SubmissionGap(SubmissionGap)
+pub enum variant nomos_spec_bundle::Record::SubmissionValue(SubmissionValue)
 pub enum variant nomos_spec_bundle::Record::Suite(Suite)
 pub fn nomos_spec_bundle::Bundle::New(schema_version: u32, records: Vec<Record>) -> Result<Self, BundleError>
 pub fn nomos_spec_bundle::Bundle::Parse(text: &str) -> Result<Self, BundleError>

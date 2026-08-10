@@ -4,7 +4,8 @@ use crate::columns::Assert_Columns_Covered;
 use crate::model::{
     Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
     Omission, OrdinalRef, Record, RecordFrontMatter, RecordRelation, Relation, RelationType,
-    SourceBlock, SourceDocument, SourceHeading, SourceTableRow, Suite, TableRowRef,
+    SourceBlock, SourceDocument, SourceHeading, SourceTableRow, Submission, SubmissionGap,
+    SubmissionValue, Suite, TableRowRef,
 };
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
@@ -47,6 +48,9 @@ pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
     Omissions(connection, &mut records)?;
     Record_Front_Matter(connection, &mut records)?;
     Record_Relations(connection, &mut records)?;
+    Submissions(connection, &mut records)?;
+    Submission_Values(connection, &mut records)?;
+    Submission_Gaps(connection, &mut records)?;
 
     Assert_Complete(store, &records)?;
     Assert_Columns_Covered(connection, &records)?;
@@ -576,5 +580,93 @@ fn Record_Relations(connection: &Connection, records: &mut Vec<Record>) -> Resul
         .collect::<Result<Vec<_>, _>>()?;
 
     records.extend(rows.into_iter().map(Record::RecordRelation));
+    return Ok(());
+}
+
+/// The submissions, ordered by the node they are.
+fn Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT n.node_id, s.kind, s.form_contract_version, s.state, s.submitted_by,
+                s.submitted_through
+         FROM submissions s
+         JOIN nodes n ON n.uid = s.node_uid
+         ORDER BY n.node_id",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(Submission {
+                node_id: row.get(0)?,
+                kind: row.get(1)?,
+                form_contract_version: row.get(2)?,
+                state: row.get(3)?,
+                submitted_by: row.get(4)?,
+                submitted_through: row.get(5)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::Submission));
+    return Ok(());
+}
+
+/// Every value of every field, in the order that makes the last one the current reading.
+fn Submission_Values(connection: &Connection, records: &mut Vec<Record>)
+-> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT n.node_id, v.field, v.ordinal, v.origin, v.value, v.value_hash,
+                v.supersedes_hash, v.recorded_at
+         FROM submission_values v
+         JOIN submissions s ON s.uid = v.submission_uid
+         JOIN nodes n ON n.uid = s.node_uid
+         ORDER BY n.node_id, v.field, v.ordinal",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(SubmissionValue {
+                node_id: row.get(0)?,
+                field: row.get(1)?,
+                ordinal: row.get(2)?,
+                origin: row.get(3)?,
+                value: row.get(4)?,
+                value_hash: row.get(5)?,
+                supersedes_hash: row.get(6)?,
+                recorded_at: row.get(7)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::SubmissionValue));
+    return Ok(());
+}
+
+/// The decision gaps, open and closed alike.
+///
+/// A closed gap travels too. `OD-SPEC-010` closes one by a citation and never by deletion, so
+/// a bundle that dropped them would lose the record that a question was ever asked.
+fn Submission_Gaps(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT n.node_id, g.ordinal, g.question, g.blocks, g.severity, g.closed_by
+         FROM submission_gaps g
+         JOIN submissions s ON s.uid = g.submission_uid
+         JOIN nodes n ON n.uid = s.node_uid
+         ORDER BY n.node_id, g.ordinal",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(SubmissionGap {
+                node_id: row.get(0)?,
+                ordinal: row.get(1)?,
+                question: row.get(2)?,
+                blocks: row.get(3)?,
+                severity: row.get(4)?,
+                closed_by: row.get(5)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::SubmissionGap));
     return Ok(());
 }

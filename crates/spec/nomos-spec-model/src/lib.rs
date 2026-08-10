@@ -14,6 +14,7 @@ mod normalize;
 mod record;
 mod render;
 mod statement;
+mod submission;
 mod table;
 
 pub use block::{BlockKind, Segment, SourceBlock};
@@ -21,4 +22,8 @@ pub use normalize::{ContentHash, HASH_PREFIX, Is_Normalized, Normalize};
 pub use record::{Parse_Record, Record, RecordError, RecordFrontMatter, RecordRelation};
 pub use render::{RenderError, Render_Record, Round_Trips};
 pub use statement::{NormativeStatement, StatementId, StatementKind};
+pub use submission::{
+    DecisionGap, Failure, FieldValue, Origin, Refusal, Severity, Submission, SubmissionKind,
+    SubmissionState, Validate,
+};
 pub use table::{RowKind, TableDefect, TableRow, Table_Defects, Table_Rows};
