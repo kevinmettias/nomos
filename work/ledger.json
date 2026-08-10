@@ -5455,7 +5455,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -5471,7 +5471,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "achine ... ok\ntest Test_A_Rebuild_Should_Be_Byte_Identical ... ok\ntest Test_The_Sidecar_Should_Round_Trip ... ok\ntest Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds ... ok\ntest Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store ... ok\ntest Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content ... ok\ntest Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-561a88ff4bc732e0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-f65566f9f804790f.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-ae78a8a92bf9e664.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-f75bebc7f5b3ba97.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-ae6f7467808b79ca.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1786382266,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-requirable-set-w33",
@@ -5605,14 +5630,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-derived-fact-w62",
-        "acquired_at": 1786381873,
-        "lease_expires_at": 1786396273
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -5621,6 +5642,50 @@
           "nomos-analysis",
           "-p",
           "nomos-lang-rust"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-derived-fact-w62",
+          "reason": "Territory is wrong, and the reading that found it is the item answer to why no edge exists.\n\nA dependency edge needs a fact derived from other facts. Every fact is filed under a capability, and this build declares exactly one - nomos.cap.syntax.items - whose facts are per-file leaves by construction: crates/languages/nomos-lang-rust/src/provider.rs sets semantic_inputs to InputDigest::Of the file text alone and says so, its guarantee declares IncrementalGranularity::File, and its evidence is Verified with a comment refusing Derived because \"the source is not a fact, it is the territory\". A rollup cannot reuse that capability either: SCHEMA is fixed at nomos.syntax.items.v2 and PayloadItem carries a Rust qualified name with no field for which file an item came from, so a union across subjects loses the only thing that would make it useful.\n\nSo the first honest edge needs a second capability, and OD-CAPABILITY-002 puts a capability contract in crates/capabilities rather than in the provider. That directory is outside this item territory, a new crate there is an explicit Cargo.toml member and a row in the README band table that tests/contract/tests/boundaries.rs parses both directions, and README.md is under P10-PATTERN-BRICK active claim. The item cannot be widened - there is no work edit - and it should not be finished on prose while the shipped clause of its own done_when is reachable by a correctly scoped successor.\n\nReleased rather than held: crates/substrate/nomos-ledger/src/store.rs Conflicts excludes only items with an active claim, so an unclaimed item reserves nothing and this frees nomos-lang-rust and nomos-analysis immediately.\n\nThe successor needs, in one territory: crates/capabilities/<the new capability crate>, crates/languages/nomos-lang-rust, crates/substrate/nomos-analysis, Cargo.toml, README.md, the surface snapshots for every crate it moves, and its own record id. Author it once README.md is free.\n\nNothing was written to the tree under this claim. The evidence for the defect is unchanged and still true: crates/substrate/nomos-analysis/tests/fact_identity.rs:710 is the only non-empty dependency array in the workspace, and crates/substrate/nomos-analysis/src/reader.rs:262-266 already names the missing consumer as \"a rollup\".",
+          "abandoned_at": 1786382124
+        }
+      ],
+      "displaced": []
+    },
+    {
+      "id": "P10-SEAM-CITATION",
+      "title": "The seam is decided in two record sets, and the root one cites neither sibling that decided it first",
+      "why": "P3-SIBLINGS ingests xvpe-spec-seed-v0.1, kwb-spec-seed-v0.1 and ecosystem-contracts-v0.1 as non-root suites, and siblings.rs says why: without the distinction XVPE's",
+      "done_when": "ARC-ECOSYSTEM-001 declares a relation to each sibling record whose decision it restates or rests on, so which",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md",
+          "crates/spec/nomos-spec-store/records/ARC-ECOSYSTEM-001.record",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-seam-citation-w60",
+        "acquired_at": 1786382136,
+        "lease_expires_at": 1786392936
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },
