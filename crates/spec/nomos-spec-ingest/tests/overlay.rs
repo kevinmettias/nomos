@@ -10,7 +10,7 @@
 //! estimates that motivated the work, not readings.
 
 use nomos_spec_ingest::{
-    Archive, Disposition, Family, Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler,
+    Archive, Disposition, Family, Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, Overlaid,
     OverlayReport, Parse_Artifact, Reconcile, ReconciliationReport, Statements_In,
 };
 use nomos_spec_store::{SpecificationStore, Table};
@@ -182,7 +182,11 @@ fn Test_Every_Filler_Block_Should_Carry_A_Lineage_Row()
             continue;
         }
         let text = archive.Read_Text(&entry).unwrap_or_else(|error| panic!("{error}"));
-        Ingest_Overlay_Document(&mut store, &entry, &text, &headings, &mut report)
+        let document = Overlaid {
+            path: &entry,
+            markdown: &text,
+        };
+        Ingest_Overlay_Document(&mut store, &document, &headings, &mut report)
             .unwrap_or_else(|error| panic!("{entry}: {error}"));
     }
 

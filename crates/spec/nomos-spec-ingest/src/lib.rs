@@ -30,7 +30,7 @@ pub use lineage::{
 };
 pub use overlay::{
     Artifact, Disposition, Family, FillerBlock, FILLER_PATTERNS, IdentifierOutcome,
-    Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, OverlayReport, Parse_Artifact,
+    Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, Overlaid, OverlayReport, Parse_Artifact,
     ReconciliationReport, Reconcile, Statements_In,
 };
 pub use restore::{

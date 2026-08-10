@@ -1,5 +1,5 @@
 use crate::phases::IngestError;
-use nomos_spec_model::{ContentHash, Parse_Record, Segment};
+use nomos_spec_model::{ContentHash, Parse_Record, Segment, SourceBlock};
 use nomos_spec_store::{SpecificationStore, StoreError};
 use core::fmt::Write as _;
 use serde::Deserialize;
@@ -170,28 +170,38 @@ impl ReconciliationReport
         let mut lines = Vec::new();
         for family in Family::All()
         {
-            let absent = self.Absent_In(*family);
-            let mut line = format!(
-                "{}: {} of {} preserved",
-                family.Label(),
-                self.Preserved_In(*family),
-                self.Declared_In(*family)
-            );
-            if !absent.is_empty()
-            {
-                let named: Vec<&str> = absent.iter().take(5).copied().collect();
-                let _ = write!(
-                    line,
-                    ", {} absent ({}{})",
-                    absent.len(),
-                    named.join(", "),
-                    if absent.len() > named.len() { ", …" } else { "" }
-                );
-            }
-            lines.push(line);
+            lines.push(self.Family_Line(*family));
         }
 
         return lines.join("\n");
+    }
+
+    /// One family's count, and the identifiers behind it when any are missing.
+    ///
+    /// Only the first five are named. The list is there so the reader can go and look at
+    /// one, and a hundred identifiers on a summary line is not a list anybody looks at.
+    fn Family_Line(&self, family: Family) -> String
+    {
+        let absent = self.Absent_In(family);
+        let mut line = format!(
+            "{}: {} of {} preserved",
+            family.Label(),
+            self.Preserved_In(family),
+            self.Declared_In(family)
+        );
+        if !absent.is_empty()
+        {
+            let named: Vec<&str> = absent.iter().take(5).copied().collect();
+            let _ = write!(
+                line,
+                ", {} absent ({}{})",
+                absent.len(),
+                named.join(", "),
+                if absent.len() > named.len() { ", …" } else { "" }
+            );
+        }
+
+        return line;
     }
 }
 
@@ -211,20 +221,28 @@ pub fn Parse_Artifact(markdown: &str, family: Family) -> Result<Artifact, Ingest
 
     let front: ArtifactFrontMatter = serde_yaml_ng::from_str(yaml)
         .map_err(|error| IngestError::Parse(format!("artifact front matter: {error}")))?;
+    let statement = Statement_Of(&front)?;
 
-    let statement = if front.statement.trim().is_empty()
+    return Ok(Artifact {
+        id: front.id,
+        family,
+        criteria: front.criteria.len(),
+        statement,
+    });
+}
+
+/// What an artifact says, from its statement or from the criteria standing in for one.
+///
+/// v14 let an artifact carry criteria and no statement, and the criteria are what it says
+/// in that case. An artifact carrying neither is refused rather than reconciled as empty,
+/// because empty text matches empty text and would report itself preserved.
+fn Statement_Of(front: &ArtifactFrontMatter) -> Result<String, IngestError>
+{
+    let mut statement = front.statement.clone();
+    if statement.trim().is_empty()
     {
-        front
-            .criteria
-            .iter()
-            .map(|criterion| return format!("{} {}", criterion.id, criterion.statement))
-            .collect::<Vec<String>>()
-            .join("\n")
+        statement = Criteria_As_Statement(front);
     }
-    else
-    {
-        front.statement
-    };
 
     if statement.trim().is_empty()
     {
@@ -234,12 +252,18 @@ pub fn Parse_Artifact(markdown: &str, family: Family) -> Result<Artifact, Ingest
         )));
     }
 
-    return Ok(Artifact {
-        id: front.id,
-        family,
-        criteria: front.criteria.len(),
-        statement,
-    });
+    return Ok(statement);
+}
+
+/// The criteria run together, for an artifact that carries them instead of a statement.
+fn Criteria_As_Statement(front: &ArtifactFrontMatter) -> String
+{
+    return front
+        .criteria
+        .iter()
+        .map(|criterion| return format!("{} {}", criterion.id, criterion.statement))
+        .collect::<Vec<String>>()
+        .join("\n");
 }
 
 /// The front matter body, tolerating a byte order mark exactly as v14's readers did.
@@ -275,26 +299,30 @@ pub fn Statements_In(markdown: &str) -> BTreeMap<String, String>
 
     for line in markdown.split('\n')
     {
-        let Some((before, after)) = line.split_once("{#")
-        else
+        if let Some((id, text)) = Anchored_In(line)
         {
-            continue;
-        };
-        let _ = before;
-        let Some((id, rest)) = after.split_once('}')
-        else
-        {
-            continue;
-        };
-        if id.is_empty() || !id.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-')
-        {
-            continue;
+            found.insert(id.to_owned(), text.trim().to_owned());
         }
-
-        found.insert(id.to_owned(), rest.trim().to_owned());
     }
 
     return found;
+}
+
+/// The identifier a line anchors and the text following it, if it anchors one.
+///
+/// The character set is checked because `{#` opens things that are not anchors — a CSS
+/// fragment in a fenced block, a template placeholder — and admitting those would invent
+/// identifiers that no revision ever declared.
+fn Anchored_In(line: &str) -> Option<(&str, &str)>
+{
+    let (_, after) = line.split_once("{#")?;
+    let (id, rest) = after.split_once('}')?;
+    if id.is_empty() || !id.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-')
+    {
+        return None;
+    }
+
+    return Some((id, rest));
 }
 
 /// Compares every v14 identifier against what v15 carries.
@@ -305,40 +333,42 @@ pub fn Reconcile(v14: &[Artifact], v15: &BTreeMap<String, String>) -> Reconcilia
 
     for artifact in v14
     {
-        // Normalized, because v14 stores the statement as folded YAML and v15 stores it
-        // as one line of prose. Comparing raw text would report every identifier reworded
-        // on a difference no reader could see.
-        let mine = ContentHash::Of_Normalized(&artifact.statement);
-        let disposition = match v15.get(&artifact.id)
-        {
-            None => Disposition::Absent,
-            Some(theirs) =>
-            {
-                let theirs = ContentHash::Of_Normalized(theirs);
-                if theirs == mine
-                {
-                    Disposition::Preserved
-                }
-                else
-                {
-                    Disposition::Reworded {
-                        v14: mine,
-                        v15: theirs,
-                    }
-                }
-            }
-        };
-
         outcomes.push(IdentifierOutcome {
             id: artifact.id.clone(),
             family: artifact.family,
-            disposition,
+            disposition: Judged(artifact, v15),
         });
     }
 
     outcomes.sort_by(|left, right| return left.id.cmp(&right.id));
 
     return ReconciliationReport { outcomes };
+}
+
+/// What became of one v14 identifier in v15.
+///
+/// Both sides are normalized, because v14 stores a statement as folded YAML and v15 stores
+/// it as one line of prose. Comparing the raw text would report every identifier reworded
+/// on a difference no reader could see.
+fn Judged(artifact: &Artifact, v15: &BTreeMap<String, String>) -> Disposition
+{
+    let mine = ContentHash::Of_Normalized(&artifact.statement);
+    let Some(text) = v15.get(&artifact.id)
+    else
+    {
+        return Disposition::Absent;
+    };
+
+    let theirs = ContentHash::Of_Normalized(text);
+    if theirs == mine
+    {
+        return Disposition::Preserved;
+    }
+
+    return Disposition::Reworded {
+        v14: mine,
+        v15: theirs,
+    };
 }
 
 /// Prose that says a section exists without saying what it says.
@@ -393,6 +423,18 @@ pub struct FillerBlock
     pub displaced: Option<String>,
 }
 
+/// A v15 document as it arrives: where it came from and what it says.
+///
+/// The two travel together because a filler block is only reportable as a path plus what
+/// the markdown said at that ordinal — neither half identifies a block on its own.
+pub struct Overlaid<'a>
+{
+    /// The path the report names.
+    pub path: &'a str,
+    /// What the document says.
+    pub markdown: &'a str,
+}
+
 /// I4 — ingests one v15 document, recording filler as filler.
 ///
 /// A filler block is stored, not discarded: a stub is evidence of what was lost, and
@@ -405,12 +447,13 @@ pub struct FillerBlock
 /// Returns [`IngestError`] on any store failure.
 pub fn Ingest_Overlay_Document(
     store: &mut SpecificationStore,
-    path: &str,
-    markdown: &str,
+    document: &Overlaid<'_>,
     v14_headings: &BTreeMap<String, i64>,
     report: &mut OverlayReport,
 ) -> Result<(), IngestError>
 {
+    let path = document.path;
+    let markdown = document.markdown;
     let document_uid = store.Put_Source_Document(path, "v15.0", markdown)?;
     let blocks = Segment(markdown);
     store.Put_Source_Blocks(document_uid, &blocks)?;
@@ -424,23 +467,50 @@ pub fn Ingest_Overlay_Document(
     for block in &blocks
     {
         report.blocks = report.blocks.saturating_add(1);
-
-        let Some(pattern) = Is_Filler(&block.text)
-        else
-        {
-            continue;
-        };
-
-        Record_Filler(store, document_uid, block.ordinal, pattern)?;
-        report.filler.push(FillerBlock {
-            document: path.to_owned(),
-            ordinal: block.ordinal,
-            pattern,
-            displaced: displaced.cloned(),
-        });
+        let filler = Filler { document_uid, path, displaced: displaced.map(String::as_str) };
+        Note_Filler(store, block, &filler, report)?;
     }
 
     report.documents = report.documents.saturating_add(1);
+
+    return Ok(());
+}
+
+/// Where a block sits, for the two records a filler block produces.
+///
+/// The lineage row and the report entry need the same three facts about the document, and
+/// carrying them as one value is what keeps the block walk from naming all of them twice.
+struct Filler<'a>
+{
+    /// The document row the lineage entry hangs off.
+    document_uid: i64,
+    /// The path the report entry names.
+    path: &'a str,
+    /// The v14 heading this document displaced, if it displaced one.
+    displaced: Option<&'a str>,
+}
+
+/// Records one block as filler, if it is filler.
+fn Note_Filler(
+    store: &mut SpecificationStore,
+    block: &SourceBlock,
+    filler: &Filler<'_>,
+    report: &mut OverlayReport,
+) -> Result<(), IngestError>
+{
+    let Some(pattern) = Is_Filler(&block.text)
+    else
+    {
+        return Ok(());
+    };
+
+    Record_Filler(store, filler.document_uid, block.ordinal, pattern)?;
+    report.filler.push(FillerBlock {
+        document: filler.path.to_owned(),
+        ordinal: block.ordinal,
+        pattern,
+        displaced: filler.displaced.map(str::to_owned),
+    });
 
     return Ok(());
 }

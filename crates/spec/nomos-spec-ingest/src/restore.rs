@@ -226,26 +226,36 @@ impl RestorationReport
         let mut lines = Vec::new();
         for family in Restored::All()
         {
-            let members = self.In(*family);
-            let named: Vec<&str> = members
-                .iter()
-                .take(3)
-                .map(|member| return member.name.as_str())
-                .collect();
-            let mut line = format!("{}: {} restored", family.Label(), members.len());
-            if !named.is_empty()
-            {
-                let _ = write!(
-                    line,
-                    " ({}{})",
-                    named.join(", "),
-                    if members.len() > named.len() { ", …" } else { "" }
-                );
-            }
-            lines.push(line);
+            lines.push(self.Family_Line(*family));
         }
 
         return lines.join("\n");
+    }
+
+    /// One family's count, and up to three of the members behind it.
+    ///
+    /// Naming a few is what makes a count checkable against the volume by eye; naming all
+    /// of them would make the summary the report it is supposed to introduce.
+    fn Family_Line(&self, family: Restored) -> String
+    {
+        let members = self.In(family);
+        let named: Vec<&str> = members
+            .iter()
+            .take(3)
+            .map(|member| return member.name.as_str())
+            .collect();
+        let mut line = format!("{}: {} restored", family.Label(), members.len());
+        if !named.is_empty()
+        {
+            let _ = write!(
+                line,
+                " ({}{})",
+                named.join(", "),
+                if members.len() > named.len() { ", …" } else { "" }
+            );
+        }
+
+        return line;
     }
 }
 
@@ -313,91 +323,128 @@ impl core::fmt::Display for Collision
     }
 }
 
+/// The volume is checked once here rather than at each recognition, because a heading only
+/// belongs to a family if the document it sits in is that family's volume — asking once is
+/// what keeps a newly added recognition from forgetting to ask at all.
 fn From_Heading(document: &str, block: &SourceBlock, members: &mut Vec<Member>)
 {
-    let depth = block.text.chars().take_while(|character| return *character == '#').count();
     let title = block.text.trim_start_matches('#').trim();
-    let path = &block.heading_path;
-    let origin = Origin::Block {
-        ordinal: block.ordinal,
-    };
+    let origin = Origin::Block { ordinal: block.ordinal };
 
-    // The key rather than the identity, because every caller minted the identity from the
-    // family it was already passing. Naming the family twice was an invitation to name two
-    // different ones.
-    let mut push = |family: Restored, key: &str, alias: Option<String>| {
+    for (family, key, alias) in Recognized(block, title)
+    {
         if !document.starts_with(family.Volume())
         {
-            return;
+            continue;
         }
         members.push(Member {
-            id: Identify(family, key),
+            id: Identify(family, &key),
             family,
             name: title.to_owned(),
             document: document.to_owned(),
             origin,
             alias,
         });
+    }
+}
+
+/// A heading recognised as a family member: the family, the key its identifier is minted
+/// from, and the alias it answers to when it answers to one.
+type Recognition = (Restored, String, Option<String>);
+
+/// What a heading names, judged by how deep it sits.
+///
+/// Depth is what separates a family member from a section that merely mentions one, so a
+/// heading at any other level names nothing at all.
+fn Recognized(block: &SourceBlock, title: &str) -> Vec<Recognition>
+{
+    let depth = block.text.chars().take_while(|character| return *character == '#').count();
+
+    return match depth
+    {
+        3 => At_Depth_3(title),
+        4 => At_Depth_4(title, &block.heading_path),
+        _ => Vec::new(),
     };
+}
 
-    if depth == 3
+/// The level-3 numbered series, and the family each one restores.
+const DEPTH_3: &[(char, Restored)] = &[('D', Restored::AppendixD), ('H', Restored::AppendixH)];
+
+/// The level-4 numbered series, and the family each one restores.
+const DEPTH_4: &[(char, Restored)] = &[
+    ('D', Restored::AppendixD),
+    ('E', Restored::HeadlessInventory),
+    ('F', Restored::IdeProfile),
+];
+
+/// Every family in `series` whose letter this title carries at `parts` levels of numbering.
+fn Numbered(title: &str, parts: usize, series: &[(char, Restored)]) -> Vec<Recognition>
+{
+    let mut found = Vec::new();
+
+    for (letter, family) in series
     {
-        if let Some(numbering) = Milestone(title)
+        if let Some(numbering) = Numbering(title, *letter, parts)
         {
-            push(Restored::RoadmapMilestone, &numbering, None);
-        }
-        if let Some(numbering) = Numbering(title, 'G', 1)
-        {
-            if title.contains("End-to-end scenario:")
-            {
-                push(Restored::Scenario, &numbering, None);
-            }
-        }
-        if let Some(numbering) = Numbering(title, 'D', 1)
-        {
-            push(Restored::AppendixD, &numbering, None);
-        }
-        if let Some(numbering) = Numbering(title, 'H', 1)
-        {
-            push(Restored::AppendixH, &numbering, None);
+            found.push((*family, numbering, None));
         }
     }
 
-    if depth == 4
+    return found;
+}
+
+/// What a level-3 heading names.
+///
+/// A `G` numbering is a scenario only when the title says so, because appendix G numbers
+/// its prose sections in the same series as its scenarios.
+fn At_Depth_3(title: &str) -> Vec<Recognition>
+{
+    let mut found = Numbered(title, 1, DEPTH_3);
+
+    if let Some(numbering) = Milestone(title)
     {
-        if let Some(numbering) = Numbering(title, 'D', 2)
+        found.push((Restored::RoadmapMilestone, numbering, None));
+    }
+    if let Some(numbering) = Numbering(title, 'G', 1)
+    {
+        if title.contains("End-to-end scenario:")
         {
-            push(Restored::AppendixD, &numbering, None);
-        }
-        if let Some(numbering) = Numbering(title, 'E', 2)
-        {
-            push(Restored::HeadlessInventory, &numbering, None);
-        }
-        if let Some(numbering) = Numbering(title, 'F', 2)
-        {
-            push(Restored::IdeProfile, &numbering, None);
-        }
-        if Under(path, SERVICES) && title.split_whitespace().any(|word| return word == "Service")
-        {
-            push(Restored::Service, title, None);
-        }
-        if Under(path, EXTENDED_TERMS)
-        {
-            push(Restored::GlossaryTerm, title, Some(title.to_owned()));
+            found.push((Restored::Scenario, numbering, None));
         }
     }
+
+    return found;
+}
+
+/// What a level-4 heading names.
+///
+/// Services and glossary terms are recognised by where they sit rather than by a numbering,
+/// because neither carries one — the heading path is the only thing that distinguishes a
+/// service from any other level-4 heading in the same volume.
+fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
+{
+    let mut found = Numbered(title, 2, DEPTH_4);
+
+    if Under(path, SERVICES) && title.split_whitespace().any(|word| return word == "Service")
+    {
+        found.push((Restored::Service, title.to_owned(), None));
+    }
+    if Under(path, EXTENDED_TERMS)
+    {
+        found.push((Restored::GlossaryTerm, title.to_owned(), Some(title.to_owned())));
+    }
+
+    return found;
 }
 
 fn From_Rows(document: &str, block: &SourceBlock, members: &mut Vec<Member>)
 {
-    let under = block.heading_path.last().map(String::as_str);
-    let family = match under
+    let Some(family) = Tabled_Family(block)
+    else
     {
-        Some(DOMAIN_MODEL) => Restored::CanonicalDomainModel,
-        Some(GLOSSARY) => Restored::GlossaryTerm,
-        _ => return,
+        return;
     };
-
     if !document.starts_with(family.Volume())
     {
         return;
@@ -405,33 +452,63 @@ fn From_Rows(document: &str, block: &SourceBlock, members: &mut Vec<Member>)
 
     for row in Table_Rows(block).iter().filter(|row| return row.kind == RowKind::Content)
     {
-        let Some(cell) = First_Cell(row)
-        else
-        {
-            continue;
+        let origin = Origin::Row {
+            block_ordinal: block.ordinal,
+            row_ordinal: row.ordinal,
         };
-
-        let names = match family
+        for name in Named_By(row, family)
         {
-            Restored::CanonicalDomainModel => Models_In(cell),
-            _ => vec![cell],
-        };
-
-        for name in names
-        {
-            members.push(Member {
-                id: Identify(family, name),
-                family,
-                name: name.to_owned(),
-                document: document.to_owned(),
-                origin: Origin::Row {
-                    block_ordinal: block.ordinal,
-                    row_ordinal: row.ordinal,
-                },
-                alias: Some(name.to_owned()),
-            });
+            let member = Tabled(document, family, name, origin);
+            members.push(member);
         }
     }
+}
+
+/// The family a table under this heading declares, if it declares one.
+fn Tabled_Family(block: &SourceBlock) -> Option<Restored>
+{
+    return match block.heading_path.last().map(String::as_str)
+    {
+        Some(DOMAIN_MODEL) => Some(Restored::CanonicalDomainModel),
+        Some(GLOSSARY) => Some(Restored::GlossaryTerm),
+        _ => None,
+    };
+}
+
+/// One member as a table row declares it.
+///
+/// It carries an alias where a heading may not: a row's first cell is the name the rest of
+/// the corpus refers to it by, whereas a heading's text is a sentence about it.
+fn Tabled(document: &str, family: Restored, name: &str, origin: Origin) -> Member
+{
+    return Member {
+        id: Identify(family, name),
+        family,
+        name: name.to_owned(),
+        document: document.to_owned(),
+        origin,
+        alias: Some(name.to_owned()),
+    };
+}
+
+/// The members one content row declares.
+///
+/// Only the canonical domain model splits a cell: nine of its rows name more than one
+/// model, and every other family's first cell is one name however it reads.
+fn Named_By(row: &TableRow, family: Restored) -> Vec<&str>
+{
+    let Some(cell) = First_Cell(row)
+    else
+    {
+        return Vec::new();
+    };
+
+    if family == Restored::CanonicalDomainModel
+    {
+        return Models_In(cell);
+    }
+
+    return vec![cell];
 }
 
 /// The models one row of the canonical domain model names.
@@ -574,7 +651,32 @@ pub fn Restore(
     documents: &BTreeMap<String, String>,
 ) -> Result<RestorationReport, IngestError>
 {
-    let mut report = RestorationReport::default();
+    let located = Located(store, revision, documents)?;
+    let members: Vec<Member> = located.iter().map(|(_, member)| return member.clone()).collect();
+    Refuse_Collisions(&members)?;
+
+    let mut report = RestorationReport {
+        ambiguous_names: Ambiguous(&members),
+        ..RestorationReport::default()
+    };
+    for (document_uid, member) in located
+    {
+        Record(store, document_uid, member, &mut report)?;
+    }
+
+    return Ok(report);
+}
+
+/// Every member every document declares, with the store row its document occupies.
+///
+/// Read in full before anything is written, because a collision is only visible across
+/// documents and half a restoration is harder to undo than none.
+fn Located(
+    store: &mut SpecificationStore,
+    revision: &str,
+    documents: &BTreeMap<String, String>,
+) -> Result<Vec<(i64, Member)>, IngestError>
+{
     let mut located: Vec<(i64, Member)> = Vec::new();
 
     for (document, markdown) in documents
@@ -586,53 +688,126 @@ pub fn Restore(
         }
     }
 
-    let members: Vec<Member> = located.iter().map(|(_, member)| return member.clone()).collect();
-    Refuse_Collisions(&members)?;
-    report.ambiguous_names = Ambiguous(&members);
+    return Ok(located);
+}
 
-    for (document_uid, member) in located
+/// Mints one member's node, ties it to its text, and gives it its name.
+fn Record(
+    store: &mut SpecificationStore,
+    document_uid: i64,
+    member: Member,
+    report: &mut RestorationReport,
+) -> Result<(), IngestError>
+{
+    let node_uid = store.Upsert_Node(
+        &member.id,
+        member.family.Node_Kind(),
+        "canonical",
+        "record",
+        &member.name,
+    )?;
+
+    Trace(store, document_uid, &member, node_uid)?;
+    Claim_Alias(store, &member, node_uid, report)?;
+    report.members.push(member);
+
+    return Ok(());
+}
+
+/// A row's address in the store.
+///
+/// Three numbers that only mean anything together, and carrying them as one value is what
+/// keeps the row tracer inside the argument budget.
+#[derive(Clone, Copy)]
+struct RowAt
+{
+    document_uid: i64,
+    block_ordinal: u32,
+    row_ordinal: u32,
+}
+
+/// Ties a node to the text it was minted from.
+fn Trace(
+    store: &mut SpecificationStore,
+    document_uid: i64,
+    member: &Member,
+    node_uid: i64,
+) -> Result<(), IngestError>
+{
+    match member.origin
     {
-        let node_uid = store.Upsert_Node(
-            &member.id,
-            member.family.Node_Kind(),
-            "canonical",
-            "record",
-            &member.name,
-        )?;
-
-        match member.origin
+        Origin::Block { ordinal } => Dispose_Block(store, document_uid, ordinal, node_uid)?,
+        Origin::Row {
+            block_ordinal,
+            row_ordinal,
+        } =>
         {
-            Origin::Block { ordinal } => Dispose_Block(store, document_uid, ordinal, node_uid)?,
-            Origin::Row {
+            let at = RowAt {
+                document_uid,
                 block_ordinal,
                 row_ordinal,
-            } =>
-            {
-                let row_uid = store
-                    .Table_Row_Uid(document_uid, block_ordinal, row_ordinal)?
-                    .ok_or_else(|| {
-                        return IngestError::Parse(format!(
-                            "{} block {block_ordinal} row {row_ordinal} is not in the store, \
-                             so {} would trace to nothing",
-                            member.document, member.id
-                        ));
-                    })?;
-                store.Put_Row_Lineage(row_uid, "preserved-verbatim", Some(node_uid))?;
-            }
+            };
+            Trace_Row(store, at, member, node_uid)?;
         }
-
-        if let Some(alias) = &member.alias
-        {
-            if !report.ambiguous_names.contains(alias) && !Alias(store, alias, node_uid)?
-            {
-                report.contested_aliases.push(alias.clone());
-            }
-        }
-
-        report.members.push(member);
     }
 
-    return Ok(report);
+    return Ok(());
+}
+
+/// Ties a node to the one row it was minted from.
+///
+/// A row the store does not hold is refused rather than skipped: the node would stand with
+/// no text behind it, and "which row did this come from" is the question the restoration
+/// exists to answer.
+fn Trace_Row(
+    store: &mut SpecificationStore,
+    at: RowAt,
+    member: &Member,
+    node_uid: i64,
+) -> Result<(), IngestError>
+{
+    let found = store.Table_Row_Uid(at.document_uid, at.block_ordinal, at.row_ordinal)?;
+    let Some(row_uid) = found
+    else
+    {
+        return Err(IngestError::Parse(format!(
+            "{} block {} row {} is not in the store, so {} would trace to nothing",
+            member.document, at.block_ordinal, at.row_ordinal, member.id
+        )));
+    };
+    store.Put_Row_Lineage(row_uid, "preserved-verbatim", Some(node_uid))?;
+
+    return Ok(());
+}
+
+/// Points an alias at the node, unless the name is contested.
+///
+/// A name more than one restored member claims is left unclaimed, and one another authority
+/// already owns is reported and left where it is — a restoration may not repoint a name it
+/// did not mint.
+fn Claim_Alias(
+    store: &mut SpecificationStore,
+    member: &Member,
+    node_uid: i64,
+    report: &mut RestorationReport,
+) -> Result<(), IngestError>
+{
+    let Some(alias) = &member.alias
+    else
+    {
+        return Ok(());
+    };
+    if report.ambiguous_names.contains(alias)
+    {
+        return Ok(());
+    }
+
+    if !Alias(store, alias, node_uid)?
+    {
+        report.contested_aliases.push(alias.clone());
+    }
+
+    return Ok(());
 }
 
 /// Names claimed by more than one restored member.

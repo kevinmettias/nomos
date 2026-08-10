@@ -5,11 +5,17 @@ use crate::overlay::Is_Filler;
 use crate::phases::IngestError;
 use crate::restore::{Extract, Member, Models_In, Restored};
 use crate::revisions::{Fingerprint_Of, PairChange, RevisionFingerprint, Walk, Within, DOMAIN_VOLUMES};
-use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, Table_Rows};
+use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, TableRow, Table_Rows};
 use core::fmt::Write as _;
 use std::collections::{BTreeMap, BTreeSet};
 
 pub const SHARED_BY: u32 = 3;
+
+/// Every section of every document, as a path, a heading, and the blocks under it.
+///
+/// It is a list rather than a map because two documents may carry the same heading, and
+/// that they do is the very repetition the census is looking for.
+type Sections = Vec<(String, String, Vec<SourceBlock>)>;
 
 pub struct Revision
 {
@@ -248,48 +254,82 @@ impl RegressionReport
     #[must_use]
     pub fn Summary(&self) -> String
     {
-        let mut lines = vec![
-            format!("{} -> {}", self.from, self.to),
-            format!(
-                "  documents: {} appeared, {} disappeared, {} changed in place, {} relocated",
-                self.documents.appeared.len(),
-                self.documents.disappeared.len(),
-                self.documents.changed.len(),
-                self.documents.relocated.len()
-            ),
-        ];
+        let documents = self.Documents_Line();
+        let mut lines = vec![format!("{} -> {}", self.from, self.to), documents];
 
         for family in Restored::All()
         {
-            let tally = self.Tally(*family);
-            if tally.Total() == 0
+            if let Some(line) = self.Family_Line(*family)
             {
-                continue;
+                lines.push(line);
             }
-
-            let named: Vec<&str> = self
-                .In(*family)
-                .iter()
-                .filter(|member| return !matches!(member.fate, Fate::Preserved { .. }))
-                .take(3)
-                .map(|member| return member.name.as_str())
-                .collect();
-
-            let mut line = format!(
-                "  {}: {} preserved, {} hollowed, {} mentioned, {} gone",
-                family.Label(),
-                tally.preserved,
-                tally.hollowed,
-                tally.mentioned,
-                tally.gone
-            );
-            if !named.is_empty()
-            {
-                let _ = write!(line, " ({})", named.join(", "));
-            }
-            lines.push(line);
         }
 
+        let filler = self.Filler_Line();
+        lines.push(filler);
+
+        return lines.join("\n");
+    }
+
+    /// What moved between the two revisions, at the level of whole documents.
+    fn Documents_Line(&self) -> String
+    {
+        return format!(
+            "  documents: {} appeared, {} disappeared, {} changed in place, {} relocated",
+            self.documents.appeared.len(),
+            self.documents.disappeared.len(),
+            self.documents.changed.len(),
+            self.documents.relocated.len()
+        );
+    }
+
+    /// One family's tallies, or nothing at all when the revision carried no member of it.
+    ///
+    /// A family with a zero total is left out rather than printed as four zeroes, because a
+    /// summary that lists every family the build knows about buries the one that moved.
+    fn Family_Line(&self, family: Restored) -> Option<String>
+    {
+        let tally = self.Tally(family);
+        if tally.Total() == 0
+        {
+            return None;
+        }
+
+        let named = self.Named_Losses(family);
+        let mut line = format!(
+            "  {}: {} preserved, {} hollowed, {} mentioned, {} gone",
+            family.Label(),
+            tally.preserved,
+            tally.hollowed,
+            tally.mentioned,
+            tally.gone
+        );
+        if !named.is_empty()
+        {
+            let _ = write!(line, " ({})", named.join(", "));
+        }
+
+        return Some(line);
+    }
+
+    /// Up to three members of a family that did not survive.
+    ///
+    /// Naming a few is what makes a tally actionable; naming all of them would make the
+    /// summary the report it is supposed to introduce.
+    fn Named_Losses(&self, family: Restored) -> Vec<&str>
+    {
+        return self
+            .In(family)
+            .iter()
+            .filter(|member| return !matches!(member.fate, Fate::Preserved { .. }))
+            .take(3)
+            .map(|member| return member.name.as_str())
+            .collect();
+    }
+
+    /// What the blocklist matched, and the widest thing standing on filler that it did not.
+    fn Filler_Line(&self) -> String
+    {
         let mut filler = format!(
             "  filler: {} documents the blocklist matches, {} carrying nothing but filler",
             self.filler.declared.len(),
@@ -305,13 +345,34 @@ impl RegressionReport
                 widest.text.chars().take(72).collect::<String>()
             );
         }
-        lines.push(filler);
 
-        return lines.join("\n");
+        return filler;
     }
 }
 
 pub fn Regression(from: &Revision, to: &Revision) -> Result<RegressionReport, IngestError>
+{
+    let volumes = Volumes_Of(from)?;
+    let earlier = from.Fingerprint()?;
+    let later_print = to.Fingerprint()?;
+    let pair = One_Pair(&earlier, &later_print)?;
+    let later = Later::Read(&to.documents);
+    let members = Judged(&volumes, &later, &to.documents)?;
+
+    return Ok(RegressionReport {
+        from: from.label.clone(),
+        to: to.label.clone(),
+        documents: Relocations(&pair, &earlier, &later_print),
+        members,
+        filler: Census(&later),
+    });
+}
+
+/// The domain volumes a revision carries, refusing one that carries none.
+///
+/// Without the refusal, a revision that never held a family reports every member of every
+/// family gone — which reads as catastrophic loss rather than as the wrong input.
+fn Volumes_Of(from: &Revision) -> Result<BTreeMap<String, String>, IngestError>
 {
     let volumes = from.Volumes();
     if volumes.is_empty()
@@ -323,26 +384,27 @@ pub fn Regression(from: &Revision, to: &Revision) -> Result<RegressionReport, In
         )));
     }
 
-    let pair = One_Pair(&from.Fingerprint()?, &to.Fingerprint()?)?;
-    let later = Later::Read(&to.documents);
+    return Ok(volumes);
+}
 
+/// Every member the earlier volumes declare, each with what became of it.
+fn Judged(
+    volumes: &BTreeMap<String, String>,
+    later: &Later,
+    documents: &BTreeMap<String, String>,
+) -> Result<Vec<MemberFate>, IngestError>
+{
     let mut members = Vec::new();
-    for (document, markdown) in &volumes
+    for (document, markdown) in volumes
     {
         for member in Extract(document, markdown)?
         {
-            let judged = Judge(&member, &later, &to.documents);
+            let judged = Judge(&member, later, documents);
             members.push(judged);
         }
     }
 
-    return Ok(RegressionReport {
-        from: from.label.clone(),
-        to: to.label.clone(),
-        documents: Relocations(&pair, &from.Fingerprint()?, &to.Fingerprint()?),
-        members,
-        filler: Census(&later),
-    });
+    return Ok(members);
 }
 
 fn One_Pair(
@@ -367,36 +429,12 @@ pub fn Relocations(
     to: &RevisionFingerprint,
 ) -> DocumentFate
 {
-    let mut origins: BTreeMap<&str, Vec<String>> = BTreeMap::new();
-    for path in &pair.disappeared
-    {
-        if let Some(hash) = from.documents.get(path)
-        {
-            origins.entry(hash.as_str()).or_default().push(path.clone());
-        }
-    }
-
+    let origins = Origins_By_Content(pair, from);
     let mut fate = DocumentFate {
         changed: pair.changed.clone(),
         ..DocumentFate::default()
     };
-    let mut moved: BTreeSet<&str> = BTreeSet::new();
-
-    for path in &pair.appeared
-    {
-        match to.documents.get(path).and_then(|hash| return origins.get(hash.as_str()))
-        {
-            Some(from_paths) =>
-            {
-                moved.extend(from_paths.iter().map(String::as_str));
-                fate.relocated.push(Relocation {
-                    to: path.clone(),
-                    from: from_paths.clone(),
-                });
-            }
-            None => fate.appeared.push(path.clone()),
-        }
-    }
+    let moved = Place_Appeared(pair, to, &origins, &mut fate);
 
     fate.disappeared = pair
         .disappeared
@@ -406,6 +444,58 @@ pub fn Relocations(
         .collect();
 
     return fate;
+}
+
+/// The paths that disappeared, indexed by the content they held.
+///
+/// A move is only recognisable as one because the content survived under another name, so
+/// content is the key and the old paths are what it answers with.
+fn Origins_By_Content<'a>(
+    pair: &'a PairChange,
+    from: &'a RevisionFingerprint,
+) -> BTreeMap<&'a str, Vec<String>>
+{
+    let mut origins: BTreeMap<&str, Vec<String>> = BTreeMap::new();
+    for path in &pair.disappeared
+    {
+        if let Some(hash) = from.documents.get(path)
+        {
+            origins.entry(hash.as_str()).or_default().push(path.clone());
+        }
+    }
+
+    return origins;
+}
+
+/// Sorts each appeared path into a relocation or a genuine arrival, and says which origins
+/// were accounted for — those are the ones the caller must not also report as disappeared.
+fn Place_Appeared(
+    pair: &PairChange,
+    to: &RevisionFingerprint,
+    origins: &BTreeMap<&str, Vec<String>>,
+    fate: &mut DocumentFate,
+) -> BTreeSet<String>
+{
+    let mut moved: BTreeSet<String> = BTreeSet::new();
+
+    for path in &pair.appeared
+    {
+        let origin = to.documents.get(path).and_then(|hash| return origins.get(hash.as_str()));
+        match origin
+        {
+            Some(from_paths) =>
+            {
+                moved.extend(from_paths.iter().cloned());
+                fate.relocated.push(Relocation {
+                    to: path.clone(),
+                    from: from_paths.clone(),
+                });
+            }
+            None => fate.appeared.push(path.clone()),
+        }
+    }
+
+    return moved;
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -458,10 +548,13 @@ struct Later
 
 impl Later
 {
+    /// Reads every document into the index, in three passes that cannot be merged.
+    ///
+    /// A block's shape depends on how many *other* sections repeat it, so nothing can be
+    /// judged until every section has been counted. The passes are: cut the documents into
+    /// sections, count what repeats, then judge each section against the counts.
     fn Read(documents: &BTreeMap<String, String>) -> Self
     {
-        let mut sections: Vec<(String, String, Vec<SourceBlock>)> = Vec::new();
-        let mut templates: BTreeMap<String, Repetition> = BTreeMap::new();
         let mut later = Self {
             authored: BTreeMap::new(),
             named_in_row: BTreeMap::new(),
@@ -470,75 +563,40 @@ impl Later
             bodies: BTreeMap::new(),
         };
 
-        for (path, markdown) in documents
-        {
-            let mut title: Option<String> = None;
-            let mut body: Vec<SourceBlock> = Vec::new();
-
-            for block in Segment(markdown)
-            {
-                if block.kind != BlockKind::Heading
-                {
-                    Note_Block(&mut later, path, &block);
-                    body.push(block);
-                    continue;
-                }
-
-                let heading = Title(&block);
-                if let Some(previous) = title.replace(heading)
-                {
-                    sections.push((path.clone(), previous, core::mem::take(&mut body)));
-                }
-            }
-
-            if let Some(last) = title
-            {
-                sections.push((path.clone(), last, body));
-            }
-        }
-
+        let sections = Sections_Of(documents, &mut later);
+        later.templates = Repetitions_In(&sections);
         for (path, title, body) in &sections
         {
-            for block in Keyable(body)
-            {
-                let key = Template_Key(&block.text, title);
-                let repetition = templates.entry(key).or_default();
-                repetition.sections = repetition.sections.saturating_add(1);
-                repetition.documents.insert(path.clone());
-            }
-        }
-        later.templates = templates;
-
-        for (path, title, body) in &sections
-        {
-            let mut strongest: Option<Body> = None;
-            for block in Keyable(body)
-            {
-                let shape = later.Shape(&block.text, title);
-                let counted = later.bodies.entry(path.clone()).or_default();
-                counted.blocks = counted.blocks.saturating_add(1);
-                if matches!(shape, Body::Template { .. })
-                {
-                    counted.filler = counted.filler.saturating_add(1);
-                }
-                strongest = Some(match (strongest.take(), shape)
-                {
-                    (Some(Body::Narrative), _) | (_, Body::Narrative) => Body::Narrative,
-                    (_, other) => other,
-                });
-            }
-
-            later
-                .authored
-                .entry(title.clone())
-                .or_default()
-                .push(Position::Heading {
-                    document: path.clone(),
-                    body: strongest,
-                });
+            later.Note_Section(path, title, body);
         }
 
         return later;
+    }
+
+    /// What one section contributes: how much of it is filler, and where its heading stands.
+    fn Note_Section(&mut self, path: &str, title: &str, body: &[SourceBlock])
+    {
+        let mut strongest: Option<Body> = None;
+        for block in Keyable(body)
+        {
+            let shape = self.Shape(&block.text, title);
+            let counted = self.bodies.entry(path.to_owned()).or_default();
+            counted.blocks = counted.blocks.saturating_add(1);
+            if matches!(shape, Body::Template { .. })
+            {
+                counted.filler = counted.filler.saturating_add(1);
+            }
+            strongest = Some(match (strongest.take(), shape)
+            {
+                (Some(Body::Narrative), _) | (_, Body::Narrative) => Body::Narrative,
+                (_, other) => other,
+            });
+        }
+
+        self.authored.entry(title.to_owned()).or_default().push(Position::Heading {
+            document: path.to_owned(),
+            body: strongest,
+        });
     }
 
     fn Shape(&self, text: &str, title: &str) -> Body
@@ -562,6 +620,88 @@ impl Later
     }
 }
 
+/// Cuts every document at its headings, noting what the non-heading blocks say on the way.
+///
+/// The index is filled here rather than afterwards because a block is read once and both
+/// passes want it — the sections for repetition counting, the index for what the rows name.
+fn Sections_Of(documents: &BTreeMap<String, String>, later: &mut Later) -> Sections
+{
+    let mut sections: Sections = Vec::new();
+
+    for (path, markdown) in documents
+    {
+        Cut_At_Headings(path, markdown, later, &mut sections);
+    }
+
+    return sections;
+}
+
+/// Cuts one document at its headings, noting what its non-heading blocks say on the way.
+///
+/// A block before the first heading belongs to no section and is indexed but not kept: it
+/// is front matter, and keying it against an empty title would make every document's front
+/// matter look like a repetition of every other's.
+fn Cut_At_Headings(path: &str, markdown: &str, later: &mut Later, sections: &mut Sections)
+{
+    let mut title: Option<String> = None;
+    let mut body: Vec<SourceBlock> = Vec::new();
+
+    for block in Segment(markdown)
+    {
+        if block.kind != BlockKind::Heading
+        {
+            Note_Block(later, path, &block);
+            body.push(block);
+            continue;
+        }
+
+        let heading = Title(&block);
+        Close_Section(path, title.replace(heading), &mut body, sections);
+    }
+
+    Close_Section(path, title, &mut body, sections);
+}
+
+/// Emits the section a heading just ended, if a heading had opened one.
+///
+/// The same call closes the last section at the end of the document, because "another
+/// heading arrived" and "the document ran out" end a section for the same reason. Written
+/// out twice, the two were one edit away from disagreeing about what gets emitted.
+fn Close_Section(
+    path: &str,
+    title: Option<String>,
+    body: &mut Vec<SourceBlock>,
+    sections: &mut Sections,
+)
+{
+    let Some(title) = title
+    else
+    {
+        return;
+    };
+
+    sections.push((path.to_owned(), title, core::mem::take(body)));
+}
+
+/// How many sections, and how many documents, each keyed block appears in.
+fn Repetitions_In(sections: &[(String, String, Vec<SourceBlock>)]) -> BTreeMap<String, Repetition>
+{
+    let mut templates: BTreeMap<String, Repetition> = BTreeMap::new();
+
+    for (path, title, body) in sections
+    {
+        for block in Keyable(body)
+        {
+            let key = Template_Key(&block.text, title);
+            let repetition = templates.entry(key).or_default();
+            repetition.sections = repetition.sections.saturating_add(1);
+            repetition.documents.insert(path.clone());
+        }
+    }
+
+    return templates;
+}
+
 /// What one non-heading block contributes to the index: whether its document declares
 /// filler, and every subject its content rows name.
 fn Note_Block(later: &mut Later, path: &str, block: &SourceBlock)
@@ -573,27 +713,36 @@ fn Note_Block(later: &mut Later, path: &str, block: &SourceBlock)
 
     for row in Table_Rows(block).iter().filter(|row| return row.kind == RowKind::Content)
     {
-        let subject = row
-            .cells
-            .iter()
-            .map(|cell| return cell.trim())
-            .find(|cell| return !cell.is_empty());
-        let Some(cell) = subject
-        else
-        {
-            continue;
-        };
+        Note_Row(later, path, row);
+    }
+}
 
-        later.authored.entry(cell.to_owned()).or_default().push(Position::Row {
-            document: path.to_owned(),
-        });
-        for name in Models_In(cell)
-        {
-            later
-                .named_in_row
-                .entry(name.to_owned())
-                .or_insert_with(|| return path.to_owned());
-        }
+/// What one content row names.
+///
+/// The subject is the row's first non-empty cell, and a row with none is not a statement
+/// about anything — a table's alignment padding is not a member of the domain.
+fn Note_Row(later: &mut Later, path: &str, row: &TableRow)
+{
+    let subject = row
+        .cells
+        .iter()
+        .map(|cell| return cell.trim())
+        .find(|cell| return !cell.is_empty());
+    let Some(cell) = subject
+    else
+    {
+        return;
+    };
+
+    later.authored.entry(cell.to_owned()).or_default().push(Position::Row {
+        document: path.to_owned(),
+    });
+    for name in Models_In(cell)
+    {
+        later
+            .named_in_row
+            .entry(name.to_owned())
+            .or_insert_with(|| return path.to_owned());
     }
 }
 
@@ -651,16 +800,16 @@ fn Judge(member: &Member, later: &Later, documents: &BTreeMap<String, String>) -
     };
 }
 
+/// What the later revision still says about a member, if it says anything.
+///
+/// A single preserving position settles it, so the walk returns on the first one and keeps
+/// a hollowed position only as the answer of last resort. A member preserved in one document
+/// and hollow in another is preserved.
 fn Still(member: &Member, later: &Later) -> Option<Fate>
 {
-    if member.family == Restored::CanonicalDomainModel
+    if let Some(named) = Named_In_Row(member, later)
     {
-        if let Some(document) = later.named_in_row.get(&member.name)
-        {
-            return Some(Fate::Preserved {
-                document: document.clone(),
-            });
-        }
+        return Some(named);
     }
 
     let positions = later.authored.get(&member.name)?;
@@ -668,47 +817,69 @@ fn Still(member: &Member, later: &Later) -> Option<Fate>
 
     for position in positions
     {
-        match position
+        match At(position)
         {
-            Position::Row { document } =>
+            preserved @ Fate::Preserved { .. } => return Some(preserved),
+            hollowed =>
             {
-                return Some(Fate::Preserved {
-                    document: document.clone(),
-                })
+                hollow.get_or_insert(hollowed);
             }
-            Position::Heading { document, body } => match body
-            {
-                Some(Body::Narrative) =>
-                {
-                    return Some(Fate::Preserved {
-                        document: document.clone(),
-                    })
-                }
-                Some(Body::Template {
-                    shared_with,
-                    declared,
-                }) =>
-                {
-                    hollow.get_or_insert(Fate::Hollowed {
-                        document: document.clone(),
-                        evidence: Hollow::Template {
-                            shared_with: *shared_with,
-                            declared: *declared,
-                        },
-                    });
-                }
-                None =>
-                {
-                    hollow.get_or_insert(Fate::Hollowed {
-                        document: document.clone(),
-                        evidence: Hollow::NoBody,
-                    });
-                }
-            },
         }
     }
 
     return hollow;
+}
+
+/// A domain model named in a table row, which is preservation for that family alone.
+///
+/// Only the canonical domain model is carried in rows; for every other family a row is a
+/// mention, and treating it as preservation would report a deleted member as surviving.
+fn Named_In_Row(member: &Member, later: &Later) -> Option<Fate>
+{
+    if member.family != Restored::CanonicalDomainModel
+    {
+        return None;
+    }
+
+    let document = later.named_in_row.get(&member.name)?;
+
+    return Some(Fate::Preserved {
+        document: document.clone(),
+    });
+}
+
+/// What one position amounts to on its own.
+fn At(position: &Position) -> Fate
+{
+    return match position
+    {
+        Position::Row { document } | Position::Heading {
+            document,
+            body: Some(Body::Narrative),
+        } => Fate::Preserved {
+            document: document.clone(),
+        },
+        Position::Heading {
+            document,
+            body: Some(Body::Template {
+                shared_with,
+                declared,
+            }),
+        } => Fate::Hollowed {
+            document: document.clone(),
+            evidence: Hollow::Template {
+                shared_with: *shared_with,
+                declared: *declared,
+            },
+        },
+        Position::Heading {
+            document,
+            body: None,
+        } => Fate::Hollowed {
+            document: document.clone(),
+            evidence: Hollow::NoBody,
+        },
+    };
 }
 
 fn Mentions(name: &str, documents: &BTreeMap<String, String>) -> Fate
@@ -729,40 +900,63 @@ fn Mentions(name: &str, documents: &BTreeMap<String, String>) -> Fate
 
 fn Census(later: &Later) -> FillerCensus
 {
-    let mut census = FillerCensus {
+    return FillerCensus {
         declared: later.declared.iter().cloned().collect(),
-        ..FillerCensus::default()
+        templates: Shared_Templates(later),
+        stubs: Stubs(later),
     };
+}
 
-    for (key, repetition) in &later.templates
-    {
-        if repetition.sections < SHARED_BY
-        {
-            continue;
-        }
-        census.templates.push(Template {
-            text: key.clone(),
-            sections: repetition.sections,
-            documents: repetition.documents.iter().cloned().collect(),
-            declared: Is_Filler(key),
-        });
-    }
-    census.templates.sort_by(|first, second| {
+/// The blocks repeated widely enough to be template rather than prose, widest first.
+///
+/// Ordering is by reach and then by text, so the report opens on the thing worth deleting
+/// and two runs over the same corpus agree on what to print.
+fn Shared_Templates(later: &Later) -> Vec<Template>
+{
+    let mut templates: Vec<Template> = later
+        .templates
+        .iter()
+        .filter(|(_, repetition)| return repetition.sections >= SHARED_BY)
+        .map(|(key, repetition)| return Described(key, repetition))
+        .collect();
+    templates.sort_by(|first, second| {
         return second
             .sections
             .cmp(&first.sections)
             .then_with(|| return first.text.cmp(&second.text));
     });
 
+    return templates;
+}
+
+/// One repeated block as the census reports it.
+fn Described(key: &str, repetition: &Repetition) -> Template
+{
+    return Template {
+        text: key.to_owned(),
+        sections: repetition.sections,
+        documents: repetition.documents.iter().cloned().collect(),
+        declared: Is_Filler(key),
+    };
+}
+
+/// The documents carrying nothing but filler.
+///
+/// A document with no blocks at all is not one of them: it is empty, which is a different
+/// complaint and one the reader can already see.
+fn Stubs(later: &Later) -> Vec<String>
+{
+    let mut stubs: Vec<String> = Vec::new();
+
     for (path, bodies) in &later.bodies
     {
         if bodies.blocks > 0 && bodies.filler == bodies.blocks
         {
-            census.stubs.push(path.clone());
+            stubs.push(path.clone());
         }
     }
 
-    return census;
+    return stubs;
 }
 
 
