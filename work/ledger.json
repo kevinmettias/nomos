@@ -5399,6 +5399,86 @@
       },
       "abandoned": [],
       "displaced": []
+    },
+    {
+      "id": "P10-REQUIRABLE-SET",
+      "title": "Every profile this repository can rebuild is one profile, so a fresh agent has no current projection to open",
+      "why": "The Required projections step requires diagram-set and nothing else, and OD-GATE-005 left that scope to OD-PROJECT-001 rather than widening it. Measured on a corpus-less shell, which is what CI is: rendering architecture-document exits non-zero with 'section \"Normative statements\" selected no statements, and this store is not whole', and github-markdown and implementation-context-pack refuse the same way on Suites and Statements. That refusal is correct and is not the defect -- an empty projection over a store nothing was read into is not a projection of an empty specification. The defect is that the refusal is a property of a section nobody declared, so the three profiles closest to being agent-readable cannot be rebuilt by CI and none of them is committed. An agent arriving here routes through README and the records because spec/architecture.md is not a file it can open, and the reason is one section per profile. Seeding writes nodes, source documents, source blocks, headings, front matter and relations; it writes no normative_statements and no suites. Nothing states that division, so the next profile author guesses which side a content kind falls on.",
+      "done_when": "Which content kinds a seeded store can answer for is declared in one place and checked against what seeding actually writes, so a profile whose sections stay inside that set is known to be rebuildable rather than assumed to be. At least one profile drawing only on those kinds ships as a committed body and sidecar and is named in the Required projections step, so a fresh checkout can open a current projection of the record set. The corpus-backed profiles are left alone: architecture-document, github-markdown and implementation-context-pack keep refusing on an incomplete store, because that refusal is the projection contract working. A required profile that stops being rebuildable fails the gate rather than silently becoming optional, and OD-PROJECT-002 records what makes a profile requirable and why the required set is a declared list rather than every profile that happens to render.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-002",
+          "crates/spec/nomos-spec-store/records/OD-PROJECT-002.record",
+          "crates/spec/nomos-spec-project",
+          ".github/workflows/gate.yml",
+          "spec"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-requirable-set-w33",
+          "reason": "Abandoned on two findings that change the item rather than on difficulty. First, the premise was too pessimistic: the rebuildable set is not one profile but at least six. Measured by inventorying every profile's content kinds against what Seed_Governing_Records writes (nodes, source documents, source blocks, headings, front matter, relations, lineage -- no suites, no statements, no rows, no omissions): diagram-set, domain-specification, html-site, feature-design, release-specification and traceability-matrix all draw only on seeded kinds, and projections.rs already proves domain-specification and html-site render over a seeded-only store. So spec/feature-design.md -- one of the two documents a fresh agent was said to be unable to open -- is renderable from the record set today and is merely neither committed nor required. The work is to declare and require, not to build a profile. Second, the territory is wrong and cannot be widened under claim. Adding any profile to the required set creates a re-render obligation on every future record author, and the procedure for that obligation lives in two files this item does not reserve: AGENTS.md names  and .claude/skills/nomos-spec-change/SKILL.md names both that command and . Leaving those naming one profile while the gate requires two would make every record author's correct-looking render produce a red gate, which is the OD-GATE-005 failure re-installed one commit after it was closed. Re-authored as P10-REQUIRABLE-DECLARED with those two paths reserved.",
+          "abandoned_at": 1786380919
+        }
+      ],
+      "displaced": []
+    },
+    {
+      "id": "P10-REQUIRABLE-DECLARED",
+      "title": "Six profiles rebuild from the record set, one is required, and nothing declares which side a content kind falls on",
+      "why": "The Required projections step requires diagram-set alone, and the reason looked like a corpus limitation. It is not. Seed_Governing_Records writes nodes, source documents, source blocks, headings, front matter, relations and lineage, and writes no suites, no statements, no rows and no omissions. Inventoried against that, six shipped profiles draw only on seeded kinds: diagram-set, domain-specification, html-site, feature-design, release-specification and traceability-matrix. Test_The_Governing_Records_Should_Project_As_A_Document_Suite already proves two of them render over a seeded-only store. So spec/feature-design.md is renderable from the record set today and is neither committed nor required, which is the whole of the gap between an agent routing through README and an agent opening a current projection. The corpus-backed profiles refuse correctly and are not the defect: rendering architecture-document on a corpus-less shell exits non-zero saying its Normative statements section selected nothing and the store is not whole, and github-markdown and implementation-context-pack refuse the same way on Suites and Statements. The defect is that the division is undeclared, so requirability is a property nobody can check and the next profile author guesses. This item supersedes P10-REQUIRABLE-SET, abandoned because its territory omitted the two files that carry the re-render procedure; the abandonment reason there lost two fragments to shell expansion and this why is the complete version.",
+      "done_when": "Which content kinds a seeded store can answer for is declared in one place and checked against what seeding actually writes, in both directions, so a kind that stops being seeded fails rather than quietly narrowing the set. Whether a profile is rebuildable from the record set follows from that declaration rather than being asserted per profile, and the six that qualify and the ones that do not are both covered by the check, so a section added to a required profile that reaches an unseeded kind fails locally rather than in CI. feature-design ships as a committed body and sidecar and is named in the Required projections step alongside diagram-set. The required set stays a declared list with a stated reason for each entry, because every required projection is a re-render obligation on every future record author and OD-PROJECT-002 must say why that price is paid for this one and not for all six. AGENTS.md and .claude/skills/nomos-spec-change/SKILL.md name every profile a record author must re-render, so following either produces a tree the gate accepts. AGENTS.md stays inside its line budget.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-002",
+          "crates/spec/nomos-spec-store/records/OD-PROJECT-002.record",
+          "crates/spec/nomos-spec-project",
+          ".github/workflows/gate.yml",
+          "spec",
+          "AGENTS.md",
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
     }
   ]
 }
