@@ -7400,6 +7400,44 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-AMEND-RESERVATION",
+      "title": "A record identifier allocated once and a published record reserved for amendment are the same act to add, and both are refused",
+      "why": "work add refuses a territory naming a record identifier that is already published: \"A record identifier is allocated once; choose the next free one\", exit 4. That is right for the defect it was built for. P11-SPENT-RECORD-ID recorded that add compared only against open items, so a published identifier could be reserved twice, and five collisions had to be cleared one record per item in df42f5e.\n\nIt is wrong for the other reason an item names a published record. Amending one is ordinary work here: ARC-ECOSYSTEM-001 is at version 2, OD-CAPABILITY-001 at version 2, D-134 was amended in place rather than superseded because six of its seven decisions were untouched. An item that amends a record must reserve it, because the amendment edits that file and territory is how this board keeps two writers off one file.\n\nThe two acts are now indistinguishable to add, and it refuses both. Measured on 2026-08-10 against ARC-HARNESS-001: refused by identifier stem and refused again by the full published filename, so there is no spelling that gets an amendment through.\n\nThe board already carries the proof that the refused case is legitimate. P11-ECOSYSTEM-UPWARD reserves docs/records/ARC-ECOSYSTEM-001 and its done_when is version 3 of that record. It was authored before the guard landed and cannot be authored today, so the guard forbids an item the board is currently holding.\n\nThe immediate cost is a clause that cannot be answered. ARC-HARNESS-001 owes an ownership row for handoff, which P11-HARNESS-SEAM's done_when required and the record does not carry, and no item can be opened to add it while add refuses to reserve the record it would edit.",
+      "done_when": "Reserving a published record for amendment is possible, and reserving an unallocated identifier twice is still refused.\n\nadd distinguishes the two rather than matching on the identifier alone. Whatever separates them is stated where an author can find it before being refused, and the refusal for the case that stays refused says which of the two it is, because \"choose the next free one\" is advice that is wrong for an amendment and the author who reads it will renumber a record that should not move.\n\nA test drives both against one board: an item reserving a published record is accepted, and a second item reserving an identifier another open item already reserved is refused, and the two refusal paths are asserted separately rather than through one shared assertion that either could satisfy.\n\nNot closed by removing the guard. P11-SPENT-RECORD-ID measured what its absence costs and five items were declined to clear it.\n\nNot closed by telling authors to reserve the registration file instead: both spellings are refused today, and a rule that depends on which of two paths an author happened to write is the kind of convention this board does not enforce.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/tests",
+          "docs/records/OD-LEDGER-026",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-026.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
