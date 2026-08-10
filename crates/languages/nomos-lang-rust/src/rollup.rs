@@ -109,6 +109,15 @@ pub const APPROXIMATE: &str = "approximate";
 /// The `outcome` field for a member with no readable answer.
 pub const UNREACHABLE: &str = "unreachable";
 
+/// Fields in a `module` record, counting the tag.
+const MODULE_FIELDS: usize = 2;
+
+/// Fields in a `member` record, counting the tag.
+const MEMBER_FIELDS: usize = 3;
+
+/// Fields in an `item` record, counting the tag.
+const ITEM_FIELDS: usize = 6;
+
 #[must_use]
 pub fn Capability() -> CapabilityId
 {
@@ -567,6 +576,12 @@ fn Read_Members(
 /// refuses — a module nothing was read for and a module that declares nothing are two
 /// answers and must not share an encoding.
 ///
+/// **A record is exactly the fields the grammar gives it**, and one carrying more is refused
+/// rather than read down to the fields this build knows. That is the same rule as the one
+/// for an unrecognised record tag and it is refused for the same reason: a longer record is
+/// most likely a newer schema, so the field being dropped is the one carrying what changed.
+/// [`Expect_Fields`] is where it is enforced.
+///
 /// Nothing is escaped. `kind`, `visibility` and `qualified-name` arrive from the syntax
 /// schema's unescaped fields, which are tab-free and newline-free by that schema's own
 /// grammar, so an escape here would be a second encoding of bytes that already passed
@@ -634,15 +649,15 @@ pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
             .to_owned());
     };
 
-    let Some(module) = header.strip_prefix("module\t")
-    else
+    let header_fields: Vec<&str> = header.split('\t').collect();
+    if header_fields.first().copied() != Some("module")
     {
         return Err(format!("the first record is `{header}` and not a `module` record"));
-    };
-    let module = Subject_From(module.trim(), 1)?;
+    }
+    Expect_Fields("module", &header_fields, MODULE_FIELDS, 1)?;
 
     let mut index = ModuleIndex {
-        module,
+        module: Subject_From(header_fields.get(1).copied().unwrap_or_default(), 1)?,
         members: Vec::new(),
         items: Vec::new(),
     };
@@ -650,33 +665,27 @@ pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
     for (offset, line) in lines
     {
         let number = offset.saturating_add(1);
-        let mut fields = line.split('\t');
+        let fields: Vec<&str> = line.split('\t').collect();
 
-        match fields.next()
+        // `split` yields at least one element for every input, so `first` is only `None`
+        // for an iterator that is already exhausted, which this one is not.
+        match fields.first().copied().unwrap_or_default()
         {
-            Some("module") => return Err(format!("line {number} is a second `module` record")),
-            Some("member") => index.members.push(Member_Record(&mut fields, number)?),
-            Some("item") => index.items.push(Item_Record(&mut fields, number)?),
-            Some(tag) => return Err(format!("line {number} has record tag `{tag}`, which this build does not understand")),
-            None => return Err(format!("line {number} is empty")),
+            "module" => return Err(format!("line {number} is a second `module` record")),
+            "member" => index.members.push(Member_Record(&fields, number)?),
+            "item" => index.items.push(Item_Record(&fields, number)?),
+            tag => return Err(format!("line {number} has record tag `{tag}`, which this build does not understand")),
         }
     }
 
     return Ok(index);
 }
 
-fn Member_Record<'text>(
-    fields: &mut impl Iterator<Item = &'text str>,
-    line: usize,
-) -> Result<MemberReading, String>
+fn Member_Record(fields: &[&str], line: usize) -> Result<MemberReading, String>
 {
-    let (Some(subject), Some(outcome)) = (fields.next(), fields.next())
-    else
-    {
-        return Err(format!("line {line} is a `member` record without a subject and an outcome"));
-    };
+    Expect_Fields("member", fields, MEMBER_FIELDS, line)?;
 
-    let outcome = match outcome
+    let outcome = match fields.get(2).copied().unwrap_or_default()
     {
         READ => Outcome::Read,
         APPROXIMATE => Outcome::Approximate,
@@ -685,39 +694,60 @@ fn Member_Record<'text>(
     };
 
     return Ok(MemberReading {
-        subject: Subject_From(subject, line)?,
+        subject: Subject_From(fields.get(1).copied().unwrap_or_default(), line)?,
         outcome,
     });
 }
 
-fn Item_Record<'text>(
-    fields: &mut impl Iterator<Item = &'text str>,
-    line: usize,
-) -> Result<IndexEntry, String>
+fn Item_Record(fields: &[&str], line: usize) -> Result<IndexEntry, String>
 {
-    let (Some(member), Some(ordinal), Some(kind), Some(visibility), Some(qualified_name)) = (
-        fields.next(),
-        fields.next(),
-        fields.next(),
-        fields.next(),
-        fields.next(),
-    )
-    else
-    {
-        return Err(format!("line {line} is an `item` record with fewer than five fields"));
-    };
+    Expect_Fields("item", fields, ITEM_FIELDS, line)?;
 
+    let ordinal = fields.get(2).copied().unwrap_or_default();
     let ordinal: u32 = ordinal
         .parse()
         .map_err(|_| return format!("`{ordinal}` on line {line} is not an ordinal"))?;
 
     return Ok(IndexEntry {
-        member: Subject_From(member, line)?,
+        member: Subject_From(fields.get(1).copied().unwrap_or_default(), line)?,
         ordinal,
-        kind: kind.to_owned(),
-        visibility: visibility.to_owned(),
-        qualified_name: qualified_name.to_owned(),
+        kind: fields.get(3).copied().unwrap_or_default().to_owned(),
+        visibility: fields.get(4).copied().unwrap_or_default().to_owned(),
+        qualified_name: fields.get(5).copied().unwrap_or_default().to_owned(),
     });
+}
+
+/// Refuses a record whose field count is not the one the grammar states.
+///
+/// # Why a longer record is refused rather than truncated
+///
+/// The same argument the unknown record tag gets, one grain finer, and it took
+/// `P10-INDEX-FIELD-STRICTNESS` to notice that this reader made it in one place and not the
+/// other. A record carrying more fields than this build knows about is most likely a payload
+/// from a newer schema, and that is exactly the case where reading the prefix and discarding
+/// the rest is worst: the discarded field is where the new information is, and the caller is
+/// handed a clean decode of a payload it only partly understood.
+///
+/// A shorter record is refused for the older reason — a missing field defaulting to empty is
+/// an absence invented by the reader rather than one the writer wrote.
+///
+/// This is deliberately the same shape as `nomos-cap-syntax`'s `Expect_Fields`, which had it
+/// right from the start. The two schemas share no code and should not: what they share is a
+/// rule about what a record is, and agreeing by construction would remove the disagreement
+/// that would otherwise be visible.
+fn Expect_Fields(tag: &str, fields: &[&str], expected: usize, line: usize) -> Result<(), String>
+{
+    if fields.len() == expected
+    {
+        return Ok(());
+    }
+
+    return Err(format!(
+        "the `{tag}` record on line {line} has {} field(s) and this schema's has {expected}. \
+         A longer record is most likely a newer schema, and reading its first {expected} \
+         fields would discard exactly the part that is new",
+        fields.len()
+    ));
 }
 
 /// A subject read back out of the hexadecimal the encoder wrote.
@@ -915,6 +945,62 @@ mod tests
             .is_err(),
             "an item record missing its name is not an item with no name"
         );
+    }
+
+    /// A record longer than the grammar is refused, not read down to what this build knows.
+    ///
+    /// The half `P10-INDEX-FIELD-STRICTNESS` was written for. Every payload here is what a
+    /// v2 of this schema would plausibly look like from a v1 reader: the fields it knows,
+    /// followed by one it does not. Truncating instead of refusing hands a caller a clean
+    /// decode of a payload it only partly understood, and the field it dropped is the one
+    /// that changed.
+    #[test]
+    fn Test_A_Record_With_A_Field_This_Build_Does_Not_Know_Should_Be_Refused()
+    {
+        let module = format!("module\t{}\n", Subject("the/module").Digest());
+        let alpha = Subject("alpha.rs").Digest();
+
+        assert!(
+            Parse_Index(format!("module\t{alpha}\tv2\n").as_bytes()).is_err(),
+            "a `module` record with a field after the subject is not this schema"
+        );
+        assert!(
+            Parse_Index(format!("{module}member\t{alpha}\tread\t42\n").as_bytes()).is_err(),
+            "a `member` record carrying something after its outcome is not this schema"
+        );
+        assert!(
+            Parse_Index(
+                format!("{module}item\t{alpha}\t0\tFunction\tPublic\tOne\tv2\n").as_bytes()
+            )
+            .is_err(),
+            "an `item` record carrying an eighth field is not this schema"
+        );
+    }
+
+    /// The control for the test above, and the one that stops it from being satisfied by a
+    /// reader that refuses everything.
+    ///
+    /// A stricter reader that also refused this provider's own output would be a schema with
+    /// no conforming writer, which is a worse defect than the laxness it replaced — and it
+    /// would fail here rather than in whatever consumes a rollup three commits from now.
+    #[test]
+    fn Test_Every_Record_This_Encoder_Writes_Should_Still_Be_Accepted()
+    {
+        let index = An_Index();
+        let encoded = Encode_Index(&index);
+        let rendered = String::from_utf8(encoded.clone()).expect("the encoding is text");
+
+        assert_eq!(Parse_Index(&encoded), Ok(index));
+
+        // Every record form the encoder can emit is present above, so the round trip is a
+        // statement about the grammar rather than about one record. A test that round-tripped
+        // a payload with no `item` record would say nothing about the longest record there is.
+        assert!(rendered.contains("\nmember\t"), "{rendered}");
+        assert!(rendered.contains("\nitem\t"), "{rendered}");
+        for outcome in [READ, APPROXIMATE, UNREACHABLE]
+        {
+            assert!(rendered.contains(outcome), "{outcome} is not exercised: {rendered}");
+        }
     }
 
     /// The ceiling admits a weaker offer, which is what a ceiling is for.

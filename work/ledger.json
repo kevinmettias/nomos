@@ -6389,14 +6389,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-index-strictness-a41",
-        "acquired_at": 1786386504,
-        "lease_expires_at": 1786393704
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -6407,7 +6403,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust"
+        ],
+        "exit_code": 0,
+        "output_tail": "s_That_Are_Not_Items ... ok\ntest Test_The_Reading_Should_Not_Depend_On_What_Was_Read_Before ... ok\ntest Test_The_Unexpanded_Count_Should_Expose_How_Much_Was_Out_Of_Reach ... ok\ntest Test_Every_Item_Form_Should_Reach_Its_Own_Kind ... ok\ntest Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved ... ok\ntest Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source ... ok\ntest Test_The_Unexpanded_Count_Should_Be_A_Lower_Bound ... ok\ntest Test_The_Granularity_Should_Be_File_Because_A_Reading_Carries_Nothing_Across ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 10 tests\ntest Test_The_Member_Order_Should_Not_Change_The_Fact ... ok\ntest Test_A_Module_Whose_Members_Changed_Should_Not_Keep_Its_Key ... ok\ntest Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge ... ok\ntest Test_The_Store_Should_Return_The_Edges_The_Reader_Recorded ... ok\ntest Test_The_Rollup_Should_Broaden_A_File_Granular_Cause ... ok\ntest Test_The_Derived_Fact_Should_Claim_No_More_Than_Its_Inputs ... ok\ntest Test_A_Change_To_Nothing_In_The_Module_Should_Reach_Neither ... ok\ntest Test_Every_Entry_Should_Name_The_Member_That_Declared_It ... ok\ntest Test_Editing_A_Member_Should_Reach_The_Rollup_Through_A_Dependency_Edge ... ok\ntest Test_The_Payload_Should_Decode_Under_This_Schemas_Own_Reader ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-c0d3013487db468f.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-6dea91e8c3074c08.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-aa5222c5e1f41e84.exe)\n     Running tests\\rollup.rs (target\\debug\\deps\\rollup-15bc2c60d1668fd8.exe)\n   Doc-tests nomos_lang_rust\n",
+        "verified_at": 1786387371,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -6448,7 +6467,7 @@
       "claim": {
         "holder": "claude-submission-layout-s22",
         "acquired_at": 1786386001,
-        "lease_expires_at": 1786400401
+        "lease_expires_at": 1786401710
       },
       "verification": {
         "argv": [
@@ -6749,7 +6768,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-REEXPORT-GRAIN, which is this item with the territory the reading found. The defect is unchanged, the diagnosis in this item's why is confirmed exactly as written, and what could not be executed was the territory.\n\nThis item reserved one snapshot, tests/contract/surface/nomos-integration-tests.txt, because one dropped name had been measured. The mechanism is one comparison in tests/contract/src/surface.rs and it drops names in every crate at once, so the fix moves three snapshots and cannot move one.\n\nMeasured, in a detached worktree at HEAD with only the repaired surface.rs applied. Emit_Re_Export set a single resolved_any flag for a whole pub use declaration, so any name that failed to resolve was neither emitted nor reported whenever a sibling in the same list resolved. Reporting per name instead recovers fifteen dropped names in three crates:\n\n  nomos-integration-tests   1  pub use corpus::Subject_Of_Path\n  nomos-contract-tests      2  DeclaredUniverse and UniverseKind, re-exported from nomos_rules\n  nomos-contracts          12  the identity newtypes, declared by macro_rules! expansion\n\nThe second and third are not this item's instance and are not separable from it either. tests/contract/surface/nomos-contract-tests.txt and tests/contract/surface/nomos-contracts.txt were not reserved, and the predicate cargo test -p nomos-contract-tests fails on both until they are committed, so the item could not have gone green inside its own territory.\n\nThe third is also a finding this item did not predict and the reissue carries. OD-GATE-002 lists macro-generated items among what the source-level reading gives up, and those twelve are exactly that -- but they are re-exported by name from the crate root, so per-name reporting makes twelve invisible exports visible as unresolved rather than leaving them absent. That is a wider claim than a glob's and it belongs in the record.\n\nNothing else was widened. Nothing reads Surface::unresolved outside surface.rs and public_surface.rs, checked across the workspace, so the blast radius is the three snapshots and the record."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -6764,9 +6787,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-reexport-surface-c19",
+          "reason": "Released so the item can be declined and re-authored as P11-REEXPORT-GRAIN with the territory the reading found. Nothing was left in the tree under this claim; the one edited file, tests/contract/src/surface.rs, is inside both territories and travels with the reissue.",
+          "abandoned_at": 1786387355
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-reexport-surface-c19",
+        "declined_at": 1786387355
+      }
     },
     {
       "id": "P11-ADD-NOT-DURABLE",
@@ -7008,6 +7040,85 @@
           "nomos-ledger",
           "-p",
           "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-ADD-CALL-SITE",
+      "title": "The add verb reaches the board around the store's one locked door, and the door is where the fix has to be reached from",
+      "why": "P11-ADD-NOT-DURABLE establishes the mechanism and closes it in the store: FileLedger::Add now decides and writes under one lock acquisition, and a test in nomos-ledger reproduces the lost update and fails without it. Two files the repair needs are outside that item's territory, and it has none to spare because there is no work edit. crates/host/nomos-cli/src/work.rs holds the caller, which today is a Load, a push and a Save with nothing held in between - that call site is the defect, and while it stands the store's new door is unreached and work add still exits 0 over a write that did not survive. crates/substrate/nomos-ledger/src/lib.rs must re-export AddRefusal, which is pub in a private module and therefore unnameable by the caller that has to match on it. This is authored as a second item rather than by widening the first because territory is declared and not enforced (OD-LEDGER-001), so widening a claim mid-flight is the thing that makes a declaration worthless. The two territories are disjoint and both may be held at once, which is the arrangement the board exists to express.",
+      "done_when": "work add routes through FileLedger::Add, so its read, its duplicate check and its write happen inside one lock acquisition. AddRefusal is re-exported from nomos-ledger so the caller can name what it matched. AlreadyPresent keeps exit code 4 and LedgerUnusable reports as a store error, so no refusal that used to be distinguishable becomes indistinguishable. No Load-then-Save pair remains in work.rs's mutating path. cargo test --no-fail-fast -p nomos-ledger -p nomos-cli passes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/host/nomos-cli/src/work.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-add-durable-b41",
+        "acquired_at": 1786387209,
+        "lease_expires_at": 1786398009
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-REEXPORT-GRAIN",
+      "title": "A named re-export of another crate item is dropped from the surface snapshot rather than reported as unresolved",
+      "why": "This is P11-REEXPORT-SURFACE with the territory the reading found. The defect it names is unchanged and its diagnosis was confirmed rather than revised.\n\ntests/integration/src/corpus.rs exports Subject_Of_Path by re-exporting nomos_model, and tests/integration/src/lib.rs re-exports it again. The crate still exports the name and slice.rs still calls it. The snapshot lost it: blessing nomos-integration-tests under P10-SUBJECT-HOME removed the Subject_Of_Path line from tests/contract/surface/nomos-integration-tests.txt while the export was still there, in commit a6f0e9c.\n\nOD-GATE-002 lists what the source-level derivation gives up and this is not on the list. It names the glob form, pub use module star, and promises that one is reported as an unresolved re-export rather than dropped. A named cross-crate re-export is dropped silently instead. The same record states, as a property explicitly NOT given up, that adding a name to a pub use list changes a committed file and fails the test until it is committed. For a target in another crate it does not. So the guard under-reports in a case its own record says it covers, which is worse than the documented false negatives, because a reader who checked the record was told otherwise.\n\nThe mechanism is now located and it is one flag. Emit_Re_Export in tests/contract/src/surface.rs sets resolved_any once for a whole pub use declaration, so the report is per declaration while the resolution is per name. A glob was only ever reported because it is the sole name in its declaration; the promise held by accident and fails the moment a name that resolves stands beside one that does not.\n\nThat makes the defect wider than the one instance this item was opened for, measured in a detached worktree at HEAD with only the repaired reader applied. Fifteen names in three crates are dropped today: Subject_Of_Path in nomos-integration-tests, DeclaredUniverse and UniverseKind in nomos-contract-tests -- re-exported by name from nomos_rules, the same shape -- and twelve identity newtypes in nomos-contracts, declared by macro_rules! expansion and re-exported by name from the crate root. The last group is a case OD-GATE-002 does list as given up, and the difference is that per-name reporting makes those twelve visible as unresolved rather than absent, which is a stronger position than the record currently describes.\n\nThree snapshots move for one comparison, which is why this item carries three and P11-REEXPORT-SURFACE carried one.",
+      "done_when": "A named re-export whose target is outside the crate is either resolved into the snapshot or recorded in it as an unresolved re-export, the way OD-GATE-002 already promises for the glob form. Silently dropping it is the one outcome ruled out.\n\nThe report is per name rather than per declaration, because a name dropped beside names that resolve is where a dropped one hides best. A grouped list is split across as many lines as it has unresolvable names, rather than reported whole, which would say that every name in the list is outside this crate when one is.\n\ntests/contract/surface/nomos-integration-tests.txt regains the name it lost. tests/contract/surface/nomos-contract-tests.txt and tests/contract/surface/nomos-contracts.txt gain the fourteen the same comparison was dropping from them, in the commit that repairs the comparison rather than in a later one that would read as an unexplained widening.\n\nA test covers the case, with a negative control that a same-crate re-export still resolves. The control matters more than usual here: a reader that reported every name as unresolved would satisfy the first clause and destroy the check.\n\nOD-GATE-002 goes to version 2. It records that resolution is per crate, so a named cross-crate re-export is reported rather than resolved, and it corrects the standing of its own claim about pub use lists -- which was false for cross-crate targets and is true once the report is per name. It also records that a macro-generated item re-exported by name is now visible as an unresolved re-export rather than absent, which is a narrowing of the macro entry in What This Gives Up rather than a new concession.\n\nRegistered under crates/spec/nomos-spec-store/records or it is not governing, and both required projections are re-rendered from a tree whose registered records are exactly the ones the commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/src",
+          "tests/contract/tests/public_surface.rs",
+          "tests/contract/surface/nomos-integration-tests.txt",
+          "tests/contract/surface/nomos-contract-tests.txt",
+          "tests/contract/surface/nomos-contracts.txt",
+          "docs/records/OD-GATE-002",
+          "crates/spec/nomos-spec-store/records/OD-GATE-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-reexport-grain-c19",
+        "acquired_at": 1786387355,
+        "lease_expires_at": 1786398155
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
           "-p",
           "nomos-contract-tests"
         ],
