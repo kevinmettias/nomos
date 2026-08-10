@@ -65,6 +65,39 @@ impl core::fmt::Display for ArchiveError
 
 impl std::error::Error for ArchiveError {}
 
+/// A zip file's index, read without unpacking anything.
+///
+/// Both failures answer with the archive path rather than the underlying message alone,
+/// because a caller walking twenty archives cannot tell from "invalid zip" which one it was.
+fn Opened(path: &Path) -> Result<zip::ZipArchive<std::io::BufReader<std::fs::File>>, ArchiveError>
+{
+    let file = std::fs::File::open(path).map_err(|error| ArchiveError::Unreadable {
+        archive: path.to_path_buf(),
+        cause: error.to_string(),
+    })?;
+
+    return zip::ZipArchive::new(std::io::BufReader::new(file)).map_err(|error| {
+        return ArchiveError::Unreadable {
+            archive: path.to_path_buf(),
+            cause: error.to_string(),
+        };
+    });
+}
+
+/// The files an archive holds, sorted so an iteration order never depends on how the
+/// archive was written.
+fn Entries(inner: &zip::ZipArchive<std::io::BufReader<std::fs::File>>) -> Vec<String>
+{
+    let mut paths: Vec<String> = inner
+        .file_names()
+        .filter(|name| !name.ends_with('/'))
+        .map(str::to_owned)
+        .collect();
+    paths.sort();
+
+    return paths;
+}
+
 /// One versioned archive, read in place.
 ///
 /// Nothing is unpacked. Keeping the revisions inside their archives is the same barrier
@@ -85,25 +118,8 @@ impl Archive
     /// [`ArchiveError::Empty`] if it holds no files.
     pub fn Open(path: &Path) -> Result<Self, ArchiveError>
     {
-        let file = std::fs::File::open(path).map_err(|error| ArchiveError::Unreadable {
-            archive: path.to_path_buf(),
-            cause: error.to_string(),
-        })?;
-
-        let inner = zip::ZipArchive::new(std::io::BufReader::new(file)).map_err(|error| {
-            return ArchiveError::Unreadable {
-                archive: path.to_path_buf(),
-                cause: error.to_string(),
-            };
-        })?;
-
-        // Sorted, so an iteration order never depends on how the archive was written.
-        let mut paths: Vec<String> = inner
-            .file_names()
-            .filter(|name| !name.ends_with('/'))
-            .map(str::to_owned)
-            .collect();
-        paths.sort();
+        let inner = Opened(path)?;
+        let paths = Entries(&inner);
 
         if paths.is_empty()
         {

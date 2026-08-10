@@ -170,17 +170,8 @@ pub fn Check_Against_Manifest(
 ) -> GateReport
 {
     let mut report = GateReport::default();
-    let mut recorded_by_document: BTreeMap<&str, Vec<&RecordedBlock>> = BTreeMap::new();
 
-    for block in &lineage.blocks
-    {
-        recorded_by_document
-            .entry(&block.source_document)
-            .or_default()
-            .push(block);
-    }
-
-    for (name, recorded) in recorded_by_document
+    for (name, recorded) in By_Document(lineage)
     {
         let Some(markdown) = documents.get(name)
         else
@@ -191,33 +182,74 @@ pub fn Check_Against_Manifest(
             continue;
         };
 
-        report.documents_checked = report.documents_checked.saturating_add(1);
-        let recomputed = Segment(markdown);
-
-        if recomputed.len() != recorded.len()
-        {
-            report.mismatches.push(BlockMismatch::CountDiffers {
-                document: name.to_owned(),
-                recorded: recorded.len(),
-                recomputed: recomputed.len(),
-            });
-        }
-
-        for (want, got) in recorded.iter().zip(&recomputed)
-        {
-            report.blocks_checked = report.blocks_checked.saturating_add(1);
-            if want.content_hash != want.normalized_hash
-            {
-                report.discriminating_blocks = report.discriminating_blocks.saturating_add(1);
-            }
-            Compare(name, want, got, &mut report.mismatches);
-        }
+        Check_Document(name, &recorded, markdown, &mut report);
     }
 
     return report;
 }
 
+/// The recorded blocks, grouped by the document each came from.
+fn By_Document(lineage: &BlockLineage) -> BTreeMap<&str, Vec<&RecordedBlock>>
+{
+    let mut grouped: BTreeMap<&str, Vec<&RecordedBlock>> = BTreeMap::new();
+
+    for block in &lineage.blocks
+    {
+        grouped.entry(&block.source_document).or_default().push(block);
+    }
+
+    return grouped;
+}
+
+/// Recomputes one document's blocks against what the manifest recorded.
+///
+/// A count that differs is reported and the walk continues over the shorter of the two,
+/// because the first few blocks usually still line up and the ordinals where they stop
+/// doing so are the useful part of the answer.
+fn Check_Document(
+    name: &str,
+    recorded: &[&RecordedBlock],
+    markdown: &str,
+    report: &mut GateReport,
+)
+{
+    report.documents_checked = report.documents_checked.saturating_add(1);
+    let recomputed = Segment(markdown);
+
+    if recomputed.len() != recorded.len()
+    {
+        report.mismatches.push(BlockMismatch::CountDiffers {
+            document: name.to_owned(),
+            recorded: recorded.len(),
+            recomputed: recomputed.len(),
+        });
+    }
+
+    for (want, got) in recorded.iter().zip(&recomputed)
+    {
+        report.blocks_checked = report.blocks_checked.saturating_add(1);
+        if want.content_hash != want.normalized_hash
+        {
+            report.discriminating_blocks = report.discriminating_blocks.saturating_add(1);
+        }
+        Compare(name, want, got, &mut report.mismatches);
+    }
+}
+
 fn Compare(
+    document: &str,
+    want: &RecordedBlock,
+    got: &SourceBlock,
+    mismatches: &mut Vec<BlockMismatch>,
+)
+{
+    Compare_Kind(document, want, got, mismatches);
+    Compare_Content(document, want, got, mismatches);
+    Compare_Normalized(document, want, got, mismatches);
+}
+
+/// What the segmenter now calls the block.
+fn Compare_Kind(
     document: &str,
     want: &RecordedBlock,
     got: &SourceBlock,
@@ -234,7 +266,16 @@ fn Compare(
             recomputed: kind.to_owned(),
         });
     }
+}
 
+/// The block's text exactly as it stands.
+fn Compare_Content(
+    document: &str,
+    want: &RecordedBlock,
+    got: &SourceBlock,
+    mismatches: &mut Vec<BlockMismatch>,
+)
+{
     let content = ContentHash::Of(&got.text);
     if content.As_Str() != want.content_hash
     {
@@ -245,7 +286,20 @@ fn Compare(
             recomputed: content.As_Str().to_owned(),
         });
     }
+}
 
+/// The normalized hash on its own.
+///
+/// It is checked separately from the content hash because the two disagreeing is the whole
+/// signal: a block whose content moved but whose normalization did not is a reformatting,
+/// and one where both moved is an edit.
+fn Compare_Normalized(
+    document: &str,
+    want: &RecordedBlock,
+    got: &SourceBlock,
+    mismatches: &mut Vec<BlockMismatch>,
+)
+{
     let normalized = ContentHash::Of_Normalized(&got.text);
     if normalized.As_Str() != want.normalized_hash
     {

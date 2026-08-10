@@ -120,87 +120,209 @@ pub fn Ingest_Sibling_Suite(
     sibling: Sibling,
 ) -> Result<SuiteReport, IngestError>
 {
-    let suite_uid = store.Put_Suite(sibling.Suite_Id(), sibling.Title(), false)?;
+    let suite = Suite {
+        sibling,
+        uid: store.Put_Suite(sibling.Suite_Id(), sibling.Title(), false)?,
+    };
     let mut report = SuiteReport {
         suite: sibling.Suite_Id().to_owned(),
         ..SuiteReport::default()
     };
 
+    Ingest_Prose(store, archive, suite, &mut report)?;
+    Ingest_Machine(store, archive, suite, &mut report)?;
+
+    return Ok(report);
+}
+
+/// The suite a document is being ingested into: which sibling, and the row it occupies.
+///
+/// The two are never useful apart — the row is where a claim is written and the sibling is
+/// what a claim is checked against — and carrying them together is what keeps the ingest
+/// verbs inside the argument budget.
+#[derive(Clone, Copy)]
+struct Suite
+{
+    sibling: Sibling,
+    uid: i64,
+}
+
+/// A document as the archive holds it: where it sits, and what it says.
+struct Sourced<'a>
+{
+    entry: &'a str,
+    text: &'a str,
+}
+
+/// What a document declares itself to be.
+struct Declared
+{
+    id: String,
+    kind: String,
+    authority: String,
+    title: String,
+}
+
+/// Every markdown entry in the suite.
+fn Ingest_Prose(
+    store: &mut SpecificationStore,
+    archive: &mut Archive,
+    suite: Suite,
+    report: &mut SuiteReport,
+) -> Result<(), IngestError>
+{
     for entry in archive.Ending_With(".md")
     {
         let text = Text(archive, &entry)?;
-        let (node_id, kind, authority, title) = if entry.contains("/records/")
-        {
-            let record = Parse_Record(&text)
-                .map_err(|error| IngestError::Parse(format!("{entry}: {error}")))?;
-            (
-                record.front_matter.id.clone(),
-                record.front_matter.kind.clone(),
-                record.front_matter.authority.clone(),
-                record.front_matter.title.clone(),
-            )
-        }
-        else
-        {
-            (
-                Qualified(sibling, &entry),
-                "document".to_owned(),
-                "canonical".to_owned(),
-                Stem(&entry).to_owned(),
-            )
+        let declared = Declared_By(suite.sibling, &entry, &text)?;
+        let node = Take(store, &declared, suite, report)?;
+
+        let sourced = Sourced {
+            entry: &entry,
+            text: &text,
         };
-
-        let node = store.Upsert_Node(&node_id, &kind, &authority, "document", &title)?;
-        if Claim(store, &node_id, node, suite_uid, sibling)?
-        {
-            report.records.push(node_id);
-        }
-        else
-        {
-            report.contested.push(node_id);
-        }
-
-        let ingested = Ingest_Document(store, sibling, &entry, &text, node)?;
+        let ingested = Ingest_Document(store, suite, &sourced, node)?;
         report.blocks = report.blocks.saturating_add(ingested);
         report.documents = report.documents.saturating_add(1);
     }
 
+    return Ok(());
+}
+
+/// What a markdown entry declares itself to be.
+///
+/// A record keeps its own declared identifier — D-085 is D-085 in every suite that names
+/// it, which is what makes a cross-suite relation an ordinary row. Anything else is
+/// suite-qualified, because a filename is only unique inside its own seed.
+fn Declared_By(sibling: Sibling, entry: &str, text: &str) -> Result<Declared, IngestError>
+{
+    if !entry.contains("/records/")
+    {
+        return Ok(Declared {
+            id: Qualified(sibling, entry),
+            kind: "document".to_owned(),
+            authority: "canonical".to_owned(),
+            title: Stem(entry).to_owned(),
+        });
+    }
+
+    let record =
+        Parse_Record(text).map_err(|error| IngestError::Parse(format!("{entry}: {error}")))?;
+
+    return Ok(Declared {
+        id: record.front_matter.id,
+        kind: record.front_matter.kind,
+        authority: record.front_matter.authority,
+        title: record.front_matter.title,
+    });
+}
+
+/// Mints the node, and records whether this suite got to keep the identifier.
+fn Take(
+    store: &mut SpecificationStore,
+    declared: &Declared,
+    suite: Suite,
+    report: &mut SuiteReport,
+) -> Result<i64, IngestError>
+{
+    let node = store.Upsert_Node(
+        &declared.id,
+        &declared.kind,
+        &declared.authority,
+        "document",
+        &declared.title,
+    )?;
+
+    if Claim(store, &declared.id, node, suite)?
+    {
+        report.records.push(declared.id.clone());
+    }
+    else
+    {
+        report.contested.push(declared.id.clone());
+    }
+
+    return Ok(node);
+}
+
+/// Every JSON entry in the suite.
+fn Ingest_Machine(
+    store: &mut SpecificationStore,
+    archive: &mut Archive,
+    suite: Suite,
+    report: &mut SuiteReport,
+) -> Result<(), IngestError>
+{
     for entry in archive.Ending_With(".json")
     {
         let text = Text(archive, &entry)?;
         let header: SchemaHeader = serde_json::from_str(&text)
             .map_err(|error| IngestError::Parse(format!("{entry}: {error}")))?;
-
-        // Suite-qualified, because `target-adapter.schema.json` is unique inside its seed
-        // and nowhere else. A record keeps its declared identifier — D-085 is D-085 in
-        // every suite that names it, which is what makes a cross-suite relation an
-        // ordinary row.
-        let node_id = Qualified(sibling, &entry);
-        let title = if header.title.is_empty() { header.id.clone() } else { header.title.clone() };
-        // Not every file under `machine/` is a schema. Five of the thirteen are instance
-        // documents — an ownership matrix, a dependency inventory, an evidence exchange —
-        // and typing them all `schema` would make "how many schemas does the ecosystem
-        // define" answer with the file count instead.
-        let kind = if Is_Schema(&entry) { "schema" } else { "machine_document" };
-        let node = store.Upsert_Node(&node_id, kind, "canonical", "record", &title)?;
-
-        if !Claim(store, &node_id, node, suite_uid, sibling)?
-        {
-            report.contested.push(node_id);
-            continue;
-        }
-
-        if kind == "schema"
-        {
-            report.schemas.push(node_id);
-        }
-        else
-        {
-            report.machine_documents.push(node_id);
-        }
+        let declared = Machine_Declared(suite.sibling, &entry, &header);
+        Record_Machine(store, declared, suite, report)?;
     }
 
-    return Ok(report);
+    return Ok(());
+}
+
+/// Mints one machine node and files it under what it is, or under the conflict.
+fn Record_Machine(
+    store: &mut SpecificationStore,
+    declared: Declared,
+    suite: Suite,
+    report: &mut SuiteReport,
+) -> Result<(), IngestError>
+{
+    let node = store.Upsert_Node(
+        &declared.id,
+        &declared.kind,
+        &declared.authority,
+        "record",
+        &declared.title,
+    )?;
+
+    if !Claim(store, &declared.id, node, suite)?
+    {
+        report.contested.push(declared.id);
+
+        return Ok(());
+    }
+    Note_Machine(declared, report);
+
+    return Ok(());
+}
+
+/// What a machine file declares itself to be.
+///
+/// Suite-qualified, because `target-adapter.schema.json` is unique inside its own seed and
+/// nowhere else. Not every file under `machine/` is a schema either — five of the thirteen
+/// are instance documents, an ownership matrix, a dependency inventory, an evidence
+/// exchange — and typing them all `schema` would make "how many schemas does the ecosystem
+/// define" answer with the file count instead.
+fn Machine_Declared(sibling: Sibling, entry: &str, header: &SchemaHeader) -> Declared
+{
+    let title = if header.title.is_empty() { &header.id } else { &header.title };
+    let kind = if Is_Schema(entry) { "schema" } else { "machine_document" };
+
+    return Declared {
+        id: Qualified(sibling, entry),
+        kind: kind.to_owned(),
+        authority: "canonical".to_owned(),
+        title: title.clone(),
+    };
+}
+
+/// Files a machine node this suite kept under what it actually is.
+fn Note_Machine(declared: Declared, report: &mut SuiteReport)
+{
+    if declared.kind == "schema"
+    {
+        report.schemas.push(declared.id);
+    }
+    else
+    {
+        report.machine_documents.push(declared.id);
+    }
 }
 
 /// I8 — a game plan, as commentary.
@@ -302,19 +424,18 @@ fn Claim(
     store: &mut SpecificationStore,
     node_id: &str,
     node: i64,
-    suite_uid: i64,
-    sibling: Sibling,
+    suite: Suite,
 ) -> Result<bool, IngestError>
 {
-    let held: Option<String> = store.Suite_Of(node_id)?.map(|(suite, _)| return suite);
+    let held: Option<String> = store.Suite_Of(node_id)?.map(|(holder, _)| return holder);
 
     return match held.as_deref()
     {
-        Some(suite) if suite != sibling.Suite_Id() => Ok(false),
+        Some(holder) if holder != suite.sibling.Suite_Id() => Ok(false),
         Some(_) => Ok(true),
         None =>
         {
-            store.Assign_Suite(node, suite_uid)?;
+            store.Assign_Suite(node, suite.uid)?;
             Ok(true)
         }
     };
@@ -322,14 +443,14 @@ fn Claim(
 
 fn Ingest_Document(
     store: &mut SpecificationStore,
-    sibling: Sibling,
-    entry: &str,
-    text: &str,
+    suite: Suite,
+    document: &Sourced<'_>,
     node_uid: i64,
 ) -> Result<u32, IngestError>
 {
-    let document_uid = store.Put_Source_Document(entry, sibling.Suite_Id(), text)?;
-    let blocks = Segment(text);
+    let suite_id = suite.sibling.Suite_Id();
+    let document_uid = store.Put_Source_Document(document.entry, suite_id, document.text)?;
+    let blocks = Segment(document.text);
     store.Put_Source_Blocks(document_uid, &blocks)?;
 
     for block in &blocks

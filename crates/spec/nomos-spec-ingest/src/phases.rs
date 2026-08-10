@@ -145,52 +145,85 @@ pub fn Ingest_Statements(
 
     for statement in &file.statements
     {
-        let recomputed = ContentHash::Of(&statement.canonical_text);
-        let canonical = Is_Normalized(&statement.canonical_text);
-
-        if recomputed.As_Str() != statement.canonical_hash
-        {
-            report.divergences.push(StatementDivergence {
-                id: statement.id.clone(),
-                recorded: statement.canonical_hash.clone(),
-                recomputed: recomputed.As_Str().to_owned(),
-                text_is_canonical: canonical,
-            });
-        }
-
-        if !canonical
-        {
-            report.non_canonical_text.push(statement.id.clone());
-        }
-
-        let node_uid = store.Upsert_Node(
-            &statement.id,
-            &statement.kind,
-            "canonical",
-            "record",
-            &statement.source_document,
-        )?;
-
-        store
-            .Connection()
-            .execute(
-                "INSERT OR REPLACE INTO normative_statements
-                 (node_uid, statement_id, kind, canonical_text, canonical_hash)
-                 VALUES (?1, ?2, ?3, ?4, ?5)",
-                rusqlite::params![
-                    node_uid,
-                    statement.id,
-                    statement.kind,
-                    statement.canonical_text,
-                    statement.canonical_hash,
-                ],
-            )
-            .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
-
+        Note_Divergence(statement, &mut report);
+        Store_Statement(store, statement)?;
         report.ingested = report.ingested.saturating_add(1);
     }
 
     return Ok(report);
+}
+
+/// Records what the recomputed hash says about the recorded one.
+///
+/// Whether the text is canonical is reported alongside, because a hash that disagrees over
+/// text that was never normalized is a different finding from one that disagrees over text
+/// that was: the first is a stale recording, the second a changed definition.
+fn Note_Divergence(statement: &RecordedStatement, report: &mut StatementReport)
+{
+    let recomputed = ContentHash::Of(&statement.canonical_text);
+    let canonical = Is_Normalized(&statement.canonical_text);
+
+    if recomputed.As_Str() != statement.canonical_hash
+    {
+        report.divergences.push(StatementDivergence {
+            id: statement.id.clone(),
+            recorded: statement.canonical_hash.clone(),
+            recomputed: recomputed.As_Str().to_owned(),
+            text_is_canonical: canonical,
+        });
+    }
+
+    if !canonical
+    {
+        report.non_canonical_text.push(statement.id.clone());
+    }
+}
+
+/// Writes the statement's node and the recorded text hanging off it.
+fn Store_Statement(
+    store: &mut SpecificationStore,
+    statement: &RecordedStatement,
+) -> Result<(), IngestError>
+{
+    let node_uid = store.Upsert_Node(
+        &statement.id,
+        &statement.kind,
+        "canonical",
+        "record",
+        &statement.source_document,
+    )?;
+
+    return Store_Text(store, statement, node_uid);
+}
+
+/// The recorded text and the hash it was recorded under, both as the manifest gave them.
+///
+/// `OR REPLACE` rather than `OR IGNORE`, because re-ingesting a corrected manifest is meant
+/// to correct the store — a statement whose text was fixed upstream must not keep the old
+/// text just because its identifier is unchanged.
+fn Store_Text(
+    store: &mut SpecificationStore,
+    statement: &RecordedStatement,
+    node_uid: i64,
+) -> Result<(), IngestError>
+{
+    store
+        .Connection()
+        .execute(
+            "INSERT OR REPLACE INTO normative_statements
+             (node_uid, statement_id, kind, canonical_text, canonical_hash)
+             VALUES (?1, ?2, ?3, ?4, ?5)",
+            rusqlite::params![
+                node_uid,
+                statement.id,
+                statement.kind,
+                statement.canonical_text,
+                statement.canonical_hash,
+            ],
+        )
+        .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
+
+    return Ok(());
 }
 
 #[derive(Debug, Deserialize)]
@@ -228,6 +261,29 @@ pub fn Parse_Catalog(json: &str) -> Result<Vec<CatalogEntity>, IngestError>
         .map_err(|error| IngestError::Parse(format!("catalog: {error}")));
 }
 
+/// Points every name an entity answers to at its node.
+fn Record_Aliases(
+    store: &mut SpecificationStore,
+    entity: &CatalogEntity,
+    node_uid: i64,
+    report: &mut CatalogReport,
+) -> Result<(), IngestError>
+{
+    for alias in &entity.aliases
+    {
+        store
+            .Connection()
+            .execute(
+                "INSERT OR IGNORE INTO node_aliases (alias, node_uid) VALUES (?1, ?2)",
+                rusqlite::params![alias, node_uid],
+            )
+            .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
+        report.aliases = report.aliases.saturating_add(1);
+    }
+
+    return Ok(());
+}
+
 /// I3 — the node graph.
 ///
 /// # Errors
@@ -250,18 +306,7 @@ pub fn Ingest_Catalog(
             &entity.title,
         )?;
         report.nodes = report.nodes.saturating_add(1);
-
-        for alias in &entity.aliases
-        {
-            store
-                .Connection()
-                .execute(
-                    "INSERT OR IGNORE INTO node_aliases (alias, node_uid) VALUES (?1, ?2)",
-                    rusqlite::params![alias, node_uid],
-                )
-                .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
-            report.aliases = report.aliases.saturating_add(1);
-        }
+        Record_Aliases(store, entity, node_uid, &mut report)?;
     }
 
     return Ok(report);

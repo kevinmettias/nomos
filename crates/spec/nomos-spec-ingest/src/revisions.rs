@@ -139,6 +139,22 @@ pub struct KindCensus
 /// directory that matched nothing reads exactly like an archaeology with nothing to say.
 pub fn Revisions_In(directory: &Path) -> Result<Vec<(String, PathBuf)>, IngestError>
 {
+    let mut found = Labelled_Archives(directory)?;
+    if found.is_empty()
+    {
+        return Err(IngestError::Parse(format!(
+            "{} holds no revision archive. Refusing to report an archaeology over nothing",
+            directory.display()
+        )));
+    }
+
+    found.sort_by_key(|(label, _)| return Order(label));
+    return Ok(found);
+}
+
+/// Every archive in the directory whose name gives it a revision label.
+fn Labelled_Archives(directory: &Path) -> Result<Vec<(String, PathBuf)>, IngestError>
+{
     let entries = std::fs::read_dir(directory).map_err(|error| {
         return IngestError::Parse(format!("cannot read {}: {error}", directory.display()));
     })?;
@@ -154,15 +170,6 @@ pub fn Revisions_In(directory: &Path) -> Result<Vec<(String, PathBuf)>, IngestEr
         }
     }
 
-    if found.is_empty()
-    {
-        return Err(IngestError::Parse(format!(
-            "{} holds no revision archive. Refusing to report an archaeology over nothing",
-            directory.display()
-        )));
-    }
-
-    found.sort_by_key(|(label, _)| return Order(label));
     return Ok(found);
 }
 
@@ -207,16 +214,30 @@ pub fn Gaps(labels: &[String]) -> Vec<String>
         {
             continue;
         };
-        if before.0 != after.0
-        {
-            continue;
-        }
-        let mut minor = before.1.saturating_add(1);
-        while minor < after.1
-        {
-            missing.push(format!("v{}.{minor}", before.0));
-            minor = minor.saturating_add(1);
-        }
+        let skipped = Between(*before, *after);
+        missing.extend(skipped);
+    }
+
+    return missing;
+}
+
+/// The revisions numbered between two adjacent archives.
+///
+/// Only within one major version. A major bump is a renumbering rather than a run, so
+/// counting from `v14.36` to `v15.0` would report thirty-six revisions nobody ever cut.
+fn Between(before: (u32, u32), after: (u32, u32)) -> Vec<String>
+{
+    if before.0 != after.0
+    {
+        return Vec::new();
+    }
+
+    let mut missing = Vec::new();
+    let mut minor = before.1.saturating_add(1);
+    while minor < after.1
+    {
+        missing.push(format!("v{}.{minor}", before.0));
+        minor = minor.saturating_add(1);
     }
 
     return missing;
@@ -296,30 +317,7 @@ pub fn Walk(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
             continue;
         };
 
-        let mut change = PairChange {
-            from: from.label.clone(),
-            to: to.label.clone(),
-            ..PairChange::default()
-        };
-
-        for (path, hash) in &to.documents
-        {
-            match from.documents.get(path)
-            {
-                Some(previous) if previous != hash => change.changed.push(path.clone()),
-                Some(_) => {}
-                None => Note_Arrival(&mut change, path, &seen_before),
-            }
-        }
-
-        for path in from.documents.keys()
-        {
-            if !to.documents.contains_key(path)
-            {
-                change.disappeared.push(path.clone());
-            }
-        }
-
+        let change = Between_Revisions(from, to, &seen_before);
         pairs.push(change);
         seen_before.extend(from.documents.keys().map(String::as_str));
     }
@@ -348,38 +346,99 @@ pub fn Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestE
         let text = archive
             .Read_Text(&entry)
             .map_err(|error| return IngestError::Parse(error.to_string()))?;
-        census.documents = census.documents.saturating_add(1);
-
-        for line in text.lines()
-        {
-            if line.trim_start().starts_with("```")
-            {
-                census.fence_lines = census.fence_lines.saturating_add(1);
-            }
-        }
-
-        let mut carries_a_table = false;
-        for block in Segment(&text)
-        {
-            carries_a_table |= Count_Block(&mut census, &block);
-        }
-
-        if carries_a_table
-        {
-            census.documents_with_tables = census.documents_with_tables.saturating_add(1);
-        }
+        Count_Document(&mut census, &text);
     }
-
-    if census.documents == 0
-    {
-        return Err(IngestError::Parse(format!(
-            "no document under {}. Refusing to report zero rows for a scope that does not \
-             exist in this revision, because a missing path is not an empty one",
-            scope.Label()
-        )));
-    }
+    Refuse_Empty_Scope(&census, scope)?;
 
     return Ok(census);
+}
+
+/// A scope that matched no document at all.
+///
+/// Refused rather than reported as zero. A revision that reorganised the tree away has no
+/// such directory, and calling that zero rows is the same defect as a check that walks a
+/// missing path and reports clean.
+fn Refuse_Empty_Scope(census: &KindCensus, scope: Scope) -> Result<(), IngestError>
+{
+    if census.documents > 0
+    {
+        return Ok(());
+    }
+
+    return Err(IngestError::Parse(format!(
+        "no document under {}. Refusing to report zero rows for a scope that does not \
+         exist in this revision, because a missing path is not an empty one",
+        scope.Label()
+    )));
+}
+
+/// What one document adds to the census.
+///
+/// Fences are counted by line rather than by block, because an unclosed fence produces no
+/// block at all and a revision that lost its code is exactly where that happens.
+fn Count_Document(census: &mut KindCensus, text: &str)
+{
+    census.documents = census.documents.saturating_add(1);
+
+    for line in text.lines()
+    {
+        if line.trim_start().starts_with("```")
+        {
+            census.fence_lines = census.fence_lines.saturating_add(1);
+        }
+    }
+
+    let mut carries_a_table = false;
+    for block in Segment(text)
+    {
+        carries_a_table |= Count_Block(census, &block);
+    }
+
+    if carries_a_table
+    {
+        census.documents_with_tables = census.documents_with_tables.saturating_add(1);
+    }
+}
+
+/// The four sets for one adjacent pair.
+///
+/// `seen_before` is every path any earlier revision held, which is what separates a path
+/// arriving for the first time from one coming back.
+fn Between_Revisions(
+    from: &RevisionFingerprint,
+    to: &RevisionFingerprint,
+    seen_before: &BTreeSet<&str>,
+) -> PairChange
+{
+    let mut change = PairChange {
+        from: from.label.clone(),
+        to: to.label.clone(),
+        ..PairChange::default()
+    };
+
+    for (path, hash) in &to.documents
+    {
+        match from.documents.get(path)
+        {
+            Some(previous) if previous != hash => change.changed.push(path.clone()),
+            Some(_) => {}
+            None => Note_Arrival(&mut change, path, seen_before),
+        }
+    }
+    change.disappeared = Absent_From(from, to);
+
+    return change;
+}
+
+/// The paths the earlier revision held and the later one does not.
+fn Absent_From(from: &RevisionFingerprint, to: &RevisionFingerprint) -> Vec<String>
+{
+    return from
+        .documents
+        .keys()
+        .filter(|path| return !to.documents.contains_key(*path))
+        .cloned()
+        .collect();
 }
 
 /// A document the earlier revision of a pair did not have: new, or back after an absence.
