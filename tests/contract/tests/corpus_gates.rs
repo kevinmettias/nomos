@@ -170,8 +170,11 @@ const GATES: &[Gate] = &[
     Gate {
         path: "tests/integration/tests/analysis_slice.rs",
         variables: &[RUST],
+        // Unchanged by P9-FALLBACK, deliberately. The five assertions it added are about
+        // spending the selection per subject and are written against the precision corpus,
+        // which is in this repository — so the hole this table measures did not grow.
         gated: 4,
-        tests: 24,
+        tests: 29,
     },
 ];
 
@@ -182,7 +185,11 @@ const GATES: &[Gate] = &[
 const GATED_TOTAL: usize = 68;
 
 /// The number this is worth reading against: how many tests the gated files hold in total.
-const TESTS_IN_GATED_FILES: usize = 125;
+///
+/// Rose to 130 with `P9-FALLBACK`'s five assertions in `analysis_slice.rs`, none of which
+/// reads a corpus. [`GATED_TOTAL`] is unchanged, and that is the point of keeping the two
+/// numbers apart: a gated file growing is not the hole growing.
+const TESTS_IN_GATED_FILES: usize = 130;
 
 /// The table accounts for every file that reaches a corpus.
 ///

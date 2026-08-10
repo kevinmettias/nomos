@@ -29,9 +29,12 @@ pub fn nomos_integration_tests::Production::State(&self) -> Vec<Vec<u8>>
 pub fn nomos_integration_tests::Public_Items(payload: &[u8]) -> Result<(u32, u32), String>
 pub fn nomos_integration_tests::Report_Line(domain: &str, digest: &str) -> String
 pub fn nomos_integration_tests::Resolved_Configuration(registry: &Registry) -> ConfigurationId
+pub fn nomos_integration_tests::RunReport::Answered_By(&self, provider: &str) -> usize
 pub fn nomos_integration_tests::RunReport::Recomputed(&self) -> Vec<String>
 pub fn nomos_integration_tests::RunReport::Recomputed_For(&self, capability: &str) -> Vec<String>
+pub fn nomos_integration_tests::RunReport::Wholly_Chosen(&self) -> bool
 pub fn nomos_integration_tests::Slice::Accepting(mut self, floor: Guarantee) -> Self
+pub fn nomos_integration_tests::Slice::Candidates(&self) -> Vec<nomos_capability::ProviderOffer>
 pub fn nomos_integration_tests::Slice::Checkout(&mut self, corpus: &mut Corpus, landing: &[(&str, &str)]) -> Edited
 pub fn nomos_integration_tests::Slice::Composed() -> Self
 pub fn nomos_integration_tests::Slice::Edit( &mut self, corpus: &mut Corpus, source: ChangeSource, path: &str, content: &str, ) -> Edited
@@ -44,6 +47,7 @@ pub fn nomos_integration_tests::Slice::Resolved(&self) -> (Selection, Applicabil
 pub fn nomos_integration_tests::Slice::Run(&mut self, corpus: &Corpus) -> RunReport
 pub fn nomos_integration_tests::Slice::Surface_Of(&self, members: &[&SourceFile]) -> Option<MaterializedFact>
 pub fn nomos_integration_tests::Slice::Syntax_Key(&self, file: &SourceFile) -> FactKey
+pub fn nomos_integration_tests::Slice::Syntax_Key_Of(&self, file: &SourceFile, offer: &nomos_capability::ProviderOffer) -> FactKey
 pub fn nomos_integration_tests::Subject_Of_Path(path: &str) -> SubjectId
 pub fn nomos_integration_tests::Surface::Encode(&self) -> Vec<u8>
 pub fn nomos_integration_tests::Verify<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>) -> Verification
@@ -54,7 +58,10 @@ pub struct field nomos_integration_tests::Corpus::unreadable: Vec<PathBuf>
 pub struct field nomos_integration_tests::Production::trace: Vec<u8>
 pub struct field nomos_integration_tests::Recompute::capability: String
 pub struct field nomos_integration_tests::Recompute::subject: String
+pub struct field nomos_integration_tests::RunReport::answered_by: std::collections::BTreeMap<String, usize>
+pub struct field nomos_integration_tests::RunReport::approximated: Vec<String>
 pub struct field nomos_integration_tests::RunReport::degraded: Vec<String>
+pub struct field nomos_integration_tests::RunReport::fell_back: Vec<(String, String)>
 pub struct field nomos_integration_tests::RunReport::files_seen: usize
 pub struct field nomos_integration_tests::RunReport::groups_seen: usize
 pub struct field nomos_integration_tests::RunReport::recomputed: Vec<Recompute>
@@ -68,6 +75,7 @@ pub struct field nomos_integration_tests::SourceFile::group_subject: SubjectId
 pub struct field nomos_integration_tests::SourceFile::path: String
 pub struct field nomos_integration_tests::SourceFile::source: String
 pub struct field nomos_integration_tests::SourceFile::subject: SubjectId
+pub struct field nomos_integration_tests::Surface::approximate: u32
 pub struct field nomos_integration_tests::Surface::files: u32
 pub struct field nomos_integration_tests::Surface::items: u32
 pub struct field nomos_integration_tests::Surface::public: u32

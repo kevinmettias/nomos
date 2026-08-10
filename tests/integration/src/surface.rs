@@ -96,6 +96,16 @@ pub struct Surface
     pub files: u32,
     /// Members whose syntax fact the rollup could not read.
     pub unreachable: u32,
+    /// Members whose syntax fact came from a weaker provider than the run asked for.
+    ///
+    /// `OD-CAPABILITY-003`'s third condition, and the field that keeps per-subject fallback
+    /// from being a laundering machine. Without it the scanner covers the file the parser
+    /// refused, `unreachable` drops to zero, and a rollup over five parsed files and one
+    /// pattern-matched one is byte-identical to a rollup over six parsed ones.
+    ///
+    /// Counted in `files` as well, because the member did answer. This says how much of
+    /// that answer is an approximation, not how much of it is missing.
+    pub approximate: u32,
     pub items: u32,
     pub public: u32,
 }
@@ -109,8 +119,8 @@ impl Surface
     pub fn Encode(&self) -> Vec<u8>
     {
         return format!(
-            "files\t{}\nunreachable\t{}\nitems\t{}\npublic\t{}\n",
-            self.files, self.unreachable, self.items, self.public
+            "files\t{}\nunreachable\t{}\napproximate\t{}\nitems\t{}\npublic\t{}\n",
+            self.files, self.unreachable, self.approximate, self.items, self.public
         )
         .into_bytes();
     }
@@ -144,6 +154,7 @@ pub fn Decode_Surface(payload: &[u8]) -> Result<Surface, String>
         {
             "files" => surface.files = value,
             "unreachable" => surface.unreachable = value,
+            "approximate" => surface.approximate = value,
             "items" => surface.items = value,
             "public" => surface.public = value,
             other => return Err(format!("`{other}` is not a surface field")),
@@ -151,9 +162,9 @@ pub fn Decode_Surface(payload: &[u8]) -> Result<Surface, String>
         seen = seen.saturating_add(1);
     }
 
-    if seen != 4
+    if seen != 5
     {
-        return Err(format!("a surface has four fields and this had {seen}"));
+        return Err(format!("a surface has five fields and this had {seen}"));
     }
 
     return Ok(surface);
@@ -265,7 +276,12 @@ mod tests
         assert!(Decode_Surface(b"files\tmany\n").is_err());
         assert!(
             Decode_Surface(b"files\t1\n").is_err(),
-            "a surface has four fields, and three of them defaulting to zero is a lie"
+            "a surface has five fields, and four of them defaulting to zero is a lie"
+        );
+        assert!(
+            Decode_Surface(b"files\t3\nunreachable\t0\nitems\t9\npublic\t2\n").is_err(),
+            "the four-field encoding predates `approximate`, and reading it as a surface \
+             with nothing approximated would be reading a decision it never made"
         );
     }
 
@@ -275,10 +291,34 @@ mod tests
         let surface = Surface {
             files: 3,
             unreachable: 1,
+            approximate: 2,
             items: 42,
             public: 7,
         };
 
         assert_eq!(Decode_Surface(&surface.Encode()), Ok(surface));
+    }
+
+    /// A rollup over an approximated member must not encode as one over a parsed member.
+    ///
+    /// The negative control for `OD-CAPABILITY-003`'s third condition. If `approximate` did
+    /// not reach the bytes, buying coverage would also buy the appearance of precision, and
+    /// nothing downstream could tell the two rollups apart.
+    #[test]
+    fn Test_An_Approximated_Rollup_Should_Not_Encode_Like_An_Exact_One()
+    {
+        let exact = Surface {
+            files: 2,
+            unreachable: 0,
+            approximate: 0,
+            items: 9,
+            public: 4,
+        };
+        let approximated = Surface {
+            approximate: 1,
+            ..exact
+        };
+
+        assert_ne!(exact.Encode(), approximated.Encode());
     }
 }

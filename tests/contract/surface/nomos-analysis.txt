@@ -48,6 +48,7 @@ pub fn nomos_analysis::FactPayload::New(schema: SchemaId, bytes: Vec<u8>) -> Sel
 pub fn nomos_analysis::FactReader::Dependencies(&self) -> &[Dependency]
 pub fn nomos_analysis::FactReader::Get(&mut self, identity: &FactIdentity) -> Result<&MaterializedFact, FactError>
 pub fn nomos_analysis::FactReader::Require( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<&MaterializedFact, Applicability>
+pub fn nomos_analysis::FactReader::Require_Any( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<(&MaterializedFact, Applicability), Applicability>
 pub fn nomos_analysis::FactStore::Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>
 pub fn nomos_analysis::FactStore::Historical(&self, key: &FactKey) -> Option<(MaterializedFact, Supersession)>
 pub fn nomos_analysis::FactStore::Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
@@ -71,6 +72,7 @@ pub fn nomos_analysis::Reader::Get(&mut self, identity: &FactIdentity) -> Result
 pub fn nomos_analysis::Reader::Into_Dependencies(self) -> Vec<Dependency>
 pub fn nomos_analysis::Reader::On( store: &'store MemoryFactStore, registry: &'registry Registry, context: Context, ) -> Self
 pub fn nomos_analysis::Reader::Require( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<&MaterializedFact, Applicability>
+pub fn nomos_analysis::Reader::Require_Any( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<(&MaterializedFact, Applicability), Applicability>
 pub impl nomos_analysis::FactError implements core::fmt::Display
 pub impl nomos_analysis::FactError implements std::error::Error
 pub impl nomos_analysis::FactIdentity implements core::fmt::Display

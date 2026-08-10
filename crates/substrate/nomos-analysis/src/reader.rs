@@ -1,7 +1,7 @@
 use crate::fact::{FactError, MaterializedFact};
 use crate::identity::{FactIdentity, FactKey, GuaranteeDigest, InputDigest};
 use crate::store::MemoryFactStore;
-use nomos_capability::{Registry, Requirement, Resolution};
+use nomos_capability::{ProviderOffer, Registry, Requirement, Resolution};
 use nomos_contracts::{
     Applicability, BuildVariantId, CapabilityId, ConfigurationId, GenerationId, SnapshotId,
     SubjectId,
@@ -61,6 +61,34 @@ pub trait FactReader
         need: &Requirement,
     ) -> Result<&MaterializedFact, Applicability>;
 
+    /// The best answer any admitted provider has for this subject, and how good it is.
+    ///
+    /// [`FactReader::Require`] asks the chosen provider and stops. That is right when a
+    /// caller wants one provider's answer or none, and it is what leaves a lowered floor
+    /// unspent: the offers the floor admitted are reachable and nothing looks at them.
+    ///
+    /// This walks the selection — the chosen offer, then `Selection::Weaker()` in the order
+    /// the registry ranked them — and takes the first that answers. The order is the
+    /// registry's rather than this reader's, which is what makes the result single-valued:
+    /// one ordered list, one first hit. `OD-CAPABILITY-003` records why that is the rule.
+    ///
+    /// The returned [`Applicability`] is [`Applicability::SupportedWithFallback`] when the
+    /// answer came from anything but the chosen offer. A caller that ignores it is deriving
+    /// a fact from an approximation and calling it exact, which is the whole risk of
+    /// falling back at all.
+    ///
+    /// # Errors
+    ///
+    /// [`Applicability::DependencyUnavailable`] when no admitted provider has an answer,
+    /// and whatever the resolution said when nothing was admitted in the first place.
+    fn Require_Any(
+        &mut self,
+        capability: &CapabilityId,
+        subject: &SubjectId,
+        inputs: InputDigest,
+        need: &Requirement,
+    ) -> Result<(&MaterializedFact, Applicability), Applicability>;
+
     fn Dependencies(&self) -> &[Dependency];
 }
 
@@ -117,9 +145,23 @@ impl<'store, 'registry> Reader<'store, 'registry>
         resolution: &Resolution,
     ) -> Option<FactKey>
     {
-        let offer = resolution.Offer()?;
+        return Some(self.Key_From(capability, subject, inputs, resolution.Offer()?));
+    }
 
-        return Some(FactKey {
+    /// The key one named offer's answer about a subject would be filed under.
+    ///
+    /// The provider and its guarantee are components of the key, which is the reason
+    /// per-subject fallback is admissible at all: two providers answering about one file
+    /// are two addresses rather than two values at one.
+    fn Key_From(
+        &self,
+        capability: &CapabilityId,
+        subject: &SubjectId,
+        inputs: InputDigest,
+        offer: &ProviderOffer,
+    ) -> FactKey
+    {
+        return FactKey {
             contract: capability.clone(),
             contract_version: offer.version,
             subject: *subject,
@@ -129,7 +171,7 @@ impl<'store, 'registry> Reader<'store, 'registry>
             guarantee: GuaranteeDigest::Of(&offer.guarantee),
             variant: self.context.variant,
             configuration: self.context.configuration,
-        });
+        };
     }
 }
 
@@ -193,6 +235,78 @@ impl FactReader for Reader<'_, '_>
             .store
             .Lookup(&key, at)
             .map_err(|()| return Applicability::DependencyUnavailable);
+    }
+
+    fn Require_Any(
+        &mut self,
+        capability: &CapabilityId,
+        subject: &SubjectId,
+        inputs: InputDigest,
+        need: &Requirement,
+    ) -> Result<(&MaterializedFact, Applicability), Applicability>
+    {
+        let resolution = self.registry.Resolve(need);
+        let Resolution::Satisfied {
+            selection,
+            applicability,
+        } = &resolution
+        else
+        {
+            return Err(resolution.Applicability());
+        };
+
+        let at = self.context.generation;
+        let mut candidates: Vec<&ProviderOffer> = vec![&selection.chosen];
+        candidates.extend(selection.Weaker());
+
+        // Missed keys are collected rather than recorded on the way past, because
+        // recording takes `&mut self` and the candidates borrow the resolution. They are
+        // recorded below either way: "the parser had nothing here" is a real read and a
+        // real dependency, and a rollup that later has to be invalidated when the parser
+        // does have something needs the edge.
+        let mut answered = None;
+        let mut missed = Vec::new();
+
+        for (rank, offer) in candidates.iter().enumerate()
+        {
+            let key = self.Key_From(capability, subject, inputs, offer);
+            if self.store.Lookup(&key, at).is_ok()
+            {
+                answered = Some((
+                    key,
+                    if rank == 0
+                    {
+                        *applicability
+                    }
+                    else
+                    {
+                        Applicability::SupportedWithFallback
+                    },
+                ));
+                break;
+            }
+            missed.push(key);
+        }
+
+        for key in &missed
+        {
+            self.Record(key, ReadOutcome::Degraded(Applicability::DependencyUnavailable));
+        }
+
+        let Some((key, applicability)) = answered
+        else
+        {
+            return Err(Applicability::DependencyUnavailable);
+        };
+
+        self.Record(&key, ReadOutcome::Materialized);
+
+        let fact = self
+            .store
+            .Lookup(&key, at)
+            .map_err(|()| return Applicability::DependencyUnavailable)?;
+
+        return Ok((fact, applicability));
     }
 
     fn Dependencies(&self) -> &[Dependency]

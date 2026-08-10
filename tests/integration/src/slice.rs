@@ -31,8 +31,28 @@ pub struct RunReport
     pub files_seen: usize,
     pub syntax_materialized: usize,
     pub syntax_reused: usize,
-    /// Files the provider refused, by path and reason. Named, not counted.
+    /// Files no admitted provider could answer for, by path and reason. Named, not counted.
+    ///
+    /// The reason is the *chosen* provider's, because that is the refusal a caller can act
+    /// on. Under a floor that admits nobody weaker this is every refusal there is.
     pub refused: Vec<(String, String)>,
+    /// How many subjects each provider answered for, by provider name.
+    ///
+    /// The census `OD-CAPABILITY-003` requires. Without it a run that fell back for one
+    /// file in six is indistinguishable from one the parser answered whole, and the point
+    /// of admitting fallback was to buy coverage visibly rather than quietly.
+    pub answered_by: std::collections::BTreeMap<String, usize>,
+    /// Subjects the chosen provider refused and a weaker one answered, with who answered.
+    ///
+    /// Named rather than counted, for the same reason `refused` is: "one file was
+    /// approximated" is satisfied by approximating the wrong one.
+    pub fell_back: Vec<(String, String)>,
+    /// Groups whose rollup read at least one fallback answer.
+    ///
+    /// Distinct from `degraded`, and the distinction is the whole of what fallback buys and
+    /// costs. A degraded rollup could not read a member at all; an approximated one read
+    /// every member and one of them came from a weaker provider than the run asked for.
+    pub approximated: Vec<String>,
     pub groups_seen: usize,
     pub surface_materialized: usize,
     pub surface_reused: usize,
@@ -70,6 +90,23 @@ impl RunReport
         subjects.sort();
 
         return subjects;
+    }
+
+    /// How many subjects one provider answered for in this pass.
+    #[must_use]
+    pub fn Answered_By(&self, provider: &str) -> usize
+    {
+        return self.answered_by.get(provider).copied().unwrap_or(0);
+    }
+
+    /// Whether this pass got every answer from the provider the registry chose.
+    ///
+    /// The question a caller asks before treating the run as exact. A run that fell back is
+    /// not a clean run — it is a run that bought coverage, and it says what that cost.
+    #[must_use]
+    pub fn Wholly_Chosen(&self) -> bool
+    {
+        return self.fell_back.is_empty();
     }
 
     /// Everything written in this pass, sorted, as `capability of subject`.
@@ -443,19 +480,49 @@ impl Slice
     #[must_use]
     pub fn Syntax_Key(&self, file: &SourceFile) -> FactKey
     {
-        let offer = self.Resolved().0.chosen;
+        return self.Syntax_Key_Of(file, &self.Resolved().0.chosen);
+    }
 
+    /// The key one named offer's answer about a file would be filed under.
+    ///
+    /// The same construction as [`Slice::Syntax_Key`] with the offer supplied rather than
+    /// resolved, because under per-subject fallback the offer that answered is not always
+    /// the offer the registry chose — and the key has to name whoever actually answered or
+    /// the store is holding a fact labelled with a provider that refused it.
+    #[must_use]
+    pub fn Syntax_Key_Of(&self, file: &SourceFile, offer: &nomos_capability::ProviderOffer)
+        -> FactKey
+    {
         return FactKey {
             contract: CapabilityId::New(syntax::CAPABILITY),
             contract_version: offer.version,
             subject: file.subject,
             semantic_inputs: Self::Syntax_Inputs(&file.source),
-            provider: offer.provider,
+            provider: offer.provider.clone(),
             provider_version: offer.version,
             guarantee: GuaranteeDigest::Of(&offer.guarantee),
             variant: self.variant,
             configuration: self.configuration,
         };
+    }
+
+    /// The offers this run may ask, chosen first and then weakest-last.
+    ///
+    /// Exactly `chosen` followed by `Selection::Weaker()`, in the registry's order. The
+    /// composition root does not rank and does not filter: `nomos-capability` already
+    /// decided both, and a second ordering here would be a second answer to
+    /// `OD-CAPABILITY-001`.
+    ///
+    /// Under [`Parsed_Floor`] this is one offer, because nothing weaker cleared the floor —
+    /// so a run that asked for a parse gets a parse or nothing, unchanged.
+    #[must_use]
+    pub fn Candidates(&self) -> Vec<nomos_capability::ProviderOffer>
+    {
+        let selection = self.Resolved().0;
+        let mut offers = vec![selection.chosen.clone()];
+        offers.extend(selection.Weaker().into_iter().cloned());
+
+        return offers;
     }
 
     /// The rollup's semantic inputs: the digests of every member's inputs, in corpus order.
@@ -524,10 +591,10 @@ impl Slice
     /// # Panics
     ///
     /// If the resolved provider has no dispatch here.
-    fn Dispatch(&self, file: &SourceFile) -> rust::Materialization
+    fn Dispatch(&self, file: &SourceFile, offer: &nomos_capability::ProviderOffer)
+        -> rust::Materialization
     {
-        let chosen = self.Resolved().0.chosen;
-        let provider = chosen.provider.As_Str();
+        let provider = offer.provider.As_Str();
 
         if provider == rust::PROVIDER
         {
@@ -594,37 +661,11 @@ impl Slice
             ..RunReport::default()
         };
 
+        let candidates = self.Candidates();
+
         for file in &corpus.files
         {
-            let key = self.Syntax_Key(file);
-
-            if self.Held(&key)
-            {
-                report.syntax_reused = report.syntax_reused.saturating_add(1);
-                continue;
-            }
-
-            match self.Dispatch(file)
-            {
-                rust::Materialization::Materialized(fact) =>
-                {
-                    // A leaf: computed from the file and from nothing else, so it declares
-                    // no dependencies. This is also why the corpus needs the rollup — a
-                    // graph of leaves has no descendants to get wrong.
-                    self.store
-                        .Materialize(*fact, &[])
-                        .expect("a fact is never written behind the generation it names");
-                    report.syntax_materialized = report.syntax_materialized.saturating_add(1);
-                    report.recomputed.push(Recompute {
-                        capability: syntax::CAPABILITY.to_owned(),
-                        subject: file.path.clone(),
-                    });
-                }
-                rust::Materialization::Unparseable(failure) =>
-                {
-                    report.refused.push((file.path.clone(), failure.to_string()));
-                }
-            }
+            self.Answer_For(file, &candidates, &mut report);
         }
 
         let groups = corpus.Groups();
@@ -651,6 +692,10 @@ impl Slice
             if surface.unreachable > 0
             {
                 report.degraded.push(group.clone());
+            }
+            if surface.approximate > 0
+            {
+                report.approximated.push(group.clone());
             }
 
             self.store
@@ -681,6 +726,92 @@ impl Slice
         return report;
     }
 
+    /// Walks the selection for one file until something answers.
+    ///
+    /// The loop `P8-SELECTION` made possible and nothing wrote. The chosen offer is asked
+    /// first; if it refuses the file, the next admitted offer is asked, and so on down the
+    /// ranking the registry produced. The first answer is written under *its own* provider's
+    /// key, so the store never holds a fact labelled with a provider that refused it.
+    ///
+    /// A refusal is not cached. The parser is asked again on the next pass over the same
+    /// file and refuses again, which is cheap and is the honest reading — nothing has
+    /// recorded that the parser cannot answer, only that it did not.
+    ///
+    /// # Panics
+    ///
+    /// If a fact would be written behind the generation it names, which is a contradiction
+    /// in the run loop rather than a runtime condition.
+    fn Answer_For(
+        &mut self,
+        file: &SourceFile,
+        candidates: &[nomos_capability::ProviderOffer],
+        report: &mut RunReport,
+    )
+    {
+        let mut refusal = None;
+
+        for (rank, offer) in candidates.iter().enumerate()
+        {
+            let key = self.Syntax_Key_Of(file, offer);
+            let provider = offer.provider.As_Str().to_owned();
+
+            if self.Held(&key)
+            {
+                report.syntax_reused = report.syntax_reused.saturating_add(1);
+                Self::Credit(report, &provider, rank, file);
+
+                return;
+            }
+
+            match self.Dispatch(file, offer)
+            {
+                rust::Materialization::Materialized(fact) =>
+                {
+                    // A leaf: computed from the file and from nothing else, so it declares
+                    // no dependencies. This is also why the corpus needs the rollup — a
+                    // graph of leaves has no descendants to get wrong.
+                    self.store
+                        .Materialize(*fact, &[])
+                        .expect("a fact is never written behind the generation it names");
+                    report.syntax_materialized = report.syntax_materialized.saturating_add(1);
+                    report.recomputed.push(Recompute {
+                        capability: syntax::CAPABILITY.to_owned(),
+                        subject: file.path.clone(),
+                    });
+                    Self::Credit(report, &provider, rank, file);
+
+                    return;
+                }
+                rust::Materialization::Unparseable(failure) =>
+                {
+                    // The chosen provider's refusal is the one a caller can act on, so it
+                    // is the one kept when nobody below can answer either.
+                    if refusal.is_none()
+                    {
+                        refusal = Some(failure.to_string());
+                    }
+                }
+            }
+        }
+
+        report.refused.push((
+            file.path.clone(),
+            refusal.unwrap_or_else(|| return "no admitted provider answered".to_owned()),
+        ));
+    }
+
+    /// Records who answered for a subject, and whether that was the chosen offer.
+    fn Credit(report: &mut RunReport, provider: &str, rank: usize, file: &SourceFile)
+    {
+        let counted = report.answered_by.entry(provider.to_owned()).or_insert(0);
+        *counted = counted.saturating_add(1);
+
+        if rank > 0
+        {
+            report.fell_back.push((file.path.clone(), provider.to_owned()));
+        }
+    }
+
     /// Reads every member's syntax fact through the registry and sums what they declare.
     ///
     /// The dependency edges come from [`Reader`] observing the reads, not from this
@@ -702,22 +833,29 @@ impl Slice
 
         for member in members
         {
-            let read = reader.Require(
+            // `Require_Any` rather than `Require`, which is what makes the coverage a
+            // lowered floor bought reachable by the thing that derives from it. Reading
+            // only the chosen provider would leave the scanner's answer written into the
+            // store and unread, and the rollup would still report the member missing —
+            // the same defect one level in.
+            let read = reader.Require_Any(
                 &CapabilityId::New(syntax::CAPABILITY),
                 &member.subject,
                 Self::Syntax_Inputs(&member.source),
                 &need,
             );
 
-            let Ok(fact) = read
+            let Ok((fact, applicability)) = read
             else
             {
-                // The member has no readable fact — it was refused by the provider, or
+                // The member has no readable fact — every admitted provider refused it, or
                 // nothing has computed it. Counted, never skipped: a rollup that silently
                 // omits a member reports a smaller surface as if it were a complete one.
                 surface.unreachable = surface.unreachable.saturating_add(1);
                 continue;
             };
+
+            let approximated = applicability == Applicability::SupportedWithFallback;
 
             match crate::surface::Public_Items(&fact.payload.bytes)
             {
@@ -726,6 +864,14 @@ impl Slice
                     surface.files = surface.files.saturating_add(1);
                     surface.items = surface.items.saturating_add(items);
                     surface.public = surface.public.saturating_add(public);
+                    if approximated
+                    {
+                        // OD-CAPABILITY-003's third condition. Without this the scanner's
+                        // answer covers the file the parser refused, `unreachable` drops to
+                        // zero, and a corpus that was visibly incomplete starts reading as
+                        // complete and sound.
+                        surface.approximate = surface.approximate.saturating_add(1);
+                    }
                 }
                 Err(_) => surface.unreachable = surface.unreachable.saturating_add(1),
             }
