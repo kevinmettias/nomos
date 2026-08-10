@@ -1,0 +1,65 @@
+//! What a universe's claimed mirror amounts to against the checks that exist.
+
+use super::{DeclaredUniverse, BTreeSet, EnforcementReach, EnforcerRef, RuleId, COMPLETENESS_MIRROR, GateCategory, EnforcementBreach};
+
+/// The enforcement claim a universe makes, and what the source says of it.
+///
+/// A universe that names no mirror declares [`EnforcerRef::Review`] and expects
+/// [`GateCategory::Review`], which is *truthful* — an admitted gap is an honest
+/// declaration, and `enforcement.rs` is explicit that it must not be conflated with an
+/// overclaim. It is still not enforcement, which is why the finding is raised on
+/// [`EnforcementReach::Is_Enforced`] and its severity read off the breaches.
+pub(super) fn Reach_Of(universe: &DeclaredUniverse, checks: &BTreeSet<String>) -> EnforcementReach
+{
+    let Some(claimed) = universe.claimed_mirror.as_ref()
+    else
+    {
+        return Reviewed();
+    };
+
+    let enforcer = EnforcerRef::Check {
+        name: claimed.clone(),
+    };
+    let (computed, breaches) = Resolution(claimed, checks.contains(claimed));
+
+    return EnforcementReach {
+        rule: RuleId::New(COMPLETENESS_MIRROR),
+        declared: vec![enforcer],
+        // Naming a check is a claim that a violation would be caught. That is what makes a
+        // name resolving to nothing a false claim rather than a typo.
+        expected: GateCategory::Blocking,
+        computed,
+        breaches,
+    };
+}
+
+/// The reach of a universe that names no mirror.
+///
+/// Declared and expected agree, so there is no breach: an admitted gap is a truthful
+/// declaration that this universe is reviewed rather than checked.
+pub(super) fn Reviewed() -> EnforcementReach
+{
+    return EnforcementReach {
+        rule: RuleId::New(COMPLETENESS_MIRROR),
+        declared: vec![EnforcerRef::Review],
+        expected: GateCategory::Review,
+        computed: GateCategory::Review,
+        breaches: Vec::new(),
+    };
+}
+
+/// What a claimed name amounts to, given whether the index holds it.
+pub(super) fn Resolution(claimed: &str, resolves: bool) -> (GateCategory, Vec<EnforcementBreach>)
+{
+    if resolves
+    {
+        return (GateCategory::Blocking, Vec::new());
+    }
+
+    return (
+        GateCategory::Unreachable,
+        vec![EnforcementBreach::Phantom {
+            name: claimed.to_owned(),
+        }],
+    );
+}

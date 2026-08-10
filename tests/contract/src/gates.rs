@@ -846,10 +846,17 @@ fn Item_Shape_After(bytes: &[u8], mask: &[bool], from: usize) -> Option<ItemShap
     return None;
 }
 
-/// Every `.rs` file under a directory, recursively.
+/// Every `.rs` file under a directory that is compiled into the crate proper.
 ///
 /// `pub(crate)` because `strategies.rs` walks the same trees for a different property,
 /// and two walkers would eventually disagree about what counts as a source file.
+///
+/// A file declared `#[cfg(test)] mod tests;` is left out, for exactly the reason
+/// [`Without_Test_Modules`] blanks an inline `#[cfg(test)] mod tests { … }`: it is a unit
+/// test, and a scanner that reads it is reading examples as though they were the thing
+/// they are examples of. Without this, moving a test module out of the file it tests
+/// makes the crate look like it constructs facts and declares no strategy — which is what
+/// happened to `nomos-rules` the first time its `mirror` module became a directory.
 pub(crate) fn Source_Files(root: &Path) -> Vec<PathBuf>
 {
     let mut found = Vec::new();
@@ -877,7 +884,59 @@ pub(crate) fn Source_Files(root: &Path) -> Vec<PathBuf>
         }
     }
 
+    let test_only = Test_Only_Modules(&found);
+    found.retain(|path| return !test_only.iter().any(|excluded| return path.starts_with(excluded)));
+
     return found;
+}
+
+/// Every path a `#[cfg(test)] mod <name>;` declaration points at.
+///
+/// Both spellings, because Rust accepts either: `<name>.rs` beside the declaring file, or
+/// `<name>/` beneath it. The declaration is read rather than the file name, so a module
+/// that happens to be called `tests` and is compiled into the crate proper is still read.
+fn Test_Only_Modules(files: &[PathBuf]) -> Vec<PathBuf>
+{
+    let mut excluded = Vec::new();
+
+    for file in files
+    {
+        let Ok(text) = std::fs::read_to_string(file)
+        else
+        {
+            continue;
+        };
+        let Some(home) = file.parent()
+        else
+        {
+            continue;
+        };
+
+        let mut gated = false;
+        for line in text.lines()
+        {
+            let line = line.trim();
+            if let Some(name) = Declared_Module(line).filter(|_| return gated)
+            {
+                excluded.push(home.join(format!("{name}.rs")));
+                excluded.push(home.join(name));
+            }
+            gated = line == "#[cfg(test)]";
+        }
+    }
+
+    return excluded;
+}
+
+/// The module name a `mod <name>;` line declares, if the line is one.
+fn Declared_Module(line: &str) -> Option<&str>
+{
+    let name = line.strip_prefix("mod ")?.strip_suffix(';')?.trim();
+
+    return name
+        .chars()
+        .all(|character| return character.is_ascii_alphanumeric() || character == '_')
+        .then_some(name);
 }
 
 #[cfg(test)]
