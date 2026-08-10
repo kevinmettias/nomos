@@ -164,6 +164,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md"
         ),
     ),
+    (
+        "docs/records/OD-LEDGER-007-a-record-excludes-nobody-and-two-other-files-serialize-the-board.md",
+        include_str!(
+            "../../../../docs/records/OD-LEDGER-007-a-record-excludes-nobody-and-two-other-files-serialize-the-board.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -204,6 +210,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-GATE-002",
     "OD-LEDGER-006",
     "OD-CAPABILITY-003",
+    "OD-LEDGER-007",
 ];
 
 /// The relation vocabulary the governing records use.

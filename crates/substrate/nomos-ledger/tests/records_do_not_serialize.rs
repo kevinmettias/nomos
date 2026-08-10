@@ -16,6 +16,7 @@ use nomos_ledger::{
 };
 use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem};
+use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
@@ -118,21 +119,98 @@ fn Unclaimed_Copy() -> LedgerDocument
     return document;
 }
 
-/// Two open items that each reserve a record and are otherwise territorially independent.
+/// Every open item that will write a record and could be claimed on its own merits.
 ///
-/// Returns identifiers rather than items so the caller can claim them through the ledger,
-/// which is the surface the item is actually about.
-fn A_Concurrent_Pair(document: &LedgerDocument) -> Option<(ItemId, ItemId)>
+/// An unmet dependency refuses a claim for reasons that have nothing to do with territory
+/// and would make every assertion here fail for the wrong reason.
+fn Record_Writers(document: &LedgerDocument) -> Vec<&LedgerItem>
 {
-    let candidates: Vec<&LedgerItem> = document
+    return document
         .items
         .iter()
         .filter(|item| Is_Open(item))
         .filter(|item| !Reserved_Records(item).is_empty())
-        // An unmet dependency refuses a claim for reasons that have nothing to do with
-        // territory, and would make this test fail for the wrong reason.
         .filter(|item| item.depends_on.is_empty())
         .collect();
+}
+
+/// An item's territory with everything but its records removed.
+///
+/// The projection the acceptance property is stated over. `P10-RECORD-LOCK` bought one
+/// thing and one thing only: that the *records* two items reserve stop excluding them from
+/// each other. Whether they also share code is a separate question with a separate answer,
+/// and asserting the two together is what made the guarantee depend on who was on the
+/// board — see `OD-LEDGER-007`.
+fn Only_Records(item: &LedgerItem) -> Territory
+{
+    return Territory::Of_Files(Reserved_Records(item));
+}
+
+/// Whether two paths exclude each other, decided by the ledger's own rule.
+///
+/// Single-path territories rather than a containment check written here. `a/b` contains
+/// `a/b/c` and two spellings of one path are one path, and a second implementation of
+/// either would be a second answer waiting to disagree with `Territory::Intersect`.
+fn Paths_Collide(left: &str, right: &str) -> bool
+{
+    return !Territory::Of_Files([left])
+        .Intersect(&Territory::Of_Files([right]))
+        .Permits_Concurrency();
+}
+
+/// The non-record paths two items share, narrower spelling first.
+fn Shared_Paths(left: &LedgerItem, right: &LedgerItem) -> Vec<String>
+{
+    let mut shared = Vec::new();
+
+    for mine in &left.territory.paths
+    {
+        if Normalize_Path(mine).starts_with(RECORD_DIRECTORY)
+        {
+            continue;
+        }
+
+        for theirs in &right.territory.paths
+        {
+            if Normalize_Path(theirs).starts_with(RECORD_DIRECTORY) || !Paths_Collide(mine, theirs)
+            {
+                continue;
+            }
+
+            // The broader of the two is the one that serializes: an item reserving a whole
+            // crate is what a file inside it collides with, and naming the file would
+            // report the symptom.
+            let broader = if Normalize_Path(mine).len() <= Normalize_Path(theirs).len()
+            {
+                Normalize_Path(mine)
+            }
+            else
+            {
+                Normalize_Path(theirs)
+            };
+            if !shared.contains(&broader)
+            {
+                shared.push(broader);
+            }
+        }
+    }
+
+    shared.sort();
+    return shared;
+}
+
+/// Two open items that each reserve a record and are otherwise territorially independent.
+///
+/// Returns identifiers rather than items so the caller can claim them through the ledger,
+/// which is the surface the item is actually about.
+///
+/// No longer an acceptance criterion. Whether such a pair exists is a fact about the board
+/// rather than about the mechanism, and `OD-LEDGER-007` records why the mechanism cannot
+/// guarantee one while seeding a record is a hand-maintained edit to two shared files.
+/// Kept because it is still the honest way to say whether the board is parallel today.
+fn A_Concurrent_Pair(document: &LedgerDocument) -> Option<(ItemId, ItemId)>
+{
+    let candidates = Record_Writers(document);
 
     for (index, left) in candidates.iter().enumerate()
     {
@@ -204,44 +282,325 @@ fn Test_The_Board_Should_Have_Record_Writing_Items_To_Talk_About()
 }
 
 // ---------------------------------------------------------------------------
-// The case that exists right now: two of them claim at once.
+// The acceptance criterion: a record excludes nobody but its own writer.
 // ---------------------------------------------------------------------------
 
-/// The acceptance criterion, over the ledger as it actually stands.
+/// What `P10-RECORD-LOCK` actually bought, stated so that it can hold.
 ///
-/// Before P10-RECORD-LOCK this could not pass for any pair on the board: all nine open
-/// items reserved `docs/records`, so the second claim was always refused.
+/// The original acceptance test asserted that two record writers on the board could be
+/// claimed at once, over their whole territories. That was true on the day it was written
+/// and stopped being true on 2026-08-09 without any code changing: every open item that
+/// writes a record must also edit `governing.rs` and the surface snapshots, so they all
+/// share two paths and no pair is independent. The property was a fact about who had
+/// authored what.
+///
+/// This is the property the mechanism can keep. Every record writer is reduced to the
+/// records it reserves, and the pair is claimed through the real ledger on that
+/// projection. If it passes, the records contribute no exclusion — which is the whole of
+/// what reserving `docs/records/<ID>` instead of `docs/records` was for. What the items
+/// *also* share is measured separately, by the two tests below.
+///
+/// `OD-LEDGER-007` records the restatement and why the stronger property was given up
+/// rather than manufactured.
 #[test]
-fn Test_Two_Items_Writing_Different_Records_Should_Be_Claimable_At_Once()
+fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
 {
-    let document = Unclaimed_Copy();
-    let (first, second) =
-        A_Concurrent_Pair(&document).expect("the board must offer two independent record writers");
+    let mut document = Unclaimed_Copy();
+    let writers: Vec<ItemId> = Record_Writers(&document)
+        .iter()
+        .map(|item| return item.id.clone())
+        .collect();
 
-    let directory = Temp_Dir("concurrent-pair");
+    assert!(
+        writers.len() >= 2,
+        "fewer than two open record writers, so a claim of independence would be a claim \
+         about nothing; got {}",
+        writers.len()
+    );
+
+    for item in &mut document.items
+    {
+        if writers.contains(&item.id)
+        {
+            item.territory = Only_Records(item);
+        }
+    }
+
+    let directory = Temp_Dir("records-only");
     let clock = FixedClock(NOW);
     let mut ledger = Ledger_At(&directory, &clock);
-    ledger.Save(&document).expect("the real ledger is valid");
+    ledger.Save(&document).expect("a records-only board is a valid ledger");
 
-    ledger
-        .Claim(&first, "agent-a", Duration::from_secs(3_600))
-        .unwrap_or_else(|refusal| panic!("the first claim is uncontended: {}", refusal.Describe()));
-
-    ledger
-        .Claim(&second, "agent-b", Duration::from_secs(3_600))
-        .unwrap_or_else(|refusal| {
-            panic!(
-                "{second} writes a different record from {first} and touches different code, so \
-                 it must be claimable concurrently: {}",
-                refusal.Describe()
-            )
-        });
+    // Every one of them, not a pair. A pair could be independent by accident; all of them
+    // being claimable at once is the property, and it is the one that survives an item
+    // being added to the board tomorrow.
+    for (ordinal, writer) in writers.iter().enumerate()
+    {
+        ledger
+            .Claim(writer, &format!("agent-{ordinal}"), Duration::from_secs(3_600))
+            .unwrap_or_else(|refusal| {
+                panic!(
+                    "{writer} was refused on its record alone, so two records still exclude \
+                     each other: {}",
+                    refusal.Describe()
+                )
+            });
+    }
 
     ledger
         .Validate_Current()
-        .expect("two independent claims are a valid ledger");
+        .expect("independent claims are a valid ledger");
 
     let _ = std::fs::remove_dir_all(&directory);
+}
+
+// ---------------------------------------------------------------------------
+// What still serializes them, named rather than assumed.
+// ---------------------------------------------------------------------------
+
+/// The paths every record writer is forced to share, and what forces them.
+///
+/// Declared rather than derived, and then checked against the board in both directions by
+/// the two tests below. Deriving it would let a third serializer join the list without
+/// anybody deciding it should, which is the shape `OD-GATE-001` and
+/// `Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source` already settled for
+/// the corpus gates: the derivation catches drift, the declaration is what makes growth a
+/// decision.
+///
+/// This list is a debt register. Every entry is a reason two agents cannot work at once,
+/// and the intended direction of travel is that it empties — see `OD-LEDGER-007` for what
+/// each entry would take.
+const KNOWN_SERIALIZERS: &[(&str, &str)] = &[
+    (
+        "crates/spec/nomos-spec-store",
+        "seeding. A canonical record must be added to RECORDS and GOVERNING_RECORD_IDS in \
+         governing.rs and the literal count in governing_records_are_present.rs raised, so \
+         two items writing two different records edit the same two files. This is \
+         OD-LEDGER-001's third authoring rule defeating the guarantee P10-RECORD-LOCK \
+         bought, and it was added in the same work.",
+    ),
+    (
+        "tests/contract",
+        "the surface snapshots. P9-PUBLIC-API checks each crate's public API into \
+         tests/contract/surface, and corpus_gates.rs declares a per-file test count, so an \
+         item that widens any API or adds any test to a gated file writes under this \
+         directory. Reserving the directory to write one file inside it is the shape \
+         P10-RECORD-LOCK named for records, one level up.",
+    ),
+];
+
+/// A path *every* record writer has to reserve is one somebody wrote down.
+///
+/// The assertion that replaces "there must be a concurrent pair", and the discriminator is
+/// the whole of its value. Two record writers sharing `crates/host/nomos-cli` are two items
+/// that both change the CLI — ordinary contention, which is what territory is for, and
+/// which resolves itself when one of them finishes. A path reserved by *all* of them is
+/// something a rule forces, and it does not resolve: the next record writer will reserve it
+/// too. That is a structural serializer, and both of the ones in the register arrived
+/// without anybody noticing.
+#[test]
+fn Test_Every_Universal_Reservation_Should_Be_Declared()
+{
+    let document = Unclaimed_Copy();
+    let writers = Record_Writers(&document);
+
+    assert!(
+        writers.len() >= 2,
+        "fewer than two open record writers, so nothing can be reserved by all of them and \
+         this passes having compared nothing; got {}",
+        writers.len()
+    );
+
+    let undeclared = Undeclared_Serializers(&document);
+
+    assert!(
+        undeclared.is_empty(),
+        "every open record writer reserves these, and none is in KNOWN_SERIALIZERS: \
+         {undeclared:?}.\n\
+         A third thing every record writer has to touch is a third reason the board runs \
+         one item at a time. Add it with what forces it, or remove the coupling."
+    );
+}
+
+/// The other direction: a declared serializer that no longer serializes anything.
+///
+/// A register that over-reports is as useless as one that under-reports. If seeding stops
+/// forcing a shared edit — the remedy `OD-LEDGER-007` defers — this fails, and the entry
+/// comes out in the commit that earned it rather than surviving as an explanation for a
+/// coupling nobody has any more.
+#[test]
+fn Test_Every_Declared_Serializer_Should_Still_Serialize()
+{
+    let document = Unclaimed_Copy();
+    let writers = Record_Writers(&document);
+
+    let stale: Vec<&str> = KNOWN_SERIALIZERS
+        .iter()
+        .map(|(path, _)| return *path)
+        .filter(|declared| {
+            let reserving = writers
+                .iter()
+                .filter(|item| {
+                    return item
+                        .territory
+                        .paths
+                        .iter()
+                        .any(|path| return Paths_Collide(declared, path));
+                })
+                .count();
+
+            return reserving < 2;
+        })
+        .collect();
+
+    assert!(
+        stale.is_empty(),
+        "these are declared as serializing the board and fewer than two open record writers \
+         reserve them: {stale:?}.\n\
+         Either the coupling is gone and the entry should be too, or the board no longer \
+         has the items that made it visible."
+    );
+}
+
+/// The control that keeps the census above from being satisfied by an empty search.
+///
+/// Constructs a board where every record writer also reserves a path nobody declared, and
+/// asserts the search finds it. Confirmed by construction rather than by reasoning that it
+/// would be found: the whole point of this file is that a property nobody exercised turned
+/// out not to hold.
+#[test]
+fn Test_An_Undeclared_Serializer_Should_Be_Found()
+{
+    let mut document = Unclaimed_Copy();
+    let writers: Vec<ItemId> = Record_Writers(&document)
+        .iter()
+        .map(|item| return item.id.clone())
+        .collect();
+    let invented = "crates/invented/shared-by-everyone";
+
+    for item in &mut document.items
+    {
+        if writers.contains(&item.id)
+        {
+            let mut paths = item.territory.paths.clone();
+            paths.push(invented.to_owned());
+            item.territory = Territory::Of_Files(paths);
+        }
+    }
+
+    let found = Undeclared_Serializers(&document);
+
+    assert!(
+        found.iter().any(|path| return path == invented),
+        "a path every record writer reserves was not reported as a serializer: {found:?}"
+    );
+}
+
+/// The non-record paths every open record writer reserves and nobody declared.
+///
+/// Shared by the assertion and its control, so the control exercises the search the
+/// assertion makes rather than a second one written beside it.
+///
+/// Universal rather than pairwise. A path two items share is contention; a path all of them
+/// share is a rule.
+fn Undeclared_Serializers(document: &LedgerDocument) -> BTreeSet<String>
+{
+    let writers = Record_Writers(document);
+    let declared: Vec<&str> = KNOWN_SERIALIZERS.iter().map(|(path, _)| return *path).collect();
+    let Some(first) = writers.first()
+    else
+    {
+        return BTreeSet::new();
+    };
+
+    let mut undeclared = BTreeSet::new();
+
+    // Candidates come from one writer and are tested against the rest, which is enough:
+    // a path all of them reserve is reserved by this one too.
+    for candidate in &first.territory.paths
+    {
+        if Normalize_Path(candidate).starts_with(RECORD_DIRECTORY)
+        {
+            continue;
+        }
+        if declared.iter().any(|known| return Paths_Collide(known, candidate))
+        {
+            continue;
+        }
+
+        let universal = writers.iter().all(|item| {
+            return item
+                .territory
+                .paths
+                .iter()
+                .any(|path| return Paths_Collide(candidate, path));
+        });
+
+        if universal
+        {
+            undeclared.insert(Normalize_Path(candidate));
+        }
+    }
+
+    return undeclared;
+}
+
+/// Whether the board is parallel today, reported rather than asserted.
+///
+/// The figure the old acceptance test turned into a pass or a failure. It is worth knowing
+/// and it is not a property of this code: it depends on which items happen to be open. So
+/// it prints, in both directions, and the line's absence would itself be visible — the
+/// same shape `OD-GATE-001` settled on for the corpus gates.
+#[test]
+fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
+{
+    let document = Unclaimed_Copy();
+    let writers = Record_Writers(&document);
+    let declared: Vec<&str> = KNOWN_SERIALIZERS.iter().map(|(path, _)| return *path).collect();
+
+    let mut pairs = 0_usize;
+    let mut blocked = 0_usize;
+    let mut structural = 0_usize;
+
+    for (index, left) in writers.iter().enumerate()
+    {
+        for right in writers.iter().skip(index.saturating_add(1))
+        {
+            pairs = pairs.saturating_add(1);
+            if left.territory.Intersect(&right.territory).Permits_Concurrency()
+            {
+                continue;
+            }
+            blocked = blocked.saturating_add(1);
+
+            // Blocked *only* by the register. The rest is two items wanting the same crate,
+            // which is territory doing its job and resolves when one of them finishes.
+            if Shared_Paths(left, right)
+                .iter()
+                .all(|path| return declared.iter().any(|known| return Paths_Collide(known, path)))
+            {
+                structural = structural.saturating_add(1);
+            }
+        }
+    }
+
+    let parallel = A_Concurrent_Pair(&document)
+        .map_or_else(|| return "none".to_owned(), |(first, second)| {
+            return format!("{first} + {second}");
+        });
+
+    eprintln!(
+        "record writers: {} items, {pairs} pair(s), {blocked} blocked, {structural} of those \
+         only by a declared serializer. Concurrent pair available: {parallel}.\n\
+         The {structural} are OD-LEDGER-007's debt; the other {} are ordinary contention.",
+        writers.len(),
+        blocked.saturating_sub(structural)
+    );
+
+    assert!(
+        !writers.is_empty(),
+        "no open item writes a record, so this reported on nothing"
+    );
 }
 
 /// The control for the acceptance test above, and the reason it cannot pass vacuously.
@@ -280,6 +639,33 @@ fn Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair()
         "with every open item reserving `{RECORD_DIRECTORY}` the board must serialize \
          completely, which is the defect this item closed"
     );
+
+    // And the same reconstruction against the property that replaced it. The records-only
+    // projection is what `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` claims
+    // over, so it has to be red here: under the old authoring every item's record
+    // projection is the whole directory, and the whole directory contains every record.
+    let writers = Record_Writers(&document);
+    let mut independent = 0_usize;
+
+    for (index, left) in writers.iter().enumerate()
+    {
+        for right in writers.iter().skip(index.saturating_add(1))
+        {
+            if Only_Records(left)
+                .Intersect(&Only_Records(right))
+                .Permits_Concurrency()
+            {
+                independent = independent.saturating_add(1);
+            }
+        }
+    }
+
+    assert_eq!(
+        independent, 0,
+        "under the old authoring the record projection must exclude every pair, or the \
+         projection has stopped measuring exclusion and the acceptance test is reporting a \
+         success it did not earn"
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -288,30 +674,34 @@ fn Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair()
 
 /// The control that keeps the repair from being a blanket exemption.
 ///
-/// Take the very pair the test above claims concurrently and point both at one record.
-/// If that still claims twice, the fix has not made record reservations finer — it has
-/// stopped them mattering, and two agents will write one file.
+/// Take the two record writers the acceptance test claims concurrently on their records,
+/// and point both at one record. If that still claims twice, the fix has not made record
+/// reservations finer — it has stopped them mattering, and two agents will write one file.
+///
+/// Stated over the records-only projection for the same reason the acceptance test is: the
+/// two items very likely share code as well, and a refusal caused by `governing.rs` would
+/// let this pass while proving nothing about records.
 #[test]
 fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
 {
     let mut document = Unclaimed_Copy();
-    let (first, second) =
-        A_Concurrent_Pair(&document).expect("the board must offer two independent record writers");
+    let writers: Vec<ItemId> = Record_Writers(&document)
+        .iter()
+        .map(|item| return item.id.clone())
+        .take(2)
+        .collect();
+    let (Some(first), Some(second)) = (writers.first().cloned(), writers.get(1).cloned())
+    else
+    {
+        panic!("the board must hold two open record writers for a contest to be possible")
+    };
 
     let contested = format!("{RECORD_DIRECTORY}/OD-CONTESTED-001");
     for item in &mut document.items
     {
         if item.id == first || item.id == second
         {
-            let mut kept: Vec<String> = item
-                .territory
-                .paths
-                .iter()
-                .filter(|path| !Normalize_Path(path).starts_with(RECORD_DIRECTORY))
-                .cloned()
-                .collect();
-            kept.push(contested.clone());
-            item.territory = Territory::Of_Files(kept);
+            item.territory = Territory::Of_Files([contested.clone()]);
         }
     }
 
