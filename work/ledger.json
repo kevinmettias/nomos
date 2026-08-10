@@ -5746,6 +5746,48 @@
       "verified": null,
       "abandoned": [],
       "displaced": []
+    },
+    {
+      "id": "P10-DEPENDENT-EDGE",
+      "title": "The dependent half of invalidation has no producer, because the one capability this build declares is a leaf by construction",
+      "why": "P10-DERIVED-FACT states the defect and was released because its territory could not reach the fix. This is that item with the territory the reading found. The measurement is unchanged.\n\nnomos-analysis ships a complete transitive invalidation mechanism. MemoryFactStore keeps a dependents reverse index, Materialize takes a &[Dependency], Dependencies_Of reads them back, Reader records every read and hands them over as Into_Dependencies, and InvalidationReport separates direct from dependent and prints \"N through dependency edges\".\n\nNothing that ships creates an edge. Every producer in the workspace passes an empty slice, and the only non-empty dependency array anywhere is crates/substrate/nomos-analysis/tests/fact_identity.rs:710, where the crate exercises its own index against a fact it invented. So InvalidationReport::dependent is a field no run can make non-empty, and one fixture stands between the transitive half of this store and dead code.\n\nThe reason is structural rather than an omission, and it is why this needs the territory it does. Every fact is filed under a capability and this build declares one, nomos.cap.syntax.items, whose facts are per-file leaves by construction: crates/languages/nomos-lang-rust/src/provider.rs sets semantic_inputs to the file text alone, declares IncrementalGranularity::File, and stamps EvidenceClass::Verified with a comment refusing Derived because \"the source is not a fact, it is the territory\". The capability cannot be reused for a rollup either: its SCHEMA is fixed at nomos.syntax.items.v2 and PayloadItem carries a Rust qualified name with no field for which file an item came from, so a union across subjects loses the only thing that would make it useful. A second capability is therefore the smallest honest fix, and OD-CAPABILITY-002 puts a capability contract in crates/capabilities rather than in the provider that answers it.\n\ncrates/substrate/nomos-analysis/src/reader.rs:262-266 already names the missing consumer, in a comment about recording missed reads: \"a rollup that later has to be invalidated when the parser does have something needs the edge\". The edge it describes has never been written.\n\nThis is cheapest now. There is one capability, one registered provider and one rule; every rule added before it is written against a store whose interesting behaviour nothing has run, and P10-SERVICE-SEAM will move the composition root while this is still unresolved.",
+      "done_when": "A fact derived from other facts is materialized with a non-empty dependency edge by code that ships rather than by a test fixture, and a test drives the store transitive path rather than its direct one: invalidating a fact that was read reports the derived fact under InvalidationReport::dependent rather than direct, and Dependencies_Of returns the edge that was declared. The derived fact carries EvidenceClass::Derived and a guarantee no stronger than the inputs it was computed from, and the edges come from what the reader actually recorded rather than from a list written beside the read. What the rollup is over, and whether the composition root or a caller assembles it, is this item to decide and its record to state; a second capability is expected but a defensible edge inside the existing one closes it just as well. Not closed by widening the fixture, and not by a test that materializes its own dependency: that proves the index works, which is already proven, and says nothing about whether anything uses it. README names any crate this adds and the band table is what tests/contract/tests/boundaries.rs parses, public surface snapshots move for every crate whose API moves, and the required projections are re-rendered from a tree whose records are all committed.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities",
+          "crates/languages/nomos-lang-rust",
+          "crates/substrate/nomos-analysis",
+          "Cargo.toml",
+          "README.md",
+          "docs/records/OD-ANALYSIS-002",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-002.record",
+          "tests/contract/surface/nomos-analysis.txt",
+          "tests/contract/surface/nomos-lang-rust.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
     }
   ]
 }
