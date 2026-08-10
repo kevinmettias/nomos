@@ -21,6 +21,7 @@ profile: domain-specification
 | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md@authored | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md | authored | 36 | 5 | sha256:3a749fa2720e1ec104110b73ca5f2f65a934b7ee60e5a85ab4683f3548dc3db0 |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -155,6 +156,14 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#18 | authored | 2 | What Closed It |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#24 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#27 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#1 | authored | 1 | The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#6 | authored | 2 | What Was Actually Wrong |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#10 | authored | 2 | The Answer |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#16 | authored | 2 | Why The Contract Lives Beside Its Provider |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#19 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#24 | authored | 2 | What Holds It |
+| docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -3157,6 +3166,265 @@ Closed by P8-PIN. Three controls were confirmed red before the change was kept: 
 workspace state back into a fact's identity (six tests, including the scale reuse claim), a
 replacement that names no differing member, and a held workspace identity that stops
 following the workspace — the pin, wearing a cache.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#1
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one · hash: sha256:883e514ad9fa5538f6acf66caef32d3dfbe38251cc5e61bf31785054e634729e*
+
+# The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#2
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#3
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Question · hash: sha256:15046b21ee4fe4ace998b8ff2b33fa93cc75f7eca5b13d54a69c8eec0bbb8f31*
+
+`nomos-analysis` ships a complete transitive invalidation mechanism. `MemoryFactStore` keeps
+a reverse index of dependents, `Materialize` takes a `&[Dependency]`, `Dependencies_Of` reads
+them back, `Reader` records every read and hands them over as `Into_Dependencies`, and
+`InvalidationReport` separates `direct` from `dependent` and prints "N through dependency
+edges".
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#4
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Question · hash: sha256:d67ee1260fb70ef523c9761ce5292c46fd08cbf421de101257ad389069bcae45*
+
+Nothing that ships created an edge. Every producer in `crates/` passed an empty slice, and
+the only non-empty dependency arrays in the tree were in `tests/` — one in
+`nomos-analysis`'s own fixture, which invents a fact to exercise its own index, and one in
+`tests/integration`'s slice, which is the instrument rather than the product. So
+`InvalidationReport::dependent` was a field no shipping run could make non-empty.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#5
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Question · hash: sha256:86dc7c8a4edbfe9259f7f8436e1c5170734554a7b5bdf07d798146f54fbec32a*
+
+Where does the first shipping edge come from?
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#6
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Actually Wrong · hash: sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7*
+
+## What Was Actually Wrong
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#7
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Actually Wrong · hash: sha256:52e66c50cebd5d9071e4e4b2dc54d9a25e8d916a3df27340b143fcaa8330e8c2*
+
+**It was structural, not an omission.** Every fact is filed under a capability, and the one
+capability this build shipped — `nomos-cap-syntax`'s `nomos.cap.syntax.items` — is a
+per-file leaf *by construction*. `nomos-lang-rust`'s provider sets `semantic_inputs` to the
+file text alone, declares `IncrementalGranularity::File`, and stamps
+`EvidenceClass::Verified` with a comment refusing `Derived` because "the source is not a
+fact, it is the territory". All three are correct. A capability whose semantic input is one
+file's bytes can never depend on another answer, so no amount of care inside that capability
+would have produced an edge.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#8
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Actually Wrong · hash: sha256:64030a5f1a0459388a308042e089c0042384f3a94ff3fbda862d6811aaa23d69*
+
+**The capability could not be reused for a rollup either.** Its schema is fixed at
+`nomos.syntax.items.v2`, and `PayloadItem` carries a name qualified by syntactic nesting
+*within one file* with no field for which file that was. A union of syntax payloads across
+subjects therefore loses the only thing that would make a module-level answer worth having:
+two files each declaring `Read` produce two indistinguishable records.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#9
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Actually Wrong · hash: sha256:8c4221de0d710b12a0b37cda21451f3f3f2f96a67d45edb6d987162ee94642b0*
+
+**The missing consumer was already named.** `nomos-analysis`'s reader has carried a comment
+since it was written — a read that found nothing is still a real dependency, because "a
+rollup that later has to be invalidated when the parser does have something needs the edge".
+The rollup it describes had never been written.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#10
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / The Answer · hash: sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d*
+
+## The Answer
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#11
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / The Answer · hash: sha256:2f914c9d6480d40f047139c8190317123c3a893c3948eced0bca54be6f715d73*
+
+A second capability, `nomos.cap.module.index`, answering *which items a module declares and
+which of its files declared each one*, produced by `nomos-lang-rust`'s `rollup` module from
+the syntax facts of its members.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#12
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / The Answer · hash: sha256:5b8b1cf706f410647320576226595ee9e497f80137734a7239a0c5305ab4d237*
+
+**The subject is the module, and it must not be any member's.** This is the load-bearing
+part and it is easy to get wrong. A rollup keyed on one of its own inputs is named by the
+same `GenerationCause` that names that input, so a change to a member would report the
+rollup under `direct` — and a test asserting "the change reached the rollup" would pass
+while measuring the path that was never in doubt. The module gets a subject of its own, and
+the assertion is that the rollup arrives under `dependent` and *not* under `direct`.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#13
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / The Answer · hash: sha256:4627438486a6cd006d1ba22b9827d241345d969d6239d9990fc4b512b79feee0*
+
+**The edges are observed, never listed.** `Materialize_Index` reads through
+`nomos_analysis::Reader` and hands the store `Into_Dependencies()`. It never assembles a
+dependency array. A hand-written edge list is a claim about what was read; this is a record
+of it, and the two diverge the first time a read is added and the list is not. Reads that
+found nothing are edges too, which is the case the reader's comment named.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#14
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / The Answer · hash: sha256:cca42184cea0305e35d7454af9be186b4db2e7f59530d831ca716b430c7887fc*
+
+**The guarantee is no stronger than its inputs, on every axis.** `FactVariant::Syntactic`
+and `Assurance::Sound` carry over; completeness stays `Assurance::Unknown` because the
+syntax facts may have missed macro-generated items, so the rollup has missed them too; and
+`EvidenceClass::Derived` says the same thing about provenance. `IncrementalGranularity` is
+`Project`, because a rollup over a module cannot refresh half a module — declaring `File`
+would let the engine refresh one member's contribution and treat the rest as current. The
+engine broadens a file-granular cause and records having done so on
+`InvalidationReport::broadened`, which is the cost of the rollup stated rather than
+absorbed.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#15
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / The Answer · hash: sha256:163f61c67d839bf1f7153451429cbdfe38287e926d81bdb5e0ee0725b7229e35*
+
+**The semantic inputs are every member's subject and every member's input digest.** Both
+halves are load-bearing. Without the inputs, editing a member leaves the rollup addressable
+at its old key and a stale answer reads as current. Without the subjects, a module that
+swapped one file for another holding identical bytes would key the same — and a module is
+which files it has, not only what they contain. Members are canonically ordered and
+deduplicated by subject before anything is read, so the same module described two ways is
+one fact.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#16
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Why The Contract Lives Beside Its Provider · hash: sha256:2620b9daf99974bb495b15956b70ddfcca4133e56da2fa0bb6f381b609786801*
+
+## Why The Contract Lives Beside Its Provider
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#17
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Why The Contract Lives Beside Its Provider · hash: sha256:97b81ad64a6a6dc19ddcdac882ad4bcb80df8a2342a4f0291504265930ec98ff*
+
+`OD-CAPABILITY-002` sets the criterion and it is **contention, not principle**: a capability
+with a single provider is not wrongly filed for living beside that provider, and moving it
+out buys a crate and no property. `nomos-cap-syntax` exists because two crates offer against
+it and, sitting at one band, neither may name the other. Nothing offers against
+`nomos.cap.module.index` but the function that answers it.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#18
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Why The Contract Lives Beside Its Provider · hash: sha256:8c7125b7b223b2ad5c72e8a2ba1af792f9533290d1352fec12900b44d7452fb1*
+
+So this record deliberately does *not* create a crate under `crates/capabilities`. The day a
+second provider exists — one reading a module from a compiler's own item table rather than
+from syntax facts — the contract moves, and
+`Test_A_Capability_Id_Should_Be_Written_In_One_Crate` will say so the moment the id is
+spelled in two crates' `src`. That guard is what makes this a deferral with an alarm on it
+rather than a decision to revisit by memory.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#19
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#20
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Considered And Rejected · hash: sha256:93dc62e423b834f5f57110f9f52692b84f47a450d2779d1e198769b5886a63b0*
+
+**Widening `nomos.cap.syntax.items` to accept several files.** It is the change that looks
+smallest and it is the one that destroys the capability. `IncrementalGranularity::File` and
+a `semantic_inputs` of one file's text are what make that contract honest; a multi-file
+answer under the same contract would have to claim one of them falsely. The schema could not
+carry the answer either, per the payload objection above.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#21
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Considered And Rejected · hash: sha256:f7ca0da861e5f8b25417b47f205a6f7f0bd3303918b7bd2a07aa600121d2f016*
+
+**Promoting the slice's `nomos.cap.module.surface`.** `tests/integration` already computes a
+directory rollup with real edges, and it is where the mechanism was proven. It is not the
+product: that crate is the instrument that measures the workspace, its facts are five counts
+rather than an index, and `Fact_Domains` excludes it from the determinism universe for
+exactly the reason that it is not an execution domain. Moving it would also have made the
+slice assert against itself.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#22
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Considered And Rejected · hash: sha256:f62997b1cda13627bed845601a378b16337330322da82ddb1d86b74a2d4b62e3*
+
+**A derived fact over a single file, keyed on that file.** Cheaper, and it proves nothing:
+the derived fact and its input share a subject, so `SubjectChanged` names both and the
+derived one is reported `direct`. The test would have been green over the direct path.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#23
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Was Considered And Rejected · hash: sha256:eed408e96ad343b1f2a092c12907cd05d1b5405edc41d4a460d0c71aa3c62525*
+
+**A second `impl Strategy` for the rollup's determinism.** `tests/contract`'s determinism
+guard requires every declaration to be held to it by the integration harness, and
+registering one there is outside this item's territory. A declaration with nothing behind it
+is worse than none — that is what the guard exists to catch — so the rollup runs under
+`nomos-lang-rust`'s existing `SyntaxFactProduction` declaration, whose triple it genuinely
+shares, and a separate item carries the split.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#24
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#25
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Holds It · hash: sha256:349cfb0315295b8723088f556cf7a3780aa8705c5a5c4b28e55ef76f9c307e68*
+
+`crates/languages/nomos-lang-rust/tests/rollup.rs`, ten assertions, of which four are the
+ones that could have been faked:
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#26
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Holds It · hash: sha256:616c1853e8f120b64f3f5e2a198a26a4449208d5f30654a331d2673aa660c404*
+
+- **the rollup arrives under `dependent` and not under `direct`** — the property the whole
+  item is about, stated in both directions so a rollup keyed on its own input fails it;
+- **a change to a file that is neither a member nor read invalidates nothing** — the
+  negative control, without which a store that invalidated everything would satisfy the
+  first;
+- **a member with no fact is still an edge**, with an outcome that is not `Materialized` —
+  the reader's own comment, exercised;
+- **`Dependencies_Of` returns what the reader recorded**, one edge per member.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#27
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / What Holds It · hash: sha256:f0921ccd635a8411916480e20b129f20194627d33fc887bf3dcd2e4131e94b7d*
+
+Plus the payload's negative controls in `rollup.rs`: the empty byte string, a missing header,
+a repeated header, an unknown record tag, an unknown outcome and a short item record are all
+refused. A decoder that fell back to an empty index would report every unreadable rollup as
+a module that declares nothing, which is indistinguishable from a module that genuinely
+does.
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28
+
+*revision: authored · kind: heading · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#29
+
+*revision: authored · kind: prose · heading: The dependent half of invalidation had no producer because every shipping capability is a leaf, and a second capability is what gives it one / Status · hash: sha256:521260881280279afae77be303f830b22af30ce982ad45c32979805aa8878ee8*
+
+Closed by P10-DEPENDENT-EDGE. `P10-DERIVED-FACT` states the same defect and was released
+because its territory could not reach the fix; the measurement it recorded is unchanged.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 

@@ -91,17 +91,23 @@ graph LR
     od_agent_001 -->|"relates-to"| od_ledger_001
     od_agent_001 -->|"relates-to"| od_project_001
     od_analysis_001 -->|"affects"| d_129
+    od_analysis_001 -->|"relates-to"| od_analysis_002["OD-ANALYSIS-002"]
     od_analysis_001 -->|"relates-to"| od_capability_001["OD-CAPABILITY-001"]
     od_analysis_001 -->|"relates-to"| od_capability_003["OD-CAPABILITY-003"]
+    od_analysis_002 -->|"relates-to"| od_analysis_001
+    od_analysis_002 -->|"relates-to"| od_capability_002["OD-CAPABILITY-002"]
+    od_analysis_002 -->|"relates-to"| od_capability_003
     od_capability_001 -->|"relates-to"| od_analysis_001
-    od_capability_001 -->|"relates-to"| od_capability_002["OD-CAPABILITY-002"]
+    od_capability_001 -->|"relates-to"| od_capability_002
     od_capability_001 -->|"relates-to"| od_capability_003
     od_capability_001 -->|"relates-to"| od_contracts_002["OD-CONTRACTS-002"]
+    od_capability_002 -->|"relates-to"| od_analysis_002
     od_capability_002 -->|"relates-to"| od_capability_001
     od_capability_002 -->|"relates-to"| od_rules_001
     od_capability_002 -->|"relates-to"| od_store_001
     od_capability_002 -->|"relates-to"| od_syntax_001["OD-SYNTAX-001"]
     od_capability_003 -->|"relates-to"| od_analysis_001
+    od_capability_003 -->|"relates-to"| od_analysis_002
     od_capability_003 -->|"relates-to"| od_capability_001
     od_capability_003 -->|"relates-to"| od_rules_001
     od_capability_003 -->|"relates-to"| od_store_001
@@ -431,6 +437,7 @@ graph LR
     d_134
     od_agent_001
     od_analysis_001
+    od_analysis_002
     od_capability_001
     od_capability_002
     od_capability_003

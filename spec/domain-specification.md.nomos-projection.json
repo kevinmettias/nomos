@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:233ab0e9c06f280c6fcbf9e890fbe56e78337901ca2afd97f9414e7e1bfea2e2",
-  "inputs_digest": "sha256:75d2566a70ae42065695f52a7678cb208b80979840cb26c074c1f6eab7933269",
+  "content_digest": "sha256:adeef12b69d45a1b833e4edab5e878bb4d197b9fbd209d073d4d58e4d11d0be7",
+  "inputs_digest": "sha256:b1d00499ffaaba711edec7c3e5b28644e62b0f3c7ab9a9a805e794ee791bbd64",
   "sections": [
     [
       "Documents",
-      64
+      65
     ],
     [
       "Sections",
-      591
+      599
     ],
     [
       "Source blocks",
-      2368
+      2397
     ]
   ],
   "inputs": [
@@ -74,6 +74,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored",
       "hash": "sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored",
+      "hash": "sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561"
     },
     {
       "content": "documents",
@@ -719,6 +724,46 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#27",
       "hash": "sha256:9b4d32a9617c1b80d09db7d011a8a3b1f95610af1f99aba50f754c19a0afea7b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#1",
+      "hash": "sha256:073025f986f7f4a20fe4caf7b1832f66aef6f328b917d4d73b7c2098bc51781f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#2",
+      "hash": "sha256:2fe9078a33f56b6406c9e5dea289d8202f1f0c96ae717b0b2c5f391da60e9bac"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#6",
+      "hash": "sha256:0bfb19adacd78737beda2709b7f79814d3e147220cb94d3b5ec6c5db24c25c46"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#10",
+      "hash": "sha256:859d6edb00bb0c2ae698c57652b4dd6076b8144b493909cd7d225080aa9e98a6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#16",
+      "hash": "sha256:12d5165aec3bcf4092d5e754b83d514f454eaf46383e21ebd33080701add690e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#19",
+      "hash": "sha256:34c8727685f92b6fef6177b03acd816d6a718953fc93b9ac19d60bd2984f754e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#24",
+      "hash": "sha256:45753b073dfefe27f7b6c26af1195c7c868edbd4433afdcc6bdd72fc8c51c195"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28",
+      "hash": "sha256:a2456d82e2a0c1aebd1838e1d538da506a0b1f1e6c7da195fd54c7d5ec249764"
     },
     {
       "content": "headings",
@@ -4789,6 +4834,151 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#28",
       "hash": "sha256:91a5c9fbf9d9d25b63a57b8d4f59db82fc5102c67737c084791eaea1e621ab93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#1",
+      "hash": "sha256:883e514ad9fa5538f6acf66caef32d3dfbe38251cc5e61bf31785054e634729e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#3",
+      "hash": "sha256:15046b21ee4fe4ace998b8ff2b33fa93cc75f7eca5b13d54a69c8eec0bbb8f31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#4",
+      "hash": "sha256:d67ee1260fb70ef523c9761ce5292c46fd08cbf421de101257ad389069bcae45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#5",
+      "hash": "sha256:86dc7c8a4edbfe9259f7f8436e1c5170734554a7b5bdf07d798146f54fbec32a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#6",
+      "hash": "sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#7",
+      "hash": "sha256:52e66c50cebd5d9071e4e4b2dc54d9a25e8d916a3df27340b143fcaa8330e8c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#8",
+      "hash": "sha256:64030a5f1a0459388a308042e089c0042384f3a94ff3fbda862d6811aaa23d69"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#9",
+      "hash": "sha256:8c4221de0d710b12a0b37cda21451f3f3f2f96a67d45edb6d987162ee94642b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#10",
+      "hash": "sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#11",
+      "hash": "sha256:2f914c9d6480d40f047139c8190317123c3a893c3948eced0bca54be6f715d73"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#12",
+      "hash": "sha256:5b8b1cf706f410647320576226595ee9e497f80137734a7239a0c5305ab4d237"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#13",
+      "hash": "sha256:4627438486a6cd006d1ba22b9827d241345d969d6239d9990fc4b512b79feee0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#14",
+      "hash": "sha256:cca42184cea0305e35d7454af9be186b4db2e7f59530d831ca716b430c7887fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#15",
+      "hash": "sha256:163f61c67d839bf1f7153451429cbdfe38287e926d81bdb5e0ee0725b7229e35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#16",
+      "hash": "sha256:2620b9daf99974bb495b15956b70ddfcca4133e56da2fa0bb6f381b609786801"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#17",
+      "hash": "sha256:97b81ad64a6a6dc19ddcdac882ad4bcb80df8a2342a4f0291504265930ec98ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#18",
+      "hash": "sha256:8c7125b7b223b2ad5c72e8a2ba1af792f9533290d1352fec12900b44d7452fb1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#19",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#20",
+      "hash": "sha256:93dc62e423b834f5f57110f9f52692b84f47a450d2779d1e198769b5886a63b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#21",
+      "hash": "sha256:f7ca0da861e5f8b25417b47f205a6f7f0bd3303918b7bd2a07aa600121d2f016"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#22",
+      "hash": "sha256:f62997b1cda13627bed845601a378b16337330322da82ddb1d86b74a2d4b62e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#23",
+      "hash": "sha256:eed408e96ad343b1f2a092c12907cd05d1b5405edc41d4a460d0c71aa3c62525"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#24",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#25",
+      "hash": "sha256:349cfb0315295b8723088f556cf7a3780aa8705c5a5c4b28e55ef76f9c307e68"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#26",
+      "hash": "sha256:616c1853e8f120b64f3f5e2a198a26a4449208d5f30654a331d2673aa660c404"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#27",
+      "hash": "sha256:f0921ccd635a8411916480e20b129f20194627d33fc887bf3dcd2e4131e94b7d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#29",
+      "hash": "sha256:521260881280279afae77be303f830b22af30ce982ad45c32979805aa8878ee8"
     },
     {
       "content": "blocks",
