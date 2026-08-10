@@ -44,6 +44,48 @@
 //! Where the vacuity guard *belongs* is a live question — `P10-VACUITY-HOME` holds it, and
 //! a rule that can now report "I could not run" is evidence for that item rather than an
 //! answer to it.
+//!
+//! # This command is a gate step now, and that changes what an exit code costs
+//!
+//! `OD-GATE-004` wired the `Rules` step of `.github/workflows/gate.yml` to
+//! `cargo run --quiet -p nomos-cli --bin nomos -- check --root .`. Until then nothing in
+//! CI ran this command, so the rule layer enforced nothing: a broken walk, a provider that
+//! stopped answering, a rotted argv or a panic out of [`Registered`] all shipped green.
+//!
+//! **Zero is the only success, and the workflow says so by containing no branch.** Actions
+//! fails a step on any non-zero exit, and that default *is* the policy — so the numbers
+//! below stay spelled here, once, rather than being restated in YAML where they would go
+//! stale against this enum. What each code now does to a pull request:
+//!
+//! - [`ExitCode::Ok`] — the rules ran over the workspace, materialized facts, and nothing
+//!   they found can fail a build. Not "found nothing": twelve admitted gaps and the two
+//!   `tests/corpus/analysis/gamma/broken.rs` advisories print on every run, and the counts
+//!   line carries both denominators. **Green.**
+//! - [`ExitCode::Violations`] — the arm the step exists for. Reachable only since
+//!   `OD-RULES-002` made incompleteness a property of the claim rather than of the run;
+//!   before that a phantom anywhere in this workspace was downgraded by `broken.rs` and the
+//!   step could not have failed for its own reason. **Red.**
+//! - [`ExitCode::Usage`] — from a step, this means *the workflow's own argv is wrong*. A
+//!   gate that mistypes its invocation and passes is a gate checking nothing. **Red.**
+//! - [`ExitCode::Unreadable`] — no tree, so nothing was checked. **Red.**
+//! - [`ExitCode::Vacuous`] — the one this wiring is really about. A gate treating "I judged
+//!   nothing" as success would be `OD-GATE-001`'s defect installed one level up from where
+//!   that record found it, this time with a green tick beside it. **Red.**
+//! - anything else — `101` from a build failure or from [`Registered`]'s own `expect`, a
+//!   signal, a truncation. Absence, unknown and error must not become success, and the
+//!   default gives that for free. **Red.**
+//!
+//! Two consequences for anybody editing this module. A sixth code must survive
+//! `main`'s `u8::try_from(code).unwrap_or(1)`, or a distinct outcome arrives at CI as an
+//! ordinary violation. And [`ExitCode::Vacuous`] must never be renumbered to `0` "because
+//! there is nothing to report" — `Test_Only_Ok_Should_Carry_The_Passing_Exit_Code` below is
+//! the whole exit-code policy as one assertion, and it is where that would go red.
+//!
+//! No corpus is involved. This command reads no environment variable at run time —
+//! `main.rs` passes it none — so a CI runner with no `NOMOS_*` set produces the full
+//! answer. Measured. What it does need is what `build.rs` baked in for
+//! [`Host_Variant`], and a runner that cannot supply those cannot link the binary and
+//! fails at `Lint` long before this step.
 
 use crate::arguments::Named_Value;
 use nomos_analysis::{Context, MemoryFactStore, Reader};
@@ -565,6 +607,118 @@ mod tests
     fn Source(path: &str, text: &str) -> SourceFile
     {
         return SourceFile::New(path, Subject_Of_Path(path), text);
+    }
+
+    /// ---- the exit-code policy the gate step rests on ----
+    ///
+    /// Every code this group can leave the process with, written twice on purpose.
+    ///
+    /// The array is what the assertions below iterate. [`Labelled`] is an exhaustive `match`,
+    /// so a variant added to [`ExitCode`] fails to compile *there* — which is the only
+    /// mechanism available without a derive that a code-adder cannot walk past, and it stops
+    /// them inside the function they have to extend. What the match does not force is adding
+    /// the new code to this array; that residual is closed from the other side by
+    /// `Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With`, which
+    /// compares the array against the usage text a person reads.
+    ///
+    /// # Why this is not `ExitCode::All()`
+    ///
+    /// That was the tidier shape and it was tried. An `All()` in an inherent implementation is
+    /// a *declared universe* — `nomos-rules` finds it by that exact name — so the enum this
+    /// gate step's policy rests on would need a row in
+    /// `tests/contract/tests/completeness_universes.rs` saying what compares the list against
+    /// the reality it enumerates. Measured: without that row,
+    /// `Test_The_Declared_Table_Should_Match_What_Is_Derived` and
+    /// `Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror` go red naming
+    /// `ExitCode::All`, and the scanned total goes from sixteen universes to seventeen. That
+    /// file is outside `P10-CHECK-GATE`'s territory, so the census stays private here, where
+    /// it is not a universe at all. Promoting it is worth doing by whoever holds that file
+    /// next — the mechanism refusing an unclassified list is the rule working, not an
+    /// obstacle.
+    fn Every_Exit_Code() -> [ExitCode; 5]
+    {
+        return [
+            ExitCode::Ok,
+            ExitCode::Violations,
+            ExitCode::Usage,
+            ExitCode::Unreadable,
+            ExitCode::Vacuous,
+        ];
+    }
+
+    /// A code's name, as an exhaustive match, so that adding one stops the build here.
+    fn Labelled(code: ExitCode) -> &'static str
+    {
+        return match code
+        {
+            ExitCode::Ok => "Ok",
+            ExitCode::Violations => "Violations",
+            ExitCode::Usage => "Usage",
+            ExitCode::Unreadable => "Unreadable",
+            ExitCode::Vacuous => "Vacuous",
+        };
+    }
+
+    /// The whole exit-code policy as one assertion, and the reason the workflow needs no
+    /// branch.
+    ///
+    /// `OD-GATE-004` decided that zero is the only success and implemented it by writing no
+    /// policy: Actions fails a step on any non-zero exit. So this is the only place in the
+    /// tree where the policy is checkable. If [`ExitCode::Vacuous`] were renumbered to `0`
+    /// "because there is nothing to report", CI would start passing runs that judged nothing
+    /// and nothing else would notice.
+    #[test]
+    fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
+    {
+        for code in Every_Exit_Code()
+        {
+            assert_eq!(
+                code.Value() == 0,
+                code == ExitCode::Ok,
+                "{} exits {}, and the gate reads zero and only zero as success",
+                Labelled(code),
+                code.Value()
+            );
+        }
+    }
+
+    /// The codes this file documents are the codes this group can exit with.
+    ///
+    /// `P10-CHECK-GATE`'s `done_when` asks that the codes the gate rests on be "the ones
+    /// crates/host/nomos-cli/src/check.rs documents, read from there rather than restated".
+    /// The workflow honours the second half by restating nothing. This is what makes the
+    /// first half true of *this* file: [`USAGE`] is prose a person reads and [`ExitCode`] is
+    /// what the process returns, the two were written separately, and a code added or
+    /// renumbered in one of them and not the other is the failure that actually happens.
+    #[test]
+    fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
+    {
+        let (_, spelled) = USAGE
+            .split_once("exit codes:")
+            .expect("the usage text documents the exit codes");
+
+        let mut documented: Vec<i32> = spelled
+            .split_whitespace()
+            .filter_map(|word| return word.parse::<i32>().ok())
+            .collect();
+        documented.sort_unstable();
+
+        let mut implemented: Vec<i32> = Every_Exit_Code()
+            .iter()
+            .map(|code| return code.Value())
+            .collect();
+        implemented.sort_unstable();
+
+        assert!(
+            !documented.is_empty(),
+            "no exit code was parsed out of the usage text, so this compared nothing: \
+             {spelled}"
+        );
+        assert_eq!(
+            documented, implemented,
+            "the usage text and ExitCode disagree about what this command can exit with, \
+             and the gate step reads its policy off the latter"
+        );
     }
 
     #[test]

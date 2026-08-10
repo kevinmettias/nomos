@@ -51,6 +51,27 @@ jobs:
       - name: Required projections
         run: cargo run --quiet -p nomos-cli -- spec freshness --into . --require diagram-set
 
+      # The only step in this gate that judges code rather than paperwork. It runs the
+      # rule layer over this workspace and exits on what it found.
+      #
+      # There is deliberately NO exit-code branch here, and adding one would be a
+      # regression rather than a clarification. crates/host/nomos-cli/src/check.rs is the
+      # authority on what each code means; a `case $?` block restating 1, 5 and 6 in YAML
+      # would be a second place for one contract to be spelled -- the objection
+      # OD-LEDGER-003 makes about the lint command and OD-GATE-002 about the surface
+      # snapshot. Actions fails a step on any non-zero exit, and that default IS the
+      # policy this step needs: zero is the only success. In particular a run that judged
+      # nothing exits 6 and is not one -- a gate treating 6 as green would be
+      # OD-GATE-001's defect installed one level up from where that record found it.
+      #
+      # The `run:` line stays one bare command with no shell metacharacters, and this step
+      # must never be named `Lint`: `work finish` derives the gate's lint argv by scanning
+      # this file for the step named `Lint` (nomos_ledger::Derive_Step), so that name here
+      # would make finishing run this command instead of clippy, silently. A scripted
+      # `run:` is refused outright. See OD-GATE-004.
+      - name: Rules
+        run: cargo run --quiet -p nomos-cli --bin nomos -- check --root .
+
       # None of the three corpora is present on a CI runner: they live outside this
       # repository. So the tests that read them return early and print ok, and this
       # step is the only place the size of that hole appears. --nocapture is what
