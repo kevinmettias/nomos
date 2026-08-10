@@ -2762,14 +2762,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-audit-state-w1",
-        "acquired_at": 1786334131,
-        "lease_expires_at": 1786341331
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2779,7 +2775,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": " 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 16 tests\ntest Test_A_Missing_Required_Flag_Should_Be_A_Usage_Error ... ok\ntest Test_A_Non_Numeric_Ordinal_Should_Be_A_Usage_Error ... ok\ntest Test_The_Binary_Should_Name_Both_Groups ... ok\ntest Test_The_Work_Group_Should_Still_Parse_Its_Arguments ... ok\ntest Test_Every_Shipped_Profile_Should_Be_Listed ... ok\ntest Test_An_Unknown_Spec_Command_Should_Be_A_Usage_Error ... ok\ntest Test_A_Node_With_No_Document_Should_Say_So_Rather_Than_Report_It_Missing ... ok\ntest Test_A_Profile_That_Needs_The_Corpus_Should_Fail_As_An_Absence ... ok\ntest Test_An_Absent_Corpus_Should_Be_Named_Rather_Than_Answered_Empty ... ok\ntest Test_Nothing_But_The_Record_Should_Reach_Standard_Output ... ok\ntest Test_A_Record_Should_Come_Out_Of_The_Binary_Byte_For_Byte ... ok\ntest Test_An_Unreadable_Corpus_Should_Name_The_Path_It_Was_Given ... ok\ntest Test_A_Table_Should_Come_Out_As_The_Rows_That_Were_Authored ... ok\ntest Test_A_Whole_Store_Should_Report_Nothing_Missing ... ok\ntest Test_An_Unknown_Identifier_Over_A_Whole_Store_Should_Not_Be_An_Absence ... ok\ntest Test_A_Profile_Should_Render_To_A_File ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-51842239e9e38230.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-31464506428b903d.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-21a4915c6ed81f4b.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-c1421495100087d6.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-e3c9de915070eefd.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-ad87b675e3989839.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-d837d0637d000ea2.exe)\n",
+        "verified_at": 1786334656,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": []
     },
     {
@@ -2797,10 +2815,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-seed-grain-w2",
+        "acquired_at": 1786334355,
+        "lease_expires_at": 1786345155
+      },
       "verification": {
         "argv": [
           "cargo",

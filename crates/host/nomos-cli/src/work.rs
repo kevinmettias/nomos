@@ -559,6 +559,52 @@ fn Report_Finish(
     };
 }
 
+/// What stands between `item` and an agent that would take it, if anything.
+///
+/// The one place any surface asks that question, and the reason it is a function is the
+/// reason [`Claim_Refusal`] is one: two implementations of a rule is how they come to
+/// disagree — `OD-LEDGER-005`. The listing reads it to choose a word and `audit` reads it
+/// to choose whom to report, so an item the listing calls `held` cannot be an item `audit`
+/// is silent about, and an item the listing calls `done` cannot be one `audit` describes as
+/// blocked.
+///
+/// An item that is not `Ready` returns `None` rather than its refusal. `Claim_Refusal`
+/// would answer `NotClaimable` for every `Done` and `Declined` item on the board, which is
+/// true and useless: nobody is queued behind finished work, and reporting it buries the
+/// handful of refusals somebody could actually act on.
+fn Blocking_Refusal(
+    document: &LedgerDocument,
+    item: &LedgerItem,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    if !matches!(item.state, ItemState::Ready)
+    {
+        return None;
+    }
+
+    return Claim_Refusal(document, &item.id, now);
+}
+
+/// The word for a refusal.
+///
+/// Shared by the listing and the audit for the same reason the refusal itself is: one item
+/// must not be `held` in one report and something else in the other.
+const fn Refusal_Label(refusal: &ClaimRefusal) -> &'static str
+{
+    return match refusal
+    {
+        // Retryable and not the reader's problem to solve: something else has to finish or
+        // lapse first. `waiting` rather than `blocked`, because `blocked` is already a state
+        // an author sets by hand and conflating them would lose that distinction.
+        ClaimRefusal::DependencyUnmet { .. } => "waiting",
+        ClaimRefusal::HeldBy { .. } => "held",
+        // Not retryable: somebody has to close a modelling gap. Reporting it as `ready`
+        // would send an agent to discover that by being refused.
+        _ => "snagged",
+    };
+}
+
 /// What to call an item in a listing.
 ///
 /// For everything except a `Ready` item this is just the state. `Ready` is the word that
@@ -567,10 +613,11 @@ fn Report_Finish(
 /// overlapping ground — on 2026-08-09 the column said `ready` for eight items that a single
 /// held claim refused, three separate times.
 ///
-/// The answer comes from [`Claim_Refusal`], which is the function `claim` itself refuses
-/// with. That is the point rather than an implementation detail: a listing computing its own
-/// idea of claimability would be a second guard for one rule, and the two would eventually
-/// disagree about whether an agent may proceed.
+/// The answer comes from [`Blocking_Refusal`], and through it from [`Claim_Refusal`], which
+/// is the function `claim` itself refuses with. That is the point rather than an
+/// implementation detail: a listing computing its own idea of claimability would be a second
+/// guard for one rule, and the two would eventually disagree about whether an agent may
+/// proceed.
 fn Listing_Label(document: &LedgerDocument, item: &LedgerItem, now: Timestamp) -> &'static str
 {
     // `claimed` is the second word that lies, for the same reason `ready` was the first.
@@ -583,22 +630,12 @@ fn Listing_Label(document: &LedgerDocument, item: &LedgerItem, now: Timestamp) -
         return "lapsed";
     }
 
-    if !matches!(item.state, ItemState::Ready)
+    return match Blocking_Refusal(document, item, now)
     {
-        return State_Label(&item.state);
-    }
-
-    return match Claim_Refusal(document, &item.id, now)
-    {
-        None => "ready",
-        // Retryable and not the reader's problem to solve: something else has to finish or
-        // lapse first. `waiting` rather than `blocked`, because `blocked` is already a state
-        // an author sets by hand and conflating them would lose that distinction.
-        Some(ClaimRefusal::DependencyUnmet { .. }) => "waiting",
-        Some(ClaimRefusal::HeldBy { .. }) => "held",
-        // Not retryable: somebody has to close a modelling gap. Reporting it as `ready`
-        // would send an agent to discover that by being refused.
-        Some(_) => "snagged",
+        // Nothing refuses it, or nothing is meant to: the state word is the honest answer
+        // in both cases, and for a `Ready` item that word is `ready`.
+        None => State_Label(&item.state),
+        Some(refusal) => Refusal_Label(&refusal),
     };
 }
 
@@ -700,31 +737,98 @@ fn Report_Validation(
     };
 }
 
+/// Every item somebody is waiting on, and what they are waiting for.
+///
+/// # Why this asks the listing's question and not its own
+///
+/// `audit` used to walk every item on the board and ask [`ExclusionLedger::Conflicts`] which
+/// live claims overlapped its territory. That was a second implementation of the rule
+/// `list` already went through, and the two disagreed the moment the board had history in
+/// it. Measured on 2026-08-09: of fourteen lines, nine described `Done` items as blocked by
+/// a claim they will never contend for, because a finished item still has territory and
+/// `Conflicts` has no opinion about state. The board `P10-AUDIT-STATE` was written against
+/// was worse — fifty-four lines, forty-four of them about work nobody can pick up.
+///
+/// The over-report is how it was noticed; the silence was the cost. `Conflicts` compares
+/// territory and knows nothing about `depends_on`, so an item refused with
+/// `ClaimRefusal::DependencyUnmet` printed nothing at all — `audit` could not say `waiting`
+/// where `list` could, which is the one answer an agent looking for the next thing to do
+/// most needs.
+///
+/// So the filter and the reason both come from [`Blocking_Refusal`], the function `list`
+/// labels with and `claim` refuses with — `OD-LEDGER-005`. An item reported here is exactly
+/// an item `list` calls `waiting`, `held` or `snagged`, with the same word, and there is no
+/// way for the two to drift because they are one answer read twice.
 fn Audit(
     ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
+    // Once, for the whole report. `Conflicts` loads and parses the ledger internally, so
+    // asking it per item read the file once per item — sixty opens to answer one question
+    // about sixty items, and sixty chances for the answer to be about a different board
+    // than the line above it.
     let document = match ledger.Load()
     {
         Ok(document) => document,
         Err(error) => return Report_Error(&error, output),
     };
 
+    let now = SystemClock.Now();
+
+    let mut reported = 0_u32;
     for item in &document.items
     {
-        for refusal in ledger.Conflicts(&item.territory)
+        let Some(refusal) = Blocking_Refusal(&document, item, now)
+        else
         {
-            if let ClaimRefusal::HeldBy { item: held, .. } = &refusal
-                && held == &item.id
-            {
-                continue;
-            }
-            let _ = writeln!(output, "{}: {}", item.id, refusal.Describe());
-        }
+            continue;
+        };
+
+        let _ = writeln!(
+            output,
+            "{:<13} {:<9} {}",
+            item.id,
+            Refusal_Label(&refusal),
+            Blocking_Reason(&refusal)
+        );
+        reported = reported.saturating_add(1);
+    }
+
+    if reported == 0
+    {
+        // Empty output used to mean either "nothing is blocked" or "the report cannot
+        // express what is blocking this", and only one of those is good news.
+        let _ = writeln!(output, "nothing claimable is blocked");
     }
 
     return ExitCode::Ok;
+}
+
+/// How the audit phrases one refusal, from the reported item's side.
+///
+/// [`ClaimRefusal::Describe`] was written for `claim`, where the reader already knows which
+/// item they asked about, so its held arm names the *holder's* item. Printed under an
+/// identifier of its own that reads `P9-README … P10-AUDIT-STATE overlaps territory held by
+/// …`, which puts the blocker where the subject belongs and says the reverse of what
+/// happened. That arm is therefore phrased here, naming the blocker as the blocker. The
+/// others read correctly from the subject's side already and are left to `Describe`, so
+/// this is a rendering and not a second opinion about whether anything is refused.
+/// Repairing `Describe` itself belongs to `nomos-ledger`, which has other callers.
+fn Blocking_Reason(refusal: &ClaimRefusal) -> String
+{
+    return match refusal
+    {
+        ClaimRefusal::HeldBy {
+            holder,
+            until,
+            item,
+        } => format!(
+            "territory overlaps {item}, held by {holder} until unix {}",
+            until.Unix_Seconds()
+        ),
+        other => other.Describe(),
+    };
 }
 
 fn Report_Error(error: &LedgerError, output: &mut impl std::io::Write) -> ExitCode
