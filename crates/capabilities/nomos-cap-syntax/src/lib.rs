@@ -59,6 +59,7 @@ pub use contract::{
     Capability, Capability_Contract, Payload_Schema, Ceiling, CAPABILITY, CONTRACT_VERSION, SCHEMA,
 };
 pub use payload::{
-    Parse_Payload, PayloadItem, PayloadRefusal, Render_Payload, SyntaxPayload, FUNCTION,
-    NOT_APPLICABLE, PUBLIC,
+    Escape, Function_Arity, Function_Shape, Observation, Parse_Payload, PayloadItem,
+    PayloadRefusal, Render_Payload, SyntaxPayload, Unescape, FUNCTION, IMPLEMENTATION, INHERENT,
+    NOT_APPLICABLE, PUBLIC, SLICE, TRAIT, VALUE,
 };

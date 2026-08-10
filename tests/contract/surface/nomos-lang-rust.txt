@@ -60,10 +60,12 @@ pub struct field nomos_lang_rust::ParseFailure::line: usize
 pub struct field nomos_lang_rust::ParseFailure::message: String
 pub struct field nomos_lang_rust::SyntaxFacts::items: Vec<SyntaxItem>
 pub struct field nomos_lang_rust::SyntaxFacts::unexpanded: u32
+pub struct field nomos_lang_rust::SyntaxItem::documentation: Option<String>
 pub struct field nomos_lang_rust::SyntaxItem::kind: ItemKind
 pub struct field nomos_lang_rust::SyntaxItem::name: String
 pub struct field nomos_lang_rust::SyntaxItem::ordinal: u32
 pub struct field nomos_lang_rust::SyntaxItem::scope: Vec<String>
+pub struct field nomos_lang_rust::SyntaxItem::shape: Option<String>
 pub struct field nomos_lang_rust::SyntaxItem::visibility: Visibility
 pub struct nomos_lang_rust::FactContext
 pub struct nomos_lang_rust::ParseFailure

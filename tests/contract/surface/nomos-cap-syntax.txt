@@ -2,18 +2,34 @@ pub const fn nomos_cap_syntax::Ceiling() -> Guarantee
 pub const nomos_cap_syntax::CAPABILITY: &str
 pub const nomos_cap_syntax::CONTRACT_VERSION: ContractVersion
 pub const nomos_cap_syntax::FUNCTION: &str
+pub const nomos_cap_syntax::IMPLEMENTATION: &str
+pub const nomos_cap_syntax::INHERENT: &str
 pub const nomos_cap_syntax::NOT_APPLICABLE: &str
 pub const nomos_cap_syntax::PUBLIC: &str
 pub const nomos_cap_syntax::SCHEMA: &str
+pub const nomos_cap_syntax::SLICE: &str
+pub const nomos_cap_syntax::TRAIT: &str
+pub const nomos_cap_syntax::VALUE: &str
+pub enum nomos_cap_syntax::Observation
 pub enum nomos_cap_syntax::PayloadRefusal
+pub enum variant nomos_cap_syntax::Observation::Absent
+pub enum variant nomos_cap_syntax::Observation::NotObserved
+pub enum variant nomos_cap_syntax::Observation::Present(String)
 pub enum variant nomos_cap_syntax::PayloadRefusal::NoHeader
 pub enum variant nomos_cap_syntax::PayloadRefusal::NotUtf8
 pub enum variant nomos_cap_syntax::PayloadRefusal::RepeatedHeader { line: usize, }
 pub enum variant nomos_cap_syntax::PayloadRefusal::UnknownRecord { tag: String, line: usize, }
 pub enum variant nomos_cap_syntax::PayloadRefusal::UnreadableNumber { field: &'static str, value: String, line: usize, }
+pub enum variant nomos_cap_syntax::PayloadRefusal::UnreadableObservation { field: &'static str, value: String, line: usize, }
 pub enum variant nomos_cap_syntax::PayloadRefusal::WrongFieldCount { tag: String, expected: usize, found: usize, line: usize, }
 pub fn nomos_cap_syntax::Capability() -> CapabilityId
 pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_syntax::Escape(value: &str) -> String
+pub fn nomos_cap_syntax::Function_Arity(shape: &Observation) -> Option<u32>
+pub fn nomos_cap_syntax::Function_Shape(arity: usize) -> String
+pub fn nomos_cap_syntax::Observation::Encode(&self) -> String
+pub fn nomos_cap_syntax::Observation::Value(&self) -> Option<&str>
+pub fn nomos_cap_syntax::Observation::Was_Observed(&self) -> bool
 pub fn nomos_cap_syntax::Parse_Payload(bytes: &[u8]) -> Result<SyntaxPayload, PayloadRefusal>
 pub fn nomos_cap_syntax::PayloadItem::Declares_No_Visibility(&self) -> bool
 pub fn nomos_cap_syntax::PayloadItem::Is_Public(&self) -> bool
@@ -21,9 +37,13 @@ pub fn nomos_cap_syntax::PayloadItem::Own_Name(&self) -> &str
 pub fn nomos_cap_syntax::PayloadRefusal::Describe(&self) -> String
 pub fn nomos_cap_syntax::Payload_Schema() -> SchemaId
 pub fn nomos_cap_syntax::Render_Payload(payload: &SyntaxPayload) -> Vec<u8>
+pub fn nomos_cap_syntax::SyntaxPayload::Enclosing(&self, ordinal: usize) -> Option<&PayloadItem>
+pub fn nomos_cap_syntax::Unescape(value: &str) -> String
+pub struct field nomos_cap_syntax::PayloadItem::documentation: Observation
 pub struct field nomos_cap_syntax::PayloadItem::kind: String
 pub struct field nomos_cap_syntax::PayloadItem::ordinal: u32
 pub struct field nomos_cap_syntax::PayloadItem::qualified_name: String
+pub struct field nomos_cap_syntax::PayloadItem::shape: Observation
 pub struct field nomos_cap_syntax::PayloadItem::visibility: String
 pub struct field nomos_cap_syntax::SyntaxPayload::items: Vec<PayloadItem>
 pub struct field nomos_cap_syntax::SyntaxPayload::unexpanded: u32

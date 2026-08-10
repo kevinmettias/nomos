@@ -333,6 +333,8 @@ dependencies = [
 name = "nomos-contract-tests"
 version = "0.1.0"
 dependencies = [
+ "nomos-cap-syntax",
+ "nomos-lang-rust",
  "nomos-ledger",
  "nomos-rules",
  "serde_json",
@@ -430,9 +432,8 @@ dependencies = [
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
+ "nomos-lang-rust",
  "nomos-model",
- "proc-macro2",
- "syn 2.0.119",
 ]
 
 [[package]]

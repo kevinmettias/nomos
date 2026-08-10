@@ -3568,16 +3568,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P10-SYNTAX-SCHEMA"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-syntax-v2-w1",
-        "acquired_at": 1786344741,
-        "lease_expires_at": 1786375568
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3598,7 +3594,40 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": ".00s\n\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.52s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_syntax-5b00bd5f96655fb9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-af9ee92193467382.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6cfaddc4b16312b3.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-34f3dfa7f9923b4b.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-f75546e48cc40e29.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-ce2ac817ed8a3e76.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d58c046fbc3add5b.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-8f7c287149532a59.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-2b3ffd88e464ab1d.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-d89cd5ad7a67d6d4.exe)\n     Running tests\\determinism.rs (target\\debug\\deps\\determinism-ee5eb7dfa77ffcd9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-1a9306117fadfd4f.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-a4b51a7c3cf69ceb.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-a69b43953f37f3db.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-a8e56a65bf54beb5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-f8de10ab646f77ad.exe)\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n   Doc-tests nomos_rules\n",
+        "verified_at": 1786348192,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
@@ -4711,10 +4740,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-diagram-owed-w22",
+        "acquired_at": 1786348163,
+        "lease_expires_at": 1786355363
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4729,6 +4762,41 @@
           ".",
           "--require",
           "diagram-set"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-CANONICITY-DECISION",
+      "title": "Which substrate is canonical for a feature request is undecided, and the typed layer encodes the answer",
+      "why": "The typed FeatureRequest/DesignSpec/FeatureResult layer cannot be started until this is recorded, because the schema is the answer written down: authored files with typed front matter and a derived store index is a different schema from a store that is the durable substrate with docs/records rendered out of it. OD-SPEC-006 decided the question for governing records and left the alternative priced rather than refused - stop seeding from include_str, seed from the bundle, make docs/records rendered outputs with a freshness check, and design a guard, because OD-SPEC-005 refused the obvious one. OD-SPEC-007 has since paid part of that price in general form: it established that what makes the guard a check is that side B is authored independently of the directory it is compared against rather than that it is hand-typed in one file, and built registration files that keep the independence while removing the shared edit. So the price OD-SPEC-006 quoted is out of date in the buyers favour and nothing has restated it. Deciding this per artifact rather than once is the second-authority failure this repository is organised against: feature requests in one substrate and records in another would put the split in the schema of every typed row.",
+      "done_when": "A record under docs/records with its own registration under crates/spec/nomos-spec-store/records decides which substrate is canonical for a feature request, on stated grounds rather than by preference, and restates the price of the alternative as OD-SPEC-007 left it rather than as OD-SPEC-006 quoted it. It says what the decision binds - the typed layer schema - and what it does not. Not closed by a record that says the question is open, and not by one that decides it for records again without saying what a feature request is.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-008-feature-requests-are-authored-where-records-are-and-the-store-remains-a-derived-index.md",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-stamp-consistency-w21",
+        "acquired_at": 1786348106,
+        "lease_expires_at": 1786355306
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
         ],
         "timeout_seconds": 600
       },

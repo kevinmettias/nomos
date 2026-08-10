@@ -92,6 +92,12 @@ pub fn Encode_Payload(scanned: &ScannedFile) -> Vec<u8>
         encoded.push_str(&item.visibility.Label());
         encoded.push('\t');
         encoded.push_str(&item.name);
+        // Not observed, twice, and never absent. This reader skips comment lines and
+        // associates nothing with the item below them, and it never looks at a declared
+        // type at all. Writing `.` here would say it looked and found nothing — which for
+        // a list that does declare its mirror is a phantom silently downgraded to an
+        // admitted gap. See `OD-SYNTAX-002`.
+        encoded.push_str("\t-\t-");
         encoded.push('\n');
     }
 
@@ -129,8 +135,8 @@ mod tests
         assert_eq!(
             rendered,
             "unexpanded\t0\n\
-             item\t0\tFunction\tPublic\tone\n\
-             item\t1\tFunction\tPrivate\ttwo\n"
+             item\t0\tFunction\tPublic\tone\t-\t-\n\
+             item\t1\tFunction\tPrivate\ttwo\t-\t-\n"
         );
         assert!(!rendered.contains('\r'), "line endings must not be local");
     }

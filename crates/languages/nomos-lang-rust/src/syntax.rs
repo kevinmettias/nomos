@@ -149,6 +149,16 @@ pub struct SyntaxItem
     /// leaf, the binding it introduces.
     pub name: String,
     pub visibility: Visibility,
+    /// The item's documentation, as written, or `None` when it has none.
+    ///
+    /// `None` is an absence this provider looked for and did not find, never an inability
+    /// to look — it parses, so it always sees the attributes. That difference is what the
+    /// payload spells, and it is why this is not the same field as the one a line reader
+    /// would fill.
+    pub documentation: Option<String>,
+    /// What the item declares beyond its name, in the payload's vocabulary, or `None` when
+    /// the form has nothing to describe.
+    pub shape: Option<String>,
 }
 
 impl SyntaxItem
@@ -297,7 +307,20 @@ impl Walk
         };
     }
 
-    fn Record(&mut self, kind: ItemKind, name: String, visibility: Visibility)
+    /// Records one declaration, with what this provider observed about it.
+    ///
+    /// `shape` is `None` where the form has no shape to describe rather than where none
+    /// could be seen. This provider parses, so everything it does not record is an absence
+    /// it looked for — the distinction the payload spells `.` rather than `-`, and the
+    /// whole reason `nomos.syntax.items.v2` exists.
+    fn Record(
+        &mut self,
+        kind: ItemKind,
+        name: String,
+        visibility: Visibility,
+        attributes: &[syn::Attribute],
+        shape: Option<String>,
+    )
     {
         let ordinal = u32::try_from(self.items.len()).unwrap_or(u32::MAX);
 
@@ -307,10 +330,17 @@ impl Walk
             scope: self.scope.clone(),
             name,
             visibility,
+            documentation: Documentation(attributes),
+            shape,
         });
     }
 
-    fn Record_Use_Tree(&mut self, tree: &syn::UseTree, visibility: &Visibility)
+    fn Record_Use_Tree(
+        &mut self,
+        tree: &syn::UseTree,
+        visibility: &Visibility,
+        attributes: &[syn::Attribute],
+    )
     {
         match tree
         {
@@ -318,34 +348,105 @@ impl Walk
             // HashMap` introduces one name into this file and it is `HashMap`; recording
             // `std` and `collections` as well would be reporting declarations the file
             // does not make.
-            syn::UseTree::Path(path) => self.Record_Use_Tree(&path.tree, visibility),
+            syn::UseTree::Path(path) => self.Record_Use_Tree(&path.tree, visibility, attributes),
             syn::UseTree::Group(group) =>
             {
                 for branch in &group.items
                 {
-                    self.Record_Use_Tree(branch, visibility);
+                    self.Record_Use_Tree(branch, visibility, attributes);
                 }
             }
             syn::UseTree::Name(name) =>
             {
-                self.Record(ItemKind::Use, name.ident.to_string(), visibility.clone());
+                self.Record(
+                    ItemKind::Use,
+                    name.ident.to_string(),
+                    visibility.clone(),
+                    attributes,
+                    None,
+                );
             }
             // The binding is the alias, because the alias is what this file now has. What
             // it aliases is on the other side of a name resolution this provider does not
             // perform.
             syn::UseTree::Rename(rename) =>
             {
-                self.Record(ItemKind::Use, rename.rename.to_string(), visibility.clone());
+                self.Record(
+                    ItemKind::Use,
+                    rename.rename.to_string(),
+                    visibility.clone(),
+                    attributes,
+                    None,
+                );
             }
             // A glob introduces names this provider cannot enumerate — it would have to
             // read the module being imported. Recorded as `*` so the import is visible
             // and not mistaken for a set of known bindings.
             syn::UseTree::Glob(_) =>
             {
-                self.Record(ItemKind::Use, "*".to_owned(), visibility.clone());
+                self.Record(ItemKind::Use, "*".to_owned(), visibility.clone(), attributes, None);
             }
         }
     }
+}
+
+/// The shape a declared type has, in the payload's vocabulary.
+///
+/// One distinction, and it is the one a consumer cannot recover from the other fields:
+/// `pub const LIMIT: usize` and `pub const TABLES: &[&str]` are identical in every field a
+/// v1 payload carried. `&[&str]` and `&'static [Self]` are lists however many references
+/// deep; `&str` and `usize` are not.
+fn Type_Shape(declared: &syn::Type) -> String
+{
+    return match declared
+    {
+        syn::Type::Reference(reference) => Type_Shape(&reference.elem),
+        syn::Type::Slice(_) | syn::Type::Array(_) => nomos_cap_syntax::SLICE.to_owned(),
+        _ => nomos_cap_syntax::VALUE.to_owned(),
+    };
+}
+
+/// The shape a function of this many declared parameters has.
+///
+/// The receiver counts, because it is a declared parameter and because the distinction a
+/// consumer wants — `fn All()` against `fn All(&self)` — is exactly the one that vanishes
+/// if it does not.
+fn Function_Shape(arity: usize) -> String
+{
+    return nomos_cap_syntax::Function_Shape(arity);
+}
+
+/// The item's documentation, as one string, or `None` when it has none.
+///
+/// `///` is `#[doc]` after parsing, so both spellings are read and neither has to be
+/// recognised as text. The lines are joined with newlines rather than flattened: a consumer
+/// matching a claim written on one line of a paragraph needs the paragraph as the author
+/// wrote it, and the payload escapes the newlines rather than losing them.
+fn Documentation(attributes: &[syn::Attribute]) -> Option<String>
+{
+    let mut lines = Vec::new();
+
+    for attribute in attributes
+    {
+        if !attribute.path().is_ident("doc")
+        {
+            continue;
+        }
+
+        if let syn::Meta::NameValue(pair) = &attribute.meta
+            && let syn::Expr::Lit(literal) = &pair.value
+            && let syn::Lit::Str(text) = &literal.lit
+        {
+            lines.push(text.value());
+        }
+    }
+
+    if lines.is_empty()
+    {
+        return None;
+    }
+
+    return Some(lines.join("\n"));
 }
 
 impl<'ast> Visit<'ast> for Walk
@@ -356,6 +457,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Constant,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_item_const(self, node);
     }
@@ -366,6 +469,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Enum,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_item_enum(self, node);
     }
@@ -376,6 +481,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::ExternCrate,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_item_extern_crate(self, node);
     }
@@ -386,6 +493,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Function,
             node.sig.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_item_fn(self, node);
     }
@@ -401,7 +510,10 @@ impl<'ast> Visit<'ast> for Walk
                 .as_ref()
                 .map_or_else(|| return "extern".to_owned(), |name| return name.value()),
             Visibility::NotApplicable,
+            &node.attrs,
+            None,
         );
+
         syn::visit::visit_item_foreign_mod(self, node);
     }
 
@@ -413,7 +525,26 @@ impl<'ast> Visit<'ast> for Walk
         // any such claim wrong.
         let name = Type_Head(&node.self_ty);
 
-        self.Record(ItemKind::Implementation, name.clone(), Visibility::NotApplicable);
+        // Inherent or not is the shape, and it is the only thing that tells two `impl`
+        // blocks for one type apart. A member of `impl Display for Table` carries the same
+        // qualified name as a member of `impl Table` and does not belong to `Table` the
+        // same way, which is a distinction a consumer cannot recover from any other field.
+        let shape = if node.trait_.is_some()
+        {
+            nomos_cap_syntax::TRAIT
+        }
+        else
+        {
+            nomos_cap_syntax::INHERENT
+        };
+
+        self.Record(
+            ItemKind::Implementation,
+            name.clone(),
+            Visibility::NotApplicable,
+            &node.attrs,
+            Some(shape.to_owned()),
+        );
         self.scope.push(name);
         syn::visit::visit_item_impl(self, node);
         self.scope.pop();
@@ -428,7 +559,13 @@ impl<'ast> Visit<'ast> for Walk
             |ident| return ident.to_string(),
         );
 
-        self.Record(ItemKind::MacroDefinition, name, Visibility::NotApplicable);
+        self.Record(
+            ItemKind::MacroDefinition,
+            name,
+            Visibility::NotApplicable,
+            &node.attrs,
+            None,
+        );
         syn::visit::visit_item_macro(self, node);
     }
 
@@ -438,6 +575,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Module,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         self.scope.push(node.ident.to_string());
         syn::visit::visit_item_mod(self, node);
@@ -450,6 +589,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Static,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_item_static(self, node);
     }
@@ -460,6 +601,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Struct,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_item_struct(self, node);
     }
@@ -470,6 +613,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Trait,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         self.scope.push(node.ident.to_string());
         syn::visit::visit_item_trait(self, node);
@@ -482,6 +627,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::TraitAlias,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_item_trait_alias(self, node);
     }
@@ -492,6 +639,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::TypeAlias,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_item_type(self, node);
     }
@@ -502,6 +651,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Union,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_item_union(self, node);
     }
@@ -510,7 +661,7 @@ impl<'ast> Visit<'ast> for Walk
     {
         let visibility = Visibility::Of(&node.vis);
 
-        self.Record_Use_Tree(&node.tree, &visibility);
+        self.Record_Use_Tree(&node.tree, &visibility, &node.attrs);
         syn::visit::visit_item_use(self, node);
     }
 
@@ -524,6 +675,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Constant,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_impl_item_const(self, node);
     }
@@ -534,6 +687,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Function,
             node.sig.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_impl_item_fn(self, node);
     }
@@ -544,6 +699,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::TypeAlias,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_impl_item_type(self, node);
     }
@@ -554,6 +711,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Constant,
             node.ident.to_string(),
             Visibility::NotApplicable,
+            &node.attrs,
+            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_trait_item_const(self, node);
     }
@@ -564,6 +723,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Function,
             node.sig.ident.to_string(),
             Visibility::NotApplicable,
+            &node.attrs,
+            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_trait_item_fn(self, node);
     }
@@ -574,6 +735,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::TypeAlias,
             node.ident.to_string(),
             Visibility::NotApplicable,
+            &node.attrs,
+            None,
         );
         syn::visit::visit_trait_item_type(self, node);
     }
@@ -584,6 +747,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Function,
             node.sig.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_foreign_item_fn(self, node);
     }
@@ -594,6 +759,8 @@ impl<'ast> Visit<'ast> for Walk
             ItemKind::Static,
             node.ident.to_string(),
             Visibility::Of(&node.vis),
+            &node.attrs,
+            None,
         );
         syn::visit::visit_foreign_item_static(self, node);
     }

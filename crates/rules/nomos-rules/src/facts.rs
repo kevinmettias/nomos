@@ -23,7 +23,7 @@
 //! [`Check_Names_In`] that is not a successfully decoded payload is a refusal the caller
 //! has to handle, and the caller turns it into a finding.
 
-use nomos_cap_syntax::{Parse_Payload, PayloadRefusal, FUNCTION};
+use nomos_cap_syntax::{SyntaxPayload, FUNCTION};
 use std::collections::BTreeSet;
 
 /// The prefix that makes a function a check, by this workspace's naming convention.
@@ -52,13 +52,11 @@ const CHECK_PREFIX: &str = "Test_";
 /// spelling from ever reaching here. A caller that lowered the floor would not get a
 /// slightly weaker answer; it would get signatures counted as checks.
 ///
-/// # Errors
-///
-/// [`PayloadRefusal`] for anything the schema's reader cannot read. Never an empty set
-/// standing in for a failed read.
-pub(crate) fn Check_Names_In(bytes: &[u8]) -> Result<BTreeSet<String>, PayloadRefusal>
+/// The payload arrives decoded, because the caller reads two things out of one fact — the
+/// checks a file declares and the universes it declares — and decoding it twice would be
+/// two answers to what the bytes say.
+pub(crate) fn Check_Names_In(payload: &SyntaxPayload) -> BTreeSet<String>
 {
-    let payload = Parse_Payload(bytes)?;
     let mut names: BTreeSet<String> = BTreeSet::new();
 
     for item in &payload.items
@@ -75,7 +73,7 @@ pub(crate) fn Check_Names_In(bytes: &[u8]) -> Result<BTreeSet<String>, PayloadRe
         }
     }
 
-    return Ok(names);
+    return names;
 }
 
 #[cfg(test)]
@@ -85,7 +83,10 @@ mod tests
 
     fn Names(payload: &str) -> BTreeSet<String>
     {
-        return Check_Names_In(payload.as_bytes()).expect("this payload is well formed");
+        let decoded = nomos_cap_syntax::Parse_Payload(payload.as_bytes())
+            .expect("this payload is well formed");
+
+        return Check_Names_In(&decoded);
     }
 
     /// The positive control, and it is not optional. Every negative control below is
@@ -96,8 +97,8 @@ mod tests
     {
         let names = Names(
             "unexpanded\t0\n\
-             item\t0\tModule\tPrivate\ttests\n\
-             item\t1\tFunction\tPrivate\ttests::Test_Something_Should_Hold\n",
+             item\t0\tModule\tPrivate\ttests\t.\t.\n\
+             item\t1\tFunction\tPrivate\ttests::Test_Something_Should_Hold\t.\t+fn/0\n",
         );
 
         assert!(names.contains("Test_Something_Should_Hold"), "{names:?}");
@@ -110,7 +111,8 @@ mod tests
     #[test]
     fn Test_A_Check_In_An_Implementation_Should_Be_Found_By_Its_Own_Name()
     {
-        let names = Names("unexpanded\t0\nitem\t0\tFunction\tPublic\tTable::Test_Every_Row\n");
+        let names =
+            Names("unexpanded\t0\nitem\t0\tFunction\tPublic\tTable::Test_Every_Row\t.\t+fn/0\n");
 
         assert!(names.contains("Test_Every_Row"), "{names:?}");
     }
@@ -122,8 +124,8 @@ mod tests
     {
         let names = Names(
             "unexpanded\t0\n\
-             item\t0\tTrait\tPublic\tJudged\n\
-             item\t1\tFunction\tNotApplicable\tJudged::Test_Declared_Only\n",
+             item\t0\tTrait\tPublic\tJudged\t.\t.\n\
+             item\t1\tFunction\tNotApplicable\tJudged::Test_Declared_Only\t.\t+fn/1\n",
         );
 
         assert!(names.is_empty(), "a trait method signature resolved a claim: {names:?}");
@@ -137,20 +139,16 @@ mod tests
         assert!(Names("unexpanded\t0\n").is_empty());
     }
 
-    /// The property this layer must not lose when the decoding moved out of it.
-    ///
-    /// The shapes of unreadable payload are the schema's to enumerate and it does. What is
-    /// asserted here is that a refusal still arrives at *this* caller as a refusal: the
-    /// defect being prevented is a check index that is silently short, and it would come
-    /// back the moment this function swallowed one.
+    /// A check name is the item's own name and never the qualified one, whatever the item
+    /// is nested in.
     #[test]
-    fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Checks()
+    fn Test_A_Check_Nested_Twice_Should_Still_Be_Found_By_Its_Own_Name()
     {
-        assert_eq!(Check_Names_In(&[0xFF, 0xFE]), Err(PayloadRefusal::NotUtf8));
-        assert_eq!(Check_Names_In(b""), Err(PayloadRefusal::NoHeader));
+        let names = Names(
+            "unexpanded\t0\n\
+             item\t0\tFunction\tPrivate\ttests::Table::Test_Every_Row\t.\t+fn/0\n",
+        );
 
-        let unknown = Check_Names_In(b"unexpanded\t0\nregion\t0\t3\n")
-            .expect_err("a record tag this build does not know must refuse");
-        assert!(unknown.Describe().contains("region"), "{unknown:?}");
+        assert!(names.contains("Test_Every_Row"), "{names:?}");
     }
 }

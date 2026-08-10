@@ -538,8 +538,11 @@ fn Alternating(build: fn(bool) -> Vec<u8>) -> impl Fn() -> Vec<u8>
 /// A legitimate change to an encoding changes these, and that is the point: the diff then
 /// says "every fact ever keyed under the old bytes has been re-addressed", which is a
 /// sentence somebody should have to read before merging.
-const PARSED_GOLDEN: &str = "15cc14884df61a70872959a572706249";
-const SCANNED_GOLDEN: &str = "94b9715ad47de8152fe3d3b2c53046ac";
+/// Re-addressed once, deliberately, by `P10-SYNTAX-V2`: `nomos.syntax.items.v2` carries two
+/// more fields per item, so every fact keyed under the v1 bytes has a new payload digest.
+/// `OD-SYNTAX-002` is the sentence that had to be read before this diff merged.
+const PARSED_GOLDEN: &str = "6ec4ad9fe9c81ab2358e3c3756a3f1f5";
+const SCANNED_GOLDEN: &str = "e692ad97796279579ca5cd77764e08e5";
 const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 
 /// The bundle's golden, and the one whose scope claim reaches furthest.

@@ -67,7 +67,24 @@ pub fn Declared_Universes() -> Vec<DeclaredUniverse>
                     .to_string()
                     .replace('\\', "/");
 
-                universes.extend(nomos_rules::Universes_In(&relative, &text));
+                // Through the provider and its encoding, because that is the subject the
+                // rule is handed at run time. `nomos-rules` no longer parses — it reads a
+                // syntax fact — so a walk that handed it text would be testing a signature
+                // the product does not use. See `OD-SYNTAX-002`.
+                let nomos_lang_rust::Reading::Parsed(facts) = nomos_lang_rust::Read_Source(&text)
+                else
+                {
+                    continue;
+                };
+
+                let Ok(payload) =
+                    nomos_cap_syntax::Parse_Payload(&nomos_lang_rust::Encode_Payload(&facts))
+                else
+                {
+                    continue;
+                };
+
+                universes.extend(nomos_rules::Universes_In(&relative, &payload));
             }
         }
     }

@@ -22,24 +22,27 @@ nomos-model = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-cap-syntax = { workspace = true }
-# A parser, not a scanner. "Is this a declaration" has an exact answer, and a line
-# scanner kept reporting this crate's own test fixtures as real declarations. `full` for
-# every item form; `span-locations` so a refusal can name the line it refused at.
-# `printing` is deliberately absent — nothing here renders tokens back out.
 #
-# Retained for `universe.rs` alone and for a measured reason, not by inertia: the agreed
-# payload of `nomos.cap.syntax.items` carries no doc comment and no declared type, which
-# are the two things discovery needs. OD-RULES-001 states the end condition — when a
-# schema carries an item's documentation and its declared type shape, this dependency
-# goes and `nomos-rules` reaches no parser at all. `P10-SYNTAX-V2` holds it.
-syn = { version = "2", default-features = false, features = [
-    "full",
-    "parsing",
-    "clone-impls",
-] }
-proc-macro2 = { version = "1", default-features = false, features = [
-    "span-locations",
-] }
+# There is no parser here, and that is the end condition OD-RULES-001 wrote down rather
+# than a gap. `universe.rs` carried `syn` and `proc-macro2` for one reason — the agreed
+# payload of `nomos.cap.syntax.items` carried no doc comment and no declared type, which
+# are the two things universe discovery reads. `nomos.syntax.items.v2` carries both, as
+# observations bounded by the answering provider's guarantee, so discovery reads facts
+# like the rest of this rule and the second Rust front end is gone. See OD-SYNTAX-002.
+#
+# A rule that grows a parser again is a rule that has stopped taking its subject as an
+# argument. If one is ever needed, the fix is a capability, not a dependency here.
+
+[dev-dependencies]
+# The real parser, to build fixture payloads in tests and nowhere else.
+#
+# Not a dependency of the rule, and the distinction is the whole point: the rule names a
+# capability and lets the registry choose, while a test needs bytes that a real provider
+# would actually have written. Hand-written fixtures were doing that job and drifted the
+# moment the schema gained a field — a payload nobody could have produced is a subject the
+# rule is not really being tested against. Band 25 observed from band 30, in dev only, so
+# `tests/contract`'s dependency bands see nothing and the shipped rule reaches no parser.
+nomos-lang-rust = { workspace = true }
 
 [lints]
 workspace = true

@@ -18,6 +18,12 @@ nomos-rules = { workspace = true }
 # reading the board — through the type that writes it, because a second parser over the
 # same JSON is how the two come to disagree about what a finished item looks like.
 nomos-ledger = { workspace = true }
+# The syntax capability and the provider that answers it, to derive the universes this
+# crate quantifies over. `nomos-rules` stopped parsing under `P10-SYNTAX-V2` and reads a
+# `nomos.syntax.items.v2` payload instead, so the walk here has to produce one — through
+# the real provider, which is what a run does. Band 100 observing bands 23 and 25.
+nomos-cap-syntax = { workspace = true }
+nomos-lang-rust = { workspace = true }
 serde_json = { workspace = true }
 
 [lints]

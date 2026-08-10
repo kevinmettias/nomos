@@ -98,6 +98,11 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 ///
 /// Fields are tab-separated and records are `\n`-terminated, never `\r\n`. A digest that
 /// depends on the line ending of the machine that produced it is not a content address.
+///
+/// Every observation this provider writes is a real one. It parses, so it sees every doc
+/// attribute and every declared type there is to see, and it never writes the schema's
+/// *not observed* mark — an absence here is always an absence in the source. The mark
+/// exists for its peer, and `OD-SYNTAX-002` records why that had to be two spellings.
 #[must_use]
 pub fn Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
 {
@@ -117,10 +122,29 @@ pub fn Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
         encoded.push_str(&item.visibility.Label());
         encoded.push('\t');
         encoded.push_str(&item.Qualified_Name());
+        encoded.push('\t');
+        encoded.push_str(&Observed(item.documentation.as_deref()));
+        encoded.push('\t');
+        encoded.push_str(&Observed(item.shape.as_deref()));
         encoded.push('\n');
     }
 
     return encoded.into_bytes();
+}
+
+/// One observed field, in the schema's spelling.
+///
+/// `Some` is what was seen and `None` is an absence that was looked for. The third
+/// spelling — not observed — is deliberately unreachable from here: writing it would be
+/// this provider claiming a blindness it does not have, and a consumer would then refuse an
+/// answer that was available.
+fn Observed(value: Option<&str>) -> String
+{
+    return match value
+    {
+        Some(seen) => format!("+{}", nomos_cap_syntax::Escape(seen)),
+        None => ".".to_owned(),
+    };
 }
 
 #[cfg(test)]
@@ -240,11 +264,36 @@ mod tests
         assert_eq!(
             rendered,
             "unexpanded\t0\n\
-             item\t0\tFunction\tPublic\tone\n\
-             item\t1\tModule\tPrivate\tinner\n\
-             item\t2\tFunction\tPrivate\tinner::two\n"
+             item\t0\tFunction\tPublic\tone\t.\t+fn/0\n\
+             item\t1\tModule\tPrivate\tinner\t.\t.\n\
+             item\t2\tFunction\tPrivate\tinner::two\t.\t+fn/0\n"
         );
         assert!(!rendered.contains('\r'), "line endings must not be local");
+    }
+
+    /// What this provider writes in the two fields v2 added, as bytes.
+    ///
+    /// Both are always observations it made. A module has no shape to describe and gets
+    /// `.`; a list's type is a slice and gets `+slice`; a doc comment arrives as written,
+    /// with its newlines escaped rather than dropped, because a consumer matching a claim
+    /// written mid-paragraph needs the paragraph.
+    #[test]
+    fn Test_The_Encoding_Should_Carry_What_This_Provider_Observed()
+    {
+        let fact = Fact(
+            "/// A list.\n\
+             /// Mirrored by `Test_Every_Row`.\n\
+             pub const TABLES: &[&str] = &[];\n\
+             pub const LIMIT: usize = 2;\n",
+        );
+        let rendered = String::from_utf8(fact.payload.bytes.clone()).expect("ASCII and tabs");
+
+        assert_eq!(
+            rendered,
+            "unexpanded\t0\n\
+             item\t0\tConstant\tPublic\tTABLES\t+ A list.\\n Mirrored by `Test_Every_Row`.\t+slice\n\
+             item\t1\tConstant\tPublic\tLIMIT\t.\t+value\n"
+        );
     }
 
     /// What this provider writes is what the schema says a payload is.

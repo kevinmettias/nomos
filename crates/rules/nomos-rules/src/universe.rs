@@ -19,55 +19,38 @@
 //!
 //! and the rule resolves that name against the real source. Meaning stays with the
 //! author, which is where it was always going to have to live; what becomes mechanical
-//! is whether the claim is true. That is exactly the split `enforcement.rs` is built on
-//! — naming an enforcer is a claim about existence, whether it runs is a claim about
-//! execution, and only the second can be checked against reality.
+//! is whether the claim is true.
 //!
-//! # Why this parses instead of scanning lines
+//! # This module used to hold a parser, and that is the point of the version it reads
 //!
-//! It scanned lines first, and three runs against this workspace reported this crate's
-//! own test fixtures as real universes — one of them as a phantom mirror. A trimmed
+//! It scanned lines first, and three runs against this workspace reported this crate's own
+//! test fixtures as real universes — one of them as a phantom mirror. A trimmed
 //! continuation line of a multi-line string literal is indistinguishable from a
-//! declaration, and each attempt to tell them apart by text — stopping at
-//! `#[cfg(test)]`, then tracking quote parity, then tracking raw strings on top of that
-//! — fixed the case in front of it and left the state machine drifting on the next one.
+//! declaration. So it parsed instead, with `syn`, and `nomos-rules` carried a second Rust
+//! front end in a workspace that already had one behind `nomos.cap.syntax.items`.
 //!
-//! A rule that reports its own test data is not one anybody reads the output of, and "is
-//! this a declaration" is a question `syn` already answers exactly. What remains of the
-//! textual approach is the mirror claim, and it is read from parsed doc attributes rather
-//! than from lines that look like comments.
+//! `OD-RULES-001` kept that parser for a measurement rather than an inference: discovery
+//! needs two things the agreed payload did not carry — that a `pub const` is of *slice*
+//! type, and the doc comment at the declaration site. It stated the end condition, and
+//! `nomos.syntax.items.v2` is it. The payload now carries both, per item, as
+//! [`nomos_cap_syntax::Observation`]s, and this module reads facts like every other part of
+//! the rule. `nomos-rules` depends on no parser at all.
 //!
-//! # Why the parser is *here* and nowhere else in this crate
+//! # Why the two fields had to be observations
 //!
-//! This module is the whole of `nomos-rules`' dependency on `syn`, and it is the second
-//! Rust front end in a workspace that already has one behind `nomos.cap.syntax.items`.
-//! `D-134` created it and gave a reason — replayability — that proves a rule takes its
-//! subject as an argument and does not prove that the argument must be text.
-//! `OD-RULES-001` withdraws that inference, moves check-name resolution onto the fact
-//! layer, and keeps the parser here for a reason that is a measurement rather than an
-//! inference.
+//! Because "this item has no doc comment" and "this provider does not read doc comments"
+//! are different answers, and one of them is a silent downgrade. `nomos-lang-rust-scan`
+//! cannot read a doc comment at all. Had v2 spelled both as an empty string, every list
+//! read through the scanner would have arrived here as a list declaring no mirror — a
+//! phantom mirror downgraded to an admitted gap, which is absence becoming success in the
+//! one field this rule's severity ordering turns on.
 //!
-//! The measurement: discovery needs two things the agreed payload does not carry.
-//!
-//! | What discovery needs | In `nomos.syntax.items.v1` |
-//! |---|---|
-//! | that a `pub const` is of *slice* type | **no** — there is no type field, and `pub const LIMIT: usize` and `pub const TABLES: &[&str]` encode identically |
-//! | the doc comment at the declaration site | **no** — there is no doc field, in `SyntaxItem` or in the encoding |
-//!
-//! Neither is a field addition, which is why the schema version is not cut here and not
-//! for want of time. `nomos-lang-rust-scan` cannot read doc comments at all — it skips
-//! comment lines and associates nothing with the item below them — so a schema in which
-//! "this item has no doc comment" and "this provider does not read doc comments" are the
-//! same bytes would turn every universe read by the scanner into one declaring no mirror:
-//! a phantom silently downgraded to an admitted gap, which is absence becoming success in
-//! the one field this rule's whole severity ordering turns on. A version has to carry what
-//! each provider *observed*, bounded by its guarantee.
-//!
-//! **The end condition, stated so this is an exception and not a habit:** when
-//! `nomos.syntax.items.v1` is superseded by a schema carrying an item's documentation and
-//! its declared type shape, this module reads facts too, `syn` and `proc-macro2` leave
-//! `Cargo.toml`, and `nomos-rules` depends on no parser at all. `P10-SYNTAX-V2` holds that
-//! work.
+//! So a payload whose fields were not observed produces [`Reading::Unobserved`] and never
+//! an empty list of universes. `OD-SYNTAX-002` records the schema half of this.
+
+use nomos_cap_syntax::{
+    Function_Arity, PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, INHERENT, SLICE,
+};
 
 /// How a universe is written down.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -104,21 +87,24 @@ pub struct DeclaredUniverse
     pub claimed_mirror: Option<String>,
 }
 
-/// What reading one file produced.
+/// What reading one file's syntax fact produced.
 ///
-/// A parse failure is not an empty file. `Applicability::Unparseable` exists in
-/// `nomos-contracts` for exactly this distinction, and collapsing the two here would put
-/// "nothing to judge" and "could not be read" behind one value before the rule ever got
-/// the chance to tell them apart.
+/// Two variants, and the second is not "the file was empty". A provider that could not
+/// observe documentation has told this module nothing about mirrors, and reporting that as
+/// a file whose universes all declare none would turn every phantom under that provider
+/// into an admitted gap. `Applicability::Unparseable` exists in `nomos-contracts` for the
+/// neighbouring distinction and the rule maps this onto it.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Reading
 {
-    /// The file parsed, and these are its universes. Possibly none.
-    Parsed(Vec<DeclaredUniverse>),
-    /// The file did not parse. Nothing is claimed about what it contains.
-    Unparseable
+    /// The provider observed what discovery needs, and these are the universes. Possibly
+    /// none, which is a real answer about the file.
+    Observed(Vec<DeclaredUniverse>),
+    /// The provider that answered cannot see what discovery reads. Nothing is claimed
+    /// about what the file contains.
+    Unobserved
     {
-        /// What the parser objected to.
+        /// Which field, so a finding can say what would have to change.
         because: String,
     },
 }
@@ -126,167 +112,149 @@ pub enum Reading
 /// The marker a universe declares its mirror with.
 const MIRROR_MARKER: &str = "Mirrored by ";
 
-/// The declarations in one file.
+/// The method name that makes an inherent implementation a declared variant list.
+const ALL: &str = "All";
+
+/// The universes one file declares, read from its syntax fact.
 ///
 /// Deliberately over-inclusive on discovery. A list that turns out to need no mirror is
 /// cheap to classify once; a list that is never surfaced is the defect this exists to
 /// prevent.
 #[must_use]
-pub fn Read_Universes(path: &str, text: &str) -> Reading
+pub fn Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
 {
-    let file = match syn::parse_file(text)
+    if let Some(field) = Unobserved_Field(payload)
     {
-        Ok(parsed) => parsed,
-        Err(refusal) =>
-        {
-            return Reading::Unparseable {
-                because: format!("{refusal} at line {}", refusal.span().start().line),
-            };
-        }
-    };
+        return Reading::Unobserved {
+            because: format!(
+                "the provider that answered did not observe each item's {field}, which is \
+                 what a declared universe and its claimed mirror are read from"
+            ),
+        };
+    }
 
     let mut found = Vec::new();
-    Universes_In_Items(path, &file.items, &mut found);
+
+    for (index, item) in payload.items.iter().enumerate()
+    {
+        if let Some(universe) = Constant_Universe(path, item)
+        {
+            found.push(universe);
+            continue;
+        }
+
+        if let Some(universe) = Enumeration_Universe(path, payload, index, item)
+        {
+            found.push(universe);
+        }
+    }
 
     found.sort();
     found.dedup();
-    return Reading::Parsed(found);
+    return Reading::Observed(found);
 }
 
-/// The declarations in one file, or none when it does not parse.
+/// The universes one file declares, or none when the provider could not observe them.
 ///
 /// The convenience form, for callers with nothing useful to do with the difference. The
-/// rule itself does not use it: reporting an unreadable file as a clean one is the defect
+/// rule itself does not use it: reporting an unobserved file as a clean one is the defect
 /// this workspace keeps finding.
 #[must_use]
-pub fn Universes_In(path: &str, text: &str) -> Vec<DeclaredUniverse>
+pub fn Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
 {
-    return match Read_Universes(path, text)
+    return match Read_Universes(path, payload)
     {
-        Reading::Parsed(universes) => universes,
-        Reading::Unparseable { .. } => Vec::new(),
+        Reading::Observed(universes) => universes,
+        Reading::Unobserved { .. } => Vec::new(),
     };
 }
 
-/// Walks a list of items, descending into inline modules.
+/// The first field discovery needs that the provider did not observe.
 ///
-/// `#[cfg(test)]` modules are descended into like any other. A list declared under test
-/// is still a list; the line scanner skipped them to work around its own false positives,
-/// and that reason did not survive it.
-fn Universes_In_Items(path: &str, items: &[syn::Item], found: &mut Vec<DeclaredUniverse>)
+/// A payload with no items at all is not unobserved — a provider that saw nothing to
+/// report about a file that declares nothing has observed exactly as much as one that
+/// parsed it, and refusing there would report every empty file as unread.
+fn Unobserved_Field(payload: &SyntaxPayload) -> Option<&'static str>
 {
-    for item in items
+    for item in &payload.items
     {
-        match item
+        if !item.documentation.Was_Observed()
         {
-            syn::Item::Const(constant)
-                if Is_Slice(&constant.ty) && Is_Public(&constant.vis) =>
-            {
-                found.push(DeclaredUniverse {
-                    path: path.to_owned(),
-                    name: constant.ident.to_string(),
-                    kind: UniverseKind::Constant,
-                    claimed_mirror: Claimed_Mirror(&constant.attrs),
-                });
-            }
-            syn::Item::Impl(block) => Universes_In_Impl(path, block, found),
-            syn::Item::Mod(module) =>
-            {
-                if let Some((_, nested)) = module.content.as_ref()
-                {
-                    Universes_In_Items(path, nested, found);
-                }
-            }
-            _ =>
-            {}
+            return Some("documentation");
+        }
+        if !item.shape.Was_Observed()
+        {
+            return Some("declared shape");
         }
     }
+
+    return None;
 }
 
-/// An `All()` in an inherent implementation names the type's own variant list.
+/// A public constant whose declared type is a list.
 ///
-/// Inherent implementations only. `impl Display for Table` does not own the variant list,
-/// and attributing an `All()` found there to `Table` would name the wrong universe.
-fn Universes_In_Impl(path: &str, block: &syn::ItemImpl, found: &mut Vec<DeclaredUniverse>)
-{
-    if block.trait_.is_some()
-    {
-        return;
-    }
-
-    let Some(owner) = Type_Name(&block.self_ty)
-    else
-    {
-        return;
-    };
-
-    for item in &block.items
-    {
-        if let syn::ImplItem::Fn(function) = item
-            && function.sig.ident == "All"
-            && function.sig.inputs.is_empty()
-        {
-            found.push(DeclaredUniverse {
-                path: path.to_owned(),
-                name: format!("{owner}::All"),
-                kind: UniverseKind::Enumeration,
-                claimed_mirror: Claimed_Mirror(&function.attrs),
-            });
-        }
-    }
-}
-
-/// Whether a declaration is visible outside its own module.
-///
-/// The scope this rule judges, and a deliberate narrowing rather than an accident of
+/// Public only, and that is a deliberate narrowing rather than an accident of
 /// implementation. A completeness guard built on a list the rest of the workspace cannot
 /// see fails within one module, where the declaration and its uses are read together; the
 /// three instances `OD-COMPLETENESS-001` analyses were all public lists consumed from
 /// somewhere else, which is what let each of them go wrong unnoticed for months.
 ///
-/// It is also what keeps this rule's answer comparable with the classification
-/// `tests/contract` already declares. Widening to private lists takes the workspace from
-/// twelve unmirrored universes to forty, every one of which needs a human to say what
-/// would go wrong — that is somebody's next item, not a side effect of this one.
-///
-/// Both figures are measurements and neither is durable. Taken on 2026-08-09 by running
-/// this module's own discovery over the workspace twice, once as written and once with
-/// this narrowing removed: 16 public universes of which twelve claim no mirror, and 44
-/// universes of which forty have no resolving claim. `OD-COMPLETENESS-002` records that
-/// the previous sentence said thirty-four, which no longer matched anything measurable.
-fn Is_Public(visibility: &syn::Visibility) -> bool
+/// Widening to private lists takes the workspace from twelve unmirrored universes to
+/// forty, every one of which needs a human to say what would go wrong — that is somebody's
+/// next item, not a side effect of this one. Both figures were measured on 2026-08-09;
+/// `OD-COMPLETENESS-002` records that an earlier sentence said thirty-four, which no longer
+/// matched anything measurable.
+fn Constant_Universe(path: &str, item: &PayloadItem) -> Option<DeclaredUniverse>
 {
-    return matches!(visibility, syn::Visibility::Public(_));
-}
-
-/// Whether a type is a slice reference — the shape a declared list has.
-///
-/// `&[&str]` and `&'static [Self]` are universes. `&str` and `usize` are not: a scalar
-/// constant is not a list, and matching one would bury the real ones.
-fn Is_Slice(kind: &syn::Type) -> bool
-{
-    return match kind
-    {
-        syn::Type::Reference(reference) => Is_Slice(&reference.elem),
-        syn::Type::Slice(_) | syn::Type::Array(_) => true,
-        _ => false,
-    };
-}
-
-/// The last segment of a path type, which is the name a universe is known by.
-fn Type_Name(kind: &syn::Type) -> Option<String>
-{
-    let syn::Type::Path(path) = kind
-    else
+    if item.kind != "Constant" || !item.Is_Public() || item.shape.Value() != Some(SLICE)
     {
         return None;
-    };
+    }
 
-    return path
-        .path
-        .segments
-        .last()
-        .map(|segment| return segment.ident.to_string());
+    return Some(DeclaredUniverse {
+        path: path.to_owned(),
+        name: item.Own_Name().to_owned(),
+        kind: UniverseKind::Constant,
+        claimed_mirror: Claimed_Mirror(item.documentation.Value()),
+    });
+}
+
+/// An `All()` in an inherent implementation names the type's own variant list.
+///
+/// Inherent implementations only. `impl Display for Table` does not own the variant list,
+/// and attributing an `All()` found there to `Table` would name the wrong universe — a
+/// distinction that survives into the payload only because the schema carries an
+/// implementation's shape and the items are in source order.
+///
+/// Arity zero, for the same reason it always was: `All(&self)` is an accessor on an
+/// instance and not the type's list of itself.
+fn Enumeration_Universe(
+    path: &str,
+    payload: &SyntaxPayload,
+    index: usize,
+    item: &PayloadItem,
+) -> Option<DeclaredUniverse>
+{
+    if item.kind != FUNCTION || item.Own_Name() != ALL || Function_Arity(&item.shape) != Some(0)
+    {
+        return None;
+    }
+
+    let owner = payload.Enclosing(index)?;
+    if owner.kind != IMPLEMENTATION || owner.shape.Value() != Some(INHERENT)
+    {
+        return None;
+    }
+
+    // The type and the method, and not the modules above them. A universe's name is what a
+    // finding is keyed on, and it stayed stable across the move to facts because the two
+    // trailing segments are what the parser used to build by hand.
+    return Some(DeclaredUniverse {
+        path: path.to_owned(),
+        name: format!("{}::{ALL}", owner.Own_Name()),
+        kind: UniverseKind::Enumeration,
+        claimed_mirror: Claimed_Mirror(item.documentation.Value()),
+    });
 }
 
 /// The mirror named in an item's documentation, if one is named.
@@ -294,9 +262,9 @@ fn Type_Name(kind: &syn::Type) -> Option<String>
 /// Reads the *first* claim rather than the last. A doc comment that names two mirrors is
 /// an authoring mistake, and taking the first makes the rule deterministic about which
 /// one it resolves instead of depending on comment order in a way nobody would predict.
-fn Claimed_Mirror(attributes: &[syn::Attribute]) -> Option<String>
+fn Claimed_Mirror(documentation: Option<&str>) -> Option<String>
 {
-    for line in Documentation(attributes)
+    for line in documentation?.lines()
     {
         let Some(after) = line.split_once(MIRROR_MARKER).map(|(_, rest)| return rest)
         else
@@ -325,41 +293,26 @@ fn Claimed_Mirror(attributes: &[syn::Attribute]) -> Option<String>
     return None;
 }
 
-/// Every `#[doc = "…"]` line on an item, in order.
-///
-/// `///` is `#[doc]` after parsing, so both spellings are read and neither has to be
-/// recognised as text.
-fn Documentation(attributes: &[syn::Attribute]) -> Vec<String>
-{
-    let mut lines = Vec::new();
-
-    for attribute in attributes
-    {
-        if !attribute.path().is_ident("doc")
-        {
-            continue;
-        }
-
-        if let syn::Meta::NameValue(pair) = &attribute.meta
-            && let syn::Expr::Lit(literal) = &pair.value
-            && let syn::Lit::Str(text) = &literal.lit
-        {
-            lines.push(text.value());
-        }
-    }
-
-    return lines;
-}
-
 #[cfg(test)]
 mod tests
 {
     use super::*;
+    use nomos_cap_syntax::Parse_Payload;
+
+    /// A payload built from item records, so a fixture reads as the bytes a provider wrote.
+    fn Payload(records: &str) -> SyntaxPayload
+    {
+        return Parse_Payload(format!("unexpanded\t0\n{records}").as_bytes())
+            .expect("the fixture is written in the schema");
+    }
 
     #[test]
     fn Test_A_Constant_Slice_Should_Be_Found()
     {
-        let found = Universes_In("a.rs", "pub const GOVERNING_RECORD_IDS: &[&str] = &[];");
+        let found = Universes_In(
+            "a.rs",
+            &Payload("item\t0\tConstant\tPublic\tGOVERNING_RECORD_IDS\t.\t+slice\n"),
+        );
 
         assert_eq!(found.len(), 1);
         assert_eq!(
@@ -373,7 +326,10 @@ mod tests
     {
         let found = Universes_In(
             "a.rs",
-            "impl Table { pub const fn All() -> &'static [Self] { &[] } }",
+            &Payload(
+                "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
+                 item\t1\tFunction\tPublic\tTable::All\t.\t+fn/0\n",
+            ),
         );
 
         assert_eq!(
@@ -387,13 +343,33 @@ mod tests
     }
 
     /// A trait implementation does not own the type's variant list, so attributing an
-    /// `All()` to it would name the wrong universe.
+    /// `All()` to it would name the wrong universe. Two `impl` blocks for one type carry
+    /// the same qualified name, and only the record each member follows tells them apart.
     #[test]
     fn Test_A_Trait_Impl_Should_Not_Claim_The_Type()
     {
         let found = Universes_In(
             "a.rs",
-            "impl Table { } impl Display for Other { fn All() {} }",
+            &Payload(
+                "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
+                 item\t1\tImplementation\tNotApplicable\tOther\t.\t+trait\n\
+                 item\t2\tFunction\tNotApplicable\tOther::All\t.\t+fn/0\n",
+            ),
+        );
+
+        assert!(found.is_empty(), "{found:?}");
+    }
+
+    /// An accessor on an instance is not the type's list of itself.
+    #[test]
+    fn Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe()
+    {
+        let found = Universes_In(
+            "a.rs",
+            &Payload(
+                "item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
+                 item\t1\tFunction\tPublic\tTable::All\t.\t+fn/1\n",
+            ),
         );
 
         assert!(found.is_empty(), "{found:?}");
@@ -403,8 +379,22 @@ mod tests
     #[test]
     fn Test_A_Scalar_Constant_Should_Not_Be_A_Universe()
     {
-        assert!(Universes_In("a.rs", "pub const LIMIT: usize = 2_000;").is_empty());
-        assert!(Universes_In("a.rs", "pub const NAME: &str = \"x\";").is_empty());
+        assert!(Universes_In(
+            "a.rs",
+            &Payload("item\t0\tConstant\tPublic\tLIMIT\t.\t+value\n")
+        )
+        .is_empty());
+    }
+
+    /// A list the rest of the workspace cannot see is out of this rule's declared scope.
+    #[test]
+    fn Test_A_Private_List_Should_Not_Be_A_Universe()
+    {
+        assert!(Universes_In(
+            "a.rs",
+            &Payload("item\t0\tConstant\tPrivate\tTABLES\t.\t+slice\n")
+        )
+        .is_empty());
     }
 
     #[test]
@@ -412,137 +402,56 @@ mod tests
     {
         let found = Universes_In(
             "a.rs",
-            "/// The tables.\n\
-             ///\n\
-             /// Mirrored by `Test_Every_Table_Should_Be_Declared`.\n\
-             pub const TABLES: &[&str] = &[];",
+            &Payload(
+                "item\t0\tConstant\tPublic\tTABLES\t+ A list.\\n Mirrored by `Test_Every_Row`.\t+slice\n",
+            ),
         );
 
         assert_eq!(
             found.first().and_then(|universe| universe.claimed_mirror.clone()),
-            Some("Test_Every_Table_Should_Be_Declared".to_owned())
+            Some("Test_Every_Row".to_owned())
         );
     }
 
-    /// The claim belongs to the item it documents. Reading it off nearby text would let
-    /// one annotation silently mirror every universe below it in the file.
+    /// A list with no doc comment claims no mirror, and that is a real answer about the
+    /// source rather than a failure to look.
     #[test]
-    fn Test_A_Claim_Should_Not_Carry_To_The_Next_Item()
+    fn Test_A_List_With_No_Documentation_Should_Claim_No_Mirror()
     {
         let found = Universes_In(
             "a.rs",
-            "/// Mirrored by `Test_X`.\n\
-             pub const FIRST: &[&str] = &[];\n\
-             /// No claim here.\n\
-             pub const SECOND: &[&str] = &[];",
+            &Payload("item\t0\tConstant\tPublic\tTABLES\t.\t+slice\n"),
         );
 
-        assert_eq!(found.len(), 2);
-
-        let claims: Vec<Option<String>> = found
-            .iter()
-            .map(|universe| return universe.claimed_mirror.clone())
-            .collect();
-
-        assert_eq!(claims, vec![Some("Test_X".to_owned()), None]);
+        assert_eq!(found.first().and_then(|universe| universe.claimed_mirror.clone()), None);
     }
 
-    /// Prose about mirroring is not a claim. Only the backticked form is, because a
-    /// sentence that happens to contain the words would otherwise read as coverage.
-    #[test]
-    fn Test_Unquoted_Prose_Should_Not_Be_A_Claim()
-    {
-        let found = Universes_In(
-            "a.rs",
-            "/// Mirrored by nothing in particular.\npub const TABLES: &[&str] = &[];",
-        );
-
-        assert_eq!(
-            found.first().and_then(|universe| universe.claimed_mirror.clone()),
-            None
-        );
-    }
-
-    #[test]
-    fn Test_The_First_Of_Two_Claims_Should_Win()
-    {
-        let found = Universes_In(
-            "a.rs",
-            "/// Mirrored by `Test_A`.\n\
-             /// Mirrored by `Test_B`.\n\
-             pub const TABLES: &[&str] = &[];",
-        );
-
-        assert_eq!(
-            found.first().and_then(|universe| universe.claimed_mirror.clone()),
-            Some("Test_A".to_owned())
-        );
-    }
-
-    /// ---- the reason this parses instead of scanning lines ----
+    /// The property v2 exists for, at the consumer end.
     ///
-    /// Three runs of the line scanner against this workspace reported this crate's own
-    /// fixtures as real universes, one of them as a phantom mirror. Below are the two
-    /// shapes that defeated it: a multi-line string literal whose continuation line
-    /// begins with `pub const`, and a raw string containing an ordinary one. A parser
-    /// cannot make this mistake, and this test is what stops anybody trading the parser
-    /// back for a cheaper scan.
+    /// The same list, read through a provider that cannot see doc comments, must not come
+    /// back as a list that declares no mirror. It comes back as nothing observed, and the
+    /// rule turns that into a finding rather than into silence.
     #[test]
-    fn Test_A_Declaration_Inside_A_String_Should_Not_Be_A_Universe()
+    fn Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror()
     {
-        let found = Universes_In(
-            "a.rs",
-            r##"pub const REAL: &[&str] = &[];
+        let blind = Payload("item\t0\tConstant\tPublic\tTABLES\t-\t-\n");
 
-fn Fixture()
-{
-    let escaped = "impl Table\n\
-                   pub const NOT_REAL: &[&str] = &[];";
-    let raw = r#"/// Mirrored by `Test_Nowhere`.
-pub const ALSO_NOT_REAL: &[&str] = &[];"#;
-}
-"##,
-        );
-
-        let names: Vec<&str> = found
-            .iter()
-            .map(|universe| return universe.name.as_str())
-            .collect();
-
-        assert_eq!(names, vec!["REAL"], "a fixture is not a declaration");
-    }
-
-    /// A list declared under test is still a list.
-    #[test]
-    fn Test_A_Universe_Inside_A_Test_Module_Should_Still_Be_Found()
-    {
-        let found = Universes_In(
-            "a.rs",
-            "#[cfg(test)] mod tests { pub const FIXTURE_NAMES: &[&str] = &[]; }",
-        );
-
-        assert_eq!(
-            found.first().map(|universe| universe.name.clone()),
-            Some("FIXTURE_NAMES".to_owned())
-        );
-    }
-
-    /// A file that does not parse is not a file with nothing in it. Collapsing the two is
-    /// how a check reports clean over what it could not read.
-    #[test]
-    fn Test_An_Unparseable_File_Should_Say_So_Rather_Than_Look_Empty()
-    {
-        let reading = Read_Universes("a.rs", "pub const ??? = ;");
+        let reading = Read_Universes("a.rs", &blind);
 
         assert!(
-            matches!(reading, Reading::Unparseable { .. }),
-            "{reading:?} must not be an empty parse"
+            matches!(reading, Reading::Unobserved { ref because } if because.contains("documentation")),
+            "{reading:?}"
+        );
+        assert!(
+            Universes_In("a.rs", &blind).is_empty(),
+            "the convenience form yields nothing, which is why the rule does not use it"
         );
     }
 
+    /// A file that declares nothing is not a file nobody could read.
     #[test]
-    fn Test_An_Empty_File_Should_Parse_To_Nothing()
+    fn Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty()
     {
-        assert_eq!(Read_Universes("a.rs", ""), Reading::Parsed(Vec::new()));
+        assert_eq!(Read_Universes("a.rs", &Payload("")), Reading::Observed(Vec::new()));
     }
 }

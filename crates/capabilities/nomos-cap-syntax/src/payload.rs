@@ -1,4 +1,4 @@
-//! The grammar of `nomos.syntax.items.v1`, and the reader the tree agrees on.
+//! The grammar of `nomos.syntax.items.v2`, and the reader the tree agrees on.
 //!
 //! Until this module existed, the schema was a [`nomos_contracts::SchemaId`] string and
 //! nothing else. Two providers authored the bytes independently and three consumers read
@@ -13,10 +13,15 @@
 //! of the machine that produced it is not a content address.
 //!
 //! ```text
-//! payload  := header item*
-//! header   := "unexpanded" TAB u32 LF
-//! item     := "item" TAB ordinal TAB kind TAB visibility TAB qualified-name LF
-//! ordinal  := u32
+//! payload     := header item*
+//! header      := "unexpanded" TAB u32 LF
+//! item        := "item" TAB ordinal TAB kind TAB visibility TAB qualified-name
+//!                TAB documentation TAB shape LF
+//! ordinal     := u32
+//! documentation := observation
+//! shape         := observation
+//! observation := "-" | "." | "+" escaped
+//! escaped     := any text, with `\` `\t` `\n` `\r` written `\\` `\t` `\n` `\r`
 //! ```
 //!
 //! **The header is the first record and appears exactly once.** It carries a lower bound on
@@ -25,9 +30,13 @@
 //! thing in every payload rather than a claim that there were none.
 //!
 //! **`item` records are in source order** and `ordinal` is the item's position in that
-//! order, starting at zero. A file that declares nothing is a header and no items — which
-//! is a real answer, and distinguishable from a payload that could not be read only because
-//! the empty byte string is refused rather than decoded.
+//! order, starting at zero. Source order is load-bearing rather than cosmetic: a member is
+//! attributed to the most recent enclosing record before it, and a consumer that sorted the
+//! items would attribute members to the wrong owner.
+//!
+//! A file that declares nothing is a header and no items — a real answer, and
+//! distinguishable from a payload that could not be read only because the empty byte string
+//! is refused rather than decoded.
 //!
 //! **`kind` and `visibility` are labels, and the schema does not enumerate them.** A
 //! provider that can distinguish fewer forms than another writes fewer labels; a kind it
@@ -35,14 +44,49 @@
 //! the weaker provider unable to answer honestly, and the ceiling already exists to bound
 //! what an answer may claim.
 //!
-//! Three labels are reserved, because they are the ones consumers branch on:
-//! [`FUNCTION`], [`PUBLIC`] and [`NOT_APPLICABLE`]. A provider that uses any of those three
-//! spellings for anything else is not writing this schema.
-//!
 //! **`qualified-name` is the name as written, qualified by syntactic nesting** — a function
 //! declared in `mod tests` arrives as `tests::Name`, and one declared in an `impl` block
 //! arrives as `Type::Name`. It is not a resolved path: no provider of this capability
 //! resolves names, and a `::` in it is nesting rather than a module route.
+//!
+//! # Not observed is not absent
+//!
+//! This is why there is a v2, and it is the whole of the difference.
+//!
+//! `documentation` and `shape` are [`Observation`]s rather than strings, because two
+//! providers of one capability differ in *what they can see* and not only in how well.
+//! `nomos-lang-rust-scan` cannot read a doc comment at all — it skips comment lines and
+//! associates nothing with the item below them. If "this item has no documentation" and
+//! "this provider does not read documentation" were the same bytes, every list read through
+//! the scanner would arrive as a list declaring no mirror: a phantom mirror silently
+//! downgraded to an admitted gap, which is absence becoming success in the one field a
+//! completeness rule's severity ordering turns on.
+//!
+//! So the three states are three spellings. `-` is *not observed*; `.` is *observed and
+//! there is none*; `+…` is *observed and here it is*. A consumer that cannot act on an
+//! unobserved field must say so rather than treat it as empty, and the type makes that
+//! difficult to get wrong by accident.
+//!
+//! Observation is bounded by the provider's guarantee and not by its effort. A provider
+//! writes `-` when the method it used cannot see the thing, which is a property of the
+//! method — the same property its declared [`nomos_contracts::Guarantee`] describes.
+//!
+//! ## What `shape` says, per kind
+//!
+//! Open like the other vocabularies, and meaningful relative to the kind:
+//!
+//! | For a | `shape` is |
+//! |---|---|
+//! | typed declaration — a constant, a static | [`SLICE`] when the declared type is a slice or an array, however many references deep, and [`VALUE`] otherwise |
+//! | function | `fn/<arity>`, the number of declared parameters including a receiver — read it with [`Function_Arity`] |
+//! | implementation block | [`INHERENT`] or [`TRAIT`] |
+//! | anything else | `.` — observed, and the shape has nothing to say about this form |
+//!
+//! The distinctions are the ones a consumer cannot recover from the rest of the record and
+//! could otherwise only get by parsing the source a second time. `pub const LIMIT: usize`
+//! and `pub const TABLES: &[&str]` are identical in every other field; `fn All()` and
+//! `fn All(&self)` are identical in every other field; and an `All` in `impl Display for T`
+//! does not belong to `T` the way an `All` in `impl T` does.
 //!
 //! # What this schema declines to state
 //!
@@ -60,12 +104,12 @@
 //! not**, and a consumer that reads absence as "this is a definition" is reading a weaker
 //! provider's blindness as an observation.
 //!
-//! The consequence is stated rather than left to be discovered: a consumer needing the
-//! distinction must obtain it from the *guarantee* it required of the answer, not from the
-//! bytes. That is what `nomos-rules` does — `OD-RULES-001` sets a floor the approximate
-//! provider does not meet, so a payload that could carry the blind spelling never reaches
-//! the filter. Carrying the item's form in the payload is a v2 question and `P10-SYNTAX-V2`
-//! holds it.
+//! Visibility is the one field where that asymmetry is still unmarked, and v2 does not fix
+//! it: making it an [`Observation`] would say that a provider did not observe visibility at
+//! all, which is false — the scanner observes `pub` correctly and merely cannot see the
+//! enclosing form. The consequence is stated instead: a consumer needing the distinction
+//! must obtain it from the *guarantee* it required of the answer, not from the bytes. That
+//! is what `nomos-rules` does, and `OD-RULES-001`'s floor is what makes it sound.
 //!
 //! # One reader, two writers
 //!
@@ -77,14 +121,17 @@
 //! The writers stay where they are, deliberately. What makes two providers interchangeable
 //! is that both produce bytes a third party can read; a shared encoder would make that true
 //! by construction and prove nothing. What the duplication used to cost is that nothing
-//! checked the agreement — so each provider now decodes its own output through this reader
-//! in its own tests, which is the check the duplication was missing rather than the
-//! duplication removed.
+//! checked the agreement — so each provider decodes its own output through this reader in
+//! its own tests, which is the check the duplication was missing rather than the duplication
+//! removed.
 
 use core::fmt::Write as _;
 
 /// The `kind` label every provider writes for a function form.
 pub const FUNCTION: &str = "Function";
+
+/// The `kind` label for an implementation block.
+pub const IMPLEMENTATION: &str = "Implementation";
 
 /// The `visibility` label for an item that declares itself public.
 pub const PUBLIC: &str = "Public";
@@ -96,13 +143,110 @@ pub const PUBLIC: &str = "Public";
 /// caveat before treating its absence as evidence of anything.
 pub const NOT_APPLICABLE: &str = "NotApplicable";
 
+/// The `shape` of a typed declaration whose type is a slice or an array.
+pub const SLICE: &str = "slice";
+
+/// The `shape` of a typed declaration whose type is anything else.
+pub const VALUE: &str = "value";
+
+/// The `shape` of an implementation block that implements no trait.
+pub const INHERENT: &str = "inherent";
+
+/// The `shape` of an implementation block that implements a trait.
+pub const TRAIT: &str = "trait";
+
+/// The `shape` prefix a function's arity is written behind.
+const FUNCTION_SHAPE: &str = "fn/";
+
 /// Fields in an `item` record, tag included.
-const ITEM_FIELDS: usize = 5;
+const ITEM_FIELDS: usize = 7;
 
 /// Fields in the `unexpanded` header, tag included.
 const HEADER_FIELDS: usize = 2;
 
-/// A decoded `nomos.syntax.items.v1` payload.
+/// What a provider saw when it looked — including that it could not look.
+///
+/// Three states rather than an `Option`, because the two empty answers are not the same
+/// answer and one of them is a silent downgrade. See the module doc.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Observation
+{
+    /// The method this provider used cannot see this. Nothing is claimed either way.
+    NotObserved,
+    /// The provider looked, and there is nothing here.
+    Absent,
+    /// The provider looked, and this is what it saw.
+    Present(String),
+}
+
+impl Observation
+{
+    /// The value, when there is one.
+    ///
+    /// `None` for both empty states, so a caller that only wants the text can have it —
+    /// and a caller that must not confuse the two has [`Observation::Was_Observed`].
+    #[must_use]
+    pub fn Value(&self) -> Option<&str>
+    {
+        return match self
+        {
+            Self::Present(value) => Some(value),
+            Self::NotObserved | Self::Absent => None,
+        };
+    }
+
+    /// Whether the provider was able to look at all.
+    #[must_use]
+    pub fn Was_Observed(&self) -> bool
+    {
+        return !matches!(self, Self::NotObserved);
+    }
+
+    /// The wire form: `-`, `.`, or `+` and the escaped value.
+    #[must_use]
+    pub fn Encode(&self) -> String
+    {
+        return match self
+        {
+            Self::NotObserved => "-".to_owned(),
+            Self::Absent => ".".to_owned(),
+            Self::Present(value) => format!("+{}", Escape(value)),
+        };
+    }
+
+    /// Reads the wire form back.
+    ///
+    /// A field that is neither of the two marks and does not begin with `+` is not this
+    /// schema — refused rather than read as absent, because absent is one of the answers.
+    fn Decode(field: &str) -> Option<Self>
+    {
+        return match field
+        {
+            "-" => Some(Self::NotObserved),
+            "." => Some(Self::Absent),
+            _ => field.strip_prefix('+').map(|value| return Self::Present(Unescape(value))),
+        };
+    }
+}
+
+/// The arity a function `shape` declares, if the field is one.
+#[must_use]
+pub fn Function_Arity(shape: &Observation) -> Option<u32>
+{
+    return shape
+        .Value()?
+        .strip_prefix(FUNCTION_SHAPE)
+        .and_then(|arity| return arity.parse().ok());
+}
+
+/// The `shape` a function of this arity declares.
+#[must_use]
+pub fn Function_Shape(arity: usize) -> String
+{
+    return format!("{FUNCTION_SHAPE}{arity}");
+}
+
+/// A decoded `nomos.syntax.items.v2` payload.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SyntaxPayload
 {
@@ -110,6 +254,29 @@ pub struct SyntaxPayload
     pub unexpanded: u32,
     /// The items the file declares, in source order.
     pub items: Vec<PayloadItem>,
+}
+
+impl SyntaxPayload
+{
+    /// The record that syntactically encloses the item at `ordinal`, if any.
+    ///
+    /// The most recent preceding record whose qualified name is this one's prefix. Source
+    /// order is what makes this answerable: an `All` declared in `impl Display for Table`
+    /// and one declared in `impl Table` carry the same qualified name, and only the record
+    /// they follow tells them apart.
+    #[must_use]
+    pub fn Enclosing(&self, ordinal: usize) -> Option<&PayloadItem>
+    {
+        let item = self.items.get(ordinal)?;
+        let (owner, _) = item.qualified_name.rsplit_once("::")?;
+
+        return self
+            .items
+            .get(..ordinal)?
+            .iter()
+            .rev()
+            .find(|candidate| return candidate.qualified_name == owner);
+    }
 }
 
 /// One `item` record.
@@ -124,6 +291,10 @@ pub struct PayloadItem
     pub visibility: String,
     /// The name as written, qualified by syntactic nesting.
     pub qualified_name: String,
+    /// The item's documentation, and whether the provider could look for it.
+    pub documentation: Observation,
+    /// What the item declares, beyond its name — see the module doc's table.
+    pub shape: Observation,
 }
 
 impl PayloadItem
@@ -203,6 +374,13 @@ pub enum PayloadRefusal
         value: String,
         line: usize,
     },
+    /// A field that must be an observation and is not one of its three spellings.
+    UnreadableObservation
+    {
+        field: &'static str,
+        value: String,
+        line: usize,
+    },
 }
 
 impl PayloadRefusal
@@ -236,6 +414,10 @@ impl PayloadRefusal
             Self::UnreadableNumber { field, value, line } => {
                 format!("line {line} carries `{value}` where `{field}` must be a number")
             }
+            Self::UnreadableObservation { field, value, line } => format!(
+                "line {line} carries `{value}` where `{field}` must be `-`, `.` or `+` and a \
+                 value"
+            ),
         };
     }
 }
@@ -295,6 +477,12 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<SyntaxPayload, PayloadRefusal>
                     kind: fields.get(2).copied().unwrap_or_default().to_owned(),
                     visibility: fields.get(3).copied().unwrap_or_default().to_owned(),
                     qualified_name: fields.get(4).copied().unwrap_or_default().to_owned(),
+                    documentation: Observed(
+                        fields.get(5).copied().unwrap_or_default(),
+                        "documentation",
+                        at,
+                    )?,
+                    shape: Observed(fields.get(6).copied().unwrap_or_default(), "shape", at)?,
                 });
             }
             other =>
@@ -336,12 +524,81 @@ pub fn Render_Payload(payload: &SyntaxPayload) -> Vec<u8>
     {
         let _ = writeln!(
             rendered,
-            "item\t{}\t{}\t{}\t{}",
-            item.ordinal, item.kind, item.visibility, item.qualified_name
+            "item\t{}\t{}\t{}\t{}\t{}\t{}",
+            item.ordinal,
+            item.kind,
+            item.visibility,
+            item.qualified_name,
+            item.documentation.Encode(),
+            item.shape.Encode()
         );
     }
 
     return rendered.into_bytes();
+}
+
+/// Makes a value safe to carry in one tab-separated field.
+///
+/// Documentation is prose and arrives with newlines in it. Escaping rather than dropping
+/// them keeps a multi-line doc comment one field and one record, so the grammar stays
+/// line-oriented and a consumer still reads the text the author wrote.
+#[must_use]
+pub fn Escape(value: &str) -> String
+{
+    let mut escaped = String::with_capacity(value.len());
+
+    for character in value.chars()
+    {
+        match character
+        {
+            '\\' => escaped.push_str("\\\\"),
+            '\t' => escaped.push_str("\\t"),
+            '\n' => escaped.push_str("\\n"),
+            '\r' => escaped.push_str("\\r"),
+            other => escaped.push(other),
+        }
+    }
+
+    return escaped;
+}
+
+/// Reads an escaped field back.
+///
+/// An escape this build does not know keeps its backslash rather than being swallowed,
+/// because dropping it would quietly change the text a consumer then matches against.
+#[must_use]
+pub fn Unescape(value: &str) -> String
+{
+    let mut plain = String::with_capacity(value.len());
+    let mut characters = value.chars();
+
+    while let Some(character) = characters.next()
+    {
+        if character != '\\'
+        {
+            plain.push(character);
+            continue;
+        }
+
+        match characters.next()
+        {
+            Some('t') => plain.push('\t'),
+            Some('n') => plain.push('\n'),
+            Some('r') => plain.push('\r'),
+            // An escaped backslash, and a backslash at the very end with nothing behind
+            // it. One arm because the answer is the same character, and the second case is
+            // a field that is not this schema — reproducing what was written is the least
+            // that can be got wrong.
+            Some('\\') | None => plain.push('\\'),
+            Some(other) =>
+            {
+                plain.push('\\');
+                plain.push(other);
+            }
+        }
+    }
+
+    return plain;
 }
 
 /// Refuses a record whose field count is not the one the grammar states.
@@ -377,15 +634,27 @@ fn Number(value: &str, field: &'static str, line: usize) -> Result<u32, PayloadR
     });
 }
 
+/// Reads a field that must be an observation.
+fn Observed(value: &str, field: &'static str, line: usize) -> Result<Observation, PayloadRefusal>
+{
+    return Observation::Decode(value).ok_or_else(|| {
+        return PayloadRefusal::UnreadableObservation {
+            field,
+            value: value.to_owned(),
+            line,
+        };
+    });
+}
+
 #[cfg(test)]
 mod tests
 {
     use super::*;
 
     const SAMPLE: &str = "unexpanded\t2\n\
-                          item\t0\tModule\tPrivate\ttests\n\
-                          item\t1\tFunction\tPublic\ttests::One\n\
-                          item\t2\tFunction\tNotApplicable\tJudged::Two\n";
+                          item\t0\tModule\tPrivate\ttests\t.\t.\n\
+                          item\t1\tConstant\tPublic\tTABLES\t+Mirrored by `Test_X`.\t+slice\n\
+                          item\t2\tFunction\tNotApplicable\tJudged::Two\t-\t-\n";
 
     #[test]
     fn Test_A_Well_Formed_Payload_Should_Decode_To_Its_Records()
@@ -395,16 +664,97 @@ mod tests
         assert_eq!(payload.unexpanded, 2);
         assert_eq!(payload.items.len(), 3);
 
-        let second = payload.items.get(1).expect("three items");
-        assert_eq!(second.ordinal, 1);
-        assert_eq!(second.kind, FUNCTION);
-        assert_eq!(second.Own_Name(), "One");
-        assert!(second.Is_Public());
-        assert!(!second.Declares_No_Visibility());
+        let list = payload.items.get(1).expect("three items");
+        assert_eq!(list.kind, "Constant");
+        assert_eq!(list.Own_Name(), "TABLES");
+        assert!(list.Is_Public());
+        assert_eq!(list.documentation.Value(), Some("Mirrored by `Test_X`."));
+        assert_eq!(list.shape.Value(), Some(SLICE));
+    }
 
-        let third = payload.items.get(2).expect("three items");
-        assert!(third.Declares_No_Visibility());
-        assert_eq!(third.Own_Name(), "Two");
+    /// The distinction v2 exists for, asserted as bytes rather than as a description.
+    #[test]
+    fn Test_Not_Observed_And_Absent_Should_Be_Different_Bytes()
+    {
+        assert_ne!(Observation::NotObserved.Encode(), Observation::Absent.Encode());
+
+        let payload = Parse_Payload(SAMPLE.as_bytes()).expect("the grammar");
+
+        let looked = payload.items.first().expect("three items");
+        assert_eq!(looked.documentation, Observation::Absent);
+        assert!(looked.documentation.Was_Observed(), "this provider read doc comments");
+
+        let blind = payload.items.get(2).expect("three items");
+        assert_eq!(blind.documentation, Observation::NotObserved);
+        assert!(!blind.documentation.Was_Observed());
+
+        // Both answer `None` to "what is the text", which is exactly why the caller that
+        // must not confuse them has a second question to ask.
+        assert_eq!(looked.documentation.Value(), blind.documentation.Value());
+    }
+
+    /// A member belongs to the record it follows, and two impls of one type are told apart
+    /// by nothing else.
+    #[test]
+    fn Test_A_Member_Should_Be_Enclosed_By_The_Record_It_Follows()
+    {
+        let payload = Parse_Payload(
+            b"unexpanded\t0\n\
+              item\t0\tImplementation\tNotApplicable\tTable\t.\t+trait\n\
+              item\t1\tFunction\tNotApplicable\tTable::All\t.\t+fn/1\n\
+              item\t2\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
+              item\t3\tFunction\tPublic\tTable::All\t.\t+fn/0\n",
+        )
+        .expect("well formed");
+
+        let under_trait = payload.Enclosing(1).expect("the first All is enclosed");
+        assert_eq!(under_trait.shape.Value(), Some(TRAIT));
+
+        let under_inherent = payload.Enclosing(3).expect("the second All is enclosed");
+        assert_eq!(under_inherent.shape.Value(), Some(INHERENT));
+
+        assert!(payload.Enclosing(0).is_none(), "a top-level item encloses nothing");
+    }
+
+    #[test]
+    fn Test_A_Function_Shape_Should_Carry_Its_Arity()
+    {
+        assert_eq!(Function_Shape(0), "fn/0");
+        assert_eq!(
+            Function_Arity(&Observation::Present(Function_Shape(2))),
+            Some(2)
+        );
+        assert_eq!(Function_Arity(&Observation::NotObserved), None);
+        assert_eq!(Function_Arity(&Observation::Present(SLICE.to_owned())), None);
+    }
+
+    /// Documentation is prose and arrives with newlines and tabs in it. One field, one
+    /// record, and the text a consumer matches against is the text the author wrote.
+    #[test]
+    fn Test_Documentation_Should_Survive_The_Field_It_Travels_In()
+    {
+        let prose = "Mirrored by `Test_X`.\n\nA second\tparagraph with a \\ in it.";
+        let payload = SyntaxPayload {
+            unexpanded: 0,
+            items: vec![PayloadItem {
+                ordinal: 0,
+                kind: "Constant".to_owned(),
+                visibility: PUBLIC.to_owned(),
+                qualified_name: "TABLES".to_owned(),
+                documentation: Observation::Present(prose.to_owned()),
+                shape: Observation::Present(SLICE.to_owned()),
+            }],
+        };
+
+        let rendered = Render_Payload(&payload);
+        assert_eq!(
+            rendered.iter().filter(|byte| return **byte == b'\n').count(),
+            2,
+            "the newlines in the prose must not become records"
+        );
+
+        let read = Parse_Payload(&rendered).expect("what this module wrote");
+        assert_eq!(read.items.first().expect("one item").documentation.Value(), Some(prose));
     }
 
     /// A file that declares nothing is a real answer, and the shortest well-formed payload.
@@ -417,17 +767,6 @@ mod tests
         assert!(payload.items.is_empty());
     }
 
-    /// An unqualified name is its own name. The fallback is asserted because every other
-    /// case in this workspace is nested, so nothing else would ever reach it.
-    #[test]
-    fn Test_An_Unqualified_Name_Should_Be_Its_Own_Name()
-    {
-        let payload = Parse_Payload(b"unexpanded\t0\nitem\t0\tStruct\tPublic\tAlone\n")
-            .expect("well formed");
-
-        assert_eq!(payload.items.first().expect("one item").Own_Name(), "Alone");
-    }
-
     /// The negative controls. None of these may arrive at a caller as an empty payload: a
     /// reader that decodes unreadable bytes to "no items" makes a subject that was never
     /// read indistinguishable from a subject that declared nothing.
@@ -437,7 +776,7 @@ mod tests
         assert_eq!(Parse_Payload(&[0xFF, 0xFE]), Err(PayloadRefusal::NotUtf8));
         assert_eq!(Parse_Payload(b""), Err(PayloadRefusal::NoHeader));
         assert_eq!(
-            Parse_Payload(b"item\t0\tFunction\tPublic\tOne\n"),
+            Parse_Payload(b"item\t0\tFunction\tPublic\tOne\t.\t.\n"),
             Err(PayloadRefusal::NoHeader)
         );
         assert_eq!(
@@ -451,19 +790,21 @@ mod tests
             "{unknown:?}"
         );
 
-        let short = Parse_Payload(b"unexpanded\t0\nitem\t0\tFunction\tOne\n")
-            .expect_err("a record with the wrong field count must refuse");
+        // A v1 record, which is this schema's likeliest wrong input rather than a
+        // hypothetical one: five fields where seven are written.
+        let previous = Parse_Payload(b"unexpanded\t0\nitem\t0\tFunction\tPublic\tOne\n")
+            .expect_err("the previous schema is not this one");
         assert!(
             matches!(
-                short,
+                previous,
                 PayloadRefusal::WrongFieldCount {
-                    found: 4,
-                    expected: 5,
+                    found: 5,
+                    expected: 7,
                     line: 2,
                     ..
                 }
             ),
-            "{short:?}"
+            "{previous:?}"
         );
 
         let unnumbered = Parse_Payload(b"unexpanded\tmany\n").expect_err("a count is a number");
@@ -472,11 +813,18 @@ mod tests
             "{unnumbered:?}"
         );
 
-        let ordinal = Parse_Payload(b"unexpanded\t0\nitem\tfirst\tFunction\tPublic\tOne\n")
-            .expect_err("an ordinal is a number");
+        let unmarked = Parse_Payload(b"unexpanded\t0\nitem\t0\tConstant\tPublic\tA\tnone\t.\n")
+            .expect_err("an observation has three spellings and this is not one");
         assert!(
-            matches!(ordinal, PayloadRefusal::UnreadableNumber { field: "ordinal", line: 2, .. }),
-            "{ordinal:?}"
+            matches!(
+                unmarked,
+                PayloadRefusal::UnreadableObservation {
+                    field: "documentation",
+                    line: 2,
+                    ..
+                }
+            ),
+            "{unmarked:?}"
         );
     }
 

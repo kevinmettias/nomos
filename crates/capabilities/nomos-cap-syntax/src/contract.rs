@@ -22,7 +22,12 @@ pub const CAPABILITY: &str = "nomos.cap.syntax.items";
 /// A schema is the shape of an answer and not a claim about its accuracy — that is what a
 /// guarantee is for. Two providers of one capability writing different shapes would force
 /// every consumer to know which one answered.
-pub const SCHEMA: &str = "nomos.syntax.items.v1";
+/// Versioned separately from the contract, and this is the version where that mattered.
+/// v2 makes each item's documentation and declared shape an observation rather than a
+/// string, so that a provider which cannot see one says so instead of writing the same
+/// bytes as a provider that looked and found nothing. The *question* did not change, so
+/// [`CONTRACT_VERSION`] did not either — see `OD-SYNTAX-002`.
+pub const SCHEMA: &str = "nomos.syntax.items.v2";
 
 /// The contract version. Not a crate version: a caller reads against the contract.
 pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);

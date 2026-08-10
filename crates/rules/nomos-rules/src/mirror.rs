@@ -105,18 +105,21 @@ pub fn Check_Completeness_Mirrors(
 {
     let index = Check_Index_Of(sources, facts);
 
-    let mut universes: Vec<DeclaredUniverse> = Vec::new();
+    // Both halves of the subject now come out of one fact per file. The universes are read
+    // where the fact is read rather than from `source.text`, which is what removed this
+    // crate's second Rust front end — `OD-RULES-001` named that the end condition and
+    // `OD-SYNTAX-002` is the schema that met it.
+    let mut universes: Vec<DeclaredUniverse> = index.universes.clone();
     let mut findings: Vec<Finding> = Vec::new();
 
-    for source in sources
+    for (path, because) in &index.unobserved
     {
-        match Read_Universes(&source.path, &source.text)
+        // The provider that answered cannot see doc comments, so it has said nothing about
+        // this file's mirrors. Reported and not skipped: folding it into "no universe here"
+        // is the phantom-becomes-admitted-gap downgrade the schema version exists to stop.
+        if let Some(source) = sources.iter().find(|candidate| return &candidate.path == path)
         {
-            Reading::Parsed(found) => universes.extend(found),
-            // A file this rule could not read is reported, not skipped. Skipping it would
-            // fold "there is nothing here" into "I could not look", which is the one
-            // conflation `Applicability` exists to prevent.
-            Reading::Unparseable { because } => findings.push(Unreadable(source, &because)),
+            findings.push(Unreadable(source, because));
         }
     }
 
@@ -479,6 +482,16 @@ struct CheckIndex<'source>
 {
     /// Check names, from the facts that were read.
     names: BTreeSet<String>,
+    /// The universes those same facts declare, in source order.
+    ///
+    /// Read from the fact rather than from the file, which is what this rule stopped
+    /// parsing for itself. One fact answers both halves of the subject.
+    universes: Vec<DeclaredUniverse>,
+    /// Files whose provider could not observe what a universe is read from, and why.
+    ///
+    /// Separate from `unread`, because the fact *was* read. What is missing is a field
+    /// inside it, and a file here is a file about whose mirrors nothing may be concluded.
+    unobserved: Vec<(String, String)>,
     /// Subjects whose facts were not read, in source order.
     unread: Vec<Unread<'source>>,
 }
@@ -550,6 +563,8 @@ fn Check_Index_Of<'source>(
 
     let mut index = CheckIndex {
         names: BTreeSet::new(),
+        universes: Vec::new(),
+        unobserved: Vec::new(),
         unread: Vec::new(),
     };
 
@@ -566,7 +581,15 @@ fn Check_Index_Of<'source>(
                  not read",
                 fact.payload.schema
             )),
-            Ok(fact) => Check_Names_In(&fact.payload.bytes)
+            // Decoded once. Two decodes of one fact would be two answers to what the bytes
+            // say, which is the objection `OD-SYNTAX-001` settled for the whole tree.
+            Ok(fact) => nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
+                .map(|payload| {
+                    return (
+                        Check_Names_In(&payload),
+                        Read_Universes(&source.path, &payload),
+                    );
+                })
                 .map_err(|refusal| return refusal.Describe()),
             Err(applicability) =>
             {
@@ -586,7 +609,19 @@ fn Check_Index_Of<'source>(
 
         match outcome
         {
-            Ok(names) => index.names.extend(names),
+            Ok((names, reading)) =>
+            {
+                index.names.extend(names);
+
+                match reading
+                {
+                    Reading::Observed(found) => index.universes.extend(found),
+                    Reading::Unobserved { because } =>
+                    {
+                        index.unobserved.push((source.path.clone(), because));
+                    }
+                }
+            }
             // A payload this build cannot read is not an empty payload. Folding it into
             // one would make a fact nobody could decode indistinguishable from a file that
             // declares no checks, and the second is a real answer.
@@ -706,20 +741,46 @@ mod tests
     /// by a `tests` module, because that is the shape every check in this workspace really
     /// has and a reader that only handled bare names would pass here and resolve nothing
     /// in the product.
-    fn Payload(declared: &[&str]) -> Vec<u8>
-    {
-        let mut encoded = String::from("unexpanded\t0\n");
+    use core::fmt::Write as _;
 
-        for (ordinal, name) in declared.iter().enumerate()
+    /// `None` where the provider would have refused the file, so no fact is filed for it —
+    /// which is what a real run does with a file that does not parse, and why the rule
+    /// reports it unread rather than clean.
+    fn Payload(source: &SourceFile, declared: &[&str]) -> Option<Vec<u8>>
+    {
+        let nomos_lang_rust::Reading::Parsed(facts) = nomos_lang_rust::Read_Source(&source.text)
+        else
         {
-            encoded.push_str("item\t");
-            encoded.push_str(&ordinal.to_string());
-            encoded.push_str("\tFunction\tPrivate\ttests::");
-            encoded.push_str(name);
-            encoded.push('\n');
+            return None;
+        };
+
+        let encoded = nomos_lang_rust::Encode_Payload(&facts);
+        let mut text = String::from_utf8(encoded).expect("the encoding is UTF-8");
+
+        for (offset, name) in declared.iter().enumerate()
+        {
+            let ordinal = facts.items.len().saturating_add(offset);
+            let _ = writeln!(text, "item\t{ordinal}\tFunction\tPrivate\ttests::{name}\t.\t+fn/0");
         }
 
-        return encoded.into_bytes();
+        return Some(text.into_bytes());
+    }
+
+    /// A payload from a provider that could not observe what a universe is read from.
+    ///
+    /// The scanner's shape, filed under an admitted guarantee. The rule normally never sees
+    /// one — its floor excludes the provider that writes it — so this is the case that
+    /// arrives when some future provider is admitted and still cannot read doc comments.
+    fn Blind_Payload(names: &[&str]) -> Vec<u8>
+    {
+        let mut text = String::from("unexpanded\t0\n");
+
+        for (ordinal, name) in names.iter().enumerate()
+        {
+            let _ = writeln!(text, "item\t{ordinal}\tConstant\tPublic\t{name}\t-\t-");
+        }
+
+        return text.into_bytes();
     }
 
     /// The parts of a composition a rule reads through: a registry and a store.
@@ -820,17 +881,24 @@ mod tests
 
     /// A parser is registered, and it answered for every source named here.
     ///
-    /// What a file "declares" is stated by the test rather than parsed out of the fixture,
-    /// which is the honest shape: this crate does not parse for check names any more, and
-    /// a test that derived the payload from the text would be asserting a parser it does
-    /// not own.
+    /// The fixture's payload is what the real provider would have written for it, plus
+    /// whatever check names the test states on top. Both halves are deliberate. Deriving
+    /// the items means a fixture's universes reach the rule the way they do in the product
+    /// — this crate no longer parses, so a hand-written payload would be a shape nobody
+    /// could have produced, and it drifted the moment the schema gained a field. Stating
+    /// the checks separately keeps the tests that matter honest: a `Test_X` written inside
+    /// a fixture string is *not* in the parser's output, and a test that wants one resolved
+    /// has to say so rather than smuggling it through the text.
     fn World_Over(declaring: &[(&SourceFile, &[&str])]) -> World
     {
         let mut world = World::Offering(&[(PARSER, Parser_Guarantee())]);
 
         for (source, declared) in declaring
         {
-            world = world.Materializing(source, nomos_cap_syntax::SCHEMA, Payload(declared));
+            if let Some(payload) = Payload(source, declared)
+            {
+                world = world.Materializing(source, nomos_cap_syntax::SCHEMA, payload);
+            }
         }
 
         return world;
@@ -1089,6 +1157,11 @@ mod tests
     /// A file that could not be read is reported, not skipped. A run that silently drops
     /// what it could not parse and reports clean is the shape this workspace keeps
     /// finding — and `Applicability` is the field that says so.
+    ///
+    /// Which side reports it moved with `P10-SYNTAX-V2`. The rule used to parse the text
+    /// itself and refuse it here; now the provider refuses it, files no fact, and the
+    /// subject arrives unread. The property is the same and the path is shorter — there is
+    /// one parser in the workspace and it is the one that says a file does not parse.
     #[test]
     fn Test_An_Unparseable_File_Should_Be_Reported_And_Not_Fail_The_Build()
     {
@@ -1096,10 +1169,10 @@ mod tests
 
         let unparseable = findings
             .iter()
-            .find(|finding| return finding.summary.contains("could not be parsed"))
-            .expect("the text side must report the file it could not read");
+            .find(|finding| return finding.summary.contains("no syntax fact could be read"))
+            .expect("the file nobody could produce a fact for must be reported");
 
-        assert_eq!(unparseable.applicability, Applicability::Unparseable);
+        assert_eq!(unparseable.applicability, Applicability::DependencyUnavailable);
         assert!(
             !unparseable.Can_Fail_A_Build(),
             "a rule that could not read its subject must not stop anybody"
@@ -1177,6 +1250,17 @@ mod tests
     /// nothing. Three properties together are what "could not run" means: the result is
     /// not empty, every finding names an unavailability rather than a phantom, and nothing
     /// in it can stop a build.
+    ///
+    /// The count is two rather than three since `P10-SYNTAX-V2`, and the difference is
+    /// worth stating because it is a guarantee that changed rather than a fixture that
+    /// moved. A universe declared in a file whose fact was never read is no longer
+    /// discovered at all: discovery reads the fact, and there is no fact. The rule used to
+    /// find it in the text and report the claim as withheld, which was the same bypass
+    /// `OD-RULES-001` closed for check names — a rule reaching around its own fact layer.
+    /// What is kept is the property this test is named for: a run that read nothing renders
+    /// as one finding per unread file and never as a clean tree. What is given up is
+    /// per-claim detail inside a file nobody read, which is a sentence about a subject the
+    /// rule never saw. `OD-SYNTAX-002` records the trade.
     #[test]
     fn Test_An_Empty_Store_Should_Not_Report_A_Clean_Tree()
     {
@@ -1200,8 +1284,8 @@ mod tests
                     return finding.applicability == Applicability::DependencyUnavailable;
                 })
                 .count(),
-            3,
-            "two unread subjects and one claim that could not be resolved: {findings:?}"
+            2,
+            "one finding per unread subject: {findings:?}"
         );
         assert!(
             findings
@@ -1307,14 +1391,16 @@ mod tests
             claim.summary
         );
 
-        // And the unreadable subject is still reported, twice, exactly as before.
+        // And the unreadable subject is still reported — once now rather than twice. It
+        // used to be counted by the text side as well, which was this rule parsing the file
+        // itself; there is one report because there is one reading.
         assert_eq!(
             findings
                 .iter()
                 .filter(|finding| return finding.subject_name == "broken.rs")
                 .count(),
-            2,
-            "both readings of the unreadable file must still be reported: {findings:?}"
+            1,
+            "the unreadable file must still be reported: {findings:?}"
         );
     }
 
@@ -1349,22 +1435,31 @@ mod tests
         let mut reader = world.Reader();
         let findings = Check_Completeness_Mirrors(&sources, &mut reader);
 
-        let claim = findings
-            .iter()
-            .find(|finding| return finding.subject_name == "T")
-            .expect("the universe is discovered from a text syn can still read");
-
-        assert_eq!(claim.gate, GateCategory::Advisory);
-        assert_eq!(claim.applicability, Applicability::DependencyUnavailable);
+        // Since `P10-SYNTAX-V2` the claim is not judged at all, because the universe is not
+        // discovered: discovery reads the fact and this file has none. The property the
+        // test is named for is unchanged and stronger — nothing here is a phantom — and the
+        // subject is still reported, which is what keeps the run from rendering clean.
         assert!(
-            !claim.Can_Fail_A_Build(),
-            "the file that would have resolved this claim is the one the index is short \
-             of: {claim:?}"
+            !findings.iter().any(|finding| return finding.subject_name == "T"),
+            "a claim in a file the rule never read must not be judged at all: {findings:?}"
+        );
+
+        let unread = findings
+            .iter()
+            .find(|finding| return finding.subject_name == "a.rs")
+            .expect("the subject whose fact was missing must be reported");
+
+        assert_eq!(unread.gate, GateCategory::Advisory);
+        assert_eq!(unread.applicability, Applicability::DependencyUnavailable);
+        assert!(
+            !unread.Can_Fail_A_Build(),
+            "a rule that did not read a subject must not stop anybody over it: {unread:?}"
         );
         assert!(
-            claim.summary.contains("the check index is short a.rs"),
-            "{}",
-            claim.summary
+            findings
+                .iter()
+                .all(|finding| return finding.gate != GateCategory::Blocking),
+            "nothing may be reported as a phantom out of a file nobody read: {findings:?}"
         );
     }
 
@@ -1464,18 +1559,24 @@ mod tests
         let mut reader = world.Reader();
         let findings = Check_Completeness_Mirrors(&[source], &mut reader);
 
-        let claim = findings
+        // With nothing offering, no fact exists and no universe is discovered — so the
+        // claim is not judged rather than judged leniently. `MissingCapability` is still
+        // what the run reports, on the subject instead of on the claim, and the finding
+        // that must never appear is a phantom.
+        let unread = findings
             .iter()
-            .find(|finding| return finding.subject_name == "T")
-            .expect("the universe is judged");
+            .find(|finding| return finding.subject_name == "a.rs")
+            .expect("a run with no provider must report the subject it could not read");
 
-        assert_eq!(claim.applicability, Applicability::MissingCapability);
-        assert_eq!(claim.gate, GateCategory::Advisory);
-        assert!(!claim.Can_Fail_A_Build());
+        assert_eq!(unread.applicability, Applicability::MissingCapability);
+        assert_eq!(unread.gate, GateCategory::Advisory);
+        assert!(!unread.Can_Fail_A_Build());
         assert!(
-            claim.summary.contains("no check index for this name to be absent from"),
-            "{}",
-            claim.summary
+            findings
+                .iter()
+                .all(|finding| return finding.gate != GateCategory::Blocking),
+            "with no provider admitted there is no index for a name to be absent from, so \
+             nothing may be called a phantom: {findings:?}"
         );
     }
 
@@ -1578,15 +1679,68 @@ mod tests
         let mut reader = world.Reader();
         let findings = Check_Completeness_Mirrors(&[source], &mut reader);
 
-        let claim = findings
+        // The floor keeps the scanner's answer out, so no fact reaches the rule and the
+        // universe is not discovered. What the run reports is the subject, as a missing
+        // capability — and crucially not as a universe that declares no mirror, which is
+        // the downgrade `nomos.syntax.items.v2` and this floor both exist to prevent.
+        let unread = findings
             .iter()
-            .find(|finding| return finding.subject_name == "T")
-            .expect("the universe is still discovered from its text");
+            .find(|finding| return finding.subject_name == "a.rs")
+            .expect("the subject no admitted provider answered for must be reported");
 
-        assert_eq!(claim.applicability, Applicability::MissingCapability);
+        assert_eq!(unread.applicability, Applicability::MissingCapability);
         assert!(
-            !claim.Can_Fail_A_Build(),
+            !unread.Can_Fail_A_Build(),
             "with only a scanner admitted the rule could not run, so it may not block"
+        );
+        assert!(
+            findings
+                .iter()
+                .all(|finding| return finding.gate != GateCategory::Blocking),
+            "an approximate provider must not be able to produce a blocking finding here"
+        );
+    }
+
+    /// A universe read through a provider that cannot see doc comments is not an admitted
+    /// gap.
+    ///
+    /// The property `P10-SYNTAX-V2` exists for, at the end of the chain. The floor above
+    /// keeps today's scanner out; this is what happens when some future provider is
+    /// *admitted* and still cannot read documentation. Its payload spells both fields "not
+    /// observed", so the rule reports a file it could not judge — never a list that
+    /// declares no mirror, which would turn a phantom into a gap somebody has already
+    /// accepted.
+    #[test]
+    fn Test_A_Universe_Read_Through_A_Blind_Provider_Should_Not_Be_An_Admitted_Gap()
+    {
+        let source = Source(
+            "a.rs",
+            "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        );
+
+        let world = World::Offering(&[(PARSER, Parser_Guarantee())]).Materializing(
+            &source,
+            nomos_cap_syntax::SCHEMA,
+            Blind_Payload(&["T"]),
+        );
+        let mut reader = world.Reader();
+        let findings = Check_Completeness_Mirrors(&[source], &mut reader);
+
+        let unobserved = findings
+            .iter()
+            .find(|finding| return finding.subject_name == "a.rs")
+            .expect("a file whose provider saw no documentation must be reported");
+
+        assert_eq!(unobserved.applicability, Applicability::Unparseable);
+        assert!(
+            unobserved.summary.contains("documentation"),
+            "the finding must name the field that was not observed: {}",
+            unobserved.summary
+        );
+        assert!(
+            !findings.iter().any(|finding| return finding.subject_name == "T"),
+            "the universe must not be judged out of a payload that observed nothing about \
+             it: {findings:?}"
         );
     }
 
@@ -1603,7 +1757,7 @@ mod tests
         let world = World::Offering(&[(PARSER, Parser_Guarantee())]).Materializing(
             &source,
             "nomos.syntax.items.v9",
-            Payload(&["Test_From_The_Future"]),
+            Payload(&source, &["Test_From_The_Future"]).expect("the fixture parses"),
         );
         let mut reader = world.Reader();
         let findings = Check_Completeness_Mirrors(&[source], &mut reader);
