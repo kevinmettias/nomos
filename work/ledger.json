@@ -3841,7 +3841,8 @@
           "crates/host/nomos-cli/src/spec.rs",
           "crates/host/nomos-cli/tests/freshness.rs",
           ".github/workflows/gate.yml",
-          "diagrams"
+          "diagrams",
+          ".gitignore"
         ],
         "patterns": []
       },
@@ -3860,6 +3861,59 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-ECOSYSTEM-BOUNDARY",
+      "title": "Nomos, KWB, XVPE and repository tooling have no recorded ownership boundary, and the only thing written down about the seam is a dependency rule",
+      "why": "Four products share one design conversation and nothing in this repository records where one ends and the next begins. XVPE appears here as a style sibling and in D-130, which decides that no crate depends on it before Phase 5 and never by path - a dependency rule rather than an ownership rule. KWB appears five times, all incidental. So the seam that decides whether a subsystem belongs to knowledge, to generic runtime, to software engineering reality, or to the machinery that only exists to build this repository, is currently held in conversation and in nobody file. OD-AGENT-001 refused to write it into AGENTS.md, correctly: an instruction file nobody reviews would have promoted a design discussion into normative architecture. That refusal left a clean placeholder saying the question is unresolved, and this item is the answer going where an answer belongs. It is worth doing before more work accumulates across the seam, because every subsystem placed without it is a placement that later has to be argued about rather than read.",
+      "done_when": "A canonical record states what each of the four owns, and states the two projection boundaries rather than only the nouns - knowledge and rationale becoming an executable software contract by a governed projection, and a generic execution primitive being adapted by a software specific service. It says explicitly that current placement does not prove permanent ownership, and names the subsystems that sit here for bootstrap reasons with a mature home that may be elsewhere. It carries an authority matrix answering which product answers which question, and an anti drift clause: a subsystem moves toward the lowest layer whose semantics fully explain it, and neither reuse alone, nor structure alone, nor current location alone decides it. It identifies any conflict with an existing decision explicitly rather than reinterpreting one quietly. Closed by the record alone: no crate moves, no package is renamed, no dependency changes, no integration is implemented, and AGENTS.md is not touched, because the harness gains a routing line only when a concrete routing question needs it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ECOSYSTEM-001",
+          "crates/spec/nomos-spec-store/records/ARC-ECOSYSTEM-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Be_Refused ... ok\ntest Test_Reopening_Should_Not_Re_Run_Migrations ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n\nrunning 16 tests\ntest Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-79e22d39019203d6.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-f7dc0d942c75731f.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-9f1e4a630321b491.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-790d1d7a443043a4.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-ad97dbebf370ad64.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786342299,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": []
     }
   ]
