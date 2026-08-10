@@ -56,6 +56,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md | authored | 42 | 12 | sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944 |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
@@ -517,6 +518,18 @@ profile: domain-specification
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#38 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#41 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#45 | authored | 2 | Status |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1 | authored | 1 | A record identifier is allocated once, and add refuses a spent one by naming what spent it |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#10 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#11 | authored | 3 | 1. Two refusals, because there are two remedies |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#15 | authored | 3 | 2. The store decides both, and the command layer supplies the repository |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#20 | authored | 3 | 3. Both comparisons go through `Territory::Intersect` |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#23 | authored | 3 | 4. Only record identifiers, and only open items |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#26 | authored | 3 | 5. `ExitCode::Conflict`, not `Usage` |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#29 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#34 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -14865,6 +14878,316 @@ and `P11-ADD-CALL-SITE`, which carries the two files the first item's territory 
 reserve. The second item exists because there is no `work edit` and widening a claim
 mid-flight is what makes a declared territory worthless; the two territories are disjoint and
 were held at once, which is the arrangement `OD-LEDGER-001` describes.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it · hash: sha256:dd2104302e3146efb323cf9a4c9c91ab791a651d645606707994a193a4f7f6f8*
+
+# A record identifier is allocated once, and add refuses a spent one by naming what spent it
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#2
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#3
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Question · hash: sha256:84442ee11fdc6b3dd0e4d8ee5ecb8420733616bf36fbb3bc6b620120bc3ca79a*
+
+`work add` refused a duplicate item identifier and nothing else. An author reserving a record
+identifier somebody had already published — or one another open item had already spoken for —
+was told nothing, and the only guard was remembering to look.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#4
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Question · hash: sha256:2460401e650485f3ab039608307c4963c4614e64d445d2fba3dd41f2bbe816bd*
+
+`P10-ADD-PROMISE` closed by narrowing the doc comment that promised a territory check rather
+than by adding one, so the promise came out of the prose and the check never went in.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#5
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#6
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Measured · hash: sha256:9b0c409b102d1025d8b3cc9e90a9513d524d8e1fe7f9246a73f79681ba08b3c3*
+
+Five collisions, and one of them happened to this item.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#7
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Measured · hash: sha256:92346de4b19be01c5a742915b820100c058fa6f8284cae05c8cfda69e7a530f6*
+
+**Two on published identifiers.** `P10-DERIVED-FACT` reserved `docs/records/OD-ANALYSIS-002`,
+published by `0bcaf6d` under `P10-DEPENDENT-EDGE`. `P10-REQUEST-LAYOUT` reserved
+`docs/records/OD-SPEC-011`, published by `515fc26` under `P10-VOCABULARY-REFUSAL`. Both items
+are Declined now, so no open item carries a spent identifier today; the mechanism that let it
+happen was untouched by that.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#8
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Measured · hash: sha256:029fc9753dce259ead24a969ab1e4afb2b13e710ef7d6aa95be18553cee6438b*
+
+**Three on unspent ones.** Three open items reserved `OD-LEDGER-020` and two reserved
+`OD-LEDGER-021`, each authored by a session taking the next free `OD-LEDGER` number. That
+reddened `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` against the repository's own
+board, and with it every predicate naming `-p nomos-ledger`. Clearing the two required
+declining and re-authoring four items, because there is no `work edit`. Then, during the
+clearing, `P11-DISPATCH-SPLIT` and this item's first reissue both took `OD-LEDGER-022` — one
+session's `add` landing between another's board read and its own — and the guard went red a
+second time for the same reason.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#9
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Measured · hash: sha256:0766dfab427c7f1b16e3289fd292f3999c88f622c10b3c2a7727c43123ccd113*
+
+**The two halves fail differently, and only one is visible to any existing check.** The guard
+above reddens on two *open* items sharing an identifier. One open item on a *published* one
+excludes nobody, so nothing reddens at all: the author discovers it mid-claim, when there is
+no longer a way to move it.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#10
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#11
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 1. Two refusals, because there are two remedies · hash: sha256:091ae4c1e89cfbc6ef97270aa9cc5f13ae82a843f58f99d39269c13624ec3def*
+
+### 1. Two refusals, because there are two remedies
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#12
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 1. Two refusals, because there are two remedies · hash: sha256:2615878395ce2c4ffce7e38c89db6c8192d08bfee0c222ac022e97be7d096120*
+
+`AddRefusal::RecordPublished { identifier, file }` and
+`AddRefusal::RecordReserved { identifier, item }`.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#13
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 1. Two refusals, because there are two remedies · hash: sha256:80d225067f65156708f89ca5cb334fc970a363906bb7b0d04ac2b1d62387cb53*
+
+A published identifier is spent forever and the only fix is choosing another number. A
+reserved one belongs to an item that may yet be retired, so the author has a second option
+that does not exist in the first case. One message for both would send half of each group to
+the wrong remedy — the mis-subject `OD-LEDGER-014` measured one verb over.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#14
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 1. Two refusals, because there are two remedies · hash: sha256:836f78838a629865d50da1926f5a3d5bed9f3b460d61b64867747e7ad33ee289*
+
+Each names what spent it rather than only that something did. An author told
+"`OD-LEDGER-025` is taken" has to go and find out by what, and the thing that answers that is
+a filename or an item identifier.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#15
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 2. The store decides both, and the command layer supplies the repository · hash: sha256:f8b849a0af5835ebefe6c4c9448e6e7e62b75905748c3b4f46dc07a98e250423*
+
+### 2. The store decides both, and the command layer supplies the repository
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#16
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 2. The store decides both, and the command layer supplies the repository · hash: sha256:9d78e282edcd4770132bcd60f529740ecd8e3708dfad292ff8aaf06ca1143574*
+
+`OD-LEDGER-021` put `add` behind one lock and left the command layer its input and its
+reporting. Both comparisons are therefore decided in `FileLedger::Add`, inside
+`Decide_Under_Lock`, and `Add` takes the published record set as an argument.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#17
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 2. The store decides both, and the command layer supplies the repository · hash: sha256:9688c8ac8bbce8a308b17ef6ecf4e395e054d8bb6d82c3af1b84ebb052d90d61*
+
+The open-item comparison **has** to be there. Two sessions each taking the next free number
+read a board without the other's item and are both told it is free, which is exactly how
+`OD-LEDGER-022` went twice. A check against a document loaded before the lock is the check
+that just failed.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#18
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 2. The store decides both, and the command layer supplies the repository · hash: sha256:0d718333e6677bc86ed2899579b6afce366a25b80a826edc4733225ab40ae61e*
+
+The published comparison does not need the lock — a file on disk is not racing the board —
+and it is inside it anyway, because the argument is already in hand and a second code path
+that decides the same kind of question differently is worth more than the microseconds.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#19
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 2. The store decides both, and the command layer supplies the repository · hash: sha256:7732a58b38dc67a47910a87fca988d6906cb6d10abca596019ccaa978440d458*
+
+What the store does **not** do is discover the repository. `nomos-ledger` is a general
+exclusion ledger over territories; it already stretches as far as it should by knowing what a
+record filename folds to, and teaching it to walk a source tree would make a substrate crate
+an authority on this repository's directory layout. So `nomos-cli` enumerates `docs/records`
+and hands the result in. A caller with nothing to declare passes an empty territory, which is
+honest — it is saying it does not know — and the open-item half still holds.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#20
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 3. Both comparisons go through `Territory::Intersect` · hash: sha256:3bb8afacd90795d2e673df3dcd36dce6ed90afe8453f316ec2aa16e3a76ee751*
+
+### 3. Both comparisons go through `Territory::Intersect`
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#21
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 3. Both comparisons go through `Territory::Intersect` · hash: sha256:89766c8755a5066554e415b24d822802d347cbbf9873414b14e7d3a7f9c63093*
+
+Not a containment rule written beside it. `Intersect` folds a record filename onto the
+identifier it carries, which is what makes `docs/records/OD-LEDGER-020` and
+`docs/records/OD-LEDGER-020-a-slug.md` one subject without anything in `add` knowing the
+grammar. `OD-LEDGER-016` is that decision and this is its second caller.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#22
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 3. Both comparisons go through `Territory::Intersect` · hash: sha256:5f86824aceb7b0838a874ad4191ccd3870075bd2a82025a2c0afe748c47b6cb6*
+
+It is applied one authored path at a time, so the refusal can name which path collided —
+`Intersection::Overlaps` carries subject digests, and a digest is not a sentence anybody can
+act on.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#23
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 4. Only record identifiers, and only open items · hash: sha256:298e5a3ad1f55cf063fbe67e6c489cd21908cb9541bf3952b485e0b9d48e5d72*
+
+### 4. Only record identifiers, and only open items
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#24
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 4. Only record identifiers, and only open items · hash: sha256:75b09c164b40e49414ad7044fa3046cadfa8c4ab596e8afa77957617f58dda0c*
+
+**Only record identifiers.** `add` does not refuse overlapping territory in general and must
+not start: items overlap constantly and claims are what serialize them. What is guarded is
+the one reservation an author cannot recover from mid-claim.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#25
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 4. Only record identifiers, and only open items · hash: sha256:f347b37c74fcfdaa5ea24aba8c5a2835699fb308a80eae1d4b40439e47ee1f1f*
+
+**Only open items.** A `Done` or `Declined` item's territory is history, in the sense
+`Is_Open` already gives that word. Refusing against closed items would make every allocated
+number a permanent claim, and since almost every item ever finished reserved a record, the
+next author could allocate nothing at all.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#26
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 5. `ExitCode::Conflict`, not `Usage` · hash: sha256:45fbfc190bc944f1f83e37f9c80e4aa92914295859a43446696941f83b4eff3e*
+
+### 5. `ExitCode::Conflict`, not `Usage`
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#27
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 5. `ExitCode::Conflict`, not `Usage` · hash: sha256:4c7eda7cb5d17f9ccbd02ec07ab90eb9367f8093c2d1b5d978f3eb88c5b393a7*
+
+The item's `done_when` asked for "a usage refusal rather than a store error", and the
+operative contrast is with `StoreError` — this is the author's to fix, not a broken ledger.
+Between the two candidates the decision is `Conflict`, the code `AlreadyPresent` already
+gives a taken item identifier, because the reason given is the same one: an identifier
+somebody else holds, resolved by choosing another.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#28
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / The Decision / 5. `ExitCode::Conflict`, not `Usage` · hash: sha256:eaa6b33d11c4adbb680da23d7b6bd0a093e7b8f64b44f6025fb7d5d2b2178cf9*
+
+`Usage` is the parser's code for a malformed invocation. An agent that saw it would go and
+inspect its own argument syntax, which is not the fix, and the invocation here is perfectly
+well formed. The refusal text is what tells the two record cases apart; the exit code tells
+an agent what *kind* of thing happened, and this is a kind that already had one.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#29
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#30
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Considered And Rejected · hash: sha256:1dbe606c7cc6c42c0865925bedca45bdc29cb6b23849d2b608fef5463993625c*
+
+**Enumerating `docs/records` inside the store.** It would put both halves in one place, and
+`FileSystem` has no directory listing to do it with — `Read_To_String`, `Replace_Atomically`
+and `Exists` are the whole port. Adding one is a band-15 change, and the reason not to is not
+that it was out of this item's territory: it is decision 2's, that a general ledger should not
+become a repository scanner.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#31
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Considered And Rejected · hash: sha256:c7d6372605d394e75c1ab1979daeecfe21e7c09637e5e1b98a7c5a0661af2923*
+
+**Probing the registration file instead.**
+`crates/spec/nomos-spec-store/records/<ID>.record` is an exact path, so `Exists` alone would
+answer without any listing. Rejected: it would hardcode one crate's directory into
+`nomos-ledger`, which is a worse coupling than the one it avoids, and it would miss a record
+file written but not yet registered.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#32
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Considered And Rejected · hash: sha256:b026eff621c41c765e1cef4817cd1802467ae0269023bc000dd324f256e62458*
+
+**Refusing against closed items too.** Decision 4. It reads as the safer choice and refuses
+the whole board.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#33
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Was Considered And Rejected · hash: sha256:42c0b06f8e503b8d40864fa2b71f67335d8be55fa3bf6e734217cf5d128c3a7b*
+
+**A doc comment telling authors to check.** `P10-ADD-PROMISE` already did that, and the five
+collisions above all happened afterwards.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#34
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#35
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Holds It · hash: sha256:bb1821c40f4a5ddde42460f957131f75315f2ad5b5914cc393837d735cd7e575*
+
+Six tests in `crates/substrate/nomos-ledger/tests/exclusion_holds.rs`, of which three are
+controls:
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#36
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Holds It · hash: sha256:5fa1ea142bd776b0a95f398a01575c6a96c25bbf682c3236759c150b4ead849e*
+
+- a published identifier is refused and the **file** is named;
+- an identifier another open item reserves is refused and the **item** is named, including
+  when the two authors spelled it differently — one as the bare identifier, one as the file
+  they were about to write;
+- the two refusals are different values *and* different sentences;
+- **an unspent identifier is still accepted**, beside published ones — including
+  `OD-LEDGER-0071` alongside a reservation of `OD-LEDGER-007`, because an ordinal is compared
+  as a whole component and a prefix rule would say `007` was taken;
+- **a closed item's reservation reserves nothing**, for both `Done` and `Declined`;
+- **ordinary shared territory is still accepted**, which is the guard against this check
+  quietly becoming the territory refusal `add` deliberately does not make.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#37
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / What Holds It · hash: sha256:7850d6b83817ebf3b083eeb27b0c7cb1ae8a737840c42457e68935214ce67356*
+
+No item on the board carries a spent or duplicated identifier as this lands, so the check is
+proved by its own tests rather than by what it happens to catch today.
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38
+
+*revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#39
+
+*revision: authored · kind: prose · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it / Status · hash: sha256:42d4b0a0041e4a0ac6551f9c770da781419017924bbfd605f33824f93e2a6f55*
+
+Closed by P11-ADD-IDENTIFIER-GUARD, which is `P11-SPENT-RECORD-ID` reissued twice — once for
+`OD-LEDGER-020` and once for `OD-LEDGER-022`, both collisions of the kind it exists to
+prevent.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

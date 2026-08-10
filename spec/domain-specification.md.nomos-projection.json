@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:78a9395321be2b0421dd29d75f62b1bdea09160478c4bb8aab0e6fe6f84b5457",
-  "inputs_digest": "sha256:4b6f97e1f64b36740a275fcb10206174e2af1cc4493b4f4012c06ce86c92881a",
+  "content_digest": "sha256:90459fe9c8d3bffd247c0cd1cb398050872eff8583d821cb7532f4b50b2329c3",
+  "inputs_digest": "sha256:d346fc2ed7e6d97e21cf888f14a5bd11770f4d0b048fec6691684e735f1f34e2",
   "sections": [
     [
       "Documents",
-      70
+      71
     ],
     [
       "Sections",
-      661
+      673
     ],
     [
       "Source blocks",
-      2611
+      2650
     ]
   ],
   "inputs": [
@@ -249,6 +249,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored",
       "hash": "sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored",
+      "hash": "sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640"
     },
     {
       "content": "documents",
@@ -2529,6 +2534,66 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#45",
       "hash": "sha256:8106930ce0e81d2727b0b2174c8736bd3d1825015422b54d885637f5b6269635"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1",
+      "hash": "sha256:cb963ea545cd20befb0721a680a009337cf772481c631dc76aac4f76ba50a744"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#2",
+      "hash": "sha256:5788bf5dfe806151f40d2f65261b73bf6f658be6199054e5c860dcc05e94bbfd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#5",
+      "hash": "sha256:08b65bcf7ccb645027df95d6bee1286d8f42825888fe208d9629e6bf5ee57623"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#10",
+      "hash": "sha256:3fa0d0d1686fdcafa4c4c2947e83ac861fecd1106ac989e4c7697cd6e4fffe29"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#11",
+      "hash": "sha256:d8c22eaeaa3bb9eacc7e4006e77c423b0f19ffd1562698c4e39e91861f260446"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#15",
+      "hash": "sha256:b5f99b37042f3bcc396b75a27f8f5f6b92ca1364c0ed4eafc2c5d1d8c2fc57c8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#20",
+      "hash": "sha256:732beb098f6caa42d091b1f95da2b3a5778a2f4424aa93645f8944500d7db3a6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#23",
+      "hash": "sha256:fc653a27a0cb8e27aabd101a1424bc878755ce76863a345c2ace9d8f899a9c26"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#26",
+      "hash": "sha256:884aa423336a2f60bfc7ecd643c2c2b1a8ee77a891b655da13860f715e4599a0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#29",
+      "hash": "sha256:e31e6e544500cbea47d01a7229232ea52302ee426a8f5fb18624cfafb93d4722"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#34",
+      "hash": "sha256:1c4593d80592ca2263c19fd1aa87bc83a006b802767dfa0902cd23fc76605722"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38",
+      "hash": "sha256:5d6370ab9e2806729f79a8df8988700a00b59d9b5f3cfc0bd64a1dac14de7b4f"
     },
     {
       "content": "headings",
@@ -12094,6 +12159,201 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#46",
       "hash": "sha256:79291756764772a86041380b50e752760605f6d250191b5167ae8aab21f3301e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1",
+      "hash": "sha256:dd2104302e3146efb323cf9a4c9c91ab791a651d645606707994a193a4f7f6f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#3",
+      "hash": "sha256:84442ee11fdc6b3dd0e4d8ee5ecb8420733616bf36fbb3bc6b620120bc3ca79a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#4",
+      "hash": "sha256:2460401e650485f3ab039608307c4963c4614e64d445d2fba3dd41f2bbe816bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#6",
+      "hash": "sha256:9b0c409b102d1025d8b3cc9e90a9513d524d8e1fe7f9246a73f79681ba08b3c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#7",
+      "hash": "sha256:92346de4b19be01c5a742915b820100c058fa6f8284cae05c8cfda69e7a530f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#8",
+      "hash": "sha256:029fc9753dce259ead24a969ab1e4afb2b13e710ef7d6aa95be18553cee6438b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#9",
+      "hash": "sha256:0766dfab427c7f1b16e3289fd292f3999c88f622c10b3c2a7727c43123ccd113"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#11",
+      "hash": "sha256:091ae4c1e89cfbc6ef97270aa9cc5f13ae82a843f58f99d39269c13624ec3def"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#12",
+      "hash": "sha256:2615878395ce2c4ffce7e38c89db6c8192d08bfee0c222ac022e97be7d096120"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#13",
+      "hash": "sha256:80d225067f65156708f89ca5cb334fc970a363906bb7b0d04ac2b1d62387cb53"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#14",
+      "hash": "sha256:836f78838a629865d50da1926f5a3d5bed9f3b460d61b64867747e7ad33ee289"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#15",
+      "hash": "sha256:f8b849a0af5835ebefe6c4c9448e6e7e62b75905748c3b4f46dc07a98e250423"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#16",
+      "hash": "sha256:9d78e282edcd4770132bcd60f529740ecd8e3708dfad292ff8aaf06ca1143574"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#17",
+      "hash": "sha256:9688c8ac8bbce8a308b17ef6ecf4e395e054d8bb6d82c3af1b84ebb052d90d61"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#18",
+      "hash": "sha256:0d718333e6677bc86ed2899579b6afce366a25b80a826edc4733225ab40ae61e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#19",
+      "hash": "sha256:7732a58b38dc67a47910a87fca988d6906cb6d10abca596019ccaa978440d458"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#20",
+      "hash": "sha256:3bb8afacd90795d2e673df3dcd36dce6ed90afe8453f316ec2aa16e3a76ee751"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#21",
+      "hash": "sha256:89766c8755a5066554e415b24d822802d347cbbf9873414b14e7d3a7f9c63093"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#22",
+      "hash": "sha256:5f86824aceb7b0838a874ad4191ccd3870075bd2a82025a2c0afe748c47b6cb6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#23",
+      "hash": "sha256:298e5a3ad1f55cf063fbe67e6c489cd21908cb9541bf3952b485e0b9d48e5d72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#24",
+      "hash": "sha256:75b09c164b40e49414ad7044fa3046cadfa8c4ab596e8afa77957617f58dda0c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#25",
+      "hash": "sha256:f347b37c74fcfdaa5ea24aba8c5a2835699fb308a80eae1d4b40439e47ee1f1f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#26",
+      "hash": "sha256:45fbfc190bc944f1f83e37f9c80e4aa92914295859a43446696941f83b4eff3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#27",
+      "hash": "sha256:4c7eda7cb5d17f9ccbd02ec07ab90eb9367f8093c2d1b5d978f3eb88c5b393a7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#28",
+      "hash": "sha256:eaa6b33d11c4adbb680da23d7b6bd0a093e7b8f64b44f6025fb7d5d2b2178cf9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#29",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#30",
+      "hash": "sha256:1dbe606c7cc6c42c0865925bedca45bdc29cb6b23849d2b608fef5463993625c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#31",
+      "hash": "sha256:c7d6372605d394e75c1ab1979daeecfe21e7c09637e5e1b98a7c5a0661af2923"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#32",
+      "hash": "sha256:b026eff621c41c765e1cef4817cd1802467ae0269023bc000dd324f256e62458"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#33",
+      "hash": "sha256:42c0b06f8e503b8d40864fa2b71f67335d8be55fa3bf6e734217cf5d128c3a7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#34",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#35",
+      "hash": "sha256:bb1821c40f4a5ddde42460f957131f75315f2ad5b5914cc393837d735cd7e575"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#36",
+      "hash": "sha256:5fa1ea142bd776b0a95f398a01575c6a96c25bbf682c3236759c150b4ead849e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#37",
+      "hash": "sha256:7850d6b83817ebf3b083eeb27b0c7cb1ae8a737840c42457e68935214ce67356"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#39",
+      "hash": "sha256:42d4b0a0041e4a0ac6551f9c770da781419017924bbfd605f33824f93e2a6f55"
     },
     {
       "content": "blocks",
