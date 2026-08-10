@@ -2142,10 +2142,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-spec-determinism-w8",
+        "acquired_at": 1786337442,
+        "lease_expires_at": 1786348242
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2155,7 +2159,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "probe2",
+          "reason": "Held only to measure how many items the board grants at once after P10-SURFACE-GRAIN. Five, mutually disjoint, where the same probe before it got one. Released unstarted; the work is dispatched under its own holders.",
+          "abandoned_at": 1786337441
+        }
+      ]
     },
     {
       "id": "P10-RECORD-LOCK",
@@ -2659,10 +2669,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-package-seam-w9",
+        "acquired_at": 1786338964,
+        "lease_expires_at": 1786349764
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2675,7 +2689,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "probe2",
+          "reason": "Held only to measure how many items the board grants at once after P10-SURFACE-GRAIN. Five, mutually disjoint, where the same probe before it got one. Released unstarted; the work is dispatched under its own holders.",
+          "abandoned_at": 1786337441
+        }
+      ]
     },
     {
       "id": "P10-LAPSE-TAKEOVER",
@@ -2690,8 +2710,8 @@
           "crates/spec/nomos-spec-store/records/OD-LEDGER-012.record",
           "tests/contract/surface/nomos-ledger.txt",
           "README.md",
-          "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md",
-          "docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md",
+          "docs/records/OD-LEDGER-006",
+          "docs/records/OD-LEDGER-009",
           "docs/records/OD-LEDGER-012"
         ],
         "patterns": []
@@ -2737,10 +2757,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-fact-bypass-w5",
+        "acquired_at": 1786337441,
+        "lease_expires_at": 1786351841
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2760,7 +2784,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "probe2",
+          "reason": "Held only to measure how many items the board grants at once after P10-SURFACE-GRAIN. Five, mutually disjoint, where the same probe before it got one. Released unstarted; the work is dispatched under its own holders.",
+          "abandoned_at": 1786337441
+        }
+      ]
     },
     {
       "id": "P10-VACUITY-HOME",
@@ -2968,7 +2998,7 @@
           "crates/host/nomos-cli/src/work.rs",
           "tests/contract/surface/nomos-ledger.txt",
           "crates/spec/nomos-spec-store/records/OD-LEDGER-014.record",
-          "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md",
+          "docs/records/OD-LEDGER-001",
           "docs/records/OD-LEDGER-014"
         ],
         "patterns": []
@@ -3011,10 +3041,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-lock-bypass-w6",
+        "acquired_at": 1786337441,
+        "lease_expires_at": 1786348241
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -3028,7 +3062,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "probe2",
+          "reason": "Held only to measure how many items the board grants at once after P10-SURFACE-GRAIN. Five, mutually disjoint, where the same probe before it got one. Released unstarted; the work is dispatched under its own holders.",
+          "abandoned_at": 1786337441
+        }
+      ]
     },
     {
       "id": "P10-RECORD-STEM",
@@ -3046,7 +3086,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -3062,8 +3102,39 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
-      "abandoned": []
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": " ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.52s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-1afcd92160e5df68.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-4a08fbfdcb38d532.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-bbd63b4e0120614c.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-99134fb2521fbdfa.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-79e22d39019203d6.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-f7dc0d942c75731f.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-9f1e4a630321b491.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-790d1d7a443043a4.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-ad97dbebf370ad64.exe)\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786339004,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [
+        {
+          "holder": "probe2",
+          "reason": "Held only to measure how many items the board grants at once after P10-SURFACE-GRAIN. Five, mutually disjoint, where the same probe before it got one. Released unstarted; the work is dispatched under its own holders.",
+          "abandoned_at": 1786337441
+        }
+      ]
     },
     {
       "id": "P10-TEST-MASK",

@@ -240,7 +240,8 @@ pub fn Subject_Of(path: &str) -> SubjectId
 /// Reduces an authored path to the text its identity is computed from.
 ///
 /// Separators are unified, `./` prefixes and repeated or trailing separators are
-/// dropped, and the result is lowercased.
+/// dropped, the result is lowercased, and a record filename is reduced to the record
+/// identifier it carries.
 ///
 /// # Why case is folded
 ///
@@ -252,6 +253,55 @@ pub fn Subject_Of(path: &str) -> SubjectId
 /// Folding has a cost, and it is the honest one to pay: on Linux those really are two
 /// files, so two agents who could have worked in parallel are serialized instead. That
 /// costs throughput. The alternative costs an edit, and an edit does not come back.
+///
+/// # Why a record filename folds onto its identifier
+///
+/// `OD-LEDGER-001`'s authoring rule tells an item to reserve the record it will write *by
+/// identifier*: `docs/records/OD-<AREA>-<NNN>`, not the directory records live in and not
+/// a pattern. The reason it says identifier is good and has not changed — the slug on the
+/// end of the filename is the writing, and the writing is not knowable when the item is
+/// authored. So the identifier is the only name two items can both write down in advance,
+/// which makes it the coordination token whether or not it is a path.
+///
+/// It is not a path. Nothing is ever at `docs/records/OD-LEDGER-006`; the file is
+/// `docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md`.
+/// Compared as paths the two are *siblings* — neither is a prefix of the other at a
+/// separator — so before this rule an item reserving the identifier excluded nobody from
+/// the file, and an item that named the filename outright excluded nobody who had
+/// reserved the identifier. Two items could hold one record between them and both be told
+/// the ledger was disjoint.
+///
+/// That is the same failure as `src/Main.rs` against `src/main.rs`, arriving by a
+/// different route, and it has the same answer: **two spellings of one thing are one
+/// subject.** A record has two spellings — the identifier it was allocated and the file it
+/// became — and folding the second onto the first is what makes them one. Containment is
+/// deliberately *not* where this lives. The identifier does not contain the record; it is
+/// the record, and saying so here leaves [`Contains_Or_Equals`] the pure path relation it
+/// has always been, and fixes [`Subject_Of`] — and so [`Territory::As_Subject_Set`] — at
+/// the same time. A rule written into containment would have left the identity form still
+/// answering that the two are unrelated.
+///
+/// # Why it is scoped to `docs/records`
+///
+/// Because the general version of it destroys the ledger. "A name contains the names that
+/// extend it with a hyphen" would make `crates/nomos-spec` contain
+/// `crates/nomos-spec-model`, and the whole repository would serialize — the exact case
+/// [`Contains_Or_Equals`] appends a separator to avoid, and
+/// `Test_A_Sibling_With_A_Shared_Prefix_Should_Not_Be_Contained` is the guard on it.
+///
+/// So the rule is confined to the one directory where the identifier-to-filename relation
+/// is a stated fact rather than an inference from the shape of a name: every canonical
+/// record's registration under `crates/spec/nomos-spec-store/records/<ID>.record` writes
+/// that mapping down as a `path:` line, and `OD-SPEC-006` makes `docs/records` the
+/// authoring substrate and nothing else. Outside it, `tests/fixtures/case-001` and
+/// `tests/fixtures/case-001-expected.md` stay two subjects, because there the resemblance
+/// really is a coincidence.
+///
+/// Inside it the residual risk is over-folding, not under-folding: a file in
+/// `docs/records` whose name happens to fit the grammar without being a record would fold
+/// onto a name it does not mean, and two items would serialize over a record neither is
+/// writing. That is the same trade case folding already makes and it falls the same way —
+/// over-folding costs throughput, under-folding costs an edit.
 #[must_use]
 pub fn Normalize_Path(path: &str) -> String
 {
@@ -268,7 +318,91 @@ pub fn Normalize_Path(path: &str) -> String
         .collect::<Vec<&str>>()
         .join("/");
 
-    return joined.to_lowercase();
+    let folded = joined.to_lowercase();
+
+    // Applied last, and to the folded text rather than to the authored spelling, so that
+    // `Docs\Records\OD-LEDGER-006-x.md` reaches the same identifier as
+    // `docs/records/od-ledger-006-x.md`. A rule that read the identifier off what the
+    // author typed would have reintroduced, one level up, the hole the folding closes.
+    if let Some(identifier) = Record_Identifier_Form(&folded)
+    {
+        return identifier;
+    }
+
+    return folded;
+}
+
+/// The directory this repository authors its decision records in, normalized.
+///
+/// Named here rather than passed in, because the rule below is about this directory and no
+/// other — see [`Normalize_Path`] for why it has to be.
+const RECORD_DIRECTORY: &str = "docs/records";
+
+/// A record filename reduced to the identifier it carries, or [`None`] if it carries none.
+///
+/// Takes an already-folded path, because the identifier is read off the text and reading
+/// it off two spellings would produce two identifiers.
+///
+/// # The grammar
+///
+/// Every record in this repository is named `<IDENTIFIER>-<slug>.md`, and every identifier
+/// is one or more hyphen-separated words followed by an ordinal: `d-129`, `od-ledger-006`,
+/// `arc-specdb-001`. The ordinal is what *ends* an identifier, so the first all-digit
+/// component is its last component and everything after it is prose. Reading the ordinal
+/// as the first digit group rather than the last is what keeps
+/// `d-130-no-xvpe-dependency-before-phase-5.md` from being read as ending at the `5`.
+///
+/// Two things are deliberately not accepted. A name that does not *begin* with a word is
+/// not an identifier at all — `2026-08-09-notes.md` reaches its first all-digit component
+/// at `08` and would otherwise reduce to `docs/records/2026-08`, and a date is not an
+/// allocation. And a component of digits must match a reservation's ordinal exactly rather
+/// than prefix it, which falls out of comparing whole components: nothing makes
+/// `od-ledger-001` the identifier of `od-ledger-0011-something.md`, because `0011` is one
+/// component and it is not `001`.
+fn Record_Identifier_Form(folded: &str) -> Option<String>
+{
+    let name = folded.strip_prefix(RECORD_DIRECTORY)?.strip_prefix('/')?;
+
+    // Records are flat. Anything deeper is some other thing that happens to live under the
+    // directory, and guessing at its shape is how a rule scoped to one convention escapes
+    // the scope it was given. `docs/records-archive/...` is refused by the same two steps
+    // above: stripping the directory leaves `-archive/...`, which has no leading separator.
+    if name.contains('/')
+    {
+        return None;
+    }
+
+    let stem = name.strip_suffix(".md")?;
+    let mut identifier = String::new();
+
+    for (position, component) in stem.split('-').enumerate()
+    {
+        // An identifier begins with a word. `2026-08-09-notes.md` reaches its first
+        // all-digit component at `08` and would otherwise reduce to `docs/records/2026-08`,
+        // which two unrelated notes from the same month would then share. Requiring a
+        // letter first refuses the whole name rather than the first component of it.
+        if position == 0 && !component.bytes().any(|byte| return byte.is_ascii_alphabetic())
+        {
+            return None;
+        }
+
+        if position > 0
+        {
+            identifier.push('-');
+        }
+        identifier.push_str(component);
+
+        let is_ordinal = position > 0
+            && !component.is_empty()
+            && component.bytes().all(|byte| return byte.is_ascii_digit());
+
+        if is_ordinal
+        {
+            return Some(format!("{RECORD_DIRECTORY}/{identifier}"));
+        }
+    }
+
+    return None;
 }
 
 #[cfg(test)]
@@ -438,6 +572,156 @@ mod tests
             rendered.contains("crates/kernel/nomos-model/src/digest.rs"),
             "a reviewer must be able to read what an item reserves: {rendered}"
         );
+    }
+
+    /// The defect `OD-LEDGER-016` closes, with both spellings written out.
+    ///
+    /// `docs/records/OD-LEDGER-006` is the identifier an item reserves and
+    /// `docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md`
+    /// is the file that identifier was allocated for. They are one record, so they are one
+    /// subject; before the folding they were siblings and compared `Disjoint`.
+    #[test]
+    fn Test_A_Record_Identifier_And_Its_File_Should_Be_One_Subject()
+    {
+        let identifier = "docs/records/OD-LEDGER-006";
+        let file = "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-\
+                    survive-it.md";
+
+        assert_eq!(
+            Subject_Of(file),
+            Subject_Of(identifier),
+            "`{file}` is the file `{identifier}` names, so the two must be one subject"
+        );
+    }
+
+    /// The same thing through the type the ledger actually asks, in both directions.
+    ///
+    /// An item amending an existing record and an item that reserved that record's
+    /// identifier must exclude each other, and which of them wrote which spelling must not
+    /// decide it.
+    #[test]
+    fn Test_Reserving_A_Record_Should_Exclude_The_Writer_Of_Its_File()
+    {
+        let by_identifier = Territory::Of_Files(["docs/records/OD-LEDGER-006"]);
+        let by_file = Territory::Of_Files([
+            "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md",
+        ]);
+
+        assert!(
+            !by_identifier.Intersect(&by_file).Permits_Concurrency(),
+            "reserving a record's identifier must exclude the item that writes its file"
+        );
+        assert!(
+            !by_file.Intersect(&by_identifier).Permits_Concurrency(),
+            "and from the other side, because exclusion is symmetric"
+        );
+
+        // Case and separator folding has to survive the reduction, or the hole closes for
+        // one spelling of the filename and stays open for the next.
+        let shouted = Territory::Of_Files([
+            r"docs\Records\OD-LEDGER-006-A-Reason-Attached-To-A-Transition-Does-Not-Survive-It.MD",
+        ]);
+        assert!(!by_identifier.Intersect(&shouted).Permits_Concurrency());
+    }
+
+    /// Two records are still two records. The reduction must fold a filename onto *its*
+    /// identifier and not onto a neighbouring one.
+    #[test]
+    fn Test_Two_Records_Should_Still_Be_Two_Subjects()
+    {
+        let one = Territory::Of_Files(["docs/records/OD-LEDGER-006"]);
+        let another = Territory::Of_Files([
+            "docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md",
+        ]);
+
+        assert_eq!(one.Intersect(&another), Intersection::Disjoint);
+    }
+
+    /// The nearest miss, and the reason the ordinal is compared as a whole component.
+    ///
+    /// `od-ledger-001` is a prefix of the *text* `od-ledger-0011-...`, and a rule written
+    /// with `starts_with` would fold the hundred-and-first record onto the first — the same
+    /// shape as `crates/a` swallowing `crates/abc`, which is why containment appends a
+    /// separator rather than matching bare text.
+    #[test]
+    fn Test_A_Longer_Ordinal_Should_Be_A_Different_Record()
+    {
+        let first = Territory::Of_Files(["docs/records/OD-LEDGER-001"]);
+        let hundred_and_first =
+            Territory::Of_Files(["docs/records/OD-LEDGER-0011-a-much-later-record.md"]);
+
+        assert_eq!(first.Intersect(&hundred_and_first), Intersection::Disjoint);
+        assert_ne!(
+            Subject_Of("docs/records/OD-LEDGER-0011-a-much-later-record.md"),
+            Subject_Of("docs/records/OD-LEDGER-001")
+        );
+    }
+
+    /// The blast-radius control. The reduction is scoped to one directory, and everywhere
+    /// else a name that merely looks like an identifier is a coincidence.
+    ///
+    /// Both misses are constructed rather than found: a fixture pair outside the record
+    /// directory, and a directory whose *name* extends the record directory's. The second
+    /// is the one a prefix test gets wrong — `docs/records-archive` starts with
+    /// `docs/records` as text and is not inside it.
+    #[test]
+    fn Test_The_Reduction_Should_Not_Escape_The_Record_Directory()
+    {
+        let case = Territory::Of_Files(["tests/fixtures/case-001"]);
+        let expectation = Territory::Of_Files(["tests/fixtures/case-001-expected.md"]);
+
+        assert_eq!(
+            case.Intersect(&expectation),
+            Intersection::Disjoint,
+            "outside `docs/records` an ordinal in a filename means nothing"
+        );
+
+        let record = Territory::Of_Files(["docs/records/OD-LEDGER-001"]);
+        let neighbour =
+            Territory::Of_Files(["docs/records-archive/OD-LEDGER-001-an-old-copy.md"]);
+
+        assert_eq!(
+            record.Intersect(&neighbour),
+            Intersection::Disjoint,
+            "a directory whose name extends `docs/records` is not `docs/records`"
+        );
+    }
+
+    /// A leading digit group is a date, not an allocation, and folding it would invent a
+    /// record called `docs/records/2026` that two unrelated notes would then share.
+    #[test]
+    fn Test_A_Leading_Digit_Group_Should_Not_Be_An_Ordinal()
+    {
+        assert_eq!(
+            Normalize_Path("docs/records/2026-08-09-notes.md"),
+            "docs/records/2026-08-09-notes.md"
+        );
+        assert_eq!(
+            Territory::Of_Files(["docs/records/2026-08-09-notes.md"])
+                .Intersect(&Territory::Of_Files(["docs/records/2026-08-10-notes.md"])),
+            Intersection::Disjoint
+        );
+    }
+
+    /// What is left alone. A file under `docs/records` that carries no ordinal is a file,
+    /// and a registration file elsewhere keeps its extension — that directory is named by
+    /// identifier too, and `records/OD-LEDGER-016.record` is a real path that resolves.
+    #[test]
+    fn Test_A_Path_Without_A_Record_Identifier_Should_Be_Untouched()
+    {
+        for path in [
+            "docs/records/readme.md",
+            "docs/records/OD-LEDGER-006",
+            "crates/spec/nomos-spec-store/records/OD-LEDGER-016.record",
+            "docs/records",
+        ]
+        {
+            assert_eq!(
+                Normalize_Path(path),
+                path.to_lowercase(),
+                "`{path}` carries no record filename to reduce"
+            );
+        }
     }
 
     #[test]
