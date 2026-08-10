@@ -365,6 +365,195 @@ fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
     let _ = std::fs::remove_dir_all(&directory);
 }
 
+/// What an unexpanded pattern does to the board, pinned as measured rather than as argued.
+///
+/// `P10-PATTERN-BRICK` found this by reading `territory.rs` rather than from an incident: a
+/// single entry in `patterns` short-circuits `Territory::Intersect` to `Unknown` before a
+/// single path is compared, and `Unknown` refuses non-retryably.
+///
+/// # The item's own description of this was one clause too strong, and the correction matters
+///
+/// `P10-PATTERN-BRICK` says the item "can never be claimed by anyone, its own holder
+/// included". Measured here, that is not what happens, because `Conflicts` compares only
+/// against items holding an **active claim**. So a pattern item on a quiet board claims
+/// perfectly normally — asserted below, because it is the step that makes the rest possible.
+///
+/// The real shape is worse than an item nobody can take, and this is the finding:
+///
+/// 1. the pattern item is claimable exactly when the board is quiet, so nothing warns the
+///    agent who takes it;
+/// 2. from that moment every other claim is refused against it, including territory sharing
+///    no path with it at all;
+/// 3. and the refusal is the non-retryable one, which by `README.md`'s exit-code contract
+///    tells each refused agent to stop and fetch a person rather than pick up another item.
+///
+/// So one agent quietly acquires the power to stop every other session, and learns nothing
+/// about having done so. `OD-LEDGER-013` withdrew `--territory-pattern` on the strength of
+/// this. The state stays reachable by hand-editing the document, which is why this test can
+/// still construct it, and why the `Unknown` in `Territory::Intersect` is kept rather than
+/// relaxed: withdrawing the flag removes the way in, not the guard.
+#[test]
+fn Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board()
+{
+    let directory = Temp_Dir("pattern-brick");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    let mut vague = Item("T-1", &["src/a.rs"]);
+    vague.territory = vague.territory.With_Pattern("crates/spec/**");
+
+    ledger
+        .Save(&Document(vec![
+            vague,
+            Item("T-2", &["docs/unrelated.md"]),
+            Item("T-3", &["tests/also-unrelated.rs"]),
+        ]))
+        .expect("a document carrying a pattern is well-formed, which is the problem");
+
+    // 1. It claims without complaint. Nothing is held yet, so nothing is compared, so the
+    //    pattern is never consulted. This is the step the item's description missed.
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("on a quiet board a pattern item claims like any other, which is the trap");
+
+    // 2. And now the board is shut. `docs/unrelated.md` shares nothing with `src/a.rs` or
+    //    with `crates/spec/**`, and is refused anyway — the short-circuit runs before any
+    //    path is looked at, so being unrelated is no defence.
+    for (item, holder) in [("T-2", "agent-b"), ("T-3", "agent-c")]
+    {
+        let collateral = ledger
+            .Claim(&ItemId::New(item), holder, Duration::from_secs(3_600))
+            .expect_err("every other claim is refused against the held pattern");
+
+        assert!(
+            matches!(collateral, ClaimRefusal::UnknownIndependence { .. }),
+            "{item}: {collateral:?}"
+        );
+        assert!(
+            !collateral.Is_Retryable(),
+            "{item}: this is the sharp end — a non-retryable refusal tells the agent to stop \
+             and fetch a person, so one held pattern reads to every session as a broken ledger"
+        );
+    }
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// And it shuts in the other direction too, once anything at all is held.
+///
+/// The complement of the test above, and together they are why the state has no safe
+/// ordering: claim the pattern first and it stops everyone else; claim anything else first
+/// and the pattern item can never be taken. There is no sequence in which the board both
+/// carries a pattern and keeps working.
+#[test]
+fn Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held()
+{
+    let directory = Temp_Dir("pattern-brick-reverse");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    let mut vague = Item("T-2", &["src/b.rs"]);
+    vague.territory = vague.territory.With_Pattern("crates/spec/**");
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["docs/unrelated.md"]), vague]))
+        .expect("a document carrying a pattern is well-formed");
+
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("an ordinary item on a quiet board");
+
+    let refused = ledger
+        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+        .expect_err("the pattern item cannot be claimed while anything is held");
+
+    assert!(matches!(refused, ClaimRefusal::UnknownIndependence { .. }), "{refused:?}");
+    assert!(
+        !refused.Is_Retryable(),
+        "and waiting will not help: `docs/unrelated.md` is disjoint from `src/b.rs`, so the \
+         refusal is not contention and no lease expiring resolves it"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The negative control for the test above: the same two items, minus the pattern.
+///
+/// Without this, `Test_An_Unexpanded_Pattern_Should_Brick_Every_Claim_On_The_Board` would
+/// pass just as happily if claiming were broken for some entirely unrelated reason, and the
+/// record would be citing a measurement of nothing. One line differs between the two.
+#[test]
+fn Test_The_Same_Board_Without_The_Pattern_Should_Claim_Freely()
+{
+    let directory = Temp_Dir("pattern-brick-control");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![
+            Item("T-1", &["src/a.rs"]),
+            Item("T-2", &["docs/unrelated.md"]),
+        ]))
+        .expect("a fresh ledger is valid");
+
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("the pattern was the only thing stopping this");
+    ledger
+        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+        .expect("and the only thing stopping this");
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// A directory reserves what is beneath it, which is what the withdrawn flag was for.
+///
+/// This is the load-bearing half of `OD-LEDGER-013`: withdrawing `--territory-pattern` is
+/// only a narrowing if it removed something an author could otherwise say. It did not.
+/// "Everything under `crates/spec`" is an ordinary territory entry, it is decided from the
+/// text with no filesystem access, and — unlike the pattern — it answers.
+#[test]
+fn Test_A_Directory_Should_Reserve_Its_Subtree_Without_A_Pattern()
+{
+    let directory = Temp_Dir("subtree-without-pattern");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![
+            Item("T-1", &["crates/spec"]),
+            Item("T-2", &["crates/spec/nomos-spec-model/src/lib.rs"]),
+            Item("T-3", &["crates/host/nomos-cli/src/work.rs"]),
+        ]))
+        .expect("a fresh ledger is valid");
+
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let refusal = ledger
+        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+        .expect_err("a file inside a reserved directory is reserved");
+
+    assert!(
+        matches!(refusal, ClaimRefusal::HeldBy { .. }),
+        "the subtree is *held*, not unanswerable — the distinction is the whole record: \
+         {refusal:?}"
+    );
+    assert!(
+        refusal.Is_Retryable(),
+        "and it is a queue rather than a wall, which the pattern never was"
+    );
+
+    // While genuinely unrelated territory is still free, so the directory entry reserves a
+    // subtree rather than the repository.
+    ledger
+        .Claim(&ItemId::New("T-3"), "agent-c", Duration::from_secs(3_600))
+        .expect("a directory reserves its subtree, not the board");
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
 // ---------------------------------------------------------------------------
 // Acceptance 5 — finishing runs the predicate, and believes it.
 // ---------------------------------------------------------------------------

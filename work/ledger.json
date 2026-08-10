@@ -3229,10 +3229,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-pattern-brick-w51",
+        "acquired_at": 1786381331,
+        "lease_expires_at": 1786395731
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -5495,14 +5499,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-requirable-declared-w34",
-        "acquired_at": 1786381173,
-        "lease_expires_at": 1786388373
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -5512,6 +5512,115 @@
           "nomos-spec-project",
           "-p",
           "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-requirable-declared-w34",
+          "reason": "Abandoned because its done_when names a profile that cannot be required, and the error was mine. The check this item built is what found it, which is the system working rather than a setback. Measured by rendering all eighteen shipped profiles over a records-only store: exactly four succeed -- diagram-set, domain-specification, html-site and traceability-matrix. Not six. feature-design refuses because its Concepts section filters nodes on kind concept, and release-specification, api-documentation and requirement-catalog refuse the same way on scenario, milestone and requirement kinds. Those are corpus node kinds; a governing record is kind decision or architecture. So reaching only seeded content kinds is necessary and not sufficient: a filter that selects nothing refuses too, and that is data-dependent rather than a static property of a profile. The census also corrected the declaration itself. Table rows ARE seeded, because governing records carry markdown tables and Write_Record writes their rows, so the seeded set is seven kinds and not six: documents, headings, blocks, rows, nodes, relations, lineage. Both errors were caught by comparing the declaration against a really-seeded store in both directions, which is the half of this item worth keeping. Re-authored as P10-REQUIRABLE-FLOOR, requiring domain-specification instead: it renders over a seeded store today, it is the record set as one readable document, and it is one added re-render obligation rather than three.",
+          "abandoned_at": 1786381395
+        }
+      ],
+      "displaced": []
+    },
+    {
+      "id": "P10-REQUIRABLE-FLOOR",
+      "title": "Four of eighteen profiles rebuild without a corpus, one is required, and nothing declares or checks which",
+      "why": "Measured by rendering every shipped profile over a store holding only this repository governing records, which is the tree CI checks out: exactly four succeed -- diagram-set, domain-specification, html-site and traceability-matrix -- and only diagram-set is required. The other fourteen refuse, correctly, because a section selected nothing and the store is not whole; an empty projection over a store nothing was read into is not a projection of an empty specification. So a fresh agent cannot open a current projection of the record set even though three profiles could produce one today. Two things are undeclared. Which content kinds a seeded store answers for is folklore: seeding writes documents, headings, blocks, rows, nodes, relations and lineage, and writes no suites, statements or omissions, and nothing says so, so the next profile author guesses. And reaching only those kinds turns out to be necessary rather than sufficient, because a filter naming a corpus node kind selects nothing and refuses too -- feature-design on concept, release-specification on milestone, api-documentation on scenario, requirement-catalog on requirement. That asymmetry is why requirability cannot be read off a profile and has to be measured against a seeded store. Supersedes P10-REQUIRABLE-SET, whose territory omitted the two files carrying the re-render procedure, and P10-REQUIRABLE-DECLARED, whose done_when named feature-design on the mistaken belief it was rebuildable.",
+      "done_when": "Which content kinds a seeded store can answer for is declared in one place and compared against a really-seeded store in both directions, so the list cannot shrink to nothing or grow to all ten and still pass. Reaching only those kinds is exposed as the necessary condition it is, named so it cannot be read as sufficient, and the gap between it and rendering is asserted over every shipped profile with the subject profiles excluded by an assertion rather than by silence. domain-specification ships as a committed body and sidecar and is named in the Required projections step beside diagram-set, and a test asserts every required profile renders over a seeded store so a change making one corpus-backed fails locally rather than on a runner. The required set stays a declared list and OD-PROJECT-002 states why this one entry is added and the other two rebuildable profiles are not, since every required projection is a re-render obligation on every future record author. AGENTS.md and .claude/skills/nomos-spec-change/SKILL.md name every profile a record author must re-render, so following either produces a tree the gate accepts, and AGENTS.md stays inside its line budget.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-002",
+          "crates/spec/nomos-spec-store/records/OD-PROJECT-002.record",
+          "crates/spec/nomos-spec-project",
+          ".github/workflows/gate.yml",
+          "spec",
+          "AGENTS.md",
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "achine ... ok\ntest Test_A_Rebuild_Should_Be_Byte_Identical ... ok\ntest Test_The_Sidecar_Should_Round_Trip ... ok\ntest Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds ... ok\ntest Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store ... ok\ntest Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content ... ok\ntest Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.68s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-561a88ff4bc732e0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-f65566f9f804790f.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-ae78a8a92bf9e664.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-f75bebc7f5b3ba97.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-ae6f7467808b79ca.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1786382075,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-DERIVED-FACT",
+      "title": "Every fact this build materializes is a leaf, so the dependency half of invalidation ships unexercised",
+      "why": "nomos-analysis carries a full transitive invalidation mechanism. MemoryFactStore keeps a dependents reverse index, Materialize takes a &[Dependency], Dependencies_Of reads them back, and InvalidationReport separates direct from dependent and prints \"N through dependency edges\". OD-ANALYSIS-001 took the snapshot out of a fact key so that reuse across generations would be possible at all.\n\nNothing that ships creates an edge. Every call site in the workspace passes an empty slice. crates/host/nomos-cli/src/check.rs:410 does, and says why - \"No dependency edges: a syntax fact is a leaf, read from one file bytes and from nothing this store holds\" - and crates/rules/nomos-rules/src/mirror.rs:861 does inside its own test harness. The only non-empty dependency array anywhere in the tree is crates/substrate/nomos-analysis/tests/fact_identity.rs:710, which is the crate exercising its own reverse index against a fact it invented for the purpose.\n\nSo InvalidationReport::dependent is a field no shipped run can make non-empty, and one fixture is the only thing standing between the transitive half of this store and dead code. That is the shape P10-FACT-BYPASS closed, one level in: the fact layer has a consumer now, and the half of it that makes incremental reuse worth having still has none. It is cheapest to settle while there is one capability, one registered provider and one rule. Every rule added before it is a rule written against a store whose interesting behaviour nothing has run.",
+      "done_when": "A fact is materialized with a non-empty dependency edge by code that ships rather than by a test fixture, and a test drives the store transitive path rather than its direct one: invalidating the fact that was read reports the derived fact under dependent rather than direct, and Dependencies_Of returns the edge that was declared. What the derived fact is, is this item to decide and its record to state, including the alternative that the existing provider declares an edge over something it already reads, if that is honest, rather than a second capability invented to carry one. If no honest edge exists at this size, the record says so, says what dependent is therefore holding open, and names what the first real one will be and what will produce it. Not closed by widening the fixture: a test materializing its own dependency proves the index works and proves nothing about whether anything uses it. Public surface snapshots move for every crate whose API moves.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust",
+          "crates/substrate/nomos-analysis",
+          "docs/records/OD-ANALYSIS-002",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-002.record",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "tests/contract/surface/nomos-analysis.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-derived-fact-w62",
+        "acquired_at": 1786381873,
+        "lease_expires_at": 1786396273
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-lang-rust"
         ],
         "timeout_seconds": 600
       },

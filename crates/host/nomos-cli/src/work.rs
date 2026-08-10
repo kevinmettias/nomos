@@ -222,8 +222,33 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
     let value_of = |name: &str| Named_Value(named, name);
 
     let paths = Named_Values(named, "--territory");
-    let patterns = Named_Values(named, "--territory-pattern");
-    if paths.is_empty() && patterns.is_empty()
+
+    // Refused before `--territory` is even checked, because it is the more specific answer:
+    // somebody who passed only a pattern needs to be told the pattern is the problem, not
+    // that they reserved nothing. See `OD-LEDGER-013`.
+    //
+    // A pattern is recorded unexpanded, and `Territory::Intersect` answers `Unknown` for
+    // every comparison involving one. That is the correct answer to a question the
+    // comparison cannot decide, and it is not correct as the *outcome of a flag*: the item
+    // becomes unclaimable by anyone including its own author, every other claim on the board
+    // is refused against it, and the refusal is non-retryable, which by the exit-code
+    // contract tells an agent to stop and fetch a person. So the flag is withdrawn rather
+    // than the refusal weakened.
+    if let Some(pattern) = Named_Values(named, "--territory-pattern").first()
+    {
+        return Err(format!(
+            "--territory-pattern is not supported: a pattern is never expanded, so every \
+             comparison against `{pattern}` answers that independence cannot be established \
+             — which makes the item unclaimable and refuses every other claim on the board.\n\
+             \n\
+             Reserve a directory instead. Territory is compared by containment, so \
+             `--territory crates/spec` already reserves everything beneath it, and it is \
+             decided from the text with no filesystem access.\n\n{}",
+            Usage_Text()
+        ));
+    }
+
+    if paths.is_empty()
     {
         return Err(format!(
             "--territory is required: an item that reserves nothing excludes nobody.\n\n{}",
@@ -231,11 +256,7 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
         ));
     }
 
-    let mut territory = Territory::Of_Files(paths);
-    for pattern in patterns
-    {
-        territory = territory.With_Pattern(pattern);
-    }
+    let territory = Territory::Of_Files(paths);
 
     let verification = if predicate_argv.is_empty()
     {
@@ -309,7 +330,7 @@ fn Usage_Text() -> String
             carry prose.\n\
             \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
             \x20          --territory <path> [--territory <path> …]\n\
-            \x20          [--territory-pattern <glob> …] [--depends-on <id> …]\n\
+            \x20          [--depends-on <id> …]\n\
             \x20          [-- <program> <args…>]\n\
             \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
             \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
@@ -1116,6 +1137,69 @@ mod tests
             Parse(&Arguments("add --item T-1 --title t --why w --done-when d")).unwrap_err();
 
         assert!(error.contains("--territory"));
+    }
+
+    /// The flag `OD-LEDGER-013` withdrew.
+    ///
+    /// A pattern reaches `Territory::Intersect`, which short-circuits to `Unknown` before
+    /// comparing a single path, and `Unknown` refuses non-retryably. So this one flag made an
+    /// item nobody could claim *and* refused every other claim on the board, and told each
+    /// refused agent to stop and fetch a person rather than try another item.
+    ///
+    /// Pinned as a **usage** error rather than a ledger one: the mistake is in what was
+    /// typed, and an exit code of 1 or 5 here would read as the board being broken, which is
+    /// the confusion this item exists to remove.
+    #[test]
+    fn Test_Add_Should_Refuse_A_Territory_Pattern()
+    {
+        let error = Parse(&Arguments(
+            "add --item T-1 --title t --why w --done-when d \
+             --territory src/a.rs --territory-pattern crates/spec/**",
+        ))
+        .unwrap_err();
+
+        assert!(
+            error.contains("--territory-pattern is not supported"),
+            "the refusal must name the flag that is unsupported: {error}"
+        );
+        assert!(
+            error.contains("crates/spec/**"),
+            "and quote the pattern it refused, or an author cannot tell which one: {error}"
+        );
+    }
+
+    /// The pattern is refused even when it is the only territory given.
+    ///
+    /// The ordering control. `--territory` was checked first before this item, so a pattern
+    /// on its own reported "an item that reserves nothing excludes nobody" — a true sentence
+    /// about the wrong problem, which sends the author to add a path rather than to drop the
+    /// flag. Swapping the two checks back turns this red while the test above stays green.
+    #[test]
+    fn Test_A_Pattern_Alone_Should_Be_Refused_As_A_Pattern()
+    {
+        let error = Parse(&Arguments(
+            "add --item T-1 --title t --why w --done-when d --territory-pattern crates/**",
+        ))
+        .unwrap_err();
+
+        assert!(
+            error.contains("--territory-pattern is not supported"),
+            "a pattern alone must be refused for being a pattern: {error}"
+        );
+    }
+
+    /// The flag is gone from the usage text as well as from the parser.
+    ///
+    /// `done_when` requires the flag to leave the advertised surface, and the usage string is
+    /// the copy an agent actually reads — it is printed on every refusal above.
+    #[test]
+    fn Test_The_Usage_Text_Should_Not_Advertise_A_Territory_Pattern()
+    {
+        assert!(
+            !Usage_Text().contains("--territory-pattern"),
+            "the usage text still advertises a flag that is refused: {}",
+            Usage_Text()
+        );
     }
 
     #[test]

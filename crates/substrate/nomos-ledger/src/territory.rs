@@ -44,9 +44,27 @@ pub struct Territory
     /// Patterns that have not been expanded.
     ///
     /// Recorded rather than rejected, and every comparison involving one answers
-    /// [`nomos_model::Intersection::Unknown`]. An item may honestly say "this touches
-    /// everything under `crates/spec/`" before anyone can enumerate that; what it may
-    /// not do is have that claim silently compare as touching nothing.
+    /// [`nomos_model::Intersection::Unknown`]. A claim that cannot be shown independent must
+    /// not compare as touching nothing, so this stays exactly as it is.
+    ///
+    /// # Nothing authors one, and `OD-LEDGER-013` is why
+    ///
+    /// `work add --territory-pattern` used to put a value here and is now a usage error. The
+    /// justification this field originally carried — an item may honestly say "this touches
+    /// everything under `crates/spec/`" before anyone can enumerate that — turned out to be
+    /// already satisfied by an ordinary path: [`Contains_Or_Equals`] decides containment from
+    /// the text, so `crates/spec` *does* reserve everything beneath it, with no filesystem
+    /// access and no `Unknown`. What the flag added was not expressiveness. It was the only
+    /// documented way to reach a state in which an item is unclaimable by everyone including
+    /// its own author, every other claim on the board is refused against it, and the refusal
+    /// is the non-retryable one that tells an agent to stop and fetch a person.
+    ///
+    /// The field survives the flag for two reasons. `#[serde(deny_unknown_fields)]` above
+    /// means removing the key would refuse every ledger ever written, including the hundred
+    /// items carrying `"patterns": []` today. And a document that arrives with one anyway —
+    /// hand-edited, or written by some future authoring surface — must still fail closed,
+    /// which is what the `Unknown` in [`Territory::Intersect`] does. Withdrawing the flag
+    /// removes the way in; it deliberately does not remove the guard.
     #[serde(default)]
     pub patterns: Vec<String>,
 }
@@ -77,6 +95,11 @@ impl Territory
     }
 
     /// Records a pattern whose membership is not yet known.
+    ///
+    /// No authoring surface calls this — `OD-LEDGER-013` withdrew the flag that did, and
+    /// [`Territory::patterns`] says why. It remains because the state is still *reachable* in
+    /// a hand-edited document, and a guard against a state nothing can construct is a guard
+    /// nothing can test: this is how the fail-closed behaviour is exercised.
     #[must_use]
     pub fn With_Pattern(mut self, pattern: impl Into<String>) -> Self
     {

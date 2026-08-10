@@ -80,7 +80,7 @@ claim rather than granting it.
 nomos work list [--state ready|claimed|blocked|done|declined]
 nomos work add     --item <id> --title <text> --why <text> --done-when <text>
                    --territory <path> [--territory <path> …]
-                   [--territory-pattern <glob> …] [--depends-on <id> …]
+                   [--depends-on <id> …]
                    [-- <program> <args…>]
 nomos work claim   --item <id> --holder <name> [--lease 2h]
 nomos work renew   --item <id> --holder <name> [--lease 2h]
@@ -96,6 +96,13 @@ committed and reviewed in a `git diff` — a diff of digests is a diff nobody re
 are compared after normalization, so `./crates\A\src\Lib.rs` and `crates/a/src/lib.rs`
 are one subject, and a directory contains the files beneath it. An item that reserves
 nothing is refused: it would exclude nobody while looking like work.
+
+Territory is paths and not globs, and `--territory-pattern` is a usage error rather than a
+flag. Containment already covers what a glob was wanted for — `--territory crates/spec`
+reserves everything beneath it, decided from the text with no filesystem access — whereas an
+unexpanded pattern compares as *unanswerable* against every other territory, which makes the
+item unclaimable by anyone including its author and refuses every other claim on the board
+with the code that means stop and fetch a person. `OD-LEDGER-013` records the trade.
 
 **A claim is a lease, and a lease lapses.** An agent that dies holding one stops excluding
 everybody else the moment the lease runs out, which is what stops one crashed session holding
