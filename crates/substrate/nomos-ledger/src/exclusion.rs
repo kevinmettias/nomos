@@ -74,6 +74,18 @@ pub enum ClaimRefusal
         /// The identifier that matched nothing.
         item: ItemId,
     },
+    /// The ledger itself could not be read or written.
+    ///
+    /// Nothing to do with the item, and that is why it is its own arm. Every load and save
+    /// failure used to be reported as [`ClaimRefusal::NoSuchItem`], so an unreadable file,
+    /// a parse error and an invalid document all told the operator their identifier was
+    /// wrong — sending them to check a spelling while the ledger was broken. `OD-LEDGER-009`
+    /// records it as the third instance of a reason not surviving the failure it explains.
+    LedgerUnusable
+    {
+        /// What the store said, verbatim.
+        cause: String,
+    },
 }
 
 impl ClaimRefusal
@@ -109,6 +121,9 @@ impl ClaimRefusal
                 state,
             } => format!("{item} depends on {dependency}, which is {state}"),
             Self::NoSuchItem { item } => format!("no item named {item}"),
+            Self::LedgerUnusable { cause } => {
+                format!("the ledger could not be used: {cause}")
+            }
         };
     }
 

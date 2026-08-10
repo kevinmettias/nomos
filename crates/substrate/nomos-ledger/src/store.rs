@@ -306,10 +306,25 @@ pub fn Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
             violations.push(format!("{} is blocked without saying why", item.id));
         }
 
-        if item.state == ItemState::Claimed && !item.Has_Active_Claim(now)
+        // Deliberately `claim.is_none()` and not `!Has_Active_Claim(now)`.
+        //
+        // A lease expiring is `Claimed` with an inactive claim, and it is the normal end of
+        // an agent that died rather than a corruption. Validating against the clock made a
+        // document's validity a function of when it was read: one written valid stopped
+        // being valid on its own, `Load` refuses an invalid document, and every operation
+        // loads first — so one lapsed lease refused every claim on the board, including
+        // items sharing no territory with it. `MAXIMUM_LEASE` exists to stop a crashed
+        // agent holding territory until somebody edits the file, and the lease expiring was
+        // causing exactly what the lease exists to prevent.
+        //
+        // What remains is the invariant that does not move: an item claimed by nobody
+        // records who claimed it. That is a real corruption — nothing can say whose work
+        // was abandoned — and it cannot arrive by the passage of time.
+        if item.state == ItemState::Claimed && item.claim.is_none()
         {
             violations.push(format!(
-                "{} is marked claimed but has no active claim",
+                "{} is marked claimed and records no claim, so nothing can say who holds it \
+                 or held it",
                 item.id
             ));
         }
@@ -502,6 +517,21 @@ pub fn Claim_Refusal(
     return None;
 }
 
+/// A store failure, reported as itself rather than as a missing item.
+///
+/// Every load and save in the three operations below used to discard its error and return
+/// [`ClaimRefusal::NoSuchItem`], so an unreadable file, a parse error and an invalid
+/// document all told the operator that their identifier matched nothing. That is a reason
+/// destroyed by the failure it explains, and it is why `P10-LAPSE-BRICKS` needed an
+/// experiment to diagnose rather than a glance: the surface was reporting a spelling
+/// mistake while the ledger was refusing to load.
+fn Unusable(error: &LedgerError) -> ClaimRefusal
+{
+    return ClaimRefusal::LedgerUnusable {
+        cause: error.to_string(),
+    };
+}
+
 impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedger<F, C, L>
 {
     fn Claim(
@@ -515,9 +545,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
 
         let now = self.clock.Now();
         let expires_at = now.Plus(lease);
-        let mut document = self.Load().map_err(|_| ClaimRefusal::NoSuchItem {
-            item: item.clone(),
-        })?;
+        let mut document = self.Load().map_err(|error| return Unusable(&error))?;
 
         if let Some(refusal) = Claim_Refusal(&document, item, now)
         {
@@ -538,7 +566,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
         }
 
         self.Save(&document)
-            .map_err(|_| ClaimRefusal::NoSuchItem { item: item.clone() })?;
+            .map_err(|error| return Unusable(&error))?;
 
         return Ok(Reservation {
             item: item.clone(),
@@ -558,9 +586,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
 
         let now = self.clock.Now();
         let expires_at = now.Plus(lease);
-        let mut document = self.Load().map_err(|_| ClaimRefusal::NoSuchItem {
-            item: item.clone(),
-        })?;
+        let mut document = self.Load().map_err(|error| return Unusable(&error))?;
 
         let mut renewed = false;
         for candidate in &mut document.items
@@ -600,7 +626,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
         }
 
         self.Save(&document)
-            .map_err(|_| ClaimRefusal::NoSuchItem { item: item.clone() })?;
+            .map_err(|error| return Unusable(&error))?;
 
         return Ok(Reservation {
             item: item.clone(),
@@ -617,9 +643,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
     ) -> Result<(), ClaimRefusal>
     {
         let now = self.clock.Now();
-        let mut document = self.Load().map_err(|_| ClaimRefusal::NoSuchItem {
-            item: item.clone(),
-        })?;
+        let mut document = self.Load().map_err(|error| return Unusable(&error))?;
 
         let mut released = false;
         for candidate in &mut document.items
@@ -661,9 +685,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
             return Err(ClaimRefusal::NoSuchItem { item: item.clone() });
         }
 
-        return self
-            .Save(&document)
-            .map_err(|_| ClaimRefusal::NoSuchItem { item: item.clone() });
+        return self.Save(&document).map_err(|error| return Unusable(&error));
     }
 
     fn Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>

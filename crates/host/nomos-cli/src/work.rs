@@ -573,6 +573,16 @@ fn Report_Finish(
 /// disagree about whether an agent may proceed.
 fn Listing_Label(document: &LedgerDocument, item: &LedgerItem, now: Timestamp) -> &'static str
 {
+    // `claimed` is the second word that lies, for the same reason `ready` was the first.
+    // An item whose lease ran out four hours ago reads as work in progress, and it is work
+    // whose holder is gone. It excludes nobody now — `OD-LEDGER-009` — and nobody else can
+    // take it either, so it is the one state on this board that needs a person. Saying so
+    // is the whole of what makes that tolerable.
+    if matches!(item.state, ItemState::Claimed) && !item.Has_Active_Claim(now)
+    {
+        return "lapsed";
+    }
+
     if !matches!(item.state, ItemState::Ready)
     {
         return State_Label(&item.state);
@@ -625,14 +635,7 @@ fn Report_Claim(
         Err(refusal) =>
         {
             let _ = writeln!(output, "refused: {}", refusal.Describe());
-            if refusal.Is_Retryable()
-            {
-                ExitCode::ClaimUnavailable
-            }
-            else
-            {
-                ExitCode::Conflict
-            }
+            Code_For(&refusal)
         }
     };
 }
@@ -650,7 +653,33 @@ fn Report_Release(result: Result<(), ClaimRefusal>, output: &mut impl std::io::W
         Err(refusal) =>
         {
             let _ = writeln!(output, "refused: {}", refusal.Describe());
-            ExitCode::Conflict
+            Code_For(&refusal)
+        }
+    };
+}
+
+/// The exit code a refusal earns.
+///
+/// The distinction `3` versus `5` is the one the README says earns its own code: an agent
+/// told the item is taken picks up something else, and an agent told the ledger is broken
+/// stops and fetches a person. [`ClaimRefusal::LedgerUnusable`] is the second of those and
+/// used to arrive as `4` — a conflict a human resolves — after arriving as "no such item",
+/// which sent them to check a spelling. Three answers, one of them right.
+const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
+{
+    return match refusal
+    {
+        ClaimRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
+        other =>
+        {
+            if other.Is_Retryable()
+            {
+                ExitCode::ClaimUnavailable
+            }
+            else
+            {
+                ExitCode::Conflict
+            }
         }
     };
 }

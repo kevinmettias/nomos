@@ -170,6 +170,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-LEDGER-007-a-record-excludes-nobody-and-two-other-files-serialize-the-board.md"
         ),
     ),
+    (
+        "docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md",
+        include_str!(
+            "../../../../docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -211,6 +217,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-LEDGER-006",
     "OD-CAPABILITY-003",
     "OD-LEDGER-007",
+    "OD-LEDGER-009",
 ];
 
 /// The relation vocabulary the governing records use.

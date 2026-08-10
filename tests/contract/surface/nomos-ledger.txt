@@ -24,6 +24,7 @@ pub enum variant nomos_ledger::Blocker::TerritoryMismatch { detail: String, }
 pub enum variant nomos_ledger::ClaimRefusal::DependencyUnmet { item: ItemId, dependency: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::HeldBy { holder: String, until: Timestamp, item: ItemId, }
 pub enum variant nomos_ledger::ClaimRefusal::LeaseTooLong { requested: Duration, maximum: Duration, }
+pub enum variant nomos_ledger::ClaimRefusal::LedgerUnusable { cause: String, }
 pub enum variant nomos_ledger::ClaimRefusal::NoSuchItem { item: ItemId, }
 pub enum variant nomos_ledger::ClaimRefusal::NotClaimable { item: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::UnknownIndependence { against: ItemId, reason: UnknownReason, }

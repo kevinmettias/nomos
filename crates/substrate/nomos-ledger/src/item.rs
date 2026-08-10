@@ -149,9 +149,17 @@ impl Claim
 {
     /// Whether this claim has lapsed as of `now`.
     ///
-    /// A lapsed claim does not release itself. It stops excluding, which is what lets
-    /// the next agent take the item, and it stays visible so that a person can see the
-    /// work was abandoned rather than never started.
+    /// A lapsed claim does not release itself. It stops excluding — every *other* item is
+    /// claimable again, which is what `MAXIMUM_LEASE` exists for — and it stays visible so
+    /// that a person can see the work was abandoned rather than never started.
+    ///
+    /// It does not let the next agent take *this* item, and this comment said it did until
+    /// `P10-LAPSE-BRICKS` measured it. The item stays `Claimed`, and `Claim_Refusal` rejects
+    /// anything that is not `Ready` before it ever reaches the lease. That is deliberate as
+    /// of `OD-LEDGER-009` rather than merely true: a claim overwrites `claim`, and `claim`
+    /// is the only thing recording that the work was ever started, which `OD-LEDGER-006`
+    /// decided must survive. Taking a lapsed item over is a different operation from
+    /// claiming a free one and is not one yet.
     #[must_use]
     pub fn Has_Lapsed(&self, now: Timestamp) -> bool
     {

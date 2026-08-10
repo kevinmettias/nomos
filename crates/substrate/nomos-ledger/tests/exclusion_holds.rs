@@ -965,3 +965,253 @@ fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
 
     let _ = std::fs::remove_dir_all(&directory);
 }
+
+// ---------------------------------------------------------------------------
+// A lapse must not brick the board. P10-LAPSE-BRICKS.
+// ---------------------------------------------------------------------------
+
+/// The defect, and the reason it needed an experiment rather than a reading.
+///
+/// Validation used to call `Claimed` with no *active* claim a violation, and a lease
+/// expiring is precisely that. So a document written valid stopped being valid on its own,
+/// `Save` refuses an invalid document, and every claim saves — which meant one lapsed lease
+/// refused every claim on the board, including items sharing no territory with it. The
+/// lease expiring caused exactly what `MAXIMUM_LEASE` exists to prevent.
+///
+/// The unit level was right the whole time and that is what hid it: `Has_Active_Claim`
+/// returns false on a lapsed claim, exclusion honours that, and validation refused the
+/// document before exclusion was ever consulted.
+#[test]
+fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
+{
+    let directory = Temp_Dir("lapse-bricks");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![
+            Item("T-1", &["src/a.rs"]),
+            Item("T-2", &["src/b.rs"]),
+        ]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let later = FixedClock(NOW + 7_200);
+    let mut after = Ledger_At(&directory, &later);
+    let document = after.Load().expect("the file is still readable");
+
+    // One: the document is not called invalid because time passed.
+    assert_eq!(
+        Validate(&document, At(NOW + 7_200)),
+        Vec::<String>::new(),
+        "a lapsed lease made the whole document invalid, so nothing can be written to it"
+    );
+    after
+        .Validate_Current()
+        .expect("validate must not call a board with a lapsed lease broken");
+
+    // Two: an unrelated item is still claimable. `src/b.rs` shares nothing with `src/a.rs`,
+    // so a refusal here is not exclusion — it is the board refusing to be written at all.
+    after
+        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+        .unwrap_or_else(|refusal| {
+            panic!(
+                "an item sharing no territory with the lapsed one was refused: {}",
+                refusal.Describe()
+            )
+        });
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// Three: what the lapsed item itself does, which is a decision rather than a consequence.
+///
+/// It stays `Claimed` and nobody else may take it. `OD-LEDGER-009` states the grounds:
+/// `Claim` overwrites `claim`, and `claim` is the only thing recording that the work was
+/// ever started — which `OD-LEDGER-006` decided must survive, having refused to synthesize
+/// an `Abandonment` for a lapse because `Abandonment::reason` is the words the holder gave
+/// and a lapse has none. Taking a lapsed item over is a different operation from claiming a
+/// free one, and it does not exist yet.
+///
+/// Asserted rather than left implicit, because the refusal is now deliberate. What must not
+/// happen is that it becomes claimable by accident and quietly erases who was working on it.
+#[test]
+fn Test_A_Lapsed_Item_Should_Refuse_A_New_Holder_And_Keep_The_Old_One_Visible()
+{
+    let directory = Temp_Dir("lapse-takeover");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let later = FixedClock(NOW + 7_200);
+    let mut after = Ledger_At(&directory, &later);
+
+    let refusal = after
+        .Claim(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+        .expect_err(
+            "a lapsed item is not claimable, and silently allowing it would erase the only \
+             record that the work was started",
+        );
+
+    assert!(
+        matches!(refusal, ClaimRefusal::NotClaimable { .. }),
+        "the refusal must say the item is not in a claimable state rather than blame \
+         territory or the identifier: {}",
+        refusal.Describe()
+    );
+
+    let held = after.Load().expect("readable");
+    let item = held.items.first().expect("the item survives");
+    assert_eq!(
+        item.claim.as_ref().map(|claim| return claim.holder.clone()),
+        Some("dead-agent".to_owned()),
+        "the lapsed claim was replaced, so nothing says who walked away from this"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The holder's own recovery still works, and is now the whole recovery story.
+///
+/// `Renew` and `Release` match on the holder and never took the validating path, so an
+/// agent that came back could always rescue its own claim. That was the only recovery there
+/// was while the board was bricked; it is still the only way a lapsed item returns to the
+/// pool, and the lapse now blocks only that item rather than every item.
+#[test]
+fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
+{
+    let directory = Temp_Dir("lapse-recover");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let later = FixedClock(NOW + 7_200);
+    let mut after = Ledger_At(&directory, &later);
+
+    after
+        .Renew(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .unwrap_or_else(|refusal| {
+            panic!("the holder must be able to renew: {}", refusal.Describe())
+        });
+
+    let held = after.Load().expect("readable");
+    assert!(
+        held.items
+            .first()
+            .is_some_and(|item| return item.Has_Active_Claim(At(NOW + 7_200))),
+        "renewing a lapsed claim must make it active again"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The positive control: validation still catches the corruption it was aimed at.
+///
+/// Dropping the time-dependent rule must not become "validation stopped looking". An item
+/// marked `Claimed` with no claim at all is a real corruption — nothing can say whose work
+/// it is or was — and unlike a lapse it cannot arrive by the passage of time.
+#[test]
+fn Test_A_Claimed_Item_Recording_No_Claim_Should_Still_Be_Invalid()
+{
+    let mut item = Item("T-1", &["src/a.rs"]);
+    item.state = ItemState::Claimed;
+    item.claim = None;
+
+    let violations = Validate(&Document(vec![item]), At(NOW));
+
+    assert!(
+        violations
+            .iter()
+            .any(|violation| violation.contains("records no claim")),
+        "a claimed item with no claim is a corruption and must still be reported: \
+         {violations:?}"
+    );
+}
+
+/// A lapsed claim is not that corruption, stated beside it so the pair cannot drift.
+#[test]
+fn Test_A_Lapsed_Claim_Should_Not_Be_Reported_As_A_Violation()
+{
+    let document = Document(vec![Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW - 1)]);
+
+    assert_eq!(
+        Validate(&document, At(NOW)),
+        Vec::<String>::new(),
+        "a lease that ran out is the normal end of an agent that died, not a broken file"
+    );
+}
+
+// ---------------------------------------------------------------------------
+// A load failure names its cause. P10-LAPSE-BRICKS, second half.
+// ---------------------------------------------------------------------------
+
+/// Two causes wore one name, which is why the defect above needed an experiment.
+///
+/// Every load and save failure in `Claim`, `Renew` and `Release` discarded its error and
+/// returned `NoSuchItem`, so an unreadable file, a parse error and an invalid document all
+/// told the operator that their identifier matched nothing. The text is asserted here
+/// rather than only the variant, because the defect was precisely what the operator read.
+#[test]
+fn Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item()
+{
+    let directory = Temp_Dir("unusable-ledger");
+    let clock = FixedClock(NOW);
+
+    // A genuinely missing item, over a ledger that is fine.
+    let mut sound = Ledger_At(&directory, &clock);
+    sound
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    let missing = sound
+        .Claim(&ItemId::New("T-NOPE"), "agent-a", Duration::from_secs(3_600))
+        .expect_err("no such item");
+
+    // The same call over a file that is not a ledger at all.
+    std::fs::write(directory.join("ledger.json"), "{ not json").expect("writes the corruption");
+    let mut broken = Ledger_At(&directory, &clock);
+    let unusable = broken
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect_err("a ledger that will not parse cannot be claimed against");
+
+    assert!(
+        matches!(missing, ClaimRefusal::NoSuchItem { .. }),
+        "{}",
+        missing.Describe()
+    );
+    assert!(
+        matches!(unusable, ClaimRefusal::LedgerUnusable { .. }),
+        "a broken ledger was reported as {}",
+        unusable.Describe()
+    );
+    assert_ne!(
+        missing.Describe(),
+        unusable.Describe(),
+        "the two causes must not read the same, which is the defect"
+    );
+    assert!(
+        unusable.Describe().contains("malformed"),
+        "the refusal must carry what the store said: {}",
+        unusable.Describe()
+    );
+    assert!(
+        !unusable.Describe().contains("no item named"),
+        "a broken ledger still sends the operator to check a spelling: {}",
+        unusable.Describe()
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
