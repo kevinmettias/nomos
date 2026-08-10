@@ -1,5 +1,5 @@
 use nomos_spec_bundle::{Bundle, Export, Import};
-use nomos_spec_model::Segment;
+use nomos_spec_model::{ContentHash, Segment};
 use nomos_spec_project::{
     Build, Catalogue, Check, Content, Format, Profile, Select, Stamp, DO_NOT_EDIT, SIDECAR_SUFFIX,
 };
@@ -601,6 +601,16 @@ fn Test_A_Changed_Store_Should_Be_Stale()
 
     assert!(freshness.stale.is_some(), "a changed store reads as current");
     assert!(freshness.Report(&built.path).contains("stale"));
+
+    // The store moving is not the file being written by hand, and the third verdict must not
+    // swallow the first. This body does differ from what the store now renders, so a
+    // divergence check asked unconditionally would report both and `diverged` would stop
+    // naming anything in particular.
+    assert!(
+        freshness.diverged.is_none(),
+        "a store that moved under an untouched file reads as hand-written: {}",
+        freshness.Report(&built.path)
+    );
 }
 
 #[test]
@@ -641,6 +651,61 @@ fn Test_An_Edited_Output_Should_Be_Reported_As_Edited()
 
     assert!(freshness.edited.is_some(), "a hand-edited output reads as generated");
     assert!(freshness.stale.is_none(), "the store did not change");
+    assert!(
+        freshness.diverged.is_none(),
+        "an edit its own stamp already contradicts is reported twice: {}",
+        freshness.Report(&built.path)
+    );
+}
+
+/// The case the other three cannot see.
+///
+/// `stale` compares the stamp's inputs against the store and `edited` compares the stamp's
+/// digest against the file, so a body and the `content_digest` describing it, rewritten
+/// together, agree with each other and satisfy both. Before this, that reported "is
+/// current" and exited 0 — which is what the gate step added by P10-REQUIRED-PROJECTIONS
+/// was resting on, since the commit that ships a projection can rewrite the stamp beside it.
+///
+/// `Test_An_Edited_Output_Should_Be_Reported_As_Edited` leaves the stamp alone, so it is
+/// caught by the digest comparison and never reaches the bytes.
+#[test]
+fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
+{
+    let store = Populated();
+    let profile = Profile_Named("mcp-resource");
+    let built = Build(&store, &profile).expect("builds");
+
+    let tampered = format!("{}\nhand written\n", built.body);
+    let mut agreeing = built.stamp.clone();
+    agreeing.content_digest = ContentHash::Of(&tampered).As_Str().to_owned();
+
+    let freshness = Check(
+        &store,
+        &profile,
+        Some(&tampered),
+        Some(&agreeing.Render().expect("stamps")),
+    )
+    .expect("checks");
+
+    assert!(
+        !freshness.Is_Fresh(),
+        "a body and a stamp rewritten together read as current: {}",
+        freshness.Report(&built.path)
+    );
+    assert!(
+        freshness.diverged.is_some(),
+        "the refusal did not come from the comparison against what the store renders"
+    );
+
+    // Neither of the old two may claim it. The stamp is internally consistent, so saying
+    // "the stamp declares X and the file hashes to Y" would be false — they are the same
+    // value — and the store never moved.
+    assert!(freshness.edited.is_none(), "the stamp agrees with the file it describes");
+    assert!(freshness.stale.is_none(), "the store did not change");
+
+    let said = freshness.Report(&built.path);
+    assert!(said.contains("diverged"), "the new case has no words of its own: {said}");
+    assert!(!said.contains("edited"), "the new case reuses the edited sentence: {said}");
 }
 
 #[test]

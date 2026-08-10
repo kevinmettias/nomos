@@ -4295,14 +4295,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-stamp-consistency-w21",
-        "acquired_at": 1786347127,
-        "lease_expires_at": 1786354327
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -4313,7 +4309,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project"
+        ],
+        "exit_code": 0,
+        "output_tail": "Be_Lf_Utf8_Without_A_Bom ... ok\ntest Test_A_Yaml_Projection_Should_Parse_As_Yaml ... ok\ntest Test_An_Output_That_Was_Never_Built_Should_Be_Absent ... ok\ntest Test_A_Diagram_Should_Name_Every_Relation_It_Draws ... ok\ntest Test_A_Section_That_Declares_It_May_Be_Empty_Should_Render ... ok\ntest Test_The_Sidecar_Should_Round_Trip ... ok\ntest Test_One_Profile_Should_Serve_Every_Subject ... ok\ntest Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused ... ok\ntest Test_A_Markdown_Table_Cell_Should_Not_Break_The_Table ... ok\ntest Test_A_Subject_That_Matches_Nothing_Should_Not_Render_An_Empty_File ... ok\ntest Test_Every_Body_Should_Declare_Itself_Generated ... ok\ntest Test_Every_Shipped_Profile_Should_Render_Content_From_The_Store ... ok\ntest Test_No_Body_Should_Carry_This_Machine ... ok\ntest Test_A_Whole_Store_Profile_Should_Render_Exactly_What_It_Did_Before ... ok\ntest Test_A_Rebuild_Should_Be_Byte_Identical ... ok\ntest Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 39 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-project)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.28s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-d855e2e92dc37b1d.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-9ae58a7fbfa913b5.exe)\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1786347461,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-stamp-consistency-w21",

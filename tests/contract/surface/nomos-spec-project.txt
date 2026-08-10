@@ -87,6 +87,7 @@ pub struct field nomos_spec_project::Filter::revision: Option<String>
 pub struct field nomos_spec_project::Filter::row_kind: Option<String>
 pub struct field nomos_spec_project::Filter::suite: Option<String>
 pub struct field nomos_spec_project::Freshness::absent: bool
+pub struct field nomos_spec_project::Freshness::diverged: Option<(String, String)>
 pub struct field nomos_spec_project::Freshness::edited: Option<(String, String)>
 pub struct field nomos_spec_project::Freshness::stale: Option<(String, String)>
 pub struct field nomos_spec_project::Input::content: Content

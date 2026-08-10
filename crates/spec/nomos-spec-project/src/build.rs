@@ -114,6 +114,15 @@ pub struct Freshness
     pub absent: bool,
     pub stale: Option<(String, String)>,
     pub edited: Option<(String, String)>,
+    /// The file and its stamp agree with each other and not with the store.
+    ///
+    /// `stale` reads the stamp's inputs against the store and `edited` reads the stamp's
+    /// digest against the file. Both are satisfied by a body and a `content_digest`
+    /// rewritten together: the pair is internally consistent, so neither comparison has
+    /// anything to say, and neither of them ever looks at what the store renders. This is
+    /// the residue — what is left over once the store has been ruled out as the cause and
+    /// the stamp has been ruled out as out of date.
+    pub diverged: Option<(String, String)>,
 }
 
 impl Freshness
@@ -121,7 +130,10 @@ impl Freshness
     #[must_use]
     pub const fn Is_Fresh(&self) -> bool
     {
-        return !self.absent && self.stale.is_none() && self.edited.is_none();
+        return !self.absent
+            && self.stale.is_none()
+            && self.edited.is_none()
+            && self.diverged.is_none();
     }
 
     #[must_use]
@@ -143,6 +155,13 @@ impl Freshness
         {
             said.push(format!(
                 "edited: the stamp declares {declared} and the file hashes to {found}"
+            ));
+        }
+        if let Some((agreed, rendered)) = &self.diverged
+        {
+            said.push(format!(
+                "diverged: the file and its stamp agree on {agreed} and the store renders \
+                 {rendered}"
             ));
         }
         if said.is_empty()
@@ -186,7 +205,24 @@ pub fn Check(
     let found = ContentHash::Of(body).As_Str().to_owned();
     if recorded.content_digest != found
     {
-        freshness.edited = Some((recorded.content_digest.clone(), found));
+        freshness.edited = Some((recorded.content_digest.clone(), found.clone()));
+    }
+
+    // The third comparison, and the only one that reads the store's own bytes. `rebuilt` has
+    // been sitting here since the stale check and its body was never looked at, so a body
+    // edited together with the `content_digest` describing it satisfied both tests above and
+    // reported current.
+    //
+    // Only asked once the other two have come back clean, because it cannot distinguish a
+    // cause. A stale output differs from `rebuilt.body` too, and so does an edited one, so
+    // reporting this whenever the bytes differ would say `diverged` alongside every other
+    // verdict and stop being the name of anything. Rendering is deterministic over the
+    // inputs and the profile, and both digests have just been found to match the rebuild, so
+    // an honest stamp guarantees these bytes are equal: reaching here means the pair was
+    // written by something other than `Build`.
+    if freshness.stale.is_none() && freshness.edited.is_none() && body != rebuilt.body
+    {
+        freshness.diverged = Some((found, rebuilt.stamp.content_digest));
     }
 
     return Ok(freshness);
