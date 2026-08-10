@@ -45,6 +45,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-010-opening-an-item-on-held-ground-is-how-the-board-is-used.md@authored | docs/records/OD-LEDGER-010-opening-an-item-on-held-ground-is-how-the-board-is-used.md | authored | 32 | 7 | sha256:17278bb3678519fb59aeb633a882c2c7860eed22d6dd7172de4f0a90116c0c34 |
 | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md@authored | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md | authored | 57 | 11 | sha256:bea0117983798941618c6bb02e434e01724011b472b15ce2789eea55dffdc6bd |
 | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md@authored | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md | authored | 49 | 12 | sha256:132b3b282d6055769c5aa827f773c67e60275d3a0d43008b0591d1525f70dca4 |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md | authored | 37 | 12 | sha256:5f21272705557881d9d73abe392ba0fc106a8185353907cc918aa75c666879be |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md@authored | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md | authored | 42 | 10 | sha256:a66618d299913629165021f9bec2bd02f4afcb0714f8dd1149db99f5391d2e71 |
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md@authored | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md | authored | 39 | 10 | sha256:cbf273e93bd704aae1337dc210a950f7f95493a727a45aef6d66b0af422aa458 |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md | authored | 42 | 12 | sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944 |
@@ -372,6 +373,18 @@ profile: domain-specification
 | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md#37 | authored | 2 | The Coupling Territory Could Not See |
 | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md#42 | authored | 2 | Consequences |
 | docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md#48 | authored | 2 | Status |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#1 | authored | 1 | Territory is paths, and a pattern is refused where it is authored |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#12 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#13 | authored | 3 | 1. `--territory-pattern` is a usage error, and leaves the advertised surface |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#16 | authored | 3 | 2. The narrowing costs nothing, because containment already says it |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#20 | authored | 3 | 3. The comparing branch is refused on soundness, not on cost |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#23 | authored | 3 | 4. The field and its `Unknown` are kept, and this is not half a decision |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#28 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#32 | authored | 2 | What This Does Not Do |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#34 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36 | authored | 2 | Status |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#1 | authored | 1 | The three verbs that change the board took no lock, and what a lock may span is the recording of a verdict and not the reaching of it |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#7 | authored | 2 | What Was Actually At Risk |
@@ -10442,6 +10455,308 @@ item.
 
 Accepted. Implemented in `nomos-ledger`, exposed as `nomos work takeover`, and reported by
 `nomos work show` and `nomos work list`.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#1
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored · hash: sha256:9d26b84bf1542902b6a773e349005b4622dfe0cacaa4d1052fb36626314d48d8*
+
+# Territory is paths, and a pattern is refused where it is authored
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#2
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#3
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Question · hash: sha256:415f5a9b09b0b04d2ac3de4bfffdffd74cbaff7d7cc166a6b0504458bab7c49c*
+
+`nomos work add` advertised `--territory-pattern <glob>` in its usage text and in `README.md`,
+beside `--territory`. A value passed to it landed in `Territory::patterns`, and
+`Territory::Intersect` short-circuits on a non-empty `patterns` before comparing a single
+path — so every comparison involving that item answered `Intersection::Unknown`, which
+`Refusal_From` maps to `ClaimRefusal::UnknownIndependence`, whose `Is_Retryable` is false.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#4
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Question · hash: sha256:12a8e57679154a47eed30bf69089af45800867702eaeaac28bbd82a9e16cb282*
+
+Refusing an unanswerable overlap rather than granting it is correct and is not in question
+here; `OD-LEDGER-001` is why the ledger's answer *is* the exclusion, and a claim that cannot
+be shown independent must never compare as touching nothing. What is in question is that the
+only documented way to reach that state was an advertised flag for a comparison nobody wrote.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#5
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Question · hash: sha256:8ea3ce85badbda278a5256242a149bb63c80ab4527ee3cb32ed9ebfb42e849f9*
+
+`P10-PATTERN-BRICK` asked which of two things closes it: the pattern compares, or the pattern
+is refused where it is authored.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#6
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#7
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:7443ed4a1938135e53936040c8bfa83ee64617422c723179b3ccb760d225282b*
+
+No open item on the board carries a pattern — 0 of 100, checked before any change — so this
+was found by reading `territory.rs` while measuring the board's serialization, not from an
+incident. That is what made closing it cost a test and a refusal rather than a recovery.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#8
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:572c6e8e10100b366539a259a34bf2bb08243936b70a990c0a02b2a6ab30e666*
+
+**The item's own description of the failure was one clause too strong, and the correction is
+the reason this record argues the way it does.** `P10-PATTERN-BRICK` states the item "can
+never be claimed by anyone, its own holder included". Measured through the real ledger, that
+is not what happens. `FileLedger::Conflicts` compares a candidate territory only against items
+holding an **active claim**, so on a quiet board a pattern item claims like any other — the
+pattern is never consulted, because there is nothing to consult it against.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#9
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:6e7f98618b3f0cc411a87a97825adad27ac3198914b4215154a64c6682e76fe8*
+
+The true shape is worse than an item nobody can take:
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#10
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:e00f1cdb9df70d582468ae280c29e2eed1a5dbcd91a852d9141c7b2c07e94f69*
+
+| Board state when the pattern item is reached | What happens |
+|---|---|
+| nothing held | it claims normally, and nothing warns the agent |
+| the pattern item now held | every other claim is refused `UnknownIndependence`, non-retryable, including territory sharing no path with it |
+| anything else held first | the pattern item can never be claimed, and no lease expiring resolves it |
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#11
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Measured · hash: sha256:11e06cbc380b144020aca9e9750ab4af866c26df79a2654cf083a552dc5e3015*
+
+So there is no ordering in which a board carries a pattern and keeps working, and the one
+agent who acquires the power to stop every other session learns nothing about having done so.
+The refusal they each receive is the code `README.md` defines as *stop and fetch a person*,
+which is the one refusal an agent must not route around — so the failure does not even
+present as contention. `Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board` and
+`Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held` pin both directions.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#12
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#13
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 1. `--territory-pattern` is a usage error, and leaves the advertised surface · hash: sha256:1ae7782afe6f996d1b6bf094b8859b1aaddde91668beaf05bc9e3a2495f5170f*
+
+### 1. `--territory-pattern` is a usage error, and leaves the advertised surface
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#14
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 1. `--territory-pattern` is a usage error, and leaves the advertised surface · hash: sha256:f8778c8389befc2296cad0829530f1c0310c07f364588e802546b4407803f885*
+
+`Parse_Add` refuses it before it checks `--territory`, and the flag is gone from the usage
+text and from `README.md`. The refusal names the flag, quotes the pattern it refused, and says
+what to write instead.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#15
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 1. `--territory-pattern` is a usage error, and leaves the advertised surface · hash: sha256:96bddac0939cb359239e35dea727bf32aa9ba8f1406dc83e561741997f95486f*
+
+It is a **usage** error and deliberately not a ledger one. Exit 2 says the mistake is in what
+was typed; 1 or 5 would say the board is broken, and the whole complaint of this item is that
+a typing mistake was presenting as a broken board. The ordering is asserted separately by
+`Test_A_Pattern_Alone_Should_Be_Refused_As_A_Pattern`, because before this change a pattern
+passed on its own reported "an item that reserves nothing excludes nobody" — a true sentence
+about the wrong problem, which sends the author to add a path rather than to drop the flag.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#16
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 2. The narrowing costs nothing, because containment already says it · hash: sha256:a8b6e57f27d437b66c2ab0a0f1ed1463f95b9b531d855c20f37fdad0d19acbeb*
+
+### 2. The narrowing costs nothing, because containment already says it
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#17
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 2. The narrowing costs nothing, because containment already says it · hash: sha256:b81f3f8034edf664d555320425de9bb7c1c575ee73ca08446e21b4a46c0c8c56*
+
+This is the load-bearing half, and without it the decision would be a real reduction in what
+the ledger offers.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#18
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 2. The narrowing costs nothing, because containment already says it · hash: sha256:ba30c3d91049438af7fd03cfc8e4683657b14d9e6060f9b3f9286e29e7f629b6*
+
+The justification the field originally carried was that an item may honestly say "this touches
+everything under `crates/spec/`" before anyone can enumerate that. That sentence is already an
+ordinary territory entry. `Contains_Or_Equals` decides containment textually, so
+`--territory crates/spec` reserves every file beneath it, with no filesystem access and no
+glob engine — and, unlike the pattern, it *answers*: a claim on a file inside it is refused
+`HeldBy`, which is retryable, names a holder and expires. A queue rather than a wall.
+`Test_A_Directory_Should_Reserve_Its_Subtree_Without_A_Pattern` asserts exactly that, together
+with the other half — genuinely unrelated territory stays claimable, so a directory entry
+reserves a subtree and not the board.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#19
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 2. The narrowing costs nothing, because containment already says it · hash: sha256:333e24e61eb7b742c4925024b93915e5401e5db9215e47150aea1f3070919993*
+
+So the flag added no expressiveness. It added one documented route to a state the comparison
+cannot decide.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#20
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 3. The comparing branch is refused on soundness, not on cost · hash: sha256:46914a77cea14c01c419f6e0a99d5698ee014d750592f5cc60d066624f4aa09c*
+
+### 3. The comparing branch is refused on soundness, not on cost
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#21
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 3. The comparing branch is refused on soundness, not on cost · hash: sha256:f7e94d4334d9bff429e285b0d45d1c0482961f948a6ef2c1156f3d52a76b813c*
+
+Implementing glob comparison is not hard for glob-against-path. It is hard where it counts:
+glob-against-glob, which is what two items each carrying a pattern would require, and where
+the answer that must never be wrong is `Disjoint`.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#22
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 3. The comparing branch is refused on soundness, not on cost · hash: sha256:848675de5b66a0affa2fe22f214222a671ee76c57675fa310d76b96b9af13cbc*
+
+Every other answer this mechanism gives is safe when wrong in the conservative direction — an
+unnecessary `Overlaps` costs throughput, and `Unknown` costs a refusal. A wrong `Disjoint`
+costs an edit, and an edit does not come back. That is the same trade `Normalize_Path` already
+makes when it folds case, decided the same way. Buying a feature nobody is using, at the price
+of a new opportunity to answer `Disjoint` incorrectly from subtle glob semantics, is the wrong
+side of it.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#23
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 4. The field and its `Unknown` are kept, and this is not half a decision · hash: sha256:6baad47d2e1826c8a83b54a01c4a9609ec0b1e9d3eabc82e691169dd80d5bd96*
+
+### 4. The field and its `Unknown` are kept, and this is not half a decision
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#24
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 4. The field and its `Unknown` are kept, and this is not half a decision · hash: sha256:1e7cab1d03ceb5615a3d334559b110e2e09b96641746bd515627111da6da91d6*
+
+`Territory::patterns` stays, and `Territory::Intersect` still short-circuits to `Unknown` on
+it. Two reasons, and neither is reluctance:
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#25
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 4. The field and its `Unknown` are kept, and this is not half a decision · hash: sha256:72573b202b8e399db77a59bb2f4fda269dc411a8e0ba48b2a366df359ec87cc0*
+
+- `#[serde(deny_unknown_fields)]` governs this document, so removing the key would refuse
+  every ledger ever written, including the hundred items carrying `"patterns": []` today.
+  `OD-LEDGER-008` is the standing decision that a writer which does not understand a document
+  must not write it; deleting a field every existing document carries is that failure chosen
+  deliberately.
+- A hand-edited document, or some future authoring surface, can still put one there. Such a
+  document must keep failing closed, and `Unknown` is what does that.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#26
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 4. The field and its `Unknown` are kept, and this is not half a decision · hash: sha256:40c2db8b9dc009490646cc952881d44816dfa407c1078d63b498dfff19add0a4*
+
+**Withdrawing the flag removes the way in. It deliberately does not remove the guard.** The
+two are different jobs and this record does both of them on purpose.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#27
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / The Decision / 4. The field and its `Unknown` are kept, and this is not half a decision · hash: sha256:89d8ffc8a9b0e68115403375fd2b76a220b68fce41f398041d5137b9762110a2*
+
+`Territory::With_Pattern` stays public for the same reason: a guard against a state nothing
+can construct is a guard nothing can test, and it is how the fail-closed behaviour above is
+exercised.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#28
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#29
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Considered And Rejected · hash: sha256:641c3cd4d52d0089688575381122117e9d147fec57137edcf8f4496fc24f9a5a*
+
+**Leave the flag and document the hazard.** `P10-PATTERN-BRICK`'s `done_when` refuses this in
+advance and is right to. The warning arrives after the write, and the board a documented flag
+can brick is every session's board at once.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#30
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Considered And Rejected · hash: sha256:23b9f7af5464733560df855f9efcea6d4d37cfbc23c44b0f3b61cbf863efbe69*
+
+**Refuse patterns in `Validate`, so the document rejects one too.** This is the more complete
+answer and it is the right shape — it would close the hand-edit route as well as the flag.
+It is not done here because `Validate` lives in `store.rs`, which is outside
+`P10-PATTERN-BRICK`'s territory, and widening a territory mid-claim is the failure this
+repository has already had twice. The state remains safe without it — it fails closed, which
+is decision 4 — so this is a completeness gap and not a hole. It is worth an item.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#31
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What Was Considered And Rejected · hash: sha256:c3ff30496928133231eb59456ce9820a318551dd861557776293e608536a74d3*
+
+**Expand the pattern against the filesystem at authoring time.** Rejected on
+`OD-LEDGER-009`: the ledger's validity must not depend on when it is read, and an expansion is
+a photograph of a working tree that three sessions are writing. Two agents expanding one
+pattern seconds apart would reserve different sets, and the document would not say which.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#32
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#33
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / What This Does Not Do · hash: sha256:2dee1c2a9a6ba7c04d66f2b92dba3535dd419ca3c12339724d65cc72c02c0784*
+
+- It does not change `Territory::Intersect`, `Refusal_From`, or what `Unknown` means. The
+  refusal semantics are untouched; only the way of reaching them by accident is.
+- It does not remove `patterns` from the schema, and decision 4 names the identifier that
+  would break if it did.
+- It does not make the state unreachable, and does not pretend to. It makes it unreachable
+  *through a documented flag*, which is what `done_when` asked for, and leaves the guard
+  standing behind it.
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#34
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#35
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Controls · hash: sha256:35fe57d0c941020bfba5f133234431e0fa8c54ce886fea67b24d98b087fb74b3*
+
+| Weakening | What it produces |
+|---|---|
+| keep the flag, document the hazard | one agent silently acquires the power to refuse every other session, and finds out after the write |
+| relax `Unknown` to `Disjoint` for patterns | two agents editing one file, told the territory was independent — the failure the ledger exists to prevent |
+| implement glob-against-glob comparison | a new way to answer `Disjoint` wrongly, bought for a feature 0 of 100 open items use |
+| remove the `patterns` field outright | every ledger ever written stops loading, `OD-LEDGER-008`'s refusal chosen deliberately |
+| check `--territory` before the pattern | "an item that reserves nothing excludes nobody" — true, about the wrong problem, and it sends the author to add a path rather than drop the flag |
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36
+
+*revision: authored · kind: heading · heading: Territory is paths, and a pattern is refused where it is authored / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#37
+
+*revision: authored · kind: prose · heading: Territory is paths, and a pattern is refused where it is authored / Status · hash: sha256:93fcbc34b5418e23f7ba27548ac2a55f486cb52347526db2f220f33cbb5dcf66*
+
+Closed by `P10-PATTERN-BRICK`.
 
 ### docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md#1
 

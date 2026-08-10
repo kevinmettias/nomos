@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:7df32aa4a1e49798b9a6176e1eab0628939e141943dafea8ef329dbe1524bb13",
-  "inputs_digest": "sha256:fa0e9178b289d32c6aafd1a35e00d778bb0d8376d37e9e1f65171ff28a90b6de",
+  "content_digest": "sha256:99e77d687ea076ab34fd0a7da901f7bfd2053f58db46a271a89fee8509f864c4",
+  "inputs_digest": "sha256:77530228950cf43e887c40f517f5a58e022d439c407e08bc512af81a40e31495",
   "sections": [
     [
       "Documents",
-      59
+      60
     ],
     [
       "Sections",
-      527
+      539
     ],
     [
       "Source blocks",
-      2117
+      2154
     ]
   ],
   "inputs": [
@@ -194,6 +194,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md@authored",
       "hash": "sha256:132b3b282d6055769c5aa827f773c67e60275d3a0d43008b0591d1525f70dca4"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored",
+      "hash": "sha256:5f21272705557881d9d73abe392ba0fc106a8185353907cc918aa75c666879be"
     },
     {
       "content": "documents",
@@ -1804,6 +1809,66 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md#48",
       "hash": "sha256:7267a3c2a4fd66541daffde355d8d10cb4a2d9a9403f1f42bf4cf0d7a342318f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#1",
+      "hash": "sha256:f9152324ad6d0a9af345b64e7c68e4ba3093e744d1b37bdfd42bea2be15cb9c4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#2",
+      "hash": "sha256:6724c177085c5a25b5b02d644d7c4d37cbb6089ed4bd994a32f85d578788d1c4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#6",
+      "hash": "sha256:b2723407767c7de1a851422c6ff5e81095db436d922aa99fdee3930f4478c2b7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#12",
+      "hash": "sha256:dfdc08de33f37a1ba40214bb9b13989e156de2d194fd1d88181341bbfcd6efbe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#13",
+      "hash": "sha256:ad72d5692fd6538e57b91cf3e5b53c4194e0df122c372c81a45464cd28ff28f4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#16",
+      "hash": "sha256:e51ea20329421c2c6e21c104ac0eb8098ffa186ec35361318ce34d4b58a3572b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#20",
+      "hash": "sha256:c00912060e037296a2b8982da50bdc44c57f995b5a74bb2ffd0b77c8091f21d0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#23",
+      "hash": "sha256:7361093f4ff69ef19c9ebe9b5901fcd9e9528a24553f083d6467bd4801240515"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#28",
+      "hash": "sha256:cbb14b576750cfb3f3d29d87542e2abbde9e0f963897f7da70405cd8693b6802"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#32",
+      "hash": "sha256:31b0147df6a959b7a7b0e74fffbcbd5507815b35f85ea7f5af3511df65060ce1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#34",
+      "hash": "sha256:746bbcb31e02c7ca4fdbb32075f7b4f37a88f1755d6f56190de8a31cfb350bbf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36",
+      "hash": "sha256:655b1270b55ae1a60ebef821a81b197c9f41ec311d68352081b067cbfff50a05"
     },
     {
       "content": "headings",
@@ -8789,6 +8854,191 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-012-a-lapse-is-taken-over-and-the-claim-it-replaces-is-kept.md#49",
       "hash": "sha256:c25867ca5ab50543d2e6fc1eeb4138cbf7d62efd0ff91740047b82dd97ed65ee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#1",
+      "hash": "sha256:9d26b84bf1542902b6a773e349005b4622dfe0cacaa4d1052fb36626314d48d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#3",
+      "hash": "sha256:415f5a9b09b0b04d2ac3de4bfffdffd74cbaff7d7cc166a6b0504458bab7c49c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#4",
+      "hash": "sha256:12a8e57679154a47eed30bf69089af45800867702eaeaac28bbd82a9e16cb282"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#5",
+      "hash": "sha256:8ea3ce85badbda278a5256242a149bb63c80ab4527ee3cb32ed9ebfb42e849f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#7",
+      "hash": "sha256:7443ed4a1938135e53936040c8bfa83ee64617422c723179b3ccb760d225282b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#8",
+      "hash": "sha256:572c6e8e10100b366539a259a34bf2bb08243936b70a990c0a02b2a6ab30e666"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#9",
+      "hash": "sha256:6e7f98618b3f0cc411a87a97825adad27ac3198914b4215154a64c6682e76fe8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#10",
+      "hash": "sha256:e00f1cdb9df70d582468ae280c29e2eed1a5dbcd91a852d9141c7b2c07e94f69"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#11",
+      "hash": "sha256:11e06cbc380b144020aca9e9750ab4af866c26df79a2654cf083a552dc5e3015"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#13",
+      "hash": "sha256:1ae7782afe6f996d1b6bf094b8859b1aaddde91668beaf05bc9e3a2495f5170f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#14",
+      "hash": "sha256:f8778c8389befc2296cad0829530f1c0310c07f364588e802546b4407803f885"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#15",
+      "hash": "sha256:96bddac0939cb359239e35dea727bf32aa9ba8f1406dc83e561741997f95486f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#16",
+      "hash": "sha256:a8b6e57f27d437b66c2ab0a0f1ed1463f95b9b531d855c20f37fdad0d19acbeb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#17",
+      "hash": "sha256:b81f3f8034edf664d555320425de9bb7c1c575ee73ca08446e21b4a46c0c8c56"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#18",
+      "hash": "sha256:ba30c3d91049438af7fd03cfc8e4683657b14d9e6060f9b3f9286e29e7f629b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#19",
+      "hash": "sha256:333e24e61eb7b742c4925024b93915e5401e5db9215e47150aea1f3070919993"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#20",
+      "hash": "sha256:46914a77cea14c01c419f6e0a99d5698ee014d750592f5cc60d066624f4aa09c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#21",
+      "hash": "sha256:f7e94d4334d9bff429e285b0d45d1c0482961f948a6ef2c1156f3d52a76b813c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#22",
+      "hash": "sha256:848675de5b66a0affa2fe22f214222a671ee76c57675fa310d76b96b9af13cbc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#23",
+      "hash": "sha256:6baad47d2e1826c8a83b54a01c4a9609ec0b1e9d3eabc82e691169dd80d5bd96"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#24",
+      "hash": "sha256:1e7cab1d03ceb5615a3d334559b110e2e09b96641746bd515627111da6da91d6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#25",
+      "hash": "sha256:72573b202b8e399db77a59bb2f4fda269dc411a8e0ba48b2a366df359ec87cc0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#26",
+      "hash": "sha256:40c2db8b9dc009490646cc952881d44816dfa407c1078d63b498dfff19add0a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#27",
+      "hash": "sha256:89d8ffc8a9b0e68115403375fd2b76a220b68fce41f398041d5137b9762110a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#28",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#29",
+      "hash": "sha256:641c3cd4d52d0089688575381122117e9d147fec57137edcf8f4496fc24f9a5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#30",
+      "hash": "sha256:23b9f7af5464733560df855f9efcea6d4d37cfbc23c44b0f3b61cbf863efbe69"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#31",
+      "hash": "sha256:c3ff30496928133231eb59456ce9820a318551dd861557776293e608536a74d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#32",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#33",
+      "hash": "sha256:2dee1c2a9a6ba7c04d66f2b92dba3535dd419ca3c12339724d65cc72c02c0784"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#34",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#35",
+      "hash": "sha256:35fe57d0c941020bfba5f133234431e0fa8c54ce886fea67b24d98b087fb74b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#36",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md#37",
+      "hash": "sha256:93fcbc34b5418e23f7ba27548ac2a55f486cb52347526db2f220f33cbb5dcf66"
     },
     {
       "content": "blocks",
