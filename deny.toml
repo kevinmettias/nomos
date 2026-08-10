@@ -7,6 +7,13 @@ yanked = "deny"
 
 [licenses]
 version = 2
+# Every member of this workspace is `publish = false` with `license = "UNLICENSED"`, which
+# is not an SPDX expression and cannot be made into one — there is no SPDX identifier
+# meaning "not licensed for distribution". Without this, the first execution of this file
+# refused all 22 members as unlicensed third-party code: a true reading of the letter that
+# says nothing whatever about a dependency. The allowlist below is what this file is for,
+# and it still governs everything that is not a member of this workspace.
+private = { ignore = true }
 allow = [
     "Apache-2.0",
     "Apache-2.0 WITH LLVM-exception",
@@ -21,6 +28,13 @@ allow = [
 [bans]
 multiple-versions = "warn"
 wildcards = "deny"
+# The line above is aimed at a registry dependency with no version bound. A `{ path = … }`
+# dependency carries no version either, so every first-party edge in this workspace reads
+# as a wildcard: 19 of the 22 members were refused on the first execution of this file, for
+# depending on each other. cargo-deny permits the exemption only for `publish = false`
+# crates, which is exactly the case being exempted here, so `wildcards = "deny"` keeps its
+# whole meaning for the dependencies it was written about.
+allow-wildcard-paths = true
 
 # A headless Nomos must not acquire a GPU, windowing or UI stack transitively.
 #

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:136b73c1958ed005073683da40cbd939e7553bfa237e7ee868596f228e90b2bc",
-  "inputs_digest": "sha256:0bcfdf559a512e583fd3795e85730da36bff34d55ae49e52664183e6d0227815",
+  "content_digest": "sha256:97e96b1fb10cf4d22a5c5b8d5e7e7cbba20b2f5cffd8b00ae2189aa2e743b2e4",
+  "inputs_digest": "sha256:1d21e50fa5f4531d78978e80d625c114c813f6b6a9a331d86ad21a8a2ec12b54",
   "sections": [
     [
       "Documents",
-      73
+      74
     ],
     [
       "Sections",
-      689
+      698
     ],
     [
       "Source blocks",
-      2713
+      2750
     ]
   ],
   "inputs": [
@@ -154,6 +154,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored",
       "hash": "sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored",
+      "hash": "sha256:589ddc8de1af5ea870f31c4cb1b7f935e5d0dc0dc40c44186723553b943aa111"
     },
     {
       "content": "documents",
@@ -1534,6 +1539,51 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md#57",
       "hash": "sha256:78214263681282b8eed903e18f30ddca07251af7dcd87467ec1e79a80c8254de"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#1",
+      "hash": "sha256:78e4fa0f3d44decbb676618ab3d12949f0e87d7fe027c8793b713032f23b06cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#2",
+      "hash": "sha256:59987ece687859ec3fe5d3d25c0efafcba36c6be9151474d618955bd690f06a7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#5",
+      "hash": "sha256:d1a11c6b2d4355e880a67aa00dfc5de6fb3fb30ef064921a877b88cee0fbc5f1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#14",
+      "hash": "sha256:92e1dfcd352d0d4e567d262373cadfad9e55539970728c146b8c36c73cb8f09d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#20",
+      "hash": "sha256:896d4d35fe0c6f680890f45324c19c67db675b59fbdfda1be73ccb0c28b05374"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#24",
+      "hash": "sha256:5567bce06a34e21c4fa2bb503c523e26b726b44d8c244960a2c440f2d2ab26bf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#28",
+      "hash": "sha256:0a22587037cea4e4c5ae141767553c340a5edee195fa07aa2e2dbfb61097c23a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#33",
+      "hash": "sha256:ea74ea1aa6d760188b131ee8d09152b14d4c577f2aaee63680d3469bcb1fe8ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#36",
+      "hash": "sha256:f9de3d960f5a4d395db902ad0136c5ad8bd02e92ddaf210916d4df8cba66305f"
     },
     {
       "content": "headings",
@@ -8224,6 +8274,191 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md#59",
       "hash": "sha256:9b5e0fde212047d5833de6c12e03873d7ad4adcd6ddeee1cc63c6ca31e4762cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#1",
+      "hash": "sha256:a07cba38ff8493a92149d451d3df53583debfea44d151992ec23f73e8501ae34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#3",
+      "hash": "sha256:60ed6efe67722592bbd9a05d4613af72e82bb5b6c938d7e1573c48779f20c119"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#4",
+      "hash": "sha256:41b4ef222b33a3b27a0c0c24417eac88c60a04c138f7a14484493883ddeec147"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#6",
+      "hash": "sha256:38243d0cfbd22ac7dc74a7a35ecf2f304da535d6dae690dd48697b75007fd32f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#7",
+      "hash": "sha256:04fdd3537812f96e08925f986f339d0a7a307a389cd4a08d44a34a83e9d02c97"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#8",
+      "hash": "sha256:5d82ba1e2e79c3c4f9860a0545c33239f24bf15db9c685bad3179071d33b77e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#9",
+      "hash": "sha256:9f59ca294e3f73eb310f035a2b60a8679077be5fb06a755c760ba233f4e68c85"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#10",
+      "hash": "sha256:c450b27e2ebaacce8b8044134c4f6bef22c8715dbe4300a45f8a8987c29d68ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#11",
+      "hash": "sha256:5b58525e0ca6fa3fedf5f21f08cf44e3255835a14d3bb26fabea61b75ce71a52"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#12",
+      "hash": "sha256:c3f4eba6e2ec3f81f735d45f9d220c0a67200cfe6db322307b87d82c100fa68c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#13",
+      "hash": "sha256:18d2622345ea244c39dfe5d2fece71d036f4bf34ba0c2a87687cf3604a4a0ce8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#14",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#15",
+      "hash": "sha256:980a6b52b67b8eb9bd46e91022766224f05be3b888cf6448d445def0e9674d8c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#16",
+      "hash": "sha256:2e744b683332822455ee9122675e3e1bea66c503b90430a1fef6c0ceb77d48c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#17",
+      "hash": "sha256:4bbd4233c2d4b1975adde09de3bdaf534b031317cd8d1965e176c6dd11878ddc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#18",
+      "hash": "sha256:74e1e696a0cc5fe1d44b56e47d5d8e0ab9c13190d004cca8da1d24114fd054ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#19",
+      "hash": "sha256:dad9f08692f7ae08340f37f18b3106c2abf9c7ff84dd7503dfef313899b21d40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#20",
+      "hash": "sha256:5319532f3af5b801092aeae9b986db5f6a1b000128bd63c709fecc06f4275132"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#21",
+      "hash": "sha256:6ebbfd1d26f44395bd9b7071642fb23495bde188642b20f065ba9b25fa8bfa33"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#22",
+      "hash": "sha256:27771b5c7b6b3ac3e8cb9565dc00d3601d2b2de7a6895ddc3341b19034d3a8bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#23",
+      "hash": "sha256:3c1e687622950ecf4c71e1228bf4725164ee98f6152abdfebf1a5f6b4d71c14a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#24",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#25",
+      "hash": "sha256:bea249af200eabd17518d820fabbef4ddb8189bdb54c059132154795dc57c615"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#26",
+      "hash": "sha256:98ad173ed98fd171c3c60db82deefd52fb2a62dd9320f09ca7b78fce83b1ce4f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#27",
+      "hash": "sha256:5dc4ee1c25bc39c977e06cef957df9d8579b5d5aef4a8756f57c439083bad91d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#28",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#29",
+      "hash": "sha256:9c1f1584061ab72ee97161de9a6e019f84161a0e8cafd7a4b6da1ca8d1c919f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#30",
+      "hash": "sha256:95352c6ac315a96f60570b9df2cf74274fceea392e9bce8c9ef346cb433e7b7e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#31",
+      "hash": "sha256:ecd4299dac6c627e50af10014458c65d65c95536ea9580bf4bdf6f9ef6dcd860"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#32",
+      "hash": "sha256:433519cb06156a1da15decf228453421920d0efc3dbbab28637abdc04ad9e0e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#33",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#34",
+      "hash": "sha256:d00244b0189b3b7611c8ffcf4ce58f4336f8dac176ed0f52c019ac25101a27e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#35",
+      "hash": "sha256:48432c780a3de035fcb0f355039b93df767bc495beea36ad94ec706509ee670c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#36",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#37",
+      "hash": "sha256:71a4c19910483a038d747e4973f68973e11cc0853b5f6f17a6b617ee9af5558e"
     },
     {
       "content": "blocks",

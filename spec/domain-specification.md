@@ -37,6 +37,7 @@ profile: domain-specification
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md | authored | 37 | 9 | sha256:589ddc8de1af5ea870f31c4cb1b7f935e5d0dc0dc40c44186723553b943aa111 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -318,6 +319,15 @@ profile: domain-specification
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md#53 | authored | 2 | What This Does Not Do |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md#55 | authored | 2 | Controls |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md#57 | authored | 2 | Status |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#1 | authored | 1 | A declaration of enforcement is incomplete until something executes it, in every environment the claim needs |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#14 | authored | 2 | The Decision |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#20 | authored | 2 | Cadence, And Why It Is Not Separated Here |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#24 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#28 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#33 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#36 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -8227,6 +8237,334 @@ with a projection predicate will meet decision 5 again. Re-authoring those predi
 `finish` a way to be pointed at the tree a predicate is about — is real work this record does not
 do, and it is named here rather than widened into an item whose territory is a diagram and a
 skill.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#1
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs · hash: sha256:a07cba38ff8493a92149d451d3df53583debfea44d151992ec23f73e8501ae34*
+
+# A declaration of enforcement is incomplete until something executes it, in every environment the claim needs
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#2
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#3
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Question · hash: sha256:60ed6efe67722592bbd9a05d4613af72e82bb5b6c938d7e1573c48779f20c119*
+
+This repository governs by mechanism. `OD-AGENT-001` refuses an instruction file that restates
+architecture, because a document read by a machine every session and reviewed by a person
+approximately never promotes an undecided design to normative status. `OD-GATE-002` derives the
+surface check here rather than trusting a tool nobody has. `OD-LEDGER-003` derives the gate's
+lint argv from the workflow rather than retyping it, because "two guards for one rule is how
+they come to disagree". The pattern is consistent: a claim is worth what the thing that checks
+it is worth.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#4
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Question · hash: sha256:41b4ef222b33a3b27a0c0c24417eac88c60a04c138f7a14484493883ddeec147*
+
+Four claims in this repository are checked by nothing, and each of them reads, in the file that
+makes it, like a claim about a mechanism. That is the failure mode the pattern was supposed to
+prevent, arriving through a door nobody was watching: not an undocumented rule, but a documented
+rule with no executor.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#5
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#6
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:38243d0cfbd22ac7dc74a7a35ecf2f304da535d6dae690dd48697b75007fd32f*
+
+At `4844c2b`, on 2026-08-10.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#7
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:04fdd3537812f96e08925f986f339d0a7a307a389cd4a08d44a34a83e9d02c97*
+
+**The gate did not run on the branch the work is on.** `.github/workflows/gate.yml` triggered on
+`pull_request` and on `push` to `main`. Every commit in this repository is pushed to `dev` and
+reaches `main` only by a merge, so the workflow named `gate` covered the branch that receives
+finished work and not the branch that produces it. Earlier in the session that measured this,
+the gate was red on `dev` at the `Lint` step, and the only reason anybody knew is that a session
+ran clippy by hand. `P10-DIAGRAM-OWED` measured the same shape once already at the
+`Required projections` step, and its own reasoning ends by observing that the honest agents are
+the ones who leave it broken.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#8
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:5d82ba1e2e79c3c4f9860a0545c33239f24bf15db9c685bad3179071d33b77e9*
+
+**`deny.toml` had never been executed.** It configures four classes and no step in any workflow
+ran `cargo deny`. `D-130` cites it as governing — "`deny.toml` bans the GPU, windowing and UI
+crates on the default feature set" — and the file says of that ban that it "is what makes the
+distinction hold mechanically rather than by intention". It held by intention.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#9
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:9f59ca294e3f73eb310f035a2b60a8679077be5fb06a755c760ba233f4e68c85*
+
+Its first execution, `cargo-deny` 0.20.2 against `Cargo.lock`:
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#10
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:c450b27e2ebaacce8b8044134c4f6bef22c8715dbe4300a45f8a8987c29d68ca*
+
+| class | result |
+|---|---|
+| advisories | ok |
+| sources | ok |
+| licenses | **failed, 22 errors** |
+| bans | **failed, 19 errors** |
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#11
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:5b58525e0ca6fa3fedf5f21f08cf44e3255835a14d3bb26fabea61b75ce71a52*
+
+Neither failure was a supply-chain finding, and that is this record's subject rather than a
+mitigation. `licenses` refused all 22 workspace members because `license = "UNLICENSED"` is not
+an SPDX expression and `private` was unset, so every `publish = false` crate here read as
+unlicensed third-party code. `bans` refused 19 of them because `wildcards = "deny"` and a
+`{ path = … }` dependency carries no version, so every first-party edge read as a wildcard and
+`allow-wildcard-paths` was unset. The GPU ban `D-130` cites did pass — there is no `wgpu`,
+`egui`, `winit`, `ash` or `naga` in the tree — and it had passed unobserved since the file was
+written.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#12
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:c3f4eba6e2ec3f81f735d45f9d220c0a67200cfe6db322307b87d82c100fa68c*
+
+**`rust-version` claims a floor nothing compiles.** `Cargo.toml` declares
+`rust-version = "1.85"`; `rust-toolchain.toml` pins the channel to `nightly` for rustfmt's
+unstable brace style, so no build here or in CI has ever used a compiler near the floor. Nine
+`&& let` chains are in the workspace today and let chains stabilized in Rust 1.88 under edition
+2024, so the declared floor cannot compile the code that declares it.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#13
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Measured · hash: sha256:18d2622345ea244c39dfe5d2fece71d036f4bf34ba0c2a87687cf3604a4a0ce8*
+
+**Every determinism claim is checked on one operating system.** The gate runs one job on
+`ubuntu-latest`. Six crates carry a `determinism.rs` under `OD-DETERMINISM-001` and
+`OD-DETERMINISM-002`, and the properties those claims are usually wrong about — path
+separators, directory iteration order, filename case, line endings — are exactly what differs
+between a Linux runner and the Windows host this repository is developed on. `.gitattributes`
+states the risk in as many words, that "the same commit would validate on one machine and not
+on another", and defends one instance of it with `eol=lf` and a single test.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#14
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#15
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / The Decision · hash: sha256:980a6b52b67b8eb9bd46e91022766224f05be3b888cf6448d445def0e9674d8c*
+
+> **A declaration of mechanical enforcement, compatibility, or environmental validity is
+> incomplete until an executable gate exercises that declaration in every environment necessary
+> for the claim to hold.**
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#16
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / The Decision · hash: sha256:2e744b683332822455ee9122675e3e1bea66c503b90430a1fef6c0ceb77d48c4*
+
+Three consequences follow, and each is the reason the sentence is worded the way it is.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#17
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / The Decision · hash: sha256:4bbd4233c2d4b1975adde09de3bdaf534b031317cd8d1965e176c6dd11878ddc*
+
+**An unexecuted declaration is not merely unverified; it is untested as a declaration.** This is
+the finding, and it is stronger than the suspicion that prompted the work. `deny.toml` was
+assumed to be correct-but-unrun. Two of its four classes could not have passed on any input,
+because they were misconfigured against this workspace's own shape, and nothing in the file or
+in `D-130` could have revealed that without running it. A declaration that has never executed
+has never had its own syntax, its own scope, or its own applicability checked. So the cost of
+leaving one unrun is not the failures it would have caught — it is that nobody knows whether it
+could catch anything.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#18
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / The Decision · hash: sha256:74e1e696a0cc5fe1d44b56e47d5d8e0ab9c13190d004cca8da1d24114fd054ac*
+
+**The class that passes is as load-bearing as the class that fails.** The narrow repair here —
+run `advisories` and `sources`, leave `licenses` and `bans` until somebody has time — would have
+produced a green step that exercised half a file while reading as though it exercised the file.
+That is `OD-GATE-001`'s defect, a check reporting ok having examined nothing, one level up from
+where that record found it. A gate step is a claim about what it covers, and a step that names
+its config file covers all of it or names the part it covers.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#19
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / The Decision · hash: sha256:dad9f08692f7ae08340f37f18b3106c2abf9c7ff84dd7503dfef313899b21d40*
+
+**"In every environment necessary for the claim to hold" is decided by the claim, not by
+convenience.** A compatibility floor's necessary environment is that floor. A determinism claim's
+necessary environments are the ones the claim says produce identical output, which is more than
+one by construction — a determinism claim checked in a single environment is a tautology.
+Nothing here requires a matrix for its own sake; what it forbids is choosing the environment
+because it was the one already configured.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#20
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Cadence, And Why It Is Not Separated Here · hash: sha256:5319532f3af5b801092aeae9b986db5f6a1b000128bd63c709fecc06f4275132*
+
+## Cadence, And Why It Is Not Separated Here
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#21
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Cadence, And Why It Is Not Separated Here · hash: sha256:6ebbfd1d26f44395bd9b7071642fb23495bde188642b20f065ba9b25fa8bfa33*
+
+Of the four classes now running, three are functions of `Cargo.lock` and one is not: an advisory
+published tomorrow can redden this gate with no commit in between. The obvious response is a
+second cadence — the deterministic classes per commit, the advisory database on a schedule.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#22
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Cadence, And Why It Is Not Separated Here · hash: sha256:27771b5c7b6b3ac3e8cb9565dc00d3601d2b2de7a6895ddc3341b19034d3a8bf*
+
+That is deliberately not done, and the reason is `OD-GATE-001` again rather than laziness. A
+scheduled run has no pull request to fail and nobody obliged to act on it, and this repository
+already has one step that cannot fail by design and had to argue for itself in a paragraph. A
+second signal nobody is required to answer is a gate everybody learns to ignore, which is worse
+than a per-commit failure arriving on a day the diff did not cause it. The failure is legible
+either way; only one of the two arrangements makes somebody deal with it.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#23
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Cadence, And Why It Is Not Separated Here · hash: sha256:3c1e687622950ecf4c71e1228bf4725164ee98f6152abdfebf1a5f6b4d71c14a*
+
+This is a decision about this repository at this size and it is the part of this record most
+likely to be revisited. What would change it is a second cadence that somebody is accountable
+to, not a larger dependency graph.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#24
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#25
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What This Record Does Not Decide · hash: sha256:bea249af200eabd17518d820fabbef4ddb8189bdb54c059132154795dc57c615*
+
+It does not decide anything about a declaration that *is* executed. The workspace lint table in
+`Cargo.toml` and the gate's `-D warnings` are two authorities for one severity policy, and both
+of them run — that is a disagreement between executors rather than an absent one, and it belongs
+to `P11-LINT-AUTHORITY`.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#26
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What This Record Does Not Decide · hash: sha256:98ad173ed98fd171c3c60db82deefd52fb2a62dd9320f09ca7b78fce83b1ce4f*
+
+It does not decide what this repository's supported platforms or minimum toolchain *are*. It
+decides that whatever they are declared to be must be exercised. Choosing the floor belongs to
+`P11-MSRV-UNCHECKED`; choosing the second operating system belongs to `P11-PLATFORM-UNCHECKED`.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#27
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What This Record Does Not Decide · hash: sha256:5dc4ee1c25bc39c977e06cef957df9d8579b5d5aef4a8756f57c439083bad91d*
+
+It does not make CI a product surface. Nothing here is about a canonical CI policy, a generated
+workflow, or a vendor-neutral runner. `ARC-ECOSYSTEM-001`'s rule that current repository
+location alone does not make something Nomos applies to this workflow exactly as it applies to
+the ledger: `gate.yml` is bootstrap.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#28
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#29
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Considered And Rejected · hash: sha256:9c1f1584061ab72ee97161de9a6e019f84161a0e8cafd7a4b6da1ca8d1c919f0*
+
+**Write the obligation into `AGENTS.md`.** Refused, and this is the third time a record has had
+to refuse it. `OD-AGENT-001` is the reasoning and `ARC-HARNESS-001` cites it for the same
+purpose. A hazard line telling authors to run `cargo deny` by hand is a rule enforced by memory,
+in a file that is read by a machine and reviewed by a person approximately never — and the
+subject of this record is precisely a rule that nothing enforces.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#30
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Considered And Rejected · hash: sha256:95352c6ac315a96f60570b9df2cf74274fceea392e9bce8c9ef346cb433e7b7e*
+
+**Delete the unexecuted declaration instead of executing it.** Tempting for `rust-version`,
+which is wrong rather than merely unchecked, and wrong for `deny.toml`, whose ban `D-130` cites
+as load-bearing. Deleting is the right answer only where the claim is not wanted, and deciding
+that is per-declaration work. What this record refuses is the third state: keeping the
+declaration, citing it in a governing record, and running nothing.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#31
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Considered And Rejected · hash: sha256:ecd4299dac6c627e50af10014458c65d65c95536ea9580bf4bdf6f9ef6dcd860*
+
+**Add the checks and accept a red gate.** Refused because a gate that is red on arrival teaches
+the same lesson as a gate that never runs. `deny.toml` was repaired in the same commit that
+began executing it, and the repairs are visible as configuration rather than as suppression:
+`private` and `allow-wildcard-paths` both narrow the check to the case it was written for, and
+the ban list was measured still live afterwards by adding a crate that *is* in the graph and
+watching `bans` refuse it.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#32
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Was Considered And Rejected · hash: sha256:433519cb06156a1da15decf228453421920d0efc3dbbab28637abdc04ad9e0e1*
+
+**Require every declaration to name its executor mechanically.** This is the version of this
+record that would prevent recurrence rather than describing it — a check that reads the
+repository's declarations and refuses one that no gate step reaches. It is refused here for
+scope rather than on the merits: there is no enumeration of "declarations" to read, and
+inventing one to satisfy this record would put a second authority beside the files that already
+make the claims. It is named here so the next reader knows the gap is known.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#33
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#34
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Holds It · hash: sha256:d00244b0189b3b7611c8ffcf4ce58f4336f8dac176ed0f52c019ac25101a27e1*
+
+`.github/workflows/gate.yml` itself, and the assertions that already read it as text:
+`Test_Only_One_Step_Should_Be_Named_Lint` keeps the new steps from colliding with the argv
+`work finish` derives, `Test_No_Step_In_The_Gate_Should_Excuse_Itself` refuses
+`continue-on-error` on any of them, and `Test_The_Workflow_Should_Not_Appear_Empty` is the floor
+that fails if the file is emptied rather than fixed.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#35
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / What Holds It · hash: sha256:48432c780a3de035fcb0f355039b93df767bc495beea36ad94ec706509ee670c*
+
+What does **not** hold it is worth stating plainly, because the shape of this record invites the
+opposite reading. Nothing prevents the next declaration from arriving unexecuted. The two
+instances still open are open items and not tests, and if both are declined this record's
+principle survives with one instance discharged. That is the honest state and it is why the
+paragraph above names the mechanical version and says why it was not built.
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#36
+
+*revision: authored · kind: heading · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#37
+
+*revision: authored · kind: prose · heading: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs / Status · hash: sha256:71a4c19910483a038d747e4973f68973e11cc0853b5f6f17a6b617ee9af5558e*
+
+Closed. `P11-UNRUN-POLICY` carries it and discharges two of the four instances measured above:
+the gate now runs on the branch the work lands on, and `cargo deny` runs all four classes and
+exits 0. `P11-MSRV-UNCHECKED` and `P11-PLATFORM-UNCHECKED` carry the other two and depend on
+this item, so the record exists before the instances that cite it rather than after.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

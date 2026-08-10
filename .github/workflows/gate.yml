@@ -1,9 +1,15 @@
 name: gate
 
+# `dev` is named here because it is where the work is. Every commit in this repository is
+# pushed to `dev` and reaches `main` only by a merge, so a gate on `main` alone covers the
+# branch that receives finished work and not the branch that produces it -- and a workflow
+# that does not run on the branch it protects is a declaration of enforcement that nothing
+# executes. It has already been red on `dev` with nobody told: the only reason anyone knew
+# is that a session ran clippy by hand. OD-GATE-006.
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, dev]
 
 jobs:
   gate:
@@ -82,6 +88,36 @@ jobs:
       # `run:` is refused outright. See OD-GATE-004.
       - name: Rules
         run: cargo run --quiet -p nomos-cli --bin nomos -- check --root .
+
+      # deny.toml is policy this repository declared and never ran. D-130 cites it as
+      # governing -- the GPU, windowing and UI ban is what keeps a headless CLI from
+      # acquiring a graphics stack transitively -- and the file itself says that ban is
+      # "what makes the distinction hold mechanically rather than by intention". Until
+      # this step it held by intention. OD-GATE-006 is why that is a defect rather than
+      # an omission.
+      #
+      # All four classes run, and the two that already passed are as load-bearing as the
+      # two that did not. The first execution refused 22 crates on licenses and 19 on
+      # bans, both for misconfiguration rather than for anything in the dependency graph:
+      # that is what an unexecuted declaration looks like from the inside, and it is why
+      # the narrow version of this step -- run the classes that are green, leave the rest
+      # -- would have been worse than no step at all.
+      #
+      # cargo-deny is built from crates.io rather than fetched through a third-party
+      # action. This workflow trusts exactly one action and a second one is a trust
+      # decision rather than a convenience; `cargo install --locked` adds no publisher
+      # the build does not already depend on. The cost is runner minutes, and it is
+      # chosen rather than defaulted into.
+      #
+      # The tool version is deliberately not pinned. The advisory database varies with
+      # time whatever this step does, so pinning would buy determinism only for the three
+      # classes that already have it from Cargo.lock, while costing fixes for the one
+      # class that cannot have it.
+      - name: Install cargo-deny
+        run: cargo install cargo-deny --locked
+
+      - name: Supply chain
+        run: cargo deny check advisories bans licenses sources
 
       # None of the three corpora is present on a CI runner: they live outside this
       # repository. So the tests that read them return early and print ok, and this

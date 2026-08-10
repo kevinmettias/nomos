@@ -7671,6 +7671,192 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-UNRUN-POLICY",
+      "title": "A gate that does not run on the branch it protects, and a ban policy nothing has ever executed",
+      "why": "Two declarations in this repository claim mechanical enforcement and neither is executed. Both were measured at 4844c2b.\n\nThe gate does not run on the branch the work is on. .github/workflows/gate.yml triggers on pull_request and on push to main. Every commit lands on dev - 4844c2b, 33ed874, 3e0d0eb, f2934e6 and d25e8ce all did, and none of them ran the gate. Nothing reaches main except by a merge, so the workflow named gate covers the branch that receives finished work and not the branch that produces it. Earlier in this session the gate was red on dev at the Lint step, and the only reason anybody knew is that a session ran clippy by hand. P10-DIAGRAM-OWED measured the same shape once already at the Required projections step, and its why says the honest agents are the ones who leave it broken.\n\ndeny.toml has never been executed. It configures four classes - advisories, licenses, bans and sources - and no step in any workflow runs cargo deny. D-130 cites it as governing: \"deny.toml bans the GPU, windowing and UI crates on the default feature set\", and the file itself says of that ban \"This ban is what makes the distinction hold mechanically rather than by intention\". It holds by intention.\n\nRunning it for the first time, cargo-deny 0.20.2 against Cargo.lock at 4844c2b:\n\n  advisories  ok\n  sources     ok\n  licenses    FAILED, 22 errors\n  bans        FAILED, 19 errors\n\nNeither failure is a supply-chain finding, and that is the point rather than a mitigation. licenses refuses all 22 workspace members because [workspace.package] license = \"UNLICENSED\" is not a valid SPDX expression and [licenses] private is unset, so every publish = false crate here is read as unlicensed third-party code. bans refuses 19 of them because wildcards = \"deny\" and a { path = ... } dependency carries no version, so every first-party edge is a wildcard and allow-wildcard-paths is unset. The GPU ban D-130 cites does pass - there is no wgpu, egui, winit, ash or naga in the tree - and it has passed unobserved since the file was written.\n\nThat is the shape worth recording. An unexecuted declaration is not merely unverified; it is untested as a declaration. Three of this file's four classes were misconfigured in ways nobody could see, because nothing ran them, and the one class configured correctly proves nothing about the other three.",
+      "done_when": ".github/workflows/gate.yml runs on pushes to the branch this repository's work lands on, so a commit that reddens the gate is reported by the gate rather than by whoever next runs it by hand.\n\nA gate step executes cargo deny over all four classes and exits 0, which means deny.toml is repaired rather than the check narrowed: licenses stops reading 22 publish = false crates as unlicensed third-party code, and bans stops reading every first-party path dependency as a wildcard. Neither repair weakens what D-130 cites - the ban is still checked on the default feature set and still refuses wgpu, egui, winit, ash and naga, shown by measurement rather than asserted. Not closed by running the two classes that already pass and omitting the two that do not.\n\nThe new step is not named Lint and does not carry continue-on-error. work finish derives its lint argv by scanning this file for the step named Lint (nomos_ledger::Derive_Step), and Test_Only_One_Step_Should_Be_Named_Lint and Test_No_Step_In_The_Gate_Should_Excuse_Itself in crates/host/nomos-cli/tests/gate_step.rs both assert against this file rather than a fixture.\n\nHow cargo-deny arrives on the runner is decided rather than defaulted. This workflow trusts exactly one third-party action today, on a mutable tag, and a second one is a trust decision rather than a convenience.\n\nOD-GATE-006 records the principle the two share and is registered under crates/spec/nomos-spec-store/records, or it is not governing. Its scope is the general rule and not these two instances: rust-version = \"1.85\" is unexercised on a nightly-pinned toolchain, and every determinism claim in this workspace is checked on one operating system. Those are P11-MSRV-UNCHECKED and P11-PLATFORM-UNCHECKED, this item does not do them, and the record names them so a reader can tell a principle with open instances from one written to dress up a single fix.\n\nBoth required projections are re-rendered from a tree holding exactly the registered records this commit publishes, per OD-GATE-005.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".github/workflows/gate.yml",
+          "deny.toml",
+          "docs/records/OD-GATE-006",
+          "crates/spec/nomos-spec-store/records/OD-GATE-006.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "tests-561a88ff4bc732e0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-f65566f9f804790f.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-ae78a8a92bf9e664.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-7525560aad5d2090.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-f75bebc7f5b3ba97.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-ae6f7467808b79ca.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786405403,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-LINT-AUTHORITY",
+      "title": "The gate's -D warnings and the workspace lint table are two authorities for one severity policy",
+      "why": "Cargo.toml lines 111 to 133 declare the workspace lint policy, mirrored from XVPE. clippy::all and clippy::pedantic sit at warn with priority -1; float_cmp, unwrap_used, arithmetic_side_effects and indexing_slicing sit at deny. The severities are deliberate and the file says why: the four denials are there because a panic on the analysis path is a determinism defect rather than a bug, since a replay must reach the same panic at the same step.\n\n.github/workflows/gate.yml then runs cargo clippy --workspace --all-targets -- -D warnings, which promotes every one of those warnings to an error. So the distinction the table draws between warn and deny is real on a contributor's machine and erased in CI, and the effective policy is spelled in two files that disagree. An author who reads Cargo.toml to learn what is enforced learns something false, and the stricter of the two authorities is the one that is not written down as policy.\n\nThis is the shape OD-LEDGER-003 refuses for the lint command itself. That record derives the gate's argv from the workflow rather than retyping it into a crate, because a copy is a second source of truth that goes stale the day the workflow changes and two guards for one rule is how they come to disagree. The severities the argv carries are the same rule and got the opposite treatment.\n\nWhich way it collapses is a real choice and it is not behaviour-preserving in either direction. Dropping -D warnings makes CI accept pedantic findings it rejects today. Moving the strictness into [workspace.lints] makes every local cargo check deny what only CI denies now, which changes every contributor's inner loop and changes work finish too, because the derived argv runs on the author's machine before the item is recorded done.",
+      "done_when": "One authority states the severity of every lint this workspace enforces, and the other place stops restating it.\n\nWhich of the two survives is the decision, recorded on stated grounds rather than settled by whichever is cheaper to write, and the record says what the choice costs the side that loses: either CI stops rejecting something it rejects today, or every local cargo check starts rejecting something it accepts today. A record that only says the duplication is gone has not answered this.\n\nnomos_ledger::Derive_Step still yields a runnable argv from the step named Lint. It refuses any run: line containing a shell metacharacter, so the surviving line stays one bare command, and Test_The_Derived_Lint_Step_Should_Still_Be_Clippy asserts the derived argv is clippy over this workspace.\n\nThe workspace is measured under the collapsed policy before the item is finished rather than after. If the new arrangement reddens exactly what -D warnings was already failing, that is the same set and costs nothing; if it reddens more, the item says how many and where rather than discovering it on somebody else's claim.\n\nNot closed by deleting -D warnings and saying the table now governs, unless a clippy run under the new arrangement is shown to reject what the old one rejected.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          ".github/workflows/gate.yml",
+          "docs/records/OD-GATE-007",
+          "crates/spec/nomos-spec-store/records/OD-GATE-007.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-MSRV-UNCHECKED",
+      "title": "rust-version says 1.85 and this workspace has not compiled on 1.85 since it grew let chains",
+      "why": "[workspace.package] rust-version = \"1.85\" at Cargo.toml:69 is a compatibility declaration and nothing exercises it. rust-toolchain.toml pins the channel to nightly - for rustfmt's unstable brace_style option, per its own comment - so every build here and every build in CI uses a compiler far newer than the floor being claimed.\n\nThe claim is already false, and by a mechanism that is invisible without a build. There are nine `&& let` chains in this workspace, including crates/substrate/nomos-ledger/src/gate.rs:121. Let chains stabilized in Rust 1.88 under edition 2024. So the declared floor cannot compile the code that declares it, and the only reason nobody has noticed is that no toolchain older than nightly has ever been pointed at this tree.\n\nThis is OD-GATE-006's principle in its compatibility form: a declaration of what this workspace is compatible with is incomplete until something compiles it in that configuration. Unlike deny.toml it is not merely unobserved, it is wrong, and it will go wrong again on the next stabilized feature somebody reaches for.",
+      "done_when": "rust-version states a floor the workspace actually compiles on, established by compiling it rather than by reading release notes.\n\nA gate lane exercises that floor on every run, so the next feature that raises it is reported by CI rather than discovered by a downstream consumer. The lane overrides rust-toolchain.toml explicitly, since that file pins nightly and would otherwise silence the whole check - a lane reporting ok while running nightly is OD-GATE-001's defect in a new place.\n\nWhat the lane runs is decided rather than defaulted. cargo check on the floor and cargo test on the floor are different claims, and the item says which one rust-version is making here.\n\nCites OD-GATE-006 rather than allocating a record, unless the choice of floor is a decision that record does not already make. Tracking stable, pinning a number and dropping the declaration are three different answers; the identifier reserved here is spent only if one of them needs arguing.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          ".github/workflows/gate.yml",
+          "docs/records/OD-GATE-008",
+          "crates/spec/nomos-spec-store/records/OD-GATE-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P11-UNRUN-POLICY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-PLATFORM-UNCHECKED",
+      "title": "Every determinism claim in this workspace is checked on one operating system, and it is not the one it is written on",
+      "why": ".github/workflows/gate.yml runs one job on ubuntu-latest. This repository is developed on Windows - every measurement in this ledger carries an F:\\repos\\nomos path - so the two environments that matter are the one CI checks and the one nobody checks.\n\nWhat is declared and unchecked is not incidental here. OD-DETERMINISM-001 and OD-DETERMINISM-002 govern a set of determinism declarations, and six crates carry a determinism.rs to make them: nomos-analysis, nomos-workspace, nomos-spec-bundle, nomos-spec-project, nomos-lang-rust and nomos-lang-rust-scan. A determinism claim says the same input yields the same output, and the inputs that vary between a Windows host and a Linux runner are exactly the ones such claims are usually wrong about - path separators, directory iteration order, filename case, and line endings, which .gitattributes already has an opinion about.\n\n.gitattributes states the risk in as many words and defends against exactly one instance of it. Line endings are load-bearing because content hashes are computed over file bytes and the governing records are embedded with include_str!, so \"the same commit would validate on one machine and not on another\" - and the defence is `* text=auto eol=lf` plus one test that fails on a carriage return in an embedded record. That is a single mechanism against a whole class, and the class is stated by the repository itself.\n\nThat is OD-GATE-006's principle in its environmental form: a declaration is exercised in every environment necessary for the claim to hold, and a determinism claim's necessary environments are more than one.",
+      "done_when": "The gate runs on more than one operating system, and the second is chosen because a claim in this repository depends on it rather than because it was available.\n\nWhat the non-Linux lane runs is decided rather than copied. Running the whole workspace twice doubles the gate's cost, and the steps that could differ by platform are not the same set as the steps that are expensive - a lane that reruns the paperwork steps is paying for nothing.\n\nA red lane is a finding and gets its own item. This item's territory is the workflow; a determinism defect the lane exposes lives in the crate that declares the determinism, which this item does not reserve and must not widen into. Saying so here rather than discovering it mid-claim is what P11-AMEND-TERRITORY cost.\n\nNot closed by adding a matrix whose extra legs are allowed to fail. Test_No_Step_In_The_Gate_Should_Excuse_Itself refuses continue-on-error by name, and a lane nobody has to fix is the corpus-gate shape without the corpus gate's reason for it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".github/workflows/gate.yml",
+          "docs/records/OD-GATE-009",
+          "crates/spec/nomos-spec-store/records/OD-GATE-009.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P11-UNRUN-POLICY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -69,6 +69,7 @@ graph LR
     d_129 -->|"affects"| arc_specdb_001
     d_129 -->|"relates-to"| od_project_001
     d_129 -->|"supersedes"| adr_doc_001
+    d_130 -->|"affected_by"| od_gate_006["OD-GATE-006"]
     d_130 -->|"affects"| arc_specdb_001
     d_130 -->|"relates-to"| arc_ecosystem_001
     d_130 -->|"relates-to"| od_platform_001
@@ -163,6 +164,7 @@ graph LR
     od_determinism_001 -->|"affected_by"| od_determinism_002
     od_determinism_001 -->|"affects"| od_gate_001
     od_determinism_001 -->|"relates-to"| arc_specdb_001
+    od_determinism_001 -->|"relates-to"| od_gate_006
     od_determinism_002 -->|"affects"| od_determinism_001
     od_determinism_002 -->|"relates-to"| od_completeness_001
     od_determinism_002 -->|"relates-to"| od_gate_001
@@ -177,6 +179,7 @@ graph LR
     od_gate_001 -->|"relates-to"| od_gate_002["OD-GATE-002"]
     od_gate_001 -->|"relates-to"| od_gate_004
     od_gate_001 -->|"relates-to"| od_gate_005
+    od_gate_001 -->|"relates-to"| od_gate_006
     od_gate_001 -->|"relates-to"| od_ledger_003["OD-LEDGER-003"]
     od_gate_001 -->|"relates-to"| od_ledger_017
     od_gate_001 -->|"relates-to"| od_platform_001
@@ -195,6 +198,7 @@ graph LR
     od_gate_004 -->|"relates-to"| od_gate_001
     od_gate_004 -->|"relates-to"| od_gate_002
     od_gate_004 -->|"relates-to"| od_gate_005
+    od_gate_004 -->|"relates-to"| od_gate_006
     od_gate_004 -->|"relates-to"| od_ledger_003
     od_gate_004 -->|"relates-to"| od_rules_001
     od_gate_004 -->|"relates-to"| od_rules_002
@@ -208,6 +212,12 @@ graph LR
     od_gate_005 -->|"relates-to"| od_ledger_018["OD-LEDGER-018"]
     od_gate_005 -->|"relates-to"| od_project_001
     od_gate_005 -->|"relates-to"| od_project_002
+    od_gate_006 -->|"affects"| d_130
+    od_gate_006 -->|"relates-to"| od_determinism_001
+    od_gate_006 -->|"relates-to"| od_gate_001
+    od_gate_006 -->|"relates-to"| od_gate_004
+    od_gate_006 -->|"relates-to"| od_ledger_003
+    od_gate_006 -->|"relates-to"| od_project_002
     od_ledger_001 -->|"affected_by"| od_ledger_004["OD-LEDGER-004"]
     od_ledger_001 -->|"affected_by"| od_ledger_011
     od_ledger_001 -->|"affected_by"| od_ledger_014["OD-LEDGER-014"]
@@ -239,6 +249,7 @@ graph LR
     od_ledger_003 -->|"relates-to"| od_gate_002
     od_ledger_003 -->|"relates-to"| od_gate_004
     od_ledger_003 -->|"relates-to"| od_gate_005
+    od_ledger_003 -->|"relates-to"| od_gate_006
     od_ledger_003 -->|"relates-to"| od_ledger_001
     od_ledger_003 -->|"relates-to"| od_ledger_015
     od_ledger_004 -->|"affects"| od_ledger_001
@@ -390,6 +401,7 @@ graph LR
     od_project_001 -->|"relates-to"| od_project_002
     od_project_002 -->|"relates-to"| arc_specdb_001
     od_project_002 -->|"relates-to"| od_gate_005
+    od_project_002 -->|"relates-to"| od_gate_006
     od_project_002 -->|"relates-to"| od_project_001
     od_project_002 -->|"relates-to"| od_spec_005
     od_rules_001 -->|"affected_by"| od_rules_002
@@ -522,6 +534,7 @@ graph LR
     od_gate_002
     od_gate_004
     od_gate_005
+    od_gate_006
     od_ledger_001
     od_ledger_002
     od_ledger_003
