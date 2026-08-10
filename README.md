@@ -45,7 +45,7 @@ band, and `tests/contract` asserts it.
 | 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
 | 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`. |
 | 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |
-| 30 | `nomos-rules` | A rule as a pure function from source text to findings. |
+| 30 | `nomos-rules` | A rule as a pure function whose subject is an argument: source it is handed, and facts it reads through a `FactReader`. |
 | 90 | `nomos-cli` | The `nomos` binary. |
 | 100 | `nomos-contract-tests` | The assertions in `tests/contract`. Observes the workspace; nothing observes it. |
 | 100 | `nomos-integration-tests` | The vertical slice, driving the product through its seams. Its peer, not its layer. |
