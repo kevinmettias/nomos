@@ -4584,10 +4584,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-band0-w62",
+        "acquired_at": 1786382572,
+        "lease_expires_at": 1786393372
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -5780,6 +5784,37 @@
           "nomos-analysis",
           "-p",
           "nomos-lang-rust",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-LEDGER-ASSESSED",
+      "title": "Two divergences now have their reasons and the registry still cannot read them",
+      "why": "OD-TRACE-002 states that WORK-LEDGER-001 and WORK-LEDGER-005 \"cannot be entered until P10-LEDGER-CORPUS writes the reasons\", because the reader refuses a Diverges entry naming no record. OD-LEDGER-017 wrote both reasons at 111d2d5, so the block is gone and the entries are authorable. Until they land, the registry holds four entries and every one is Met, so Test_Every_Divergence_Should_Name_A_Governing_Record is vacuous over the committed set -- OD-TRACE-002 recorded that as its own consequence and named this as what ends it. The cost of leaving it is that the first two Diverges entries the registry was designed for still do not exist, so the one predicate that distinguishes a reasoned divergence from an unreasoned one has never judged a real subject.",
+      "done_when": "tests/contract/requirements/WORK-LEDGER-001.assessment and WORK-LEDGER-005.assessment are committed, each verdict Diverges, each naming OD-LEDGER-017 as its record and resolving sites that exist -- CORPUS_CAUSES and Corpus_Position in item.rs for 005, LedgerItem for 001. The identifier lives only in the file stem, per the rule CHK-003.assessment states. Test_Every_Divergence_Should_Name_A_Governing_Record stops being vacuous and is confirmed to judge these two rather than merely pass. FEWEST_ASSESSMENTS is raised only if the floor is what a deletion must walk past; adding costs no edit there and must not become one.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/WORK-LEDGER-001.assessment",
+          "tests/contract/requirements/WORK-LEDGER-005.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
           "-p",
           "nomos-contract-tests"
         ],
