@@ -3810,7 +3810,7 @@
       "claim": {
         "holder": "claude-subject-home-r58",
         "acquired_at": 1786385276,
-        "lease_expires_at": 1786392476
+        "lease_expires_at": 1786393216
       },
       "verification": {
         "argv": [
@@ -6148,14 +6148,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-decline-verb-k11",
-        "acquired_at": 1786385069,
-        "lease_expires_at": 1786392269
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -6170,7 +6166,34 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "leteness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\declining_ends_an_item.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\declining_ends_an_item-7525560aad5d2090.exe)\n     Running tests\\exclusion_holds.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/5ec2b52a-6a6d-4537-b540-ac5abc39e87d/scratchpad/render-target\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1786385982,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -6385,13 +6408,17 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P10-INTAKE-SURFACE",
         "P10-SUBMISSION-VALIDATION"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-submission-layout-s22",
+        "acquired_at": 1786386001,
+        "lease_expires_at": 1786400401
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -6450,6 +6477,118 @@
           "nomos-ledger",
           "-p",
           "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-SPENT-RECORD-ID",
+      "title": "A record identifier that is already published can be reserved again, because work add compares only against open items",
+      "why": "P10-DERIVED-FACT reserves docs/records/OD-ANALYSIS-002 and its registration file. Both were published by 0bcaf6d under P10-DEPENDENT-EDGE, so the identifier is spent while the item still holds it. P10-REQUEST-LAYOUT reserves docs/records/OD-SPEC-011, published by 515fc26 under P10-VOCABULARY-REFUSAL. Two open items now reserve identifiers naming records already on disk. work add refuses a duplicate item id and nothing else: P10-ADD-PROMISE closed by narrowing the doc comment rather than adding the territory check, so the only guard is that an author remembers to look. Nothing reddens today because a spent identifier excludes nobody. The collision that reddens Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer is two OPEN items on one identifier, not one open item on a published one, which is exactly why nothing will catch this. Whoever claims either item finds the identifier taken mid-claim, and there is no work edit to move it.",
+      "done_when": "work add refuses a territory naming a record identifier that already resolves to a file under docs/records, and names that file in the refusal. It exits as a usage refusal rather than a store error, because the author fixes it by choosing another identifier. A test asserts the refusal, and its negative control is that an unspent identifier is still accepted. The two items already carrying spent identifiers are named and each is either retired or reissued, rather than left as the first thing the new check would have caught. Not closed by a doc comment telling authors to check, which is what P10-ADD-PROMISE already did.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/tests",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-020",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-020.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-ECOSYSTEM-UPWARD",
+      "title": "The seam record governs knowledge becoming a rule and says nothing about a run's observations becoming knowledge",
+      "why": "ARC-ECOSYSTEM-001 draws two crossings and governs both. KWB semantic intent projects down into a Nomos executable contract, and the projection is where authority changes hands, which is why it must be a recorded step rather than an inference somebody made once. XVPE generic primitives are consumed upward by adaptation rather than by extension. Neither of those is the crossing an autonomous run produces.\n\nA harness that records what it did - task class, model, attempts, verification outcome, review findings, cost, failure cause - is producing observations about a codebase, which is Nomos's own subject matter and crosses nothing. What crosses is the step after it: generalizing many runs into a lesson that outlives the runs it came from. That is rationale and long-term epistemic memory, which is KWB's description in this record word for word, and the record has no arrow for reaching it from here.\n\nThe consequence is not that the step is forbidden. It is that it is ungoverned, and the specific risk is a loop the record's own governance step cannot see. Its last table row says a generalized lesson becomes an enforceable software rule only by a governed decision projected into Nomos, and that row is described as the one that does work. If runs write generalizations into KWB unreviewed, the review that later turns one into a rule is inspecting evidence produced by the machine the rule will govern, and the approval reads as independent while being circular. The downward arrow is guarded; the upward one is what would be feeding it.\n\nOD-AGENT-001 recorded that the KWB boundary had not been decided by this repository, and ARC-ECOSYSTEM-001 was the answer for the boundary it drew. This is the half that answer did not reach, and it becomes load bearing the moment a run is allowed to write anything durable about itself.",
+      "done_when": "ARC-ECOSYSTEM-001 states whether observations produced by a run may become KWB knowledge.\n\nIf they may, it says what governs the crossing: at minimum whether a generalization carries the runs it was derived from as provenance rather than arriving as an assertion, and whether the review step that turns a lesson into an enforceable rule may accept evidence the system generated about itself or must have a second source. The record already treats the direction of a crossing as the interesting question rather than the boxes on either end, and this is a third direction beside the two it drew.\n\nOr it decides the crossing does not exist yet, states what that costs, and names what would open it - the shape the record already uses for its own placeholders and the shape it says a placeholder should have.\n\nVersion 3 of ARC-ECOSYSTEM-001, not a new record. This is the crossing section of an existing decision, and a second record about the same seam is the duplication a seam record exists to prevent. Changing it leaves both required projections stale, so they are re-rendered from a tree whose registered records are exactly the ones the commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ECOSYSTEM-001",
+          "crates/spec/nomos-spec-store/records/ARC-ECOSYSTEM-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-KNOWLEDGE-ABSENT",
+      "title": "An optional knowledge capability that is absent and one that found nothing would be the same answer",
+      "why": "A context builder is proposed that asks a knowledge capability for a bounded, provenance-backed packet - prior decisions, known failure patterns, previously rejected approaches - and that stays fully functional when no such capability is installed. ARC-ECOSYSTEM-001 already permits the seam: the specification store's mature home \"may be KWB, reached from here through a knowledge capability, which is already how the product is permitted to see it\". So the open question is not whether the seam is allowed. It is what the seam returns when nobody answers.\n\nThe failure mode is one this repository has already met and fixed one layer down. OD-CONTRACTS-002 found that a subject needing a model \"had nowhere honest to go\", because Applicability answered six of the seven categories CHK-003 requires and folded the seventh into either evaluated or coverage debt. The remedy was a third disjoint bucket - Applicability::AgentRequired and Coverage::Agent_Required, neither Was_Evaluated nor Is_Coverage_Debt - with a test asserting disjointness over the whole enum rather than over a list of states somebody remembered. An optional knowledge capability has the identical shape. No relevant prior knowledge exists, and no capability was installed to look, are different facts with different remedies, and an empty packet reports them as the same one. Graceful degradation is exactly the mechanism that makes the conflation silent, because the run continues and looks complete.\n\nResolution has no answer for it either. OD-CAPABILITY-001 resolves a requirement with a floor and an optional preferred provider, and OD-CONTRACTS-002 states that the capability registry \"answers about providers and only about providers\", with WF-006 making executors a kind distinct from providers. A knowledge context provider is neither a mechanical provider nor an executor, so either the registry grows a third kind or the seam resolves somewhere else, and which of those is right is undecided.",
+      "done_when": "Either the resolution seam can say that no knowledge capability was installed, distinctly from a capability that answered and had nothing relevant, and a test asserts the two are different values rather than both being an empty result.\n\nOr a record states where that distinction will live when a context builder exists, why the capability registry is or is not the place given that it answers about providers only and a knowledge provider is not one, and what a run reports in the meantime - which must not be silence, on the grounds OD-CONTRACTS-002 already established for the same shape one layer down.\n\nNot closed by returning an empty packet with a flag beside it that nothing is required to read, and not closed by making the capability mandatory: the whole point of the seam is that the harness is complete without it, so the absence has to be reportable rather than eliminated.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-capability/src/registry.rs",
+          "tests/contract/surface/nomos-capability.txt",
+          "docs/records/OD-CAPABILITY-004",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-capability",
           "-p",
           "nomos-contract-tests"
         ],

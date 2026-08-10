@@ -87,6 +87,7 @@ nomos work renew   --item <id> --holder <name> [--lease 2h]
 nomos work takeover --item <id> --holder <name> [--lease 2h]
 nomos work finish  --item <id> --holder <name>
 nomos work abandon --item <id> --holder <name> --reason <text>
+nomos work decline --item <id> --holder <name> --reason <text>
 nomos work validate
 nomos work audit
 ```
@@ -112,6 +113,16 @@ back runs `renew`, and anybody else runs `takeover`, which installs a new claim 
 it displaced on the item where `show` reports it. `claim` never does this — it refuses a lapsed
 item and names the holder it would have displaced — because taking over another agent's
 abandoned work is a decision, and a decision belongs in a verb somebody typed.
+
+**Abandoning ends a claim; declining ends an item.** They take the same three arguments and
+they are not degrees of one thing. `abandon` says this holder stopped, so the item goes back on
+the board with the reason attached — which is right for eighteen of the twenty abandonments this
+ledger has recorded, because the work was still wanted and somebody else finished it. `decline`
+says the item is not work at all: superseded by a successor that already landed it, or refused
+by name in a record written since it was authored. It takes no claim, because an item nobody
+intends to do should not have to be claimed first, and it refuses an item somebody is holding —
+that call is the holder's, and the refusal names the two commands. `OD-LEDGER-019` measures what
+having only the first of these cost.
 
 **Finishing runs something.** `done_when` is prose for a human; everything after `--` is
 an argument vector that gets executed, with no shell between what was written and what

@@ -53,6 +53,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md@authored | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md | authored | 39 | 10 | sha256:cbf273e93bd704aae1337dc210a950f7f95493a727a45aef6d66b0af422aa458 |
 | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md@authored | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md | authored | 108 | 19 | sha256:37c30a7fb96b566768cb5b23df4bb92b037c769ce8f7eabc087b4dd91742d730 |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md | authored | 42 | 12 | sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944 |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 27 | 8 | sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b |
@@ -471,6 +472,20 @@ profile: domain-specification
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#37 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#39 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#41 | authored | 2 | Status |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#1 | authored | 1 | Abandoning ends a claim and declining ends an item, so one verb cannot do both |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#18 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#19 | authored | 3 | 1. Abandoning ends a claim; declining ends an item |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#22 | authored | 3 | 2. It is a verb, not a flag on `abandon`, and the measurement decides it rather than taste |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#27 | authored | 3 | 3. `decline` takes a holder, and who and when survive on the item |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#32 | authored | 3 | 4. A live claim refuses; `Done` and `Declined` conflict |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#38 | authored | 3 | 5. The schema version moves, and that is the guard working |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#41 | authored | 3 | 6. `Blocked` is left unreachable, deliberately and not silently |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#43 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#49 | authored | 2 | What This Does Not Do |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#51 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#1 | authored | 1 | Independently versioned is a property of a package, and this build has no package |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#2 | authored | 2 | The Question |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#6 | authored | 2 | What The Corpus Actually Says |
@@ -13619,6 +13634,452 @@ cites this record; it is not written here, because the harness is another item's
 *revision: authored · kind: prose · heading: A ledger commit publishes the board, and a transition is recorded on the item rather than in the message / Status · hash: sha256:b19d92687b59bb32538fb7cb9c2965fcfa07d742eca76e707f0932aa2ec82170*
 
 Closed by `P10-LEDGER-SWEEP`.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#1
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both · hash: sha256:8182fc72161df7f4151185fb6667354eb50b9f8439db575749ac73e058354ade*
+
+# Abandoning ends a claim and declining ends an item, so one verb cannot do both
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#2
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#3
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Question · hash: sha256:0c1f7e67966cb93fd4fd02f79d5cf60dcd8c6dba2b2a98f1fb12883fbf57b3c3*
+
+`ItemState::Declined { reason }` is declared, is counted terminal beside `Done` by
+`ItemState::Is_Finished`, is filtered by `nomos work list --state declined`, and is produced
+by nothing. The one item in it, `P3-RESTORE`, was written into the file by hand.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#4
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Question · hash: sha256:ea9e0e1993c006f19de2f35a4d4f65668b495187008bc35fba2f0bc9539f6f39*
+
+So when an item turns out not to be work — the successor already landed it, or its own
+governing record refuses its last clause by name — the only verb that touches it is
+`abandon`, and `abandon` returns it to `Ready`. The board then offers it again.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#5
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Question · hash: sha256:fac5e9419210d9ff2d18fc3011c0ab15cbfe5e57dd1733039a014e22291231ea*
+
+`P10-DECLINE-VERB` asks which of two things closes that: a verb that ends the item, or
+`abandon` widened with a flag saying which way the release ends. If it is a new verb, two
+further questions have to be answered rather than left to whichever path the first caller
+takes — whether declining records who did it, and what it does to an item somebody is
+holding.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#6
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#7
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:2c0c9374afd14b85d31ac0f5cb4ffbf783459d49b58ae6fabb132af0419c9340*
+
+The board at `80f679a`: 107 items, 20 abandonments across 19 items. Every abandonment
+classified by the state its item is in now, which is the outcome the release produced rather
+than a reading of its prose.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#8
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:86a5f9633303e0428cf43207db99a2165bec42cd89dd0cfc92b9dddea82696fd*
+
+| Abandonments | Item's state now | What the return to `Ready` produced |
+|---|---|---|
+| 18, on 17 items | `Done` | the work was still wanted; somebody took it and finished it |
+| 2, on 2 items | `Ready` | the work was not wanted; the board is still offering it |
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#9
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:0c7302b17bafdfda98a8daf9eb8c81beff079dd3fc142a3d0c0791fb6d345b58*
+
+**Abandon's return to `Ready` is correct for 18 of its 20 recorded uses.** The verb is not
+broken and is not what this record changes. What the board has no verb for is the other two,
+and they are not a weaker case of the same thing — they are a different fact reached through
+the only door that was open.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#10
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:1023ea0906e3ce3dfbf607388ce76432179803a0a0726eb56ae6a89d599ead4c*
+
+The two are `P10-REQUIRABLE-DECLARED` and `P10-DERIVED-FACT`. The first is the one where the
+cost was paid in full, and it is the only subject on the board that has been claimed after it
+was superseded:
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#11
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:07697e033003c1078d3031411b1979db6ea9c405c89f41024bd292fe3c3ede5c*
+
+| unix | event |
+|---|---|
+| 1786380919 | `claude-requirable-set-w33` abandons `P10-REQUIRABLE-SET`: premise measured too pessimistic, territory cannot be widened under claim, re-authored as `P10-REQUIRABLE-DECLARED` |
+| 1786381395 | `claude-requirable-declared-w34` abandons `P10-REQUIRABLE-DECLARED`: its own new check measured the premise false, re-authored as `P10-REQUIRABLE-FLOOR`. **The item returns to `Ready`** |
+| 1786382075 | `P10-REQUIRABLE-FLOOR` finishes, predicate exit 0, gate exit 0 |
+| 1786382440 | `claude-requirable-declared-w62` abandons `P10-REQUIRABLE-DECLARED` a second time, having checked its four clauses one by one and found three landed by the successor and the fourth refused by name in the alternatives table of `OD-PROJECT-002`. **The item returns to `Ready`** |
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#12
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:35f9a876b4d636ad37fbf52583353f24597b839ae9279bec3541632d5d7839d7*
+
+1,045 seconds separate the abandonment that superseded the item from the end of the run that
+took it anyway, and 365 of those seconds were spent after the successor was already verified
+`Done`. Nothing was written to the tree under that second claim, because there was nothing
+to write. Its reason ends:
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#13
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:59d52dd979ecb21e67f59cf836617c6d7dfe6b8a39b459c491ef02ec6a43c7e6*
+
+> This should be Declined, and there is no verb that can decline it.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#14
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:7b0021ae933847b23b295e72ea3de4ae4e93ae360b6f6849874c5177f9a3baaa*
+
+That is the measurement. One subject became three items, and a session's whole run went on
+establishing that the second of them was already finished — a fact the board had, in the
+abandonment reason, and could not show in the column anybody reads before claiming.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#15
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:673b52f6b15e24c88a57c1f170e8df0b85583c03bd1688cf7b39d80776c7ed77*
+
+The state census that explains why, taken across the workspace excluding test modules:
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#16
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:7d9cdf13400edfb0a31ee1c9108dc05c8a8000117a4657ff4e68a70c5abb71fb*
+
+| `ItemState` variant | Written by |
+|---|---|
+| `Ready` | `work.rs:277` at `add`, `item.rs:450` at construction, `exclusion.rs:253` at `abandon` |
+| `Claimed` | `store.rs:934` at `claim` |
+| `Done` | `exclusion.rs:248` at `finish` |
+| `Blocked` | nothing |
+| `Declined` | nothing |
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#17
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Measured · hash: sha256:dee7fc702f670103f98967f9bac9d6d6789196115f9cf7410d53c1ebf8ac92ff*
+
+Two of five states cannot be produced, and both are still read: `list --state` filters on
+them, `Is_Finished` counts `Declined` terminal, and `store.rs:563` validates that a `Blocked`
+item carries its reason. The ledger can describe two conditions it cannot enter.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#18
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#19
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 1. Abandoning ends a claim; declining ends an item · hash: sha256:766e16767f7307b840384085ff783cf2b53375b3c8170346f216de096c0b1504*
+
+### 1. Abandoning ends a claim; declining ends an item
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#20
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 1. Abandoning ends a claim; declining ends an item · hash: sha256:35f7ee757ed8e4689de1000581944b17b51593a5d4f4b0576b235ea10ae47b3b*
+
+They differ in subject, not in degree. `abandon` is a statement about a *claim*: this holder
+stopped. The item is untouched by it — it goes back on the board because the work is still
+wanted, and the 18 measured cases are that working. `decline` is a statement about the
+*item*: this will not be done by anybody. Nothing about a holder is being said.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#21
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 1. Abandoning ends a claim; declining ends an item · hash: sha256:ab1696635fab2a966928aa81a41e0e7b659f42b998c940b0034a2b07fa7a8523*
+
+So the reason each carries answers a different question. Abandon's reason answers *why did
+you stop*, and the next claimant reads it as context. Decline's reason answers *why is this
+not work*, and there is no next claimant. Merging them makes an item's history a list of
+sentences whose question the reader has to guess.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#22
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 2. It is a verb, not a flag on `abandon`, and the measurement decides it rather than taste · hash: sha256:83a661f9ef888c7710dfd9ee6321d9f04a6e49618b8359cd7a557d984af69096*
+
+### 2. It is a verb, not a flag on `abandon`, and the measurement decides it rather than taste
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#23
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 2. It is a verb, not a flag on `abandon`, and the measurement decides it rather than taste · hash: sha256:6c7152ea3f4b4791dcd584ad8833216204e8e094296ca0fbf407eb9b835036ea*
+
+Three independent reasons, in the order they close the question.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#24
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 2. It is a verb, not a flag on `abandon`, and the measurement decides it rather than taste · hash: sha256:680c402af8f141de113f85a478f7b26214ff174dc984c2534dc970f02f91f1ff*
+
+**Eighteen of twenty.** A flag on `abandon` puts a decision in front of every release,
+including the eighteen where the answer has never been anything but the default. The
+frequent case pays for the rare one, and the rare one is not made any more visible: a flag
+somebody forgot leaves the item exactly where it is today.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#25
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 2. It is a verb, not a flag on `abandon`, and the measurement decides it rather than taste · hash: sha256:e753323e03e45b130698b094801d2c8e4a42da0167ecdb898da58175bc013189*
+
+**The precondition contradicts the purpose.** `abandon` requires an active claim by the named
+holder: `FileLedger::Release` refuses an unclaimed item as `NotClaimable { state:
+"unclaimed" }` and one held by somebody else as `HeldBy`. Both items that need declining are
+unclaimed and have been since the runs that superseded them released. Reaching
+them through a widened `abandon` would mean claiming work nobody intends to do in order to
+record that nobody intends to do it, and the claim itself excludes territory for as long as
+it is held.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#26
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 2. It is a verb, not a flag on `abandon`, and the measurement decides it rather than taste · hash: sha256:03bc65687305da3c16331e18f10714d5df6b6d95e67c30c1102c765b95060e6d*
+
+**The two writes are not the same kind of write.** `item.rs` already draws this, above
+`Abandonment`: `Declined` carries its reason because it is part of a *state*, and states are
+what get written down, whereas an abandonment is a *transition* that leaves nothing behind
+unless a field on the item is given the job of holding it. A single verb switching between
+those on a flag is one verb with two return types wearing one name.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#27
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 3. `decline` takes a holder, and who and when survive on the item · hash: sha256:2ad6000275acae0ed23cb7bf187b67a75c86d885c7a9aa8c5dcf4fcdfa836c1d*
+
+### 3. `decline` takes a holder, and who and when survive on the item
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#28
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 3. `decline` takes a holder, and who and when survive on the item · hash: sha256:a2eb66551447a262d223f7c2fdcdbeb90e7add90e967018075753aaa6049938a*
+
+`OD-LEDGER-006` decided the general form — a transition is not persisted; whatever it carried
+is gone unless something on the item holds it — and this is that rule applied to the new
+transition rather than a second answer to it.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#29
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 3. `decline` takes a holder, and who and when survive on the item · hash: sha256:2de62f437cd42dcb0c83063a61f13f667992b970563bc5f2139f8856d79e989b*
+
+`ItemState::Declined { reason }` keeps its reason unchanged. The reason is the state's own
+content and the thing that makes the state unreachable reasonlessly through the type, which
+is the property `item.rs` built it for. What a state cannot carry is *who* and *when*,
+because those are facts about a transition and a state is not one.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#30
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 3. `decline` takes a holder, and who and when survive on the item · hash: sha256:827b632a3e11be38e14e57f7a60169cc37425d01df2a48f2d63046859594d461*
+
+So `LedgerItem` gains `declined`, holding the holder and the timestamp, and **not** the
+reason. Two copies of one fact is the defect this repository has an operating hazard about at
+document scale and would be no better at field scale; a reader asking why goes to the state,
+and a reader asking who goes to the item, and neither can be told two different things.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#31
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 3. `decline` takes a holder, and who and when survive on the item · hash: sha256:4d9020966b3b10f674f1f9a019dd253f26e4ce9a8edff4522d1114790efd478c*
+
+`P3-RESTORE` reads as declined with nobody named, which is exactly true: it was declined
+before a verb existed and there is no holder to attribute it to. That is the same treatment
+`abandoned` and `displaced` got when they arrived — a fact about the items written before the
+field, rather than something to backfill.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#32
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 4. A live claim refuses; `Done` and `Declined` conflict · hash: sha256:bd633cb712acb8f10a14978bebe5ee0fbed355a06a4916dcb8ca50e38e078f46*
+
+### 4. A live claim refuses; `Done` and `Declined` conflict
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#33
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 4. A live claim refuses; `Done` and `Declined` conflict · hash: sha256:fc8e20830eabbe66a6156d81ef29cac1d7dbe1269a9db92cae86cbd5a07d9f54*
+
+The third question, answered rather than left to the first caller.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#34
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 4. A live claim refuses; `Done` and `Declined` conflict · hash: sha256:e4399d810e62f055b9631bf93777055023bcff92e4ea0bd494ffa7ea85b116c7*
+
+**An item with an active claim is refused, retryably, naming the holder.** The remedy is two
+commands from the person who has the facts: `abandon`, then `decline`. `OD-LEDGER-001` is
+why. Territory is declared and not enforced, so the ledger's answer *is* the exclusion — and
+ending a live claim from outside would be the one transition where the board overrules the
+only party who knows whether the work is still running. Retryable is the honest code: the
+claim will lapse or be released, and the caller should come back rather than fetch a person.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#35
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 4. A live claim refuses; `Done` and `Declined` conflict · hash: sha256:311c436b65d88fe9b7fe5b1cdb39390b4cacd2655139b7a927e62c5643d26993*
+
+**An item already `Done` is a conflict.** Declining it would put prose where a verification
+record's verdict is, and `finish` exists precisely so that a `Done` item cannot claim a check
+that never ran.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#36
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 4. A live claim refuses; `Done` and `Declined` conflict · hash: sha256:3cc7c85a446eeefb055846a1582c056ccbd909b6363b68518bb989b33ffd03aa*
+
+**An item already `Declined` is a conflict, and the refusal reports the reason it carries**
+rather than replacing it. A second decline is either a duplicate or a disagreement, and both
+are for a person.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#37
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 4. A live claim refuses; `Done` and `Declined` conflict · hash: sha256:8d18614aeef58a5a1eeff557fbabc0218f8ab68c0485508f18702929e1bbbfb1*
+
+Every one of these names the item and what stopped it, per `OD-LEDGER-014`, and every one
+lands on an exit code the README's table already defines. No new code is introduced.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#38
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 5. The schema version moves, and that is the guard working · hash: sha256:e5eff470ba5f05e663be1e45bb55e78c80a7f06a8f61e5f2f58bf275ace10fb8*
+
+### 5. The schema version moves, and that is the guard working
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#39
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 5. The schema version moves, and that is the guard working · hash: sha256:540820b802498ed29033fed30a116943ce6ee7837dff2a0e9e35003860d386c9*
+
+`declined` is a key on a serialized item, and
+`Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version` counts those keys, so
+`SCHEMA_VERSION` goes to 3. This is not incidental: `OD-LEDGER-008` chose deny-unknown-fields
+over a discretionary bump exactly so that a forgotten bump could only degrade a message and
+never cost a field, and the counting test is what makes the bump non-discretionary.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#40
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 5. The schema version moves, and that is the guard working · hash: sha256:6ee0febf2f7cdb94ed35244d78239573cfdd670f469e2ea904affc77bd574064*
+
+The operational consequence is stated here so nobody has to discover it. Every binary copied
+before this lands refuses every ledger verb with the store-error code and the sentence naming
+both schemas, until it is rebuilt and re-copied. That is the designed behaviour and the
+alternative is the one `OD-LEDGER-008` was written after: a writer that does not understand
+the document writing it anyway, at exit 0, dropping the field.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#41
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 6. `Blocked` is left unreachable, deliberately and not silently · hash: sha256:e6bca72ced6be440470cfb7a1a52c77a3925d8845d3213b10d005d2fefb97cdf*
+
+### 6. `Blocked` is left unreachable, deliberately and not silently
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#42
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / The Decision / 6. `Blocked` is left unreachable, deliberately and not silently · hash: sha256:c4b2ba1ce30ebc47cb8ba60dbbc96b8c690fac7c6505eac2f37aa0bc82acc040*
+
+It is the other state nothing writes. It is outside what `P10-DECLINE-VERB` was asked and it
+is not fixed here, and the reason for saying so rather than saying nothing is that a variant
+nobody can produce is a promise the type makes and the tool does not keep. `Declined` was that
+promise for the whole life of this ledger and cost a session's run to notice. `Blocked` is
+still it, `store.rs:563` still validates a reason for it, and the next reader should find that
+written down rather than measure it again.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#43
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#44
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Considered And Rejected · hash: sha256:bfd7e3cd283b07232c7e901ccb5049fa4a63d22e2ef8477a8160a392a41db346*
+
+**`abandon --declined`, a flag on the existing verb.** Refused in decision 2 on three
+independent grounds, the first of which is measured: it taxes 18 releases to serve 2, its
+precondition requires claiming work in order to say the work is not wanted, and it makes one
+verb write both a state and a transition record. It is the cheapest change and it is cheap
+because it moves the question rather than answering it.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#45
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Considered And Rejected · hash: sha256:3061d958bec6b84debf6edd8623eb49d170b54e3ae0f003ac07c392ae188a48d*
+
+**Deleting the superseded item from the ledger.** This is what a hand edit would most likely
+do, and it destroys the abandonment reason — which for `P10-REQUIRABLE-DECLARED` is the only
+written account of why `P10-REQUIRABLE-FLOOR` exists and what its census corrected, and for
+`P10-DERIVED-FACT` is the only account of why `P10-DEPENDENT-EDGE` needs the territory it
+reserves. `OD-LEDGER-006` exists to stop exactly that loss one scale down.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#46
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Considered And Rejected · hash: sha256:740edebd1a241844670be5d5eafce4e8e535faac88f062fcf77a1699cc701e85*
+
+**A `work edit` verb to narrow the superseded item's territory instead.** It answers a
+different question. Both items are correctly scoped for the work they described; the work is
+what stopped existing. Narrowing the territory leaves them `Ready` and the board still offers
+them.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#47
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Considered And Rejected · hash: sha256:c524c06bc6bb25851a242f720c1b46d94fe6644c241e238062d35255df924ce3*
+
+**Hand-editing the state, which is what happens today.** It writes a value no verb produces
+and no transition records, so who declined it and when are gone at the moment of the edit —
+the shape `OD-LEDGER-006` already settled — and it does it to shared coordination state that
+other sessions are reading, which `OD-LEDGER-018` covers.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#48
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What Was Considered And Rejected · hash: sha256:e52196021d5cb63e70a6a7761a8e3818849695bdc9f9584bdef05f2501ecb439*
+
+**Requiring the item to be claimed before it can be declined, for symmetry with `abandon`.**
+Refused on the same measurement that refuses the flag: the two items this exists for are
+unclaimed, and a precondition that forces a claim in order to close something makes the verb
+unusable for its own motivating case.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#49
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#50
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / What This Does Not Do · hash: sha256:eadc98e08134d54ba00f30f2ffd6ba54b95f64c67e10ffce429f179aa55a680b*
+
+- It does not change `abandon`. Its reason, its list, and its return to `Ready` are correct
+  and measured correct, and the 18 cases stay on the path they are on.
+- It does not make `Blocked` reachable, and decision 6 says so rather than leaving a reader to
+  find it.
+- It does not delete or rewrite any superseded item. `P10-REQUIRABLE-DECLARED` and
+  `P10-DERIVED-FACT` are declined through the verb, keeping every abandonment reason they
+  already carry.
+- It does not let the board end work somebody is holding. That refusal is decision 4 and it is
+  the point of the verb having a precondition at all.
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#51
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#52
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Controls · hash: sha256:e8e06332cff41b39bf9b55fb5a01ec01fe8324e24f4533cefb9d05145ac248dd*
+
+| Weakening | What it produces |
+|---|---|
+| a flag on `abandon` instead of a verb | a decision in front of 18 releases that never needed one, and a forgotten flag leaves the item exactly where it is today |
+| decline without a reason | the state `item.rs` built to be unreachable reasonlessly, reached reasonlessly through the CLI |
+| decline recording only the reason, not who and when | `OD-LEDGER-006`'s loss, re-installed on the one transition added after it was decided |
+| decline overriding a live claim | the board ending work whose only informed party is the holder, on ground `OD-LEDGER-001` says nothing enforces |
+| decline overwriting a `Done` item | prose replacing a verification verdict, which is what `finish` exists to prevent |
+| add `declined` without moving `SCHEMA_VERSION` | a stale binary dropping the field at exit 0 — the `OD-LEDGER-008` defect, on the field this record adds |
+| leave the state unreachable and hand-edit as needed | measured: one subject, three items, and a whole session run spent re-establishing that the work was already done |
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53
+
+*revision: authored · kind: heading · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#54
+
+*revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Status · hash: sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5*
+
+Closed by `P10-DECLINE-VERB`.
 
 ### docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#1
 

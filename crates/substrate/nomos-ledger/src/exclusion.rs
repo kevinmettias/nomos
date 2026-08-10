@@ -65,6 +65,28 @@ pub enum ClaimRefusal
         /// When it ran out.
         since: Timestamp,
     },
+    /// The item itself is held, and the operation would end somebody's live work.
+    ///
+    /// Distinct from [`ClaimRefusal::HeldBy`], which is about a *different* item whose
+    /// territory overlaps the one asked for. Here the subject and the blocker are the same
+    /// item, and a sentence about overlapping territory would be false about it — the
+    /// mis-subject `OD-LEDGER-014` measured, in the one place reusing that arm would have
+    /// reintroduced it.
+    ///
+    /// Retryable, and for a stronger reason than most: a claim is a lease, so it is released
+    /// or it lapses. The remedy is named in the sentence because it is two commands and the
+    /// first of them is one only the holder can run. `OD-LEDGER-001` is why it has to be
+    /// theirs — territory is declared and not enforced, so the holder is the only party who
+    /// knows whether the work is still running.
+    StillHeld
+    {
+        /// The item.
+        item: ItemId,
+        /// Who holds it.
+        holder: String,
+        /// When their lease lapses.
+        until: Timestamp,
+    },
     /// The item is not in a state that can be claimed.
     NotClaimable
     {
@@ -160,6 +182,15 @@ impl ClaimRefusal
                  `nomos work takeover` replaces it and keeps {holder}'s claim on the item",
                 since.Unix_Seconds()
             ),
+            Self::StillHeld {
+                item,
+                holder,
+                until,
+            } => format!(
+                "{item} is held by {holder} until unix {}; ending it is {holder}'s call — \
+                 `nomos work abandon` releases it and `nomos work decline` then ends it",
+                until.Unix_Seconds()
+            ),
             Self::NotClaimable { item, state } => {
                 format!("{item} is {state}, so the operation was refused")
             }
@@ -182,7 +213,10 @@ impl ClaimRefusal
     #[must_use]
     pub const fn Is_Retryable(&self) -> bool
     {
-        return matches!(self, Self::HeldBy { .. } | Self::DependencyUnmet { .. });
+        return matches!(
+            self,
+            Self::HeldBy { .. } | Self::DependencyUnmet { .. } | Self::StillHeld { .. }
+        );
     }
 }
 

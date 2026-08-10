@@ -119,6 +119,21 @@ pub enum WorkCommand
         /// Why.
         reason: String,
     },
+    /// End an item that turned out not to be work.
+    ///
+    /// Separate from [`WorkCommand::Abandon`] because they are about different subjects —
+    /// abandoning ends a claim and puts the item back on the board, declining ends the item —
+    /// and because the items this exists for are unclaimed, which `abandon` cannot reach.
+    /// `OD-LEDGER-019`.
+    Decline
+    {
+        /// Which item.
+        item: ItemId,
+        /// Who is ending it.
+        holder: String,
+        /// Why it is not work.
+        reason: String,
+    },
     /// Check the ledger's invariants.
     Validate,
     /// Show what would block a claim.
@@ -201,7 +216,18 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
                 },
             })
         }
+        // Two verbs, one shape of argument list, and *not* one shared arm. `claim`, `renew`
+        // and `takeover` share theirs above because they do the same thing to the same
+        // subject with a different policy; these two do different things to different
+        // subjects and merely take the same three words, so a shared arm would be a
+        // similarity of spelling standing in for a similarity of meaning — which is the
+        // conflation `OD-LEDGER-019` refuses at the verb level.
         "abandon" => Ok(WorkCommand::Abandon {
+            item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
+            holder: Required(value_of("--holder").as_ref(), "--holder")?,
+            reason: Required(value_of("--reason").as_ref(), "--reason")?,
+        }),
+        "decline" => Ok(WorkCommand::Decline {
             item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
             holder: Required(value_of("--holder").as_ref(), "--holder")?,
             reason: Required(value_of("--reason").as_ref(), "--reason")?,
@@ -285,6 +311,7 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            declined: None,
         }),
     });
 }
@@ -340,6 +367,13 @@ fn Usage_Text() -> String
             claim it displaced, which `show` then reports.\n\
             \x20 finish   --item <id> --holder <name>\n\
             \x20 abandon  --item <id> --holder <name> --reason <text>\n\
+            \x20 decline  --item <id> --holder <name> --reason <text>\n\
+            \x20          ends an item that turned out not to be work — superseded by another \
+            item, or refused by a record since it was written. `abandon` ends a *claim* and \
+            puts the item back on the board for somebody else; `decline` ends the *item*, and \
+            takes no claim, because an item nobody intends to do should not have to be claimed \
+            first. It refuses an item somebody is holding, and one already done or already \
+            declined.\n\
             \x20 validate\n\
             \x20 audit\n\
             \n\
@@ -415,6 +449,11 @@ pub fn Run(
             ),
             output,
         ),
+        WorkCommand::Decline {
+            item,
+            holder,
+            reason,
+        } => Report_Decline(item, ledger.Decline(item, holder, reason), output),
         WorkCommand::Validate => Report_Validation(&ledger, output),
         WorkCommand::Audit => Audit(&ledger, output),
     };
@@ -782,6 +821,35 @@ fn Report_Claim(
     };
 }
 
+/// Reports a decline, naming the item on both paths.
+///
+/// The success line says `declined` and not `released`: an agent that reads `released` after
+/// running `decline` has been told the item is back on the board, which is the opposite of
+/// what happened and the exact confusion this verb exists to end.
+///
+/// The refusal names the item first and then prints [`ClaimRefusal::Describe`] beneath it,
+/// which is the composition `OD-LEDGER-014` phrased those sentences for.
+fn Report_Decline(
+    item: &ItemId,
+    result: Result<(), ClaimRefusal>,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    return match result
+    {
+        Ok(()) =>
+        {
+            let _ = writeln!(output, "{item} declined");
+            ExitCode::Ok
+        }
+        Err(refusal) =>
+        {
+            let _ = writeln!(output, "refused: {}", refusal.Describe());
+            Code_For(&refusal)
+        }
+    };
+}
+
 fn Report_Release(result: Result<(), ClaimRefusal>, output: &mut impl std::io::Write)
 -> ExitCode
 {
@@ -1047,6 +1115,117 @@ mod tests
 
         assert!(error.contains("frobnicate"));
         assert!(error.contains("usage"));
+    }
+
+    /// One word, no hyphen, matching the other ten verbs — and not a spelling of `abandon`.
+    ///
+    /// The second half is the assertion worth making. These two take the same three
+    /// arguments and do opposite things to the item: a `decline` that parsed as an `Abandon`
+    /// would put the item back on the board while reporting that it had been ended, which is
+    /// exactly the state `OD-LEDGER-019` was written to stop an item being left in.
+    #[test]
+    fn Test_Decline_Should_Not_Parse_As_An_Abandon()
+    {
+        let parsed = Parse(&Arguments("decline --item T-1 --holder agent-a --reason done"))
+            .unwrap();
+
+        assert_eq!(
+            parsed,
+            WorkCommand::Decline {
+                item: ItemId::New("T-1"),
+                holder: "agent-a".to_owned(),
+                reason: "done".to_owned(),
+            }
+        );
+    }
+
+    /// The state carries its reason so that an item cannot be declined reasonlessly, and the
+    /// flag is required so that the guarantee reaches somebody typing rather than stopping at
+    /// the type.
+    #[test]
+    fn Test_Decline_Should_Require_A_Reason()
+    {
+        let error =
+            Parse(&Arguments("decline --item T-1 --holder agent-a")).unwrap_err();
+
+        assert!(error.contains("--reason"), "{error}");
+        assert!(Parse(&Arguments("decline --holder agent-a --reason r")).is_err());
+        assert!(Parse(&Arguments("decline --item T-1 --reason r")).is_err());
+    }
+
+    /// The usage text is what an agent reads at exit 2, so a verb missing from it is a verb
+    /// that does not exist as far as the next session is concerned.
+    #[test]
+    fn Test_The_Usage_Text_Should_Name_Every_Verb_It_Accepts()
+    {
+        let usage = Usage_Text();
+
+        for verb in [
+            "list", "show", "add", "claim", "renew", "takeover", "finish", "abandon",
+            "decline", "validate", "audit",
+        ]
+        {
+            assert!(usage.contains(verb), "the usage text does not name `{verb}`");
+            assert!(
+                Parse(&Arguments(verb)).is_ok() || !Parse(&Arguments(verb)).unwrap_err().contains("unknown command"),
+                "the usage text names `{verb}` and the parser does not accept it"
+            );
+        }
+    }
+
+    /// A board holding one declined item and nothing else.
+    fn Board_With_A_Declined_Item() -> LedgerDocument
+    {
+        let mut item = match Parse(&Arguments(
+            "add --item T-1 --title t --why w --done-when d --territory src/a.rs",
+        ))
+        .unwrap()
+        {
+            WorkCommand::Add { item } => *item,
+            other => panic!("expected an add, got {other:?}"),
+        };
+
+        item.Decline("superseded by T-2", "agent-a", Timestamp::From_Unix_Seconds(1));
+
+        return LedgerDocument {
+            schema_version: nomos_ledger::SCHEMA_VERSION,
+            items: vec![item],
+        };
+    }
+
+    /// The column an agent reads before claiming has to say the item is over.
+    ///
+    /// This is the whole of what the state buys at the surface. `P10-REQUIRABLE-DECLARED` was
+    /// superseded twice and read `ready` both times, with the reason behind `work show` where
+    /// nobody looks first — so the second session claimed it and spent its run establishing
+    /// that the first one was right.
+    #[test]
+    fn Test_A_Declined_Item_Should_Be_Listed_As_Declined()
+    {
+        let document = Board_With_A_Declined_Item();
+        let item = document.items.first().expect("the fixture has an item");
+
+        assert_eq!(
+            Listing_Label(&document, item, Timestamp::From_Unix_Seconds(2)),
+            "declined"
+        );
+    }
+
+    /// `work audit` answers for items somebody could act on, and nobody can act on this one.
+    ///
+    /// `P10-AUDIT-STATE` settled that once: an audit that reported blockers for finished work
+    /// made forty-four lines nobody could do anything about. A newly reachable terminal state
+    /// is the obvious way to reopen it.
+    #[test]
+    fn Test_Audit_Should_Not_Answer_For_A_Declined_Item()
+    {
+        let document = Board_With_A_Declined_Item();
+        let item = document.items.first().expect("the fixture has an item");
+
+        assert!(
+            Blocking_Refusal(&document, item, Timestamp::From_Unix_Seconds(2)).is_none(),
+            "audit answered for an item nobody can act on"
+        );
     }
 
     fn Added(text: &str) -> LedgerItem

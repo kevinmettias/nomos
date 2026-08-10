@@ -29,6 +29,7 @@ pub enum variant nomos_ledger::ClaimRefusal::LeaseTooLong { requested: Duration,
 pub enum variant nomos_ledger::ClaimRefusal::LedgerUnusable { cause: String, }
 pub enum variant nomos_ledger::ClaimRefusal::NoSuchItem { item: ItemId, }
 pub enum variant nomos_ledger::ClaimRefusal::NotClaimable { item: ItemId, state: String, }
+pub enum variant nomos_ledger::ClaimRefusal::StillHeld { item: ItemId, holder: String, until: Timestamp, }
 pub enum variant nomos_ledger::ClaimRefusal::UnknownIndependence { against: ItemId, reason: UnknownReason, }
 pub enum variant nomos_ledger::FinishRefusal::CouldNotRun { item: ItemId, cause: String, }
 pub enum variant nomos_ledger::FinishRefusal::GateFailed { item: ItemId, argv: Vec<String>, exit_code: i32, output_tail: String, }
@@ -63,6 +64,7 @@ pub fn nomos_ledger::ExclusionLedger::Release( &mut self, item: &ItemId, holder:
 pub fn nomos_ledger::ExclusionLedger::Renew(&mut self, item: &ItemId, holder: &str, lease: Duration) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::FileLedger::At(path: impl Into<PathBuf>, filesystem: F, clock: C, lock: L) -> Self
 pub fn nomos_ledger::FileLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Decline( &mut self, item: &ItemId, holder: &str, reason: &str, ) -> Result<(), ClaimRefusal>
 pub fn nomos_ledger::FileLedger::Load(&self) -> Result<LedgerDocument, LedgerError>
 pub fn nomos_ledger::FileLedger::Now(&self) -> Timestamp
 pub fn nomos_ledger::FileLedger::Path(&self) -> &Path
@@ -79,7 +81,9 @@ pub fn nomos_ledger::GateUnknown::Describe(&self) -> String
 pub fn nomos_ledger::ItemId::As_Str(&self) -> &str
 pub fn nomos_ledger::ItemId::New(value: impl Into<String>) -> Self
 pub fn nomos_ledger::ItemId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_ledger::ItemState::Describe(&self) -> String
 pub fn nomos_ledger::LedgerError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_ledger::LedgerItem::Decline(&mut self, reason: &str, holder: &str, at: Timestamp)
 pub fn nomos_ledger::LedgerItem::Has_Active_Claim(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::LedgerItem::Replace_Lapsed_Claim(&mut self, replacement: Claim, now: Timestamp) -> bool
 pub fn nomos_ledger::Normalize_Path(path: &str) -> String
@@ -107,6 +111,8 @@ pub struct field nomos_ledger::Abandonment::reason: String
 pub struct field nomos_ledger::Claim::acquired_at: Timestamp
 pub struct field nomos_ledger::Claim::holder: String
 pub struct field nomos_ledger::Claim::lease_expires_at: Timestamp
+pub struct field nomos_ledger::Declination::declined_at: Timestamp
+pub struct field nomos_ledger::Declination::holder: String
 pub struct field nomos_ledger::GateOutcome::argv: Vec<String>
 pub struct field nomos_ledger::GateOutcome::exit_code: i32
 pub struct field nomos_ledger::LedgerDocument::items: Vec<LedgerItem>
@@ -114,6 +120,7 @@ pub struct field nomos_ledger::LedgerDocument::schema_version: u32
 pub struct field nomos_ledger::LedgerItem::abandoned: Vec<Abandonment>
 pub struct field nomos_ledger::LedgerItem::blocked: Option<Blocker>
 pub struct field nomos_ledger::LedgerItem::claim: Option<Claim>
+pub struct field nomos_ledger::LedgerItem::declined: Option<Declination>
 pub struct field nomos_ledger::LedgerItem::depends_on: Vec<ItemId>
 pub struct field nomos_ledger::LedgerItem::displaced: Vec<Claim>
 pub struct field nomos_ledger::LedgerItem::done_when: String
@@ -139,6 +146,7 @@ pub struct field nomos_ledger::VerificationRecord::output_tail: String
 pub struct field nomos_ledger::VerificationRecord::verified_at: Timestamp
 pub struct nomos_ledger::Abandonment
 pub struct nomos_ledger::Claim
+pub struct nomos_ledger::Declination
 pub struct nomos_ledger::FileLedger<F, C, L>
 pub struct nomos_ledger::GateOutcome
 pub struct nomos_ledger::ItemId(String)

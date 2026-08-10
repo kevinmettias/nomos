@@ -144,9 +144,18 @@ pub enum ItemState
     /// Finished, with its verification predicate having passed.
     Done,
     /// Deliberately not going to be done.
+    ///
+    /// Reached by `nomos work decline` and by nothing else. It was reachable by nothing at
+    /// all until `OD-LEDGER-019`, which is what that record measures: a state the ledger
+    /// could describe, filter on and count terminal, and could not enter, so a superseded
+    /// item went back to [`ItemState::Ready`] and the board offered it again.
     Declined
     {
         /// Why not. Carried in the variant so an item cannot be declined reasonlessly.
+        ///
+        /// The only copy. [`Declination`] records who ended it and when, and deliberately
+        /// does not repeat this — a reader asking *why* asks the state and a reader asking
+        /// *who* asks the item, and neither can be told two different things.
         reason: String,
     },
 }
@@ -165,6 +174,39 @@ impl ItemState
     pub const fn Is_Finished(&self) -> bool
     {
         return matches!(self, Self::Done | Self::Declined { .. });
+    }
+
+    /// This state as one line, for a refusal that has to name it.
+    ///
+    /// `Debug` was what every caller used, and it was fine for four of the five variants
+    /// because they carry nothing. [`ItemState::Declined`] carries prose, and the moment the
+    /// state became reachable that prose started arriving inside single-line refusals with
+    /// its newlines escaped — the reason `P10-DERIVED-FACT` was declined with runs to five
+    /// paragraphs, and `nomos work decline` on it printed all of them as one line.
+    ///
+    /// So the reason is kept and cut to its first line. Which of the two things a caller has
+    /// hit — a duplicate, or a disagreement with somebody's reading — is decided by the first
+    /// sentence, and the whole of it is one `work show` away. That split is the one the usage
+    /// text already draws between the two verbs: `list` is a column per item, `show` is the
+    /// one that can carry prose.
+    ///
+    /// One implementation, for the reason [`crate::Claim_Refusal`] is one function: two
+    /// renderings of a state is how a listing and a refusal come to disagree about what an
+    /// item is, which `OD-LEDGER-014` measured at the next layer up.
+    #[must_use]
+    pub fn Describe(&self) -> String
+    {
+        return match self
+        {
+            Self::Declined { reason } =>
+            {
+                let first = reason.lines().next().unwrap_or_default();
+                let elided = reason.lines().count() > 1;
+
+                format!("Declined: {first}{}", if elided { " […]" } else { "" })
+            }
+            other => format!("{other:?}"),
+        };
     }
 }
 
@@ -225,6 +267,32 @@ pub struct Abandonment
     pub reason: String,
     /// When they gave it up.
     pub abandoned_at: Timestamp,
+}
+
+/// Who ended an item, and when.
+///
+/// The same job [`Abandonment`] does, for the transition [`ItemState::Declined`] is the
+/// result of, and it exists for the same reason: a state is written down and a transition is
+/// not, so who performed it and when are gone at the moment it happens unless a field on the
+/// item is given the job of holding them.
+///
+/// It carries **no reason**, and that absence is the design rather than an omission. The
+/// reason is the state's own content — [`ItemState::Declined`] is what makes an item
+/// impossible to decline reasonlessly — and a second copy here would be one fact with two
+/// homes that can come to disagree. `OD-LEDGER-019` decision 3.
+///
+/// The two fields differ from [`Abandonment`]'s in what they are about. An abandonment is
+/// about a *claim*, so its holder is the agent that was holding the item. A declination is
+/// about the *item*, and the item need not have been held by anybody — both of the items this
+/// verb was built for were unclaimed — so `holder` here is whoever ran the verb.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Declination
+{
+    /// Who ended it.
+    pub holder: String,
+    /// When they ended it.
+    pub declined_at: Timestamp,
 }
 
 /// A command that decides whether an item is actually finished.
@@ -378,6 +446,19 @@ pub struct LedgerItem
     /// document is independent of what is in it.
     #[serde(default)]
     pub displaced: Vec<Claim>,
+    /// Who declined this item and when, if it was declined through the verb.
+    ///
+    /// Not a list, unlike its two neighbours, because declining is terminal: a second decline
+    /// is refused rather than appended, so there is never a second entry to lose. That is the
+    /// same argument [`LedgerItem::abandoned`] makes, reaching the opposite shape from the
+    /// opposite fact.
+    ///
+    /// `#[serde(default)]` for the reason the fields above carry it, and with one instance
+    /// already on the board: `P3-RESTORE` was declined by hand before any verb could, so it
+    /// reads as declined with nobody named. That is exactly true and is left visible rather
+    /// than backfilled with an agent identifier nothing recorded.
+    #[serde(default)]
+    pub declined: Option<Declination>,
 }
 
 impl LedgerItem
@@ -432,6 +513,28 @@ impl LedgerItem
 
         return true;
     }
+
+    /// Ends this item, keeping who ended it and when.
+    ///
+    /// One operation, for the reason [`LedgerItem::Replace_Lapsed_Claim`] and
+    /// [`crate::ReleaseOutcome::Record_On`] are each one: spelled out at a call site, an
+    /// implementation is free to write the state and not the [`Declination`], and that is
+    /// precisely the half this whole change exists to stop being lost. There is no ordering
+    /// of the statements below in which the state lands and the declination does not.
+    ///
+    /// It performs no checks. Whether this item may be declined at all is
+    /// `Decline_Refusal`'s question, asked once under the lock, and asking it twice is how
+    /// two answers come to disagree.
+    pub fn Decline(&mut self, reason: &str, holder: &str, at: Timestamp)
+    {
+        self.state = ItemState::Declined {
+            reason: reason.to_owned(),
+        };
+        self.declined = Some(Declination {
+            holder: holder.to_owned(),
+            declined_at: at,
+        });
+    }
 }
 
 #[cfg(test)]
@@ -455,6 +558,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            declined: None,
         };
     }
 
@@ -782,7 +886,7 @@ mod tests
 
         assert_eq!(
             fields.len(),
-            13,
+            14,
             "a field was added to `LedgerItem`. Raise `SCHEMA_VERSION` in `store.rs` and this \
              count together, or a build that predates the field will be told the ledger is \
              malformed instead of being told it is old"

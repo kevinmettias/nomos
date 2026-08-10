@@ -28,6 +28,14 @@
 //! [`VerificationPredicate`] is an argument vector that gets executed, and an item
 //! cannot report itself done because somebody typed that it was.
 //!
+//! An item that turns out not to be work is ended by a third verb, [`FileLedger::Decline`],
+//! and not by either of those two. Abandoning ends a *claim* and returns the item to the
+//! board because the work is still wanted; declining ends the *item*. Reaching
+//! [`ItemState::Declined`] took a hand edit until `OD-LEDGER-019`, so a superseded item went
+//! back to `Ready` and was offered again — measured once at the cost of a whole session's
+//! run. [`Declination`] gives who ended it and when the home on the item that
+//! [`Abandonment`] gives the other transition.
+//!
 //! # Scope
 //!
 //! This crate is the durable, git-committed instance of the exclusion model. The
@@ -53,8 +61,8 @@ pub use exclusion::{
 pub use finish::{Finish, FinishRefusal};
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateUnknown, LINT_STEP, Workflow_Path};
 pub use item::{
-    Abandonment, Blocker, Claim, DEFAULT_LEASE, GateOutcome, ItemId, ItemState, LedgerItem,
-    MAXIMUM_LEASE, VerificationPredicate, VerificationRecord,
+    Abandonment, Blocker, Claim, DEFAULT_LEASE, Declination, GateOutcome, ItemId, ItemState,
+    LedgerItem, MAXIMUM_LEASE, VerificationPredicate, VerificationRecord,
 };
 pub use store::{
     Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, LedgerError,

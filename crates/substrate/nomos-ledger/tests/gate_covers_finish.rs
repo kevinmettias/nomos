@@ -143,6 +143,7 @@ fn Tree(name: &str, workflow: Option<&str>) -> PathBuf
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        declined: None,
     };
     item.claim = Some(Claim {
         holder: HOLDER.to_owned(),

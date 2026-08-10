@@ -32,11 +32,12 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// on the next instance of the defect it was built for. Here a forgotten bump can only degrade
 /// a message, and can never cost a field.
 ///
-/// `2` since `OD-LEDGER-012` added [`crate::LedgerItem::displaced`]. The bump is not
-/// discretionary: `Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version` counts the
-/// keys on a serialized item, so a field arriving without this number moving is a refusal that
+/// `3` since `OD-LEDGER-019` added [`crate::LedgerItem::declined`]; `2` was
+/// `OD-LEDGER-012`'s [`crate::LedgerItem::displaced`]. The bump is not discretionary:
+/// `Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version` counts the keys on a
+/// serialized item, so a field arriving without this number moving is a refusal that
 /// misstates why.
-pub const SCHEMA_VERSION: u32 = 2;
+pub const SCHEMA_VERSION: u32 = 3;
 
 /// Why a ledger operation could not be carried out.
 #[derive(Debug)]
@@ -508,6 +509,65 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
         });
     }
 
+    /// Ends an item that turned out not to be work.
+    ///
+    /// # Why this is not a way of releasing a claim
+    ///
+    /// [`ExclusionLedger::Release`] answers what happened to a *claim* — finished, or given
+    /// up — and both of its outcomes leave an item the board can still act on. This answers
+    /// what happened to the *item*, and it takes no claim at all: both of the items
+    /// `OD-LEDGER-019` was written for had been released long before anybody established they
+    /// were superseded, so a verb reachable only through a live claim could not have reached
+    /// either of them. Widening `abandon` instead would put a decision in front of the
+    /// eighteen releases in twenty that have never needed one, and would still leave the
+    /// remaining two behind a claim on work nobody intends to do.
+    ///
+    /// # Why it is not on [`ExclusionLedger`]
+    ///
+    /// The reason [`Self::Take_Over`] is not: the trait is the exclusion question, and this is
+    /// not one. A declined item excludes nothing, and the run-scoped and session-scoped
+    /// instances have no notion of an item outliving the run that would decline it.
+    ///
+    /// Read, decide and write happen inside one lock acquisition, through
+    /// [`Self::Decide_Under_Lock`], for the reason `OD-LEDGER-015` gives about the three verbs
+    /// that did not.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ClaimRefusal::StillHeld`] when somebody is holding it — retryable, and the
+    /// sentence names the two commands that resolve it — [`ClaimRefusal::Lapsed`] when the
+    /// holder is gone rather than working, [`ClaimRefusal::NotClaimable`] when the item is
+    /// already `Done` or already `Declined`, and [`ClaimRefusal::NoSuchItem`] for an
+    /// identifier that matches nothing.
+    pub fn Decline(
+        &mut self,
+        item: &ItemId,
+        holder: &str,
+        reason: &str,
+    ) -> Result<(), ClaimRefusal>
+    {
+        return self.Decide_Under_Lock(holder, |document, now| {
+            if let Some(refusal) = Decline_Refusal(document, item, now)
+            {
+                return Err(refusal);
+            }
+
+            for candidate in &mut document.items
+            {
+                if &candidate.id == item
+                {
+                    // `LedgerItem::Decline` and not two statements here, for the reason
+                    // `Replace_Lapsed_Claim` is one call: a call site that wrote the state
+                    // itself would be free to write it and not the declination, and the
+                    // declination is the half this verb was added to keep.
+                    candidate.Decline(reason, holder, now);
+                }
+            }
+
+            return Ok(());
+        });
+    }
+
     /// Whether the ledger currently satisfies its invariants.
     ///
     /// # Errors
@@ -733,7 +793,7 @@ pub fn Claim_Refusal(
     {
         return Some(ClaimRefusal::NotClaimable {
             item: item.clone(),
-            state: format!("{:?}", target.state),
+            state: target.state.Describe(),
         });
     }
 
@@ -767,6 +827,63 @@ fn Lapse_Refusal(target: &LedgerItem, now: Timestamp) -> Option<ClaimRefusal>
         holder: claim.holder.clone(),
         since: claim.lease_expires_at,
     });
+}
+
+/// Why an item may not be declined, if it may not.
+///
+/// Only a `Ready` item can be ended, and the three refusals below are the three ways of not
+/// being one. `OD-LEDGER-019` decision 4 states each; what matters here is the *order*, which
+/// is the order a caller hits them so that the reason reported is the first one that actually
+/// applies — the same discipline [`Claim_Refusal`] follows, and the lapse check is first for
+/// the same reason it is first there.
+///
+/// [`Contested_By`] is deliberately not consulted. Territory contention decides who may *work*
+/// an item; it has nothing to say about whether the item is work at all, and a decline refused
+/// because some unrelated peer holds an overlapping file would be a refusal nobody could act
+/// on.
+fn Decline_Refusal(
+    document: &LedgerDocument,
+    item: &ItemId,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let Some(target) = document
+        .items
+        .iter()
+        .find(|candidate| &candidate.id == item)
+    else
+    {
+        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
+    };
+
+    // First, because `Claimed` is the state a lapsed item is in and the remedies differ: a
+    // live holder is asked to release, and a dead one is taken over. `OD-LEDGER-012`.
+    if let Some(refusal) = Lapse_Refusal(target, now)
+    {
+        return Some(refusal);
+    }
+
+    if let Some(claim) = target.claim.as_ref()
+    {
+        return Some(ClaimRefusal::StillHeld {
+            item: item.clone(),
+            holder: claim.holder.clone(),
+            until: claim.lease_expires_at,
+        });
+    }
+
+    if target.state != ItemState::Ready
+    {
+        // `Describe` rather than a bare state word, so a `Declined` item's refusal carries
+        // the reason it already holds. Told only "it is declined", a caller cannot tell a
+        // duplicate from a disagreement, and both need a person.
+        return Some(ClaimRefusal::NotClaimable {
+            item: item.clone(),
+            state: target.state.Describe(),
+        });
+    }
+
+    return None;
 }
 
 /// Everything that refuses an item for a reason outside the item's own state: an unfinished
@@ -885,7 +1002,7 @@ fn Wrong_Verb(target: &LedgerItem, now: Timestamp) -> ClaimRefusal
 
     return ClaimRefusal::NotClaimable {
         item: target.id.clone(),
-        state: format!("{:?}", target.state),
+        state: target.state.Describe(),
     };
 }
 

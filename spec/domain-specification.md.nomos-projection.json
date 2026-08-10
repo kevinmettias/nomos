@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:adeef12b69d45a1b833e4edab5e878bb4d197b9fbd209d073d4d58e4d11d0be7",
-  "inputs_digest": "sha256:b1d00499ffaaba711edec7c3e5b28644e62b0f3c7ab9a9a805e794ee791bbd64",
+  "content_digest": "sha256:62383da3dd5d6a499e6ed60c0d992aeda63e19f907bf88a681866186fbd54ed3",
+  "inputs_digest": "sha256:301801d8bbf7acd7787c47202a40bf06fffc480db71fe47609517873f3c8c7dd",
   "sections": [
     [
       "Documents",
-      65
+      66
     ],
     [
       "Sections",
-      599
+      613
     ],
     [
       "Source blocks",
-      2397
+      2451
     ]
   ],
   "inputs": [
@@ -234,6 +234,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored",
       "hash": "sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored",
+      "hash": "sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d"
     },
     {
       "content": "documents",
@@ -2299,6 +2304,76 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#41",
       "hash": "sha256:e3cab469fe502659b4834c92758f0fe23381e899fc0ab9784c67c897209f6ba8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#1",
+      "hash": "sha256:bd474409886df7856ada35737e8d6bac57828197624e9ea8a3078c8b5900a090"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#2",
+      "hash": "sha256:7e4dc333f5cec9079fabc0a7c47c934187b08daeef02452e779bd08b31ecce6f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#6",
+      "hash": "sha256:f67be25f2968589400a77027b4cb75bdeb6d7a1721346139472d21ad97831245"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#18",
+      "hash": "sha256:925ae0b1c2a77d2bc6378901ae0fce3e0da1c1e8abb6b06d7f7cafc0a58ada1a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#19",
+      "hash": "sha256:c4f24f690b39c69f60cdcbd1ac3e587128982a880d2933d1ebed44473eaa3c5b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#22",
+      "hash": "sha256:f510cf91a8ab022b0dd27c7ba9ff89a1b4bdf52a88b50d8b6718287500155582"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#27",
+      "hash": "sha256:e0eb4a81fb6a95ca813c545b6c69fa6bbd1704d9e305d0c28b17a9f8a2e3bb59"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#32",
+      "hash": "sha256:bc962bbfae697254a7f19236d90af14fd3f6a1531c2495e754eea1602dadc922"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#38",
+      "hash": "sha256:d34cfff31463a784871b214a2fd6fd0254e263866125a966abdd0d6adc46d14b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#41",
+      "hash": "sha256:737ac3b2538bc3151841bd5eaeebdd93ae06964c924f0a7a4bacc56bbfe5ccfe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#43",
+      "hash": "sha256:a689292b6e60d2fe211c6a30b21553e6bfcf126540f08bf776c272b82ae961e5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#49",
+      "hash": "sha256:5af46a24f921f48f7e21ed4bde80ed6a970f3f8b937fa371bd123740521744d8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#51",
+      "hash": "sha256:158acf401b8fc3a34391c12f20bb82bdbfec8413b4041ef7e731b3744229a601"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53",
+      "hash": "sha256:9617271589e0ca04597ad3176dbb9afacaf716a4591b088a34c6f5e58ee55948"
     },
     {
       "content": "headings",
@@ -11039,6 +11114,276 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#42",
       "hash": "sha256:b19d92687b59bb32538fb7cb9c2965fcfa07d742eca76e707f0932aa2ec82170"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#1",
+      "hash": "sha256:8182fc72161df7f4151185fb6667354eb50b9f8439db575749ac73e058354ade"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#3",
+      "hash": "sha256:0c1f7e67966cb93fd4fd02f79d5cf60dcd8c6dba2b2a98f1fb12883fbf57b3c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#4",
+      "hash": "sha256:ea9e0e1993c006f19de2f35a4d4f65668b495187008bc35fba2f0bc9539f6f39"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#5",
+      "hash": "sha256:fac5e9419210d9ff2d18fc3011c0ab15cbfe5e57dd1733039a014e22291231ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#7",
+      "hash": "sha256:2c0c9374afd14b85d31ac0f5cb4ffbf783459d49b58ae6fabb132af0419c9340"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#8",
+      "hash": "sha256:86a5f9633303e0428cf43207db99a2165bec42cd89dd0cfc92b9dddea82696fd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#9",
+      "hash": "sha256:0c7302b17bafdfda98a8daf9eb8c81beff079dd3fc142a3d0c0791fb6d345b58"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#10",
+      "hash": "sha256:1023ea0906e3ce3dfbf607388ce76432179803a0a0726eb56ae6a89d599ead4c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#11",
+      "hash": "sha256:07697e033003c1078d3031411b1979db6ea9c405c89f41024bd292fe3c3ede5c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#12",
+      "hash": "sha256:35f9a876b4d636ad37fbf52583353f24597b839ae9279bec3541632d5d7839d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#13",
+      "hash": "sha256:59d52dd979ecb21e67f59cf836617c6d7dfe6b8a39b459c491ef02ec6a43c7e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#14",
+      "hash": "sha256:7b0021ae933847b23b295e72ea3de4ae4e93ae360b6f6849874c5177f9a3baaa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#15",
+      "hash": "sha256:673b52f6b15e24c88a57c1f170e8df0b85583c03bd1688cf7b39d80776c7ed77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#16",
+      "hash": "sha256:7d9cdf13400edfb0a31ee1c9108dc05c8a8000117a4657ff4e68a70c5abb71fb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#17",
+      "hash": "sha256:dee7fc702f670103f98967f9bac9d6d6789196115f9cf7410d53c1ebf8ac92ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#18",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#19",
+      "hash": "sha256:766e16767f7307b840384085ff783cf2b53375b3c8170346f216de096c0b1504"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#20",
+      "hash": "sha256:35f7ee757ed8e4689de1000581944b17b51593a5d4f4b0576b235ea10ae47b3b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#21",
+      "hash": "sha256:ab1696635fab2a966928aa81a41e0e7b659f42b998c940b0034a2b07fa7a8523"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#22",
+      "hash": "sha256:83a661f9ef888c7710dfd9ee6321d9f04a6e49618b8359cd7a557d984af69096"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#23",
+      "hash": "sha256:6c7152ea3f4b4791dcd584ad8833216204e8e094296ca0fbf407eb9b835036ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#24",
+      "hash": "sha256:680c402af8f141de113f85a478f7b26214ff174dc984c2534dc970f02f91f1ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#25",
+      "hash": "sha256:e753323e03e45b130698b094801d2c8e4a42da0167ecdb898da58175bc013189"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#26",
+      "hash": "sha256:03bc65687305da3c16331e18f10714d5df6b6d95e67c30c1102c765b95060e6d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#27",
+      "hash": "sha256:2ad6000275acae0ed23cb7bf187b67a75c86d885c7a9aa8c5dcf4fcdfa836c1d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#28",
+      "hash": "sha256:a2eb66551447a262d223f7c2fdcdbeb90e7add90e967018075753aaa6049938a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#29",
+      "hash": "sha256:2de62f437cd42dcb0c83063a61f13f667992b970563bc5f2139f8856d79e989b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#30",
+      "hash": "sha256:827b632a3e11be38e14e57f7a60169cc37425d01df2a48f2d63046859594d461"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#31",
+      "hash": "sha256:4d9020966b3b10f674f1f9a019dd253f26e4ce9a8edff4522d1114790efd478c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#32",
+      "hash": "sha256:bd633cb712acb8f10a14978bebe5ee0fbed355a06a4916dcb8ca50e38e078f46"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#33",
+      "hash": "sha256:fc8e20830eabbe66a6156d81ef29cac1d7dbe1269a9db92cae86cbd5a07d9f54"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#34",
+      "hash": "sha256:e4399d810e62f055b9631bf93777055023bcff92e4ea0bd494ffa7ea85b116c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#35",
+      "hash": "sha256:311c436b65d88fe9b7fe5b1cdb39390b4cacd2655139b7a927e62c5643d26993"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#36",
+      "hash": "sha256:3cc7c85a446eeefb055846a1582c056ccbd909b6363b68518bb989b33ffd03aa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#37",
+      "hash": "sha256:8d18614aeef58a5a1eeff557fbabc0218f8ab68c0485508f18702929e1bbbfb1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#38",
+      "hash": "sha256:e5eff470ba5f05e663be1e45bb55e78c80a7f06a8f61e5f2f58bf275ace10fb8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#39",
+      "hash": "sha256:540820b802498ed29033fed30a116943ce6ee7837dff2a0e9e35003860d386c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#40",
+      "hash": "sha256:6ee0febf2f7cdb94ed35244d78239573cfdd670f469e2ea904affc77bd574064"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#41",
+      "hash": "sha256:e6bca72ced6be440470cfb7a1a52c77a3925d8845d3213b10d005d2fefb97cdf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#42",
+      "hash": "sha256:c4b2ba1ce30ebc47cb8ba60dbbc96b8c690fac7c6505eac2f37aa0bc82acc040"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#43",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#44",
+      "hash": "sha256:bfd7e3cd283b07232c7e901ccb5049fa4a63d22e2ef8477a8160a392a41db346"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#45",
+      "hash": "sha256:3061d958bec6b84debf6edd8623eb49d170b54e3ae0f003ac07c392ae188a48d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#46",
+      "hash": "sha256:740edebd1a241844670be5d5eafce4e8e535faac88f062fcf77a1699cc701e85"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#47",
+      "hash": "sha256:c524c06bc6bb25851a242f720c1b46d94fe6644c241e238062d35255df924ce3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#48",
+      "hash": "sha256:e52196021d5cb63e70a6a7761a8e3818849695bdc9f9584bdef05f2501ecb439"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#49",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#50",
+      "hash": "sha256:eadc98e08134d54ba00f30f2ffd6ba54b95f64c67e10ffce429f179aa55a680b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#51",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#52",
+      "hash": "sha256:e8e06332cff41b39bf9b55fb5a01ec01fe8324e24f4533cefb9d05145ac248dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#54",
+      "hash": "sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5"
     },
     {
       "content": "blocks",
