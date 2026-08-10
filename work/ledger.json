@@ -4848,10 +4848,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-ledger-sweep-w23",
+        "acquired_at": 1786349598,
+        "lease_expires_at": 1786356798
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4897,6 +4901,60 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-SUBSTRATE-SEAM",
+      "title": "The substrate question is answered per artifact, and nothing records what decides it",
+      "why": "The typed FeatureRequest/DesignSpec/FeatureResult layer needs a rule for which objects are authored as documents and which are born structured, and no such rule exists. OD-SPEC-006 answered the question for governing records on the evidence of the day and left the alternative priced rather than refused. P10-CANONICITY-DECISION reached the opposite answer for feature requests, and its own abandon reason names the hazard that blocks both: deciding per artifact would put two substrates in one build and encode the split in every typed row. That objection is fatal to a split drawn on artifact kind and says nothing at all about a split drawn on provenance, and the difference between those two axes has never been written down. Until it is, the next substrate decision is argued from preference, and ARC-SPECDB-001 says the specification is a database without saying which objects are born in it.",
+      "done_when": "A record under docs/records with its own registration under crates/spec/nomos-spec-store/records states what decides an objects canonical substrate, on the provenance axis rather than the artifact-kind axis, and says why the kind axis is refused rather than merely not chosen. The rule is stated so it applies to an object nobody has proposed yet. It carries the obligation in both directions: what a born-structured object owes in exchange for skipping the preservation machinery, and what an ingested document still owes. It names which existing decisions it extends and identifies any conflict explicitly rather than reinterpreting one quietly. Closed by the record alone: no schema changes, no crate moves, no profile is added, and diagrams/relations.mmd is not touched, because P10-DIAGRAM-OWED holds it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-SPECDB-002",
+          "crates/spec/nomos-spec-store/records/ARC-SPECDB-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Be_Refused ... ok\ntest Test_Reopening_Should_Not_Re_Run_Migrations ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n\nrunning 16 tests\ntest Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest Test_A_Census_Should_Narrow_To_One_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-79e22d39019203d6.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-f7dc0d942c75731f.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-9f1e4a630321b491.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-790d1d7a443043a4.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-ad97dbebf370ad64.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786349752,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     }
