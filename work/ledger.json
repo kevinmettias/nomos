@@ -2322,6 +2322,46 @@
         ],
         "patterns": []
       },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-seeding",
+        "acquired_at": 1786327828,
+        "lease_expires_at": 1786342228
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-STALE-WRITER",
+      "title": "An older binary silently drops the ledger fields it does not know",
+      "why": "Measured on 2026-08-09 rather than inferred. LedgerItem derives Deserialize with no deny_unknown_fields and no schema version, so a nomos.exe built before a field existed reads the current work/ledger.json, ignores the keys it does not know, and writes the document back without them. No error, exit 0. The state change survives and the dropped data does not, so a lossy write is indistinguishable from a successful one at the surface that reports it. The evidence. e88f92d added LedgerItem::abandoned as a Vec<Abandonment> with serde(default) and no skip_serializing_if, so a current binary always emits an empty abandoned list on every item. A round trip through the current binary against a scratch ledger under NOMOS_WORK_DIR confirms that directly: work claim wrote the key to all fifty items and work abandon persisted the reason text verbatim. The repository ledger holds zero such keys. An abandonment of P10-ABANDON-REASON written at unix 1786326402 through a freshly built binary was gone by 1786326839, when another session's work claim rewrote the file - the release stood, the reason did not. This did not start today. Both e88f92d and 6326566 committed a work/ledger.json with zero abandoned keys, including the very commit that added the field, so the authoring session was stripping it as it wrote it and nothing said so. What produced it is the documented Windows workaround rather than carelessness. work finish cannot run under cargo run, because the predicate rebuilds the exe that is the running process, so sessions copy target/debug/nomos.exe and run the copy - and a copy taken before a schema change is a stale writer for the rest of that session. The workaround for a file lock became a silent data loss channel on a file two sessions share. The shape is OD-LEDGER-006 one level down. That record is about a reason attached to a transition not surviving it; this is a reason attached to an item not surviving the next writer, and it fails the same way, by looking like success. The reason destroyed here is worth keeping, because it is the first thing the new field was ever asked to hold: the work was complete and committed at e88f92d, the item's predicate runs -p nomos-ledger which is red on records_do_not_serialize for a cause outside the item, that cause is on the board as P10-SEEDING-SERIALIZES, and the claim reserved the two paths every open item also reserves, so it was refusing the one item able to fix the reason it could not finish.",
+      "done_when": "A write by a binary that does not understand the document it is writing either fails or preserves what it did not understand. Which of those is settled in the record on stated grounds rather than left to whoever implements it: a schema version the writer must recognise, deny_unknown_fields on the way in, or a preserved passthrough of unknown keys. A test asserts it over a document carrying a key the deserializing type does not declare, and asserts on the round tripped document rather than on whether a type compiles. The negative control is confirmed red - removing the guard must fail that test and fail it alone. A second control holds the line the crate already draws: a writer that does understand the document must still round trip it unchanged, because a guard that refuses every write is not a fix and would stop the board rather than protect it. Whether the copied binary workaround is replaced, or only documented so an operator can tell a stale writer from a current one, is settled either way, since a guard that reports only after the loss leaves the operator holding the same problem.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-LEDGER-008"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -2332,6 +2372,8 @@
           "test",
           "-p",
           "nomos-ledger",
+          "-p",
+          "nomos-cli",
           "-p",
           "nomos-spec-store",
           "-p",
