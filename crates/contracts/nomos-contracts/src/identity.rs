@@ -152,55 +152,6 @@ Digest_Identity!
     RunId
 }
 
-/// A monotone counter marking one analysis state of a workspace.
-///
-/// Generations are the mechanism by which stale results stay readable as history
-/// without ever being publishable as current. A result produced against generation 42
-/// is not wrong when the workspace reaches 43 — it is evidence about 42, and saying so
-/// is different from either discarding it or presenting it as fresh.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct GenerationId(u64);
-
-impl GenerationId
-{
-    /// The generation a freshly discovered workspace starts at.
-    pub const INITIAL: Self = Self(0);
-
-    /// Wraps a raw counter value.
-    #[must_use]
-    pub const fn From_Raw(value: u64) -> Self
-    {
-        return Self(value);
-    }
-
-    /// The raw counter value.
-    #[must_use]
-    pub const fn Raw(self) -> u64
-    {
-        return self.0;
-    }
-
-    /// The generation following this one.
-    ///
-    /// Saturating rather than wrapping. A wrapped generation counter would make an
-    /// ancient result compare as current, which is precisely the failure the type
-    /// exists to prevent; saturation stalls loudly instead, and `u64::MAX` generations
-    /// is not a workspace anyone will reach.
-    #[must_use]
-    pub const fn Next(self) -> Self
-    {
-        return Self(self.0.saturating_add(1));
-    }
-}
-
-impl core::fmt::Display for GenerationId
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(formatter, "gen{}", self.0);
-    }
-}
-
 /// Declares a newtype over an authored, human-readable identifier.
 macro_rules! Named_Identity
 {
@@ -277,45 +228,6 @@ Named_Identity!
     OperationName
 }
 
-/// A schema or contract version.
-///
-/// Two components rather than three: a contract either stays compatible with existing
-/// consumers or it does not, and a patch level invites the belief that a third kind of
-/// change exists which needs no thought.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct ContractVersion
-{
-    /// Incremented when a consumer written against the previous version breaks.
-    pub major: u16,
-    /// Incremented for additions a previous consumer can ignore.
-    pub minor: u16,
-}
-
-impl ContractVersion
-{
-    /// Constructs a version.
-    #[must_use]
-    pub const fn New(major: u16, minor: u16) -> Self
-    {
-        return Self { major, minor };
-    }
-
-    /// Whether a consumer written against `self` can read data produced at `other`.
-    #[must_use]
-    pub const fn Can_Read(self, other: Self) -> bool
-    {
-        return self.major == other.major && self.minor >= other.minor;
-    }
-}
-
-impl core::fmt::Display for ContractVersion
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(formatter, "v{}.{}", self.major, self.minor);
-    }
-}
-
 #[cfg(test)]
 mod tests
 {
@@ -356,24 +268,5 @@ mod tests
         let digest = Digest128::From_Bytes([0xab; Digest128::BYTE_LENGTH]);
 
         assert!(format!("{digest:?}").contains(&digest.to_string()));
-    }
-
-    #[test]
-    fn Test_Generation_Should_Advance_And_Never_Wrap()
-    {
-        assert_eq!(GenerationId::INITIAL.Next().Raw(), 1);
-        assert_eq!(GenerationId::From_Raw(u64::MAX).Next().Raw(), u64::MAX);
-    }
-
-    #[test]
-    fn Test_Version_Should_Read_Its_Own_And_Older_Minors_Only()
-    {
-        let reader = ContractVersion::New(1, 3);
-
-        assert!(reader.Can_Read(ContractVersion::New(1, 3)));
-        assert!(reader.Can_Read(ContractVersion::New(1, 0)));
-        assert!(!reader.Can_Read(ContractVersion::New(1, 4)));
-        assert!(!reader.Can_Read(ContractVersion::New(2, 0)));
-        assert!(!reader.Can_Read(ContractVersion::New(0, 9)));
     }
 }

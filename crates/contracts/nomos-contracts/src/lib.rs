@@ -60,29 +60,40 @@
 #![forbid(unsafe_code)]
 
 mod applicability;
+mod assurance;
 mod authority;
+mod contract_version;
 mod determinism;
+mod display_label;
 mod enforcement;
 mod evidence;
+mod fact_variant;
 mod finding;
+mod generation_id;
 mod guarantee;
 mod identity;
+mod incremental_granularity;
 mod package;
 mod peer;
 
-pub use applicability::{Applicability, DisplayLabel};
+pub use applicability::Applicability;
+pub use assurance::Assurance;
 pub use authority::{AuthorityClass, MutationClass};
+pub use contract_version::ContractVersion;
 pub use determinism::{
     Declaration_Is_Coherent, DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence,
 };
+pub use display_label::DisplayLabel;
 pub use enforcement::{EnforcementBreach, EnforcementReach, EnforcerRef, GateCategory};
 pub use evidence::EvidenceClass;
+pub use fact_variant::FactVariant;
 pub use finding::Finding;
-pub use guarantee::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
+pub use generation_id::GenerationId;
+pub use guarantee::Guarantee;
 pub use identity::{
-    BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, Digest128, GenerationId,
-    OperationName, PackageId, ProviderId, RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId,
-    SubjectId,
+    BuildVariantId, CapabilityId, ConfigurationId, Digest128, OperationName, PackageId, ProviderId,
+    RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId, SubjectId,
 };
+pub use incremental_granularity::IncrementalGranularity;
 pub use package::PackageKind;
 pub use peer::{PeerAvailability, SynchronizationState};
