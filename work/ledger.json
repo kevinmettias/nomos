@@ -2520,10 +2520,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-stale-writer-w14",
+        "acquired_at": 1786342513,
+        "lease_expires_at": 1786353313
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2540,7 +2544,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "probeA",
+          "reason": "Held only to measure which items freed when P10-PHANTOM-FLOOR finished. Released unstarted; dispatched under their own holders.",
+          "abandoned_at": 1786342513
+        }
+      ]
     },
     {
       "id": "P10-LAPSE-BRICKS",
@@ -3381,7 +3391,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "probeA",
+          "reason": "Held only to measure which items freed when P10-PHANTOM-FLOOR finished. Released unstarted; dispatched under their own holders.",
+          "abandoned_at": 1786342513
+        }
+      ]
     },
     {
       "id": "P10-SYNTAX-V2",
@@ -3439,9 +3455,16 @@
       "territory": {
         "resolution": "File",
         "paths": [
+          "crates/kernel/nomos-model/src/path.rs",
+          "crates/kernel/nomos-model/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/territory.rs",
           "crates/host/nomos-cli/src/check.rs",
           "tests/integration/src/corpus.rs",
-          "docs/records/OD-ANALYSIS-002"
+          "tests/integration/src/lib.rs",
+          "tests/contract/surface/nomos-model.txt",
+          "tests/contract/surface/nomos-integration-tests.txt",
+          "crates/spec/nomos-spec-store/records/OD-MODEL-001.record",
+          "docs/records/OD-MODEL-001"
         ],
         "patterns": []
       },
@@ -3454,6 +3477,8 @@
           "cargo",
           "test",
           "--no-fail-fast",
+          "-p",
+          "nomos-model",
           "-p",
           "nomos-ledger",
           "-p",
@@ -3937,6 +3962,41 @@
           "exit_code": 0
         }
       },
+      "abandoned": []
+    },
+    {
+      "id": "P10-RULES-001-STALE",
+      "title": "OD-RULES-001 describes a whole-run downgrade the code stopped doing one commit later",
+      "why": "P10-PHANTOM-FLOOR replaced CheckIndex::Incompleteness with Shortfall_For, so a claim is downgraded only when an unread subject could have declared that name, not whenever any subject anywhere was unread. It could not amend the record that says otherwise, because docs/records/OD-RULES-001 was outside its territory, and it named the amendment as owed in OD-RULES-002 rather than reaching for it. The sentence still standing at OD-RULES-001:145 reads that the check index is marked incomplete for the whole run: while it is incomplete, a claimed mirror that fails to resolve is not reported as a phantom and cannot fail a build. The first clause no longer describes the code and the last clause is now false - a phantom in a read subject blocks, measured at 52dbf1a as one blocking finding and exit 1 where the same tree gave zero and exit 0 before. This is the defect the repository opens items about rather than a tidy-up: the standing wording is the citable one, and OD-RULES-001 is a canonical normative record that later work reads to learn what absence means. An affects edge from OD-RULES-002 carries a reader forward, which is why nothing is broken today and why it will stop being obvious.",
+      "done_when": "OD-RULES-001 describes the downgrade the code performs, at version 2, with an amendment note in the shape D-134 used at its own version 2 - the original sentence quoted, what replaced it, and why - so a reader who cited the old wording can see what moved. What survives is stated as well as what changed: the third state above D-134s two is unchanged, and the reason a rule must not manufacture a phantom out of its own inability to look is the part OD-RULES-002 sharpens rather than reverses. The owed-amendment note in OD-RULES-002 is settled in the same commit, either by removing it or by pointing at this version. No code changes and no test changes, so the predicate is the record guard alone: Test_Every_Canonical_Record_On_Disk_Should_Be_Governing must stay green, which proves the file is still registered and still parses after the edit. Not closed by deleting the sentence, since a record that quietly loses a claim it made is the failure this one is about.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-001"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-rules001-w15",
+        "acquired_at": 1786342513,
+        "lease_expires_at": 1786346113
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": []
     }
   ]
