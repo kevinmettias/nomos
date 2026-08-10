@@ -246,4 +246,67 @@ mod tests
         );
         assert!(!rendered.contains('\r'), "line endings must not be local");
     }
+
+    /// What this provider writes is what the schema says a payload is.
+    ///
+    /// The encoder above is hand-written here and its peer is hand-written in
+    /// `nomos-lang-rust-scan`, deliberately — a shared writer would make two providers of
+    /// one capability agree by construction and prove nothing. What the duplication used
+    /// to cost is that nothing checked the agreement: the format lived in two functions and
+    /// three readers, and a drift in either writer would have produced facts that decode
+    /// differently under one capability with nothing in the tree noticing.
+    ///
+    /// So the agreement is checked here, against the grammar in `nomos-cap-syntax` rather
+    /// than against the other provider. Reading its output back through the canonical
+    /// reader is what makes the encoding an interface; comparing the two providers' bytes
+    /// is a different property and `tests/integration` already holds it.
+    #[test]
+    fn Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader()
+    {
+        let fact = Fact("pub fn one() {}\nmod inner { fn two() {} }\n");
+
+        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
+            .expect("this provider writes nomos.syntax.items.v1");
+
+        assert_eq!(payload.unexpanded, 0);
+        assert_eq!(payload.items.len(), 3);
+
+        let second = payload.items.get(2).expect("three items");
+        assert_eq!(second.ordinal, 2);
+        assert_eq!(second.kind, nomos_cap_syntax::FUNCTION);
+        assert_eq!(second.qualified_name, "inner::two");
+        assert_eq!(second.Own_Name(), "two");
+        assert!(!second.Is_Public());
+    }
+
+    /// The mark the schema reserves is the one this provider puts on a trait member.
+    ///
+    /// Asserted here because `nomos-cap-syntax` cannot: it sits below both providers and
+    /// names neither. The schema states what `NotApplicable` means and explicitly declines
+    /// to state that its absence means anything — this is the provider end of that,
+    /// showing which forms actually carry it.
+    #[test]
+    fn Test_A_Trait_Member_Should_Carry_The_Mark_The_Schema_Reserves()
+    {
+        let fact = Fact("pub trait Judged { fn Check(&self); }\npub fn Free() {}\n");
+
+        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("well formed");
+
+        let member = payload
+            .items
+            .iter()
+            .find(|item| return item.Own_Name() == "Check")
+            .expect("the trait member is an item");
+        assert!(
+            member.Declares_No_Visibility(),
+            "a trait method declares no visibility of its own: {member:?}"
+        );
+
+        let free = payload
+            .items
+            .iter()
+            .find(|item| return item.Own_Name() == "Free")
+            .expect("the free function is an item");
+        assert!(free.Is_Public(), "{free:?}");
+    }
 }

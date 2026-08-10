@@ -23,6 +23,13 @@
 //! to know which one answered, which is the thing resolving through a registry exists to
 //! avoid.
 //!
+//! And, since `P10-SYNTAX-SCHEMA`, the *shape* of an answer rather than only its name: the
+//! grammar of `nomos.syntax.items.v1` and the one reader every consumer uses. A schema
+//! identifier with no written grammar is a name for an agreement nobody wrote down, and it
+//! had three independent ideas of what a well-formed payload is. The writers stay with
+//! their providers on purpose — [`Parse_Payload`] carries the grammar and the reason the
+//! reader and the writer are answered differently.
+//!
 //! Not here: anything a provider claims for itself. A `ProviderId` is a provider's own name
 //! and a [`nomos_contracts::Guarantee`] is its own claim, bounded by the ceiling below and
 //! checked against its output by its own tests. A contract that also declared what each
@@ -46,7 +53,12 @@
 #![forbid(unsafe_code)]
 
 mod contract;
+mod payload;
 
 pub use contract::{
     Capability, Capability_Contract, Payload_Schema, Ceiling, CAPABILITY, CONTRACT_VERSION, SCHEMA,
+};
+pub use payload::{
+    Parse_Payload, PayloadItem, PayloadRefusal, Render_Payload, SyntaxPayload, FUNCTION,
+    NOT_APPLICABLE, PUBLIC,
 };

@@ -135,6 +135,55 @@ mod tests
         assert!(!rendered.contains('\r'), "line endings must not be local");
     }
 
+    /// What this provider writes is what the schema says a payload is.
+    ///
+    /// The encoder above is hand-written and stays that way: what makes two providers of
+    /// one capability interchangeable is that each authors the format independently and a
+    /// third party can read both. The check the duplication was missing is this one —
+    /// against the grammar in `nomos-cap-syntax`, which belongs to neither provider.
+    #[test]
+    fn Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader()
+    {
+        let fact = Materialize(Subject("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
+
+        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
+            .expect("this provider writes nomos.syntax.items.v1");
+
+        assert_eq!(payload.unexpanded, 0);
+        assert_eq!(payload.items.len(), 2);
+        assert!(payload.items.first().expect("two items").Is_Public());
+    }
+
+    /// This provider never writes the mark, and that is the schema's caveat from the other
+    /// side.
+    ///
+    /// A line reader cannot see the enclosing trait, so it records the member as private —
+    /// a conforming payload that spells the same source construct differently from the
+    /// parser's. It is why the schema declines to state that a `Function` without the mark
+    /// is a definition: the absence here is blindness rather than an observation, and a
+    /// consumer that needs the distinction has to require it of the guarantee instead.
+    #[test]
+    fn Test_A_Trait_Member_Should_Not_Be_Marked_By_A_Reader_That_Cannot_See_The_Trait()
+    {
+        let fact = Materialize(
+            Subject("a.rs"),
+            "pub trait Judged\n{\n    fn Check(&self);\n}\n",
+            Context(),
+        );
+
+        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("well formed");
+
+        let member = payload
+            .items
+            .iter()
+            .find(|item| return item.Own_Name() == "Check")
+            .expect("the line reader sees the signature");
+        assert!(
+            !member.Declares_No_Visibility(),
+            "this provider has no such value to write: {member:?}"
+        );
+    }
+
     /// The fact says what produced it. Two providers answering one capability about one
     /// subject must be tellable apart by anything holding both.
     #[test]

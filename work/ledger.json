@@ -3402,14 +3402,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-syntax-schema-w1",
-        "acquired_at": 1786343832,
-        "lease_expires_at": 1786358232
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3428,7 +3424,38 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "test universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_Unparseable_File_Should_Say_So_Rather_Than_Look_Empty ... ok\ntest universe::tests::Test_Unquoted_Prose_Should_Not_Be_A_Claim ... ok\ntest universe::tests::Test_The_First_Of_Two_Claims_Should_Win ... ok\n\ntest result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_syntax-5b00bd5f96655fb9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-2b3ffd88e464ab1d.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-d89cd5ad7a67d6d4.exe)\n     Running tests\\determinism.rs (target\\debug\\deps\\determinism-ee5eb7dfa77ffcd9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-1a9306117fadfd4f.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-a4b51a7c3cf69ceb.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-a69b43953f37f3db.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-a8e56a65bf54beb5.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-da4223f06489033d.exe)\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n   Doc-tests nomos_rules\n",
+        "verified_at": 1786344587,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "probeA",
@@ -4280,6 +4307,51 @@
           "--no-fail-fast",
           "-p",
           "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-SUBJECT-PROJECTIONS",
+      "title": "A profile can be pointed at one subject, so the same projection serves every subject rather than one",
+      "why": "Every shipped profile projects the whole store into one fixed path. Profile.output is a String and Filter has no exact identity at all - identifier_prefix is the closest, and a prefix is not an identity, so FEAT-1 also selects FEAT-12, and on relations it only narrows the from end. That is why the four-formats-per-subject shape cannot be expressed today: generated/features/FEAT-123/design.md needs the same profile run once per subject, and the profile model has nowhere to put the subject. This is the mechanism the typed feature layer will stand on, and it is worth building before that layer exists precisely because it can be demonstrated on subjects the store already holds - the governing records - rather than on a schema nobody has agreed to yet.",
+      "done_when": "A profile can name a subject placeholder in its filter values and in its output path, and a run supplies the subject. Rendering the same profile for two subjects writes two outputs and neither contains the other subject content. An exact node identity is selectable rather than approximated by a prefix, and on relations it selects the edges at either end rather than only the ones the subject starts. The refusals are real and tested: a subject given to a profile that names none, a profile that names one run without a subject, and a subject that matches nothing, are three different messages and none of them is an empty file. The existing whole-store profiles are unaffected and their outputs are byte-identical to what they produced before. The shipped-profile assertions in tests/projections.rs still hold, including the one requiring every shipped profile to produce nonempty content, which now has to say what it means for a profile that cannot produce anything without being told a subject.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/src/profile.rs",
+          "crates/spec/nomos-spec-project/src/select.rs",
+          "crates/spec/nomos-spec-project/src/build.rs",
+          "crates/spec/nomos-spec-project/src/lib.rs",
+          "crates/spec/nomos-spec-project/src/catalogue.rs",
+          "crates/spec/nomos-spec-project/profiles",
+          "crates/spec/nomos-spec-project/tests/projections.rs",
+          "crates/host/nomos-cli/src/spec.rs",
+          "tests/contract/surface/nomos-spec-project.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-subject-projections-w18",
+        "acquired_at": 1786344570,
+        "lease_expires_at": 1786355370
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-cli",
           "-p",
           "nomos-contract-tests"
         ],

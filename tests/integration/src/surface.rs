@@ -170,49 +170,38 @@ pub fn Decode_Surface(payload: &[u8]) -> Result<Surface, String>
     return Ok(surface);
 }
 
-/// Counts the publicly declared items in a `nomos-lang-rust` syntax payload.
+/// Counts the publicly declared items in a syntax payload.
 ///
-/// # Why the slice decodes rather than sharing a type
+/// # Why the slice no longer decodes for itself
 ///
-/// This is the only place the encoding `nomos-lang-rust` writes is read back by something
-/// that is not `nomos-lang-rust`. A shared struct would make the two agree by
-/// construction and prove nothing; parsing the bytes is what makes the payload an
-/// interface rather than an internal detail that happens to be public.
+/// It used to, and the reason was that a shared struct would make the payload's writer and
+/// its reader agree by construction and prove nothing. That reason was about the *writer*
+/// and it still holds: both providers author these bytes by hand and neither shares an
+/// encoder with the other or with anybody.
+///
+/// It never applied to the reader. This walk was a third opinion about what a well-formed
+/// payload is, and it was the laxest of the three — it accepted an empty payload as a
+/// directory that declares nothing, which is the rollup counting a file it could not read
+/// as a file with nothing in it. `P10-SYNTAX-SCHEMA` moved the grammar and one reader into
+/// `nomos-cap-syntax`, which is owned by neither provider, so using it is not agreeing with
+/// either writer by construction.
 ///
 /// # Errors
 ///
-/// Returns the offending line for anything that is not a syntax payload.
+/// Returns what the schema's reader refused, for anything that is not a syntax payload.
 pub fn Public_Items(payload: &[u8]) -> Result<(u32, u32), String>
 {
-    let text = core::str::from_utf8(payload).map_err(|error| return error.to_string())?;
-    let mut items = 0_u32;
-    let mut public = 0_u32;
+    let decoded = nomos_cap_syntax::Parse_Payload(payload)
+        .map_err(|refusal| return refusal.Describe())?;
 
-    for line in text.lines()
-    {
-        let mut fields = line.split('\t');
+    let items = u32::try_from(decoded.items.len()).unwrap_or(u32::MAX);
+    let public = decoded
+        .items
+        .iter()
+        .filter(|item| return item.Is_Public())
+        .count();
 
-        match fields.next()
-        {
-            Some("unexpanded") =>
-            {}
-            Some("item") =>
-            {
-                items = items.saturating_add(1);
-
-                // ordinal, kind, visibility, name — the visibility is the fourth field,
-                // so two `next()` calls land on it.
-                let visibility = fields.nth(2);
-                if visibility == Some("Public")
-                {
-                    public = public.saturating_add(1);
-                }
-            }
-            _ => return Err(format!("`{line}` is not a syntax payload record")),
-        }
-    }
-
-    return Ok((items, public));
+    return Ok((items, u32::try_from(public).unwrap_or(u32::MAX)));
 }
 
 #[cfg(test)]
