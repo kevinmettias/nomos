@@ -113,6 +113,11 @@ pub enum SpecCommand
         profile: String,
         /// The build root the profile's own relative output is placed under.
         into: PathBuf,
+        /// The node a subject-addressed profile is pointed at.
+        ///
+        /// Absent for the whole-store profiles, which have nowhere to put it. Which kind a
+        /// profile is is decided by the profile, so this is not a mode the caller selects.
+        subject: Option<String>,
     },
     /// Compare the outputs already on disk against the store and their own stamps.
     Freshness
@@ -197,6 +202,7 @@ pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
         "render" => Ok(SpecCommand::Render {
             profile: required("--profile")?,
             into: PathBuf::from(required("--into")?),
+            subject: value_of("--subject"),
         }),
         "freshness" => Ok(SpecCommand::Freshness {
             into: PathBuf::from(required("--into")?),
@@ -246,7 +252,7 @@ fn Usage_Text() -> String
             \x20 record    --id <node-id> [--revision <label>]\n\
             \x20 table     --document <path|name> [--block <n>] [--table <n>] \
             [--revision <label>]\n\
-            \x20 render    --profile <id> --into <directory>\n\
+            \x20 render    --profile <id> --into <directory> [--subject <node-id>]\n\
             \x20 freshness --into <directory> [--profile <id>] [--require <id> …]\n\
             \x20 markdown  --id <node-id> [--revision <label>]\n\
             \x20 preview   --id <node-id> --from <file> [--rename <path>]\n\
@@ -323,7 +329,11 @@ pub fn Run(
             table,
             revision,
         } => Table(&assembly, document, *block, *table, revision.as_deref(), output, notes),
-        SpecCommand::Render { profile, into } => Render(&assembly, profile, into, output, notes),
+        SpecCommand::Render {
+            profile,
+            into,
+            subject,
+        } => Render(&assembly, profile, into, subject.as_deref(), output, notes),
         SpecCommand::Freshness {
             into,
             profile,
@@ -855,6 +865,7 @@ fn Render(
     assembly: &Assembly,
     profile: &str,
     into: &Path,
+    subject: Option<&str>,
     output: &mut impl std::io::Write,
     notes: &mut impl std::io::Write,
 ) -> ExitCode
@@ -869,6 +880,15 @@ fn Render(
     {
         Ok(declared) => declared,
         Err(code) => return code,
+    };
+
+    // Resolved against the subject before the store is touched. A profile that names a
+    // subject and a run that does not supply one disagree about what is being built, and
+    // the disagreement is answerable without reading a single row.
+    let declared = &match declared.For(subject)
+    {
+        Ok(resolved) => resolved,
+        Err(error) => return Report_Project_Error(&error, notes),
     };
 
     let built = match Build(&assembly.store, declared)
@@ -1448,11 +1468,26 @@ fn Report_Store_Error(error: &StoreError, notes: &mut impl std::io::Write) -> Ex
     return ExitCode::StoreError;
 }
 
+/// A projection failure, as a number a caller can branch on.
+///
+/// Not every one of these is a store problem, and `5` for all of them was defensible only
+/// while every one of them was. A subject the caller did not give and a subject the profile
+/// cannot use are both arguments that were wrong before a row was read — an agent told the
+/// store failed will retry; an agent told its command line was wrong will fix it. The rest
+/// stay `StoreError` because that is what they are: the projection could not be built out
+/// of what the store holds.
 fn Report_Project_Error(error: &ProjectError, notes: &mut impl std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "{error}");
 
-    return ExitCode::StoreError;
+    return match *error
+    {
+        ProjectError::SubjectMissing { .. } | ProjectError::SubjectUnexpected { .. } =>
+        {
+            ExitCode::Usage
+        }
+        _ => ExitCode::StoreError,
+    };
 }
 
 #[cfg(test)]
@@ -1515,6 +1550,7 @@ mod tests
             SpecCommand::Render {
                 profile: "github-markdown".to_owned(),
                 into: PathBuf::from("build"),
+                subject: None,
             }
         );
     }
@@ -1541,6 +1577,33 @@ mod tests
             }
         );
         assert!(Parse(&Arguments("freshness --profile mcp-resource")).is_err());
+    }
+
+    /// `--subject` is optional at the parse, and required by the profile.
+    ///
+    /// Whether a run needs one is a fact about the profile named, which the parser has not
+    /// resolved yet. Refusing here would mean teaching the command line which profiles are
+    /// subject-addressed — a second copy of something the catalogue already says.
+    #[test]
+    fn Test_Render_Should_Carry_A_Subject_When_One_Is_Given()
+    {
+        assert_eq!(
+            Parse(&Arguments("render --profile subject-dossier --into . --subject D-129"))
+                .expect("parses"),
+            SpecCommand::Render {
+                profile: "subject-dossier".to_owned(),
+                into: PathBuf::from("."),
+                subject: Some("D-129".to_owned()),
+            }
+        );
+        assert_eq!(
+            Parse(&Arguments("render --profile diagram-set --into .")).expect("parses"),
+            SpecCommand::Render {
+                profile: "diagram-set".to_owned(),
+                into: PathBuf::from("."),
+                subject: None,
+            }
+        );
     }
 
     /// Repeated rather than comma-separated, so a run that promises two outputs says so

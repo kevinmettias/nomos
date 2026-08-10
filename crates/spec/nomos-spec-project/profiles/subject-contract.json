@@ -1,0 +1,31 @@
+{
+  "id": "subject-contract",
+  "title": "Subject contract",
+  "format": "yaml",
+  "output": "subjects/{subject}/contract.yaml",
+  "sections": [
+    {
+      "title": "Subject",
+      "content": "nodes",
+      "filter": {
+        "node_id": "{subject}"
+      }
+    },
+    {
+      "title": "Statements",
+      "content": "statements",
+      "filter": {
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
+    },
+    {
+      "title": "Relations",
+      "content": "relations",
+      "filter": {
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
+    }
+  ]
+}

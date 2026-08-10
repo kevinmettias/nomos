@@ -135,6 +135,14 @@ pub struct Filter
     pub row_kind: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier_prefix: Option<String>,
+    /// One node, by the identity it is addressed as.
+    ///
+    /// Apart from `identifier_prefix` because a prefix is not an identity. `FEAT-1` as a
+    /// prefix also selects `FEAT-12`, and on relations it narrows only the end the edge
+    /// starts from — so a subject asked for its relations would be shown the ones it
+    /// declares and not the ones declared about it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub node_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -210,7 +218,71 @@ impl Profile
 
         return ContentHash::Of(&canonical).As_Str().to_owned();
     }
+
+    /// Whether this profile projects one subject rather than the whole store.
+    ///
+    /// Derived from the profile rather than declared beside it. A `subject: true` field
+    /// would be a second place to be wrong: a profile could claim a subject and never use
+    /// it, or use one and forget to say so, and the placeholder is the thing that actually
+    /// decides what the run needs.
+    #[must_use]
+    pub fn Names_A_Subject(&self) -> bool
+    {
+        return self.output.contains(SUBJECT)
+            || self.sections.iter().any(|section| {
+                return section
+                    .filter
+                    .Named()
+                    .iter()
+                    .any(|(_, value)| return value.contains(SUBJECT));
+            });
+    }
+
+    /// This profile, resolved against the subject a run was given or was not given.
+    ///
+    /// The two refusals are the point. Silently ignoring a subject a whole-store profile
+    /// cannot use would write the same file once per subject and call it a per-subject
+    /// build; silently rendering a subject profile without one would write a directory
+    /// named `{subject}`. Both read as success.
+    pub fn For(&self, subject: Option<&str>) -> Result<Self, ProjectError>
+    {
+        return match (self.Names_A_Subject(), subject)
+        {
+            (true, Some(subject)) => Ok(self.Resolved_For(subject)),
+            (false, None) => Ok(self.clone()),
+            (true, None) => Err(ProjectError::SubjectMissing {
+                profile: self.id.clone(),
+            }),
+            (false, Some(subject)) => Err(ProjectError::SubjectUnexpected {
+                profile: self.id.clone(),
+                subject: subject.to_owned(),
+            }),
+        };
+    }
+
+    /// This profile with `{subject}` replaced throughout by the subject given.
+    ///
+    /// A copy rather than a mutation, because the catalogue is shared and a resolved
+    /// profile is a different thing from the one that was shipped: its digest differs,
+    /// which is what keeps two subjects' stamps from claiming to have been built by the
+    /// same profile over different inputs.
+    #[must_use]
+    pub fn Resolved_For(&self, subject: &str) -> Self
+    {
+        let mut resolved = self.clone();
+        resolved.output = resolved.output.replace(SUBJECT, subject);
+
+        for section in &mut resolved.sections
+        {
+            section.filter.Substitute(subject);
+        }
+
+        return resolved;
+    }
 }
+
+/// What a profile writes where a subject belongs.
+pub const SUBJECT: &str = "{subject}";
 
 fn Path_Is_Relative(profile: &str, output: &str) -> Result<(), ProjectError>
 {

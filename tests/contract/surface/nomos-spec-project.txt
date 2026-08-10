@@ -10,6 +10,7 @@ pub const nomos_spec_project::ProjectionOutput::STRENGTH: DeterminismStrength
 pub const nomos_spec_project::ProjectionOutput::TRACE: TraceEquivalence
 pub const nomos_spec_project::SHIPPED: &[(&str, &str)]
 pub const nomos_spec_project::SIDECAR_SUFFIX: &str
+pub const nomos_spec_project::SUBJECT: &str
 pub enum nomos_spec_project::Content
 pub enum nomos_spec_project::Format
 pub enum nomos_spec_project::ProjectError
@@ -36,6 +37,9 @@ pub enum variant nomos_spec_project::ProjectError::Malformed(String)
 pub enum variant nomos_spec_project::ProjectError::NotRelative { profile: String, output: String, }
 pub enum variant nomos_spec_project::ProjectError::Sql(String)
 pub enum variant nomos_spec_project::ProjectError::Store(nomos_spec_store::StoreError)
+pub enum variant nomos_spec_project::ProjectError::SubjectMissing { profile: String, }
+pub enum variant nomos_spec_project::ProjectError::SubjectUnexpected { profile: String, subject: String, }
+pub enum variant nomos_spec_project::ProjectError::SubjectUnresolved { profile: String, output: String, }
 pub enum variant nomos_spec_project::ProjectError::UnsupportedFilter { profile: String, content: &'static str, filter: &'static str, }
 pub fn nomos_spec_project::Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, ProjectError>
 pub fn nomos_spec_project::Catalogue::Named(&self, id: &str) -> Option<&Profile>
@@ -51,7 +55,10 @@ pub fn nomos_spec_project::Item::Of(identity: &str) -> Self
 pub fn nomos_spec_project::Item::With(mut self, name: &str, value: &str) -> Self
 pub fn nomos_spec_project::Output::Sidecar(&self) -> Result<String, ProjectError>
 pub fn nomos_spec_project::Profile::Digest(&self) -> String
+pub fn nomos_spec_project::Profile::For(&self, subject: Option<&str>) -> Result<Self, ProjectError>
+pub fn nomos_spec_project::Profile::Names_A_Subject(&self) -> bool
 pub fn nomos_spec_project::Profile::Parse(text: &str) -> Result<Self, ProjectError>
+pub fn nomos_spec_project::Profile::Resolved_For(&self, subject: &str) -> Self
 pub fn nomos_spec_project::Profile::Validate(&self) -> Result<(), ProjectError>
 pub fn nomos_spec_project::ProjectError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_project::ProjectError::from(error: nomos_spec_store::StoreError) -> Self
@@ -73,6 +80,7 @@ pub struct field nomos_spec_project::Filter::disposition: Option<String>
 pub struct field nomos_spec_project::Filter::document: Option<String>
 pub struct field nomos_spec_project::Filter::identifier_prefix: Option<String>
 pub struct field nomos_spec_project::Filter::kind: Option<String>
+pub struct field nomos_spec_project::Filter::node_id: Option<String>
 pub struct field nomos_spec_project::Filter::relation_type: Option<String>
 pub struct field nomos_spec_project::Filter::representation: Option<String>
 pub struct field nomos_spec_project::Filter::revision: Option<String>

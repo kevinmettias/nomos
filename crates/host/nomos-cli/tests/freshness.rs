@@ -40,8 +40,16 @@ const REQUIRED: &str = "diagram-set";
 /// Where that profile puts its body, relative to a build root.
 const REQUIRED_BODY: &str = "diagrams/relations.mmd";
 
-/// The count `Catalogue::Shipped` carries, restated so the census assertions are legible.
-const SHIPPED: usize = 14;
+/// How many profiles the catalogue ships.
+///
+/// Read from the catalogue rather than typed here. It was a literal `14` until four
+/// subject-addressed profiles arrived and turned the census line into `of 18`, and a number
+/// restated in a test is a mirror of something checked elsewhere — the failure it produces
+/// says the census is wrong when what is wrong is the copy.
+fn Shipped_Count() -> usize
+{
+    return nomos_spec_project::SHIPPED.len();
+}
 
 fn Nomos(arguments: &[&str]) -> Output
 {
@@ -124,7 +132,7 @@ fn Test_A_Freshly_Rendered_Output_Should_Be_Current()
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
     let said = Out_Text(&output);
     assert!(said.contains("is current"), "{said}");
-    assert!(said.contains(&format!("checked 1 of {SHIPPED}")), "{said}");
+    assert!(said.contains(&format!("checked 1 of {}", Shipped_Count())), "{said}");
 }
 
 /// The defect this command exists for.
@@ -192,7 +200,7 @@ fn Test_An_Empty_Build_Root_Should_Report_What_It_Did_Not_Check()
 
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
     let said = Out_Text(&output);
-    assert!(said.contains(&format!("checked 0 of {SHIPPED}")), "{said}");
+    assert!(said.contains(&format!("checked 0 of {}", Shipped_Count())), "{said}");
     assert!(said.contains("not built here"), "{said}");
     assert!(said.contains(EMBEDDED), "the unbuilt profiles are not named: {said}");
 }

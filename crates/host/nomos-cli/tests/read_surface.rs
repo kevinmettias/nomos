@@ -308,7 +308,7 @@ fn Test_Every_Shipped_Profile_Should_Be_Listed()
 
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
     let listed = Out_Text(&output);
-    assert_eq!(listed.lines().count(), 14, "{listed}");
+    assert_eq!(listed.lines().count(), nomos_spec_project::SHIPPED.len(), "{listed}");
     for named in ["domain-specification", "github-markdown", "offline-bundle"]
     {
         assert!(listed.contains(named), "{named} is not listed:\n{listed}");

@@ -12,7 +12,7 @@ mod select;
 pub use build::{Build, Check, Freshness, Output, Stamp, SIDECAR_SUFFIX};
 pub use catalogue::{Catalogue, Shipped, SHIPPED};
 pub use determinism::ProjectionOutput;
-pub use profile::{Content, Filter, Format, Profile, Section as ProfileSection};
+pub use profile::{Content, Filter, Format, Profile, Section as ProfileSection, SUBJECT};
 pub use projection::{Input, Item, Projection, Section, DO_NOT_EDIT};
 pub use render::Render;
 pub use select::Select;
@@ -49,6 +49,23 @@ pub enum ProjectError
         output: String,
         first: String,
         second: String,
+    },
+    /// A profile that projects one subject, run without being told which.
+    SubjectMissing
+    {
+        profile: String,
+    },
+    /// A subject given to a profile that projects the whole store.
+    SubjectUnexpected
+    {
+        profile: String,
+        subject: String,
+    },
+    /// A profile that reached the renderer with its placeholder still in it.
+    SubjectUnresolved
+    {
+        profile: String,
+        output: String,
     },
 }
 
@@ -99,6 +116,24 @@ impl core::fmt::Display for ProjectError
                 formatter,
                 "{first} and {second} both write {output}, so one would overwrite the other and \
                  the build would depend on profile order"
+            ),
+            Self::SubjectMissing { profile } => write!(
+                formatter,
+                "{profile} projects one subject and was not told which. It writes a path \
+                 holding {SUBJECT} and selects on it, so without a subject there is no output \
+                 to write and no rows to write into it — name one with --subject"
+            ),
+            Self::SubjectUnexpected { profile, subject } => write!(
+                formatter,
+                "{profile} projects the whole store, so it has nowhere to put the subject \
+                 {subject}. Its output path is fixed and none of its filters names a subject: \
+                 running it per subject would write the same file every time"
+            ),
+            Self::SubjectUnresolved { profile, output } => write!(
+                formatter,
+                "{profile} reached the renderer still writing to {output}. A path holding \
+                 {SUBJECT} is a template rather than a destination, and rendering it would \
+                 create a directory named after the placeholder"
             ),
         };
     }

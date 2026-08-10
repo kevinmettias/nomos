@@ -3487,16 +3487,30 @@
           "tests/contract/surface/nomos-rules.txt",
           "tests/contract/surface/nomos-cap-syntax.txt",
           "tests/contract/surface/nomos-lang-rust.txt",
-          "tests/contract/surface/nomos-lang-rust-scan.txt"
+          "tests/contract/surface/nomos-lang-rust-scan.txt",
+          "tests/contract/surface/nomos-contract-tests.txt",
+          "tests/contract/surface/nomos-integration-tests.txt",
+          "tests/contract/src/universes.rs",
+          "tests/contract/Cargo.toml",
+          "tests/contract/tests/completeness_universes.rs",
+          "tests/integration/src/surface.rs",
+          "tests/integration/src/slice.rs",
+          "Cargo.lock",
+          "crates/spec/nomos-spec-store/records/OD-SYNTAX-002.record",
+          "docs/records/OD-SYNTAX-002"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P10-SYNTAX-SCHEMA"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-syntax-v2-w1",
+        "acquired_at": 1786344741,
+        "lease_expires_at": 1786359141
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4339,7 +4353,9 @@
           "crates/spec/nomos-spec-project/profiles",
           "crates/spec/nomos-spec-project/tests/projections.rs",
           "crates/host/nomos-cli/src/spec.rs",
-          "tests/contract/surface/nomos-spec-project.txt"
+          "tests/contract/surface/nomos-spec-project.txt",
+          "crates/host/nomos-cli/tests/freshness.rs",
+          "crates/host/nomos-cli/tests/read_surface.rs"
         ],
         "patterns": []
       },

@@ -1,4 +1,4 @@
-use crate::profile::{Content, Filter, Profile};
+use crate::profile::{Content, Filter, Profile, SUBJECT};
 use crate::projection::{Input, Item, Projection, Section};
 use crate::ProjectError;
 use core::fmt::Write as _;
@@ -22,6 +22,7 @@ impl Filter
             ("disposition", &self.disposition),
             ("row_kind", &self.row_kind),
             ("identifier_prefix", &self.identifier_prefix),
+            ("node_id", &self.node_id),
         ]
         {
             if let Some(set) = value
@@ -31,6 +32,34 @@ impl Filter
         }
 
         return named;
+    }
+
+    /// Replaces the subject placeholder in every value this filter carries.
+    ///
+    /// Every value rather than `node_id` alone. A subject narrows different content in
+    /// different ways — a node by identity, its statements by the node they belong to, a
+    /// document by path — and deciding here which of those is allowed would put the
+    /// profile's vocabulary in the substitution rather than in the profile.
+    pub fn Substitute(&mut self, subject: &str)
+    {
+        for set in [
+            &mut self.kind,
+            &mut self.authority,
+            &mut self.representation,
+            &mut self.suite,
+            &mut self.document,
+            &mut self.revision,
+            &mut self.relation_type,
+            &mut self.disposition,
+            &mut self.row_kind,
+            &mut self.identifier_prefix,
+            &mut self.node_id,
+        ]
+        .into_iter()
+        .flatten()
+        {
+            *set = set.replace(SUBJECT, subject);
+        }
     }
 }
 
@@ -51,9 +80,10 @@ impl Content
                 "representation",
                 "suite",
                 "identifier_prefix",
+                "node_id",
             ],
-            Self::Statements => &["kind", "identifier_prefix"],
-            Self::Relations => &["relation_type", "suite", "identifier_prefix"],
+            Self::Statements => &["kind", "identifier_prefix", "node_id"],
+            Self::Relations => &["relation_type", "suite", "identifier_prefix", "node_id"],
             Self::Lineage => &["disposition", "document"],
             Self::Omissions => &["document"],
         };
@@ -95,6 +125,21 @@ impl Query
                 " AND {column} LIKE ?{} ESCAPE '\\'",
                 self.values.len()
             );
+        }
+    }
+
+    /// One value matched against either of two columns.
+    ///
+    /// A relation has two ends and a subject sits at one or the other. Narrowing only the
+    /// end an edge starts from would show a subject what it declares and hide what is
+    /// declared about it, which is the half of a graph a reader is usually looking for.
+    fn Either(&mut self, first: &str, second: &str, value: Option<&String>)
+    {
+        if let Some(value) = value
+        {
+            self.values.push(value.clone());
+            let position = self.values.len();
+            let _ = write!(self.sql, " AND ({first} = ?{position} OR {second} = ?{position})");
         }
     }
 
@@ -351,6 +396,7 @@ fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectE
     query.Equal("n.representation", filter.representation.as_ref());
     query.Equal("s.suite_id", filter.suite.as_ref());
     query.Prefix("n.node_id", filter.identifier_prefix.as_ref());
+    query.Equal("n.node_id", filter.node_id.as_ref());
 
     return query.Ordered_By("n.node_id").Run(connection, |row| {
         return Ok(Item::Of(&Text(row, 0)?)
@@ -372,6 +418,7 @@ fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Pro
     );
     query.Equal("s.kind", filter.kind.as_ref());
     query.Prefix("s.statement_id", filter.identifier_prefix.as_ref());
+    query.Equal("n.node_id", filter.node_id.as_ref());
 
     return query.Ordered_By("s.statement_id").Run(connection, |row| {
         return Ok(Item::Of(&Text(row, 0)?)
@@ -397,6 +444,7 @@ fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proj
     query.Equal("r.relation_type", filter.relation_type.as_ref());
     query.Equal("s.suite_id", filter.suite.as_ref());
     query.Prefix("f.node_id", filter.identifier_prefix.as_ref());
+    query.Either("f.node_id", "t.node_id", filter.node_id.as_ref());
 
     return query
         .Ordered_By("f.node_id, r.relation_type, t.node_id")

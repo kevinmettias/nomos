@@ -1,0 +1,31 @@
+{
+  "id": "subject-model",
+  "title": "Subject model",
+  "format": "json",
+  "output": "subjects/{subject}/model.json",
+  "sections": [
+    {
+      "title": "Subject",
+      "content": "nodes",
+      "filter": {
+        "node_id": "{subject}"
+      }
+    },
+    {
+      "title": "Statements",
+      "content": "statements",
+      "filter": {
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
+    },
+    {
+      "title": "Relations",
+      "content": "relations",
+      "filter": {
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
+    }
+  ]
+}

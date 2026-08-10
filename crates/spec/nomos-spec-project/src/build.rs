@@ -61,6 +61,19 @@ impl Output
 pub fn Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, ProjectError>
 {
     profile.Validate()?;
+
+    // The last place a template can be caught before it becomes a directory. `Resolved_For`
+    // is the only thing that removes the placeholder, so a profile arriving here with one
+    // still in it was never resolved -- and rendering it would quietly create a path named
+    // after the placeholder rather than after any subject.
+    if profile.Names_A_Subject()
+    {
+        return Err(ProjectError::SubjectUnresolved {
+            profile: profile.id.clone(),
+            output: profile.output.clone(),
+        });
+    }
+
     let projection = Select(store, profile)?;
     let body = Render(&projection)?;
 

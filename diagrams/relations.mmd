@@ -69,6 +69,7 @@ graph LR
     od_capability_002 -->|"relates-to"| od_capability_001
     od_capability_002 -->|"relates-to"| od_rules_001
     od_capability_002 -->|"relates-to"| od_store_001
+    od_capability_002 -->|"relates-to"| od_syntax_001["OD-SYNTAX-001"]
     od_capability_003 -->|"relates-to"| od_analysis_001
     od_capability_003 -->|"relates-to"| od_capability_001
     od_capability_003 -->|"relates-to"| od_rules_001
@@ -82,6 +83,7 @@ graph LR
     od_completeness_001 -->|"relates-to"| od_rules_001
     od_completeness_001 -->|"relates-to"| od_rules_002
     od_completeness_001 -->|"relates-to"| od_spec_007["OD-SPEC-007"]
+    od_completeness_001 -->|"relates-to"| od_syntax_001
     od_completeness_002 -->|"affects"| d_134
     od_completeness_002 -->|"affects"| od_completeness_001
     od_completeness_002 -->|"relates-to"| od_gate_001
@@ -204,6 +206,7 @@ graph LR
     od_rules_001 -->|"relates-to"| od_completeness_001
     od_rules_001 -->|"relates-to"| od_gate_001
     od_rules_001 -->|"relates-to"| od_package_001
+    od_rules_001 -->|"relates-to"| od_syntax_001
     od_rules_002 -->|"affects"| od_rules_001
     od_rules_002 -->|"relates-to"| d_134
     od_rules_002 -->|"relates-to"| od_completeness_001
@@ -233,6 +236,9 @@ graph LR
     od_store_001 -->|"affects"| d_129
     od_store_001 -->|"relates-to"| od_capability_002
     od_store_001 -->|"relates-to"| od_capability_003
+    od_syntax_001 -->|"relates-to"| od_capability_002
+    od_syntax_001 -->|"relates-to"| od_completeness_001
+    od_syntax_001 -->|"relates-to"| od_rules_001
   end
   subgraph "Decisions"
     d_129
@@ -278,4 +284,5 @@ graph LR
     od_spec_006
     od_spec_007
     od_store_001
+    od_syntax_001
   end

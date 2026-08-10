@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:85191b366681bbaf4f724e43ba3c52c26242065b164bc6ebb8fce1750d351d61",
-  "inputs_digest": "sha256:7ce1fba4e0d53f6698bb3a728b60ca73b774e6ad2760ec1f47ea464dc7c1d703",
+  "content_digest": "sha256:742c3b7fe4f4ea189eb41a8227042ae3ad6ac31b0a5d323ddbee6a7b81e821c2",
+  "inputs_digest": "sha256:930a77fe22e1764c2dec7e448638329a1987b1c382a06336d7ecb3c15e799ff9",
   "sections": [
     [
       "Relations",
-      230
+      236
     ],
     [
       "Decisions",
-      43
+      44
     ]
   ],
   "inputs": [
@@ -348,6 +348,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CAPABILITY-002 relates-to OD-SYNTAX-001",
+      "hash": "sha256:eccfb8d9934dedf1961799c47c601c80ac475c43b054456e3b999d03aaab6173"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CAPABILITY-003 relates-to OD-ANALYSIS-001",
       "hash": "sha256:e228ba755f751fe845d1c50cd7c70933c3d89d85099aaa3d8601eac92a6fcdfa"
     },
@@ -410,6 +415,11 @@
       "content": "relations",
       "identity": "OD-COMPLETENESS-001 relates-to OD-SPEC-007",
       "hash": "sha256:ac88cc11848e8bd18588ecbb4a067b5d838a87716fb7592c4daea9b42013b43e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-COMPLETENESS-001 relates-to OD-SYNTAX-001",
+      "hash": "sha256:5056d4fe22dca41aa629eb749525f6b52497a3166c162149949d588f006a09d2"
     },
     {
       "content": "relations",
@@ -1023,6 +1033,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-001 relates-to OD-SYNTAX-001",
+      "hash": "sha256:b22751bb7f3908fb096fe001ddfbf3f0479ed1df8d705aebe30d58b7bed43f6d"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-002 affects OD-RULES-001",
       "hash": "sha256:854a85bb4e132346517d2c9cef200dd811ba0b17c9477a99d5780452844d8d10"
     },
@@ -1165,6 +1180,21 @@
       "content": "relations",
       "identity": "OD-STORE-001 relates-to OD-CAPABILITY-003",
       "hash": "sha256:635173525cbfc026a04bd4606fa456a5e0ff54198d3fff031392e2511d12a338"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SYNTAX-001 relates-to OD-CAPABILITY-002",
+      "hash": "sha256:c1b657375ba7228aaea7cdcf8fa0836c7cc6f716e9bb98bab69c7064525a29a4"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SYNTAX-001 relates-to OD-COMPLETENESS-001",
+      "hash": "sha256:284fd1b18e50896be0197fa5103964003c05cf165a219369a0a0258b46307bff"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SYNTAX-001 relates-to OD-RULES-001",
+      "hash": "sha256:ff73e73c3ed33d3477cce348eee2f153de239178371397ae2d08464a43e4f17a"
     },
     {
       "content": "nodes",
@@ -1380,6 +1410,11 @@
       "content": "nodes",
       "identity": "OD-STORE-001",
       "hash": "sha256:be6a808af82c38966f44aef959db7b0942e99af7f91e2f1aad454d2326a05c4b"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-SYNTAX-001",
+      "hash": "sha256:e0125fd288091aeeb92734056284ae62f14c030d880ba03c05beda7a557b9f1d"
     }
   ]
 }
