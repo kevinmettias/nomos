@@ -32,8 +32,23 @@ fn main()
     let toolchain =
         std::env::var("RUSTUP_TOOLCHAIN").unwrap_or_else(|_| return "unstated".to_owned());
 
-    // Cargo exports one variable per enabled feature and no list. A set, so the order they
-    // are read in cannot reach the variant's identity.
+    let features = Enabled_Features();
+
+    println!("cargo::rustc-env=NOMOS_TARGET={target}");
+    println!("cargo::rustc-env=NOMOS_PROFILE={profile}");
+    println!("cargo::rustc-env=NOMOS_TOOLCHAIN={toolchain}");
+    println!("cargo::rustc-env=NOMOS_FEATURES={features}");
+
+    println!("cargo::rerun-if-changed=build.rs");
+    println!("cargo::rerun-if-env-changed=RUSTUP_TOOLCHAIN");
+}
+
+/// The enabled features as one comma-separated field.
+///
+/// Cargo exports one variable per enabled feature and no list. Collected into a set, so the
+/// order they happen to be read in cannot reach the variant's identity.
+fn Enabled_Features() -> String
+{
     let features: BTreeSet<String> = std::env::vars()
         .filter_map(|(name, _)| {
             return name
@@ -42,14 +57,5 @@ fn main()
         })
         .collect();
 
-    println!("cargo::rustc-env=NOMOS_TARGET={target}");
-    println!("cargo::rustc-env=NOMOS_PROFILE={profile}");
-    println!("cargo::rustc-env=NOMOS_TOOLCHAIN={toolchain}");
-    println!(
-        "cargo::rustc-env=NOMOS_FEATURES={}",
-        features.into_iter().collect::<Vec<String>>().join(",")
-    );
-
-    println!("cargo::rerun-if-changed=build.rs");
-    println!("cargo::rerun-if-env-changed=RUSTUP_TOOLCHAIN");
+    return features.into_iter().collect::<Vec<String>>().join(",");
 }

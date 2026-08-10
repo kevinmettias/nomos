@@ -90,7 +90,7 @@
 use crate::arguments::Named_Value;
 use nomos_analysis::{Context, MemoryFactStore, Reader};
 use nomos_capability::Registry;
-use nomos_contracts::{ConfigurationId, Finding, Guarantee};
+use nomos_contracts::{CapabilityId, ConfigurationId, Finding, Guarantee};
 use nomos_lang_rust::{FactContext, Materialization};
 use nomos_model::{Content_Digest, Subject_Of_Path};
 use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
@@ -190,91 +190,142 @@ struct Examined
 /// Runs the rules and renders what they say.
 pub fn Run(command: &CheckCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    if !command.root.is_dir()
+    let prepared = match Prepare(&command.root, stderr)
     {
-        let _ignored = writeln!(
-            stderr,
-            "cannot read `{}`: not a directory",
-            command.root.display()
-        );
-        return ExitCode::Unreadable;
+        Ok(prepared) => prepared,
+        Err(code) => return code,
+    };
+
+    let mut store = MemoryFactStore::New();
+    let facts = Materialize_Syntax(&prepared.sources, &prepared.context, &mut store);
+    if facts == 0
+    {
+        return Nothing_Materialized(prepared.sources.len(), &command.root, stderr);
     }
 
-    let sources = Read_Sources(&command.root);
+    let mut reader = Reader::On(&store, &prepared.registry, prepared.context);
+    let findings = Check_Completeness_Mirrors(&prepared.sources, &mut reader);
+    let examined = Examined {
+        files: prepared.sources.len(),
+        facts,
+    };
 
+    return Report(&findings, examined, stdout);
+}
+
+/// Everything the run needs before it can judge anything.
+struct Prepared
+{
+    sources: Vec<SourceFile>,
+    registry: Registry,
+    context: Context,
+}
+
+/// Walks the tree and ingests it as one workspace state.
+fn Prepare(root: &Path, stderr: &mut impl Write) -> Result<Prepared, ExitCode>
+{
+    let sources = Walked(root, stderr)?;
+    let registry = Registered();
+    let context = Ingested(&sources, root, &registry, stderr)?;
+
+    return Ok(Prepared {
+        sources,
+        registry,
+        context,
+    });
+}
+
+/// The Rust sources under the root.
+///
+/// A walk that found nothing is a refusal rather than a clean result: a run that judged no
+/// file renders exactly like a run that judged every file and found nothing to say.
+fn Walked(root: &Path, stderr: &mut impl Write) -> Result<Vec<SourceFile>, ExitCode>
+{
+    if !root.is_dir()
+    {
+        let _ignored = writeln!(stderr, "cannot read `{}`: not a directory", root.display());
+
+        return Err(ExitCode::Unreadable);
+    }
+
+    let sources = Read_Sources(root);
     if sources.is_empty()
     {
         let _ignored = writeln!(
             stderr,
             "no Rust source found under `{}`, so nothing was judged.\n\
              A clean result here would mean only that the walk found nothing.",
-            command.root.display()
+            root.display()
         );
-        return ExitCode::Vacuous;
+
+        return Err(ExitCode::Vacuous);
     }
 
-    let registry = Registered();
-    let configuration = Resolved_Configuration(&registry);
+    return Ok(sources);
+}
+
+/// The walk applied to an empty workspace, and the context every fact is filed under.
+fn Ingested(
+    sources: &[SourceFile],
+    root: &Path,
+    registry: &Registry,
+    stderr: &mut impl Write,
+) -> Result<Context, ExitCode>
+{
+    let configuration = Resolved_Configuration(registry);
     let variant = Host_Variant();
     let mut workspace = Workspace::Empty(variant.clone(), configuration);
+    let checkout = As_One_Checkout(sources);
 
-    let mut checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
-    for source in &sources
-    {
-        checkout = checkout.Present(source.path.clone(), source.text.clone());
-    }
+    let applied = workspace.Apply(&checkout).map_err(|error| {
+        let _ignored = writeln!(
+            stderr,
+            "the walk of `{}` could not be ingested as a workspace state: {error:?}",
+            root.display()
+        );
 
-    // The whole walk arrives as one change set because a walk is one event. Applying a
-    // file at a time would produce one generation per file, and every intermediate one
-    // would describe a tree that never existed.
-    let applied = match workspace.Apply(&checkout)
-    {
-        Ok(applied) => applied,
-        Err(error) =>
-        {
-            let _ignored = writeln!(
-                stderr,
-                "the walk of `{}` could not be ingested as a workspace state: {error:?}",
-                command.root.display()
-            );
-            return ExitCode::Unreadable;
-        }
-    };
+        return ExitCode::Unreadable;
+    })?;
 
-    let context = Context {
+    return Ok(Context {
         snapshot: applied.Snapshot(),
         variant: variant.Id(),
         configuration,
         generation: applied.Generation(),
-    };
+    });
+}
 
-    let mut store = MemoryFactStore::New();
-    let facts = Materialize_Syntax(&sources, &context, &mut store);
+/// The whole walk as one change set, because a walk is one event.
+///
+/// Applying a file at a time would produce one generation per file, and every intermediate
+/// one would describe a tree that never existed.
+fn As_One_Checkout(sources: &[SourceFile]) -> WorkspaceChangeSet
+{
+    let mut checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
 
-    if facts == 0
+    for source in sources
     {
-        let _ignored = writeln!(
-            stderr,
-            "{} file(s) were read under `{}` and no syntax fact was materialized for any \
-             of them, so no mirror claim could be resolved.\n\
-             A clean result here would mean only that the analysis never ran.",
-            sources.len(),
-            command.root.display()
-        );
-        return ExitCode::Vacuous;
+        checkout = checkout.Present(source.path.clone(), source.text.clone());
     }
 
-    let mut reader = Reader::On(&store, &registry, context);
-    let findings = Check_Completeness_Mirrors(&sources, &mut reader);
+    return checkout;
+}
 
-    return Report(
-        &findings,
-        Examined {
-            files: sources.len(),
-            facts,
-        },
-        stdout,
+/// A walk that read source and produced no fact from any of it.
+///
+/// The same lie as an empty walk, one layer in: the rule would resolve every mirror claim
+/// against an empty index and, because the index is empty, refuse to block on any of them.
+fn Nothing_Materialized(read: usize, root: &Path, stderr: &mut impl Write) -> ExitCode
+{
+    let _ignored = writeln!(
+        stderr,
+        "{read} file(s) were read under `{}` and no syntax fact was materialized for any \
+         of them, so no mirror claim could be resolved.\n\
+         A clean result here would mean only that the analysis never ran.",
+        root.display()
     );
+
+    return ExitCode::Vacuous;
 }
 
 /// The capability this run declares and the providers it admits.
@@ -345,22 +396,30 @@ fn Resolved_Configuration(registry: &Registry) -> ConfigurationId
         rendered.push('\t');
         rendered.push_str(&Rendered_Guarantee(contract.ceiling));
         rendered.push('\n');
-
-        for offer in registry.Offers(&contract.id)
-        {
-            rendered.push_str("offer\t");
-            rendered.push_str(contract.id.As_Str());
-            rendered.push('\t');
-            rendered.push_str(offer.provider.As_Str());
-            rendered.push('\t');
-            rendered.push_str(&offer.version.to_string());
-            rendered.push('\t');
-            rendered.push_str(&Rendered_Guarantee(offer.guarantee));
-            rendered.push('\n');
-        }
+        Render_Offers(&mut rendered, registry, &contract.id);
     }
 
     return ConfigurationId::From_Digest(Content_Digest(rendered.as_bytes()));
+}
+
+/// Every offer standing against one capability, each on its own line.
+///
+/// The offers are part of the configuration and not only the declarations, because the same
+/// floor served by a different provider is a different composition and has to hash apart.
+fn Render_Offers(rendered: &mut String, registry: &Registry, capability: &CapabilityId)
+{
+    for offer in registry.Offers(capability)
+    {
+        rendered.push_str("offer\t");
+        rendered.push_str(capability.As_Str());
+        rendered.push('\t');
+        rendered.push_str(offer.provider.As_Str());
+        rendered.push('\t');
+        rendered.push_str(&offer.version.to_string());
+        rendered.push('\t');
+        rendered.push_str(&Rendered_Guarantee(offer.guarantee));
+        rendered.push('\n');
+    }
 }
 
 /// A guarantee as one field, by its four stable labels.
@@ -388,12 +447,7 @@ fn Materialize_Syntax(
     store: &mut MemoryFactStore,
 ) -> usize
 {
-    let production = FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
+    let production = Production(context);
     let mut written = 0_usize;
 
     for source in sources
@@ -416,6 +470,17 @@ fn Materialize_Syntax(
     return written;
 }
 
+/// The reading context as the provider takes it.
+fn Production(context: &Context) -> FactContext
+{
+    return FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
+}
+
 /// Renders the findings and decides the exit code.
 fn Report(findings: &[Finding], examined: Examined, stdout: &mut impl Write) -> ExitCode
 {
@@ -428,28 +493,30 @@ fn Report(findings: &[Finding], examined: Examined, stdout: &mut impl Write) -> 
         .iter()
         .filter(|finding| return finding.Can_Fail_A_Build())
         .count();
+    Counts(findings.len(), blocking, examined, stdout);
 
-    // The counts of what was looked at are part of the result, not decoration. "0
-    // findings" over 4 files and "0 findings" over 400 are different claims, and so are
-    // "400 files" and "400 files, 12 of which produced a fact" — a reader who cannot tell
-    // them apart cannot tell a clean tree from a broken walk.
+    if blocking > 0
+    {
+        return ExitCode::Violations;
+    }
+
+    return ExitCode::Ok;
+}
+
+/// What was looked at, which is part of the result and not decoration.
+///
+/// "0 findings" over 4 files and "0 findings" over 400 are different claims, and so are
+/// "400 files" and "400 files, 12 of which produced a fact" — a reader who cannot tell
+/// them apart cannot tell a clean tree from a broken walk.
+fn Counts(found: usize, blocking: usize, examined: Examined, stdout: &mut impl Write)
+{
     let _ignored = writeln!(
         stdout,
-        "\n{} file(s) examined, {} with a syntax fact, {} finding(s), {blocking} of which \
-         can fail a build",
+        "\n{} file(s) examined, {} with a syntax fact, {found} finding(s), {blocking} of \
+         which can fail a build",
         examined.files,
-        examined.facts,
-        findings.len()
+        examined.facts
     );
-
-    return if blocking > 0
-    {
-        ExitCode::Violations
-    }
-    else
-    {
-        ExitCode::Ok
-    };
 }
 
 /// Every `.rs` file under `root`, with its text and the subject its facts are filed under.
@@ -506,15 +573,23 @@ fn Read_Entry(
     if path.extension().is_some_and(|extension| return extension == "rs")
         && let Ok(text) = std::fs::read_to_string(&path)
     {
-        let relative = Relative(root, &path);
-        // This root files a fact under the subject and hands the same value to the rule on
-        // `SourceFile::subject`, so the two cannot disagree about addressing. It is the
-        // kernel's rule and not a local one, which is what keeps that agreement from being
-        // a coincidence — see `OD-MODEL-001`.
-        let subject = Subject_Of_Path(&relative);
-        let source = SourceFile::New(relative, subject, text);
+        let source = Read_Source(root, &path, text);
         sources.push(source);
     }
+}
+
+/// One `.rs` file as the rule takes it.
+///
+/// This root files a fact under the subject and hands the same value to the rule on
+/// `SourceFile::subject`, so the two cannot disagree about addressing. It is the kernel's
+/// rule and not a local one, which is what keeps that agreement from being a coincidence —
+/// see `OD-MODEL-001`.
+fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
+{
+    let relative = Relative(root, path);
+    let subject = Subject_Of_Path(&relative);
+
+    return SourceFile::New(relative, subject, text);
 }
 
 /// A path as it should be reported: relative to the tree, forward slashes.
@@ -554,23 +629,9 @@ mod tests
         fn Over(sources: &[SourceFile]) -> Self
         {
             let registry = Registered();
-            let configuration = Resolved_Configuration(&registry);
-            let variant = Host_Variant();
-            let mut workspace = Workspace::Empty(variant.clone(), configuration);
-
-            let mut checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
-            for source in sources
-            {
-                checkout = checkout.Present(source.path.clone(), source.text.clone());
-            }
-            let applied = workspace.Apply(&checkout).expect("the fixture is a valid tree");
-
-            let context = Context {
-                snapshot: applied.Snapshot(),
-                variant: variant.Id(),
-                configuration,
-                generation: applied.Generation(),
-            };
+            let mut refused = Vec::new();
+            let context = Ingested(sources, Path::new("."), &registry, &mut refused)
+                .expect("the fixture is a valid tree");
             let mut store = MemoryFactStore::New();
             let _written = Materialize_Syntax(sources, &context, &mut store);
 

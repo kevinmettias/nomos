@@ -132,50 +132,13 @@ impl Assembly
 /// commands over this store still have a true answer to give without it.
 pub fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
 {
-    let mut store = SpecificationStore::In_Memory()?;
-    let seeded = Seed_Governing_Records(&mut store)?;
+    let mut assembly = Seeded()?;
 
-    let mut assembly = Assembly {
-        store,
-        read: vec![format!(
-            "{} governing record(s) embedded in this binary, {} block(s)",
-            seeded.records, seeded.blocks
-        )],
-        absent: Vec::new(),
-    };
-
-    let Some(root) = request.root.as_ref()
+    let Some(root) = Corpus_Root(&mut assembly, request)
     else
     {
-        assembly.absent.push(Absence {
-            subject: "the v14 authoring corpus".to_owned(),
-            expected: format!(
-                "a directory named by {}, holding {DOMAIN_VOLUMES}/, {STATEMENTS} and {CATALOG}",
-                request.variable
-            ),
-            cause: format!("{} is not set, and no --corpus was given", request.variable),
-            cost: "the corpus documents, their table rows, the normative statements and the \
-                   node catalog are not in this store. What this command can answer is what \
-                   this repository authors about itself, and nothing else"
-                .to_owned(),
-        });
-
         return Ok(assembly);
     };
-
-    if !root.is_dir()
-    {
-        assembly.absent.push(Absence {
-            subject: "the v14 authoring corpus".to_owned(),
-            expected: format!("{} to be a directory", root.display()),
-            cause: format!("{} does not name a readable directory", request.variable),
-            cost: "the corpus documents, their table rows, the normative statements and the \
-                   node catalog are not in this store"
-                .to_owned(),
-        });
-
-        return Ok(assembly);
-    }
 
     Ingest_Volumes(&mut assembly, root, &request.revision);
     Ingest_Statement_File(&mut assembly, root);
@@ -184,80 +147,228 @@ pub fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
     return Ok(assembly);
 }
 
+/// The floor every command stands on: this repository's own governing records.
+///
+/// Embedded rather than read, because they are what makes an answer possible at all when
+/// no corpus is layered over them — a store that could not find its own records would have
+/// nothing true left to say.
+fn Seeded() -> Result<Assembly, StoreError>
+{
+    let mut store = SpecificationStore::In_Memory()?;
+    let seeded = Seed_Governing_Records(&mut store)?;
+
+    return Ok(Assembly {
+        store,
+        read: vec![format!(
+            "{} governing record(s) embedded in this binary, {} block(s)",
+            seeded.records, seeded.blocks
+        )],
+        absent: Vec::new(),
+    });
+}
+
+/// The corpus directory, or nothing and a recorded absence saying why there is none.
+///
+/// Unset and unreadable are two absences rather than one, because the reader's next move
+/// differs: the first is a variable to set and the second is a path that is already wrong.
+fn Corpus_Root<'a>(assembly: &mut Assembly, request: &'a CorpusRequest) -> Option<&'a Path>
+{
+    let Some(root) = request.root.as_ref()
+    else
+    {
+        let unnamed = Unnamed_Corpus(&request.variable);
+        assembly.absent.push(unnamed);
+
+        return None;
+    };
+
+    if !root.is_dir()
+    {
+        let unreadable = Unreadable_Corpus(root, &request.variable);
+        assembly.absent.push(unreadable);
+
+        return None;
+    }
+
+    return Some(root);
+}
+
+/// No corpus was named at all.
+fn Unnamed_Corpus(variable: &str) -> Absence
+{
+    return Absence {
+        subject: "the v14 authoring corpus".to_owned(),
+        expected: format!(
+            "a directory named by {variable}, holding {DOMAIN_VOLUMES}/, {STATEMENTS} and \
+             {CATALOG}"
+        ),
+        cause: format!("{variable} is not set, and no --corpus was given"),
+        cost: "the corpus documents, their table rows, the normative statements and the node \
+               catalog are not in this store. What this command can answer is what this \
+               repository authors about itself, and nothing else"
+            .to_owned(),
+    };
+}
+
+/// A corpus was named and is not a directory this build can read.
+fn Unreadable_Corpus(root: &Path, variable: &str) -> Absence
+{
+    return Absence {
+        subject: "the v14 authoring corpus".to_owned(),
+        expected: format!("{} to be a directory", root.display()),
+        cause: format!("{variable} does not name a readable directory"),
+        cost: "the corpus documents, their table rows, the normative statements and the node \
+               catalog are not in this store"
+            .to_owned(),
+    };
+}
+
 fn Ingest_Volumes(assembly: &mut Assembly, root: &Path, revision: &str)
 {
     let directory = root.join(DOMAIN_VOLUMES);
-    let Ok(entries) = std::fs::read_dir(&directory)
+    let Some(documents) = Volumes_Under(assembly, &directory)
     else
     {
-        assembly.absent.push(Absence {
-            subject: "the domain volumes".to_owned(),
-            expected: format!("{}/*.md", directory.display()),
-            cause: "the directory could not be read".to_owned(),
-            cost: "no corpus document is in this store, so no corpus table has rows to read"
-                .to_owned(),
-        });
-
         return;
     };
 
-    // Sorted, because a store assembled in directory order is a store whose block uids
-    // depend on the filesystem — and two runs on two machines would then disagree about
-    // what a document is without either of them being wrong about the bytes.
+    let blocks = Ingest_Each(assembly, &directory, &documents, revision);
+    assembly.read.push(format!(
+        "{} domain volume(s) at {revision} from {}, {blocks} block(s)",
+        documents.len(),
+        directory.display()
+    ));
+}
+
+/// Every markdown document under the volumes directory, or nothing when there are none.
+///
+/// Sorted, because a store assembled in directory order is a store whose block uids depend
+/// on the filesystem — and two runs on two machines would then disagree about what a
+/// document is without either of them being wrong about the bytes.
+fn Volumes_Under(assembly: &mut Assembly, directory: &Path) -> Option<BTreeMap<String, String>>
+{
+    let Ok(entries) = std::fs::read_dir(directory)
+    else
+    {
+        let unopened = Unreadable_Volumes(directory);
+        assembly.absent.push(unopened);
+
+        return None;
+    };
+
+    let (documents, unreadable) = Read_Volumes(entries);
+    Note_Unreadable(assembly, directory, &unreadable);
+    if documents.is_empty()
+    {
+        let empty = Empty_Volumes(directory);
+        assembly.absent.push(empty);
+
+        return None;
+    }
+
+    return Some(documents);
+}
+
+/// Every markdown document the directory yielded, and the paths that would not open.
+fn Read_Volumes(entries: std::fs::ReadDir) -> (BTreeMap<String, String>, Vec<String>)
+{
     let mut documents: BTreeMap<String, String> = BTreeMap::new();
     let mut unreadable: Vec<String> = Vec::new();
 
     for entry in entries.flatten()
     {
         let path = entry.path();
-        if path.extension().is_none_or(|extension| return extension != "md")
-        {
-            continue;
-        }
-
-        let name = path
-            .file_name()
-            .and_then(std::ffi::OsStr::to_str)
-            .unwrap_or_default()
-            .to_owned();
-
-        match std::fs::read_to_string(&path)
-        {
-            Ok(text) =>
-            {
-                documents.insert(name, text);
-            }
-            Err(error) => unreadable.push(format!("{}: {error}", path.display())),
-        }
+        Read_Volume(&path, &mut documents, &mut unreadable);
     }
 
-    if !unreadable.is_empty()
-    {
-        assembly.absent.push(Absence {
-            subject: format!("{} domain volume(s)", unreadable.len()),
-            expected: format!("{}/*.md to be readable text", directory.display()),
-            cause: unreadable.join("; "),
-            cost: "those documents and their table rows are not in this store, so a count \
-                   taken over it is a count over what happened to open"
-                .to_owned(),
-        });
-    }
+    return (documents, unreadable);
+}
 
-    if documents.is_empty()
+/// One directory entry: a markdown document read, an unreadable one named, anything else
+/// passed over.
+fn Read_Volume(
+    path: &Path,
+    documents: &mut BTreeMap<String, String>,
+    unreadable: &mut Vec<String>,
+)
+{
+    if path.extension().is_none_or(|extension| return extension != "md")
     {
-        assembly.absent.push(Absence {
-            subject: "the domain volumes".to_owned(),
-            expected: format!("at least one .md file under {}", directory.display()),
-            cause: "the directory holds no markdown document".to_owned(),
-            cost: "no corpus document is in this store, so no corpus table has rows to read"
-                .to_owned(),
-        });
-
         return;
     }
 
+    let name = path
+        .file_name()
+        .and_then(std::ffi::OsStr::to_str)
+        .unwrap_or_default()
+        .to_owned();
+
+    match std::fs::read_to_string(path)
+    {
+        Ok(text) =>
+        {
+            documents.insert(name, text);
+        }
+        Err(error) => unreadable.push(format!("{}: {error}", path.display())),
+    }
+}
+
+/// A volumes directory that could not be opened at all.
+fn Unreadable_Volumes(directory: &Path) -> Absence
+{
+    return Absence {
+        subject: "the domain volumes".to_owned(),
+        expected: format!("{}/*.md", directory.display()),
+        cause: "the directory could not be read".to_owned(),
+        cost: "no corpus document is in this store, so no corpus table has rows to read"
+            .to_owned(),
+    };
+}
+
+/// A volumes directory holding nothing this build recognises.
+fn Empty_Volumes(directory: &Path) -> Absence
+{
+    return Absence {
+        subject: "the domain volumes".to_owned(),
+        expected: format!("at least one .md file under {}", directory.display()),
+        cause: "the directory holds no markdown document".to_owned(),
+        cost: "no corpus document is in this store, so no corpus table has rows to read"
+            .to_owned(),
+    };
+}
+
+/// The volumes that were there and would not open, named individually.
+fn Note_Unreadable(assembly: &mut Assembly, directory: &Path, unreadable: &[String])
+{
+    if unreadable.is_empty()
+    {
+        return;
+    }
+
+    assembly.absent.push(Absence {
+        subject: format!("{} domain volume(s)", unreadable.len()),
+        expected: format!("{}/*.md to be readable text", directory.display()),
+        cause: unreadable.join("; "),
+        cost: "those documents and their table rows are not in this store, so a count taken \
+               over it is a count over what happened to open"
+            .to_owned(),
+    });
+}
+
+/// Puts every document into the store, and says how many blocks went in.
+///
+/// A document the store refuses becomes an absence and the walk continues, because one
+/// unparseable volume is not a reason to report the other eight as missing too.
+fn Ingest_Each(
+    assembly: &mut Assembly,
+    directory: &Path,
+    documents: &BTreeMap<String, String>,
+    revision: &str,
+) -> u32
+{
     let mut blocks = 0_u32;
-    for (name, markdown) in &documents
+
+    for (name, markdown) in documents
     {
         match Ingest_Source_Document(&mut assembly.store, name, revision, markdown)
         {
@@ -275,116 +386,115 @@ fn Ingest_Volumes(assembly: &mut Assembly, root: &Path, revision: &str)
         }
     }
 
-    assembly.read.push(format!(
-        "{} domain volume(s) at {revision} from {}, {blocks} block(s)",
-        documents.len(),
-        directory.display()
-    ));
+    return blocks;
+}
+
+/// One optional corpus file, and what its absence costs.
+///
+/// The two costs are separate because they are separate claims: the first is what the
+/// reader loses when the file is not there, and the second is what they lose when it was
+/// there and would not go in. Written out at each of the three sites that need them, the
+/// two ingests carried six copies of four strings.
+struct Layered<'a>
+{
+    /// What an absence calls it.
+    subject: &'a str,
+    /// Where it should be.
+    path: PathBuf,
+    /// What is lost when it cannot be read at all.
+    unread: &'a str,
+    /// What is lost when it was read and refused.
+    refused: &'a str,
+}
+
+/// The text of an optional input, or nothing and a recorded absence.
+fn Text_Of(assembly: &mut Assembly, input: &Layered<'_>) -> Option<String>
+{
+    let Ok(text) = std::fs::read_to_string(&input.path)
+    else
+    {
+        assembly.absent.push(Absence {
+            subject: input.subject.to_owned(),
+            expected: input.path.display().to_string(),
+            cause: "the file could not be read".to_owned(),
+            cost: input.unread.to_owned(),
+        });
+
+        return None;
+    };
+
+    return Some(text);
+}
+
+/// Records an input that was found and would not go in.
+fn Refuse(assembly: &mut Assembly, input: &Layered<'_>, error: &IngestError)
+{
+    let refusal = Refused(
+        input.subject,
+        &input.path.display().to_string(),
+        error,
+        input.refused,
+    );
+    assembly.absent.push(refusal);
+}
+
+/// Records what an input contributed.
+fn Note(assembly: &mut Assembly, input: &Layered<'_>, count: u32, noun: &str)
+{
+    assembly.read.push(format!("{count} {noun} from {}", input.path.display()));
 }
 
 fn Ingest_Statement_File(assembly: &mut Assembly, root: &Path)
 {
-    let path = root.join(STATEMENTS);
-    let Ok(text) = std::fs::read_to_string(&path)
+    let input = Layered {
+        subject: "the normative statements",
+        path: root.join(STATEMENTS),
+        unread: "no normative statement is in this store, so a profile that projects \
+                 statements has nothing to project",
+        refused: "no normative statement is in this store",
+    };
+    let Some(text) = Text_Of(assembly, &input)
     else
     {
-        assembly.absent.push(Absence {
-            subject: "the normative statements".to_owned(),
-            expected: path.display().to_string(),
-            cause: "the file could not be read".to_owned(),
-            cost: "no normative statement is in this store, so a profile that projects \
-                   statements has nothing to project"
-                .to_owned(),
-        });
-
         return;
     };
 
     let file = match Parse_Statements(&text)
     {
         Ok(file) => file,
-        Err(error) =>
-        {
-            let refusal = Refused(
-                "the normative statements",
-                &path.display().to_string(),
-                &error,
-                "no normative statement is in this store",
-            );
-            assembly.absent.push(refusal);
-
-            return;
-        }
+        Err(error) => return Refuse(assembly, &input, &error),
     };
-
     match Ingest_Statements(&mut assembly.store, &file)
     {
-        Ok(report) => assembly
-            .read
-            .push(format!("{} normative statement(s) from {}", report.ingested, path.display())),
-        Err(error) =>
-        {
-            let refusal = Refused(
-                "the normative statements",
-                &path.display().to_string(),
-                &error,
-                "no normative statement is in this store",
-            );
-            assembly.absent.push(refusal);
-        }
+        Ok(report) => Note(assembly, &input, report.ingested, "normative statement(s)"),
+        Err(error) => Refuse(assembly, &input, &error),
     }
 }
 
 fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
 {
-    let path = root.join(CATALOG);
-    let Ok(text) = std::fs::read_to_string(&path)
+    let input = Layered {
+        subject: "the node catalog",
+        path: root.join(CATALOG),
+        unread: "the corpus contributes no node to this store, so an identifier it holds \
+                 resolves to nothing",
+        refused: "the corpus contributes no node to this store",
+    };
+    let Some(text) = Text_Of(assembly, &input)
     else
     {
-        assembly.absent.push(Absence {
-            subject: "the node catalog".to_owned(),
-            expected: path.display().to_string(),
-            cause: "the file could not be read".to_owned(),
-            cost: "the corpus contributes no node to this store, so an identifier it holds \
-                   resolves to nothing"
-                .to_owned(),
-        });
-
         return;
     };
 
     let entities = match Parse_Catalog(&text)
     {
         Ok(entities) => entities,
-        Err(error) =>
-        {
-            let refusal = Refused(
-                "the node catalog",
-                &path.display().to_string(),
-                &error,
-                "the corpus contributes no node to this store",
-            );
-            assembly.absent.push(refusal);
-
-            return;
-        }
+        Err(error) => return Refuse(assembly, &input, &error),
     };
-
     match Ingest_Catalog(&mut assembly.store, &entities)
     {
-        Ok(report) => assembly
-            .read
-            .push(format!("{} catalog node(s) from {}", report.nodes, path.display())),
-        Err(error) =>
-        {
-            let refusal = Refused(
-                "the node catalog",
-                &path.display().to_string(),
-                &error,
-                "the corpus contributes no node to this store",
-            );
-            assembly.absent.push(refusal);
-        }
+        Ok(report) => Note(assembly, &input, report.nodes, "catalog node(s)"),
+        Err(error) => Refuse(assembly, &input, &error),
     }
 }
 
