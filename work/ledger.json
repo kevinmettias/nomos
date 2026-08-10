@@ -2843,6 +2843,8 @@
           "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
           "crates/host/nomos-cli/src/work.rs",
           "crates/host/nomos-cli/tests/takeover_is_recorded.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish.rs",
+          "crates/host/nomos-cli/tests/stale_writer_is_refused.rs",
           "crates/spec/nomos-spec-store/records/OD-LEDGER-012.record",
           "tests/contract/surface/nomos-ledger.txt",
           "README.md",
@@ -2857,8 +2859,8 @@
       "blocked": null,
       "claim": {
         "holder": "claude-lapse-takeover-w16",
-        "acquired_at": 1786344104,
-        "lease_expires_at": 1786354904
+        "acquired_at": 1786344651,
+        "lease_expires_at": 1786355451
       },
       "verification": {
         "argv": [
@@ -2876,7 +2878,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "claude-lapse-takeover-w16",
+          "reason": "Released unstarted, nothing edited, to widen rather than widen during. Two files the design mechanically forces fell outside the territory when c7082ae narrowed this item from two whole crates to six files: gate_covers_finish.rs holds one of only four exhaustive LedgerItem literals in the workspace and will not compile once displaced is added, and stale_writer_is_refused.rs asserts the string this build understands 1, which the mandated SCHEMA_VERSION bump falsifies. Both were authored by the sibling item P10-STALE-WRITER one commit earlier and neither is held. The narrowing was mine and so is this correction.",
+          "abandoned_at": 1786344635
+        }
+      ]
     },
     {
       "id": "P10-FACT-BYPASS",
