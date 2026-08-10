@@ -83,17 +83,37 @@ impl Coverage
 
     /// The gaps that represent analysis that was wanted and did not happen.
     ///
-    /// Excludes deliberate absences, which are decisions rather than debt.
+    /// Excludes deliberate absences, which are decisions rather than debt. Also excludes
+    /// [`Coverage::Agent_Required`], which is wanted and undone but is not debt: nothing
+    /// is missing, and telling a reader to install a provider would be false.
     pub fn Debt(&self) -> impl Iterator<Item = &CoverageGap>
     {
         return self.gaps.iter().filter(|gap| gap.reason.Is_Coverage_Debt());
     }
 
+    /// The gaps a model could close, and no provider will.
+    ///
+    /// `CHK-003`'s seventh reporting category, kept out of both `evaluated` and
+    /// [`Coverage::Debt`] because it is neither. Before `OD-CONTRACTS-002` these subjects
+    /// were filed as `MissingCapability` or left out of `gaps` altogether, so a run either
+    /// overstated a capability gap or said nothing.
+    pub fn Agent_Required(&self) -> impl Iterator<Item = &CoverageGap>
+    {
+        return self.gaps.iter().filter(|gap| gap.reason.Requires_Agent());
+    }
+
     /// Whether every in-scope subject was examined.
+    ///
+    /// Agent-required subjects were not examined, so they hold this false. Their being
+    /// outside [`Coverage::Debt`] is about what the remedy is, not about whether the run
+    /// finished — collapsing those two questions is what made a subject nobody judged
+    /// indistinguishable from one nothing binds.
     #[must_use]
     pub fn Is_Complete(&self) -> bool
     {
-        return self.Has_Effective_Coverage() && self.Debt().next().is_none();
+        return self.Has_Effective_Coverage()
+            && self.Debt().next().is_none()
+            && self.Agent_Required().next().is_none();
     }
 }
 
@@ -164,6 +184,63 @@ mod tests
         };
 
         assert!(coverage.Is_Complete());
+    }
+
+    /// `CHK-003`'s seventh category, and the two answers it replaces. An agent-required
+    /// subject counted as debt sends the reader to install a provider that does not
+    /// exist; one counted as evaluated or dropped from `gaps` says a run judged it.
+    #[test]
+    fn Test_Agent_Required_Should_Be_A_Gap_That_Is_Not_Debt()
+    {
+        let coverage = Coverage {
+            evaluated: 3,
+            excluded: 1,
+            gaps: vec![CoverageGap {
+                subject: Subject("a.rs"),
+                reason: Applicability::AgentRequired,
+            }],
+        };
+
+        assert_eq!(coverage.Debt().count(), 0, "no provider is missing");
+        assert_eq!(coverage.Agent_Required().count(), 1);
+        assert_eq!(coverage.evaluated, 3, "a model has not judged it");
+        assert!(
+            !coverage.Is_Complete(),
+            "a subject nobody judged must not read as examined"
+        );
+    }
+
+    /// The three buckets are disjoint, so a subject lands in exactly one of them. Debt
+    /// and agent-required overlapping is how the same gap gets both remedies, and neither
+    /// gets acted on.
+    #[test]
+    fn Test_The_Buckets_Should_Not_Overlap()
+    {
+        let coverage = Coverage {
+            evaluated: 1,
+            excluded: 0,
+            gaps: vec![
+                CoverageGap {
+                    subject: Subject("a.rs"),
+                    reason: Applicability::MissingCapability,
+                },
+                CoverageGap {
+                    subject: Subject("b.rs"),
+                    reason: Applicability::AgentRequired,
+                },
+                CoverageGap {
+                    subject: Subject("c.rs"),
+                    reason: Applicability::NotApplicable,
+                },
+            ],
+        };
+
+        assert_eq!(coverage.Debt().count(), 1);
+        assert_eq!(coverage.Agent_Required().count(), 1);
+        assert!(coverage.Debt().all(|gap| !gap.reason.Requires_Agent()));
+        assert!(coverage
+            .Agent_Required()
+            .all(|gap| !gap.reason.Is_Coverage_Debt()));
     }
 
     #[test]

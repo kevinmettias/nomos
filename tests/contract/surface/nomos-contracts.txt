@@ -1,6 +1,7 @@
 pub const fn nomos_contracts::Applicability::Display_Label(self) -> DisplayLabel
 pub const fn nomos_contracts::Applicability::Is_Coverage_Debt(self) -> bool
 pub const fn nomos_contracts::Applicability::Label(self) -> &'static str
+pub const fn nomos_contracts::Applicability::Requires_Agent(self) -> bool
 pub const fn nomos_contracts::Applicability::Was_Evaluated(self) -> bool
 pub const fn nomos_contracts::Assurance::Label(self) -> &'static str
 pub const fn nomos_contracts::Assurance::Satisfies_Requirement(self) -> bool
@@ -62,6 +63,7 @@ pub enum nomos_contracts::PeerAvailability
 pub enum nomos_contracts::ReproducibilityScope
 pub enum nomos_contracts::SynchronizationState
 pub enum nomos_contracts::TraceEquivalence
+pub enum variant nomos_contracts::Applicability::AgentRequired
 pub enum variant nomos_contracts::Applicability::AnalysisFailed
 pub enum variant nomos_contracts::Applicability::ConfigurationDisabled
 pub enum variant nomos_contracts::Applicability::DependencyUnavailable
@@ -85,6 +87,7 @@ pub enum variant nomos_contracts::AuthorityClass::Read
 pub enum variant nomos_contracts::DeterminismStrength::None
 pub enum variant nomos_contracts::DeterminismStrength::State
 pub enum variant nomos_contracts::DeterminismStrength::StateTemporal
+pub enum variant nomos_contracts::DisplayLabel::AgentRequired
 pub enum variant nomos_contracts::DisplayLabel::Failed
 pub enum variant nomos_contracts::DisplayLabel::Fallback
 pub enum variant nomos_contracts::DisplayLabel::Native

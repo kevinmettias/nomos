@@ -76,6 +76,7 @@ pub fn nomos_model::CompositeIdentity::Entity_Id(&self) -> EntityId
 pub fn nomos_model::Confidence::Meets(self, threshold: Self) -> bool
 pub fn nomos_model::Confidence::Of(value: f64) -> Self
 pub fn nomos_model::Content_Digest(bytes: &[u8]) -> Digest128
+pub fn nomos_model::Coverage::Agent_Required(&self) -> impl Iterator<Item = &CoverageGap>
 pub fn nomos_model::Coverage::Debt(&self) -> impl Iterator<Item = &CoverageGap>
 pub fn nomos_model::Coverage::Is_Complete(&self) -> bool
 pub fn nomos_model::Digest_Of_Parts(parts: &[&[u8]]) -> Digest128

@@ -4643,14 +4643,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-agent-required-w23",
-        "acquired_at": 1786348449,
-        "lease_expires_at": 1786355649
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -4667,7 +4663,36 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-model",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.02s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-af9ee92193467382.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6cfaddc4b16312b3.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-34f3dfa7f9923b4b.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-f75546e48cc40e29.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-ce2ac817ed8a3e76.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d58c046fbc3add5b.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-8f7c287149532a59.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-0a6643a441db0006.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_model-5c3a41953c26a564.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-6513f2b784f9db8e.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-103e563fbb789ea0.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-f50329bbff375e72.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-1d183afa395052f7.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-774615dec9e029c0.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n   Doc-tests nomos_model\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786348959,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
@@ -4834,6 +4859,40 @@
           "--no-fail-fast",
           "-p",
           "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-TRACE-REGISTRY",
+      "title": "The requirement assessment registry OD-TRACE-001 decided has no home, so CHK-003 is Met only in prose",
+      "why": "OD-TRACE-001 decided that an assessment of a corpus requirement is a declared entry committed to this repository and compared against the workspace by a test, never derived from the corpus at check time, because CI has no corpus and a check-time surface would be green by being unable to look. It builds nothing: it names the four verdicts (Met, Diverges, NotBinding, Unassessed-by-absence) and the three things the guard asserts, and says the registry lands with whichever of P10-AGENT-REQUIRED and P10-LEDGER-CORPUS lands first. P10-AGENT-REQUIRED landed first and could not carry it. Its territory was two source files, two surface snapshots and one record, there is no work edit, and widening a territory mid-claim is the failure this repository has already had twice. So CHK-003 is assessed in the prose of OD-CONTRACTS-002 and in no machine-readable place, which is the state OD-TRACE-001 exists to end. Three requirements are already known to diverge or be met with nothing that can be read: CHK-003 (Met, by OD-CONTRACTS-002), WORK-LEDGER-005 and WORK-LEDGER-001 (both diverge by one element, per OD-TRACE-001s hand audit). Every day this stays open, a prose Met and an unexamined requirement keep reading identically, which is the exact defect OD-TRACE-001 measured.",
+      "done_when": "A committed registry of requirement assessments exists, and a test in tests/contract asserts what OD-TRACE-001 said it must: every entry names a site that exists in the workspace, every Diverges entry names a record that exists and is registered, and the assessed set only grows. CHK-003 has an entry with verdict Met naming OD-CONTRACTS-002 and the sites in applicability.rs and evidence.rs, so the verdict stops living only in prose. A corpus comparison, if one is added, is corpus-gated and declared in corpus_gates.rs, and inherits the OD-GATE-001 hole visibly rather than hiding in it. Not closed by a doc comment citing a requirement id, which OD-TRACE-001 refused by name.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/requirement_trace.rs",
+          "tests/contract/requirements",
+          "tests/contract/tests/corpus_gates.rs",
+          "docs/records/OD-TRACE-002",
+          "crates/spec/nomos-spec-store/records/OD-TRACE-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },

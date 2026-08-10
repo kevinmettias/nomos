@@ -12,6 +12,7 @@ const DEPENDENCY_UNAVAILABLE_LABEL: &str = "DependencyUnavailable";
 const CONFIGURATION_DISABLED_LABEL: &str = "ConfigurationDisabled";
 const UNPARSEABLE_LABEL: &str = "Unparseable";
 const ANALYSIS_FAILED_LABEL: &str = "AnalysisFailed";
+const AGENT_REQUIRED_LABEL: &str = "AgentRequired";
 
 /// Why a rule did or did not produce a judgment about a subject.
 ///
@@ -58,6 +59,21 @@ pub enum Applicability
     /// A provider ran and failed. Distinct from `Unparseable` because the input was
     /// well-formed and the fault is ours or the tool's.
     AnalysisFailed,
+    /// The rule binds this subject and no mechanical provider can judge it; reaching a
+    /// judgment needs a model.
+    ///
+    /// This is `CHK-003`'s seventh reporting category and it is deliberately not a
+    /// capability gap. [`Applicability::MissingCapability`] tells a reader to install a
+    /// provider, and no provider exists to install; leaving the subject out of coverage
+    /// tells them nothing at all. The work is available and the executor for it is not a
+    /// provider. `OD-CONTRACTS-002` records which of those two mis-filings this variant
+    /// replaces.
+    ///
+    /// It says a model is *required*, never that one ran. What a model produced is
+    /// [`crate::EvidenceClass::AgentJudged`], which
+    /// [`crate::EvidenceClass::Is_Mechanical`] already refuses to report as a machine
+    /// having checked something.
+    AgentRequired,
 }
 
 impl Applicability
@@ -78,6 +94,7 @@ impl Applicability
             Self::ConfigurationDisabled => CONFIGURATION_DISABLED_LABEL,
             Self::Unparseable => UNPARSEABLE_LABEL,
             Self::AnalysisFailed => ANALYSIS_FAILED_LABEL,
+            Self::AgentRequired => AGENT_REQUIRED_LABEL,
         };
     }
 
@@ -114,6 +131,17 @@ impl Applicability
         );
     }
 
+    /// Whether reaching a judgment about this subject needs a model.
+    ///
+    /// One place decides it, for the same reason [`Applicability::Is_Coverage_Debt`] is a
+    /// method rather than a set each caller rebuilds. A consumer that wants the three
+    /// answers apart asks the three predicates; none of them overlaps another.
+    #[must_use]
+    pub const fn Requires_Agent(self) -> bool
+    {
+        return matches!(self, Self::AgentRequired);
+    }
+
     /// The presentation mapping clients use to render this state compactly.
     ///
     /// Clients localize the *label*; they never re-derive the *mapping*. Two clients
@@ -133,6 +161,7 @@ impl Applicability
             | Self::DependencyUnavailable
             | Self::ConfigurationDisabled => DisplayLabel::Unavailable,
             Self::Unparseable | Self::AnalysisFailed => DisplayLabel::Failed,
+            Self::AgentRequired => DisplayLabel::AgentRequired,
         };
     }
 }
@@ -151,6 +180,7 @@ const PARTIAL_LABEL: &str = "Partial";
 const DISPLAY_NOT_APPLICABLE_LABEL: &str = "N/A";
 const UNAVAILABLE_LABEL: &str = "Unavailable";
 const FAILED_LABEL: &str = "Failed";
+const AGENT_LABEL: &str = "Agent";
 
 /// The compact presentation form of an [`Applicability`], for matrices and summaries.
 ///
@@ -172,6 +202,13 @@ pub enum DisplayLabel
     Unavailable,
     /// Something needed was present and broke. Not a pass.
     Failed,
+    /// A model is needed to judge this. Available work, not a pass and not a gap.
+    ///
+    /// This one does not collapse. Folding it into `Unavailable` would tell a reader to
+    /// install something that does not exist, which is the mis-filing
+    /// [`Applicability::AgentRequired`] was added to end — reintroducing it here would
+    /// undo the correction at the only layer most readers ever see.
+    AgentRequired,
 }
 
 impl DisplayLabel
@@ -188,6 +225,7 @@ impl DisplayLabel
             Self::NotApplicable => DISPLAY_NOT_APPLICABLE_LABEL,
             Self::Unavailable => UNAVAILABLE_LABEL,
             Self::Failed => FAILED_LABEL,
+            Self::AgentRequired => AGENT_LABEL,
         };
     }
 }
@@ -204,6 +242,22 @@ impl core::fmt::Display for DisplayLabel
 mod tests
 {
     use super::*;
+
+    /// Every state, once. A test that builds its own list checks the states it happened
+    /// to remember, which is how a variant arrives unexamined.
+    const ALL: [Applicability; 11] = [
+        Applicability::Supported,
+        Applicability::SupportedWithFallback,
+        Applicability::PartiallySupported,
+        Applicability::NotApplicable,
+        Applicability::MissingCapability,
+        Applicability::ProviderUnavailable,
+        Applicability::DependencyUnavailable,
+        Applicability::ConfigurationDisabled,
+        Applicability::Unparseable,
+        Applicability::AnalysisFailed,
+        Applicability::AgentRequired,
+    ];
 
     /// The whole point of the type. If this ever passes for a debt state, a run can
     /// report success having analyzed nothing.
@@ -238,6 +292,54 @@ mod tests
         assert!(!Applicability::ConfigurationDisabled.Is_Coverage_Debt());
     }
 
+    /// `CHK-003`'s seventh category. Agent-required is work that is available and not
+    /// done, so reading as evaluated would be a lie and reading as debt would send the
+    /// reader to install a provider that does not exist.
+    #[test]
+    fn Test_Agent_Required_Should_Be_Neither_Evaluated_Nor_Coverage_Debt()
+    {
+        let state = Applicability::AgentRequired;
+
+        assert!(state.Requires_Agent());
+        assert!(!state.Was_Evaluated(), "a model has not run yet");
+        assert!(!state.Is_Coverage_Debt(), "the work is available, not missing");
+    }
+
+    /// The three predicates partition nothing between them, and a state answering two of
+    /// them would let one caller count a subject twice and another count it never.
+    #[test]
+    fn Test_No_State_Should_Answer_Two_Predicates()
+    {
+        for state in ALL
+        {
+            let answers = usize::from(state.Was_Evaluated())
+                + usize::from(state.Is_Coverage_Debt())
+                + usize::from(state.Requires_Agent());
+
+            assert!(answers <= 1, "{state} answers {answers} predicates");
+        }
+    }
+
+    /// Collapsing this into `Unavailable` is the mis-filing the variant exists to end,
+    /// and the display layer is where it would come back unnoticed.
+    #[test]
+    fn Test_Agent_Required_Should_Not_Display_As_Unavailable()
+    {
+        assert_eq!(
+            Applicability::AgentRequired.Display_Label(),
+            DisplayLabel::AgentRequired
+        );
+
+        for state in ALL
+        {
+            assert_eq!(
+                state.Display_Label() == DisplayLabel::AgentRequired,
+                state.Requires_Agent(),
+                "{state} disagrees with its display label about needing a model"
+            );
+        }
+    }
+
     #[test]
     fn Test_Evaluated_States_Should_Be_Exactly_The_Three_Judged_Ones()
     {
@@ -253,23 +355,42 @@ mod tests
     #[test]
     fn Test_Labels_Should_Be_Stable_And_Distinct()
     {
-        let all = [
-            Applicability::Supported,
-            Applicability::SupportedWithFallback,
-            Applicability::PartiallySupported,
-            Applicability::NotApplicable,
-            Applicability::MissingCapability,
-            Applicability::ProviderUnavailable,
-            Applicability::DependencyUnavailable,
-            Applicability::ConfigurationDisabled,
-            Applicability::Unparseable,
-            Applicability::AnalysisFailed,
-        ];
-
-        let mut seen: Vec<&str> = all.iter().map(|state| state.Label()).collect();
+        let mut seen: Vec<&str> = ALL.iter().map(|state| state.Label()).collect();
         let count = seen.len();
         seen.sort_unstable();
         seen.dedup();
         assert_eq!(seen.len(), count, "two applicability states share a label");
+    }
+
+    /// `ALL` is a hand-written universe, and `OD-COMPLETENESS-001` records what one of
+    /// those is worth on its own. The match below has no wildcard, so an eleventh state
+    /// arriving stops the build here — beside the list it has to be added to. That is the
+    /// guard; the assertion only catches a name written into the list twice.
+    #[test]
+    fn Test_Every_State_Should_Be_In_The_Tested_Universe()
+    {
+        for state in ALL
+        {
+            match state
+            {
+                Applicability::Supported
+                | Applicability::SupportedWithFallback
+                | Applicability::PartiallySupported
+                | Applicability::NotApplicable
+                | Applicability::MissingCapability
+                | Applicability::ProviderUnavailable
+                | Applicability::DependencyUnavailable
+                | Applicability::ConfigurationDisabled
+                | Applicability::Unparseable
+                | Applicability::AnalysisFailed
+                | Applicability::AgentRequired =>
+                {}
+            }
+        }
+
+        let mut distinct = ALL.to_vec();
+        distinct.sort_unstable();
+        distinct.dedup();
+        assert_eq!(distinct.len(), ALL.len(), "a state is listed twice in ALL");
     }
 }
