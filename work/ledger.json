@@ -2345,6 +2345,7 @@
           "crates/spec/nomos-spec-validate",
           "crates/rules/nomos-rules",
           "tests/contract",
+          "crates/host/nomos-cli",
           "crates/spec/nomos-spec-store",
           "docs/records/OD-COMPLETENESS-002"
         ],
