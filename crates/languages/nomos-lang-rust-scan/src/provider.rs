@@ -36,7 +36,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 {
     let scanned = Scan(source);
     let guarantee = Declared_Guarantee();
-    let key = Keyed(subject, source, &guarantee, context);
+    let key = Keyed(subject, source, guarantee, context);
 
     return MaterializedFact {
         identity: key.At(context.generation),
@@ -59,7 +59,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 fn Keyed(
     subject: SubjectId,
     source: &str,
-    guarantee: &Guarantee,
+    guarantee: Guarantee,
     context: FactContext,
 ) -> nomos_analysis::FactKey
 {
@@ -70,7 +70,7 @@ fn Keyed(
         semantic_inputs: InputDigest::Of(&[source.as_bytes()]),
         provider: ProviderId::New(PROVIDER),
         provider_version: CONTRACT_VERSION,
-        guarantee: GuaranteeDigest::Of(guarantee),
+        guarantee: GuaranteeDigest::Of(&guarantee),
         variant: context.variant,
         configuration: context.configuration,
     };

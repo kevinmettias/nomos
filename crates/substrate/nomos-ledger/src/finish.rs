@@ -8,10 +8,20 @@
 //! writes the result into the item, so `Done` is a state the ledger arrives at by
 //! observation.
 
-use crate::exclusion::{ClaimRefusal, ExclusionLedger, ReleaseOutcome};
-use crate::gate::{Derive_Step, GateUnknown, LINT_STEP, Workflow_Path};
-use crate::item::{GateOutcome, ItemId, VerificationPredicate, VerificationRecord};
-use crate::store::{FileLedger, LedgerDocument};
+use crate::finishing::Finishing;
+use crate::claim_refusal::ClaimRefusal;
+use crate::exclusion::ExclusionLedger;
+use crate::release_outcome::ReleaseOutcome;
+use crate::gate::Derive_Step;
+use crate::gate::GateUnknown;
+use crate::gate::LINT_STEP;
+use crate::gate::Workflow_Path;
+use crate::gate_outcome::GateOutcome;
+use crate::item_id::ItemId;
+use crate::verification_predicate::VerificationPredicate;
+use crate::verification_record::VerificationRecord;
+use crate::store::FileLedger;
+use crate::ledger_document::LedgerDocument;
 use nomos_platform::{
     Clock, Command, CrossProcessLock, ExitOutcome, FileSystem, ProcessLauncher, Timestamp,
 };
@@ -127,7 +137,7 @@ impl FinishRefusal
             Self::NotHeld { refusal } => refusal.Describe(),
             Self::NoPredicate { item, done_when } => No_Predicate(item, done_when),
             Self::CouldNotRun { item, cause } => Could_Not_Run(item, cause),
-            Self::NoVerdict { item, outcome } => No_Verdict(item, outcome),
+            Self::NoVerdict { item, outcome } => No_Verdict(item, *outcome),
             Self::PredicateFailed {
                 item,
                 exit_code,
@@ -213,7 +223,7 @@ fn Could_Not_Run(item: &ItemId, cause: &str) -> String
 }
 
 /// A predicate that ended without an exit code — killed, timed out, or lost.
-fn No_Verdict(item: &ItemId, outcome: &ExitOutcome) -> String
+fn No_Verdict(item: &ItemId, outcome: ExitOutcome) -> String
 {
     return format!(
         "{item}'s predicate produced no verdict ({outcome:?}), so whether the work is \
@@ -320,20 +330,6 @@ fn Refuse_Nonzero(item: &ItemId, code: i32, tail: &str) -> Result<(), FinishRefu
         exit_code: code,
         output_tail: tail.to_owned(),
     });
-}
-
-/// Who is finishing what.
-///
-/// The two are consulted together at every step — the item to find the predicate, the holder
-/// to prove entitlement to record the result — and a call that named one without the other
-/// could not do either.
-#[derive(Clone, Copy)]
-pub struct Finishing<'a>
-{
-    /// The item whose predicate is being run.
-    pub item: &'a ItemId,
-    /// Who claims to hold it.
-    pub holder: &'a str,
 }
 
 /// How a command is to be run: from where, and for how long at most.

@@ -1,0 +1,141 @@
+//! Every way adding an item is refused before it reaches the board.
+
+use crate::ledger_error::LedgerError;
+use crate::item_id::ItemId;
+/// Why an item could not be put on the board.
+///
+/// Its own vocabulary and not a borrowed [`ClaimRefusal`] arm. Adding an item is not
+/// claiming one — it takes no territory, judges no lease and consults no other holder — so
+/// every arm of a claim's refusal would be a sentence about the wrong question. That is the
+/// mis-subject `OD-LEDGER-014` measured, and the cost of a second small enum is smaller than
+/// the cost of one arm meaning two things.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum AddRefusal
+{
+    /// The identifier is already on the board.
+    ///
+    /// An answer and not a store failure: the caller chose an identifier somebody else has
+    /// already used, and the remedy is to choose another. Decided **inside** the lock, so two
+    /// sessions adding one identifier at once cannot both be told it was free.
+    AlreadyPresent
+    {
+        /// The identifier that is taken.
+        item: ItemId,
+    },
+    /// The territory reserves a record identifier this repository has already published.
+    ///
+    /// Distinct from [`AddRefusal::RecordReserved`] because the remedies are different and an
+    /// author told the wrong one does the wrong thing. A published record is spent forever —
+    /// the identifier is allocated and the file exists — so the only fix is choosing another
+    /// number. A reserved one belongs to an item that may yet be retired.
+    ///
+    /// Names the file rather than only the identifier, because an author who reads
+    /// "`OD-LEDGER-025` is taken" has to go and find out by what, and the thing that answers
+    /// that is a filename.
+    ///
+    /// A published identifier excludes nobody, which is why nothing caught this before:
+    /// `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` reddens on two *open* items
+    /// sharing an identifier, and one open item on a spent one is invisible to it.
+    RecordPublished
+    {
+        /// The identifier, in the folded form both spellings reach.
+        identifier: String,
+        /// The record file that already carries it, as the caller found it.
+        file: String,
+    },
+    /// The territory reserves a record identifier another open item already reserves.
+    ///
+    /// Decided inside the lock, and that is the whole of why it is here rather than in the
+    /// command layer. Two sessions each taking the next free number read a board without the
+    /// other's item and are both told it is free — which is exactly how `P11-DISPATCH-SPLIT`
+    /// and this item's own first reissue both took `OD-LEDGER-022`, one add landing between
+    /// the other's board read and its own.
+    ///
+    /// Only open items reserve. A `Done` or `Declined` item's territory is history, and
+    /// refusing against it would make every closed item a permanent claim on its number.
+    RecordReserved
+    {
+        /// The identifier, in the folded form both spellings reach.
+        identifier: String,
+        /// The open item that already reserves it.
+        item: ItemId,
+    },
+    /// The item would leave the board violating its own invariants.
+    ///
+    /// The commonest of these is an item that reserves nothing, which `AGENTS.md` states as a
+    /// rule of the board: it would exclude nobody while looking like work.
+    ///
+    /// Distinct from [`AddRefusal::LedgerUnusable`] because the remedies are opposite and the
+    /// exit codes differ. This one is the caller's own item to correct and the board is fine;
+    /// that one means nobody can use the board until somebody looks at it. Collapsing them is
+    /// how "your territory is empty" comes to read as "stop and fetch a person".
+    WouldBeInvalid
+    {
+        /// Every violation the document would carry, not just the first.
+        violations: Vec<String>,
+    },
+    /// The ledger itself could not be read or written.
+    ///
+    /// Its own arm for the reason [`ClaimRefusal::LedgerUnusable`] is: a caller told only
+    /// "that identifier is taken" while the file is in fact unparseable goes and renames its
+    /// item, and the rename does not help. `OD-LEDGER-009`.
+    LedgerUnusable
+    {
+        /// What the store said, verbatim.
+        cause: String,
+    },
+}
+
+impl AddRefusal
+{
+    /// A one-line explanation a person or an agent can act on.
+    #[must_use]
+    pub fn Describe(&self) -> String
+    {
+        return match self
+        {
+            Self::AlreadyPresent { item } => format!("{item} is already on the ledger"),
+            // Each names what to do next, because the two are told apart by the remedy and
+            // an author who read only "taken" would pick the wrong one half the time.
+            Self::RecordPublished { identifier, file } => format!(
+                "{identifier} is already published as {file}. A record identifier is \
+                 allocated once; choose the next free one"
+            ),
+            Self::RecordReserved { identifier, item } => format!(
+                "{identifier} is already reserved by {item}, which is open. Choose another \
+                 identifier, or retire that item if it is not work"
+            ),
+            // The wording [`LedgerError::Invalid`] would have produced, because this arm
+            // exists to carry that refusal out through a different channel and not to
+            // rephrase it. An operator who has seen one of these should recognise the other.
+            Self::WouldBeInvalid { violations } =>
+            {
+                format!("ledger is invalid:\n  {}", violations.join("\n  "))
+            }
+            Self::LedgerUnusable { cause } => cause.clone(),
+        };
+    }
+}
+
+/// Which of a store failure's two meanings this is, for a caller adding an item.
+///
+/// [`LedgerError::Invalid`] arrives here by a different route from the rest. The others are
+/// the store failing at its job; that one is [`FileLedger::Save`] doing its job, refusing a
+/// document before it reaches the disk because the item just handed to it is not one the
+/// board can hold. Reporting the second as the first is the conflation `OD-LEDGER-009`
+/// records, and here it would cost the exit code an agent branches on.
+impl From<&LedgerError> for AddRefusal
+{
+    fn from(error: &LedgerError) -> Self
+    {
+        return match error
+        {
+            LedgerError::Invalid { violations } => Self::WouldBeInvalid {
+                violations: violations.clone(),
+            },
+            other => Self::LedgerUnusable {
+                cause: other.to_string(),
+            },
+        };
+    }
+}

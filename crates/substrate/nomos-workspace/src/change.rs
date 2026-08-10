@@ -8,68 +8,6 @@
 use nomos_contracts::Digest128;
 use nomos_model::Content_Digest;
 
-/// Who submitted a change.
-///
-/// Recorded because provenance is a fact about the change, and because the sources behave
-/// differently in ways somebody will eventually need to see: a git checkout arrives as
-/// hundreds of changes at once, an IDE save as one, and an agent's edit is the one a
-/// person will want to find again.
-///
-/// It is deliberately **not** part of the workspace's identity. Two workspaces holding the
-/// same files are the same workspace however the files got there, and keying the snapshot
-/// on the source would make an agent's edit and a human's edit of identical content two
-/// different states to analyze.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum ChangeSource
-{
-    /// A correction applied by the system to its own recorded state.
-    Correction,
-    /// An editor wrote a file.
-    IdeEdit,
-    /// The working tree moved to another revision.
-    GitCheckout,
-    /// An agent edited a file.
-    AgentEdit,
-    /// A generator produced a file.
-    CodeGenerator,
-}
-
-impl ChangeSource
-{
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Correction => "Correction",
-            Self::IdeEdit => "IdeEdit",
-            Self::GitCheckout => "GitCheckout",
-            Self::AgentEdit => "AgentEdit",
-            Self::CodeGenerator => "CodeGenerator",
-        };
-    }
-
-    #[must_use]
-    pub const fn All() -> &'static [Self]
-    {
-        return &[
-            Self::Correction,
-            Self::IdeEdit,
-            Self::GitCheckout,
-            Self::AgentEdit,
-            Self::CodeGenerator,
-        ];
-    }
-}
-
-impl core::fmt::Display for ChangeSource
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return formatter.write_str(self.Label());
-    }
-}
-
 /// One change to one path.
 ///
 /// There is no `Moved`. A move is a removal and an addition, and modelling it as its own
@@ -121,75 +59,12 @@ impl Change
     }
 }
 
-/// A batch of changes from one source, applied as one step.
-///
-/// A batch rather than a change, because a checkout that moved four hundred files is one
-/// event. Applying them one at a time would produce four hundred generations, and every
-/// intermediate one would describe a tree that never existed — a half-applied checkout is
-/// not a state anybody should be able to ask questions about.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct WorkspaceChangeSet
-{
-    source: ChangeSource,
-    changes: Vec<Change>,
-}
-
-/// The name this type is known by where the distinction from [`Change`] is already clear.
-pub type ChangeSet = WorkspaceChangeSet;
-
-impl WorkspaceChangeSet
-{
-    #[must_use]
-    pub const fn From(source: ChangeSource) -> Self
-    {
-        return Self {
-            source,
-            changes: Vec::new(),
-        };
-    }
-
-    #[must_use]
-    pub fn Present(mut self, path: impl Into<String>, content: impl Into<String>) -> Self
-    {
-        self.changes.push(Change::Present {
-            path: path.into(),
-            content: content.into(),
-        });
-
-        return self;
-    }
-
-    #[must_use]
-    pub fn Absent(mut self, path: impl Into<String>) -> Self
-    {
-        self.changes.push(Change::Absent { path: path.into() });
-
-        return self;
-    }
-
-    #[must_use]
-    pub const fn Source(&self) -> ChangeSource
-    {
-        return self.source;
-    }
-
-    #[must_use]
-    pub fn Changes(&self) -> &[Change]
-    {
-        return &self.changes;
-    }
-
-    #[must_use]
-    pub fn Is_Empty(&self) -> bool
-    {
-        return self.changes.is_empty();
-    }
-}
-
 #[cfg(test)]
 mod tests
 {
     use super::*;
+    use crate::change_source::ChangeSource;
+    use crate::workspace_change_set::WorkspaceChangeSet;
 
     #[test]
     fn Test_A_Change_Set_Should_Carry_Its_Source_And_Its_Changes()

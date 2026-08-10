@@ -40,14 +40,28 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::missing_errors_doc)]
 
+mod applied;
 mod change;
+mod change_set;
+mod change_source;
 mod determinism;
+mod effect;
+mod member;
 mod snapshot;
 mod variant;
 mod workspace;
+mod workspace_change_set;
+mod workspace_error;
 
-pub use change::{Change, ChangeSet, ChangeSource, WorkspaceChangeSet};
+pub use applied::Applied;
+pub use change::Change;
+pub use change_set::ChangeSet;
+pub use change_source::ChangeSource;
 pub use determinism::SnapshotSerialization;
-pub use snapshot::{Member, WorkspaceSnapshot, SNAPSHOT_SCHEMA};
+pub use effect::Effect;
+pub use member::Member;
+pub use snapshot::{WorkspaceSnapshot, SNAPSHOT_SCHEMA};
 pub use variant::BuildVariant;
-pub use workspace::{Applied, Effect, Workspace, WorkspaceError};
+pub use workspace::Workspace;
+pub use workspace_change_set::WorkspaceChangeSet;
+pub use workspace_error::WorkspaceError;

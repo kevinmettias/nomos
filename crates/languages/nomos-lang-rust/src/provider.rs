@@ -74,7 +74,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 
     let payload = Encode_Payload(&facts);
     let guarantee = Declared_Guarantee();
-    let key = Keyed(subject, source, &guarantee, context);
+    let key = Keyed(subject, source, guarantee, context);
 
     let fact = Fact(key, guarantee, payload, context);
 
@@ -114,7 +114,7 @@ fn Fact(
 fn Keyed(
     subject: SubjectId,
     source: &str,
-    guarantee: &Guarantee,
+    guarantee: Guarantee,
     context: FactContext,
 ) -> nomos_analysis::FactKey
 {
@@ -125,7 +125,7 @@ fn Keyed(
         semantic_inputs: Syntax_Inputs(source),
         provider: ProviderId::New(PROVIDER),
         provider_version: CONTRACT_VERSION,
-        guarantee: GuaranteeDigest::Of(guarantee),
+        guarantee: GuaranteeDigest::Of(&guarantee),
         variant: context.variant,
         configuration: context.configuration,
     };

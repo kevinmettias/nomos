@@ -605,7 +605,7 @@ impl<'ast> Visit<'ast> for Walk
         self.Record(
             Declared {
                 kind: ItemKind::MacroDefinition,
-                name: name,
+                name,
                 visibility: Visibility::NotApplicable,
                 shape: None,
             },

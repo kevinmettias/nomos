@@ -1,5 +1,6 @@
 //! What the workspace is, in bytes somebody else can read.
 
+use crate::member::Member;
 use crate::variant::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, SnapshotId};
 use nomos_model::Content_Digest;
@@ -7,20 +8,6 @@ use nomos_store::StoreError;
 use std::collections::BTreeMap;
 
 pub const SNAPSHOT_SCHEMA: &str = "nomos.workspace.snapshot.v1";
-
-/// One file in the workspace.
-///
-/// A path and a content address. Not the content: a snapshot of a large tree that carried
-/// every byte would be a copy of the tree, and the store already holds content by address.
-/// What the snapshot has to be able to say without the tree is *which* content, and a
-/// digest says that.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Member
-{
-    /// Workspace-relative, normalized. Never absolute, which is the whole of portability.
-    pub path: String,
-    pub content: Digest128,
-}
 
 /// A workspace state, addressable by what it contains.
 #[derive(Clone, Debug, PartialEq, Eq)]

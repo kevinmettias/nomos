@@ -1,193 +1,14 @@
 //! The workspace, and the only thing that changes it.
 
-use crate::change::{Change, WorkspaceChangeSet};
+use crate::effect::Effect;
+use crate::workspace_error::WorkspaceError;
+use crate::applied::Applied;
+use crate::change::Change;
+use crate::workspace_change_set::WorkspaceChangeSet;
 use crate::snapshot::WorkspaceSnapshot;
 use crate::variant::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
-use nomos_store::{Authority, Commit, DocumentKind, DocumentStore, Recorded, StoreError};
-
-/// What one change actually did.
-///
-/// Reported rather than assumed, because the submitter did not know. A checkout does not
-/// diff before it lands and an editor's save hook does not consult the previous
-/// generation, so [`Change::Present`] is a statement about the desired end state. This is
-/// the answer to what it turned out to be.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Effect
-{
-    Added
-    {
-        path: String,
-    },
-    Modified
-    {
-        path: String,
-    },
-    Removed
-    {
-        path: String,
-    },
-    /// The change said what the workspace already said.
-    ///
-    /// Not an error and not silence. An editor saving an unmodified file and a checkout
-    /// landing where you already were both arrive here, and a workspace that treated them
-    /// as changes would advance a generation and invalidate every fact in the store to
-    /// reach the answer it already had.
-    Redundant
-    {
-        path: String,
-    },
-    /// A removal of something that was not there.
-    ///
-    /// Distinct from `Redundant` because it is worth seeing: a submitter deleting files
-    /// the workspace never had is usually a submitter working from a different idea of
-    /// what the workspace contains.
-    AlreadyAbsent
-    {
-        path: String,
-    },
-}
-
-impl Effect
-{
-    #[must_use]
-    pub fn Path(&self) -> &str
-    {
-        return match self
-        {
-            Self::Added { path }
-            | Self::Modified { path }
-            | Self::Removed { path }
-            | Self::Redundant { path }
-            | Self::AlreadyAbsent { path } => path,
-        };
-    }
-
-    /// Whether this effect changed what the workspace is.
-    #[must_use]
-    pub const fn Altered(&self) -> bool
-    {
-        return matches!(self, Self::Added { .. } | Self::Modified { .. } | Self::Removed { .. });
-    }
-}
-
-/// The outcome of submitting a change set.
-///
-/// Two arms rather than a generation and a `bool`, and no `Option`. A caller that has to
-/// decide whether to invalidate must be told which world it is in, and
-/// `unwrap_or(current_generation)` is how a workspace that did change gets treated as one
-/// that did not.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Applied
-{
-    /// The workspace is now something else.
-    Advanced
-    {
-        generation: GenerationId,
-        snapshot: SnapshotId,
-        effects: Vec<Effect>,
-    },
-    /// Every change said what the workspace already said.
-    Unchanged
-    {
-        generation: GenerationId,
-        snapshot: SnapshotId,
-        effects: Vec<Effect>,
-    },
-}
-
-impl Applied
-{
-    #[must_use]
-    pub const fn Generation(&self) -> GenerationId
-    {
-        return match self
-        {
-            Self::Advanced { generation, .. } | Self::Unchanged { generation, .. } => *generation,
-        };
-    }
-
-    #[must_use]
-    pub const fn Snapshot(&self) -> SnapshotId
-    {
-        return match self
-        {
-            Self::Advanced { snapshot, .. } | Self::Unchanged { snapshot, .. } => *snapshot,
-        };
-    }
-
-    #[must_use]
-    pub fn Effects(&self) -> &[Effect]
-    {
-        return match self
-        {
-            Self::Advanced { effects, .. } | Self::Unchanged { effects, .. } => effects,
-        };
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum WorkspaceError
-{
-    /// A change set with nothing in it.
-    ///
-    /// Refused rather than accepted as `Unchanged`, because they are different mistakes. A
-    /// set whose changes all turned out to be redundant is a submitter who did not know;
-    /// an empty set is a submitter who built one and never put anything in it, and that is
-    /// almost always a loop that iterated zero times.
-    Vacuous,
-    /// A path that does not name a workspace-relative file.
-    Unnamed
-    {
-        path: String,
-        reason: String,
-    },
-    /// The same path changed twice in one set.
-    ///
-    /// Refused rather than last-wins, because a set that says a path is both present and
-    /// absent has no correct interpretation and picking one silently would make the
-    /// workspace's state depend on the order a caller happened to push changes.
-    Conflicting
-    {
-        path: String,
-    },
-    Store(StoreError),
-}
-
-impl core::fmt::Display for WorkspaceError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::Vacuous => write!(
-                formatter,
-                "a change set with no changes in it. This is refused rather than ignored \
-                 because it is almost always a loop that iterated zero times"
-            ),
-            Self::Unnamed { path, reason } => {
-                write!(formatter, "`{path}` cannot name a workspace member: {reason}")
-            }
-            Self::Conflicting { path } => write!(
-                formatter,
-                "`{path}` is changed twice in one set. There is no correct reading of a \
-                 path that is both present and absent, and choosing one would make the \
-                 workspace depend on the order a caller pushed changes"
-            ),
-            Self::Store(error) => error.fmt(formatter),
-        };
-    }
-}
-
-impl std::error::Error for WorkspaceError {}
-
-impl From<StoreError> for WorkspaceError
-{
-    fn from(error: StoreError) -> Self
-    {
-        return Self::Store(error);
-    }
-}
+use nomos_store::{Authority, Commit, DocumentKind, DocumentStore, Recorded};
 
 /// What the workspace currently is.
 ///
@@ -486,7 +307,7 @@ fn Normalize(path: &str) -> String
 mod tests
 {
     use super::*;
-    use crate::change::ChangeSource;
+    use crate::change_source::ChangeSource;
 
     fn Variant() -> BuildVariant
     {

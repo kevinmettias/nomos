@@ -1,13 +1,23 @@
 //! The durable ledger: a JSON file, a lock beside it, and the rules it must satisfy.
 
-use crate::exclusion::{
-    Check_Lease, ClaimRefusal, ExclusionLedger, Refusal_From, ReleaseOutcome, Reservation,
-};
-use crate::item::{Claim, ItemId, ItemState, LedgerItem};
-use crate::territory::{Normalize_Path, Territory};
+use crate::ledger_document::VersionProbe;
+use crate::add_refusal::AddRefusal;
+use crate::ledger_document::LedgerDocument;
+use crate::ledger_error::LedgerError;
+use crate::exclusion::Check_Lease;
+use crate::claim_refusal::ClaimRefusal;
+use crate::exclusion::ExclusionLedger;
+use crate::exclusion::Refusal_From;
+use crate::release_outcome::ReleaseOutcome;
+use crate::reservation::Reservation;
+use crate::claim::Claim;
+use crate::item_id::ItemId;
+use crate::item_state::ItemState;
+use crate::item::LedgerItem;
+use crate::territory::Normalize_Path;
+use crate::territory::Territory;
 use nomos_model::Intersection;
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timestamp};
-use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
@@ -40,245 +50,6 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// serialized item, so a field arriving without this number moving is a refusal that
 /// misstates why.
 pub const SCHEMA_VERSION: u32 = 3;
-
-/// Why a ledger operation could not be carried out.
-#[derive(Debug)]
-pub enum LedgerError
-{
-    /// The ledger file could not be read or written.
-    Unreadable
-    {
-        /// What went wrong.
-        cause: String,
-    },
-    /// The ledger file exists and is not valid.
-    Malformed
-    {
-        /// What is wrong with it.
-        cause: String,
-    },
-    /// The lock could not be taken.
-    Locked
-    {
-        /// What went wrong.
-        cause: String,
-    },
-    /// The ledger's own invariants are violated.
-    Invalid
-    {
-        /// Every violation found, not just the first.
-        violations: Vec<String>,
-    },
-    /// The ledger holds something this build cannot account for.
-    ///
-    /// Distinct from [`LedgerError::Malformed`] because the two remedies are opposites: a
-    /// malformed ledger is repaired, and this one is left alone while the *reader* is
-    /// rebuilt. Reporting the second as the first sends an operator to edit a file that is
-    /// correct, which is the "two causes wearing one name" shape `OD-LEDGER-009` names,
-    /// with the causes swapped.
-    Unrecognized
-    {
-        /// What this build understands.
-        understood: u32,
-        /// What the file says it is.
-        found: u32,
-        /// What could not be accounted for, verbatim from the parser.
-        cause: String,
-    },
-}
-
-impl core::fmt::Display for LedgerError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::Unreadable { cause } => write!(formatter, "ledger could not be read: {cause}"),
-            Self::Malformed { cause } => write!(formatter, "ledger is malformed: {cause}"),
-            Self::Locked { cause } => write!(formatter, "ledger is locked: {cause}"),
-            Self::Invalid { violations } => write!(
-                formatter,
-                "ledger is invalid:\n  {}",
-                violations.join("\n  ")
-            ),
-            Self::Unrecognized {
-                understood,
-                found,
-                cause,
-            } => write!(
-                formatter,
-                "this build understands ledger schema {understood} and the file is schema \
-                 {found}: {cause}. Writing it back would drop what could not be read, so \
-                 nothing was written. Rebuild (`cargo build -p nomos-cli`) and retry"
-            ),
-        };
-    }
-}
-
-impl std::error::Error for LedgerError {}
-
-/// Why an item could not be put on the board.
-///
-/// Its own vocabulary and not a borrowed [`ClaimRefusal`] arm. Adding an item is not
-/// claiming one — it takes no territory, judges no lease and consults no other holder — so
-/// every arm of a claim's refusal would be a sentence about the wrong question. That is the
-/// mis-subject `OD-LEDGER-014` measured, and the cost of a second small enum is smaller than
-/// the cost of one arm meaning two things.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum AddRefusal
-{
-    /// The identifier is already on the board.
-    ///
-    /// An answer and not a store failure: the caller chose an identifier somebody else has
-    /// already used, and the remedy is to choose another. Decided **inside** the lock, so two
-    /// sessions adding one identifier at once cannot both be told it was free.
-    AlreadyPresent
-    {
-        /// The identifier that is taken.
-        item: ItemId,
-    },
-    /// The territory reserves a record identifier this repository has already published.
-    ///
-    /// Distinct from [`AddRefusal::RecordReserved`] because the remedies are different and an
-    /// author told the wrong one does the wrong thing. A published record is spent forever —
-    /// the identifier is allocated and the file exists — so the only fix is choosing another
-    /// number. A reserved one belongs to an item that may yet be retired.
-    ///
-    /// Names the file rather than only the identifier, because an author who reads
-    /// "`OD-LEDGER-025` is taken" has to go and find out by what, and the thing that answers
-    /// that is a filename.
-    ///
-    /// A published identifier excludes nobody, which is why nothing caught this before:
-    /// `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` reddens on two *open* items
-    /// sharing an identifier, and one open item on a spent one is invisible to it.
-    RecordPublished
-    {
-        /// The identifier, in the folded form both spellings reach.
-        identifier: String,
-        /// The record file that already carries it, as the caller found it.
-        file: String,
-    },
-    /// The territory reserves a record identifier another open item already reserves.
-    ///
-    /// Decided inside the lock, and that is the whole of why it is here rather than in the
-    /// command layer. Two sessions each taking the next free number read a board without the
-    /// other's item and are both told it is free — which is exactly how `P11-DISPATCH-SPLIT`
-    /// and this item's own first reissue both took `OD-LEDGER-022`, one add landing between
-    /// the other's board read and its own.
-    ///
-    /// Only open items reserve. A `Done` or `Declined` item's territory is history, and
-    /// refusing against it would make every closed item a permanent claim on its number.
-    RecordReserved
-    {
-        /// The identifier, in the folded form both spellings reach.
-        identifier: String,
-        /// The open item that already reserves it.
-        item: ItemId,
-    },
-    /// The item would leave the board violating its own invariants.
-    ///
-    /// The commonest of these is an item that reserves nothing, which `AGENTS.md` states as a
-    /// rule of the board: it would exclude nobody while looking like work.
-    ///
-    /// Distinct from [`AddRefusal::LedgerUnusable`] because the remedies are opposite and the
-    /// exit codes differ. This one is the caller's own item to correct and the board is fine;
-    /// that one means nobody can use the board until somebody looks at it. Collapsing them is
-    /// how "your territory is empty" comes to read as "stop and fetch a person".
-    WouldBeInvalid
-    {
-        /// Every violation the document would carry, not just the first.
-        violations: Vec<String>,
-    },
-    /// The ledger itself could not be read or written.
-    ///
-    /// Its own arm for the reason [`ClaimRefusal::LedgerUnusable`] is: a caller told only
-    /// "that identifier is taken" while the file is in fact unparseable goes and renames its
-    /// item, and the rename does not help. `OD-LEDGER-009`.
-    LedgerUnusable
-    {
-        /// What the store said, verbatim.
-        cause: String,
-    },
-}
-
-impl AddRefusal
-{
-    /// A one-line explanation a person or an agent can act on.
-    #[must_use]
-    pub fn Describe(&self) -> String
-    {
-        return match self
-        {
-            Self::AlreadyPresent { item } => format!("{item} is already on the ledger"),
-            // Each names what to do next, because the two are told apart by the remedy and
-            // an author who read only "taken" would pick the wrong one half the time.
-            Self::RecordPublished { identifier, file } => format!(
-                "{identifier} is already published as {file}. A record identifier is \
-                 allocated once; choose the next free one"
-            ),
-            Self::RecordReserved { identifier, item } => format!(
-                "{identifier} is already reserved by {item}, which is open. Choose another \
-                 identifier, or retire that item if it is not work"
-            ),
-            // The wording [`LedgerError::Invalid`] would have produced, because this arm
-            // exists to carry that refusal out through a different channel and not to
-            // rephrase it. An operator who has seen one of these should recognise the other.
-            Self::WouldBeInvalid { violations } =>
-            {
-                format!("ledger is invalid:\n  {}", violations.join("\n  "))
-            }
-            Self::LedgerUnusable { cause } => cause.clone(),
-        };
-    }
-}
-
-/// Which of a store failure's two meanings this is, for a caller adding an item.
-///
-/// [`LedgerError::Invalid`] arrives here by a different route from the rest. The others are
-/// the store failing at its job; that one is [`FileLedger::Save`] doing its job, refusing a
-/// document before it reaches the disk because the item just handed to it is not one the
-/// board can hold. Reporting the second as the first is the conflation `OD-LEDGER-009`
-/// records, and here it would cost the exit code an agent branches on.
-impl From<&LedgerError> for AddRefusal
-{
-    fn from(error: &LedgerError) -> Self
-    {
-        return match error
-        {
-            LedgerError::Invalid { violations } => Self::WouldBeInvalid {
-                violations: violations.clone(),
-            },
-            other => Self::LedgerUnusable {
-                cause: other.to_string(),
-            },
-        };
-    }
-}
-
-/// The on-disk form.
-#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
-// The outermost of the strict containers. Reasoned once in `item.rs`'s module documentation and
-// decided in `OD-LEDGER-008`: a build that cannot account for every key in the ledger does not
-// get to write the ledger back.
-#[serde(deny_unknown_fields)]
-pub struct LedgerDocument
-{
-    /// Schema version, so a future reader can tell what it is looking at.
-    pub schema_version: u32,
-    /// The items, in a stable order.
-    pub items: Vec<LedgerItem>,
-}
-
-/// The schema version alone, for explaining a strict parse that already failed.
-///
-/// A separate type, and deliberately *not* `deny_unknown_fields`: its whole job is to read one
-/// field out of a document [`LedgerDocument`] has refused, which every key it does not declare
-/// is the reason for.
-#[derive(Deserialize)]
-struct VersionProbe
-{
-    schema_version: u32,
-}
 
 /// Which of the two parse failures this is.
 ///
@@ -627,7 +398,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
                 acquired_at: now,
                 lease_expires_at: expires_at,
             };
-            Replace_Lapsed(document, item, replacement, now)?;
+            Replace_Lapsed(document, item, &replacement, now)?;
 
             return Ok(Reservation {
                 item: item.clone(),
@@ -989,7 +760,7 @@ fn Entitled(candidate: &LedgerItem, holder: &str) -> Result<(), ClaimRefusal>
 fn Replace_Lapsed(
     document: &mut LedgerDocument,
     item: &ItemId,
-    replacement: Claim,
+    replacement: &Claim,
     now: Timestamp,
 ) -> Result<(), ClaimRefusal>
 {

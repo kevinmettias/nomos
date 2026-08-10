@@ -202,7 +202,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/substrate/nomos-analysis/src/identity.rs",
+        path: "crates/substrate/nomos-analysis/src/component.rs",
         name: "Component::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
@@ -211,7 +211,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/substrate/nomos-workspace/src/change.rs",
+        path: "crates/substrate/nomos-workspace/src/change_source.rs",
         name: "ChangeSource::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

@@ -11,9 +11,21 @@
 #![forbid(unsafe_code)]
 
 mod contract;
+mod provider_offer;
 mod registry;
+mod registry_error;
+mod requirement;
+mod resolution;
 mod selection;
+mod standing;
+mod unmet;
 
-pub use contract::{CapabilityContract, ProviderOffer, Requirement};
-pub use registry::{Registry, RegistryError, Resolution, Unmet};
-pub use selection::{Selection, Standing};
+pub use contract::CapabilityContract;
+pub use provider_offer::ProviderOffer;
+pub use registry::Registry;
+pub use registry_error::RegistryError;
+pub use requirement::Requirement;
+pub use resolution::Resolution;
+pub use selection::Selection;
+pub use standing::Standing;
+pub use unmet::Unmet;

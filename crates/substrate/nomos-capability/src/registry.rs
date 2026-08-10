@@ -1,195 +1,12 @@
-use crate::contract::{CapabilityContract, ProviderOffer, Requirement};
+use crate::resolution::Resolution;
+use crate::unmet::Unmet;
+use crate::registry_error::RegistryError;
+use crate::contract::CapabilityContract;
+use crate::provider_offer::ProviderOffer;
+use crate::requirement::Requirement;
 use crate::selection::Selection;
-use nomos_contracts::{Applicability, CapabilityId, ContractVersion, ProviderId};
+use nomos_contracts::{Applicability, CapabilityId};
 use std::collections::BTreeMap;
-
-/// Why a requirement could not be met.
-///
-/// Separate from [`Applicability`] on purpose. `Applicability` is the vocabulary a run
-/// reports in and is deliberately small; this is the actionable detail behind one of its
-/// values. One relation, two projections — the alternative is growing `Applicability` a
-/// variant per diagnosis until nothing can match on it exhaustively.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Unmet
-{
-    /// Nobody declared this capability. Distinct from having no provider, because the
-    /// remedy is authoring a contract rather than installing something.
-    Undeclared,
-    /// Declared, and nothing offers it.
-    NoProvider,
-    /// Offered at a contract version this caller cannot read.
-    VersionMismatch
-    {
-        offered: ContractVersion,
-    },
-    /// Offered, and no offer reaches the required guarantee.
-    BelowRequirement
-    {
-        closest: ProviderId,
-    },
-}
-
-impl Unmet
-{
-    /// How a run reports this.
-    ///
-    /// Every arm is [`Applicability::MissingCapability`] and none is
-    /// [`Applicability::NotApplicable`] — that distinction is the entire point. "No
-    /// provider offers what this rule needs" is coverage debt; "this rule does not bind
-    /// this subject" is a judgement about the subject, and the registry is in no
-    /// position to make it. Collapsing the two is how a rule that could not run reads
-    /// like a rule that did not need to.
-    #[must_use]
-    pub const fn Applicability(&self) -> Applicability
-    {
-        return match *self
-        {
-            Self::Undeclared
-            | Self::NoProvider
-            | Self::VersionMismatch { .. }
-            | Self::BelowRequirement { .. } => Applicability::MissingCapability,
-        };
-    }
-
-    #[must_use]
-    pub fn Describe(&self) -> String
-    {
-        return match self
-        {
-            Self::Undeclared => "no capability contract declares this".to_owned(),
-            Self::NoProvider => "the contract is declared and no provider offers it".to_owned(),
-            Self::VersionMismatch { offered } => {
-                format!("offered at contract version {offered}, which this caller cannot read")
-            }
-            Self::BelowRequirement { closest } => {
-                format!("{closest} is the closest offer and does not reach the required guarantee")
-            }
-        };
-    }
-}
-
-/// The answer to a requirement.
-///
-/// Two results, never a `bool` and never an `Option`. An `Option::None` here would be a
-/// caller's invitation to write `unwrap_or_default`, and there is no defensible default
-/// for "can this analysis be performed".
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Resolution
-{
-    Satisfied
-    {
-        /// Which offer answers, and every usable offer it was chosen over.
-        ///
-        /// A [`Selection`] rather than a bare offer, because the answer to "who answers"
-        /// is not complete without "instead of whom". A caller that lowered its floor to
-        /// buy coverage bought the weaker offers too, and a resolution that named only the
-        /// winner would spend the floor on its behalf and hand back one provider.
-        selection: Selection,
-        applicability: Applicability,
-    },
-    Unsatisfied
-    {
-        capability: CapabilityId,
-        reason: Unmet,
-    },
-}
-
-impl Resolution
-{
-    /// How a run reports this. There is deliberately no `Is_Available`.
-    #[must_use]
-    pub fn Applicability(&self) -> Applicability
-    {
-        return match self
-        {
-            Self::Satisfied { applicability, .. } => *applicability,
-            Self::Unsatisfied { reason, .. } => reason.Applicability(),
-        };
-    }
-
-    /// The offer that answers.
-    #[must_use]
-    pub const fn Offer(&self) -> Option<&ProviderOffer>
-    {
-        return match self
-        {
-            Self::Satisfied { selection, .. } => Some(&selection.chosen),
-            Self::Unsatisfied { .. } => None,
-        };
-    }
-
-    /// The offer that answers together with the ones it was chosen over.
-    #[must_use]
-    pub const fn Selection(&self) -> Option<&Selection>
-    {
-        return match self
-        {
-            Self::Satisfied { selection, .. } => Some(selection),
-            Self::Unsatisfied { .. } => None,
-        };
-    }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum RegistryError
-{
-    AlreadyDeclared
-    {
-        capability: CapabilityId,
-    },
-    OfferForUndeclared
-    {
-        capability: CapabilityId,
-        provider: ProviderId,
-    },
-    /// A provider claimed more than its contract permits.
-    ExceedsCeiling
-    {
-        capability: CapabilityId,
-        provider: ProviderId,
-    },
-    DuplicateOffer
-    {
-        capability: CapabilityId,
-        provider: ProviderId,
-    },
-}
-
-impl core::fmt::Display for RegistryError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::AlreadyDeclared { capability } => {
-                write!(formatter, "{capability} is already declared")
-            }
-            Self::OfferForUndeclared {
-                capability,
-                provider,
-            } => write!(
-                formatter,
-                "{provider} offers {capability}, which no contract declares. An offer \
-                 against nothing is a capability with no agreed meaning"
-            ),
-            Self::ExceedsCeiling {
-                capability,
-                provider,
-            } => write!(
-                formatter,
-                "{provider} claims more for {capability} than its contract permits. A \
-                 provider grading its own work is how a syntactic answer comes to satisfy \
-                 a rule that needs resolution"
-            ),
-            Self::DuplicateOffer {
-                capability,
-                provider,
-            } => write!(formatter, "{provider} already offers {capability}"),
-        };
-    }
-}
-
-impl std::error::Error for RegistryError {}
 
 /// Capability contracts and the offers against them.
 ///
@@ -451,7 +268,9 @@ fn Honoured(requirement: &Requirement, selection: &Selection) -> Applicability
 mod tests
 {
     use super::*;
-    use crate::contract::Requirement;
+    use nomos_contracts::ProviderId;
+    use nomos_contracts::ContractVersion;
+    use crate::requirement::Requirement;
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 
     const CAPABILITY: &str = "nomos.cap.test.knowledge";

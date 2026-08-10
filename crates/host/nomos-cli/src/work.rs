@@ -149,7 +149,7 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
 
     return match verb.as_str()
     {
-        "list" => Parse_List(named),
+        "list" => Ok(Parse_List(named)),
         "show" => Parse_Show(named),
         "add" => Parse_Add(named, predicate_argv),
         "finish" => Parse_Finish(named),
@@ -201,11 +201,15 @@ fn Reason_Of(named: &[String]) -> Result<String, String>
     return Required(Named_Value(named, "--reason").as_ref(), "--reason");
 }
 
-fn Parse_List(named: &[String]) -> Result<WorkCommand, String>
+/// Listing takes no argument that can be wrong, so it does not return a `Result`.
+///
+/// Every other verb here can refuse its arguments and this one cannot, and a `Result` that
+/// is never `Err` invites a caller to write a handler for a case that does not exist.
+fn Parse_List(named: &[String]) -> WorkCommand
 {
-    return Ok(WorkCommand::List {
+    return WorkCommand::List {
         state: Named_Value(named, "--state"),
-    });
+    };
 }
 
 fn Parse_Show(named: &[String]) -> Result<WorkCommand, String>
