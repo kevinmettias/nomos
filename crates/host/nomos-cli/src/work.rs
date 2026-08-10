@@ -77,67 +77,58 @@ pub enum WorkCommand
         holder: String,
     },
     /// Take an item.
-    Claim
-    {
-        /// Which item.
-        item: ItemId,
-        /// Who is taking it.
-        holder: String,
-        /// How long to hold it.
-        lease: Duration,
-    },
+    Claim(ClaimRequest),
     /// Extend a held claim.
-    Renew
-    {
-        /// Which item.
-        item: ItemId,
-        /// Who holds it.
-        holder: String,
-        /// How much longer.
-        lease: Duration,
-    },
+    Renew(ClaimRequest),
     /// Take over an item whose holder's lease ran out, keeping the claim it displaces.
     ///
     /// Separate from [`WorkCommand::Claim`] because taking another agent's abandoned work is
     /// a decision, and a decision belongs in a verb somebody typed — `OD-LEDGER-012`.
-    TakeOver
-    {
-        /// Which item.
-        item: ItemId,
-        /// Who is taking it over.
-        holder: String,
-        /// How long to hold it.
-        lease: Duration,
-    },
+    TakeOver(ClaimRequest),
     /// Give up a claim without finishing.
-    Abandon
-    {
-        /// Which item.
-        item: ItemId,
-        /// Who holds it.
-        holder: String,
-        /// Why.
-        reason: String,
-    },
+    Abandon(EndingRequest),
     /// End an item that turned out not to be work.
     ///
     /// Separate from [`WorkCommand::Abandon`] because they are about different subjects —
     /// abandoning ends a claim and puts the item back on the board, declining ends the item —
     /// and because the items this exists for are unclaimed, which `abandon` cannot reach.
     /// `OD-LEDGER-019`.
-    Decline
-    {
-        /// Which item.
-        item: ItemId,
-        /// Who is ending it.
-        holder: String,
-        /// Why it is not work.
-        reason: String,
-    },
+    Decline(EndingRequest),
     /// Check the ledger's invariants.
     Validate,
     /// Show what would block a claim.
     Audit,
+}
+
+/// Who is holding what, and for how long.
+///
+/// One type for `claim`, `renew` and `takeover` because they take exactly the same three
+/// arguments and default the lease the same way. Three identical types would be three
+/// chances for them to drift apart in what they accept while being documented as identical.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ClaimRequest
+{
+    /// Which item.
+    pub item: ItemId,
+    /// Who is taking or holding it.
+    pub holder: String,
+    /// How long to hold it.
+    pub lease: Duration,
+}
+
+/// Who is ending what, and why.
+///
+/// Shared by `abandon` and `decline` for the shape of the argument list only. What they end
+/// is different, which is why they stay two verbs and two ledger calls — `OD-LEDGER-019`.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct EndingRequest
+{
+    /// Which item.
+    pub item: ItemId,
+    /// Who is ending it.
+    pub holder: String,
+    /// Why.
+    pub reason: String,
 }
 
 /// Parses `nomos work` arguments.
@@ -153,92 +144,139 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
         return Err(Usage_Text());
     };
 
-    // Everything after a bare `--` is the verification argv, so a predicate carrying its
-    // own flags needs no quoting and no escaping. The named arguments are parsed from
-    // the part before it, which is why the split happens here rather than per-command.
-    let separator = arguments.iter().position(|argument| argument == "--");
-    let (named, predicate_argv) = match separator
-    {
-        Some(index) => (
-            arguments.get(..index).unwrap_or_default(),
-            arguments.get(index.saturating_add(1)..).unwrap_or_default(),
-        ),
-        None => (arguments, &[] as &[String]),
-    };
-
-    let value_of = |name: &str| Named_Value(named, name);
-    let item_of = || -> Result<ItemId, String> {
-        let text = Required(value_of("--item").as_ref(), "--item")?;
-
-        return Ok(ItemId::New(text));
-    };
+    let (named, predicate_argv) = Split_At_Separator(arguments);
 
     return match verb.as_str()
     {
-        "list" => Ok(WorkCommand::List {
-            state: value_of("--state"),
-        }),
-        "show" => Ok(WorkCommand::Show { item: item_of()? }),
+        "list" => Parse_List(named),
+        "show" => Parse_Show(named),
         "add" => Parse_Add(named, predicate_argv),
-        "finish" => Ok(WorkCommand::Finish {
-            item: item_of()?,
-            holder: Required(value_of("--holder").as_ref(), "--holder")?,
-        }),
-        // One parse for three verbs. `claim`, `renew` and `takeover` take exactly the same
-        // three arguments and default the lease the same way, so sharing this is what stops
-        // them drifting apart in what they accept — which they would be free to do while
-        // being documented as identical.
-        "claim" | "renew" | "takeover" =>
-        {
-            let item = item_of()?;
-            let holder = Required(value_of("--holder").as_ref(), "--holder")?;
-            let lease = value_of("--lease")
-                .map_or(Ok(DEFAULT_LEASE), |text| Parse_Duration(&text))?;
-
-            // The two verbs that do something unusual are named and `claim` is the
-            // fallthrough, deliberately. A fourth verb added to the pattern above and
-            // forgotten here becomes a plain claim, which refuses anything that is not
-            // `Ready`; had `takeover` been the fallthrough it would displace a holder
-            // instead.
-            Ok(match verb.as_str()
-            {
-                "takeover" => WorkCommand::TakeOver {
-                    item,
-                    holder,
-                    lease,
-                },
-                "renew" => WorkCommand::Renew {
-                    item,
-                    holder,
-                    lease,
-                },
-                _ => WorkCommand::Claim {
-                    item,
-                    holder,
-                    lease,
-                },
-            })
-        }
-        // Two verbs, one shape of argument list, and *not* one shared arm. `claim`, `renew`
-        // and `takeover` share theirs above because they do the same thing to the same
-        // subject with a different policy; these two do different things to different
-        // subjects and merely take the same three words, so a shared arm would be a
-        // similarity of spelling standing in for a similarity of meaning — which is the
-        // conflation `OD-LEDGER-019` refuses at the verb level.
-        "abandon" => Ok(WorkCommand::Abandon {
-            item: item_of()?,
-            holder: Required(value_of("--holder").as_ref(), "--holder")?,
-            reason: Required(value_of("--reason").as_ref(), "--reason")?,
-        }),
-        "decline" => Ok(WorkCommand::Decline {
-            item: item_of()?,
-            holder: Required(value_of("--holder").as_ref(), "--holder")?,
-            reason: Required(value_of("--reason").as_ref(), "--reason")?,
-        }),
+        "finish" => Parse_Finish(named),
+        "claim" | "renew" | "takeover" => Parse_Reservation(verb, named),
+        "abandon" => Parse_Abandon(named),
+        "decline" => Parse_Decline(named),
         "validate" => Ok(WorkCommand::Validate),
         "audit" => Ok(WorkCommand::Audit),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
     };
+}
+
+/// The named arguments and the verification argv, split at a bare `--`.
+///
+/// Everything after the separator is the predicate's own argv, so a predicate carrying its
+/// own flags needs no quoting and no escaping. The split happens once here rather than
+/// per-command.
+fn Split_At_Separator(arguments: &[String]) -> (&[String], &[String])
+{
+    let Some(index) = arguments.iter().position(|argument| return argument == "--")
+    else
+    {
+        return (arguments, &[]);
+    };
+
+    return (
+        arguments.get(..index).unwrap_or_default(),
+        arguments.get(index.saturating_add(1)..).unwrap_or_default(),
+    );
+}
+
+/// The item an argument list names.
+fn Item_Of(named: &[String]) -> Result<ItemId, String>
+{
+    let text = Required(Named_Value(named, "--item").as_ref(), "--item")?;
+
+    return Ok(ItemId::New(text));
+}
+
+/// The holder an argument list names.
+fn Holder_Of(named: &[String]) -> Result<String, String>
+{
+    return Required(Named_Value(named, "--holder").as_ref(), "--holder");
+}
+
+/// The reason an argument list gives.
+fn Reason_Of(named: &[String]) -> Result<String, String>
+{
+    return Required(Named_Value(named, "--reason").as_ref(), "--reason");
+}
+
+fn Parse_List(named: &[String]) -> Result<WorkCommand, String>
+{
+    return Ok(WorkCommand::List {
+        state: Named_Value(named, "--state"),
+    });
+}
+
+fn Parse_Show(named: &[String]) -> Result<WorkCommand, String>
+{
+    return Ok(WorkCommand::Show {
+        item: Item_Of(named)?,
+    });
+}
+
+fn Parse_Finish(named: &[String]) -> Result<WorkCommand, String>
+{
+    return Ok(WorkCommand::Finish {
+        item: Item_Of(named)?,
+        holder: Holder_Of(named)?,
+    });
+}
+
+/// `abandon` and `decline` take one shape of argument list, and are deliberately not one
+/// parse.
+///
+/// `claim`, `renew` and `takeover` share theirs because they do the same thing to the same
+/// subject with a different policy; these two do different things to different subjects and
+/// merely take the same three words, so a shared parse would be a similarity of spelling
+/// standing in for a similarity of meaning — which is the conflation `OD-LEDGER-019`
+/// refuses at the verb level.
+fn Parse_Abandon(named: &[String]) -> Result<WorkCommand, String>
+{
+    return Ok(WorkCommand::Abandon(Ending_Request(named)?));
+}
+
+/// The other half of the pair [`Parse_Abandon`] documents.
+fn Parse_Decline(named: &[String]) -> Result<WorkCommand, String>
+{
+    return Ok(WorkCommand::Decline(Ending_Request(named)?));
+}
+
+/// The three words `abandon` and `decline` both take.
+fn Ending_Request(named: &[String]) -> Result<EndingRequest, String>
+{
+    return Ok(EndingRequest {
+        item: Item_Of(named)?,
+        holder: Holder_Of(named)?,
+        reason: Reason_Of(named)?,
+    });
+}
+
+/// One parse for three verbs.
+///
+/// `claim`, `renew` and `takeover` take exactly the same three arguments and default the
+/// lease the same way, so sharing this is what stops them drifting apart in what they
+/// accept — which they would be free to do while being documented as identical.
+///
+/// The two that do something unusual are named and `claim` is the fallthrough,
+/// deliberately. A fourth verb added to the caller's pattern and forgotten here becomes a
+/// plain claim, which refuses anything that is not `Ready`; had `takeover` been the
+/// fallthrough it would displace a holder instead.
+fn Parse_Reservation(verb: &str, named: &[String]) -> Result<WorkCommand, String>
+{
+    let lease = Named_Value(named, "--lease")
+        .map_or(Ok(DEFAULT_LEASE), |text| return Parse_Duration(&text))?;
+    let request = ClaimRequest {
+        item: Item_Of(named)?,
+        holder: Holder_Of(named)?,
+        lease,
+    };
+
+    return Ok(match verb
+    {
+        "takeover" => WorkCommand::TakeOver(request),
+        "renew" => WorkCommand::Renew(request),
+        _ => WorkCommand::Claim(request),
+    });
 }
 
 /// Builds an item from `add`'s arguments.
@@ -248,35 +286,52 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
 /// the one that silently opts out of the exclusion the ledger exists to provide.
 fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand, String>
 {
+    let territory = Parse_Territory(named)?;
+    let verification = Parse_Predicate(predicate_argv);
+    let item = New_Item(named, territory, verification)?;
+
+    return Ok(WorkCommand::Add {
+        item: Box::new(item),
+    });
+}
+
+/// The item itself, from the arguments describing it.
+fn New_Item(
+    named: &[String],
+    territory: Territory,
+    verification: Option<VerificationPredicate>,
+) -> Result<LedgerItem, String>
+{
     let value_of = |name: &str| Named_Value(named, name);
+    let depends_on = Named_Values(named, "--depends-on").into_iter().map(ItemId::New);
 
-    let paths = Named_Values(named, "--territory");
+    return Ok(LedgerItem {
+        id: Item_Of(named)?,
+        title: Required(value_of("--title").as_ref(), "--title")?,
+        why: Required(value_of("--why").as_ref(), "--why")?,
+        done_when: Required(value_of("--done-when").as_ref(), "--done-when")?,
+        territory,
+        state: ItemState::Ready,
+        depends_on: depends_on.collect(),
+        blocked: None,
+        claim: None,
+        verification,
+        verified: None,
+        abandoned: Vec::new(),
+        displaced: Vec::new(),
+        declined: None,
+    });
+}
 
-    // Refused before `--territory` is even checked, because it is the more specific answer:
-    // somebody who passed only a pattern needs to be told the pattern is the problem, not
-    // that they reserved nothing. See `OD-LEDGER-013`.
-    //
-    // A pattern is recorded unexpanded, and `Territory::Intersect` answers `Unknown` for
-    // every comparison involving one. That is the correct answer to a question the
-    // comparison cannot decide, and it is not correct as the *outcome of a flag*: the item
-    // becomes unclaimable by anyone including its own author, every other claim on the board
-    // is refused against it, and the refusal is non-retryable, which by the exit-code
-    // contract tells an agent to stop and fetch a person. So the flag is withdrawn rather
-    // than the refusal weakened.
+/// What the item reserves, or the message saying why what was given cannot reserve.
+fn Parse_Territory(named: &[String]) -> Result<Territory, String>
+{
     if let Some(pattern) = Named_Values(named, "--territory-pattern").first()
     {
-        return Err(format!(
-            "--territory-pattern is not supported: a pattern is never expanded, so every \
-             comparison against `{pattern}` answers that independence cannot be established \
-             — which makes the item unclaimable and refuses every other claim on the board.\n\
-             \n\
-             Reserve a directory instead. Territory is compared by containment, so \
-             `--territory crates/spec` already reserves everything beneath it, and it is \
-             decided from the text with no filesystem access.\n\n{}",
-            Usage_Text()
-        ));
+        return Err(Refuse_A_Pattern(pattern));
     }
 
+    let paths = Named_Values(named, "--territory");
     if paths.is_empty()
     {
         return Err(format!(
@@ -285,40 +340,44 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
         ));
     }
 
-    let territory = Territory::Of_Files(paths);
-    let identifier = Required(value_of("--item").as_ref(), "--item")?;
-    let item = ItemId::New(identifier);
+    return Ok(Territory::Of_Files(paths));
+}
 
-    let verification = if predicate_argv.is_empty()
+/// Why `--territory-pattern` is withdrawn rather than supported.
+///
+/// Refused before `--territory` is even checked, because it is the more specific answer:
+/// somebody who passed only a pattern needs to be told the pattern is the problem, not that
+/// they reserved nothing. See `OD-LEDGER-013`.
+///
+/// A pattern is recorded unexpanded, and `Territory::Intersect` answers `Unknown` for every
+/// comparison involving one. That is the correct answer to a question the comparison cannot
+/// decide, and it is not correct as the *outcome of a flag*: the item becomes unclaimable by
+/// anyone including its own author, every other claim on the board is refused against it,
+/// and the refusal is non-retryable, which by the exit-code contract tells an agent to stop
+/// and fetch a person. So the flag is withdrawn rather than the refusal weakened.
+fn Refuse_A_Pattern(pattern: &str) -> String
+{
+    return format!(
+        "--territory-pattern is not supported: a pattern is never expanded, so every \
+         comparison against `{pattern}` answers that independence cannot be established — \
+         which makes the item unclaimable and refuses every other claim on the board.\n\
+         \n\
+         Reserve a directory instead. Territory is compared by containment, so \
+         `--territory crates/spec` already reserves everything beneath it, and it is \
+         decided from the text with no filesystem access.\n\n{}",
+        Usage_Text()
+    );
+}
+
+/// The predicate an item is verified by, when one was given after `--`.
+fn Parse_Predicate(predicate_argv: &[String]) -> Option<VerificationPredicate>
+{
+    if predicate_argv.is_empty()
     {
-        None
+        return None;
     }
-    else
-    {
-        Some(VerificationPredicate::New(predicate_argv.to_vec()))
-    };
 
-    return Ok(WorkCommand::Add {
-        item: Box::new(LedgerItem {
-            id: item,
-            title: Required(value_of("--title").as_ref(), "--title")?,
-            why: Required(value_of("--why").as_ref(), "--why")?,
-            done_when: Required(value_of("--done-when").as_ref(), "--done-when")?,
-            territory,
-            state: ItemState::Ready,
-            depends_on: Named_Values(named, "--depends-on")
-                .into_iter()
-                .map(ItemId::New)
-                .collect(),
-            blocked: None,
-            claim: None,
-            verification,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            declined: None,
-        }),
-    });
+    return Some(VerificationPredicate::New(predicate_argv.to_vec()));
 }
 
 fn Required(value: Option<&String>, name: &str) -> Result<String, String>
@@ -349,49 +408,48 @@ fn Parse_Duration(text: &str) -> Result<Duration, String>
 
 fn Usage_Text() -> String
 {
-    return "usage: nomos work <command>\n\
-            \n\
-            \x20 list     [--state ready|waiting|held|snagged|claimed|blocked|done|declined]\n\
-            \x20          `ready` means claimable now. An item nothing can claim is \
-            reported as `waiting` (a dependency is unfinished), `held` (somebody holds \
-            overlapping territory) or `snagged` (independence cannot be established), \
-            from the same refusal `claim` would give.\n\
-            \x20 show     --item <id>\n\
-            \x20          one item in full: its claim, every claim given up on it with the \
-            reason given, and its verification. `list` is a column per item and cannot \
-            carry prose.\n\
-            \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
-            \x20          --territory <path> [--territory <path> …]\n\
-            \x20          [--depends-on <id> …]\n\
-            \x20          [-- <program> <args…>]\n\
-            \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
-            \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
-            \x20 takeover --item <id> --holder <name> [--lease 2h]\n\
-            \x20          takes over an item listed `lapsed` — one whose holder's lease ran \
-            out. `claim` never takes over a lapsed item; `takeover` does, and records the \
-            claim it displaced, which `show` then reports.\n\
-            \x20 finish   --item <id> --holder <name>\n\
-            \x20 abandon  --item <id> --holder <name> --reason <text>\n\
-            \x20 decline  --item <id> --holder <name> --reason <text>\n\
-            \x20          ends an item that turned out not to be work — superseded by another \
-            item, or refused by a record since it was written. `abandon` ends a *claim* and \
-            puts the item back on the board for somebody else; `decline` ends the *item*, and \
-            takes no claim, because an item nobody intends to do should not have to be claimed \
-            first. It refuses an item somebody is holding, and one already done or already \
-            declined.\n\
-            \x20 validate\n\
-            \x20 audit\n\
-            \n\
-            everything after `--` is the verification predicate, run directly with no \
-            shell. `finish` runs the gate's own lint step first, derived from \
-            .github/workflows/gate.yml rather than written here, then the item's \
-            predicate, and records the item done only if both exit zero. An item whose \
-            predicate passes while the gate is red is not finished.\n\
-            \n\
-            exit codes: 0 ok, 1 validation error, 2 usage, 3 claim unavailable \
-            (retryable), 4 conflict, 5 store error"
-        .to_owned();
+    return format!("usage: nomos work <command>\n\n{VERBS}\n{NOTES}");
 }
+
+/// Every verb and what it takes.
+const VERBS: &str = "\x20 list     [--state ready|waiting|held|snagged|claimed|blocked|done|declined]\n\
+     \x20          `ready` means claimable now. An item nothing can claim is reported as \
+     `waiting` (a dependency is unfinished), `held` (somebody holds overlapping territory) \
+     or `snagged` (independence cannot be established), from the same refusal `claim` would \
+     give.\n\
+     \x20 show     --item <id>\n\
+     \x20          one item in full: its claim, every claim given up on it with the reason \
+     given, and its verification. `list` is a column per item and cannot carry prose.\n\
+     \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
+     \x20          --territory <path> [--territory <path> …]\n\
+     \x20          [--depends-on <id> …]\n\
+     \x20          [-- <program> <args…>]\n\
+     \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
+     \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
+     \x20 takeover --item <id> --holder <name> [--lease 2h]\n\
+     \x20          takes over an item listed `lapsed` — one whose holder's lease ran out. \
+     `claim` never takes over a lapsed item; `takeover` does, and records the claim it \
+     displaced, which `show` then reports.\n\
+     \x20 finish   --item <id> --holder <name>\n\
+     \x20 abandon  --item <id> --holder <name> --reason <text>\n\
+     \x20 decline  --item <id> --holder <name> --reason <text>\n\
+     \x20          ends an item that turned out not to be work — superseded by another item, \
+     or refused by a record since it was written. `abandon` ends a *claim* and puts the item \
+     back on the board for somebody else; `decline` ends the *item*, and takes no claim, \
+     because an item nobody intends to do should not have to be claimed first. It refuses an \
+     item somebody is holding, and one already done or already declined.\n\
+     \x20 validate\n\
+     \x20 audit\n";
+
+/// What holds across every verb: the predicate, and the codes an agent branches on.
+const NOTES: &str = "\neverything after `--` is the verification predicate, run directly \
+     with no shell. `finish` runs the gate's own lint step first, derived from \
+     .github/workflows/gate.yml rather than written here, then the item's predicate, and \
+     records the item done only if both exit zero. An item whose predicate passes while the \
+     gate is red is not finished.\n\
+     \n\
+     exit codes: 0 ok, 1 validation error, 2 usage, 3 claim unavailable (retryable), \
+     4 conflict, 5 store error";
 
 /// Runs a command against the ledger at `directory`, writing to `output`.
 ///
@@ -413,76 +471,91 @@ pub fn Run(
     {
         WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
         WorkCommand::Show { item } => Show(&ledger, item, output),
-        WorkCommand::Add { item } => Add(&mut ledger, item, &Published_Records(directory), output),
+        WorkCommand::Add { item } =>
+        {
+            let published = Published_Records(directory);
+
+            Add(&mut ledger, item, &published, output)
+        }
         WorkCommand::Finish { item, holder } =>
         {
             // No working directory: the predicate runs where the user invoked `nomos`,
             // which for a repository tool run inside a repository is the repository. A
-            // predicate silently relocated into `work/` would fail in ways that look
-            // like the work being wrong.
+            // predicate silently relocated into `work/` would fail in ways that look like
+            // the work being wrong.
             let outcome = Finish(&mut ledger, &StdProcessLauncher, item, holder, None);
 
             Report_Finish(outcome, output)
         }
-        WorkCommand::Claim {
-            item,
-            holder,
-            lease,
-        } =>
-        {
-            let outcome = ledger.Claim(item, holder, *lease);
-
-            Report_Claim(outcome, output)
-        }
-        WorkCommand::Renew {
-            item,
-            holder,
-            lease,
-        } =>
-        {
-            let outcome = ledger.Renew(item, holder, *lease);
-
-            Report_Claim(outcome, output)
-        }
-        // `Report_Claim` and `Code_For` unchanged, which is the point: one mapping from a
-        // refusal to an exit code, so `claim` and `takeover` cannot come to disagree about
-        // what a refusal means. No new code is introduced and the README's table does not move.
-        WorkCommand::TakeOver {
-            item,
-            holder,
-            lease,
-        } =>
-        {
-            let outcome = ledger.Take_Over(item, holder, *lease);
-
-            Report_Claim(outcome, output)
-        }
-        WorkCommand::Abandon {
-            item,
-            holder,
-            reason,
-        } =>
-        {
-            let abandoned = ReleaseOutcome::Abandoned {
-                reason: reason.clone(),
-            };
-            let outcome = ledger.Release(item, holder, abandoned);
-
-            Report_Release(outcome, output)
-        }
-        WorkCommand::Decline {
-            item,
-            holder,
-            reason,
-        } =>
-        {
-            let outcome = ledger.Decline(item, holder, reason);
-
-            Report_Decline(item, outcome, output)
-        }
+        WorkCommand::Claim(request) => Claimed(&mut ledger, request, output),
+        WorkCommand::Renew(request) => Renewed(&mut ledger, request, output),
+        WorkCommand::TakeOver(request) => Taken_Over(&mut ledger, request, output),
+        WorkCommand::Abandon(request) => Abandoned(&mut ledger, request, output),
+        WorkCommand::Decline(request) => Declined(&mut ledger, request, output),
         WorkCommand::Validate => Report_Validation(&ledger, output),
         WorkCommand::Audit => Audit(&ledger, output),
     };
+}
+
+/// One `Report_Claim` across the three reservation verbs, which is the point: one mapping
+/// from a refusal to an exit code, so `claim`, `renew` and `takeover` cannot come to
+/// disagree about what a refusal means, and the README's table does not move.
+fn Claimed(
+    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
+    request: &ClaimRequest,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let outcome = ledger.Claim(&request.item, &request.holder, request.lease);
+
+    return Report_Claim(outcome, output);
+}
+
+fn Renewed(
+    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
+    request: &ClaimRequest,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let outcome = ledger.Renew(&request.item, &request.holder, request.lease);
+
+    return Report_Claim(outcome, output);
+}
+
+fn Taken_Over(
+    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
+    request: &ClaimRequest,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let outcome = ledger.Take_Over(&request.item, &request.holder, request.lease);
+
+    return Report_Claim(outcome, output);
+}
+
+fn Abandoned(
+    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
+    request: &EndingRequest,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let abandoned = ReleaseOutcome::Abandoned {
+        reason: request.reason.clone(),
+    };
+    let outcome = ledger.Release(&request.item, &request.holder, abandoned);
+
+    return Report_Release(outcome, output);
+}
+
+fn Declined(
+    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
+    request: &EndingRequest,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let outcome = ledger.Decline(&request.item, &request.holder, &request.reason);
+
+    return Report_Decline(&request.item, outcome, output);
 }
 
 fn List(
@@ -496,38 +569,65 @@ fn List(
         Ok(document) => document,
         Err(error) => return Report_Error(&error, output),
     };
-
     let now = SystemClock.Now();
-
     let mut shown = 0_u32;
     for item in &document.items
     {
-        let label = Listing_Label(&document, item, now);
-        if state.is_some_and(|wanted| !label.eq_ignore_ascii_case(wanted))
+        let Some(label) = Listed_As(&document, item, state, now)
+        else
         {
             continue;
-        }
-
-        let holder = item
-            .claim
-            .as_ref()
-            .map_or_else(String::new, |claim| format!("  [{}]", claim.holder));
-        let _ = writeln!(output, "{:<13} {:<9}{holder}  {}", item.id, label, item.title);
+        };
+        Print_Listing(item, label, output);
         shown = shown.saturating_add(1);
     }
-
     if shown == 0
     {
-        // An empty result and a filter that matched nothing look identical otherwise,
-        // and the user's next action differs.
-        let _ = match state
-        {
-            Some(wanted) => writeln!(output, "no items are {wanted}"),
-            None => writeln!(output, "the ledger has no items"),
-        };
+        Nothing_Listed(state, output);
     }
 
     return ExitCode::Ok;
+}
+
+/// The label this item lists under, or nothing when the filter excludes it.
+fn Listed_As(
+    document: &LedgerDocument,
+    item: &LedgerItem,
+    state: Option<&str>,
+    now: Timestamp,
+) -> Option<&'static str>
+{
+    let label = Listing_Label(document, item, now);
+    if state.is_some_and(|wanted| return !label.eq_ignore_ascii_case(wanted))
+    {
+        return None;
+    }
+
+    return Some(label);
+}
+
+/// What to say when the listing printed nothing.
+///
+/// An empty result and a filter that matched nothing look identical otherwise, and the
+/// user's next action differs.
+fn Nothing_Listed(state: Option<&str>, output: &mut impl std::io::Write)
+{
+    let _ = match state
+    {
+        Some(wanted) => writeln!(output, "no items are {wanted}"),
+        None => writeln!(output, "the ledger has no items"),
+    };
+}
+
+/// One item's line: its identifier, what it may be called now, its holder, and its title.
+fn Print_Listing(item: &LedgerItem, label: &str, output: &mut impl std::io::Write)
+{
+    let holder = item
+        .claim
+        .as_ref()
+        .map_or_else(String::new, |claim| return format!("  [{}]", claim.holder));
+
+    let _ = writeln!(output, "{:<13} {:<9}{holder}  {}", item.id, label, item.title);
 }
 
 /// Reports one item, including what has happened to it.
@@ -548,40 +648,63 @@ fn Show(
         Err(error) => return Report_Error(&error, output),
     };
 
-    let Some(found) = document
-        .items
-        .iter()
-        .find(|candidate| return &candidate.id == item)
+    let Some(found) = document.items.iter().find(|candidate| return &candidate.id == item)
     else
     {
         let _ = writeln!(output, "no item named {item}");
         return ExitCode::Conflict;
     };
-
     let now = SystemClock.Now();
+    let label = Listing_Label(&document, found, now);
 
     let _ = writeln!(output, "{} {}", found.id, found.title);
-    let _ = writeln!(output, "state: {}", Listing_Label(&document, found, now));
+    let _ = writeln!(output, "state: {label}");
+    Print_Claim(found, now, output);
+    Print_History(found, output);
 
-    if let Some(claim) = &found.claim
+    return ExitCode::Ok;
+}
+
+/// The live claim, if there is one.
+///
+/// A lapsed claim is still shown, and still says it lapsed. It stops excluding without being
+/// removed, so a reader who is not told would take it for a live one.
+fn Print_Claim(found: &LedgerItem, now: Timestamp, output: &mut impl std::io::Write)
+{
+    let Some(claim) = &found.claim
+    else
     {
-        // A lapsed claim is still shown, and still says it lapsed. It stops excluding
-        // without being removed, so a reader who is not told would take it for a live one.
-        let lapsed = if claim.Has_Lapsed(now) { " (lapsed)" } else { "" };
-        let _ = writeln!(
-            output,
-            "held by {} since unix {} until unix {}{lapsed}",
-            claim.holder,
-            claim.acquired_at.Unix_Seconds(),
-            claim.lease_expires_at.Unix_Seconds()
-        );
-    }
+        return;
+    };
 
-    // Reported, not merely stored. `OD-LEDGER-006`'s rule and `OD-LEDGER-012`'s reason for
-    // obeying it here: a record no surface reports is one only somebody willing to read the
-    // JSON can find, which is most of the way back to not keeping it. Each line names the
-    // holder a takeover displaced and the window they held — who displaced them is the next
-    // line's holder, or the live claim above.
+    let lapsed = if claim.Has_Lapsed(now) { " (lapsed)" } else { "" };
+    let _ = writeln!(
+        output,
+        "held by {} since unix {} until unix {}{lapsed}",
+        claim.holder,
+        claim.acquired_at.Unix_Seconds(),
+        claim.lease_expires_at.Unix_Seconds()
+    );
+}
+
+/// What has happened to the item: takeovers, abandonments, and the verification that ended
+/// it.
+///
+/// Reported, not merely stored. `OD-LEDGER-006`'s rule and `OD-LEDGER-012`'s reason for
+/// obeying it here: a record no surface reports is one only somebody willing to read the
+/// JSON can find, which is most of the way back to not keeping it. Each displacement line
+/// names the holder a takeover displaced and the window they held — who displaced them is
+/// the next line's holder, or the live claim above.
+fn Print_History(found: &LedgerItem, output: &mut impl std::io::Write)
+{
+    Print_Displacements(found, output);
+    Print_Abandonments(found, output);
+    Print_Verification(found, output);
+}
+
+/// Every holder a takeover displaced, and the window they held.
+fn Print_Displacements(found: &LedgerItem, output: &mut impl std::io::Write)
+{
     for displaced in &found.displaced
     {
         let _ = writeln!(
@@ -592,7 +715,11 @@ fn Show(
             displaced.lease_expires_at.Unix_Seconds()
         );
     }
+}
 
+/// Every claim that was given up without finishing, and the reason given.
+fn Print_Abandonments(found: &LedgerItem, output: &mut impl std::io::Write)
+{
     for abandonment in &found.abandoned
     {
         let _ = writeln!(
@@ -603,19 +730,24 @@ fn Show(
             abandonment.reason
         );
     }
+}
 
-    if let Some(record) = &found.verified
+/// The predicate that ended the item, if one has.
+fn Print_Verification(found: &LedgerItem, output: &mut impl std::io::Write)
+{
+    let Some(record) = &found.verified
+    else
     {
-        let _ = writeln!(
-            output,
-            "verified by `{}` at unix {} with exit {}",
-            record.argv.join(" "),
-            record.verified_at.Unix_Seconds(),
-            record.exit_code
-        );
-    }
+        return;
+    };
 
-    return ExitCode::Ok;
+    let _ = writeln!(
+        output,
+        "verified by `{}` at unix {} with exit {}",
+        record.argv.join(" "),
+        record.verified_at.Unix_Seconds(),
+        record.exit_code
+    );
 }
 
 /// Records a new item, refusing a duplicate identifier and a document that would not
@@ -685,10 +817,25 @@ fn Published_Records(directory: &Path) -> Territory
         return Territory::Empty();
     };
 
+    let mut published = Record_Files(root);
+    // Sorted so that an item colliding with two records is refused against the same one
+    // every run. A refusal that names a different file each time reads as two defects.
+    published.sort();
+
+    return Territory::Of_Files(published);
+}
+
+/// Every file directly under the repository's record directory, as a territory is spelled.
+///
+/// Repository-relative and forward-slashed, which is the spelling a territory is authored
+/// in. `Normalize_Path` would accept either, and handing it the shape it documents keeps the
+/// refusal's text readable by whoever has to act on it.
+fn Record_Files(root: &Path) -> Vec<String>
+{
     let Ok(entries) = std::fs::read_dir(root.join(RECORD_DIRECTORY))
     else
     {
-        return Territory::Empty();
+        return Vec::new();
     };
 
     let mut published = Vec::new();
@@ -696,18 +843,11 @@ fn Published_Records(directory: &Path) -> Territory
     {
         if let Some(name) = entry.file_name().to_str()
         {
-            // Repository-relative and forward-slashed, which is the spelling a territory is
-            // authored in. `Normalize_Path` would accept either, and handing it the shape it
-            // documents keeps the refusal's text readable by whoever has to act on it.
             published.push(format!("{RECORD_DIRECTORY}/{name}"));
         }
     }
 
-    // Sorted so that an item colliding with two records is refused against the same one
-    // every run. A refusal that names a different file each time reads as two defects.
-    published.sort();
-
-    return Territory::Of_Files(published);
+    return published;
 }
 
 /// Where this repository authors its decision records, relative to the repository root.
@@ -736,35 +876,41 @@ fn Add(
             );
             ExitCode::Ok
         }
-        // Each arm keeps the exit code this command already gave it. Routing the write
-        // through the store changed which type carries the refusal out and must not change
-        // what an agent branching on the number concludes: a taken identifier is the
-        // caller's to resolve by choosing another, an item that reserves nothing is the
-        // caller's to correct, and only a ledger that cannot be read or written at all is
-        // the one an agent stops and fetches a person for.
         Err(refusal) =>
         {
             let _ = writeln!(output, "{}", refusal.Describe());
 
-            match refusal
-            {
-                AddRefusal::AlreadyPresent { .. } => ExitCode::Conflict,
-                // The same code as a taken item identifier, and for the same reason: an
-                // identifier somebody else holds, which the author resolves by choosing
-                // another. `ExitCode::Usage` was the other candidate and is wrong — that is
-                // the parser's code for a malformed invocation, and an agent that saw it
-                // would go and inspect its own argument syntax, which is not the fix. The
-                // refusal text is what tells the two record cases apart; the code tells an
-                // agent what kind of thing happened, and this is the kind that already had
-                // one.
-                AddRefusal::RecordPublished { .. } | AddRefusal::RecordReserved { .. } =>
-                {
-                    ExitCode::Conflict
-                }
-                AddRefusal::WouldBeInvalid { .. } => ExitCode::ValidationError,
-                AddRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
-            }
+            Code_For_Refusal(&refusal)
         }
+    };
+}
+
+/// The exit code an `add` refusal reports.
+///
+/// Each arm keeps the code this command already gave it. Routing the write through the
+/// store changed which type carries the refusal out and must not change what an agent
+/// branching on the number concludes: a taken identifier is the caller's to resolve by
+/// choosing another, an item that reserves nothing is the caller's to correct, and only a
+/// ledger that cannot be read or written at all is the one an agent stops and fetches a
+/// person for.
+const fn Code_For_Refusal(refusal: &AddRefusal) -> ExitCode
+{
+    return match refusal
+    {
+        AddRefusal::AlreadyPresent { .. } => ExitCode::Conflict,
+        // The same code as a taken item identifier, and for the same reason: an identifier
+        // somebody else holds, which the author resolves by choosing another.
+        // `ExitCode::Usage` was the other candidate and is wrong — that is the parser's code
+        // for a malformed invocation, and an agent that saw it would go and inspect its own
+        // argument syntax, which is not the fix. The refusal text is what tells the two
+        // record cases apart; the code tells an agent what kind of thing happened, and this
+        // is the kind that already had one.
+        AddRefusal::RecordPublished { .. } | AddRefusal::RecordReserved { .. } =>
+        {
+            ExitCode::Conflict
+        }
+        AddRefusal::WouldBeInvalid { .. } => ExitCode::ValidationError,
+        AddRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
     };
 }
 
@@ -1064,6 +1210,22 @@ fn Report_Validation(
 /// labels with and `claim` refuses with — `OD-LEDGER-005`. An item reported here is exactly
 /// an item `list` calls `waiting`, `held` or `snagged`, with the same word, and there is no
 /// way for the two to drift because they are one answer read twice.
+fn Print_Blocked(item: &LedgerItem, refusal: &ClaimRefusal, output: &mut impl std::io::Write)
+{
+    let _ = writeln!(
+        output,
+        "{:<13} {:<9} {}",
+        item.id,
+        Refusal_Label(refusal),
+        // `Describe` directly, and no local rephrasing. Its held arm used to name the
+        // blocker where the subject belongs, so this line phrased that one arm itself;
+        // `OD-LEDGER-014` fixed the library and deleted the workaround in the same commit,
+        // because the whole cost of the workaround was that two renderings of one refusal
+        // outlived the reason for the second.
+        refusal.Describe()
+    );
+}
+
 fn Audit(
     ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
     output: &mut impl std::io::Write,
@@ -1078,9 +1240,7 @@ fn Audit(
         Ok(document) => document,
         Err(error) => return Report_Error(&error, output),
     };
-
     let now = SystemClock.Now();
-
     let mut reported = 0_u32;
     for item in &document.items
     {
@@ -1089,22 +1249,9 @@ fn Audit(
         {
             continue;
         };
-
-        let _ = writeln!(
-            output,
-            "{:<13} {:<9} {}",
-            item.id,
-            Refusal_Label(&refusal),
-            // `Describe` directly, and no local rephrasing. Its held arm used to name the
-            // blocker where the subject belongs, so this line phrased that one arm itself;
-            // `OD-LEDGER-014` fixed the library and deleted the workaround in the same
-            // commit, because the whole cost of the workaround was that two renderings of
-            // one refusal outlived the reason for the second.
-            refusal.Describe()
-        );
+        Print_Blocked(item, &refusal, output);
         reported = reported.saturating_add(1);
     }
-
     if reported == 0
     {
         // Empty output used to mean either "nothing is blocked" or "the report cannot
@@ -1150,11 +1297,11 @@ mod tests
 
         assert_eq!(
             parsed,
-            WorkCommand::Claim {
+            WorkCommand::Claim(ClaimRequest {
                 item: ItemId::New("T-1"),
                 holder: "agent-a".to_owned(),
                 lease: DEFAULT_LEASE,
-            }
+            })
         );
     }
 
@@ -1168,11 +1315,11 @@ mod tests
 
         assert_eq!(
             parsed,
-            WorkCommand::TakeOver {
+            WorkCommand::TakeOver(ClaimRequest {
                 item: ItemId::New("T-1"),
                 holder: "agent-b".to_owned(),
                 lease: DEFAULT_LEASE,
-            }
+            })
         );
     }
 
@@ -1242,11 +1389,11 @@ mod tests
 
         assert_eq!(
             parsed,
-            WorkCommand::Decline {
+            WorkCommand::Decline(EndingRequest {
                 item: ItemId::New("T-1"),
                 holder: "agent-a".to_owned(),
                 reason: "done".to_owned(),
-            }
+            })
         );
     }
 
