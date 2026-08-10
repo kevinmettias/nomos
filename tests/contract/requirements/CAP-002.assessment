@@ -1,0 +1,11 @@
+# The assessment of CAP-002 against this build.
+#
+# CAP-002 names five fact variants. `FactVariant` carries precisely those five —
+# Predicted, Approximate, Syntactic, SemanticallyResolved, RuntimeObserved — and no
+# sixth.
+#
+# One of the three comparisons OD-TRACE-001 hand-audited against NOMOS_V14_CORPUS and
+# found already satisfied, exactly.
+verdict: Met
+record: OD-TRACE-001
+site: crates/contracts/nomos-contracts/src/guarantee.rs#FactVariant

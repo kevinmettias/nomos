@@ -1,0 +1,14 @@
+# The assessment of EVID-001 against this build.
+#
+# EVID-001 names eight evidence classes, Authoritative through HumanAsserted, and forbids
+# collapsing them into a confidence number. `EvidenceClass` carries precisely those eight
+# and has no numeric form; `Is_Mechanical` is the distinction the requirement is about,
+# expressed as a predicate rather than as a threshold on a score.
+#
+# One of the three comparisons OD-TRACE-001 hand-audited against NOMOS_V14_CORPUS and
+# found already satisfied, exactly. The audit is in that record; this entry is what makes
+# the verdict readable by a machine.
+verdict: Met
+record: OD-TRACE-001
+site: crates/contracts/nomos-contracts/src/evidence.rs#EvidenceClass
+site: crates/contracts/nomos-contracts/src/evidence.rs#Is_Mechanical

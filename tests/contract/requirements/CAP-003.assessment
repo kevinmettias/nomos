@@ -1,0 +1,14 @@
+# The assessment of CAP-003 against this build.
+#
+# CAP-003 requires provider selection to compare guarantees rather than availability.
+# `Guarantee::Satisfies` compares every axis and is documented as deliberately not a
+# score, and `selection.rs` is the caller that spends it — `Standing::Of` asks the
+# comparison in both directions rather than ordering two providers by which one is
+# installed.
+#
+# One of the three comparisons OD-TRACE-001 hand-audited against NOMOS_V14_CORPUS and
+# found already satisfied, exactly.
+verdict: Met
+record: OD-TRACE-001
+site: crates/contracts/nomos-contracts/src/guarantee.rs#Satisfies
+site: crates/substrate/nomos-capability/src/selection.rs#Satisfies

@@ -1,0 +1,21 @@
+# The assessment of CHK-003 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong — the rule OD-SPEC-007 chose for a
+# record registration, for the same reason.
+#
+# CHK-003 requires that every run report evaluated, excluded, unsupported, unavailable,
+# failed, not-applicable and agent-required combinations. `Applicability` answered six of
+# the seven and had no state for agent-required; OD-CONTRACTS-002 decided the seventh and
+# P10-AGENT-REQUIRED built it. That record is also where the argument that CHK-003 binds
+# this build at all is made, which is why it is named here rather than merely cited.
+#
+# Authored from OD-CONTRACTS-002's assessment, which was itself authored against
+# NOMOS_V14_CORPUS. It is not recomputed from the corpus at check time, and OD-TRACE-001
+# records why: CI has no corpus, so a guard that read one would be green by being unable
+# to look.
+verdict: Met
+record: OD-CONTRACTS-002
+site: crates/contracts/nomos-contracts/src/applicability.rs#AgentRequired
+site: crates/contracts/nomos-contracts/src/applicability.rs#Requires_Agent
+site: crates/contracts/nomos-contracts/src/evidence.rs#AgentJudged
+site: crates/contracts/nomos-contracts/src/evidence.rs#Is_Mechanical

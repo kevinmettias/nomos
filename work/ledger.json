@@ -4928,7 +4928,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -4942,7 +4942,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ember_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s\n\n\nrunning 11 tests\ntest Test_A_Divergence_With_No_Record_Should_Be_Refused ... ok\ntest Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number ... ok\ntest Test_An_Entry_Naming_A_Vanished_Site_Should_Be_Reported ... ok\ntest Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported ... ok\ntest Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It ... ok\ntest Test_Every_Divergence_Should_Name_A_Governing_Record ... ok\ntest Test_The_Reader_Should_Refuse_Every_Malformed_Entry ... ok\ntest Test_The_Assessed_Set_Should_Not_Shrink ... ok\ntest Test_The_Reader_Should_Enumerate_The_Directory_It_Is_Given ... ok\ntest Test_Every_Assessment_Should_Name_A_Site_That_Exists ... ok\ntest Test_Every_Named_Record_Should_Exist_And_Be_Registered ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-5199bdafaa913a2e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-51aa4e2ffacb6dea.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-9ae75b5b09cb3bc0.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-0c1de3a56028c300.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-fde27190f260795e.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-260c96e353d2afad.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-291be51620867033.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-b2691cd1a57ec67c.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1786351135,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
@@ -4984,6 +5007,69 @@
         "exit_code": 0,
         "output_tail": "d_Be_Refused ... ok\ntest Test_Reopening_Should_Not_Re_Run_Migrations ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n\nrunning 16 tests\ntest Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest Test_A_Census_Should_Narrow_To_One_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-79e22d39019203d6.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-f7dc0d942c75731f.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-9f1e4a630321b491.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-790d1d7a443043a4.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-ad97dbebf370ad64.exe)\n   Doc-tests nomos_spec_store\n",
         "verified_at": 1786349752,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-DURABLE-LOAD",
+      "title": "The durable form the born-structured layer must live in cannot be loaded into any store this build assembles, because import refuses a store that has been seeded",
+      "why": "OD-SPEC-008 makes the committed durable form of the born-structured layer the nomos-spec-bundle text, with SQLite a derived index any checkout rebuilds. Import is the only door from that text into a store, and it refuses any store whose tables are not all empty. Every store this build assembles seeds the governing records first and unconditionally, so the durable form cannot be loaded into the store it is meant to be durable for. Nothing has noticed because no host code calls Import at all.",
+      "done_when": "A bundle loads into a store already holding seeded governing records: exactly the bundle rows land, the seeded rows are left untouched, and a bundle carrying a row the store already holds is refused by name rather than silently merged. Import into an empty store keeps its present behaviour and its existing tests pass unchanged.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/src/import.rs",
+          "crates/spec/nomos-spec-bundle/src/lib.rs",
+          "crates/spec/nomos-spec-bundle/tests/durable_load.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip.rs",
+          "tests/contract/surface/nomos-spec-bundle.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-af9ee92193467382.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6cfaddc4b16312b3.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-34f3dfa7f9923b4b.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-f75546e48cc40e29.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-ce2ac817ed8a3e76.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d58c046fbc3add5b.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-8f7c287149532a59.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-ce512e6e5aa0b6fe.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-74a8d32bd5e53e67.exe)\n     Running tests\\durable_load.rs (target\\debug\\deps\\durable_load-833e7f18e3eb67b1.exe)\n     Running tests\\round_trip.rs (target\\debug\\deps\\round_trip-23b19831a123f4d0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-6513f2b784f9db8e.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-103e563fbb789ea0.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-f50329bbff375e72.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-1d183afa395052f7.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-774615dec9e029c0.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786351143,
         "gate": {
           "argv": [
             "cargo",
