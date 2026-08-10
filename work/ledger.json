@@ -2757,14 +2757,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-fact-bypass-w5",
-        "acquired_at": 1786337441,
-        "lease_expires_at": 1786351841
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2783,7 +2779,38 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "ts\\fact_identity.rs (target\\debug\\deps\\fact_identity-cc5d19d7abdc176b.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-1e3a04fc69d2503b.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-3eb4efb2c688a3e4.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-a688b401f0513b2f.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1b704c8ae71a3035.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-d3d2ab8041932be7.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-5a44775d9e3bafb9.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-708f2fe3f8499ca0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-4d491df5128a0538.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-2863076446f756d8.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-c3aa84c0a826cf4a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-3dff6d2b9d7b349b.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-c26e900fca96d97f.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-a436a2bde8adf4d2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-da4223f06489033d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786339274,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "probe2",
@@ -3191,6 +3218,170 @@
           "exit_code": 0
         }
       },
+      "abandoned": []
+    },
+    {
+      "id": "P10-SYNTAX-SCHEMA",
+      "title": "One payload schema, two encoders, three readers, and no written grammar",
+      "why": "nomos.syntax.items.v1 is a SchemaId string in nomos-cap-syntax and nothing else. nomos-lang-rust::Encode_Payload and nomos-lang-rust-scan each author the bytes independently, and three consumers read them back: tests/integration/src/surface.rs, crates/rules/nomos-rules/src/facts.rs, and whoever is next. The contract crate exists because an agreement is not the property of one party to it, and the shape of the answer is the part of that agreement with no home. Two encoders that drift produce facts that decode differently under one capability, and nothing in the tree would notice. Separately, the payload cannot distinguish a trait-method signature from a function definition except by an incidental encoding of visibility, which nomos-rules now depends on and OD-RULES-001 wrote down as a shape convention rather than a guarantee.",
+      "done_when": "The grammar of nomos.syntax.items.v1 is written down in nomos-cap-syntax, where both parties can name it, together with one reader or one writer that the tree agrees is canonical. Every consumer either uses it or has a stated reason not to. The trait-signature distinction is either something the schema states or something the schema explicitly declines to state, in writing. Not closed by documenting the current bytes in a comment, and not closed by promoting a reader nobody but its author calls.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax",
+          "crates/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-rust-scan",
+          "crates/rules/nomos-rules/src/facts.rs",
+          "tests/integration/src/surface.rs",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "tests/contract/surface/nomos-lang-rust-scan.txt",
+          "docs/records/OD-SYNTAX-001"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-SYNTAX-V2",
+      "title": "A payload that carries what a provider did not observe, so the second syn front end can go",
+      "why": "SyntaxItem carries no doc comment and no declared type, so universe discovery cannot be served from facts and nomos-rules keeps a syn front end for exactly that. OD-RULES-001 measured this and gave the residual parser a stated reason and this item as its end condition; without this item the exception has no expiry and becomes a habit. Adding the two fields is not a field addition. nomos-lang-rust-scan cannot read doc comments at all: it skips comment lines and associates nothing with the item below them, so a schema in which this item has no doc comment and this provider does not read doc comments are the same bytes turns every universe under the scanner into one declaring no mirror. That is a phantom mirror silently downgraded to an admitted gap, which is absence becoming success in the one field the completeness-mirror rule severity ordering turns on.",
+      "done_when": "A version of the syntax payload carries, per item, what each provider actually observed about its documentation and its declared type shape, bounded by that provider guarantee, so that not observed and not present are different bytes. nomos-rules/src/universe.rs reads facts, and syn and proc-macro2 leave crates/rules/nomos-rules/Cargo.toml. A test proves that a universe read through the scanner is not reported as an admitted gap. Not closed by adding two optional fields that a provider which cannot fill them leaves empty.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "crates/capabilities/nomos-cap-syntax",
+          "crates/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-rust-scan",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "tests/contract/surface/nomos-lang-rust-scan.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-SYNTAX-SCHEMA"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-rust-scan",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-SUBJECT-HOME",
+      "title": "Three normalizations of a path into a subject, and the note that said the third one settles it",
+      "why": "nomos_ledger::Subject_Of, tests/integration/src/corpus.rs::Subject_Of_Path and now crates/host/nomos-cli/src/check.rs each reduce a path to a SubjectId by nearly the same rules. corpus.rs states in its own doc comment that the duplication is worth converging behind one home the moment a third caller appears, and OD-RULES-001 made that third caller. They are not identical: the ledger folds a record filename onto its record identifier and the other two do not, so converging is a decision about whether a claim and a fact address the same thing rather than a move of one function. Left as it is, two of the three drift and a composition root files facts under subjects a rule computes differently, which reads as every fact being unavailable rather than as one function being wrong.",
+      "done_when": "Either the three normalizations become one, with the record-filename fold expressed as something the caller asks for rather than as a difference between two copies, or the tree records why a subject for a claim and a subject for a fact are deliberately different things and each copy names that reason at its site. Not closed by importing one of the three into the other two without settling which question they answer.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check.rs",
+          "tests/integration/src/corpus.rs",
+          "docs/records/OD-ANALYSIS-002"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-CHECK-GATE",
+      "title": "nomos check is not wired into the gate, and it now has more to be silent about",
+      "why": "D-134 deferred wiring the command into the gate explicitly and it is still deferred. OD-RULES-001 made the command a composition root that declares a capability, registers a provider, materializes a fact per file and reports how many it got, which sharpens the question rather than softening it: a gate step that could not materialise a fact must fail rather than report clean, and today nothing runs the command at all so nobody would know either way. The workspace has thirteen unmirrored universes and zero blocking findings, so the step can be green on the day it lands, which is the window in which wiring it is cheap.",
+      "done_when": "The gate runs nomos check over this workspace and the workflow distinguishes the three outcomes the binary already distinguishes: nothing blocking, findings that can fail a build, and a run that judged nothing. A run that materialised no facts fails the step. The exit codes the workflow branches on are the ones crates/host/nomos-cli/src/check.rs documents, read from there rather than restated. Not closed by adding a step that runs the command and ignores its exit code.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check.rs",
+          ".github/workflows/gate.yml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-FACT-BYPASS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": []
     }
   ]

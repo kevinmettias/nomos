@@ -14,9 +14,30 @@ path = "src/main.rs"
 [dependencies]
 nomos-contracts = { workspace = true }
 nomos-ledger = { workspace = true }
+# One digest function, for the subject a fact is filed under and for the identity of the
+# policy this run resolved. Content addressing is the kernel's and is not respelled here.
+nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-platform-std = { workspace = true }
 nomos-rules = { workspace = true }
+# The analysis composition `nomos check` assembles. A composition root is the only place
+# permitted to name a provider — a rule states a floor and the registry decides who
+# serves it — and OD-RULES-001 makes this command that root in earnest: it declares the
+# syntax contract, registers the parser, materializes a fact per file and runs the rule
+# over the store.
+#
+# `nomos-lang-rust-scan` is deliberately absent. It cannot serve `nomos_rules::
+# Syntax_Requirement`, so registering it would turn a refusal that can be reasoned about
+# here into a runtime event nobody sees.
+nomos-analysis = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-cap-syntax = { workspace = true }
+nomos-lang-rust = { workspace = true }
+# The one door a workspace state comes through. Used so that the snapshot, generation,
+# variant and configuration a fact is filed under come from something real rather than
+# from four values invented at the call site — and so that an empty change set is refused
+# by the thing that owns the question. This is `nomos-workspace`'s second dependent.
+nomos-workspace = { workspace = true }
 # The specification system. A composition root is the only place permitted to name
 # these: the spec crates sit beside the kernel rather than above it, and nothing in the
 # product may reach them directly.

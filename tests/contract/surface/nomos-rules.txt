@@ -5,15 +5,17 @@ pub enum variant nomos_rules::Reading::Parsed(Vec<DeclaredUniverse>)
 pub enum variant nomos_rules::Reading::Unparseable { because: String, }
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
-pub fn nomos_rules::Check_Completeness_Mirrors(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Read_Universes(path: &str, text: &str) -> Reading
-pub fn nomos_rules::SourceFile::New(path: impl Into<String>, text: impl Into<String>) -> Self
+pub fn nomos_rules::SourceFile::New(path: impl Into<String>, subject: SubjectId, text: impl Into<String>) -> Self
+pub fn nomos_rules::Syntax_Requirement() -> Requirement
 pub fn nomos_rules::Universes_In(path: &str, text: &str) -> Vec<DeclaredUniverse>
 pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
 pub struct field nomos_rules::DeclaredUniverse::kind: UniverseKind
 pub struct field nomos_rules::DeclaredUniverse::name: String
 pub struct field nomos_rules::DeclaredUniverse::path: String
 pub struct field nomos_rules::SourceFile::path: String
+pub struct field nomos_rules::SourceFile::subject: SubjectId
 pub struct field nomos_rules::SourceFile::text: String
 pub struct nomos_rules::DeclaredUniverse
 pub struct nomos_rules::SourceFile

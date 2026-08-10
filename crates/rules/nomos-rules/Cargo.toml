@@ -1,7 +1,7 @@
 [package]
 name = "nomos-rules"
 version = "0.1.0"
-description = "Band 3. Rules that judge source, as pure functions over text."
+description = "Band 30. Rules that judge source, as pure functions over a subject handed in."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -10,10 +10,28 @@ publish.workspace = true
 [dependencies]
 nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
+# The fact layer. `boundaries.rs` placed this crate at band 30 rather than below the
+# language providers precisely so that "the moment one needs a parsed tree it must be
+# able to reach a provider rather than vendor a second parser", and OD-RULES-001 takes
+# that edge: check names are read from `nomos.cap.syntax.items` facts.
+#
+# `nomos-cap-syntax` and not `nomos-lang-rust`. A rule states a floor and the registry
+# says who can serve it; naming a provider here would be this crate deciding the thing
+# the registry exists to decide, and would put a rule at band 30 in the business of
+# knowing which languages exist.
+nomos-analysis = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-cap-syntax = { workspace = true }
 # A parser, not a scanner. "Is this a declaration" has an exact answer, and a line
 # scanner kept reporting this crate's own test fixtures as real declarations. `full` for
 # every item form; `span-locations` so a refusal can name the line it refused at.
 # `printing` is deliberately absent — nothing here renders tokens back out.
+#
+# Retained for `universe.rs` alone and for a measured reason, not by inertia: the agreed
+# payload of `nomos.cap.syntax.items` carries no doc comment and no declared type, which
+# are the two things discovery needs. OD-RULES-001 states the end condition — when a
+# schema carries an item's documentation and its declared type shape, this dependency
+# goes and `nomos-rules` reaches no parser at all. `P10-SYNTAX-V2` holds it.
 syn = { version = "2", default-features = false, features = [
     "full",
     "parsing",

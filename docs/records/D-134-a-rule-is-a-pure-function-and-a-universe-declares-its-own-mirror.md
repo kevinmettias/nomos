@@ -3,7 +3,7 @@ id: D-134
 type: decision
 title: A rule is a pure function over source, and a universe declares its own mirror at the site
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -17,6 +17,8 @@ relations:
     type: relates-to
   - target: ARC-SPECDB-001
     type: relates-to
+  - target: OD-RULES-001
+    type: affected_by
 ---
 
 # A rule is a pure function over source, and a universe declares its own mirror at the site
@@ -59,12 +61,17 @@ comparison could not fail.
 
 ## Decision
 
-**A rule is a pure function from source text to findings.** `nomos-rules` opens no file,
-walks no directory, and does not know where the workspace is. The caller supplies
-`SourceFile`s: the binary walks the real tree, and a test hands the rule three files it
-wrote by hand. This is what makes `Test_All_Three_Historical_Instances_Should_Fail_This_Rule`
+**A rule takes its subject as an argument.** `nomos-rules` opens no file, walks no
+directory, and does not know where the workspace is. The caller supplies the subject: the
+binary composes it from the real tree, and a test composes it from three files it wrote by
+hand. This is what makes `Test_All_Three_Historical_Instances_Should_Fail_This_Rule`
 possible at all — the rule judges code that no longer exists anywhere, in the shape it had
 when it was wrong.
+
+*(Amended at version 2. This paragraph originally read "a pure function from source text to
+findings" and concluded that the subject is source text. Replayability proves that the
+subject is an argument and no more; a `FactReader` passed as a parameter satisfies it
+identically. See the amendment note below.)*
 
 **A universe declares its mirror at the site, in a doc comment.**
 
@@ -124,6 +131,49 @@ of. Check names are parsed for the same reason — a `fn Test_X` written inside 
 would otherwise resolve a claim that nothing checks, which is this rule's defect arriving
 through its own resolver.
 
+## Amendment, Version 2
+
+`P10-FACT-BYPASS` found that this record's argument does not reach its conclusion, and the
+finding is upheld.
+
+The argument is that none of the three `OD-COMPLETENESS-001` instances can be replayed from
+git, so a rule that reads the filesystem can only ever be judged against the tree it is
+standing in. That is sound and it defeats a filesystem-walking rule. It does not defeat a
+fact-consuming one: a `FactReader` handed to the rule as a parameter is an argument in
+exactly the sense that a `&[SourceFile]` is, a test can build one over three files that no
+longer exist anywhere, and the replay requirement is met identically. The premise proves
+*the subject is an argument*. It was written down as proving *the subject is text*.
+
+The gap mattered because of what was on the other side of it. `nomos-analysis`,
+`nomos-capability` and `nomos-cap-syntax` existed when this record was written, and
+`boundaries.rs` had already placed `nomos-rules` at band 30 so that a rule needing a parsed
+tree "must be able to reach a provider rather than vendor a second parser". This record
+vendored the second parser and recorded a reason that does not carry it. There were real
+reasons available — scope, and what the payload can carry — and neither is what was written.
+
+`OD-RULES-001` settles the relationship. Its short form: the rule reads facts for the half
+the agreed payload can serve, states its own floor so a composition root cannot feed it an
+approximation, and keeps `syn` in `universe.rs` alone because `nomos.syntax.items.v1`
+carries no doc comment and no declared type, which is what discovery needs. The reason for
+the residual front end is now a measurement with a named end condition rather than an
+inference that does not hold.
+
+**What stands from this record is everything except that one inference.** A rule takes its
+subject as an argument and opens no file; a universe declares its mirror at the site; the
+judgment is `EnforcementReach` and not a second vocabulary beside it; a false claim of
+coverage outranks an admitted gap; a `Finding` carries its applicability, evidence and gate;
+a finding is identified by name and never by path; and discovery parses rather than scanning
+lines. Six of the seven decisions are untouched, which is why this record is amended in
+place rather than superseded — a `superseded_by` edge would tell a later reader that all
+seven are dead.
+
+Two of the six are extended rather than merely retained, and both extensions are additive.
+A run whose check index is incomplete now reports *neither* a false claim nor an admitted
+gap for a mirror it could not resolve, and says so; that is the asymmetry with a third state
+above it rather than a change to the ordering between the two. And `Finding::applicability`
+becomes load-bearing in a second way, carrying the difference between "no provider offers
+what this rule needs" and "the store had nothing for this subject".
+
 ## Consequences
 
 `nomos check` runs over this workspace: 174 files examined, 14 findings, 0 of which can fail
@@ -131,6 +181,11 @@ a build. Thirteen are unmirrored universes. The fourteenth is
 `tests/corpus/analysis/gamma/broken.rs`, which is deliberately unparseable and is now
 *reported* as unread rather than silently skipped — `Applicability::Unparseable`, and
 `Can_Fail_A_Build` refuses it on the applicability alone.
+
+*(Amended at version 2.)* Those three numbers are what was measured on the day and are left
+as written. The tree has grown since; `OD-RULES-001` re-measured it with the old binary and
+the new one over the same 190 files and recorded both, which is the comparison that matters
+rather than either number on its own.
 
 The negative control was confirmed on the real tree rather than only in a fixture — a mirror
 annotation naming a check that does not exist was added to `MIGRATIONS` in
@@ -143,6 +198,12 @@ The single scanner is shared rather than duplicated. `tests/contract` keeps the 
 is a question about the workspace and needs `cargo metadata`; recognising a universe in a
 file moved to `nomos-rules`, and `tests/contract` depends on it. Band 100 observing band 3
 is the safe direction.
+
+*(Amended at version 2.)* That claim is about the universe *recogniser* and not about the
+parser. One recogniser with two callers and two independent `syn` front ends over one
+language are different objects, and this record stated the first as though it discharged the
+second. `OD-RULES-001` separates them: recognition stays shared, and the second front end is
+reduced to `universe.rs` and given a stated cause and a condition for its removal.
 
 Three of the four mirrored universes now declare their mirror. The fourth, `DECLARED_RULES`
 in `nomos-spec-validate`, is mirrored in fact and does not declare it, so the command reports

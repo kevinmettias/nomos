@@ -36,6 +36,38 @@
 //! this a declaration" is a question `syn` already answers exactly. What remains of the
 //! textual approach is the mirror claim, and it is read from parsed doc attributes rather
 //! than from lines that look like comments.
+//!
+//! # Why the parser is *here* and nowhere else in this crate
+//!
+//! This module is the whole of `nomos-rules`' dependency on `syn`, and it is the second
+//! Rust front end in a workspace that already has one behind `nomos.cap.syntax.items`.
+//! `D-134` created it and gave a reason — replayability — that proves a rule takes its
+//! subject as an argument and does not prove that the argument must be text.
+//! `OD-RULES-001` withdraws that inference, moves check-name resolution onto the fact
+//! layer, and keeps the parser here for a reason that is a measurement rather than an
+//! inference.
+//!
+//! The measurement: discovery needs two things the agreed payload does not carry.
+//!
+//! | What discovery needs | In `nomos.syntax.items.v1` |
+//! |---|---|
+//! | that a `pub const` is of *slice* type | **no** — there is no type field, and `pub const LIMIT: usize` and `pub const TABLES: &[&str]` encode identically |
+//! | the doc comment at the declaration site | **no** — there is no doc field, in `SyntaxItem` or in the encoding |
+//!
+//! Neither is a field addition, which is why the schema version is not cut here and not
+//! for want of time. `nomos-lang-rust-scan` cannot read doc comments at all — it skips
+//! comment lines and associates nothing with the item below them — so a schema in which
+//! "this item has no doc comment" and "this provider does not read doc comments" are the
+//! same bytes would turn every universe read by the scanner into one declaring no mirror:
+//! a phantom silently downgraded to an admitted gap, which is absence becoming success in
+//! the one field this rule's whole severity ordering turns on. A version has to carry what
+//! each provider *observed*, bounded by its guarantee.
+//!
+//! **The end condition, stated so this is an exception and not a habit:** when
+//! `nomos.syntax.items.v1` is superseded by a schema carrying an item's documentation and
+//! its declared type shape, this module reads facts too, `syn` and `proc-macro2` leave
+//! `Cargo.toml`, and `nomos-rules` depends on no parser at all. `P10-SYNTAX-V2` holds that
+//! work.
 
 /// How a universe is written down.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
