@@ -6057,6 +6057,45 @@
         ],
         "patterns": []
       },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-rollup-determinism-a41",
+        "acquired_at": 1786385180,
+        "lease_expires_at": 1786395980
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P11-HARNESS-SEAM",
+      "title": "An autonomous work harness is being designed for this repository and no record says which of the four products owns it",
+      "why": "A design for an autonomous work harness proposes a goal model above the ledger, a model and effort router, a context builder, an execution supervisor, a run controller, a budget controller and a run history, placed as crates/autonomous/nomos-* and packaged as a Nomos product capability with agent runtimes as adapters underneath it. ARC-ECOSYSTEM-001 already answers most of that question in the other direction, and it was written to stop exactly this placement being made by precedent rather than by decision.\n\nThree of its clauses reach the proposal by name. Its description of what XVPE owns is \"a task scheduler, a storage primitive, a process or window or telemetry substrate\", which is the run controller, the run history and the execution supervisor almost word for word. Its fourth owner is repository and bootstrap tooling, which owns \"the machinery that exists only to develop or preserve this repository\", carrying the sentence that something written to get Nomos built is not thereby part of Nomos, and that assuming it is is how a scaffold becomes a shipped surface nobody chose to ship. And its anti-drift clause states that a subsystem moves toward the lowest layer or product whose semantics fully explain it, with \"reuse alone does not make something XVPE\" and \"current repository location alone does not make something Nomos\" written as rules meant to be cited.\n\nOne part of the proposal does have a Nomos claim, and the same record supplies it: Nomos owns change planning and the validation that execution satisfied it. A goal decomposed into a change plan, and a convergence check that the plan was satisfied, is that sentence. Routing a model, supervising a process and accounting for tokens is not, because none of those definitions mentions software.\n\nSo the harness is not one subsystem with one owner, and the cost of leaving that undecided is the cost ARC-ECOSYSTEM-001 names for itself: work accumulated across an unstated seam has to be re-litigated when the seam is finally drawn. The proposal has already reached naming, and a crate called nomos-model-router is the placement made, not proposed.",
+      "done_when": "A record decides ownership per component rather than for the harness as a whole. For each of goal and plan, convergence validation, model and effort routing, context construction and handoff, execution supervision, budget accounting, and run history, it says which of the four owns it and why the semantics require that owner rather than which repository the code would be convenient in.\n\nOr it decides that the whole harness is repository bootstrap tooling for now, states what that costs, and names what would make it a product surface - which is the shape ARC-ECOSYSTEM-001 used for its own placeholders, and is a decision rather than a deferral.\n\nNot closed by creating crates/autonomous/ and moving on: a directory is a placement, and the placement is the undecided thing this item exists for. Not closed by an entry in AGENTS.md or CLAUDE.md either - OD-AGENT-001 refused to write an undecided architecture into an instruction file, and ARC-ECOSYSTEM-001 exists because of that refusal.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-HARNESS-001",
+          "crates/spec/nomos-spec-store/records/ARC-HARNESS-001.record"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -6067,9 +6106,82 @@
           "test",
           "--no-fail-fast",
           "-p",
-          "nomos-lang-rust",
+          "nomos-spec-store",
           "-p",
-          "nomos-integration-tests",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P11-EXEC-IDLE",
+      "title": "A predicate that stalls and one that is legitimately slow are the same TimedOut, so the only remedy is a bigger timeout",
+      "why": "Command carries one bound, timeout, at crates/platform/nomos-platform/src/launcher.rs:25, and ExitOutcome carries one non-verdict bucket for exceeding it, TimedOut, at launcher.rs:66. A benchmark honestly running for forty minutes, a test suite whose one hanging case has stopped the other four hundred, and a child blocked writing into a pipe nobody drains are the same value. The enum was built to keep \"the check failed\" apart from \"nobody found out\", which it does. It does not keep the reasons nobody found out apart, and those have different remedies: wait, kill the case, fix the reader.\n\nThe cost is recorded on this board rather than hypothetical. P10-LAUNCHER-PIPE met one of the three - a predicate that passes in 103 seconds by hand was recorded as TimedOut twice at 600 seconds because the launcher read no pipe until the child exited. The drain was fixed and the classification was not, so the next stall from a different cause presents identically, and the first remedy anybody reaches for is a larger timeout, which is the one remedy that is wrong for all three.\n\nUnattended looping multiplies it. Nothing records that an argv has already stalled, so a controller that retries on a non-verdict re-runs the same hang for as long as its budget lasts, and each attempt costs the full wall bound before producing the same non-answer.",
+      "done_when": "A stall and a long run are different outcomes, and the difference is asserted by a test that drives both.\n\nA command carries a wall bound and an idle bound separately, and observable progress resets the idle bound. The outcome distinguishes at minimum a child that produced nothing for the idle bound from a child that was still producing when the wall bound expired, and that distinction survives into what the ledger records for a predicate, so work show can say which happened rather than only that nobody found out.\n\nTermination reaches the process tree rather than the direct child, because a cargo test killed without its test binary leaves alive the thing that was actually hanging. What was observed before the kill - elapsed time, last output, the argv - is reported rather than discarded, since the kill destroys the only evidence of why it was needed.\n\nNot closed by raising a default timeout, and not closed by adding an Idle variant that nothing produces: the test driving a slow-but-progressing child and a silent child has to show two different values.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/launcher.rs",
+          "crates/platform/nomos-platform-std/src/launcher.rs",
+          "tests/contract/surface/nomos-platform.txt",
+          "tests/contract/surface/nomos-platform-std.txt",
+          "docs/records/OD-PLATFORM-001",
+          "crates/spec/nomos-spec-store/records/OD-PLATFORM-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P11-AGENT-CONTINUATION",
+      "title": "A session that runs out of context has no way to hand off, and the obvious fix would restate the contract in the handoff",
+      "why": "A session that exhausts its context has two places to put what it knows, and neither takes it. The ledger holds the claim, the territory and the predicate, which is what the next holder needs in order to start; it does not hold what this session learned and has not yet earned a record for - the hypothesis it ruled out, the command that hangs, the reading of a record that turned out to be wrong. The records hold decisions, and none of that is a decision yet.\n\nSo the state goes into a prose handoff, and the shape a handoff takes by default is a summary of the repository: the crate bands, the gate commands, the ledger verbs, the hazards. OD-AGENT-001 already refused that document once, for the reason that a summary of a checked file is an unchecked copy of it, and tests/contract/tests/agent_harness.rs keeps AGENTS.md honest about it. A handoff prompt is the same document at a different address, written by a machine at the moment it is least able to check what it is copying, and read by a successor with no way to tell the copy from the authority it was copied from.\n\nThe compression direction matters too, and it cuts the other way. Agent-to-agent text is worth compressing, but the qualifiers are the expensive part to lose. Unverified, failed, assumed, not run, and the provenance of a claim are exactly what a summary drops first and exactly what makes the successor either repeat the work or trust something nobody checked.",
+      "done_when": "The contract states what a handoff carries, and a test holds it to that.\n\nIt carries session-local state only: what was tried and rejected, what was observed and not yet recorded, and what the next action is. Everything reconstructible from an authority is a reference to that authority - the item id, the record id, the commit - and not a paraphrase of it.\n\nAgent-to-agent prose is compressed, and the compression is directional. Identifiers, paths, errors, failures and the qualifiers that mark a claim unverified survive it, because the compressible part is the English and not the uncertainty.\n\nagent_harness.rs asserts it the way it already asserts that AGENTS.md carries no band table: whatever states the handoff policy names no crate table, no gate command list and no second copy of the ledger verb reference, and every repository path it cites exists on disk. Where a decision is made about what a handoff must not restate, that decision is a record, because a policy about not duplicating authority cannot itself live only in the instruction file it is about.\n\nNot closed by a skill: a skill is a procedure, and this is a constraint on content that a procedure would restate.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "tests/contract/tests/agent_harness.rs",
+          "docs/records/OD-AGENT-002",
+          "crates/spec/nomos-spec-store/records/OD-AGENT-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
           "-p",
           "nomos-contract-tests"
         ],
