@@ -4782,14 +4782,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-stamp-consistency-w21",
-        "acquired_at": 1786348106,
-        "lease_expires_at": 1786355306
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -4801,7 +4797,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-stamp-consistency-w21",
+          "reason": "Decided and drafted, not landed, and blocked by the tree rather than by the question. Landing a governing record adds relations, which leaves diagrams/relations.mmd stale and reddens the freshness gate step unless the commit re-renders; re-rendering now would bake OD-LEDGER-012 and OD-SYNTAX-002, two other sessions uncommitted records, into a committed file. Both halves of the AGENTS.md hazard cannot be satisfied at once right now, so the conservative half wins and no record is added. The freshness step is independently red already at exit 8 for the same missing render. The decision reached, on the evidence: a feature request is an authored file under docs/records with typed front matter and the store holds it as a derived index, not as the durable substrate. Three grounds. Nothing persists a specification database - corpus.rs still opens with that sentence and RECORDS in governing.rs is still a generated table of include_str over the record files, so what survives an invocation is the file. Deciding per artifact is the real hazard: files for records and the store for feature requests would put two substrates in one build and encode the split in every typed row, which is unreversible in a way the substrate choice itself is not. And the price OD-SPEC-006 quoted for the store is out of date in the buyers favour - OD-SPEC-007 paid the guard part by establishing that side B needs to be authored independently of the directory it is compared against rather than hand-typed in one file, so what remains is seeding from the bundle and making docs/records rendered outputs with a freshness check, neither of which is an open design question. Re-claim and land the draft once git status --porcelain over docs/records and crates/spec/nomos-spec-store/records is empty, then render diagram-set in the same commit.",
+          "abandoned_at": 1786348249
+        }
+      ],
       "displaced": []
     }
   ]
