@@ -3,7 +3,7 @@ id: D-129
 type: decision
 title: The specification store is the identity substrate; markdown is an editing surface
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - specification-system
@@ -59,6 +59,10 @@ corpus in Phase 3; until then it is present by identity and by this edge, not by
 
 ## What Is Not Built (amended at version 2)
 
+*Answered by the version 3 section below. Kept as written, because the gap it records is what
+made the work schedulable and a record that quietly stops mentioning its own gap teaches
+nobody anything.*
+
 The round trip does not exist. Nothing reads a record out of the store as markdown, and
 nothing writes an edit back. There is no claim, stage, preview or commit against the store
 for an authored record; the preview this record calls mandatory has never run.
@@ -84,6 +88,34 @@ the opposite of what this record decides.
 
 `P9-AUTHORING` carries the round trip. It is a phase of work rather than a defect to patch,
 and stating the gap is what makes it schedulable.
+
+## What Is Built (amended at version 3)
+
+The round trip exists. `nomos spec markdown` renders a record out of the store's own rows —
+the declared front matter and the block rows, never the ingested blob — and `nomos spec
+preview` and `nomos spec commit` write an edit back as one transaction. The preview is
+mandatory in the only way that survives a careless caller: committing takes a preview value
+that nothing outside the module can construct, so an unpreviewed commit is not a lapse of
+discipline but an unwritable program. The preview names whether normative wording moved, from
+the normalizer over the blocks and from the recorded statements where a corpus has supplied
+them, and says which of the two it used.
+
+Identity survives the round trip, and a rename is an ordinary edit: the document row is
+updated rather than replaced, so the block surrogates every lineage row hangs from are
+untouched, and retyping `id:` in a staged file is refused because identity is not a property
+of the file.
+
+What this does not do is move the substrate, and that half is now recorded rather than
+implied. Markdown files under `docs/records` are still what this repository authors in,
+because nothing persists a specification database: the store is assembled per invocation from
+records compiled into the binary. `OD-SPEC-006` states that on the evidence, says what would
+have to change for the store to become durable, and names the obstacle already recorded
+against the obvious route.
+
+So the second paragraph of the decision now describes the system. What changed underneath it
+is the evidence rather than the dependency: the store used to hold a copy of unknown
+fidelity, and it now holds a projection asserted byte for byte, in both directions, over every
+record in it.
 
 ## Alternatives Considered
 

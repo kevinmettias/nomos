@@ -177,31 +177,7 @@ impl SpecificationStore
     /// Returns [`StoreError`] on any SQL failure.
     pub fn Put_Blob(&mut self, content: &[u8]) -> Result<i64, StoreError>
     {
-        let digest = ContentHash::Of_Bytes(content);
-        let existing: Option<i64> = self
-            .connection
-            .query_row(
-                "SELECT uid FROM blobs WHERE sha256 = ?1",
-                params![digest.As_Str()],
-                |row| row.get(0),
-            )
-            .optional()?;
-
-        if let Some(uid) = existing
-        {
-            return Ok(uid);
-        }
-
-        self.connection.execute(
-            "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
-            params![
-                digest.As_Str(),
-                i64::try_from(content.len()).unwrap_or(i64::MAX),
-                content
-            ],
-        )?;
-
-        return Ok(self.connection.last_insert_rowid());
+        return Write_Blob(&self.connection, content);
     }
 
     /// # Errors
@@ -214,18 +190,7 @@ impl SpecificationStore
         content: &str,
     ) -> Result<i64, StoreError>
     {
-        let blob_uid = self.Put_Blob(content.as_bytes())?;
-
-        self.connection.execute(
-            "INSERT OR IGNORE INTO source_documents (path, revision, blob_uid) VALUES (?1, ?2, ?3)",
-            params![path, revision, blob_uid],
-        )?;
-
-        return Ok(self.connection.query_row(
-            "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
-            params![path, revision],
-            |row| row.get(0),
-        )?);
+        return Write_Source_Document(&self.connection, path, revision, content);
     }
 
     /// Writes blocks and, for any block carrying a table, its typed rows.
@@ -245,26 +210,52 @@ impl SpecificationStore
         blocks: &[SourceBlock],
     ) -> Result<usize, StoreError>
     {
-        for block in blocks
-        {
-            let defects = Table_Defects(&Table_Rows(block));
-            if let Some(defect) = defects.first()
-            {
-                return Err(StoreError::Table {
-                    document_uid,
-                    ordinal: block.ordinal,
-                    cause: defect.to_string(),
-                });
-            }
-        }
-
         let transaction = self.connection.transaction()?;
+        let written = Write_Source_Blocks(&transaction, document_uid, blocks)?;
+        transaction.commit()?;
+
+        return Ok(written);
+    }
+
+}
+
+/// Writes blocks and their typed rows through a caller's transaction.
+///
+/// Free rather than a method, and taking a [`Connection`] rather than the store, because
+/// [`rusqlite::Transaction`] dereferences to one: the seed, a re-ingest and an authoring
+/// commit all reach this same writer, one of them inside a transaction that spans several
+/// documents. A second entry point that knew how to write a block would be a second place
+/// that could be wrong about what a block is.
+///
+/// # Errors
+///
+/// Returns [`StoreError::Table`] if a block's tables do not each carry exactly one
+/// delimiter, and [`StoreError`] on any SQL failure.
+pub(crate) fn Write_Source_Blocks(
+    connection: &Connection,
+    document_uid: i64,
+    blocks: &[SourceBlock],
+) -> Result<usize, StoreError>
+{
+    for block in blocks
+    {
+        let defects = Table_Defects(&Table_Rows(block));
+        if let Some(defect) = defects.first()
         {
+            return Err(StoreError::Table {
+                document_uid,
+                ordinal: block.ordinal,
+                cause: defect.to_string(),
+            });
+        }
+    }
+
+    {
             // Not `INSERT OR REPLACE`. REPLACE deletes the conflicting row and inserts a
             // new one, which hands the block a new `uid` — and `uid` is what every
             // lineage and omission row points at. Re-ingesting a document would silently
             // renumber its blocks and take their dispositions with them.
-            let mut insert = transaction.prepare(
+            let mut insert = connection.prepare(
                 "INSERT INTO source_blocks
                  (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
                  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
@@ -289,12 +280,12 @@ impl SpecificationStore
                 ])?;
             }
 
-            let mut block_uid = transaction.prepare(
+            let mut block_uid = connection.prepare(
                 "SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal = ?2",
             )?;
             // Same reasoning as the blocks above: update in place rather than REPLACE, so
             // a re-ingest does not hand a row a new uid.
-            let mut insert_row = transaction.prepare(
+            let mut insert_row = connection.prepare(
                 "INSERT INTO source_table_rows
                  (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
                   content_hash, normalized_hash)
@@ -335,12 +326,158 @@ impl SpecificationStore
                     ])?;
                 }
             }
-        }
-        transaction.commit()?;
-
-        return Ok(blocks.len());
     }
 
+    return Ok(blocks.len());
+}
+
+/// Writes bytes, addressed by content, through a caller's transaction.
+///
+/// # Errors
+///
+/// Returns [`StoreError`] on any SQL failure.
+pub(crate) fn Write_Blob(connection: &Connection, content: &[u8]) -> Result<i64, StoreError>
+{
+    let digest = ContentHash::Of_Bytes(content);
+    let existing: Option<i64> = connection
+        .query_row(
+            "SELECT uid FROM blobs WHERE sha256 = ?1",
+            params![digest.As_Str()],
+            |row| row.get(0),
+        )
+        .optional()?;
+
+    if let Some(uid) = existing
+    {
+        return Ok(uid);
+    }
+
+    connection.execute(
+        "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
+        params![
+            digest.As_Str(),
+            i64::try_from(content.len()).unwrap_or(i64::MAX),
+            content
+        ],
+    )?;
+
+    return Ok(connection.last_insert_rowid());
+}
+
+/// Writes a document and its bytes through a caller's transaction.
+///
+/// # Errors
+///
+/// Returns [`StoreError`] on any SQL failure.
+pub(crate) fn Write_Source_Document(
+    connection: &Connection,
+    path: &str,
+    revision: &str,
+    content: &str,
+) -> Result<i64, StoreError>
+{
+    let blob_uid = Write_Blob(connection, content.as_bytes())?;
+
+    connection.execute(
+        "INSERT OR IGNORE INTO source_documents (path, revision, blob_uid) VALUES (?1, ?2, ?3)",
+        params![path, revision, blob_uid],
+    )?;
+
+    return Ok(connection.query_row(
+        "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
+        params![path, revision],
+        |row| row.get(0),
+    )?);
+}
+
+/// Writes a node, upgrading a placeholder but never overwriting a real one, through a
+/// caller's transaction.
+///
+/// # Errors
+///
+/// Returns [`StoreError`] on any SQL failure.
+pub(crate) fn Write_Node(
+    connection: &Connection,
+    node_id: &str,
+    kind: &str,
+    authority: &str,
+    representation: &str,
+    title: &str,
+) -> Result<i64, StoreError>
+{
+    connection.execute(
+        "INSERT INTO nodes (node_id, kind, authority, representation, title)
+         VALUES (?1, ?2, ?3, ?4, ?5)
+         ON CONFLICT(node_id) DO UPDATE SET
+             kind = excluded.kind,
+             authority = excluded.authority,
+             representation = excluded.representation,
+             title = excluded.title
+         WHERE nodes.authority = ?6",
+        params![node_id, kind, authority, representation, title, EXTERNAL],
+    )?;
+
+    return Ok(connection.query_row(
+        "SELECT uid FROM nodes WHERE node_id = ?1",
+        params![node_id],
+        |row| row.get(0),
+    )?);
+}
+
+/// Records an edge and its inverse through a caller's transaction.
+///
+/// # Errors
+///
+/// Returns [`StoreError`] on any SQL failure.
+pub(crate) fn Write_Relation(
+    connection: &Connection,
+    from_node_id: &str,
+    relation_type: &str,
+    to_node_id: &str,
+) -> Result<(), StoreError>
+{
+    connection.execute(
+        "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
+         SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
+         WHERE f.node_id = ?1 AND t.node_id = ?3",
+        params![from_node_id, relation_type, to_node_id],
+    )?;
+
+    if let Some(inverse) = Inverse_Of(connection, relation_type)?
+    {
+        connection.execute(
+            "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
+             SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
+             WHERE f.node_id = ?1 AND t.node_id = ?3",
+            params![to_node_id, inverse, from_node_id],
+        )?;
+    }
+
+    return Ok(());
+}
+
+/// The inverse a relation type declares, if it declares one.
+///
+/// # Errors
+///
+/// Returns [`StoreError`] on any SQL failure.
+pub(crate) fn Inverse_Of(
+    connection: &Connection,
+    relation_type: &str,
+) -> Result<Option<String>, StoreError>
+{
+    return Ok(connection
+        .query_row(
+            "SELECT inverse_of FROM relation_types WHERE name = ?1",
+            params![relation_type],
+            |row| row.get(0),
+        )
+        .optional()?
+        .flatten());
+}
+
+impl SpecificationStore
+{
     /// The surrogate for one table row, addressed the way a person addresses one.
     ///
     /// # Errors
@@ -418,23 +555,7 @@ impl SpecificationStore
         title: &str,
     ) -> Result<i64, StoreError>
     {
-        self.connection.execute(
-            "INSERT INTO nodes (node_id, kind, authority, representation, title)
-             VALUES (?1, ?2, ?3, ?4, ?5)
-             ON CONFLICT(node_id) DO UPDATE SET
-                 kind = excluded.kind,
-                 authority = excluded.authority,
-                 representation = excluded.representation,
-                 title = excluded.title
-             WHERE nodes.authority = ?6",
-            params![node_id, kind, authority, representation, title, EXTERNAL],
-        )?;
-
-        return Ok(self.connection.query_row(
-            "SELECT uid FROM nodes WHERE node_id = ?1",
-            params![node_id],
-            |row| row.get(0),
-        )?);
+        return Write_Node(&self.connection, node_id, kind, authority, representation, title);
     }
 
     /// Records a suite and whether it is this repository's own.
@@ -584,34 +705,7 @@ impl SpecificationStore
         to_node_id: &str,
     ) -> Result<(), StoreError>
     {
-        self.connection.execute(
-            "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
-             SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
-             WHERE f.node_id = ?1 AND t.node_id = ?3",
-            params![from_node_id, relation_type, to_node_id],
-        )?;
-
-        let inverse: Option<String> = self
-            .connection
-            .query_row(
-                "SELECT inverse_of FROM relation_types WHERE name = ?1",
-                params![relation_type],
-                |row| row.get(0),
-            )
-            .optional()?
-            .flatten();
-
-        if let Some(inverse) = inverse
-        {
-            self.connection.execute(
-                "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
-                 SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
-                 WHERE f.node_id = ?1 AND t.node_id = ?3",
-                params![to_node_id, inverse, from_node_id],
-            )?;
-        }
-
-        return Ok(());
+        return Write_Relation(&self.connection, from_node_id, relation_type, to_node_id);
     }
 
     /// # Errors
@@ -651,6 +745,8 @@ pub enum Table
     NormativeStatements,
     Lineage,
     Omissions,
+    RecordFrontMatter,
+    RecordRelations,
 }
 
 impl Table
@@ -674,6 +770,8 @@ impl Table
             Self::NormativeStatements => "normative_statements",
             Self::Lineage => "lineage",
             Self::Omissions => "omissions",
+            Self::RecordFrontMatter => "record_front_matter",
+            Self::RecordRelations => "record_relations",
         };
     }
 
@@ -699,6 +797,8 @@ impl Table
             Self::NormativeStatements,
             Self::Lineage,
             Self::Omissions,
+            Self::RecordFrontMatter,
+            Self::RecordRelations,
         ];
     }
 }

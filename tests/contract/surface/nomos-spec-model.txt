@@ -3,6 +3,7 @@ pub const fn nomos_spec_model::RowKind::Label(self) -> &'static str
 pub const nomos_spec_model::HASH_PREFIX: &str
 pub enum nomos_spec_model::BlockKind
 pub enum nomos_spec_model::RecordError
+pub enum nomos_spec_model::RenderError
 pub enum nomos_spec_model::RowKind
 pub enum nomos_spec_model::StatementKind
 pub enum nomos_spec_model::TableDefect
@@ -14,6 +15,7 @@ pub enum variant nomos_spec_model::RecordError::NoHeading { id: String, }
 pub enum variant nomos_spec_model::RecordError::TitleDiverges { id: String, declared: String, heading: String, }
 pub enum variant nomos_spec_model::RecordError::UnterminatedFrontMatter
 pub enum variant nomos_spec_model::RecordError::Yaml(String)
+pub enum variant nomos_spec_model::RenderError::Unrepresentable { field: String, value: String, cause: &'static str, }
 pub enum variant nomos_spec_model::RowKind::Content
 pub enum variant nomos_spec_model::RowKind::Header
 pub enum variant nomos_spec_model::RowKind::Separator
@@ -37,6 +39,9 @@ pub fn nomos_spec_model::NormativeStatement::Canonicalized(mut self) -> Self
 pub fn nomos_spec_model::NormativeStatement::Text_Is_Canonical(&self) -> bool
 pub fn nomos_spec_model::Parse_Record(markdown: &str) -> Result<Record, RecordError>
 pub fn nomos_spec_model::RecordError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_model::RenderError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_model::Render_Record( front_matter: &RecordFrontMatter, blocks: &[SourceBlock], ) -> Result<String, RenderError>
+pub fn nomos_spec_model::Round_Trips(markdown: &str) -> bool
 pub fn nomos_spec_model::RowKind::Parse(label: &str) -> Option<Self>
 pub fn nomos_spec_model::Segment(markdown: &str) -> Vec<SourceBlock>
 pub fn nomos_spec_model::SourceBlock::Content_Hash(&self) -> ContentHash
@@ -53,6 +58,8 @@ pub fn nomos_spec_model::Table_Rows(block: &SourceBlock) -> Vec<TableRow>
 pub impl nomos_spec_model::ContentHash implements core::fmt::Display
 pub impl nomos_spec_model::RecordError implements core::fmt::Display
 pub impl nomos_spec_model::RecordError implements std::error::Error
+pub impl nomos_spec_model::RenderError implements core::fmt::Display
+pub impl nomos_spec_model::RenderError implements std::error::Error
 pub impl nomos_spec_model::StatementId implements core::fmt::Display
 pub impl nomos_spec_model::TableDefect implements core::fmt::Display
 pub struct field nomos_spec_model::NormativeStatement::canonical_text: String

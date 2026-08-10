@@ -162,7 +162,26 @@ fn Populate_Graph(store: &SpecificationStore)
              SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
              FROM source_blocks b, source_documents d
              WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
-               AND b.ordinal = 2;",
+               AND b.ordinal = 2;
+
+             -- The front matter one document declared. It is what lets a store rebuilt from
+             -- this bundle render the record back out as markdown, so a bundle that dropped
+             -- it would rebuild a store that can preserve every record and author none.
+             INSERT INTO record_front_matter
+             (document_uid, node_uid, status, version, tags_json)
+             SELECT d.uid, n.uid, 'accepted', 2, '[\"architecture\",\"identity\"]'
+             FROM source_documents d, nodes n
+             WHERE d.path = 'volumes/02-core.md' AND n.node_id = 'AGT-EXEC-001';
+
+             -- Two of them, in declared order, because the order is in the file and the
+             -- ordinal is the only thing that carries it.
+             INSERT INTO record_relations (document_uid, ordinal, target, relation)
+             SELECT d.uid, 1, 'CON-WORKSPACE-001', 'affects'
+             FROM source_documents d WHERE d.path = 'volumes/02-core.md';
+
+             INSERT INTO record_relations (document_uid, ordinal, target, relation)
+             SELECT d.uid, 2, 'REQ-RETIRED-009', 'verified_by'
+             FROM source_documents d WHERE d.path = 'volumes/02-core.md';",
         )
         .expect("populates every table");
 }

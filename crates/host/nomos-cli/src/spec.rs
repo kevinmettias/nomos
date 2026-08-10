@@ -24,7 +24,7 @@
 use crate::arguments::{Named_Value, Required};
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
 use nomos_spec_project::{Build, Catalogue, Check, Profile, ProjectError, SIDECAR_SUFFIX};
-use nomos_spec_store::{PathMatch, RowScope, StoreError};
+use nomos_spec_store::{EditError, EditPreview, PathMatch, RowScope, StoreError};
 use std::path::{Path, PathBuf};
 
 /// What the process exits with.
@@ -61,6 +61,14 @@ pub enum ExitCode
     /// collapsing the two would report a machine without a corpus exactly as it reports
     /// an edited output, which is the confusion `OD-GATE-001` is already about.
     Stale = 8,
+    /// An authoring step refused the edit it was given.
+    ///
+    /// Apart from [`ExitCode::Usage`] because the command line was right: the author asked
+    /// for exactly what they meant and the *content* was refused — a text this surface would
+    /// not have written, a front matter naming a different record, a rename onto an occupied
+    /// path. An agent told its arguments were wrong will retype them; an agent told its edit
+    /// was refused will read the reason.
+    Refused = 9,
 }
 
 impl ExitCode
@@ -114,6 +122,35 @@ pub enum SpecCommand
         /// Only this profile. Without it, every shipped profile is looked for.
         profile: Option<String>,
     },
+    /// Read a record out of the store as markdown, rendered from its rows.
+    Markdown
+    {
+        /// The node identifier.
+        id: String,
+        /// Which revision of it, when more than one is held.
+        revision: Option<String>,
+    },
+    /// Say what committing an edited record would change, and change nothing.
+    Preview
+    {
+        id: String,
+        /// The edited markdown.
+        from: PathBuf,
+        /// The path the record should move to. A rename is an ordinary edit.
+        rename: Option<String>,
+    },
+    /// Preview an edited record and then commit it.
+    Commit
+    {
+        id: String,
+        from: PathBuf,
+        rename: Option<String>,
+        /// The tree the record's own path is written under. A record's path is repository
+        /// relative, so a commit has to be told which tree it means; `.` is the default
+        /// rather than the only option, so a test does not have to write into the tree it
+        /// is testing.
+        into: PathBuf,
+    },
     /// List the shipped projection profiles.
     Profiles,
     /// Say what this store was assembled from, and what was missing.
@@ -156,6 +193,21 @@ pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
             into: PathBuf::from(required("--into")?),
             profile: value_of("--profile"),
         }),
+        "markdown" => Ok(SpecCommand::Markdown {
+            id: required("--id")?,
+            revision: value_of("--revision"),
+        }),
+        "preview" => Ok(SpecCommand::Preview {
+            id: required("--id")?,
+            from: PathBuf::from(required("--from")?),
+            rename: value_of("--rename"),
+        }),
+        "commit" => Ok(SpecCommand::Commit {
+            id: required("--id")?,
+            from: PathBuf::from(required("--from")?),
+            rename: value_of("--rename"),
+            into: value_of("--into").map_or_else(|| return PathBuf::from("."), PathBuf::from),
+        }),
         "profiles" => Ok(SpecCommand::Profiles),
         "sources" => Ok(SpecCommand::Sources),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
@@ -186,6 +238,9 @@ fn Usage_Text() -> String
             [--revision <label>]\n\
             \x20 render    --profile <id> --into <directory>\n\
             \x20 freshness --into <directory> [--profile <id>]\n\
+            \x20 markdown  --id <node-id> [--revision <label>]\n\
+            \x20 preview   --id <node-id> --from <file> [--rename <path>]\n\
+            \x20 commit    --id <node-id> --from <file> [--rename <path>]\n\
             \x20 profiles\n\
             \x20 sources\n\
             \n\
@@ -194,13 +249,19 @@ fn Usage_Text() -> String
             `record` and `table` write content to stdout and everything about it to \
             stderr, so a redirect captures exactly what the store holds.\n\
             \n\
+            `record` prints the bytes the store was given; `markdown` renders the record \
+            back out of the store's own rows, which is the round trip D-129 decides. \
+            `commit` refuses to write an edit it has not previewed, and prints the preview \
+            it did.\n\
+            \n\
             the store is assembled per invocation: this repository's governing records \
             are embedded, and the v14 corpus is read from --corpus or the environment. A \
             corpus that is not there is reported as an absence rather than as a shorter \
             answer — run `nomos spec sources` to see what a store holds.\n\
             \n\
             exit codes: 0 ok, 1 not found, 2 usage, 5 store error, 6 a source was absent, \
-            7 the output could not be written, 8 an output on disk has drifted"
+            7 the output could not be written, 8 an output on disk has drifted, 9 an edit \
+            was refused"
         .to_owned();
 }
 
@@ -221,7 +282,7 @@ pub fn Run(
         return Profiles(output, notes);
     }
 
-    let assembly = match Assemble(request)
+    let mut assembly = match Assemble(request)
     {
         Ok(assembly) => assembly,
         Err(error) => return Report_Store_Error(&error, notes),
@@ -252,8 +313,301 @@ pub fn Run(
         {
             Freshness_Of(&assembly, into, profile.as_deref(), output, notes)
         }
+        SpecCommand::Markdown { id, revision } =>
+        {
+            Markdown(&assembly, id, revision.as_deref(), output, notes)
+        }
+        SpecCommand::Preview { id, from, rename } =>
+        {
+            Preview(&assembly, id, from, rename.as_deref(), output, notes)
+        }
+        SpecCommand::Commit {
+            id,
+            from,
+            rename,
+            into,
+        } => Commit(&mut assembly, id, from, rename.as_deref(), into, output, notes),
         SpecCommand::Profiles => Profiles(output, notes),
         SpecCommand::Sources => Sources(&assembly, output),
+    };
+}
+
+/// What a `preview` or `commit` against this binary's store does and does not persist.
+///
+/// Said on every run rather than left to a record nobody has open. The store is assembled per
+/// invocation and thrown away, so the transaction proves the edit is admissible and the file is
+/// what survives it — and for a record this binary embeds, the seed keeps reading its own
+/// compiled-in copy until the crate is rebuilt. `OD-SPEC-006` is why that is the arrangement
+/// rather than a defect.
+const EPHEMERAL: &str = "this store was assembled for this invocation and is now gone: the \
+                         transaction is what checked the edit, and the file is what persists \
+                         it. A record embedded in this binary is re-seeded from the copy \
+                         compiled into it until nomos-spec-store is rebuilt. See OD-SPEC-006.";
+
+/// `D-129`'s round trip, read half: the record as the store's own rows render it.
+///
+/// Deliberately a second command rather than a flag on [`SpecCommand::Record`]. `record`
+/// answers *what bytes went in*, which is a preservation question; this answers *what the
+/// store can write back out*, which is an authoring one. A flag would make the two look like
+/// two formats of one answer, and the whole point of `P9-AUTHORING` is that they were not the
+/// same answer until now.
+fn Markdown(
+    assembly: &Assembly,
+    id: &str,
+    revision: Option<&str>,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let projection = match assembly.store.Record_Markdown(id, revision)
+    {
+        Ok(projection) => projection,
+        Err(error) => return Report_Edit_Error(assembly, &error, notes),
+    };
+
+    let _ = write!(output, "{}", projection.markdown);
+    let _ = writeln!(
+        notes,
+        "{id}: {} at revision {}, rendered from the store's rows as {}",
+        projection.path, projection.revision, projection.projected_hash
+    );
+
+    if projection.Matches_Source()
+    {
+        return ExitCode::Ok;
+    }
+
+    let _ = writeln!(
+        notes,
+        "the bytes this document was ingested from hash to {}, so the store cannot reproduce \
+         them. A v14 record carrying a byte order mark is the ordinary reason (D-131), and an \
+         edit through this surface is refused until that is settled rather than silently \
+         normalised.",
+        projection.source_hash
+    );
+
+    return ExitCode::Stale;
+}
+
+/// The preview, printed, changing nothing.
+fn Preview(
+    assembly: &Assembly,
+    id: &str,
+    from: &Path,
+    rename: Option<&str>,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let staged = match Staged_Text(from, notes)
+    {
+        Ok(text) => text,
+        Err(code) => return code,
+    };
+
+    let preview = match Previewed(assembly, id, &staged, rename, notes)
+    {
+        Ok(preview) => preview,
+        Err(code) => return code,
+    };
+
+    let _ = writeln!(output, "{}", preview.Describe());
+    let _ = writeln!(notes, "nothing was written. {EPHEMERAL}");
+
+    return ExitCode::Ok;
+}
+
+/// The preview and then the commit, in that order, because the other order is not available.
+fn Commit(
+    assembly: &mut Assembly,
+    id: &str,
+    from: &Path,
+    rename: Option<&str>,
+    into: &Path,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let staged = match Staged_Text(from, notes)
+    {
+        Ok(text) => text,
+        Err(code) => return code,
+    };
+
+    let preview = match Previewed(assembly, id, &staged, rename, notes)
+    {
+        Ok(preview) => preview,
+        Err(code) => return code,
+    };
+    let _ = writeln!(output, "{}", preview.Describe());
+    let vacated = preview.Rename().map(|(before, _)| return before.to_owned());
+
+    let report = match assembly.store.Commit_Edit(&preview)
+    {
+        Ok(report) => report,
+        Err(error) => return Report_Edit_Error(assembly, &error, notes),
+    };
+
+    let vacated = vacated.map(|path| return into.join(path));
+    if let Some(code) =
+        Written(&into.join(&report.path), &staged, vacated.as_deref(), output, notes)
+    {
+        return code;
+    }
+
+    let _ = writeln!(
+        output,
+        "committed {} to {}: {} block(s), {} removed, {} relation(s) added, {} removed",
+        report.node_id,
+        report.path,
+        report.blocks,
+        report.blocks_removed,
+        report.relations_added,
+        report.relations_removed
+    );
+
+    return Reproduced(assembly, id, &staged, output, notes);
+}
+
+/// Writes the committed record where the author expects it, and vacates the path a rename
+/// left.
+///
+/// Deleting the old file is part of the rename rather than left to the author: two files
+/// declaring one identifier is what `Test_Every_Canonical_Record_On_Disk_Should_Be_Governing`
+/// would report as a phantom record, and a rename that needs a follow-up step is a rename
+/// somebody will half-do.
+fn Written(
+    destination: &Path,
+    staged: &str,
+    vacated: Option<&Path>,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> Option<ExitCode>
+{
+    if let Some(parent) = destination.parent()
+        && let Err(error) = std::fs::create_dir_all(parent)
+    {
+        let _ = writeln!(notes, "cannot create {}: {error}", parent.display());
+
+        return Some(ExitCode::Unwritable);
+    }
+
+    if let Err(error) = std::fs::write(destination, staged)
+    {
+        let _ = writeln!(notes, "cannot write {}: {error}", destination.display());
+
+        return Some(ExitCode::Unwritable);
+    }
+
+    if let Some(old) = vacated
+    {
+        match std::fs::remove_file(old)
+        {
+            Ok(()) => drop(writeln!(output, "vacated {}", old.display())),
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (),
+            Err(error) => drop(writeln!(
+                notes,
+                "{} was written and {} could not be removed ({error}), so two files now \
+                 declare this record",
+                destination.display(),
+                old.display()
+            )),
+        }
+    }
+
+    return None;
+}
+
+/// The round trip, closed on the way out: the store is asked to render what was just
+/// committed, and the answer is compared with it.
+fn Reproduced(
+    assembly: &Assembly,
+    id: &str,
+    staged: &str,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let _ = writeln!(notes, "{EPHEMERAL}");
+
+    return match assembly.store.Record_Markdown(id, None)
+    {
+        Ok(projection) if projection.markdown == staged =>
+        {
+            let _ = writeln!(
+                output,
+                "the store renders it back as the same bytes ({})",
+                projection.projected_hash
+            );
+
+            ExitCode::Ok
+        }
+        Ok(projection) =>
+        {
+            let _ = writeln!(
+                notes,
+                "the commit succeeded and the store renders {} rather than what was committed, \
+                 so the round trip does not close here",
+                projection.projected_hash
+            );
+
+            ExitCode::Stale
+        }
+        Err(error) => Report_Edit_Error(assembly, &error, notes),
+    };
+}
+
+fn Staged_Text(from: &Path, notes: &mut impl std::io::Write) -> Result<String, ExitCode>
+{
+    return std::fs::read_to_string(from).map_err(|error| {
+        let _ = writeln!(notes, "cannot read {}: {error}", from.display());
+
+        return ExitCode::Usage;
+    });
+}
+
+fn Previewed(
+    assembly: &Assembly,
+    id: &str,
+    staged: &str,
+    rename: Option<&str>,
+    notes: &mut impl std::io::Write,
+) -> Result<EditPreview, ExitCode>
+{
+    return assembly
+        .store
+        .Claim_For_Edit(id, None)
+        .and_then(|claimed| return claimed.Stage(staged, rename))
+        .and_then(|edit| return edit.Preview(&assembly.store))
+        .map_err(|error| return Report_Edit_Error(assembly, &error, notes));
+}
+
+/// The code an authoring refusal reports.
+///
+/// Everything the author can fix by editing their text is [`ExitCode::Refused`]; an
+/// identifier the store does not hold goes through [`Absent_Or`], because over a store the
+/// corpus never reached the honest answer is that something was missing.
+fn Report_Edit_Error(
+    assembly: &Assembly,
+    error: &EditError,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let _ = writeln!(notes, "{error}");
+
+    return match error
+    {
+        EditError::NoSuchRecord { .. } | EditError::NoContent { .. } =>
+        {
+            Absent_Or(assembly, ExitCode::NotFound, notes)
+        }
+        EditError::Ambiguous { .. } => ExitCode::NotFound,
+        EditError::Store(_) => ExitCode::StoreError,
+        EditError::NotAuthored { .. }
+        | EditError::Unreadable { .. }
+        | EditError::IdentityChanged { .. }
+        | EditError::NotCanonical { .. }
+        | EditError::PathTaken { .. } => ExitCode::Refused,
     };
 }
 
@@ -1049,6 +1403,7 @@ mod tests
         assert_eq!(ExitCode::Absent.Value(), 6);
         assert_eq!(ExitCode::Unwritable.Value(), 7);
         assert_eq!(ExitCode::Stale.Value(), 8);
+        assert_eq!(ExitCode::Refused.Value(), 9);
 
         for taken in [
             crate::work::ExitCode::ClaimUnavailable.Value(),
@@ -1062,6 +1417,7 @@ mod tests
                     ExitCode::Absent.Value(),
                     ExitCode::Unwritable.Value(),
                     ExitCode::Stale.Value(),
+                    ExitCode::Refused.Value(),
                 ]
                 .contains(&taken),
                 "spec reuses {taken}, which work already spends on a claim outcome"
@@ -1074,9 +1430,80 @@ mod tests
     {
         let usage = Usage_Text();
 
-        for command in ["record", "table", "render", "freshness", "profiles", "sources"]
+        for command in [
+            "record",
+            "table",
+            "render",
+            "freshness",
+            "markdown",
+            "preview",
+            "commit",
+            "profiles",
+            "sources",
+        ]
         {
             assert!(usage.contains(command), "usage does not mention {command}");
         }
+    }
+
+    /// `--rename` is optional and `--from` is not, so a rename cannot be a second parse of
+    /// `commit` — and `--into` defaults, because a record's path is repository relative and
+    /// most callers mean the tree they are standing in.
+    #[test]
+    fn Test_Commit_Should_Parse_With_A_Default_Tree_And_An_Optional_Rename()
+    {
+        assert_eq!(
+            Parse(&Arguments("commit --id D-129 --from staged.md")).expect("parses"),
+            SpecCommand::Commit {
+                id: "D-129".to_owned(),
+                from: PathBuf::from("staged.md"),
+                rename: None,
+                into: PathBuf::from("."),
+            }
+        );
+        assert_eq!(
+            Parse(&Arguments(
+                "commit --id D-129 --from staged.md --rename docs/records/moved.md --into build"
+            ))
+            .expect("parses"),
+            SpecCommand::Commit {
+                id: "D-129".to_owned(),
+                from: PathBuf::from("staged.md"),
+                rename: Some("docs/records/moved.md".to_owned()),
+                into: PathBuf::from("build"),
+            }
+        );
+        assert!(Parse(&Arguments("commit --id D-129")).is_err());
+    }
+
+    #[test]
+    fn Test_Markdown_And_Preview_Should_Parse()
+    {
+        assert_eq!(
+            Parse(&Arguments("markdown --id D-129")).expect("parses"),
+            SpecCommand::Markdown {
+                id: "D-129".to_owned(),
+                revision: None,
+            }
+        );
+        assert_eq!(
+            Parse(&Arguments("preview --id D-129 --from staged.md")).expect("parses"),
+            SpecCommand::Preview {
+                id: "D-129".to_owned(),
+                from: PathBuf::from("staged.md"),
+                rename: None,
+            }
+        );
+        assert!(Parse(&Arguments("preview --from staged.md")).is_err());
+    }
+
+    /// `markdown` is not `record` with a flag, and the parse is where that stays true.
+    #[test]
+    fn Test_Reading_Bytes_And_Rendering_Markdown_Should_Be_Different_Commands()
+    {
+        assert_ne!(
+            Parse(&Arguments("record --id D-129")).expect("parses"),
+            Parse(&Arguments("markdown --id D-129")).expect("parses")
+        );
     }
 }

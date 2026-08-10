@@ -41,8 +41,9 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
     // OD-COMPLETENESS-001 was the twentieth, OD-LEDGER-005 the twenty-third,
     // OD-PLATFORM-001 the twenty-fourth, OD-PROJECT-001 the twenty-fifth, OD-GATE-002
     // the twenty-sixth, OD-LEDGER-006 the twenty-seventh, OD-CAPABILITY-003 the
-    // twenty-eighth, OD-LEDGER-007 the twenty-ninth and OD-LEDGER-009 the thirtieth.
-    assert_eq!(GOVERNING_RECORD_IDS.len(), 30);
+    // twenty-eighth, OD-LEDGER-007 the twenty-ninth, OD-LEDGER-009 the thirtieth and
+    // OD-SPEC-006 the thirty-first.
+    assert_eq!(GOVERNING_RECORD_IDS.len(), 31);
 }
 
 /// Every record on disk that claims to be canonical and normative is in the store.

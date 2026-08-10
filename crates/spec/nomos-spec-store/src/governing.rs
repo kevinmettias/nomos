@@ -1,6 +1,5 @@
 use crate::store::{AUTHORED, SpecificationStore, StoreError};
-use nomos_spec_model::{BlockKind, Parse_Record, Segment};
-use rusqlite::params;
+use nomos_spec_model::Parse_Record;
 
 /// The records that govern this system, embedded so they travel with the binary.
 ///
@@ -176,6 +175,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md"
         ),
     ),
+    (
+        "docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md",
+        include_str!(
+            "../../../../docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -218,6 +223,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-CAPABILITY-003",
     "OD-LEDGER-007",
     "OD-LEDGER-009",
+    "OD-SPEC-006",
 ];
 
 /// The relation vocabulary the governing records use.
@@ -288,36 +294,10 @@ pub fn Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedRepo
 
     for (path, text) in RECORDS
     {
-        let record = Parse_Record(text).map_err(|error| StoreError::Record {
-            path: (*path).to_owned(),
-            cause: error.to_string(),
-        })?;
+        let written = store.Put_Record(path, AUTHORED, text)?;
 
-        let node_uid = store.Upsert_Node(
-            &record.front_matter.id,
-            &record.front_matter.kind,
-            &record.front_matter.authority,
-            "document",
-            &record.front_matter.title,
-        )?;
-
-        let document_uid = store.Put_Source_Document(path, AUTHORED, text)?;
-        let blocks = Segment(&record.body);
-        store.Put_Source_Blocks(document_uid, &blocks)?;
-
-        for block in &blocks
-        {
-            if block.kind == BlockKind::Heading
-            {
-                Put_Heading(store, document_uid, block.ordinal, &block.text)?;
-                Dispose_Heading(store, document_uid, block.ordinal, node_uid)?;
-                report.headings = report.headings.saturating_add(1);
-            }
-
-            Dispose_Block(store, document_uid, block.ordinal, node_uid)?;
-            report.blocks = report.blocks.saturating_add(1);
-        }
-
+        report.headings = report.headings.saturating_add(written.headings);
+        report.blocks = report.blocks.saturating_add(written.blocks);
         report.records = report.records.saturating_add(1);
     }
 
@@ -346,59 +326,3 @@ pub fn Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedRepo
     return Ok(report);
 }
 
-fn Put_Heading(
-    store: &mut SpecificationStore,
-    document_uid: i64,
-    ordinal: u32,
-    text: &str,
-) -> Result<(), StoreError>
-{
-    let depth = text.chars().take_while(|character| *character == '#').count();
-
-    store.Connection().execute(
-        "INSERT OR IGNORE INTO source_headings (document_uid, ordinal, depth, title)
-         VALUES (?1, ?2, ?3, ?4)",
-        params![
-            document_uid,
-            ordinal,
-            i64::try_from(depth).unwrap_or(0),
-            text.trim_start_matches('#').trim()
-        ],
-    )?;
-
-    return Ok(());
-}
-
-fn Dispose_Block(
-    store: &mut SpecificationStore,
-    document_uid: i64,
-    ordinal: u32,
-    node_uid: i64,
-) -> Result<(), StoreError>
-{
-    store.Connection().execute(
-        "INSERT OR IGNORE INTO lineage (source_block_uid, disposition, target_node_uid)
-         SELECT uid, 'preserved-verbatim', ?3 FROM source_blocks
-         WHERE document_uid = ?1 AND ordinal = ?2",
-        params![document_uid, ordinal, node_uid],
-    )?;
-
-    return Ok(());
-}
-
-fn Dispose_Heading(
-    store: &mut SpecificationStore,
-    document_uid: i64,
-    ordinal: u32,
-    node_uid: i64,
-) -> Result<(), StoreError>
-{
-    store.Connection().execute(
-        "INSERT OR IGNORE INTO lineage (source_heading_uid, disposition, target_node_uid)
-         SELECT uid, 'preserved-verbatim', ?3 FROM source_headings
-         WHERE document_uid = ?1 AND ordinal = ?2",
-        params![document_uid, ordinal, node_uid],
-    )?;
-
-    return Ok(());
-}

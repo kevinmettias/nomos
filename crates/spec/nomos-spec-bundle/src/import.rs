@@ -65,6 +65,8 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
         Insert_Normative_Statements(transaction, bundle)?;
         Insert_Lineage(transaction, bundle)?;
         Insert_Omissions(transaction, bundle)?;
+        Insert_Record_Front_Matter(transaction, bundle)?;
+        Insert_Record_Relations(transaction, bundle)?;
 
         Assert_Landed(transaction, bundle)?;
 
@@ -711,4 +713,64 @@ fn Optional_Heading_Uid(
             );
         })
         .transpose();
+}
+
+fn Insert_Record_Front_Matter(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+) -> Result<(), BundleError>
+{
+    for record in bundle.Records()
+    {
+        let Record::RecordFrontMatter(front_matter) = record
+        else
+        {
+            continue;
+        };
+
+        let tags = serde_json::to_string(&front_matter.tags)
+            .map_err(|error| BundleError::Sql(error.to_string()))?;
+        transaction.execute(
+            "INSERT INTO record_front_matter
+             (document_uid, node_uid, status, version, tags_json)
+             VALUES (?1, ?2, ?3, ?4, ?5)",
+            params![
+                Document_Uid(transaction, &front_matter.document)?,
+                Node_Uid(transaction, &front_matter.node_id)?,
+                front_matter.status,
+                front_matter.version,
+                tags
+            ],
+        )?;
+    }
+
+    return Ok(());
+}
+
+fn Insert_Record_Relations(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+) -> Result<(), BundleError>
+{
+    for record in bundle.Records()
+    {
+        let Record::RecordRelation(relation) = record
+        else
+        {
+            continue;
+        };
+
+        transaction.execute(
+            "INSERT INTO record_relations (document_uid, ordinal, target, relation)
+             VALUES (?1, ?2, ?3, ?4)",
+            params![
+                Document_Uid(transaction, &relation.document)?,
+                relation.ordinal,
+                relation.target,
+                relation.relation
+            ],
+        )?;
+    }
+
+    return Ok(());
 }

@@ -181,6 +181,32 @@ pub struct Omission
     pub decision_record: String,
 }
 
+/// The front matter one record declared, as it declared it.
+///
+/// Carried rather than derived from [`Node`] and [`Relation`], for the reason the schema
+/// gives: the graph is inverse-completed and undirected about `relates-to`, so it cannot say
+/// which end of an edge wrote it down. A bundle that dropped this would rebuild a store that
+/// can preserve every record and render none of them back.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RecordFrontMatter
+{
+    pub document: DocumentRef,
+    pub node_id: String,
+    pub status: String,
+    pub version: i64,
+    pub tags: Vec<String>,
+}
+
+/// One relation a record declared, in the position it declared it.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RecordRelation
+{
+    pub document: DocumentRef,
+    pub ordinal: i64,
+    pub target: String,
+    pub relation: String,
+}
+
 /// One row, carrying its own table name and only natural keys.
 ///
 /// `uid` never appears. Two databases built from the same bundle assign different
@@ -217,6 +243,10 @@ pub enum Record
     Lineage(Lineage),
     #[serde(rename = "omissions")]
     Omission(Omission),
+    #[serde(rename = "record_front_matter")]
+    RecordFrontMatter(RecordFrontMatter),
+    #[serde(rename = "record_relations")]
+    RecordRelation(RecordRelation),
 }
 
 impl Record
@@ -240,6 +270,8 @@ impl Record
             Self::NormativeStatement(_) => "normative_statements",
             Self::Lineage(_) => "lineage",
             Self::Omission(_) => "omissions",
+            Self::RecordFrontMatter(_) => "record_front_matter",
+            Self::RecordRelation(_) => "record_relations",
         };
     }
 }

@@ -1827,7 +1827,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P9-READ-SURFACE"
       ],
@@ -1848,7 +1848,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "sts\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-31464506428b903d.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-21a4915c6ed81f4b.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-c1421495100087d6.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-e3c9de915070eefd.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-ad87b675e3989839.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-d837d0637d000ea2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-156de37739d5a787.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-b1b171db0941c494.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-0e235bd890f7e5c7.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-39fe4c577082bca8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-49745208ecaaadc1.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-813415b5cf8d35be.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-48edbcc871df3710.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-55b6c675156f8a5a.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-b52836aa7b25e28c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2596f725576ffee8.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-81a2ce5c1466bfe2.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-fc4b3f54a637b757.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-76ddf6dfcfe2915e.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-a648d8a02a8e5061.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786333942,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-authoring-0809",
@@ -2196,10 +2224,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-lead-orch-0809",
+        "acquired_at": 1786334018,
+        "lease_expires_at": 1786335818
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2687,6 +2719,107 @@
           "nomos-contracts",
           "-p",
           "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-AUDIT-STATE",
+      "title": "work audit answers for items nobody can act on, by a second guard that disagrees with the first",
+      "why": "P9-DEPENDS-ON closed exactly this defect in work list and did not reach its sibling. Audit at crates/host/nomos-cli/src/work.rs:713 iterates document.items with no state filter, so against the live board it prints 54 lines of which 44 describe Done or Declined items being blocked by a claim they will never contend for. Ten lines describe something actionable and they are not distinguishable by eye. Worse than noise, it is a second implementation of one rule: list goes through Listing_Label, which calls nomos_ledger::Claim_Refusal, while audit calls ExclusionLedger::Conflicts instead, and the doc comment on Claim_Refusal at crates/substrate/nomos-ledger/src/store.rs:436 says in as many words that a second guard for one rule is the thing to avoid. The two already disagree on 44 items. Conflicts is territory-only, so an item refused by DependencyUnmet prints nothing at all and audit cannot say waiting where list can. It also calls Load once per item, parsing the whole ledger 58 times for one command. Finally ClaimRefusal::HeldBy::Describe formats the holders item, so every line reads subject: blocker overlaps territory held by, transposing which of the two names is the subject.",
+      "done_when": "Audit reports only what an agent could act on, and it derives that from the same function list does rather than a second one. Terminal items are absent from the output, not merely sorted below it. An item refused for an unfinished dependency is reported as such, so the command stops being silent about a refusal it cannot express today. The ledger is loaded once per invocation and not once per item. A test pins the output against a board holding a terminal item, a dependency-blocked item and a territory-blocked item at once, and fails if a Done item reappears or if a DependencyUnmet item is dropped; the negative control is that reinstating the unfiltered loop turns it red. Not closed by filtering the printing while leaving Conflicts as a parallel implementation, since the disagreement between two guards is the defect and the line count is only how it was noticed. No new record: OD-LEDGER-005 already states the rule this applies, and citing it is the point.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/tests/list_tells_the_truth.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-SEED-GRAIN",
+      "title": "A record writer edits the store because the seed table is one list, and the count assertion is the last file forcing it",
+      "why": "OD-LEDGER-007 declared crates/spec/nomos-spec-store a structural serializer and declined the structural remedy, on the grounds that deriving RECORDS and GOVERNING_RECORD_IDS straight from docs/records would make Test_Every_Canonical_Record_On_Disk_Should_Be_Governing compare a directory against itself and pass having checked nothing. That objection is correct and it defeats only the derivation it names. A per-record registration file leaves the declaration authored - the record file and its registration are still two independent acts by a human - so the guard keeps comparing two sets and does not go vacuous, while adding a record stops touching a file any other record writer touches. Measured over the ten open record writers by the ledgers own overlap rule: 45 of 45 pairs blocked today, 39 of 45 with this serializer dissolved. The register in records_do_not_serialize.rs is a debt list and OD-LEDGER-007 says it is expected to empty; this is the entry for its remaining half. Three symbols in two files force the collision: RECORDS at src/governing.rs:9, GOVERNING_RECORD_IDS at src/governing.rs:190, and the literal assert_eq on its length at tests/governing_records_are_present.rs:45. The first two can be generated from per-record files; the literal count cannot, and it is the real subject of this item.",
+      "done_when": "Adding a canonical record touches the record file and its own registration, and no file that another record writer also edits. GOVERNING_RECORD_IDS keeps its declaration site and its public surface line, so tests/contract/surface/nomos-spec-store.txt is unchanged and the completeness_universes row for it still resolves - if the universe scanner does not recognise the new initializer, that row is re-declared deliberately rather than left stale, and the item says which happened. The literal count in governing_records_are_present.rs is deleted or restated, and the record states what it was buying and what is given up: it uniquely catches a record and its registration being deleted together, which no derived count can. If that guarantee is kept, the record says by what. crates/spec/nomos-spec-store is removed from KNOWN_SERIALIZERS in the same commit that dissolves it, since leaving it reddens Test_Every_Declared_Serializer_Should_Still_Serialize and removing it early reddens the other direction. The negative control is that deleting a registration while leaving its record on disk still fails Test_Every_Canonical_Record_On_Disk_Should_Be_Governing, proving the guard did not go vacuous. Not closed by globbing docs/records, which is the move OD-LEDGER-007 refused and for the reason it gave.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store",
+          "tests/contract/tests/completeness_universes.rs",
+          "tests/contract/surface/nomos-spec-store.txt",
+          "docs/records/OD-SPEC-007"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-PATTERN-BRICK",
+      "title": "A documented flag makes an item permanently unclaimable and stops every other claim, non-retryably",
+      "why": "work add advertises --territory-pattern in its usage and README documents it beside --territory. Any item carrying one entry in territory.patterns makes Territory::Intersect return Unknown against every other territory - crates/substrate/nomos-ledger/src/territory.rs:130 short-circuits on patterns before comparing a single path - so Refusal_From maps it to UnknownIndependence, whose Is_Retryable is false. The consequences are worse than an item nobody can claim. That item can never be claimed by anyone, its own holder included; every other claim on the board is refused against it; and the refusal tells an agent the independence question is unanswerable, which by the exit-code contract in README means stop and fetch a human rather than try another item. Nothing in work add warns, and validate accepts the document, so a single documented flag bricks the board for every session at once and the failure does not look like contention. Refusing an unanswerable overlap rather than granting it is correct and is the README rule; what is wrong is that the only way to reach that state is an advertised flag for a feature the comparison does not implement. This was found by reading territory.rs while measuring the boards serialization, not by an incident - no open item uses a pattern today, which is why the cost of closing it now is a test and a refusal.",
+      "done_when": "A territory pattern either compares or is refused where it is authored, and it is no longer possible to reach UnknownIndependence through a documented flag. If patterns are refused, work add rejects --territory-pattern with a message naming what is unsupported, the flag leaves the usage text and README, and the refusal is a usage error rather than a ledger error so it cannot be mistaken for contention. If patterns compare, Territory::Intersect answers Disjoint or Overlaps for a pattern against a path and Unknown is reserved for a question the mechanism genuinely cannot answer. Which of the two is the decision this item makes and the record says why, since refusing a flag the README documents is a narrowing of what the ledger offers and OD-LEDGER-001 is the standing statement of what territory promises. A test claims against an item carrying a pattern and pins the outcome, and the negative control is that restoring the unconditional Unknown at territory.rs:130 turns it red. Not closed by leaving the flag in place and documenting the hazard, because the board a documented flag can brick is every sessions board and the warning arrives after the write.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/territory.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "README.md",
+          "crates/spec/nomos-spec-store",
+          "docs/records/OD-LEDGER-013"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store"
         ],
         "timeout_seconds": 600
       },

@@ -28,6 +28,8 @@ pub enum variant nomos_spec_bundle::Record::NodeAlias(NodeAlias)
 pub enum variant nomos_spec_bundle::Record::NodeHistory(NodeHistory)
 pub enum variant nomos_spec_bundle::Record::NormativeStatement(NormativeStatement)
 pub enum variant nomos_spec_bundle::Record::Omission(Omission)
+pub enum variant nomos_spec_bundle::Record::RecordFrontMatter(RecordFrontMatter)
+pub enum variant nomos_spec_bundle::Record::RecordRelation(RecordRelation)
 pub enum variant nomos_spec_bundle::Record::Relation(Relation)
 pub enum variant nomos_spec_bundle::Record::RelationType(RelationType)
 pub enum variant nomos_spec_bundle::Record::SourceBlock(SourceBlock)
@@ -99,6 +101,15 @@ pub struct field nomos_spec_bundle::Omission::source_block: Option<OrdinalRef>
 pub struct field nomos_spec_bundle::Omission::source_heading: Option<OrdinalRef>
 pub struct field nomos_spec_bundle::OrdinalRef::document: DocumentRef
 pub struct field nomos_spec_bundle::OrdinalRef::ordinal: i64
+pub struct field nomos_spec_bundle::RecordFrontMatter::document: DocumentRef
+pub struct field nomos_spec_bundle::RecordFrontMatter::node_id: String
+pub struct field nomos_spec_bundle::RecordFrontMatter::status: String
+pub struct field nomos_spec_bundle::RecordFrontMatter::tags: Vec<String>
+pub struct field nomos_spec_bundle::RecordFrontMatter::version: i64
+pub struct field nomos_spec_bundle::RecordRelation::document: DocumentRef
+pub struct field nomos_spec_bundle::RecordRelation::ordinal: i64
+pub struct field nomos_spec_bundle::RecordRelation::relation: String
+pub struct field nomos_spec_bundle::RecordRelation::target: String
 pub struct field nomos_spec_bundle::Relation::from_node_id: String
 pub struct field nomos_spec_bundle::Relation::relation_type: String
 pub struct field nomos_spec_bundle::Relation::to_node_id: String
@@ -145,6 +156,8 @@ pub struct nomos_spec_bundle::NodeHistory
 pub struct nomos_spec_bundle::NormativeStatement
 pub struct nomos_spec_bundle::Omission
 pub struct nomos_spec_bundle::OrdinalRef
+pub struct nomos_spec_bundle::RecordFrontMatter
+pub struct nomos_spec_bundle::RecordRelation
 pub struct nomos_spec_bundle::Relation
 pub struct nomos_spec_bundle::RelationType
 pub struct nomos_spec_bundle::SourceBlock

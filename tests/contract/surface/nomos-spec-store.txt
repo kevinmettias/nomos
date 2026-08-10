@@ -1,3 +1,4 @@
+pub const fn nomos_spec_store::BlockChange::Disturbs_Wording(&self) -> bool
 pub const fn nomos_spec_store::Disposition::Label(self) -> &'static str
 pub const fn nomos_spec_store::Disposition::Preserves_Content(self) -> bool
 pub const fn nomos_spec_store::Kind_Label(kind: BlockKind) -> &'static str
@@ -8,16 +9,37 @@ pub const nomos_spec_store::AUTHORED: &str
 pub const nomos_spec_store::EXTERNAL: &str
 pub const nomos_spec_store::GOVERNING_RECORD_IDS: &[&str]
 pub const nomos_spec_store::MIGRATIONS: &[Migration]
+pub enum nomos_spec_store::BlockChange
 pub enum nomos_spec_store::Disposition
+pub enum nomos_spec_store::EditError
+pub enum nomos_spec_store::NormativeOutcome
 pub enum nomos_spec_store::PathMatch
 pub enum nomos_spec_store::RowScope
 pub enum nomos_spec_store::StoreError
 pub enum nomos_spec_store::Table
+pub enum variant nomos_spec_store::BlockChange::Added { ordinal: u32, kind: String, }
+pub enum variant nomos_spec_store::BlockChange::Moved { from: u32, to: u32, }
+pub enum variant nomos_spec_store::BlockChange::Reflowed { ordinal: u32, }
+pub enum variant nomos_spec_store::BlockChange::Removed { ordinal: u32, kind: String, }
+pub enum variant nomos_spec_store::BlockChange::Reworded { ordinal: u32, before: String, after: String, }
 pub enum variant nomos_spec_store::Disposition::Omitted
 pub enum variant nomos_spec_store::Disposition::PreservedNormalized
 pub enum variant nomos_spec_store::Disposition::PreservedVerbatim
 pub enum variant nomos_spec_store::Disposition::RegressionFiller
 pub enum variant nomos_spec_store::Disposition::Superseded
+pub enum variant nomos_spec_store::EditError::Ambiguous { node_id: String, revisions: Vec<String>, }
+pub enum variant nomos_spec_store::EditError::IdentityChanged { held: String, staged: String, }
+pub enum variant nomos_spec_store::EditError::NoContent { node_id: String, }
+pub enum variant nomos_spec_store::EditError::NoSuchRecord { node_id: String, }
+pub enum variant nomos_spec_store::EditError::NotAuthored { path: String, }
+pub enum variant nomos_spec_store::EditError::NotCanonical { cause: String, }
+pub enum variant nomos_spec_store::EditError::PathTaken { path: String, }
+pub enum variant nomos_spec_store::EditError::Store(StoreError)
+pub enum variant nomos_spec_store::EditError::Unreadable { cause: String, }
+pub enum variant nomos_spec_store::NormativeOutcome::Gone { from: u32, }
+pub enum variant nomos_spec_store::NormativeOutcome::Held { block: u32, }
+pub enum variant nomos_spec_store::NormativeOutcome::Moved { from: u32, to: u32, }
+pub enum variant nomos_spec_store::NormativeOutcome::Unlocatable
 pub enum variant nomos_spec_store::PathMatch::Exact
 pub enum variant nomos_spec_store::PathMatch::FileName
 pub enum variant nomos_spec_store::PathMatch::Fragment
@@ -36,6 +58,8 @@ pub enum variant nomos_spec_store::Table::NodeHistory
 pub enum variant nomos_spec_store::Table::Nodes
 pub enum variant nomos_spec_store::Table::NormativeStatements
 pub enum variant nomos_spec_store::Table::Omissions
+pub enum variant nomos_spec_store::Table::RecordFrontMatter
+pub enum variant nomos_spec_store::Table::RecordRelations
 pub enum variant nomos_spec_store::Table::RelationTypes
 pub enum variant nomos_spec_store::Table::Relations
 pub enum variant nomos_spec_store::Table::SourceBlocks
@@ -43,8 +67,32 @@ pub enum variant nomos_spec_store::Table::SourceDocuments
 pub enum variant nomos_spec_store::Table::SourceHeadings
 pub enum variant nomos_spec_store::Table::SourceTableRows
 pub enum variant nomos_spec_store::Table::Suites
+pub fn nomos_spec_store::BlockChange::Describe(&self) -> String
+pub fn nomos_spec_store::ClaimedRecord::Markdown(&self) -> &str
+pub fn nomos_spec_store::ClaimedRecord::Node_Id(&self) -> &str
+pub fn nomos_spec_store::ClaimedRecord::Path(&self) -> &str
+pub fn nomos_spec_store::ClaimedRecord::Stage(self, markdown: &str, rename: Option<&str>) -> Result<StagedEdit, EditError>
 pub fn nomos_spec_store::Disposition::Parse(label: &str) -> Option<Self>
+pub fn nomos_spec_store::EditError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_store::EditError::from(error: RenderError) -> Self
+pub fn nomos_spec_store::EditError::from(error: StoreError) -> Self
+pub fn nomos_spec_store::EditError::from(error: rusqlite::Error) -> Self
+pub fn nomos_spec_store::EditPreview::Blocks(&self) -> &[BlockChange]
+pub fn nomos_spec_store::EditPreview::Changes_Nothing(&self) -> bool
+pub fn nomos_spec_store::EditPreview::Describe(&self) -> String
+pub fn nomos_spec_store::EditPreview::Identity(&self) -> &[IdentityChange]
+pub fn nomos_spec_store::EditPreview::Markdown(&self) -> &str
+pub fn nomos_spec_store::EditPreview::Node_Id(&self) -> &str
+pub fn nomos_spec_store::EditPreview::Path(&self) -> &str
+pub fn nomos_spec_store::EditPreview::Relations_Added(&self) -> &[RecordRelation]
+pub fn nomos_spec_store::EditPreview::Relations_Removed(&self) -> &[RecordRelation]
+pub fn nomos_spec_store::EditPreview::Rename(&self) -> Option<(&str, &str)>
+pub fn nomos_spec_store::EditPreview::Statements(&self) -> &[NormativeMovement]
+pub fn nomos_spec_store::EditPreview::Wording_Moved(&self) -> bool
+pub fn nomos_spec_store::Kind_Of(label: &str) -> Option<BlockKind>
 pub fn nomos_spec_store::Latest_Version() -> u32
+pub fn nomos_spec_store::NormativeOutcome::Describe(&self) -> String
+pub fn nomos_spec_store::RecordProjection::Matches_Source(&self) -> bool
 pub fn nomos_spec_store::Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedReport, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Assign_Suite(&mut self, node_uid: i64, suite_uid: i64) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Connection(&self) -> &Connection
@@ -67,16 +115,32 @@ pub fn nomos_spec_store::SpecificationStore::Suite_Of(&self, node_id: &str) -> R
 pub fn nomos_spec_store::SpecificationStore::Table_Row_Uid( &self, document_uid: i64, block_ordinal: u32, row_ordinal: u32, ) -> Result<Option<i64>, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Upsert_Node( &mut self, node_id: &str, kind: &str, authority: &str, representation: &str, title: &str, ) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Version(&self) -> u32
+pub fn nomos_spec_store::StagedEdit::Preview(self, store: &SpecificationStore) -> Result<EditPreview, EditError>
 pub fn nomos_spec_store::StoreError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_spec_store::StoreError::from(error: rusqlite::Error) -> Self
+pub impl nomos_spec_store::EditError implements From<RenderError>
+pub impl nomos_spec_store::EditError implements From<StoreError>
+pub impl nomos_spec_store::EditError implements From<rusqlite::Error>
+pub impl nomos_spec_store::EditError implements core::fmt::Display
+pub impl nomos_spec_store::EditError implements std::error::Error
 pub impl nomos_spec_store::StoreError implements From<rusqlite::Error>
 pub impl nomos_spec_store::StoreError implements core::fmt::Display
 pub impl nomos_spec_store::StoreError implements std::error::Error
+pub struct field nomos_spec_store::CommitReport::blocks: usize
+pub struct field nomos_spec_store::CommitReport::blocks_removed: usize
+pub struct field nomos_spec_store::CommitReport::node_id: String
+pub struct field nomos_spec_store::CommitReport::path: String
+pub struct field nomos_spec_store::CommitReport::relations_added: usize
+pub struct field nomos_spec_store::CommitReport::relations_removed: usize
+pub struct field nomos_spec_store::CommitReport::renamed: bool
 pub struct field nomos_spec_store::DocumentSource::content_hash: String
 pub struct field nomos_spec_store::DocumentSource::path: String
 pub struct field nomos_spec_store::DocumentSource::revision: String
 pub struct field nomos_spec_store::DocumentSource::text: String
 pub struct field nomos_spec_store::DocumentSource::uid: i64
+pub struct field nomos_spec_store::IdentityChange::after: String
+pub struct field nomos_spec_store::IdentityChange::before: String
+pub struct field nomos_spec_store::IdentityChange::field: String
 pub struct field nomos_spec_store::Migration::name: &'static str
 pub struct field nomos_spec_store::Migration::statements: &'static [&'static str]
 pub struct field nomos_spec_store::Migration::version: u32
@@ -85,6 +149,20 @@ pub struct field nomos_spec_store::NodeSummary::kind: String
 pub struct field nomos_spec_store::NodeSummary::node_id: String
 pub struct field nomos_spec_store::NodeSummary::representation: String
 pub struct field nomos_spec_store::NodeSummary::title: String
+pub struct field nomos_spec_store::NormativeMovement::canonical_hash: String
+pub struct field nomos_spec_store::NormativeMovement::outcome: NormativeOutcome
+pub struct field nomos_spec_store::NormativeMovement::statement_id: String
+pub struct field nomos_spec_store::RecordProjection::markdown: String
+pub struct field nomos_spec_store::RecordProjection::node_id: String
+pub struct field nomos_spec_store::RecordProjection::path: String
+pub struct field nomos_spec_store::RecordProjection::projected_hash: String
+pub struct field nomos_spec_store::RecordProjection::revision: String
+pub struct field nomos_spec_store::RecordProjection::source_hash: String
+pub struct field nomos_spec_store::RecordWrite::blocks: u32
+pub struct field nomos_spec_store::RecordWrite::document_uid: i64
+pub struct field nomos_spec_store::RecordWrite::headings: u32
+pub struct field nomos_spec_store::RecordWrite::node_uid: i64
+pub struct field nomos_spec_store::RecordWrite::relations: u32
 pub struct field nomos_spec_store::RowCensus::content: u32
 pub struct field nomos_spec_store::RowCensus::header: u32
 pub struct field nomos_spec_store::RowCensus::lines: u32
@@ -102,10 +180,18 @@ pub struct field nomos_spec_store::TableLine::kind: String
 pub struct field nomos_spec_store::TableLine::row_ordinal: u32
 pub struct field nomos_spec_store::TableLine::table_ordinal: u32
 pub struct field nomos_spec_store::TableLine::text: String
+pub struct nomos_spec_store::ClaimedRecord
+pub struct nomos_spec_store::CommitReport
 pub struct nomos_spec_store::DocumentSource
+pub struct nomos_spec_store::EditPreview
+pub struct nomos_spec_store::IdentityChange
 pub struct nomos_spec_store::Migration
 pub struct nomos_spec_store::NodeSummary
+pub struct nomos_spec_store::NormativeMovement
+pub struct nomos_spec_store::RecordProjection
+pub struct nomos_spec_store::RecordWrite
 pub struct nomos_spec_store::RowCensus
 pub struct nomos_spec_store::SeedReport
 pub struct nomos_spec_store::SpecificationStore
+pub struct nomos_spec_store::StagedEdit
 pub struct nomos_spec_store::TableLine

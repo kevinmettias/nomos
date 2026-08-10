@@ -3,8 +3,8 @@ use crate::bundle::Bundle;
 use crate::columns::Assert_Columns_Covered;
 use crate::model::{
     Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
-    Omission, OrdinalRef, Record, Relation, RelationType, SourceBlock, SourceDocument,
-    SourceHeading, SourceTableRow, Suite, TableRowRef,
+    Omission, OrdinalRef, Record, RecordFrontMatter, RecordRelation, Relation, RelationType,
+    SourceBlock, SourceDocument, SourceHeading, SourceTableRow, Suite, TableRowRef,
 };
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
@@ -45,6 +45,8 @@ pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
     Normative_Statements(connection, &mut records)?;
     Lineages(connection, &mut records)?;
     Omissions(connection, &mut records)?;
+    Record_Front_Matter(connection, &mut records)?;
+    Record_Relations(connection, &mut records)?;
 
     Assert_Complete(store, &records)?;
     Assert_Columns_Covered(connection, &records)?;
@@ -506,4 +508,73 @@ fn Ordinal_Reference(
         }),
         _ => None,
     });
+}
+
+/// The declared front matter, addressed by the document that declared it.
+fn Record_Front_Matter(
+    connection: &Connection,
+    records: &mut Vec<Record>,
+) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT d.path, d.revision, n.node_id, f.status, f.version, f.tags_json
+         FROM record_front_matter f
+         JOIN source_documents d ON d.uid = f.document_uid
+         JOIN nodes n ON n.uid = f.node_uid
+         ORDER BY d.path, d.revision",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            let tags: String = row.get(5)?;
+            return Ok((
+                RecordFrontMatter {
+                    document: DocumentRef {
+                        path: row.get(0)?,
+                        revision: row.get(1)?,
+                    },
+                    node_id: row.get(2)?,
+                    status: row.get(3)?,
+                    version: row.get(4)?,
+                    tags: Vec::new(),
+                },
+                tags,
+            ));
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    for (mut record, tags) in rows
+    {
+        record.tags =
+            serde_json::from_str(&tags).map_err(|error| BundleError::Sql(error.to_string()))?;
+        records.push(Record::RecordFrontMatter(record));
+    }
+
+    return Ok(());
+}
+
+/// The declared relations, in the order the record declared them.
+fn Record_Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    let mut statement = connection.prepare(
+        "SELECT d.path, d.revision, r.ordinal, r.target, r.relation
+         FROM record_relations r
+         JOIN source_documents d ON d.uid = r.document_uid
+         ORDER BY d.path, d.revision, r.ordinal",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
+            return Ok(RecordRelation {
+                document: DocumentRef {
+                    path: row.get(0)?,
+                    revision: row.get(1)?,
+                },
+                ordinal: row.get(2)?,
+                target: row.get(3)?,
+                relation: row.get(4)?,
+            });
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows.into_iter().map(Record::RecordRelation));
+    return Ok(());
 }

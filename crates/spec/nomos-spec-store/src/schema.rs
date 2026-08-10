@@ -262,6 +262,43 @@ pub const MIGRATIONS: &[Migration] = &[
             "CREATE INDEX nodes_suite ON nodes(suite_uid)",
         ],
     },
+    Migration {
+        version: 5,
+        name: "declared-front-matter",
+        statements: &[
+            // What a record's front matter said, as it said it. `nodes` already holds the
+            // kind, the authority and the title, and `relations` already holds the edges —
+            // so this table exists for the three fields nothing kept (`status`, `version`,
+            // `tags`) and for one property the graph cannot have.
+            //
+            // That property is directedness. `relations` is completed with inverses on the
+            // way in, deliberately, so that `verifies` and `verified_by` are one fact. A
+            // record that is merely the *target* of a `relates-to` therefore has an
+            // outgoing edge it never declared, and `relates-to` is its own inverse, so the
+            // graph cannot tell which end wrote it down. Rendering front matter from the
+            // graph would put edges in a file that its author did not write — which is the
+            // silent-content-change this store exists to make impossible, committed by the
+            // authoring surface itself. Measured, not feared: OD-LEDGER-009 declares three
+            // `relates-to` edges, and rendering OD-LEDGER-001 from the graph invents one.
+            "CREATE TABLE record_front_matter (
+                 document_uid INTEGER PRIMARY KEY REFERENCES source_documents(uid),
+                 node_uid     INTEGER NOT NULL REFERENCES nodes(uid),
+                 status       TEXT NOT NULL,
+                 version      INTEGER NOT NULL,
+                 tags_json    TEXT NOT NULL
+             )",
+            // Ordered, because the order is in the file and a set is not a document.
+            "CREATE TABLE record_relations (
+                 uid          INTEGER PRIMARY KEY,
+                 document_uid INTEGER NOT NULL REFERENCES source_documents(uid),
+                 ordinal      INTEGER NOT NULL,
+                 target       TEXT NOT NULL,
+                 relation     TEXT NOT NULL,
+                 UNIQUE (document_uid, ordinal)
+             )",
+            "CREATE INDEX record_relations_document ON record_relations(document_uid)",
+        ],
+    },
 ];
 
 pub struct Migration

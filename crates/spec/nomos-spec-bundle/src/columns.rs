@@ -38,6 +38,26 @@ struct Coverage
 
 const COVERAGE: &[Coverage] = &[
     Coverage {
+        table: "record_front_matter",
+        columns: &[
+            ("document_uid", Carried::Field("document")),
+            ("node_uid", Carried::Field("node_id")),
+            ("status", Carried::Field("status")),
+            ("version", Carried::Field("version")),
+            ("tags_json", Carried::Field("tags")),
+        ],
+    },
+    Coverage {
+        table: "record_relations",
+        columns: &[
+            ("uid", Carried::Surrogate),
+            ("document_uid", Carried::Field("document")),
+            ("ordinal", Carried::Field("ordinal")),
+            ("target", Carried::Field("target")),
+            ("relation", Carried::Field("relation")),
+        ],
+    },
+    Coverage {
         table: "blobs",
         columns: &[
             ("uid", Carried::Surrogate),
