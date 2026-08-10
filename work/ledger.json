@@ -4356,7 +4356,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P10-REQUIRED-PROJECTIONS"
       ],
@@ -4374,7 +4374,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-51aa4e2ffacb6dea.exe)\n",
+        "verified_at": 1786347539,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-rerender-hazard-w18",
@@ -4481,7 +4506,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -4499,7 +4524,34 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": " 2.10s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-b775cb860a2e14bd.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-08c1b26a32bf36cc.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-31debe44ae1233ee.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-c35edda1aad1ab39.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-a824ca41384b08c5.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-0749c8d63c3ceac1.exe)\n     Running tests\\gate_step.rs (target\\debug\\deps\\gate_step-651a678d29995d98.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-f325696e69b045cd.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-253c06b98188f76c.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-32c64e36d2416b1f.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-023ed72b0b5f56bc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-561a88ff4bc732e0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-f65566f9f804790f.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-ae78a8a92bf9e664.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-f75bebc7f5b3ba97.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-ae6f7467808b79ca.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_project\n",
+        "verified_at": 1786347526,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-subject-projections-w18",
@@ -4534,6 +4586,80 @@
           "--no-fail-fast",
           "-p",
           "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-AGENT-REQUIRED",
+      "title": "A run cannot report that a subject needs an agent, so the seventh reporting category CHK-003 requires has no state to be reported in",
+      "why": "CHK-001 through CHK-007 are normative requirements in volume 05 governing what a check run reports. CHK-003 is the one this item is about: every run shall report evaluated, excluded, unsupported, unavailable, failed, not-applicable, and agent-required combinations.\n\nApplicability in crates/contracts/nomos-contracts/src/applicability.rs answers six of those seven and does it well. Supported, SupportedWithFallback and PartiallySupported are evaluated; ConfigurationDisabled is excluded; MissingCapability is unsupported; ProviderUnavailable and DependencyUnavailable are unavailable, split because the remedy differs; AnalysisFailed and Unparseable are failed, split for the same reason; NotApplicable is not-applicable and its doc comment already calls it the only positive statement about the absence of a judgment.\n\nThere is no agent-required. Ten variants, and none of them says a subject needs a model to judge it.\n\nThat absence is load-bearing rather than cosmetic, because the concept is already in the tree one layer away. EvidenceClass in the same crate carries AgentJudged, documented as the floor a claim arrives at when nothing corroborates it, and EvidenceClass::Is_Mechanical exists precisely so a model judgment cannot be reported as a check having passed. So the protocol knows the difference between mechanical and agent-produced evidence when it describes a claim, and has no way to say it when it describes coverage.\n\nThe consequence is that a subject requiring an agent has nowhere honest to go. It gets filed as MissingCapability, which says no installed provider offers the capability and points the reader at installing something, or it is left out of Coverage entirely. Coverage in crates/kernel/nomos-model/src/evidence.rs counts evaluated and excluded and lists gaps, and Coverage::Debt filters gaps to those that are coverage debt rather than deliberate absences. Agent-required is neither: it is work that can be done, by something that is not a provider. Both available answers are wrong in the direction this type exists to prevent.\n\nThe enum head comment says the type is deliberately exhaustive and that a consumer match should break when the protocol grows a state, because a new way for analysis to be incomplete is exactly the kind of change a consumer must not silently absorb. Agent-required is a way for analysis to be incomplete, and it is being absorbed silently today by having no variant at all.\n\nRelated but not the same question as P10-VACUITY-HOME, which is about where the no-vacuous-success guarantee lives. This is about whether the vocabulary can express the case at all.",
+      "done_when": "Whether CHK-003 binds this build is answered, and if it does, a run can say that a subject requires an agent without that being indistinguishable from a missing provider or from silence.\n\nIf the requirement is accepted, Applicability gains the state, Coverage gains whatever bucket keeps it out of both evaluated and Debt, and the record says which of the two current mis-filings each was, so the change reads as a correction rather than an addition. A test asserts that an agent-required subject is neither reported as evaluated nor counted as coverage debt.\n\nIf it is deferred or read as not binding, the record states that with the reason, and Applicability carries the answer at the site, so the next reader comparing the enum to CHK-003 finds the decision instead of repeating this audit.\n\nGrowing the enum breaks every exhaustive match on it by design. Those breaks are the item, not an obstacle to it, and any that fall outside this territory are named in the record rather than widened into it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/applicability.rs",
+          "crates/kernel/nomos-model/src/evidence.rs",
+          "tests/contract/surface/nomos-contracts.txt",
+          "tests/contract/surface/nomos-model.txt",
+          "docs/records/OD-CONTRACTS-002",
+          "crates/spec/nomos-spec-store/records/OD-CONTRACTS-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-model",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-CORPUS-TRACE",
+      "title": "Three hundred and sixty-three requirements govern this build and fourteen are cited, so a requirement that is met and one that is not read identically",
+      "why": "The v14 corpus carries 363 requirements in 61 families under 01_authoring/artifacts/requirements, at authority canonical-normative-record. Resolving every one of those ids against every file git ls-files reports finds 14 named in a governing record, the ledger, or crate source. Of those 14, the ARCH and PKG cluster is deliberate, put there by P10-PACKAGE-SEAM; the rest are incidental mentions in the ingest pipeline.\n\nThe reflex reading is that the corpus is far ahead of the build, most of it governs phases nobody has started, and a low number is expected. That reading is wrong in the direction that matters, and measuring it is what produced this item.\n\nWhere the build has reached a requirement, it tracks it closely. EvidenceClass carries exactly EVID-001 eight classes, Authoritative through HumanAsserted, and EVID-001 also forbids collapsing them into one confidence number, which the type does not do. FactVariant carries exactly CAP-002 five variants. CAP-003 requires provider selection to compare guarantees and not merely availability, and selection.rs compares Guarantee on every axis and documents that it is deliberately not a score. Three requirements met, precisely, and not one of the three is cited anywhere.\n\nWhere it diverges, it diverges by one element and says nothing. Blocker carries six of WORK-LEDGER-005 seven typed causes in corpus order and drops StaleProbeArtifact. LedgerItem carries twelve of WORK-LEDGER-001 thirteen fields and drops priority. Applicability carries six of CHK-003 seven reporting categories and drops agent-required.\n\nThat is the finding. Met and unmet are the same shape from outside: an identifier that appears nowhere, next to code that may or may not honour it. The only way anyone has told the difference is by hand, three times in this repository so far, and each time it cost a full audit to establish something a machine could have reported. Three of the six comparisons above came out met, which means the hand audit is not merely expensive but mostly negative - the worst ratio a manual check can have.\n\nThis repository already refuses this exact class of ignorance everywhere else. tests/contract asserts the README tables against the workspace in both directions. OD-COMPLETENESS-001 records that a completeness guard is only as complete as its universe. D-134 makes a universe declare its own mirror. The one universe with no guard is the corpus that governs the whole product.\n\nThe machinery is also already here and pointed elsewhere: a traceability-matrix projection profile exists in nomos-spec-project, and like all eighteen profiles it projects the specification store rather than relating the store to the build.",
+      "done_when": "How a corpus requirement is related to this build is decided and recorded, such that a requirement which is met, one which is deliberately not met, and one which nobody has looked at are three distinguishable states rather than one.\n\nThe record names the bearer of the relation and why it is there rather than somewhere else - a citation at the implementation site, a registry the contract tests read, or a projection relating the store to the workspace - and states what it costs to keep honest, because a traceability surface that goes stale is worse than none. It says what happens to the 349 requirements nobody has assessed, since a scheme that requires all of them answered before any of them is answered will not be adopted.\n\nNot closed by citing requirement ids in comments. A comment is not a universe and nothing reads it, which is the failure OD-COMPLETENESS-001 already recorded one scale down. Whether the answer is mechanically checked is itself part of the decision, and if it is not, the record says why the corpus is the one authority in this tree exempt from a guard.\n\nBuilding the mechanism is a follow-on item. This one ends at a decision with a named first requirement family to carry it, and P10-LEDGER-CORPUS and P10-AGENT-REQUIRED are the two already open that would be its first two entries.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-TRACE-001",
+          "crates/spec/nomos-spec-store/records/OD-TRACE-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
           "-p",
           "nomos-spec-store",
           "-p",
