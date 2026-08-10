@@ -1,8 +1,12 @@
 pub const nomos_contract_tests::CORPUS_VARIABLES: &[&str]
 pub fn nomos_contract_tests::Corpus_Gates() -> Vec<CorpusGate>
 pub fn nomos_contract_tests::Crate_Identifier(package: &str) -> String
+pub fn nomos_contract_tests::Declaration::Occupies(&self, row: &DomainRow) -> bool
 pub fn nomos_contract_tests::Declared_Universes() -> Vec<DeclaredUniverse>
+pub fn nomos_contract_tests::DomainRow::Claims_Reproducibility(&self) -> bool
+pub fn nomos_contract_tests::Domain_Table() -> Vec<DomainRow>
 pub fn nomos_contract_tests::Fact_Domains() -> Vec<FactDomain>
+pub fn nomos_contract_tests::Harnessed_Strategies() -> BTreeSet<String>
 pub fn nomos_contract_tests::Public_Surface(package: &str, root: &Path) -> Option<Surface>
 pub fn nomos_contract_tests::Workspace::Get(&self, name: &str) -> Option<&Package>
 pub fn nomos_contract_tests::Workspace::Load() -> Self
@@ -12,8 +16,16 @@ pub fn nomos_contract_tests::Workspace::Workspace_Root() -> PathBuf
 pub struct field nomos_contract_tests::CorpusGate::corpora: BTreeSet<String>
 pub struct field nomos_contract_tests::CorpusGate::file: String
 pub struct field nomos_contract_tests::CorpusGate::test: String
+pub struct field nomos_contract_tests::Declaration::scope: String
+pub struct field nomos_contract_tests::Declaration::strategy: String
+pub struct field nomos_contract_tests::Declaration::strength: String
+pub struct field nomos_contract_tests::Declaration::trace: String
+pub struct field nomos_contract_tests::DomainRow::domain: String
+pub struct field nomos_contract_tests::DomainRow::scope: String
+pub struct field nomos_contract_tests::DomainRow::strength: String
+pub struct field nomos_contract_tests::DomainRow::trace: String
 pub struct field nomos_contract_tests::FactDomain::crate_name: String
-pub struct field nomos_contract_tests::FactDomain::declarations: BTreeSet<String>
+pub struct field nomos_contract_tests::FactDomain::declarations: BTreeSet<Declaration>
 pub struct field nomos_contract_tests::FactDomain::produces: bool
 pub struct field nomos_contract_tests::Package::direct_dependencies: BTreeSet<String>
 pub struct field nomos_contract_tests::Package::is_workspace_member: bool
@@ -23,6 +35,8 @@ pub struct field nomos_contract_tests::Surface::declarations: Vec<String>
 pub struct field nomos_contract_tests::Surface::package: String
 pub struct field nomos_contract_tests::Surface::unresolved: Vec<String>
 pub struct nomos_contract_tests::CorpusGate
+pub struct nomos_contract_tests::Declaration
+pub struct nomos_contract_tests::DomainRow
 pub struct nomos_contract_tests::FactDomain
 pub struct nomos_contract_tests::Package
 pub struct nomos_contract_tests::Surface

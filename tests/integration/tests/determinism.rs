@@ -32,7 +32,8 @@ use nomos_analysis::{
     Dependency, FactReuse, FactStore, GenerationCause, MemoryFactStore,
 };
 use nomos_contracts::{
-    BuildVariantId, ConfigurationId, GenerationId, SnapshotId, Strategy, SubjectId,
+    BuildVariantId, ConfigurationId, DeterminismStrength, GenerationId, ReproducibilityScope,
+    SnapshotId, Strategy, SubjectId, TraceEquivalence,
 };
 use nomos_integration_tests::{
     Child_Variable, Cross_Environment_Owed, CrossEnvironment, Digest_In, Production, Report_Line,
@@ -41,9 +42,14 @@ use nomos_integration_tests::{
 use nomos_lang_rust::SyntaxFactProduction;
 use nomos_lang_rust_scan::ScanFactProduction;
 use nomos_model::Content_Digest;
+use nomos_spec_bundle::{BundleSerialization, Export};
+use nomos_spec_model::Segment;
+use nomos_spec_project::{Build, Profile, ProjectionOutput};
+use nomos_spec_store::SpecificationStore;
 use nomos_workspace::{
     BuildVariant, ChangeSource, SnapshotSerialization, Workspace, WorkspaceChangeSet,
 };
+use std::cell::Cell;
 
 // ---------------------------------------------------------------------------------
 // The fixture
@@ -272,6 +278,253 @@ fn Snapshot_Production() -> Vec<u8>
 }
 
 // ---------------------------------------------------------------------------------
+// The two spec domains
+// ---------------------------------------------------------------------------------
+
+/// A specification corpus small enough to read and rich enough to order wrongly.
+///
+/// Two documents, one carrying a table and a fenced block, so the store holds blobs,
+/// documents, headings, blocks and table rows before anything above them is inserted.
+const SPEC_CORE: &str = "# Core architecture\n\nIdentity is not a path.\n\n\
+                         ## Domain model\n\n| Model | Owns |\n| --- | --- |\n\
+                         | WorkspaceContext | the workspace |\n| BuildVariant | one build |\n\n\
+                         ```rust\nlet quoted = \"a \\\"nested\\\" string\";\n```\n";
+
+const SPEC_CONFORMANCE: &str = "# Conformance\n\nUnknown is not pass \u{2014} ni\u{00f1}o, \
+                                \u{4e2d}\u{6587}, \u{1f600}.\n";
+
+/// The same corpus, written in one of two insertion orders.
+///
+/// # Why the order is a parameter
+///
+/// Insertion order is the only thing that decides a row's `uid`, and a `uid` is the one
+/// value in either domain that is not a function of the content. So two stores of this
+/// corpus written in opposite orders are the instrument for "is anything here ordered by
+/// a surrogate" — which is the failure mode both declarations are actually about, and the
+/// one an in-process repetition over a *single* store cannot see, because repeating a pure
+/// function over identical input agrees with itself whatever it is ordered by.
+fn Spec_Store(reversed: bool) -> SpecificationStore
+{
+    let mut store = SpecificationStore::In_Memory().expect("an in-memory store opens");
+    let mut documents = vec![
+        ("volumes/02-core.md", SPEC_CORE),
+        ("volumes/03-conformance.md", SPEC_CONFORMANCE),
+    ];
+    if reversed
+    {
+        documents.reverse();
+    }
+
+    for (path, text) in documents
+    {
+        let document = store
+            .Put_Source_Document(path, "v14.36", text)
+            .expect("the fixture document stores");
+        store
+            .Put_Source_Blocks(document, &Segment(text))
+            .expect("the fixture blocks store");
+    }
+
+    Populate_Spec_Graph(&store, reversed);
+
+    return store;
+}
+
+/// Everything above the documents: suites, nodes, relations, statements, lineage.
+///
+/// Split out so neither half runs past the line limit, and written as SQL for the reason
+/// `nomos-spec-bundle`'s own fixture is: the store's authoring API deliberately does not
+/// offer a way to write an arbitrary graph, and a fixture that could only build what the
+/// authoring path builds would never exercise a row the ingest path produces.
+fn Populate_Spec_Graph(store: &SpecificationStore, reversed: bool)
+{
+    let nodes = "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                        suite_uid)
+                 SELECT 'CDM-WORKSPACECONTEXT', 'concept', 'canonical', 'record',
+                        'WorkspaceContext', NULL, uid FROM suites WHERE suite_id = 'nomos';
+                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                        suite_uid)
+                 SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record',
+                        'Agent execution ancestry', NULL, uid FROM suites WHERE suite_id = 'nomos';
+                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                        suite_uid)
+                 SELECT 'D-129', 'decision', 'canonical', 'record',
+                        'The store is the identity substrate', NULL, uid
+                 FROM suites WHERE suite_id = 'xvpe-seed';";
+
+    let mut statements: Vec<&str> = nodes.split(";\n").collect();
+    statements.reverse();
+    let reversed_nodes = statements.join(";\n");
+
+    store
+        .Connection()
+        .execute_batch(
+            "INSERT INTO suites (suite_id, title, authority_root)
+             VALUES ('nomos', 'The Nomos specification', 1),
+                    ('xvpe-seed', 'XVPE specification seed', 0);
+
+             INSERT INTO source_headings (document_uid, ordinal, depth, title)
+             SELECT uid, 1, 1, 'Core architecture' FROM source_documents
+             WHERE path = 'volumes/02-core.md';
+             INSERT INTO source_headings (document_uid, ordinal, depth, title)
+             SELECT uid, 2, 2, 'Domain model' FROM source_documents
+             WHERE path = 'volumes/02-core.md';
+             INSERT INTO source_headings (document_uid, ordinal, depth, title)
+             SELECT uid, 1, 1, 'Conformance' FROM source_documents
+             WHERE path = 'volumes/03-conformance.md';",
+        )
+        .expect("the fixture suites and headings store");
+
+    store
+        .Connection()
+        .execute_batch(if reversed { &reversed_nodes } else { nodes })
+        .expect("the fixture nodes store");
+
+    Populate_Spec_Edges(store);
+}
+
+/// The edges, which are where a join can drop a row and an ordering can reach a surrogate.
+fn Populate_Spec_Edges(store: &SpecificationStore)
+{
+    store
+        .Connection()
+        .execute_batch(
+            "INSERT INTO node_aliases (alias, node_uid)
+             SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
+
+             INSERT INTO relation_types (name, tier, inverse_of)
+             VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies'),
+                    ('affects', 'extended', NULL);
+
+             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+             SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
+             WHERE f.node_id = 'CDM-WORKSPACECONTEXT' AND t.node_id = 'AGT-EXEC-001';
+             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+             SELECT f.uid, 'affects', t.uid FROM nodes f, nodes t
+             WHERE f.node_id = 'D-129' AND t.node_id = 'AGT-EXEC-001';
+
+             INSERT INTO normative_statements
+             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+             SELECT uid, 'AGT-EXEC-001', 'requirement', 'Nomos shall record ancestry.',
+                    'sha256:aa', 'sha256:99' FROM nodes WHERE node_id = 'AGT-EXEC-001';
+             INSERT INTO normative_statements
+             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+             SELECT uid, 'D-129-01', 'principle', 'The store is the identity substrate.',
+                    'sha256:bb', NULL FROM nodes WHERE node_id = 'D-129';
+
+             INSERT INTO lineage
+             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
+             SELECT b.uid, NULL, 'preserved-verbatim', NULL, s.uid
+             FROM source_blocks b, normative_statements s, source_documents d
+             WHERE d.path = 'volumes/02-core.md' AND b.document_uid = d.uid AND b.ordinal = 2
+               AND s.statement_id = 'AGT-EXEC-001';
+             INSERT INTO lineage (source_table_row_uid, disposition, target_node_uid)
+             SELECT r.uid, 'preserved-verbatim', n.uid
+             FROM source_table_rows r, nodes n
+             WHERE r.cells_json LIKE '%WorkspaceContext%'
+               AND n.node_id = 'CDM-WORKSPACECONTEXT';
+
+             INSERT INTO omissions
+             (source_block_uid, source_heading_uid, reason, justification, decision_record)
+             SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
+             FROM source_blocks b, source_documents d
+             WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
+               AND b.ordinal = 1;",
+        )
+        .expect("the fixture edges store");
+}
+
+/// The bundle a store of the fixture corpus exports, as text.
+fn Bundle_Bytes(reversed: bool) -> Vec<u8>
+{
+    let store = Spec_Store(reversed);
+    let bundle = Export(&store).expect("the fixture exports");
+
+    assert!(
+        bundle.Records().len() > 20,
+        "the fixture reached the bundle as only {} record(s), so agreeing with itself \
+         says almost nothing",
+        bundle.Records().len()
+    );
+
+    return bundle.Write().expect("the bundle writes").into_bytes();
+}
+
+/// The two profiles the projection domain is measured over.
+///
+/// Authored here rather than taken from `Catalogue::Shipped`, and the reason is the golden.
+/// A digest over the shipped catalogue would move the day somebody adds a profile — a
+/// change to the *content* the engine projects — and the failure would name the engine's
+/// encoding, which is the one thing that had not changed. What this pins is the engine and
+/// two profiles that live in this file.
+const PROJECTION_PROFILES: &[&str] = &[
+    r#"{ "id": "determinism-markdown", "title": "Determinism, rendered",
+         "format": "markdown", "output": "determinism.md",
+         "sections": [{ "title": "Nodes", "content": "nodes" },
+                      { "title": "Relations", "content": "relations" },
+                      { "title": "Documents", "content": "documents" }] }"#,
+    r#"{ "id": "determinism-json", "title": "Determinism, structured",
+         "format": "json", "output": "determinism.json",
+         "sections": [{ "title": "Statements", "content": "statements" },
+                      { "title": "Headings", "content": "headings" },
+                      { "title": "Lineage", "content": "lineage" }] }"#,
+];
+
+/// Both profiles rendered over the fixture, bodies and stamps together.
+///
+/// The stamp is in the production deliberately. It carries the inputs digest that
+/// [`nomos_spec_project::Check`] decides freshness from, so a projection whose body was
+/// stable and whose stamp was not would report every generated file as stale without a
+/// single byte of output having moved — a determinism defect the body alone cannot see.
+fn Projection_Bytes(reversed: bool) -> Vec<u8>
+{
+    let store = Spec_Store(reversed);
+    let mut rendered = Vec::new();
+
+    for text in PROJECTION_PROFILES
+    {
+        let profile = Profile::Parse(text).expect("the fixture profile parses");
+        let output = Build(&store, &profile)
+            .unwrap_or_else(|error| panic!("{}: {error}", profile.id));
+
+        rendered.extend_from_slice(format!("profile\t{}\n", output.path).as_bytes());
+        rendered.extend_from_slice(output.body.as_bytes());
+        rendered.extend_from_slice(
+            output
+                .Sidecar()
+                .expect("the stamp renders")
+                .as_bytes(),
+        );
+    }
+
+    return rendered;
+}
+
+/// A production that alternates the insertion order of an otherwise identical corpus.
+///
+/// [`Verify`] repeats a production and compares the results at the declared strength. Over
+/// a production that rebuilds the *same* store every time, that comparison is a test of
+/// whether the code is a pure function of its input, which it plainly is — the repetition
+/// would agree even if every ordering in the exporter were `ORDER BY uid`.
+///
+/// Alternating makes the repetition compare two stores of one corpus instead, which is
+/// what the declaration actually claims: a bundle is a function of the specification, not
+/// of the order the specification arrived in. The first call is always the forward order,
+/// so the digest the child process and the golden are compared against does not depend on
+/// how many times the closure has been called.
+fn Alternating(build: fn(bool) -> Vec<u8>) -> impl Fn() -> Vec<u8>
+{
+    let reversed = Cell::new(false);
+
+    return move || {
+        let order = reversed.get();
+        reversed.set(!order);
+
+        return build(order);
+    };
+}
+
+// ---------------------------------------------------------------------------------
 // Goldens
 // ---------------------------------------------------------------------------------
 
@@ -288,6 +541,21 @@ fn Snapshot_Production() -> Vec<u8>
 const PARSED_GOLDEN: &str = "15cc14884df61a70872959a572706249";
 const SCANNED_GOLDEN: &str = "94b9715ad47de8152fe3d3b2c53046ac";
 const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
+
+/// The bundle's golden, and the one whose scope claim reaches furthest.
+///
+/// `CrossBinary` is verified by capturing a reference from one build and comparing from
+/// others. The reference is this constant, and what it is worth is bounded by that: it is
+/// compared by every later build of this workspace, which is a real comparison across
+/// recompilation and is not yet a comparison across compiler versions.
+/// `docs/records/OD-DETERMINISM-002` says so rather than implying more.
+///
+/// It also pins the store's schema version, which travels in the bundle header. A
+/// migration therefore moves this constant, and that is right rather than unfortunate:
+/// a bundle written under one schema and read under another is exactly the interchange
+/// case the `CrossBinary` claim is about, and the diff is where somebody says so.
+const BUNDLE_GOLDEN: &str = "328491e46f92b6898c12b90b0d288b47";
+const PROJECTION_GOLDEN: &str = "9cecf39961bbd638111f82382eafd643";
 
 // ---------------------------------------------------------------------------------
 // The declared domains
@@ -379,6 +647,8 @@ fn Test_Name_For(domain: &str) -> &'static str
         "scan-fact-production" => "Test_The_Scanner_Should_Meet_Its_Declared_Strategy",
         "fact-reuse" => "Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy",
         "snapshot-serialization" => "Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy",
+        "bundle-serialization" => "Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy",
+        "projection-output" => "Test_Projection_Output_Should_Meet_Its_Declared_Strategy",
         other => panic!("no test is registered for the domain {other}"),
     };
 }
@@ -451,40 +721,179 @@ fn Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy()
     );
 }
 
+#[test]
+fn Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<BundleSerialization>(
+        "bundle-serialization",
+        &Alternating(Bundle_Bytes),
+        BUNDLE_GOLDEN,
+    );
+}
+
+#[test]
+fn Test_Projection_Output_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<ProjectionOutput>(
+        "projection-output",
+        &Alternating(Projection_Bytes),
+        PROJECTION_GOLDEN,
+    );
+}
+
+// ---------------------------------------------------------------------------------
+// The controls
+// ---------------------------------------------------------------------------------
+
+/// A declaration with the bundle row's triple, over a domain that does not hold it.
+///
+/// Held here rather than in a crate because it is not a domain: it is the negative control
+/// for the harness, and a strategy declared in a `src/` directory would be found by
+/// `Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness` and correctly reported as a
+/// promise with nothing behind it.
+struct Wobbly;
+
+impl Strategy for Wobbly
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::CrossBinary;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
+
+/// The control that says the harness would catch a real violation.
+///
+/// Without it every assertion above is consistent with a [`Verify`] that compares nothing:
+/// a domain repeated eight times and found to agree proves the domain is a function of its
+/// input, and proves nothing whatever about the instrument. So this runs the instrument
+/// over a production that is *not* a function of its input and asserts it fails, with the
+/// message it fails by, at the declared strength.
+///
+/// The variation is a counter rather than a hash seed or a clock, because a control has to
+/// fail on every machine on every run — a control that is itself flaky is a control nobody
+/// believes when it goes green.
+#[test]
+fn Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness()
+{
+    let call = Cell::new(0_u32);
+    let wobbles = || {
+        let seen = call.get();
+        call.set(seen.saturating_add(1));
+
+        return format!("line\tone\nline\t{seen}\n").into_bytes();
+    };
+
+    let refusal = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        return Verify::<Wobbly>("wobbly", &wobbles);
+    }))
+    .expect_err("a production that changes between repetitions must fail the harness");
+
+    let said = refusal
+        .downcast_ref::<String>()
+        .map_or_else(String::new, Clone::clone);
+    assert!(
+        said.contains("produced a different set"),
+        "the harness failed for the wrong reason: {said}"
+    );
+    assert!(
+        call.get() > 1,
+        "the control never reached a second repetition, so it proved nothing"
+    );
+}
+
+/// The control for the golden, which is the half of a scope claim a repetition cannot make.
+///
+/// A committed digest only catches a changed encoding if it is a function of the bytes.
+/// Both spec domains declare `State`, and a `State` digest is taken over the *sorted* line
+/// set — so the reasonable worry is that it is insensitive to something it ought to catch.
+/// This shows it is not: one altered byte anywhere in a real bundle moves the digest the
+/// golden is compared against.
+#[test]
+fn Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins()
+{
+    let honest = Production {
+        trace: Bundle_Bytes(false),
+    };
+    let mut altered = honest.trace.clone();
+    let last = altered
+        .iter()
+        .rposition(|byte| return byte.is_ascii_lowercase())
+        .expect("a bundle carries lower-case text");
+    let target = altered
+        .get_mut(last)
+        .expect("the position just found is in range");
+    *target = target.to_ascii_uppercase();
+
+    let tampered = Production { trace: altered };
+
+    assert_ne!(
+        tampered.trace, honest.trace,
+        "the control altered nothing, so the comparison below cannot fail"
+    );
+    assert_ne!(
+        tampered.Digest_At(DeterminismStrength::State),
+        honest.Digest_At(DeterminismStrength::State),
+        "a changed byte left the digest where it was, so the golden pins nothing"
+    );
+    assert_eq!(
+        honest.Digest_At(DeterminismStrength::State),
+        BUNDLE_GOLDEN,
+        "the honest half of this control must be the bundle the golden was captured from"
+    );
+}
+
 // ---------------------------------------------------------------------------------
 // The declarations themselves
 // ---------------------------------------------------------------------------------
 
-/// The domain table in `nomos_contracts::determinism` names six rows. Four are declared
-/// in this workspace and this test says which two are not, so the gap is a statement
-/// rather than an omission.
+/// Every domain this workspace has, with the row of the contracts table it occupies.
 ///
-/// Spec-bundle serialization and the projection engine both live in `crates/spec`, which
-/// `P9-DETERMINISM` did not claim and did not touch. Progress UI, logs and telemetry are
-/// the `None` row and there is no such domain in the tree yet — the CLI prints, and
-/// nothing about what it prints is a fact.
+/// # Why this test was renamed
+///
+/// It was `Test_The_Declared_Domains_Should_Be_The_Ones_This_Item_Covered`, and
+/// `docs/records/OD-DETERMINISM-001` cites it by that name as the place the two undeclared
+/// rows were written down. Both are declared now, so the sentence that name asserts is
+/// false. A citation that resolves to a test asserting the opposite of what the citing
+/// record says is worse than one that resolves to nothing, so the name moved and
+/// `docs/records/OD-DETERMINISM-002` records where it went.
+///
+/// # What is still not covered, and why that is not a gap
+///
+/// Two of the table's six rows have no domain in this tree. "Correction planning and
+/// staging" describes work that applies fixes, and nothing here applies one. "Progress UI,
+/// logs, telemetry, agent execution" is the `None` row — the CLI prints, and nothing about
+/// what it prints is a fact. Neither is an omission that a declaration would repair;
+/// `tests/contract/tests/determinism_declarations.rs` is where they are accounted for, so
+/// that a crate arriving to occupy either row cannot do so silently.
 #[test]
-fn Test_The_Declared_Domains_Should_Be_The_Ones_This_Item_Covered()
+fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 {
     let declared = [
         ("syntax-fact-production", SyntaxFactProduction::STRENGTH),
         ("scan-fact-production", ScanFactProduction::STRENGTH),
         ("fact-reuse", FactReuse::STRENGTH),
         ("snapshot-serialization", SnapshotSerialization::STRENGTH),
+        ("bundle-serialization", BundleSerialization::STRENGTH),
+        ("projection-output", ProjectionOutput::STRENGTH),
     ];
 
     assert_eq!(
         declared.len(),
-        4,
-        "four domains are covered; a fifth declaration needs a row in this table and a \
+        6,
+        "six domains are covered; a seventh declaration needs a row in this table and a \
          test of its own"
     );
 
-    for (domain, _) in declared
+    for (domain, strength) in declared
     {
         assert!(
             !Test_Name_For(domain).is_empty(),
             "{domain} declares a strategy and has no test registered"
+        );
+        assert_ne!(
+            strength,
+            DeterminismStrength::None,
+            "{domain} is measured here and promises nothing, so the measurement is \
+             discharging no obligation"
         );
     }
 }

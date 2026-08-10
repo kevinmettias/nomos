@@ -1,6 +1,9 @@
 pub const fn nomos_spec_bundle::Bundle::Header(&self) -> &Header
 pub const fn nomos_spec_bundle::Bundle::Manifest(&self) -> &Manifest
 pub const fn nomos_spec_bundle::Record::Table(&self) -> &'static str
+pub const nomos_spec_bundle::BundleSerialization::SCOPE: ReproducibilityScope
+pub const nomos_spec_bundle::BundleSerialization::STRENGTH: DeterminismStrength
+pub const nomos_spec_bundle::BundleSerialization::TRACE: TraceEquivalence
 pub const nomos_spec_bundle::FORMAT: u32
 pub enum nomos_spec_bundle::BlobEncoding
 pub enum nomos_spec_bundle::BundleError
@@ -53,6 +56,7 @@ pub impl nomos_spec_bundle::BundleError implements From<rusqlite::Error>
 pub impl nomos_spec_bundle::BundleError implements From<serde_json::Error>
 pub impl nomos_spec_bundle::BundleError implements core::fmt::Display
 pub impl nomos_spec_bundle::BundleError implements std::error::Error
+pub impl nomos_spec_bundle::BundleSerialization implements Strategy
 pub struct field nomos_spec_bundle::Blob::byte_length: i64
 pub struct field nomos_spec_bundle::Blob::content: String
 pub struct field nomos_spec_bundle::Blob::encoding: BlobEncoding
@@ -145,6 +149,7 @@ pub struct field nomos_spec_bundle::TableRowRef::block: OrdinalRef
 pub struct field nomos_spec_bundle::TableRowRef::ordinal: i64
 pub struct nomos_spec_bundle::Blob
 pub struct nomos_spec_bundle::Bundle
+pub struct nomos_spec_bundle::BundleSerialization
 pub struct nomos_spec_bundle::DocumentRef
 pub struct nomos_spec_bundle::Header
 pub struct nomos_spec_bundle::ImportReport

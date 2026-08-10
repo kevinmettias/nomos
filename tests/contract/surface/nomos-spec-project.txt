@@ -5,6 +5,9 @@ pub const fn nomos_spec_project::Format::Extension(self) -> &'static str
 pub const fn nomos_spec_project::Format::Label(self) -> &'static str
 pub const fn nomos_spec_project::Freshness::Is_Fresh(&self) -> bool
 pub const nomos_spec_project::DO_NOT_EDIT: &str
+pub const nomos_spec_project::ProjectionOutput::SCOPE: ReproducibilityScope
+pub const nomos_spec_project::ProjectionOutput::STRENGTH: DeterminismStrength
+pub const nomos_spec_project::ProjectionOutput::TRACE: TraceEquivalence
 pub const nomos_spec_project::SHIPPED: &[(&str, &str)]
 pub const nomos_spec_project::SIDECAR_SUFFIX: &str
 pub enum nomos_spec_project::Content
@@ -64,6 +67,7 @@ pub impl nomos_spec_project::ProjectError implements From<nomos_spec_store::Stor
 pub impl nomos_spec_project::ProjectError implements From<rusqlite::Error>
 pub impl nomos_spec_project::ProjectError implements core::fmt::Display
 pub impl nomos_spec_project::ProjectError implements std::error::Error
+pub impl nomos_spec_project::ProjectionOutput implements Strategy
 pub struct field nomos_spec_project::Filter::authority: Option<String>
 pub struct field nomos_spec_project::Filter::disposition: Option<String>
 pub struct field nomos_spec_project::Filter::document: Option<String>
@@ -122,5 +126,6 @@ pub struct nomos_spec_project::Output
 pub struct nomos_spec_project::Profile
 pub struct nomos_spec_project::ProfileSection
 pub struct nomos_spec_project::Projection
+pub struct nomos_spec_project::ProjectionOutput
 pub struct nomos_spec_project::Section
 pub struct nomos_spec_project::Stamp

@@ -355,6 +355,10 @@ dependencies = [
  "nomos-lang-rust",
  "nomos-lang-rust-scan",
  "nomos-model",
+ "nomos-spec-bundle",
+ "nomos-spec-model",
+ "nomos-spec-project",
+ "nomos-spec-store",
  "nomos-workspace",
 ]
 
@@ -435,6 +439,7 @@ name = "nomos-spec-bundle"
 version = "0.1.0"
 dependencies = [
  "base64",
+ "nomos-contracts",
  "nomos-spec-model",
  "nomos-spec-store",
  "rusqlite",
@@ -470,6 +475,7 @@ dependencies = [
 name = "nomos-spec-project"
 version = "0.1.0"
 dependencies = [
+ "nomos-contracts",
  "nomos-spec-bundle",
  "nomos-spec-ingest",
  "nomos-spec-model",

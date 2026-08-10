@@ -16,6 +16,8 @@ mod universes;
 
 pub use gates::{Corpus_Gates, CorpusGate, CORPUS_VARIABLES};
 pub use metadata::{Package, Workspace};
-pub use strategies::{Fact_Domains, FactDomain};
+pub use strategies::{
+    Declaration, Domain_Table, DomainRow, Fact_Domains, FactDomain, Harnessed_Strategies,
+};
 pub use surface::{Crate_Identifier, Public_Surface, Surface};
 pub use universes::{Declared_Universes, DeclaredUniverse, UniverseKind};

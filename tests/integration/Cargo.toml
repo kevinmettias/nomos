@@ -16,6 +16,13 @@ nomos-workspace = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-lang-rust = { workspace = true }
 nomos-lang-rust-scan = { workspace = true }
+# The two spec domains this harness holds to their declarations. The spec system sits
+# beside the kernel rather than above it, and this crate is the one place both sides are
+# linked at once — which is what a harness is for.
+nomos-spec-model = { workspace = true }
+nomos-spec-store = { workspace = true }
+nomos-spec-bundle = { workspace = true }
+nomos-spec-project = { workspace = true }
 
 [lints]
 workspace = true

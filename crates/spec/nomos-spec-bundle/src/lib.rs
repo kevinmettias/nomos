@@ -8,11 +8,13 @@
 
 mod bundle;
 mod columns;
+mod determinism;
 mod export;
 mod import;
 mod model;
 
 pub use bundle::{Bundle, FORMAT, Header, Manifest};
+pub use determinism::BundleSerialization;
 pub use export::Export;
 pub use import::{Import, ImportReport};
 pub use model::{

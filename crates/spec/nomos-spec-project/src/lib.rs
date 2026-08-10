@@ -3,6 +3,7 @@
 
 mod build;
 mod catalogue;
+mod determinism;
 mod profile;
 mod projection;
 mod render;
@@ -10,6 +11,7 @@ mod select;
 
 pub use build::{Build, Check, Freshness, Output, Stamp, SIDECAR_SUFFIX};
 pub use catalogue::{Catalogue, Shipped, SHIPPED};
+pub use determinism::ProjectionOutput;
 pub use profile::{Content, Filter, Format, Profile, Section as ProfileSection};
 pub use projection::{Input, Item, Projection, Section, DO_NOT_EDIT};
 pub use render::Render;

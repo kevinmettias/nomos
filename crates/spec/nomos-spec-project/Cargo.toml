@@ -8,6 +8,9 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
+# The determinism vocabulary, for the one declaration in `src/determinism.rs`. See the
+# same note in `nomos-spec-bundle`.
+nomos-contracts = { workspace = true }
 nomos-spec-model = { workspace = true }
 nomos-spec-store = { workspace = true }
 serde = { workspace = true }
