@@ -115,6 +115,96 @@ impl core::fmt::Display for LedgerError
 
 impl std::error::Error for LedgerError {}
 
+/// Why an item could not be put on the board.
+///
+/// Its own vocabulary and not a borrowed [`ClaimRefusal`] arm. Adding an item is not
+/// claiming one — it takes no territory, judges no lease and consults no other holder — so
+/// every arm of a claim's refusal would be a sentence about the wrong question. That is the
+/// mis-subject `OD-LEDGER-014` measured, and the cost of a second small enum is smaller than
+/// the cost of one arm meaning two things.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum AddRefusal
+{
+    /// The identifier is already on the board.
+    ///
+    /// An answer and not a store failure: the caller chose an identifier somebody else has
+    /// already used, and the remedy is to choose another. Decided **inside** the lock, so two
+    /// sessions adding one identifier at once cannot both be told it was free.
+    AlreadyPresent
+    {
+        /// The identifier that is taken.
+        item: ItemId,
+    },
+    /// The item would leave the board violating its own invariants.
+    ///
+    /// The commonest of these is an item that reserves nothing, which `AGENTS.md` states as a
+    /// rule of the board: it would exclude nobody while looking like work.
+    ///
+    /// Distinct from [`AddRefusal::LedgerUnusable`] because the remedies are opposite and the
+    /// exit codes differ. This one is the caller's own item to correct and the board is fine;
+    /// that one means nobody can use the board until somebody looks at it. Collapsing them is
+    /// how "your territory is empty" comes to read as "stop and fetch a person".
+    WouldBeInvalid
+    {
+        /// Every violation the document would carry, not just the first.
+        violations: Vec<String>,
+    },
+    /// The ledger itself could not be read or written.
+    ///
+    /// Its own arm for the reason [`ClaimRefusal::LedgerUnusable`] is: a caller told only
+    /// "that identifier is taken" while the file is in fact unparseable goes and renames its
+    /// item, and the rename does not help. `OD-LEDGER-009`.
+    LedgerUnusable
+    {
+        /// What the store said, verbatim.
+        cause: String,
+    },
+}
+
+impl AddRefusal
+{
+    /// A one-line explanation a person or an agent can act on.
+    #[must_use]
+    pub fn Describe(&self) -> String
+    {
+        return match self
+        {
+            Self::AlreadyPresent { item } => format!("{item} is already on the ledger"),
+            // The wording [`LedgerError::Invalid`] would have produced, because this arm
+            // exists to carry that refusal out through a different channel and not to
+            // rephrase it. An operator who has seen one of these should recognise the other.
+            Self::WouldBeInvalid { violations } =>
+            {
+                format!("ledger is invalid:\n  {}", violations.join("\n  "))
+            }
+            Self::LedgerUnusable { cause } => cause.clone(),
+        };
+    }
+}
+
+/// Which of a store failure's two meanings this is, for a caller adding an item.
+///
+/// [`LedgerError::Invalid`] arrives here by a different route from the rest. The others are
+/// the store failing at its job; that one is [`FileLedger::Save`] doing its job, refusing a
+/// document before it reaches the disk because the item just handed to it is not one the
+/// board can hold. Reporting the second as the first is the conflation `OD-LEDGER-009`
+/// records, and here it would cost the exit code an agent branches on.
+impl From<&LedgerError> for AddRefusal
+{
+    fn from(error: &LedgerError) -> Self
+    {
+        return match error
+        {
+            LedgerError::Invalid { violations } => Self::WouldBeInvalid {
+                violations: violations.clone(),
+            },
+            other => Self::LedgerUnusable {
+                cause: other.to_string(),
+            },
+        };
+    }
+}
+
 /// The on-disk form.
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 // The outermost of the strict containers. Reasoned once in `item.rs`'s module documentation and
@@ -394,28 +484,41 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
 
     /// Runs a decision that may refuse, over the document, inside one lock acquisition.
     ///
-    /// The three [`ExclusionLedger`] verbs share a shape that [`Self::With_Lock`] cannot
-    /// express on its own: they answer with a [`ClaimRefusal`] rather than a
-    /// [`LedgerError`], and a refusal is an *answer*, not a failure of the store. Carrying
-    /// it out through the error channel would put "agent-b holds this" and "the file will
-    /// not parse" in one type, which is the conflation `OD-LEDGER-009` already had to undo
-    /// once. So the refusal rides out as the modification's value, and only genuine store
-    /// failures use the error.
+    /// The [`ExclusionLedger`] verbs share a shape that [`Self::With_Lock`] cannot express on
+    /// its own: they answer with a refusal rather than a [`LedgerError`], and a refusal is an
+    /// *answer*, not a failure of the store. Carrying it out through the error channel would
+    /// put "agent-b holds this" and "the file will not parse" in one type, which is the
+    /// conflation `OD-LEDGER-009` already had to undo once. So the refusal rides out as the
+    /// modification's value, and only genuine store failures use the error.
     ///
-    /// Written once and called three times rather than spelled out in each verb. Three
-    /// copies of "take the lock, read the clock, decide, write" is three chances for one of
-    /// them to stop taking the lock — which is the defect this exists to have fixed.
+    /// Written once and called from every verb rather than spelled out in each. A copy of
+    /// "take the lock, read the clock, decide, write" per verb is a chance per verb for one of
+    /// them to stop taking the lock — which is the defect this exists to have fixed, and which
+    /// `add` then went on to demonstrate anyway by never being routed through here at all.
+    /// `OD-LEDGER-021`.
+    ///
+    /// # Why the refusal type is generic
+    ///
+    /// It was [`ClaimRefusal`] concretely while the only callers were the three claim verbs.
+    /// `add` refuses for a reason that is not about claiming — the identifier is already on
+    /// the board — and giving it a [`ClaimRefusal`] arm to borrow would have been the
+    /// mis-subject `OD-LEDGER-014` measured. The alternative, letting `add` reach for
+    /// [`Self::With_Lock`] directly, is the copy this function exists to prevent. So the door
+    /// stays single and each verb brings its own vocabulary, bound only by being able to say
+    /// "the store itself failed".
     ///
     /// `now` is read **inside** the acquisition and handed to the decision, so the clock a
     /// claim is judged against and the clock its lease is measured from are one reading
     /// taken after the wait for the lock. Read before, a claim that waited on a contended
     /// lock would be granted a lease shortened by however long it waited, and would judge
     /// other holders' leases against a time that had already passed.
-    fn Decide_Under_Lock<T>(
+    fn Decide_Under_Lock<T, E>(
         &self,
         holder: &str,
-        decide: impl FnOnce(&mut LedgerDocument, Timestamp) -> Result<T, ClaimRefusal>,
-    ) -> Result<T, ClaimRefusal>
+        decide: impl FnOnce(&mut LedgerDocument, Timestamp) -> Result<T, E>,
+    ) -> Result<T, E>
+    where
+        for<'error> E: From<&'error LedgerError>,
     {
         // The stale takeover is dropped here, deliberately and visibly. None of the three
         // verbs' return types can carry one — `Reservation` and `ClaimRefusal` are public
@@ -429,7 +532,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
 
                 return Ok(decide(document, now));
             })
-            .map_err(|error| return Unusable(&error))?;
+            .map_err(|error| return E::from(&error))?;
 
         return outcome;
     }
@@ -563,6 +666,49 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
                     candidate.Decline(reason, holder, now);
                 }
             }
+
+            return Ok(());
+        });
+    }
+
+    /// Puts a new item on the board.
+    ///
+    /// # Why this is on the store at all
+    ///
+    /// It was not, and that is what `OD-LEDGER-021` records. `add` lived in the command layer
+    /// as a `Load`, a push and a `Save` with nothing held in between — the same shape
+    /// `OD-LEDGER-015` had already found in `Claim`, `Renew` and `Release`, surviving in a
+    /// fourth verb because those three were fixed by name rather than the door being made the
+    /// only way through. An add that read the board before somebody else's claim wrote its
+    /// own snapshot back over that claim, and the loss is symmetric: whichever of the two
+    /// writers saves last wins whole, so the same defect appears once as a lost claim and once
+    /// as an add that returned exit 0 and was never on the board.
+    ///
+    /// The duplicate check moves inside the lock with the write it guards. Outside it, two
+    /// sessions adding one identifier could both read a board without it and both be told it
+    /// was theirs, and the second write would leave a document `Validate` calls invalid — a
+    /// board that refuses to load, reached by two callers who were each told they succeeded.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`AddRefusal::AlreadyPresent`] if the identifier is taken,
+    /// [`AddRefusal::WouldBeInvalid`] if the item would leave the board violating its own
+    /// invariants — [`Self::Save`] refuses that before anything reaches the disk — and
+    /// [`AddRefusal::LedgerUnusable`] if the ledger could not be read or written at all.
+    pub fn Add(&mut self, item: &LedgerItem, holder: &str) -> Result<(), AddRefusal>
+    {
+        return self.Decide_Under_Lock(holder, |document, _now| {
+            if document
+                .items
+                .iter()
+                .any(|existing| existing.id == item.id)
+            {
+                return Err(AddRefusal::AlreadyPresent {
+                    item: item.id.clone(),
+                });
+            }
+
+            document.items.push(item.clone());
 
             return Ok(());
         });
@@ -1014,11 +1160,18 @@ fn Wrong_Verb(target: &LedgerItem, now: Timestamp) -> ClaimRefusal
 /// destroyed by the failure it explains, and it is why `P10-LAPSE-BRICKS` needed an
 /// experiment to diagnose rather than a glance: the surface was reporting a spelling
 /// mistake while the ledger was refusing to load.
-fn Unusable(error: &LedgerError) -> ClaimRefusal
+///
+/// A conversion rather than a free function since [`FileLedger::Decide_Under_Lock`] became
+/// generic over what its caller refuses with: this is the one thing every such vocabulary
+/// has to be able to say, so it is the bound rather than a step each verb performs.
+impl From<&LedgerError> for ClaimRefusal
 {
-    return ClaimRefusal::LedgerUnusable {
-        cause: error.to_string(),
-    };
+    fn from(error: &LedgerError) -> Self
+    {
+        return Self::LedgerUnusable {
+            cause: error.to_string(),
+        };
+    }
 }
 
 impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedger<F, C, L>

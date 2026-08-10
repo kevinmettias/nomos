@@ -2,7 +2,7 @@
 
 use crate::arguments::{Named_Value, Named_Values};
 use nomos_ledger::{
-    ClaimRefusal, Claim_Refusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish,
+    AddRefusal, ClaimRefusal, Claim_Refusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish,
     FinishRefusal, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome,
     SCHEMA_VERSION, Territory, Validate, VerificationPredicate,
 };
@@ -408,7 +408,7 @@ pub fn Run(
     {
         WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
         WorkCommand::Show { item } => Show(&ledger, item, output),
-        WorkCommand::Add { item } => Add(&ledger, item, output),
+        WorkCommand::Add { item } => Add(&mut ledger, item, output),
         WorkCommand::Finish { item, holder } => Report_Finish(
             // No working directory: the predicate runs where the user invoked `nomos`,
             // which for a repository tool run inside a repository is the repository. A
@@ -618,30 +618,32 @@ fn Show(
 /// stated exactly because the promise is what the next reader will act on: the identifier
 /// is unused, and the document that results still satisfies its own invariants. Nothing
 /// here says two agents may edit one file, and nothing here is what stops them.
+///
+/// # The exclusion this *does* need, and did not have
+///
+/// Both of those guarantees were until `OD-LEDGER-021` written outside the lock. This
+/// function read the whole document, decided against it and wrote the whole document back
+/// with nothing held in between — the shape `OD-LEDGER-015` removed from `Claim`, `Renew`
+/// and `Release`, left behind here because those three were fixed by name. An add that read
+/// the board before a concurrent verb's write put its own snapshot back over it, and the
+/// caller was told exit 0 either way.
+///
+/// So the read, the duplicate check and the write are now one [`FileLedger::Add`], and what
+/// is left here is reporting. The check in particular had to travel with them: outside the
+/// lock, two sessions adding one identifier both read a board without it, and the second
+/// write produced a document `Validate` calls invalid — a board that then refuses to load,
+/// for two callers who were each told they had succeeded.
 fn Add(
-    ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
+    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
     item: &LedgerItem,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    let mut document = match ledger.Load()
-    {
-        Ok(document) => document,
-        Err(error) => return Report_Error(&error, output),
-    };
-
-    if document
-        .items
-        .iter()
-        .any(|existing| existing.id == item.id)
-    {
-        let _ = writeln!(output, "{} is already on the ledger", item.id);
-        return ExitCode::Conflict;
-    }
-
-    document.items.push(item.clone());
-
-    return match ledger.Save(&document)
+    // The lock's holder name is a courtesy for a stale-takeover report and never an
+    // identity that is checked, which is why `add` can name itself here while every other
+    // verb passes the agent that asked. `add` takes no `--holder` because it takes no
+    // claim: the item it writes is `Ready` and belongs to nobody yet.
+    return match ledger.Add(item, "nomos work add")
     {
         Ok(()) =>
         {
@@ -653,7 +655,23 @@ fn Add(
             );
             ExitCode::Ok
         }
-        Err(error) => Report_Error(&error, output),
+        // Each arm keeps the exit code this command already gave it. Routing the write
+        // through the store changed which type carries the refusal out and must not change
+        // what an agent branching on the number concludes: a taken identifier is the
+        // caller's to resolve by choosing another, an item that reserves nothing is the
+        // caller's to correct, and only a ledger that cannot be read or written at all is
+        // the one an agent stops and fetches a person for.
+        Err(refusal) =>
+        {
+            let _ = writeln!(output, "{}", refusal.Describe());
+
+            match refusal
+            {
+                AddRefusal::AlreadyPresent { .. } => ExitCode::Conflict,
+                AddRefusal::WouldBeInvalid { .. } => ExitCode::ValidationError,
+                AddRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
+            }
+        }
     };
 }
 

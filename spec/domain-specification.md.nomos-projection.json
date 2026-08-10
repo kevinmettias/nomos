@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:99f56b1004667861ce202258311b5e8e91dcbe2054e80bab05f83675ffc3a643",
-  "inputs_digest": "sha256:ce79b8d705e9ddcf9ab0a68e58296312a12bdba92aca2aa769a5dbe93dca0951",
+  "content_digest": "sha256:eee1c5f93dd3e497c40b1c0e8af1846b647afe773b3579a84712d7d3ed2e9c7e",
+  "inputs_digest": "sha256:64680c3634649731e91b617179cf4c0f4bf6554b3ffd7794b4fe794908c2b629",
   "sections": [
     [
       "Documents",
-      68
+      69
     ],
     [
       "Sections",
-      635
+      649
     ],
     [
       "Source blocks",
-      2529
+      2567
     ]
   ],
   "inputs": [
@@ -133,7 +133,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored",
-      "hash": "sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf"
+      "hash": "sha256:b39496b715d80c073eaee5e8087fd9a9454131c1975bef781ec837c646ba18d8"
     },
     {
       "content": "documents",
@@ -239,6 +239,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored",
       "hash": "sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored",
+      "hash": "sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d"
     },
     {
       "content": "documents",
@@ -1242,23 +1247,18 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19",
+      "hash": "sha256:edf16a440bcf4f37b32f34f2dc3da92a85baeb98c28d311e4f9dd1e2bf28efbb"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21",
-      "hash": "sha256:aca92864232e31452d4761bcc98b7e7002da95a25a5e72fcf624bb8c82177ba1"
+      "hash": "sha256:c01b7ba22753c6489621d203092d62f9391c8c6908a49d6098c87ec9540d3ad0"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27",
-      "hash": "sha256:db7ef04ea2706ba0fbe86d0fe5184509fbbeb4f09036f059c2ca309207f47efb"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29",
-      "hash": "sha256:9e02a2a85be9fa1be073e6435785b2b6be059ab04251d42266cbb9ba6134c0b9"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31",
-      "hash": "sha256:dd339ebc1e6a29fe951f390708c05b6860c8886cdec17319f10b754b338968dd"
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23",
+      "hash": "sha256:85e26fc2000085765d90fc1904ffe15fe361c36f4f2b678a5026a924b4f6a93e"
     },
     {
       "content": "headings",
@@ -2389,6 +2389,81 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53",
       "hash": "sha256:9617271589e0ca04597ad3176dbb9afacaf716a4591b088a34c6f5e58ee55948"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#1",
+      "hash": "sha256:3fca50a225a402f5a1ba57ace742bf7d45d19b4263d2846c1a24b7ad4cbe7191"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#2",
+      "hash": "sha256:6b70ff43e7cd2aaf943ac53908a9a9fdf1faffb52c7956576aa99372d90186f6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#6",
+      "hash": "sha256:72857d9450ee800d249e63d6167dd351a87db3ec5189d0e7223789eafc6ee919"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#11",
+      "hash": "sha256:8d1335ae36a46bbf7a2e1af6cdd8e6ffe10028cb74b1e34f5fdf8aa008a478b2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#16",
+      "hash": "sha256:55d91d57be6725427bb6ada055eb546d6f26b694d08ce15c728717daef002f07"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#21",
+      "hash": "sha256:f183c593d9b34a4288c6aea2799adad310fb469e0b618e8a35cfb04c2a78bbf9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#22",
+      "hash": "sha256:043cbc91ea684f3b204c0339e3351b919482cfedca1670a6d9607799f188e1e4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#24",
+      "hash": "sha256:98436384ac022ba33302206240d44a61d5caeb68a7da7211916721c6332634f2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#26",
+      "hash": "sha256:e32bba54267dbe0aa262685e5edd69417448e2f4574a58573ac486c72950dd06"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#31",
+      "hash": "sha256:f8fc9a903b57a9e2439f4e8408cbae41c8573d3d4995951d5badf65140abfeda"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#34",
+      "hash": "sha256:0814d0333333eb98c090876f34379e713eb4f2e89c7ff2c319ebe7e22ba3804a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#36",
+      "hash": "sha256:7dd2b518a47472848fad7592fc481289c3f0477e47748e543658e915a183cb93"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#38",
+      "hash": "sha256:0dde042729329574f99b3eb6868d119404ba99bc0f39aa6643eb2f1243057c04"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#41",
+      "hash": "sha256:506ec6d011f5dbdfe808bc74c10fa183ff847c01ee223c7c0ddcb304e499d32a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#45",
+      "hash": "sha256:8106930ce0e81d2727b0b2174c8736bd3d1825015422b54d885637f5b6269635"
     },
     {
       "content": "headings",
@@ -6863,7 +6938,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#16",
-      "hash": "sha256:1d652e4feed5e0045390d32d37cfed8a238ae0f4d95079207f19bfb1d8fda3f8"
+      "hash": "sha256:7cb9b072bc3e18bdc181edeeb2328a2ed82a0ac98b37220b77017ab6374a8922"
     },
     {
       "content": "blocks",
@@ -6873,77 +6948,37 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#18",
-      "hash": "sha256:d4475cc7279e5729e3b4be075530d5025ca182fd996f776830b3f947e871ebcd"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19",
       "hash": "sha256:bf840757080ceefa2aacf5651830582bd156c90e63920500a9917ec594ddd853"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#20",
-      "hash": "sha256:bf02c9b6cec5b7e25762ef556a5fca645ee48f694c4f9e155ba6a9f6871c42b6"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21",
-      "hash": "sha256:d84e917a0a30b27370a65a063fe8a349a89d42f2e2b40e297bac9ad51ca33ea1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#22",
-      "hash": "sha256:bb3cc516f56aeba5ee9c2c254d1798e7790388447187f3b9b61d175bee617b07"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23",
-      "hash": "sha256:456f55ddb500318716eebff3f8ac046938a45804ad6bafa998e9efc9648aae74"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#24",
-      "hash": "sha256:bcaf758082147d408a268337a678390a3dabe0ee976d4e814a157491351567d7"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#25",
-      "hash": "sha256:3d2fe470a5b2c3460fbef6bf8da92dfb9341ba263b539b1d72e87167c5d21dea"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#26",
-      "hash": "sha256:cb5bb4d9d65e50946f48954a4e7ad9c3f27cb219ca5ef7d3d563dc4509ad08e6"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19",
       "hash": "sha256:5fa0e3ac46acb99b145b67a28728ce1bdba39c2ad425dc0d8fbea375a08558b0"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#28",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#20",
       "hash": "sha256:933e53cc0bc56ffe81a366e2a2d67ddaad671aa11a713fc3235b0a0fa66d2451"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21",
       "hash": "sha256:555ac5e2947b4d7528ab7a18bac24ba8889418d9a2655d42618ef9cf79630668"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#30",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#22",
       "hash": "sha256:86dc515771db13c51903f2dbb0c6a4e98ab5650009f5c93d3e8c4f55af7f5f00"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23",
       "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
     },
     {
       "content": "blocks",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#32",
-      "hash": "sha256:4193ff51826b0528afc76c94a023749e9f5fb7267adc4f4bb9084e37f28f060e"
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#24",
+      "hash": "sha256:374a4973a4e0405b64cf4193816afcf13d360653e1cbc4d98cf95f72819727e5"
     },
     {
       "content": "blocks",
@@ -11544,6 +11579,236 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#54",
       "hash": "sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#1",
+      "hash": "sha256:7fbd97b09d09d67ceac5cbea9eaa11ae91fd0d8cab856905e893215acd7ad135"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#3",
+      "hash": "sha256:dcd41c8dbf6ef1feb6b7b81c3cec4f1e7cc77c142baa69100a96996359e58111"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#4",
+      "hash": "sha256:1e2b5ea06a4b5f90d54db71193454a35673e033be6f3463a214b0cc896f9002d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#5",
+      "hash": "sha256:11f9e21f4c0acc75afeb6084b75191532a0c5133ae01af3af5af057967e11ccb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#6",
+      "hash": "sha256:9cf637875913d15d7fe1825e949e1b19591ffd93154cf6d0c4afbca0fe408ed3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#7",
+      "hash": "sha256:995c1cbd761f668438eaabef14f829e547988a19416a4581a78d5919c6dafd88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#8",
+      "hash": "sha256:534202759c11177586471ac11e7aee9ec2f7c45c7e2e936cc1d798982ec08341"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#9",
+      "hash": "sha256:e65a7ab8b421e67cae4cd20a3261c307589684bf3eeec2d97915fa318105b291"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#10",
+      "hash": "sha256:e70a973e599e524f96ccbcc6984e82746eda5dd2874a6a447c6281e56b21d2d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#11",
+      "hash": "sha256:18ed38131858db855e4fda0b3171cce559fdaeac5b8aed87bad66123b9622edc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#12",
+      "hash": "sha256:3482115cfac8460ff27fc0825b4488617d368cbd09c8de367d24b3c4190e30eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#13",
+      "hash": "sha256:d1e5d7c6213e81f092ffc0648e31ce2ace1a1d237e1e078a5a0a3ea655c41f2f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#14",
+      "hash": "sha256:a4eb6244bbf7ba008c4864eed5a1326037da768a37c2ceac8fe11a14b9c7d19b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#15",
+      "hash": "sha256:33d392ff588f8ed18894c01cfae90cbe48efb7889ff4a70feb92276646d454d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#16",
+      "hash": "sha256:3f78e26a11e792fe670fbed8a7a38127205d140a5c13351591bbf62bf055b8f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#17",
+      "hash": "sha256:2e03b3382f2190e18b5455cf93f81762878bf6678d2ab1fcd145edbd4d74fb28"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#18",
+      "hash": "sha256:4633ed1a074b6dc106043162e15aa154da7dd2607b54268c0e8a9ae857171ead"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#19",
+      "hash": "sha256:737ca4a585515dbc6b79f1c7b7d28e7ca3334262d3bf6b612d5ae90b6b650ffd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#20",
+      "hash": "sha256:ad88f78131758e6d534fa9a4bc2ac3e5881380ff20c9d106d93f8ef5b92ab7b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#21",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#22",
+      "hash": "sha256:fe15a808f2a0ce709d471b5d52973cec53136afec0958b72f02dc78498b0b8d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#23",
+      "hash": "sha256:243d32069162ab1d88fa85f049c70c218f5a761dc94edb7aa0ff917f356c16d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#24",
+      "hash": "sha256:ef1cb4584aedf897a3f5d795075a96cc5ab5ec71e7e6b4fb2a32b0bce255ac11"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#25",
+      "hash": "sha256:7100fd7b14db71e095858c78d5604117b74c5cb71efd603e6431ae9d076bc86e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#26",
+      "hash": "sha256:6a0a04e7e347352756607f7a718ae8fec69621f2060e7ee9f108c9241cd102e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#27",
+      "hash": "sha256:2e2f9ff9ff1eea1207b7da55a9b5122662c5a6ba39ac546539bd1b013ef334ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#28",
+      "hash": "sha256:76c9ffad81d422bcd7b74a9947e2085e53ffd384b20b2ae59363afb0ecd3feb3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#29",
+      "hash": "sha256:80e2f350463ce3ce7b5d4474688a1ef9bb5291827cc10a8c89257c75f43c4d28"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#30",
+      "hash": "sha256:69404c1d5e496c0ee15da645eda377bebadf63794c3abecc3df7a850d1dbc301"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#31",
+      "hash": "sha256:c865139886256359cc8260ce5360ba44104b33e14321c9b3370639d10bb53c53"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#32",
+      "hash": "sha256:1beba867e49ddec3f5c124b1ffa40d49add1ad4d6a48d59e5996a2569ec580ef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#33",
+      "hash": "sha256:0f28ba07e8e69a9c46f7d83ea06433f04c9d8e3e0044ec0c2813e98426b17217"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#34",
+      "hash": "sha256:e1e07bf8c3090e450b3e9a15400a6fcd476a1974f8b1215c2ce872a7bfff152a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#35",
+      "hash": "sha256:cab1a8ca8b317cb6c80618747f121adef9c52bde95f88cafbba9ddab81e0aa19"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#36",
+      "hash": "sha256:75586251482925fc8e4510d92e163429fab48fc6e22709f3e25d23056d2dfe9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#37",
+      "hash": "sha256:480944e68418341c5fadc9fa08608541b43be9518d344198613db4ce38bd283f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#38",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#39",
+      "hash": "sha256:6fe42dc472b7ecc408c55444aab5224924b2d3ddef137f752218650b639c1c79"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#40",
+      "hash": "sha256:a6852cf77180de9061244b3c835d1b7afc21790746389e0d7d92797c06296837"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#41",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#42",
+      "hash": "sha256:8d19214fd4475f4264859a48eb5dfa478a3b318b6356a00f82c0360a993594e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#43",
+      "hash": "sha256:85c71ec56b19bde6dba33f59af7fccb26f62b180b78440db9febc461cd4b79e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#44",
+      "hash": "sha256:69c1feb4de0aca998d447b2fbf2998b2798e81b5080f4a1c5048b0b519fbb0f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#45",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#46",
+      "hash": "sha256:79291756764772a86041380b50e752760605f6d250191b5167ae8aab21f3301e"
     },
     {
       "content": "blocks",

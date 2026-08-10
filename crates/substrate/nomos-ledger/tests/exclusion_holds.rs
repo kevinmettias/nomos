@@ -5,9 +5,9 @@
 //! checks were deleted.
 
 use nomos_ledger::{
-    Abandonment, Blocker, Claim, ClaimRefusal, ExclusionLedger, FileLedger, Finish, FinishRefusal,
-    GateOutcome, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome,
-    SCHEMA_VERSION, Territory as ItemTerritory, Validate, VerificationPredicate,
+    Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, ExclusionLedger, FileLedger, Finish,
+    FinishRefusal, GateOutcome, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem,
+    ReleaseOutcome, SCHEMA_VERSION, Territory as ItemTerritory, Validate, VerificationPredicate,
     VerificationRecord,
 };
 use nomos_model::SetResolution;
@@ -2646,6 +2646,175 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
             .map(|claim| return claim.lease_expires_at),
         Some(At(NOW + 3_600)),
         "the renewal the first writer was told had been recorded is not in the ledger"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The same loss at the verb that puts work on the board, which `OD-LEDGER-015` left behind.
+///
+/// `Claim`, `Renew` and `Release` were moved behind the lock and `add` was not, because the
+/// three were named as "the verbs that change the board" and adding an item was not counted
+/// as changing it. It is: the document `add` writes back is the whole board, so an add that
+/// read before somebody else's claim erases that claim exactly as a stale `Claim` would.
+///
+/// Observed on the real ledger rather than reasoned about. Two adds ran back to back, both
+/// printed their success line and both exited 0, and only the first was ever on the board —
+/// a peer's locked verb had read the file between them and written its snapshot back over
+/// the second. `OD-LEDGER-021`.
+#[test]
+fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
+{
+    let directory = Temp_Dir("concurrent-add");
+    let clock = FixedClock(NOW);
+
+    Ledger_At(&directory, &clock)
+        .Save(&Document(vec![Item("T-2", &["src/b.rs"])]))
+        .expect("a fresh ledger is valid");
+
+    Two_Writers(
+        &directory,
+        &clock,
+        |ledger| {
+            ledger
+                .Add(&Item("T-1", &["src/a.rs"]), "agent-a")
+                .expect("T-1 is not on the board yet");
+        },
+        |ledger| {
+            ledger
+                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
+                .expect("T-2 shares no territory with T-1");
+        },
+    );
+
+    let after = Ledger_At(&directory, &clock).Load().expect("readable");
+
+    assert!(
+        after
+            .items
+            .iter()
+            .any(|item| return item.id == ItemId::New("T-1")),
+        "the add was told the item was recorded and the item is not on the board: an add \
+         wrote back a document it had read before the other writer existed, or was written \
+         over by one"
+    );
+    assert_eq!(
+        Holder_Of(&after, "T-2"),
+        Some("agent-b".to_owned()),
+        "an add wrote back a document read before the other writer's claim, so the claim it \
+         was granted is gone"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The duplicate check has to travel inside the lock with the write it guards.
+///
+/// Deciding it outside is the same defect one level down, and it is worse than a lost item:
+/// two sessions adding one identifier both read a board without it, both are told it is
+/// theirs, and the document that results has the identifier twice. [`Validate`] calls that
+/// invalid and every operation loads before it does anything, so the next agent to touch the
+/// board — any agent, on any item — is refused by a ledger that will not load. Two callers
+/// were each told they succeeded and the board is unusable.
+///
+/// The interleaving is the one the harness always builds, and what it proves is different
+/// here: the second writer is not merely made to wait, it is made to *see* the first writer's
+/// item and refuse on it.
+#[test]
+fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
+{
+    let directory = Temp_Dir("concurrent-duplicate-add");
+    let clock = FixedClock(NOW);
+
+    Ledger_At(&directory, &clock)
+        .Save(&Document(Vec::new()))
+        .expect("an empty board is a valid ledger");
+
+    let second_outcome = Mutex::new(None);
+    let recorded = &second_outcome;
+
+    Two_Writers(
+        &directory,
+        &clock,
+        |ledger| {
+            ledger
+                .Add(&Item("T-1", &["src/a.rs"]), "agent-a")
+                .expect("the board is empty, so T-1 is free");
+        },
+        |ledger| {
+            let outcome = ledger.Add(&Item("T-1", &["src/b.rs"]), "agent-b");
+            *recorded.lock().expect("the harness never panics under this lock") =
+                Some(outcome);
+        },
+    );
+
+    assert_eq!(
+        second_outcome
+            .lock()
+            .expect("the harness never panics under this lock")
+            .clone()
+            .expect("the second writer ran"),
+        Err(AddRefusal::AlreadyPresent {
+            item: ItemId::New("T-1")
+        }),
+        "the second add read the board before the first one's write and was told an \
+         identifier that was already taken was free"
+    );
+
+    let after = Ledger_At(&directory, &clock).Load().expect("readable");
+
+    assert_eq!(
+        after
+            .items
+            .iter()
+            .filter(|item| return item.id == ItemId::New("T-1"))
+            .count(),
+        1,
+        "one identifier is on the board twice, so the board no longer loads for anybody"
+    );
+    assert!(
+        Validate(&after, At(NOW)).is_empty(),
+        "the board two accepted adds left behind is one the ledger itself calls invalid"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// An item the board cannot hold is the caller's to correct, not a broken store.
+///
+/// The two are different exit codes and opposite next actions — fix your item, or stop and
+/// fetch a person — so routing `add` through the store had to keep them apart. Carrying
+/// [`LedgerError::Invalid`] out as [`AddRefusal::LedgerUnusable`] with everything else would
+/// have turned "your territory is empty" into "the ledger is unusable", which is
+/// `OD-LEDGER-009`'s conflation arriving by a new route.
+///
+/// An empty territory is the instance that actually happens: `AGENTS.md` states it as a rule
+/// of the board, so it is the refusal an author hits by writing a plausible item.
+#[test]
+fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
+{
+    let directory = Temp_Dir("add-would-not-validate");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(Vec::new()))
+        .expect("an empty board is a valid ledger");
+
+    let refused = ledger.Add(&Item("T-1", &[]), "agent-a");
+
+    assert!(
+        matches!(refused, Err(AddRefusal::WouldBeInvalid { .. })),
+        "an item that reserves nothing is a violation of the board's own rules, and \
+         reporting it as an unusable store sends its author to the wrong remedy: {refused:?}"
+    );
+    assert!(
+        ledger
+            .Load()
+            .expect("readable")
+            .items
+            .is_empty(),
+        "the refusal was reported and the item landed anyway"
     );
 
     let _ = std::fs::remove_dir_all(&directory);

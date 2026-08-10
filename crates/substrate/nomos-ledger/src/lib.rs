@@ -65,7 +65,7 @@ pub use item::{
     LedgerItem, MAXIMUM_LEASE, VerificationPredicate, VerificationRecord,
 };
 pub use store::{
-    Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, LedgerError,
-    SCHEMA_VERSION, Validate,
+    AddRefusal, Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument,
+    LedgerError, SCHEMA_VERSION, Validate,
 };
 pub use territory::{Normalize_Path, Subject_Of, Territory};

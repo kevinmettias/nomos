@@ -32,7 +32,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 24 | 8 | sha256:b39496b715d80c073eaee5e8087fd9a9454131c1975bef781ec837c646ba18d8 |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
@@ -54,6 +54,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md@authored | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md | authored | 108 | 19 | sha256:37c30a7fb96b566768cb5b23df4bb92b037c769ce8f7eabc087b4dd91742d730 |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md | authored | 42 | 12 | sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944 |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
@@ -259,10 +260,9 @@ profile: domain-specification
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#5 | authored | 2 | Why Not `cargo public-api` |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#10 | authored | 2 | The Decision |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#14 | authored | 2 | What This Gives Up |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21 | authored | 2 | Version 2: A Name Is Reported, Not A Declaration |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27 | authored | 2 | Blessing Is Not A Passing Run |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29 | authored | 2 | What Would Change This |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31 | authored | 2 | Status |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19 | authored | 2 | Blessing Is Not A Passing Run |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21 | authored | 2 | What Would Change This |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23 | authored | 2 | Status |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#1 | authored | 1 | The rule layer becomes a gate step, and zero is the only exit code that passes it |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#2 | authored | 2 | Why This Identifier |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#4 | authored | 2 | Question |
@@ -489,6 +489,21 @@ profile: domain-specification
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#49 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#51 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53 | authored | 2 | Status |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#1 | authored | 1 | A verb that changes the board is one the store owns, and add was outside the door |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#6 | authored | 2 | What Was Observed |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#11 | authored | 2 | The Mechanism, Established Rather Than Inferred |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#16 | authored | 3 | The two candidates that were ruled out |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#21 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#22 | authored | 3 | 1. `add` is a verb that changes the board, and the store owns it |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#24 | authored | 3 | 2. The duplicate check moves inside the lock with the write it guards |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#26 | authored | 3 | 3. A refusal that was distinguishable stays distinguishable |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#31 | authored | 3 | 4. `Decide_Under_Lock` is generic over what its caller refuses with |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#34 | authored | 3 | 5. The fix is not a wider lock wait |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#36 | authored | 3 | 6. It is not closed by advice either |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#38 | authored | 2 | What This Does Not Do |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#41 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#45 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -6318,16 +6333,10 @@ so that the next person does not have to find out:
 
 ### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#16
 
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:1d652e4feed5e0045390d32d37cfed8a238ae0f4d95079207f19bfb1d8fda3f8*
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:7cb9b072bc3e18bdc181edeeb2328a2ed82a0ac98b37220b77017ab6374a8922*
 
 - **Glob re-exports.** `pub use module::*` names nothing, so nothing resolves. It is
   reported as an unresolved re-export rather than dropped. There are none today.
-- **Named re-exports of another crate's items.** Resolution is per crate: `Public_Surface`
-  is given one package and its root, and there is no second crate's module tree to follow
-  `pub use nomos_model::Subject_Of_Path` into. The name is reported as an unresolved
-  re-export rather than resolved to the declaration it names. This is the one entry that
-  is *reported* rather than merely absent, which is the difference version 2 bought and the
-  section below records.
 - **Blanket and generic impls.** An `impl<T> Trait for T` is recorded by its written form,
   not expanded over the types it covers.
 - **Trait inheritance.** A trait's supertrait methods are surface and are recorded against
@@ -6335,12 +6344,7 @@ so that the next person does not have to find out:
 - **`#[cfg]`.** Every branch is read, so a surface that differs by platform or feature is
   reported as the union. This workspace has no `#[cfg]`-gated exports.
 - **Macro-generated items.** A `macro_rules!` expansion that declares a `pub` item is
-  invisible to the scan. *There is no such macro here* was wrong when it was written:
-  `nomos-contracts` declares its twelve identity newtypes through `Digest_Identity!` and
-  `Named_Identity!`, each expansion carrying a `pub struct` and its inherent methods. The
-  expansion is still invisible. What changed in version 2 is that those twelve are
-  re-exported by name from the crate root, so they are now *reported* as unresolved
-  re-exports instead of being absent from the snapshot altogether.
+  invisible. There is no such macro here.
 - **Type aliases and inference.** The declaration is recorded as written, so
   `pub type Guard = …` shows the alias rather than what it resolves to.
 
@@ -6354,14 +6358,6 @@ this record exists rather than a comment in the file.
 
 ### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#18
 
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:d4475cc7279e5729e3b4be075530d5025ca182fd996f776830b3f947e871ebcd*
-
-Each of those is an absence. The entry above them is not, and the distinction is the whole
-of version 2: a name that is *reported* is a line in the snapshot, so adding or removing it
-still fails the test, while a name that is *absent* changes nothing and nobody hears.
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19
-
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:bf840757080ceefa2aacf5651830582bd156c90e63920500a9917ec594ddd853*
 
 What is *not* given up is the property the item asked for. Adding a `pub fn`, widening a
@@ -6369,74 +6365,13 @@ field, adding a variant, adding a method to a public type, changing a signature,
 a name to a `pub use` list all change a committed file, and the test fails until somebody
 commits that change with the change that caused it.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#20
-
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What This Gives Up · hash: sha256:bf02c9b6cec5b7e25762ef556a5fca645ee48f694c4f9e155ba6a9f6871c42b6*
-
-That last clause was false for a cross-crate target until version 2, and it was false in
-the way that is hardest to notice: not by failing loudly, but by being true of every name
-somebody happened to test.
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21
-
-*revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:d84e917a0a30b27370a65a063fe8a349a89d42f2e2b40e297bac9ad51ca33ea1*
-
-## Version 2: A Name Is Reported, Not A Declaration
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#22
-
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:bb3cc516f56aeba5ee9c2c254d1798e7790388447187f3b9b61d175bee617b07*
-
-`P11-REEXPORT-GRAIN`. `Emit_Re_Export` resolved each name in a `pub use` list separately
-and then asked one question about the whole list — had *anything* resolved. A name that
-resolved to nothing was reported only when every name beside it also did.
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23
-
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:456f55ddb500318716eebff3f8ac046938a45804ad6bafa998e9efc9648aae74*
-
-A glob is the sole name in its declaration, so the promise three paragraphs up held for the
-one case this record thought to name, and held by accident. It failed for every other:
-`pub use corpus::{Corpus, SourceFile, Subject_Of_Path, Walk}` had three names declared in
-the crate and one re-exported from `nomos-model`, so the three made the fourth look handled
-and it left `tests/contract/surface/nomos-integration-tests.txt` entirely — blessed away by
-`a6f0e9c` while the crate went on exporting the name and `slice.rs` went on calling it.
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#24
-
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:bcaf758082147d408a268337a678390a3dabe0ee976d4e814a157491351567d7*
-
-**The report is per name.** A list is split across as many lines as it has unresolvable
-names, spelled as the `pub use` a reader would go and look at — `pub use
-corpus::Subject_Of_Path`, carrying `as` where the source renamed. The route is the one the
-source wrote, not the one the target eventually lives at, because that first hop is where
-somebody checking the report has to begin and the second hop is the resolution this reader
-is recorded as not doing.
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#25
-
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:3d2fe470a5b2c3460fbef6bf8da92dfb9341ba263b539b1d72e87167c5d21dea*
-
-Reporting whole lists was refused for the mirror reason: one line naming four names says
-four items are outside this crate when one is, which is over-reporting, and a snapshot that
-cries wolf is re-blessed unread.
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#26
-
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 2: A Name Is Reported, Not A Declaration · hash: sha256:cb5bb4d9d65e50946f48954a4e7ad9c3f27cb219ca5ef7d3d563dc4509ad08e6*
-
-Measured when the grain changed: fifteen names in three crates were being dropped. One in
-`nomos-integration-tests`, two in `nomos-contract-tests` re-exported from `nomos-rules`,
-and twelve in `nomos-contracts` from the macro above. Three snapshots moved for one
-comparison, which is the shape of the defect — it was never about one crate.
-
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#19
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Blessing Is Not A Passing Run · hash: sha256:5fa0e3ac46acb99b145b67a28728ce1bdba39c2ad425dc0d8fbea375a08558b0*
 
 ## Blessing Is Not A Passing Run
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#28
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#20
 
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Blessing Is Not A Passing Run · hash: sha256:933e53cc0bc56ffe81a366e2a2d67ddaad671aa11a713fc3235b0a0fa66d2451*
 
@@ -6445,13 +6380,13 @@ check any environment could switch off by exporting a variable, and a CI job wit
 set would report green having compared nothing — the same failure this whole item is about,
 one level out.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What Would Change This · hash: sha256:555ac5e2947b4d7528ab7a18bac24ba8889418d9a2655d42618ef9cf79630668*
 
 ## What Would Change This
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#30
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#22
 
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What Would Change This · hash: sha256:86dc515771db13c51903f2dbb0c6a4e98ab5650009f5c93d3e8c4f55af7f5f00*
 
@@ -6461,19 +6396,17 @@ the two derivations should be compared against each other before either is trust
 the way `P9-ONE-DIRECTION` compared the corpus-gate count against the source: two
 independent readings that agree are worth more than one authoritative one.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#23
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#32
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#24
 
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:4193ff51826b0528afc76c94a023749e9f5fb7267adc4f4bb9084e37f28f060e*
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:374a4973a4e0405b64cf4193816afcf13d360653e1cbc4d98cf95f72819727e5*
 
-Version 1 closed by `P9-PUBLIC-API`. Version 2 closed by `P11-REEXPORT-GRAIN`, which
-re-authored `P11-REEXPORT-SURFACE` once the reading found the defect in three crates rather
-than the one it was opened for.
+Closed by `P9-PUBLIC-API`.
 
 ### docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#1
 
@@ -14186,6 +14119,366 @@ unusable for its own motivating case.
 *revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Status · hash: sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5*
 
 Closed by `P10-DECLINE-VERB`.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#1
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door · hash: sha256:7fbd97b09d09d67ceac5cbea9eaa11ae91fd0d8cab856905e893215acd7ad135*
+
+# A verb that changes the board is one the store owns, and add was outside the door
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#2
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#3
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / Question · hash: sha256:dcd41c8dbf6ef1feb6b7b81c3cec4f1e7cc77c142baa69100a96996359e58111*
+
+`nomos work add` printed its success line, exited 0, and the item was never on the board.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#4
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / Question · hash: sha256:1e2b5ea06a4b5f90d54db71193454a35673e033be6f3463a214b0cc896f9002d*
+
+`AGENTS.md` rests the whole working loop on the opposite of that. Step 3 says **exit 0 is the
+only thing that means you have it**, and step 2 says to put an item on the board before
+claiming one. An add that returns 0 over a write that did not survive makes the first
+sentence false at the step that precedes the one it is written on.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#5
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / Question · hash: sha256:11f9e21f4c0acc75afeb6084b75191532a0c5133ae01af3af5af057967e11ccb*
+
+`OD-LEDGER-015` recorded this failure once already, for `Claim`, `Renew` and `Release`. This
+is a second instance, reached by a different route, in a verb that record did not name.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#6
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / What Was Observed · hash: sha256:9cf637875913d15d7fe1825e949e1b19591ffd93154cf6d0c4afbca0fe408ed3*
+
+## What Was Observed
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#7
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / What Was Observed · hash: sha256:995c1cbd761f668438eaabef14f829e547988a19416a4581a78d5919c6dafd88*
+
+Two `work add` invocations ran back to back from one script at unix 1786386100, against a
+freshly built schema-3 binary. Both printed their success line and both exited 0:
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#8
+
+*revision: authored · kind: code · heading: A verb that changes the board is one the store owns, and add was outside the door / What Was Observed · hash: sha256:534202759c11177586471ac11e7aee9ec2f7c45c7e2e936cc1d798982ec08341*
+
+```
+added P11-SPENT-RECORD-ID reserving 6 path(s)
+added P11-REEXPORT-SURFACE reserving 5 path(s)
+```
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#9
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / What Was Observed · hash: sha256:e65a7ab8b421e67cae4cd20a3261c307589684bf3eeec2d97915fa318105b291*
+
+`P11-SPENT-RECORD-ID` is on the board. `P11-REEXPORT-SURFACE` was in no commit, `git log -S`
+over `work/ledger.json` finds it in none, and it was absent from the working tree minutes
+later.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#10
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / What Was Observed · hash: sha256:e70a973e599e524f96ccbcc6984e82746eda5dd2874a6a447c6281e56b21d2d4*
+
+The window is locatable and does not depend on remembering what happened. Commit `a2c0fed`,
+written by another session while those adds ran, carries a `work/ledger.json` holding the
+first of the two adds and not the second. The file on disk had already lost it before that
+commit was taken, so the loss is between the two adds and not in anybody's staging.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#11
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred · hash: sha256:18ed38131858db855e4fda0b3171cce559fdaeac5b8aed87bad66123b9622edc*
+
+## The Mechanism, Established Rather Than Inferred
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#12
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred · hash: sha256:3482115cfac8460ff27fc0825b4488617d368cbd09c8de367d24b3c4190e30eb*
+
+`Add` lived in the command layer, in `crates/host/nomos-cli/src/work.rs`. It read the whole
+document with `ledger.Load()`, checked the identifier, pushed the item and wrote the whole
+document back with `ledger.Save()` — with nothing held anywhere in between. It never called
+`With_Lock`, and it is not on `FileLedger` at all.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#13
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred · hash: sha256:d1e5d7c6213e81f092ffc0648e31ce2ace1a1d237e1e078a5a0a3ea655c41f2f*
+
+That is the exact shape `OD-LEDGER-015` removed from three verbs. It survived in a fourth
+because those three were fixed **by name**: the record calls them "the three verbs that change
+the board", and putting an item on the board was not counted as changing it. It is. The
+document `add` writes back is the whole board, so an add that read before a peer's claim
+writes its own snapshot back over that claim.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#14
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred · hash: sha256:a4eb6244bbf7ba008c4864eed5a1326037da768a37c2ceac8fe11a14b9c7d19b*
+
+The loss is symmetric, and this is the part that made the incident hard to read. Whichever of
+the two writers saves last wins whole. So the same single defect appears as a lost *claim*
+when the add saves last, and as an add that returned exit 0 and was never on the board when
+the peer's locked verb saves last. The second is what was observed here; the first is what the
+test reproduces, because the harness controls which writer is held.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#15
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred · hash: sha256:33d392ff588f8ed18894c01cfae90cbe48efb7889ff4a70feb92276646d454d8*
+
+The peer's verb was not at fault and did nothing wrong. It took the lock, loaded inside it,
+decided and wrote — correctly. A lock excludes only the writers that take it, and the add did
+not, so the lock had nothing to say about it.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#16
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred / The two candidates that were ruled out · hash: sha256:3f78e26a11e792fe670fbed8a7a38127205d140a5c13351591bbf62bf055b8f6*
+
+### The two candidates that were ruled out
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#17
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred / The two candidates that were ruled out · hash: sha256:2e03b3382f2190e18b5455cf93f81762878bf6678d2ab1fcd145edbd4d74fb28*
+
+Both were plausible enough to check before writing any code, and neither is what happened.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#18
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred / The two candidates that were ruled out · hash: sha256:4633ed1a074b6dc106043162e15aa154da7dd2607b54268c0e8a9ae857171ead*
+
+**A second lock identity under `NOMOS_WORK_DIR`.** Ruled out at the construction site. The
+ledger path and the lock path are derived from one `directory` argument in the same
+expression — `directory.join("ledger.json")` and `directory.join("ledger.lock")` — so the
+lock always accompanies the file it guards. Pointing the variable elsewhere selects a
+different ledger *and* its own lock; it cannot split one from the other.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#19
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred / The two candidates that were ruled out · hash: sha256:737ca4a585515dbc6b79f1c7b7d28e7ca3334262d3bf6b612d5ae90b6b650ffd*
+
+**A lock taken but not honoured across processes on this platform.** Ruled out at the
+primitive. `FileLock` excludes by `OpenOptions::create_new`, which is `CREATE_NEW` on Windows
+and `O_CREAT | O_EXCL` on Unix — chosen for exactly this reason and recorded in its own doc
+comment. Its contention tests pass on this platform.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#20
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Mechanism, Established Rather Than Inferred / The two candidates that were ruled out · hash: sha256:ad88f78131758e6d534fa9a4bc2ac3e5881380ff20c9d106d93f8ef5b92ab7b8*
+
+Neither was needed. The writer bypassed the door.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#21
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#22
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 1. `add` is a verb that changes the board, and the store owns it · hash: sha256:fe15a808f2a0ce709d471b5d52973cec53136afec0958b72f02dc78498b0b8d5*
+
+### 1. `add` is a verb that changes the board, and the store owns it
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#23
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 1. `add` is a verb that changes the board, and the store owns it · hash: sha256:243d32069162ab1d88fa85f049c70c218f5a761dc94edb7aa0ff917f356c16d5*
+
+`FileLedger::Add` performs the read, the duplicate check and the write inside one lock
+acquisition, through `Decide_Under_Lock` — the same door `Claim`, `Renew`, `Release`,
+`Take_Over` and `Decline` go through. The command layer keeps the argument parsing and the
+reporting, which is all a command layer should have had.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#24
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 2. The duplicate check moves inside the lock with the write it guards · hash: sha256:ef1cb4584aedf897a3f5d795075a96cc5ab5ec71e7e6b4fb2a32b0bce255ac11*
+
+### 2. The duplicate check moves inside the lock with the write it guards
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#25
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 2. The duplicate check moves inside the lock with the write it guards · hash: sha256:7100fd7b14db71e095858c78d5604117b74c5cb71efd603e6431ae9d076bc86e*
+
+Not incidental to moving the code, and worse than the lost item if left behind. Outside the
+lock, two sessions adding one identifier both read a board without it and are both told it is
+theirs. The document that results carries the identifier twice, `Validate` calls that invalid,
+and every operation loads before it does anything — so the next agent to touch the board, on
+any item, is refused by a ledger that will not load. Two callers were each told they
+succeeded and the board is unusable.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#26
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 3. A refusal that was distinguishable stays distinguishable · hash: sha256:6a0a04e7e347352756607f7a718ae8fec69621f2060e7ee9f108c9241cd102e3*
+
+### 3. A refusal that was distinguishable stays distinguishable
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#27
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 3. A refusal that was distinguishable stays distinguishable · hash: sha256:2e2f9ff9ff1eea1207b7da55a9b5122662c5a6ba39ac546539bd1b013ef334ec*
+
+`AddRefusal` is `add`'s own vocabulary rather than a borrowed `ClaimRefusal` arm. Adding an
+item takes no territory, judges no lease and consults no other holder, so every arm of a
+claim's refusal would be a sentence about a different question — the mis-subject
+`OD-LEDGER-014` measured.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#28
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 3. A refusal that was distinguishable stays distinguishable · hash: sha256:76c9ffad81d422bcd7b74a9947e2085e53ffd384b20b2ae59363afb0ecd3feb3*
+
+It has three arms because the command already gave three exit codes and routing the write
+through the store must not collapse them:
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#29
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 3. A refusal that was distinguishable stays distinguishable · hash: sha256:80e2f350463ce3ce7b5d4474688a1ef9bb5291827cc10a8c89257c75f43c4d28*
+
+| Arm | Exit | What the caller does next |
+|---|---|---|
+| `AlreadyPresent` | 4 | choose another identifier |
+| `WouldBeInvalid` | 1 | correct the item — commonly, reserve something |
+| `LedgerUnusable` | 5 | stop and fetch a person |
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#30
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 3. A refusal that was distinguishable stays distinguishable · hash: sha256:69404c1d5e496c0ee15da645eda377bebadf63794c3abecc3df7a850d1dbc301*
+
+`WouldBeInvalid` exists only because of this. `Save` refuses an invalid document with
+`LedgerError::Invalid`, and carrying every `LedgerError` out as `LedgerUnusable` would have
+turned "your territory is empty" into "the ledger is unusable" — `OD-LEDGER-009`'s conflation
+arriving by a new route, at the one refusal an author reaches by writing a plausible item.
+`AGENTS.md` states the empty-territory rule, so it is a refusal authors meet.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#31
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 4. `Decide_Under_Lock` is generic over what its caller refuses with · hash: sha256:c865139886256359cc8260ce5360ba44104b33e14321c9b3370639d10bb53c53*
+
+### 4. `Decide_Under_Lock` is generic over what its caller refuses with
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#32
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 4. `Decide_Under_Lock` is generic over what its caller refuses with · hash: sha256:1beba867e49ddec3f5c124b1ffa40d49add1ad4d6a48d59e5996a2569ec580ef*
+
+It was concretely `ClaimRefusal` while the only callers were claim verbs. Rather than give
+`add` an arm to borrow, or let it reach for `With_Lock` directly — which is the per-verb copy
+that function exists to prevent, and precisely how this defect happened — the door stays
+single and each verb brings its own vocabulary. The only bound is being able to say "the store
+itself failed", expressed as `From<&LedgerError>`.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#33
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 4. `Decide_Under_Lock` is generic over what its caller refuses with · hash: sha256:0f28ba07e8e69a9c46f7d83ea06433f04c9d8e3e0044ec0c2813e98426b17217*
+
+This is the part that addresses the class rather than the instance. `OD-LEDGER-015` fixed
+three verbs by name and the fourth was written outside the door afterwards. A door that
+refuses only the vocabularies it was born knowing is a door the next verb routes around.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#34
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 5. The fix is not a wider lock wait · hash: sha256:e1e07bf8c3090e450b3e9a15400a6fcd476a1974f8b1215c2ce872a7bfff152a*
+
+### 5. The fix is not a wider lock wait
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#35
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 5. The fix is not a wider lock wait · hash: sha256:cab1a8ca8b317cb6c80618747f121adef9c52bde95f88cafbba9ddab81e0aa19*
+
+Widening `LOCK_WAIT_LIMIT`, or retrying, changes how often two writers collide. It does not
+change whether a writer that never takes the lock can be excluded by one, which is the
+property. A remedy that improves the odds would have made the next instance rarer and no less
+possible, and rarer is worse here: this one took a peer's commit to diagnose.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#36
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 6. It is not closed by advice either · hash: sha256:75586251482925fc8e4510d92e163429fab48fc6e22709f3e25d23056d2dfe9f*
+
+### 6. It is not closed by advice either
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#37
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / The Decision / 6. It is not closed by advice either · hash: sha256:480944e68418341c5fadc9fa08608541b43be9518d344198613db4ce38bd283f*
+
+Telling authors in `AGENTS.md` to re-read the board after adding would document the defect as
+a working practice. The contract being repaired *is* that exit 0 is the answer; a step that
+verifies exit 0 concedes it is not.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#38
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#39
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / What This Does Not Do · hash: sha256:6fe42dc472b7ecc408c55444aab5224924b2d3ddef137f752218650b639c1c79*
+
+`add` still does not refuse an item whose territory somebody already holds, and that is
+`OD-LEDGER-010`'s decision, untouched. Opening an item on held ground is how this board is
+used. What is now guaranteed is that the write survives, not that the ground is free.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#40
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / What This Does Not Do · hash: sha256:a6852cf77180de9061244b3c835d1b7afc21790746389e0d7d92797c06296837*
+
+It also does not close `P11-SPENT-RECORD-ID`: an identifier already published can still be
+reserved, because the check compares against open items only. That is a different question
+about what `add` should refuse, and this record is about whether what it accepted was written
+down.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#41
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#42
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / Controls · hash: sha256:8d19214fd4475f4264859a48eb5dfa478a3b318b6356a00f82c0360a993594e5*
+
+Three tests in `crates/substrate/nomos-ledger/tests/exclusion_holds.rs`, using the
+`Two_Writers` interleaving harness that `OD-LEDGER-015`'s own tests are built on. The harness
+holds one writer between its read and its write, so the ordering is constructed rather than
+raced — a test that reproduced by luck would go green on a slower machine with the defect
+still there.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#43
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / Controls · hash: sha256:85c71ec56b19bde6dba33f59af7fccb26f62b180b78440db9febc461cd4b79e7*
+
+- `Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran`. Watched failing before the fix,
+  with the claim granted to `agent-b` gone from the board it was written to.
+- `Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted`. Watched failing
+  with the duplicate check moved back outside the lock and everything else unchanged, which is
+  the negative control for decision 2 specifically.
+- `Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake`, for decision 3.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#44
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / Controls · hash: sha256:69c1feb4de0aca998d447b2fbf2998b2798e81b5080f4a1c5048b0b519fbb0f7*
+
+The exit-code contract in decision 3 is held from outside by the seven existing tests in
+`crates/host/nomos-cli/tests/add_guarantees_what_it_says.rs`, which pin 0, 1 and 4 through the
+real binary and were not modified. Two of them fail if `WouldBeInvalid` is dropped.
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#45
+
+*revision: authored · kind: heading · heading: A verb that changes the board is one the store owns, and add was outside the door / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#46
+
+*revision: authored · kind: prose · heading: A verb that changes the board is one the store owns, and add was outside the door / Status · hash: sha256:79291756764772a86041380b50e752760605f6d250191b5167ae8aab21f3301e*
+
+Accepted. Implemented across `P11-ADD-NOT-DURABLE` — the store, the record and the tests —
+and `P11-ADD-CALL-SITE`, which carries the two files the first item's territory did not
+reserve. The second item exists because there is no `work edit` and widening a claim
+mid-flight is what makes a declared territory worthless; the two territories are disjoint and
+were held at once, which is the arrangement `OD-LEDGER-001` describes.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 
