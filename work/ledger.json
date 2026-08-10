@@ -2233,6 +2233,40 @@
         "timeout_seconds": 600
       },
       "verified": null
+    },
+    {
+      "id": "P10-SEEDING-SERIALIZES",
+      "title": "Two items writing different records cannot be independent, because seeding makes them share two files",
+      "why": "records_do_not_serialize is red at HEAD, and it is red on its own precondition rather than on its subject. Both Test_Two_Items_Writing_Different_Records_Should_Be_Claimable_At_Once and Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused fail at A_Concurrent_Pair with the board must offer two independent record writers. There is no such pair. Five open items reserve a record; every one of them also reserves crates/spec/nomos-spec-store or a parent of it, and every one of them also reserves tests/contract.\nThis is not an accident of who authored what. OD-LEDGER-001 third authoring rule requires that anything writing a canonical record also reserve crates/spec/nomos-spec-store, because such a record must be seeded in governing.rs with the literal count in governing_records_are_present.rs raised or the workspace goes red. Two items writing two different records must therefore both edit the same two files. They cannot be independent, by construction, and the rule that makes it so was added in the same work as the guarantee it defeats. P10-RECORD-LOCK set out to end exactly this: before it, all nine open items reserved docs/records and the second claim was always refused. Reserving the record instead of the directory removed one edge and left the deeper one in place.\nOD-LEDGER-004 already measured it without drawing the conclusion. It lists twenty-two pairs still excluded on genuine code overlap, naming crates/spec and crates/spec/nomos-spec-store at six blocked pairs and tests/contract at five, and treats them as ordinary code contention. What it does not say is that for record-writing items specifically the store overlap is guaranteed by its own authoring rule, so the acceptance test passed at the time only because some pair on the board happened to be disjoint for unrelated reasons. The property was measured true once and is not structurally maintained.\nA second global serializer arrived later and independently. P9-PUBLIC-API checks each crate public surface into tests/contract/surface, so any item widening any crate API must update a file under tests/contract, and items are now being widened to reserve that whole directory for the same reason they reserve the store. Two items updating two different snapshot files collide on the directory that holds them, which is the shape P10-RECORD-LOCK named for records, one level up and not yet applied here.\nObserved on 2026-08-09. The last concurrent pair existed at 340a310 and went at 91f8159, a widening commit, which by design takes no claim and runs no predicate. No open item predicate builds nomos-ledger except P10-ABANDON-REASON, which is how a red test in nomos-ledger survived several commits with nobody informed - the same shape as a check in a crate the predicate never builds, which is the omission two widening commits on this board have already corrected for themselves.",
+      "done_when": "The guarantee stops depending on who happens to be on the board. Either two items writing different records can be claimed at once for a structural reason, or the property records_do_not_serialize asserts is restated to one that can actually hold, and which of those it is gets recorded with the reason rather than left to whoever next reads a red suite. Nothing here is closed by editing the guard until it passes, and nothing is closed by narrowing another item territory to manufacture a pair.\nIf the remedy is structural, the two known collision points are named rather than assumed: the seeding rule, where RECORDS and GOVERNING_RECORD_IDS are hand-maintained lists every record writer must edit, and the surface snapshots, where reserving tests/contract reserves every crate snapshot to write one. Deriving the record list from the directory would remove the first and would also remove a declared universe, which is P10-MIRROR-DISAGREEMENT territory and wants coordinating rather than doing twice.\nA test fails when the board serializes again, and it is confirmed red by constructing a board that serializes rather than by reasoning that it would. The file already carries Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair as the control that the pair search measures exclusion at all; whatever replaces or keeps the acceptance test must still fail against that reconstruction, or the search has stopped measuring anything and the suite reports a success it did not earn. The vacuity guard matters as much: a board with fewer than two open record writers must not pass by having nothing to compare.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-LEDGER-007"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null
     }
   ]
 }
