@@ -18,6 +18,7 @@ pub enum nomos_ledger::ItemState
 pub enum nomos_ledger::LedgerError
 pub enum nomos_ledger::ReleaseOutcome
 pub enum variant nomos_ledger::AddRefusal::AlreadyPresent { item: ItemId, }
+pub enum variant nomos_ledger::AddRefusal::AmendmentNotPublished { identifier: String, }
 pub enum variant nomos_ledger::AddRefusal::LedgerUnusable { cause: String, }
 pub enum variant nomos_ledger::AddRefusal::RecordPublished { identifier: String, file: String, }
 pub enum variant nomos_ledger::AddRefusal::RecordReserved { identifier: String, item: ItemId, }
@@ -70,7 +71,7 @@ pub fn nomos_ledger::Derive_Step(workflow: &str, step: &str) -> Result<Vec<Strin
 pub fn nomos_ledger::ExclusionLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Release( &mut self, item: &ItemId, holder: &str, outcome: ReleaseOutcome, ) -> Result<(), ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Renew(&mut self, item: &ItemId, holder: &str, lease: Duration) -> Result<Reservation, ClaimRefusal>
-pub fn nomos_ledger::FileLedger::Add( &mut self, item: &LedgerItem, holder: &str, published: &Territory, ) -> Result<(), AddRefusal>
+pub fn nomos_ledger::FileLedger::Add( &mut self, item: &LedgerItem, holder: &str, published: &Territory, amending: &Territory, ) -> Result<(), AddRefusal>
 pub fn nomos_ledger::FileLedger::At(path: impl Into<PathBuf>, filesystem: F, clock: C, lock: L) -> Self
 pub fn nomos_ledger::FileLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::FileLedger::Decline( &mut self, item: &ItemId, holder: &str, reason: &str, ) -> Result<(), ClaimRefusal>

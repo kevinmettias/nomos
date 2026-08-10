@@ -22,12 +22,20 @@ pub enum AddRefusal
         /// The identifier that is taken.
         item: ItemId,
     },
-    /// The territory reserves a record identifier this repository has already published.
+    /// The territory reserves a record identifier this repository has already published,
+    /// and the item did not say it was amending it.
+    ///
+    /// Two acts reserve a published record and only one of them is this defect. A new
+    /// decision that reached for an identifier somebody already spent must renumber. An
+    /// amendment must not: it edits that record, and `OD-LEDGER-016` makes the identifier and
+    /// the file one subject, so reserving the file *is* reserving the identifier. The two are
+    /// told apart by the item declaring the second, never by inspecting the identifier — which
+    /// is why this arm now means "undeclared" rather than "published".
     ///
     /// Distinct from [`AddRefusal::RecordReserved`] because the remedies are different and an
     /// author told the wrong one does the wrong thing. A published record is spent forever —
-    /// the identifier is allocated and the file exists — so the only fix is choosing another
-    /// number. A reserved one belongs to an item that may yet be retired.
+    /// the identifier is allocated and the file exists — so the fix is choosing another number
+    /// or declaring the amendment. A reserved one belongs to an item that may yet be retired.
     ///
     /// Names the file rather than only the identifier, because an author who reads
     /// "`OD-LEDGER-025` is taken" has to go and find out by what, and the thing that answers
@@ -59,6 +67,24 @@ pub enum AddRefusal
         identifier: String,
         /// The open item that already reserves it.
         item: ItemId,
+    },
+    /// The item declared an amendment to a record this repository has not published.
+    ///
+    /// The mirror of [`AddRefusal::RecordPublished`], and here for the reason that arm no
+    /// longer refuses on its own: once a declaration decides which act this is, a declaration
+    /// that names nothing is a claim about the repository that the repository denies. Left
+    /// unchecked it would be the cheapest way to defeat the guard — declare every reservation
+    /// an amendment and no identifier is ever spent — and the author who did it by mistake
+    /// would be told nothing at all.
+    ///
+    /// The remedy is the opposite of its mirror's. That one says the identifier is taken; this
+    /// one says it is free, which means the item is allocating rather than amending and should
+    /// say so.
+    AmendmentNotPublished
+    {
+        /// The identifier the item said it was amending, folded as [`Self::RecordPublished`]
+        /// folds its own.
+        identifier: String,
     },
     /// The item would leave the board violating its own invariants.
     ///
@@ -97,13 +123,22 @@ impl AddRefusal
             Self::AlreadyPresent { item } => format!("{item} is already on the ledger"),
             // Each names what to do next, because the two are told apart by the remedy and
             // an author who read only "taken" would pick the wrong one half the time.
+            // Names both acts rather than only the commoner one. "Choose the next free one"
+            // was the whole of this sentence once, and it is advice that renumbers a record
+            // that should not move whenever the author meant to amend.
             Self::RecordPublished { identifier, file } => format!(
-                "{identifier} is already published as {file}. A record identifier is \
-                 allocated once; choose the next free one"
+                "{identifier} is already published as {file}. If this item is a new decision, \
+                 a record identifier is allocated once — choose the next free one. If it \
+                 amends that record, say so with `--amends {file}`, which reserves the file it \
+                 edits"
             ),
             Self::RecordReserved { identifier, item } => format!(
                 "{identifier} is already reserved by {item}, which is open. Choose another \
                  identifier, or retire that item if it is not work"
+            ),
+            Self::AmendmentNotPublished { identifier } => format!(
+                "{identifier} is declared as an amendment and no record here carries it. An \
+                 amendment edits a record that exists; reserve a new one with `--territory`"
             ),
             // The wording [`LedgerError::Invalid`] would have produced, because this arm
             // exists to carry that refusal out through a different channel and not to

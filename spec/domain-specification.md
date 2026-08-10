@@ -58,6 +58,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
@@ -539,6 +540,14 @@ profile: domain-specification
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#29 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#34 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#38 | authored | 2 | Status |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#1 | authored | 1 | An amendment and an allocation both reserve a record, and only the item can say which |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#11 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#19 | authored | 2 | Where The Declaration Lives, And Why Not On The Item |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#23 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#28 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#31 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -15449,6 +15458,260 @@ proved by its own tests rather than by what it happens to catch today.
 Closed by P11-ADD-IDENTIFIER-GUARD, which is `P11-SPENT-RECORD-ID` reissued twice — once for
 `OD-LEDGER-020` and once for `OD-LEDGER-022`, both collisions of the kind it exists to
 prevent.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#1
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which · hash: sha256:47ddc9d803448d1d3faf85b67ac64a3d3df531d764798620f2e0495fac319b16*
+
+# An amendment and an allocation both reserve a record, and only the item can say which
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#2
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#3
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / Question · hash: sha256:4169749a173c5a1169f22e9ca7ee2bb1e4c1aadd452f1a94ac02f53a35a9d5a6*
+
+`OD-LEDGER-025` made `work add` refuse a territory naming a record identifier this repository
+had already published, because an identifier is allocated once and an author who reached for a
+spent number had no way to move it afterwards. That is right for the case it was built for.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#4
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / Question · hash: sha256:6bc8c0b769aa391ac3695db538dc95925e111fbeed8b18ab9cfb7c5e57fe0851*
+
+It is wrong for the other reason an item names a published record. Amending one is ordinary
+work here — `ARC-ECOSYSTEM-001` is at version 2, `OD-CAPABILITY-001` is at version 2, and
+`D-134` was amended in place rather than superseded because six of its seven decisions were
+untouched and cited by working code. An item that amends a record **must** reserve it, because
+the amendment edits that file and territory is the only thing keeping a second writer off it.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#5
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / Question · hash: sha256:74fbaa682be29f679e0c5d4b06fdf051c8bc5d977af308d2d0552d77272d0324*
+
+So the guard refused the reservation that the discipline requires.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#6
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#7
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Measured · hash: sha256:7c976544a83e1106d2afc08de9c5a19d1152b0e7dc2ad82210dab9365426f525*
+
+Against `ARC-HARNESS-001`, on 2026-08-10. Reserving `docs/records/ARC-HARNESS-001` was refused
+by identifier stem; reserving the full published filename was refused too, because
+`OD-LEDGER-016` folds a record filename onto the identifier it carries and both spellings reach
+the same subject. No spelling got an amendment through.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#8
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Measured · hash: sha256:566a4f000757efa3ca6a639206cbd632efb3341e42baace88ff3f45af4a34eb7*
+
+Two costs, both already on the board rather than hypothetical.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#9
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Measured · hash: sha256:0aa83febe6eeffc0f1bacad358fc3c537187a57c92fd96caf17a79d2d8149e1c*
+
+`P11-ECOSYSTEM-UPWARD` reserves `docs/records/ARC-ECOSYSTEM-001` and its `done_when` is version
+3 of that record. It was authored before `OD-LEDGER-025` landed and could not be authored the
+day after, so the guard forbade an item the board was already carrying.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#10
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Measured · hash: sha256:b6e21f507edfbcca9f8b202cce902549e7e2f164b673c1f739d5353244664b76*
+
+`ARC-HARNESS-001` owes an ownership row for handoff, which `P11-HARNESS-SEAM`'s `done_when`
+required among its named components and the record does not carry. No item could be opened to
+add it, because `add` refused to reserve the record that item would edit. That omission
+survived `work finish` for a reason worth keeping: the predicate is a test suite, and a test
+suite cannot read a `done_when`.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#11
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#12
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:87105f9b4c1079d115532b5940cb950bf2837e9b78e5c72747885ecda530fa7e*
+
+**The item declares which act it is, and the store refuses on the declaration rather than on
+the identifier.**
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#13
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:f574c327ad7723a52e4c0f47da3406d05c94e48aa0b559f57efe689caf613d5b*
+
+`FileLedger::Add` takes a second territory beside the published set: the records the item says
+it is *editing* rather than allocating. A reservation the item declared is exempt from the
+published comparison. A reservation it did not declare is refused exactly as before.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#14
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:26c25182af0ab623e1d03dd4e0e74d5dd91209240ab62b0a69e74b0228340ec0*
+
+Three consequences follow, and each is a thing the guard must not do.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#15
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:5215ca3e57a2d960c40862bf890df1db476cc8f1a953cedafbc99cfab337ec2a*
+
+**It is declared, never inferred.** An identifier carries no evidence of which act is meant, so
+anything the store could read off a path would be a convention rather than a rule — and
+`OD-LEDGER-013` already refused the shape where the outcome turns on which of two equivalent
+spellings an author happened to write. Both spellings work here for the same reason.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#16
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:07bab3436e9bc3bc854c2f88324eb8825203cf572ef52026732c7417fb8df915*
+
+**Declaring does not exempt the open-item comparison.** Two items amending one record are two
+writers on one file, which is precisely what territory serializes. The declaration answers
+*which act this is*, never *whether somebody else is already doing it*. `AddRefusal::RecordReserved`
+is unchanged and still refuses an amendment.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#17
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:b557dfae495ce3c3b29747a5c565839fc0c14f1ebb72c6dc30628e0646cf6609*
+
+**A declaration that names nothing is refused.** `AddRefusal::AmendmentNotPublished` exists
+because without it the declaration would be the cheapest possible defeat of the guard: declare
+every reservation an amendment and no identifier is ever spent again. It also catches the
+ordinary mistake, an author who mistyped a number, who would otherwise get an item that
+allocates while claiming to amend. Its exit code is `ValidationError` and not `Conflict` —
+nothing is contended, the identifier is free, and an agent told `Conflict` would go looking for
+a holder that does not exist.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#18
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / The Decision · hash: sha256:d5291eb37a9f2df6c5c9e3dd5de50fd4b246090ed0003520e95e3c689d9089b4*
+
+The refusal that remains says which of the two cases it is. `"A record identifier is allocated
+once; choose the next free one"` was the whole of that sentence before, and it is advice that
+renumbers a record which should not move whenever the author meant to amend.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#19
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which / Where The Declaration Lives, And Why Not On The Item · hash: sha256:db8b8caeec61921da7bd01b64feea757939e0d53ed54d0dadec441b75f397cd1*
+
+## Where The Declaration Lives, And Why Not On The Item
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#20
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / Where The Declaration Lives, And Why Not On The Item · hash: sha256:12062ddf88ff5726b41a4f59c99aff18526589089e0a80a60d32e24e11fa3b25*
+
+`--amends <record>` reserves what it declares. An author writes the record once, and an item
+that declared an amendment without reserving the file it edits is not expressible.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#21
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / Where The Declaration Lives, And Why Not On The Item · hash: sha256:484d68903dbe803387a77e57396b62c9c5225b42a049cccce5242f92cedfddc3*
+
+The declaration is passed beside the item and is **not** a `LedgerItem` field. It decides
+whether the add is refused and has no reader afterwards, so putting it on the item would add a
+field to a document two live sessions share — and `OD-LEDGER-008` prices exactly that: a build
+older than a field reads the file, ignores the key it does not know, and writes the document
+back without it, at exit 0. A field worth that cost has to be worth reading back, and this one
+is not.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#22
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / Where The Declaration Lives, And Why Not On The Item · hash: sha256:d92cfff64c867a9fb0cab43df1396fb029a96da1c2bde5691353ce20f26c8ba8*
+
+What is lost is that the board does not record, afterwards, that an item amended rather than
+allocated. That is stated here rather than left to be discovered: `work add` says it on the
+success line, once, and nothing keeps it.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#23
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#24
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Considered And Rejected · hash: sha256:0d9dc1bbebafd0d5469aefa0e63ad230dcc84ba117b1572e2c6cf0732e46371e*
+
+**Remove the guard.** `P11-SPENT-RECORD-ID` measured what its absence cost — three open items
+on `OD-LEDGER-020`, two on `OD-LEDGER-021`, five declined and re-authored to clear them,
+because there is no `work edit`. The guard is not the defect.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#25
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Considered And Rejected · hash: sha256:2e287be5970afa9d9d9131a60c20ed456dca92041ccc186afd0db9d9dc704082*
+
+**Let the author reserve the registration file instead of the record.** Both spellings are
+refused today, and `OD-LEDGER-016` is the reason: the identifier and the file it names are one
+subject. A rule that turned on which of two paths an author happened to write is the kind of
+convention this board does not enforce.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#26
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Considered And Rejected · hash: sha256:61d61916b7450101d122ddfaf61f51fb1b56238879eab47a191a78816abb5b10*
+
+**Infer the amendment from the identifier being published.** This is the tempting one, and it
+is wrong in one direction that matters: it makes every collision look like an amendment. The
+author who reached for a spent number is exactly the author who did not mean to amend, and
+under this rule they are told nothing at all.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#27
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Was Considered And Rejected · hash: sha256:7ce7cde9cf054bae73d2d181a65c1f92f1579071f67bbda20879966bbe8d0b37*
+
+**Refuse the amendment and require a superseding record instead.** Rejected because it is a
+rule about how decisions are written, smuggled in as a rule about a ledger verb. `D-134` was
+amended rather than superseded on the merits of the decision, and the board is not where that
+question belongs.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#28
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#29
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Holds It · hash: sha256:1b9af066828d2c2a631dc16a7d1400a706601632ee01552c5c4330b0b92b1f90*
+
+`crates/substrate/nomos-ledger/tests/exclusion_holds.rs`. The acceptance and the contention are
+asserted separately rather than through one assertion either could satisfy, because a single
+one is satisfied by an `add` that ignores the declaration entirely:
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#30
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / What Holds It · hash: sha256:0b3c2f9765a4f44fe3eb4783d8c972b0b0c67fa6ba09ef929d78c47580d07666*
+
+- a published record declared as an amendment is accepted, driven in **both** spellings;
+- an amendment of a record another open item reserves is still refused, naming that item;
+- an amendment of a record nobody published is refused as such;
+- a published identifier reserved *without* a declaration is still refused by its file, which
+  is `OD-LEDGER-025`'s own assertion, narrowed to the case it now covers and otherwise
+  unchanged.
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#31
+
+*revision: authored · kind: heading · heading: An amendment and an allocation both reserve a record, and only the item can say which / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#32
+
+*revision: authored · kind: prose · heading: An amendment and an allocation both reserve a record, and only the item can say which / Status · hash: sha256:c09ef73a4eb9f194bf2a4a9db48014ade06332f960fa18f0642b8059308df8e8*
+
+Closed. `P11-AMEND-GRAIN` carries it — the third spelling of the item, after
+`P11-AMEND-RESERVATION` reserved only the CLI and `P11-AMEND-TERRITORY` reserved `store.rs`
+while the sentence it had to change had moved to `add_refusal.rs`. The second of those was
+correct when it was authored, and this record's own subject is why it could not be repaired in
+place.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

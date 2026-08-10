@@ -68,6 +68,13 @@ pub enum WorkCommand
     {
         /// The item to record.
         item: Box<LedgerItem>,
+        /// Which of the records it reserves the item edits rather than allocates.
+        ///
+        /// Beside the item rather than on it. The declaration decides whether the add is
+        /// refused and has no reader afterwards, so carrying it on [`LedgerItem`] would put a
+        /// field on a document two sessions share — and a build older than a field drops it
+        /// silently at exit 0, which is what `OD-LEDGER-008` prices.
+        amending: Territory,
     },
     /// Run an item's verification predicate and record it done if it passes.
     Finish
@@ -291,12 +298,14 @@ fn Parse_Reservation(verb: &str, named: &[String]) -> Result<WorkCommand, String
 /// the one that silently opts out of the exclusion the ledger exists to provide.
 fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand, String>
 {
-    let territory = Parse_Territory(named)?;
+    let amending = Territory::Of_Files(Named_Values(named, "--amends"));
+    let territory = Parse_Territory(named, &amending)?;
     let verification = Parse_Predicate(predicate_argv);
     let item = New_Item(named, territory, verification)?;
 
     return Ok(WorkCommand::Add {
         item: Box::new(item),
+        amending,
     });
 }
 
@@ -329,18 +338,28 @@ fn New_Item(
 }
 
 /// What the item reserves, or the message saying why what was given cannot reserve.
-fn Parse_Territory(named: &[String]) -> Result<Territory, String>
+///
+/// `--amends` reserves as well as declares, and is folded in here rather than being a second
+/// thing an author has to remember to also pass to `--territory`. An amendment edits the
+/// record it names, so an item that declared one without reserving it would be editing a file
+/// nothing keeps a second writer off — and requiring both spellings would make that omission
+/// the easy mistake instead of an impossible one.
+fn Parse_Territory(named: &[String], amending: &Territory) -> Result<Territory, String>
 {
     if let Some(pattern) = Named_Values(named, "--territory-pattern").first()
     {
         return Err(Refuse_A_Pattern(pattern));
     }
 
-    let paths = Named_Values(named, "--territory");
+    let mut paths = Named_Values(named, "--territory");
+    paths.extend(amending.paths.iter().cloned());
+
     if paths.is_empty()
     {
         return Err(format!(
-            "--territory is required: an item that reserves nothing excludes nobody.\n\n{}",
+            "--territory is required: an item that reserves nothing excludes nobody. \
+             `--amends <record>` reserves too, and says the item edits that record rather \
+             than allocating it.\n\n{}",
             Usage_Text()
         ));
     }
@@ -427,8 +446,14 @@ const VERBS: &str = "\x20 list     [--state ready|waiting|held|snagged|claimed|b
      given, and its verification. `list` is a column per item and cannot carry prose.\n\
      \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
      \x20          --territory <path> [--territory <path> …]\n\
+     \x20          [--amends <record> …]\n\
      \x20          [--depends-on <id> …]\n\
      \x20          [-- <program> <args…>]\n\
+     \x20          `--amends` reserves a record this repository has already published and \
+     says the item edits it. Reserving a published record any other way is refused, because \
+     an identifier is allocated once and the two acts are otherwise the same act. Either \
+     spelling works — the identifier or the file — and it reserves what it names, so the \
+     record does not also need `--territory`.\n\
      \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
      \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
      \x20 takeover --item <id> --holder <name> [--lease 2h]\n\
@@ -476,11 +501,11 @@ pub fn Run(
     {
         WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
         WorkCommand::Show { item } => Show(&ledger, item, output),
-        WorkCommand::Add { item } =>
+        WorkCommand::Add { item, amending } =>
         {
             let published = Published_Records(directory);
 
-            Add(&mut ledger, item, &published, output)
+            Add(&mut ledger, item, &published, amending, output)
         }
         WorkCommand::Finish { item, holder } => Finished(&mut ledger, item, holder, output),
         WorkCommand::Claim(request) => Claimed(&mut ledger, request, output),
@@ -871,6 +896,7 @@ fn Add(
     ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
     item: &LedgerItem,
     published: &Territory,
+    amending: &Territory,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
@@ -878,15 +904,16 @@ fn Add(
     // identity that is checked, which is why `add` can name itself here while every other
     // verb passes the agent that asked. `add` takes no `--holder` because it takes no
     // claim: the item it writes is `Ready` and belongs to nobody yet.
-    return match ledger.Add(item, "nomos work add", published)
+    return match ledger.Add(item, "nomos work add", published, amending)
     {
         Ok(()) =>
         {
             let _ = writeln!(
                 output,
-                "added {} reserving {} path(s)",
+                "added {} reserving {} path(s){}",
                 item.id,
-                item.territory.paths.len()
+                item.territory.paths.len(),
+                Amendment_Note(amending)
             );
             ExitCode::Ok
         }
@@ -897,6 +924,22 @@ fn Add(
             Code_For_Refusal(&refusal)
         }
     };
+}
+
+/// What the success line says about a declared amendment, and nothing when there is none.
+///
+/// Said on the way out because it is the one thing about the item that the board does not
+/// keep. Territory is on the item and can be read back with `show`; the declaration decided
+/// this add and is then gone, so an author who mis-declared has this line and no other
+/// chance to notice.
+fn Amendment_Note(amending: &Territory) -> String
+{
+    if amending.paths.is_empty()
+    {
+        return String::new();
+    }
+
+    return format!(", amending {}", amending.paths.join(", "));
 }
 
 /// The exit code an `add` refusal reports.
@@ -923,7 +966,15 @@ const fn Code_For_Refusal(refusal: &AddRefusal) -> ExitCode
         {
             ExitCode::Conflict
         }
-        AddRefusal::WouldBeInvalid { .. } => ExitCode::ValidationError,
+        // A declared amendment of nothing joins the invalid item rather than the two record
+        // conflicts above, and the difference is what an agent does next. Nothing is contended
+        // here — the identifier is free — so `Conflict` would send it looking for a holder
+        // that does not exist. What is wrong is the item's own declaration, which is the
+        // caller's to correct, and that is already what this code means.
+        AddRefusal::WouldBeInvalid { .. } | AddRefusal::AmendmentNotPublished { .. } =>
+        {
+            ExitCode::ValidationError
+        }
         AddRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
     };
 }
@@ -1453,7 +1504,7 @@ mod tests
         ))
         .unwrap()
         {
-            WorkCommand::Add { item } => *item,
+            WorkCommand::Add { item, .. } => *item,
             other => panic!("expected an add, got {other:?}"),
         };
 
@@ -1504,7 +1555,7 @@ mod tests
     {
         return match Parse(&Arguments(text)).unwrap()
         {
-            WorkCommand::Add { item } => *item,
+            WorkCommand::Add { item, .. } => *item,
             other => panic!("expected an add, got {other:?}"),
         };
     }
@@ -1519,6 +1570,83 @@ mod tests
 
         assert_eq!(item.territory.paths, vec!["src/a.rs", "src/b.rs"]);
         assert_eq!(item.state, ItemState::Ready);
+    }
+
+    /// The command and the declaration it carries beside the item.
+    fn Add_Of(text: &str) -> (LedgerItem, Territory)
+    {
+        return match Parse(&Arguments(text)).unwrap()
+        {
+            WorkCommand::Add { item, amending } => (*item, amending),
+            other => panic!("expected an add, got {other:?}"),
+        };
+    }
+
+    /// `--amends` reserves the record it declares, so an author writes it once.
+    ///
+    /// The alternative was requiring `--territory` beside it, and that makes the dangerous
+    /// omission the easy one: an item that declared an amendment without reserving the file
+    /// would edit a record with nothing keeping a second writer off it, which is the whole
+    /// reason the guard has to admit amendments rather than refuse them.
+    #[test]
+    fn Test_Amends_Should_Reserve_The_Record_It_Declares()
+    {
+        let (item, amending) = Add_Of(
+            "add --item T-1 --title t --why w --done-when d \
+             --amends docs/records/ARC-HARNESS-001-a-slug.md",
+        );
+
+        assert_eq!(
+            item.territory.paths,
+            vec!["docs/records/ARC-HARNESS-001-a-slug.md"],
+            "a declared amendment must reserve the file it edits"
+        );
+        assert_eq!(
+            amending.paths, item.territory.paths,
+            "the declaration must reach the store, not only the reservation"
+        );
+    }
+
+    /// An amendment satisfies the reservation requirement on its own.
+    ///
+    /// `--territory` is required because an item that reserves nothing excludes nobody, and
+    /// an item that only amends is not that item — it reserves exactly one file and excludes
+    /// every other writer of it.
+    #[test]
+    fn Test_An_Item_That_Only_Amends_Should_Not_Be_Refused_As_Reserving_Nothing()
+    {
+        assert!(
+            Parse(&Arguments(
+                "add --item T-1 --title t --why w --done-when d \
+                 --amends docs/records/ARC-HARNESS-001-a-slug.md",
+            ))
+            .is_ok(),
+            "an item reserving a record through --amends reserves something"
+        );
+    }
+
+    /// Territory and amendments combine, and only the declared ones are declared.
+    ///
+    /// The case that distinguishes reserving from declaring. An item amending one record
+    /// while editing ordinary code reserves both and says only the record is an amendment;
+    /// a declaration that swept in the code would be claiming the repository had published
+    /// a source file.
+    #[test]
+    fn Test_Amends_Should_Declare_Only_What_It_Names()
+    {
+        let (item, amending) = Add_Of(
+            "add --item T-1 --title t --why w --done-when d --territory src/a.rs \
+             --amends docs/records/ARC-HARNESS-001-a-slug.md",
+        );
+
+        assert_eq!(
+            item.territory.paths,
+            vec!["src/a.rs", "docs/records/ARC-HARNESS-001-a-slug.md"]
+        );
+        assert_eq!(
+            amending.paths,
+            vec!["docs/records/ARC-HARNESS-001-a-slug.md"]
+        );
     }
 
     /// The predicate is everything after `--`, so a command carrying its own flags needs

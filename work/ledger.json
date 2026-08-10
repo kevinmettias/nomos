@@ -7560,14 +7560,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-amend-grain-t7",
-        "acquired_at": 1786402889,
-        "lease_expires_at": 1786410089
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -7582,7 +7578,34 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "leteness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\declining_ends_an_item.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\declining_ends_an_item-7525560aad5d2090.exe)\n     Running tests\\exclusion_holds.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c32221f3-4b36-414e-bdf8-5f0d81815e53/scratchpad/verify-target\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1786404016,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

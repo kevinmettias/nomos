@@ -500,18 +500,25 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// passes [`Territory::Empty`], which is honest: it is saying it does not know, and the
     /// open-item half still holds.
     ///
+    /// `amending` is the subset of that reservation the item declares it is *editing* rather
+    /// than allocating. Declared by the author and not inferred: an identifier tells you
+    /// nothing about which of the two acts is meant, and a rule that guessed from the spelling
+    /// of a path would be a convention this board does not enforce.
+    ///
     /// # Errors
     ///
     /// [`AddRefusal::AlreadyPresent`] for a duplicate identifier,
     /// [`AddRefusal::RecordPublished`] or [`AddRefusal::RecordReserved`] for a record
     /// identifier that is already spent or already spoken for,
-    /// [`AddRefusal::WouldBeInvalid`] for an item that would break the board's invariants,
-    /// and [`AddRefusal::LedgerUnusable`] when the file itself cannot be used.
+    /// [`AddRefusal::AmendmentNotPublished`] for a declared amendment of a record that does
+    /// not exist, [`AddRefusal::WouldBeInvalid`] for an item that would break the board's
+    /// invariants, and [`AddRefusal::LedgerUnusable`] when the file itself cannot be used.
     pub fn Add(
         &mut self,
         item: &LedgerItem,
         holder: &str,
         published: &Territory,
+        amending: &Territory,
     ) -> Result<(), AddRefusal>
     {
         return self.Decide_Under_Lock(holder, |document, _now| {
@@ -525,7 +532,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
                 });
             }
 
-            Refuse_A_Spent_Record(item, document, published)?;
+            Refuse_A_Spent_Record(item, document, published, amending)?;
 
             document.items.push(item.clone());
 
@@ -564,25 +571,68 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
 /// a record filename onto the identifier it carries, which is what makes
 /// `docs/records/OD-LEDGER-025` and `docs/records/OD-LEDGER-025-a-slug.md` one subject
 /// without anything here knowing the grammar. `OD-LEDGER-016` is that decision and this is
-/// the second caller to rely on it.
+/// the second caller to rely on it — and the reason a declaration may be spelled either way
+/// too, since the same fold decides whether a declaration covers a reservation.
+///
+/// Only the *published* comparison is conditional. An amendment and an allocation both edit
+/// one file, so two open items reserving one record still refuse each other whichever act
+/// each intends: that is territory doing its ordinary job, and exempting amendments from it
+/// would put two writers on one record with nothing between them.
 fn Refuse_A_Spent_Record(
     item: &LedgerItem,
     document: &LedgerDocument,
     published: &Territory,
+    amending: &Territory,
 ) -> Result<(), AddRefusal>
 {
+    Refuse_An_Unpublished_Amendment(amending, published)?;
+
     for reserved in Record_Reservations(&item.territory)
     {
         let mine = Territory::Of_Files([reserved.clone()]);
 
-        Refuse_If_Published(&mine, &reserved, published)?;
+        if !matches!(mine.Intersect(amending), Intersection::Overlaps(_))
+        {
+            Refuse_If_Published(&mine, &reserved, published)?;
+        }
+
         Refuse_If_Reserved(&mine, &reserved, document)?;
     }
 
     return Ok(());
 }
 
+/// Refuses a declared amendment of a record this repository has not published.
+///
+/// Checked before the reservations rather than among them, because it is a statement about
+/// the declaration itself and holds whether or not the territory reserves anything. An author
+/// who declared the wrong identifier is told that here, once, instead of being told nothing
+/// and getting an item that allocates while claiming to amend.
+fn Refuse_An_Unpublished_Amendment(
+    amending: &Territory,
+    published: &Territory,
+) -> Result<(), AddRefusal>
+{
+    for declared in &amending.paths
+    {
+        let mine = Territory::Of_Files([declared.clone()]);
+
+        if !matches!(mine.Intersect(published), Intersection::Overlaps(_))
+        {
+            return Err(AddRefusal::AmendmentNotPublished {
+                identifier: Normalize_Path(declared),
+            });
+        }
+    }
+
+    return Ok(());
+}
+
 /// Refuses an identifier some committed record already carries.
+///
+/// Reached only for a reservation the item did not declare as an amendment, so arriving here
+/// already means the item is allocating. The refusal still names both acts, because the
+/// commonest way to be here is having meant the other one.
 fn Refuse_If_Published(
     mine: &Territory,
     reserved: &str,

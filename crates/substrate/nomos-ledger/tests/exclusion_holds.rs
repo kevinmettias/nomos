@@ -2690,7 +2690,7 @@ fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
         &clock,
         |ledger| {
             ledger
-                .Add(&Item("T-1", &["src/a.rs"]), "agent-a", &ItemTerritory::Empty())
+                .Add(&Item("T-1", &["src/a.rs"]), "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty())
                 .expect("T-1 is not on the board yet");
         },
         |ledger| {
@@ -2751,11 +2751,11 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
         &clock,
         |ledger| {
             ledger
-                .Add(&Item("T-1", &["src/a.rs"]), "agent-a", &ItemTerritory::Empty())
+                .Add(&Item("T-1", &["src/a.rs"]), "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty())
                 .expect("the board is empty, so T-1 is free");
         },
         |ledger| {
-            let outcome = ledger.Add(&Item("T-1", &["src/b.rs"]), "agent-b", &ItemTerritory::Empty());
+            let outcome = ledger.Add(&Item("T-1", &["src/b.rs"]), "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
             *recorded.lock().expect("the harness never panics under this lock") =
                 Some(outcome);
         },
@@ -2814,7 +2814,7 @@ fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
         .Save(&Document(Vec::new()))
         .expect("an empty board is a valid ledger");
 
-    let refused = ledger.Add(&Item("T-1", &[]), "agent-a", &ItemTerritory::Empty());
+    let refused = ledger.Add(&Item("T-1", &[]), "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty());
 
     assert!(
         matches!(refused, Err(AddRefusal::WouldBeInvalid { .. })),
@@ -2849,12 +2849,17 @@ fn Published(files: &[&str]) -> ItemTerritory
     return ItemTerritory::Of_Files(files.iter().map(|file| return (*file).to_owned()));
 }
 
-/// A record identifier that is already published is refused, and the file is named.
+/// A published identifier reserved without declaring an amendment is refused, by its file.
 ///
 /// The half nothing could have caught. A published identifier excludes nobody, so
 /// `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` — which reddens on two *open*
 /// items sharing one — is blind to it by construction. What happened instead is that the
 /// author found the identifier taken mid-claim, with no `work edit` to move it.
+///
+/// What this asserts narrowed when the declaration arrived, and the assertion did not have to
+/// change: the item here declares nothing, so it is allocating, and an allocation onto a spent
+/// number is still the defect this was written for. The case it no longer covers is the one
+/// directly below.
 #[test]
 fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
 {
@@ -2870,6 +2875,7 @@ fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
         &Reserving_Record("T-1", "docs/records/OD-LEDGER-006"),
         "agent-a",
         &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &ItemTerritory::Empty(),
     );
 
     let Err(AddRefusal::RecordPublished { identifier, file }) = refused
@@ -2911,10 +2917,142 @@ fn Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted()
             // look taken. `0071` is not `007`, and a prefix rule would say it is.
             "docs/records/OD-LEDGER-0071-something-else.md",
         ]),
+        &ItemTerritory::Empty(),
     );
 
     assert_eq!(added, Ok(()), "the next free identifier is free");
     assert_eq!(ledger.Load().expect("readable").items.len(), 1);
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// What the item says it is editing rather than allocating.
+///
+/// The same shape as [`Published`] and deliberately a different name at the call site: the
+/// two arguments are both record files and mean opposite things, and a reader who sees
+/// `Published` twice has to work out which one is the claim and which is the repository.
+fn Amending(files: &[&str]) -> ItemTerritory
+{
+    return ItemTerritory::Of_Files(files.iter().map(|file| return (*file).to_owned()));
+}
+
+/// A published record reserved for amendment is accepted, in either spelling.
+///
+/// The clause this item exists for. `ARC-ECOSYSTEM-001` is at version 2 and
+/// `OD-CAPABILITY-001` at version 2, so amending a record is ordinary work here, and an
+/// amendment must reserve the file it edits because territory is the only thing keeping two
+/// writers off one file. Both spellings are driven, because `OD-LEDGER-016` makes the
+/// identifier and its file one subject and an author who had to guess which one `--amends`
+/// wanted would be following a convention rather than a rule.
+#[test]
+fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
+{
+    const FILE: &str = "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md";
+
+    for (described, spelled) in [
+        ("the bare identifier", "docs/records/OD-LEDGER-006"),
+        ("the published filename", FILE),
+    ]
+    {
+        let directory = Temp_Dir("add-record-amended");
+        let clock = FixedClock(NOW);
+        let mut ledger = Ledger_At(&directory, &clock);
+
+        ledger
+            .Save(&Document(Vec::new()))
+            .expect("an empty board is a valid ledger");
+
+        let added = ledger.Add(
+            &Reserving_Record("T-1", spelled),
+            "agent-a",
+            &Published(&[FILE]),
+            &Amending(&[spelled]),
+        );
+
+        assert_eq!(
+            added,
+            Ok(()),
+            "an amendment declared by {described} was refused as an allocation"
+        );
+        assert_eq!(ledger.Load().expect("readable").items.len(), 1);
+
+        let _ = std::fs::remove_dir_all(&directory);
+    }
+}
+
+/// Declaring an amendment does not exempt the record from the open-item comparison.
+///
+/// The half a reader is most likely to expect the other way round. Two items amending one
+/// record are two writers on one file, which is exactly what territory serializes, so the
+/// declaration answers *which act this is* and never *whether somebody else is already doing
+/// it*. Asserted separately from the acceptance above rather than folded into it, because one
+/// assertion covering both is satisfied by an `add` that ignores the declaration entirely.
+#[test]
+fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
+{
+    let directory = Temp_Dir("add-record-amend-contended");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Reserving_Record(
+            "T-1",
+            "docs/records/OD-LEDGER-006",
+        )]))
+        .expect("a board with one open item is a valid ledger");
+
+    let refused = ledger.Add(
+        &Reserving_Record("T-2", "docs/records/OD-LEDGER-006"),
+        "agent-b",
+        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Amending(&["docs/records/OD-LEDGER-006"]),
+    );
+
+    let Err(AddRefusal::RecordReserved { identifier, item }) = refused
+    else
+    {
+        panic!("a second amender must still be refused by the first: {refused:?}");
+    };
+    assert_eq!(identifier, "docs/records/od-ledger-006");
+    assert_eq!(item, ItemId::New("T-1"));
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// An amendment declared against a record nobody has published is refused.
+///
+/// Without this the declaration would be the cheapest way to defeat the guard the whole
+/// check exists to be: declare every reservation an amendment and no identifier is ever
+/// spent again. It is also the ordinary mistake — an author who mistyped the number is told
+/// so here rather than getting an item that allocates while saying it amends.
+#[test]
+fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
+{
+    let directory = Temp_Dir("add-record-amend-absent");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(Vec::new()))
+        .expect("an empty board is a valid ledger");
+
+    let refused = ledger.Add(
+        &Reserving_Record("T-1", "docs/records/OD-LEDGER-099"),
+        "agent-a",
+        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Amending(&["docs/records/OD-LEDGER-099"]),
+    );
+
+    let Err(AddRefusal::AmendmentNotPublished { identifier }) = refused
+    else
+    {
+        panic!("an amendment of nothing must be refused as such: {refused:?}");
+    };
+    assert_eq!(identifier, "docs/records/od-ledger-099");
+    assert!(
+        ledger.Load().expect("readable").items.is_empty(),
+        "the refusal was reported and the item landed anyway"
+    );
 
     let _ = std::fs::remove_dir_all(&directory);
 }
@@ -2944,6 +3082,7 @@ fn Test_A_Record_Identifier_Another_Open_Item_Reserves_Should_Be_Refused_By_Its_
     let refused = ledger.Add(
         &Reserving_Record("T-2", "docs/records/OD-LEDGER-020-the-same-number.md"),
         "agent-b",
+        &ItemTerritory::Empty(),
         &ItemTerritory::Empty(),
     );
 
@@ -2981,11 +3120,13 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
         &Reserving_Record("T-2", "docs/records/OD-LEDGER-020"),
         "agent-b",
         &ItemTerritory::Empty(),
+        &ItemTerritory::Empty(),
     );
     let published = ledger.Add(
         &Reserving_Record("T-3", "docs/records/OD-LEDGER-006"),
         "agent-b",
         &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &ItemTerritory::Empty(),
     );
 
     assert_ne!(reserved, published);
@@ -3048,6 +3189,7 @@ fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
             &Reserving_Record("T-2", "docs/records/OD-LEDGER-020"),
             "agent-b",
             &ItemTerritory::Empty(),
+            &ItemTerritory::Empty(),
         );
 
         assert_eq!(
@@ -3080,6 +3222,7 @@ fn Test_Ordinary_Shared_Territory_Should_Still_Be_Accepted()
     let added = ledger.Add(
         &Item("T-2", &["crates/a/src/lib.rs"]),
         "agent-b",
+        &ItemTerritory::Empty(),
         &ItemTerritory::Empty(),
     );
 
