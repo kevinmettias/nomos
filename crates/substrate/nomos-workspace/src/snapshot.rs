@@ -156,58 +156,45 @@ impl WorkspaceSnapshot
         let text = core::str::from_utf8(bytes)
             .map_err(|error| return StoreError::Malformed(error.to_string()))?;
         let mut lines = text.lines();
+        Expect_Schema(lines.next().unwrap_or_default())?;
 
-        let schema = lines.next().unwrap_or_default();
-        if schema != SNAPSHOT_SCHEMA
-        {
-            return Err(StoreError::Malformed(format!(
-                "`{schema}` is not {SNAPSHOT_SCHEMA}"
-            )));
-        }
-
-        let mut variant = None;
-        let mut configuration = None;
-        let mut members = BTreeMap::new();
-
+        let mut read = Read {
+            variant: None,
+            configuration: None,
+            members: BTreeMap::new(),
+        };
         for line in lines
         {
-            let Some((field, rest)) = line.split_once('\t')
-            else
-            {
-                return Err(StoreError::Malformed(format!("`{line}` is not a field")));
-            };
-
-            match field
-            {
-                "variant" => variant = Some(Decode_Variant(rest)?),
-                "configuration" =>
-                {
-                    configuration = Some(ConfigurationId::From_Digest(Decode_Digest(rest)?));
-                }
-                "member" =>
-                {
-                    let Some((path, content)) = rest.split_once('\t')
-                    else
-                    {
-                        return Err(StoreError::Malformed(format!(
-                            "`{rest}` is not a path and a digest"
-                        )));
-                    };
-                    members.insert(path.to_owned(), Decode_Digest(content)?);
-                }
-                other =>
-                {
-                    return Err(StoreError::Malformed(format!(
-                        "`{other}` is not a snapshot field"
-                    )));
-                }
-            }
+            Decode_Field(line, &mut read)?;
         }
 
-        // Absent rather than defaulted. A snapshot decoded with a default variant would
-        // claim to describe a build nobody configured, and every fact keyed on it would be
-        // filed under a variant that does not exist.
-        let (Some(variant), Some(configuration)) = (variant, configuration)
+        return read.Complete();
+    }
+}
+
+/// A snapshot part-way through being decoded.
+///
+/// The variant and the configuration are optional here and not on [`Snapshot`], because
+/// they arrive as fields in whatever order the payload wrote them and are only required to
+/// be present once the payload has run out.
+struct Read
+{
+    variant: Option<BuildVariant>,
+    configuration: Option<ConfigurationId>,
+    members: BTreeMap<String, Digest128>,
+}
+
+impl Read
+{
+    /// The snapshot a completed read describes, if it describes one.
+    ///
+    /// The variant and the configuration are required, absent rather than defaulted. A
+    /// snapshot decoded with a default variant would claim to describe a build nobody
+    /// configured, and every fact keyed on it would be filed under a variant that does not
+    /// exist.
+    fn Complete(self) -> Result<WorkspaceSnapshot, StoreError>
+    {
+        let (Some(variant), Some(configuration)) = (self.variant, self.configuration)
         else
         {
             return Err(StoreError::Malformed(
@@ -215,12 +202,81 @@ impl WorkspaceSnapshot
             ));
         };
 
-        return Ok(Self {
+        return Ok(WorkspaceSnapshot {
             variant,
             configuration,
-            members,
+            members: self.members,
         });
     }
+}
+
+/// The schema line, which has to be this schema.
+///
+/// Refused rather than read past, because bytes filed under a different schema decoded as
+/// this one would produce a snapshot describing a tree nobody measured.
+fn Expect_Schema(schema: &str) -> Result<(), StoreError>
+{
+    if schema == SNAPSHOT_SCHEMA
+    {
+        return Ok(());
+    }
+
+    return Err(StoreError::Malformed(format!(
+        "`{schema}` is not {SNAPSHOT_SCHEMA}"
+    )));
+}
+
+/// One field line of a snapshot payload.
+///
+/// An unrecognised field is refused rather than skipped: a field this build does not know
+/// is most likely a newer schema, and reading past it would decode the payload down to the
+/// part that has not changed.
+fn Decode_Field(line: &str, read: &mut Read) -> Result<(), StoreError>
+{
+    let Some((field, rest)) = line.split_once('\t')
+    else
+    {
+        return Err(StoreError::Malformed(format!("`{line}` is not a field")));
+    };
+
+    match field
+    {
+        "variant" => read.variant = Some(Decode_Variant(rest)?),
+        "configuration" => read.configuration = Some(Decode_Configuration(rest)?),
+        "member" => Decode_Member(rest, &mut read.members)?,
+        other => return Err(Unknown_Field(other)),
+    }
+
+    return Ok(());
+}
+
+/// The configuration a snapshot was taken under.
+fn Decode_Configuration(rest: &str) -> Result<ConfigurationId, StoreError>
+{
+    let digest = Decode_Digest(rest)?;
+
+    return Ok(ConfigurationId::From_Digest(digest));
+}
+
+/// A field this build does not know.
+fn Unknown_Field(field: &str) -> StoreError
+{
+    return StoreError::Malformed(format!("`{field}` is not a snapshot field"));
+}
+
+/// One member: a path and the digest of what stood at it.
+fn Decode_Member(rest: &str, members: &mut BTreeMap<String, Digest128>) -> Result<(), StoreError>
+{
+    let Some((path, content)) = rest.split_once('\t')
+    else
+    {
+        return Err(StoreError::Malformed(format!(
+            "`{rest}` is not a path and a digest"
+        )));
+    };
+    members.insert(path.to_owned(), Decode_Digest(content)?);
+
+    return Ok(());
 }
 
 fn Decode_Variant(rendered: &str) -> Result<BuildVariant, StoreError>

@@ -250,59 +250,7 @@ impl Workspace
             return Err(WorkspaceError::Vacuous);
         }
 
-        // Validate everything first. Normalizing here rather than at each use is also what
-        // makes the conflict check see `src/a.rs` and `./src/A.rs` as one path.
-        let mut normalized: Vec<(String, &Change)> = Vec::new();
-        for change in changes.Changes()
-        {
-            let path = Named(change.Path())?;
-
-            if normalized.iter().any(|(seen, _)| return *seen == path)
-            {
-                return Err(WorkspaceError::Conflicting { path });
-            }
-            normalized.push((path, change));
-        }
-
-        let mut effects = Vec::new();
-        let mut altered = false;
-
-        for (path, change) in normalized
-        {
-            let effect = match change
-            {
-                Change::Present { content, .. } =>
-                {
-                    let digest = nomos_model::Content_Digest(content.as_bytes());
-
-                    match self.snapshot.Content_Of(&path)
-                    {
-                        Some(held) if held == digest => Effect::Redundant { path },
-                        Some(_) =>
-                        {
-                            self.snapshot.Put(path.clone(), digest);
-                            Effect::Modified { path }
-                        }
-                        None =>
-                        {
-                            self.snapshot.Put(path.clone(), digest);
-                            Effect::Added { path }
-                        }
-                    }
-                }
-                Change::Absent { .. } => match self.snapshot.Take(&path)
-                {
-                    Some(_) => Effect::Removed { path },
-                    None => Effect::AlreadyAbsent { path },
-                },
-            };
-
-            altered = altered || effect.Altered();
-            effects.push(effect);
-        }
-
-        effects.sort();
-
+        let (effects, altered) = self.Apply_Each(Normalized(changes)?);
         if !altered
         {
             return Ok(Applied::Unchanged {
@@ -319,6 +267,67 @@ impl Workspace
             snapshot: self.snapshot.Id(),
             effects,
         });
+    }
+
+    /// Applies every change, and says whether any of them moved the snapshot.
+    ///
+    /// A set of changes that all turn out to be redundant is applied and alters nothing,
+    /// which is what keeps a re-run of one checkout from advancing the generation and
+    /// invalidating a corpus of facts that are still true.
+    fn Apply_Each(&mut self, normalized: Vec<(String, &Change)>) -> (Vec<Effect>, bool)
+    {
+        let mut effects = Vec::new();
+        let mut altered = false;
+
+        for (path, change) in normalized
+        {
+            let effect = self.Applied_One(path, change);
+            altered = altered || effect.Altered();
+            effects.push(effect);
+        }
+        effects.sort();
+
+        return (effects, altered);
+    }
+
+    /// One change against the snapshot, and what it did to it.
+    ///
+    /// A write of content the snapshot already holds is `Redundant` rather than `Modified`.
+    /// The distinction is what keeps a checkout that changed nothing from advancing the
+    /// generation and invalidating a corpus of facts that are still true.
+    fn Applied_One(&mut self, path: String, change: &Change) -> Effect
+    {
+        let Change::Present { content, .. } = change
+        else
+        {
+            return match self.snapshot.Take(&path)
+            {
+                Some(_) => Effect::Removed { path },
+                None => Effect::AlreadyAbsent { path },
+            };
+        };
+
+        let digest = nomos_model::Content_Digest(content.as_bytes());
+
+        return self.Put(path, digest);
+    }
+
+    /// Writes one member, saying whether the write added it, changed it, or said nothing.
+    fn Put(&mut self, path: String, digest: nomos_contracts::Digest128) -> Effect
+    {
+        let held = self.snapshot.Content_Of(&path);
+        if held == Some(digest)
+        {
+            return Effect::Redundant { path };
+        }
+        self.snapshot.Put(path.clone(), digest);
+
+        if held.is_some()
+        {
+            return Effect::Modified { path };
+        }
+
+        return Effect::Added { path };
     }
 
     /// Records this state in a document store.
@@ -376,47 +385,95 @@ impl Workspace
     }
 }
 
+/// Every change with its path validated and normalized, refusing the whole set on the first
+/// bad or repeated path.
+///
+/// Validated in full before anything is applied, so a set that is refused leaves the
+/// workspace exactly as it was — a half-applied checkout is not a state anybody should be
+/// able to ask questions about. Normalizing here rather than at each use is also what makes
+/// the conflict check see `src/a.rs` and `./src/A.rs` as one path.
+fn Normalized(changes: &WorkspaceChangeSet) -> Result<Vec<(String, &Change)>, WorkspaceError>
+{
+    let mut normalized: Vec<(String, &Change)> = Vec::new();
+
+    for change in changes.Changes()
+    {
+        let path = Named(change.Path())?;
+        if normalized.iter().any(|(seen, _)| return *seen == path)
+        {
+            return Err(WorkspaceError::Conflicting { path });
+        }
+        normalized.push((path, change));
+    }
+
+    return Ok(normalized);
+}
+
 /// Validates and normalizes a submitted path.
 fn Named(path: &str) -> Result<String, WorkspaceError>
 {
-    let refuse = |reason: &str| {
-        return WorkspaceError::Unnamed {
+    let unified = path.trim().replace('\\', "/");
+    let segments = Segments_Of(&unified);
+
+    if let Some(reason) = Unnameable(&unified, &segments)
+    {
+        return Err(WorkspaceError::Unnamed {
             path: path.to_owned(),
             reason: reason.to_owned(),
-        };
-    };
-
-    let unified = path.trim().replace('\\', "/");
-
-    // An absolute path is the failure portability exists to prevent. A snapshot recording
-    // `F:/repos/xvpe/crates/a.rs` is a snapshot that cannot be read anywhere else, and
-    // catching it at the door is the difference between a refusal and a corpus of them.
-    if unified.starts_with('/')
-        || unified
-            .split_once(':')
-            .is_some_and(|(prefix, _)| return prefix.len() == 1)
-    {
-        return Err(refuse("a member is workspace-relative, and this is absolute"));
-    }
-
-    let segments: Vec<&str> = unified
-        .split('/')
-        .filter(|segment| return !segment.is_empty() && *segment != ".")
-        .collect();
-
-    if segments.is_empty()
-    {
-        return Err(refuse("it names nothing"));
-    }
-
-    // `..` would let a member address something outside the workspace, and two spellings
-    // of one file would be two members.
-    if segments.contains(&"..")
-    {
-        return Err(refuse("a member cannot reach outside the workspace"));
+        });
     }
 
     return Ok(segments.join("/").to_lowercase());
+}
+
+/// Why a path cannot name a member, if it cannot.
+///
+/// `..` would let a member address something outside the workspace, and two spellings of
+/// one file would be two members.
+fn Unnameable(unified: &str, segments: &[&str]) -> Option<&'static str>
+{
+    if Is_Absolute(unified)
+    {
+        return Some("a member is workspace-relative, and this is absolute");
+    }
+
+    if segments.is_empty()
+    {
+        return Some("it names nothing");
+    }
+
+    if segments.contains(&"..")
+    {
+        return Some("a member cannot reach outside the workspace");
+    }
+
+    return None;
+}
+
+/// A path's components, with the ones that name nothing dropped.
+///
+/// `.` and an empty segment both address the directory they sit in, so keeping either would
+/// make `src/./a.rs` and `src/a.rs` two members naming one file.
+fn Segments_Of(unified: &str) -> Vec<&str>
+{
+    return unified
+        .split('/')
+        .filter(|segment| return !segment.is_empty() && *segment != ".")
+        .collect();
+}
+
+/// A path that names a place on one machine rather than a member of a workspace.
+///
+/// Both spellings are refused: a leading separator and a single-letter drive prefix. A
+/// snapshot recording `F:/repos/xvpe/crates/a.rs` is a snapshot that cannot be read anywhere
+/// else, and catching it at the door is the difference between a refusal and a corpus of
+/// them.
+fn Is_Absolute(unified: &str) -> bool
+{
+    return unified.starts_with('/')
+        || unified
+            .split_once(':')
+            .is_some_and(|(prefix, _)| return prefix.len() == 1);
 }
 
 /// The same normalization, for lookups that have already been validated elsewhere.

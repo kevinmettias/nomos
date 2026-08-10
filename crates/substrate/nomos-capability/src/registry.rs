@@ -233,22 +233,7 @@ impl Registry
     /// offers it, or the offer claims more than the contract's ceiling.
     pub fn Offer(&mut self, offer: ProviderOffer) -> Result<(), RegistryError>
     {
-        let Some(contract) = self.declared.get(&offer.capability)
-        else
-        {
-            return Err(RegistryError::OfferForUndeclared {
-                capability: offer.capability,
-                provider: offer.provider,
-            });
-        };
-
-        if !contract.ceiling.Satisfies(&offer.guarantee)
-        {
-            return Err(RegistryError::ExceedsCeiling {
-                capability: offer.capability,
-                provider: offer.provider,
-            });
-        }
+        self.Refuse_Unofferable(&offer)?;
 
         let against = self.offers.entry(offer.capability.clone()).or_default();
         if against
@@ -267,6 +252,69 @@ impl Registry
         // falls back to when the guarantee ranks nothing is at least the same tiebreak
         // every time.
         against.sort_by(|left, right| left.provider.cmp(&right.provider));
+        return Ok(());
+    }
+
+    /// Every offer standing against a capability, in name order.
+    ///
+    /// An empty slice rather than an absence, because "nobody offers this" and "this
+    /// capability has no entry yet" are the same answer to the caller and giving them two
+    /// shapes would make the caller decide which.
+    fn Offers_For(&self, requirement: &Requirement) -> &[ProviderOffer]
+    {
+        return self
+            .offers
+            .get(&requirement.capability)
+            .map_or(&[] as &[ProviderOffer], Vec::as_slice);
+    }
+
+    /// Why the contract itself cannot answer this requirement, if it cannot.
+    ///
+    /// Both answers are about the capability rather than about any offer: it was never
+    /// declared, or it was declared at a version this caller cannot read. Neither depends
+    /// on who is offering, which is why they are asked before the offers are looked at.
+    fn Unreadable(&self, requirement: &Requirement) -> Option<Unmet>
+    {
+        let Some(contract) = self.declared.get(&requirement.capability)
+        else
+        {
+            return Some(Unmet::Undeclared);
+        };
+
+        if !requirement.version.Can_Read(contract.version)
+        {
+            return Some(Unmet::VersionMismatch {
+                offered: contract.version,
+            });
+        }
+
+        return None;
+    }
+
+    /// An offer against a capability that will not take it.
+    ///
+    /// The ceiling is checked here rather than at resolution because it is a statement about
+    /// the offer and not about any requirement: a provider claiming more than the contract
+    /// admits is wrong whether or not anybody ever asks for that much.
+    fn Refuse_Unofferable(&self, offer: &ProviderOffer) -> Result<(), RegistryError>
+    {
+        let Some(contract) = self.declared.get(&offer.capability)
+        else
+        {
+            return Err(RegistryError::OfferForUndeclared {
+                capability: offer.capability.clone(),
+                provider: offer.provider.clone(),
+            });
+        };
+
+        if !contract.ceiling.Satisfies(&offer.guarantee)
+        {
+            return Err(RegistryError::ExceedsCeiling {
+                capability: offer.capability.clone(),
+                provider: offer.provider.clone(),
+            });
+        }
+
         return Ok(());
     }
 
@@ -290,71 +338,49 @@ impl Registry
     #[must_use]
     pub fn Resolve(&self, requirement: &Requirement) -> Resolution
     {
-        let unsatisfied = |reason: Unmet| Resolution::Unsatisfied {
-            capability: requirement.capability.clone(),
-            reason,
-        };
-
-        let Some(contract) = self.declared.get(&requirement.capability)
-        else
+        let selection = match self.Selected(requirement)
         {
-            return unsatisfied(Unmet::Undeclared);
+            Ok(selection) => selection,
+            Err(reason) => return Resolution::Unsatisfied {
+                capability: requirement.capability.clone(),
+                reason,
+            },
         };
-
-        if !requirement.version.Can_Read(contract.version)
-        {
-            return unsatisfied(Unmet::VersionMismatch {
-                offered: contract.version,
-            });
-        }
-
-        let offers = self
-            .offers
-            .get(&requirement.capability)
-            .map_or(&[] as &[ProviderOffer], Vec::as_slice);
-
-        let Some(first) = offers.first()
-        else
-        {
-            return unsatisfied(Unmet::NoProvider);
-        };
-
-        let usable: Vec<ProviderOffer> = offers
-            .iter()
-            .filter(|offer| {
-                return requirement.version.Can_Read(offer.version)
-                    && offer.guarantee.Satisfies(&requirement.minimum);
-            })
-            .cloned()
-            .collect();
-
-        let Some(selection) = Selection::Over(usable, requirement.preferred.as_ref())
-        else
-        {
-            return unsatisfied(Unmet::BelowRequirement {
-                closest: first.provider.clone(),
-            });
-        };
-
-        // A named preference that was not honoured is what makes this a fallback. The
-        // judgment still stands; its provenance is not what was asked for, and a caller
-        // that cannot tell cannot record why.
-        //
-        // Compared against who actually answered rather than against a second search for
-        // the preference, because those are the same question and asking it twice is how
-        // the two answers come to disagree.
-        let applicability = match &requirement.preferred
-        {
-            Some(preferred) if *preferred != selection.chosen.provider => {
-                Applicability::SupportedWithFallback
-            }
-            _ => Applicability::Supported,
-        };
+        let applicability = Honoured(requirement, &selection);
 
         return Resolution::Satisfied {
             selection,
             applicability,
         };
+    }
+
+    /// Which offer answers, or which of the four things was missing.
+    ///
+    /// The four are distinct on purpose: nobody declared it, it was declared at a version
+    /// this caller cannot read, nobody offers it, and everyone who offers it is below the
+    /// floor. Collapsing any two of them would leave a caller unable to tell a composition
+    /// mistake from a missing dependency.
+    fn Selected(&self, requirement: &Requirement) -> Result<Selection, Unmet>
+    {
+        if let Some(reason) = self.Unreadable(requirement)
+        {
+            return Err(reason);
+        }
+
+        let offers = self.Offers_For(requirement);
+        let Some(first) = offers.first()
+        else
+        {
+            return Err(Unmet::NoProvider);
+        };
+
+        let usable = Usable(offers, requirement);
+
+        return Selection::Over(usable, requirement.preferred.as_ref()).ok_or_else(|| {
+            return Unmet::BelowRequirement {
+                closest: first.provider.clone(),
+            };
+        });
     }
 
     pub fn Declared(&self) -> impl Iterator<Item = &CapabilityContract>
@@ -382,6 +408,45 @@ impl Registry
 /// a provider that answered found anything *relevant* is a statement about content, and a
 /// registry that could report it would be grading a provider's work. `OD-CAPABILITY-004`
 /// carries that argument and says where the combined distinction lives instead.
+/// Every offer this requirement could actually use: readable at its version, and at or
+/// above its floor.
+fn Usable(offers: &[ProviderOffer], requirement: &Requirement) -> Vec<ProviderOffer>
+{
+    return offers
+        .iter()
+        .filter(|offer| {
+            return requirement.version.Can_Read(offer.version)
+                && offer.guarantee.Satisfies(&requirement.minimum);
+        })
+        .cloned()
+        .collect();
+}
+
+/// Whether the answer came from the provider the caller asked for.
+///
+/// A named preference that was not honoured is what makes this a fallback. The judgment
+/// still stands; its provenance is not what was asked for, and a caller that cannot tell
+/// cannot record why.
+///
+/// Compared against who actually answered rather than against a second search for the
+/// preference, because those are the same question and asking it twice is how the two
+/// answers come to disagree.
+fn Honoured(requirement: &Requirement, selection: &Selection) -> Applicability
+{
+    let Some(preferred) = &requirement.preferred
+    else
+    {
+        return Applicability::Supported;
+    };
+
+    if *preferred == selection.chosen.provider
+    {
+        return Applicability::Supported;
+    }
+
+    return Applicability::SupportedWithFallback;
+}
+
 #[cfg(test)]
 mod tests
 {
