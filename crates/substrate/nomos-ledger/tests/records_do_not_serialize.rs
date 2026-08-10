@@ -158,6 +158,29 @@ fn Paths_Collide(left: &str, right: &str) -> bool
         .Permits_Concurrency();
 }
 
+/// Whether reserving `reserved` reserves `declared` — the coarse direction, not either one.
+///
+/// [`Paths_Collide`] answers a symmetric question, because exclusion is symmetric: an item
+/// reserving a directory and an item reserving a file inside it exclude each other, and
+/// which of them is broader does not change that. Whether a *declared serializer* is still
+/// serializing is not that question. It asks whether anybody still reserves the coarse path
+/// itself, and under the symmetric reading `tests/contract/surface/nomos-ledger.txt` counts
+/// as reserving `tests/contract` — so narrowing a reservation never reduces the count and
+/// only deleting the item does. The register could not empty, which is the one thing
+/// `OD-LEDGER-007` says it is for. Found while closing `P10-SURFACE-GRAIN`; `OD-LEDGER-011`
+/// records it.
+///
+/// The direction is taken from the collision rather than decided again beside it. If two
+/// paths collide under this ledger's rule then one contains the other, and the shorter
+/// normalized spelling is the container — the same tie-break [`Shared_Paths`] already uses
+/// to name the broader of two paths. A containment check written out here would be a second
+/// answer waiting to disagree with `Territory::Intersect`.
+fn Covers(reserved: &str, declared: &str) -> bool
+{
+    return Paths_Collide(reserved, declared)
+        && Normalize_Path(reserved).len() <= Normalize_Path(declared).len();
+}
+
 /// The non-record paths two items share, narrower spelling first.
 fn Shared_Paths(left: &LedgerItem, right: &LedgerItem) -> Vec<String>
 {
@@ -355,6 +378,178 @@ fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
 }
 
 // ---------------------------------------------------------------------------
+// The second acceptance criterion: the snapshot is an artefact, not a directory.
+// ---------------------------------------------------------------------------
+
+/// The directory holding the whole harness, and the coarse reservation this item removed.
+const HARNESS_DIRECTORY: &str = "tests/contract";
+
+/// Where `P9-PUBLIC-API` checks each crate's public API, one file per crate.
+const SNAPSHOT_DIRECTORY: &str = "tests/contract/surface";
+
+/// The snapshot *files* an item reserves, as against the directory holding them.
+///
+/// An item reserving `tests/contract` reserves every crate's snapshot and appears here as
+/// nothing, which is the whole of the distinction the test below is about: the directory is
+/// twenty-one crates' surfaces, and an item that widens one API will write one of them.
+fn Reserved_Snapshots(item: &LedgerItem) -> BTreeSet<String>
+{
+    return item
+        .territory
+        .paths
+        .iter()
+        .map(|path| return Normalize_Path(path))
+        .filter(|path| {
+            return Covers(SNAPSHOT_DIRECTORY, path) && path.as_str() != SNAPSHOT_DIRECTORY;
+        })
+        .collect();
+}
+
+/// Two record writers that widen different crates' public APIs and share no territory.
+///
+/// Derived rather than named. Two identifiers written here would be right until one of them
+/// finished, and an acceptance criterion that expires the moment its example is done is the
+/// failure `OD-LEDGER-007` recorded about the pair search this replaces.
+fn A_Pair_Widening_Different_Crates(document: &LedgerDocument) -> Option<(ItemId, ItemId)>
+{
+    let widening: Vec<(&LedgerItem, BTreeSet<String>)> = Record_Writers(document)
+        .into_iter()
+        .map(|item| return (item, Reserved_Snapshots(item)))
+        .filter(|(_, snapshots)| return !snapshots.is_empty())
+        .collect();
+
+    for (index, (left, mine)) in widening.iter().enumerate()
+    {
+        for (right, theirs) in widening.iter().skip(index.saturating_add(1))
+        {
+            if mine.intersection(theirs).next().is_some()
+            {
+                continue;
+            }
+            if left.territory.Intersect(&right.territory).Permits_Concurrency()
+            {
+                return Some((left.id.clone(), right.id.clone()));
+            }
+        }
+    }
+    return None;
+}
+
+/// The property `P10-SURFACE-GRAIN` bought, claimed through the ledger rather than argued.
+///
+/// Two items each widening one crate's public API are two items writing two different files
+/// in one directory. Reserving the directory made them exclude each other over nineteen
+/// snapshots neither would touch; reserving the file they will write does not. Nothing in
+/// the mechanism ever prevented the finer grain — `Territory::Intersect` has always compared
+/// by containment — so this is a property of what the items *say*, which is why it is
+/// asserted against the repository's own board and not a fixture.
+///
+/// Stated over the whole territory and not over a projection, unlike
+/// [`Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer`]. That test had to project
+/// because two record writers genuinely do share code; here the pair is required to be
+/// independent outright, because a snapshot grain that only works once the rest is ignored
+/// would buy nobody a concurrent claim.
+#[test]
+fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
+{
+    let document = Unclaimed_Copy();
+
+    let Some((first, second)) = A_Pair_Widening_Different_Crates(&document)
+    else
+    {
+        panic!(
+            "no two open record writers widen different crates' APIs and are otherwise \
+             independent. Either every such item is back to reserving `{HARNESS_DIRECTORY}` \
+             — which is the defect OD-LEDGER-011 closed — or the board no longer holds two \
+             items that widen an API at all."
+        )
+    };
+
+    let directory = Temp_Dir("snapshot-grain");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+    ledger.Save(&document).expect("the real board is a valid ledger");
+
+    for (writer, agent) in [(&first, "agent-a"), (&second, "agent-b")]
+    {
+        ledger
+            .Claim(writer, agent, Duration::from_secs(3_600))
+            .unwrap_or_else(|refusal| {
+                panic!(
+                    "{first} and {second} widen different crates' APIs and {writer} was \
+                     still refused: {}",
+                    refusal.Describe()
+                )
+            });
+    }
+
+    ledger
+        .Validate_Current()
+        .expect("two independent claims are a valid ledger");
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The control that keeps the test above from passing for some other reason.
+///
+/// Takes the same pair and puts one of them back on the bare `tests/contract`, which is how
+/// every one of these items was authored before `OD-LEDGER-011`. The second claim must then
+/// be refused and must name the holder of the first. If it is not, the pair above was
+/// independent for a reason that has nothing to do with the snapshot grain and the
+/// acceptance test is reporting a success it did not earn.
+#[test]
+fn Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair()
+{
+    let mut document = Unclaimed_Copy();
+
+    let Some((first, second)) = A_Pair_Widening_Different_Crates(&document)
+    else
+    {
+        panic!("the acceptance test's pair must exist for its control to mean anything")
+    };
+
+    for item in &mut document.items
+    {
+        if item.id != first
+        {
+            continue;
+        }
+        let snapshots = Reserved_Snapshots(item);
+        let mut paths: Vec<String> = item
+            .territory
+            .paths
+            .iter()
+            .filter(|path| return !snapshots.contains(&Normalize_Path(path)))
+            .cloned()
+            .collect();
+        paths.push(HARNESS_DIRECTORY.to_owned());
+        item.territory = Territory::Of_Files(paths);
+    }
+
+    let directory = Temp_Dir("snapshot-directory-restored");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+    ledger.Save(&document).expect("the coarse authoring is still a valid ledger");
+
+    ledger
+        .Claim(&first, "agent-a", Duration::from_secs(3_600))
+        .expect("the first claim is uncontended");
+
+    let refusal = ledger
+        .Claim(&second, "agent-b", Duration::from_secs(3_600))
+        .expect_err("the coarse authoring must refuse the second of the pair");
+
+    assert!(
+        refusal.Describe().contains("agent-a"),
+        "{second} must be refused by name once {first} is back on `{HARNESS_DIRECTORY}`, \
+         because the two then share nineteen snapshots neither will write: {}",
+        refusal.Describe()
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+// ---------------------------------------------------------------------------
 // What still serializes them, named rather than assumed.
 // ---------------------------------------------------------------------------
 
@@ -370,29 +565,22 @@ fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
 /// This list is a debt register. Every entry is a reason two agents cannot work at once,
 /// and the intended direction of travel is that it empties — see `OD-LEDGER-007` for what
 /// each entry would take.
-const KNOWN_SERIALIZERS: &[(&str, &str)] = &[
-    (
-        "crates/spec/nomos-spec-store",
-        "declared territory, no longer a code coupling. OD-SPEC-007 dissolved the one this \
-         entry was opened for: a record is registered by its own file under records/, the \
-         two tables are generated from that directory, and the literal count is a floor \
-         additions do not touch — so two items writing two different records now write two \
-         different files here. What remains is twelve territories authored under \
-         OD-LEDGER-001's third rule as it stood before that record, which still reserve the \
-         whole crate. This register reads declared territory rather than edited files, so \
-         the entry cannot come out until those are re-authored; removing it now would leave \
-         a path every record writer reserves and nobody declared. It comes out with that \
-         pass, not with the code change.",
-    ),
-    (
-        "tests/contract",
-        "the surface snapshots. P9-PUBLIC-API checks each crate's public API into \
-         tests/contract/surface, and corpus_gates.rs declares a per-file test count, so an \
-         item that widens any API or adds any test to a gated file writes under this \
-         directory. Reserving the directory to write one file inside it is the shape \
-         P10-RECORD-LOCK named for records, one level up.",
-    ),
-];
+///
+/// # It is empty, and that is a state rather than an absence
+///
+/// Both entries came out in `P10-SURFACE-GRAIN`, in the commit that earned each of them.
+/// `crates/spec/nomos-spec-store` was a code coupling until `OD-SPEC-007` dissolved it and
+/// a declared-territory coupling for as long as twelve items still reserved the whole
+/// crate to seed one record; `tests/contract` was the same shape one level up, an item
+/// reserving the snapshot directory to write one file inside it. `OD-LEDGER-011` re-authored
+/// both to the artefact — `records/<ID>.record` and `surface/<crate>.txt` — and the two
+/// tests below are what confirmed the entries were gone rather than merely deleted.
+///
+/// An empty register does not make this file vacuous. The register is the *declared* half;
+/// [`Test_Every_Universal_Reservation_Should_Be_Declared`] is the derived half, and it is
+/// the one that fails when a third structural serializer arrives. The declaration is what
+/// makes growth a decision, and a decision has to be able to start from nothing.
+const KNOWN_SERIALIZERS: &[(&str, &str)] = &[];
 
 /// A path *every* record writer has to reserve is one somebody wrote down.
 ///
@@ -433,6 +621,10 @@ fn Test_Every_Universal_Reservation_Should_Be_Declared()
 /// forcing a shared edit — the remedy `OD-LEDGER-007` defers — this fails, and the entry
 /// comes out in the commit that earned it rather than surviving as an explanation for a
 /// coupling nobody has any more.
+///
+/// Counted with [`Covers`] and not with [`Paths_Collide`]. See that function for why the
+/// symmetric reading made the register unemptiable, which is the defect `OD-LEDGER-011`
+/// found while closing.
 #[test]
 fn Test_Every_Declared_Serializer_Should_Still_Serialize()
 {
@@ -450,7 +642,7 @@ fn Test_Every_Declared_Serializer_Should_Still_Serialize()
                         .territory
                         .paths
                         .iter()
-                        .any(|path| return Paths_Collide(declared, path));
+                        .any(|path| return Covers(path, declared));
                 })
                 .count();
 

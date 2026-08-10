@@ -2129,9 +2129,15 @@
         "paths": [
           "crates/spec/nomos-spec-bundle",
           "crates/spec/nomos-spec-project",
-          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-store/records/OD-DETERMINISM-002.record",
           "tests/integration",
-          "tests/contract",
+          "tests/contract/src/strategies.rs",
+          "tests/contract/src/lib.rs",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/contract/surface/nomos-contract-tests.txt",
+          "tests/contract/surface/nomos-spec-bundle.txt",
+          "tests/contract/surface/nomos-spec-project.txt",
+          "tests/contract/surface/nomos-integration-tests.txt",
           "docs/records/OD-DETERMINISM-002"
         ],
         "patterns": []
@@ -2344,9 +2350,11 @@
         "paths": [
           "crates/spec/nomos-spec-validate",
           "crates/rules/nomos-rules",
-          "tests/contract",
+          "tests/contract/tests/completeness_universes.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-spec-validate.txt",
           "crates/host/nomos-cli",
-          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-store/records/OD-COMPLETENESS-002.record",
           "docs/records/OD-COMPLETENESS-002"
         ],
         "patterns": []
@@ -2444,8 +2452,8 @@
         "paths": [
           "crates/substrate/nomos-ledger",
           "crates/host/nomos-cli",
-          "crates/spec/nomos-spec-store",
-          "tests/contract",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-008.record",
+          "tests/contract/surface/nomos-ledger.txt",
           "README.md",
           "docs/records/OD-LEDGER-008"
         ],
@@ -2548,8 +2556,7 @@
         "resolution": "File",
         "paths": [
           "crates/host/nomos-cli",
-          "crates/spec/nomos-spec-store",
-          "tests/contract",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-010.record",
           "docs/records/OD-LEDGER-010"
         ],
         "patterns": []
@@ -2589,14 +2596,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-surface-grain-w3",
-        "acquired_at": 1786335831,
-        "lease_expires_at": 1786346631
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2608,7 +2611,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "uld_Be_Findable_By_Its_Content ... ok\ntest Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-model v0.1.0 (F:\\repos\\nomos\\crates\\kernel\\nomos-model)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.70s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-1afcd92160e5df68.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-4a08fbfdcb38d532.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-bbd63b4e0120614c.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-99134fb2521fbdfa.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-79e22d39019203d6.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-f7dc0d942c75731f.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-9f1e4a630321b491.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-790d1d7a443043a4.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-ad97dbebf370ad64.exe)\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786337214,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-surface-grain-w3",
@@ -2626,8 +2653,8 @@
         "resolution": "File",
         "paths": [
           "crates/contracts/nomos-contracts",
-          "crates/spec/nomos-spec-store",
-          "tests/contract",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-001.record",
+          "tests/contract/surface/nomos-contracts.txt",
           "docs/records/OD-PACKAGE-001"
         ],
         "patterns": []
@@ -2660,8 +2687,8 @@
         "paths": [
           "crates/substrate/nomos-ledger",
           "crates/host/nomos-cli",
-          "crates/spec/nomos-spec-store",
-          "tests/contract",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-012.record",
+          "tests/contract/surface/nomos-ledger.txt",
           "README.md",
           "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md",
           "docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md",
@@ -2701,8 +2728,10 @@
         "paths": [
           "crates/rules/nomos-rules",
           "crates/substrate/nomos-analysis",
-          "crates/spec/nomos-spec-store",
-          "tests/contract",
+          "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store/records/OD-RULES-001.record",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-analysis.txt",
           "docs/records/OD-RULES-001",
           "docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md"
         ],
@@ -2721,7 +2750,12 @@
           "-p",
           "nomos-analysis",
           "-p",
-          "nomos-contract-tests"
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
         ],
         "timeout_seconds": 600
       },
@@ -2738,8 +2772,8 @@
         "paths": [
           "crates/host/nomos-cli",
           "crates/contracts/nomos-contracts",
-          "crates/spec/nomos-spec-store",
-          "tests/contract",
+          "crates/spec/nomos-spec-store/records/OD-GATE-003.record",
+          "tests/contract/surface/nomos-contracts.txt",
           "docs/records/OD-GATE-003"
         ],
         "patterns": []
@@ -2894,7 +2928,8 @@
           "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
           "crates/host/nomos-cli/src/work.rs",
           "README.md",
-          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-013.record",
+          "tests/contract/surface/nomos-ledger.txt",
           "docs/records/OD-LEDGER-013"
         ],
         "patterns": []
@@ -2932,7 +2967,8 @@
           "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
           "crates/host/nomos-cli/src/work.rs",
           "tests/contract/surface/nomos-ledger.txt",
-          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-014.record",
+          "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md",
           "docs/records/OD-LEDGER-014"
         ],
         "patterns": []
@@ -2970,7 +3006,7 @@
         "paths": [
           "crates/substrate/nomos-ledger/src/store.rs",
           "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
-          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-015.record",
           "docs/records/OD-LEDGER-015"
         ],
         "patterns": []
@@ -3004,7 +3040,8 @@
         "paths": [
           "crates/substrate/nomos-ledger/src/territory.rs",
           "crates/substrate/nomos-ledger/tests/records_do_not_serialize.rs",
-          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-016.record",
+          "work/ledger.json",
           "docs/records/OD-LEDGER-016"
         ],
         "patterns": []
@@ -3041,14 +3078,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-test-mask-w4",
-        "acquired_at": 1786335831,
-        "lease_expires_at": 1786343031
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3061,7 +3094,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "Renumber_Its_Rows ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.86s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-207ef041d2ea84e5.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-6acbbf6efee5d0c0.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-e26432a0c61b833c.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-8329f15ab06de82d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d082d20178d303c9.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-67f4f969b9389d55.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-6513f2b784f9db8e.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-103e563fbb789ea0.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-f50329bbff375e72.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-1d183afa395052f7.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-774615dec9e029c0.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786336434,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": []
     }
   ]
