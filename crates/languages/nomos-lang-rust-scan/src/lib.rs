@@ -37,10 +37,16 @@
 
 mod determinism;
 mod guarantee;
+mod item_kind;
 mod provider;
 mod scan;
+mod scanned_file;
+mod visibility;
 
 pub use determinism::ScanFactProduction;
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
 pub use provider::{Encode_Payload, FactContext, Materialize};
-pub use scan::{ItemKind, Scan, ScannedFile, ScannedItem, Visibility};
+pub use item_kind::ItemKind;
+pub use scan::{Scan, ScannedItem};
+pub use scanned_file::ScannedFile;
+pub use visibility::Visibility;

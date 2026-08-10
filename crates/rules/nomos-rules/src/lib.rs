@@ -49,15 +49,19 @@
 
 #![forbid(unsafe_code)]
 
+mod declared_universe;
 mod facts;
 mod mirror;
+mod reading;
 mod universe;
 
 use nomos_capability::Requirement;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
 
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR};
-pub use universe::{DeclaredUniverse, Read_Universes, Reading, UniverseKind, Universes_In};
+pub use declared_universe::DeclaredUniverse;
+pub use reading::Reading;
+pub use universe::{Read_Universes, UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.
 ///

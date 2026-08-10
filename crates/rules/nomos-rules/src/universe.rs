@@ -48,6 +48,8 @@
 //! So a payload whose fields were not observed produces [`Reading::Unobserved`] and never
 //! an empty list of universes. `OD-SYNTAX-002` records the schema half of this.
 
+use crate::declared_universe::DeclaredUniverse;
+use crate::reading::Reading;
 use nomos_cap_syntax::{
     Function_Arity, PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, INHERENT, SLICE,
 };
@@ -64,49 +66,6 @@ pub enum UniverseKind
     /// of every guard built on `All()`, and each of those guards then passes by not
     /// looking.
     Enumeration,
-}
-
-/// One list that some completeness guard quantifies over.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct DeclaredUniverse
-{
-    /// Repo-relative, forward slashes. For reporting; never identity.
-    pub path: String,
-    /// `GOVERNING_RECORD_IDS`, or `Table::All` for an enumeration.
-    ///
-    /// This is the stable name. A universe that moves file keeps it, which is what lets
-    /// a finding about one survive a refactor instead of closing and reopening.
-    pub name: String,
-    /// How it is written down.
-    pub kind: UniverseKind,
-    /// The mirror this universe claims, if it claims one.
-    ///
-    /// A claim, not a fact. Whether the named check exists is what the rule resolves,
-    /// and a claim that resolves to nothing is worse than no claim at all — it reads as
-    /// coverage while checking nothing.
-    pub claimed_mirror: Option<String>,
-}
-
-/// What reading one file's syntax fact produced.
-///
-/// Two variants, and the second is not "the file was empty". A provider that could not
-/// observe documentation has told this module nothing about mirrors, and reporting that as
-/// a file whose universes all declare none would turn every phantom under that provider
-/// into an admitted gap. `Applicability::Unparseable` exists in `nomos-contracts` for the
-/// neighbouring distinction and the rule maps this onto it.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Reading
-{
-    /// The provider observed what discovery needs, and these are the universes. Possibly
-    /// none, which is a real answer about the file.
-    Observed(Vec<DeclaredUniverse>),
-    /// The provider that answered cannot see what discovery reads. Nothing is claimed
-    /// about what the file contains.
-    Unobserved
-    {
-        /// Which field, so a finding can say what would have to change.
-        because: String,
-    },
 }
 
 /// The marker a universe declares its mirror with.

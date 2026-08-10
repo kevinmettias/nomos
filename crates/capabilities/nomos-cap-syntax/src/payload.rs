@@ -125,6 +125,9 @@
 //! its own tests, which is the check the duplication was missing rather than the duplication
 //! removed.
 
+use crate::payload_item::PayloadItem;
+use crate::payload_refusal::PayloadRefusal;
+use crate::syntax_payload::SyntaxPayload;
 use core::fmt::Write as _;
 
 /// The `kind` label every provider writes for a function form.
@@ -244,182 +247,6 @@ pub fn Function_Arity(shape: &Observation) -> Option<u32>
 pub fn Function_Shape(arity: usize) -> String
 {
     return format!("{FUNCTION_SHAPE}{arity}");
-}
-
-/// A decoded `nomos.syntax.items.v2` payload.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct SyntaxPayload
-{
-    /// The lower bound the provider offered on unexpanded regions.
-    pub unexpanded: u32,
-    /// The items the file declares, in source order.
-    pub items: Vec<PayloadItem>,
-}
-
-impl SyntaxPayload
-{
-    /// The record that syntactically encloses the item at `ordinal`, if any.
-    ///
-    /// The most recent preceding record whose qualified name is this one's prefix. Source
-    /// order is what makes this answerable: an `All` declared in `impl Display for Table`
-    /// and one declared in `impl Table` carry the same qualified name, and only the record
-    /// they follow tells them apart.
-    #[must_use]
-    pub fn Enclosing(&self, ordinal: usize) -> Option<&PayloadItem>
-    {
-        let item = self.items.get(ordinal)?;
-        let (owner, _) = item.qualified_name.rsplit_once("::")?;
-
-        return self
-            .items
-            .get(..ordinal)?
-            .iter()
-            .rev()
-            .find(|candidate| return candidate.qualified_name == owner);
-    }
-}
-
-/// One `item` record.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PayloadItem
-{
-    /// Position in source order, from zero.
-    pub ordinal: u32,
-    /// The form the provider recognised. See the module doc: the vocabulary is open.
-    pub kind: String,
-    /// The visibility the item declares, as the provider observed it.
-    pub visibility: String,
-    /// The name as written, qualified by syntactic nesting.
-    pub qualified_name: String,
-    /// The item's documentation, and whether the provider could look for it.
-    pub documentation: Observation,
-    /// What the item declares, beyond its name — see the module doc's table.
-    pub shape: Observation,
-}
-
-impl PayloadItem
-{
-    /// The item's own name, without the nesting it is qualified by.
-    ///
-    /// The last `::` segment. Matching a qualified form against anything else resolves
-    /// nothing, because almost every declaration worth naming lives inside something.
-    #[must_use]
-    pub fn Own_Name(&self) -> &str
-    {
-        return self
-            .qualified_name
-            .rsplit("::")
-            .next()
-            .unwrap_or(&self.qualified_name);
-    }
-
-    /// Whether the item declares itself public.
-    #[must_use]
-    pub fn Is_Public(&self) -> bool
-    {
-        return self.visibility == PUBLIC;
-    }
-
-    /// Whether the provider observed a form with no visibility to declare.
-    ///
-    /// True is an observation. False is not the opposite of it — see the module doc.
-    #[must_use]
-    pub fn Declares_No_Visibility(&self) -> bool
-    {
-        return self.visibility == NOT_APPLICABLE;
-    }
-}
-
-/// Why a payload could not be read.
-///
-/// Every variant carries where. A caller told only that something failed has been handed a
-/// number nobody can act on, and this text reaches a finding somebody has to answer.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum PayloadRefusal
-{
-    /// The bytes are not UTF-8, so they are not this schema.
-    NotUtf8,
-    /// The first record is not an `unexpanded` header.
-    ///
-    /// Includes the empty payload. A fact carrying no bytes is not a file that declared
-    /// nothing — that is a header and no items — and reading one as the other makes a
-    /// subject that was never read indistinguishable from a subject with nothing in it.
-    NoHeader,
-    /// A second `unexpanded` header, which would leave two answers to one question.
-    RepeatedHeader
-    {
-        line: usize,
-    },
-    /// A record tag this build does not understand.
-    ///
-    /// The likeliest cause is a payload from a newer schema, which is precisely the case
-    /// where guessing is worst: the unknown record is where the missing information is.
-    UnknownRecord
-    {
-        tag: String,
-        line: usize,
-    },
-    /// A record with the right tag and the wrong shape.
-    WrongFieldCount
-    {
-        tag: String,
-        expected: usize,
-        found: usize,
-        line: usize,
-    },
-    /// A field that must be a number and is not.
-    UnreadableNumber
-    {
-        field: &'static str,
-        value: String,
-        line: usize,
-    },
-    /// A field that must be an observation and is not one of its three spellings.
-    UnreadableObservation
-    {
-        field: &'static str,
-        value: String,
-        line: usize,
-    },
-}
-
-impl PayloadRefusal
-{
-    /// What went wrong, in terms somebody can act on.
-    #[must_use]
-    pub fn Describe(&self) -> String
-    {
-        return match self
-        {
-            Self::NotUtf8 => "the payload is not UTF-8, so it is not this schema".to_owned(),
-            Self::NoHeader => "the payload does not begin with an `unexpanded` header, so it \
-                               is either empty or not this schema"
-                .to_owned(),
-            Self::RepeatedHeader { line } => {
-                format!("line {line} is a second `unexpanded` header, and a payload has one")
-            }
-            Self::UnknownRecord { tag, line } => format!(
-                "line {line} carries the record tag `{tag}`, which this build does not \
-                 understand"
-            ),
-            Self::WrongFieldCount {
-                tag,
-                expected,
-                found,
-                line,
-            } => format!(
-                "line {line} is a `{tag}` record with {found} field(s) where this build \
-                 expects {expected}"
-            ),
-            Self::UnreadableNumber { field, value, line } => {
-                format!("line {line} carries `{value}` where `{field}` must be a number")
-            }
-            Self::UnreadableObservation { field, value, line } => format!(
-                "line {line} carries `{value}` where `{field}` must be `-`, `.` or `+` and a \
-                 value"
-            ),
-        };
-    }
 }
 
 /// Reads a payload, or refuses it.
@@ -713,6 +540,9 @@ fn Observed(value: &str, field: &'static str, line: usize) -> Result<Observation
 mod tests
 {
     use super::*;
+    use crate::payload_refusal::PayloadRefusal;
+    use crate::payload_item::PayloadItem;
+    use crate::syntax_payload::SyntaxPayload;
 
     const SAMPLE: &str = "unexpanded\t2\n\
                           item\t0\tModule\tPrivate\ttests\t.\t.\n\

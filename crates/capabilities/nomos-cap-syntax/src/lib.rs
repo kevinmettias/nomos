@@ -54,12 +54,17 @@
 
 mod contract;
 mod payload;
+mod payload_item;
+mod payload_refusal;
+mod syntax_payload;
 
 pub use contract::{
     Capability, Capability_Contract, Payload_Schema, Ceiling, CAPABILITY, CONTRACT_VERSION, SCHEMA,
 };
 pub use payload::{
-    Escape, Function_Arity, Function_Shape, Observation, Parse_Payload, PayloadItem,
-    PayloadRefusal, Render_Payload, SyntaxPayload, Unescape, FUNCTION, IMPLEMENTATION, INHERENT,
-    NOT_APPLICABLE, PUBLIC, SLICE, TRAIT, VALUE,
+    Escape, Function_Arity, Function_Shape, Observation, Parse_Payload, Render_Payload, Unescape,
+    FUNCTION, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, PUBLIC, SLICE, TRAIT, VALUE,
 };
+pub use payload_item::PayloadItem;
+pub use payload_refusal::PayloadRefusal;
+pub use syntax_payload::SyntaxPayload;

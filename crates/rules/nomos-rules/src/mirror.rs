@@ -72,7 +72,10 @@
 //! disagree.
 
 use crate::facts::Check_Names_In;
-use crate::universe::{DeclaredUniverse, Reading, Read_Universes, UniverseKind};
+use crate::declared_universe::DeclaredUniverse;
+use crate::reading::Reading;
+use crate::universe::Read_Universes;
+use crate::universe::UniverseKind;
 use crate::{SourceFile, Syntax_Requirement};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_contracts::{

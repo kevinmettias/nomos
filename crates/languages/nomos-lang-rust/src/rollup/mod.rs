@@ -67,12 +67,30 @@
 //! to it by the integration harness, so a declaration added without one there is a promise
 //! nothing can falsify, which is the defect that guard exists to catch.
 
-use crate::provider::{FactContext, Syntax_Inputs};
+mod against;
+mod index_entry;
+mod member_reading;
+mod module;
+mod module_index;
+mod module_member;
+mod outcome;
+mod rolled;
+
+pub use against::Against;
+pub use index_entry::IndexEntry;
+pub use member_reading::MemberReading;
+pub use module::Module;
+pub use module_index::ModuleIndex;
+pub use module_member::ModuleMember;
+pub use outcome::Outcome;
+pub use rolled::Rolled;
+
+use crate::provider::FactContext;
 use nomos_analysis::{
     Context, Dependency, FactError, FactKey, FactPayload, FactReader, GuaranteeDigest, InputDigest,
     MaterializedFact, MemoryFactStore, Reader,
 };
-use nomos_capability::{CapabilityContract, ProviderOffer, Registry, Requirement};
+use nomos_capability::{CapabilityContract, ProviderOffer, Requirement};
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, ContractVersion, Digest128, EvidenceClass, FactVariant,
     Guarantee, IncrementalGranularity, ProviderId, SchemaId, SubjectId,
@@ -203,166 +221,6 @@ pub fn Provider_Offer() -> ProviderOffer
     };
 }
 
-/// One file a module is made of.
-///
-/// Carries the subject *and* the semantic inputs its syntax fact was computed from,
-/// because a fact is looked up by rebuilding its key and the inputs are a component of
-/// one. [`ModuleMember::Of`] is the way to construct it: it routes through
-/// [`Syntax_Inputs`], so the digest this rebuilds a key with is the digest that wrote it.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct ModuleMember
-{
-    pub subject: SubjectId,
-    pub inputs: InputDigest,
-}
-
-impl ModuleMember
-{
-    /// A member from the file's subject and its entire contents.
-    #[must_use]
-    pub fn Of(subject: SubjectId, source: &str) -> Self
-    {
-        return Self {
-            subject,
-            inputs: Syntax_Inputs(source),
-        };
-    }
-}
-
-/// The subject a rollup is about, and the files it is over.
-///
-/// The module's own subject must not be any member's. A rollup keyed on one of its inputs
-/// would be named by the same [`nomos_analysis::GenerationCause`] that names the input,
-/// and would be reported as directly invalidated by a change it was actually reached by —
-/// which is the transitive half of invalidation disappearing into the direct half.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Module
-{
-    pub subject: SubjectId,
-    pub members: Vec<ModuleMember>,
-}
-
-/// How a member's syntax fact was obtained.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Outcome
-{
-    /// Answered by a provider the caller's requirement admitted at full standing.
-    Read,
-    /// Answered by a weaker provider than the requirement asked for.
-    ///
-    /// `OD-CAPABILITY-003`'s third condition. Without a distinct value the scanner's
-    /// answer covers the file the parser refused, `Unreachable` drops to zero, and an
-    /// index over five parsed members and one pattern-matched one encodes identically to
-    /// one over six parsed members.
-    Approximate,
-    /// No admitted provider had a readable answer for this member.
-    ///
-    /// Never silently dropped. A rollup that omits the members it could not read reports a
-    /// smaller module as though it were a complete one.
-    Unreachable,
-}
-
-impl Outcome
-{
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Read => READ,
-            Self::Approximate => APPROXIMATE,
-            Self::Unreachable => UNREACHABLE,
-        };
-    }
-
-    /// Whether the member contributed entries. `Approximate` did; it says how good they
-    /// are, not whether they are there.
-    #[must_use]
-    pub const fn Answered(self) -> bool
-    {
-        return matches!(self, Self::Read | Self::Approximate);
-    }
-}
-
-/// A member of the module, and what came of reading it.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct MemberReading
-{
-    pub subject: SubjectId,
-    pub outcome: Outcome,
-}
-
-/// One declared item, attributed to the member that declared it.
-///
-/// `qualified_name` is the syntax schema's, unchanged: a name qualified by nesting within
-/// its own file, and not a resolved path. What this adds is `member`, without which two
-/// files declaring the same name are one record.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct IndexEntry
-{
-    pub member: SubjectId,
-    pub ordinal: u32,
-    pub kind: String,
-    pub visibility: String,
-    pub qualified_name: String,
-}
-
-/// What a module declares.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ModuleIndex
-{
-    pub module: SubjectId,
-    pub members: Vec<MemberReading>,
-    pub items: Vec<IndexEntry>,
-}
-
-impl ModuleIndex
-{
-    /// Members that contributed entries, whether exactly or approximately.
-    #[must_use]
-    pub fn Answered(&self) -> usize
-    {
-        return self
-            .members
-            .iter()
-            .filter(|member| return member.outcome.Answered())
-            .count();
-    }
-
-    /// Members whose syntax fact could not be read.
-    #[must_use]
-    pub fn Unreachable(&self) -> usize
-    {
-        return self
-            .members
-            .iter()
-            .filter(|member| return member.outcome == Outcome::Unreachable)
-            .count();
-    }
-
-    /// Members answered by a weaker provider than the caller asked for.
-    #[must_use]
-    pub fn Approximated(&self) -> usize
-    {
-        return self
-            .members
-            .iter()
-            .filter(|member| return member.outcome == Outcome::Approximate)
-            .count();
-    }
-}
-
-/// A rollup that has been written to the store.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Rolled
-{
-    /// Where the derived fact is filed. A caller invalidating or re-reading it needs this.
-    pub key: FactKey,
-    pub index: ModuleIndex,
-    /// What the reader observed, which is what the store was given as edges.
-    pub dependencies: Vec<Dependency>,
-}
-
 /// Rolls a module's members up into a derived fact and writes it, with its edges.
 ///
 /// `need` is the caller's requirement for `nomos-cap-syntax`'s capability, passed in rather
@@ -401,23 +259,6 @@ pub fn Materialize_Index(
         index,
         dependencies,
     });
-}
-
-/// What a rollup is computed against: who may answer, how good the answer has to be, and
-/// the build its facts are filed under.
-///
-/// The three travel together through every step of a rollup and none of them is useful
-/// without the others — a registry with no floor admits everything, and a floor with no
-/// build has nothing to file the result under.
-#[derive(Clone, Copy)]
-pub struct Against<'a>
-{
-    /// Who may answer for a member.
-    pub registry: &'a Registry,
-    /// How good an answer has to be to count.
-    pub need: &'a Requirement,
-    /// The build every fact read and written here is filed under.
-    pub context: FactContext,
 }
 
 /// The rollup as a fact.
@@ -880,6 +721,7 @@ fn Pairs(hexadecimal: &str) -> impl Iterator<Item = &str>
 mod tests
 {
     use super::*;
+    use nomos_capability::Registry;
     use nomos_capability::{Requirement, Resolution, Unmet};
     use nomos_model::Content_Digest;
 

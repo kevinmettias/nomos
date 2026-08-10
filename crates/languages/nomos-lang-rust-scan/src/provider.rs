@@ -1,7 +1,10 @@
 //! Turning a scan into a fact the analysis kernel can store.
 
-use crate::guarantee::{Declared_Guarantee, PROVIDER};
-use crate::scan::{Scan, ScannedFile, ScannedItem};
+use crate::guarantee::Declared_Guarantee;
+use crate::guarantee::PROVIDER;
+use crate::scan::Scan;
+use crate::scanned_file::ScannedFile;
+use crate::scan::ScannedItem;
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
 use nomos_contracts::{

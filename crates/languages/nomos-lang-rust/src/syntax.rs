@@ -1,254 +1,12 @@
 //! Reading one file, and what comes back when that fails.
 
+use crate::item_kind::ItemKind;
+use crate::visibility::Visibility;
+use crate::syntax_item::SyntaxItem;
+use crate::syntax_facts::SyntaxFacts;
+use crate::parse_failure::ParseFailure;
+use crate::reading::Reading;
 use syn::visit::Visit;
-
-/// What kind of declaration an item is.
-///
-/// Every item form Rust has, spelled out rather than collapsed into `Other`. An `Other`
-/// bucket is where a form goes to be forgotten: the count stays right, nothing reports
-/// it, and the day somebody needs `ForeignModule` they find it was never distinguished.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum ItemKind
-{
-    Constant,
-    Enum,
-    ExternCrate,
-    ForeignModule,
-    Function,
-    Implementation,
-    MacroDefinition,
-    Module,
-    Static,
-    Struct,
-    Trait,
-    TraitAlias,
-    TypeAlias,
-    Union,
-    Use,
-}
-
-impl ItemKind
-{
-    /// The kind's stable `PascalCase` name, as it appears in an encoded payload.
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Constant => "Constant",
-            Self::Enum => "Enum",
-            Self::ExternCrate => "ExternCrate",
-            Self::ForeignModule => "ForeignModule",
-            Self::Function => "Function",
-            Self::Implementation => "Implementation",
-            Self::MacroDefinition => "MacroDefinition",
-            Self::Module => "Module",
-            Self::Static => "Static",
-            Self::Struct => "Struct",
-            Self::Trait => "Trait",
-            Self::TraitAlias => "TraitAlias",
-            Self::TypeAlias => "TypeAlias",
-            Self::Union => "Union",
-            Self::Use => "Use",
-        };
-    }
-}
-
-impl core::fmt::Display for ItemKind
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return formatter.write_str(self.Label());
-    }
-}
-
-/// The visibility an item declares.
-///
-/// Four values, not a `bool`. A trait method and a private function are both "not
-/// public" and they are not the same fact: one has no visibility to declare, and
-/// recording it as `Private` would be this provider inventing a declaration the source
-/// does not contain. [`Visibility::NotApplicable`] is what a sound provider says there.
-#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum Visibility
-{
-    /// `pub`.
-    Public,
-    /// `pub(crate)`, `pub(super)`, `pub(in path)` — with the scope as written.
-    Restricted
-    {
-        scope: String,
-    },
-    /// No visibility keyword, on an item form that permits one.
-    Private,
-    /// An item form that declares no visibility: an `impl` block, a trait member.
-    NotApplicable,
-}
-
-impl Visibility
-{
-    /// The stable label used in an encoded payload.
-    #[must_use]
-    pub fn Label(&self) -> String
-    {
-        return match self
-        {
-            Self::Public => "Public".to_owned(),
-            Self::Restricted { scope } => format!("Restricted({scope})"),
-            Self::Private => "Private".to_owned(),
-            Self::NotApplicable => "NotApplicable".to_owned(),
-        };
-    }
-
-    fn Of(visibility: &syn::Visibility) -> Self
-    {
-        return match visibility
-        {
-            syn::Visibility::Public(_) => Self::Public,
-            syn::Visibility::Inherited => Self::Private,
-            syn::Visibility::Restricted(restricted) =>
-            {
-                let path = Path_As_Written(&restricted.path);
-                let scope = if restricted.in_token.is_some()
-                {
-                    format!("in {path}")
-                }
-                else
-                {
-                    path
-                };
-
-                Self::Restricted { scope }
-            }
-        };
-    }
-}
-
-impl core::fmt::Display for Visibility
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return formatter.write_str(&self.Label());
-    }
-}
-
-/// One declaration, as the file spells it.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct SyntaxItem
-{
-    /// Position in the walk, dense and zero-based. Source order, so it is stable for a
-    /// given file and says nothing about any other file.
-    pub ordinal: u32,
-    pub kind: ItemKind,
-    /// The syntactic nesting above this item, outermost first.
-    ///
-    /// Nesting, not a resolved module path. It does not begin at a crate root, because
-    /// this provider does not know which crate the file belongs to — that is workspace
-    /// structure, and reading it would make the answer a function of more than this file.
-    pub scope: Vec<String>,
-    /// The name as written. For an `impl` block, the head of the self type; for a `use`
-    /// leaf, the binding it introduces.
-    pub name: String,
-    pub visibility: Visibility,
-    /// The item's documentation, as written, or `None` when it has none.
-    ///
-    /// `None` is an absence this provider looked for and did not find, never an inability
-    /// to look — it parses, so it always sees the attributes. That difference is what the
-    /// payload spells, and it is why this is not the same field as the one a line reader
-    /// would fill.
-    pub documentation: Option<String>,
-    /// What the item declares beyond its name, in the payload's vocabulary, or `None` when
-    /// the form has nothing to describe.
-    pub shape: Option<String>,
-}
-
-impl SyntaxItem
-{
-    /// The item's name qualified by its syntactic nesting.
-    #[must_use]
-    pub fn Qualified_Name(&self) -> String
-    {
-        if self.scope.is_empty()
-        {
-            return self.name.clone();
-        }
-
-        return format!("{}::{}", self.scope.join("::"), self.name);
-    }
-}
-
-/// Everything one file says on its face.
-#[derive(Clone, Debug, PartialEq, Eq, Default)]
-pub struct SyntaxFacts
-{
-    /// Items in source order.
-    pub items: Vec<SyntaxItem>,
-    /// Places where the parse tree ends and an unexpanded token stream begins.
-    ///
-    /// A **lower bound**, and the reason completeness is
-    /// [`nomos_contracts::Assurance::Unknown`]. Macro invocations and `derive`
-    /// attributes are counted because they are syntactically identifiable; an attribute
-    /// macro like `#[tokio::main]` is not, because telling it from `#[allow]` requires
-    /// resolving the path — the thing this provider does not do.
-    ///
-    /// Reported rather than hidden so that a caller reading "3 items" can see whether
-    /// the file also had 40 places those items could have been generated from.
-    pub unexpanded: u32,
-}
-
-impl SyntaxFacts
-{
-    /// Whether the file declared nothing at all.
-    ///
-    /// A real answer for a file that is empty or entirely comments, and never the answer
-    /// for a file that failed to parse — that is [`Reading::Unparseable`], a different
-    /// variant reached by a different path.
-    #[must_use]
-    pub fn Declares_Nothing(&self) -> bool
-    {
-        return self.items.is_empty();
-    }
-}
-
-/// Why a file could not be read.
-///
-/// Carries where, because the point of this variant is that somebody can act on it. A
-/// corpus walk that reports "412 unparseable" and cannot say which or where has produced
-/// a number nobody can do anything with.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ParseFailure
-{
-    pub line: usize,
-    pub column: usize,
-    pub message: String,
-}
-
-impl core::fmt::Display for ParseFailure
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(
-            formatter,
-            "line {}, column {}: {}",
-            self.line, self.column, self.message
-        );
-    }
-}
-
-impl std::error::Error for ParseFailure {}
-
-/// The result of reading one recognized file.
-///
-/// Two variants and no third. There is deliberately no `Reading::Empty` and no
-/// `impl Default`: a caller that wants to know whether a file declared nothing must ask
-/// [`SyntaxFacts::Declares_Nothing`], which is only reachable through
-/// [`Reading::Parsed`] — so "the file has no items" is a sentence that can only be said
-/// about a file that was successfully read.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Reading
-{
-    Parsed(SyntaxFacts),
-    Unparseable(ParseFailure),
-}
 
 /// Reads Rust source.
 ///
@@ -861,7 +619,7 @@ impl<'ast> Visit<'ast> for Walk
 }
 
 /// A path rendered as written, without the generic arguments.
-fn Path_As_Written(path: &syn::Path) -> String
+pub(crate) fn Path_As_Written(path: &syn::Path) -> String
 {
     let leading = if path.leading_colon.is_some() { "::" } else { "" };
     let segments: Vec<String> = path
@@ -898,6 +656,8 @@ fn Type_Head(kind: &syn::Type) -> String
 mod tests
 {
     use super::*;
+    use crate::syntax_item::SyntaxItem;
+    use crate::reading::Reading;
 
     fn Parsed(source: &str) -> SyntaxFacts
     {

@@ -21,6 +21,9 @@
 //! lines. Seven files in the scale corpus carry a stray byte order mark that `syn` refuses
 //! outright, and one in the precision corpus does. This reads them.
 
+use crate::scanned_file::ScannedFile;
+use crate::visibility::Visibility;
+use crate::item_kind::ItemKind;
 /// One declaration, as a line-reader can see it.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ScannedItem
@@ -33,127 +36,6 @@ pub struct ScannedItem
     pub kind: ItemKind,
     pub visibility: Visibility,
     pub name: String,
-}
-
-/// What kind of declaration a line looks like.
-///
-/// The labels are the same strings `nomos-lang-rust` writes, and the list is deliberately
-/// re-authored rather than imported. Two providers of one capability agree on a payload
-/// *format*, which is an interface; sharing an enum would make them agree by construction
-/// and there would be nothing left for the slice to check.
-///
-/// It is a shorter list than a parser's. A line-reader cannot see a `ForeignModule`'s
-/// contents or tell a trait alias from a type alias without following the tokens, and a
-/// kind it cannot distinguish is a kind it must not claim.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum ItemKind
-{
-    Constant,
-    Enum,
-    ExternCrate,
-    Function,
-    Implementation,
-    MacroDefinition,
-    Module,
-    Static,
-    Struct,
-    Trait,
-    TypeAlias,
-    Union,
-    Use,
-}
-
-impl ItemKind
-{
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Constant => "Constant",
-            Self::Enum => "Enum",
-            Self::ExternCrate => "ExternCrate",
-            Self::Function => "Function",
-            Self::Implementation => "Implementation",
-            Self::MacroDefinition => "MacroDefinition",
-            Self::Module => "Module",
-            Self::Static => "Static",
-            Self::Struct => "Struct",
-            Self::Trait => "Trait",
-            Self::TypeAlias => "TypeAlias",
-            Self::Union => "Union",
-            Self::Use => "Use",
-        };
-    }
-
-    /// The keyword that introduces this kind, in the order a scanner must try them.
-    ///
-    /// `macro_rules` before `macro`, and `const` before nothing — order matters because
-    /// these are matched as prefixes and a shorter keyword that is a prefix of a longer one
-    /// would claim it first.
-    const fn Table() -> &'static [(&'static str, Self)]
-    {
-        return &[
-            ("macro_rules!", Self::MacroDefinition),
-            ("extern crate", Self::ExternCrate),
-            ("unsafe impl", Self::Implementation),
-            ("async fn", Self::Function),
-            ("unsafe fn", Self::Function),
-            ("const fn", Self::Function),
-            ("fn", Self::Function),
-            ("struct", Self::Struct),
-            ("enum", Self::Enum),
-            ("union", Self::Union),
-            ("trait", Self::Trait),
-            ("impl", Self::Implementation),
-            ("mod", Self::Module),
-            ("type", Self::TypeAlias),
-            ("const", Self::Constant),
-            ("static", Self::Static),
-            ("use", Self::Use),
-        ];
-    }
-}
-
-/// How visible a declaration says it is.
-///
-/// There is no `NotApplicable`. A parser knows a trait member declares no visibility of its
-/// own; a line-reader cannot see that it is inside a trait, so it would have to guess, and a
-/// guess recorded as a fact is worse than a weaker vocabulary.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Visibility
-{
-    Public,
-    Restricted
-    {
-        scope: String,
-    },
-    Private,
-}
-
-impl Visibility
-{
-    #[must_use]
-    pub fn Label(&self) -> String
-    {
-        return match self
-        {
-            Self::Public => "Public".to_owned(),
-            Self::Restricted { scope } => format!("Restricted({scope})"),
-            Self::Private => "Private".to_owned(),
-        };
-    }
-}
-
-/// What one file looks like to a line-reader.
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
-pub struct ScannedFile
-{
-    pub items: Vec<ScannedItem>,
-    /// Lines read. The denominator: a scan that reported three items out of four lines and
-    /// one that reported three out of four thousand are different answers, and a count with
-    /// no denominator cannot tell them apart.
-    pub lines: u32,
 }
 
 /// Reads a source file.
@@ -304,6 +186,7 @@ fn Name_In(rest: &str) -> String
 mod tests
 {
     use super::*;
+    use crate::item_kind::ItemKind;
 
     fn Kinds(source: &str) -> Vec<(ItemKind, String, String)>
     {

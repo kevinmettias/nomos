@@ -6,8 +6,13 @@
 //! any of them wrong would be invalidated at the wrong time rather than merely labelled
 //! badly.
 
-use crate::guarantee::{Declared_Guarantee, PROVIDER};
-use crate::syntax::{ParseFailure, Reading, Read_Source, SyntaxFacts, SyntaxItem};
+use crate::materialization::Materialization;
+use crate::guarantee::Declared_Guarantee;
+use crate::guarantee::PROVIDER;
+use crate::reading::Reading;
+use crate::syntax::Read_Source;
+use crate::syntax_facts::SyntaxFacts;
+use crate::syntax_item::SyntaxItem;
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
 use nomos_contracts::{
@@ -27,18 +32,6 @@ pub struct FactContext
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
     pub generation: GenerationId,
-}
-
-/// The outcome of asking this provider for a fact about one file.
-///
-/// Mirrors [`Reading`] deliberately. A `Result<MaterializedFact, ParseFailure>` would
-/// invite `.ok()`, and a corpus walk that maps failures to `None` and counts the `Some`s
-/// is exactly the shape of a run reporting a clean corpus it never read.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Materialization
-{
-    Materialized(Box<MaterializedFact>),
-    Unparseable(ParseFailure),
 }
 
 /// What this provider computes a file's fact from.
@@ -200,6 +193,7 @@ fn Observed(value: Option<&str>) -> String
 mod tests
 {
     use super::*;
+    use crate::materialization::Materialization;
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 
