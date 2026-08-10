@@ -7416,7 +7416,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory is short of the work. The guard is crates/substrate/nomos-ledger/src/store.rs:217 and its test is crates/substrate/nomos-ledger/tests/exclusion_holds.rs:2824; this item reserved crates/host/nomos-cli/src/work.rs and crates/host/nomos-cli/tests, neither of which holds the check it exists to change. Superseded by P11-AMEND-TERRITORY, which is this item with the ledger paths added. The defect is unchanged and still open: work add refuses a published record identifier reserved for amendment, and both spellings were measured refused against ARC-HARNESS-001."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -7436,6 +7440,55 @@
       },
       "verified": null,
       "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-amend-reservation-w9",
+        "declined_at": 1786391619
+      }
+    },
+    {
+      "id": "P11-AMEND-TERRITORY",
+      "title": "A record identifier allocated once and a published record reserved for amendment are the same act to add, and both are refused",
+      "why": "work add refuses a territory naming a record identifier that is already published - \"A record identifier is allocated once; choose the next free one\", exit 4, from crates/substrate/nomos-ledger/src/store.rs:217. That is right for the defect it was built for. P11-SPENT-RECORD-ID recorded that add compared only against open items, so a published identifier could be reserved twice, and five collisions were cleared one record per item in df42f5e.\n\nIt is wrong for the other reason an item names a published record. Amending one is ordinary work here: ARC-ECOSYSTEM-001 is at version 2, OD-CAPABILITY-001 at version 2, and D-134 was amended in place rather than superseded because six of its seven decisions were untouched and cited by working code. An item that amends a record must reserve it, because the amendment edits that file and territory is the only thing keeping two writers off one file.\n\nThe two acts are indistinguishable to add, and it refuses both. Measured on 2026-08-10 against ARC-HARNESS-001: refused by identifier stem, and refused again by the full published filename, so no spelling gets an amendment through.\n\nThe board already holds the proof that the refused case is legitimate. P11-ECOSYSTEM-UPWARD reserves docs/records/ARC-ECOSYSTEM-001 and its done_when is version 3 of that record. It was authored before the guard landed and could not be authored today, so the guard forbids an item the board is currently carrying.\n\nThe immediate cost is a clause that cannot be answered. ARC-HARNESS-001 owes an ownership row for handoff, which P11-HARNESS-SEAM's done_when required among its named components and the record does not carry, and no item can be opened to add it while add refuses to reserve the record it would edit. That omission survived work finish because the predicate is a test suite and a test suite cannot read a done_when.",
+      "done_when": "Reserving a published record for amendment is possible, and reserving an unallocated identifier twice is still refused.\n\nThe check in store.rs distinguishes the two rather than matching on the identifier alone. Whatever separates them is stated where an author meets it, and the refusal that remains says which of the two cases it is - because \"choose the next free one\" is advice that is wrong for an amendment, and an author who follows it renumbers a record that should not move.\n\nexclusion_holds.rs drives both against one board: an item reserving a published record is accepted, and a second item reserving an identifier another open item already reserved is refused. The two are asserted separately rather than through one shared assertion either could satisfy.\n\nNot closed by removing the guard - P11-SPENT-RECORD-ID measured what its absence cost, and five items were declined to clear it. Not closed by having authors reserve the registration file instead: both spellings are refused today, and a rule that turns on which of two paths an author happened to write is the kind of convention this board does not enforce.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-026",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-026.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-amend-territory-w9",
+          "reason": "Territory is correct and occupied. crates/host/nomos-cli/src/work.rs carries 52 insertions and 26 deletions uncommitted, and crates/substrate/nomos-ledger/src/store.rs one more, from a session holding no claim on either - measured 2026-08-10, the work.rs change being a refactor that extracts an --item parsing closure and restructures the Finish arm, unrelated to this guard. Editing on top of it builds on unlanded work, and committing the two paths publishes it unattributed. The fix needs work.rs because store.rs cannot tell an amendment from an allocation without a signal the caller sends, so the file cannot be avoided. Retry when those two paths are clean; nothing about the defect changed.",
+          "abandoned_at": 1786391745
+        }
+      ],
       "displaced": [],
       "declined": null
     }
