@@ -39,7 +39,7 @@ use nomos_integration_tests::{
     Child_Variable, Cross_Environment_Owed, CrossEnvironment, Digest_In, Production, Report_Line,
     Verification, Verify,
 };
-use nomos_lang_rust::SyntaxFactProduction;
+use nomos_lang_rust::{rollup, SyntaxFactProduction};
 use nomos_lang_rust_scan::ScanFactProduction;
 use nomos_model::Content_Digest;
 use nomos_spec_bundle::{BundleSerialization, Export};
@@ -168,6 +168,101 @@ fn Parsed_Production() -> Vec<u8>
                 panic!("the fixture must parse; {path} did not: {failure}");
             }
         }
+    }
+
+    return rendered;
+}
+
+/// The rollup's fact over the same fixture, with the edges it declared.
+///
+/// The second producer in `nomos-lang-rust`, and the one whose reproducibility argument is
+/// not the parser's — see [`SyntaxFactProduction`]'s doc. It is measured as its own
+/// production rather than folded into [`Parsed_Production`] because a declaration is
+/// discharged by what the harness runs, and a rollup summed into another domain's bytes
+/// would be covered by that domain's digest without ever being the thing under test.
+///
+/// The edges are rendered, not only the payload. They decide what a later change
+/// invalidates, so an edge list that varied between runs would leave invalidation itself
+/// non-reproducible while every payload digest still agreed — which no assertion over the
+/// bytes alone could see.
+///
+/// The fixture is walked in reverse to build the module, deliberately. The provider claims
+/// the member order is its own rather than its caller's, and handing it the corpus order
+/// both times would agree under an implementation that simply kept whatever it was given.
+fn Rolled_Production() -> Vec<u8>
+{
+    let context = Fact_Context();
+    let mut store = MemoryFactStore::New();
+
+    let mut registry = nomos_capability::Registry::New();
+    registry
+        .Declare(nomos_cap_syntax::Capability_Contract())
+        .expect("the syntax contract is declared once");
+    registry
+        .Offer(nomos_lang_rust::Provider_Offer())
+        .expect("the parser's offer is within the ceiling");
+
+    for (path, source) in FIXTURE
+    {
+        let nomos_lang_rust::Materialization::Materialized(fact) =
+            nomos_lang_rust::Materialize(Subject_Of(path), source, context)
+        else
+        {
+            panic!("the fixture must parse");
+        };
+
+        store
+            .Materialize(*fact, &[] as &[Dependency])
+            .expect("a fresh store accepts a first materialization");
+    }
+
+    let module = rollup::Module {
+        subject: Subject_Of("the-fixture-module"),
+        members: FIXTURE
+            .iter()
+            .rev()
+            .map(|(path, source)| return rollup::ModuleMember::Of(Subject_Of(path), source))
+            .collect(),
+    };
+
+    let need = nomos_capability::Requirement::New(
+        nomos_cap_syntax::Capability(),
+        nomos_cap_syntax::CONTRACT_VERSION,
+        nomos_lang_rust::Declared_Guarantee(),
+    );
+
+    let rolled = rollup::Materialize_Index(&mut store, &registry, &need, &module, context)
+        .expect("the rollup is not written behind the generation it names");
+
+    // The same guard `Bundle_Bytes` carries, for the same reason. A rollup that read none
+    // of its members produces a payload and a digest, and agreeing with itself across two
+    // processes would then be a claim about three lines of header. The fixture has three
+    // members and they all parse, so anything less means the reads missed — most likely a
+    // requirement that resolved a provider whose key nobody wrote.
+    assert_eq!(
+        rolled.index.Answered(),
+        FIXTURE.len(),
+        "the rollup read {} of {} members, so this production is mostly not a rollup: {:#?}",
+        rolled.index.Answered(),
+        FIXTURE.len(),
+        rolled.index.members
+    );
+    assert!(
+        rolled.index.items.len() > 10,
+        "the fixture reached the index as only {} item(s), so agreeing with itself says \
+         almost nothing",
+        rolled.index.items.len()
+    );
+
+    let mut rendered = Vec::new();
+    rendered.extend_from_slice(format!("key\t{}\n", rolled.key.Digest()).as_bytes());
+    rendered.extend_from_slice(&rollup::Encode_Index(&rolled.index));
+
+    for dependency in &rolled.dependencies
+    {
+        rendered.extend_from_slice(
+            format!("edge\t{}\t{:?}\n", dependency.key.Digest(), dependency.outcome).as_bytes(),
+        );
     }
 
     return rendered;
@@ -542,6 +637,15 @@ fn Alternating(build: fn(bool) -> Vec<u8>) -> impl Fn() -> Vec<u8>
 /// more fields per item, so every fact keyed under the v1 bytes has a new payload digest.
 /// `OD-SYNTAX-002` is the sentence that had to be read before this diff merged.
 const PARSED_GOLDEN: &str = "6ec4ad9fe9c81ab2358e3c3756a3f1f5";
+
+/// The rollup's golden.
+///
+/// It pins more than a payload encoding. The bytes carry the derived fact's key, the index,
+/// and every dependency edge with its outcome — so this constant moves if the member
+/// ordering changes, if the edge order changes, or if what counts as a read changes. Each of
+/// those is a change to what a later invalidation will reach, which is worth a sentence in a
+/// diff.
+const ROLLED_GOLDEN: &str = "a9dc834595e753e498f3a981020b2214";
 const SCANNED_GOLDEN: &str = "e692ad97796279579ca5cd77764e08e5";
 const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 
@@ -557,7 +661,24 @@ const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 /// migration therefore moves this constant, and that is right rather than unfortunate:
 /// a bundle written under one schema and read under another is exactly the interchange
 /// case the `CrossBinary` claim is about, and the diff is where somebody says so.
-const BUNDLE_GOLDEN: &str = "328491e46f92b6898c12b90b0d288b47";
+/// Moved by `P10-SUBMISSION-LAYOUT` (`86971ce`), which is the case the paragraph above
+/// describes rather than an exception to it.
+///
+/// That commit added the `submissions`, `submission_values` and `submission_gaps` tables as
+/// store schema migration 6 and extended the exporter to cover them, so both halves of what
+/// this pins moved: the schema version travelling in the bundle header, and the column
+/// coverage the export asserts. The first failure was not a digest mismatch at all — it was
+/// `UncoveredColumn { table: "submissions", column: "uid" }`, the exporter refusing to write
+/// a bundle it could not fully describe, which is that check working.
+///
+/// Recaptured here rather than by that commit's author because they could not: the item's
+/// territory is the four `crates/spec` crates and its predicate does not reach
+/// `nomos-integration-tests`, so nothing they ran could see this constant and nothing they
+/// were entitled to write could change it. `OD-LEDGER-003` decided that a per-item predicate
+/// stays narrower than the gate and that the gate at push time is what closes the gap, so
+/// this is the designed outcome rather than a defect somebody let through — and this comment
+/// is the sentence that decision expects somebody to read.
+const BUNDLE_GOLDEN: &str = "0d43f057b74822e3ab0d4305d3187f14";
 const PROJECTION_GOLDEN: &str = "9cecf39961bbd638111f82382eafd643";
 
 // ---------------------------------------------------------------------------------
@@ -647,6 +768,7 @@ fn Test_Name_For(domain: &str) -> &'static str
     return match domain
     {
         "syntax-fact-production" => "Test_The_Parser_Should_Meet_Its_Declared_Strategy",
+        "module-index-rollup" => "Test_The_Rollup_Should_Meet_Its_Declared_Strategy",
         "scan-fact-production" => "Test_The_Scanner_Should_Meet_Its_Declared_Strategy",
         "fact-reuse" => "Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy",
         "snapshot-serialization" => "Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy",
@@ -697,6 +819,19 @@ fn Test_The_Parser_Should_Meet_Its_Declared_Strategy()
         &Parsed_Production,
         PARSED_GOLDEN,
     );
+}
+
+/// The second producer covered by `nomos-lang-rust`'s declaration, discharged separately.
+///
+/// Same `Strategy`, because it is the same execution domain holding the same triple —
+/// `SyntaxFactProduction`'s doc says why one declaration covers both. What must not be
+/// shared is the *production*: a declaration is only as good as what the harness runs it
+/// over, and this is the run that makes the crate's promise true of the rollup rather than
+/// merely stated about it.
+#[test]
+fn Test_The_Rollup_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<SyntaxFactProduction>("module-index-rollup", &Rolled_Production, ROLLED_GOLDEN);
 }
 
 #[test]
@@ -872,6 +1007,12 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 {
     let declared = [
         ("syntax-fact-production", SyntaxFactProduction::STRENGTH),
+        // The same declaration, discharged over the other thing it covers. Two entries and
+        // one strategy is the shape `P10-ROLLUP-DETERMINISM` settled on: `nomos-lang-rust`
+        // has two fact producers occupying one row of the contracts table, so they are one
+        // promise — and a promise covering two producers has to be run over both, or the
+        // second is covered by a sentence and measured by nothing.
+        ("module-index-rollup", SyntaxFactProduction::STRENGTH),
         ("scan-fact-production", ScanFactProduction::STRENGTH),
         ("fact-reuse", FactReuse::STRENGTH),
         ("snapshot-serialization", SnapshotSerialization::STRENGTH),
@@ -881,9 +1022,10 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 
     assert_eq!(
         declared.len(),
-        6,
-        "six domains are covered; a seventh declaration needs a row in this table and a \
-         test of its own"
+        7,
+        "seven productions are covered by six declarations; a new producer needs a row in \
+         this table and a test of its own, whether or not it also needs a declaration of \
+         its own"
     );
 
     for (domain, strength) in declared
