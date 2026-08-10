@@ -2383,6 +2383,44 @@
       },
       "verified": null,
       "abandoned": []
+    },
+    {
+      "id": "P10-LAPSE-BRICKS",
+      "title": "A lapsed lease invalidates the whole ledger, so one dead agent stops every claim",
+      "why": "Measured on a scratch ledger under NOMOS_WORK_DIR rather than inferred from reading. Document validation in store.rs treats state Claimed with no active claim as a violation - X is marked claimed but has no active claim. A lease expiring is precisely that state, so the moment any lease runs out the whole document stops validating. FileLedger::Claim loads the document before it does anything else and the load validates, so every claim then fails, not only a claim on the lapsed item. Reproduced by forcing one lease into the past and then claiming P9-AUTHORING, which shares no territory with the lapsed item: refused. Meanwhile work list still reports P9-AUTHORING as ready, so the board goes on advertising work nobody can take - the defect P9-DEPENDS-ON closed, reappearing through a different cause. The report also names the wrong thing. Claim writes self.Load().map_err of a closure discarding its argument into ClaimRefusal::NoSuchItem at store.rs:518, so every load failure - an invalid document, an unreadable file, a parse error - is reported as no item named X. The operator is told the identifier is wrong when the ledger is broken. That is why this needed an experiment rather than a glance, and it is a reason attached to a failure not surviving it, the same shape as OD-LEDGER-006 for the third time. Recovery exists, but only for the holder. Renew and Release match on the holder and do not take the validating path, so the agent holding the lapsed claim can renew or abandon it and the board recovers at once. Anyone else is refused: abandoning as another holder is refused with overlaps territory held by dead-agent until unix 1000000000, a lease twenty-five years expired and still excluding. So when the holder is a process that died - which is the only reason a lease ever lapses on its own - nothing on the board can be claimed, renewed or abandoned by anybody, and the only recovery is editing work/ledger.json by hand. MAXIMUM_LEASE exists so that a crashed agent does not hold territory until somebody edits the file, and item.rs says exactly that at the definition of the lapse check. The lease expiring is what causes the thing the lease exists to prevent. The unit level being right is what hid it: Has_Active_Claim returns false on a lapsed claim and its tests pass, and validation refuses the document before exclusion is ever consulted, so the correct answer never gets to matter. This is live rather than theoretical - a four-hour lease was outstanding on this board while it was written.",
+      "done_when": "A lapse behaves the way MAXIMUM_LEASE was introduced to make it behave: an agent that dies holding a claim stops excluding everybody else, and the board keeps working without a human editing the file. What a lapsed claim leaves visible on the item is settled in the record rather than assumed - the crate has already decided a lapse should be distinguishable from work never started, and that decision is not reopened here. A test claims an item, forces its lease into the past, and asserts three things: an unrelated item is still claimable, validate does not call the document invalid, and the lapsed item itself is either claimable or explicitly is not on stated grounds. The negative control is confirmed red and confirmed alone - restoring the violation must fail those tests and nothing else, since a control that reddens the whole suite proves nothing about what it guards. Separately, a load failure names its cause: Claim stops mapping every load error to NoSuchItem, and a test asserts that an invalid document and a genuinely missing item produce different messages, asserting the text itself because the defect is precisely that two causes wore one name.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-LEDGER-009"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
     }
   ]
 }
