@@ -1595,7 +1595,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P9-READ-SURFACE"
       ],
@@ -1616,7 +1616,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-51842239e9e38230.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-c1421495100087d6.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-e3c9de915070eefd.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-ad87b675e3989839.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-d837d0637d000ea2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-156de37739d5a787.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-b1b171db0941c494.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-0e235bd890f7e5c7.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-39fe4c577082bca8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-49745208ecaaadc1.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-3de20786aadc77ad.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-f86a6915fbdf7b4f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2596f725576ffee8.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-81a2ce5c1466bfe2.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-76ddf6dfcfe2915e.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-a648d8a02a8e5061.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786321757,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      }
     },
     {
       "id": "P9-PUBLIC-API",

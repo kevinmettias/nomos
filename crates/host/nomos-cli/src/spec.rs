@@ -23,7 +23,7 @@
 
 use crate::arguments::{Named_Value, Required};
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
-use nomos_spec_project::{Build, Catalogue, Profile, ProjectError, SIDECAR_SUFFIX};
+use nomos_spec_project::{Build, Catalogue, Check, Profile, ProjectError, SIDECAR_SUFFIX};
 use nomos_spec_store::{PathMatch, RowScope, StoreError};
 use std::path::{Path, PathBuf};
 
@@ -54,6 +54,13 @@ pub enum ExitCode
     Absent = 6,
     /// The answer was produced and could not be written where it was asked to go.
     Unwritable = 7,
+    /// A governed output on disk is no longer what the store and its stamp say it is.
+    ///
+    /// Apart from [`ExitCode::Absent`] on purpose. Absent is "nobody could find out";
+    /// this is "somebody found out, and the answer is that the file drifted". A gate
+    /// collapsing the two would report a machine without a corpus exactly as it reports
+    /// an edited output, which is the confusion `OD-GATE-001` is already about.
+    Stale = 8,
 }
 
 impl ExitCode
@@ -99,6 +106,14 @@ pub enum SpecCommand
         /// The build root the profile's own relative output is placed under.
         into: PathBuf,
     },
+    /// Compare the outputs already on disk against the store and their own stamps.
+    Freshness
+    {
+        /// The build root the profiles' own relative outputs are read from.
+        into: PathBuf,
+        /// Only this profile. Without it, every shipped profile is looked for.
+        profile: Option<String>,
+    },
     /// List the shipped projection profiles.
     Profiles,
     /// Say what this store was assembled from, and what was missing.
@@ -137,6 +152,10 @@ pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
             profile: required("--profile")?,
             into: PathBuf::from(required("--into")?),
         }),
+        "freshness" => Ok(SpecCommand::Freshness {
+            into: PathBuf::from(required("--into")?),
+            profile: value_of("--profile"),
+        }),
         "profiles" => Ok(SpecCommand::Profiles),
         "sources" => Ok(SpecCommand::Sources),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
@@ -166,6 +185,7 @@ fn Usage_Text() -> String
             \x20 table     --document <path|name> [--block <n>] [--table <n>] \
             [--revision <label>]\n\
             \x20 render    --profile <id> --into <directory>\n\
+            \x20 freshness --into <directory> [--profile <id>]\n\
             \x20 profiles\n\
             \x20 sources\n\
             \n\
@@ -180,7 +200,7 @@ fn Usage_Text() -> String
             answer — run `nomos spec sources` to see what a store holds.\n\
             \n\
             exit codes: 0 ok, 1 not found, 2 usage, 5 store error, 6 a source was absent, \
-            7 the output could not be written"
+            7 the output could not be written, 8 an output on disk has drifted"
         .to_owned();
 }
 
@@ -228,6 +248,10 @@ pub fn Run(
             revision,
         } => Table(&assembly, document, *block, *table, revision.as_deref(), output, notes),
         SpecCommand::Render { profile, into } => Render(&assembly, profile, into, output, notes),
+        SpecCommand::Freshness { into, profile } =>
+        {
+            Freshness_Of(&assembly, into, profile.as_deref(), output, notes)
+        }
         SpecCommand::Profiles => Profiles(output, notes),
         SpecCommand::Sources => Sources(&assembly, output),
     };
@@ -471,22 +495,10 @@ fn Render(
         Err(error) => return Report_Project_Error(&error, notes),
     };
 
-    let Some(declared) = catalogue.Named(profile)
-    else
+    let declared = match Resolved(&catalogue, profile, notes)
     {
-        let _ = writeln!(
-            notes,
-            "no shipped profile is named {profile}. There are {}: {}",
-            catalogue.Profiles().len(),
-            catalogue
-                .Profiles()
-                .iter()
-                .map(|shipped| return shipped.id.clone())
-                .collect::<Vec<String>>()
-                .join(", ")
-        );
-
-        return ExitCode::NotFound;
+        Ok(declared) => declared,
+        Err(code) => return code,
     };
 
     let built = match Build(&assembly.store, declared)
@@ -547,6 +559,234 @@ fn Render(
     );
 
     return ExitCode::Ok;
+}
+
+/// The shipped profile that identifier names, or the message saying which ones exist.
+fn Resolved<'a>(
+    catalogue: &'a Catalogue,
+    profile: &str,
+    notes: &mut impl std::io::Write,
+) -> Result<&'a Profile, ExitCode>
+{
+    let Some(declared) = catalogue.Named(profile)
+    else
+    {
+        let _ = writeln!(
+            notes,
+            "no shipped profile is named {profile}. There are {}: {}",
+            catalogue.Profiles().len(),
+            catalogue
+                .Profiles()
+                .iter()
+                .map(|shipped| return shipped.id.clone())
+                .collect::<Vec<String>>()
+                .join(", ")
+        );
+
+        return Err(ExitCode::NotFound);
+    };
+
+    return Ok(declared);
+}
+
+/// `D-128`'s check, run over what is on disk.
+///
+/// [`nomos_spec_project::Check`] shipped with the renderers and was reachable from that
+/// crate's own unit tests and from nothing else, so a hand edit to a generated output was
+/// detectable in principle and detected by nobody — the shape `OD-GATE-001` is about. This
+/// is the command that runs it.
+///
+/// The branch that earns its own case is the half-present pair. A body with no sidecar
+/// beside it is a failure rather than something skipped, because otherwise deleting the
+/// sidecar is how an edit stops being caught, and a check teaches that trick to the first
+/// person who trips over it.
+fn Freshness_Of(
+    assembly: &Assembly,
+    into: &Path,
+    only: Option<&str>,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let catalogue = match Catalogue::Shipped()
+    {
+        Ok(catalogue) => catalogue,
+        Err(error) => return Report_Project_Error(&error, notes),
+    };
+
+    let wanted: Vec<&Profile> = match only
+    {
+        Some(id) => match Resolved(&catalogue, id, notes)
+        {
+            Ok(declared) => vec![declared],
+            Err(code) => return code,
+        },
+        None => catalogue.Profiles().iter().collect(),
+    };
+
+    let mut worst = ExitCode::Ok;
+    let mut checked = 0_u32;
+    let mut unbuilt: Vec<&str> = Vec::new();
+
+    for profile in &wanted
+    {
+        match Verdict(assembly, profile, into, output, notes)
+        {
+            Some(code) =>
+            {
+                checked = checked.saturating_add(1);
+                worst = Worse(worst, code);
+            }
+            None => unbuilt.push(profile.id.as_str()),
+        }
+    }
+
+    return Census(&wanted, checked, &unbuilt, into, only, worst, output);
+}
+
+/// One profile's answer, or [`None`] when neither half of the pair is on disk.
+fn Verdict(
+    assembly: &Assembly,
+    profile: &Profile,
+    into: &Path,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> Option<ExitCode>
+{
+    let body_path = into.join(&profile.output);
+    let sidecar_path = into.join(format!("{}{SIDECAR_SUFFIX}", profile.output));
+    let body = std::fs::read_to_string(&body_path).ok();
+    let sidecar = std::fs::read_to_string(&sidecar_path).ok();
+
+    return match (body, sidecar)
+    {
+        (None, None) => None,
+        (Some(_), None) =>
+        {
+            let _ = writeln!(
+                output,
+                "{}: {} is there and {} is not, so nothing can say whether it is what the \
+                 store produced",
+                profile.id,
+                profile.output,
+                format_args!("{}{SIDECAR_SUFFIX}", profile.output)
+            );
+
+            Some(ExitCode::Stale)
+        }
+        (None, Some(_)) =>
+        {
+            let _ = writeln!(
+                output,
+                "{}: a sidecar is there and {} is not, so a governed output was deleted or \
+                 never written",
+                profile.id, profile.output
+            );
+
+            Some(ExitCode::Stale)
+        }
+        (Some(body), Some(sidecar)) =>
+        {
+            Some(Compared(assembly, profile, &body, &sidecar, output, notes))
+        }
+    };
+}
+
+/// The comparison itself, with a store that may not be whole.
+fn Compared(
+    assembly: &Assembly,
+    profile: &Profile,
+    body: &str,
+    sidecar: &str,
+    output: &mut impl std::io::Write,
+    notes: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let freshness = match Check(&assembly.store, profile, Some(body), Some(sidecar))
+    {
+        Ok(freshness) => freshness,
+        Err(ProjectError::Empty {
+            profile: named,
+            section,
+            content,
+        }) =>
+        {
+            return Empty_Section(assembly, &named, &section, content, notes);
+        }
+        Err(error) => return Report_Project_Error(&error, notes),
+    };
+
+    let _ = writeln!(output, "{}: {}", profile.id, freshness.Report(&profile.output));
+
+    return if freshness.Is_Fresh()
+    {
+        ExitCode::Ok
+    }
+    else
+    {
+        ExitCode::Stale
+    };
+}
+
+/// What the run looked at, printed whether or not it found anything.
+///
+/// A freshness command that prints nothing over a directory holding no outputs reads
+/// exactly like one that checked everything and was happy, which is the defect the whole
+/// group exists to avoid.
+fn Census(
+    wanted: &[&Profile],
+    checked: u32,
+    unbuilt: &[&str],
+    into: &Path,
+    only: Option<&str>,
+    worst: ExitCode,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let _ = writeln!(
+        output,
+        "checked {checked} of {} governed output(s) under {}",
+        wanted.len(),
+        into.display()
+    );
+
+    if !unbuilt.is_empty()
+    {
+        let _ = writeln!(output, "not built here: {}", unbuilt.join(", "));
+    }
+
+    // Asking about one profile that is not there is a question about a named file, and
+    // "no such file" is its answer. Asking about all of them over a build root that holds
+    // three is the ordinary case and not a failure.
+    if let Some(id) = only
+        && checked == 0
+    {
+        let _ = writeln!(
+            output,
+            "{id} has not been built under {}, so there was nothing to compare",
+            into.display()
+        );
+
+        return ExitCode::NotFound;
+    }
+
+    return worst;
+}
+
+/// The code a run reports when its profiles disagreed about what happened.
+///
+/// [`ExitCode::Stale`] beats [`ExitCode::Absent`] deliberately: a definite finding about
+/// one output is more actionable than a machine that could not check another, and the
+/// text above has already said both.
+const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
+{
+    return match (carried, found)
+    {
+        (ExitCode::StoreError, _) | (_, ExitCode::StoreError) => ExitCode::StoreError,
+        (ExitCode::Stale, _) | (_, ExitCode::Stale) => ExitCode::Stale,
+        (ExitCode::Absent, _) | (_, ExitCode::Absent) => ExitCode::Absent,
+        _ => ExitCode::Ok,
+    };
 }
 
 /// A section that selected nothing, over a store that is missing its corpus.
@@ -767,6 +1007,28 @@ mod tests
         );
     }
 
+    /// `--profile` is optional here and required by `render`, so the two must not share a
+    /// parse. A freshness run over a whole build root is the useful one.
+    #[test]
+    fn Test_Freshness_Should_Take_A_Destination_And_An_Optional_Profile()
+    {
+        assert_eq!(
+            Parse(&Arguments("freshness --into build")).expect("parses"),
+            SpecCommand::Freshness {
+                into: PathBuf::from("build"),
+                profile: None,
+            }
+        );
+        assert_eq!(
+            Parse(&Arguments("freshness --into build --profile mcp-resource")).expect("parses"),
+            SpecCommand::Freshness {
+                into: PathBuf::from("build"),
+                profile: Some("mcp-resource".to_owned()),
+            }
+        );
+        assert!(Parse(&Arguments("freshness --profile mcp-resource")).is_err());
+    }
+
     #[test]
     fn Test_An_Unknown_Command_Should_Be_A_Usage_Error()
     {
@@ -786,6 +1048,7 @@ mod tests
         assert_eq!(ExitCode::StoreError.Value(), 5);
         assert_eq!(ExitCode::Absent.Value(), 6);
         assert_eq!(ExitCode::Unwritable.Value(), 7);
+        assert_eq!(ExitCode::Stale.Value(), 8);
 
         for taken in [
             crate::work::ExitCode::ClaimUnavailable.Value(),
@@ -798,6 +1061,7 @@ mod tests
                     ExitCode::StoreError.Value(),
                     ExitCode::Absent.Value(),
                     ExitCode::Unwritable.Value(),
+                    ExitCode::Stale.Value(),
                 ]
                 .contains(&taken),
                 "spec reuses {taken}, which work already spends on a claim outcome"
@@ -810,7 +1074,7 @@ mod tests
     {
         let usage = Usage_Text();
 
-        for command in ["record", "table", "render", "profiles", "sources"]
+        for command in ["record", "table", "render", "freshness", "profiles", "sources"]
         {
             assert!(usage.contains(command), "usage does not mention {command}");
         }

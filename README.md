@@ -6,19 +6,25 @@ Nomos builds and maintains a canonical, multi-resolution model of software, and 
 to keep intent, architecture, implementation, runtime evidence, automated
 transformations and agent work aligned.
 
-This repository is at **Phase 2 complete**. Two things exist.
+Three things exist.
 
 The coordination substrate every later phase needs — the protocol vocabulary, the
 canonical model kernel, the platform port, the work ledger, and the boundary tests that
 keep the architecture from eroding.
 
-And the specification system: the corpus lives in a database behind a preservation ledger
+The specification system: the corpus lives in a database behind a preservation ledger
 that makes silent content loss fail rather than pass. It exists because the previous
 specification revision destroyed 282 markdown table rows, all 6 code blocks and 132
 sections of narrative, and the mechanism that would have caught it was present and never
 ran. See `docs/records/ARC-SPECDB-001-the-specification-is-a-database.md`.
 
-There is no analysis engine yet.
+And the analysis kernel, which is young: a capability registry whose answer is never a
+bare no, a fact store keyed on identity rather than on a workspace snapshot, two Rust
+providers of one capability that are able to disagree, and a rules crate whose first rule
+judges real code and is reachable as `nomos check`.
+
+What is built and what is not is the ledger's answer rather than this paragraph's. Run
+`nomos work list`.
 
 ## Layout
 
@@ -29,10 +35,20 @@ band, and `tests/contract` asserts it.
 |---|---|---|
 | 0 | `nomos-contracts` | Protocol truth. Depends on `serde` and nothing else. |
 | 10 | `nomos-model` | Subjects, composite identity, evidence, and the `SubjectSet` exclusion primitive. |
+| 12 | `nomos-store` | Content-addressed documents, with one write door per authority. |
 | 15 | `nomos-platform` | Port traits: clock, filesystem, cross-process lock, process launcher. |
 | 16 | `nomos-platform-std` | The std implementation of those traits. |
+| 18 | `nomos-workspace` | Snapshots, build variants, and the single change door. |
 | 20 | `nomos-ledger` | Territory-based mutual exclusion over `work/ledger.json`. |
+| 21 | `nomos-capability` | The contract registry whose answer is never a bare no. |
+| 22 | `nomos-analysis` | Fact identity, fact readers, the fact store, and invalidation. |
+| 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
+| 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`. |
+| 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |
+| 30 | `nomos-rules` | A rule as a pure function from source text to findings. |
 | 90 | `nomos-cli` | The `nomos` binary. |
+| 100 | `nomos-contract-tests` | The assertions in `tests/contract`. Observes the workspace; nothing observes it. |
+| 100 | `nomos-integration-tests` | The vertical slice, driving the product through its seams. Its peer, not its layer. |
 
 The specification system sits beside the kernel rather than above it. It reaches the
 product only through a knowledge capability, so nothing in the product may name it.
@@ -44,6 +60,7 @@ product only through a knowledge capability, so nothing in the product may name 
 | 13 | `nomos-spec-bundle` | Deterministic JSONL export and import — the portable authority committed to git. |
 | 13 | `nomos-spec-ingest` | Parsers and the manifest gate against the real v14 corpus. |
 | 14 | `nomos-spec-validate` | The `NSV-PRESERVE-*` rules and the run that fails closed. |
+| 14 | `nomos-spec-project` | Fourteen projection profiles, the renderers, and the freshness stamp. |
 
 The normalizer was **recovered from the corpus, not chosen**: v14's hash generator does
 not ship, so the algorithm was reconstructed and verified against all 2,533 recorded
@@ -102,6 +119,29 @@ should pick up something else; an agent told the ledger is broken should stop an
 a person. Collapsing those into "non-zero" makes the first indistinguishable from the
 second.
 
+## Reading the specification
+
+```
+nomos spec record    --id <node-id> [--revision <label>]
+nomos spec table     --document <path|name> [--block <n>] [--table <n>]
+nomos spec render    --profile <id> --into <directory>
+nomos spec freshness --into <directory> [--profile <id>]
+nomos spec profiles
+nomos spec sources
+```
+
+The store is assembled per invocation: this repository's governing records are embedded in
+the binary, and the v14 corpus is read from `--corpus` or `NOMOS_V14_CORPUS`. A corpus that
+is not there is reported as an absence and exits 6, never as a shorter answer. `record` and
+`table` write content to stdout and everything about it to stderr, so a redirect captures
+exactly what the store holds.
+
+`render` writes a body and a `.nomos-projection.json` sidecar stamping what produced it
+and from what. `freshness` compares the two back and keeps the two failures apart — the
+store moved (stale) and somebody typed into the file (edited) — exiting 8 for either. A
+body with no sidecar beside it is a failure rather than a skip, because otherwise deleting
+the sidecar is how an edit stops being caught.
+
 ## Conventions
 
 Function names are `Pascal_Snake_Case` and control flow uses explicit `return` and
@@ -123,3 +163,21 @@ must reach the same panic at the same step.
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 ```
+
+## This file is hand-authored, and that is a decision
+
+`D-128` requires `README.md`, `ARCHITECTURE.md` and `ARTIFACT_MAP.md` to be
+freshness-validated publication outputs. Those are the *specification suite's* overview
+documents, and this repository ships two of them as projections: `README.projection.md`
+from the `github-markdown` profile, and `spec/architecture.md` from `architecture-document`.
+
+This file is a different document that happens to share a name. It describes the
+workspace, and no content kind in the projection system selects a crate's band or a gate
+command — so no profile can render it, and the corpus it would be rendered from is on no
+CI runner. It therefore stays hand-authored.
+
+What that gives up is freshness for the prose, and nothing here pretends otherwise. What
+it does not give up is the tables above: `tests/contract/tests/boundaries.rs` compares them
+against the declared bands in both directions, so a crate that joins the workspace without
+joining this page fails the gate. See
+`docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md`.

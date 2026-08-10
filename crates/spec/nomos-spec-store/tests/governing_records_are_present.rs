@@ -38,9 +38,9 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
     assert!(missing.is_empty(), "not in the store: {missing:?}");
     // Declared, and checked against `docs/records` in both directions by the test below.
     // Raising it is the deliberate step adding a governing record is meant to cost;
-    // OD-COMPLETENESS-001 was the twentieth, OD-LEDGER-005 the twenty-third, and
-    // OD-PLATFORM-001 the twenty-fourth.
-    assert_eq!(GOVERNING_RECORD_IDS.len(), 24);
+    // OD-COMPLETENESS-001 was the twentieth, OD-LEDGER-005 the twenty-third,
+    // OD-PLATFORM-001 the twenty-fourth and OD-PROJECT-001 the twenty-fifth.
+    assert_eq!(GOVERNING_RECORD_IDS.len(), 25);
 }
 
 /// Every record on disk that claims to be canonical and normative is in the store.
