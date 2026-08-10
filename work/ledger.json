@@ -3670,14 +3670,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-agent-harness-w1",
-        "acquired_at": 1786341289,
-        "lease_expires_at": 1786355689
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3690,7 +3686,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest Test_The_Contract_Should_Name_The_Work_And_Rationale_Authorities ... ok\ntest Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.97s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-4bc65991099bd13c.exe)\n",
+        "verified_at": 1786341660,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": []
     },
     {
@@ -3753,6 +3774,38 @@
           "--test",
           "agent_harness",
           "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-REQUIRED-PROJECTIONS",
+      "title": "A repository can declare a projection mandatory, and a missing one fails closed",
+      "why": "nomos spec freshness answers \"what governed outputs are present here, and are the ones I found fresh?\". A gate needs the other question: \"are all outputs this repository declares mandatory present and fresh?\". Measured on a corpus-less shell: freshness over an empty build root prints \"checked 0 of 14\" and exits 0, and deleting both halves of a governed output moves it to \"not built here\" and still exits 0. The half-present pairs and the edited body are already caught and tested at exit 8, so the hole is not the comparison - it is that nothing declares which outputs must exist. Requiredness is a property of this repository, not of a projection, so it does not belong on Profile beside format and output. It also cannot be derived from the directory being checked, which is OD-SPEC-005 refusing to compare a directory against itself.",
+      "done_when": "freshness takes a repeatable --require <profile-id>. A required profile whose output and sidecar are both absent fails, as do output-without-sidecar, sidecar-without-output, an edited body and a stamp whose recorded inputs no longer match the store. An optional profile absent from the build root stays \"not built here\" and stays green, so a scratch root holding a subset is unaffected. An unknown --require id is a refusal that names the profiles that exist, not a missing output. Absent-because-the-corpus-is-unreadable stays its own answer and is not bent into staleness. diagrams/relations.mmd and its sidecar are committed, and the gate runs freshness --require diagram-set over the tree, which is green on a runner holding no corpus because that profile reads only the embedded governing records.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/spec.rs",
+          "crates/host/nomos-cli/tests/freshness.rs",
+          ".github/workflows/gate.yml",
+          "diagrams"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
         ],
         "timeout_seconds": 600
       },
