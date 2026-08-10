@@ -2,8 +2,16 @@
 **/*.rs.bk
 *.pdb
 
-# Generated projections are never committed. They are rebuild artifacts, and the
-# validator fails when a generated file is treated as a canonical source.
+# Scratch build roots for generated projections. A projection is a rebuild artifact and
+# most of them stay one: nothing here is a canonical source, and a registration may only
+# name a record under docs/records, so a generated file cannot become one by accident.
+#
+# The exception is deliberate and narrow. A projection this repository *promises to ship*
+# is committed together with its .nomos-projection.json stamp, and the gate re-derives it
+# and fails if the pair has drifted -- `nomos spec freshness --require <profile>`. Which
+# outputs those are is repository publication policy, named at the gate step rather than
+# here, because a profile describes how a projection is built and not whether anybody
+# ships it.
 /build/
 /release-artifacts/
 .nomos/

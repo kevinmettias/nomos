@@ -33,6 +33,24 @@ jobs:
       - name: Boundaries
         run: cargo test -p nomos-contract-tests
 
+      # The projections this repository promises to ship, re-derived and compared against
+      # what is committed. `--require` is what makes an absence fail: without it the
+      # command reports on the outputs it happens to find, so deleting both halves of a
+      # governed pair would move it to "not built here" and still exit zero -- which would
+      # make `rm` the way to silence a drifted publication.
+      #
+      # Only `diagram-set` is named, and the reason is the runner rather than taste. Ten
+      # of the fourteen shipped profiles select corpus content, and no corpus is present
+      # here (see the step below), so requiring one would fail for a variable that is not
+      # set rather than for a file that drifted. `diagram-set` reads only the relations
+      # between the governing records compiled into the binary, so it is reconstructible
+      # on any runner. A profile that CANNOT be rebuilt here must not be required here.
+      #
+      # This is publication policy, not a property of the profile: the catalogue says how
+      # each projection is built and nothing there says whether this repository ships it.
+      - name: Required projections
+        run: cargo run --quiet -p nomos-cli -- spec freshness --into . --require diagram-set
+
       # None of the three corpora is present on a CI runner: they live outside this
       # repository. So the tests that read them return early and print ok, and this
       # step is the only place the size of that hole appears. --nocapture is what

@@ -31,6 +31,15 @@ const EMBEDDED: &str = "domain-specification";
 /// Where that profile puts its body, relative to a build root.
 const EMBEDDED_BODY: &str = "spec/domain-specification.md";
 
+/// The profile this repository commits and therefore requires.
+///
+/// It reads only the relations between the embedded governing records, so it builds on a
+/// runner holding no corpus — which is the property that lets the gate require it at all.
+const REQUIRED: &str = "diagram-set";
+
+/// Where that profile puts its body, relative to a build root.
+const REQUIRED_BODY: &str = "diagrams/relations.mmd";
+
 /// The count `Catalogue::Shipped` carries, restated so the census assertions are legible.
 const SHIPPED: usize = 14;
 
@@ -74,12 +83,18 @@ fn Scratch(name: &str) -> PathBuf
 /// A build root holding exactly one rendered profile and its sidecar.
 fn Rendered(name: &str) -> PathBuf
 {
+    return Rendered_As(name, EMBEDDED);
+}
+
+/// The same, for a named profile.
+fn Rendered_As(name: &str, profile: &str) -> PathBuf
+{
     let into = Scratch(name);
     let output = Nomos(&[
         "spec",
         "render",
         "--profile",
-        EMBEDDED,
+        profile,
         "--into",
         &into.display().to_string(),
     ]);
@@ -249,4 +264,172 @@ fn Test_A_Rewritten_Stamp_Should_Not_Excuse_The_File_It_Describes()
 
     assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
     assert!(Out_Text(&output).contains("edited"), "{}", Out_Text(&output));
+}
+
+// ---------------------------------------------------------------------------------------
+// Required publications.
+//
+// Everything above answers "what is here, and is what is here current". A gate needs the
+// other question — "is everything this repository promises to ship here and current" — and
+// the two have opposite defaults. A build root holding a subset is ordinary; a *promised*
+// output that is absent is a failure. `--require` is the difference, and it is a property
+// of the repository doing the promising rather than of the profile, which describes how a
+// projection is built and not whether anybody ships it.
+
+/// The hole this flag closes.
+///
+/// Without it, deleting both halves of a governed output moves it to `not built here` and
+/// the run still exits zero — so the way to silence a drifted publication is to delete it,
+/// which is worse than the edit the rest of this file catches.
+#[test]
+fn Test_A_Required_Output_That_Was_Never_Built_Should_Fail()
+{
+    let into = Scratch("required-never-built");
+
+    let output = Freshness(&into, &["--require", REQUIRED]);
+
+    assert_eq!(Code(&output), 8, "a promised output was absent and nobody minded: {}", Out_Text(&output));
+    let said = Out_Text(&output);
+    assert!(said.contains(REQUIRED_BODY), "the missing output is not named: {said}");
+    assert!(said.contains("required and not current"), "{said}");
+}
+
+/// The default is unchanged, and that is the point.
+///
+/// A scratch build root legitimately holds three of fourteen profiles. If requiredness
+/// leaked into the ordinary run, every developer rendering one profile would get a red
+/// answer about thirteen they never asked for.
+#[test]
+fn Test_An_Unrequired_Output_That_Was_Never_Built_Should_Still_Pass()
+{
+    let into = Scratch("required-absent-optional");
+
+    let output = Freshness(&into, &[]);
+
+    assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
+    let said = Out_Text(&output);
+    assert!(said.contains(REQUIRED), "{said}");
+    assert!(!said.contains("required and"), "nothing was required: {said}");
+}
+
+#[test]
+fn Test_A_Required_Output_Missing_Its_Sidecar_Should_Fail()
+{
+    let into = Rendered_As("required-unstamped", REQUIRED);
+    std::fs::remove_file(into.join(format!("{REQUIRED_BODY}.nomos-projection.json")))
+        .expect("removes the sidecar");
+
+    let output = Freshness(&into, &["--require", REQUIRED]);
+
+    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert!(Out_Text(&output).contains("required and not current"), "{}", Out_Text(&output));
+}
+
+#[test]
+fn Test_A_Required_Sidecar_Missing_Its_Output_Should_Fail()
+{
+    let into = Rendered_As("required-bodiless", REQUIRED);
+    std::fs::remove_file(into.join(REQUIRED_BODY)).expect("removes the body");
+
+    let output = Freshness(&into, &["--require", REQUIRED]);
+
+    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert!(Out_Text(&output).contains("required and not current"), "{}", Out_Text(&output));
+}
+
+/// A requirement is kept by a *current* output, not by a present one.
+///
+/// The summary line is what this asserts. An edited body already fails on its own line, and
+/// a summary that went on calling the requirement met would be the same vacuous success one
+/// level up.
+#[test]
+fn Test_A_Required_Output_That_Was_Edited_Should_Not_Count_As_Kept()
+{
+    let into = Rendered_As("required-edited", REQUIRED);
+    let body = into.join(REQUIRED_BODY);
+    let text = std::fs::read_to_string(&body).expect("reads the rendered body");
+    std::fs::write(&body, format!("{text}\n%% somebody typed this here\n")).expect("edits it");
+
+    let output = Freshness(&into, &["--require", REQUIRED]);
+
+    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    let said = Out_Text(&output);
+    assert!(said.contains("edited"), "{said}");
+    assert!(said.contains("required and not current"), "{said}");
+    assert!(!said.contains("required and current"), "an edited output was reported kept: {said}");
+}
+
+/// A stamp built over inputs the store no longer holds.
+///
+/// Simulated by rewriting the recorded inputs rather than by moving the store, because the
+/// governing records are compiled into the binary under test. What is asserted is that the
+/// requirement reads the store-side half of the comparison too, so a publication whose
+/// inputs moved is not kept alive by a body that still matches its own digest.
+#[test]
+fn Test_A_Required_Output_Built_Over_Other_Inputs_Should_Not_Count_As_Kept()
+{
+    let into = Rendered_As("required-stale-inputs", REQUIRED);
+    let sidecar = into.join(format!("{REQUIRED_BODY}.nomos-projection.json"));
+    let stamp = std::fs::read_to_string(&sidecar).expect("reads the sidecar");
+    let digest = stamp
+        .lines()
+        .find_map(|line| return line.trim().strip_prefix("\"inputs_digest\": \""))
+        .and_then(|rest| return rest.strip_suffix("\","))
+        .expect("the sidecar declares an inputs digest");
+    std::fs::write(&sidecar, stamp.replace(digest, "sha256:0000000000000000"))
+        .expect("rewrites the recorded inputs");
+
+    let output = Freshness(&into, &["--require", REQUIRED]);
+
+    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    let said = Out_Text(&output);
+    assert!(said.contains("stale:"), "{said}");
+    assert!(said.contains("required and not current"), "{said}");
+}
+
+/// The green case has to say what it enforced.
+///
+/// A gate step whose successful output does not name the outputs it guaranteed reads
+/// exactly like one that guaranteed nothing, which is the defect the whole file is against.
+#[test]
+fn Test_A_Kept_Requirement_Should_Name_Itself()
+{
+    let into = Rendered_As("required-kept", REQUIRED);
+
+    let output = Freshness(&into, &["--require", REQUIRED]);
+
+    assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
+    let said = Out_Text(&output);
+    assert!(said.contains(&format!("required and current: {REQUIRED}")), "{said}");
+}
+
+/// An unknown requirement is a question about a profile, not an answer about a file.
+///
+/// Reporting `diagram-sett` as a missing output would send a reader looking for a path that
+/// was never nameable. The catalogue already knows how to refuse an identifier by listing
+/// the ones that exist, and resolving before reading disk is what routes it there.
+#[test]
+fn Test_An_Unknown_Requirement_Should_Be_Refused_Rather_Than_Reported_Missing()
+{
+    let into = Rendered_As("required-unknown", REQUIRED);
+
+    let output = Freshness(&into, &["--require", "no-such-profile"]);
+
+    assert_eq!(Code(&output), 1, "{}", Err_Text(&output));
+    let notes = Err_Text(&output);
+    assert!(notes.contains("no-such-profile"), "{notes}");
+    assert!(notes.contains(REQUIRED), "the profiles that do exist are not named: {notes}");
+    assert!(!Out_Text(&output).contains("required and not current"), "{}", Out_Text(&output));
+}
+
+/// A requirement the run would never have looked at is a contradiction, not a pass.
+#[test]
+fn Test_A_Requirement_Outside_The_Examined_Profile_Should_Be_Refused()
+{
+    let into = Rendered_As("required-unexamined", REQUIRED);
+
+    let output = Freshness(&into, &["--profile", EMBEDDED, "--require", REQUIRED]);
+
+    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert!(Err_Text(&output).contains("never looked for it"), "{}", Err_Text(&output));
 }

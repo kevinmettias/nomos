@@ -3930,14 +3930,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-required-projections-w14",
-        "acquired_at": 1786343888,
-        "lease_expires_at": 1786354688
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3948,7 +3944,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "ord_Should_Come_Out_Of_The_Binary_Byte_For_Byte ... ok\ntest Test_Nothing_But_The_Record_Should_Reach_Standard_Output ... ok\ntest Test_An_Unreadable_Corpus_Should_Name_The_Path_It_Was_Given ... ok\ntest Test_An_Unknown_Identifier_Over_A_Whole_Store_Should_Not_Be_An_Absence ... ok\ntest Test_A_Whole_Store_Should_Report_Nothing_Missing ... ok\ntest Test_A_Table_Should_Come_Out_As_The_Rows_That_Were_Authored ... ok\ntest Test_A_Profile_That_Needs_The_Corpus_Should_Fail_As_An_Absence ... ok\ntest Test_A_Profile_Should_Render_To_A_File ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s\n\n\nrunning 4 tests\ntest Test_Listing_A_Ledger_This_Build_Cannot_Account_For_Should_Refuse ... ok\ntest Test_Validate_Should_Report_The_Files_Schema_And_The_Builds ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-1e3a04fc69d2503b.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-3eb4efb2c688a3e4.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-5768c4cf37250e60.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-a688b401f0513b2f.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-1b704c8ae71a3035.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-d3d2ab8041932be7.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-5a44775d9e3bafb9.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-708f2fe3f8499ca0.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-5c4271afc883178c.exe)\n",
+        "verified_at": 1786344011,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": []
     },
     {

@@ -21,7 +21,7 @@
 //! command whose answer is empty *because* something was missing says so and exits
 //! [`ExitCode::Absent`] rather than printing nothing and succeeding. See [`crate::corpus`].
 
-use crate::arguments::{Named_Value, Required};
+use crate::arguments::{Named_Value, Named_Values, Required};
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
 use nomos_spec_project::{Build, Catalogue, Check, Profile, ProjectError, SIDECAR_SUFFIX};
 use nomos_spec_store::{EditError, EditPreview, PathMatch, RowScope, StoreError};
@@ -121,6 +121,15 @@ pub enum SpecCommand
         into: PathBuf,
         /// Only this profile. Without it, every shipped profile is looked for.
         profile: Option<String>,
+        /// The profiles this run requires to be there, whose absence is a failure.
+        ///
+        /// Empty by default, which is the question this command already answered: what
+        /// is here, and is what is here current. A build root legitimately holds a
+        /// subset, so absence is only a finding when a caller says which outputs it was
+        /// promised — and that promise belongs to the repository asking, not to the
+        /// profile, which describes how a projection is built and not whether anyone
+        /// ships it.
+        require: Vec<String>,
     },
     /// Read a record out of the store as markdown, rendered from its rows.
     Markdown
@@ -192,6 +201,7 @@ pub fn Parse(arguments: &[String]) -> Result<SpecCommand, String>
         "freshness" => Ok(SpecCommand::Freshness {
             into: PathBuf::from(required("--into")?),
             profile: value_of("--profile"),
+            require: Named_Values(arguments, "--require"),
         }),
         "markdown" => Ok(SpecCommand::Markdown {
             id: required("--id")?,
@@ -237,7 +247,7 @@ fn Usage_Text() -> String
             \x20 table     --document <path|name> [--block <n>] [--table <n>] \
             [--revision <label>]\n\
             \x20 render    --profile <id> --into <directory>\n\
-            \x20 freshness --into <directory> [--profile <id>]\n\
+            \x20 freshness --into <directory> [--profile <id>] [--require <id> …]\n\
             \x20 markdown  --id <node-id> [--revision <label>]\n\
             \x20 preview   --id <node-id> --from <file> [--rename <path>]\n\
             \x20 commit    --id <node-id> --from <file> [--rename <path>]\n\
@@ -253,6 +263,11 @@ fn Usage_Text() -> String
             back out of the store's own rows, which is the round trip D-129 decides. \
             `commit` refuses to write an edit it has not previewed, and prints the preview \
             it did.\n\
+            \n\
+            `freshness` reports on the outputs it finds; a build root holding a subset is \
+            normal and not a finding. `--require` names an output this repository promises \
+            to ship, and its absence becomes a failure rather than a line saying it was \
+            not built here. Repeat it per profile.\n\
             \n\
             the store is assembled per invocation: this repository's governing records \
             are embedded, and the v14 corpus is read from --corpus or the environment. A \
@@ -309,10 +324,11 @@ pub fn Run(
             revision,
         } => Table(&assembly, document, *block, *table, revision.as_deref(), output, notes),
         SpecCommand::Render { profile, into } => Render(&assembly, profile, into, output, notes),
-        SpecCommand::Freshness { into, profile } =>
-        {
-            Freshness_Of(&assembly, into, profile.as_deref(), output, notes)
-        }
+        SpecCommand::Freshness {
+            into,
+            profile,
+            require,
+        } => Freshness_Of(&assembly, into, profile.as_deref(), require, output, notes),
         SpecCommand::Markdown { id, revision } =>
         {
             Markdown(&assembly, id, revision.as_deref(), output, notes)
@@ -958,6 +974,7 @@ fn Freshness_Of(
     assembly: &Assembly,
     into: &Path,
     only: Option<&str>,
+    require: &[String],
     output: &mut impl std::io::Write,
     notes: &mut impl std::io::Write,
 ) -> ExitCode
@@ -966,6 +983,12 @@ fn Freshness_Of(
     {
         Ok(catalogue) => catalogue,
         Err(error) => return Report_Project_Error(&error, notes),
+    };
+
+    let required = match Required_Profiles(&catalogue, require, notes)
+    {
+        Ok(required) => required,
+        Err(code) => return code,
     };
 
     let wanted: Vec<&Profile> = match only
@@ -978,24 +1001,111 @@ fn Freshness_Of(
         None => catalogue.Profiles().iter().collect(),
     };
 
+    if let Err(code) = Every_Requirement_Examined(&required, &wanted, only, notes)
+    {
+        return code;
+    }
+
+    let mut census = Census {
+        wanted: wanted.len(),
+        checked: 0,
+        unbuilt: Vec::new(),
+        required,
+        unmet: Vec::new(),
+    };
     let mut worst = ExitCode::Ok;
-    let mut checked = 0_u32;
-    let mut unbuilt: Vec<&str> = Vec::new();
 
     for profile in &wanted
     {
+        let promised = census.required.contains(&profile.id.as_str());
+
         match Verdict(assembly, profile, into, output, notes)
         {
             Some(code) =>
             {
-                checked = checked.saturating_add(1);
+                census.checked = census.checked.saturating_add(1);
                 worst = Worse(worst, code);
+
+                // A promise is kept only by an output that is current. A half-present pair
+                // or an edited body has already printed its own line above, and carrying it
+                // into the requirement summary is what stops that summary from reporting a
+                // requirement as met by a file that just failed.
+                if promised && !matches!(code, ExitCode::Ok)
+                {
+                    census.unmet.push(profile.id.as_str());
+                }
             }
-            None => unbuilt.push(profile.id.as_str()),
+            None if promised =>
+            {
+                let _ = writeln!(
+                    output,
+                    "{}: required here, and neither {} nor its stamp is on disk, so an \
+                     output this repository promises to ship was never written or has been \
+                     deleted",
+                    profile.id, profile.output
+                );
+                census.unmet.push(profile.id.as_str());
+                worst = Worse(worst, ExitCode::Stale);
+            }
+            None => census.unbuilt.push(profile.id.as_str()),
         }
     }
 
-    return Census(&wanted, checked, &unbuilt, into, only, worst, output);
+    return census.Report(into, only, worst, output);
+}
+
+/// The profiles a run was told it must find, resolved before any disk is read.
+///
+/// Resolving first is what keeps an unknown `--require` a question about a profile rather
+/// than an answer about a file. Reporting `diagram-sett` as a missing output would send a
+/// reader looking for something that was never nameable, and the catalogue already knows
+/// how to refuse an identifier by listing the ones that exist.
+fn Required_Profiles<'a>(
+    catalogue: &'a Catalogue,
+    require: &[String],
+    notes: &mut impl std::io::Write,
+) -> Result<Vec<&'a str>, ExitCode>
+{
+    let mut required: Vec<&str> = Vec::new();
+
+    for id in require
+    {
+        required.push(Resolved(catalogue, id, notes)?.id.as_str());
+    }
+
+    return Ok(required);
+}
+
+/// Refuses a run that was promised an output it would never have looked at.
+///
+/// `--profile a --require b` asks for one profile to be examined and a different one to be
+/// guaranteed. Answering it would mean reporting success over a requirement nothing
+/// checked, which is the shape this flag exists against — so it is a usage error and not a
+/// quiet pass.
+fn Every_Requirement_Examined(
+    required: &[&str],
+    wanted: &[&Profile],
+    only: Option<&str>,
+    notes: &mut impl std::io::Write,
+) -> Result<(), ExitCode>
+{
+    let Some(unexamined) = required
+        .iter()
+        .find(|id| return !wanted.iter().any(|profile| return profile.id == **id))
+    else
+    {
+        return Ok(());
+    };
+
+    let _ = writeln!(
+        notes,
+        "--require {unexamined} cannot hold while --profile {} narrows this run to one \
+         other profile: the requirement would be reported as met by a run that never \
+         looked for it",
+        only.unwrap_or("<none>")
+    );
+
+    return Err(ExitCode::Usage);
 }
 
 /// One profile's answer, or [`None`] when neither half of the pair is on disk.
@@ -1087,44 +1197,92 @@ fn Compared(
 /// A freshness command that prints nothing over a directory holding no outputs reads
 /// exactly like one that checked everything and was happy, which is the defect the whole
 /// group exists to avoid.
-fn Census(
-    wanted: &[&Profile],
-    checked: u32,
-    unbuilt: &[&str],
-    into: &Path,
-    only: Option<&str>,
-    worst: ExitCode,
-    output: &mut impl std::io::Write,
-) -> ExitCode
+struct Census<'a>
 {
-    let _ = writeln!(
-        output,
-        "checked {checked} of {} governed output(s) under {}",
-        wanted.len(),
-        into.display()
-    );
+    /// How many profiles this run was going to look for.
+    wanted: usize,
+    /// How many it found both halves of and compared.
+    checked: u32,
+    /// Those absent from the build root and not promised by anyone.
+    unbuilt: Vec<&'a str>,
+    /// Those this run was told must be present.
+    required: Vec<&'a str>,
+    /// Those it was promised and did not get a current output for, whether because
+    /// nothing was on disk or because what was there did not hold up.
+    unmet: Vec<&'a str>,
+}
 
-    if !unbuilt.is_empty()
-    {
-        let _ = writeln!(output, "not built here: {}", unbuilt.join(", "));
-    }
-
-    // Asking about one profile that is not there is a question about a named file, and
-    // "no such file" is its answer. Asking about all of them over a build root that holds
-    // three is the ordinary case and not a failure.
-    if let Some(id) = only
-        && checked == 0
+impl Census<'_>
+{
+    fn Report(
+        &self,
+        into: &Path,
+        only: Option<&str>,
+        worst: ExitCode,
+        output: &mut impl std::io::Write,
+    ) -> ExitCode
     {
         let _ = writeln!(
             output,
-            "{id} has not been built under {}, so there was nothing to compare",
+            "checked {} of {} governed output(s) under {}",
+            self.checked,
+            self.wanted,
             into.display()
         );
 
-        return ExitCode::NotFound;
+        if !self.unbuilt.is_empty()
+        {
+            let _ = writeln!(output, "not built here: {}", self.unbuilt.join(", "));
+        }
+
+        self.Requirements(output);
+
+        // Asking about one profile that is not there is a question about a named file, and
+        // "no such file" is its answer. Asking about all of them over a build root that
+        // holds three is the ordinary case and not a failure. A profile that was *required*
+        // is neither: it has already been reported as a missing promise above, and letting
+        // this branch answer for it would downgrade that finding to a lookup miss.
+        if let Some(id) = only
+            && self.checked == 0
+            && self.unmet.is_empty()
+        {
+            let _ = writeln!(
+                output,
+                "{id} has not been built under {}, so there was nothing to compare",
+                into.display()
+            );
+
+            return ExitCode::NotFound;
+        }
+
+        return worst;
     }
 
-    return worst;
+    /// What this run was promised, named whether or not it was kept.
+    ///
+    /// The satisfied case prints too. A gate step whose green output does not say which
+    /// outputs it enforced is indistinguishable from one that enforced nothing, and this
+    /// whole flag exists because `checked 0 of 14` already exits zero.
+    fn Requirements(&self, output: &mut impl std::io::Write)
+    {
+        if self.required.is_empty()
+        {
+            return;
+        }
+
+        if self.unmet.is_empty()
+        {
+            let _ = writeln!(output, "required and current: {}", self.required.join(", "));
+
+            return;
+        }
+
+        let _ = writeln!(
+            output,
+            "required and not current: {}",
+            self.unmet.join(", ")
+        );
+    }
 }
 
 /// The code a run reports when its profiles disagreed about what happened.
@@ -1371,6 +1529,7 @@ mod tests
             SpecCommand::Freshness {
                 into: PathBuf::from("build"),
                 profile: None,
+                require: Vec::new(),
             }
         );
         assert_eq!(
@@ -1378,9 +1537,28 @@ mod tests
             SpecCommand::Freshness {
                 into: PathBuf::from("build"),
                 profile: Some("mcp-resource".to_owned()),
+                require: Vec::new(),
             }
         );
         assert!(Parse(&Arguments("freshness --profile mcp-resource")).is_err());
+    }
+
+    /// Repeated rather than comma-separated, so a run that promises two outputs says so
+    /// twice and nothing has to decide what a comma inside an identifier would mean.
+    #[test]
+    fn Test_Freshness_Should_Collect_Every_Requirement()
+    {
+        assert_eq!(
+            Parse(&Arguments(
+                "freshness --into . --require diagram-set --require html-site"
+            ))
+            .expect("parses"),
+            SpecCommand::Freshness {
+                into: PathBuf::from("."),
+                profile: None,
+                require: vec!["diagram-set".to_owned(), "html-site".to_owned()],
+            }
+        );
     }
 
     #[test]
