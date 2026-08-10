@@ -74,6 +74,21 @@ impl core::fmt::Display for ItemId
 /// decision?" without matching strings. The prototype stored this as a sentence, and
 /// the result was that nobody could tell how much of the backlog was waiting on a
 /// person versus waiting on a dependency.
+///
+/// # Six of `WORK-LEDGER-005`'s seven causes, and why the seventh is not here
+///
+/// This enum is derived from `WORK-LEDGER-005`, a normative accepted corpus requirement, and
+/// declares six of the seven causes it names, in its order. The absent one is
+/// `stale probe artifact`. `OD-LEDGER-017` decided it is **declined rather than missing**: the
+/// seven are an inventory of what one earlier ledger's prose `blocked` field was observed to
+/// contain, this build has no probe artifact for an item to wait on, and the requirement's own
+/// list ends "or other typed cause" — which [`Blocker::Other`] is. The variant becomes owed the
+/// day an item here waits on *somebody else* regenerating a derived artifact; a stale
+/// projection is not that, because re-rendering it needs no second party.
+///
+/// The comparison is transcribed as `CORPUS_CAUSES` in this module's test module rather than
+/// left in the record, so the next reader does not have to re-derive it against a corpus that
+/// is not on their machine — `D-134`'s reason for putting a universe beside its mirror.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub enum Blocker
@@ -291,6 +306,14 @@ pub struct VerificationRecord
 }
 
 /// One unit of work.
+///
+/// `WORK-LEDGER-001` names the things an item shall be addressable by, and this type carries
+/// all of them except **`priority`**. `OD-LEDGER-017` defers that rather than adding a field:
+/// the corpus wants `priority` as the first of three ranking keys, and the other two — how many
+/// descendants an item unblocks, and conflict risk — are already derivable from
+/// [`LedgerItem::depends_on`] and [`LedgerItem::territory`]. A bare integer would satisfy the
+/// letter of the requirement while buying the one key of the three that ages worst. The
+/// follow-on is ranking, not a field.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct LedgerItem
@@ -438,6 +461,168 @@ mod tests
     fn At(seconds: i64) -> Timestamp
     {
         return Timestamp::From_Unix_Seconds(seconds);
+    }
+
+    /// The seven typed blocker causes `WORK-LEDGER-005` names, in the order it names them,
+    /// each paired with the [`Blocker`] variant that carries it.
+    ///
+    /// A transcription of the requirement's statement, quoted in full from
+    /// `01_authoring/artifacts/requirements/WORK-LEDGER-005.md` (`status: normative`,
+    /// `authority: canonical-normative-record`, `maturity: accepted`):
+    ///
+    /// > WORK-LEDGER-005 Blocked work shall classify the blocker as dependency, decision,
+    /// > territory mismatch, external resource, needs-split, stale probe artifact, or other
+    /// > typed cause rather than relying only on prose notes.
+    ///
+    /// So a row is a claim about the corpus rather than a local preference, and the corpus is
+    /// not on the machine that runs this test — which is the reason the comparison is here
+    /// rather than only in a record.
+    ///
+    /// The `None` row is `stale probe artifact`, and it is empty **deliberately**.
+    /// `OD-LEDGER-017` records why, what would reverse it, and why declining it does not
+    /// violate the requirement.
+    const CORPUS_CAUSES: [(&str, Option<&str>); 7] = [
+        ("dependency", Some("Dependency")),
+        ("decision", Some("Decision")),
+        ("territory mismatch", Some("TerritoryMismatch")),
+        ("external resource", Some("ExternalResource")),
+        ("needs-split", Some("NeedsSplit")),
+        ("stale probe artifact", None),
+        ("other", Some("Other")),
+    ];
+
+    /// Where a cause sits in [`CORPUS_CAUSES`].
+    ///
+    /// The match is exhaustive on purpose, and that is the whole mechanism for membership: a
+    /// seventh variant makes it non-exhaustive, so this module stops compiling and whoever
+    /// added the cause has to arrive here, beside the table and the record it cites, rather
+    /// than adding one these assertions would never visit.
+    const fn Corpus_Position(blocker: &Blocker) -> usize
+    {
+        return match blocker
+        {
+            Blocker::Dependency { .. } => 0,
+            Blocker::Decision { .. } => 1,
+            Blocker::TerritoryMismatch { .. } => 2,
+            Blocker::ExternalResource { .. } => 3,
+            Blocker::NeedsSplit => 4,
+            Blocker::Other { .. } => 6,
+        };
+    }
+
+    /// The externally tagged variant name a blocker serializes as.
+    ///
+    /// Read back out of `serde` rather than from a `Debug` string, because the serialized name
+    /// is what a reader of `work/ledger.json` sees and what a stale writer's
+    /// `deny_unknown_fields` refusal turns on. A unit variant serializes as a bare string and a
+    /// struct variant as a one-key object, so both shapes are handled and anything else is a
+    /// panic rather than a silent miss.
+    fn Serialized_Tag(blocker: &Blocker) -> String
+    {
+        return match serde_json::to_value(blocker).expect("a blocker serializes")
+        {
+            serde_json::Value::String(name) => name,
+            serde_json::Value::Object(fields) => fields
+                .keys()
+                .next()
+                .cloned()
+                .expect("an externally tagged struct variant carries one key"),
+            other => panic!("a blocker serialized as neither a string nor an object: {other:?}"),
+        };
+    }
+
+    /// One sample of every cause this enum declares.
+    ///
+    /// Built here rather than inside a test so both assertions below read the same six, and so
+    /// the compiler's exhaustiveness check on [`Corpus_Position`] is the only thing deciding
+    /// what "every declared cause" means.
+    fn Declared_Causes() -> Vec<Blocker>
+    {
+        return vec![
+            Blocker::Dependency {
+                items: vec![ItemId::New("T-1")],
+            },
+            Blocker::Decision {
+                question: "which substrate is canonical".to_owned(),
+            },
+            Blocker::TerritoryMismatch {
+                detail: "the work reaches a crate the item does not reserve".to_owned(),
+            },
+            Blocker::ExternalResource {
+                resource: "a corpus that is not on this machine".to_owned(),
+            },
+            Blocker::NeedsSplit,
+            Blocker::Other {
+                detail: "stated".to_owned(),
+            },
+        ];
+    }
+
+    /// `WORK-LEDGER-005` is the corpus requirement this enum is derived from, and six of its
+    /// seven causes in its order is the entire evidence for that derivation. Asserted rather
+    /// than trusted: the resemblance is what makes the absent seventh a decision instead of an
+    /// accident, and a relabelling or a reordering would destroy the evidence while leaving
+    /// every other test in this file green.
+    #[test]
+    fn Test_The_Declared_Causes_Should_Be_The_Corpus_Causes_Minus_The_Declined_One()
+    {
+        let mut occupied: Vec<usize> = Vec::new();
+
+        for blocker in Declared_Causes()
+        {
+            let position = Corpus_Position(&blocker);
+            let (cause, transcribed) = *CORPUS_CAUSES
+                .get(position)
+                .expect("Corpus_Position returns an index into CORPUS_CAUSES");
+
+            assert_eq!(
+                transcribed,
+                Some(Serialized_Tag(&blocker).as_str()),
+                "the variant declared for WORK-LEDGER-005's `{cause}` does not serialize as the \
+                 name CORPUS_CAUSES transcribes for it"
+            );
+
+            occupied.push(position);
+        }
+
+        occupied.sort_unstable();
+
+        let transcribed: Vec<usize> = CORPUS_CAUSES
+            .iter()
+            .enumerate()
+            .filter(|(_, entry)| return entry.1.is_some())
+            .map(|(position, _)| return position)
+            .collect();
+
+        assert_eq!(
+            occupied, transcribed,
+            "`Blocker` no longer covers exactly the causes CORPUS_CAUSES says it covers. \
+             OD-LEDGER-017 decided which of WORK-LEDGER-005's seven this enum declares and which \
+             it declines, so changing the membership means amending that record and this table \
+             together"
+        );
+    }
+
+    /// Which row is empty is the decision, not merely how many are.
+    ///
+    /// Without this, `OD-LEDGER-017`'s answer could be relocated to a different cause while the
+    /// count stayed at six and the test above stayed green — a decline of `needs-split` reading
+    /// as the decline of `stale probe artifact` that record actually argued for.
+    #[test]
+    fn Test_The_One_Declined_Cause_Should_Be_The_Stale_Probe_Artifact()
+    {
+        let declined: Vec<&str> = CORPUS_CAUSES
+            .iter()
+            .filter(|entry| return entry.1.is_none())
+            .map(|entry| return entry.0)
+            .collect();
+
+        assert_eq!(
+            declined,
+            vec!["stale probe artifact"],
+            "OD-LEDGER-017 declines exactly one of WORK-LEDGER-005's seven causes and names which \
+             one. A different row going empty is a different decision and needs its own record"
+        );
     }
 
     #[test]

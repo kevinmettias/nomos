@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:99e77d687ea076ab34fd0a7da901f7bfd2053f58db46a271a89fee8509f864c4",
-  "inputs_digest": "sha256:77530228950cf43e887c40f517f5a58e022d439c407e08bc512af81a40e31495",
+  "content_digest": "sha256:22c6d6f41ffd0b8ce1a355585ee28505ace88015d808366a1d49d3d62930ffff",
+  "inputs_digest": "sha256:3c8074afc4e55138e1a1dc09dfccdef8fcab994c8a1b16ae08d21c5e72411ecb",
   "sections": [
     [
       "Documents",
-      60
+      61
     ],
     [
       "Sections",
-      539
+      558
     ],
     [
       "Source blocks",
-      2154
+      2262
     ]
   ],
   "inputs": [
@@ -209,6 +209,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md@authored",
       "hash": "sha256:cbf273e93bd704aae1337dc210a950f7f95493a727a45aef6d66b0af422aa458"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md@authored",
+      "hash": "sha256:37c30a7fb96b566768cb5b23df4bb92b037c769ce8f7eabc087b4dd91742d730"
     },
     {
       "content": "documents",
@@ -1969,6 +1974,101 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md#37",
       "hash": "sha256:1721dffe5f221daba9e6e3fa6b27e9147f3934012bc0beb381a76dfaaabad54a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#1",
+      "hash": "sha256:71ba068366f14117113c0110ac0f5a0a29349ad0953ae5432b4a4c3291d258d9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#2",
+      "hash": "sha256:2a214a590504ceaef90496282ab6dfca85e7c790ad2b5485e79462baacccc870"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#6",
+      "hash": "sha256:9045610cd4b8452dfd4989442584f2cbabc0575d893e16c5189f6d267a9be035"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#12",
+      "hash": "sha256:705e4f326ae893dad22f034f03f3658f0f7357cc2265beeb7eda8d77936c3d6d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#17",
+      "hash": "sha256:82df44f85e1d0ddad1747c959ce71624e7364a0732162774ab97a84fd3547694"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#27",
+      "hash": "sha256:eb5a0406987ad9ffe78a0ee3da6919676ba659928d9670500f85cd4ba9e15d95"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#36",
+      "hash": "sha256:8c3b2620026c7b485b3f58c6cb5fb9fe87e9236a8ecba7837c0c059d4eb87e1d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#39",
+      "hash": "sha256:4b60d281c0d75cf4f390d29e3c0ce8cd5e332f1394e3cb8b9b043775a905d171"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#44",
+      "hash": "sha256:26e4caf21321afbaed07ab02f7009e7cf0e75893f2aec7ed334960e484723793"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#48",
+      "hash": "sha256:ac1c9022f9844c5daf844f38899cf094caf86641643c145d6221107a9cdabed1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#53",
+      "hash": "sha256:d53b39783a8c4ab1450e45b001c4dcd98a172474dc68be7aec10e837ed32d593"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#57",
+      "hash": "sha256:b0c579303cdf3896c2d7a33852339bd7bea03f94f6ad4a1cd33c50d34bb8eb30"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#66",
+      "hash": "sha256:bda714f989fb934aa1c4087cb7fd6cbe36846ed24199375f3e33159c113ef68b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#70",
+      "hash": "sha256:64bc659298bd0b69bd28c66a534fa0477e146373669f09bf3851eb31341f2ee4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#76",
+      "hash": "sha256:d70bcb235dc1f6d08970e99d4c8ba12b53630ccc7d8887006b2d6f8a2d73d3fb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#81",
+      "hash": "sha256:ed8f90d8ecdb5b0b563e5a79ddd0f25f25fc16414463b22ea94711d5aca2362a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#93",
+      "hash": "sha256:ffb592aa43ce9842c1bc60c9ed4510a96782325dbecf550c54bf4e207a036d39"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#96",
+      "hash": "sha256:69829017706e0d9b4b82c25e67565b8789cb94b0c0f53dae13c67515ac01723a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#103",
+      "hash": "sha256:a9a0017f56037862ac0be7c5b8d69f773c4f1913f0a8d5da41f6bade0a4a712f"
     },
     {
       "content": "headings",
@@ -9444,6 +9544,546 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md#39",
       "hash": "sha256:ad64ffbf661395d995f3b77090c0dad4eb60427c8a53c429cbf2b1766a2192e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#1",
+      "hash": "sha256:71a55ab92f52ce2e507fdbf327fe6405a70eaebfad211350ea66f001fbf6c074"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#3",
+      "hash": "sha256:170bf0308d1fd73fee6c9f7e0ea8faa40c46a7eabc62c0351b55ed5ab30b1a61"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#4",
+      "hash": "sha256:f145245a7a8089fa05b78b5b6491525fb4e74e217261637df28577e28f0e3b03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#5",
+      "hash": "sha256:115fbd2da98e6c31cce4d1c376529903ac710212395efe6a9809c87468e55f83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#6",
+      "hash": "sha256:6e3fcf34c67a13bd5b365fa57f4f865da5c456795308102d179f8bc3a7394043"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#7",
+      "hash": "sha256:c74a695b844ef995866ddac1ca9c777084dca0a06e3ca263d312a14ac1e6b615"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#8",
+      "hash": "sha256:ecf49de0a548b6c0de2db9b729958f4ade9534f6224913961c1fd11064d7f364"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#9",
+      "hash": "sha256:bfa0e1d9cb2b5659ecedd2781e3cfac942d21a4bf07dedd6adbc8bcc60fcf745"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#10",
+      "hash": "sha256:b28a9e285a6b5a8f129ee995f3dfd4c5d89e4bceadede828d543653e55d4b959"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#11",
+      "hash": "sha256:11ecbe7b71e1abe7d4dc631d6fa8e024241e87aa4bb8898641498b04e49428b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#12",
+      "hash": "sha256:ad0dd7f53b42ab574cbde46b6deb4cdd6f401dd103e3227f9afe99e07ded2df0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#13",
+      "hash": "sha256:01de3b5fb11f5c5ea6241b9b216a00c1b5e03d3df98206721de6a2ec7bcbd53b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#14",
+      "hash": "sha256:3b4062d7e0d72314cefabc13c8af25e4b59f41ff7d21e7466c561eec5b518300"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#15",
+      "hash": "sha256:65cad1eb0b5ebe219430973e6d9f78e06cbbfffbc99af6dc38aea75bb909fbe0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#16",
+      "hash": "sha256:fb57746b66b5bf66c2a1a351e64edb0096e52fc86008535a4e6dba603a9c1c71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#17",
+      "hash": "sha256:9bb3d302ea773b4212f3338bc0f57a18564a2024df7213ee1ed195eb27f97cdb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#18",
+      "hash": "sha256:ac8a40dbd92125df3cbbcac6559fe3b34b2a62d8dae20969449a3b5c6f2af9fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#19",
+      "hash": "sha256:3810eb33f593e19feb605efdbe202be56c3e2f3fa6734d5cbf36d4767cc48958"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#20",
+      "hash": "sha256:23212170afded95aca40f124b3a2c3fc457536a0a859208f9be672e2354261ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#21",
+      "hash": "sha256:b4218d55937e6ecb5a0ef6fe0b12d6856f2af5ad1ddda3a15f6ac9edb361e8ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#22",
+      "hash": "sha256:fc491571f0da32812c4db261868049a3211c5ae9837a4f9801a973413fe401c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#23",
+      "hash": "sha256:68aeab19298ed046d41dd5f633114295fb2fedbe3965c61d0083cfd29ae34719"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#24",
+      "hash": "sha256:3581ee8aad666e07321cf228a804601d32174bed9cf4cebfecd346c860c24a4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#25",
+      "hash": "sha256:1f7681c5d4d601d4b72d4a6a4e8eeb4d10eb969e201539bac9a5012f4db0a51a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#26",
+      "hash": "sha256:9619d23a6758832b7096cf9d0f86d72f819acfcfe38cb0e378395e35db98e9c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#27",
+      "hash": "sha256:815a833527a07a38f5fb6082c21acec737cd88ea005a40a4a9a10f843003716a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#28",
+      "hash": "sha256:c7d2d380eaecbdc545fc39d23d1acd33e3d98cd6680577f15428fbb0750c2b8d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#29",
+      "hash": "sha256:10f69f0bbee13813b5d086941c93de7f8768f9e461bb4dbafa1385e2a7aa370b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#30",
+      "hash": "sha256:fd882d70d3bcfcc26e63648cb7de1f6772f217ab8f2f1f78419b7ca1221e5f21"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#31",
+      "hash": "sha256:2e73da4522ad294ec17f606f7a3ed6aecfbe9dbb06ba9d3f0e70243a006558f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#32",
+      "hash": "sha256:99c93e28e644cf7386b4fd310cdca8ca2f9f64e62890ed593deeb2a4239c2f58"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#33",
+      "hash": "sha256:e99a774fb786249b6e1d2ea238ed13257101a3fd42fb19c4d67191253bdaa386"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#34",
+      "hash": "sha256:156a68b9256edce368cef6434793bbb8b6e7290540df10b36749b2938a03ee93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#35",
+      "hash": "sha256:470c83e55a33583dd1c0cab1e50fb51a1a8347df89d8f92ec7208c74dd94c19e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#36",
+      "hash": "sha256:6836d563f4ab965cbc3bc1b51a0c4c2a41eeb7e7c33a481559f6d1ed38c160f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#37",
+      "hash": "sha256:39d2b8bb4bcaabeafb9849ab8189c8d4cefb4e981821458457d5ee4cb907d82e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#38",
+      "hash": "sha256:294a8ab02b56216bc0ef0374d0d2a68f29ddb2ac4860f4e50b39ba316fd11dd0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#39",
+      "hash": "sha256:01ac3627f817903159cf5b60f65eed7447a4e74840a062b06861b4ebb4b9842d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#40",
+      "hash": "sha256:766d893ab8ccbe803c693e9b025b0e6d0ea0cd54210a4fec5f952ed23925ee97"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#41",
+      "hash": "sha256:3b3f3182db13951136a5a73fb2fe50ccdd11995ddce45bd75bec50ba8007536c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#42",
+      "hash": "sha256:af60720c31b3aa421e4cce14505beb1aec4b856802dea82df87da760bda11b12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#43",
+      "hash": "sha256:6c10c977818121ccb7b472339bac033e4e1e63dc60e74cdeb25b4aee5ca6d3e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#44",
+      "hash": "sha256:c84a40fe98e45563d04715c3e723b0c377d5f441b823ef95b46d08665a48bc0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#45",
+      "hash": "sha256:6ebf597d1ed1cf07d5642441c419621c25e7e089ac4bcd958f30a6a8c9fd2d93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#46",
+      "hash": "sha256:3184af17828205b3d983406f920bf3f239a0c4f8ebf50e9251b8e3cc910e5121"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#47",
+      "hash": "sha256:8ce8f73a12e86ee0b0cda43f9948dc1c4b1f02d87176d2befd5b9622361e8754"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#48",
+      "hash": "sha256:fda5b36ffb593975c83f5ba8c520e687afc4bb1694c03d1ccd19e2e7854bc3e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#49",
+      "hash": "sha256:d167e795e60bae3c0e46abd5a38debab898a925472e0bef110d544915b974030"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#50",
+      "hash": "sha256:a888854a6989f40c88260c8c6464d28c0320812cb5ddc70b22e2d8ba34364434"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#51",
+      "hash": "sha256:11bd5e206803b381df948d62c64daa4a8cbc2dcc7b3481abc88f4a1d60fff841"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#52",
+      "hash": "sha256:eec132a5b34471e4409e3f91603c1729228c0da5ca82c02902a8c96bc32372b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#53",
+      "hash": "sha256:cca1ae62a0cf47e411a0ac90a97a7d58a7cd261fcefa09e374a8a0aaf19d389d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#54",
+      "hash": "sha256:370ef0533d8294f9ce4f242804a5bba0d420e27963d4c966f1f247e4c86cb15e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#55",
+      "hash": "sha256:1d6d1f9c011d98ca8e42ce74e6b5ea3ee18a508753702ba171154f989b0d7174"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#56",
+      "hash": "sha256:678472b6233c4101bbe1eb27e09e4541a72c05ac652ad2d8272f0778667b42ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#57",
+      "hash": "sha256:90632d23c3442227e6627e287a8b89b93adb4d7c941c849676c2df680e1ef27d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#58",
+      "hash": "sha256:78c8d9a0281d6c01b89533ed023fff2df77e762eb203be20c257160437598408"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#59",
+      "hash": "sha256:33d245cd69442b351fff067fcb73dc4b2cf624db8c189bcb75e83691a454aafe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#60",
+      "hash": "sha256:68225960f01b83e86710a8f33e71b1fe53e1c30185956c93fdc82a06bc92331e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#61",
+      "hash": "sha256:a2102a0a899b4ad7ab0bc1653f468f8cc644cc8aba075b0a9b767be844ef83e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#62",
+      "hash": "sha256:12e30267689ebec22d5ddd0ae020f7ae370884a51bff899ef53eff58060dec94"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#63",
+      "hash": "sha256:0e2443bf9f6077fa654e030a99fcd9753f46406d627f35d235f7959f6fd0541d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#64",
+      "hash": "sha256:afbdaf57d81b259dc8d6ed9667d8bbe2c185ac9ba5973e309b2bcdeccb1bcd58"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#65",
+      "hash": "sha256:219fd75f17d068982047cd96d47b45e7854b87853e6b2331743ec65eac5145a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#66",
+      "hash": "sha256:e5f0f36789ef12e2cf6f53379a1ed3430d2e7f752430079aa721a88ecf3a7739"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#67",
+      "hash": "sha256:7867529ae0f3fcefd817fcfa0b39a062460832c1658652b5f95885ec8e2aa039"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#68",
+      "hash": "sha256:408e268b50fba7a90ab6f5fdeaf0f829648ca188acc4ddea4ce4f676dc599844"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#69",
+      "hash": "sha256:3c667750873b0aea69d8675bf1faf8d3724961caa50b7dee6d9d1b902977c429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#70",
+      "hash": "sha256:3b7bc8dbd6312129f3578f409e9e5e2a1de16bcb932646dc2a7ee5643d0d5742"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#71",
+      "hash": "sha256:923ffe08d5da1cc3e1ebc84562df880868c25e1f3619e7f8015cfe1f15b49370"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#72",
+      "hash": "sha256:ea221e686f27cf8626cbd1805cfa86b42fdeaae80dd2d8dd98d822d9278f9557"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#73",
+      "hash": "sha256:21fff337d942db692e6d0593a979413bc6bd4f0bb8609eaa7b6640a0bdd51668"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#74",
+      "hash": "sha256:50239b6d8163d4870c9df4859e70417b34e37ec460d1c45526095f2bb14fa003"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#75",
+      "hash": "sha256:6123723420b7146e0c9d9937b16499010b3fa84729a43cd85e33fd0204df0183"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#76",
+      "hash": "sha256:bfa4497e275768ad40b71a891e41339caf76c8c4b500e2cea7cbbb6643b5a89d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#77",
+      "hash": "sha256:3b49d9e055189c50e8bd467fad17b60762f692d07f87c9a82187b22b40e12eab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#78",
+      "hash": "sha256:4b079e03510fde62817040e7b9aa5c33c95f29305f0cf37b122694b4f5d3dd4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#79",
+      "hash": "sha256:003feee72b834ad5a5dbaf2c312b286704ca6146625f8c53c064e663962ae0a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#80",
+      "hash": "sha256:a51d7f508bf4a07c796cf5467c12430daca038da7170bfef9a47b33af28475d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#81",
+      "hash": "sha256:708bfbd1e85a936ce05dd68827e89f345c56a61e38106b4080e126fb32d9a890"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#82",
+      "hash": "sha256:3b931ae0bfe7cf4d4bed031255f0606d1cb89c9bd24519daef815e716e4aa2e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#83",
+      "hash": "sha256:8bd68df38b098f4efa6ba696bd1aeefae36f750a4c49886328668d08f7630989"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#84",
+      "hash": "sha256:add62dcca33116b44e5ee5df57913e51e23eac1329af776ff4fe64a2c0150868"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#85",
+      "hash": "sha256:c7bcc817df927a8e1f0d78a7dc001a6b9e27b0ee092ab9e0d601ab1905798066"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#86",
+      "hash": "sha256:a694739c9d8f79ef351297d1177f1eb181295a31d369e08c36a28592aa72b268"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#87",
+      "hash": "sha256:7e120954cf5f5fddb9cfbec12fa4468d6476c23fba8e2c04ac3f37b635ab2a0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#88",
+      "hash": "sha256:b8ba388315dd882c5ee73cfafbdec542cc37dadab1289902be7bfb1690b1fa7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#89",
+      "hash": "sha256:757fffd63579d8224232e9bbab07b299dfcfd68bce4626a9aaef8a146487a147"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#90",
+      "hash": "sha256:dc34bd85942b7e47ccffe366d81cb48518dd161d95eb57f228494d81e35ccad8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#91",
+      "hash": "sha256:11dbff61873b37b97ad91b4dda5890995acdce738841c923e1a408813fbe6e01"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#92",
+      "hash": "sha256:988b4c71336cbd4f00d02495e3e2f44b5b841ac3b240d0b76dbea041ac55df00"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#93",
+      "hash": "sha256:99925736f3e3e264da6861b55a56e1bc3dd7648310abb357c87397ce522ba49e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#94",
+      "hash": "sha256:47b9aa9520f3d8af8c0ab1e92c58fde00373e23b064f9c42f9212be6dbb00f5c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#95",
+      "hash": "sha256:cfec7591f3004856010fafefc7b4d1e2a157728dba7968f61b40f580004480dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#96",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#97",
+      "hash": "sha256:8a817bda3afae0fb256f0822a156f23aee6deb064de950e221c3625a55d4acb7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#98",
+      "hash": "sha256:bda370b10c5a3ff4a19fabacdfb34143681c36b8e0fa34a1b40723689380fa0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#99",
+      "hash": "sha256:2116523f6ff4297bc08363fb93bcb3730694e3e5aae3dfff8c2a8e173f7e01ee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#100",
+      "hash": "sha256:d687c397aa3004bd832b79ff1d0cf0a89530de05c9d4783e6f8e199478132505"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#101",
+      "hash": "sha256:d4a056db670b7decc36f61a2c037807147377c0588c63377bf330e3ee2e0b06e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#102",
+      "hash": "sha256:d8333eb2eb76193db2cb30aec5f56211f29e2e31fdc89085d31ddae7e1c0565d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#103",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#104",
+      "hash": "sha256:327c71c14e8a3836a929983ece974bd22e123e4f566a767fc11120394abb7c73"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#105",
+      "hash": "sha256:93e071ac4be37ae3cb1ba2dcf812029f50416fe2f94ea3f78101bc06f8058b09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#106",
+      "hash": "sha256:cdc0bdfc4d66130c6d6e245d181961c348abf2452fe0a9fea7cabfe5889390bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#107",
+      "hash": "sha256:ba6b8e157b815b1956db61d5df419d9e112341134545b63f9856015b034fdec9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#108",
+      "hash": "sha256:792e749e28b9437d011bff9b8df34c12867e1ef5216bd777119866c4e89476eb"
     },
     {
       "content": "blocks",

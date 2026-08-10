@@ -48,6 +48,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md@authored | docs/records/OD-LEDGER-013-territory-is-paths-and-a-pattern-is-refused-where-it-is-authored.md | authored | 37 | 12 | sha256:5f21272705557881d9d73abe392ba0fc106a8185353907cc918aa75c666879be |
 | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md@authored | docs/records/OD-LEDGER-015-the-three-verbs-that-change-the-board-took-no-lock.md | authored | 42 | 10 | sha256:a66618d299913629165021f9bec2bd02f4afcb0714f8dd1149db99f5391d2e71 |
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md@authored | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md | authored | 39 | 10 | sha256:cbf273e93bd704aae1337dc210a950f7f95493a727a45aef6d66b0af422aa458 |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md@authored | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md | authored | 108 | 19 | sha256:37c30a7fb96b566768cb5b23df4bb92b037c769ce8f7eabc087b4dd91742d730 |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md | authored | 42 | 12 | sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
@@ -405,6 +406,25 @@ profile: domain-specification
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md#25 | authored | 2 | Blast Radius |
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md#34 | authored | 2 | What Was Re-Authored, And What Was Not |
 | docs/records/OD-LEDGER-016-a-record-identifier-and-the-file-it-names-are-one-subject.md#37 | authored | 2 | Status |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#1 | authored | 1 | Six work-ledger requirements bind this build, and the review that produced them prices each divergence |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#6 | authored | 2 | What Was Read, And The Document That Changes The Answers |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#12 | authored | 2 | All Six Bind, And That Is Settled Before The Individual Verdicts |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#17 | authored | 2 | WORK-LEDGER-003 — Met |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#27 | authored | 2 | WORK-LEDGER-005 — Diverges by one cause, and the cause is declined |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#36 | authored | 3 | The nearest thing this build has is not a blocker |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#39 | authored | 3 | The decision, and what would reverse it |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#44 | authored | 2 | WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#48 | authored | 3 | What the corpus wanted `priority` for |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#53 | authored | 3 | The price, measured |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#57 | authored | 2 | WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#66 | authored | 2 | WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#70 | authored | 3 | The review's own numbers on it |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#76 | authored | 3 | Why it is deferred rather than built |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#81 | authored | 2 | WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#93 | authored | 2 | Summary Of The Six |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#96 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#103 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#1 | authored | 1 | A ledger commit publishes the board, and a transition is recorded on the item rather than in the message |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#6 | authored | 2 | What Was Measured |
@@ -11450,6 +11470,897 @@ changed is that a reservation now denotes the thing it was always meant to denot
 There is an irony here and it is only worth a sentence: the registration files are named by
 identifier too, so this record is registered by `records/OD-LEDGER-016.record` — which is a
 real path, resolves, and needs none of this, because there the identifier *is* the filename.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#1
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence · hash: sha256:71a55ab92f52ce2e507fdbf327fe6405a70eaebfad211350ea66f001fbf6c074*
+
+# Six work-ledger requirements bind this build, and the review that produced them prices each divergence
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#2
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#3
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / Question · hash: sha256:170bf0308d1fd73fee6c9f7e0ea8faa40c46a7eabc62c0351b55ed5ab30b1a61*
+
+`WORK-LEDGER-001` through `WORK-LEDGER-006` are `status: normative`,
+`authority: canonical-normative-record`, `maturity: accepted`, in
+`volume-12.10-4-2-work-ledger-verification-and-decomposition`. They govern the work ledger.
+This repository has a work ledger, `OD-TRACE-001` found three of the six diverging by a
+single element each, and `OD-TRACE-002` then found that two of those divergences **cannot be
+entered in the assessment registry at all** until a record says why — a `Diverges` entry with
+no record is refused by the reader, which is `OD-TRACE-001`'s rule enforced rather than
+restated.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#4
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / Question · hash: sha256:f145245a7a8089fa05b78b5b6491525fb4e74e217261637df28577e28f0e3b03*
+
+So the question is not whether to notice. It is which of the six bind, which are met, and for
+each one that is not met, what the gap costs and what would make deferring it wrong.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#5
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / Question · hash: sha256:115fbd2da98e6c31cce4d1c376529903ac710212395efe6a9809c87468e55f83*
+
+`P10-LEDGER-CORPUS`'s `done_when` refuses a blanket answer, and it is right to: `003` is
+already satisfied and `002` has no counterpart in the schema at all, so one verdict covering
+all six would be a verdict about none of them.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#6
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Was Read, And The Document That Changes The Answers · hash: sha256:6e3fcf34c67a13bd5b365fa57f4f865da5c456795308102d179f8bc3a7394043*
+
+## What Was Read, And The Document That Changes The Answers
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#7
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Was Read, And The Document That Changes The Answers · hash: sha256:c74a695b844ef995866ddac1ca9c777084dca0a06e3ca263d312a14ac1e6b615*
+
+The six requirement artifacts under
+`C:/Users/kmett/source/repos/kevinmettias/code-standards/docs/nomos-spec-internal-artifacts/01_authoring/artifacts/requirements/`,
+each restated verbatim in `01_authoring/markdown_volumes/12-12-roadmap-quality-decisions-and-traceability/index.md`
+at line 128 and following.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#8
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Was Read, And The Document That Changes The Answers · hash: sha256:ecf49de0a548b6c0de2db9b729958f4ade9534f6224913961c1fd11064d7f364*
+
+And one document that was not read when `P10-LEDGER-CORPUS` was authored, which is where most
+of this record comes from: **`00_overview/WORK_LEDGER_REVIEW.md`, 182 lines.** It is the review
+that produced all six requirements, and it names its own subject on line 3:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#9
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Was Read, And The Document That Changes The Answers · hash: sha256:bfa0e1d9cb2b5659ecedd2781e3cfac942d21a4bf07dedd6adbc8bcc60fcf745*
+
+> Source reviewed: `docs/nomos-spec-internal-artifacts/01_authoring/work_ledger/tasks/`
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#10
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Was Read, And The Document That Changes The Answers · hash: sha256:b28a9e285a6b5a8f129ee995f3dfd4c5d89e4bceadede828d543653e55d4b959*
+
+That directory exists in the corpus and holds **216 task files** today. Its schema is
+`nomos.work-ledger.task.v1`; `TASK-0001` carries `"work_item_id": "F3"`, `"priority": 2`,
+`"state": "done"`, a `territory` array of globs, `depends_on`, `blocks`, and a
+`verified.command`. A Go tool — `go run ./tools/work-ledger` — is its write path.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#11
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Was Read, And The Document That Changes The Answers · hash: sha256:11ecbe7b71e1abe7d4dc631d6fa8e024241e87aa4bb8898641498b04e49428b3*
+
+**This matters for every verdict below.** The six requirements are not abstract statements
+about work ledgers in general. They are a review of *this product's own previous work ledger*,
+written by somebody who had parsed 182 items of it and counted what the model actually
+delivered. Every one of the six has a measured origin in that document, and four of them come
+with the review's own numbers on how well the reviewed ledger honoured its own rule.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#12
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / All Six Bind, And That Is Settled Before The Individual Verdicts · hash: sha256:ad0dd7f53b42ab574cbde46b6deb4cdd6f401dd103e3227f9afe99e07ded2df0*
+
+## All Six Bind, And That Is Settled Before The Individual Verdicts
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#13
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / All Six Bind, And That Is Settled Before The Individual Verdicts · hash: sha256:01de3b5fb11f5c5ea6241b9b216a00c1b5e03d3df98206721de6a2ec7bcbd53b*
+
+`OD-PACKAGE-001`'s shape is available here and is deliberately **not** used. That record could
+read `ARCH-001` as not reaching this build, because "independently versioned is a property of a
+package and this build has no package" — the requirement's subject was absent.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#14
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / All Six Bind, And That Is Settled Before The Individual Verdicts · hash: sha256:3b4062d7e0d72314cefabc13c8af25e4b59f41ff7d21e7466c561eec5b518300*
+
+No such reading is available for any of these six. The reviewed artifact is this product's
+work ledger and `work/ledger.json` is this product's work ledger; the second is a Rust rebuild
+of the subsystem the first is a Go implementation of. The subject is present, and it is the
+same subject.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#15
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / All Six Bind, And That Is Settled Before The Individual Verdicts · hash: sha256:65cad1eb0b5ebe219430973e6d9f78e06cbbfffbc99af6dc38aea75bb909fbe0*
+
+So **"does not reach this build" is refused as a verdict for all six**, and it is refused here,
+once, rather than being separately declined six times below. What remains per requirement is:
+met, or diverging with a price.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#16
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / All Six Bind, And That Is Settled Before The Individual Verdicts · hash: sha256:fb57746b66b5bf66c2a1a351e64edb0096e52fc86008535a4e6dba603a9c1c71*
+
+Stated plainly because it is the load-bearing move in this record and the cheapest thing here
+to get wrong in the convenient direction.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#17
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:9bb3d302ea773b4212f3338bc0f57a18564a2024df7213ee1ed195eb27f97cdb*
+
+## WORK-LEDGER-003 — Met
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#18
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:ac8a40dbd92125df3cbbcac6559fe3b34b2a62d8dae20969449a3b5c6f2af9fc*
+
+> A non-declined item should declare a verification predicate before work starts. Prose-only
+> `done_when` text is planning guidance, not executable completion evidence.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#19
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:3810eb33f593e19feb605efdbe202be56c3e2f3fa6734d5cbf36d4767cc48958*
+
+The review's origin for it, from Testing Status Lessons:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#20
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:23212170afded95aca40f124b3a2c3fc457536a0a859208f9be672e2354261ad*
+
+> Open work needs predicates earlier. `done_when` is useful prose, but the sweep identified 52
+> open items with no machine-executable predicate.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#21
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:b4218d55937e6ecb5a0ef6fe0b12d6856f2af5ad1ddda3a15f6ac9edb361e8ec*
+
+and, from Recommended Next Changes:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#22
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:fc491571f0da32812c4db261868049a3211c5ae9837a4f9801a973413fe401c1*
+
+> Require `verification.command` or `verified.self_reported_reason` when new non-declined items
+> are created.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#23
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:68aeab19298ed046d41dd5f633114295fb2fedbe3965c61d0083cfd29ae34719*
+
+Measured on this board, at the commit this record lands on: **101 items, 0 without a
+verification predicate.** Not 0 among the open ones — 0 among all of them. The reviewed ledger
+had 52 of 182 open items with no predicate; this one has none.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#24
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:3581ee8aad666e07321cf228a804601d32174bed9cf4cebfecd346c860c24a4e*
+
+The distinction the requirement's second sentence draws is also structural here rather than
+observed. `VerificationPredicate`'s own doc comment says it "is also a *predicate*, not a
+description. `done_when` on the item is prose for a human", `LedgerItem::done_when` says
+"Paired with — never a substitute for — `verification`", and `Is_Runnable` refuses an empty
+argv as "a field somebody filled in to satisfy a schema". `work finish` keeps *no predicate at
+all* as its own answer, distinct from the predicate failing.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#25
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:1f7681c5d4d601d4b72d4a6a4e8eeb4d10eb969e201539bac9a5012f4db0a51a*
+
+`Met`, and satisfied more strongly than a `should` asks for.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#26
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-003 — Met · hash: sha256:9619d23a6758832b7096cf9d0f86d72f819acfcfe38cb0e378395e35db98e9c1*
+
+**What is not claimed.** Nothing *enforces* the predicate at `add` time — `verification` is
+`Option`, and `work add` accepts an item with no `--` clause. The 0 is a property of how this
+board has been authored, not a guard. That is the honest limit, and it is not upgraded to a
+guard here: `WORK-LEDGER-003` is a `should`, the review's own remedy was to *require* it at
+creation, and turning `Option` into a required field is a schema change this item's `done_when`
+sends to a follow-on.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#27
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:815a833527a07a38f5fb6082c21acec737cd88ea005a40a4a9a10f843003716a*
+
+## WORK-LEDGER-005 — Diverges by one cause, and the cause is declined
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#28
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:c7d2d380eaecbdc545fc39d23d1acd33e3d98cd6680577f15428fbb0750c2b8d*
+
+> Blocked work shall classify the blocker as dependency, decision, territory mismatch,
+> external resource, needs-split, stale probe artifact, or other typed cause rather than
+> relying only on prose notes.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#29
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:10f69f0bbee13813b5d086941c93de7f8768f9e461bb4dbafa1385e2a7aa370b*
+
+`Blocker` in `crates/substrate/nomos-ledger/src/item.rs` declares six, in exactly that order,
+with matching semantics. `StaleProbeArtifact` is absent, and before this record the string
+"stale probe" appeared in this repository only inside `P10-LEDGER-CORPUS`'s own `why`.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#30
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:fd882d70d3bcfcc26e63648cb7de1f6772f217ab8f2f1f78419b7ca1221e5f21*
+
+`P10-LEDGER-CORPUS` names this the strongest evidence in the item and the cheapest thing to get
+wrong. It is answered from the sentence the requirement was derived from —
+`WORK_LEDGER_REVIEW.md`, line 71, quoted in full:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#31
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:2e73da4522ad294ec17f606f7a3ed6aecfbe9dbb06ba9d3f0e70243a006558f6*
+
+> `blocked` currently covers dependencies, decisions, territory mismatches, stale probe
+> artifacts, and external resource limits. Those should be typed as `blocked_by_item`,
+> `blocked_by_decision`, `blocked_by_territory`, `blocked_by_external`, `needs_split`, or
+> `remove_probe_artifact`.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#32
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:99c93e28e644cf7386b4fd310cdca8ca2f9f64e62890ed593deeb2a4239c2f58*
+
+**The seven causes are an inventory, not a design.** The first clause enumerates what the
+reviewed ledger's free-prose `blocked` field was *observed to already contain* across 31
+blocked items. The requirement types that inventory. Five of the causes are generic — any board
+can have a dependency, a decision, a territory mismatch, an external resource, an item too
+large to claim. "Stale probe artifact" is the one that names a specific artifact class, because
+the reviewed ledger had blocked items waiting on one.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#33
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:e99a774fb786249b6e1d2ea238ed13257101a3fd42fb19c4d67191253bdaa386*
+
+Two further facts from the same sentence:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#34
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:156a68b9256edce368cef6434793bbb8b6e7290540df10b36749b2938a03ee93*
+
+- The suggested type name is **`remove_probe_artifact`** — an *action*, imperative, unlike the
+  five `blocked_by_*` siblings. The reviewer's own naming treats it as a chore to discharge
+  rather than a state to wait in.
+- `stale probe artifact` occurs **nowhere else in the entire corpus.** Measured across the v14
+  artifact tree, every domain volume, the machine catalog, the retrieval chunks and the
+  published HTML: every occurrence is a restatement of `WORK-LEDGER-005` itself or this one
+  review line. No requirement defines a probe artifact, no volume describes one, and no other
+  requirement under `01_authoring/artifacts/requirements/` contains the word "probe" at all.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#35
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined · hash: sha256:470c83e55a33583dd1c0cab1e50fb51a1a8347df89d8f92ec7208c74dd94c19e*
+
+So the cause has no definition in the corpus outside the ledger whose prose it was lifted from.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#36
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The nearest thing this build has is not a blocker · hash: sha256:6836d563f4ab965cbc3bc1b51a0c4c2a41eeb7e7c33a481559f6d1ed38c160f6*
+
+### The nearest thing this build has is not a blocker
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#37
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The nearest thing this build has is not a blocker · hash: sha256:39d2b8bb4bcaabeafb9849ab8189c8d4cefb4e981821458457d5ee4cb907d82e*
+
+The honest test is not "does the word appear here" but "can an item on this board be blocked by
+a stale generated artifact". The candidate is real and worth naming rather than waving past: a
+committed projection going stale. `diagrams/relations.mmd` is derived, a record commit makes it
+stale, and `P10-DIAGRAM-OWED` existed because the gate was red for eleven commits over exactly
+that.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#38
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The nearest thing this build has is not a blocker · hash: sha256:294a8ab02b56216bc0ef0374d0d2a68f29ddb2ac4860f4e50b39ba316fd11dd0*
+
+**It is still not a `Blocker`, and the reason is structural rather than terminological.**
+`Blocker`'s doc comment is "Why an item cannot be worked on", and the prototype's lesson
+recorded there is that a typed cause exists so a query can answer "what is waiting on a person
+versus waiting on a dependency". Every one of the six declared causes names something *outside
+the holder's own hands*. A stale projection is inside them: `OD-GATE-005` decision 3 settles
+that the obligation is to render from the record set your commit publishes, in a tree the
+author constructs rather than waits for. It never stops an item being worked, it stops a commit
+being clean, and the remedy needs no second party. Recording it as a blocker would put a chore
+into the field that answers "who am I waiting for", which is the queryability the requirement
+exists to buy.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#39
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The decision, and what would reverse it · hash: sha256:01ac3627f817903159cf5b60f65eed7447a4e74840a062b06861b4ebb4b9842d*
+
+### The decision, and what would reverse it
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#40
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The decision, and what would reverse it · hash: sha256:766d893ab8ccbe803c693e9b025b0e6d0ea0cd54210a4fec5f952ed23925ee97*
+
+**`StaleProbeArtifact` is declined, not missing.** `Blocker` declares six of
+`WORK-LEDGER-005`'s seven typed causes deliberately.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#41
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The decision, and what would reverse it · hash: sha256:3b3f3182db13951136a5a73fb2fe50ccdd11995ddce45bd75bec50ba8007536c*
+
+`WORK-LEDGER-005` is not violated by the decline, and this is the reason it is a decline rather
+than a deferral. The requirement's obligation is *type the blocker rather than relying only on
+prose notes*, and its own list ends "**or other typed cause**". `Blocker::Other { detail }` is
+declared, so every blocker this build can have is expressible as a typed cause. What a missing
+named variant costs is queryability for that one cause — and a cause with no referent here is a
+query nobody can ask.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#42
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The decision, and what would reverse it · hash: sha256:af60720c31b3aa421e4cce14505beb1aec4b856802dea82df87da760bda11b12*
+
+**What makes this wrong:** an item on this board having to wait on *somebody else* regenerating
+a derived artifact — a corpus re-ingest, a bundle re-export, a projection only another holder's
+territory can re-render. That is a blocker in the sense `Blocker` means, it is a stale artifact,
+and the variant is owed the day it happens. Until then, `Other { detail }` carries it and the
+detail says what.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#43
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-005 — Diverges by one cause, and the cause is declined / The decision, and what would reverse it · hash: sha256:6c10c977818121ccb7b472339bac033e4e1e63dc60e74cdeb25b4aee5ca6d3e8*
+
+**What this is not:** it is not a claim that six of seven is the right count in general, and not
+a licence to drop a seventh member of some other corpus enumeration. `OD-CONTRACTS-002` reached
+the opposite verdict on the structurally identical finding — `Applicability` missing one of
+`CHK-003`'s seven reporting categories — and built the seventh, because *that* referent existed.
+Two of `OD-TRACE-001`'s three single-element divergences were derived the same way and are
+being answered in opposite directions, on the referent and nothing else.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#44
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking · hash: sha256:c84a40fe98e45563d04715c3e723b0c377d5f441b823ef95b46d08665a48bc0a*
+
+## WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#45
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking · hash: sha256:6ebf597d1ed1cf07d5642441c419621c25e7e089ac4bcd958f30a6a8c9fd2d93*
+
+> A work-ledger item shall be addressable as an individual artifact with stable id, title,
+> state, priority, rationale, territory, dependencies, blockers, claim lease, completion
+> condition, verification predicate, and recorded completion evidence.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#46
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking · hash: sha256:3184af17828205b3d983406f920bf3f239a0c4f8ebf50e9251b8e3cc910e5121*
+
+`LedgerItem` carries `id`, `title`, `state`, `why`, `territory`, `depends_on`, `blocked`,
+`claim` (which holds `acquired_at` and `lease_expires_at`), `done_when`, `verification` and
+`verified`. `priority` is absent, and the string appears nowhere in `nomos-ledger` or
+`nomos-cli`.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#47
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking · hash: sha256:8ce8f73a12e86ee0b0cda43f9948dc1c4b1f02d87176d2befd5b9622361e8754*
+
+**One correction to `OD-TRACE-001`, which recorded "twelve of `WORK-LEDGER-001`'s thirteen
+fields".** The statement's list is **twelve** comma-delimited elements, not thirteen; counted
+against them, `LedgerItem` carries eleven. Thirteen is reachable only by reading "claim lease"
+as two addressable things, which is defensible — `Claim` does carry both the claim and its
+expiry — and then twelve are carried. Either segmentation gives the same divergence, **exactly
+one element, and it is `priority`**, which is why the count did not mislead anyone. It is
+corrected here because this record is what the assessment registry will cite, and a cited count
+that cannot be reproduced from the sentence sends its next reader looking for a thirteenth noun
+that is not there.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#48
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / What the corpus wanted `priority` for · hash: sha256:fda5b36ffb593975c83f5ba8c520e687afc4bb1694c03d1ccd19e2e7854bc3e3*
+
+### What the corpus wanted `priority` for
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#49
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / What the corpus wanted `priority` for · hash: sha256:d167e795e60bae3c0e46abd5a38debab898a925472e0bef110d544915b974030*
+
+Not addressability. From the review's Target Coordination Model:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#50
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / What the corpus wanted `priority` for · hash: sha256:a888854a6989f40c88260c8c6464d28c0320812cb5ddc70b22e2d8ba34364434*
+
+> Dependency selection should operate on a graph. A task is ready only when its prerequisites
+> are complete, its required tools are available, and its expected impact has no exclusive
+> conflict with live work. **Ranking can start deterministic: priority first, then number of
+> downstream descendants unblocked, then conflict risk.**
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#51
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / What the corpus wanted `priority` for · hash: sha256:11bd5e206803b381df948d62c64daa4a8cbc2dcc7b3481abc88f4a1d60fff841*
+
+`priority` is the **first of three ranking keys** for automated selection over a 182-item graph.
+The other two are *derivable from what this build already has*: "downstream descendants
+unblocked" is a traversal of `depends_on`, and "conflict risk" is a function of `Territory`,
+which this ledger already computes exactly for exclusion.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#52
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / What the corpus wanted `priority` for · hash: sha256:eec132a5b34471e4409e3f91603c1729228c0da5ca82c02902a8c96bc32372b2*
+
+That reframes the gap. Adding a `priority` field alone would satisfy the letter of
+`WORK-LEDGER-001` while buying **the weakest third** of what the corpus wanted the field for —
+and it is the third that is a number somebody types and nobody maintains, against two that are
+computed and cannot go stale.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#53
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / The price, measured · hash: sha256:cca1ae62a0cf47e411a0ac90a97a7d58a7cd261fcefa09e374a8a0aaf19d389d*
+
+### The price, measured
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#54
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / The price, measured · hash: sha256:370ef0533d8294f9ce4f242804a5bba0d420e27963d4c966f1f247e4c86cb15e*
+
+101 items: 88 `Done`, 9 `Ready`, 3 `Claimed`, 1 `Declined`. `nomos work list` prints all 101 in
+file order with no ranking, and this is the surface an agent picks work from. So the cost is
+paid in two places. An agent choosing an item reads titles and `why` prose to guess importance,
+and the ordering that results is whatever the file happens to be in. And the listing is a
+context cost on every session that reads the board — the same concern the review names for its
+own ledger: "the task-record set is large enough that agents should usually read generated
+per-item, state, feature, testing, or summary projections instead of loading all task files".
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#55
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / The price, measured · hash: sha256:1d6d1f9c011d98ca8e42ce74e6b5ea3ee18a508753702ba171154f989b0d7174*
+
+**Deferred.** `P10-LEDGER-CORPUS` is explicit that this is not closed by adding fields, and the
+follow-on it sends this to is therefore **ranking, of which `priority` is one key** — not a bare
+field. A `priority` integer landed on its own would be the third of three that ages worst,
+landed first, with nothing computing the two that do not.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#56
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-001 — Diverges by `priority`, deferred, and the follow-on is ranking / The price, measured · hash: sha256:678472b6233c4101bbe1eb27e09e4541a72c05ac652ad2d8272f0778667b42ab*
+
+**What makes the deferral wrong:** the board acquiring enough concurrent holders that two agents
+routinely pick the same next item, or the `Ready` count growing to where reading the titles is no
+longer how anyone chooses. Nine `Ready` items is browsable; ninety is not.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#57
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:90632d23c3442227e6627e287a8b89b93adb4d7c941c849676c2df680e1ef27d*
+
+## WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#58
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:78c8d9a0281d6c01b89533ed023fff2df77e762eb203be20c257160437598408*
+
+> Completed work shall distinguish recorded verification at completion time from later
+> reverification sweeps. A failed or timed-out sweep shall not erase the original completion
+> evidence, but it shall create a visible regression or verification-gap record.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#59
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:33d245cd69442b351fff067fcb73dc4b2cf624db8c189bcb75e83691a454aafe*
+
+Its origin is a specific incident, from the review's Verified Findings:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#60
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:68225960f01b83e86710a8f33e71b1fe53e1c30185956c93fdc82a06bc92331e*
+
+> `go run ./tools/work-ledger -verify-all` was attempted during this migration review and
+> exceeded the 120 second review budget. The done records are therefore recorded as previously
+> verified by command, not freshly reverified by this migration pass.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#61
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:a2102a0a899b4ad7ab0bc1653f468f8cc644cc8aba075b0a9b767be844ef83e7*
+
+and the remedy, from Testing Status Lessons:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#62
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:12e30267689ebec22d5ddd0ae020f7ae370884a51bff899ef53eff58060dec94*
+
+> Verification needs two timestamps or statuses: `recorded verified` for the command run at
+> close time, and `reverified` for later regression sweeps.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#63
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:0e2443bf9f6077fa654e030a99fcd9753f46406d627f35d235f7959f6fd0541d*
+
+**This build has no reverification sweep.** Nothing re-runs a `Done` item's predicate, so
+nothing today can erase completion evidence, and the requirement's obligation has no occasion
+to be discharged or breached. That is why the verdict is not `Diverges`: there is no second
+verification to fail to distinguish from the first.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#64
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:afbdaf57d81b259dc8d6ed9667d8bbe2c185ac9ba5973e309b2bcdeccb1bcd58*
+
+**But `LedgerItem::verified` is a single `Option<VerificationRecord>`, and that is the shape
+`OD-LEDGER-006` already named as a defect one scale down.** That record made `abandoned` a list
+because "an item abandoned twice was abandoned twice, and keeping only the latest discards the
+earlier reason"; `displaced` is a list for the same stated reason. A sweep writing `verified`
+would overwrite the record written at completion — precisely the loss `WORK-LEDGER-004`'s second
+sentence forbids, produced by a field shape rather than by a mistake in the sweep.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#65
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-004 — Does not bind yet, and the schema is already shaped to violate it · hash: sha256:219fd75f17d068982047cd96d47b45e7854b87853e6b2331743ec65eac5145a4*
+
+**Decision: the requirement binds the sweep, and the constraint is recorded now rather than
+discovered then.** Whoever builds a reverification sweep must make the completion record and
+the sweep record distinct before running one — `verified` becoming a list, or a sibling field,
+which is that item's decision and not this one's. A sweep built over the current `Option` is a
+defect this record has already described, and the point of writing it down before the sweep
+exists is that the cheap moment is now.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#66
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs · hash: sha256:e5f0f36789ef12e2cf6f53379a1ed3430d2e7f752430079aa721a88ecf3a7739*
+
+## WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#67
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs · hash: sha256:7867529ae0f3fcefd817fcfa0b39a062460832c1658652b5f95885ec8e2aa039*
+
+> Feature work shall be decomposed into implementation, unit-test, integration-test, and
+> e2e-test dimensions. A feature is complete only when every dimension is done or explicitly
+> declined with a reason.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#68
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs · hash: sha256:408e268b50fba7a90ab6f5fdeaf0f829648ca188acc4ddea4ce4f676dc599844*
+
+There is no counterpart in the schema at all. `LedgerItem` has no `feature` and no dimension
+vocabulary.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#69
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs · hash: sha256:3c667750873b0aea69d8675bf1faf8d3724961caa50b7dee6d9d1b902977c429*
+
+The reviewed ledger's shape, measured: a task record carries a `feature` field and a `dimension`
+field, and the four dimensions are **four separate task files**, not four fields on one —
+`TASK-0077--W2-ledger-testing-implementation.md` through
+`TASK-0080--W2-ledger-testing-e2e-tests.md`, with `"dimension": "implementation"`,
+`"unit-tests"`, `"integration-tests"`, `"e2e-tests"`. One of them records
+`"done_when": "nothing: this dimension was declined"`.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#70
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / The review's own numbers on it · hash: sha256:3b7bc8dbd6312129f3578f409e9e5e2a1de16bcb932646dc2a7ee5643d0d5742*
+
+### The review's own numbers on it
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#71
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / The review's own numbers on it · hash: sha256:923ffe08d5da1cc3e1ebc84562df880868c25e1f3619e7f8015cfe1f15b49370*
+
+| Measure, from `WORK_LEDGER_REVIEW.md` | Count |
+|---|---:|
+| Items | 182 |
+| Items with a declared feature dimension | 4 |
+| Features represented by four dimensions | 1 |
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#72
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / The review's own numbers on it · hash: sha256:ea221e686f27cf8626cbd1805cfa86b42fdeaae80dd2d8dd98d822d9278f9557*
+
+> Testing status is present but underused. Only one feature uses the four-dimension model.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#73
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / The review's own numbers on it · hash: sha256:21fff337d942db692e6d0593a979413bc6bd4f0bb8609eaa7b6640a0bdd51668*
+
+One feature in 182 items, and that feature is the ledger's own testing — the review names it
+`W2-ledger-testing`, and its own `why` in the corpus says "dogfooding the four-dimension model
+on the ledger itself". Its outcome: "implementation and unit-test dimensions are explicitly
+declined, while integration and e2e dimensions are done."
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#74
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / The review's own numbers on it · hash: sha256:50239b6d8163d4870c9df4859e70417b34e37ec460d1c45526095f2bb14fa003*
+
+This is recorded because it is the strongest evidence available about what the requirement costs
+to honour, and it points the uncomfortable way: the ledger that *generated* this requirement
+honoured it once, on itself, and the one use spent two of four dimensions on declining them.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#75
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / The review's own numbers on it · hash: sha256:6123723420b7146e0c9d9937b16499010b3fa84729a43cd85e33fd0204df0183*
+
+**It does not make the requirement non-binding.** A normative accepted requirement is not
+weakened by its author's own build being behind it — `D-132` puts the corpus above the plan, and
+nothing in this record's authority chain lets adoption statistics outrank a `shall`.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#76
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / Why it is deferred rather than built · hash: sha256:bfa4497e275768ad40b71a891e41339caf76c8c4b500e2cea7cbbb6643b5a89d*
+
+### Why it is deferred rather than built
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#77
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / Why it is deferred rather than built · hash: sha256:3b49d9e055189c50e8bd467fad17b60762f692d07f87c9a82187b22b40e12eab*
+
+The unit differs. This ledger decomposes by **territory**, and that is load-bearing rather than
+stylistic: territory is what mutual exclusion can be proven on, and `OD-LEDGER-001` records that
+the whole point of a claim is keeping two authors out of one file. A feature with four testing
+dimensions cuts *across* territory — the four `W2-ledger-testing` task files above would be four
+items whose territories overlap by construction, which on this board is a set of claims that
+refuse each other. Adopting `WORK-LEDGER-002`'s decomposition is therefore not a field addition;
+it is a second decomposition axis alongside the one exclusion depends on.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#78
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / Why it is deferred rather than built · hash: sha256:4b079e03510fde62817040e7b9aa5c33c95f29305f0cf37b122694b4f5d3dd4d*
+
+The requirement's *substance* — "the ledger's strongest rule is that implementation-only
+completion is not feature completion" — is met by a different mechanism. An item cannot reach
+`Done` by assertion: `work finish` runs the derived gate step and the item's own predicate and
+records `Done` only if both exit zero, and `GateOutcome` exists so that an item finished before
+the gate was derived cannot read as though it had been checked.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#79
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / Why it is deferred rather than built · hash: sha256:003feee72b834ad5a5dbaf2c312b286704ca6146625f8c53c064e663962ae0a2*
+
+**The price, stated rather than smoothed:** nothing on this board records that integration or
+e2e coverage was *considered*. An item whose predicate is a unit-test invocation and one whose
+predicate genuinely reaches an end-to-end path are indistinguishable from the outside, and a
+dimension nobody thought about reads exactly like one deliberately declined. That is the same
+class of defect as `OD-GATE-001`'s skipped test reporting `ok` and `P9-SKIP` before it, and this
+record does not pretend otherwise.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#80
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-002 — Diverges wholly, deferred, and it is the ledger's unit of decomposition that differs / Why it is deferred rather than built · hash: sha256:a51d7f508bf4a07c796cf5467c12430daca038da7170bfef9a47b33af28475d5*
+
+**What makes the deferral wrong:** a `feature` grouping arriving on this board for any other
+reason, or an item finishing `Done` whose predicate is later found not to have reached the layer
+its `done_when` claimed. Either one makes the four dimensions cheap to add and the absence
+expensive to keep.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#81
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:708bfbd1e85a936ce05dd68827e89f345c56a61e38106b4080e126fb32d9a890*
+
+## WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#82
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:3b931ae0bfe7cf4d4bed031255f0606d1cb89c9bd24519daef815e716e4aa2e7*
+
+> The operational ledger may remain a locked write surface, but the suite shall expose generated
+> projections by item, state, feature, and testing status for review and agent context.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#83
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:8bd68df38b098f4efa6ba696bd1aeefae36f750a4c49886328668d08f7630989*
+
+The first clause is honoured. `work/ledger.json` is a locked write surface — `OD-LEDGER-015`
+put the lock on the three verbs that change the board after finding they read and wrote without
+it.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#84
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:add62dcca33116b44e5ee5df57913e51e23eac1329af776ff4fe64a2c0150868*
+
+The second is absent. **Eighteen projection profiles exist** — `api-documentation`,
+`architecture-document`, `contract-yaml`, `diagram-set`, `domain-specification`,
+`feature-design`, `github-markdown`, `html-site`, `implementation-context-pack`,
+`mcp-resource`, `offline-bundle`, `release-specification`, `requirement-catalog`,
+`subject-contract`, `subject-dossier`, `subject-model`, `subject-report`,
+`traceability-matrix` — and every one of them projects the specification store. None reads
+`work/ledger.json`. The string does not occur anywhere under `crates/spec/`.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#85
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:c7bcc817df927a8e1f0d78a7dc001a6b9e27b0ee092ab9e0d601ab1905798066*
+
+The requirement's purpose, from the review, is agent context rather than review convenience:
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#86
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:a694739c9d8f79ef351297d1177f1eb181295a31d369e08c36a28592aa72b268*
+
+> The task-record set is large enough that agents should usually read generated per-item, state,
+> feature, testing, or summary projections instead of loading all task files.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#87
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:7e120954cf5f5fddb9cfbec12fa4468d6476c23fba8e2c04ac3f37b635ab2a0e*
+
+> Generated item JSON gives token-efficient access without creating a second source of progress
+> truth.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#88
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:b8ba388315dd882c5ee73cfafbdec542cc37dadab1289902be7bfb1690b1fa7b*
+
+**The four axes do not have one verdict, and that is the finding.**
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#89
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:757fffd63579d8224232e9bbab07b299dfcfd68bce4626a9aaef8a146487a147*
+
+`item` and `state` are reachable now. `nomos work list` already answers both, and
+`P10-SUBJECT-PROJECTIONS` landed the ability to point a profile at one subject. What is missing
+is that the ledger is not a projection *subject*: the profile engine renders the specification
+store, and `work/ledger.json` is not in it. That is a real architectural question — a second
+substrate for a projection subject — and it is a follow-on item rather than a field.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#90
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:dc34bd85942b7e47ccffe366d81cb48518dd161d95eb57f228494d81e35ccad8*
+
+`feature` and `testing status` are **not reachable, and they fall with `WORK-LEDGER-002`.** A
+projection by feature presupposes a feature, and a projection by testing status presupposes the
+four dimensions. Deferring `002` defers exactly half of `006`, and the two must move together or
+not at all.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#91
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:11dbff61873b37b97ad91b4dda5890995acdce738841c923e1a408813fbe6e01*
+
+**Deferred, split.** The cost of the `item`/`state` half is the one this record already priced
+under `WORK-LEDGER-001`: every session that reads the board reads all 101 items, because there
+is no generated view narrower than the whole listing. The cost of the other half is
+`WORK-LEDGER-002`'s cost, counted once.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#92
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / WORK-LEDGER-006 — Diverges, and it splits: two axes are reachable, two fall behind 002 · hash: sha256:988b4c71336cbd4f00d02495e3e2f44b5b841ac3b240d0b76dbea041ac55df00*
+
+**What makes the deferral wrong:** the board reaching a size where `work list` is itself the
+context problem the review describes. At 101 items it is the largest single artifact a session
+reads to orient, and it grows monotonically because `Done` items are never removed.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#93
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / Summary Of The Six · hash: sha256:99925736f3e3e264da6861b55a56e1bc3dd7648310abb357c87397ce522ba49e*
+
+## Summary Of The Six
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#94
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / Summary Of The Six · hash: sha256:47b9aa9520f3d8af8c0ab1e92c58fde00373e23b064f9c42f9212be6dbb00f5c*
+
+| Requirement | Verdict | Where it stands |
+|---|---|---|
+| `WORK-LEDGER-001` | Diverges by one element | `priority` absent. Deferred; the follow-on is ranking, of which priority is the weakest of three keys and the only one not already derivable. |
+| `WORK-LEDGER-002` | Diverges wholly | No feature, no dimensions. Deferred: the decomposition axis conflicts with territory, which exclusion depends on. Substance met by predicate plus derived gate step; the cost is that a dimension nobody considered reads as one declined. |
+| `WORK-LEDGER-003` | **Met** | 0 of 101 items without a predicate, against the reviewed ledger's 52 of 182 open. Not enforced at `add` time, and that is stated rather than claimed. |
+| `WORK-LEDGER-004` | Does not bind yet | No sweep exists. The constraint on building one is recorded now: `verified` must stop being a single `Option` before anything re-runs a predicate. |
+| `WORK-LEDGER-005` | Diverges by one cause | `StaleProbeArtifact` **declined**, referent absent, `Other` carries it, and the trigger that would reverse it is named. |
+| `WORK-LEDGER-006` | Diverges, split | Lock half honoured. `item`/`state` deferred behind the ledger becoming a projection subject; `feature`/`testing status` fall with `002`. |
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#95
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / Summary Of The Six · hash: sha256:cfec7591f3004856010fafefc7b4d1e2a157728dba7968f61b40f580004480dc*
+
+Six verdicts, five distinct. No blanket answer, which is what `P10-LEDGER-CORPUS` refused.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#96
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#97
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Holds It · hash: sha256:8a817bda3afae0fb256f0822a156f23aee6deb064de950e221c3625a55d4acb7*
+
+**`WORK-LEDGER-005`'s answer is at the site**, in `item.rs`'s test module, in the shape
+`OD-PACKAGE-002` used for `CORPUS_TAXONOMY` and for the reason `D-134` put a universe beside its
+mirror: the next reader of `Blocker` must not have to re-derive the comparison from a corpus that
+is not on their machine.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#98
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Holds It · hash: sha256:bda370b10c5a3ff4a19fabacdfb34143681c36b8e0fa34a1b40723689380fa0a*
+
+`CORPUS_CAUSES` transcribes `WORK-LEDGER-005`'s seven causes in the order the requirement names
+them, each paired with the `Blocker` variant that carries it — or `None` for the one declined
+above. A row is a claim about the corpus rather than a local preference, and its doc comment says
+so.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#99
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Holds It · hash: sha256:2116523f6ff4297bc08363fb93bcb3730694e3e5aae3dfff8c2a8e173f7e01ee*
+
+`Test_The_Declared_Causes_Should_Be_The_Corpus_Causes_Minus_The_Declined_One` walks the six
+declared variants, asserts each serializes as the name the table transcribes at the position the
+table gives it, and asserts the occupied positions are exactly the table's non-`None` rows. A
+relabelling, a reordering, a dropped variant and an added one all move it.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#100
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Holds It · hash: sha256:d687c397aa3004bd832b79ff1d0cf0a89530de05c9d4783e6f8e199478132505*
+
+`Test_The_One_Declined_Cause_Should_Be_The_Stale_Probe_Artifact` pins *which* row is empty, so
+the decline cannot be silently relocated to a different cause. A different row going empty is a
+different decision and needs a different record.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#101
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Holds It · hash: sha256:d4a056db670b7decc36f61a2c037807147377c0588c63377bf330e3ee2e0b06e*
+
+A seventh variant is held by the compiler rather than by an assertion. `Corpus_Position` is an
+exhaustive match, so adding `StaleProbeArtifact` — or anything else — makes the test module fail
+to build, beside the table and this record's identifier, rather than adding a cause the
+assertions would never visit. That is the mechanism, and its limit is the same one
+`OD-PACKAGE-002` stated: it forces the author to arrive at the table, and it cannot force them to
+argue honestly once there.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#102
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What Holds It · hash: sha256:d8333eb2eb76193db2cb30aec5f56211f29e2e31fdc89085d31ddae7e1c0565d*
+
+`LedgerItem`'s own doc comment names `priority` as the absent element and points here, so the
+`WORK-LEDGER-001` verdict is also readable at the type rather than only in this file.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#103
+
+*revision: authored · kind: heading · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#104
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What This Does Not Do · hash: sha256:327c71c14e8a3836a929983ece974bd22e123e4f566a767fc11120394abb7c73*
+
+**It adds no field and changes no schema.** `SCHEMA_VERSION` does not move and the item field
+count stays at 13. `P10-LEDGER-CORPUS` bounded this deliberately, and the reason is territorial
+as well as editorial: the exhaustive undeclared-key probe lives in
+`crates/substrate/nomos-ledger/tests/exclusion_holds.rs`, which open items already reserve.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#105
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What This Does Not Do · hash: sha256:93e071ac4be37ae3cb1ba2dcf812029f50416fe2f94ea3f78101bc06f8058b09*
+
+**It writes no assessment entry.** `tests/contract/requirements/` is `OD-TRACE-002`'s registry
+and is not in this item's territory. What this record supplies is the thing that registry is
+waiting for — `OD-TRACE-002` states that `WORK-LEDGER-001` and `WORK-LEDGER-005` "cannot be
+entered until `P10-LEDGER-CORPUS` writes the reasons" — so the two entries are now authorable and
+a follow-on item carries them. Until they land,
+`Test_Every_Divergence_Should_Name_A_Governing_Record` stays vacuous over the committed set, which
+`OD-TRACE-002` already recorded as its own consequence.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#106
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What This Does Not Do · hash: sha256:cdc0bdfc4d66130c6d6e245d181961c348abf2452fe0a9fea7cabfe5889390bb*
+
+**It does not re-verify the four requirements already assessed.** `EVID-001`, `CAP-002`,
+`CAP-003` and `CHK-003` are `OD-TRACE-001`'s and `OD-CONTRACTS-002`'s subjects and are untouched.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#107
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What This Does Not Do · hash: sha256:ba6b8e157b815b1956db61d5df419d9e112341134545b63f9856015b034fdec9*
+
+**It does not make a `Met` entry self-verifying.** `WORK-LEDGER-003`'s verdict rests on a count
+taken by hand against this board today. `OD-TRACE-001`'s semantic-drift limit applies unchanged:
+a `Met` whose site still exists and whose behaviour stopped satisfying the requirement reads
+exactly like one that did not.
+
+### docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md#108
+
+*revision: authored · kind: prose · heading: Six work-ledger requirements bind this build, and the review that produced them prices each divergence / What This Does Not Do · hash: sha256:792e749e28b9437d011bff9b8df34c12867e1ef5216bd777119866c4e89476eb*
+
+**It does not reach the other 357 requirements.** Six of 363 are answered, and `OD-TRACE-001`
+chose a floor over a count precisely so that this is a readable state rather than a failure.
 
 ### docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md#1
 
