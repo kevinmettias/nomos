@@ -6625,6 +6625,88 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-SELECTION-AUTHORITY",
+      "title": "Nothing computes what to work on next, so the choice is a model's and the board has already paid for it once",
+      "why": "Every ledger verb answers the same question. Claim, Renew, Release, Decline and Claim_Refusal all answer may I have this one, and none of them answers which one. The only thing shaped like selection is work list, and README says of it that the listing column is a snapshot and means nothing seconds later, which is a warning against using it for exactly this. So the choice of what to work on next is made by whichever model read the board, and two sessions reading the same board can differ with nothing recording that they did.\n\nThe cost is on this board with a receipt rather than being argued from first principles. P10-DECLINE-VERB's rationale records that one subject became three items - P10-REQUIRABLE-DECLARED, P10-REQUIRABLE-FLOOR which delivered the work, and P10-REQUIRABLE-SET which redid work already landed - and that a session spent its run duplicating what was already committed. The reasons that would have prevented it existed, as two abandonments on the item, and were behind work show while the state column said Ready. A selection step would have read them; a model scanning a listing did not.\n\nThis is not a defect in exclusion. Exclusion is what the ledger claims to do, it does it, and it refuses an unanswerable overlap rather than guessing, which is the property any scheduler above it would need and would otherwise have to reinvent. What has no home is the layer above: the eligible set, and the order over it.\n\nIt becomes load bearing rather than merely wasteful under unattended execution, because the same board read by the same policy has to yield the same choice before anything about a run is reproducible. A run whose first decision is unreproducible has no reproducible decisions after it.",
+      "done_when": "Where the choice of next work is decided is answered, and the answer is either implemented or recorded.\n\nEither an eligible set is computed from the board rather than read off it - dependencies satisfied, not blocked, territory claimable now, refusals already known rather than discovered by attempting a claim - and the order over that set is stable, so the same board under the same policy yields the same choice, and a different choice is a change somebody made rather than a model that read differently. Ties break on something written down rather than on document order.\n\nOr a record states that selection stays with the holder, says what that costs, names P10-REQUIRABLE as the measured instance rather than describing the risk in the abstract, and says what would change the decision.\n\nIf selection gains an authority, AGENTS.md stops instructing the agent to pick an item and names the thing that picks, and agent_harness.rs asserts that it does - because a contract file that still says pick is the instruction any session will actually follow.\n\nNot closed by sorting the output of work list. Presentation is not selection, and a sorted snapshot is the same snapshot the README already warns about.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "AGENTS.md",
+          "tests/contract/tests/agent_harness.rs",
+          "docs/records/OD-LEDGER-020",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-020.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-ITEM-KIND",
+      "title": "An item a person required and one an agent proposed are the same row, and neither says what kind of work it is",
+      "why": "The item schema is id, title, why, done_when, territory, state, depends_on, blocked, claim, verification, verified, abandoned, displaced and declined. Nothing on it says what kind of work the item is, and nothing says where it came from. work add refuses exactly one thing, an item that reserves nothing, and accepts everything else - any prose, any territory, from anybody.\n\nThat is a reasonable board for a person to write, and it becomes load bearing the moment work is proposed by the same thing that executes it. A design in progress for this repository has an agent observe something, propose work, and the system classify that proposal into a typed form before it is allowed into the graph. The classification step has nowhere to attach: there is no kind for it to classify into, and no origin field that distinguishes a proposal from a requirement. A proposed item and a required one are the same row, so the guard against a session inventing its own next subject would have to be a convention, and a convention is what OD-LEDGER-006 already records the ledger cannot enforce.\n\nIt also makes the board unreadable in the one direction that matters for ordering. State says where an item is; nothing says what it is. A validation obligation, an architectural decision, a correction and a cleanup are indistinguishable rows, so any priority over them has to be recovered from prose by whoever is reading, which is the same recovery P11-SELECTION-AUTHORITY is about not leaving to a model.",
+      "done_when": "An item says what kind of work it is and where it came from, or a record says why it should not.\n\nIf it does, the kinds are a closed set decided in the record rather than a free string, so an unrecognised value is refused by the same guard that already refuses an unknown field rather than being stored and ignored. Origin distinguishes at minimum work that was required from work a session proposed. Existing items are given kinds rather than left absent, because a field empty on a hundred rows and set on the next is a field nothing can be asked about - and the migration is the schema bump the guard exists for.\n\nIf a record says otherwise, it says what reads the board instead and how that reader recovers kind, given that any ordering over ready work has to be an ordering over something.\n\nNot closed by a free-form tag list. This is a discriminant, and a list of strings is the prose it was supposed to replace.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/item.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "README.md",
+          "docs/records/OD-LEDGER-021",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-021.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
