@@ -11,10 +11,17 @@
 //!
 //! The structural promises, not the prose. That the adapter imports the contract rather
 //! than growing its own copy; that every repository path the harness names is a path that
-//! exists; that the contract names the work and rationale authorities at all; that no row
+//! exists; that the contract names each authority it claims to route to; that no row
 //! naming a workspace crate has been restated here, which is the signature of the band
 //! table `tests/contract/tests/boundaries.rs` already checks against reality in both
 //! directions; and that a committed skill declares a name matching its own directory.
+//!
+//! And that a hazard written down as temporary is still temporary. `OD-AGENT-001` admits
+//! an operating hazard tied to an open defect *on the condition* that it names the item
+//! which will close it, so that it can be removed rather than accumulate. That condition
+//! is only a promise until something reads the board: a warning deleted early disappears
+//! while the defect is still live, and one left behind costs every session a step spent
+//! defending against nothing.
 //!
 //! Each has a negative control over a fixture string in
 //! [`Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It`]. A check whose failing
@@ -33,6 +40,7 @@
 //! sentence containing a full stop.
 
 use nomos_contract_tests::Workspace;
+use nomos_ledger::LedgerDocument;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
@@ -59,6 +67,33 @@ const ADAPTER: &str = "CLAUDE.md";
 
 /// Where committed skills live, relative to the workspace root.
 const SKILL_ROOT: &str = ".claude/skills";
+
+/// The board, which is the authority on whether a temporary hazard is still temporary.
+const BOARD: &str = "work/ledger.json";
+
+/// The authorities the contract claims to route to, and must therefore name.
+///
+/// Four rather than two. The architecture pair was left unasserted when this file was
+/// written, which meant an edit could drop the two rows that send an agent to the
+/// description of the workspace and to the tests that check it, and the gate would stay
+/// green over a routing table that had stopped routing.
+const ROUTED_AUTHORITIES: &[&str] = &["README.md", "tests/contract", "docs/records", BOARD];
+
+/// Every hazard the harness states because a defect is currently open, and the item that
+/// will close it.
+///
+/// Declared rather than derived, because whether a sentence is *about* an open defect is a
+/// question about meaning. What is derived is the other direction — every item id the
+/// harness mentions — so the declaration cannot go stale in the way that flatters: a
+/// hazard added without an entry here fails, and an entry whose sentence has gone fails
+/// too.
+///
+/// The same defect is named in two places on purpose. A hazard belongs at the step where
+/// it bites, and the step is in the procedure while the rule is in the contract.
+const TEMPORARY_HAZARDS: &[(&str, &str)] = &[
+    ("AGENTS.md", "P10-STALE-WRITER"),
+    (".claude/skills/nomos-task/SKILL.md", "P10-STALE-WRITER"),
+];
 
 /// Reads a file under the workspace root, failing with the path when it is not there.
 fn Read_Harness_File(relative: &str) -> String
@@ -90,17 +125,88 @@ fn Harness_Files() -> Vec<(String, String)>
 
     for directory in Skill_Directories()
     {
-        let manifest = directory.join("SKILL.md");
-        let Ok(text) = std::fs::read_to_string(&manifest)
+        let Ok(text) = std::fs::read_to_string(directory.join("SKILL.md"))
         else
         {
             continue;
         };
 
-        files.push((manifest.display().to_string().replace('\\', "/"), text));
+        // Named relative to the root rather than by its absolute location, so that a
+        // declaration below and a failure message above spell one file one way.
+        let name = directory
+            .file_name()
+            .map(|name| return name.to_string_lossy().into_owned())
+            .unwrap_or_default();
+
+        files.push((format!("{SKILL_ROOT}/{name}/SKILL.md"), text));
     }
 
     return files;
+}
+
+/// The board as the ledger's own type reads it.
+///
+/// Through `LedgerDocument` rather than a second walk over the same JSON. A private reader
+/// here would be a second opinion about what a finished item looks like, and this
+/// workspace has already recorded twice what two guards for one question cost.
+fn Board() -> LedgerDocument
+{
+    let path = Workspace::Workspace_Root().join(BOARD);
+    let text = std::fs::read_to_string(&path)
+        .unwrap_or_else(|error| panic!("cannot read the board at {}: {error}", path.display()));
+
+    return serde_json::from_str(&text).unwrap_or_else(|error| {
+        panic!("the board at {} did not parse: {error}", path.display())
+    });
+}
+
+/// Whether a token is authored in the shape of a ledger item identifier.
+///
+/// `P<phase>-<WORD>[-<WORD>…]`. Deliberately a shape rather than a lookup: an identifier
+/// that matches nothing on the board is the interesting case, not one to be filtered out
+/// before anybody notices it.
+fn Is_Item_Id(token: &str) -> bool
+{
+    let mut segments = token.split('-');
+
+    let Some(phase) = segments.next().and_then(|first| return first.strip_prefix('P'))
+    else
+    {
+        return false;
+    };
+    if phase.is_empty() || !phase.chars().all(|character| return character.is_ascii_digit())
+    {
+        return false;
+    }
+
+    let mut words = 0_usize;
+    for segment in segments
+    {
+        if segment.is_empty()
+            || !segment.chars().all(|character| return character.is_ascii_uppercase())
+        {
+            return false;
+        }
+        words = words.saturating_add(1);
+    }
+
+    return words > 0;
+}
+
+/// Every ledger item a text names.
+fn Named_Items(text: &str) -> Vec<String>
+{
+    let mut found: Vec<String> = text
+        .split(|character: char| {
+            return !(character.is_ascii_alphanumeric() || character == '-');
+        })
+        .filter(|token| return Is_Item_Id(token))
+        .map(str::to_owned)
+        .collect();
+
+    found.sort();
+    found.dedup();
+    return found;
 }
 
 /// Every directory under the skill root, whether or not it holds a manifest.
@@ -335,26 +441,100 @@ fn Test_The_Harness_Should_Not_Restate_The_Band_Table()
     );
 }
 
-/// Routing is the contract's whole job, so the two authorities it exists for are required.
+/// Routing is the contract's whole job, so every authority it routes to is required.
 ///
-/// Named as paths rather than as prose, because a path is what an agent can open. The
-/// board and the rationale are the two an arriving session cannot infer: the ledger is not
-/// discoverable from the source, and a record explains a decision the code only shows the
-/// result of.
+/// Named as paths rather than as prose, because a path is what an agent can open. None of
+/// the four is inferable from the tree by an arriving session: the ledger is not
+/// discoverable from the source, a record explains a decision the code only shows the
+/// result of, and the pair that says what the workspace is and what checks it are the two
+/// this file spent its whole existence refusing to copy — so the route to them has to hold.
 #[test]
-fn Test_The_Contract_Should_Name_The_Work_And_Rationale_Authorities()
+fn Test_The_Contract_Should_Name_Every_Authority_It_Routes_To()
 {
     let named: BTreeSet<String> = Named_Paths(&Read_Harness_File(CONTRACT)).into_iter().collect();
 
-    for authority in ["work/ledger.json", "docs/records"]
+    for authority in ROUTED_AUTHORITIES
     {
         assert!(
             named.iter().any(|path| return path.starts_with(authority)),
             "{CONTRACT} never names {authority}. An agent that does not find the board \
-             invents one, and an agent that does not find the records repeats a decision \
-             somebody already made."
+             invents one, an agent that does not find the records repeats a decision \
+             somebody already made, and an agent that does not find the workspace \
+             description infers the architecture from whatever code is nearest."
         );
     }
+}
+
+/// A hazard that outlives its defect is a step every session spends on nothing.
+///
+/// Both directions, because each catches the failure the other cannot see. The sentence
+/// must still be there while the item is open, so a warning cannot be deleted early. The
+/// item must still be open, so a warning cannot be left behind — and the day
+/// `P10-STALE-WRITER` is finished, this test is what says so and where.
+#[test]
+fn Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open()
+{
+    let board = Board();
+
+    for (file, item) in TEMPORARY_HAZARDS
+    {
+        let text = Read_Harness_File(file);
+        assert!(
+            Named_Items(&text).iter().any(|named| return named == item),
+            "{file} is declared to carry the {item} hazard and no longer mentions it. \
+             Either the warning was removed while the defect is still open, or this \
+             declaration should have gone with it."
+        );
+
+        let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Str() == *item)
+        else
+        {
+            panic!("{file} names {item}, which is on no board. A hazard pointing at an \
+                    item nobody can look up cannot be retired by anybody.");
+        };
+
+        assert!(
+            !entry.state.Is_Finished(),
+            "{item} is finished, so the hazard {file} carries for it is over. Remove the \
+             warning and its entry here — OD-AGENT-001 admits a temporary hazard on \
+             exactly this condition."
+        );
+    }
+}
+
+/// A hazard cannot be added quietly, which is what makes the declaration above worth having.
+///
+/// The derived direction. Without it the table is a list somebody remembers to update, and
+/// `OD-COMPLETENESS-001` is this workspace's record of what that is worth.
+#[test]
+fn Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard()
+{
+    let mut undeclared = Vec::new();
+
+    for (file, text) in Harness_Files()
+    {
+        for item in Named_Items(&text)
+        {
+            let declared = TEMPORARY_HAZARDS
+                .iter()
+                .any(|(declared_file, declared_item)| {
+                    return *declared_file == file && *declared_item == item;
+                });
+
+            if !declared
+            {
+                undeclared.push(format!("{file} names {item}"));
+            }
+        }
+    }
+
+    assert!(
+        undeclared.is_empty(),
+        "the harness names ledger items that are not declared as temporary hazards: \
+         {undeclared:#?}.\n\
+         An item id in an instruction file is a promise that the sentence around it \
+         expires; declaring it is how the expiry is noticed."
+    );
 }
 
 /// A skill is addressed by name, and the name it declares must be the one it is found at.
@@ -438,5 +618,23 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
         None,
         "a manifest with no front matter reported a name, so the check would compare \
          nothing against the directory"
+    );
+
+    assert_eq!(
+        Named_Items("until `P10-STALE-WRITER` closes, confirm the write survived"),
+        vec!["P10-STALE-WRITER".to_owned()],
+        "an item id in a code span was not recognised, so a temporary hazard could be \
+         added without an expiry"
+    );
+    assert!(
+        Named_Items("read `README.md`, then run P10 and OD-AGENT-001 through work list")
+            .is_empty(),
+        "a path, a bare phase and a record id were read as ledger items, which would put \
+         entries in the hazard table that can never be retired"
+    );
+    assert!(
+        Board().items.iter().any(|entry| return entry.state.Is_Finished()),
+        "no finished item was found on the board, so the expiry check has never been \
+         shown the state it exists to catch"
     );
 }

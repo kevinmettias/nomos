@@ -3998,6 +3998,65 @@
       },
       "verified": null,
       "abandoned": []
+    },
+    {
+      "id": "P10-HAZARD-EXPIRY",
+      "title": "A temporary hazard in the agent contract has no expiry, and the routing the contract promises is only half asserted",
+      "why": "P10-AGENT-HARNESS landed the guard for the agent contract and stopped two checks short of what it promised. The contract routes architecture questions to README.md and to tests/contract and rationale questions to docs/records, and only the second pair is asserted - so an edit that drops the first two rows leaves the gate green and the routing table half real. The larger gap is expiry. The hazards written into the contract include one that is deliberately temporary: the stale binary that strips ledger fields it does not know, which names P10-STALE-WRITER as the item that will close it. Nothing connects the sentence to the item. Deleted early, the warning disappears while the defect is still live; left behind, the contract carries a hazard that no longer exists and every session spends a step defending against nothing. OD-AGENT-001 admits a temporary hazard on the condition that it can be removed rather than accumulate, and that condition is currently a promise rather than a check.",
+      "done_when": "Every ledger item named in a harness file is an item that exists and is not finished, and the pairing is declared so that the direction that flatters cannot pass: a hazard whose item has closed fails, a declared hazard the file no longer mentions fails, and an item id mentioned by no declaration fails, so a new temporary hazard cannot be added quietly. The contract is asserted to name all four of the routing authorities it claims, not two. The board is read through the ledgers own document type rather than by a second parser over the same JSON, since two readers of one schema is how they come to disagree. Each new direction has a negative control over a fixture. Not closed by deleting the stale binary hazard, which is still true while P10-STALE-WRITER is open, and not closed by asserting the item is open without also asserting the sentence is there.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/agent_harness.rs",
+          "tests/contract/Cargo.toml",
+          "Cargo.lock",
+          "AGENTS.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.42s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6735182c3e664eae.exe)\n",
+        "verified_at": 1786343225,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": []
     }
   ]
 }
