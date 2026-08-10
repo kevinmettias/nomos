@@ -1,0 +1,126 @@
+pub const fn nomos_spec_project::Content::All() -> &'static [Self]
+pub const fn nomos_spec_project::Content::Label(self) -> &'static str
+pub const fn nomos_spec_project::Format::All() -> &'static [Self]
+pub const fn nomos_spec_project::Format::Extension(self) -> &'static str
+pub const fn nomos_spec_project::Format::Label(self) -> &'static str
+pub const fn nomos_spec_project::Freshness::Is_Fresh(&self) -> bool
+pub const nomos_spec_project::DO_NOT_EDIT: &str
+pub const nomos_spec_project::SHIPPED: &[(&str, &str)]
+pub const nomos_spec_project::SIDECAR_SUFFIX: &str
+pub enum nomos_spec_project::Content
+pub enum nomos_spec_project::Format
+pub enum nomos_spec_project::ProjectError
+pub enum variant nomos_spec_project::Content::Blocks
+pub enum variant nomos_spec_project::Content::Documents
+pub enum variant nomos_spec_project::Content::Headings
+pub enum variant nomos_spec_project::Content::Lineage
+pub enum variant nomos_spec_project::Content::Nodes
+pub enum variant nomos_spec_project::Content::Omissions
+pub enum variant nomos_spec_project::Content::Relations
+pub enum variant nomos_spec_project::Content::Rows
+pub enum variant nomos_spec_project::Content::Statements
+pub enum variant nomos_spec_project::Content::Suites
+pub enum variant nomos_spec_project::Format::Contextpack
+pub enum variant nomos_spec_project::Format::Html
+pub enum variant nomos_spec_project::Format::Json
+pub enum variant nomos_spec_project::Format::Markdown
+pub enum variant nomos_spec_project::Format::Mermaid
+pub enum variant nomos_spec_project::Format::Yaml
+pub enum variant nomos_spec_project::ProjectError::Colliding { output: String, first: String, second: String, }
+pub enum variant nomos_spec_project::ProjectError::Duplicate { profile: String, }
+pub enum variant nomos_spec_project::ProjectError::Empty { profile: String, section: String, content: &'static str, }
+pub enum variant nomos_spec_project::ProjectError::Malformed(String)
+pub enum variant nomos_spec_project::ProjectError::NotRelative { profile: String, output: String, }
+pub enum variant nomos_spec_project::ProjectError::Sql(String)
+pub enum variant nomos_spec_project::ProjectError::Store(nomos_spec_store::StoreError)
+pub enum variant nomos_spec_project::ProjectError::UnsupportedFilter { profile: String, content: &'static str, filter: &'static str, }
+pub fn nomos_spec_project::Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, ProjectError>
+pub fn nomos_spec_project::Catalogue::Named(&self, id: &str) -> Option<&Profile>
+pub fn nomos_spec_project::Catalogue::Of(profiles: Vec<Profile>) -> Result<Self, ProjectError>
+pub fn nomos_spec_project::Catalogue::Profiles(&self) -> &[Profile]
+pub fn nomos_spec_project::Catalogue::Shipped() -> Result<Self, ProjectError>
+pub fn nomos_spec_project::Check( store: &SpecificationStore, profile: &Profile, body: Option<&str>, sidecar: Option<&str>, ) -> Result<Freshness, ProjectError>
+pub fn nomos_spec_project::Freshness::Report(&self, output: &str) -> String
+pub fn nomos_spec_project::Item::Carrying(mut self, body: &str) -> Self
+pub fn nomos_spec_project::Item::Digest(&self) -> String
+pub fn nomos_spec_project::Item::Field(&self, name: &str) -> Option<&str>
+pub fn nomos_spec_project::Item::Of(identity: &str) -> Self
+pub fn nomos_spec_project::Item::With(mut self, name: &str, value: &str) -> Self
+pub fn nomos_spec_project::Output::Sidecar(&self) -> Result<String, ProjectError>
+pub fn nomos_spec_project::Profile::Digest(&self) -> String
+pub fn nomos_spec_project::Profile::Parse(text: &str) -> Result<Self, ProjectError>
+pub fn nomos_spec_project::Profile::Validate(&self) -> Result<(), ProjectError>
+pub fn nomos_spec_project::ProjectError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_project::ProjectError::from(error: nomos_spec_store::StoreError) -> Self
+pub fn nomos_spec_project::ProjectError::from(error: rusqlite::Error) -> Self
+pub fn nomos_spec_project::Projection::Inputs_Digest(&self) -> String
+pub fn nomos_spec_project::Projection::Items(&self) -> usize
+pub fn nomos_spec_project::Render(projection: &Projection) -> Result<String, ProjectError>
+pub fn nomos_spec_project::Select(store: &SpecificationStore, profile: &Profile) -> Result<Projection, ProjectError>
+pub fn nomos_spec_project::Shipped() -> Result<Catalogue, ProjectError>
+pub fn nomos_spec_project::Stamp::Parse(text: &str) -> Result<Self, ProjectError>
+pub fn nomos_spec_project::Stamp::Render(&self) -> Result<String, ProjectError>
+pub impl nomos_spec_project::ProjectError implements From<nomos_spec_store::StoreError>
+pub impl nomos_spec_project::ProjectError implements From<rusqlite::Error>
+pub impl nomos_spec_project::ProjectError implements core::fmt::Display
+pub impl nomos_spec_project::ProjectError implements std::error::Error
+pub struct field nomos_spec_project::Filter::authority: Option<String>
+pub struct field nomos_spec_project::Filter::disposition: Option<String>
+pub struct field nomos_spec_project::Filter::document: Option<String>
+pub struct field nomos_spec_project::Filter::identifier_prefix: Option<String>
+pub struct field nomos_spec_project::Filter::kind: Option<String>
+pub struct field nomos_spec_project::Filter::relation_type: Option<String>
+pub struct field nomos_spec_project::Filter::representation: Option<String>
+pub struct field nomos_spec_project::Filter::revision: Option<String>
+pub struct field nomos_spec_project::Filter::row_kind: Option<String>
+pub struct field nomos_spec_project::Filter::suite: Option<String>
+pub struct field nomos_spec_project::Freshness::absent: bool
+pub struct field nomos_spec_project::Freshness::edited: Option<(String, String)>
+pub struct field nomos_spec_project::Freshness::stale: Option<(String, String)>
+pub struct field nomos_spec_project::Input::content: Content
+pub struct field nomos_spec_project::Input::hash: String
+pub struct field nomos_spec_project::Input::identity: String
+pub struct field nomos_spec_project::Item::body: Option<String>
+pub struct field nomos_spec_project::Item::fields: Vec<(String, String)>
+pub struct field nomos_spec_project::Item::identity: String
+pub struct field nomos_spec_project::Output::body: String
+pub struct field nomos_spec_project::Output::path: String
+pub struct field nomos_spec_project::Output::sidecar_path: String
+pub struct field nomos_spec_project::Output::stamp: Stamp
+pub struct field nomos_spec_project::Profile::format: Format
+pub struct field nomos_spec_project::Profile::id: String
+pub struct field nomos_spec_project::Profile::output: String
+pub struct field nomos_spec_project::Profile::sections: Vec<Section>
+pub struct field nomos_spec_project::Profile::title: String
+pub struct field nomos_spec_project::ProfileSection::content: Content
+pub struct field nomos_spec_project::ProfileSection::filter: Filter
+pub struct field nomos_spec_project::ProfileSection::may_be_empty: bool
+pub struct field nomos_spec_project::ProfileSection::title: String
+pub struct field nomos_spec_project::Projection::format: Format
+pub struct field nomos_spec_project::Projection::inputs: Vec<Input>
+pub struct field nomos_spec_project::Projection::output: String
+pub struct field nomos_spec_project::Projection::profile: String
+pub struct field nomos_spec_project::Projection::sections: Vec<Section>
+pub struct field nomos_spec_project::Projection::title: String
+pub struct field nomos_spec_project::Section::content: Content
+pub struct field nomos_spec_project::Section::items: Vec<Item>
+pub struct field nomos_spec_project::Section::title: String
+pub struct field nomos_spec_project::Stamp::content_digest: String
+pub struct field nomos_spec_project::Stamp::format: Format
+pub struct field nomos_spec_project::Stamp::inputs: Vec<Input>
+pub struct field nomos_spec_project::Stamp::inputs_digest: String
+pub struct field nomos_spec_project::Stamp::output: String
+pub struct field nomos_spec_project::Stamp::profile: String
+pub struct field nomos_spec_project::Stamp::profile_digest: String
+pub struct field nomos_spec_project::Stamp::sections: Vec<(String, u32)>
+pub struct nomos_spec_project::Catalogue
+pub struct nomos_spec_project::Filter
+pub struct nomos_spec_project::Freshness
+pub struct nomos_spec_project::Input
+pub struct nomos_spec_project::Item
+pub struct nomos_spec_project::Output
+pub struct nomos_spec_project::Profile
+pub struct nomos_spec_project::ProfileSection
+pub struct nomos_spec_project::Projection
+pub struct nomos_spec_project::Section
+pub struct nomos_spec_project::Stamp

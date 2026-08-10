@@ -1,0 +1,48 @@
+pub const nomos_spec_validate::DECLARED_RULES: &[&str]
+pub enum nomos_spec_validate::RuleOutcome
+pub enum variant nomos_spec_validate::RuleOutcome::Errored(String)
+pub enum variant nomos_spec_validate::RuleOutcome::Satisfied { checked: u32, }
+pub enum variant nomos_spec_validate::RuleOutcome::Violated(Vec<Violation>)
+pub fn nomos_spec_validate::ChangedWordingIsJustified::Describe(&self) -> &'static str
+pub fn nomos_spec_validate::ChangedWordingIsJustified::Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
+pub fn nomos_spec_validate::ChangedWordingIsJustified::Id(&self) -> &'static str
+pub fn nomos_spec_validate::EveryBlockHasADisposition::Describe(&self) -> &'static str
+pub fn nomos_spec_validate::EveryBlockHasADisposition::Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
+pub fn nomos_spec_validate::EveryBlockHasADisposition::Id(&self) -> &'static str
+pub fn nomos_spec_validate::EveryHeadingHasADisposition::Describe(&self) -> &'static str
+pub fn nomos_spec_validate::EveryHeadingHasADisposition::Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
+pub fn nomos_spec_validate::EveryHeadingHasADisposition::Id(&self) -> &'static str
+pub fn nomos_spec_validate::EveryStatementTracesToSource::Describe(&self) -> &'static str
+pub fn nomos_spec_validate::EveryStatementTracesToSource::Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
+pub fn nomos_spec_validate::EveryStatementTracesToSource::Id(&self) -> &'static str
+pub fn nomos_spec_validate::Registered() -> Vec<Box<dyn Rule>>
+pub fn nomos_spec_validate::Rule::Describe(&self) -> &'static str
+pub fn nomos_spec_validate::Rule::Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
+pub fn nomos_spec_validate::Rule::Id(&self) -> &'static str
+pub fn nomos_spec_validate::Ruleset_Hash(ids: &[&str]) -> ContentHash
+pub fn nomos_spec_validate::Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> ValidationRun
+pub fn nomos_spec_validate::ValidationRun::Errors(&self) -> Vec<(&str, &str)>
+pub fn nomos_spec_validate::ValidationRun::Passed(&self) -> bool
+pub fn nomos_spec_validate::ValidationRun::Summary(&self) -> String
+pub fn nomos_spec_validate::ValidationRun::Vacuous_Rules(&self) -> Vec<&str>
+pub fn nomos_spec_validate::ValidationRun::Violations(&self) -> Vec<&Violation>
+pub impl nomos_spec_validate::ChangedWordingIsJustified implements Rule
+pub impl nomos_spec_validate::EveryBlockHasADisposition implements Rule
+pub impl nomos_spec_validate::EveryHeadingHasADisposition implements Rule
+pub impl nomos_spec_validate::EveryStatementTracesToSource implements Rule
+pub struct field nomos_spec_validate::RuleResult::id: String
+pub struct field nomos_spec_validate::RuleResult::outcome: RuleOutcome
+pub struct field nomos_spec_validate::ValidationRun::results: Vec<RuleResult>
+pub struct field nomos_spec_validate::ValidationRun::ruleset_hash: ContentHash
+pub struct field nomos_spec_validate::ValidationRun::undeclared: Vec<String>
+pub struct field nomos_spec_validate::ValidationRun::unregistered: Vec<String>
+pub struct field nomos_spec_validate::Violation::detail: String
+pub struct field nomos_spec_validate::Violation::subject: String
+pub struct nomos_spec_validate::ChangedWordingIsJustified
+pub struct nomos_spec_validate::EveryBlockHasADisposition
+pub struct nomos_spec_validate::EveryHeadingHasADisposition
+pub struct nomos_spec_validate::EveryStatementTracesToSource
+pub struct nomos_spec_validate::RuleResult
+pub struct nomos_spec_validate::ValidationRun
+pub struct nomos_spec_validate::Violation
+pub trait nomos_spec_validate::Rule

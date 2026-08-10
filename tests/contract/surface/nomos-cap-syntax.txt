@@ -1,0 +1,7 @@
+pub const fn nomos_cap_syntax::Ceiling() -> Guarantee
+pub const nomos_cap_syntax::CAPABILITY: &str
+pub const nomos_cap_syntax::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_syntax::SCHEMA: &str
+pub fn nomos_cap_syntax::Capability() -> CapabilityId
+pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_syntax::Payload_Schema() -> SchemaId

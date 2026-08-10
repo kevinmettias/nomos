@@ -1,0 +1,111 @@
+pub const fn nomos_spec_store::Disposition::Label(self) -> &'static str
+pub const fn nomos_spec_store::Disposition::Preserves_Content(self) -> bool
+pub const fn nomos_spec_store::Kind_Label(kind: BlockKind) -> &'static str
+pub const fn nomos_spec_store::PathMatch::Label(self) -> &'static str
+pub const fn nomos_spec_store::Table::All() -> &'static [Self]
+pub const fn nomos_spec_store::Table::Name(self) -> &'static str
+pub const nomos_spec_store::AUTHORED: &str
+pub const nomos_spec_store::EXTERNAL: &str
+pub const nomos_spec_store::GOVERNING_RECORD_IDS: &[&str]
+pub const nomos_spec_store::MIGRATIONS: &[Migration]
+pub enum nomos_spec_store::Disposition
+pub enum nomos_spec_store::PathMatch
+pub enum nomos_spec_store::RowScope
+pub enum nomos_spec_store::StoreError
+pub enum nomos_spec_store::Table
+pub enum variant nomos_spec_store::Disposition::Omitted
+pub enum variant nomos_spec_store::Disposition::PreservedNormalized
+pub enum variant nomos_spec_store::Disposition::PreservedVerbatim
+pub enum variant nomos_spec_store::Disposition::RegressionFiller
+pub enum variant nomos_spec_store::Disposition::Superseded
+pub enum variant nomos_spec_store::PathMatch::Exact
+pub enum variant nomos_spec_store::PathMatch::FileName
+pub enum variant nomos_spec_store::PathMatch::Fragment
+pub enum variant nomos_spec_store::RowScope::Document(i64)
+pub enum variant nomos_spec_store::RowScope::Everything
+pub enum variant nomos_spec_store::RowScope::Table { block_uid: i64, table_ordinal: u32, }
+pub enum variant nomos_spec_store::StoreError::Migration { from: u32, cause: String, }
+pub enum variant nomos_spec_store::StoreError::Record { path: String, cause: String, }
+pub enum variant nomos_spec_store::StoreError::Sql(String)
+pub enum variant nomos_spec_store::StoreError::Table { document_uid: i64, ordinal: u32, cause: String, }
+pub enum variant nomos_spec_store::StoreError::TooNew { found: u32, supported: u32, }
+pub enum variant nomos_spec_store::Table::Blobs
+pub enum variant nomos_spec_store::Table::Lineage
+pub enum variant nomos_spec_store::Table::NodeAliases
+pub enum variant nomos_spec_store::Table::NodeHistory
+pub enum variant nomos_spec_store::Table::Nodes
+pub enum variant nomos_spec_store::Table::NormativeStatements
+pub enum variant nomos_spec_store::Table::Omissions
+pub enum variant nomos_spec_store::Table::RelationTypes
+pub enum variant nomos_spec_store::Table::Relations
+pub enum variant nomos_spec_store::Table::SourceBlocks
+pub enum variant nomos_spec_store::Table::SourceDocuments
+pub enum variant nomos_spec_store::Table::SourceHeadings
+pub enum variant nomos_spec_store::Table::SourceTableRows
+pub enum variant nomos_spec_store::Table::Suites
+pub fn nomos_spec_store::Disposition::Parse(label: &str) -> Option<Self>
+pub fn nomos_spec_store::Latest_Version() -> u32
+pub fn nomos_spec_store::Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedReport, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Assign_Suite(&mut self, node_uid: i64, suite_uid: i64) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Connection(&self) -> &Connection
+pub fn nomos_spec_store::SpecificationStore::Count(&self, table: Table) -> Result<u32, StoreError>
+pub fn nomos_spec_store::SpecificationStore::In_Memory() -> Result<Self, StoreError>
+pub fn nomos_spec_store::SpecificationStore::In_Transaction<T, E>( &mut self, work: impl FnOnce(&rusqlite::Transaction<'_>) -> Result<T, E>, ) -> Result<T, E> where E: From<StoreError>,
+pub fn nomos_spec_store::SpecificationStore::Node_Uid(&self, node_id: &str) -> Result<Option<i64>, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Open(path: &Path) -> Result<Self, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Pair_Relation_Type(&mut self, name: &str, inverse: &str) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Blob(&mut self, content: &[u8]) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Relation( &mut self, from_node_id: &str, relation_type: &str, to_node_id: &str, ) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Relation_Type(&mut self, name: &str, tier: &str) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Row_Lineage( &mut self, row_uid: i64, disposition: &str, target_node_uid: Option<i64>, ) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Source_Blocks( &mut self, document_uid: i64, blocks: &[SourceBlock], ) -> Result<usize, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Source_Document( &mut self, path: &str, revision: &str, content: &str, ) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Suite( &mut self, suite_id: &str, title: &str, authority_root: bool, ) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Reference_Node(&mut self, node_id: &str) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Row_Census(&self, scope: RowScope) -> Result<RowCensus, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Suite_Of(&self, node_id: &str) -> Result<Option<(String, bool)>, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Table_Row_Uid( &self, document_uid: i64, block_ordinal: u32, row_ordinal: u32, ) -> Result<Option<i64>, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Upsert_Node( &mut self, node_id: &str, kind: &str, authority: &str, representation: &str, title: &str, ) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Version(&self) -> u32
+pub fn nomos_spec_store::StoreError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_store::StoreError::from(error: rusqlite::Error) -> Self
+pub impl nomos_spec_store::StoreError implements From<rusqlite::Error>
+pub impl nomos_spec_store::StoreError implements core::fmt::Display
+pub impl nomos_spec_store::StoreError implements std::error::Error
+pub struct field nomos_spec_store::DocumentSource::content_hash: String
+pub struct field nomos_spec_store::DocumentSource::path: String
+pub struct field nomos_spec_store::DocumentSource::revision: String
+pub struct field nomos_spec_store::DocumentSource::text: String
+pub struct field nomos_spec_store::DocumentSource::uid: i64
+pub struct field nomos_spec_store::Migration::name: &'static str
+pub struct field nomos_spec_store::Migration::statements: &'static [&'static str]
+pub struct field nomos_spec_store::Migration::version: u32
+pub struct field nomos_spec_store::NodeSummary::authority: String
+pub struct field nomos_spec_store::NodeSummary::kind: String
+pub struct field nomos_spec_store::NodeSummary::node_id: String
+pub struct field nomos_spec_store::NodeSummary::representation: String
+pub struct field nomos_spec_store::NodeSummary::title: String
+pub struct field nomos_spec_store::RowCensus::content: u32
+pub struct field nomos_spec_store::RowCensus::header: u32
+pub struct field nomos_spec_store::RowCensus::lines: u32
+pub struct field nomos_spec_store::RowCensus::non_separator: u32
+pub struct field nomos_spec_store::RowCensus::separator: u32
+pub struct field nomos_spec_store::SeedReport::blocks: u32
+pub struct field nomos_spec_store::SeedReport::headings: u32
+pub struct field nomos_spec_store::SeedReport::records: u32
+pub struct field nomos_spec_store::SeedReport::references: Vec<String>
+pub struct field nomos_spec_store::SeedReport::relations: u32
+pub struct field nomos_spec_store::TableLine::block_ordinal: u32
+pub struct field nomos_spec_store::TableLine::cells: Vec<String>
+pub struct field nomos_spec_store::TableLine::content_hash: String
+pub struct field nomos_spec_store::TableLine::kind: String
+pub struct field nomos_spec_store::TableLine::row_ordinal: u32
+pub struct field nomos_spec_store::TableLine::table_ordinal: u32
+pub struct field nomos_spec_store::TableLine::text: String
+pub struct nomos_spec_store::DocumentSource
+pub struct nomos_spec_store::Migration
+pub struct nomos_spec_store::NodeSummary
+pub struct nomos_spec_store::RowCensus
+pub struct nomos_spec_store::SeedReport
+pub struct nomos_spec_store::SpecificationStore
+pub struct nomos_spec_store::TableLine

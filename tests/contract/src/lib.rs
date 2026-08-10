@@ -11,9 +11,11 @@
 mod gates;
 mod metadata;
 mod strategies;
+mod surface;
 mod universes;
 
 pub use gates::{Corpus_Gates, CorpusGate, CORPUS_VARIABLES};
 pub use metadata::{Package, Workspace};
 pub use strategies::{Fact_Domains, FactDomain};
+pub use surface::{Crate_Identifier, Public_Surface, Surface};
 pub use universes::{Declared_Universes, DeclaredUniverse, UniverseKind};

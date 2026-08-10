@@ -288,12 +288,12 @@ fn Carries_Test_Attribute(text: &str, offset: usize) -> bool
 }
 
 /// What each byte of a file is.
-struct Masks
+pub(crate) struct Masks
 {
     /// Ordinary code: not a comment, and not inside a literal.
-    code: Vec<bool>,
+    pub(crate) code: Vec<bool>,
     /// Inside a line or block comment, the delimiters included.
-    comment: Vec<bool>,
+    pub(crate) comment: Vec<bool>,
 }
 
 /// Classifies every byte of a file.
@@ -301,7 +301,7 @@ struct Masks
 /// Brace matching without this counts the braces in `format!("{name}")` and desynchronises
 /// on the first formatted panic message — of which this workspace has many, because a
 /// failing assertion is required to name what it saw.
-fn Scan(text: &str) -> Masks
+pub(crate) fn Scan(text: &str) -> Masks
 {
     let bytes = text.as_bytes();
     let mut masks = Masks {
@@ -420,7 +420,7 @@ fn Mark(mask: &mut [bool], from: usize, to: usize)
 /// Byte for byte, so an offset taken from the original still means the same place here.
 /// A comment is blanked whole, so a multi-byte character inside one never loses part of
 /// itself and the result stays valid UTF-8.
-fn Without_Comments(text: &str, comment: &[bool]) -> String
+pub(crate) fn Without_Comments(text: &str, comment: &[bool]) -> String
 {
     let blanked: Vec<u8> = text
         .as_bytes()
@@ -604,7 +604,7 @@ fn Only_Modifiers_Before(text: &str, offset: usize) -> bool
 }
 
 /// The identifier starting at or after `from`, with the offset just past it.
-fn Identifier_After(bytes: &[u8], from: usize) -> Option<(String, usize)>
+pub(crate) fn Identifier_After(bytes: &[u8], from: usize) -> Option<(String, usize)>
 {
     let mut cursor = from;
     while bytes.get(cursor).copied()?.is_ascii_whitespace()
@@ -637,7 +637,7 @@ fn Identifier_After(bytes: &[u8], from: usize) -> Option<(String, usize)>
 }
 
 /// The first code offset at or after `from` holding `target`.
-fn Next_Code_Byte(bytes: &[u8], mask: &[bool], from: usize, target: u8) -> Option<usize>
+pub(crate) fn Next_Code_Byte(bytes: &[u8], mask: &[bool], from: usize, target: u8) -> Option<usize>
 {
     let mut cursor = from;
     while cursor < bytes.len()
@@ -653,7 +653,7 @@ fn Next_Code_Byte(bytes: &[u8], mask: &[bool], from: usize, target: u8) -> Optio
 }
 
 /// The offset of the brace closing the one at `open`.
-fn Matching_Brace(bytes: &[u8], mask: &[bool], open: usize) -> Option<usize>
+pub(crate) fn Matching_Brace(bytes: &[u8], mask: &[bool], open: usize) -> Option<usize>
 {
     let mut depth = 0_u32;
     let mut cursor = open;
@@ -684,7 +684,7 @@ fn Matching_Brace(bytes: &[u8], mask: &[bool], open: usize) -> Option<usize>
 }
 
 /// Whether an offset is ordinary code.
-fn Is_Code(mask: &[bool], index: usize) -> bool
+pub(crate) fn Is_Code(mask: &[bool], index: usize) -> bool
 {
     return mask.get(index).copied().unwrap_or(false);
 }

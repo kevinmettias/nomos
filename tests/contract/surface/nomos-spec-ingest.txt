@@ -1,0 +1,303 @@
+pub const fn nomos_spec_ingest::Family::All() -> &'static [Self]
+pub const fn nomos_spec_ingest::Family::Directory(self) -> &'static str
+pub const fn nomos_spec_ingest::Family::Label(self) -> &'static str
+pub const fn nomos_spec_ingest::Fate::Label(&self) -> &'static str
+pub const fn nomos_spec_ingest::Restored::All() -> &'static [Self]
+pub const fn nomos_spec_ingest::Restored::Label(self) -> &'static str
+pub const fn nomos_spec_ingest::Restored::Node_Kind(self) -> &'static str
+pub const fn nomos_spec_ingest::Restored::Prefix(self) -> &'static str
+pub const fn nomos_spec_ingest::Restored::Volume(self) -> &'static str
+pub const fn nomos_spec_ingest::Scope::Label(self) -> &'static str
+pub const fn nomos_spec_ingest::Sibling::All() -> &'static [Self]
+pub const fn nomos_spec_ingest::Sibling::Archive(self) -> &'static str
+pub const fn nomos_spec_ingest::Sibling::Suite_Id(self) -> &'static str
+pub const fn nomos_spec_ingest::Sibling::Title(self) -> &'static str
+pub const fn nomos_spec_ingest::Tally::Total(&self) -> u32
+pub const nomos_spec_ingest::COMMENTARY: &str
+pub const nomos_spec_ingest::DOMAIN_VOLUMES: &str
+pub const nomos_spec_ingest::FILLER_PATTERNS: &[&str]
+pub const nomos_spec_ingest::LINEAGE_NOTES: &str
+pub const nomos_spec_ingest::ROOT_SUITE: &str
+pub const nomos_spec_ingest::SHARED_BY: u32
+pub enum nomos_spec_ingest::ArchiveError
+pub enum nomos_spec_ingest::BlockMismatch
+pub enum nomos_spec_ingest::Disposition
+pub enum nomos_spec_ingest::Family
+pub enum nomos_spec_ingest::Fate
+pub enum nomos_spec_ingest::Hollow
+pub enum nomos_spec_ingest::IngestError
+pub enum nomos_spec_ingest::Origin
+pub enum nomos_spec_ingest::Restored
+pub enum nomos_spec_ingest::Scope
+pub enum nomos_spec_ingest::Sibling
+pub enum variant nomos_spec_ingest::ArchiveError::Empty { archive: PathBuf, }
+pub enum variant nomos_spec_ingest::ArchiveError::NoSuchEntry { archive: PathBuf, entry: String, }
+pub enum variant nomos_spec_ingest::ArchiveError::NotText { archive: PathBuf, entry: String, cause: String, }
+pub enum variant nomos_spec_ingest::ArchiveError::Unreadable { archive: PathBuf, cause: String, }
+pub enum variant nomos_spec_ingest::BlockMismatch::ContentHash { document: String, ordinal: u32, recorded: String, recomputed: String, }
+pub enum variant nomos_spec_ingest::BlockMismatch::CountDiffers { document: String, recorded: usize, recomputed: usize, }
+pub enum variant nomos_spec_ingest::BlockMismatch::DocumentMissing { document: String, }
+pub enum variant nomos_spec_ingest::BlockMismatch::Kind { document: String, ordinal: u32, recorded: String, recomputed: String, }
+pub enum variant nomos_spec_ingest::BlockMismatch::NormalizedHash { document: String, ordinal: u32, recorded: String, recomputed: String, }
+pub enum variant nomos_spec_ingest::Disposition::Absent
+pub enum variant nomos_spec_ingest::Disposition::Preserved
+pub enum variant nomos_spec_ingest::Disposition::Reworded { v14: ContentHash, v15: ContentHash, }
+pub enum variant nomos_spec_ingest::Family::Acceptance
+pub enum variant nomos_spec_ingest::Family::Requirement
+pub enum variant nomos_spec_ingest::Family::Story
+pub enum variant nomos_spec_ingest::Fate::Gone
+pub enum variant nomos_spec_ingest::Fate::Hollowed { document: String, evidence: Hollow, }
+pub enum variant nomos_spec_ingest::Fate::Mentioned { documents: Vec<String>, }
+pub enum variant nomos_spec_ingest::Fate::Preserved { document: String, }
+pub enum variant nomos_spec_ingest::Hollow::NoBody
+pub enum variant nomos_spec_ingest::Hollow::Template { shared_with: u32, declared: Option<&'static str>, }
+pub enum variant nomos_spec_ingest::IngestError::GateFailed { summary: String, first: Vec<String>, }
+pub enum variant nomos_spec_ingest::IngestError::Parse(String)
+pub enum variant nomos_spec_ingest::IngestError::Store(StoreError)
+pub enum variant nomos_spec_ingest::Origin::Block { ordinal: u32, }
+pub enum variant nomos_spec_ingest::Origin::Row { block_ordinal: u32, row_ordinal: u32, }
+pub enum variant nomos_spec_ingest::Restored::AppendixD
+pub enum variant nomos_spec_ingest::Restored::AppendixH
+pub enum variant nomos_spec_ingest::Restored::CanonicalDomainModel
+pub enum variant nomos_spec_ingest::Restored::GlossaryTerm
+pub enum variant nomos_spec_ingest::Restored::HeadlessInventory
+pub enum variant nomos_spec_ingest::Restored::IdeProfile
+pub enum variant nomos_spec_ingest::Restored::RoadmapMilestone
+pub enum variant nomos_spec_ingest::Restored::Scenario
+pub enum variant nomos_spec_ingest::Restored::Service
+pub enum variant nomos_spec_ingest::Scope::DomainVolumes
+pub enum variant nomos_spec_ingest::Scope::EveryMarkdown
+pub enum variant nomos_spec_ingest::Sibling::Ecosystem
+pub enum variant nomos_spec_ingest::Sibling::Kwb
+pub enum variant nomos_spec_ingest::Sibling::Xvpe
+pub fn nomos_spec_ingest::Archive::Contains(&self, entry: &str) -> bool
+pub fn nomos_spec_ingest::Archive::Ending_With(&self, suffix: &str) -> Vec<String>
+pub fn nomos_spec_ingest::Archive::Open(path: &Path) -> Result<Self, ArchiveError>
+pub fn nomos_spec_ingest::Archive::Path(&self) -> &Path
+pub fn nomos_spec_ingest::Archive::Paths(&self) -> &[String]
+pub fn nomos_spec_ingest::Archive::Read(&mut self, entry: &str) -> Result<Vec<u8>, ArchiveError>
+pub fn nomos_spec_ingest::Archive::Read_Text(&mut self, entry: &str) -> Result<String, ArchiveError>
+pub fn nomos_spec_ingest::ArchiveError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_ingest::Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
+pub fn nomos_spec_ingest::BlockMismatch::Describe(&self) -> String
+pub fn nomos_spec_ingest::Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestError>
+pub fn nomos_spec_ingest::Check_Against_Manifest( lineage: &BlockLineage, documents: &BTreeMap<String, String>, ) -> GateReport
+pub fn nomos_spec_ingest::Collision::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_ingest::Extract(document: &str, markdown: &str) -> Result<Vec<Member>, IngestError>
+pub fn nomos_spec_ingest::FillerCensus::Undeclared(&self) -> Vec<&Template>
+pub fn nomos_spec_ingest::FillerCensus::Widest_Undeclared(&self) -> Option<&Template>
+pub fn nomos_spec_ingest::Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerprint, IngestError>
+pub fn nomos_spec_ingest::Fingerprint_Of( label: &str, documents: &BTreeMap<String, String>, ) -> Result<RevisionFingerprint, IngestError>
+pub fn nomos_spec_ingest::Gaps(labels: &[String]) -> Vec<String>
+pub fn nomos_spec_ingest::GateReport::Exercised_The_Normalizer(&self) -> bool
+pub fn nomos_spec_ingest::GateReport::Passed(&self) -> bool
+pub fn nomos_spec_ingest::GateReport::Summary(&self) -> String
+pub fn nomos_spec_ingest::IngestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_spec_ingest::IngestError::from(error: StoreError) -> Self
+pub fn nomos_spec_ingest::Ingest_Blob(store: &mut SpecificationStore, content: &[u8]) -> Result<i64, IngestError>
+pub fn nomos_spec_ingest::Ingest_Block_Dispositions( store: &mut SpecificationStore, document: &str, revision: &str, dispositions: &[(u32, String)], ) -> Result<u32, IngestError>
+pub fn nomos_spec_ingest::Ingest_Catalog( store: &mut SpecificationStore, entities: &[CatalogEntity], ) -> Result<CatalogReport, IngestError>
+pub fn nomos_spec_ingest::Ingest_Game_Plan( store: &mut SpecificationStore, suite_uid: i64, path: &str, text: &str, ) -> Result<String, IngestError>
+pub fn nomos_spec_ingest::Ingest_Overlay_Document( store: &mut SpecificationStore, path: &str, markdown: &str, v14_headings: &BTreeMap<String, i64>, report: &mut OverlayReport, ) -> Result<(), IngestError>
+pub fn nomos_spec_ingest::Ingest_Section_Lineage( store: &mut SpecificationStore, lineage: &SectionLineage, revision: &str, ) -> Result<SectionReport, IngestError>
+pub fn nomos_spec_ingest::Ingest_Sibling_Suite( store: &mut SpecificationStore, archive: &mut Archive, sibling: Sibling, ) -> Result<SuiteReport, IngestError>
+pub fn nomos_spec_ingest::Ingest_Source_Document( store: &mut SpecificationStore, path: &str, revision: &str, markdown: &str, ) -> Result<u32, IngestError>
+pub fn nomos_spec_ingest::Ingest_Statements( store: &mut SpecificationStore, file: &StatementFile, ) -> Result<StatementReport, IngestError>
+pub fn nomos_spec_ingest::Ingest_v15_Record( store: &mut SpecificationStore, path: &str, markdown: &str, ) -> Result<String, IngestError>
+pub fn nomos_spec_ingest::Is_Filler(text: &str) -> Option<&'static str>
+pub fn nomos_spec_ingest::Models_In(cell: &str) -> Vec<&str>
+pub fn nomos_spec_ingest::PairChange::Summary(&self) -> String
+pub fn nomos_spec_ingest::Parse_Artifact(markdown: &str, family: Family) -> Result<Artifact, IngestError>
+pub fn nomos_spec_ingest::Parse_Block_Lineage(yaml: &str) -> Result<BlockLineage, String>
+pub fn nomos_spec_ingest::Parse_Catalog(json: &str) -> Result<Vec<CatalogEntity>, IngestError>
+pub fn nomos_spec_ingest::Parse_Section_Lineage(yaml: &str) -> Result<SectionLineage, IngestError>
+pub fn nomos_spec_ingest::Parse_Statements(yaml: &str) -> Result<StatementFile, IngestError>
+pub fn nomos_spec_ingest::Prepare_Commentary_View(store: &SpecificationStore) -> Result<(), IngestError>
+pub fn nomos_spec_ingest::Reconcile(v14: &[Artifact], v15: &BTreeMap<String, String>) -> ReconciliationReport
+pub fn nomos_spec_ingest::ReconciliationReport::Absent(&self) -> Vec<&IdentifierOutcome>
+pub fn nomos_spec_ingest::ReconciliationReport::Absent_In(&self, family: Family) -> Vec<&str>
+pub fn nomos_spec_ingest::ReconciliationReport::Declared_In(&self, family: Family) -> usize
+pub fn nomos_spec_ingest::ReconciliationReport::Preserved_In(&self, family: Family) -> usize
+pub fn nomos_spec_ingest::ReconciliationReport::Reworded(&self) -> Vec<&IdentifierOutcome>
+pub fn nomos_spec_ingest::ReconciliationReport::Summary(&self) -> String
+pub fn nomos_spec_ingest::Regression(from: &Revision, to: &Revision) -> Result<RegressionReport, IngestError>
+pub fn nomos_spec_ingest::RegressionReport::In(&self, family: Restored) -> Vec<&MemberFate>
+pub fn nomos_spec_ingest::RegressionReport::Named(&self, name: &str) -> Option<&MemberFate>
+pub fn nomos_spec_ingest::RegressionReport::Summary(&self) -> String
+pub fn nomos_spec_ingest::RegressionReport::Tally(&self, family: Restored) -> Tally
+pub fn nomos_spec_ingest::Relocations( pair: &PairChange, from: &RevisionFingerprint, to: &RevisionFingerprint, ) -> DocumentFate
+pub fn nomos_spec_ingest::Resolve(store: &SpecificationStore, name: &str) -> Result<Option<i64>, IngestError>
+pub fn nomos_spec_ingest::RestorationReport::In(&self, family: Restored) -> Vec<&Member>
+pub fn nomos_spec_ingest::RestorationReport::Named(&self, name: &str) -> Option<&Member>
+pub fn nomos_spec_ingest::RestorationReport::Summary(&self) -> String
+pub fn nomos_spec_ingest::Restore( store: &mut SpecificationStore, revision: &str, documents: &BTreeMap<String, String>, ) -> Result<RestorationReport, IngestError>
+pub fn nomos_spec_ingest::Revision::Fingerprint(&self) -> Result<RevisionFingerprint, IngestError>
+pub fn nomos_spec_ingest::Revision::Read(archive: &mut Archive, label: &str) -> Result<Self, IngestError>
+pub fn nomos_spec_ingest::Revision::Volumes(&self) -> BTreeMap<String, String>
+pub fn nomos_spec_ingest::Revisions_In(directory: &Path) -> Result<Vec<(String, PathBuf)>, IngestError>
+pub fn nomos_spec_ingest::SectionReport::Passed(&self) -> bool
+pub fn nomos_spec_ingest::StatementReport::Passed(&self) -> bool
+pub fn nomos_spec_ingest::Statements_In(markdown: &str) -> BTreeMap<String, String>
+pub fn nomos_spec_ingest::Statements_Sourced_Only_From_Commentary( store: &SpecificationStore, ) -> Result<Vec<String>, IngestError>
+pub fn nomos_spec_ingest::Walk(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
+pub impl nomos_spec_ingest::ArchiveError implements core::fmt::Display
+pub impl nomos_spec_ingest::ArchiveError implements std::error::Error
+pub impl nomos_spec_ingest::Collision implements core::fmt::Display
+pub impl nomos_spec_ingest::IngestError implements From<StoreError>
+pub impl nomos_spec_ingest::IngestError implements core::fmt::Display
+pub impl nomos_spec_ingest::IngestError implements std::error::Error
+pub struct field nomos_spec_ingest::Artifact::criteria: usize
+pub struct field nomos_spec_ingest::Artifact::family: Family
+pub struct field nomos_spec_ingest::Artifact::id: String
+pub struct field nomos_spec_ingest::Artifact::statement: String
+pub struct field nomos_spec_ingest::BlockLineage::blocks: Vec<RecordedBlock>
+pub struct field nomos_spec_ingest::CatalogEntity::aliases: Vec<String>
+pub struct field nomos_spec_ingest::CatalogEntity::authority: String
+pub struct field nomos_spec_ingest::CatalogEntity::id: String
+pub struct field nomos_spec_ingest::CatalogEntity::kind: String
+pub struct field nomos_spec_ingest::CatalogEntity::representation: String
+pub struct field nomos_spec_ingest::CatalogEntity::title: String
+pub struct field nomos_spec_ingest::CatalogReport::aliases: u32
+pub struct field nomos_spec_ingest::CatalogReport::dangling_edges: Vec<String>
+pub struct field nomos_spec_ingest::CatalogReport::nodes: u32
+pub struct field nomos_spec_ingest::CatalogReport::relations: u32
+pub struct field nomos_spec_ingest::Collision::first: String
+pub struct field nomos_spec_ingest::Collision::id: String
+pub struct field nomos_spec_ingest::Collision::second: String
+pub struct field nomos_spec_ingest::DocumentFate::appeared: Vec<String>
+pub struct field nomos_spec_ingest::DocumentFate::changed: Vec<String>
+pub struct field nomos_spec_ingest::DocumentFate::disappeared: Vec<String>
+pub struct field nomos_spec_ingest::DocumentFate::relocated: Vec<Relocation>
+pub struct field nomos_spec_ingest::FillerBlock::displaced: Option<String>
+pub struct field nomos_spec_ingest::FillerBlock::document: String
+pub struct field nomos_spec_ingest::FillerBlock::ordinal: u32
+pub struct field nomos_spec_ingest::FillerBlock::pattern: &'static str
+pub struct field nomos_spec_ingest::FillerCensus::declared: Vec<String>
+pub struct field nomos_spec_ingest::FillerCensus::stubs: Vec<String>
+pub struct field nomos_spec_ingest::FillerCensus::templates: Vec<Template>
+pub struct field nomos_spec_ingest::GateReport::blocks_checked: u32
+pub struct field nomos_spec_ingest::GateReport::discriminating_blocks: u32
+pub struct field nomos_spec_ingest::GateReport::documents_checked: u32
+pub struct field nomos_spec_ingest::GateReport::mismatches: Vec<BlockMismatch>
+pub struct field nomos_spec_ingest::IdentifierOutcome::disposition: Disposition
+pub struct field nomos_spec_ingest::IdentifierOutcome::family: Family
+pub struct field nomos_spec_ingest::IdentifierOutcome::id: String
+pub struct field nomos_spec_ingest::KindCensus::code_blocks: u32
+pub struct field nomos_spec_ingest::KindCensus::content_rows: u32
+pub struct field nomos_spec_ingest::KindCensus::documents: u32
+pub struct field nomos_spec_ingest::KindCensus::documents_with_tables: u32
+pub struct field nomos_spec_ingest::KindCensus::fence_lines: u32
+pub struct field nomos_spec_ingest::KindCensus::non_separator_rows: u32
+pub struct field nomos_spec_ingest::KindCensus::pipe_lines: u32
+pub struct field nomos_spec_ingest::Member::alias: Option<String>
+pub struct field nomos_spec_ingest::Member::document: String
+pub struct field nomos_spec_ingest::Member::family: Restored
+pub struct field nomos_spec_ingest::Member::id: String
+pub struct field nomos_spec_ingest::Member::name: String
+pub struct field nomos_spec_ingest::Member::origin: Origin
+pub struct field nomos_spec_ingest::MemberFate::family: Restored
+pub struct field nomos_spec_ingest::MemberFate::fate: Fate
+pub struct field nomos_spec_ingest::MemberFate::id: String
+pub struct field nomos_spec_ingest::MemberFate::name: String
+pub struct field nomos_spec_ingest::MemberFate::was: String
+pub struct field nomos_spec_ingest::OverlayReport::blocks: u32
+pub struct field nomos_spec_ingest::OverlayReport::documents: u32
+pub struct field nomos_spec_ingest::OverlayReport::filler: Vec<FillerBlock>
+pub struct field nomos_spec_ingest::OverlayReport::records: u32
+pub struct field nomos_spec_ingest::PairChange::appeared: Vec<String>
+pub struct field nomos_spec_ingest::PairChange::changed: Vec<String>
+pub struct field nomos_spec_ingest::PairChange::disappeared: Vec<String>
+pub struct field nomos_spec_ingest::PairChange::from: String
+pub struct field nomos_spec_ingest::PairChange::reappeared: Vec<String>
+pub struct field nomos_spec_ingest::PairChange::to: String
+pub struct field nomos_spec_ingest::ReconciliationReport::outcomes: Vec<IdentifierOutcome>
+pub struct field nomos_spec_ingest::RecordedBlock::block_kind: String
+pub struct field nomos_spec_ingest::RecordedBlock::block_ordinal: u32
+pub struct field nomos_spec_ingest::RecordedBlock::content_hash: String
+pub struct field nomos_spec_ingest::RecordedBlock::disposition: String
+pub struct field nomos_spec_ingest::RecordedBlock::normalized_hash: String
+pub struct field nomos_spec_ingest::RecordedBlock::source_document: String
+pub struct field nomos_spec_ingest::RecordedSection::disposition: String
+pub struct field nomos_spec_ingest::RecordedSection::heading_level: i64
+pub struct field nomos_spec_ingest::RecordedSection::source_document: String
+pub struct field nomos_spec_ingest::RecordedSection::source_heading: String
+pub struct field nomos_spec_ingest::RecordedSection::stable_ids: Vec<String>
+pub struct field nomos_spec_ingest::RecordedStatement::canonical_hash: String
+pub struct field nomos_spec_ingest::RecordedStatement::canonical_text: String
+pub struct field nomos_spec_ingest::RecordedStatement::id: String
+pub struct field nomos_spec_ingest::RecordedStatement::kind: String
+pub struct field nomos_spec_ingest::RecordedStatement::source_document: String
+pub struct field nomos_spec_ingest::RegressionReport::documents: DocumentFate
+pub struct field nomos_spec_ingest::RegressionReport::filler: FillerCensus
+pub struct field nomos_spec_ingest::RegressionReport::from: String
+pub struct field nomos_spec_ingest::RegressionReport::members: Vec<MemberFate>
+pub struct field nomos_spec_ingest::RegressionReport::to: String
+pub struct field nomos_spec_ingest::Relocation::from: Vec<String>
+pub struct field nomos_spec_ingest::Relocation::to: String
+pub struct field nomos_spec_ingest::RestorationReport::ambiguous_names: Vec<String>
+pub struct field nomos_spec_ingest::RestorationReport::contested_aliases: Vec<String>
+pub struct field nomos_spec_ingest::RestorationReport::members: Vec<Member>
+pub struct field nomos_spec_ingest::Revision::documents: BTreeMap<String, String>
+pub struct field nomos_spec_ingest::Revision::label: String
+pub struct field nomos_spec_ingest::RevisionFingerprint::documents: BTreeMap<String, String>
+pub struct field nomos_spec_ingest::RevisionFingerprint::label: String
+pub struct field nomos_spec_ingest::SectionLineage::sections: Vec<RecordedSection>
+pub struct field nomos_spec_ingest::SectionReport::headings: u32
+pub struct field nomos_spec_ingest::SectionReport::lineage_rows: u32
+pub struct field nomos_spec_ingest::SectionReport::unknown_documents: Vec<String>
+pub struct field nomos_spec_ingest::StatementDivergence::id: String
+pub struct field nomos_spec_ingest::StatementDivergence::recomputed: String
+pub struct field nomos_spec_ingest::StatementDivergence::recorded: String
+pub struct field nomos_spec_ingest::StatementDivergence::text_is_canonical: bool
+pub struct field nomos_spec_ingest::StatementFile::statements: Vec<RecordedStatement>
+pub struct field nomos_spec_ingest::StatementReport::divergences: Vec<StatementDivergence>
+pub struct field nomos_spec_ingest::StatementReport::ingested: u32
+pub struct field nomos_spec_ingest::StatementReport::non_canonical_text: Vec<String>
+pub struct field nomos_spec_ingest::SuiteReport::blocks: u32
+pub struct field nomos_spec_ingest::SuiteReport::contested: Vec<String>
+pub struct field nomos_spec_ingest::SuiteReport::documents: u32
+pub struct field nomos_spec_ingest::SuiteReport::machine_documents: Vec<String>
+pub struct field nomos_spec_ingest::SuiteReport::records: Vec<String>
+pub struct field nomos_spec_ingest::SuiteReport::schemas: Vec<String>
+pub struct field nomos_spec_ingest::SuiteReport::suite: String
+pub struct field nomos_spec_ingest::Tally::gone: u32
+pub struct field nomos_spec_ingest::Tally::hollowed: u32
+pub struct field nomos_spec_ingest::Tally::mentioned: u32
+pub struct field nomos_spec_ingest::Tally::preserved: u32
+pub struct field nomos_spec_ingest::Template::declared: Option<&'static str>
+pub struct field nomos_spec_ingest::Template::documents: Vec<String>
+pub struct field nomos_spec_ingest::Template::sections: u32
+pub struct field nomos_spec_ingest::Template::text: String
+pub struct nomos_spec_ingest::Archive
+pub struct nomos_spec_ingest::Artifact
+pub struct nomos_spec_ingest::BlockLineage
+pub struct nomos_spec_ingest::CatalogEntity
+pub struct nomos_spec_ingest::CatalogReport
+pub struct nomos_spec_ingest::Collision
+pub struct nomos_spec_ingest::DocumentFate
+pub struct nomos_spec_ingest::FillerBlock
+pub struct nomos_spec_ingest::FillerCensus
+pub struct nomos_spec_ingest::GateReport
+pub struct nomos_spec_ingest::IdentifierOutcome
+pub struct nomos_spec_ingest::KindCensus
+pub struct nomos_spec_ingest::Member
+pub struct nomos_spec_ingest::MemberFate
+pub struct nomos_spec_ingest::OverlayReport
+pub struct nomos_spec_ingest::PairChange
+pub struct nomos_spec_ingest::ReconciliationReport
+pub struct nomos_spec_ingest::RecordedBlock
+pub struct nomos_spec_ingest::RecordedSection
+pub struct nomos_spec_ingest::RecordedStatement
+pub struct nomos_spec_ingest::RegressionReport
+pub struct nomos_spec_ingest::Relocation
+pub struct nomos_spec_ingest::RestorationReport
+pub struct nomos_spec_ingest::Revision
+pub struct nomos_spec_ingest::RevisionFingerprint
+pub struct nomos_spec_ingest::SectionLineage
+pub struct nomos_spec_ingest::SectionReport
+pub struct nomos_spec_ingest::StatementDivergence
+pub struct nomos_spec_ingest::StatementFile
+pub struct nomos_spec_ingest::StatementReport
+pub struct nomos_spec_ingest::SuiteReport
+pub struct nomos_spec_ingest::Tally
+pub struct nomos_spec_ingest::Template

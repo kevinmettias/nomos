@@ -1,0 +1,84 @@
+pub const fn nomos_store::Authority::Admits(self, kind: DocumentKind) -> bool
+pub const fn nomos_store::Authority::Label(self) -> &'static str
+pub const fn nomos_store::DocumentId::Digest(self) -> Digest128
+pub const fn nomos_store::DocumentId::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_store::DocumentKind::All() -> &'static [Self]
+pub const fn nomos_store::DocumentKind::Authority(self) -> Authority
+pub const fn nomos_store::DocumentKind::Label(self) -> &'static str
+pub const fn nomos_store::DocumentStore::Authority(&self) -> Authority
+pub const nomos_store::COMMIT_SCHEMA: &str
+pub enum nomos_store::Authority
+pub enum nomos_store::DocumentKind
+pub enum nomos_store::StoreError
+pub enum variant nomos_store::Authority::Authored
+pub enum variant nomos_store::Authority::Observed
+pub enum variant nomos_store::DocumentKind::Commit
+pub enum variant nomos_store::DocumentKind::Fact
+pub enum variant nomos_store::DocumentKind::Finding
+pub enum variant nomos_store::DocumentKind::Projection
+pub enum variant nomos_store::DocumentKind::Record
+pub enum variant nomos_store::DocumentKind::Run
+pub enum variant nomos_store::DocumentKind::Specification
+pub enum variant nomos_store::StoreError::Malformed(String)
+pub enum variant nomos_store::StoreError::NoSuchDocument { document: DocumentId, }
+pub enum variant nomos_store::StoreError::Vacuous { snapshot: String, }
+pub enum variant nomos_store::StoreError::WrongAuthority { store: Authority, kind: DocumentKind, document: Authority, }
+pub fn nomos_store::Commit::Decode(bytes: &[u8]) -> Result<Manifest, StoreError>
+pub fn nomos_store::Commit::Encode(&self) -> Result<Vec<u8>, StoreError>
+pub fn nomos_store::Commit::Recording(mut self, record: Recorded) -> Self
+pub fn nomos_store::Commit::Under( snapshot: SnapshotId, variant: BuildVariantId, configuration: ConfigurationId, generation: GenerationId, ) -> Self
+pub fn nomos_store::Document::Authority(&self) -> Authority
+pub fn nomos_store::Document::Id(&self) -> DocumentId
+pub fn nomos_store::Document::New(kind: DocumentKind, schema: SchemaId, bytes: Vec<u8>) -> Self
+pub fn nomos_store::DocumentId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_store::DocumentStore::Commit(&mut self, commit: &Commit) -> Result<DocumentId, StoreError>
+pub fn nomos_store::DocumentStore::Documents(&self) -> &BTreeMap<DocumentId, Document>
+pub fn nomos_store::DocumentStore::Drop_Index(&mut self)
+pub fn nomos_store::DocumentStore::For(authority: Authority) -> Self
+pub fn nomos_store::DocumentStore::Has_Index(&self) -> bool
+pub fn nomos_store::DocumentStore::Index(&mut self) -> Result<&Index, StoreError>
+pub fn nomos_store::DocumentStore::Len(&self) -> usize
+pub fn nomos_store::DocumentStore::Read(&self, id: DocumentId) -> Result<&Document, StoreError>
+pub fn nomos_store::DocumentStore::Unreachable(&mut self) -> Result<Vec<DocumentId>, StoreError>
+pub fn nomos_store::Index::Commits_Under(&self, snapshot: SnapshotId) -> Vec<DocumentId>
+pub fn nomos_store::Index::Derive(documents: &BTreeMap<DocumentId, Document>) -> Result<Self, StoreError>
+pub fn nomos_store::Index::Digest(&self) -> Digest128
+pub fn nomos_store::Index::In_Snapshot(&self, snapshot: SnapshotId) -> Vec<DocumentId>
+pub fn nomos_store::Index::Is_Empty(&self) -> bool
+pub fn nomos_store::Index::Of_Kind(&self, kind: DocumentKind) -> Vec<DocumentId>
+pub fn nomos_store::Index::Of_Schema(&self, schema: &str) -> Vec<DocumentId>
+pub fn nomos_store::Index::Snapshots(&self) -> Vec<SnapshotId>
+pub fn nomos_store::Recorded::Document(&self) -> Document
+pub fn nomos_store::Recorded::New(kind: DocumentKind, schema: SchemaId, bytes: Vec<u8>) -> Self
+pub fn nomos_store::StoreError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_store::DocumentId implements core::fmt::Display
+pub impl nomos_store::StoreError implements core::fmt::Display
+pub impl nomos_store::StoreError implements std::error::Error
+pub struct field nomos_store::Commit::configuration: ConfigurationId
+pub struct field nomos_store::Commit::generation: GenerationId
+pub struct field nomos_store::Commit::records: Vec<Recorded>
+pub struct field nomos_store::Commit::snapshot: SnapshotId
+pub struct field nomos_store::Commit::variant: BuildVariantId
+pub struct field nomos_store::Document::bytes: Vec<u8>
+pub struct field nomos_store::Document::kind: DocumentKind
+pub struct field nomos_store::Document::schema: SchemaId
+pub struct field nomos_store::Manifest::configuration: ConfigurationId
+pub struct field nomos_store::Manifest::generation: GenerationId
+pub struct field nomos_store::Manifest::records: Vec<Reference>
+pub struct field nomos_store::Manifest::schema: String
+pub struct field nomos_store::Manifest::snapshot: SnapshotId
+pub struct field nomos_store::Manifest::variant: BuildVariantId
+pub struct field nomos_store::Recorded::bytes: Vec<u8>
+pub struct field nomos_store::Recorded::kind: DocumentKind
+pub struct field nomos_store::Recorded::schema: SchemaId
+pub struct field nomos_store::Reference::document: DocumentId
+pub struct field nomos_store::Reference::kind: DocumentKind
+pub struct field nomos_store::Reference::schema: SchemaId
+pub struct nomos_store::Commit
+pub struct nomos_store::Document
+pub struct nomos_store::DocumentId(Digest128)
+pub struct nomos_store::DocumentStore
+pub struct nomos_store::Index
+pub struct nomos_store::Manifest
+pub struct nomos_store::Recorded
+pub struct nomos_store::Reference

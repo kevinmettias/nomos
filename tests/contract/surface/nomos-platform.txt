@@ -1,0 +1,52 @@
+pub const fn nomos_platform::ExitOutcome::Produced_A_Verdict(self) -> bool
+pub const fn nomos_platform::ExitOutcome::Succeeded(self) -> bool
+pub const fn nomos_platform::Timestamp::From_Unix_Seconds(seconds: i64) -> Self
+pub const fn nomos_platform::Timestamp::Unix_Seconds(self) -> i64
+pub enum nomos_platform::ExitOutcome
+pub enum nomos_platform::FileSystemError
+pub enum nomos_platform::LockError
+pub enum variant nomos_platform::ExitOutcome::Exited { code: i32, }
+pub enum variant nomos_platform::ExitOutcome::Terminated
+pub enum variant nomos_platform::ExitOutcome::TimedOut
+pub enum variant nomos_platform::FileSystemError::Denied { path: String, cause: String, }
+pub enum variant nomos_platform::FileSystemError::NotFound { path: String, }
+pub enum variant nomos_platform::FileSystemError::Other { path: String, cause: String, }
+pub enum variant nomos_platform::LockError::Held { holder: String, waited: Duration, }
+pub enum variant nomos_platform::LockError::Unusable { cause: String, }
+pub fn nomos_platform::Clock::Now(&self) -> Timestamp
+pub fn nomos_platform::Command::New(argv: Vec<String>, timeout: std::time::Duration) -> Self
+pub fn nomos_platform::Command::Program(&self) -> Option<&str>
+pub fn nomos_platform::CrossProcessLock::Acquire( &self, holder: &str, wait_limit: Duration, stale_after: Duration, ) -> Result<LockAcquisition<Self::Guard>, LockError>
+pub fn nomos_platform::FileSystem::Exists(&self, path: &Path) -> bool
+pub fn nomos_platform::FileSystem::Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
+pub fn nomos_platform::FileSystem::Replace_Atomically(&self, path: &Path, contents: &str) -> Result<(), FileSystemError>
+pub fn nomos_platform::FileSystemError::Path(&self) -> &str
+pub fn nomos_platform::FileSystemError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_platform::LockError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_platform::ProcessLauncher::Run(&self, command: &Command) -> Result<ProcessOutput, String>
+pub fn nomos_platform::Timestamp::Plus(self, duration: std::time::Duration) -> Self
+pub fn nomos_platform::Timestamp::Since(self, earlier: Self) -> std::time::Duration
+pub impl nomos_platform::FileSystemError implements core::fmt::Display
+pub impl nomos_platform::FileSystemError implements std::error::Error
+pub impl nomos_platform::LockError implements core::fmt::Display
+pub impl nomos_platform::LockError implements std::error::Error
+pub struct field nomos_platform::Command::argv: Vec<String>
+pub struct field nomos_platform::Command::timeout: std::time::Duration
+pub struct field nomos_platform::Command::working_directory: Option<PathBuf>
+pub struct field nomos_platform::LockAcquisition::broke_stale: Option<StaleTakeover>
+pub struct field nomos_platform::LockAcquisition::guard: G
+pub struct field nomos_platform::ProcessOutput::outcome: ExitOutcome
+pub struct field nomos_platform::ProcessOutput::stderr: String
+pub struct field nomos_platform::ProcessOutput::stdout: String
+pub struct field nomos_platform::StaleTakeover::age: Duration
+pub struct field nomos_platform::StaleTakeover::previous_holder: String
+pub struct nomos_platform::Command
+pub struct nomos_platform::LockAcquisition<G>
+pub struct nomos_platform::ProcessOutput
+pub struct nomos_platform::StaleTakeover
+pub struct nomos_platform::Timestamp(i64)
+pub trait nomos_platform::Clock
+pub trait nomos_platform::CrossProcessLock
+pub trait nomos_platform::FileSystem
+pub trait nomos_platform::ProcessLauncher
+pub type nomos_platform::CrossProcessLock::Guard

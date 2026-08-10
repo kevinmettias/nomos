@@ -1,0 +1,85 @@
+pub const fn nomos_integration_tests::Approximate_Floor() -> Guarantee
+pub const fn nomos_integration_tests::Cross_Environment_Owed(scope: ReproducibilityScope) -> CrossEnvironment
+pub const fn nomos_integration_tests::Edited::Outcome(&self) -> &Applied
+pub const fn nomos_integration_tests::Parsed_Floor() -> Guarantee
+pub const fn nomos_integration_tests::Slice::Generation(&self) -> GenerationId
+pub const fn nomos_integration_tests::Slice::Registry(&self) -> &Registry
+pub const fn nomos_integration_tests::Slice::Snapshot(&self) -> SnapshotId
+pub const fn nomos_integration_tests::Slice::Store(&self) -> &MemoryFactStore
+pub const fn nomos_integration_tests::Slice::Workspace(&self) -> &Workspace
+pub const nomos_integration_tests::CONFIGURATION_SCHEMA: &str
+pub const nomos_integration_tests::SURFACE_CAPABILITY: &str
+pub enum nomos_integration_tests::CrossEnvironment
+pub enum nomos_integration_tests::Edited
+pub enum variant nomos_integration_tests::CrossEnvironment::Nothing
+pub enum variant nomos_integration_tests::CrossEnvironment::SecondProcess
+pub enum variant nomos_integration_tests::CrossEnvironment::SecondProcessAndGolden
+pub enum variant nomos_integration_tests::Edited::Advanced { applied: Applied, invalidated: InvalidationReport, }
+pub enum variant nomos_integration_tests::Edited::Unchanged { applied: Applied, }
+pub fn nomos_integration_tests::Child_Variable() -> String
+pub fn nomos_integration_tests::Configuration_Rendering(registry: &Registry) -> String
+pub fn nomos_integration_tests::Corpus::Groups(&self) -> Vec<String>
+pub fn nomos_integration_tests::Corpus::In_Group(&self, group: &str) -> Vec<&SourceFile>
+pub fn nomos_integration_tests::Corpus::Rewrite(&mut self, path: &str, source: &str) -> bool
+pub fn nomos_integration_tests::Decode_Surface(payload: &[u8]) -> Result<Surface, String>
+pub fn nomos_integration_tests::Digest_In(output: &str, domain: &str) -> Option<String>
+pub fn nomos_integration_tests::Host_Variant() -> BuildVariant
+pub fn nomos_integration_tests::Production::Digest_At(&self, strength: DeterminismStrength) -> String
+pub fn nomos_integration_tests::Production::State(&self) -> Vec<Vec<u8>>
+pub fn nomos_integration_tests::Public_Items(payload: &[u8]) -> Result<(u32, u32), String>
+pub fn nomos_integration_tests::Report_Line(domain: &str, digest: &str) -> String
+pub fn nomos_integration_tests::Resolved_Configuration(registry: &Registry) -> ConfigurationId
+pub fn nomos_integration_tests::RunReport::Recomputed(&self) -> Vec<String>
+pub fn nomos_integration_tests::RunReport::Recomputed_For(&self, capability: &str) -> Vec<String>
+pub fn nomos_integration_tests::Slice::Accepting(mut self, floor: Guarantee) -> Self
+pub fn nomos_integration_tests::Slice::Checkout(&mut self, corpus: &mut Corpus, landing: &[(&str, &str)]) -> Edited
+pub fn nomos_integration_tests::Slice::Composed() -> Self
+pub fn nomos_integration_tests::Slice::Edit( &mut self, corpus: &mut Corpus, source: ChangeSource, path: &str, content: &str, ) -> Edited
+pub fn nomos_integration_tests::Slice::Name_Keys(corpus: &Corpus, keys: &[FactKey]) -> Vec<String>
+pub fn nomos_integration_tests::Slice::Over(corpus: &Corpus) -> Self
+pub fn nomos_integration_tests::Slice::Preferring(mut self, provider: &str) -> Self
+pub fn nomos_integration_tests::Slice::Registered() -> Registry
+pub fn nomos_integration_tests::Slice::Requirement(&self) -> Requirement
+pub fn nomos_integration_tests::Slice::Resolved(&self) -> (Selection, Applicability)
+pub fn nomos_integration_tests::Slice::Run(&mut self, corpus: &Corpus) -> RunReport
+pub fn nomos_integration_tests::Slice::Surface_Of(&self, members: &[&SourceFile]) -> Option<MaterializedFact>
+pub fn nomos_integration_tests::Slice::Syntax_Key(&self, file: &SourceFile) -> FactKey
+pub fn nomos_integration_tests::Subject_Of_Path(path: &str) -> SubjectId
+pub fn nomos_integration_tests::Surface::Encode(&self) -> Vec<u8>
+pub fn nomos_integration_tests::Verify<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>) -> Verification
+pub fn nomos_integration_tests::Walk(root: &Path) -> Corpus
+pub struct field nomos_integration_tests::Corpus::files: Vec<SourceFile>
+pub struct field nomos_integration_tests::Corpus::root: PathBuf
+pub struct field nomos_integration_tests::Corpus::unreadable: Vec<PathBuf>
+pub struct field nomos_integration_tests::Production::trace: Vec<u8>
+pub struct field nomos_integration_tests::Recompute::capability: String
+pub struct field nomos_integration_tests::Recompute::subject: String
+pub struct field nomos_integration_tests::RunReport::degraded: Vec<String>
+pub struct field nomos_integration_tests::RunReport::files_seen: usize
+pub struct field nomos_integration_tests::RunReport::groups_seen: usize
+pub struct field nomos_integration_tests::RunReport::recomputed: Vec<Recompute>
+pub struct field nomos_integration_tests::RunReport::refused: Vec<(String, String)>
+pub struct field nomos_integration_tests::RunReport::surface_materialized: usize
+pub struct field nomos_integration_tests::RunReport::surface_reused: usize
+pub struct field nomos_integration_tests::RunReport::syntax_materialized: usize
+pub struct field nomos_integration_tests::RunReport::syntax_reused: usize
+pub struct field nomos_integration_tests::SourceFile::group: String
+pub struct field nomos_integration_tests::SourceFile::group_subject: SubjectId
+pub struct field nomos_integration_tests::SourceFile::path: String
+pub struct field nomos_integration_tests::SourceFile::source: String
+pub struct field nomos_integration_tests::SourceFile::subject: SubjectId
+pub struct field nomos_integration_tests::Surface::files: u32
+pub struct field nomos_integration_tests::Surface::items: u32
+pub struct field nomos_integration_tests::Surface::public: u32
+pub struct field nomos_integration_tests::Surface::unreachable: u32
+pub struct field nomos_integration_tests::Verification::digest: String
+pub struct field nomos_integration_tests::Verification::discharged: Vec<String>
+pub struct field nomos_integration_tests::Verification::domain: String
+pub struct nomos_integration_tests::Corpus
+pub struct nomos_integration_tests::Production
+pub struct nomos_integration_tests::Recompute
+pub struct nomos_integration_tests::RunReport
+pub struct nomos_integration_tests::Slice
+pub struct nomos_integration_tests::SourceFile
+pub struct nomos_integration_tests::Surface
+pub struct nomos_integration_tests::Verification

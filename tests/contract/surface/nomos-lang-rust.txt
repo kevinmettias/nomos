@@ -1,0 +1,72 @@
+pub const fn nomos_lang_rust::Declared_Guarantee() -> Guarantee
+pub const fn nomos_lang_rust::ItemKind::Label(self) -> &'static str
+pub const nomos_lang_rust::PROVIDER: &str
+pub const nomos_lang_rust::RUST_EXTENSION: &str
+pub const nomos_lang_rust::SyntaxFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_rust::SyntaxFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_rust::SyntaxFactProduction::TRACE: TraceEquivalence
+pub enum nomos_lang_rust::ItemKind
+pub enum nomos_lang_rust::Materialization
+pub enum nomos_lang_rust::Reading
+pub enum nomos_lang_rust::Recognition
+pub enum nomos_lang_rust::Visibility
+pub enum variant nomos_lang_rust::ItemKind::Constant
+pub enum variant nomos_lang_rust::ItemKind::Enum
+pub enum variant nomos_lang_rust::ItemKind::ExternCrate
+pub enum variant nomos_lang_rust::ItemKind::ForeignModule
+pub enum variant nomos_lang_rust::ItemKind::Function
+pub enum variant nomos_lang_rust::ItemKind::Implementation
+pub enum variant nomos_lang_rust::ItemKind::MacroDefinition
+pub enum variant nomos_lang_rust::ItemKind::Module
+pub enum variant nomos_lang_rust::ItemKind::Static
+pub enum variant nomos_lang_rust::ItemKind::Struct
+pub enum variant nomos_lang_rust::ItemKind::Trait
+pub enum variant nomos_lang_rust::ItemKind::TraitAlias
+pub enum variant nomos_lang_rust::ItemKind::TypeAlias
+pub enum variant nomos_lang_rust::ItemKind::Union
+pub enum variant nomos_lang_rust::ItemKind::Use
+pub enum variant nomos_lang_rust::Materialization::Materialized(Box<MaterializedFact>)
+pub enum variant nomos_lang_rust::Materialization::Unparseable(ParseFailure)
+pub enum variant nomos_lang_rust::Reading::Parsed(SyntaxFacts)
+pub enum variant nomos_lang_rust::Reading::Unparseable(ParseFailure)
+pub enum variant nomos_lang_rust::Recognition::Recognized
+pub enum variant nomos_lang_rust::Recognition::Unrecognized { extension: Option<String>, }
+pub enum variant nomos_lang_rust::Visibility::NotApplicable
+pub enum variant nomos_lang_rust::Visibility::Private
+pub enum variant nomos_lang_rust::Visibility::Public
+pub enum variant nomos_lang_rust::Visibility::Restricted { scope: String, }
+pub fn nomos_lang_rust::Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
+pub fn nomos_lang_rust::ItemKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust::Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_rust::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_rust::Read_Source(source: &str) -> Reading
+pub fn nomos_lang_rust::Recognition::Of_Path(path: &str) -> Self
+pub fn nomos_lang_rust::SyntaxFacts::Declares_Nothing(&self) -> bool
+pub fn nomos_lang_rust::SyntaxItem::Qualified_Name(&self) -> String
+pub fn nomos_lang_rust::Visibility::Label(&self) -> String
+pub fn nomos_lang_rust::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_lang_rust::ItemKind implements core::fmt::Display
+pub impl nomos_lang_rust::ParseFailure implements core::fmt::Display
+pub impl nomos_lang_rust::ParseFailure implements std::error::Error
+pub impl nomos_lang_rust::SyntaxFactProduction implements Strategy
+pub impl nomos_lang_rust::Visibility implements core::fmt::Display
+pub struct field nomos_lang_rust::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_rust::FactContext::generation: GenerationId
+pub struct field nomos_lang_rust::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_rust::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_rust::ParseFailure::column: usize
+pub struct field nomos_lang_rust::ParseFailure::line: usize
+pub struct field nomos_lang_rust::ParseFailure::message: String
+pub struct field nomos_lang_rust::SyntaxFacts::items: Vec<SyntaxItem>
+pub struct field nomos_lang_rust::SyntaxFacts::unexpanded: u32
+pub struct field nomos_lang_rust::SyntaxItem::kind: ItemKind
+pub struct field nomos_lang_rust::SyntaxItem::name: String
+pub struct field nomos_lang_rust::SyntaxItem::ordinal: u32
+pub struct field nomos_lang_rust::SyntaxItem::scope: Vec<String>
+pub struct field nomos_lang_rust::SyntaxItem::visibility: Visibility
+pub struct nomos_lang_rust::FactContext
+pub struct nomos_lang_rust::ParseFailure
+pub struct nomos_lang_rust::SyntaxFactProduction
+pub struct nomos_lang_rust::SyntaxFacts
+pub struct nomos_lang_rust::SyntaxItem

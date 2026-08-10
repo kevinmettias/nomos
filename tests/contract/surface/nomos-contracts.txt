@@ -1,0 +1,233 @@
+pub const fn nomos_contracts::Applicability::Display_Label(self) -> DisplayLabel
+pub const fn nomos_contracts::Applicability::Is_Coverage_Debt(self) -> bool
+pub const fn nomos_contracts::Applicability::Label(self) -> &'static str
+pub const fn nomos_contracts::Applicability::Was_Evaluated(self) -> bool
+pub const fn nomos_contracts::Assurance::Label(self) -> &'static str
+pub const fn nomos_contracts::Assurance::Satisfies_Requirement(self) -> bool
+pub const fn nomos_contracts::AuthorityClass::Label(self) -> &'static str
+pub const fn nomos_contracts::AuthorityClass::Requires_Explicit_Grant(self) -> bool
+pub const fn nomos_contracts::ContractVersion::Can_Read(self, other: Self) -> bool
+pub const fn nomos_contracts::ContractVersion::New(major: u16, minor: u16) -> Self
+pub const fn nomos_contracts::Declaration_Is_Coherent( strength: DeterminismStrength, trace: TraceEquivalence, ) -> bool
+pub const fn nomos_contracts::DeterminismStrength::Claims_Reproducibility(self) -> bool
+pub const fn nomos_contracts::DeterminismStrength::Label(self) -> &'static str
+pub const fn nomos_contracts::Digest128::Bytes(&self) -> &[u8; Self::BYTE_LENGTH]
+pub const fn nomos_contracts::Digest128::From_Bytes(bytes: [u8; Self::BYTE_LENGTH]) -> Self
+pub const fn nomos_contracts::DisplayLabel::Label(self) -> &'static str
+pub const fn nomos_contracts::EvidenceClass::Is_Mechanical(self) -> bool
+pub const fn nomos_contracts::EvidenceClass::Label(self) -> &'static str
+pub const fn nomos_contracts::FactVariant::Label(self) -> &'static str
+pub const fn nomos_contracts::Finding::Can_Fail_A_Build(&self) -> bool
+pub const fn nomos_contracts::Finding::Is_Mechanical(&self) -> bool
+pub const fn nomos_contracts::GateCategory::Can_Fail_A_Build(self) -> bool
+pub const fn nomos_contracts::GateCategory::Label(self) -> &'static str
+pub const fn nomos_contracts::GenerationId::From_Raw(value: u64) -> Self
+pub const fn nomos_contracts::GenerationId::Next(self) -> Self
+pub const fn nomos_contracts::GenerationId::Raw(self) -> u64
+pub const fn nomos_contracts::Guarantee::New( variant: FactVariant, soundness: Assurance, completeness: Assurance, incremental: IncrementalGranularity, ) -> Self
+pub const fn nomos_contracts::IncrementalGranularity::Label(self) -> &'static str
+pub const fn nomos_contracts::MutationClass::Label(self) -> &'static str
+pub const fn nomos_contracts::MutationClass::Required_Authority(self) -> AuthorityClass
+pub const fn nomos_contracts::MutationClass::Writes(self) -> bool
+pub const fn nomos_contracts::PackageKind::Hosts_Foreign_Code(self) -> bool
+pub const fn nomos_contracts::PackageKind::Is_Optional(self) -> bool
+pub const fn nomos_contracts::PackageKind::Label(self) -> &'static str
+pub const fn nomos_contracts::PeerAvailability::Is_Knowledge(&self) -> bool
+pub const fn nomos_contracts::ReproducibilityScope::Label(self) -> &'static str
+pub const fn nomos_contracts::ReproducibilityScope::Requires_Cross_Environment_Verification(self) -> bool
+pub const fn nomos_contracts::SynchronizationState::Label(self) -> &'static str
+pub const fn nomos_contracts::SynchronizationState::Requires_Authorized_Resolution(self) -> bool
+pub const fn nomos_contracts::TraceEquivalence::Label(self) -> &'static str
+pub const fn nomos_contracts::TraceEquivalence::Weaker_Of(self, other: Self) -> Self
+pub const nomos_contracts::Digest128::BYTE_LENGTH: usize
+pub const nomos_contracts::Digest128::HEX_LENGTH: usize
+pub const nomos_contracts::GenerationId::INITIAL: Self
+pub const nomos_contracts::Strategy::SCOPE: ReproducibilityScope
+pub const nomos_contracts::Strategy::STRENGTH: DeterminismStrength
+pub const nomos_contracts::Strategy::TRACE: TraceEquivalence
+pub enum nomos_contracts::Applicability
+pub enum nomos_contracts::Assurance
+pub enum nomos_contracts::AuthorityClass
+pub enum nomos_contracts::DeterminismStrength
+pub enum nomos_contracts::DisplayLabel
+pub enum nomos_contracts::EnforcementBreach
+pub enum nomos_contracts::EnforcerRef
+pub enum nomos_contracts::EvidenceClass
+pub enum nomos_contracts::FactVariant
+pub enum nomos_contracts::GateCategory
+pub enum nomos_contracts::IncrementalGranularity
+pub enum nomos_contracts::MutationClass
+pub enum nomos_contracts::PackageKind
+pub enum nomos_contracts::PeerAvailability
+pub enum nomos_contracts::ReproducibilityScope
+pub enum nomos_contracts::SynchronizationState
+pub enum nomos_contracts::TraceEquivalence
+pub enum variant nomos_contracts::Applicability::AnalysisFailed
+pub enum variant nomos_contracts::Applicability::ConfigurationDisabled
+pub enum variant nomos_contracts::Applicability::DependencyUnavailable
+pub enum variant nomos_contracts::Applicability::MissingCapability
+pub enum variant nomos_contracts::Applicability::NotApplicable
+pub enum variant nomos_contracts::Applicability::PartiallySupported
+pub enum variant nomos_contracts::Applicability::ProviderUnavailable
+pub enum variant nomos_contracts::Applicability::Supported
+pub enum variant nomos_contracts::Applicability::SupportedWithFallback
+pub enum variant nomos_contracts::Applicability::Unparseable
+pub enum variant nomos_contracts::Assurance::Sound
+pub enum variant nomos_contracts::Assurance::Unknown
+pub enum variant nomos_contracts::Assurance::Unsound
+pub enum variant nomos_contracts::AuthorityClass::Approve
+pub enum variant nomos_contracts::AuthorityClass::Execute
+pub enum variant nomos_contracts::AuthorityClass::Mutate
+pub enum variant nomos_contracts::AuthorityClass::Preview
+pub enum variant nomos_contracts::AuthorityClass::Propose
+pub enum variant nomos_contracts::AuthorityClass::Publish
+pub enum variant nomos_contracts::AuthorityClass::Read
+pub enum variant nomos_contracts::DeterminismStrength::None
+pub enum variant nomos_contracts::DeterminismStrength::State
+pub enum variant nomos_contracts::DeterminismStrength::StateTemporal
+pub enum variant nomos_contracts::DisplayLabel::Failed
+pub enum variant nomos_contracts::DisplayLabel::Fallback
+pub enum variant nomos_contracts::DisplayLabel::Native
+pub enum variant nomos_contracts::DisplayLabel::NotApplicable
+pub enum variant nomos_contracts::DisplayLabel::Partial
+pub enum variant nomos_contracts::DisplayLabel::Unavailable
+pub enum variant nomos_contracts::EnforcementBreach::ExternalUnconfigured { tool: String, setting: String, }
+pub enum variant nomos_contracts::EnforcementBreach::Misclaimed { enforcer: EnforcerRef, actual_subject: String, }
+pub enum variant nomos_contracts::EnforcementBreach::OptIn { enforcer: EnforcerRef, missing_feature: String, }
+pub enum variant nomos_contracts::EnforcementBreach::OutOfReach { enforcer: EnforcerRef, unreached: Vec<String>, }
+pub enum variant nomos_contracts::EnforcementBreach::Phantom { name: String, }
+pub enum variant nomos_contracts::EnforcerRef::Check { name: String, }
+pub enum variant nomos_contracts::EnforcerRef::External { tool: String, setting: String, }
+pub enum variant nomos_contracts::EnforcerRef::Review
+pub enum variant nomos_contracts::EvidenceClass::AgentJudged
+pub enum variant nomos_contracts::EvidenceClass::Approximate
+pub enum variant nomos_contracts::EvidenceClass::Authoritative
+pub enum variant nomos_contracts::EvidenceClass::Derived
+pub enum variant nomos_contracts::EvidenceClass::HumanAsserted
+pub enum variant nomos_contracts::EvidenceClass::Observed
+pub enum variant nomos_contracts::EvidenceClass::Predicted
+pub enum variant nomos_contracts::EvidenceClass::Verified
+pub enum variant nomos_contracts::FactVariant::Approximate
+pub enum variant nomos_contracts::FactVariant::Predicted
+pub enum variant nomos_contracts::FactVariant::RuntimeObserved
+pub enum variant nomos_contracts::FactVariant::SemanticallyResolved
+pub enum variant nomos_contracts::FactVariant::Syntactic
+pub enum variant nomos_contracts::GateCategory::Advisory
+pub enum variant nomos_contracts::GateCategory::Blocking
+pub enum variant nomos_contracts::GateCategory::Review
+pub enum variant nomos_contracts::GateCategory::Unreachable
+pub enum variant nomos_contracts::IncrementalGranularity::File
+pub enum variant nomos_contracts::IncrementalGranularity::None
+pub enum variant nomos_contracts::IncrementalGranularity::Project
+pub enum variant nomos_contracts::IncrementalGranularity::Region
+pub enum variant nomos_contracts::IncrementalGranularity::Symbol
+pub enum variant nomos_contracts::IncrementalGranularity::WholeWorkspace
+pub enum variant nomos_contracts::MutationClass::Apply
+pub enum variant nomos_contracts::MutationClass::Preview
+pub enum variant nomos_contracts::MutationClass::Read
+pub enum variant nomos_contracts::MutationClass::Rollback
+pub enum variant nomos_contracts::MutationClass::Validate
+pub enum variant nomos_contracts::PackageKind::AgentExecutorPackage
+pub enum variant nomos_contracts::PackageKind::ClientPackage
+pub enum variant nomos_contracts::PackageKind::FeatureModule
+pub enum variant nomos_contracts::PackageKind::FeaturePack
+pub enum variant nomos_contracts::PackageKind::IntegrationPackage
+pub enum variant nomos_contracts::PackageKind::KernelModule
+pub enum variant nomos_contracts::PackageKind::LanguagePackage
+pub enum variant nomos_contracts::PackageKind::MetricProviderPackage
+pub enum variant nomos_contracts::PackageKind::ModelBackendPackage
+pub enum variant nomos_contracts::PackageKind::ProjectionPackage
+pub enum variant nomos_contracts::PackageKind::RepositoryProviderPackage
+pub enum variant nomos_contracts::PackageKind::RulePackage
+pub enum variant nomos_contracts::PackageKind::RuntimeProviderPackage
+pub enum variant nomos_contracts::PackageKind::SdkPackage
+pub enum variant nomos_contracts::PackageKind::ServiceModule
+pub enum variant nomos_contracts::PackageKind::ToolProviderPackage
+pub enum variant nomos_contracts::PeerAvailability::Answered
+pub enum variant nomos_contracts::PeerAvailability::Partial { reason: String, }
+pub enum variant nomos_contracts::PeerAvailability::Unavailable { reason: String, }
+pub enum variant nomos_contracts::ReproducibilityScope::CrossBinary
+pub enum variant nomos_contracts::ReproducibilityScope::CrossPlatform
+pub enum variant nomos_contracts::ReproducibilityScope::CrossRun
+pub enum variant nomos_contracts::ReproducibilityScope::SingleRun
+pub enum variant nomos_contracts::SynchronizationState::Current
+pub enum variant nomos_contracts::SynchronizationState::Diverged
+pub enum variant nomos_contracts::SynchronizationState::OperationalNewer
+pub enum variant nomos_contracts::SynchronizationState::Rejected
+pub enum variant nomos_contracts::SynchronizationState::SourceNewer
+pub enum variant nomos_contracts::SynchronizationState::Unavailable
+pub enum variant nomos_contracts::TraceEquivalence::BehaviorallyEquivalent
+pub enum variant nomos_contracts::TraceEquivalence::BitIdentical
+pub enum variant nomos_contracts::TraceEquivalence::NotApplicable
+pub fn nomos_contracts::Applicability::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::Assurance::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::AuthorityClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::ContractVersion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::DeterminismStrength::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::Digest128::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::DisplayLabel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::EnforcementBreach::Describe(&self) -> String
+pub fn nomos_contracts::EnforcementReach::Is_Enforced(&self) -> bool
+pub fn nomos_contracts::EnforcementReach::Is_Truthful(&self) -> bool
+pub fn nomos_contracts::EnforcerRef::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::EvidenceClass::Weaker_Of(self, other: Self) -> Self
+pub fn nomos_contracts::EvidenceClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::FactVariant::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::Finding::Describe(&self) -> String
+pub fn nomos_contracts::GateCategory::Strongest_Of(self, other: Self) -> Self
+pub fn nomos_contracts::GateCategory::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::GenerationId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::Guarantee::Satisfies(&self, required: &Self) -> bool
+pub fn nomos_contracts::IncrementalGranularity::Broadened_To(self, provider: Self) -> Self
+pub fn nomos_contracts::IncrementalGranularity::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::MutationClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::PackageKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::PeerAvailability::Describe(&self) -> String
+pub fn nomos_contracts::ReproducibilityScope::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::SynchronizationState::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::TraceEquivalence::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_contracts::Applicability implements core::fmt::Display
+pub impl nomos_contracts::Assurance implements core::fmt::Display
+pub impl nomos_contracts::AuthorityClass implements core::fmt::Display
+pub impl nomos_contracts::ContractVersion implements core::fmt::Display
+pub impl nomos_contracts::DeterminismStrength implements core::fmt::Display
+pub impl nomos_contracts::Digest128 implements core::fmt::Debug
+pub impl nomos_contracts::Digest128 implements core::fmt::Display
+pub impl nomos_contracts::DisplayLabel implements core::fmt::Display
+pub impl nomos_contracts::EnforcerRef implements core::fmt::Display
+pub impl nomos_contracts::EvidenceClass implements core::fmt::Display
+pub impl nomos_contracts::FactVariant implements core::fmt::Display
+pub impl nomos_contracts::GateCategory implements core::fmt::Display
+pub impl nomos_contracts::GenerationId implements core::fmt::Display
+pub impl nomos_contracts::IncrementalGranularity implements core::fmt::Display
+pub impl nomos_contracts::MutationClass implements core::fmt::Display
+pub impl nomos_contracts::PackageKind implements core::fmt::Display
+pub impl nomos_contracts::ReproducibilityScope implements core::fmt::Display
+pub impl nomos_contracts::SynchronizationState implements core::fmt::Display
+pub impl nomos_contracts::TraceEquivalence implements core::fmt::Display
+pub struct field nomos_contracts::ContractVersion::major: u16
+pub struct field nomos_contracts::ContractVersion::minor: u16
+pub struct field nomos_contracts::EnforcementReach::breaches: Vec<EnforcementBreach>
+pub struct field nomos_contracts::EnforcementReach::computed: GateCategory
+pub struct field nomos_contracts::EnforcementReach::declared: Vec<EnforcerRef>
+pub struct field nomos_contracts::EnforcementReach::expected: GateCategory
+pub struct field nomos_contracts::EnforcementReach::rule: RuleId
+pub struct field nomos_contracts::Finding::applicability: Applicability
+pub struct field nomos_contracts::Finding::evidence: EvidenceClass
+pub struct field nomos_contracts::Finding::gate: GateCategory
+pub struct field nomos_contracts::Finding::locations: Vec<String>
+pub struct field nomos_contracts::Finding::rule: RuleId
+pub struct field nomos_contracts::Finding::subject: SubjectId
+pub struct field nomos_contracts::Finding::subject_name: String
+pub struct field nomos_contracts::Finding::summary: String
+pub struct field nomos_contracts::Guarantee::completeness: Assurance
+pub struct field nomos_contracts::Guarantee::incremental: IncrementalGranularity
+pub struct field nomos_contracts::Guarantee::soundness: Assurance
+pub struct field nomos_contracts::Guarantee::variant: FactVariant
+pub struct nomos_contracts::ContractVersion
+pub struct nomos_contracts::Digest128([u8; 16])
+pub struct nomos_contracts::EnforcementReach
+pub struct nomos_contracts::Finding
+pub struct nomos_contracts::GenerationId(u64)
+pub struct nomos_contracts::Guarantee
+pub trait nomos_contracts::Strategy

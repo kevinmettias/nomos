@@ -1,0 +1,161 @@
+pub const fn nomos_model::Confidence::Value(self) -> f64
+pub const fn nomos_model::Coverage::Has_Effective_Coverage(&self) -> bool
+pub const fn nomos_model::EntityId::Digest(&self) -> Digest128
+pub const fn nomos_model::EntityId::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_model::Evidence::Is_Mechanical(&self) -> bool
+pub const fn nomos_model::IdentityTransitionKind::Preserves_History(self) -> bool
+pub const fn nomos_model::Intersection::Permits_Concurrency(&self) -> bool
+pub const fn nomos_model::SetResolution::Label(self) -> &'static str
+pub const fn nomos_model::StructuralFingerprint::Digest(&self) -> Digest128
+pub const fn nomos_model::StructuralFingerprint::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_model::Subject::Kind(&self) -> SubjectKind
+pub const fn nomos_model::SubjectSet::Resolution(&self) -> SetResolution
+pub const fn nomos_model::SubjectTarget::Kind(&self) -> SubjectKind
+pub const fn nomos_model::Transition::Asserted(kind: K, confidence: Confidence) -> Self
+pub const nomos_model::Confidence::CERTAIN: Self
+pub const nomos_model::Confidence::NONE: Self
+pub const nomos_model::IdentityPolicy::STRICT: Self
+pub enum nomos_model::ArtifactKind
+pub enum nomos_model::IdentityTransitionKind
+pub enum nomos_model::Intersection
+pub enum nomos_model::ResourceKind
+pub enum nomos_model::SetResolution
+pub enum nomos_model::SubjectKind
+pub enum nomos_model::SubjectTarget
+pub enum nomos_model::SymbolKind
+pub enum nomos_model::UnknownReason
+pub enum variant nomos_model::ArtifactKind::Binary
+pub enum variant nomos_model::ArtifactKind::Configuration
+pub enum variant nomos_model::ArtifactKind::Document
+pub enum variant nomos_model::ArtifactKind::GeneratedOutput
+pub enum variant nomos_model::ArtifactKind::Manifest
+pub enum variant nomos_model::ArtifactKind::Schema
+pub enum variant nomos_model::ArtifactKind::SourceFile
+pub enum variant nomos_model::IdentityTransitionKind::ExactContinuity
+pub enum variant nomos_model::IdentityTransitionKind::GeneratedFrom
+pub enum variant nomos_model::IdentityTransitionKind::MergedFrom
+pub enum variant nomos_model::IdentityTransitionKind::ProbableMove
+pub enum variant nomos_model::IdentityTransitionKind::ProbableRename
+pub enum variant nomos_model::IdentityTransitionKind::Recreated
+pub enum variant nomos_model::IdentityTransitionKind::SignatureEvolution
+pub enum variant nomos_model::IdentityTransitionKind::SplitInto
+pub enum variant nomos_model::IdentityTransitionKind::Unresolved
+pub enum variant nomos_model::Intersection::Disjoint
+pub enum variant nomos_model::Intersection::Overlaps(Vec<SubjectId>)
+pub enum variant nomos_model::Intersection::Unknown(UnknownReason)
+pub enum variant nomos_model::ResourceKind::Channel
+pub enum variant nomos_model::ResourceKind::DataFile
+pub enum variant nomos_model::ResourceKind::DataStore
+pub enum variant nomos_model::ResourceKind::Device
+pub enum variant nomos_model::ResourceKind::Endpoint
+pub enum variant nomos_model::ResourceKind::ExternalService
+pub enum variant nomos_model::SetResolution::File
+pub enum variant nomos_model::SetResolution::Region
+pub enum variant nomos_model::SetResolution::Symbol
+pub enum variant nomos_model::SubjectKind::Aggregate
+pub enum variant nomos_model::SubjectKind::Artifact
+pub enum variant nomos_model::SubjectKind::Resource
+pub enum variant nomos_model::SubjectKind::Symbol
+pub enum variant nomos_model::SubjectTarget::Aggregate { kind: String, members: Vec<SubjectId>, }
+pub enum variant nomos_model::SubjectTarget::Artifact(EntityId)
+pub enum variant nomos_model::SubjectTarget::Resource(EntityId)
+pub enum variant nomos_model::SubjectTarget::Symbol(EntityId)
+pub enum variant nomos_model::SymbolKind::Block
+pub enum variant nomos_model::SymbolKind::Closure
+pub enum variant nomos_model::SymbolKind::Constant
+pub enum variant nomos_model::SymbolKind::Field
+pub enum variant nomos_model::SymbolKind::Function
+pub enum variant nomos_model::SymbolKind::Interface
+pub enum variant nomos_model::SymbolKind::Module
+pub enum variant nomos_model::SymbolKind::Type
+pub enum variant nomos_model::UnknownReason::IncomparableResolution { left: SetResolution, right: SetResolution, }
+pub enum variant nomos_model::UnknownReason::IncomparableSnapshots
+pub enum variant nomos_model::UnknownReason::ResolutionUnavailable { requested: SetResolution, }
+pub enum variant nomos_model::UnknownReason::UnexpandedPattern { pattern: String, }
+pub fn nomos_model::CompositeIdentity::Entity_Id(&self) -> EntityId
+pub fn nomos_model::Confidence::Meets(self, threshold: Self) -> bool
+pub fn nomos_model::Confidence::Of(value: f64) -> Self
+pub fn nomos_model::Content_Digest(bytes: &[u8]) -> Digest128
+pub fn nomos_model::Coverage::Debt(&self) -> impl Iterator<Item = &CoverageGap>
+pub fn nomos_model::Coverage::Is_Complete(&self) -> bool
+pub fn nomos_model::Digest_Of_Parts(parts: &[&[u8]]) -> Digest128
+pub fn nomos_model::EntityId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_model::Intersection::Conflicting(&self) -> &[SubjectId]
+pub fn nomos_model::SetResolution::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_model::SubjectSet::Empty(resolution: SetResolution) -> Self
+pub fn nomos_model::SubjectSet::Insert(&mut self, subject: SubjectId)
+pub fn nomos_model::SubjectSet::Intersect(&self, other: &Self) -> Intersection
+pub fn nomos_model::SubjectSet::Is_Empty(&self) -> bool
+pub fn nomos_model::SubjectSet::Len(&self) -> usize
+pub fn nomos_model::SubjectSet::Members(&self) -> impl Iterator<Item = &SubjectId>
+pub fn nomos_model::SubjectSet::Of(resolution: SetResolution, members: impl IntoIterator<Item = SubjectId>) -> Self
+pub fn nomos_model::SubjectSet::With_Unexpanded_Pattern(mut self, pattern: impl Into<String>) -> Self
+pub fn nomos_model::Transition::Is_Evidenced(&self) -> bool
+pub fn nomos_model::UnknownReason::Describe(&self) -> String
+pub impl nomos_model::EntityId implements core::fmt::Display
+pub impl nomos_model::SetResolution implements core::fmt::Display
+pub struct field nomos_model::Artifact::content: Digest128
+pub struct field nomos_model::Artifact::generated_by: Option<String>
+pub struct field nomos_model::Artifact::id: EntityId
+pub struct field nomos_model::Artifact::kind: ArtifactKind
+pub struct field nomos_model::Artifact::path: String
+pub struct field nomos_model::CompositeIdentity::language: String
+pub struct field nomos_model::CompositeIdentity::policy: IdentityPolicy
+pub struct field nomos_model::CompositeIdentity::provenance: SourceProvenance
+pub struct field nomos_model::CompositeIdentity::provider_native: Option<String>
+pub struct field nomos_model::CompositeIdentity::qualified_name: Option<String>
+pub struct field nomos_model::CompositeIdentity::signature: Option<String>
+pub struct field nomos_model::CompositeIdentity::structural: StructuralFingerprint
+pub struct field nomos_model::Coverage::evaluated: u64
+pub struct field nomos_model::Coverage::excluded: u64
+pub struct field nomos_model::Coverage::gaps: Vec<CoverageGap>
+pub struct field nomos_model::CoverageGap::reason: Applicability
+pub struct field nomos_model::CoverageGap::subject: SubjectId
+pub struct field nomos_model::Evidence::class: EvidenceClass
+pub struct field nomos_model::Evidence::producer: ProviderId
+pub struct field nomos_model::Evidence::supporting: Vec<EvidenceRef>
+pub struct field nomos_model::EvidenceRef::kind: String
+pub struct field nomos_model::EvidenceRef::locator: String
+pub struct field nomos_model::IdentityPolicy::distinguish_conditional_compilation: bool
+pub struct field nomos_model::IdentityPolicy::distinguish_generated: bool
+pub struct field nomos_model::IdentityPolicy::distinguish_overloads: bool
+pub struct field nomos_model::Resource::id: EntityId
+pub struct field nomos_model::Resource::kind: ResourceKind
+pub struct field nomos_model::Resource::locator: String
+pub struct field nomos_model::SnapshotEntity::configuration: ConfigurationId
+pub struct field nomos_model::SnapshotEntity::entity: EntityId
+pub struct field nomos_model::SnapshotEntity::id: SnapshotEntityId
+pub struct field nomos_model::SnapshotEntity::snapshot: SnapshotId
+pub struct field nomos_model::SnapshotEntity::variant: BuildVariantId
+pub struct field nomos_model::SourceProvenance::generator: Option<String>
+pub struct field nomos_model::SourceProvenance::repository: String
+pub struct field nomos_model::SourceProvenance::revision: String
+pub struct field nomos_model::Subject::id: SubjectId
+pub struct field nomos_model::Subject::occurrence: SnapshotEntityId
+pub struct field nomos_model::Subject::target: SubjectTarget
+pub struct field nomos_model::Symbol::container: Option<EntityId>
+pub struct field nomos_model::Symbol::declared_in: EntityId
+pub struct field nomos_model::Symbol::id: EntityId
+pub struct field nomos_model::Symbol::identity: crate::CompositeIdentity
+pub struct field nomos_model::Symbol::kind: SymbolKind
+pub struct field nomos_model::Transition::confidence: Confidence
+pub struct field nomos_model::Transition::evidence: Vec<crate::EvidenceRef>
+pub struct field nomos_model::Transition::kind: K
+pub struct nomos_model::Artifact
+pub struct nomos_model::CompositeIdentity
+pub struct nomos_model::Confidence(f64)
+pub struct nomos_model::Coverage
+pub struct nomos_model::CoverageGap
+pub struct nomos_model::EntityId(Digest128)
+pub struct nomos_model::Evidence
+pub struct nomos_model::EvidenceRef
+pub struct nomos_model::IdentityPolicy
+pub struct nomos_model::Resource
+pub struct nomos_model::SnapshotEntity
+pub struct nomos_model::SourceProvenance
+pub struct nomos_model::StructuralFingerprint(Digest128)
+pub struct nomos_model::Subject
+pub struct nomos_model::SubjectSet
+pub struct nomos_model::Symbol
+pub struct nomos_model::Transition<K>
+pub type nomos_model::IdentityTransition
