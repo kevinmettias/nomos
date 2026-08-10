@@ -7336,6 +7336,43 @@
         "holder": "claude-add-guard-a41",
         "declined_at": 1786388822
       }
+    },
+    {
+      "id": "P11-PREFERENCE-STRENGTH",
+      "title": "A named provider can only be preferred, so a caller whose policy is that provider is answered by another and told in a field",
+      "why": "Requirement carries preferred: Option<ProviderId> and one builder that sets it, Preferring. There is one strength of naming, so a caller can say which provider it would rather have and cannot say that it must have that one.\n\nWhat happens when the preference is not honoured is decided and is not a defect. registry.rs:346-352 returns Satisfied with Applicability::SupportedWithFallback, and the comment there gives the reason: the judgment still stands, its provenance is not what was asked for, and a caller that cannot tell cannot record why. Refusing outright would deny a caller who would have accepted the fallback, which is the same mistake OD-CAPABILITY-001 avoided when it declined to let the registry decide how far down a caller spends.\n\nThe gap is on the requirement side rather than the answer side. A named provider can be a preference, and it can also be the whole point. A caller that names a provider because that provider is the policy - the strongest reader for a subject that matters, the one implementation whose output is admissible downstream - is served a different provider, told so in a field, and nothing makes it look. Applicability::SupportedWithFallback satisfies Was_Evaluated, so the run reports a judgment that was made by somebody other than the one required, and reports it as evaluated, which is true and is not what was asked.\n\nThat is the shape OD-CONTRACTS-002 corrected one enum along. A state that is honest about what happened is not sufficient when nothing obliges the caller to distinguish it, and the remedy there was not a better label but a bucket the predicates could not fold away.\n\nThe exposure grows rather than shrinks. OD-CAPABILITY-003 admits per-subject fallback, so within one run a capability may be answered by two providers under two addresses, and a caller that required one of them has more places to not notice, not fewer.",
+      "done_when": "A caller can state that a named provider is required rather than preferred, and a requirement that cannot be met by that provider is refused instead of answered by another.\n\nThe two strengths are distinguishable in the type rather than by a convention about reading Applicability afterwards: a required naming that cannot be honoured produces an Unsatisfied resolution naming what was required and what was available, and a preferred naming keeps the behaviour that exists today, unchanged and still reported as SupportedWithFallback.\n\nA test drives both against the same registry and the same unavailable provider, and asserts they produce different resolutions - not merely different applicability on the same Satisfied.\n\nWhere the distinction is decided, it is recorded, including why refusing is right for the required case when OD-CAPABILITY-001 declined to let the registry refuse on the caller's behalf: the difference is that the caller said so.\n\nNot closed by a boolean beside preferred that only some call sites pass. Not closed by documenting that callers should check Applicability, which is the convention this item exists because nothing enforces.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-capability/src/contract.rs",
+          "crates/substrate/nomos-capability/src/registry.rs",
+          "tests/contract/surface/nomos-capability.txt",
+          "docs/records/OD-CAPABILITY-005",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
