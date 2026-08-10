@@ -7491,6 +7491,44 @@
       ],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-INVALIDATION-ORDER",
+      "title": "The invalidation report names what became stale in traversal order and cannot say which facts are mutually dependent",
+      "why": "MemoryFactStore::Invalidate walks dependency edges transitively and the walk is already correct in the ways that are easy to get wrong. A seen set guards re-entry, Invalidate_One is idempotent because it returns false once invalidated_at is set, and the traversal is deterministic because dependents is a BTreeMap of BTreeSet. A mutually dependent pair terminates and each fact is invalidated once. None of that is the defect.\n\nThe defect is what the report carries. InvalidationReport.dependent is filled in frontier.pop() order, which is LIFO over the traversal, so it is deterministic and it is not a dependency order. A caller holding that vector cannot rematerialize from it: for A depending on B depending on C, the order the caller receives depends on where the walk entered, and rematerializing in it recomputes a fact from inputs that are themselves still stale.\n\nWorse, a fact reached through a cycle is indistinguishable in that vector from one reached through an acyclic edge. Both are a FactKey pushed to dependent. So a caller cannot tell the case where some valid order exists from the case where none does, and the second case is not an error - mutually recursive subjects are the ordinary shape once facts are computed from other facts.\n\nNothing has noticed because the workspace has one derived fact. OD-ANALYSIS-002 recorded that the dependent half of invalidation shipped unexercised because every capability was a leaf, and the module rollup that has since arrived is one edge deep. One edge has no order to get wrong and cannot form a cycle.\n\nBroadening is not this. It is computed per key over seen from IncrementalGranularity and answers how much more had to be invalidated than the cause implied. Dependency structure answers how the invalidated facts depend on one another. They are orthogonal and must not share a representation.\n\nRematerialization is deliberately outside FactStore, whose trait is Current, Historical and Invalidate. This item does not bring it in. The store does not have to decide how mutually recursive facts are recomputed. It has to stop hiding that the mutual dependency exists.",
+      "done_when": "The invalidation report carries enough structure for a caller to derive a valid rematerialization order where one exists, and to identify the regions where none does.\n\nThe condensation is expressed as ordered groups rather than as a sorted key vector, so that a group is either a single fact or a set of mutually dependent facts, and the group order is a valid order over the condensation. The existing dependent field keeps the semantics it shipped with; this is added beside it rather than redefining it, because a caller reading dependent today is reading what became invalid and that answer is not wrong.\n\nThree graphs are driven against a real store and asserted, not one:\n\nA depends on B depends on C depends on D produces groups whose order lets a caller rematerialize D before C before B before A, and the assertion does not depend on the traversal order the store happened to use.\n\nA cycle over four facts produces one group naming all four as mutually dependent, and no claim of a total order among them.\n\nA mixed graph, where an acyclic chain enters and leaves a two-fact cycle, preserves both: the acyclic ordering around the cycle, and the mutual-dependency group inside it.\n\nBroadening stays orthogonal. No cycle information is expressed through it and no granularity information is expressed through the groups.\n\nWhere the distinction is decided it is recorded, including why the store reports structure rather than ordering rematerialization itself, and what the later rematerialization orchestrator owes on top of it: that rematerializing according to this structure must produce the same current facts as clean recomputation. That predicate belongs to the orchestrator and is named here rather than asserted here, because nothing rematerializes yet.\n\nNot closed by sorting dependent topologically, which silently changes a shipped field and still cannot represent a cycle. Not closed by returning an error when a cycle is found: a cycle is a shape of the graph and not a fault.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/store.rs",
+          "crates/substrate/nomos-analysis/src/lib.rs",
+          "crates/substrate/nomos-analysis/tests/invalidation_order.rs",
+          "tests/contract/surface/nomos-analysis.txt",
+          "docs/records/OD-ANALYSIS-003",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
