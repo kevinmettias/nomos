@@ -3569,14 +3569,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-kind-taxonomy-w12",
-        "acquired_at": 1786340254,
-        "lease_expires_at": 1786351054
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3585,6 +3581,177 @@
           "nomos-contracts",
           "-p",
           "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Its_Reason_Into_The_Description ... ok\ntest peer::tests::Test_Unavailable_Should_Not_Read_As_Current ... ok\n\ntest result: ok. 59 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w12\\debug\\deps\\nomos_contract_tests-17508d9e418f7321.exe)\n     Running tests\\boundaries.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w12\\debug\\deps\\boundaries-3fe4cf225a94af29.exe)\n     Running tests\\completeness_universes.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w12\\debug\\deps\\completeness_universes-eb503e7eebda3c78.exe)\n     Running tests\\corpus_gates.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w12\\debug\\deps\\corpus_gates-cb19ae52bc859907.exe)\n     Running tests\\determinism_declarations.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w12\\debug\\deps\\determinism_declarations-eb47cd13fafa9c5f.exe)\n     Running tests\\public_surface.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w12\\debug\\deps\\public_surface-17c4307b64675421.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w12\\debug\\deps\\nomos_contracts-7c55b876dd85ab8e.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1786341337,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": []
+    },
+    {
+      "id": "P10-PHANTOM-FLOOR",
+      "title": "One unreadable fixture makes every phantom advisory, so the guard D-134 says must block cannot block",
+      "why": "Found by P10-MIRROR-DISAGREEMENTs eighth negative control and measured, not inferred: renaming a universes claimed mirror to a name that resolves to nothing produced [Advisory] ... resolves to no check ... and the check index is incomplete, because 1 subject(s) could not be read, and nomos check exited 0. D-134 decision 4 stands at version 2 and says a false claim of coverage blocks while an admitted gap is advisory. In this tree neither half can fire for a phantom, because tests/corpus/analysis/gamma/broken.rs is a deliberately unparseable fixture that nomos-lang-rust refuses, so index.Incompleteness() is Some for every run over this workspace and every phantom is downgraded. The downgrade itself is right and OD-RULES-001 argues for it correctly: a rule must not manufacture a phantom out of its own inability to look, and absence must become neither success nor failure. What is wrong is its scope. Incompleteness is global, so one unreadable subject anywhere silences a phantom claimed in a file whose facts were read perfectly well, and the two facts have nothing to do with each other. The result is a guard that reports rather than judges, permanently, and the workspace contradicts a standing governing decision while every test is green.",
+      "done_when": "A phantom in a subject whose facts were read blocks, whatever some other subject did. Incompleteness stops being one flag over the run and becomes a property of the subjects the judgment actually rests on - a claim is downgraded only when the index is short of something that could have resolved it, and the record states how that is decided rather than only that it is. D-134 decision 4 is either satisfied as written or amended again with a reason, and if amended the record says what a phantom is worth once it can never fail a build. The measurement is repeated and written down: today nomos check reports 191 files, 190 with a fact, 14 findings, 0 blocking, and the count that must change is the last one under a planted phantom. A test plants a phantom in a readable subject while an unreadable subject is present in the same run and asserts the finding is Blocking and the exit code is not 0; the negative control is that restoring the global downgrade turns it red, and a second control confirms a genuine unresolvable claim in an unreadable subject is still not a phantom. Not closed by excluding broken.rs from the walk, which would buy a blocking phantom by removing the case the third state exists for, and not closed by making every unresolved claim block.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "crates/host/nomos-cli",
+          "tests/contract/surface/nomos-rules.txt",
+          "crates/spec/nomos-spec-store/records/OD-RULES-002.record",
+          "docs/records/OD-RULES-002"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-phantom-floor-w13",
+        "acquired_at": 1786341181,
+        "lease_expires_at": 1786351981
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-AGENT-HARNESS",
+      "title": "A coding agent arriving at this repository has no front door, and the obvious fix would copy the tables the gate already checks",
+      "why": "Five entry points that Claude Code and Codex look for by name are absent: CLAUDE.md, AGENTS.md, .codex, .github/copilot-instructions.md, and any committed .claude content - the only .claude file present is settings.local.json, which a global ignore keeps out of git. So every session rediscovers the bands, the ledger verbs, the gate and the traps from source, and the traps are the half written down nowhere: cargo fmt damages the tree, a stale copied nomos.exe silently strips ledger fields it does not know, work finish runs the gate lint step before the predicate, and the ledger is shared with other live sessions. The proposal this replaces was a nine file docs/agent tree carrying an architecture map, a workflow page and a testing page. That would have been the defect rather than the fix: the README band tables are compared against the workspace in both directions by tests/contract/tests/boundaries.rs, so a second copy is an unchecked copy, and OD-PROJECT-001 already settled that this repository does not keep two documents answering one question.",
+      "done_when": "AGENTS.md exists as the one canonical agent contract and CLAUDE.md exists as an adapter that imports it rather than restating it. AGENTS.md routes rather than restates: it names which authority answers which question and carries the operating hazards that have no other home, and it contains no band table, no gate command list and no second copy of the ledger verb reference. A contract test asserts the structural promises - CLAUDE.md imports AGENTS.md, every repository path the harness names exists on disk, AGENTS.md names work/ledger.json as the work authority and docs/records as the rationale authority, no crate row derived from the README bands is restated in it, and each committed skill carries frontmatter whose name matches its directory - each with a negative control over a fixture rather than over the tree. A record states why an agent instruction file routes rather than restates, so the test has a why. Not closed by a longer AGENTS.md, and not closed by a docs/agent tree.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "tests/contract/tests/agent_harness.rs",
+          "docs/records/OD-AGENT-001",
+          "crates/spec/nomos-spec-store/records/OD-AGENT-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-agent-harness-w1",
+        "acquired_at": 1786341289,
+        "lease_expires_at": 1786355689
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-AGENT-TASK-SKILL",
+      "title": "The claim to finish loop is a procedure with a different hazard at five of its steps, and it lives only in prose each session reassembles",
+      "why": "AGENTS.md states where authority lives and what is dangerous, which is the right shape for a document every session reads and the wrong shape for a procedure. Choosing an item, probing the claim by exit code rather than by the listing column, keeping a copied binary fresh, running the scoped predicate before finish, and re-reading the board afterwards is a sequence whose steps each have a failure that looks like something else. Exit 3 is retryable and exit 5 is not; a green listing column means nothing fifteen seconds later; a stale copy of nomos.exe writes the ledger back without the fields it does not know, exits zero and looks like a successful release. A skill is where a multi step procedure with per step hazards belongs, and it costs nothing to a session that is not running it.",
+      "done_when": "A skill at .claude/skills/nomos-task covers the loop from observing the board to finishing and re-reading it, naming the exit code branches and the fresh binary rule at the steps where they bite rather than in a preamble. It cites AGENTS.md and the existing authorities rather than restating them, and the harness contract test accepts it: frontmatter present, name matching its directory, and every repository path it names existing. Not closed by a skill that paraphrases the README ledger section.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-task"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-AGENT-HARNESS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-AGENT-SPEC-SKILL",
+      "title": "Editing the specification store is a staged workflow whose failure mode is silent content loss, and nothing writes the ordering down",
+      "why": "The specification is a database behind a preservation ledger, and the revision that motivated it destroyed 282 markdown table rows, all 6 code blocks and 132 sections of narrative while the mechanism that would have caught it was present and never ran. Authoring against it is read, stage, preview, inspect the semantic diff, commit, then validate preservation and projection freshness - and the steps that matter are the two an agent in a hurry skips. A projection that moved under an unchanged body and a body somebody typed into are different failures sharing one exit code, and a new store table that cannot travel in the bundle is a bundle change rather than a store change. That sequencing is procedure rather than policy, so it belongs in a skill rather than in AGENTS.md.",
+      "done_when": "A skill at .claude/skills/nomos-spec-change covers the authoring sequence end to end, naming the preservation run and the freshness check as steps rather than as afterthoughts, keeping stale and edited apart where the exit code does not, and stating what a new table costs outside the migration. It routes to ARC-SPECDB-001 and the spec crates for why rather than restating them, and the harness contract test accepts it. Not closed by a command list without the ordering that makes the checks mean anything.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-AGENT-HARNESS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
           "--no-fail-fast"
         ],
         "timeout_seconds": 600

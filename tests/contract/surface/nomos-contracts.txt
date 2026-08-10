@@ -134,15 +134,15 @@ pub enum variant nomos_contracts::PackageKind::FeaturePack
 pub enum variant nomos_contracts::PackageKind::IntegrationPackage
 pub enum variant nomos_contracts::PackageKind::KernelModule
 pub enum variant nomos_contracts::PackageKind::LanguagePackage
-pub enum variant nomos_contracts::PackageKind::MetricProviderPackage
+pub enum variant nomos_contracts::PackageKind::MetricProvider
 pub enum variant nomos_contracts::PackageKind::ModelBackendPackage
 pub enum variant nomos_contracts::PackageKind::ProjectionPackage
-pub enum variant nomos_contracts::PackageKind::RepositoryProviderPackage
+pub enum variant nomos_contracts::PackageKind::RepositoryProvider
 pub enum variant nomos_contracts::PackageKind::RulePackage
-pub enum variant nomos_contracts::PackageKind::RuntimeProviderPackage
+pub enum variant nomos_contracts::PackageKind::RuntimeProvider
 pub enum variant nomos_contracts::PackageKind::SdkPackage
 pub enum variant nomos_contracts::PackageKind::ServiceModule
-pub enum variant nomos_contracts::PackageKind::ToolProviderPackage
+pub enum variant nomos_contracts::PackageKind::ToolProvider
 pub enum variant nomos_contracts::PeerAvailability::Answered
 pub enum variant nomos_contracts::PeerAvailability::Partial { reason: String, }
 pub enum variant nomos_contracts::PeerAvailability::Unavailable { reason: String, }

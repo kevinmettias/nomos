@@ -7,10 +7,10 @@ const SERVICE_MODULE_LABEL: &str = "ServiceModule";
 const FEATURE_MODULE_LABEL: &str = "FeatureModule";
 const LANGUAGE_PACKAGE_LABEL: &str = "LanguagePackage";
 const RULE_PACKAGE_LABEL: &str = "RulePackage";
-const TOOL_PROVIDER_PACKAGE_LABEL: &str = "ToolProviderPackage";
-const METRIC_PROVIDER_PACKAGE_LABEL: &str = "MetricProviderPackage";
-const REPOSITORY_PROVIDER_PACKAGE_LABEL: &str = "RepositoryProviderPackage";
-const RUNTIME_PROVIDER_PACKAGE_LABEL: &str = "RuntimeProviderPackage";
+const TOOL_PROVIDER_LABEL: &str = "ToolProvider";
+const METRIC_PROVIDER_LABEL: &str = "MetricProvider";
+const REPOSITORY_PROVIDER_LABEL: &str = "RepositoryProvider";
+const RUNTIME_PROVIDER_LABEL: &str = "RuntimeProvider";
 const MODEL_BACKEND_PACKAGE_LABEL: &str = "ModelBackendPackage";
 const AGENT_EXECUTOR_PACKAGE_LABEL: &str = "AgentExecutorPackage";
 const CLIENT_PACKAGE_LABEL: &str = "ClientPackage";
@@ -29,6 +29,30 @@ const FEATURE_PACK_LABEL: &str = "FeaturePack";
 /// This is the only such enum in the system. Nomos owns these semantics; a platform may
 /// materialize a package on disk without knowing any of them, and physical installation
 /// alone never establishes an effective capability.
+///
+/// # Every name here is transcribed, including the four that look irregular
+///
+/// [`PackageKind::Label`] is the serialized form. A peer reimplementing this enum in
+/// another language reads the label and never sees this Rust, so a label is a protocol
+/// commitment rather than a local identifier, and no name below was chosen here. All
+/// sixteen are transcribed from the package taxonomy sentence of volume 03 of the
+/// corpus, in the order that sentence names them. `OD-PACKAGE-002` quotes it, resolves
+/// its path, and records why the corpus rather than the game plan fixes these spellings.
+///
+/// That taxonomy uses four suffixes and each says what the installable unit *is*:
+/// `Module` for machinery this product itself ships, `Package` for a versioned bundle of
+/// declarations and data, `Provider` for an implementation standing behind a capability
+/// contract, and `Pack` for a manifest that only names other units. So `ToolProvider`,
+/// `MetricProvider`, `RepositoryProvider` and `RuntimeProvider` carry no `Package`
+/// suffix, and appending one would not regularize the taxonomy — it would move four
+/// kinds into a family whose semantics they do not have, which is a provider's whole
+/// distinction from the thing that ships it. `ARCH-003` and `ARCH-004` are normative and
+/// name `ToolProvider` and `MetricProvider` in exactly this spelling.
+///
+/// Those four did carry a `Package` suffix here until `OD-PACKAGE-002`, which is the
+/// mistake this note exists to stop a later reader from making again in the name of
+/// consistency. `Test_Every_Kind_Should_Carry_The_Label_The_Corpus_Names` pins the
+/// result, and its table is where a seventeenth kind has to be argued for.
 ///
 /// # Nothing consumes this, and what it is waiting for
 ///
@@ -49,9 +73,11 @@ const FEATURE_PACK_LABEL: &str = "FeaturePack";
 /// and refuses one it cannot resolve — a reader that maps a manifest to a `PackageId`, a
 /// `PackageKind` and `PKG-007`'s version domains. That is the change to watch for; until
 /// it lands the declaration is a protocol commitment held deliberately, which is also why
-/// `OD-PACKAGE-001` records that four of the labels below follow the game plan's spelling
-/// rather than volume 03's. That divergence costs nothing while nobody reads them and has
-/// to be settled before anybody does.
+/// `OD-PACKAGE-001` recorded that four of the labels below then followed the game plan's
+/// spelling rather than volume 03's. That divergence cost nothing while nobody read them
+/// and had to be settled before anybody did; `OD-PACKAGE-002` settled it, and the labels
+/// are volume 03's. Having no consumer is still this enum's condition, and it is
+/// `OD-PACKAGE-001`'s open subject rather than something the spelling repair touched.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum PackageKind
 {
@@ -66,13 +92,13 @@ pub enum PackageKind
     /// Normative rules, their judgments, corrections and fixtures.
     RulePackage,
     /// An external analysis or transformation tool, wrapped behind a capability.
-    ToolProviderPackage,
+    ToolProvider,
     /// A source of metric observations.
-    MetricProviderPackage,
+    MetricProvider,
     /// An adapter for a repository host.
-    RepositoryProviderPackage,
+    RepositoryProvider,
     /// An adapter for a runtime evidence source.
-    RuntimeProviderPackage,
+    RuntimeProvider,
     /// A model inference backend.
     ModelBackendPackage,
     /// An agent execution backend.
@@ -102,10 +128,10 @@ impl PackageKind
             Self::FeatureModule => FEATURE_MODULE_LABEL,
             Self::LanguagePackage => LANGUAGE_PACKAGE_LABEL,
             Self::RulePackage => RULE_PACKAGE_LABEL,
-            Self::ToolProviderPackage => TOOL_PROVIDER_PACKAGE_LABEL,
-            Self::MetricProviderPackage => METRIC_PROVIDER_PACKAGE_LABEL,
-            Self::RepositoryProviderPackage => REPOSITORY_PROVIDER_PACKAGE_LABEL,
-            Self::RuntimeProviderPackage => RUNTIME_PROVIDER_PACKAGE_LABEL,
+            Self::ToolProvider => TOOL_PROVIDER_LABEL,
+            Self::MetricProvider => METRIC_PROVIDER_LABEL,
+            Self::RepositoryProvider => REPOSITORY_PROVIDER_LABEL,
+            Self::RuntimeProvider => RUNTIME_PROVIDER_LABEL,
             Self::ModelBackendPackage => MODEL_BACKEND_PACKAGE_LABEL,
             Self::AgentExecutorPackage => AGENT_EXECUTOR_PACKAGE_LABEL,
             Self::ClientPackage => CLIENT_PACKAGE_LABEL,
@@ -138,10 +164,10 @@ impl PackageKind
     {
         return matches!(
             self,
-            Self::ToolProviderPackage
-                | Self::MetricProviderPackage
-                | Self::RepositoryProviderPackage
-                | Self::RuntimeProviderPackage
+            Self::ToolProvider
+                | Self::MetricProvider
+                | Self::RepositoryProvider
+                | Self::RuntimeProvider
                 | Self::ModelBackendPackage
                 | Self::AgentExecutorPackage
                 | Self::IntegrationPackage
@@ -162,31 +188,109 @@ mod tests
 {
     use super::*;
 
-    const ALL: [PackageKind; 16] = [
-        PackageKind::KernelModule,
-        PackageKind::ServiceModule,
-        PackageKind::FeatureModule,
-        PackageKind::LanguagePackage,
-        PackageKind::RulePackage,
-        PackageKind::ToolProviderPackage,
-        PackageKind::MetricProviderPackage,
-        PackageKind::RepositoryProviderPackage,
-        PackageKind::RuntimeProviderPackage,
-        PackageKind::ModelBackendPackage,
-        PackageKind::AgentExecutorPackage,
-        PackageKind::ClientPackage,
-        PackageKind::IntegrationPackage,
-        PackageKind::SdkPackage,
-        PackageKind::ProjectionPackage,
-        PackageKind::FeaturePack,
+    /// The sixteen kinds the corpus names, in the order it names them, each paired with
+    /// the label a peer actually reads.
+    ///
+    /// Transcribed from the package taxonomy sentence of volume 03,
+    /// `03_Packages_Providers_Rules_and_Applicability.md`, which `OD-PACKAGE-002` quotes
+    /// in full with its resolved path. This table is the enumeration that record fixes,
+    /// so a row is a claim about the corpus and not a local preference: editing one
+    /// changes what Nomos asserts the corpus says, which is an argument to have in a
+    /// record rather than in a diff.
+    const CORPUS_TAXONOMY: [(PackageKind, &str); 16] = [
+        (PackageKind::KernelModule, "KernelModule"),
+        (PackageKind::ServiceModule, "ServiceModule"),
+        (PackageKind::FeatureModule, "FeatureModule"),
+        (PackageKind::LanguagePackage, "LanguagePackage"),
+        (PackageKind::RulePackage, "RulePackage"),
+        (PackageKind::ToolProvider, "ToolProvider"),
+        (PackageKind::MetricProvider, "MetricProvider"),
+        (PackageKind::RepositoryProvider, "RepositoryProvider"),
+        (PackageKind::RuntimeProvider, "RuntimeProvider"),
+        (PackageKind::ModelBackendPackage, "ModelBackendPackage"),
+        (PackageKind::AgentExecutorPackage, "AgentExecutorPackage"),
+        (PackageKind::ClientPackage, "ClientPackage"),
+        (PackageKind::IntegrationPackage, "IntegrationPackage"),
+        (PackageKind::SdkPackage, "SdkPackage"),
+        (PackageKind::ProjectionPackage, "ProjectionPackage"),
+        (PackageKind::FeaturePack, "FeaturePack"),
     ];
+
+    /// Where a kind sits in `CORPUS_TAXONOMY`.
+    ///
+    /// The match is exhaustive on purpose, and that is the whole mechanism for
+    /// membership: a seventeenth variant makes it non-exhaustive, so this module stops
+    /// compiling and whoever added the kind has to arrive here, beside the table and the
+    /// record it cites, rather than adding a kind these assertions would never visit.
+    const fn Corpus_Position(kind: PackageKind) -> usize
+    {
+        return match kind
+        {
+            PackageKind::KernelModule => 0,
+            PackageKind::ServiceModule => 1,
+            PackageKind::FeatureModule => 2,
+            PackageKind::LanguagePackage => 3,
+            PackageKind::RulePackage => 4,
+            PackageKind::ToolProvider => 5,
+            PackageKind::MetricProvider => 6,
+            PackageKind::RepositoryProvider => 7,
+            PackageKind::RuntimeProvider => 8,
+            PackageKind::ModelBackendPackage => 9,
+            PackageKind::AgentExecutorPackage => 10,
+            PackageKind::ClientPackage => 11,
+            PackageKind::IntegrationPackage => 12,
+            PackageKind::SdkPackage => 13,
+            PackageKind::ProjectionPackage => 14,
+            PackageKind::FeaturePack => 15,
+        };
+    }
+
+    /// `Label` is the serialized form and a non-Rust peer reimplements it from the
+    /// corpus, so a label that drifts is a divergent wire format rather than a rename.
+    /// This checks every declared kind against the enumeration `OD-PACKAGE-002` fixes:
+    /// the label it serializes as, and the position it holds, so neither a relabelling
+    /// nor a reordering can pass without moving the table.
+    #[test]
+    fn Test_Every_Kind_Should_Carry_The_Label_The_Corpus_Names()
+    {
+        for (position, (kind, label)) in CORPUS_TAXONOMY.into_iter().enumerate()
+        {
+            assert_eq!(
+                kind.Label(),
+                label,
+                "PackageKind::{kind:?} serializes as a label the corpus taxonomy does not \
+                 name; OD-PACKAGE-002 fixes the sixteen"
+            );
+            assert_eq!(
+                Corpus_Position(kind),
+                position,
+                "PackageKind::{kind:?} is declared out of the corpus taxonomy's order"
+            );
+        }
+    }
+
+    /// `Display` is how a kind reaches a log line or a message, and a `Display` that
+    /// disagreed with `Label` would put two spellings of one protocol commitment into
+    /// circulation.
+    #[test]
+    fn Test_Display_Should_Render_The_Serialized_Label()
+    {
+        for (kind, label) in CORPUS_TAXONOMY
+        {
+            assert_eq!(
+                kind.to_string(),
+                label,
+                "PackageKind::{kind:?} displays as something other than its label"
+            );
+        }
+    }
 
     #[test]
     fn Test_Kernel_Modules_Should_Not_Be_Optional()
     {
         assert!(!PackageKind::KernelModule.Is_Optional());
 
-        for kind in ALL
+        for (kind, _) in CORPUS_TAXONOMY
         {
             if kind != PackageKind::KernelModule
             {
@@ -200,7 +304,7 @@ mod tests
     #[test]
     fn Test_Provider_Kinds_Should_Be_Recognized_As_Hosting_Foreign_Code()
     {
-        assert!(PackageKind::ToolProviderPackage.Hosts_Foreign_Code());
+        assert!(PackageKind::ToolProvider.Hosts_Foreign_Code());
         assert!(PackageKind::ModelBackendPackage.Hosts_Foreign_Code());
         assert!(PackageKind::AgentExecutorPackage.Hosts_Foreign_Code());
         assert!(!PackageKind::KernelModule.Hosts_Foreign_Code());
@@ -219,10 +323,14 @@ mod tests
     #[test]
     fn Test_Labels_Should_Be_Distinct()
     {
-        let mut labels: Vec<&str> = ALL.iter().map(|kind| kind.Label()).collect();
+        let mut labels: Vec<&str> = CORPUS_TAXONOMY.iter().map(|(kind, _)| kind.Label()).collect();
         labels.sort_unstable();
         labels.dedup();
 
-        assert_eq!(labels.len(), ALL.len(), "two package kinds share a label");
+        assert_eq!(
+            labels.len(),
+            CORPUS_TAXONOMY.len(),
+            "two package kinds share a label"
+        );
     }
 }
