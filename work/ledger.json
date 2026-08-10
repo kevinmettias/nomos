@@ -6658,10 +6658,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-knowledge-absent-a41",
+        "acquired_at": 1786387762,
+        "lease_expires_at": 1786398562
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -7209,6 +7213,43 @@
           "exit_code": 0
         }
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-SKILL-AGREEMENT",
+      "title": "A skill restates a step of the contract and nothing checks that the two still agree",
+      "why": "AGENTS.md step 2 says to read the board and pick an item, or add one. Section 3 of .claude/skills/nomos-task/SKILL.md says choose an item, or author one. That is one instruction living in two files, and P11-NEXT-WORK reserves the first and not the second - so the item that exists to stop the contract saying pick can satisfy its own done_when while the skill a session actually opens still says it. The territory was authored short, and territory cannot be widened by anyone including its author, so the gap is not something the holder can close.\n\nThe general defect is the one behind that instance. agent_harness.rs already runs its route checking over the skill root, so a path named inside a skill is checked to exist exactly as a path in the contract is, and a skill's declared name must match the directory it is found at. What nothing checks is agreement. A skill may restate a step of the contract in its own words, and when the contract's step changes, nothing notices that the copy did not. The test file is explicit about the limit of its own reach, calling what it asserts the half of correctness a machine can check.\n\nThis is OD-AGENT-001's failure at one remove. That record refused to let an instruction file restate authority, because a summary of a checked file is an unchecked copy of it, and the harness test exists to keep AGENTS.md honest about that. A procedure that restates a contract step is the same copy at an address the record did not reach. CLAUDE.md already states the rule that would govern it - a skill earns its place only when it encodes a reusable multi-step procedure that cannot be reduced to one command plus a pointer to an existing authority - and nothing asserts it.",
+      "done_when": "A skill and the contract cannot disagree about a step they share, and the disagreement is caught mechanically rather than by a reviewer noticing.\n\nEither a skill stops restating a contract step and routes to it, so there is one copy and the question cannot arise. Or, where a procedure must carry the step in its own words to be usable, the skill names the contract section it adapts and the test fails when the two diverge - which is a different assertion from the one that already runs, because a route can point at a file that still exists while saying the opposite of what the file now says.\n\nThe specific instance closes with it: once P11-NEXT-WORK decides where the choice of next work is made, the nomos-task skill does not instruct a session to choose independently of whatever the contract then says.\n\nNot closed by editing the skill once. The item is about the two staying in agreement after the next change, not about this sentence.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-task/SKILL.md",
+          ".claude/skills/nomos-spec-change/SKILL.md",
+          "tests/contract/tests/agent_harness.rs",
+          "docs/records/OD-AGENT-003",
+          "crates/spec/nomos-spec-store/records/OD-AGENT-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P11-NEXT-WORK"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
