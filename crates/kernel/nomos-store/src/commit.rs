@@ -44,6 +44,19 @@ pub struct Commit
     pub records: Vec<Recorded>,
 }
 
+/// One record as the manifest names it: what it is, and the identity of its bytes.
+///
+/// The document identity is computed here rather than carried, because it is a function of
+/// the bytes and a manifest that stated a stale one would name a document nobody holds.
+fn Referenced(record: &Recorded) -> Reference
+{
+    return Reference {
+        kind: record.kind,
+        schema: record.schema.clone(),
+        document: record.Document().Id(),
+    };
+}
+
 impl Commit
 {
     #[must_use]
@@ -79,17 +92,7 @@ impl Commit
             variant: self.variant,
             configuration: self.configuration,
             generation: self.generation,
-            records: self
-                .records
-                .iter()
-                .map(|record| {
-                    return Reference {
-                        kind: record.kind,
-                        schema: record.schema.clone(),
-                        document: record.Document().Id(),
-                    };
-                })
-                .collect(),
+            records: self.records.iter().map(Referenced).collect(),
         };
 
         let mut encoded = serde_json::to_vec(&manifest)

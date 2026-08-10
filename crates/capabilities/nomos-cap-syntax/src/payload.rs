@@ -438,70 +438,128 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<SyntaxPayload, PayloadRefusal>
         return Err(PayloadRefusal::NotUtf8);
     };
 
-    let mut unexpanded: Option<u32> = None;
-    let mut items = Vec::new();
+    let mut read = Reading {
+        unexpanded: None,
+        items: Vec::new(),
+    };
 
     for (offset, line) in text.lines().enumerate()
     {
-        let at = offset.saturating_add(1);
-        let fields: Vec<&str> = line.split('\t').collect();
-        // `split` yields at least one element for every input, including the empty one, so
-        // an absent tag is an empty tag and is refused rather than skipped.
-        let tag = fields.first().copied().unwrap_or_default();
+        Read_Record(line, offset.saturating_add(1), &mut read)?;
+    }
 
-        match tag
+    return read.Complete();
+}
+
+/// A payload part-way through being read.
+///
+/// `unexpanded` is optional here and not on [`SyntaxPayload`], because the header may not
+/// have arrived yet — and a payload that never carries one is refused rather than defaulted.
+struct Reading
+{
+    unexpanded: Option<u32>,
+    items: Vec<PayloadItem>,
+}
+
+impl Reading
+{
+    /// The payload a completed read describes, if it describes one.
+    ///
+    /// A payload with no header at all is refused rather than read as zero unexpanded
+    /// macros: zero is a claim that the provider looked and found none, and nobody looked.
+    fn Complete(self) -> Result<SyntaxPayload, PayloadRefusal>
+    {
+        let Some(unexpanded) = self.unexpanded
+        else
         {
-            "unexpanded" =>
-            {
-                if unexpanded.is_some()
-                {
-                    return Err(PayloadRefusal::RepeatedHeader { line: at });
-                }
-                Expect_Fields(tag, &fields, HEADER_FIELDS, at)?;
-                unexpanded =
-                    Some(Number(fields.get(1).copied().unwrap_or_default(), "unexpanded", at)?);
-            }
-            "item" =>
-            {
-                // Before the header rather than after it is the same defect as no header at
-                // all: the count that says how much of the tree went unread is missing at
-                // the moment the items are being believed.
-                if unexpanded.is_none()
-                {
-                    return Err(PayloadRefusal::NoHeader);
-                }
-                Expect_Fields(tag, &fields, ITEM_FIELDS, at)?;
+            return Err(PayloadRefusal::NoHeader);
+        };
 
-                items.push(PayloadItem {
-                    ordinal: Number(fields.get(1).copied().unwrap_or_default(), "ordinal", at)?,
-                    kind: fields.get(2).copied().unwrap_or_default().to_owned(),
-                    visibility: fields.get(3).copied().unwrap_or_default().to_owned(),
-                    qualified_name: fields.get(4).copied().unwrap_or_default().to_owned(),
-                    documentation: Observed(
-                        fields.get(5).copied().unwrap_or_default(),
-                        "documentation",
-                        at,
-                    )?,
-                    shape: Observed(fields.get(6).copied().unwrap_or_default(), "shape", at)?,
-                });
-            }
-            other =>
-            {
-                return Err(PayloadRefusal::UnknownRecord {
-                    tag: other.to_owned(),
-                    line: at,
-                });
-            }
+        return Ok(SyntaxPayload {
+            unexpanded,
+            items: self.items,
+        });
+    }
+}
+
+/// One record of a payload.
+///
+/// `split` yields at least one element for every input, including the empty one, so an
+/// absent tag is an empty tag and is refused rather than skipped.
+fn Read_Record(line: &str, at: usize, read: &mut Reading) -> Result<(), PayloadRefusal>
+{
+    let fields: Vec<&str> = line.split('\t').collect();
+    let tag = fields.first().copied().unwrap_or_default();
+
+    match tag
+    {
+        "unexpanded" => read.unexpanded = Some(Header(&fields, at, read.unexpanded)?),
+        "item" =>
+        {
+            let item = Read_Item(&fields, at, read.unexpanded)?;
+            read.items.push(item);
+        }
+        other =>
+        {
+            return Err(PayloadRefusal::UnknownRecord {
+                tag: other.to_owned(),
+                line: at,
+            });
         }
     }
 
-    let Some(unexpanded) = unexpanded
-    else
+    return Ok(());
+}
+
+/// One item record, refused if the header has not arrived yet.
+///
+/// An item before the header is the same defect as no header at all: the count that says how
+/// much of the tree went unread is missing at the moment the items are being believed.
+fn Read_Item(
+    fields: &[&str],
+    at: usize,
+    unexpanded: Option<u32>,
+) -> Result<PayloadItem, PayloadRefusal>
+{
+    if unexpanded.is_none()
     {
         return Err(PayloadRefusal::NoHeader);
-    };
+    }
+    Expect_Fields("item", fields, ITEM_FIELDS, at)?;
 
-    return Ok(SyntaxPayload { unexpanded, items });
+    return Item(fields, at);
+}
+
+/// The header's count, refusing a second one.
+///
+/// A payload carrying two headers does not say which count is its own, and taking either
+/// would be inventing an answer the bytes do not give.
+fn Header(fields: &[&str], at: usize, already: Option<u32>) -> Result<u32, PayloadRefusal>
+{
+    if already.is_some()
+    {
+        return Err(PayloadRefusal::RepeatedHeader { line: at });
+    }
+    Expect_Fields("unexpanded", fields, HEADER_FIELDS, at)?;
+
+    return Number(fields.get(1).copied().unwrap_or_default(), "unexpanded", at);
+}
+
+/// One item record, with both observation-bearing fields read as observations.
+fn Item(fields: &[&str], at: usize) -> Result<PayloadItem, PayloadRefusal>
+{
+    return Ok(PayloadItem {
+        ordinal: Number(fields.get(1).copied().unwrap_or_default(), "ordinal", at)?,
+        kind: fields.get(2).copied().unwrap_or_default().to_owned(),
+        visibility: fields.get(3).copied().unwrap_or_default().to_owned(),
+        qualified_name: fields.get(4).copied().unwrap_or_default().to_owned(),
+        documentation: Observed(
+            fields.get(5).copied().unwrap_or_default(),
+            "documentation",
+            at,
+        )?,
+        shape: Observed(fields.get(6).copied().unwrap_or_default(), "shape", at)?,
+    });
 }
 
 /// Renders a payload back to the bytes the grammar describes.
@@ -574,31 +632,36 @@ pub fn Unescape(value: &str) -> String
 
     while let Some(character) = characters.next()
     {
-        if character != '\\'
+        if character == '\\'
         {
-            plain.push(character);
+            Push_Escaped(&mut plain, characters.next());
             continue;
         }
-
-        match characters.next()
-        {
-            Some('t') => plain.push('\t'),
-            Some('n') => plain.push('\n'),
-            Some('r') => plain.push('\r'),
-            // An escaped backslash, and a backslash at the very end with nothing behind
-            // it. One arm because the answer is the same character, and the second case is
-            // a field that is not this schema — reproducing what was written is the least
-            // that can be got wrong.
-            Some('\\') | None => plain.push('\\'),
-            Some(other) =>
-            {
-                plain.push('\\');
-                plain.push(other);
-            }
-        }
+        plain.push(character);
     }
 
     return plain;
+}
+
+/// What a backslash and the character behind it stand for.
+///
+/// An escaped backslash and a backslash at the very end with nothing behind it share an arm,
+/// because the answer is the same character and the second case is a field that is not this
+/// schema — reproducing what was written is the least that can be got wrong.
+fn Push_Escaped(plain: &mut String, escaped: Option<char>)
+{
+    match escaped
+    {
+        Some('t') => plain.push('\t'),
+        Some('n') => plain.push('\n'),
+        Some('r') => plain.push('\r'),
+        Some('\\') | None => plain.push('\\'),
+        Some(other) =>
+        {
+            plain.push('\\');
+            plain.push(other);
+        }
+    }
 }
 
 /// Refuses a record whose field count is not the one the grammar states.

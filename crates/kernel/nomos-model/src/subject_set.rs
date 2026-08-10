@@ -263,22 +263,37 @@ impl SubjectSet
     /// symbol-resolution set cannot be compared by matching identifiers, because a file
     /// identifier and a symbol identifier are different things and their absence from
     /// each other's membership means nothing.
-    #[must_use]
-    pub fn Intersect(&self, other: &Self) -> Intersection
+    /// Why two sets cannot be compared at all, if they cannot.
+    ///
+    /// Both answers are about the sets rather than about their members: one of them still
+    /// holds an unexpanded pattern, or they were resolved to different kinds of thing.
+    /// Neither can be settled by looking at membership, which is why they are asked first.
+    fn Incomparable(&self, other: &Self) -> Option<UnknownReason>
     {
-        if let Some(pattern) = self.unexpanded.first().or_else(|| other.unexpanded.first())
+        if let Some(pattern) = self.unexpanded.first().or_else(|| return other.unexpanded.first())
         {
-            return Intersection::Unknown(UnknownReason::UnexpandedPattern {
+            return Some(UnknownReason::UnexpandedPattern {
                 pattern: pattern.clone(),
             });
         }
 
         if self.resolution != other.resolution
         {
-            return Intersection::Unknown(UnknownReason::IncomparableResolution {
+            return Some(UnknownReason::IncomparableResolution {
                 left: self.resolution,
                 right: other.resolution,
             });
+        }
+
+        return None;
+    }
+
+    #[must_use]
+    pub fn Intersect(&self, other: &Self) -> Intersection
+    {
+        if let Some(reason) = self.Incomparable(other)
+        {
+            return Intersection::Unknown(reason);
         }
 
         let shared: Vec<SubjectId> = self
@@ -286,15 +301,12 @@ impl SubjectSet
             .intersection(&other.members)
             .copied()
             .collect();
-
-        return if shared.is_empty()
+        if shared.is_empty()
         {
-            Intersection::Disjoint
+            return Intersection::Disjoint;
         }
-        else
-        {
-            Intersection::Overlaps(shared)
-        };
+
+        return Intersection::Overlaps(shared);
     }
 }
 

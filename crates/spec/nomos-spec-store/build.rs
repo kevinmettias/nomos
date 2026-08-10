@@ -47,23 +47,8 @@ fn main()
     );
 
     let directory = manifest.join("records");
-
-    // crates/spec/nomos-spec-store -> the repository. Used only to check that a named
-    // record is on disk and to spell the `include_str!` argument; nothing under it is
-    // enumerated, which is the whole of why this arrangement is not vacuous.
-    let root = manifest
-        .ancestors()
-        .nth(3)
-        .expect("the crate sits three directories below the repository root")
-        .to_path_buf();
-
-    let registrations = match Registrations_In(&directory, &root)
-    {
-        Ok(registrations) => registrations,
-        // A refusal here stops the build, which is the point. A registration skipped
-        // instead of refused is a governing record that quietly stops governing.
-        Err(error) => panic!("{}", error.Describe()),
-    };
+    let root = Repository_Root(&manifest);
+    let registrations = Registered(&directory, &root);
 
     let identifiers = Identifier_Table(&registrations);
     std::fs::write(out.join("governing_record_ids.rs"), identifiers)
@@ -74,6 +59,33 @@ fn main()
         .expect("the generated record table must be writable");
 
     Rerun_Triggers(&directory, &root, &registrations);
+}
+
+/// `crates/spec/nomos-spec-store` -> the repository.
+///
+/// Used only to check that a named record is on disk and to spell the `include_str!`
+/// argument; nothing under it is enumerated, which is the whole of why this arrangement is
+/// not vacuous.
+fn Repository_Root(manifest: &Path) -> PathBuf
+{
+    return manifest
+        .ancestors()
+        .nth(3)
+        .expect("the crate sits three directories below the repository root")
+        .to_path_buf();
+}
+
+/// Every registered record, or a stopped build.
+///
+/// A refusal here stops the build, which is the point. A registration skipped instead of
+/// refused is a governing record that quietly stops governing.
+fn Registered(directory: &Path, root: &Path) -> Vec<Registration>
+{
+    return match Registrations_In(directory, root)
+    {
+        Ok(registrations) => registrations,
+        Err(error) => panic!("{}", error.Describe()),
+    };
 }
 
 /// The initializer for `GOVERNING_RECORD_IDS`.

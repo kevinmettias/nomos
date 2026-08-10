@@ -121,6 +121,77 @@ impl FileLock
 
 }
 
+impl FileLock
+{
+    /// Sleeps until the next attempt, or refuses once the caller's patience has run out.
+    ///
+    /// The refusal names the current holder rather than the one seen when the wait began,
+    /// because the useful answer is who has it now — a caller told about a holder that has
+    /// since released it would retry against a name that no longer means anything.
+    fn Wait_Or_Refuse(
+        &self,
+        started: std::time::Instant,
+        wait_limit: Duration,
+    ) -> Result<(), LockError>
+    {
+        if started.elapsed() >= wait_limit
+        {
+            return Err(LockError::Held {
+                holder: self.Current_Holder(),
+                waited: started.elapsed(),
+            });
+        }
+        std::thread::sleep(POLL_INTERVAL);
+
+        return Ok(());
+    }
+
+    /// How old the lock file is, if it is old enough to be nobody's.
+    ///
+    /// A lock file with no readable age is not stale: it may have been created in the
+    /// moment between this process finding it and asking about it, and treating an
+    /// unanswerable age as stale would break a lock somebody had just taken.
+    fn Stale_By(&self, stale_after: Duration) -> Option<Duration>
+    {
+        return self.Age().filter(|age| return *age >= stale_after);
+    }
+
+    /// The lock, now held, and whose stale one had to be removed to get it.
+    ///
+    /// The takeover travels with the acquisition rather than being logged here: a caller
+    /// that broke somebody else's lock is entitled to say so in its own words, and one that
+    /// did not must not have to check.
+    fn Held(&self, broke_stale: Option<StaleTakeover>) -> LockAcquisition<FileLockGuard>
+    {
+        return LockAcquisition {
+            guard: FileLockGuard {
+                path: self.path.clone(),
+            },
+            broke_stale,
+        };
+    }
+
+    /// Removes a lock file old enough to be nobody's, and says whose it was.
+    ///
+    /// Remove and retry rather than assuming the removal won us the lock. Two processes can
+    /// decide the same lock is stale at the same moment; only the one whose subsequent
+    /// `create_new` succeeds actually holds it, and going back through the loop is what
+    /// makes that true rather than assumed.
+    fn Break_Stale(&self, age: Duration) -> Option<StaleTakeover>
+    {
+        let previous_holder = self.Current_Holder();
+        if std::fs::remove_file(&self.path).is_err()
+        {
+            return None;
+        }
+
+        return Some(StaleTakeover {
+            previous_holder,
+            age,
+        });
+    }
+}
+
 impl CrossProcessLock for FileLock
 {
     type Guard = FileLockGuard;
@@ -139,43 +210,15 @@ impl CrossProcessLock for FileLock
         {
             if self.Try_Create(holder)?
             {
-                return Ok(LockAcquisition {
-                    guard: FileLockGuard {
-                        path: self.path.clone(),
-                    },
-                    broke_stale,
-                });
+                return Ok(self.Held(broke_stale));
             }
-
-            if let Some(age) = self.Age()
-                && age >= stale_after
+            if let Some(age) = self.Stale_By(stale_after)
             {
-                let previous_holder = self.Current_Holder();
-
-                // Remove and retry rather than assuming the removal won us the lock.
-                // Two processes can decide the same lock is stale at the same moment;
-                // only the one whose subsequent `create_new` succeeds actually holds
-                // it, and going back through the loop is what makes that true rather
-                // than assumed.
-                if std::fs::remove_file(&self.path).is_ok()
-                {
-                    broke_stale = Some(StaleTakeover {
-                        previous_holder,
-                        age,
-                    });
-                }
+                broke_stale = self.Break_Stale(age).or(broke_stale);
                 continue;
             }
 
-            if started.elapsed() >= wait_limit
-            {
-                return Err(LockError::Held {
-                    holder: self.Current_Holder(),
-                    waited: started.elapsed(),
-                });
-            }
-
-            std::thread::sleep(POLL_INTERVAL);
+            self.Wait_Or_Refuse(started, wait_limit)?;
         }
     }
 }

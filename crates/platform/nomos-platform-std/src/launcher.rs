@@ -46,6 +46,35 @@ struct Drain
     finished: Arc<AtomicBool>,
 }
 
+/// Reads a stream to its end, keeping everything it yields.
+///
+/// A read error ends the drain exactly as end of file does. There is nothing useful to
+/// report from here — the outcome belongs to the process, not to its pipe — and what was
+/// read before the error is still worth keeping.
+fn Drain_Into<R: Read>(source: &mut R, sink: &Mutex<Vec<u8>>)
+{
+    let mut chunk = [0_u8; CHUNK_SIZE];
+
+    while let Ok(taken) = source.read(&mut chunk)
+    {
+        if taken == 0
+        {
+            break;
+        }
+        let Ok(mut buffer) = sink.lock()
+        else
+        {
+            break;
+        };
+        let Some(slice) = chunk.get(..taken)
+        else
+        {
+            break;
+        };
+        buffer.extend_from_slice(slice);
+    }
+}
+
 impl Drain
 {
     /// Starts reading `source` on a thread of its own.
@@ -57,28 +86,7 @@ impl Drain
         let reached_end = Arc::clone(&finished);
 
         std::thread::spawn(move || {
-            let mut chunk = [0_u8; CHUNK_SIZE];
-            // A read error ends the drain exactly as end of file does. There is nothing
-            // useful to report from here — the outcome belongs to the process, not to
-            // its pipe — and what was read before the error is still worth keeping.
-            while let Ok(taken) = source.read(&mut chunk)
-            {
-                if taken == 0
-                {
-                    break;
-                }
-                let Ok(mut buffer) = sink.lock()
-                else
-                {
-                    break;
-                };
-                let Some(slice) = chunk.get(..taken)
-                else
-                {
-                    break;
-                };
-                buffer.extend_from_slice(slice);
-            }
+            Drain_Into(&mut source, &sink);
             reached_end.store(true, Ordering::Release);
         });
 
@@ -123,24 +131,8 @@ impl ProcessLauncher for StdProcessLauncher
     {
         let program = command
             .Program()
-            .ok_or_else(|| "a command needs a program to run".to_owned())?;
-        let arguments = command.argv.get(1..).unwrap_or_default();
-
-        let mut builder = std::process::Command::new(program);
-        builder
-            .args(arguments)
-            .stdin(Stdio::null())
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped());
-
-        if let Some(directory) = &command.working_directory
-        {
-            builder.current_dir(directory);
-        }
-
-        let mut child = builder
-            .spawn()
-            .map_err(|error| format!("could not start `{program}`: {error}"))?;
+            .ok_or_else(|| return "a command needs a program to run".to_owned())?;
+        let mut child = Spawned(command, program)?;
 
         // Both streams are read from the moment the child starts, and not after it ends.
         // A child cannot finish writing more than a pipeful unless somebody is taking it
@@ -149,53 +141,96 @@ impl ProcessLauncher for StdProcessLauncher
         let stdout = child.stdout.take().map(Drain::Reading);
         let stderr = child.stderr.take().map(Drain::Reading);
 
-        let started = Instant::now();
-        let outcome = loop
-        {
-            match child.try_wait()
-            {
-                Ok(Some(status)) =>
-                {
-                    break status.code().map_or(ExitOutcome::Terminated, |code| {
-                        ExitOutcome::Exited { code }
-                    });
-                }
-                Ok(None) =>
-                {}
-                Err(error) => return Err(format!("could not wait for `{program}`: {error}")),
-            }
-
-            if started.elapsed() >= command.timeout
-            {
-                // Kill and then reap. Skipping the wait leaves a zombie on Unix, and a
-                // verification predicate that spawns one per timeout will exhaust the
-                // process table of a machine running an agent fleet.
-                let _ = child.kill();
-                let _ = child.wait();
-                break ExitOutcome::TimedOut;
-            }
-
-            std::thread::sleep(POLL_INTERVAL);
-        };
-
-        // The child has ended, so the readers are draining what is left rather than
-        // waiting on a process. See DRAIN_GRACE for why this is bounded and not a join.
-        let settled = Instant::now();
-        while settled.elapsed() < DRAIN_GRACE
-        {
-            if stdout.as_ref().is_none_or(Drain::Finished)
-                && stderr.as_ref().is_none_or(Drain::Finished)
-            {
-                break;
-            }
-            std::thread::sleep(POLL_INTERVAL);
-        }
+        let outcome = Waited(&mut child, program, command.timeout)?;
+        Settle(stdout.as_ref(), stderr.as_ref());
 
         return Ok(ProcessOutput {
             outcome,
             stdout: stdout.as_ref().map_or_else(String::new, Drain::Text),
             stderr: stderr.as_ref().map_or_else(String::new, Drain::Text),
         });
+    }
+}
+
+/// The child, started with both its streams piped and nothing on its input.
+///
+/// `stdin` is null rather than inherited, because a predicate that stops to read from a
+/// terminal nobody is at would hang until the timeout and report as slow work.
+fn Spawned(command: &Command, program: &str) -> Result<std::process::Child, String>
+{
+    let arguments = command.argv.get(1..).unwrap_or_default();
+    let mut builder = std::process::Command::new(program);
+    builder
+        .args(arguments)
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+
+    if let Some(directory) = &command.working_directory
+    {
+        builder.current_dir(directory);
+    }
+
+    return builder
+        .spawn()
+        .map_err(|error| return format!("could not start `{program}`: {error}"));
+}
+
+/// Waits for the child, and kills it if it outstays the timeout.
+///
+/// Kill and then reap. Skipping the wait leaves a zombie on Unix, and a verification
+/// predicate that spawns one per timeout will exhaust the process table of a machine
+/// running an agent fleet.
+fn Waited(
+    child: &mut std::process::Child,
+    program: &str,
+    timeout: std::time::Duration,
+) -> Result<ExitOutcome, String>
+{
+    let started = Instant::now();
+
+    loop
+    {
+        match child.try_wait()
+        {
+            Ok(Some(status)) =>
+            {
+                return Ok(status.code().map_or(ExitOutcome::Terminated, |code| {
+                    return ExitOutcome::Exited { code };
+                }));
+            }
+            Ok(None) =>
+            {}
+            Err(error) => return Err(format!("could not wait for `{program}`: {error}")),
+        }
+
+        if started.elapsed() >= timeout
+        {
+            let _ = child.kill();
+            let _ = child.wait();
+
+            return Ok(ExitOutcome::TimedOut);
+        }
+
+        std::thread::sleep(POLL_INTERVAL);
+    }
+}
+
+/// Gives the readers a bounded moment to finish what is left in the pipes.
+///
+/// The child has ended, so they are draining rather than waiting on a process. See
+/// `DRAIN_GRACE` for why this is bounded and not a join.
+fn Settle(stdout: Option<&Drain>, stderr: Option<&Drain>)
+{
+    let settled = Instant::now();
+
+    while settled.elapsed() < DRAIN_GRACE
+    {
+        if stdout.is_none_or(Drain::Finished) && stderr.is_none_or(Drain::Finished)
+        {
+            break;
+        }
+        std::thread::sleep(POLL_INTERVAL);
     }
 }
 
@@ -303,25 +338,28 @@ mod tests
         }
         std::fs::write(&path, &text).expect("writes the fixture");
 
-        let shown = path.display();
-        let argv = if cfg!(windows)
+        let argv = Shout(&path.display().to_string());
+
+        return (Command::New(argv, Duration::from_secs(10)), path, text);
+    }
+
+    /// An argv that prints a file and then exits loudly, in the shell of the host.
+    fn Shout(shown: &str) -> Vec<String>
+    {
+        if cfg!(windows)
         {
-            vec![
+            return vec![
                 "cmd".to_owned(),
                 "/C".to_owned(),
                 format!("type {shown} & exit {LOUD_EXIT}"),
-            ]
+            ];
         }
-        else
-        {
-            vec![
-                "sh".to_owned(),
-                "-c".to_owned(),
-                format!("cat {shown}; exit {LOUD_EXIT}"),
-            ]
-        };
 
-        return (Command::New(argv, Duration::from_secs(10)), path, text);
+        return vec![
+            "sh".to_owned(),
+            "-c".to_owned(),
+            format!("cat {shown}; exit {LOUD_EXIT}"),
+        ];
     }
 
     /// The defect this exists for.

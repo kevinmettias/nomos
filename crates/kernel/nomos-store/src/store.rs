@@ -30,7 +30,31 @@ impl DocumentStore
         return self.authority;
     }
 
-    pub fn Commit(&mut self, commit: &Commit) -> Result<DocumentId, StoreError>
+    /// A document this store's authority does not hold.
+    ///
+    /// Checked for the manifest as well as for the records it names, because a store that
+    /// admitted the manifest and not its contents — or the reverse — would hold half a
+    /// commit and answer as if it held all of it.
+    fn Refuse_Unadmitted(&self, kind: DocumentKind) -> Result<(), StoreError>
+    {
+        if self.authority.Admits(kind)
+        {
+            return Ok(());
+        }
+
+        return Err(StoreError::WrongAuthority {
+            store: self.authority,
+            kind,
+            document: kind.Authority(),
+        });
+    }
+
+    /// The manifest a commit would write, once the whole commit has been shown admissible.
+    ///
+    /// A commit recording nothing is refused rather than written as an empty one: it would
+    /// advance the store's history and reach no document, which is indistinguishable from a
+    /// commit whose records were lost.
+    fn Admitted(&self, commit: &Commit) -> Result<Document, StoreError>
     {
         if commit.records.is_empty()
         {
@@ -41,14 +65,7 @@ impl DocumentStore
 
         for record in &commit.records
         {
-            if !self.authority.Admits(record.kind)
-            {
-                return Err(StoreError::WrongAuthority {
-                    store: self.authority,
-                    kind: record.kind,
-                    document: record.kind.Authority(),
-                });
-            }
+            self.Refuse_Unadmitted(record.kind)?;
         }
 
         let manifest = Document::New(
@@ -56,14 +73,14 @@ impl DocumentStore
             SchemaId::New(COMMIT_SCHEMA),
             commit.Encode()?,
         );
-        if !self.authority.Admits(manifest.kind)
-        {
-            return Err(StoreError::WrongAuthority {
-                store: self.authority,
-                kind: manifest.kind,
-                document: manifest.kind.Authority(),
-            });
-        }
+        self.Refuse_Unadmitted(manifest.kind)?;
+
+        return Ok(manifest);
+    }
+
+    pub fn Commit(&mut self, commit: &Commit) -> Result<DocumentId, StoreError>
+    {
+        let manifest = self.Admitted(commit)?;
 
         for record in &commit.records
         {

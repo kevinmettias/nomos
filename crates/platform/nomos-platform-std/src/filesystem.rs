@@ -29,6 +29,22 @@ impl StdFileSystem
     }
 }
 
+/// Writes and flushes a file completely before anybody can see it under its real name.
+///
+/// A rename over a partially written file publishes that partial content atomically, which
+/// is worse than a torn write because it looks intact.
+fn Write_Fully(temporary: &Path, contents: &str) -> Result<(), FileSystemError>
+{
+    let mut file = std::fs::File::create(temporary)
+        .map_err(|error| return StdFileSystem::Classify(temporary, &error))?;
+    file.write_all(contents.as_bytes())
+        .map_err(|error| return StdFileSystem::Classify(temporary, &error))?;
+    file.sync_all()
+        .map_err(|error| return StdFileSystem::Classify(temporary, &error))?;
+
+    return Ok(());
+}
+
 impl FileSystem for StdFileSystem
 {
     fn Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
@@ -46,17 +62,7 @@ impl FileSystem for StdFileSystem
             std::fs::create_dir_all(parent).map_err(|error| Self::Classify(parent, &error))?;
         }
 
-        // Write and flush the temporary file completely before the rename. A rename
-        // over a partially written file publishes that partial content atomically,
-        // which is worse than a torn write because it looks intact.
-        {
-            let mut file =
-                std::fs::File::create(&temporary).map_err(|error| Self::Classify(&temporary, &error))?;
-            file.write_all(contents.as_bytes())
-                .map_err(|error| Self::Classify(&temporary, &error))?;
-            file.sync_all()
-                .map_err(|error| Self::Classify(&temporary, &error))?;
-        }
+        Write_Fully(&temporary, contents)?;
 
         // Rename rather than truncate-and-write. A truncating write has a window in
         // which the file is empty; a reader arriving in that window sees a ledger with

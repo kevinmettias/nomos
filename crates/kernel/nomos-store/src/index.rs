@@ -42,22 +42,33 @@ impl Index
 
         for (id, document) in documents
         {
-            if document.kind != DocumentKind::Commit
+            if document.kind == DocumentKind::Commit
             {
-                continue;
-            }
-
-            let manifest = Commit::Decode(&document.bytes)?;
-            index.commits.entry(manifest.snapshot).or_default().insert(*id);
-            let members = index.reachable.entry(manifest.snapshot).or_default();
-            members.insert(*id);
-            for reference in &manifest.records
-            {
-                members.insert(reference.document);
+                index.Note_Commit(*id, &document.bytes)?;
             }
         }
 
         return Ok(index);
+    }
+
+    /// What one commit manifest reaches: itself, and every record it names.
+    ///
+    /// The manifest is reachable from its own snapshot because it is the thing that names
+    /// the others. A walk that reached the records and not the manifest would find the
+    /// contents of a commit and no evidence that the commit happened.
+    fn Note_Commit(&mut self, id: DocumentId, bytes: &[u8]) -> Result<(), StoreError>
+    {
+        let manifest = Commit::Decode(bytes)?;
+        self.commits.entry(manifest.snapshot).or_default().insert(id);
+
+        let members = self.reachable.entry(manifest.snapshot).or_default();
+        members.insert(id);
+        for reference in &manifest.records
+        {
+            members.insert(reference.document);
+        }
+
+        return Ok(());
     }
 
     #[must_use]
@@ -137,20 +148,26 @@ impl Index
             parts.push(schema.as_bytes().to_vec());
             parts.push(Joined(ids));
         }
-        for (snapshot, ids) in &self.reachable
-        {
-            parts.push(snapshot.to_string().into_bytes());
-            parts.push(Joined(ids));
-        }
-        for (snapshot, ids) in &self.commits
-        {
-            parts.push(snapshot.to_string().into_bytes());
-            parts.push(Joined(ids));
-        }
+        Digest_By_Snapshot(&mut parts, &self.reachable);
+        Digest_By_Snapshot(&mut parts, &self.commits);
 
         let borrowed: Vec<&[u8]> = parts.iter().map(Vec::as_slice).collect();
 
         return Digest_Of_Parts(&borrowed);
+    }
+}
+
+/// The parts one snapshot-keyed map contributes to the digest.
+///
+/// The two maps are walked separately and both appear, because a snapshot's reachable set
+/// and its commit set are different claims about it — folding them together would let a
+/// document move from one to the other without the digest noticing.
+fn Digest_By_Snapshot(parts: &mut Vec<Vec<u8>>, by_snapshot: &BTreeMap<SnapshotId, BTreeSet<DocumentId>>)
+{
+    for (snapshot, ids) in by_snapshot
+    {
+        parts.push(snapshot.to_string().into_bytes());
+        parts.push(Joined(ids));
     }
 }
 
