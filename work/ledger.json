@@ -5971,47 +5971,6 @@
       "verified": null,
       "abandoned": [],
       "displaced": []
-    },
-    {
-      "id": "P10-STATE-UNREACHABLE",
-      "title": "Two of the five item states cannot be produced by any verb, so a superseded item stays open and blocks the record it reserves",
-      "why": "ItemState is a closed set of five and two of them are unreachable. crates/substrate/nomos-ledger/src/item.rs:136-152 declares Ready, Claimed, Blocked, Done and Declined { reason }; grep across the workspace finds writers for three. crates/host/nomos-cli/src/work.rs:277 writes Ready at add, crates/substrate/nomos-ledger/src/store.rs:934 writes Claimed at claim, and crates/substrate/nomos-ledger/src/exclusion.rs:248 and :253 write Done at finish and Ready at abandon. Nothing anywhere writes Blocked or Declined, and the verb list `nomos work` prints has no verb that would.\n\nBoth states are still read. `work list --state blocked|declined` filters on them, work.rs:753 and :755 render them, ItemState::Is_Finished counts Declined as terminal, and crates/substrate/nomos-ledger/src/store.rs:563 validates that a Blocked item carries a reason. The board can describe two states it can never enter, and every reader downstream is written for a case that cannot arise.\n\nThe cost is measured rather than hypothetical. `abandon` returns an item to Ready, which is right when the holder simply stopped and wrong when the reading that produced the abandonment says the item should not be done at all. P10-DERIVED-FACT is that case: claude-derived-fact-w62 gave it up at unix 1786382124 with a reason concluding that its territory cannot reach the fix and that a correctly scoped successor should do the work. P10-DEPENDENT-EDGE is that successor and reserves the same record, docs/records/OD-ANALYSIS-002. Two open items reserving one record is exactly what crates/substrate/nomos-ledger/tests/records_do_not_serialize.rs:329 refuses, so Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer is red - and it is red for every predicate naming -p nomos-ledger, which is most of the board. It has happened three times: OD-PROJECT-002 twice and OD-ANALYSIS-002 now, each cleared only by a peer landing unrelated work.\n\nThere is no repair short of a verb. There is no `work edit`, so the superseded item territory cannot be narrowed; `abandon` is the only verb that touches a live claim and it puts the item back on the board; and hand-editing the state would write a value no verb produces and no transition records the reason for, which is the shape OD-LEDGER-006 already settled once.",
-      "done_when": "A superseded item can be retired through a verb, and the reason it was retired survives on the item the way Abandonment does. Declined { reason } already carries a reason in the variant, so the state is not what is missing - the transition into it is. Which verb, what it is called, whether it takes a holder or is open to anybody, and whether Blocked gets one too or is deleted from the enum as a state nothing needs, is this item to decide and its record to state: an unreachable variant nobody will ever produce is a promise the type makes and the tool does not keep, so leaving Blocked declared requires a reason as much as removing it does.\n\nA test asserts that every variant of ItemState is produced by something that ships, with the negative control that removing the new transition makes it red. README.md verb list carries whatever this adds, the usage text in crates/host/nomos-cli/src/work.rs matches it, and the public surface snapshot moves for the ledger crate.\n\nDeclining P10-DERIVED-FACT - the item that motivated this, whose abandonment reason already states why it should not be done - is the acceptance case, and records_do_not_serialize.rs going green afterwards is the evidence.\n\nNot closed by narrowing P10-DERIVED-FACT territory by hand, and not by deleting it from the ledger: both leave the next superseded item in the same place, and deleting it destroys the abandonment reason that is the whole record of why the successor exists.",
-      "territory": {
-        "resolution": "File",
-        "paths": [
-          "crates/substrate/nomos-ledger/src/store.rs",
-          "crates/substrate/nomos-ledger/src/item.rs",
-          "crates/host/nomos-cli/src/work.rs",
-          "crates/substrate/nomos-ledger/tests/states_are_reachable.rs",
-          "tests/contract/surface/nomos-ledger.txt",
-          "README.md",
-          "docs/records/OD-LEDGER-019",
-          "crates/spec/nomos-spec-store/records/OD-LEDGER-019.record"
-        ],
-        "patterns": []
-      },
-      "state": "Ready",
-      "depends_on": [],
-      "blocked": null,
-      "claim": null,
-      "verification": {
-        "argv": [
-          "cargo",
-          "test",
-          "--no-fail-fast",
-          "-p",
-          "nomos-ledger",
-          "-p",
-          "nomos-cli",
-          "-p",
-          "nomos-contract-tests"
-        ],
-        "timeout_seconds": 600
-      },
-      "verified": null,
-      "abandoned": [],
-      "displaced": []
     }
   ]
 }
