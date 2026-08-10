@@ -6707,6 +6707,79 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-REEXPORT-SURFACE",
+      "title": "A named re-export of another crate item is dropped from the surface snapshot rather than reported as unresolved",
+      "why": "tests/integration/src/corpus.rs exports Subject_Of_Path by re-exporting nomos_model, and tests/integration/src/lib.rs re-exports it again. The crate still exports the name and slice.rs still calls it. The snapshot lost it: blessing nomos-integration-tests under P10-SUBJECT-HOME removed the Subject_Of_Path line from tests/contract/surface/nomos-integration-tests.txt while the export was still there, in commit a6f0e9c. OD-GATE-002 lists what the source-level derivation gives up and this is not on the list. It names the glob form, pub use module star, and promises that one is reported as an unresolved re-export rather than dropped. A named cross-crate re-export is dropped silently instead. The same record states, as a property explicitly NOT given up, that adding a name to a pub use list changes a committed file and fails the test until it is committed. For a target in another crate it does not. So the guard under-reports in a case its own record says it covers, which is worse than the documented false negatives, because a reader who checked the record was told otherwise.",
+      "done_when": "A named re-export whose target is outside the crate is either resolved into the snapshot or recorded in it as an unresolved re-export, the way OD-GATE-002 already promises for the glob form. Silently dropping it is the one outcome ruled out. Either tests/contract/surface/nomos-integration-tests.txt regains the name it lost, or OD-GATE-002 is amended to list named cross-crate re-exports among what is given up and its claim about pub use lists is corrected to match. A test covers the case, with a negative control that a same-crate re-export still resolves. Not closed by deleting the re-export from the harness, which hides the instance and leaves the guard wrong for the next one.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/src",
+          "tests/contract/tests/public_surface.rs",
+          "tests/contract/surface/nomos-integration-tests.txt",
+          "docs/records/OD-GATE-002",
+          "crates/spec/nomos-spec-store/records/OD-GATE-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-ADD-NOT-DURABLE",
+      "title": "An add that returned exit 0 was gone from the board minutes later, so exit 0 does not mean the write survived",
+      "why": "Observed at unix 1786386100 in this tree. Two work add invocations ran back to back from one script against a freshly built schema-3 binary. Both printed their success line and both exited 0: added P11-SPENT-RECORD-ID reserving 6 paths, then added P11-REEXPORT-SURFACE reserving 5 paths. P11-SPENT-RECORD-ID is on the board. P11-REEXPORT-SURFACE was in no commit, git log -S over work/ledger.json finds it in none, and it was absent from the working tree minutes later. The window is locatable. Commit a2c0fed, written by another session while those adds ran, carries a work/ledger.json containing P11-SPENT-RECORD-ID and not P11-REEXPORT-SURFACE, so the file on disk had already lost the second add before that commit was taken. A writer therefore held a document read between the two adds and wrote it back after the second, dropping it. Which writer, and by what path, is NOT established: store.rs routes every mutation through With_Lock, which loads inside the lock, and finish.rs loads only to find the predicate and then goes through Release, so neither obviously has the window. That is what makes this worth an item rather than a fix. AGENTS.md and the claim verbs rest on exit 0 being the only thing that means the write happened, and OD-LEDGER-015 already records this exact failure once, for Claim, Renew and Release. This is a second instance reached by a different route, and the doc comment on With_Lock says in its own words that a description of an arrangement is what stops being true when the arrangement is bypassed.",
+      "done_when": "The mechanism is established first and named in the record: which writer overwrote the file, whether it went through With_Lock, and if it did, how a load inside the lock still produced a document missing a committed write. Candidates to rule in or out are a second lock identity when a verb runs from a detached worktree with NOMOS_WORK_DIR set, a writer bypassing the single door, and a lock that is taken but not honoured across processes on this platform. Then the hole is closed so that a write which returned exit 0 is either present in every later read or the verb did not exit 0. A test reproduces concurrent writers losing an update and fails before the fix. Not closed by widening the lock wait, which changes the odds and not the property, and not closed by advice in AGENTS.md telling authors to re-read the board after adding, because the contract that exit 0 is the answer is the thing being repaired.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/src/finish.rs",
+          "crates/substrate/nomos-ledger/tests",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-021",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-021.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
