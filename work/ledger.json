@@ -2583,16 +2583,20 @@
         "resolution": "File",
         "paths": [
           "crates/substrate/nomos-ledger",
-          "crates/spec/nomos-spec-store",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-011.record",
           "work/ledger.json",
           "docs/records/OD-LEDGER-011"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-surface-grain-w3",
+        "acquired_at": 1786335831,
+        "lease_expires_at": 1786346631
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2605,7 +2609,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "claude-surface-grain-w3",
+          "reason": "Released unstarted to narrow its own territory. It reserved crates/spec/nomos-spec-store entire in order to seed one record, which was true until P10-SEED-GRAIN landed minutes ago and is not true now: a record is registered by its own records/<ID>.record file and governing.rs is not edited. The reservation as written blocked P10-TEST-MASK over src/lib.rs, a file this item will not touch. Narrowing belongs before a claim rather than during one, and this item is the one that says so.",
+          "abandoned_at": 1786335818
+        }
+      ]
     },
     {
       "id": "P10-PACKAGE-SEAM",
@@ -3009,6 +3019,42 @@
           "test",
           "-p",
           "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-TEST-MASK",
+      "title": "Blanking a test module blanks whatever braced item follows a brace-less one",
+      "why": "Without_Test_Modules at tests/contract/src/gates.rs:708 finds a cfg(test) marker and then blanks from it to Next_Code_Byte for an open brace, with no bound on how far that search runs. For an item that has a body the brace it finds is that items own. For a brace-less one - cfg(test) mod name; is the ordinary way to declare a test-only module in another file - the next brace in the file belongs to some later, unrelated item, and everything between them is blanked including that item. Found by P10-SEED-GRAIN: adding cfg(test) mod registration; among the mod lines of nomos-spec-store swallowed the pub use that followed it, and Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot went red reporting eleven missing exports and a re-export it could not resolve. Nothing pointed at the scanner; the failure names the crate whose surface moved. That item worked around it by putting the declaration last in lib.rs with a comment, because tests/contract was not in its territory, so the workaround is load-bearing and undocumented outside one comment. The scanner is wrong for any crate that declares a test module this way, and the public surface snapshot is what silently changes.",
+      "done_when": "A brace-less cfg(test) item blanks itself and nothing after it, and a cfg(test) item with a body still blanks its whole body. The search for a body is bounded by the end of the item it belongs to rather than by the end of the file, so a declaration ending in a semicolon is recognised as having no body rather than borrowing the next one. Unit tests in tests/contract/src/gates.rs cover both forms and the interaction that was actually observed - a brace-less declaration followed by a braced item, asserting the following item survives - and the negative control is that restoring the unbounded search turns them red while naming the item that was eaten. The workaround left in crates/spec/nomos-spec-store/src/lib.rs is removed and its comment with it, so the declaration order stops being load-bearing; if it is kept the item says why. No new record: this is a scanner defect rather than a decision, and OD-GATE-002 already states what the surface check is for.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/src/gates.rs",
+          "crates/spec/nomos-spec-store/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-test-mask-w4",
+        "acquired_at": 1786335831,
+        "lease_expires_at": 1786343031
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
           "-p",
           "nomos-spec-store",
           "--no-fail-fast"
