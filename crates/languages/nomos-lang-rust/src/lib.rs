@@ -35,6 +35,19 @@
 //! not struct fields. The boundary is stated rather than discovered: an item is the unit
 //! at which Rust attaches visibility and a name, which is the unit the capability is
 //! about.
+//!
+//! # Two capabilities, and why the second one is here
+//!
+//! [`Materialize`] answers `nomos-cap-syntax`'s capability about one file, from its bytes.
+//! [`rollup`] answers a second one about a *module*, from the first one's facts — the only
+//! producer in this workspace that derives a fact from other facts, and therefore the only
+//! one that declares a dependency edge.
+//!
+//! It is not a widening of the first. A capability whose semantic input is one file's text
+//! can never depend on another answer, so the dependent half of `nomos-analysis`'s
+//! invalidation had no producer it could possibly have had until a second capability
+//! existed. `docs/records/OD-ANALYSIS-002` records that, and why the second contract lives
+//! beside its only provider rather than under `crates/capabilities`.
 
 #![forbid(unsafe_code)]
 
@@ -42,10 +55,11 @@ mod determinism;
 mod guarantee;
 mod provider;
 mod recognition;
+pub mod rollup;
 mod syntax;
 
 pub use determinism::SyntaxFactProduction;
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
-pub use provider::{Encode_Payload, FactContext, Materialization, Materialize};
+pub use provider::{Encode_Payload, FactContext, Materialization, Materialize, Syntax_Inputs};
 pub use recognition::{Recognition, RUST_EXTENSION};
 pub use syntax::{ItemKind, ParseFailure, Read_Source, Reading, SyntaxFacts, SyntaxItem, Visibility};

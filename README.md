@@ -43,7 +43,7 @@ band, and `tests/contract` asserts it.
 | 21 | `nomos-capability` | The contract registry whose answer is never a bare no. |
 | 22 | `nomos-analysis` | Fact identity, fact readers, the fact store, and invalidation. |
 | 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
-| 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`. |
+| 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`, and the module rollup derived from them — the one fact in this workspace computed from other facts. |
 | 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |
 | 30 | `nomos-rules` | A rule as a pure function whose subject is an argument: source it is handed, and facts it reads through a `FactReader`. |
 | 90 | `nomos-cli` | The `nomos` binary. |

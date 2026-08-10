@@ -3295,14 +3295,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-refusal-surface-w73",
-        "acquired_at": 1786382374,
-        "lease_expires_at": 1786391073
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3319,7 +3315,36 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "ps\\read_surface-253c06b98188f76c.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-32c64e36d2416b1f.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-023ed72b0b5f56bc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-561a88ff4bc732e0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-f65566f9f804790f.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-ae78a8a92bf9e664.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786385057,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
@@ -5813,14 +5838,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-dependent-edge-a41",
-        "acquired_at": 1786383797,
-        "lease_expires_at": 1786398197
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -5835,7 +5856,34 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "Member_With_No_Fact_Should_Still_Be_An_Edge ... ok\ntest Test_The_Rollup_Should_Broaden_A_File_Granular_Cause ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-182bb53448016fc6.exe)\n     Running tests\\fact_identity.rs (target\\debug\\deps\\fact_identity-83964a67786ab7dc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-5199bdafaa913a2e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-51aa4e2ffacb6dea.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-9ae75b5b09cb3bc0.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-0c1de3a56028c300.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-fde27190f260795e.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-260c96e353d2afad.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-291be51620867033.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-b2691cd1a57ec67c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-c0d3013487db468f.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-6dea91e8c3074c08.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-aa5222c5e1f41e84.exe)\n     Running tests\\rollup.rs (target\\debug\\deps\\rollup-15bc2c60d1668fd8.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_lang_rust\n",
+        "verified_at": 1786384978,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
@@ -5969,6 +6017,46 @@
         ],
         "patterns": []
       },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-decline-verb-k11",
+        "acquired_at": 1786385069,
+        "lease_expires_at": 1786392269
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-ROLLUP-DETERMINISM",
+      "title": "A second fact producer arrived in a crate whose one determinism declaration is about the first",
+      "why": "P10-DEPENDENT-EDGE added nomos-lang-rust::rollup, which materializes nomos.cap.module.index from other facts. nomos-lang-rust already declares SyntaxFactProduction, and that declaration's own doc says what it is about: \"Producing the nomos.cap.syntax.items fact for one file, by parsing it.\" The rollup is not that. It reads facts rather than a file, and its reproducibility argument is a different argument -- the member order is canonicalized by the provider rather than given by syn's walk, and its inputs are digests of other facts rather than bytes off disk.\n\nNothing is red, and that is the point worth stating. tests/contract/tests/determinism_declarations.rs quantifies per crate: Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy asks whether a crate that constructs facts has at least one declaration, and this crate has one. So a second producer can arrive in a declaring crate and be covered by a declaration that was never written about it, silently. That is the same shape as the defect OD-DETERMINISM-002 repaired one level up -- a producer predicate that cannot see a domain it does not look for -- and the guard cannot catch it because the guard's grain is the crate.\n\nThe declaration was not added under P10-DEPENDENT-EDGE on purpose. Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness requires every declared strategy to be registered in tests/integration/tests/determinism.rs, which was outside that item's territory, and a declaration nothing can falsify is worse than none -- that test's own message says so. So the honest move was to leave the rollup under the existing declaration and reserve the split. This item is that split, with the harness file in its territory this time.",
+      "done_when": "Either the rollup declares its own Strategy and tests/integration/tests/determinism.rs holds it to the obligations its triple implies -- with the same axis-by-axis treatment SyntaxFactProduction gets, not a copied triple -- or SyntaxFactProduction is restated to cover both producers on stated grounds, in which case its doc comment says what the second producer's reproducibility rests on rather than leaving it to the reader to assume. If a declaration is added, it occupies a row of the contracts domain table and Test_Every_Declaration_Should_Occupy_A_Row_Of_The_Table passes without the table being widened to admit it. The public surface snapshot for nomos-lang-rust moves if a type is exported. Whether the per-crate grain of Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy is itself the defect is in scope to answer and out of scope to fix: if the answer is that the guard should count producers rather than crates, that is its own item and this one names it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust/src/determinism.rs",
+          "tests/integration/tests/determinism.rs",
+          "tests/contract/surface/nomos-lang-rust.txt"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -5979,9 +6067,9 @@
           "test",
           "--no-fail-fast",
           "-p",
-          "nomos-ledger",
+          "nomos-lang-rust",
           "-p",
-          "nomos-cli",
+          "nomos-integration-tests",
           "-p",
           "nomos-contract-tests"
         ],

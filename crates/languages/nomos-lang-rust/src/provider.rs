@@ -40,6 +40,23 @@ pub enum Materialization
     Unparseable(ParseFailure),
 }
 
+/// What this provider computes a file's fact from.
+///
+/// The semantic input is the file text and only the file text. Not its path — two copies
+/// of one file are one computation and must reach one fact — and not its modification
+/// time, which would make an untouched file look changed after a checkout.
+///
+/// Exposed because a fact key cannot be looked up without it. Anything reading this
+/// provider's answer back out of a store rebuilds the key, and a caller that computed the
+/// digest its own way would rebuild a key nobody wrote and conclude the file had never
+/// been analyzed. [`crate::rollup`] is the first such reader in this crate; the slice in
+/// `tests/integration` is the second.
+#[must_use]
+pub fn Syntax_Inputs(source: &str) -> InputDigest
+{
+    return InputDigest::Of(&[source.as_bytes()]);
+}
+
 /// Produces the syntax-items fact for one file.
 ///
 /// `subject` identifies the file; `source` is its entire contents. Nothing else is read,
@@ -57,15 +74,11 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
     let payload = Encode_Payload(&facts);
     let guarantee = Declared_Guarantee();
 
-    // The semantic input is the file text and only the file text. Not its path — two
-    // copies of one file are one computation and must reach one fact — and not its
-    // modification time, which would make an untouched file look changed after a
-    // checkout.
     let key = nomos_analysis::FactKey {
         contract: Capability(),
         contract_version: CONTRACT_VERSION,
         subject,
-        semantic_inputs: InputDigest::Of(&[source.as_bytes()]),
+        semantic_inputs: Syntax_Inputs(source),
         provider: ProviderId::New(PROVIDER),
         provider_version: CONTRACT_VERSION,
         guarantee: GuaranteeDigest::Of(&guarantee),

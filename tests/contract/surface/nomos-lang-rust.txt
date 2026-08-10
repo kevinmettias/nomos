@@ -1,15 +1,27 @@
 pub const fn nomos_lang_rust::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::ItemKind::Label(self) -> &'static str
+pub const fn nomos_lang_rust::rollup::Ceiling() -> Guarantee
+pub const fn nomos_lang_rust::rollup::Declared_Guarantee() -> Guarantee
+pub const fn nomos_lang_rust::rollup::Outcome::Answered(self) -> bool
+pub const fn nomos_lang_rust::rollup::Outcome::Label(self) -> &'static str
 pub const nomos_lang_rust::PROVIDER: &str
 pub const nomos_lang_rust::RUST_EXTENSION: &str
 pub const nomos_lang_rust::SyntaxFactProduction::SCOPE: ReproducibilityScope
 pub const nomos_lang_rust::SyntaxFactProduction::STRENGTH: DeterminismStrength
 pub const nomos_lang_rust::SyntaxFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_rust::rollup::APPROXIMATE: &str
+pub const nomos_lang_rust::rollup::CAPABILITY: &str
+pub const nomos_lang_rust::rollup::CONTRACT_VERSION: ContractVersion
+pub const nomos_lang_rust::rollup::PROVIDER: &str
+pub const nomos_lang_rust::rollup::READ: &str
+pub const nomos_lang_rust::rollup::SCHEMA: &str
+pub const nomos_lang_rust::rollup::UNREACHABLE: &str
 pub enum nomos_lang_rust::ItemKind
 pub enum nomos_lang_rust::Materialization
 pub enum nomos_lang_rust::Reading
 pub enum nomos_lang_rust::Recognition
 pub enum nomos_lang_rust::Visibility
+pub enum nomos_lang_rust::rollup::Outcome
 pub enum variant nomos_lang_rust::ItemKind::Constant
 pub enum variant nomos_lang_rust::ItemKind::Enum
 pub enum variant nomos_lang_rust::ItemKind::ExternCrate
@@ -35,6 +47,9 @@ pub enum variant nomos_lang_rust::Visibility::NotApplicable
 pub enum variant nomos_lang_rust::Visibility::Private
 pub enum variant nomos_lang_rust::Visibility::Public
 pub enum variant nomos_lang_rust::Visibility::Restricted { scope: String, }
+pub enum variant nomos_lang_rust::rollup::Outcome::Approximate
+pub enum variant nomos_lang_rust::rollup::Outcome::Read
+pub enum variant nomos_lang_rust::rollup::Outcome::Unreachable
 pub fn nomos_lang_rust::Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
 pub fn nomos_lang_rust::ItemKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_lang_rust::Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
@@ -44,8 +59,21 @@ pub fn nomos_lang_rust::Read_Source(source: &str) -> Reading
 pub fn nomos_lang_rust::Recognition::Of_Path(path: &str) -> Self
 pub fn nomos_lang_rust::SyntaxFacts::Declares_Nothing(&self) -> bool
 pub fn nomos_lang_rust::SyntaxItem::Qualified_Name(&self) -> String
+pub fn nomos_lang_rust::Syntax_Inputs(source: &str) -> InputDigest
 pub fn nomos_lang_rust::Visibility::Label(&self) -> String
 pub fn nomos_lang_rust::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust::rollup::Capability() -> CapabilityId
+pub fn nomos_lang_rust::rollup::Capability_Contract() -> CapabilityContract
+pub fn nomos_lang_rust::rollup::Encode_Index(index: &ModuleIndex) -> Vec<u8>
+pub fn nomos_lang_rust::rollup::Index_Key(module: SubjectId, members: &[ModuleMember], context: FactContext) -> FactKey
+pub fn nomos_lang_rust::rollup::Materialize_Index( store: &mut MemoryFactStore, registry: &Registry, need: &Requirement, module: &Module, context: FactContext, ) -> Result<Rolled, FactError>
+pub fn nomos_lang_rust::rollup::ModuleIndex::Answered(&self) -> usize
+pub fn nomos_lang_rust::rollup::ModuleIndex::Approximated(&self) -> usize
+pub fn nomos_lang_rust::rollup::ModuleIndex::Unreachable(&self) -> usize
+pub fn nomos_lang_rust::rollup::ModuleMember::Of(subject: SubjectId, source: &str) -> Self
+pub fn nomos_lang_rust::rollup::Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
+pub fn nomos_lang_rust::rollup::Payload_Schema() -> SchemaId
+pub fn nomos_lang_rust::rollup::Provider_Offer() -> ProviderOffer
 pub impl nomos_lang_rust::ItemKind implements core::fmt::Display
 pub impl nomos_lang_rust::ParseFailure implements core::fmt::Display
 pub impl nomos_lang_rust::ParseFailure implements std::error::Error
@@ -67,8 +95,31 @@ pub struct field nomos_lang_rust::SyntaxItem::ordinal: u32
 pub struct field nomos_lang_rust::SyntaxItem::scope: Vec<String>
 pub struct field nomos_lang_rust::SyntaxItem::shape: Option<String>
 pub struct field nomos_lang_rust::SyntaxItem::visibility: Visibility
+pub struct field nomos_lang_rust::rollup::IndexEntry::kind: String
+pub struct field nomos_lang_rust::rollup::IndexEntry::member: SubjectId
+pub struct field nomos_lang_rust::rollup::IndexEntry::ordinal: u32
+pub struct field nomos_lang_rust::rollup::IndexEntry::qualified_name: String
+pub struct field nomos_lang_rust::rollup::IndexEntry::visibility: String
+pub struct field nomos_lang_rust::rollup::MemberReading::outcome: Outcome
+pub struct field nomos_lang_rust::rollup::MemberReading::subject: SubjectId
+pub struct field nomos_lang_rust::rollup::Module::members: Vec<ModuleMember>
+pub struct field nomos_lang_rust::rollup::Module::subject: SubjectId
+pub struct field nomos_lang_rust::rollup::ModuleIndex::items: Vec<IndexEntry>
+pub struct field nomos_lang_rust::rollup::ModuleIndex::members: Vec<MemberReading>
+pub struct field nomos_lang_rust::rollup::ModuleIndex::module: SubjectId
+pub struct field nomos_lang_rust::rollup::ModuleMember::inputs: InputDigest
+pub struct field nomos_lang_rust::rollup::ModuleMember::subject: SubjectId
+pub struct field nomos_lang_rust::rollup::Rolled::dependencies: Vec<Dependency>
+pub struct field nomos_lang_rust::rollup::Rolled::index: ModuleIndex
+pub struct field nomos_lang_rust::rollup::Rolled::key: FactKey
 pub struct nomos_lang_rust::FactContext
 pub struct nomos_lang_rust::ParseFailure
 pub struct nomos_lang_rust::SyntaxFactProduction
 pub struct nomos_lang_rust::SyntaxFacts
 pub struct nomos_lang_rust::SyntaxItem
+pub struct nomos_lang_rust::rollup::IndexEntry
+pub struct nomos_lang_rust::rollup::MemberReading
+pub struct nomos_lang_rust::rollup::Module
+pub struct nomos_lang_rust::rollup::ModuleIndex
+pub struct nomos_lang_rust::rollup::ModuleMember
+pub struct nomos_lang_rust::rollup::Rolled
