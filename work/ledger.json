@@ -2820,14 +2820,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-seed-grain-w2",
-        "acquired_at": 1786334355,
-        "lease_expires_at": 1786345155
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2841,7 +2837,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.00s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-207ef041d2ea84e5.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-6acbbf6efee5d0c0.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-e26432a0c61b833c.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-8329f15ab06de82d.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d082d20178d303c9.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-67f4f969b9389d55.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-0745c39aeadf5a16.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-7788a4475651c199.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-0c143e9fdf5a06d2.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-3226753fa50af12d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-6513f2b784f9db8e.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-103e563fbb789ea0.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-f50329bbff375e72.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-1d183afa395052f7.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-774615dec9e029c0.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786335645,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "probe-only",

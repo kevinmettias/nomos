@@ -3,7 +3,7 @@ id: OD-LEDGER-001
 type: decision
 title: Territory is declared but not enforced, and nothing yet notices the difference
 status: open
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -91,14 +91,24 @@ Reserve the identifier and stop there. The slug on the end of the filename is no
 when the item is authored, and a pattern is worse than either — `Territory::Intersect`
 answers `Unknown` for a territory carrying one, and `Unknown` refuses.
 
-**An item that will write a canonical record also claims the store's governing list.** A
-record carrying `authority: canonical-normative-record` cannot land alone:
+**An item that will write a canonical record also claims that record's registration file.**
+A record carrying `authority: canonical-normative-record` still cannot land alone:
 `Test_Every_Canonical_Record_On_Disk_Should_Be_Governing` compares `docs/records` against
-`GOVERNING_RECORD_IDS` in both directions, so the file, the `RECORDS` table, the identifier
-list and the count assertion move together or the workspace goes red. This is the same shape
-as the crate rule above — two places that must change together — and it was found the way
-the others were: P10-RECORD-LOCK claimed the record it would write, did not claim
-`crates/spec/nomos-spec-store`, and could not finish without it.
+`GOVERNING_RECORD_IDS` in both directions, so the record file and its declaration move
+together or the workspace goes red. The declaration is now one file per record —
+`crates/spec/nomos-spec-store/records/<ID>.record`, named for the identifier the item is
+already reserving — so reserve that path and stop there.
+
+This rule used to say the item claims `crates/spec/nomos-spec-store`, the whole crate,
+because the declaration was two shared lists in `governing.rs` and a literal count in a test
+beside them. That made every record writer exclude every other one, which is the same
+failure the previous rule had at directory granularity, arriving one level up:
+`OD-LEDGER-007` named the crate a structural serializer for exactly this reason, and twelve
+open items had been authored to reserve it. `OD-SPEC-007` dissolved the coupling — the
+declaration is per-record, the count assertion is a floor that additions do not touch — so
+the reservation is now the registration file. Territories authored before that record still
+name the crate; they are history rather than a rule, and they are re-authored by the pass
+that empties `KNOWN_SERIALIZERS`.
 
 None is a check and none pretends to be. They are the three cases that have actually
 recurred, written down so the next item can be authored past them.
@@ -141,3 +151,9 @@ item on the ledger exclude every other one. The rule now reserves the record rat
 directory. The enforcement gap this record is *about* is still open and still waits on
 `nomos.rules.work-ledger`; what version 3 changes is only the granularity of a declaration,
 which is the half that was already working.
+
+Amended at version 4 for the same reason one level up: the *third* authoring rule reserved a
+whole crate and so re-imposed, on the store, the exclusion version 3 had just removed from
+`docs/records`. `OD-SPEC-007` made a record's declaration a file of its own, and the rule now
+reserves that file. Again only the granularity moved — the rule still says a canonical record
+cannot land without its declaration, because that is what `OD-SPEC-005` was.

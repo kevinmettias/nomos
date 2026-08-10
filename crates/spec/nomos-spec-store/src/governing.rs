@@ -5,183 +5,13 @@ use nomos_spec_model::Parse_Record;
 ///
 /// A seed that reads from disk would be a seed that silently does nothing when the
 /// working directory is somewhere else.
-const RECORDS: &[(&str, &str)] = &[
-    (
-        "docs/records/ARC-SPECDB-001-the-specification-is-a-database.md",
-        include_str!("../../../../docs/records/ARC-SPECDB-001-the-specification-is-a-database.md"),
-    ),
-    (
-        "docs/records/D-129-the-store-is-the-identity-substrate.md",
-        include_str!("../../../../docs/records/D-129-the-store-is-the-identity-substrate.md"),
-    ),
-    (
-        "docs/records/D-130-no-xvpe-dependency-before-phase-5.md",
-        include_str!("../../../../docs/records/D-130-no-xvpe-dependency-before-phase-5.md"),
-    ),
-    (
-        "docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md",
-        include_str!(
-            "../../../../docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md"
-        ),
-    ),
-    (
-        "docs/records/D-132-the-plan-is-a-game-plan.md",
-        include_str!("../../../../docs/records/D-132-the-plan-is-a-game-plan.md"),
-    ),
-    (
-        "docs/records/OD-SPEC-001-the-storage-backend-question.md",
-        include_str!("../../../../docs/records/OD-SPEC-001-the-storage-backend-question.md"),
-    ),
-    (
-        "docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md",
-        include_str!(
-            "../../../../docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md"
-        ),
-    ),
-    (
-        "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md",
-        include_str!(
-            "../../../../docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md"
-        ),
-    ),
-    (
-        "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md",
-        include_str!(
-            "../../../../docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md"
-        ),
-    ),
-    // The records the product phases produced. Every one of them was written as a file and
-    // none reached the store until P9-PHASE-GAP went looking — including two that decide
-    // how the store itself behaves.
-    (
-        "docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md",
-        include_str!("../../../../docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md"),
-    ),
-    (
-        "docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md",
-        include_str!(
-            "../../../../docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md"
-        ),
-    ),
-    (
-        "docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md",
-        include_str!(
-            "../../../../docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md"
-        ),
-    ),
-    (
-        "docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md",
-        include_str!(
-            "../../../../docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md"
-        ),
-    ),
-    (
-        "docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md",
-        include_str!(
-            "../../../../docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md"
-        ),
-    ),
-    (
-        "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md",
-        include_str!("../../../../docs/records/OD-GATE-001-a-skipped-test-reports-ok.md"),
-    ),
-    (
-        "docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md",
-        include_str!(
-            "../../../../docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md"
-        ),
-    ),
-    (
-        "docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md",
-        include_str!(
-            "../../../../docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md"
-        ),
-    ),
-    (
-        "docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md",
-        include_str!(
-            "../../../../docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md"
-        ),
-    ),
-    (
-        "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md",
-        include_str!(
-            "../../../../docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md"
-        ),
-    ),
-    (
-        "docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md",
-        include_str!(
-            "../../../../docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md"
-        ),
-    ),
-    (
-        "docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md",
-        include_str!(
-            "../../../../docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md"
-        ),
-    ),
-    (
-        "docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md",
-        include_str!(
-            "../../../../docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md"
-        ),
-    ),
-    (
-        "docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md",
-        include_str!(
-            "../../../../docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md"
-        ),
-    ),
-    (
-        "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md",
-        include_str!(
-            "../../../../docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md"
-        ),
-    ),
-    (
-        "docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md",
-        include_str!(
-            "../../../../docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md"
-        ),
-    ),
-    (
-        "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md",
-        include_str!(
-            "../../../../docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md"
-        ),
-    ),
-    (
-        "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md",
-        include_str!(
-            "../../../../docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md"
-        ),
-    ),
-    (
-        "docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md",
-        include_str!(
-            "../../../../docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md"
-        ),
-    ),
-    (
-        "docs/records/OD-LEDGER-007-a-record-excludes-nobody-and-two-other-files-serialize-the-board.md",
-        include_str!(
-            "../../../../docs/records/OD-LEDGER-007-a-record-excludes-nobody-and-two-other-files-serialize-the-board.md"
-        ),
-    ),
-    (
-        "docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md",
-        include_str!(
-            "../../../../docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md"
-        ),
-    ),
-    (
-        "docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md",
-        include_str!(
-            "../../../../docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md"
-        ),
-    ),
-];
+///
+/// The initializer is assembled by `build.rs` from `records/<ID>.record`, one file per
+/// record. The declaration stays here: an `include!` at item position is invisible to the
+/// universe scanner, and a table nobody counts is a table nobody checks. See `build.rs`
+/// and `src/registration.rs` for the rest, and `OD-SPEC-007` for why the input directory
+/// is not `docs/records`.
+const RECORDS: &[(&str, &str)] = include!(concat!(env!("OUT_DIR"), "/governing_records.rs"));
 
 /// Every record identifier this build claims to govern itself by.
 ///
@@ -192,39 +22,14 @@ const RECORDS: &[(&str, &str)] = &[
 /// comparison that matters, and it is deliberately not the one against the seeded store:
 /// the store is seeded *from this list*, so comparing the two cannot fail. Six governing
 /// records sat outside it for months for exactly that reason — OD-SPEC-005.
-pub const GOVERNING_RECORD_IDS: &[&str] = &[
-    "ARC-SPECDB-001",
-    "D-129",
-    "D-130",
-    "D-131",
-    "D-132",
-    "OD-SPEC-001",
-    "OD-SPEC-002",
-    "OD-SPEC-004",
-    "OD-LEDGER-001",
-    "OD-LEDGER-002",
-    "OD-ANALYSIS-001",
-    "OD-STORE-001",
-    "OD-CAPABILITY-001",
-    "OD-CAPABILITY-002",
-    "OD-GATE-001",
-    "OD-SPEC-005",
-    "D-133",
-    "OD-DETERMINISM-001",
-    "OD-LEDGER-003",
-    "OD-COMPLETENESS-001",
-    "D-134",
-    "OD-LEDGER-004",
-    "OD-LEDGER-005",
-    "OD-PLATFORM-001",
-    "OD-PROJECT-001",
-    "OD-GATE-002",
-    "OD-LEDGER-006",
-    "OD-CAPABILITY-003",
-    "OD-LEDGER-007",
-    "OD-LEDGER-009",
-    "OD-SPEC-006",
-];
+///
+/// Assembled by `build.rs` from the registration directory, which is authored by hand and
+/// is not `docs/records`. Both sides of that comparison therefore remain independently
+/// written down, which is the objection `OD-LEDGER-007` raised against deriving this list
+/// and the one `OD-SPEC-007` answers. A record is registered by adding
+/// `records/<ID>.record`; no author edits this file to add one.
+pub const GOVERNING_RECORD_IDS: &[&str] =
+    include!(concat!(env!("OUT_DIR"), "/governing_record_ids.rs"));
 
 /// The relation vocabulary the governing records use.
 ///

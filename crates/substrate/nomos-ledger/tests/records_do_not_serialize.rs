@@ -373,11 +373,16 @@ fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
 const KNOWN_SERIALIZERS: &[(&str, &str)] = &[
     (
         "crates/spec/nomos-spec-store",
-        "seeding. A canonical record must be added to RECORDS and GOVERNING_RECORD_IDS in \
-         governing.rs and the literal count in governing_records_are_present.rs raised, so \
-         two items writing two different records edit the same two files. This is \
-         OD-LEDGER-001's third authoring rule defeating the guarantee P10-RECORD-LOCK \
-         bought, and it was added in the same work.",
+        "declared territory, no longer a code coupling. OD-SPEC-007 dissolved the one this \
+         entry was opened for: a record is registered by its own file under records/, the \
+         two tables are generated from that directory, and the literal count is a floor \
+         additions do not touch — so two items writing two different records now write two \
+         different files here. What remains is twelve territories authored under \
+         OD-LEDGER-001's third rule as it stood before that record, which still reserve the \
+         whole crate. This register reads declared territory rather than edited files, so \
+         the entry cannot come out until those are re-authored; removing it now would leave \
+         a path every record writer reserves and nobody declared. It comes out with that \
+         pass, not with the code change.",
     ),
     (
         "tests/contract",
