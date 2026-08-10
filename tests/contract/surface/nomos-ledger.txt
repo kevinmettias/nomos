@@ -84,7 +84,7 @@ pub fn nomos_ledger::FileLedger::Save(&self, document: &LedgerDocument) -> Resul
 pub fn nomos_ledger::FileLedger::Take_Over( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::FileLedger::Validate_Current(&self) -> Result<(), LedgerError>
 pub fn nomos_ledger::FileLedger::With_Lock<T>( &self, holder: &str, modify: impl FnOnce(&mut LedgerDocument) -> Result<T, LedgerError>, ) -> Result<(T, Option<StaleTakeover>), LedgerError>
-pub fn nomos_ledger::Finish<F: FileSystem, C: Clock, L: CrossProcessLock>( ledger: &mut FileLedger<F, C, L>, launcher: &impl ProcessLauncher, item: &ItemId, holder: &str, working_directory: Option<&Path>, ) -> Result<VerificationRecord, FinishRefusal>
+pub fn nomos_ledger::Finish<F: FileSystem, C: Clock, L: CrossProcessLock>( ledger: &mut FileLedger<F, C, L>, launcher: &impl ProcessLauncher, finishing: &Finishing<'_>, working_directory: Option<&Path>, ) -> Result<VerificationRecord, FinishRefusal>
 pub fn nomos_ledger::FinishRefusal::Describe(&self) -> String
 pub fn nomos_ledger::GateUnknown::Describe(&self) -> String
 pub fn nomos_ledger::ItemId::As_Str(&self) -> &str
@@ -123,6 +123,8 @@ pub struct field nomos_ledger::Claim::holder: String
 pub struct field nomos_ledger::Claim::lease_expires_at: Timestamp
 pub struct field nomos_ledger::Declination::declined_at: Timestamp
 pub struct field nomos_ledger::Declination::holder: String
+pub struct field nomos_ledger::Finishing::holder: &'a str
+pub struct field nomos_ledger::Finishing::item: &'a ItemId
 pub struct field nomos_ledger::GateOutcome::argv: Vec<String>
 pub struct field nomos_ledger::GateOutcome::exit_code: i32
 pub struct field nomos_ledger::LedgerDocument::items: Vec<LedgerItem>
@@ -158,6 +160,7 @@ pub struct nomos_ledger::Abandonment
 pub struct nomos_ledger::Claim
 pub struct nomos_ledger::Declination
 pub struct nomos_ledger::FileLedger<F, C, L>
+pub struct nomos_ledger::Finishing<'a>
 pub struct nomos_ledger::GateOutcome
 pub struct nomos_ledger::ItemId(String)
 pub struct nomos_ledger::LedgerDocument

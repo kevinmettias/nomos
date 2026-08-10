@@ -2,6 +2,7 @@
 
 use crate::arguments::{Named_Value, Named_Values};
 use nomos_ledger::{
+    Finishing,
     AddRefusal, ClaimRefusal, Claim_Refusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish,
     FinishRefusal, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome,
     SCHEMA_VERSION, Territory, Validate, VerificationPredicate,
@@ -477,16 +478,7 @@ pub fn Run(
 
             Add(&mut ledger, item, &published, output)
         }
-        WorkCommand::Finish { item, holder } =>
-        {
-            // No working directory: the predicate runs where the user invoked `nomos`,
-            // which for a repository tool run inside a repository is the repository. A
-            // predicate silently relocated into `work/` would fail in ways that look like
-            // the work being wrong.
-            let outcome = Finish(&mut ledger, &StdProcessLauncher, item, holder, None);
-
-            Report_Finish(outcome, output)
-        }
+        WorkCommand::Finish { item, holder } => Finished(&mut ledger, item, holder, output),
         WorkCommand::Claim(request) => Claimed(&mut ledger, request, output),
         WorkCommand::Renew(request) => Renewed(&mut ledger, request, output),
         WorkCommand::TakeOver(request) => Taken_Over(&mut ledger, request, output),
@@ -495,6 +487,24 @@ pub fn Run(
         WorkCommand::Validate => Report_Validation(&ledger, output),
         WorkCommand::Audit => Audit(&ledger, output),
     };
+}
+
+/// Runs the item's predicate and reports what it said.
+///
+/// No working directory: the predicate runs where the user invoked `nomos`, which for a
+/// repository tool run inside a repository is the repository. A predicate silently
+/// relocated into `work/` would fail in ways that look like the work being wrong.
+fn Finished(
+    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
+    item: &ItemId,
+    holder: &str,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let finishing = Finishing { item, holder };
+    let outcome = Finish(ledger, &StdProcessLauncher, &finishing, None);
+
+    return Report_Finish(outcome, output);
 }
 
 /// One `Report_Claim` across the three reservation verbs, which is the point: one mapping

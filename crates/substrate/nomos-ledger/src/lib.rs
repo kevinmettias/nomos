@@ -58,7 +58,7 @@ mod territory;
 pub use exclusion::{
     Check_Lease, ClaimRefusal, ExclusionLedger, Refusal_From, ReleaseOutcome, Reservation,
 };
-pub use finish::{Finish, FinishRefusal};
+pub use finish::{Finish, FinishRefusal, Finishing};
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateUnknown, LINT_STEP, Workflow_Path};
 pub use item::{
     Abandonment, Blocker, Claim, DEFAULT_LEASE, Declination, GateOutcome, ItemId, ItemState,

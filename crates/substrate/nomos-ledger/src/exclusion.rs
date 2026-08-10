@@ -161,37 +161,24 @@ impl ClaimRefusal
                 holder,
                 until,
                 item,
-            } => format!(
-                "territory overlaps {item}, held by {holder} until unix {}",
-                until.Unix_Seconds()
-            ),
-            Self::UnknownIndependence { against, reason } => format!(
-                "cannot establish independence from {against}: {}. Unknown independence is \
-                 not safe parallelism, so this claim is refused rather than granted",
-                reason.Describe()
-            ),
-            Self::LeaseTooLong { requested, maximum } => format!(
-                "a lease of {requested:?} exceeds the {maximum:?} ceiling"
-            ),
+            } => Held_By(item, holder, *until),
+            Self::UnknownIndependence { against, reason } => Unknown_Independence(against, reason),
+            Self::LeaseTooLong { requested, maximum } =>
+            {
+                format!("a lease of {requested:?} exceeds the {maximum:?} ceiling")
+            }
             Self::Lapsed {
                 item,
                 holder,
                 since,
-            } => format!(
-                "{item} was held by {holder} and the lease ran out at unix {}; \
-                 `nomos work takeover` replaces it and keeps {holder}'s claim on the item",
-                since.Unix_Seconds()
-            ),
+            } => Lapsed(item, holder, *since),
             Self::StillHeld {
                 item,
                 holder,
                 until,
-            } => format!(
-                "{item} is held by {holder} until unix {}; ending it is {holder}'s call — \
-                 `nomos work abandon` releases it and `nomos work decline` then ends it",
-                until.Unix_Seconds()
-            ),
-            Self::NotClaimable { item, state } => {
+            } => Still_Held(item, holder, *until),
+            Self::NotClaimable { item, state } =>
+            {
                 format!("{item} is {state}, so the operation was refused")
             }
             Self::DependencyUnmet {
@@ -200,7 +187,8 @@ impl ClaimRefusal
                 state,
             } => format!("{item} depends on {dependency}, which is {state}"),
             Self::NoSuchItem { item } => format!("no item named {item}"),
-            Self::LedgerUnusable { cause } => {
+            Self::LedgerUnusable { cause } =>
+            {
                 format!("the ledger could not be used: {cause}")
             }
         };
@@ -527,3 +515,46 @@ mod tests
         }
     }
 }
+
+/// Territory another live claim already covers.
+fn Held_By(item: &ItemId, holder: &str, until: Timestamp) -> String
+{
+    return format!(
+        "territory overlaps {item}, held by {holder} until unix {}",
+        until.Unix_Seconds()
+    );
+}
+
+/// Two territories the ledger cannot prove disjoint.
+///
+/// Refused rather than granted: unknown independence is not safe parallelism, and a claim
+/// granted on a maybe is two sessions writing one path believing they are alone.
+fn Unknown_Independence(against: &ItemId, reason: &UnknownReason) -> String
+{
+    return format!(
+        "cannot establish independence from {against}: {}. Unknown independence is not safe \
+         parallelism, so this claim is refused rather than granted",
+        reason.Describe()
+    );
+}
+
+/// A claim whose lease has run out, and what replaces it.
+fn Lapsed(item: &ItemId, holder: &str, since: Timestamp) -> String
+{
+    return format!(
+        "{item} was held by {holder} and the lease ran out at unix {}; `nomos work takeover` \
+         replaces it and keeps {holder}'s claim on the item",
+        since.Unix_Seconds()
+    );
+}
+
+/// A live claim somebody else holds, and whose call it is to end it.
+fn Still_Held(item: &ItemId, holder: &str, until: Timestamp) -> String
+{
+    return format!(
+        "{item} is held by {holder} until unix {}; ending it is {holder}'s call — `nomos work \
+         abandon` releases it and `nomos work decline` then ends it",
+        until.Unix_Seconds()
+    );
+}
+

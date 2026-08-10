@@ -10,10 +10,10 @@
 
 use crate::exclusion::{ClaimRefusal, ExclusionLedger, ReleaseOutcome};
 use crate::gate::{Derive_Step, GateUnknown, LINT_STEP, Workflow_Path};
-use crate::item::{GateOutcome, ItemId, VerificationRecord};
-use crate::store::FileLedger;
+use crate::item::{GateOutcome, ItemId, VerificationPredicate, VerificationRecord};
+use crate::store::{FileLedger, LedgerDocument};
 use nomos_platform::{
-    Clock, Command, CrossProcessLock, ExitOutcome, FileSystem, ProcessLauncher,
+    Clock, Command, CrossProcessLock, ExitOutcome, FileSystem, ProcessLauncher, Timestamp,
 };
 use std::path::Path;
 
@@ -125,39 +125,23 @@ impl FinishRefusal
         return match self
         {
             Self::NotHeld { refusal } => refusal.Describe(),
-            Self::NoPredicate { item, done_when } => format!(
-                "{item} has no verification predicate, so it cannot be finished. \
-                 done_when says \"{done_when}\", and prose is not a predicate"
-            ),
-            Self::CouldNotRun { item, cause } => format!(
-                "{item}'s predicate could not be started: {cause}. This is a broken \
-                 predicate, not failing work"
-            ),
-            Self::NoVerdict { item, outcome } => format!(
-                "{item}'s predicate produced no verdict ({outcome:?}), so whether the work \
-                 is finished is still unknown"
-            ),
+            Self::NoPredicate { item, done_when } => No_Predicate(item, done_when),
+            Self::CouldNotRun { item, cause } => Could_Not_Run(item, cause),
+            Self::NoVerdict { item, outcome } => No_Verdict(item, outcome),
             Self::PredicateFailed {
                 item,
                 exit_code,
                 output_tail,
-            } => format!("{item}'s predicate exited {exit_code}, so it is not finished:\n{output_tail}"),
-            Self::GateUndetermined { item, cause } => format!(
-                "{item} cannot be finished because {}. An item finished against a check \
-                 weaker than the gate is the defect this refusal exists to prevent",
-                cause.Describe()
-            ),
+            } => Predicate_Failed(item, *exit_code, output_tail),
+            Self::GateUndetermined { item, cause } => Gate_Undetermined(item, cause),
             Self::GateFailed {
                 item,
                 argv,
                 exit_code,
                 output_tail,
-            } => format!(
-                "{item}'s work may be right and still cannot land: the gate's own step \
-                 `{}` exited {exit_code}. The item's predicate was not run.\n{output_tail}",
-                argv.join(" ")
-            ),
-            Self::NotRecorded { cause } => {
+            } => Gate_Failed(item, argv, *exit_code, output_tail),
+            Self::NotRecorded { cause } =>
+            {
                 format!("the predicate passed but the result could not be recorded: {cause}")
             }
         };
@@ -180,6 +164,89 @@ impl FinishRefusal
     }
 }
 
+/// The gate's lint step, read out of the workflow rather than written here.
+///
+/// Both failures are `GateUndetermined` rather than a licence to run the predicate alone:
+/// a workflow nobody could read and a workflow with no such step both leave the question
+/// "would this land" unanswered, and that is not the same as answering it yes.
+fn Gate_Argv<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+    item: &ItemId,
+    working_directory: Option<&Path>,
+) -> Result<Vec<String>, FinishRefusal>
+{
+    let workflow_path = Workflow_Path(working_directory.unwrap_or_else(|| return Path::new(".")));
+    let workflow = ledger
+        .Read_File(&workflow_path)
+        .map_err(|cause| FinishRefusal::GateUndetermined {
+            item: item.clone(),
+            cause: GateUnknown::Unreadable {
+                path: workflow_path.display().to_string(),
+                cause,
+            },
+        })?;
+
+    return Derive_Step(&workflow, LINT_STEP).map_err(|cause| {
+        return FinishRefusal::GateUndetermined {
+            item: item.clone(),
+            cause,
+        };
+    });
+}
+
+/// An item whose `done_when` is prose and nothing else.
+fn No_Predicate(item: &ItemId, done_when: &str) -> String
+{
+    return format!(
+        "{item} has no verification predicate, so it cannot be finished. done_when says \
+         \"{done_when}\", and prose is not a predicate"
+    );
+}
+
+/// A predicate the launcher would not start.
+fn Could_Not_Run(item: &ItemId, cause: &str) -> String
+{
+    return format!(
+        "{item}'s predicate could not be started: {cause}. This is a broken predicate, not \
+         failing work"
+    );
+}
+
+/// A predicate that ended without an exit code — killed, timed out, or lost.
+fn No_Verdict(item: &ItemId, outcome: &ExitOutcome) -> String
+{
+    return format!(
+        "{item}'s predicate produced no verdict ({outcome:?}), so whether the work is \
+         finished is still unknown"
+    );
+}
+
+/// A predicate that ran and said no.
+fn Predicate_Failed(item: &ItemId, exit_code: i32, output_tail: &str) -> String
+{
+    return format!("{item}'s predicate exited {exit_code}, so it is not finished:\n{output_tail}");
+}
+
+/// A gate nobody could ask.
+fn Gate_Undetermined(item: &ItemId, cause: &GateUnknown) -> String
+{
+    return format!(
+        "{item} cannot be finished because {}. An item finished against a check weaker than \
+         the gate is the defect this refusal exists to prevent",
+        cause.Describe()
+    );
+}
+
+/// A gate that ran and said no, before the item's own predicate was asked.
+fn Gate_Failed(item: &ItemId, argv: &[String], exit_code: i32, output_tail: &str) -> String
+{
+    return format!(
+        "{item}'s work may be right and still cannot land: the gate's own step `{}` exited \
+         {exit_code}. The item's predicate was not run.\n{output_tail}",
+        argv.join(" ")
+    );
+}
+
 /// Runs an item's verification predicate and, if it passes, records the item as done.
 ///
 /// `working_directory` of `None` runs the predicate wherever the caller already is,
@@ -193,24 +260,129 @@ impl FinishRefusal
 pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &mut FileLedger<F, C, L>,
     launcher: &impl ProcessLauncher,
-    item: &ItemId,
-    holder: &str,
+    finishing: &Finishing<'_>,
     working_directory: Option<&Path>,
 ) -> Result<VerificationRecord, FinishRefusal>
 {
-    let document = ledger
-        .Load()
-        .map_err(|error| FinishRefusal::NotRecorded {
-            cause: error.to_string(),
-        })?;
+    let item = finishing.item;
+    let document = Loaded(ledger)?;
+    let predicate = Runnable_Predicate(&document, item)?;
+    let runner = Runner {
+        working_directory,
+        timeout: std::time::Duration::from_secs(predicate.timeout_seconds),
+    };
 
-    let target = document
-        .items
-        .iter()
-        .find(|candidate| &candidate.id == item)
-        .ok_or_else(|| FinishRefusal::NotHeld {
+    // The gate's own step runs first and short-circuits. An author told "your tests passed"
+    // and "you cannot land" in one breath reads only the first sentence.
+    let gate = Run_Gate_Step(ledger, launcher, item, runner)?;
+
+    let command = Commanded(predicate.argv.clone(), runner);
+    let ran = Ran_To_Completion(launcher, &command, item)?;
+    Refuse_Nonzero(item, ran.code, &ran.tail)?;
+
+    let record = Verified(&predicate.argv, &ran, gate, ledger.Now());
+    ledger
+        .Release(item, finishing.holder, ReleaseOutcome::Finished(record.clone()))
+        .map_err(|refusal| FinishRefusal::NotHeld { refusal })?;
+
+    return Ok(record);
+}
+
+/// The ledger as it stands, or the reason it could not be read.
+///
+/// A ledger that will not load is `NotRecorded` rather than `NotHeld`: nothing was found
+/// out about the claim, and reporting it as unheld would send the author to re-claim an
+/// item they may well still hold.
+fn Loaded<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+) -> Result<LedgerDocument, FinishRefusal>
+{
+    return ledger.Load().map_err(|error| {
+        return FinishRefusal::NotRecorded {
+            cause: error.to_string(),
+        };
+    });
+}
+
+/// A predicate that ran and said no.
+///
+/// Its tail is carried into the refusal rather than only its code, because "not finished"
+/// is not actionable and "not finished, here is what the run printed" is.
+fn Refuse_Nonzero(item: &ItemId, code: i32, tail: &str) -> Result<(), FinishRefusal>
+{
+    if code == 0
+    {
+        return Ok(());
+    }
+
+    return Err(FinishRefusal::PredicateFailed {
+        item: item.clone(),
+        exit_code: code,
+        output_tail: tail.to_owned(),
+    });
+}
+
+/// Who is finishing what.
+///
+/// The two are consulted together at every step — the item to find the predicate, the holder
+/// to prove entitlement to record the result — and a call that named one without the other
+/// could not do either.
+#[derive(Clone, Copy)]
+pub struct Finishing<'a>
+{
+    /// The item whose predicate is being run.
+    pub item: &'a ItemId,
+    /// Who claims to hold it.
+    pub holder: &'a str,
+}
+
+/// How a command is to be run: from where, and for how long at most.
+///
+/// The timeout is the item's own, so the gate step is bounded by the same patience the
+/// predicate is. A gate that hung forever would refuse the item for a reason nobody could
+/// distinguish from work that never finished.
+#[derive(Clone, Copy)]
+struct Runner<'a>
+{
+    working_directory: Option<&'a Path>,
+    timeout: std::time::Duration,
+}
+
+/// The item's predicate, if it has one that can actually be run.
+///
+/// Prose in `done_when` is not a predicate and a predicate with no program is not one
+/// either. Both would let an item be finished on a check nobody performed.
+fn Runnable_Predicate<'a>(
+    document: &'a LedgerDocument,
+    item: &ItemId,
+) -> Result<&'a VerificationPredicate, FinishRefusal>
+{
+    let predicate = Predicate_Of(document, item)?;
+    if !predicate.Is_Runnable()
+    {
+        return Err(FinishRefusal::CouldNotRun {
+            item: item.clone(),
+            cause: "the predicate has no program to run".to_owned(),
+        });
+    }
+
+    return Ok(predicate);
+}
+
+/// The predicate an item declares, if the item exists and declares one.
+fn Predicate_Of<'a>(
+    document: &'a LedgerDocument,
+    item: &ItemId,
+) -> Result<&'a VerificationPredicate, FinishRefusal>
+{
+    let found = document.items.iter().find(|candidate| return &candidate.id == item);
+    let Some(target) = found
+    else
+    {
+        return Err(FinishRefusal::NotHeld {
             refusal: ClaimRefusal::NoSuchItem { item: item.clone() },
-        })?;
+        });
+    };
 
     let Some(predicate) = &target.verification
     else
@@ -221,30 +393,33 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
         });
     };
 
-    if !predicate.Is_Runnable()
-    {
-        return Err(FinishRefusal::CouldNotRun {
-            item: item.clone(),
-            cause: "the predicate has no program to run".to_owned(),
-        });
-    }
+    return Ok(predicate);
+}
 
-    let timeout = std::time::Duration::from_secs(predicate.timeout_seconds);
+/// One command that reached a verdict, and the tail of what it said on the way.
+struct Ran
+{
+    code: i32,
+    tail: String,
+}
 
-    // The gate's own step runs first and short-circuits. An author told "your tests
-    // passed" and "you cannot land" in one breath reads only the first sentence.
-    let gate = Run_Gate_Step(ledger, launcher, item, working_directory, timeout)?;
-
-    let mut command = Command::New(predicate.argv.clone(), timeout);
-    command.working_directory = working_directory.map(std::path::Path::to_path_buf);
-
+/// Runs a command to a verdict.
+///
+/// Both callers need the same three answers — the launcher would not start it, it ended
+/// without a code, it ended with one — and answering them once is what keeps the gate step
+/// and the predicate from drifting apart in how they treat a process nobody could ask.
+fn Ran_To_Completion(
+    launcher: &impl ProcessLauncher,
+    command: &Command,
+    item: &ItemId,
+) -> Result<Ran, FinishRefusal>
+{
     let output = launcher
-        .Run(&command)
+        .Run(command)
         .map_err(|cause| FinishRefusal::CouldNotRun {
             item: item.clone(),
             cause,
         })?;
-
     let tail = Tail_Of(&format!("{}{}", output.stdout, output.stderr), OUTPUT_TAIL_LIMIT);
 
     let ExitOutcome::Exited { code } = output.outcome
@@ -256,28 +431,31 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
         });
     };
 
-    if code != 0
-    {
-        return Err(FinishRefusal::PredicateFailed {
-            item: item.clone(),
-            exit_code: code,
-            output_tail: tail,
-        });
-    }
+    return Ok(Ran { code, tail });
+}
 
-    let record = VerificationRecord {
-        argv: predicate.argv.clone(),
-        exit_code: code,
-        output_tail: tail,
-        verified_at: ledger.Now(),
+/// A command as this module builds them: what to run, where, and how long to wait.
+fn Commanded(argv: Vec<String>, runner: Runner<'_>) -> Command
+{
+    let mut command = Command::New(argv, runner.timeout);
+    command.working_directory = runner.working_directory.map(std::path::Path::to_path_buf);
+
+    return command;
+}
+
+/// The record a passing predicate leaves behind.
+///
+/// It carries the gate's outcome as well as its own, because "this item was verified" is
+/// only true of a tree the gate also accepted.
+fn Verified(argv: &[String], ran: &Ran, gate: GateOutcome, at: Timestamp) -> VerificationRecord
+{
+    return VerificationRecord {
+        argv: argv.to_vec(),
+        exit_code: ran.code,
+        output_tail: ran.tail.clone(),
+        verified_at: at,
         gate: Some(gate),
     };
-
-    ledger
-        .Release(item, holder, ReleaseOutcome::Finished(record.clone()))
-        .map_err(|refusal| FinishRefusal::NotHeld { refusal })?;
-
-    return Ok(record);
 }
 
 /// Runs the gate's lint step, derived from the workflow rather than written here.
@@ -295,62 +473,26 @@ fn Run_Gate_Step<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &FileLedger<F, C, L>,
     launcher: &impl ProcessLauncher,
     item: &ItemId,
-    working_directory: Option<&Path>,
-    timeout: std::time::Duration,
+    runner: Runner<'_>,
 ) -> Result<GateOutcome, FinishRefusal>
 {
-    let workflow_path = Workflow_Path(working_directory.unwrap_or_else(|| Path::new(".")));
-    let workflow = ledger
-        .Read_File(&workflow_path)
-        .map_err(|cause| FinishRefusal::GateUndetermined {
-            item: item.clone(),
-            cause: GateUnknown::Unreadable {
-                path: workflow_path.display().to_string(),
-                cause,
-            },
-        })?;
+    let argv = Gate_Argv(ledger, item, runner.working_directory)?;
+    let command = Commanded(argv.clone(), runner);
+    let ran = Ran_To_Completion(launcher, &command, item)?;
 
-    let argv =
-        Derive_Step(&workflow, LINT_STEP).map_err(|cause| FinishRefusal::GateUndetermined {
-            item: item.clone(),
-            cause,
-        })?;
-
-    let mut command = Command::New(argv.clone(), timeout);
-    command.working_directory = working_directory.map(std::path::Path::to_path_buf);
-
-    let output = launcher
-        .Run(&command)
-        .map_err(|cause| FinishRefusal::CouldNotRun {
-            item: item.clone(),
-            cause,
-        })?;
-
-    let ExitOutcome::Exited { code } = output.outcome
-    else
-    {
-        return Err(FinishRefusal::NoVerdict {
-            item: item.clone(),
-            outcome: output.outcome,
-        });
-    };
-
-    if code != 0
+    if ran.code != 0
     {
         return Err(FinishRefusal::GateFailed {
             item: item.clone(),
             argv,
-            exit_code: code,
-            output_tail: Tail_Of(
-                &format!("{}{}", output.stdout, output.stderr),
-                OUTPUT_TAIL_LIMIT,
-            ),
+            exit_code: ran.code,
+            output_tail: ran.tail,
         });
     }
 
     return Ok(GateOutcome {
         argv,
-        exit_code: code,
+        exit_code: ran.code,
     });
 }
 

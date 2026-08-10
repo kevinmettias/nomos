@@ -16,6 +16,7 @@
 //! is not a guard.
 
 use nomos_ledger::{
+    Finishing,
     Claim, FileLedger, Finish, FinishRefusal, GateUnknown, ItemId, ItemState,
     LedgerDocument, LedgerItem, Territory, VerificationPredicate,
 };
@@ -203,9 +204,12 @@ fn Test_A_Passing_Predicate_Should_Not_Finish_An_Item_While_The_Gate_Is_Red()
     let refusal = Finish(
         &mut ledger,
         &&launcher,
-        &ItemId::New("T-1"),
-        HOLDER,
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: HOLDER,
+        },
+        Some(&directory,
+    ),
     )
     .expect_err("a red gate must refuse the finish");
 
@@ -236,9 +240,12 @@ fn Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item()
     let record = Finish(
         &mut ledger,
         &&launcher,
-        &ItemId::New("T-1"),
-        HOLDER,
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: HOLDER,
+        },
+        Some(&directory,
+    ),
     )
     .expect("a green gate and a passing predicate finish the item");
 
@@ -277,9 +284,12 @@ fn Test_The_Gate_Should_Run_Before_The_Predicate_And_Short_Circuit()
     let _ = Finish(
         &mut ledger,
         &&launcher,
-        &ItemId::New("T-1"),
-        HOLDER,
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: HOLDER,
+        },
+        Some(&directory,
+    ),
     );
 
     let calls = launcher.Calls();
@@ -304,9 +314,12 @@ fn Test_A_Green_Gate_Should_Still_Run_The_Predicate_Second()
     let _ = Finish(
         &mut ledger,
         &&launcher,
-        &ItemId::New("T-1"),
-        HOLDER,
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: HOLDER,
+        },
+        Some(&directory,
+    ),
     );
 
     let calls = launcher.Calls();
@@ -334,9 +347,12 @@ fn Test_A_Missing_Workflow_Should_Refuse_Rather_Than_Finish_On_The_Predicate_Alo
     let refusal = Finish(
         &mut ledger,
         &&launcher,
-        &ItemId::New("T-1"),
-        HOLDER,
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: HOLDER,
+        },
+        Some(&directory,
+    ),
     )
     .expect_err("an underived gate must refuse");
 
@@ -381,9 +397,12 @@ fn Test_A_Scripted_Gate_Step_Should_Refuse_Rather_Than_Be_Guessed_At()
     let refusal = Finish(
         &mut ledger,
         &&launcher,
-        &ItemId::New("T-1"),
-        HOLDER,
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: HOLDER,
+        },
+        Some(&directory,
+    ),
     )
     .expect_err("a scripted gate step must refuse");
 
@@ -415,9 +434,12 @@ fn Test_Changing_The_Workflow_Should_Change_What_Finish_Runs()
     let record = Finish(
         &mut ledger,
         &&launcher,
-        &ItemId::New("T-1"),
-        HOLDER,
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: HOLDER,
+        },
+        Some(&directory,
+    ),
     )
     .expect("the altered workflow still lints");
 

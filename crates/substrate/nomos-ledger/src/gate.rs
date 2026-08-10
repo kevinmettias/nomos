@@ -112,24 +112,14 @@ pub fn Derive_Step(workflow: &str, step: &str) -> Result<Vec<String>, GateUnknow
     {
         let trimmed = line.trim();
 
-        if let Some(name) = trimmed.strip_prefix("- name:")
+        if let Some(name) = Step_Named(trimmed)
         {
-            inside = name.trim() == step;
+            inside = name == step;
             continue;
         }
 
-        if let Some(name) = trimmed.strip_prefix("name:")
-        {
-            inside = name.trim() == step;
-            continue;
-        }
-
-        if !inside
-        {
-            continue;
-        }
-
-        if let Some(run) = trimmed.strip_prefix("run:")
+        if inside
+            && let Some(run) = trimmed.strip_prefix("run:")
         {
             return Argv_Of(run.trim(), step);
         }
@@ -138,6 +128,20 @@ pub fn Derive_Step(workflow: &str, step: &str) -> Result<Vec<String>, GateUnknow
     return Err(GateUnknown::NoSuchStep {
         step: step.to_owned(),
     });
+}
+
+/// The step name a line declares, in either of the two spellings a step is written in.
+///
+/// `- name:` opens a step and `name:` continues the same mapping, and both mean the reader
+/// has moved to a different step. Reading only one of them would leave the reader inside
+/// the previous step and take that step's `run:` as this one's.
+fn Step_Named(trimmed: &str) -> Option<&str>
+{
+    let named = trimmed
+        .strip_prefix("- name:")
+        .or_else(|| return trimmed.strip_prefix("name:"))?;
+
+    return Some(named.trim());
 }
 
 /// Splits a bare command into an argv, or refuses.

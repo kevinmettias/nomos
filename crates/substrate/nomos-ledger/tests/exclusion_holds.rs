@@ -5,6 +5,7 @@
 //! checks were deleted.
 
 use nomos_ledger::{
+    Finishing,
     Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish,
     FinishRefusal, GateOutcome, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem,
     ReleaseOutcome, SCHEMA_VERSION, Territory as ItemTerritory, Validate, VerificationPredicate,
@@ -690,9 +691,12 @@ fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
     let refusal = Finish(
         &mut ledger,
         &StdProcessLauncher,
-        &ItemId::New("T-1"),
-        "agent-a",
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: "agent-a",
+        },
+        Some(&directory,
+    ),
     )
     .expect_err("a predicate that exits non-zero must refuse the completion");
 
@@ -732,9 +736,12 @@ fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
     let record = Finish(
         &mut ledger,
         &StdProcessLauncher,
-        &ItemId::New("T-1"),
-        "agent-a",
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: "agent-a",
+        },
+        Some(&directory,
+    ),
     )
     .expect("a passing predicate must finish the item");
 
@@ -774,9 +781,12 @@ fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
     let refusal = Finish(
         &mut ledger,
         &StdProcessLauncher,
-        &ItemId::New("T-1"),
-        "agent-a",
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: "agent-a",
+        },
+        Some(&directory,
+    ),
     )
     .expect_err("an item with no predicate cannot be finished");
 
@@ -812,9 +822,12 @@ fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
     let refusal = Finish(
         &mut ledger,
         &StdProcessLauncher,
-        &ItemId::New("T-1"),
-        "agent-a",
-        Some(&directory),
+        &Finishing {
+            item: &ItemId::New("T-1"),
+            holder: "agent-a",
+        },
+        Some(&directory,
+    ),
     )
     .expect_err("a missing program is not a verdict");
 

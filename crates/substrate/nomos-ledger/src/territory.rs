@@ -170,33 +170,13 @@ impl Territory
             });
         }
 
-        let mut shared = Vec::new();
-        for mine in &self.paths
+        let shared = Shared_Subjects(&self.paths, &other.paths);
+        if shared.is_empty()
         {
-            for theirs in &other.paths
-            {
-                if !Contains_Or_Equals(mine, theirs)
-                {
-                    continue;
-                }
-
-                let narrower = Narrower(mine, theirs);
-                let subject = Subject_Of(narrower);
-                if !shared.contains(&subject)
-                {
-                    shared.push(subject);
-                }
-            }
+            return Intersection::Disjoint;
         }
 
-        return if shared.is_empty()
-        {
-            Intersection::Disjoint
-        }
-        else
-        {
-            Intersection::Overlaps(shared)
-        };
+        return Intersection::Overlaps(shared);
     }
 
     /// Authored paths that denote the same subject as another entry.
@@ -222,6 +202,82 @@ impl Territory
 
         return duplicates;
     }
+}
+
+/// A record stem up to and including its ordinal component.
+///
+/// An identifier begins with a word. `2026-08-09-notes.md` reaches its first all-digit
+/// component at `08` and would otherwise reduce to `2026-08`, which two unrelated notes
+/// from the same month would then share. Requiring a letter first refuses the whole name
+/// rather than the first component of it.
+///
+/// A stem that never reaches an all-digit component is not an allocation at all, which is
+/// why running out of components answers with nothing rather than with the whole stem.
+fn Up_To_The_Ordinal(stem: &str) -> Option<String>
+{
+    let mut identifier = String::new();
+
+    for (position, component) in stem.split('-').enumerate()
+    {
+        if position == 0 && !component.bytes().any(|byte| return byte.is_ascii_alphabetic())
+        {
+            return None;
+        }
+
+        if position > 0
+        {
+            identifier.push('-');
+        }
+        identifier.push_str(component);
+
+        if Is_Ordinal(component, position)
+        {
+            return Some(identifier);
+        }
+    }
+
+    return None;
+}
+
+/// Whether a component is the ordinal that ends an identifier.
+///
+/// Never the first: a name that opens with digits is a date or a serial rather than an
+/// allocation, and `2026` is not an identifier `2026-08-notes.md` extends.
+fn Is_Ordinal(component: &str, position: usize) -> bool
+{
+    return position > 0
+        && !component.is_empty()
+        && component.bytes().all(|byte| return byte.is_ascii_digit());
+}
+
+/// Every subject two path sets both reach, named once each.
+///
+/// Deduplicated because two entries reaching one subject is one overlap. Reporting it twice
+/// would make a territory that names a directory and a file inside it look like a wider
+/// conflict than it is.
+fn Shared_Subjects(mine: &[String], theirs: &[String]) -> Vec<SubjectId>
+{
+    let mut shared = Vec::new();
+
+    for left in mine
+    {
+        for right in theirs
+        {
+            if !Contains_Or_Equals(left, right)
+            {
+                continue;
+            }
+
+            let narrower = Narrower(left, right);
+            let subject = Subject_Of(narrower);
+            if !shared.contains(&subject)
+            {
+                shared.push(subject);
+            }
+        }
+    }
+
+    return shared;
 }
 
 /// The more specific of two overlapping paths.
@@ -403,36 +459,9 @@ fn Record_Identifier_Form(folded: &str) -> Option<String>
     }
 
     let stem = name.strip_suffix(".md")?;
-    let mut identifier = String::new();
+    let identifier = Up_To_The_Ordinal(stem)?;
 
-    for (position, component) in stem.split('-').enumerate()
-    {
-        // An identifier begins with a word. `2026-08-09-notes.md` reaches its first
-        // all-digit component at `08` and would otherwise reduce to `docs/records/2026-08`,
-        // which two unrelated notes from the same month would then share. Requiring a
-        // letter first refuses the whole name rather than the first component of it.
-        if position == 0 && !component.bytes().any(|byte| return byte.is_ascii_alphabetic())
-        {
-            return None;
-        }
-
-        if position > 0
-        {
-            identifier.push('-');
-        }
-        identifier.push_str(component);
-
-        let is_ordinal = position > 0
-            && !component.is_empty()
-            && component.bytes().all(|byte| return byte.is_ascii_digit());
-
-        if is_ordinal
-        {
-            return Some(format!("{RECORD_DIRECTORY}/{identifier}"));
-        }
-    }
-
-    return None;
+    return Some(format!("{RECORD_DIRECTORY}/{identifier}"));
 }
 
 #[cfg(test)]
