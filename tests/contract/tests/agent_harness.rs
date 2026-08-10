@@ -77,7 +77,22 @@ const BOARD: &str = "work/ledger.json";
 /// written, which meant an edit could drop the two rows that send an agent to the
 /// description of the workspace and to the tests that check it, and the gate would stay
 /// green over a routing table that had stopped routing.
-const ROUTED_AUTHORITIES: &[&str] = &["README.md", "tests/contract", "docs/records", BOARD];
+///
+/// The fifth is a whole record rather than a directory, and is the one entry here that is
+/// not satisfied by its neighbours. `docs/records` already matches any record path, so the
+/// ownership row could be deleted without failing anything while the generic rationale row
+/// survived — and the two questions are different. *Why was it decided that way* is answered
+/// by whichever record argued the case; *which product owns this* is answered by one record
+/// and getting it wrong is how the scope drift `ARC-ECOSYSTEM-001` exists to stop happens
+/// again. Naming the path also puts it under the existence check, so renaming the record
+/// without fixing the route fails here rather than in a reader's hands.
+const ROUTED_AUTHORITIES: &[&str] = &[
+    "README.md",
+    "tests/contract",
+    "docs/records",
+    "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md",
+    BOARD,
+];
 
 /// Every hazard the harness states because a defect is currently open, and the item that
 /// will close it.

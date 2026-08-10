@@ -15,6 +15,7 @@ Read the authority. Do not infer the architecture from the code nearest to your 
 | What exists, what owns what, which band may depend on which | `README.md` |
 | Is that still true? | `tests/contract/` — it asserts the README's tables against the real workspace, both directions |
 | Why was it decided that way? | `docs/records/` — one record per decision, and they are canonical |
+| Which of the four products owns this responsibility? | `docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md` |
 | What work is available, claimed, blocked, or already refused? | `work/ledger.json`, through the `nomos work` verbs the README documents |
 | What must pass before I finish? | the claimed item's own verification predicate, then `.github/workflows/gate.yml` |
 | What is canonical specification content? | the specification store, not any file rendered out of it |

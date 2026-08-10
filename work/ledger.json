@@ -5341,6 +5341,64 @@
       "verified": null,
       "abandoned": [],
       "displaced": []
+    },
+    {
+      "id": "P10-BOUNDARY-ROUTE",
+      "title": "Which product owns a responsibility is a first-class question the contract does not route",
+      "why": "ARC-ECOSYSTEM-001 states what each of the four products owns and carries the authority matrix, and P10-ECOSYSTEM-BOUNDARY landed it precisely because that seam was held in conversation and in nobody file. The agent contract's authority table does not route to it. An agent asking whether a responsibility belongs to Nomos, KWB, XVPE or the repository's own tooling is sent to docs/records generically, which is the row for why a decision was made rather than for who owns a subsystem, and the specification-system scope drift this repository has already paid for is exactly the failure that question exists to prevent. The harness budget was sized for this: CONTRACT_LINE_BUDGET's own comment says the headroom is enough for a routing line to a record that does not exist yet, and the record now exists.",
+      "done_when": "AGENTS.md routes the ownership question to ARC-ECOSYSTEM-001 by naming its path, as a routing line and not a summary of what the record decides. The harness asserts the new route the way it asserts the other four, so dropping the row fails rather than passing quietly, and the path-existence check covers the record it names. AGENTS.md stays inside CONTRACT_LINE_BUDGET and carries no restatement of the ownership matrix -- the row says which question and which file, and nothing about the answer.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md",
+          "tests/contract/tests/agent_harness.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 10 tests\ntest Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-51aa4e2ffacb6dea.exe)\n",
+        "verified_at": 1786380650,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": []
     }
   ]
 }
