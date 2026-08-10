@@ -2078,6 +2078,7 @@
           "crates/substrate/nomos-ledger",
           "crates/host/nomos-cli",
           "crates/spec/nomos-spec-store",
+          "tests/contract",
           "docs/records/OD-LEDGER-006"
         ],
         "patterns": []
@@ -2095,7 +2096,9 @@
           "-p",
           "nomos-cli",
           "-p",
-          "nomos-spec-store"
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },
