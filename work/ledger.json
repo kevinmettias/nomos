@@ -2422,10 +2422,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-lapse",
+        "acquired_at": 1786328902,
+        "lease_expires_at": 1786343302
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -2506,6 +2510,39 @@
           "nomos-ledger",
           "-p",
           "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-PACKAGE-SEAM",
+      "title": "The package seam is declared in contracts, consumed by nothing, and contradicted by publish = false",
+      "why": "ARCH-001 and ARCH-002 are corpus requirements, not plan preferences. ARCH-001 makes a LanguagePackage \"an independently versioned registration and translation boundary for one language ecosystem\". ARCH-002 makes a RulePackage \"independently versioned\" and separates the normative rule contract from its implementations. Both live in the v14 corpus at 01_authoring/artifacts/requirements/ and are restated in volume 03, Packages, Providers, Rules and Applicability. D-132 puts the corpus above the plan, so this is the strongest form the package question has, and neither id appears anywhere in this repository: not in docs/records, not in work/ledger.json, not in source.\n\nThree measurements say the seam is declared and unrealized.\n\nPackageKind in crates/contracts/nomos-contracts/src/package.rs enumerates sixteen kinds and matches the volume's package_kind list variant for variant, LanguagePackage and RulePackage among them. It has zero consumers outside nomos-contracts. That is the shape P10-FIRST-CHECK opened against for enforcement.rs: a published protocol commitment in the one crate whose types nobody compiles, accruing cost.\n\nCargo.toml line 70 sets publish = false for the whole workspace. Every crate inherits it through publish.workspace = true and carries a hand-written uniform version = \"0.1.0\". Nothing here is independently versioned or separately distributable, which is the property both requirements are about. The game plan names this exact pattern as a defect to repair, \"remove publish = false from genuinely reusable crates, assign meaningful independent or coordinated versions\", written about XVPE. This workspace reproduces it.\n\nThe two crates the requirements name, crates/languages/nomos-lang-rust and crates/rules/nomos-rules, both sit under crates/ beside the engine and neither can be released on its own.\n\nWhat this item does not rest on. An earlier reading of this deviation claimed the approved plan required a packages/ directory and rejected a rules crate under crates/. That citation could not be verified. The game plan D-132 names is docs/new docs/nomos full game plan.txt in the code-standards tree, and it contains no lettered sections, no D-084, and no packages path of any kind. Its final revised layout is a flat crates/ holding nomos-checks and nomos-gates, with providers/ as a top-level sibling. So the directory layout is not the finding and is not what this item is about. The versioning property is, and it is measurable at HEAD.",
+      "done_when": "Whether this workspace intends to satisfy ARCH-001 and ARCH-002 is answered and recorded, and the answer names what would have to become true rather than only what is true now. Any of three outcomes closes it: the requirements are accepted and the record states what independently versioned means for a Cargo workspace and what the first step is, or they are deferred and the record states until when and what the deferral costs, or they are read as not reaching this build and the record states why a corpus requirement does not bind the thing built to enforce it. PackageKind either gains a consumer or gains a stated reason for having none, at the site, the way D-134 put a universe's mirror next to the declaration. Nothing here is closed by deleting the enum or by flipping publish, and no crate's publish setting is changed by this item: settling the question is the work, and acting on the answer is a separate item with a much wider territory.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-PACKAGE-001"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },
