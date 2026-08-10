@@ -31,7 +31,9 @@ impl Confidence
         {
             return Self::NONE;
         }
-        return Self(value.clamp(0.0, 1.0));
+        let clamped = value.clamp(0.0, 1.0);
+
+        return Self(clamped);
     }
 
     /// The value, in the unit interval.

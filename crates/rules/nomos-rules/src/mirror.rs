@@ -119,7 +119,8 @@ pub fn Check_Completeness_Mirrors(
         // is the phantom-becomes-admitted-gap downgrade the schema version exists to stop.
         if let Some(source) = sources.iter().find(|candidate| return &candidate.path == path)
         {
-            findings.push(Unreadable(source, because));
+            let finding = Unreadable(source, because);
+            findings.push(finding);
         }
     }
 
@@ -806,8 +807,9 @@ mod tests
 
             for (provider, guarantee) in providers
             {
+                let offer = Offer(provider, *guarantee);
                 registry
-                    .Offer(Offer(provider, *guarantee))
+                    .Offer(offer)
                     .expect("every offer here is within the capability's ceiling");
             }
 

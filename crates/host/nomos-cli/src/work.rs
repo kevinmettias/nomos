@@ -167,18 +167,21 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
     };
 
     let value_of = |name: &str| Named_Value(named, name);
+    let item_of = || -> Result<ItemId, String> {
+        let text = Required(value_of("--item").as_ref(), "--item")?;
+
+        return Ok(ItemId::New(text));
+    };
 
     return match verb.as_str()
     {
         "list" => Ok(WorkCommand::List {
             state: value_of("--state"),
         }),
-        "show" => Ok(WorkCommand::Show {
-            item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
-        }),
+        "show" => Ok(WorkCommand::Show { item: item_of()? }),
         "add" => Parse_Add(named, predicate_argv),
         "finish" => Ok(WorkCommand::Finish {
-            item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
+            item: item_of()?,
             holder: Required(value_of("--holder").as_ref(), "--holder")?,
         }),
         // One parse for three verbs. `claim`, `renew` and `takeover` take exactly the same
@@ -187,7 +190,7 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
         // being documented as identical.
         "claim" | "renew" | "takeover" =>
         {
-            let item = ItemId::New(Required(value_of("--item").as_ref(), "--item")?);
+            let item = item_of()?;
             let holder = Required(value_of("--holder").as_ref(), "--holder")?;
             let lease = value_of("--lease")
                 .map_or(Ok(DEFAULT_LEASE), |text| Parse_Duration(&text))?;
@@ -223,12 +226,12 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
         // similarity of spelling standing in for a similarity of meaning — which is the
         // conflation `OD-LEDGER-019` refuses at the verb level.
         "abandon" => Ok(WorkCommand::Abandon {
-            item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
+            item: item_of()?,
             holder: Required(value_of("--holder").as_ref(), "--holder")?,
             reason: Required(value_of("--reason").as_ref(), "--reason")?,
         }),
         "decline" => Ok(WorkCommand::Decline {
-            item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
+            item: item_of()?,
             holder: Required(value_of("--holder").as_ref(), "--holder")?,
             reason: Required(value_of("--reason").as_ref(), "--reason")?,
         }),
@@ -283,6 +286,8 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
     }
 
     let territory = Territory::Of_Files(paths);
+    let identifier = Required(value_of("--item").as_ref(), "--item")?;
+    let item = ItemId::New(identifier);
 
     let verification = if predicate_argv.is_empty()
     {
@@ -295,7 +300,7 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
 
     return Ok(WorkCommand::Add {
         item: Box::new(LedgerItem {
-            id: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
+            id: item,
             title: Required(value_of("--title").as_ref(), "--title")?,
             why: Required(value_of("--why").as_ref(), "--why")?,
             done_when: Required(value_of("--done-when").as_ref(), "--done-when")?,
@@ -409,24 +414,36 @@ pub fn Run(
         WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
         WorkCommand::Show { item } => Show(&ledger, item, output),
         WorkCommand::Add { item } => Add(&mut ledger, item, &Published_Records(directory), output),
-        WorkCommand::Finish { item, holder } => Report_Finish(
+        WorkCommand::Finish { item, holder } =>
+        {
             // No working directory: the predicate runs where the user invoked `nomos`,
             // which for a repository tool run inside a repository is the repository. A
             // predicate silently relocated into `work/` would fail in ways that look
             // like the work being wrong.
-            Finish(&mut ledger, &StdProcessLauncher, item, holder, None),
-            output,
-        ),
+            let outcome = Finish(&mut ledger, &StdProcessLauncher, item, holder, None);
+
+            Report_Finish(outcome, output)
+        }
         WorkCommand::Claim {
             item,
             holder,
             lease,
-        } => Report_Claim(ledger.Claim(item, holder, *lease), output),
+        } =>
+        {
+            let outcome = ledger.Claim(item, holder, *lease);
+
+            Report_Claim(outcome, output)
+        }
         WorkCommand::Renew {
             item,
             holder,
             lease,
-        } => Report_Claim(ledger.Renew(item, holder, *lease), output),
+        } =>
+        {
+            let outcome = ledger.Renew(item, holder, *lease);
+
+            Report_Claim(outcome, output)
+        }
         // `Report_Claim` and `Code_For` unchanged, which is the point: one mapping from a
         // refusal to an exit code, so `claim` and `takeover` cannot come to disagree about
         // what a refusal means. No new code is introduced and the README's table does not move.
@@ -434,26 +451,35 @@ pub fn Run(
             item,
             holder,
             lease,
-        } => Report_Claim(ledger.Take_Over(item, holder, *lease), output),
+        } =>
+        {
+            let outcome = ledger.Take_Over(item, holder, *lease);
+
+            Report_Claim(outcome, output)
+        }
         WorkCommand::Abandon {
             item,
             holder,
             reason,
-        } => Report_Release(
-            ledger.Release(
-                item,
-                holder,
-                ReleaseOutcome::Abandoned {
-                    reason: reason.clone(),
-                },
-            ),
-            output,
-        ),
+        } =>
+        {
+            let abandoned = ReleaseOutcome::Abandoned {
+                reason: reason.clone(),
+            };
+            let outcome = ledger.Release(item, holder, abandoned);
+
+            Report_Release(outcome, output)
+        }
         WorkCommand::Decline {
             item,
             holder,
             reason,
-        } => Report_Decline(item, ledger.Decline(item, holder, reason), output),
+        } =>
+        {
+            let outcome = ledger.Decline(item, holder, reason);
+
+            Report_Decline(item, outcome, output)
+        }
         WorkCommand::Validate => Report_Validation(&ledger, output),
         WorkCommand::Audit => Audit(&ledger, output),
     };

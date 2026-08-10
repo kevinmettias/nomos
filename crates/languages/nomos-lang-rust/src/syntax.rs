@@ -503,12 +503,15 @@ impl<'ast> Visit<'ast> for Walk
     {
         // An `extern "C"` block has no name of its own. The ABI is what distinguishes one
         // from another in the same file, so it is what the item is called.
+        let abi = node
+            .abi
+            .name
+            .as_ref()
+            .map_or_else(|| return "extern".to_owned(), |name| return name.value());
+
         self.Record(
             ItemKind::ForeignModule,
-            node.abi
-                .name
-                .as_ref()
-                .map_or_else(|| return "extern".to_owned(), |name| return name.value()),
+            abi,
             Visibility::NotApplicable,
             &node.attrs,
             None,

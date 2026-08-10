@@ -11,7 +11,7 @@
 
 use crate::archive::Archive;
 use crate::phases::IngestError;
-use nomos_spec_model::{BlockKind, ContentHash, RowKind, Segment, Table_Rows};
+use nomos_spec_model::{BlockKind, ContentHash, RowKind, Segment, SourceBlock, Table_Rows};
 use core::fmt::Write as _;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
@@ -308,17 +308,7 @@ pub fn Walk(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
             {
                 Some(previous) if previous != hash => change.changed.push(path.clone()),
                 Some(_) => {}
-                None =>
-                {
-                    if seen_before.contains(path.as_str())
-                    {
-                        change.reappeared.push(path.clone());
-                    }
-                    else
-                    {
-                        change.appeared.push(path.clone());
-                    }
-                }
+                None => Note_Arrival(&mut change, path, &seen_before),
             }
         }
 
@@ -371,24 +361,7 @@ pub fn Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestE
         let mut carries_a_table = false;
         for block in Segment(&text)
         {
-            if block.kind == BlockKind::Code
-            {
-                census.code_blocks = census.code_blocks.saturating_add(1);
-            }
-
-            for row in Table_Rows(&block)
-            {
-                carries_a_table = true;
-                census.pipe_lines = census.pipe_lines.saturating_add(1);
-                if row.kind != RowKind::Separator
-                {
-                    census.non_separator_rows = census.non_separator_rows.saturating_add(1);
-                }
-                if row.kind == RowKind::Content
-                {
-                    census.content_rows = census.content_rows.saturating_add(1);
-                }
-            }
+            carries_a_table |= Count_Block(&mut census, &block);
         }
 
         if carries_a_table
@@ -407,6 +380,51 @@ pub fn Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestE
     }
 
     return Ok(census);
+}
+
+/// A document the earlier revision of a pair did not have: new, or back after an absence.
+///
+/// The difference is worth keeping. A path that comes back is evidence of a
+/// reorganisation, and counting it as new would hide that.
+fn Note_Arrival(change: &mut PairChange, path: &str, seen_before: &BTreeSet<&str>)
+{
+    if seen_before.contains(path)
+    {
+        change.reappeared.push(path.to_owned());
+
+        return;
+    }
+
+    change.appeared.push(path.to_owned());
+}
+
+/// What one block adds to a census, and whether it carried a table.
+///
+/// The table answer is returned rather than counted here, because carrying a table is a
+/// fact about the document and this sees one block of it.
+fn Count_Block(census: &mut KindCensus, block: &SourceBlock) -> bool
+{
+    if block.kind == BlockKind::Code
+    {
+        census.code_blocks = census.code_blocks.saturating_add(1);
+    }
+
+    let mut carries_a_table = false;
+    for row in Table_Rows(block)
+    {
+        carries_a_table = true;
+        census.pipe_lines = census.pipe_lines.saturating_add(1);
+        if row.kind != RowKind::Separator
+        {
+            census.non_separator_rows = census.non_separator_rows.saturating_add(1);
+        }
+        if row.kind == RowKind::Content
+        {
+            census.content_rows = census.content_rows.saturating_add(1);
+        }
+    }
+
+    return carries_a_table;
 }
 
 #[cfg(test)]

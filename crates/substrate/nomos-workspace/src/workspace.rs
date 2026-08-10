@@ -455,14 +455,12 @@ mod tests
         let mut workspace = Fresh();
         assert_eq!(workspace.Generation(), GenerationId::INITIAL);
 
-        let applied = workspace
-            .Apply(
-                &WorkspaceChangeSet::From(ChangeSource::GitCheckout)
-                    .Present("src/a.rs", "pub fn a() {}")
-                    .Present("src/b.rs", "pub fn b() {}")
-                    .Present("src/c.rs", "pub fn c() {}"),
-            )
-            .expect("a checkout applies");
+        let checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout)
+            .Present("src/a.rs", "pub fn a() {}")
+            .Present("src/b.rs", "pub fn b() {}")
+            .Present("src/c.rs", "pub fn c() {}");
+
+        let applied = workspace.Apply(&checkout).expect("a checkout applies");
 
         assert_eq!(applied.Generation(), GenerationId::From_Raw(1));
         assert_eq!(
@@ -479,12 +477,14 @@ mod tests
     fn Test_A_Change_That_Says_What_Is_Already_True_Should_Not_Advance()
     {
         let mut workspace = Fresh();
-        workspace.Apply(&Edit("src/a.rs", "pub fn a() {}")).expect("applies");
+        let first = Edit("src/a.rs", "pub fn a() {}");
+        workspace.Apply(&first).expect("applies");
         let before = workspace.Generation();
         let identity = workspace.Id();
 
+        let redundant = Edit("src/a.rs", "pub fn a() {}");
         let applied = workspace
-            .Apply(&Edit("src/a.rs", "pub fn a() {}"))
+            .Apply(&redundant)
             .expect("a redundant save is not an error");
 
         assert!(matches!(applied, Applied::Unchanged { .. }), "{applied:?}");
@@ -504,12 +504,12 @@ mod tests
     fn Test_A_Change_That_Says_Something_New_Should_Advance()
     {
         let mut workspace = Fresh();
-        workspace.Apply(&Edit("src/a.rs", "pub fn a() {}")).expect("applies");
+        let first = Edit("src/a.rs", "pub fn a() {}");
+        workspace.Apply(&first).expect("applies");
         let before = workspace.Generation();
 
-        let applied = workspace
-            .Apply(&Edit("src/a.rs", "pub fn changed() {}"))
-            .expect("applies");
+        let changed = Edit("src/a.rs", "pub fn changed() {}");
+        let applied = workspace.Apply(&changed).expect("applies");
 
         assert!(matches!(applied, Applied::Advanced { .. }), "{applied:?}");
         assert!(workspace.Generation() > before);
@@ -527,13 +527,16 @@ mod tests
     fn Test_Editing_A_File_Back_Should_Return_To_The_Same_Snapshot()
     {
         let mut workspace = Fresh();
-        workspace.Apply(&Edit("src/a.rs", "original")).expect("applies");
+        let first = Edit("src/a.rs", "original");
+        workspace.Apply(&first).expect("applies");
         let original = workspace.Id();
 
-        workspace.Apply(&Edit("src/a.rs", "changed")).expect("applies");
+        let changed = Edit("src/a.rs", "changed");
+        workspace.Apply(&changed).expect("applies");
         assert_ne!(workspace.Id(), original);
 
-        workspace.Apply(&Edit("src/a.rs", "original")).expect("applies");
+        let back = Edit("src/a.rs", "original");
+        workspace.Apply(&back).expect("applies");
 
         assert_eq!(
             workspace.Id(),
@@ -551,7 +554,8 @@ mod tests
     fn Test_A_Removal_Should_Take_The_Member_And_A_Second_Should_Not()
     {
         let mut workspace = Fresh();
-        workspace.Apply(&Edit("src/a.rs", "pub fn a() {}")).expect("applies");
+        let first = Edit("src/a.rs", "pub fn a() {}");
+        workspace.Apply(&first).expect("applies");
 
         let removed = workspace
             .Apply(&WorkspaceChangeSet::From(ChangeSource::AgentEdit).Absent("src/a.rs"))
@@ -637,15 +641,16 @@ mod tests
     fn Test_A_Refused_Set_Should_Change_Nothing()
     {
         let mut workspace = Fresh();
-        workspace.Apply(&Edit("src/a.rs", "original")).expect("applies");
+        let first = Edit("src/a.rs", "original");
+        workspace.Apply(&first).expect("applies");
         let before = (workspace.Generation(), workspace.Id());
 
-        let refused = workspace.Apply(
-            &WorkspaceChangeSet::From(ChangeSource::GitCheckout)
-                .Present("src/b.rs", "new")
-                .Present("src/c.rs", "new")
-                .Present("/absolute/d.rs", "new"),
-        );
+        let checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout)
+            .Present("src/b.rs", "new")
+            .Present("src/c.rs", "new")
+            .Present("/absolute/d.rs", "new");
+
+        let refused = workspace.Apply(&checkout);
 
         assert!(refused.is_err());
         assert_eq!((workspace.Generation(), workspace.Id()), before);
@@ -666,9 +671,8 @@ mod tests
         for source in ChangeSource::All()
         {
             let mut workspace = Fresh();
-            workspace
-                .Apply(&WorkspaceChangeSet::From(*source).Present("src/a.rs", "pub fn a() {}"))
-                .expect("applies");
+            let change = WorkspaceChangeSet::From(*source).Present("src/a.rs", "pub fn a() {}");
+            workspace.Apply(&change).expect("applies");
             identities.push(workspace.Id());
         }
 

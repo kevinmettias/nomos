@@ -65,19 +65,7 @@ fn Markdown(projection: &Projection) -> String
 
         if Carries_A_Body(section)
         {
-            for item in &section.items
-            {
-                let _ = writeln!(out, "\n### {}", item.identity);
-                let stated = Stated(item);
-                if !stated.is_empty()
-                {
-                    let _ = writeln!(out, "\n{stated}");
-                }
-                if let Some(body) = &item.body
-                {
-                    let _ = writeln!(out, "\n{}", body.trim_end());
-                }
-            }
+            Bodies(&mut out, section);
             continue;
         }
 
@@ -104,6 +92,24 @@ fn Markdown(projection: &Projection) -> String
     }
 
     return out;
+}
+
+/// A section whose items carry prose, written as headed bodies rather than table rows.
+fn Bodies(out: &mut String, section: &Section)
+{
+    for item in &section.items
+    {
+        let _ = writeln!(out, "\n### {}", item.identity);
+        let stated = Stated(item);
+        if !stated.is_empty()
+        {
+            let _ = writeln!(out, "\n{stated}");
+        }
+        if let Some(body) = &item.body
+        {
+            let _ = writeln!(out, "\n{}", body.trim_end());
+        }
+    }
 }
 
 fn Stated(item: &Item) -> String
@@ -154,21 +160,7 @@ fn Html(projection: &Projection) -> String
 
         for item in &section.items
         {
-            let _ = writeln!(out, "<article>\n<h3>{}</h3>", Escaped(&item.identity));
-            if !item.fields.is_empty()
-            {
-                out.push_str("<dl>\n");
-                for (name, value) in &item.fields
-                {
-                    let _ = writeln!(out, "<dt>{}</dt><dd>{}</dd>", Escaped(name), Escaped(value));
-                }
-                out.push_str("</dl>\n");
-            }
-            if let Some(body) = &item.body
-            {
-                let _ = writeln!(out, "<pre>{}</pre>", Escaped(body.trim_end()));
-            }
-            out.push_str("</article>\n");
+            Article(&mut out, item);
         }
 
         out.push_str("</section>\n");
@@ -177,6 +169,26 @@ fn Html(projection: &Projection) -> String
     out.push_str("</body>\n</html>\n");
 
     return out;
+}
+
+/// One item as an article: its identity, the fields it states, and its body.
+fn Article(out: &mut String, item: &Item)
+{
+    let _ = writeln!(out, "<article>\n<h3>{}</h3>", Escaped(&item.identity));
+    if !item.fields.is_empty()
+    {
+        out.push_str("<dl>\n");
+        for (name, value) in &item.fields
+        {
+            let _ = writeln!(out, "<dt>{}</dt><dd>{}</dd>", Escaped(name), Escaped(value));
+        }
+        out.push_str("</dl>\n");
+    }
+    if let Some(body) = &item.body
+    {
+        let _ = writeln!(out, "<pre>{}</pre>", Escaped(body.trim_end()));
+    }
+    out.push_str("</article>\n");
 }
 
 fn Escaped(value: &str) -> String

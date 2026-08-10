@@ -472,36 +472,49 @@ fn Read_Sources(root: &Path) -> Vec<SourceFile>
         for entry in entries.flatten()
         {
             let path = entry.path();
-
-            if path.is_dir()
-            {
-                let skipped = path
-                    .file_name()
-                    .is_some_and(|name| return name == "target" || name == ".git");
-
-                if !skipped
-                {
-                    pending.push(path);
-                }
-                continue;
-            }
-
-            if path.extension().is_some_and(|extension| return extension == "rs")
-                && let Ok(text) = std::fs::read_to_string(&path)
-            {
-                let relative = Relative(root, &path);
-                // This root files a fact under the subject and hands the same value to the
-                // rule on `SourceFile::subject`, so the two cannot disagree about
-                // addressing. It is the kernel's rule and not a local one, which is what
-                // keeps that agreement from being a coincidence — see `OD-MODEL-001`.
-                let subject = Subject_Of_Path(&relative);
-                sources.push(SourceFile::New(relative, subject, text));
-            }
+            Read_Entry(root, path, &mut pending, &mut sources);
         }
     }
 
     sources.sort_by(|left, right| return left.path.cmp(&right.path));
     return sources;
+}
+
+/// One entry of a walked directory: queued if it is a directory worth descending into,
+/// read if it is a `.rs` file, and ignored otherwise.
+fn Read_Entry(
+    root: &Path,
+    path: PathBuf,
+    pending: &mut Vec<PathBuf>,
+    sources: &mut Vec<SourceFile>,
+)
+{
+    if path.is_dir()
+    {
+        let skipped = path
+            .file_name()
+            .is_some_and(|name| return name == "target" || name == ".git");
+
+        if !skipped
+        {
+            pending.push(path);
+        }
+
+        return;
+    }
+
+    if path.extension().is_some_and(|extension| return extension == "rs")
+        && let Ok(text) = std::fs::read_to_string(&path)
+    {
+        let relative = Relative(root, &path);
+        // This root files a fact under the subject and hands the same value to the rule on
+        // `SourceFile::subject`, so the two cannot disagree about addressing. It is the
+        // kernel's rule and not a local one, which is what keeps that agreement from being
+        // a coincidence — see `OD-MODEL-001`.
+        let subject = Subject_Of_Path(&relative);
+        let source = SourceFile::New(relative, subject, text);
+        sources.push(source);
+    }
 }
 
 /// A path as it should be reported: relative to the tree, forward slashes.

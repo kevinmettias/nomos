@@ -82,7 +82,7 @@ pub fn Ingest_Section_Lineage(
         };
 
         let ordinal = i64::try_from(ordinal).unwrap_or(i64::MAX);
-        Sql(store.Connection().execute(
+        let inserted_heading = store.Connection().execute(
             "INSERT OR IGNORE INTO source_headings (document_uid, ordinal, depth, title)
              VALUES (?1, ?2, ?3, ?4)",
             rusqlite::params![
@@ -91,20 +91,23 @@ pub fn Ingest_Section_Lineage(
                 section.heading_level,
                 section.source_heading
             ],
-        ))?;
+        );
+        Sql(inserted_heading)?;
 
-        let heading_uid: i64 = Sql(store.Connection().query_row(
+        let selected_heading = store.Connection().query_row(
             "SELECT uid FROM source_headings
              WHERE document_uid = ?1 AND title = ?2 AND depth = ?3",
             rusqlite::params![document_uid, section.source_heading, section.heading_level],
             |row| row.get(0),
-        ))?;
+        );
+        let heading_uid: i64 = Sql(selected_heading)?;
         report.headings = report.headings.saturating_add(1);
 
-        Sql(store.Connection().execute(
+        let inserted_lineage = store.Connection().execute(
             "INSERT OR IGNORE INTO lineage (source_heading_uid, disposition) VALUES (?1, ?2)",
             rusqlite::params![heading_uid, section.disposition],
-        ))?;
+        );
+        Sql(inserted_lineage)?;
         report.lineage_rows = report.lineage_rows.saturating_add(1);
     }
 
@@ -126,11 +129,12 @@ pub fn Ingest_Block_Dispositions(
     dispositions: &[(u32, String)],
 ) -> Result<u32, IngestError>
 {
-    let document_uid: i64 = Sql(store.Connection().query_row(
+    let selected_document = store.Connection().query_row(
         "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
         rusqlite::params![document, revision],
         |row| row.get(0),
-    ))?;
+    );
+    let document_uid: i64 = Sql(selected_document)?;
 
     let mut written = 0_u32;
     for (ordinal, disposition) in dispositions
@@ -150,10 +154,11 @@ pub fn Ingest_Block_Dispositions(
             continue;
         };
 
-        Sql(store.Connection().execute(
+        let inserted_lineage = store.Connection().execute(
             "INSERT OR IGNORE INTO lineage (source_block_uid, disposition) VALUES (?1, ?2)",
             rusqlite::params![block_uid, disposition],
-        ))?;
+        );
+        Sql(inserted_lineage)?;
         written = written.saturating_add(1);
     }
 

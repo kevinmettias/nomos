@@ -145,16 +145,13 @@ mod tests
             .Offer(Provider_Offer())
             .expect("the offer is within the ceiling");
 
-        let needs_every_item = Requirement::New(
-            Capability(),
-            CONTRACT_VERSION,
-            Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Unknown,
-                Assurance::Sound,
-                IncrementalGranularity::None,
-            ),
+        let every_item = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Unknown,
+            Assurance::Sound,
+            IncrementalGranularity::None,
         );
+        let needs_every_item = Requirement::New(Capability(), CONTRACT_VERSION, every_item);
 
         assert!(
             registry.Resolve(&needs_every_item).Offer().is_none(),
@@ -176,16 +173,13 @@ mod tests
             .Offer(Provider_Offer())
             .expect("the offer is within the ceiling");
 
-        let needs_what_is_there = Requirement::New(
-            Capability(),
-            CONTRACT_VERSION,
-            Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Unknown,
-                IncrementalGranularity::File,
-            ),
+        let what_is_there = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
         );
+        let needs_what_is_there = Requirement::New(Capability(), CONTRACT_VERSION, what_is_there);
 
         let resolved = registry.Resolve(&needs_what_is_there);
 

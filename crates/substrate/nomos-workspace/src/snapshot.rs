@@ -356,10 +356,8 @@ mod tests
     {
         let base = Populated();
 
-        let mut other_variant = WorkspaceSnapshot::Of(
-            BuildVariant::New("x86_64-unknown-linux-gnu", "release", "1.85", ["analysis"]),
-            Configuration(),
-        );
+        let variant = BuildVariant::New("x86_64-unknown-linux-gnu", "release", "1.85", ["analysis"]);
+        let mut other_variant = WorkspaceSnapshot::Of(variant, Configuration());
         let mut other_configuration = WorkspaceSnapshot::Of(
             Variant(),
             ConfigurationId::From_Digest(Digest128::From_Bytes([0x7d; 16])),

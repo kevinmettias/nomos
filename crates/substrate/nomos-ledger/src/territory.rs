@@ -175,24 +175,16 @@ impl Territory
         {
             for theirs in &other.paths
             {
-                if Contains_Or_Equals(mine, theirs)
+                if !Contains_Or_Equals(mine, theirs)
                 {
-                    // The more specific of the two names the conflict most usefully: a
-                    // report saying `crates/a` overlaps is less actionable than one
-                    // saying `crates/a/src/lib.rs` does.
-                    let narrower = if Normalize_Path(mine).len() >= Normalize_Path(theirs).len()
-                    {
-                        mine
-                    }
-                    else
-                    {
-                        theirs
-                    };
-                    let subject = Subject_Of(narrower);
-                    if !shared.contains(&subject)
-                    {
-                        shared.push(subject);
-                    }
+                    continue;
+                }
+
+                let narrower = Narrower(mine, theirs);
+                let subject = Subject_Of(narrower);
+                if !shared.contains(&subject)
+                {
+                    shared.push(subject);
                 }
             }
         }
@@ -230,6 +222,20 @@ impl Territory
 
         return duplicates;
     }
+}
+
+/// The more specific of two overlapping paths.
+///
+/// It names the conflict most usefully: a report saying `crates/a` overlaps is less
+/// actionable than one saying `crates/a/src/lib.rs` does.
+fn Narrower<'a>(left: &'a str, right: &'a str) -> &'a str
+{
+    if Normalize_Path(left).len() >= Normalize_Path(right).len()
+    {
+        return left;
+    }
+
+    return right;
 }
 
 /// Whether one path is the other, or contains it.

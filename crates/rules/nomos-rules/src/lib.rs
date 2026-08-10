@@ -99,15 +99,17 @@ pub use universe::{DeclaredUniverse, Read_Universes, Reading, UniverseKind, Univ
 #[must_use]
 pub fn Syntax_Requirement() -> Requirement
 {
+    let guarantee = Guarantee::New(
+        FactVariant::Syntactic,
+        Assurance::Sound,
+        Assurance::Unknown,
+        IncrementalGranularity::File,
+    );
+
     return Requirement::New(
         nomos_cap_syntax::Capability(),
         nomos_cap_syntax::CONTRACT_VERSION,
-        Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        ),
+        guarantee,
     );
 }
 

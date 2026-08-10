@@ -1007,7 +1007,8 @@ pub fn Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
         }
     }
 
-    violations.extend(Overlapping_Claims(document, now));
+    let overlapping = Overlapping_Claims(document, now);
+    violations.extend(overlapping);
 
     return violations;
 }

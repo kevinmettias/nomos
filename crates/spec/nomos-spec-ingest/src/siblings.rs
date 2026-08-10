@@ -160,9 +160,8 @@ pub fn Ingest_Sibling_Suite(
             report.contested.push(node_id);
         }
 
-        report.blocks = report
-            .blocks
-            .saturating_add(Ingest_Document(store, sibling, &entry, &text, node)?);
+        let ingested = Ingest_Document(store, sibling, &entry, &text, node)?;
+        report.blocks = report.blocks.saturating_add(ingested);
         report.documents = report.documents.saturating_add(1);
     }
 
@@ -268,7 +267,8 @@ pub fn Statements_Sourced_Only_From_Commentary(
          ORDER BY s.statement_id",
     ))?;
 
-    let found = Sql(statement.query_map(rusqlite::params![], |row| row.get(0)))?;
+    let rows = statement.query_map(rusqlite::params![], |row| row.get(0));
+    let found = Sql(rows)?;
 
     return Sql(found.collect());
 }
@@ -347,12 +347,13 @@ fn Dispose(
     node_uid: i64,
 ) -> Result<(), IngestError>
 {
-    Sql(store.Connection().execute(
+    let disposed = store.Connection().execute(
         "INSERT OR IGNORE INTO lineage (source_block_uid, disposition, target_node_uid)
          SELECT uid, 'preserved-verbatim', ?3 FROM source_blocks
          WHERE document_uid = ?1 AND ordinal = ?2",
         rusqlite::params![document_uid, ordinal, node_uid],
-    ))?;
+    );
+    Sql(disposed)?;
 
     return Ok(());
 }

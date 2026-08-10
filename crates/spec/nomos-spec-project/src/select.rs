@@ -272,9 +272,11 @@ fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Project
 
     return query.Ordered_By("suite_id").Run(connection, |row| {
         let root: i64 = row.get(2)?;
+        let suite = Text(row, 0)?;
+        let title = Text(row, 1)?;
 
-        return Ok(Item::Of(&Text(row, 0)?)
-            .With("title", &Text(row, 1)?)
+        return Ok(Item::Of(&suite)
+            .With("title", &title)
             .With("authority", if root == 1 { "root" } else { "sibling" }));
     });
 }
@@ -294,13 +296,16 @@ fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proj
     return query.Ordered_By("d.revision, d.path").Run(connection, |row| {
         let blocks: i64 = row.get(3)?;
         let headings: i64 = row.get(4)?;
+        let path = Text(row, 0)?;
+        let revision = Text(row, 1)?;
+        let hash = Text(row, 2)?;
 
-        return Ok(Item::Of(&format!("{}@{}", Text(row, 0)?, Text(row, 1)?))
-            .With("path", &Text(row, 0)?)
-            .With("revision", &Text(row, 1)?)
+        return Ok(Item::Of(&format!("{path}@{revision}"))
+            .With("path", &path)
+            .With("revision", &revision)
             .With("blocks", &blocks.to_string())
             .With("headings", &headings.to_string())
-            .With("hash", &Text(row, 2)?));
+            .With("hash", &hash));
     });
 }
 
@@ -319,11 +324,14 @@ fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proje
         .Run(connection, |row| {
             let ordinal: i64 = row.get(2)?;
             let depth: i64 = row.get(3)?;
+            let path = Text(row, 0)?;
+            let revision = Text(row, 1)?;
+            let title = Text(row, 4)?;
 
-            return Ok(Item::Of(&format!("{}#{ordinal}", Text(row, 0)?))
-                .With("revision", &Text(row, 1)?)
+            return Ok(Item::Of(&format!("{path}#{ordinal}"))
+                .With("revision", &revision)
                 .With("depth", &depth.to_string())
-                .With("title", &Text(row, 4)?));
+                .With("title", &title));
         });
 }
 
@@ -342,13 +350,19 @@ fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Project
         .Ordered_By("d.revision, d.path, b.ordinal")
         .Run(connection, |row| {
             let ordinal: i64 = row.get(2)?;
+            let path = Text(row, 0)?;
+            let revision = Text(row, 1)?;
+            let kind = Text(row, 3)?;
+            let heading = Text(row, 4)?;
+            let text = Text(row, 5)?;
+            let hash = Text(row, 6)?;
 
-            return Ok(Item::Of(&format!("{}#{ordinal}", Text(row, 0)?))
-                .With("revision", &Text(row, 1)?)
-                .With("kind", &Text(row, 3)?)
-                .With("heading", &Text(row, 4)?)
-                .With("hash", &Text(row, 6)?)
-                .Carrying(&Text(row, 5)?));
+            return Ok(Item::Of(&format!("{path}#{ordinal}"))
+                .With("revision", &revision)
+                .With("kind", &kind)
+                .With("heading", &heading)
+                .With("hash", &hash)
+                .Carrying(&text));
         });
 }
 
@@ -372,15 +386,21 @@ fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectEr
             let block: i64 = row.get(2)?;
             let ordinal: i64 = row.get(3)?;
             let table: i64 = row.get(4)?;
-            let cells: Vec<String> = serde_json::from_str(&Text(row, 6)?).unwrap_or_default();
+            let cells_json = Text(row, 6)?;
+            let cells: Vec<String> = serde_json::from_str(&cells_json).unwrap_or_default();
+            let path = Text(row, 0)?;
+            let revision = Text(row, 1)?;
+            let kind = Text(row, 5)?;
+            let text = Text(row, 7)?;
+            let hash = Text(row, 8)?;
 
-            return Ok(Item::Of(&format!("{}#{block}:{ordinal}", Text(row, 0)?))
-                .With("revision", &Text(row, 1)?)
-                .With("kind", &Text(row, 5)?)
+            return Ok(Item::Of(&format!("{path}#{block}:{ordinal}"))
+                .With("revision", &revision)
+                .With("kind", &kind)
                 .With("table", &table.to_string())
                 .With("cells", &cells.join(" | "))
-                .With("hash", &Text(row, 8)?)
-                .Carrying(&Text(row, 7)?));
+                .With("hash", &hash)
+                .Carrying(&text));
         });
 }
 
@@ -399,12 +419,19 @@ fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectE
     query.Equal("n.node_id", filter.node_id.as_ref());
 
     return query.Ordered_By("n.node_id").Run(connection, |row| {
-        return Ok(Item::Of(&Text(row, 0)?)
-            .With("kind", &Text(row, 1)?)
-            .With("authority", &Text(row, 2)?)
-            .With("representation", &Text(row, 3)?)
-            .With("title", &Text(row, 4)?)
-            .With("suite", &Text(row, 5)?));
+        let node = Text(row, 0)?;
+        let kind = Text(row, 1)?;
+        let authority = Text(row, 2)?;
+        let representation = Text(row, 3)?;
+        let title = Text(row, 4)?;
+        let suite = Text(row, 5)?;
+
+        return Ok(Item::Of(&node)
+            .With("kind", &kind)
+            .With("authority", &authority)
+            .With("representation", &representation)
+            .With("title", &title)
+            .With("suite", &suite));
     });
 }
 
@@ -421,12 +448,19 @@ fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Pro
     query.Equal("n.node_id", filter.node_id.as_ref());
 
     return query.Ordered_By("s.statement_id").Run(connection, |row| {
-        return Ok(Item::Of(&Text(row, 0)?)
-            .With("kind", &Text(row, 1)?)
-            .With("node", &Text(row, 2)?)
-            .With("supersedes", &Text(row, 5)?)
-            .With("hash", &Text(row, 4)?)
-            .Carrying(&Text(row, 3)?));
+        let statement = Text(row, 0)?;
+        let kind = Text(row, 1)?;
+        let node = Text(row, 2)?;
+        let text = Text(row, 3)?;
+        let hash = Text(row, 4)?;
+        let supersedes = Text(row, 5)?;
+
+        return Ok(Item::Of(&statement)
+            .With("kind", &kind)
+            .With("node", &node)
+            .With("supersedes", &supersedes)
+            .With("hash", &hash)
+            .Carrying(&text));
     });
 }
 
@@ -449,16 +483,16 @@ fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proj
     return query
         .Ordered_By("f.node_id, r.relation_type, t.node_id")
         .Run(connection, |row| {
-            return Ok(Item::Of(&format!(
-                "{} {} {}",
-                Text(row, 0)?,
-                Text(row, 1)?,
-                Text(row, 2)?
-            ))
-            .With("from", &Text(row, 0)?)
-            .With("relation", &Text(row, 1)?)
-            .With("to", &Text(row, 2)?)
-            .With("tier", &Text(row, 3)?));
+            let from = Text(row, 0)?;
+            let relation = Text(row, 1)?;
+            let to = Text(row, 2)?;
+            let tier = Text(row, 3)?;
+
+            return Ok(Item::Of(&format!("{from} {relation} {to}"))
+                .With("from", &from)
+                .With("relation", &relation)
+                .With("to", &to)
+                .With("tier", &tier));
         });
 }
 
@@ -493,21 +527,29 @@ fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Projec
         .Run(connection, |row| {
             let block: i64 = row.get(2)?;
             let ordinal: i64 = row.get(3)?;
+            let disposition = Text(row, 0)?;
+            let path = Text(row, 1)?;
+            let heading = Text(row, 4)?;
+            let node = Text(row, 5)?;
+            let statement = Text(row, 6)?;
             let source = match (block, ordinal)
             {
-                (-1, -1) => format!("{}#{}", Text(row, 1)?, Text(row, 4)?),
-                (block, -1) => format!("{}#{block}", Text(row, 1)?),
-                (block, ordinal) => format!("{}#{block}:{ordinal}", Text(row, 1)?),
+                (-1, -1) => format!("{path}#{heading}"),
+                (block, -1) => format!("{path}#{block}"),
+                (block, ordinal) => format!("{path}#{block}:{ordinal}"),
             };
-            let target = match (Text(row, 5)?, Text(row, 6)?)
+            let target = if statement.is_empty()
             {
-                (node, statement) if statement.is_empty() => node,
-                (_, statement) => statement,
+                node
+            }
+            else
+            {
+                statement
             };
 
-            return Ok(Item::Of(&format!("{source} -> {}", Text(row, 0)?))
+            return Ok(Item::Of(&format!("{source} -> {disposition}"))
                 .With("source", &source)
-                .With("disposition", &Text(row, 0)?)
+                .With("disposition", &disposition)
                 .With("target", &target));
         });
 }
@@ -532,19 +574,24 @@ fn Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, Proj
         )
         .Run(connection, |row| {
             let block: i64 = row.get(1)?;
+            let path = Text(row, 0)?;
+            let heading = Text(row, 2)?;
+            let reason = Text(row, 3)?;
+            let justification = Text(row, 4)?;
+            let decision = Text(row, 5)?;
             let source = if block == -1
             {
-                format!("{}#{}", Text(row, 0)?, Text(row, 2)?)
+                format!("{path}#{heading}")
             }
             else
             {
-                format!("{}#{block}", Text(row, 0)?)
+                format!("{path}#{block}")
             };
 
-            return Ok(Item::Of(&format!("{source} -> {}", Text(row, 5)?))
+            return Ok(Item::Of(&format!("{source} -> {decision}"))
                 .With("source", &source)
-                .With("reason", &Text(row, 3)?)
-                .With("justification", &Text(row, 4)?)
-                .With("decision", &Text(row, 5)?));
+                .With("reason", &reason)
+                .With("justification", &justification)
+                .With("decision", &decision));
         });
 }

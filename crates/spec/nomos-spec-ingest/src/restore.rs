@@ -322,13 +322,16 @@ fn From_Heading(document: &str, block: &SourceBlock, members: &mut Vec<Member>)
         ordinal: block.ordinal,
     };
 
-    let mut push = |family: Restored, id: String, alias: Option<String>| {
+    // The key rather than the identity, because every caller minted the identity from the
+    // family it was already passing. Naming the family twice was an invitation to name two
+    // different ones.
+    let mut push = |family: Restored, key: &str, alias: Option<String>| {
         if !document.starts_with(family.Volume())
         {
             return;
         }
         members.push(Member {
-            id,
+            id: Identify(family, key),
             family,
             name: title.to_owned(),
             document: document.to_owned(),
@@ -341,22 +344,22 @@ fn From_Heading(document: &str, block: &SourceBlock, members: &mut Vec<Member>)
     {
         if let Some(numbering) = Milestone(title)
         {
-            push(Restored::RoadmapMilestone, Identify(Restored::RoadmapMilestone, &numbering), None);
+            push(Restored::RoadmapMilestone, &numbering, None);
         }
         if let Some(numbering) = Numbering(title, 'G', 1)
         {
             if title.contains("End-to-end scenario:")
             {
-                push(Restored::Scenario, Identify(Restored::Scenario, &numbering), None);
+                push(Restored::Scenario, &numbering, None);
             }
         }
         if let Some(numbering) = Numbering(title, 'D', 1)
         {
-            push(Restored::AppendixD, Identify(Restored::AppendixD, &numbering), None);
+            push(Restored::AppendixD, &numbering, None);
         }
         if let Some(numbering) = Numbering(title, 'H', 1)
         {
-            push(Restored::AppendixH, Identify(Restored::AppendixH, &numbering), None);
+            push(Restored::AppendixH, &numbering, None);
         }
     }
 
@@ -364,31 +367,23 @@ fn From_Heading(document: &str, block: &SourceBlock, members: &mut Vec<Member>)
     {
         if let Some(numbering) = Numbering(title, 'D', 2)
         {
-            push(Restored::AppendixD, Identify(Restored::AppendixD, &numbering), None);
+            push(Restored::AppendixD, &numbering, None);
         }
         if let Some(numbering) = Numbering(title, 'E', 2)
         {
-            push(
-                Restored::HeadlessInventory,
-                Identify(Restored::HeadlessInventory, &numbering),
-                None,
-            );
+            push(Restored::HeadlessInventory, &numbering, None);
         }
         if let Some(numbering) = Numbering(title, 'F', 2)
         {
-            push(Restored::IdeProfile, Identify(Restored::IdeProfile, &numbering), None);
+            push(Restored::IdeProfile, &numbering, None);
         }
         if Under(path, SERVICES) && title.split_whitespace().any(|word| return word == "Service")
         {
-            push(Restored::Service, Identify(Restored::Service, title), None);
+            push(Restored::Service, title, None);
         }
         if Under(path, EXTENDED_TERMS)
         {
-            push(
-                Restored::GlossaryTerm,
-                Identify(Restored::GlossaryTerm, title),
-                Some(title.to_owned()),
-            );
+            push(Restored::GlossaryTerm, title, Some(title.to_owned()));
         }
     }
 }
@@ -688,12 +683,13 @@ fn Dispose_Block(
     node_uid: i64,
 ) -> Result<(), IngestError>
 {
-    Sql(store.Connection().execute(
+    let disposed = store.Connection().execute(
         "INSERT OR IGNORE INTO lineage (source_block_uid, disposition, target_node_uid)
          SELECT uid, 'preserved-verbatim', ?3 FROM source_blocks
          WHERE document_uid = ?1 AND ordinal = ?2",
         rusqlite::params![document_uid, ordinal, node_uid],
-    ))?;
+    );
+    Sql(disposed)?;
 
     return Ok(());
 }
@@ -705,16 +701,18 @@ fn Dispose_Block(
 /// wrongly, which is worse than not resolving at all.
 fn Alias(store: &SpecificationStore, alias: &str, node_uid: i64) -> Result<bool, IngestError>
 {
-    Sql(store.Connection().execute(
+    let inserted = store.Connection().execute(
         "INSERT OR IGNORE INTO node_aliases (alias, node_uid) VALUES (?1, ?2)",
         rusqlite::params![alias, node_uid],
-    ))?;
+    );
+    Sql(inserted)?;
 
-    let owner: i64 = Sql(store.Connection().query_row(
+    let selected_owner = store.Connection().query_row(
         "SELECT node_uid FROM node_aliases WHERE alias = ?1",
         rusqlite::params![alias],
         |row| row.get(0),
-    ))?;
+    );
+    let owner: i64 = Sql(selected_owner)?;
 
     return Ok(owner == node_uid);
 }

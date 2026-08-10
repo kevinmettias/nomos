@@ -65,17 +65,13 @@ fn main()
         Err(error) => panic!("{}", error.Describe()),
     };
 
-    std::fs::write(
-        out.join("governing_record_ids.rs"),
-        Identifier_Table(&registrations),
-    )
-    .expect("the generated identifier table must be writable");
+    let identifiers = Identifier_Table(&registrations);
+    std::fs::write(out.join("governing_record_ids.rs"), identifiers)
+        .expect("the generated identifier table must be writable");
 
-    std::fs::write(
-        out.join("governing_records.rs"),
-        Record_Table(&registrations, &root),
-    )
-    .expect("the generated record table must be writable");
+    let records = Record_Table(&registrations, &root);
+    std::fs::write(out.join("governing_records.rs"), records)
+        .expect("the generated record table must be writable");
 
     Rerun_Triggers(&directory, &root, &registrations);
 }

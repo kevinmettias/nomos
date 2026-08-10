@@ -373,7 +373,8 @@ mod tests
     fn Test_The_Digest_Should_Follow_The_Profile()
     {
         let profile = Profile::Parse(MINIMAL).expect("parses");
-        let renamed = Profile::Parse(&MINIMAL.replace("\"One\"", "\"Two\"")).expect("parses");
+        let renamed_source = MINIMAL.replace("\"One\"", "\"Two\"");
+        let renamed = Profile::Parse(&renamed_source).expect("parses");
 
         assert_eq!(profile.Digest(), Profile::Parse(MINIMAL).expect("parses").Digest());
         assert_ne!(profile.Digest(), renamed.Digest());

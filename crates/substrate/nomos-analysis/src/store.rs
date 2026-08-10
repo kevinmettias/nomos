@@ -382,14 +382,16 @@ impl FactStore for MemoryFactStore
                 {
                     continue;
                 }
-                if self.Invalidate_One(consumer, from, &described)
+                if !self.Invalidate_One(consumer, from, &described)
                 {
-                    if let Some(key) = self.keys.get(&consumer)
-                    {
-                        report.dependent.push(key.clone());
-                    }
-                    frontier.push(consumer);
+                    continue;
                 }
+
+                if let Some(key) = self.keys.get(&consumer)
+                {
+                    report.dependent.push(key.clone());
+                }
+                frontier.push(consumer);
             }
         }
 

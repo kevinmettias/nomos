@@ -331,7 +331,8 @@ pub fn Regression(from: &Revision, to: &Revision) -> Result<RegressionReport, In
     {
         for member in Extract(document, markdown)?
         {
-            members.push(Judge(&member, &later, &to.documents));
+            let judged = Judge(&member, &later, &to.documents);
+            members.push(judged);
         }
     }
 
@@ -476,46 +477,18 @@ impl Later
 
             for block in Segment(markdown)
             {
-                if block.kind == BlockKind::Heading
+                if block.kind != BlockKind::Heading
                 {
-                    if let Some(previous) = title.take()
-                    {
-                        sections.push((path.clone(), previous, core::mem::take(&mut body)));
-                    }
-                    title = Some(Title(&block));
+                    Note_Block(&mut later, path, &block);
+                    body.push(block);
                     continue;
                 }
 
-                if Is_Filler(&block.text).is_some()
+                let heading = Title(&block);
+                if let Some(previous) = title.replace(heading)
                 {
-                    later.declared.insert(path.clone());
+                    sections.push((path.clone(), previous, core::mem::take(&mut body)));
                 }
-                for row in Table_Rows(&block).iter().filter(|row| return row.kind == RowKind::Content)
-                {
-                    let subject = row
-                        .cells
-                        .iter()
-                        .map(|cell| return cell.trim())
-                        .find(|cell| return !cell.is_empty());
-                    let Some(cell) = subject
-                    else
-                    {
-                        continue;
-                    };
-
-                    later
-                        .authored
-                        .entry(cell.to_owned())
-                        .or_default()
-                        .push(Position::Row {
-                            document: path.clone(),
-                        });
-                    for name in Models_In(cell)
-                    {
-                        later.named_in_row.entry(name.to_owned()).or_insert_with(|| return path.clone());
-                    }
-                }
-                body.push(block);
             }
 
             if let Some(last) = title
@@ -528,7 +501,8 @@ impl Later
         {
             for block in Keyable(body)
             {
-                let repetition = templates.entry(Template_Key(&block.text, title)).or_default();
+                let key = Template_Key(&block.text, title);
+                let repetition = templates.entry(key).or_default();
                 repetition.sections = repetition.sections.saturating_add(1);
                 repetition.documents.insert(path.clone());
             }
@@ -570,9 +544,10 @@ impl Later
     fn Shape(&self, text: &str, title: &str) -> Body
     {
         let declared = Is_Filler(text);
+        let key = Template_Key(text, title);
         let shared = self
             .templates
-            .get(&Template_Key(text, title))
+            .get(&key)
             .map_or(0, |repetition| return repetition.sections);
 
         if declared.is_some() || shared >= SHARED_BY
@@ -584,6 +559,41 @@ impl Later
         }
 
         return Body::Narrative;
+    }
+}
+
+/// What one non-heading block contributes to the index: whether its document declares
+/// filler, and every subject its content rows name.
+fn Note_Block(later: &mut Later, path: &str, block: &SourceBlock)
+{
+    if Is_Filler(&block.text).is_some()
+    {
+        later.declared.insert(path.to_owned());
+    }
+
+    for row in Table_Rows(block).iter().filter(|row| return row.kind == RowKind::Content)
+    {
+        let subject = row
+            .cells
+            .iter()
+            .map(|cell| return cell.trim())
+            .find(|cell| return !cell.is_empty());
+        let Some(cell) = subject
+        else
+        {
+            continue;
+        };
+
+        later.authored.entry(cell.to_owned()).or_default().push(Position::Row {
+            document: path.to_owned(),
+        });
+        for name in Models_In(cell)
+        {
+            later
+                .named_in_row
+                .entry(name.to_owned())
+                .or_insert_with(|| return path.to_owned());
+        }
     }
 }
 

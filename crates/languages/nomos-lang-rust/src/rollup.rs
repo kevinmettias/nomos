@@ -672,8 +672,16 @@ pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
         match fields.first().copied().unwrap_or_default()
         {
             "module" => return Err(format!("line {number} is a second `module` record")),
-            "member" => index.members.push(Member_Record(&fields, number)?),
-            "item" => index.items.push(Item_Record(&fields, number)?),
+            "member" =>
+            {
+                let member = Member_Record(&fields, number)?;
+                index.members.push(member);
+            }
+            "item" =>
+            {
+                let item = Item_Record(&fields, number)?;
+                index.items.push(item);
+            }
             tag => return Err(format!("line {number} has record tag `{tag}`, which this build does not understand")),
         }
     }
@@ -1051,16 +1059,13 @@ mod tests
         registry.Declare(Capability_Contract()).expect("declared once");
         registry.Offer(Provider_Offer()).expect("within the ceiling");
 
-        let needs_a_finer_refresh = Requirement::New(
-            Capability(),
-            CONTRACT_VERSION,
-            Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Unknown,
-                IncrementalGranularity::File,
-            ),
+        let finer_refresh = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Unknown,
+            IncrementalGranularity::File,
         );
+        let needs_a_finer_refresh = Requirement::New(Capability(), CONTRACT_VERSION, finer_refresh);
 
         assert!(
             matches!(

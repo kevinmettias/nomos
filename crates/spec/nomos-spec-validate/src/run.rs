@@ -240,7 +240,11 @@ mod tests
     {
         return DECLARED_RULES
             .iter()
-            .map(|id| Box::new(Fake(id, outcome.clone())) as Box<dyn Rule>)
+            .map(|id| {
+                let rule = Fake(id, outcome.clone());
+
+                return Box::new(rule) as Box<dyn Rule>;
+            })
             .collect();
     }
 
@@ -275,10 +279,11 @@ mod tests
     {
         let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
         rules.pop();
-        rules.push(Box::new(Fake(
+        let errored = Fake(
             "NSV-PRESERVE-006",
             RuleOutcome::Errored("input did not resolve".to_owned()),
-        )));
+        );
+        rules.push(Box::new(errored));
 
         let run = Validate(&Store(), &rules);
 
@@ -291,10 +296,8 @@ mod tests
     fn Test_A_Rule_Nobody_Declared_Should_Fail_The_Run()
     {
         let mut rules = All_Declared(&RuleOutcome::Satisfied { checked: 10 });
-        rules.push(Box::new(Fake(
-            "NSV-INVENTED-001",
-            RuleOutcome::Satisfied { checked: 1 },
-        )));
+        let undeclared = Fake("NSV-INVENTED-001", RuleOutcome::Satisfied { checked: 1 });
+        rules.push(Box::new(undeclared));
 
         let run = Validate(&Store(), &rules);
 

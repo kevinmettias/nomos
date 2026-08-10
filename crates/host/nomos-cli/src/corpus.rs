@@ -262,12 +262,16 @@ fn Ingest_Volumes(assembly: &mut Assembly, root: &Path, revision: &str)
         match Ingest_Source_Document(&mut assembly.store, name, revision, markdown)
         {
             Ok(written) => blocks = blocks.saturating_add(written),
-            Err(error) => assembly.absent.push(Refused(
-                &format!("the domain volume {name}"),
-                &directory.join(name).display().to_string(),
-                &error,
-                "that document and its rows are not in this store",
-            )),
+            Err(error) =>
+            {
+                let refusal = Refused(
+                    &format!("the domain volume {name}"),
+                    &directory.join(name).display().to_string(),
+                    &error,
+                    "that document and its rows are not in this store",
+                );
+                assembly.absent.push(refusal);
+            }
         }
     }
 
@@ -301,12 +305,13 @@ fn Ingest_Statement_File(assembly: &mut Assembly, root: &Path)
         Ok(file) => file,
         Err(error) =>
         {
-            assembly.absent.push(Refused(
+            let refusal = Refused(
                 "the normative statements",
                 &path.display().to_string(),
                 &error,
                 "no normative statement is in this store",
-            ));
+            );
+            assembly.absent.push(refusal);
 
             return;
         }
@@ -317,12 +322,16 @@ fn Ingest_Statement_File(assembly: &mut Assembly, root: &Path)
         Ok(report) => assembly
             .read
             .push(format!("{} normative statement(s) from {}", report.ingested, path.display())),
-        Err(error) => assembly.absent.push(Refused(
-            "the normative statements",
-            &path.display().to_string(),
-            &error,
-            "no normative statement is in this store",
-        )),
+        Err(error) =>
+        {
+            let refusal = Refused(
+                "the normative statements",
+                &path.display().to_string(),
+                &error,
+                "no normative statement is in this store",
+            );
+            assembly.absent.push(refusal);
+        }
     }
 }
 
@@ -349,12 +358,13 @@ fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
         Ok(entities) => entities,
         Err(error) =>
         {
-            assembly.absent.push(Refused(
+            let refusal = Refused(
                 "the node catalog",
                 &path.display().to_string(),
                 &error,
                 "the corpus contributes no node to this store",
-            ));
+            );
+            assembly.absent.push(refusal);
 
             return;
         }
@@ -365,12 +375,16 @@ fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
         Ok(report) => assembly
             .read
             .push(format!("{} catalog node(s) from {}", report.nodes, path.display())),
-        Err(error) => assembly.absent.push(Refused(
-            "the node catalog",
-            &path.display().to_string(),
-            &error,
-            "the corpus contributes no node to this store",
-        )),
+        Err(error) =>
+        {
+            let refusal = Refused(
+                "the node catalog",
+                &path.display().to_string(),
+                &error,
+                "the corpus contributes no node to this store",
+            );
+            assembly.absent.push(refusal);
+        }
     }
 }
 
