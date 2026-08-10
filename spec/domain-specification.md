@@ -10,7 +10,7 @@ profile: domain-specification
 
 | identity | path | revision | blocks | headings | hash |
 | --- | --- | --- | --- | --- | --- |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 44 | 11 | sha256:290fbce7c0046664d9a2a0dda3e942b52701edf861b0132e727a944e938f7853 |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 58 | 14 | sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -26,6 +26,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
@@ -85,9 +86,12 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#20 | authored | 2 | Current Placement Does Not Prove Permanent Ownership |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#25 | authored | 2 | Which Product Answers Which Question |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#28 | authored | 2 | The Anti-Drift Clause |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#35 | authored | 2 | Conflicts With Existing Decisions |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40 | authored | 2 | What This Record Does Not Do |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43 | authored | 2 | Status |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#35 | authored | 2 | The Sibling Record Set Decided Most Of This First |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40 | authored | 3 | The edges are declared, not described |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43 | authored | 3 | `D-122` is adopted here, because a sibling's decision does not govern by itself |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54 | authored | 2 | What This Record Does Not Do |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57 | authored | 2 | Status |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1 | authored | 1 | The specification is a database with an enforced preservation ledger |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#2 | authored | 2 | Context |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#6 | authored | 2 | Decision |
@@ -194,6 +198,15 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#44 | authored | 2 | Coordination — One Method, Not Two |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#50 | authored | 2 | What This Does Not Do |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53 | authored | 2 | Status |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1 | authored | 1 | Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2 | authored | 2 | Question |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#10 | authored | 2 | The Decision |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#16 | authored | 2 | The Statement Lives In One Place |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#19 | authored | 2 | What This Binds |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#22 | authored | 2 | What This Does Not Do |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#26 | authored | 2 | Controls |
+| docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#28 | authored | 2 | Status |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#1 | authored | 1 | A subject that needs a model is agent-required, rather than a missing provider or nothing at all |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#2 | authored | 2 | Question |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#4 | authored | 2 | Whether CHK-003 Binds This Build |
@@ -662,10 +675,12 @@ profile: domain-specification
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#3
 
-*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Question · hash: sha256:3b312d041efb3472e8853b05d685b670a13622127ab0a02ce7292a598d18630c*
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Question · hash: sha256:ec72d31c1aee7e0f6c95a41c662bb6ae8ac678fc95061040c97db528cd2a1906*
 
-Four things are being built around one another, and until now this repository has recorded
-nothing about where one ends and the next begins.
+Four things are being built around one another, and until now this repository's own records
+have said nothing about where one ends and the next begins. Version 1 of this record said
+something stronger and wrong — that *nothing* had recorded it — and the correction is
+`The Sibling Record Set Decided Most Of This First`, below.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#4
 
@@ -681,12 +696,12 @@ incidental.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#5
 
-*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Question · hash: sha256:ecdc4389bf8598f1d2cda5f52c6cfc85d4c04416d09a37ca421767b10789be63*
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Question · hash: sha256:8083a41097e3d356785f6a0b6bb140e67e9965cec0f560296bbc606ec447f757*
 
 So the seam that decides whether a subsystem belongs to knowledge, to generic runtime, to
 software-engineering reality, or to the machinery that exists only to build this repository
-has been held in conversation. Every placement made without it is a placement that has to
-be argued about later rather than read.
+is not one a reader of `docs/records/` could find. Every placement made without it is a
+placement that has to be argued about later rather than read.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#6
 
@@ -943,18 +958,138 @@ rather than against it.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#35
 
+*revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First · hash: sha256:2298d29ac218db42e715d943f5cc89948272a64714022894173561539a5a8d09*
+
+## The Sibling Record Set Decided Most Of This First
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#36
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First · hash: sha256:e097b0bae3df8a0d37dee9e375592adc0267133cf701538f839f926334b82ea3*
+
+Added at version 2. Version 1 claimed the seam had been held in conversation, which was true
+of `docs/records/` and false of the store this build assembles from the archives
+`NOMOS_SPEC_ARCHIVES` already names.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#37
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First · hash: sha256:520186b6b7005b82048539f953d6f216bad4d4b286aa4e73048adfd2119e329b*
+
+`P3-SIBLINGS` ingests three of those archives as non-root suites — `xvpe-spec-seed-v0.1`,
+`kwb-spec-seed-v0.1` and `ecosystem-contracts-v0.1` — for exactly this reason, stated in
+`siblings.rs`: without the distinction "XVPE's `D-085` reads as a decision this repository
+made", and with it a cross-suite relation is an ordinary row. The suites had already decided
+most of what is above.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#38
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First · hash: sha256:52b4635a235bf41342a93743a73b4729c280333ed20e1f57742ab621a008d725*
+
+| The clause here | The sibling record that reached it first | Suite |
+|---|---|---|
+| XVPE owns generic runtime, application and platform infrastructure | `D-085`, XVPE is the shared application platform | `xvpe-spec-seed` |
+| Generic capability is consumed by adaptation, never by extension of the generic thing | `D-086`, product semantics do not flow downward into XVPE Platform | `xvpe-spec-seed` |
+| Reuse alone does not make something XVPE | `D-090`, cross-product reuse by itself is insufficient reason to move product semantics into the platform | `xvpe-spec-seed` |
+| Nomos owns software reality and KWB owns knowledge | `D-096`, Nomos and KWB are sibling domain analyzers over XVPE | `ecosystem-contracts` |
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#39
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First · hash: sha256:7b7832eeb33635dba4a84c4c73d67884c03eb0e8d3f8eb205e9dbbbbb7aecddc*
+
+That two record sets reached the anti-drift clause independently is evidence for it rather
+than against it. What it is not is a licence to keep restating it: the next clause written
+here without checking the seeds is the one that will disagree with them and nobody will
+know.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40
+
+*revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / The edges are declared, not described · hash: sha256:e521f88cd1733b4fc5c639988c04282de62a751e518b5a2d8965fcd102762f25*
+
+### The edges are declared, not described
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#41
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / The edges are declared, not described · hash: sha256:0f64bbc37cd4134c1aaa6512c079ff71419c521dbb595cf5b56a18266550868b*
+
+Naming those four in prose and stopping would be the mistake this system exists to refuse,
+because a summary of a checked thing is an unchecked copy of it. The front matter declares a
+relation to each instead, so *which suite decided this first* is a query rather than a
+reading. Before this record there were none: 197 relation rows across this repository's
+records, three of them naming a target no local record holds — `ADR-DOC-001`, `D-120` and
+`D-128`, all v14 corpus records — and not one naming a sibling suite.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#42
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / The edges are declared, not described · hash: sha256:1b88f99759e1385fe6c8ada92bb8ead28076e0a2911140f5f3af8a8e5313bcaf*
+
+The edges resolve rather than dangle, and both halves of that already exist.
+`Seed_Governing_Records` mints an external placeholder for a target nothing has ingested and
+reports it by name rather than counting it, and `Write_Node` updates a node in place only
+where its authority is external — which is what lets `Ingest_Sibling_Suite` claim the
+identifier when the seed is read. So over a store holding only this repository's records
+these five are placeholders, and over one that has ingested the seeds they are the seeds'
+own nodes, carrying their suite. A test asserts that rather than leaving it as a reading of
+two functions.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43
+
+*revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-122` is adopted here, because a sibling's decision does not govern by itself · hash: sha256:a07fb409bf44b0edd46e745bf3e11c0bab257f8c6edb37bcf99ccc0de414e793*
+
+### `D-122` is adopted here, because a sibling's decision does not govern by itself
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#44
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-122` is adopted here, because a sibling's decision does not govern by itself · hash: sha256:076b97d6145b8c86fecdf492bf6e25534370085dd6b22c311ce640074818091f*
+
+A sibling suite is `authority_root = 0`. Its records are not this repository's decisions, and
+citing one does not make it one — that is the whole point of ingesting them as non-root. So
+where the two statements of this seam differ, this record governs here, and the difference is
+worth naming rather than absorbing silently.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#45
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-122` is adopted here, because a sibling's decision does not govern by itself · hash: sha256:0d04e4c2fb14559b902ae9831b0d48cde439417e7a8d62a68428bc7d5edbaf1c*
+
+`D-122` is the case. It admits a shared analysis mechanism into XVPE only after Nomos and KWB
+slices demonstrate materially identical domain-neutral semantics. That is narrower than the
+anti-drift clause above: this record says reuse does not settle ownership, and `D-122` says
+what does, imposing a burden of proof this record never stated.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#46
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-122` is adopted here, because a sibling's decision does not govern by itself · hash: sha256:3ba250df3ed54672fc137ba58542c14e7d3a3b2d2362aab080ddc1840455620f*
+
+**It is adopted, as a clause of this record:**
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#47
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-122` is adopted here, because a sibling's decision does not govern by itself · hash: sha256:c33cf118ae1abd3ae542b7c52209d3457d131d9b3fb4949ee93cd3c3811799f7*
+
+> A shared analysis mechanism moves to XVPE only after two products have demonstrated
+> materially identical domain-neutral semantics over it. An argument that both products
+> *would* use it is the reuse argument, and it is refused above.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#48
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-122` is adopted here, because a sibling's decision does not govern by itself · hash: sha256:4647a8b278b1202854164b63cf2f5b1109147029236d22a1e63f4b2271de3343*
+
+Adopting it rather than citing it is this record's own projection rule applied to itself — a
+statement from another authority becomes enforceable here by a recorded step, not by being
+true and nearby. The edge to `D-122` says where it came from; the clause is why it binds.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49
+
 *revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
 
 ## Conflicts With Existing Decisions
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#36
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#50
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:34b326efed4b95b229aa95b813cf32fad2e4b491000bde8ccad511024c1e4c34*
 
 Checked deliberately rather than assumed, because a record that quietly reinterprets an
 earlier one is worse than no record.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#37
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#51
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5*
 
@@ -962,7 +1097,7 @@ earlier one is worse than no record.
 meet — the single adapter crate — they agree, and this record supplies the reason `D-130`
 recorded only as a rule.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#38
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#52
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:cb43fecfbeaebd1f64a65b9a52ec1d2907b9e4322555922b24518742b3ffd482*
 
@@ -970,7 +1105,7 @@ recorded only as a rule.
 different mature home says nothing about whether the specification is a database, which it
 is and remains.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#39
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#53
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:8fec0132a90979f7822d19c7c5ad70b30c0cf98435ad4b4f3bcf64ea255bc299*
 
@@ -978,20 +1113,20 @@ is and remains.
 `AGENTS.md` may gain a routing line to this record when there is a concrete routing question
 that needs one, and it gains no conclusions from it at any point. The harness stays thin.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54
 
 *revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
 
 ## What This Record Does Not Do
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#41
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#55
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / What This Record Does Not Do · hash: sha256:724d027902f1e817b2f1b0f043217d3b935ebc14e4eb567d016bb1beb141ccf8*
 
 No crate moves. No package is renamed. No dependency changes. No KWB or XVPE integration is
 implemented, and none is scheduled here. `AGENTS.md` and `CLAUDE.md` are not touched.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#42
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#56
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / What This Record Does Not Do · hash: sha256:161dd288f5804fac5961f9a094edb4c58f088da03f840cd760db5bd737160fc8*
 
@@ -1002,17 +1137,19 @@ this record buys is that the next placement argument is settled by reading rathe
 whoever is most recently convinced, and that a future enforcement, when something concrete
 enough to enforce exists, has a criterion to be derived from.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57
 
 *revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#44
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#58
 
-*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Status · hash: sha256:05c9d15f6e801e0f5bdacf6d852e4d17313f063535e8c48d57a01e031caf4ae1*
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Status · hash: sha256:fd2661e7493ebad2777a2d7fbb5bb66670c0ee20b7fd671efa9c722595bcf869*
 
-Closed by `P10-ECOSYSTEM-BOUNDARY`.
+Closed by `P10-ECOSYSTEM-BOUNDARY`. Amended to version 2 by `P10-SEAM-CITATION`, which found
+the seam already recorded in the sibling suites this build ingests, declared the edges to it,
+and adopted `D-122`.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 
@@ -4493,6 +4630,235 @@ Stated plainly, because `OD-GATE-001` is about checks that imply more than they 
 Accepted, closed by `P10-MIRROR-DISAGREEMENT`. Sixteen declared universes; four mirrored, each
 claiming its mirror at its own site; twelve declared holes with the number checked; and the
 two guards that disagreed now hold a per-universe equality that names what moved.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain · hash: sha256:821454bad7ac3354d5f48678113ea3b33824752e9c19565e0a613b81ca4725fc*
+
+# Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#3
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / Question · hash: sha256:d2eb4cac4524a2ed25de3d984f1b87f657217d55478f81f7c4d745d750d544d0*
+
+`nomos-contracts` is band 0. Every other crate may depend on it and it may depend on nothing
+but `serde`, and `Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else` holds that
+line. What no test and no authority states is the other direction: **what may be added to it.**
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#4
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / Question · hash: sha256:6b3460c9b2443b92df587d94a1d98a891ce59253a0b7ea98f198621c41321b9f*
+
+The crate holds ten modules. Nothing in it is wrong. That is the reason to settle the question
+now rather than after a finding shape, an architecture delta or an agent type has been admitted
+on the strength of a sentence nobody chose.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#6
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What Was Measured · hash: sha256:3b93b5f84a0c173995bd166be3a593d9ed62d6d62102af19e63a1930b9e8265a*
+
+Three files described band 0 and they did not agree.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#7
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What Was Measured · hash: sha256:594b28f83b2474d82c13bc2e715ae2436fef412a774ade358c7e78c1072e3c93*
+
+| Where | What it said |
+|---|---|
+| `README.md`, band table | Protocol truth. Depends on `serde` and nothing else. |
+| `crates/contracts/nomos-contracts/src/lib.rs` | the only authoritative statement of Nomos **protocol** semantics |
+| `Cargo.toml`, members comment | The only authoritative statement of Nomos **semantics** |
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#8
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What Was Measured · hash: sha256:14536ab7fe8a98d73634d89651c32c5aa7237d6efd632ced16d89b302ce40b23*
+
+The widest of the three is the one in the workspace manifest, and it is the copy nothing reads
+back. `AGENTS.md` says that when two authorities disagree the mechanical one wins and the
+disagreement is a defect worth an item. Here the mechanical one is also the narrow one, so the
+disagreement had no mechanical resolution: the wide sentence was free to stand.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#9
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What Was Measured · hash: sha256:df3dfcefa986aa2468d025e701a96b2db87e08025d2efb95a81b995cc88b3693*
+
+"A statement of Nomos semantics" is not a criterion. Every concept in the product is a statement
+of Nomos semantics — a finding, a rule package, a correction plan, a run request, an agent
+capability. The argument for the eleventh module was already written, and it was written in a
+comment that no test parses.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#10
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#11
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Decision · hash: sha256:879cfb354861cc49fada3a2b63b2817fc35345eec18da41fc25f1b75d7122372*
+
+**A type is admitted to band 0 when it crosses a subsystem, process or plugin boundary and the
+parties on both sides need one stable shared representation of it. Everything else stays in the
+domain that owns it.**
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#12
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Decision · hash: sha256:bacddbdfe63675e1e3de2d931104cf6da31db0daebf7576aa08a4d7b2091a08c*
+
+Two halves, and the second does the work. The first alone would admit anything that *could* be
+shared; the requirement is that something on the other side of a boundary really must agree
+about this type in order to speak to Nomos at all.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#13
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Decision · hash: sha256:beb1ad6f66d797b54674e9103a662dd8c2a9d1339a935af2cbcfcc5d0185a62c*
+
+The test is not "is this important" or "is this general". It is: *would a peer that never
+compiles this crate — a knowledge service in another language, a client in TypeScript, a
+platform in another Rust workspace — be unable to agree with us without it?* The module
+documentation already gives the reason this matters: a dependency added here makes the protocol
+Nomos-shaped and forces those peers to vendor a Rust crate. A type admitted here does the same
+thing to the vocabulary.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#14
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Decision · hash: sha256:b211d608f3e6f98328e612ba51ab067ac0db5fda7a57d95e4db1ac40583be572*
+
+What a domain-local concept does instead is stay in the crate that owns it, and cross a boundary
+only as a projection. `SyntaxPayload` is the worked example: it is a real shared representation,
+it is read by more than one provider, and it lives in `nomos-cap-syntax` at band 23 rather than
+in band 0, because the parties that must agree about it are the providers of one capability
+rather than every peer that speaks to Nomos. `OD-CONTRACTS-002` decided the same shape for a
+capability contract — it is not the property of the provider that answers it, and it is also not
+protocol truth.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#15
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Decision · hash: sha256:181edf798c5f8d71de3de539c12af6649d63b9d91d85c2e8c15aa2c26964e6c4*
+
+The honesty vocabularies are the reason band 0 exists and they satisfy the criterion exactly.
+`Applicability`, `EvidenceClass`, `PeerAvailability`, `GateCategory` and `Assurance` each answer
+a question a peer must be able to answer in the same words, or the absence of knowledge reads as
+a statement that all is well on one side of the boundary and not the other.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#16
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Statement Lives In One Place · hash: sha256:0f1f50693aedc82dae01d1305e636f5ef5bc798aca8942c1cb56d090d85b3367*
+
+## The Statement Lives In One Place
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#17
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Statement Lives In One Place · hash: sha256:723250812ce60e8c541960f99f29560887aef4b243496743fc05d496cf46b2c3*
+
+The criterion is stated here, and the three files that described band 0 now route to it rather
+than restate it. `OD-AGENT-001` records why that is the right shape for this repository: a
+summary of a checked file is an unchecked copy of it, and this workspace has already paid for
+one.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#18
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / The Statement Lives In One Place · hash: sha256:fbb87393ccf54582f708941cd162a7157ef8295b477fc5d12f948fb6498e29ee*
+
+`crates/contracts/nomos-contracts/src/lib.rs` carries the operative sentence, because that is
+where an author adding an eleventh module is already reading. `README.md` keeps the mechanical
+claim its band table can be checked against and names this record. `Cargo.toml` makes no
+ownership claim at all.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#19
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What This Binds · hash: sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044*
+
+## What This Binds
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#20
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What This Binds · hash: sha256:12fd67002a32e35efc11a3c962c4167a52548682dc883d74a4b194d0a5b48ecd*
+
+An addition to `nomos-contracts` must be justifiable by the criterion above, and the
+justification belongs in the change that makes it rather than in a comment discovered later.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#21
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What This Binds · hash: sha256:4e8477b4e90ba03119fa2874bd0e0d0d7e16529c804cc5aae9d8a12b5501185d*
+
+`Test_Band_Zero_Should_Be_Described_In_One_Place` in `tests/contract/tests/boundaries.rs` holds
+the second half: the ownership phrase may appear in exactly one of the three files, and that
+file must cite this record. It is a phrase check and it is deliberately narrow — it cannot tell
+whether a *new* type belongs, and no test can. What it can do is stop the wide sentence from
+being restated somewhere nothing reads, which is how this defect arrived.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#22
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#23
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What This Does Not Do · hash: sha256:f86e897aa117b1a8a5841ac2cdf1095ef916eafc4879076d9aea9992095d4d7e*
+
+It does not remove anything from band 0. All ten modules satisfy the criterion, and a record
+that both stated a rule and applied it retroactively would be two decisions wearing one
+identifier.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#24
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What This Does Not Do · hash: sha256:c1461928841ba1a0669bc064738fac6bb0037afc41974bc7b54b2f3d0bae0383*
+
+It does not make admission mechanical. A test that counted the modules would be a declared
+universe needing a mirror, and a test that pattern-matched type names would refuse the next
+honest addition for its spelling. The criterion is for a person and for the review of a change,
+and this record is what that review cites.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#25
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / What This Does Not Do · hash: sha256:4d1e722d56ece30330e6f6e820e465f208abdc1fde3615e2f00c9bc3cc0d4844*
+
+It does not decide where a rejected concept goes. That is a question about which crate owns a
+responsibility, and `ARC-ECOSYSTEM-001` routes it.
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#26
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#27
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / Controls · hash: sha256:afb6ef9ed8669c88dbdb646654ff8079108d8c0ffbafe2ca031635d83f4f2bc8*
+
+| Alternative | Why not |
+|---|---|
+| delete the `Cargo.toml` sentence and state nothing | an unstated rule admits everything the wide one did, which is the defect with its evidence removed |
+| let the widest statement stand | every concept in the product is a statement of Nomos semantics, so it is not a criterion |
+| enforce admission with a test over the module list | a declared universe needs a mirror, and a census cannot answer whether a type crosses a boundary |
+| put the criterion in `README.md` only | the author adding a module is reading `lib.rs`, and a rule read after the change is a rule that did not apply |
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#28
+
+*revision: authored · kind: heading · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#29
+
+*revision: authored · kind: prose · heading: Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain / Status · hash: sha256:93288c0d8c01a64dec073fd9031899b2ae248b80e2edc650915fc1aa4461ca55*
+
+Accepted. Band 0 is described once, the description is a criterion rather than a claim of
+importance, and the two files that restated it now route to it.
 
 ### docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md#1
 

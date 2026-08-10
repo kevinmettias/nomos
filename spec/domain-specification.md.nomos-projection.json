@@ -3,27 +3,27 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:cd5483f0b11379141b8330ea06dc5d8cb4863dc54b92665c933c422c33ae38c9",
-  "inputs_digest": "sha256:f15286f1f03d6d2a52ef209b4e7bcb5c41e1832341a4bbba3b2ac0094818fedf",
+  "content_digest": "sha256:8c1c07ef1bdd11171b2e78d7113e814b1644b516c5cced1e4d4a478a74f8832b",
+  "inputs_digest": "sha256:7e02f0ffd288d5521480b0f0621654a4b5703251c394ffe53b38f1b883f94d8e",
   "sections": [
     [
       "Documents",
-      62
+      63
     ],
     [
       "Sections",
-      568
+      580
     ],
     [
       "Source blocks",
-      2294
+      2337
     ]
   ],
   "inputs": [
     {
       "content": "documents",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored",
-      "hash": "sha256:290fbce7c0046664d9a2a0dda3e942b52701edf861b0132e727a944e938f7853"
+      "hash": "sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4"
     },
     {
       "content": "documents",
@@ -99,6 +99,11 @@
       "content": "documents",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored",
       "hash": "sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored",
+      "hash": "sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6"
     },
     {
       "content": "documents",
@@ -373,17 +378,32 @@
     {
       "content": "headings",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#35",
-      "hash": "sha256:5d67f2d6e272c3870c0ab6857e70b766a48a70f0fa3a1323a2da38f641bac813"
+      "hash": "sha256:aa3f6e4b8eb3c57cf1a0c2d3711aa06731d1ba1bcbae17764dedcb4071520c4d"
     },
     {
       "content": "headings",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40",
-      "hash": "sha256:794bea21bb733160b04efdbb7ea879b3a36d6dd01fec01f051b6c1419a6a2cd6"
+      "hash": "sha256:6d98ca8c58099db9e421a85cbc8270c305f49dfc262b6f65bda7cc4f6dc071ae"
     },
     {
       "content": "headings",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43",
-      "hash": "sha256:a509b862a2cf424b2609d74ad6eab53078e888d2aa11df588d115da5a4b6ccf8"
+      "hash": "sha256:734c7fcf705d45a804fb343593d6ce3ef999fa6ad411e9c78176f56b98b545df"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49",
+      "hash": "sha256:2d9b591ee0a8801be37113fe4e36659944648644f71b8e84a357fb15488ec161"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54",
+      "hash": "sha256:78714b81f5a2a56ba3ce5a92dfab120c074d4529eb9a0fb9faee7e7f294a7988"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57",
+      "hash": "sha256:1d39f84ea80004933a0e437d0063286348516124238c3f2daaa9465e43c157fd"
     },
     {
       "content": "headings",
@@ -914,6 +934,51 @@
       "content": "headings",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53",
       "hash": "sha256:c005779c78b345dbfe7fa036a225aa2632408131e67e12c96dc639986d66e604"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1",
+      "hash": "sha256:2d923fff06890cdd3feb83163c88926947d681b280dc58a1f8e56ddbaa96a3d5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2",
+      "hash": "sha256:7281909513a727c5b5634c4445e785c06e847b6c611149a276ef70e3b0fb8b50"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5",
+      "hash": "sha256:a3b20bbd46d7f4cb54c6a79656c2746e02aa0521345cdeeccda9670571aacf2d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#10",
+      "hash": "sha256:73678c106b610033de5e0db77ffb4e97007b4dfcb74f0f6d389d8b43b87cfbb9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#16",
+      "hash": "sha256:dedaed2ad7668fb166ece779bf4821cc92b018645bbb6249207831459ad64675"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#19",
+      "hash": "sha256:b897a8724de5e029eae397c4c55e01fdf5559c5d85d52f3a56c96149ab5e0023"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#22",
+      "hash": "sha256:ccad505250ed29880376949c3d076c6cbc0e1038e8fbddf9f70f9214f21068c3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#26",
+      "hash": "sha256:d02059df85d318e63948e61f86aff4d084e99d9d4247794de17df8aa7941c8a9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#28",
+      "hash": "sha256:8421c4a28160625ac0a38eaf541945976e9d57a76576a225fb3d03a859e55699"
     },
     {
       "content": "headings",
@@ -3183,7 +3248,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#3",
-      "hash": "sha256:3b312d041efb3472e8853b05d685b670a13622127ab0a02ce7292a598d18630c"
+      "hash": "sha256:ec72d31c1aee7e0f6c95a41c662bb6ae8ac678fc95061040c97db528cd2a1906"
     },
     {
       "content": "blocks",
@@ -3193,7 +3258,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#5",
-      "hash": "sha256:ecdc4389bf8598f1d2cda5f52c6cfc85d4c04416d09a37ca421767b10789be63"
+      "hash": "sha256:8083a41097e3d356785f6a0b6bb140e67e9965cec0f560296bbc606ec447f757"
     },
     {
       "content": "blocks",
@@ -3343,52 +3408,122 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#35",
-      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+      "hash": "sha256:2298d29ac218db42e715d943f5cc89948272a64714022894173561539a5a8d09"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#36",
-      "hash": "sha256:34b326efed4b95b229aa95b813cf32fad2e4b491000bde8ccad511024c1e4c34"
+      "hash": "sha256:e097b0bae3df8a0d37dee9e375592adc0267133cf701538f839f926334b82ea3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#37",
-      "hash": "sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5"
+      "hash": "sha256:520186b6b7005b82048539f953d6f216bad4d4b286aa4e73048adfd2119e329b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#38",
-      "hash": "sha256:cb43fecfbeaebd1f64a65b9a52ec1d2907b9e4322555922b24518742b3ffd482"
+      "hash": "sha256:52b4635a235bf41342a93743a73b4729c280333ed20e1f57742ab621a008d725"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#39",
-      "hash": "sha256:8fec0132a90979f7822d19c7c5ad70b30c0cf98435ad4b4f3bcf64ea255bc299"
+      "hash": "sha256:7b7832eeb33635dba4a84c4c73d67884c03eb0e8d3f8eb205e9dbbbbb7aecddc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40",
-      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+      "hash": "sha256:e521f88cd1733b4fc5c639988c04282de62a751e518b5a2d8965fcd102762f25"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#41",
-      "hash": "sha256:724d027902f1e817b2f1b0f043217d3b935ebc14e4eb567d016bb1beb141ccf8"
+      "hash": "sha256:0f64bbc37cd4134c1aaa6512c079ff71419c521dbb595cf5b56a18266550868b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#42",
-      "hash": "sha256:161dd288f5804fac5961f9a094edb4c58f088da03f840cd760db5bd737160fc8"
+      "hash": "sha256:1b88f99759e1385fe6c8ada92bb8ead28076e0a2911140f5f3af8a8e5313bcaf"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:a07fb409bf44b0edd46e745bf3e11c0bab257f8c6edb37bcf99ccc0de414e793"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#44",
-      "hash": "sha256:05c9d15f6e801e0f5bdacf6d852e4d17313f063535e8c48d57a01e031caf4ae1"
+      "hash": "sha256:076b97d6145b8c86fecdf492bf6e25534370085dd6b22c311ce640074818091f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#45",
+      "hash": "sha256:0d04e4c2fb14559b902ae9831b0d48cde439417e7a8d62a68428bc7d5edbaf1c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#46",
+      "hash": "sha256:3ba250df3ed54672fc137ba58542c14e7d3a3b2d2362aab080ddc1840455620f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#47",
+      "hash": "sha256:c33cf118ae1abd3ae542b7c52209d3457d131d9b3fb4949ee93cd3c3811799f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#48",
+      "hash": "sha256:4647a8b278b1202854164b63cf2f5b1109147029236d22a1e63f4b2271de3343"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49",
+      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#50",
+      "hash": "sha256:34b326efed4b95b229aa95b813cf32fad2e4b491000bde8ccad511024c1e4c34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#51",
+      "hash": "sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#52",
+      "hash": "sha256:cb43fecfbeaebd1f64a65b9a52ec1d2907b9e4322555922b24518742b3ffd482"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#53",
+      "hash": "sha256:8fec0132a90979f7822d19c7c5ad70b30c0cf98435ad4b4f3bcf64ea255bc299"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#55",
+      "hash": "sha256:724d027902f1e817b2f1b0f043217d3b935ebc14e4eb567d016bb1beb141ccf8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#56",
+      "hash": "sha256:161dd288f5804fac5961f9a094edb4c58f088da03f840cd760db5bd737160fc8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#58",
+      "hash": "sha256:fd2661e7493ebad2777a2d7fbb5bb66670c0ee20b7fd671efa9c722595bcf869"
     },
     {
       "content": "blocks",
@@ -5464,6 +5599,151 @@
       "content": "blocks",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#54",
       "hash": "sha256:e6f493d397e38f4ef317f0ef227f46c2d522aa6ca17fe5a198eaa84a4785b6c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1",
+      "hash": "sha256:821454bad7ac3354d5f48678113ea3b33824752e9c19565e0a613b81ca4725fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#3",
+      "hash": "sha256:d2eb4cac4524a2ed25de3d984f1b87f657217d55478f81f7c4d745d750d544d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#4",
+      "hash": "sha256:6b3460c9b2443b92df587d94a1d98a891ce59253a0b7ea98f198621c41321b9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#6",
+      "hash": "sha256:3b93b5f84a0c173995bd166be3a593d9ed62d6d62102af19e63a1930b9e8265a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#7",
+      "hash": "sha256:594b28f83b2474d82c13bc2e715ae2436fef412a774ade358c7e78c1072e3c93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#8",
+      "hash": "sha256:14536ab7fe8a98d73634d89651c32c5aa7237d6efd632ced16d89b302ce40b23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#9",
+      "hash": "sha256:df3dfcefa986aa2468d025e701a96b2db87e08025d2efb95a81b995cc88b3693"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#11",
+      "hash": "sha256:879cfb354861cc49fada3a2b63b2817fc35345eec18da41fc25f1b75d7122372"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#12",
+      "hash": "sha256:bacddbdfe63675e1e3de2d931104cf6da31db0daebf7576aa08a4d7b2091a08c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#13",
+      "hash": "sha256:beb1ad6f66d797b54674e9103a662dd8c2a9d1339a935af2cbcfcc5d0185a62c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#14",
+      "hash": "sha256:b211d608f3e6f98328e612ba51ab067ac0db5fda7a57d95e4db1ac40583be572"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#15",
+      "hash": "sha256:181edf798c5f8d71de3de539c12af6649d63b9d91d85c2e8c15aa2c26964e6c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#16",
+      "hash": "sha256:0f1f50693aedc82dae01d1305e636f5ef5bc798aca8942c1cb56d090d85b3367"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#17",
+      "hash": "sha256:723250812ce60e8c541960f99f29560887aef4b243496743fc05d496cf46b2c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#18",
+      "hash": "sha256:fbb87393ccf54582f708941cd162a7157ef8295b477fc5d12f948fb6498e29ee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#19",
+      "hash": "sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#20",
+      "hash": "sha256:12fd67002a32e35efc11a3c962c4167a52548682dc883d74a4b194d0a5b48ecd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#21",
+      "hash": "sha256:4e8477b4e90ba03119fa2874bd0e0d0d7e16529c804cc5aae9d8a12b5501185d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#22",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#23",
+      "hash": "sha256:f86e897aa117b1a8a5841ac2cdf1095ef916eafc4879076d9aea9992095d4d7e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#24",
+      "hash": "sha256:c1461928841ba1a0669bc064738fac6bb0037afc41974bc7b54b2f3d0bae0383"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#25",
+      "hash": "sha256:4d1e722d56ece30330e6f6e820e465f208abdc1fde3615e2f00c9bc3cc0d4844"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#26",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#27",
+      "hash": "sha256:afb6ef9ed8669c88dbdb646654ff8079108d8c0ffbafe2ca031635d83f4f2bc8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#29",
+      "hash": "sha256:93288c0d8c01a64dec073fd9031899b2ae248b80e2edc650915fc1aa4461ca55"
     },
     {
       "content": "blocks",
