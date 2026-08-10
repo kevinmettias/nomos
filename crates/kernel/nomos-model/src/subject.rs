@@ -1,62 +1,9 @@
 //! Addressing a thing a rule, metric or finding can be about.
 
-use crate::entity::EntityId;
-use nomos_contracts::{BuildVariantId, ConfigurationId, SnapshotEntityId, SnapshotId, SubjectId};
+use crate::subject_kind::SubjectKind;
+use crate::subject_target::SubjectTarget;
+use nomos_contracts::{SnapshotEntityId, SubjectId};
 use serde::{Deserialize, Serialize};
-
-/// What kind of thing a subject denotes.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub enum SubjectKind
-{
-    /// A persisted or generated repository object.
-    Artifact,
-    /// A language-semantic declaration.
-    Symbol,
-    /// A non-code entity.
-    Resource,
-    /// A named group of subjects treated as one.
-    Aggregate,
-}
-
-/// What a subject points at.
-///
-/// A reference, never a copy. The prototype's lesson here is small and expensive: any
-/// field duplicated from the entity into the subject is a second place for it to be
-/// wrong, and the two will disagree the first time one of them is updated.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum SubjectTarget
-{
-    /// A repository object.
-    Artifact(EntityId),
-    /// A declaration.
-    Symbol(EntityId),
-    /// A non-code entity.
-    Resource(EntityId),
-    /// Several subjects addressed together.
-    Aggregate
-    {
-        /// What the grouping means.
-        kind: String,
-        /// The members.
-        members: Vec<SubjectId>,
-    },
-}
-
-impl SubjectTarget
-{
-    /// What kind of thing this target denotes.
-    #[must_use]
-    pub const fn Kind(&self) -> SubjectKind
-    {
-        return match self
-        {
-            Self::Artifact(_) => SubjectKind::Artifact,
-            Self::Symbol(_) => SubjectKind::Symbol,
-            Self::Resource(_) => SubjectKind::Resource,
-            Self::Aggregate { .. } => SubjectKind::Aggregate,
-        };
-    }
-}
 
 /// One addressable thing, as it exists in one snapshot.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -80,32 +27,11 @@ impl Subject
     }
 }
 
-/// One canonical entity as it appears under one snapshot, build variant and
-/// configuration.
-///
-/// Findings, architecture nodes, feature members and test paths all reference this
-/// rather than a bare [`EntityId`]. A function compiled for two targets is one thing to
-/// talk about and two things to measure, and a metric that cannot say which one it
-/// measured is not comparable with anything.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct SnapshotEntity
-{
-    /// Stable identity of this occurrence.
-    pub id: SnapshotEntityId,
-    /// The entity that occurred.
-    pub entity: EntityId,
-    /// The snapshot it occurred in.
-    pub snapshot: SnapshotId,
-    /// The build variant it was analyzed under.
-    pub variant: BuildVariantId,
-    /// The effective configuration it was analyzed under.
-    pub configuration: ConfigurationId,
-}
-
 #[cfg(test)]
 mod tests
 {
     use super::*;
+    use crate::entity::EntityId;
     use crate::digest::Content_Digest;
 
     #[test]

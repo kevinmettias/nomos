@@ -1,38 +1,13 @@
-use crate::document::{Document, DocumentId, DocumentKind};
+use crate::manifest::Manifest;
+use crate::recorded::Recorded;
+use crate::reference::Reference;
 use crate::StoreError;
 use nomos_contracts::{
-    BuildVariantId, ConfigurationId, GenerationId, SchemaId, SnapshotId,
+    BuildVariantId, ConfigurationId, GenerationId, SnapshotId,
 };
 use serde::{Deserialize, Serialize};
 
 pub const COMMIT_SCHEMA: &str = "nomos.commit.v1";
-
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Recorded
-{
-    pub kind: DocumentKind,
-    pub schema: SchemaId,
-    pub bytes: Vec<u8>,
-}
-
-impl Recorded
-{
-    #[must_use]
-    pub fn New(kind: DocumentKind, schema: SchemaId, bytes: Vec<u8>) -> Self
-    {
-        return Self {
-            kind,
-            schema,
-            bytes,
-        };
-    }
-
-    #[must_use]
-    pub fn Document(&self) -> Document
-    {
-        return Document::New(self.kind, self.schema.clone(), self.bytes.clone());
-    }
-}
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Commit
@@ -117,23 +92,4 @@ impl Commit
 
         return Ok(manifest);
     }
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Reference
-{
-    pub kind: DocumentKind,
-    pub schema: SchemaId,
-    pub document: DocumentId,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Manifest
-{
-    pub schema: String,
-    pub snapshot: SnapshotId,
-    pub variant: BuildVariantId,
-    pub configuration: ConfigurationId,
-    pub generation: GenerationId,
-    pub records: Vec<Reference>,
 }

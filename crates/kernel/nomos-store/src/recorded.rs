@@ -1,20 +1,20 @@
+//! One document as a commit hands it over: what it is, and its bytes.
+
 use nomos_contracts::SchemaId;
-use nomos_model::Digest_Of_Parts;
 use serde::{Deserialize, Serialize};
 
-use crate::authority::Authority;
-use crate::document_id::DocumentId;
+use crate::document::Document;
 use crate::document_kind::DocumentKind;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Document
+pub struct Recorded
 {
     pub kind: DocumentKind,
     pub schema: SchemaId,
     pub bytes: Vec<u8>,
 }
 
-impl Document
+impl Recorded
 {
     #[must_use]
     pub fn New(kind: DocumentKind, schema: SchemaId, bytes: Vec<u8>) -> Self
@@ -27,18 +27,8 @@ impl Document
     }
 
     #[must_use]
-    pub fn Id(&self) -> DocumentId
+    pub fn Document(&self) -> Document
     {
-        return DocumentId::From_Digest(Digest_Of_Parts(&[
-            self.kind.Label().as_bytes(),
-            self.schema.As_Str().as_bytes(),
-            &self.bytes,
-        ]));
-    }
-
-    #[must_use]
-    pub fn Authority(&self) -> Authority
-    {
-        return self.kind.Authority();
+        return Document::New(self.kind, self.schema.clone(), self.bytes.clone());
     }
 }

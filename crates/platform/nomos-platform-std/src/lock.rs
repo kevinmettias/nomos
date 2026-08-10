@@ -1,6 +1,8 @@
 //! A cross-process lock built from the one filesystem primitive that is atomic
 //! everywhere.
 
+use crate::file_lock_guard::FileLockGuard;
+
 use nomos_platform::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
 use std::fs::OpenOptions;
 use std::io::Write;
@@ -9,25 +11,6 @@ use std::time::Duration;
 
 /// How long to sleep between attempts while waiting for a lock.
 const POLL_INTERVAL: Duration = Duration::from_millis(50);
-
-/// A lock held on a file. Releasing happens on drop.
-#[derive(Debug)]
-pub struct FileLockGuard
-{
-    path: PathBuf,
-}
-
-impl Drop for FileLockGuard
-{
-    fn drop(&mut self)
-    {
-        // A failed release is not worth panicking over — the lock will be broken as
-        // stale by whoever comes next, which is exactly the mechanism that exists for
-        // holders that go away without cleaning up. Panicking here during unwinding
-        // would abort the process and lose the very error being handled.
-        let _ = std::fs::remove_file(&self.path);
-    }
-}
 
 /// Mutual exclusion via exclusive file creation.
 ///
@@ -164,9 +147,7 @@ impl FileLock
     fn Held(&self, broke_stale: Option<StaleTakeover>) -> LockAcquisition<FileLockGuard>
     {
         return LockAcquisition {
-            guard: FileLockGuard {
-                path: self.path.clone(),
-            },
+            guard: FileLockGuard::Over(self.path.clone()),
             broke_stale,
         };
     }

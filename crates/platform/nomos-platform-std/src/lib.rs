@@ -6,6 +6,7 @@
 #![forbid(unsafe_code)]
 
 mod clock;
+mod file_lock_guard;
 mod filesystem;
 mod launcher;
 mod lock;
@@ -13,4 +14,5 @@ mod lock;
 pub use clock::SystemClock;
 pub use filesystem::StdFileSystem;
 pub use launcher::StdProcessLauncher;
-pub use lock::{FileLock, FileLockGuard};
+pub use file_lock_guard::FileLockGuard;
+pub use lock::FileLock;

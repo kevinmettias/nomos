@@ -1,0 +1,80 @@
+//! The ways one declaration becomes another.
+
+use serde::{Deserialize, Serialize};
+
+/// What happened to a thing's identity between two snapshots.
+///
+/// Recording the *kind* of change is what lets a finding, a suppression and a metric
+/// history follow their subject through a rename instead of being orphaned by it. The
+/// prototype could not express any of these, so every one of them presented as a
+/// deletion followed by an unrelated arrival.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum IdentityTransitionKind
+{
+    /// The same thing, unchanged.
+    ExactContinuity,
+    /// Probably the same thing under a new name.
+    ProbableRename,
+    /// Probably the same thing in a new location.
+    ProbableMove,
+    /// The same thing with a changed signature.
+    SignatureEvolution,
+    /// One thing became several.
+    SplitInto,
+    /// Several things became one.
+    MergedFrom,
+    /// A thing with this identity existed, went away, and something with the same
+    /// identity came back. Not continuity, and it must not be reported as such.
+    Recreated,
+    /// Produced by a generator from a source that is itself the thing to track.
+    GeneratedFrom,
+    /// Continuity could not be established either way.
+    Unresolved,
+}
+
+impl IdentityTransitionKind
+{
+    /// Whether this transition preserves the subject's accumulated history.
+    ///
+    /// [`IdentityTransitionKind::Recreated`] and
+    /// [`IdentityTransitionKind::Unresolved`] deliberately do not. Carrying a
+    /// suppression across a recreation would silence a finding on code nobody has
+    /// reviewed, and carrying one across an unresolved link would do so on the strength
+    /// of a guess.
+    #[must_use]
+    pub const fn Preserves_History(self) -> bool
+    {
+        return matches!(
+            self,
+            Self::ExactContinuity
+                | Self::ProbableRename
+                | Self::ProbableMove
+                | Self::SignatureEvolution
+        );
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The rule that stops a suppression from surviving into code nobody reviewed.
+    #[test]
+    fn Test_Recreation_Should_Not_Preserve_History()
+    {
+        assert!(!IdentityTransitionKind::Recreated.Preserves_History());
+        assert!(!IdentityTransitionKind::Unresolved.Preserves_History());
+        assert!(!IdentityTransitionKind::SplitInto.Preserves_History());
+        assert!(!IdentityTransitionKind::MergedFrom.Preserves_History());
+    }
+
+    #[test]
+    fn Test_Renames_And_Moves_Should_Preserve_History()
+    {
+        assert!(IdentityTransitionKind::ExactContinuity.Preserves_History());
+        assert!(IdentityTransitionKind::ProbableRename.Preserves_History());
+        assert!(IdentityTransitionKind::ProbableMove.Preserves_History());
+        assert!(IdentityTransitionKind::SignatureEvolution.Preserves_History());
+    }
+}

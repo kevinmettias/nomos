@@ -1,14 +1,26 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::missing_errors_doc)]
 
+mod authority;
 mod commit;
 mod document;
+mod document_id;
+mod document_kind;
 mod index;
+mod manifest;
+mod recorded;
+mod reference;
 mod store;
 
-pub use document::{Authority, Document, DocumentId, DocumentKind};
+pub use authority::Authority;
+pub use document::Document;
+pub use document_id::DocumentId;
+pub use document_kind::DocumentKind;
 pub use index::Index;
-pub use commit::{Commit, Manifest, Recorded, Reference, COMMIT_SCHEMA};
+pub use commit::{Commit, COMMIT_SCHEMA};
+pub use manifest::Manifest;
+pub use recorded::Recorded;
+pub use reference::Reference;
 pub use store::DocumentStore;
 
 #[derive(Clone, Debug, PartialEq, Eq)]

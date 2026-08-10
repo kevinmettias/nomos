@@ -1,77 +1,8 @@
-//! Composite identity: what makes two observations the same thing.
-
-use crate::digest::Digest_Of_Parts;
-use crate::entity::EntityId;
-use nomos_contracts::Digest128;
 use serde::{Deserialize, Serialize};
 
-/// A hash of a symbol's shape, independent of its name and location.
-///
-/// The component that survives a rename. Without it, renaming a function looks like
-/// deleting one and adding another, every suppression attached to it is orphaned, and
-/// its history restarts.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct StructuralFingerprint(Digest128);
-
-impl StructuralFingerprint
-{
-    /// Wraps a digest as a fingerprint.
-    #[must_use]
-    pub const fn From_Digest(digest: Digest128) -> Self
-    {
-        return Self(digest);
-    }
-
-    /// The underlying digest.
-    #[must_use]
-    pub const fn Digest(&self) -> Digest128
-    {
-        return self.0;
-    }
-}
-
-/// Where a declaration came from.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct SourceProvenance
-{
-    /// The repository the declaration lives in.
-    pub repository: String,
-    /// The revision it was read at.
-    pub revision: String,
-    /// The generator that produced it, if it is generated.
-    pub generator: Option<String>,
-}
-
-/// How ambiguous declarations are resolved into distinct identities.
-///
-/// These are the cases where two declarations can legitimately share a qualified name,
-/// and each needs a stated answer rather than whatever the first implementation
-/// happened to do.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct IdentityPolicy
-{
-    /// Whether overloads sharing a name are distinguished by signature.
-    pub distinguish_overloads: bool,
-    /// Whether generated declarations are distinguished from hand-written ones.
-    pub distinguish_generated: bool,
-    /// Whether declarations under different conditional-compilation configurations are
-    /// distinct.
-    pub distinguish_conditional_compilation: bool,
-}
-
-impl IdentityPolicy
-{
-    /// The policy Nomos applies unless a language package states otherwise.
-    ///
-    /// All three on. Every one of them off produces a collision that presents as a
-    /// finding attached to the wrong declaration, which is worse than a missing
-    /// finding because it sends someone to read code that is fine.
-    pub const STRICT: Self = Self {
-        distinguish_overloads: true,
-        distinguish_generated: true,
-        distinguish_conditional_compilation: true,
-    };
-}
+use super::{IdentityPolicy, SourceProvenance, StructuralFingerprint};
+use crate::digest::Digest_Of_Parts;
+use crate::entity::EntityId;
 
 /// Everything that decides whether two observations denote the same declaration.
 ///

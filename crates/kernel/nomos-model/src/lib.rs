@@ -45,20 +45,38 @@
 
 #![forbid(unsafe_code)]
 
+mod confidence;
 mod digest;
 mod entity;
 mod evidence;
 mod identity;
+mod identity_transition;
+mod identity_transition_kind;
+mod intersection;
 mod path;
+mod set_resolution;
+mod snapshot_entity;
 mod subject;
+mod subject_kind;
 mod subject_set;
+mod subject_target;
 mod transition;
+mod unknown_reason;
 
+pub use confidence::Confidence;
 pub use digest::{Content_Digest, Digest_Of_Parts};
 pub use entity::{Artifact, ArtifactKind, EntityId, Resource, ResourceKind, Symbol, SymbolKind};
 pub use evidence::{Coverage, CoverageGap, Evidence, EvidenceRef};
 pub use identity::{CompositeIdentity, IdentityPolicy, SourceProvenance, StructuralFingerprint};
+pub use identity_transition::IdentityTransition;
+pub use identity_transition_kind::IdentityTransitionKind;
+pub use intersection::Intersection;
 pub use path::{Normalize_Path, Subject_Of_Path};
-pub use subject::{Subject, SubjectKind, SubjectTarget, SnapshotEntity};
-pub use subject_set::{Intersection, SetResolution, SubjectSet, UnknownReason};
-pub use transition::{Confidence, IdentityTransition, IdentityTransitionKind, Transition};
+pub use set_resolution::SetResolution;
+pub use snapshot_entity::SnapshotEntity;
+pub use subject::Subject;
+pub use subject_kind::SubjectKind;
+pub use subject_target::SubjectTarget;
+pub use subject_set::SubjectSet;
+pub use transition::Transition;
+pub use unknown_reason::UnknownReason;

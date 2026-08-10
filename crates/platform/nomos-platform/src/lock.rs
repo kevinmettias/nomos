@@ -1,68 +1,9 @@
 //! Mutual exclusion between processes that cannot see each other.
 
+use crate::lock_acquisition::LockAcquisition;
+use crate::lock_error::LockError;
+
 use std::time::Duration;
-
-/// A previous lock holder that went away without releasing.
-///
-/// The takeover is **reported**, never silent. The previous holder abandoned an update
-/// partway through, and whether that update landed is a question only a person can
-/// settle — the process that broke the lock has no way to know, and a system that
-/// quietly proceeded would be answering it by assumption.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct StaleTakeover
-{
-    /// Who held the lock, as far as the lock file recorded it.
-    pub previous_holder: String,
-    /// How long the lock had existed when it was broken.
-    pub age: Duration,
-}
-
-/// A held lock, plus whatever had to be broken to get it.
-#[derive(Debug)]
-pub struct LockAcquisition<G>
-{
-    /// The guard. Dropping it releases the lock.
-    pub guard: G,
-    /// Present when a stale lock was broken. Callers must surface this.
-    pub broke_stale: Option<StaleTakeover>,
-}
-
-/// Why a lock could not be taken.
-#[derive(Debug)]
-pub enum LockError
-{
-    /// Another live holder has it, and it has not gone stale.
-    Held
-    {
-        /// Who holds it.
-        holder: String,
-        /// How long the caller waited before giving up.
-        waited: Duration,
-    },
-    /// The lock file could not be created, read or removed.
-    Unusable
-    {
-        /// What went wrong.
-        cause: String,
-    },
-}
-
-impl core::fmt::Display for LockError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::Held { holder, waited } => write!(
-                formatter,
-                "lock is held by {holder}; waited {waited:?} without it being released"
-            ),
-            Self::Unusable { cause } => write!(formatter, "lock is unusable: {cause}"),
-        };
-    }
-}
-
-impl std::error::Error for LockError {}
 
 /// Exclusion across processes that share a filesystem and nothing else.
 ///
