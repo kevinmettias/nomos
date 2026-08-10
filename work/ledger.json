@@ -1655,6 +1655,7 @@
         "resolution": "File",
         "paths": [
           "tests/contract",
+          "crates/spec/nomos-spec-store",
           "Cargo.toml",
           ".github",
           "docs/records/OD-GATE-002"
@@ -1672,7 +1673,9 @@
           "cargo",
           "test",
           "-p",
-          "nomos-contract-tests"
+          "nomos-contract-tests",
+          "-p",
+          "nomos-spec-store"
         ],
         "timeout_seconds": 600
       },
