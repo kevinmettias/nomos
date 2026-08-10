@@ -6,6 +6,15 @@ use nomos_spec_store::SpecificationStore;
 /// Compared against the registered set at run time. A declared rule with no
 /// implementation makes the run error, which is what stops "the validator does not exist"
 /// from looking like "the validator found nothing".
+///
+/// Mirrored by `Test_The_Registry_Should_Match_The_Manifest`, which reconciles this list
+/// against the identifiers the registered rule objects return, in both directions. Those
+/// identifiers are read off the `impl Rule` blocks that run rather than copied from here,
+/// so the comparison can fail.
+///
+/// It reaches the registry and not the implementations: a rule implemented and never
+/// registered is in neither list and outside this claim. `OD-COMPLETENESS-002` states that
+/// boundary rather than leaving the claim to be read for more than it is.
 pub const DECLARED_RULES: &[&str] = &[
     "NSV-PRESERVE-001",
     "NSV-PRESERVE-002",

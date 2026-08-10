@@ -627,7 +627,7 @@ mod tests
         );
     }
 
-    /// An advisory finding is reported and does not stop anybody. Thirteen of them exist
+    /// An advisory finding is reported and does not stop anybody. Twelve of them exist
     /// in this workspace today, and a gate that can never be green is one everybody
     /// learns to bypass.
     #[test]

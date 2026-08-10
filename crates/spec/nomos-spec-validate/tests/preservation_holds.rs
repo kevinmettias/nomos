@@ -21,10 +21,32 @@ fn Dispose_All(store: &mut SpecificationStore)
     Ingest_Block_Dispositions(store, "a.md", "v14.36", &dispositions).expect("disposes");
 }
 
+/// The mirror [`DECLARED_RULES`] names at its declaration site.
+///
+/// It reconciles the manifest against the identifiers the registered rule objects return,
+/// in both directions: a declared rule nothing builds and a built rule nothing declares are
+/// each a failure here.
+///
+/// Renaming this test breaks the claim in `run.rs`, and `nomos check` reports a claim that
+/// resolves to nothing as a phantom mirror — Blocking, which is the severity ordering
+/// `mirror.rs` sets. Rename both or neither.
 #[test]
 fn Test_The_Registry_Should_Match_The_Manifest()
 {
     let run = Validate(&SpecificationStore::In_Memory().expect("opens"), &Registered());
+
+    // Two empty lists reconcile perfectly. Without these the assertions below would pass
+    // having compared nothing, which is the defect this test is now the declared mirror
+    // for — and a mirror that can report clean over nothing is worse than none, because
+    // the claim at the site reads as coverage.
+    assert!(
+        !DECLARED_RULES.is_empty(),
+        "an empty manifest reconciles against anything"
+    );
+    assert!(
+        !run.results.is_empty(),
+        "no rule was registered, so the reconciliation below compares nothing"
+    );
 
     assert!(run.unregistered.is_empty(), "declared but not built: {:?}", run.unregistered);
     assert!(run.undeclared.is_empty(), "built but not declared: {:?}", run.undeclared);

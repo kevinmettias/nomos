@@ -24,7 +24,7 @@
 //! nothing runs, nothing can fail, and the declaration says the rule is covered so no
 //! reader looks twice" — and the same asymmetry is why this rule blocks on one and
 //! reports on the other. It is also what keeps the check green today: this workspace has
-//! thirteen unmirrored universes, and a gate that can never be green is a gate everybody
+//! twelve unmirrored universes, and a gate that can never be green is a gate everybody
 //! learns to ignore.
 //!
 //! There is a third outcome above both, added by `OD-RULES-001`: **the rule saying it
@@ -819,7 +819,7 @@ mod tests
         );
         assert!(
             !Only(&admitted).Can_Fail_A_Build(),
-            "an admitted gap is honest, and thirteen of them exist; blocking on those \
+            "an admitted gap is honest, and twelve of them exist; blocking on those \
              makes a gate that can never be green"
         );
     }

@@ -246,8 +246,14 @@ fn Universes_In_Impl(path: &str, block: &syn::ItemImpl, found: &mut Vec<Declared
 ///
 /// It is also what keeps this rule's answer comparable with the classification
 /// `tests/contract` already declares. Widening to private lists takes the workspace from
-/// thirteen unmirrored universes to thirty-four, every one of which needs a human to say
-/// what would go wrong — that is somebody's next item, not a side effect of this one.
+/// twelve unmirrored universes to forty, every one of which needs a human to say what
+/// would go wrong — that is somebody's next item, not a side effect of this one.
+///
+/// Both figures are measurements and neither is durable. Taken on 2026-08-09 by running
+/// this module's own discovery over the workspace twice, once as written and once with
+/// this narrowing removed: 16 public universes of which twelve claim no mirror, and 44
+/// universes of which forty have no resolving claim. `OD-COMPLETENESS-002` records that
+/// the previous sentence said thirty-four, which no longer matched anything measurable.
 fn Is_Public(visibility: &syn::Visibility) -> bool
 {
     return matches!(visibility, syn::Visibility::Public(_));

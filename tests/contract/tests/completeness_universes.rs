@@ -25,7 +25,7 @@
 //! the same remedy `OD-GATE-001` applies to the corpus gates.
 
 use nomos_contract_tests::{Declared_Universes, UniverseKind, Workspace};
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 /// How a declared universe stands with respect to the rule.
@@ -35,7 +35,13 @@ enum Standing
     /// A check compares this declaration against the reality it claims to enumerate.
     Mirrored
     {
-        /// The test that is that comparison. Asserted to exist.
+        /// The test that is that comparison.
+        ///
+        /// A copy, not the claim. The claim lives in the universe's own doc comment, where
+        /// `nomos check` can read it, and
+        /// [`Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror`] holds this equal to
+        /// it. Two places to spell one claim is how the two guards came to disagree about
+        /// `DECLARED_RULES`; this is the one that is checked.
         by: &'static str,
     },
     /// No such check. A declared hole, counted rather than hidden.
@@ -97,12 +103,16 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     // ---- mirrored for other reasons ----
+    //
+    // `OD-COMPLETENESS-002`: this row named `Test_A_Rule_Nobody_Declared_Should_Fail_The_Run`,
+    // a unit test over a synthetic rule, while the real reconciliation sat uncited in
+    // `preservation_holds.rs`. The row was wrong about which test, never about the standing.
     Universe {
         path: "crates/spec/nomos-spec-validate/src/run.rs",
         name: "DECLARED_RULES",
         kind: UniverseKind::Constant,
         standing: Standing::Mirrored {
-            by: "Test_A_Rule_Nobody_Declared_Should_Fail_The_Run",
+            by: "Test_The_Registry_Should_Match_The_Manifest",
         },
     },
     // ---- declared holes ----
@@ -294,6 +304,92 @@ fn Test_Every_Named_Mirror_Should_Exist_In_The_Source()
         "these rows name a mirror that does not exist: {missing:#?}.\n\
          Either the test was renamed, in which case update the row, or it was deleted, in \
          which case the universe is unmirrored and UNMIRRORED_TOTAL must rise."
+    );
+}
+
+// ---------------------------------------------------------------------------
+// The scan and the table must claim the same mirror, universe by universe.
+// ---------------------------------------------------------------------------
+
+/// `nomos check` reads a universe's mirror off its doc comment at the site; this table
+/// declares one in a `by:` field. Those are two places to spell one claim, and for
+/// `DECLARED_RULES` they said different things for the length of `P10-FIRST-CHECK` —
+/// the command counted thirteen unmirrored universes while `UNMIRRORED_TOTAL` said twelve.
+/// `OD-COMPLETENESS-002`.
+///
+/// Named rather than counted, deliberately. Both totals matched throughout the
+/// disagreement this test exists to catch, and two rows swapping standing keeps every
+/// total intact while changing what the table means.
+///
+/// Claims are compared rather than verdicts. Whether a claim *resolves* is
+/// [`Test_Every_Named_Mirror_Should_Exist_In_The_Source`]'s fact; folding the two together
+/// would make a phantom agree with a row that called the universe unmirrored, which is the
+/// false-coverage reading `mirror.rs`'s severity ordering exists to refuse.
+#[test]
+fn Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror()
+{
+    let scanned: BTreeMap<(String, String), Option<String>> = Declared_Universes()
+        .into_iter()
+        .map(|universe| return ((universe.path, universe.name), universe.claimed_mirror))
+        .collect();
+
+    assert!(
+        !scanned.is_empty(),
+        "nothing was scanned, so every comparison below would pass having read nothing"
+    );
+
+    let declared: BTreeMap<(String, String), Option<String>> = UNIVERSES
+        .iter()
+        .map(|universe| {
+            let claim = match universe.standing
+            {
+                Standing::Mirrored { by } => Some(by.to_owned()),
+                Standing::Unmirrored { .. } => None,
+            };
+            return ((universe.path.to_owned(), universe.name.to_owned()), claim);
+        })
+        .collect();
+
+    let mut compared = 0_usize;
+    let mut disagreements: Vec<String> = Vec::new();
+
+    for (key, site) in &scanned
+    {
+        // Membership is Test_The_Declared_Table_Should_Match_What_Is_Derived's fact, and
+        // reporting it here too would give one cause two red tests. The count below is
+        // what stops that deferral turning into a comparison of nothing.
+        let Some(row) = declared.get(key)
+        else
+        {
+            continue;
+        };
+
+        compared = compared.saturating_add(1);
+
+        if site != row
+        {
+            let (path, name) = key;
+            disagreements.push(format!(
+                "{name} ({path}): the site claims {site:?} and the table claims {row:?}"
+            ));
+        }
+    }
+
+    assert_eq!(
+        compared,
+        scanned.len(),
+        "{} of {} scanned universes have no row here, so this test compared less than the \
+         whole set. Test_The_Declared_Table_Should_Match_What_Is_Derived says which.",
+        scanned.len().saturating_sub(compared),
+        scanned.len()
+    );
+
+    assert!(
+        disagreements.is_empty(),
+        "the workspace scan and this table disagree about these universes:\n{disagreements:#?}\n\
+         The site is the claim `nomos check` resolves and this table is a copy of it. Move \
+         the row to match the doc comment, or write the doc comment the row already \
+         promises — and if neither is true the row is Unmirrored and UNMIRRORED_TOTAL rises."
     );
 }
 

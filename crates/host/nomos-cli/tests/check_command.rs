@@ -113,7 +113,7 @@ fn Test_A_Mirror_That_Exists_Should_Pass_The_Command()
     assert!(output.contains("0 of which can fail a build"), "{output}");
 }
 
-/// An admitted gap is honest. Thirteen exist in this workspace, and blocking on them
+/// An admitted gap is honest. Twelve exist in this workspace, and blocking on them
 /// would make a gate that can never be green.
 #[test]
 fn Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing()
