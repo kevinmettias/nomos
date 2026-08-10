@@ -5865,6 +5865,39 @@
       "verified": null,
       "abandoned": [],
       "displaced": []
+    },
+    {
+      "id": "P10-VOCABULARY-REFUSAL",
+      "title": "An unknown relation type refuses the whole seed as a foreign key error that names no record and no term",
+      "why": "Found while landing P10-SEAM-CITATION. The seeded relation vocabulary is five terms -- supersedes, superseded_by, affects, affected_by and relates-to -- and relations.relation_type has a foreign key onto relation_types, so a record declaring a sixth term is refused. That refusal is the mechanism working and governing.rs says so. What it is not is diagnosable. Seed_Governing_Records fails as StoreError::Sql(FOREIGN",
+      "done_when": "Seeding refuses an unknown relation type by naming the record, the term and the vocabulary it is not in, rather than by surfacing a foreign key error whose text is the same for every cause. The vocabulary is reported from RELATION_TYPES rather than restated in the message, so a term added to the table appears in the refusal without a second edit. A test asserts the refusal names all three -- record, term and the admissible set -- and the negative control is confirmed red alone: restoring the bare Sql error must fail it, and a test that passes because the message happens to contain the record id for another reason is excluded by asserting the term too. One record with one bad term must not read as eighteen unrelated failures, so the refusal is raised where the record is known and the message says which record stopped the seed. The record states why the vocabulary stays five terms and the fix is the diagnosis rather than admitting unknown terms, since ADR-ARTIFACT-GRAPH-002's vocabulary arrives with the corpus and widening the seed table now would be inventing an answer the corpus already has.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/governing.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present.rs",
+          "docs/records/OD-SPEC-011",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-011.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
     }
   ]
 }
