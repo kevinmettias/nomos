@@ -3295,10 +3295,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-refusal-surface-w73",
+        "acquired_at": 1786382374,
+        "lease_expires_at": 1786396774
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4691,14 +4695,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-ledger-corpus-w41",
-        "acquired_at": 1786381166,
-        "lease_expires_at": 1786395566
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -4713,7 +4713,34 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "s\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.35s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-af9ee92193467382.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-6cfaddc4b16312b3.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-34f3dfa7f9923b4b.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-f75546e48cc40e29.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-ce2ac817ed8a3e76.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d58c046fbc3add5b.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-8f7c287149532a59.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-ce512e6e5aa0b6fe.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-0745c39aeadf5a16.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-7788a4475651c199.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-0c143e9fdf5a06d2.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-3226753fa50af12d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-6513f2b784f9db8e.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-103e563fbb789ea0.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-f50329bbff375e72.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-1d183afa395052f7.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-774615dec9e029c0.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786382364,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },
@@ -5568,6 +5595,11 @@
           "holder": "claude-requirable-declared-w34",
           "reason": "Abandoned because its done_when names a profile that cannot be required, and the error was mine. The check this item built is what found it, which is the system working rather than a setback. Measured by rendering all eighteen shipped profiles over a records-only store: exactly four succeed -- diagram-set, domain-specification, html-site and traceability-matrix. Not six. feature-design refuses because its Concepts section filters nodes on kind concept, and release-specification, api-documentation and requirement-catalog refuse the same way on scenario, milestone and requirement kinds. Those are corpus node kinds; a governing record is kind decision or architecture. So reaching only seeded content kinds is necessary and not sufficient: a filter that selects nothing refuses too, and that is data-dependent rather than a static property of a profile. The census also corrected the declaration itself. Table rows ARE seeded, because governing records carry markdown tables and Write_Record writes their rows, so the seeded set is seven kinds and not six: documents, headings, blocks, rows, nodes, relations, lineage. Both errors were caught by comparing the declaration against a really-seeded store in both directions, which is the half of this item worth keeping. Re-authored as P10-REQUIRABLE-FLOOR, requiring domain-specification instead: it renders over a seeded store today, it is the record set as one readable document, and it is one added re-render obligation rather than three.",
           "abandoned_at": 1786381395
+        },
+        {
+          "holder": "claude-requirable-declared-w62",
+          "reason": "Superseded, and its last open clause is one the governing record refuses by name. This should be Declined, and there is no verb that can decline it - see below.\n\nChecked clause by clause against the tree at 63ca96d rather than assumed.\n\nClause 1, the seeded content kinds declared once and checked both directions: landed by P10-REQUIRABLE-FLOOR as SEEDED_BY_RECORDS in crates/spec/nomos-spec-project/tests/projections.rs, compared against a really-seeded store by Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds.\n\nClause 2, requirability following from the declaration with both the qualifying and the non-qualifying profiles covered: landed, and more finely than this item asked. Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content pins three sets rather than two - what renders, what the screen admits and still refuses, and what is excluded from the comparison - so a profile moving between them fails rather than passing quietly.\n\nClause 4, a declared required list with a reason per entry: landed in OD-PROJECT-002, which states why domain-specification is required, and why html-site and traceability-matrix rebuild without a corpus and are deliberately not required.\n\nClause 3 is the one left, and it is false. It asks that feature-design ship as a committed body and sidecar and join the Required projections step. Measured just now on a corpus-less store, which is what CI checks out: nomos spec render --profile feature-design exits 6, a source was absent. Four profiles render without a corpus - diagram-set, domain-specification, html-site and traceability-matrix - and feature-design is not one of them. It is pinned in the screened-but-refuses set instead, because it reaches only seeded kinds and still filters nodes on a kind only a corpus has. This item premise that six profiles qualify was a screen read as an answer.\n\nOD-PROJECT-002 does not merely fail to require feature-design. Its alternatives table records \"read Reaches_Only_Seeded_Content as requirability - feature-design required and refusing, which is the error this record was written after making\". So finishing this item would mean doing the thing its own governing record was written to stop, and a record is canonical for a decision.\n\nNothing was written to the tree under this claim, and nothing should be: there is no work left here that OD-PROJECT-002 has not already governed.\n\nWhat this item actually needs is the Declined state, with this as the reason - the P3-RESTORE shape, an item that was planned and then overtaken rather than one never planned. ItemState::Declined { reason } exists in crates/substrate/nomos-ledger/src/item.rs and carries its reason in the variant so an item cannot be declined reasonlessly. No verb reaches it: nomos work offers list, show, add, claim, renew, takeover, finish, abandon, validate and audit, and abandon returns an item to Ready. So a superseded item can only be closed by hand-editing shared coordination state, and it therefore stays Ready and gets picked up again. That gap is worth its own item; it cannot be authored right now because its territory is crates/host/nomos-cli/src/work.rs, under P10-PATTERN-BRICK active claim.\n\nReleased rather than held, so this reserves nothing while it waits.",
+          "abandoned_at": 1786382440
         }
       ],
       "displaced": []
