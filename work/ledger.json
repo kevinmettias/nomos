@@ -2548,6 +2548,117 @@
       },
       "verified": null,
       "abandoned": []
+    },
+    {
+      "id": "P10-LAPSE-TAKEOVER",
+      "title": "A lapsed item can only be recovered by the agent that died holding it",
+      "why": "P10-LAPSE-BRICKS stopped a lapse from refusing every claim on the board, and left the lapsed item itself where it was: state Claimed, Claim_Refusal rejects anything that is not Ready, so nobody but the original holder can move it. Renew and Release match on the holder, and the holder is by definition a process that died - that is the only reason a lease ever lapses on its own. So the item is stuck until a person edits work/ledger.json, which is the outcome MAXIMUM_LEASE was introduced to make impossible. OD-LEDGER-009 states why it was not fixed there rather than leaving it to be rediscovered: Claim overwrites claim, and claim is the only thing recording that the work was ever started. OD-LEDGER-006 decided that must survive and refused to synthesize an Abandonment for a lapse, because Abandonment::reason is the words the holder gave and a lapse has none. A takeover therefore has nowhere to put the claim it replaces, and giving it one is a change to what a lapse leaves behind - which is OD-LEDGER-006's decision and was out of scope there. work list now says lapsed rather than claimed, so the stuck item is at least visible; it is not recoverable.",
+      "done_when": "An item whose holder died returns to the pool without a person editing the file, and what happened to it is still readable afterwards. Who held it, when they took it and when the lease ran out survive the takeover - a new claim overwriting the old one silently is the outcome this must not have. Whether that means an Abandonment variant that is not a reason the holder gave, a separate lapsed record on the item, or a takeover operation distinct from claim is the decision, recorded with the criterion rather than chosen by whichever is easiest to write. OD-LEDGER-006 is reopened deliberately or it is not touched. A test claims an item, forces the lease into the past, takes it over as a different holder, and asserts both that the takeover succeeded and that the previous holder is still named on the item. The negative control is confirmed red: a takeover that drops the previous holder must fail it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-LEDGER-011"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-FACT-BYPASS",
+      "title": "The fact layer has no consumer, and the record that bypassed it argues against filesystems rather than against facts",
+      "why": "nomos-rules is the only thing in this tree that judges code. Its dependencies are nomos-contracts, nomos-model, syn and proc-macro2. Not nomos-analysis, and not nomos-lang-rust.\n\nFactReader appears in exactly three files, all of them inside crates/substrate/nomos-analysis: the trait at src/reader.rs, the re-export at src/lib.rs, and its own test at tests/fact_identity.rs. There is no consumer anywhere else in the workspace. So P7-ANALYSIS, P7-RUST, P7-SLICE and P8-PIN, and the invalidation and incremental-reuse work behind them, reach nothing that judges. Six closed items of substrate, and the first rule built on top of it consults none of them.\n\nsyn appears in two Cargo.toml files: crates/languages/nomos-lang-rust and crates/rules/nomos-rules. One workspace, one language, two independent front ends. D-134 records at length why the second one parses rather than scans and does not record that the first one already exists.\n\nThe recorded reason does not reach the conclusion it is attached to. D-134 argues that none of the three OD-COMPLETENESS-001 instances can be replayed from git, and concludes that the only way to judge code that no longer exists is for the rule to accept code as an argument, so the rule takes text. The premise defeats a rule that walks the filesystem. It does not defeat facts. A reader handed in as a parameter is equally an argument, a test can implement it over three files it wrote by hand, and the replay requirement is satisfied identically. Whatever ruled facts out, that is not it.\n\nThe decision may still be right. D-134 argues elsewhere that one check honest end to end beats three nearly wired, and scope is a real reason that would carry this. But scope is not the reason recorded, and a record whose argument proves something narrower than its conclusion is what OD-GATE-001 is about, one level in: a claim that implies more than it holds, believed later because it was written down.",
+      "done_when": "The relationship between the rule layer and the fact layer is settled and written down. Either a rule consumes facts and the second syn front end is given a stated reason to remain or is removed, or text stays the rule's subject on grounds that survive the counter above, and in that case the record says what the fact layer is for when no judgment reads it. D-134 is amended or superseded rather than left standing with an argument that does not reach its conclusion, since the argument is the part later work will cite. Not closed by deleting nomos-analysis, and not closed by routing a rule through a fact path that no judgment actually consults, which would satisfy the letter of this item and none of it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "crates/substrate/nomos-analysis",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-RULES-001",
+          "docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-VACUITY-HOME",
+      "title": "The guarantee that a judging command cannot report success vacuously is one command remembering, not a type refusing",
+      "why": "nomos check cannot report a clean run over nothing. An empty walk exits ExitCode::Vacuous, 6, and says so, and the doc comment names the sibling defect it exists against: check-standards-tree /nonexistent walked nothing, found nothing and reported CLEAN. That guard is real, it is tested, and it is better than what it replaces.\n\nIt is also entirely local. The enum lives in crates/host/nomos-cli/src/check.rs and is private to that group's module; spec.rs declares its own 6 as Absent. Nothing in nomos-contracts makes a success value unconstructible without evidence that something was judged, so no type stops the next judging group from returning Ok over an empty subject set. The guarantee is one command remembering.\n\ncheck.rs argues the placement, and argues it well: the guard belongs in the caller \"because did I see a plausible amount of the world is a question only the caller that chose the tree can answer\". That is a real argument and it is in a doc comment. A cross-command guarantee decided in one module's prose is a decision the next author does not encounter, because the next author reads their own module.\n\nOD-LEDGER-002 already records that nomos-gates, nomos-findings and nomos-applicability do not exist. It does not record how the guarantee those crates were meant to carry is held in their absence. That is the gap here: not the missing crates, which are on the record, but the missing statement of what replaced them and where it now lives.\n\nOD-GATE-001 is this same defect one level out - a skipped test reports ok - and it is closed. This workspace has already decided once that it will not rely on a command remembering to be honest about having run nothing.",
+      "done_when": "Where the no-vacuous-success guarantee lives is decided and recorded rather than argued in a doc comment. Either caller-side placement stands, and the record states what makes the next judging command inherit the guard instead of remembering it - a shared entry point every group routes through, a contract test over every group that can print a verdict, or an explicit acceptance that it is per-command with the cost named and a place it will be noticed. Or the guarantee moves into a value that a judging command cannot construct without having judged something, and the record says what that costs at the seam and what it does not cover. Building nomos-gates is not required to close this, and neither is adding a second judging command: the question is where the property is held, and it can be answered while there is still only one.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli",
+          "crates/contracts/nomos-contracts",
+          "crates/spec/nomos-spec-store",
+          "tests/contract",
+          "docs/records/OD-GATE-003"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
     }
   ]
 }
