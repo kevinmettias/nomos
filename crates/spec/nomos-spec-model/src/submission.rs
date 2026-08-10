@@ -396,32 +396,9 @@ pub fn Validate(submission: &Submission) -> Vec<Failure>
 /// acceptance *of*. It stays in [`SubmissionKind::Required_Fields`] because it is still a field
 /// of its kind — the origin rule below reads that list and must see it — and the completeness
 /// check skips it in `draft`, which is the whole of what rule 5 asks for.
-const fn Is_Conditional_On_State(kind: SubmissionKind, field: &str) -> bool
+fn Is_Conditional_On_State(kind: SubmissionKind, field: &str) -> bool
 {
-    return matches!(kind, SubmissionKind::FeatureResult) && Same(field, "evidence");
-}
-
-/// `str::eq` is not `const`, and this predicate is.
-const fn Same(left: &str, right: &str) -> bool
-{
-    let (left, right) = (left.as_bytes(), right.as_bytes());
-
-    if left.len() != right.len()
-    {
-        return false;
-    }
-
-    let mut index = 0;
-    while index < left.len()
-    {
-        if left[index] != right[index]
-        {
-            return false;
-        }
-        index = index.saturating_add(1);
-    }
-
-    return true;
+    return matches!(kind, SubmissionKind::FeatureResult) && field == "evidence";
 }
 
 /// Every required field carries a value.
@@ -627,6 +604,12 @@ mod tests
 {
     use super::*;
 
+    /// The first failure, named rather than indexed.
+    fn First(failures: &[Failure]) -> &Failure
+    {
+        return failures.first().expect("at least one failure");
+    }
+
     fn Value(field: &str, value: &str, origin: Origin) -> FieldValue
     {
         return FieldValue {
@@ -729,8 +712,8 @@ mod tests
 
         assert_eq!(draft, Vec::new(), "a draft may carry an inferred value");
         assert_eq!(accepted.len(), 1);
-        assert_eq!(accepted[0].rule, "accepted-values-are-not-inferred");
-        assert_eq!(accepted[0].field, "goal");
+        assert_eq!(First(&accepted).rule, "accepted-values-are-not-inferred");
+        assert_eq!(First(&accepted).field, "goal");
     }
 
     #[test]
@@ -773,7 +756,7 @@ mod tests
         let failures = Validate(&submission);
 
         assert_eq!(failures.len(), 1);
-        assert_eq!(failures[0].rule, "no-open-blocking-gap");
+        assert_eq!(First(&failures).rule, "no-open-blocking-gap");
     }
 
     #[test]
@@ -802,7 +785,10 @@ mod tests
         }];
 
         assert_eq!(Validate(&submission), Vec::new());
-        assert!(submission.gaps[0].Is_Open(), "and it is still open");
+        assert!(
+            submission.gaps.first().expect("a gap").Is_Open(),
+            "and it is still open"
+        );
     }
 
     fn Design(alternatives: &str, selected: &str) -> Submission
@@ -832,7 +818,7 @@ mod tests
         let failures = Validate(&Design("a new verb", "a new verb"));
 
         assert_eq!(failures.len(), 1);
-        assert_eq!(failures[0].rule, "at-least-two-alternatives");
+        assert_eq!(First(&failures).rule, "at-least-two-alternatives");
     }
 
     #[test]
@@ -847,7 +833,7 @@ mod tests
         let failures = Validate(&Design("a new verb\ndo nothing", "a third thing"));
 
         assert_eq!(failures.len(), 1);
-        assert_eq!(failures[0].rule, "selected-names-an-alternative");
+        assert_eq!(First(&failures).rule, "selected-names-an-alternative");
     }
 
     fn Result_Submission(deviations: &str, evidence: Option<&str>) -> Submission
@@ -882,7 +868,7 @@ mod tests
         let failures = Validate(&Result_Submission("we did it differently", Some("cargo test: 0")));
 
         assert_eq!(failures.len(), 1);
-        assert_eq!(failures[0].rule, "deviation-names-its-clause");
+        assert_eq!(First(&failures).rule, "deviation-names-its-clause");
     }
 
     #[test]
@@ -901,7 +887,7 @@ mod tests
 
         let accepted = Validate(&submission);
         assert_eq!(accepted.len(), 1);
-        assert_eq!(accepted[0].rule, "accepted-result-carries-evidence");
+        assert_eq!(First(&accepted).rule, "accepted-result-carries-evidence");
 
         submission.state = SubmissionState::Draft;
         assert_eq!(Validate(&submission), Vec::new());

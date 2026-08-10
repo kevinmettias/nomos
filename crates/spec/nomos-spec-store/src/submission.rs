@@ -392,6 +392,19 @@ mod tests
         return store;
     }
 
+    /// The first failure, named rather than indexed.
+    fn First(failures: &[nomos_spec_model::Failure]) -> &nomos_spec_model::Failure
+    {
+        return failures.first().expect("at least one failure");
+    }
+
+    /// One stored value row, named rather than indexed.
+    fn Nth(rows: &[(String, u32, Option<String>)], index: usize)
+    -> &(String, u32, Option<String>)
+    {
+        return rows.get(index).expect("a stored row");
+    }
+
     fn Value(field: &str, value: &str, origin: Origin) -> FieldValue
     {
         return FieldValue {
@@ -452,7 +465,7 @@ mod tests
             {
                 assert_eq!(refusal.submission, "FR-002");
                 assert_eq!(refusal.failures.len(), 1);
-                assert_eq!(refusal.failures[0].field, "goal");
+                assert_eq!(First(&refusal.failures).field, "goal");
             }
             AcceptError::Store(error) => panic!("refused for the wrong reason: {error}"),
         }
@@ -511,10 +524,10 @@ mod tests
             .collect();
 
         assert_eq!(rows.len(), 2, "the original is still in storage");
-        assert_eq!(rows[0].0, "close superseded work");
-        assert_eq!(rows[1].0, "what it became");
-        assert!(rows[0].2.is_none(), "the first supersedes nothing");
-        assert!(rows[1].2.is_some(), "the second names what it superseded");
+        assert_eq!(Nth(&rows, 0).0, "close superseded work");
+        assert_eq!(Nth(&rows, 1).0, "what it became");
+        assert!(Nth(&rows, 0).2.is_none(), "the first supersedes nothing");
+        assert!(Nth(&rows, 1).2.is_some(), "the second names what it superseded");
     }
 
     #[test]
@@ -540,7 +553,7 @@ mod tests
         {
             panic!("refused for the wrong reason");
         };
-        assert_eq!(refusal.failures[0].rule, "no-open-blocking-gap");
+        assert_eq!(First(&refusal.failures).rule, "no-open-blocking-gap");
     }
 
     #[test]
@@ -567,9 +580,9 @@ mod tests
         {
             panic!("refused for the wrong reason");
         };
-        assert_eq!(refusal.failures[0].rule, "no-open-blocking-gap");
+        assert_eq!(First(&refusal.failures).rule, "no-open-blocking-gap");
 
-        submission.gaps[0].closed_by = Some("OD-SPEC-008".to_owned());
+        submission.gaps.first_mut().expect("a gap").closed_by = Some("OD-SPEC-008".to_owned());
         Accept_Submission(&mut store, &submission).expect("a citation closes it");
     }
 
@@ -609,10 +622,10 @@ mod tests
             panic!("refused for the wrong reason");
         };
         assert_eq!(
-            refusal.failures[0].rule,
+            First(&refusal.failures).rule,
             "citation-resolves-to-an-accepted-submission"
         );
-        assert!(refusal.failures[0].remedy.contains("no submission is filed under"));
+        assert!(First(&refusal.failures).remedy.contains("no submission is filed under"));
     }
 
     #[test]
@@ -630,7 +643,7 @@ mod tests
         {
             panic!("refused for the wrong reason");
         };
-        assert!(refusal.failures[0].remedy.contains("accept it first"));
+        assert!(First(&refusal.failures).remedy.contains("accept it first"));
 
         request.state = SubmissionState::Accepted;
         Accept_Submission(&mut store, &request).expect("promoted");

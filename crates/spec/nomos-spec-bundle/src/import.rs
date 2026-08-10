@@ -334,6 +334,35 @@ fn Carried_By(bundle: &Bundle) -> Identities
     };
 }
 
+/// The three submission records' references.
+///
+/// Lifted out of [`Assert_Resolves`] rather than inlined beside its siblings, because three
+/// more arms took that function past the length the workspace lint allows. The rule is the
+/// same one every arm there states: a record may only name what the bundle carries.
+fn Assert_Submission_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
+{
+    match record
+    {
+        // A submission is a node, so the node is what it must resolve against.
+        Record::Submission(submission) =>
+        {
+            Carried(&carried.nodes, &submission.node_id, "node")?;
+        }
+        Record::SubmissionValue(value) =>
+        {
+            Carried(&carried.submissions, &value.node_id, "submission")?;
+        }
+        Record::SubmissionGap(gap) =>
+        {
+            Carried(&carried.submissions, &gap.node_id, "submission")?;
+        }
+        _ =>
+        {}
+    }
+
+    return Ok(());
+}
+
 /// One record's references, each against what the bundle carries.
 fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
 {
@@ -415,17 +444,9 @@ fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleEr
             )?;
             Carried(&carried.nodes, &front_matter.node_id, "node")?;
         }
-        Record::Submission(submission) =>
+        Record::Submission(_) | Record::SubmissionValue(_) | Record::SubmissionGap(_) =>
         {
-            Carried(&carried.nodes, &submission.node_id, "node")?;
-        }
-        Record::SubmissionValue(value) =>
-        {
-            Carried(&carried.submissions, &value.node_id, "submission")?;
-        }
-        Record::SubmissionGap(gap) =>
-        {
-            Carried(&carried.submissions, &gap.node_id, "submission")?;
+            Assert_Submission_Resolves(record, carried)?;
         }
         Record::RecordRelation(relation) =>
         {
