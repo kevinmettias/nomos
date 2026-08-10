@@ -2520,14 +2520,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-stale-writer-w14",
-        "acquired_at": 1786342513,
-        "lease_expires_at": 1786353313
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -2543,7 +2539,35 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "rget-w14\\debug\\deps\\public_surface-90cb0b5819067194.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\nomos_ledger-3eb9592799c44067.exe)\n     Running tests\\exclusion_holds.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\exclusion_holds-fc4c8c84c6a9e3d6.exe)\n     Running tests\\gate_covers_finish.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\gate_covers_finish-e2c01b6edfceb086.exe)\n     Running tests\\records_do_not_serialize.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\records_do_not_serialize-3e8dbb6eeadf5fd4.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/ac829ef1-5bcf-4689-909d-db4ade6b2d52/scratchpad/target-w14\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786343851,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "probeA",
@@ -3368,10 +3392,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-syntax-schema-w1",
+        "acquired_at": 1786343832,
+        "lease_expires_at": 1786358232
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -3902,10 +3930,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-required-projections-w14",
+        "acquired_at": 1786343888,
+        "lease_expires_at": 1786354688
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -4111,6 +4143,39 @@
           "--no-fail-fast",
           "-p",
           "nomos-spec-project"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
+    },
+    {
+      "id": "P10-RERENDER-HAZARD",
+      "title": "Adding a governing record now reddens a gate step, and the loop that adds them does not say so",
+      "why": "P10-REQUIRED-PROJECTIONS commits diagrams/relations.mmd and has the gate re-derive it. The diagram is a projection of the relation graph, so any commit that adds or changes a governing record changes it and leaves the committed pair stale until somebody re-renders. That is the mechanism working rather than a defect, and it is exactly the kind of fact a session discovers by watching CI go red on a change it believes is unrelated to diagrams. The rate is not hypothetical: the graph moved from 208 relations to 224 in roughly one hour on 2026-08-09 while three sessions were adding records concurrently, and every one of those commits would have reddened the step. AGENTS.md operating hazards is where facts with no other home already live -- never run cargo fmt, re-copy the binary, branch on exit codes -- and this is one of them. It is not architecture and does not belong in a record: the decision is already carried by the item that made the projection required.",
+      "done_when": "AGENTS.md names the obligation in its operating hazards: a commit that changes a governing record leaves the committed projection stale, the gate step that catches it, and the one command that fixes it. It routes rather than restates -- the profile list, the exit codes and the reason the set is what it is stay where they already are, and tests/contract/tests/agent_harness.rs still passes, which is what keeps this file from growing a second copy of something checked elsewhere. Not closed by a line that says projections exist without saying what a record author has to do about one.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-REQUIRED-PROJECTIONS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
         ],
         "timeout_seconds": 600
       },

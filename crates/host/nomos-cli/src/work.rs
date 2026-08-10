@@ -4,7 +4,7 @@ use crate::arguments::{Named_Value, Named_Values};
 use nomos_ledger::{
     ClaimRefusal, Claim_Refusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish,
     FinishRefusal, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome,
-    Territory, VerificationPredicate,
+    SCHEMA_VERSION, Territory, Validate, VerificationPredicate,
 };
 use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
@@ -742,20 +742,41 @@ const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
     };
 }
 
+/// Whether the ledger is valid, and whether the executable asking is current.
+///
+/// The second half is what makes this the one command an operator can answer "is the `nomos.exe`
+/// I copied still current?" with. Sessions run a copy of the binary, because `finish` runs a
+/// predicate that rebuilds the running executable, and a copy taken before a schema change was a
+/// silent data-loss channel until `OD-LEDGER-008`. It is loud now — every verb exits 5 — and this
+/// is where the two numbers can be read side by side without provoking a refusal first.
+///
+/// `Load` and [`Validate`] rather than `Validate_Current`, which discards the document and so
+/// cannot report the file's own version. One read, not two, so both halves of the line describe
+/// the same file.
 fn Report_Validation(
     ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    return match ledger.Validate_Current()
+    let document = match ledger.Load()
     {
-        Ok(()) =>
-        {
-            let _ = writeln!(output, "ledger is valid");
-            ExitCode::Ok
-        }
-        Err(error) => Report_Error(&error, output),
+        Ok(document) => document,
+        Err(error) => return Report_Error(&error, output),
     };
+
+    let violations = Validate(&document, ledger.Now());
+    if !violations.is_empty()
+    {
+        return Report_Error(&LedgerError::Invalid { violations }, output);
+    }
+
+    let _ = writeln!(
+        output,
+        "ledger is valid (schema {}, and this build understands {})",
+        document.schema_version, SCHEMA_VERSION
+    );
+
+    return ExitCode::Ok;
 }
 
 /// Every item somebody is waiting on, and what they are waiting for.
@@ -859,8 +880,13 @@ fn Report_Error(error: &LedgerError, output: &mut impl std::io::Write) -> ExitCo
     return match error
     {
         LedgerError::Invalid { .. } => ExitCode::ValidationError,
+        // `Unrecognized` is a store error and not a conflict. The README's own criterion
+        // decides it: an agent told the ledger cannot be used at all stops and fetches a
+        // person, and a binary that cannot read the board is exactly that. No new code is
+        // introduced, so the exit-code table does not move.
         LedgerError::Unreadable { .. }
         | LedgerError::Malformed { .. }
+        | LedgerError::Unrecognized { .. }
         | LedgerError::Locked { .. } => ExitCode::StoreError,
     };
 }

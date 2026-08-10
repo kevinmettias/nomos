@@ -8,6 +8,7 @@ pub const nomos_ledger::LINT_STEP: &str
 pub const nomos_ledger::LOCK_STALE_AFTER: Duration
 pub const nomos_ledger::LOCK_WAIT_LIMIT: Duration
 pub const nomos_ledger::MAXIMUM_LEASE: Duration
+pub const nomos_ledger::SCHEMA_VERSION: u32
 pub enum nomos_ledger::Blocker
 pub enum nomos_ledger::ClaimRefusal
 pub enum nomos_ledger::FinishRefusal
@@ -48,6 +49,7 @@ pub enum variant nomos_ledger::LedgerError::Invalid { violations: Vec<String>, }
 pub enum variant nomos_ledger::LedgerError::Locked { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Malformed { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Unreadable { cause: String, }
+pub enum variant nomos_ledger::LedgerError::Unrecognized { understood: u32, found: u32, cause: String, }
 pub enum variant nomos_ledger::ReleaseOutcome::Abandoned { reason: String, }
 pub enum variant nomos_ledger::ReleaseOutcome::Finished(VerificationRecord)
 pub fn nomos_ledger::Check_Lease(requested: Duration) -> Result<(), ClaimRefusal>

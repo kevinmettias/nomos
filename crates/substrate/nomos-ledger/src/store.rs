@@ -20,8 +20,19 @@ pub const LOCK_WAIT_LIMIT: Duration = Duration::from_secs(20);
 /// machine was briefly busy.
 pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 
-/// The schema version written into every ledger file.
-const SCHEMA_VERSION: u32 = 1;
+/// The highest ledger schema version this build can account for.
+///
+/// Written into every file this build saves, and compared against a file this build failed to
+/// read. It does not *guarantee* anything: the guarantee is `deny_unknown_fields` on every
+/// container reachable from [`LedgerDocument`], which is mechanical and cannot be forgotten.
+/// This number's only job is to decide which sentence an operator whose parse just failed
+/// reads — [`LedgerError::Unrecognized`] rather than [`LedgerError::Malformed`].
+///
+/// That ordering is deliberate and is `OD-LEDGER-008`'s decision. `e88f92d` added a field to
+/// [`crate::LedgerItem`] and raised nothing, so a guard resting on the bump would report clean
+/// on the next instance of the defect it was built for. Here a forgotten bump can only degrade
+/// a message, and can never cost a field.
+pub const SCHEMA_VERSION: u32 = 1;
 
 /// Why a ledger operation could not be carried out.
 #[derive(Debug)]
@@ -51,6 +62,22 @@ pub enum LedgerError
         /// Every violation found, not just the first.
         violations: Vec<String>,
     },
+    /// The ledger holds something this build cannot account for.
+    ///
+    /// Distinct from [`LedgerError::Malformed`] because the two remedies are opposites: a
+    /// malformed ledger is repaired, and this one is left alone while the *reader* is
+    /// rebuilt. Reporting the second as the first sends an operator to edit a file that is
+    /// correct, which is the "two causes wearing one name" shape `OD-LEDGER-009` names,
+    /// with the causes swapped.
+    Unrecognized
+    {
+        /// What this build understands.
+        understood: u32,
+        /// What the file says it is.
+        found: u32,
+        /// What could not be accounted for, verbatim from the parser.
+        cause: String,
+    },
 }
 
 impl core::fmt::Display for LedgerError
@@ -67,6 +94,16 @@ impl core::fmt::Display for LedgerError
                 "ledger is invalid:\n  {}",
                 violations.join("\n  ")
             ),
+            Self::Unrecognized {
+                understood,
+                found,
+                cause,
+            } => write!(
+                formatter,
+                "this build understands ledger schema {understood} and the file is schema \
+                 {found}: {cause}. Writing it back would drop what could not be read, so \
+                 nothing was written. Rebuild (`cargo build -p nomos-cli`) and retry"
+            ),
         };
     }
 }
@@ -75,12 +112,53 @@ impl std::error::Error for LedgerError {}
 
 /// The on-disk form.
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+// The outermost of the strict containers. Reasoned once in `item.rs`'s module documentation and
+// decided in `OD-LEDGER-008`: a build that cannot account for every key in the ledger does not
+// get to write the ledger back.
+#[serde(deny_unknown_fields)]
 pub struct LedgerDocument
 {
     /// Schema version, so a future reader can tell what it is looking at.
     pub schema_version: u32,
     /// The items, in a stable order.
     pub items: Vec<LedgerItem>,
+}
+
+/// The schema version alone, for explaining a strict parse that already failed.
+///
+/// A separate type, and deliberately *not* `deny_unknown_fields`: its whole job is to read one
+/// field out of a document [`LedgerDocument`] has refused, which every key it does not declare
+/// is the reason for.
+#[derive(Deserialize)]
+struct VersionProbe
+{
+    schema_version: u32,
+}
+
+/// Which of the two parse failures this is.
+///
+/// A file newer than this build and a file that is simply broken both fail
+/// `serde_json::from_str`, and the operator's next action is opposite in the two cases: rebuild
+/// the reader, or repair the file. Telling them apart is the whole of what [`SCHEMA_VERSION`]
+/// does — it is consulted here, after the refusal, and never to decide whether to refuse.
+///
+/// A forgotten bump therefore degrades this to [`LedgerError::Malformed`] and costs a sentence.
+/// It cannot cost a field.
+fn Explain(path: &Path, text: &str, error: &serde_json::Error) -> LedgerError
+{
+    if let Ok(probe) = serde_json::from_str::<VersionProbe>(text)
+        && probe.schema_version > SCHEMA_VERSION
+    {
+        return LedgerError::Unrecognized {
+            understood: SCHEMA_VERSION,
+            found: probe.schema_version,
+            cause: error.to_string(),
+        };
+    }
+
+    return LedgerError::Malformed {
+        cause: format!("{}: {error}", path.display()),
+    };
 }
 
 /// A ledger stored as a JSON file, coordinated by a lock beside it.
@@ -156,10 +234,21 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// error, because the alternative is treating somebody's corrupted roadmap as an
     /// empty one and cheerfully letting agents claim everything.
     ///
+    /// # Why the parse is strict
+    ///
+    /// This is the single door. `With_Lock`, `Claim`, `Renew`, `Release`, `Conflicts` and
+    /// `Validate_Current` all read through here, so a document that got past this point is
+    /// one this build accounts for in full — which is what makes re-serializing it in
+    /// [`Self::Save`] lossless without a second, separately-forgettable guard there.
+    ///
+    /// A key no declared type recognises therefore fails here, before anything is written,
+    /// rather than being dropped and written back. `OD-LEDGER-008`.
+    ///
     /// # Errors
     ///
     /// Returns [`LedgerError::Malformed`] when the file exists and cannot be parsed,
-    /// and [`LedgerError::Unreadable`] when it cannot be read at all.
+    /// [`LedgerError::Unrecognized`] when it cannot be parsed *and* says it is newer than
+    /// this build, and [`LedgerError::Unreadable`] when it cannot be read at all.
     pub fn Load(&self) -> Result<LedgerDocument, LedgerError>
     {
         if !self.filesystem.Exists(&self.path)
@@ -177,9 +266,8 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
                 cause: error.to_string(),
             })?;
 
-        return serde_json::from_str(&text).map_err(|error| LedgerError::Malformed {
-            cause: format!("{}: {error}", self.path.display()),
-        });
+        return serde_json::from_str::<LedgerDocument>(&text)
+            .map_err(|error| return Explain(&self.path, &text, &error));
     }
 
     /// Writes the ledger, refusing to persist one that violates its own invariants.
@@ -188,6 +276,19 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
     /// written and then found invalid is a ledger somebody has to repair by hand, and
     /// in the meantime every agent reading it is reading something the system itself
     /// says is wrong.
+    ///
+    /// # Why the version is stamped rather than echoed
+    ///
+    /// What goes to disk says [`SCHEMA_VERSION`], not whatever the loaded document said. A
+    /// build that writes a field it invented while echoing the older number it read produces
+    /// the one file the version cannot explain: it carries keys an older build must refuse,
+    /// and it tells that build they are the same age, so the refusal comes out as
+    /// [`LedgerError::Malformed`] and sends somebody to repair a file that is correct.
+    ///
+    /// No check on the way out. The guard is [`Self::Load`]'s strict parse, and a document
+    /// that got through it is one this build accounts for in full, so writing it back is
+    /// lossless whatever number it arrived with. A second guard here would be a second
+    /// opinion about the same question, and the two would eventually disagree.
     ///
     /// # Errors
     ///
@@ -201,8 +302,13 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
             return Err(LedgerError::Invalid { violations });
         }
 
+        let stamped = LedgerDocument {
+            schema_version: SCHEMA_VERSION,
+            items: document.items.clone(),
+        };
+
         let mut rendered =
-            serde_json::to_string_pretty(document).map_err(|error| LedgerError::Unreadable {
+            serde_json::to_string_pretty(&stamped).map_err(|error| LedgerError::Unreadable {
                 cause: error.to_string(),
             })?;
         rendered.push('\n');

@@ -119,6 +119,25 @@ should pick up something else; an agent told the ledger is broken should stop an
 a person. Collapsing those into "non-zero" makes the first indistinguishable from the
 second.
 
+**If a verb exits 5 saying the file is a schema this build does not understand, the
+executable is stale, not the ledger.** `finish` runs a predicate that rebuilds the running
+process, which Windows will not permit, so sessions copy `target/debug/nomos.exe` and run the
+copy — and a copy taken before a field was added used to read the current ledger, drop that
+field, write the document back and exit 0. The state change survived and the data did not, so
+a lossy write looked exactly like a clean one. It is loud now: a build that cannot account for
+every key in the ledger refuses to read it, so it never writes it. Rebuild
+(`cargo build -p nomos-cli`), copy the binary again, and retry. `OD-LEDGER-008` records why the
+refusal is total rather than partial, and what it does not reach — a copy taken before that
+decision landed has none of the guard and stays silent.
+
+`nomos work validate` is the command that answers "is the executable I copied current?". It
+reports the file's schema version and the running build's side by side, without having to
+provoke a refusal first:
+
+```
+ledger is valid (schema 1, and this build understands 1)
+```
+
 ## Reading the specification
 
 ```

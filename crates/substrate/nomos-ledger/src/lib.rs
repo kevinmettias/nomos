@@ -51,6 +51,6 @@ pub use item::{
 };
 pub use store::{
     Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, LedgerError,
-    Validate,
+    SCHEMA_VERSION, Validate,
 };
 pub use territory::{Normalize_Path, Subject_Of, Territory};

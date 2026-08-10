@@ -28,6 +28,11 @@ use serde::{Deserialize, Serialize};
 /// Paths are stored as written so the file stays reviewable, and compared after
 /// normalization so two spellings of one file are one subject.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+// Every field here is defaulted, which made this the easiest place in the document to lose a
+// key: a misspelled `paths` deserialized as an empty territory that excludes nobody. See
+// `item.rs`'s module documentation for why the whole document refuses what it cannot account
+// for, and `OD-LEDGER-008` for the decision.
+#[serde(deny_unknown_fields)]
 pub struct Territory
 {
     /// The granularity these paths are stated at.

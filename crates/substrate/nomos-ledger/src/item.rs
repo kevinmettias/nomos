@@ -1,4 +1,22 @@
 //! What a unit of work is, and what it means to have finished one.
+//!
+//! # Why every container here refuses a key it does not declare
+//!
+//! Each type below carries `#[serde(deny_unknown_fields)]`, and the reason is stated once
+//! here rather than eight times below. Serde's default is to ignore an unrecognized key, so
+//! a binary built before a field existed read the current ledger, dropped that field, wrote
+//! the document back and exited 0 — the state change surviving and the data not. Refusing
+//! the parse is what makes such a writer stop at the door instead of succeeding quietly.
+//! `OD-LEDGER-008` records the decision and what it does not reach.
+//!
+//! The refusal is asymmetric on purpose: a new build still reads an old file, because every
+//! added field carries `#[serde(default)]`, and an old build no longer reads a new one.
+//! Forward compatibility for this file was only ever buying the ability to lose it.
+//!
+//! Nothing enumerates these attributes, because a hand-written list of types is only as
+//! complete as the hand — `OD-COMPLETENESS-001`. What holds them in place is
+//! `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`, which walks a fully
+//! populated document and probes every object node it finds.
 
 use crate::territory::Territory;
 use nomos_platform::Timestamp;
@@ -57,6 +75,7 @@ impl core::fmt::Display for ItemId
 /// the result was that nobody could tell how much of the backlog was waiting on a
 /// person versus waiting on a dependency.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum Blocker
 {
     /// Waiting on other items.
@@ -98,6 +117,7 @@ pub enum Blocker
 /// A closed set. The compiler refuses a sixth, which is the point: a state that exists
 /// only in one tool's imagination is a state no query can filter on.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum ItemState
 {
     /// Available to claim.
@@ -135,6 +155,7 @@ impl ItemState
 
 /// A held claim on an item.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Claim
 {
     /// Who holds it.
@@ -175,6 +196,7 @@ impl Claim
 /// *transition*, and a transition leaves nothing behind unless something on the item is
 /// given the job of holding it. This is that job.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Abandonment
 {
     /// Who gave it up.
@@ -195,6 +217,7 @@ pub struct Abandonment
 /// human; this is the thing that gets run, and an item cannot report itself finished
 /// because somebody typed that it was.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct VerificationPredicate
 {
     /// The program and its arguments.
@@ -232,6 +255,7 @@ impl VerificationPredicate
 /// under the gate from one finished before the gate was derived at all, and every
 /// `verified` block written earlier would silently read as though it had been checked.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct GateOutcome
 {
     /// What was run, as derived from the workflow.
@@ -242,6 +266,7 @@ pub struct GateOutcome
 
 /// What happened when the predicate was run.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct VerificationRecord
 {
     /// What was run.
@@ -262,6 +287,7 @@ pub struct VerificationRecord
 
 /// One unit of work.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct LedgerItem
 {
     /// Stable identifier.
@@ -411,6 +437,35 @@ mod tests
     {
         assert_eq!(format!("{:<10}|", ItemId::New("P1-MODEL")), "P1-MODEL  |");
         assert_eq!(format!("{}", ItemId::New("P1-MODEL")), "P1-MODEL");
+    }
+
+    /// A field added here without the schema version moving produces a refusal that misstates
+    /// why.
+    ///
+    /// This protects the *message*, never the data. Under `OD-LEDGER-008` the guarantee is
+    /// `deny_unknown_fields`, which is mechanical: a build meeting a field it does not know
+    /// refuses whatever the version says. What a forgotten bump costs is that the refusal comes
+    /// out as [`crate::LedgerError::Malformed`] instead of `Unrecognized`, so the operator is
+    /// sent to repair a file that is correct rather than to rebuild a binary that is old. A
+    /// stale explanation is the class of defect that record exists to fix, one layer along, so
+    /// the count is asserted here rather than trusted.
+    ///
+    /// Nothing about this test makes the version a guard. It makes forgetting it visible.
+    #[test]
+    fn Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version()
+    {
+        let serialized = serde_json::to_value(Item("T-1")).expect("an item serializes");
+        let fields = serialized
+            .as_object()
+            .expect("an item serializes as an object");
+
+        assert_eq!(
+            fields.len(),
+            12,
+            "a field was added to `LedgerItem`. Raise `SCHEMA_VERSION` in `store.rs` and this \
+             count together, or a build that predates the field will be told the ledger is \
+             malformed instead of being told it is old"
+        );
     }
 
     #[test]
