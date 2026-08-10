@@ -705,6 +705,14 @@ pub(crate) fn Is_Code(mask: &[bool], index: usize) -> bool
 /// `panic!("{} ...")` inside a test module would otherwise desynchronise the scan and
 /// blank the remainder of the file — which would hide real declarations and report a clean
 /// result, the failure direction that flatters.
+///
+/// The search for a body is bounded by the end of the item the attribute is attached to,
+/// which is the whole of `Item_Shape_After`'s job. An earlier version asked only for the
+/// next open brace anywhere in the file, and for `#[cfg(test)] mod registration;` — the
+/// ordinary way to declare a test-only module living in another file — that brace belonged
+/// to some later, unrelated item, so everything between them was blanked including that
+/// item. `nomos-spec-store` lost its `pub use authoring::{…}` that way and the public
+/// surface snapshot went red naming the crate, not the scanner.
 pub(crate) fn Without_Test_Modules(text: &str) -> String
 {
     let bytes = text.as_bytes();
@@ -723,19 +731,31 @@ pub(crate) fn Without_Test_Modules(text: &str) -> String
             continue;
         }
 
-        let Some(open) = Next_Code_Byte(bytes, &masks.code, index, b'{')
+        let Some(shape) = Item_Shape_After(bytes, &masks.code, index.saturating_add(MARKER.len()))
         else
         {
             break;
         };
 
-        let Some(close) = Matching_Brace(bytes, &masks.code, open)
-        else
+        // A body is blanked from its opening brace, leaving the attribute and the item's
+        // signature legible, which is what every caller has always seen. A declaration has
+        // no body to blank, so what goes is the declaration itself — from the attribute
+        // through its `;` — and nothing beyond it.
+        let (from, to) = match shape
         {
-            break;
+            ItemShape::Body(open) =>
+            {
+                let Some(close) = Matching_Brace(bytes, &masks.code, open)
+                else
+                {
+                    break;
+                };
+                (open, close)
+            }
+            ItemShape::Declaration(end) => (index, end),
         };
 
-        for offset in open..=close
+        for offset in from..=to
         {
             if let Some(slot) = blanked.get_mut(offset)
             {
@@ -746,7 +766,7 @@ pub(crate) fn Without_Test_Modules(text: &str) -> String
             }
         }
 
-        index = close.saturating_add(1);
+        index = to.saturating_add(1);
     }
 
     // Blanking replaces whole bytes of what was valid UTF-8 with ASCII spaces, so the
@@ -756,14 +776,74 @@ pub(crate) fn Without_Test_Modules(text: &str) -> String
     return String::from_utf8_lossy(&blanked).into_owned();
 }
 
+/// The attribute that marks an item as test-only.
+const MARKER: &[u8] = b"#[cfg(test)]";
+
 /// Whether a `#[cfg(test)]` attribute begins at an offset.
 fn Starts_Marker(bytes: &[u8], index: usize) -> bool
 {
-    const MARKER: &[u8] = b"#[cfg(test)]";
-
     return bytes
         .get(index..index.saturating_add(MARKER.len()))
         .is_some_and(|window| return window == MARKER);
+}
+
+/// How the item carrying a `#[cfg(test)]` attribute ends.
+///
+/// The distinction the scanner needs is not which keyword follows the attribute but
+/// whether the item terminates with a body or with a `;`, because that is the only thing
+/// that decides how much text belongs to it. `mod x { … }`, `fn f() { … }` and
+/// `impl T for U { … }` are one shape; `mod x;`, `use a::b;` and `struct S;` are the
+/// other. Reading the keyword instead would mean listing every item form Rust has and
+/// re-listing it whenever one is added — and `mod` alone appears in both shapes anyway.
+enum ItemShape
+{
+    /// The item has a body. The offset is its opening brace.
+    Body(usize),
+    /// The item is a declaration and has no body. The offset is the `;` that ends it.
+    Declaration(usize),
+}
+
+/// Whichever of `{` or `;` ends the item beginning at `from`, and which one it was.
+///
+/// This is the bound that `Without_Test_Modules` was missing. Whichever of the two comes
+/// first decides the shape, so a declaration can never borrow the body of the item after
+/// it: the `;` is reached before that item's brace is.
+///
+/// Nesting depth counts only `(`/`)` and `[`/`]`, and both delimiters matter. A `;` can sit
+/// inside either without ending anything — `fn f(v: [u8; 4]) { … }` has one in an array
+/// type, ahead of the brace that really is the body — and a further `#[…]` attribute
+/// stacked under the marker opens and closes a bracket of its own before the item even
+/// begins. Angle brackets are deliberately not counted: `<` is ambiguous with comparison
+/// in Rust's grammar, and it need not be, because generics and where-clauses put no bare
+/// `;` or `{` between the attribute and the body. Anything they could carry that looks
+/// like one — an array length, a const-generic argument — is already inside `[]` or `()`.
+///
+/// Only code bytes are read, so a `;` in a string and a `{` in a comment are both invisible
+/// to it. `None` means the file ends mid-item, which is a truncated source rather than a
+/// declaration, and the caller stops rather than guessing.
+fn Item_Shape_After(bytes: &[u8], mask: &[bool], from: usize) -> Option<ItemShape>
+{
+    let mut cursor = from;
+    let mut depth = 0_u32;
+
+    while cursor < bytes.len()
+    {
+        if Is_Code(mask, cursor)
+        {
+            match bytes.get(cursor).copied()
+            {
+                Some(b'(' | b'[') => depth = depth.saturating_add(1),
+                Some(b')' | b']') => depth = depth.saturating_sub(1),
+                Some(b'{') if depth == 0 => return Some(ItemShape::Body(cursor)),
+                Some(b';') if depth == 0 => return Some(ItemShape::Declaration(cursor)),
+                _ =>
+                {}
+            }
+        }
+        cursor = cursor.saturating_add(1);
+    }
+
+    return None;
 }
 
 /// Every `.rs` file under a directory, recursively.
@@ -908,5 +988,175 @@ fn Test_Plain()
 ";
 
         assert!(Gates_In("example.rs", source).is_empty());
+    }
+
+    /// A test module with a body still loses the whole body, which is the behaviour every
+    /// caller of `Without_Test_Modules` has always depended on.
+    #[test]
+    fn Test_A_Braced_Test_Item_Should_Still_Lose_Its_Whole_Body()
+    {
+        let source = r"
+#[cfg(test)]
+mod tests
+{
+    pub fn Helper_Inside_Tests() {}
+}
+
+pub use authoring::{Claimed};
+";
+
+        let blanked = Without_Test_Modules(source);
+        assert!(
+            !blanked.contains("Helper_Inside_Tests"),
+            "the body of a braced #[cfg(test)] item survived: {blanked}"
+        );
+        assert!(
+            blanked.contains("pub use authoring::{Claimed};"),
+            "blanking a braced test module reached past it: {blanked}"
+        );
+        assert_eq!(blanked.len(), source.len());
+    }
+
+    /// The defect, in the shape it was found in. `#[cfg(test)] mod registration;` carries no
+    /// braces of its own, so an unbounded search for a body takes the braces of whatever
+    /// item comes next — in `nomos-spec-store` that was the `pub use authoring::{…}` line,
+    /// and the public surface snapshot reported eleven exports missing without ever
+    /// mentioning the scanner.
+    #[test]
+    fn Test_A_Braceless_Test_Declaration_Should_Not_Eat_The_Item_After_It()
+    {
+        let source = r"
+mod record;
+#[cfg(test)]
+mod registration;
+mod rows;
+
+pub use authoring::{
+    BlockChange, ClaimedRecord, CommitReport,
+};
+";
+
+        let blanked = Without_Test_Modules(source);
+        assert!(
+            blanked.contains("pub use authoring::{"),
+            "pub use authoring::{{…}} was eaten by the brace-less #[cfg(test)] mod \
+             registration; above it; what survived was: {blanked}"
+        );
+        for export in ["BlockChange", "ClaimedRecord", "CommitReport"]
+        {
+            assert!(
+                blanked.contains(export),
+                "the export {export} was eaten by the brace-less #[cfg(test)] mod \
+                 registration; above it; what survived was: {blanked}"
+            );
+        }
+        assert!(
+            blanked.contains("mod rows;"),
+            "mod rows; was eaten by the brace-less #[cfg(test)] mod registration; above it; \
+             what survived was: {blanked}"
+        );
+    }
+
+    /// A brace-less declaration blanks itself, so nothing downstream can read the module
+    /// name back out and count it as a declared file.
+    #[test]
+    fn Test_A_Braceless_Test_Declaration_Should_Blank_Itself()
+    {
+        let source = r"
+mod record;
+#[cfg(test)]
+mod registration;
+mod rows;
+";
+
+        let blanked = Without_Test_Modules(source);
+        assert!(
+            !blanked.contains("registration"),
+            "a brace-less #[cfg(test)] declaration was left in place: {blanked}"
+        );
+        assert!(!blanked.contains("#[cfg(test)]"), "the marker was left in place: {blanked}");
+        assert!(blanked.contains("mod record;"), "the item above it was blanked: {blanked}");
+        assert_eq!(blanked.len(), source.len());
+    }
+
+    /// The shapes are decided by `;` versus `{`, not by the keyword, so every brace-less
+    /// item form has to behave the same way. Each of these is followed by a braced item that
+    /// must survive.
+    #[test]
+    fn Test_Every_Braceless_Item_Form_Should_Blank_Only_Itself()
+    {
+        for declaration in [
+            "mod registration;",
+            "use super::Helper;",
+            "struct Marker;",
+            "type Alias = Vec<u8>;",
+            "static LIMIT: [u8; 4] = [0; 4];",
+        ]
+        {
+            let source = format!("\n#[cfg(test)]\n{declaration}\n\npub fn Survivor() {{}}\n");
+            let blanked = Without_Test_Modules(&source);
+            assert!(
+                blanked.contains("pub fn Survivor()"),
+                "`{declaration}` ate the item after it: {blanked}"
+            );
+            assert!(
+                !blanked.contains("#[cfg(test)]"),
+                "`{declaration}` was not blanked: {blanked}"
+            );
+        }
+    }
+
+    /// Generics, a where-clause and an array-typed parameter all put punctuation between the
+    /// attribute and the body without ending the item. The `;` inside `[u8; 4]` is the one
+    /// that would fool a scanner reading for the first `;` anywhere.
+    #[test]
+    fn Test_A_Body_Behind_Generics_And_An_Array_Type_Should_Still_Be_Blanked()
+    {
+        let source = r"
+#[cfg(test)]
+fn Helper<T>(value: [u8; 4]) -> Result<T, ()>
+where
+    T: Default,
+{
+    let Eaten_Marker = value;
+    return Ok(T::default());
+}
+
+pub fn Survivor() {}
+";
+
+        let blanked = Without_Test_Modules(source);
+        assert!(
+            !blanked.contains("Eaten_Marker"),
+            "the body was not blanked, so the `;` in [u8; 4] was read as the item's end: {blanked}"
+        );
+        assert!(blanked.contains("pub fn Survivor()"), "blanking reached past the body: {blanked}");
+    }
+
+    /// The shape is decided over code bytes only. A `;` in a comment between the attribute
+    /// and the body would otherwise turn a braced item into a declaration and leave the body
+    /// in the text — the failure direction that flatters, because it reports more surface
+    /// than the crate has.
+    #[test]
+    fn Test_A_Semicolon_In_A_Comment_Should_Not_End_An_Item()
+    {
+        let source = r#"
+#[cfg(test)]
+// a declaration would have ended here;
+mod tests
+{
+    const NOTE: &str = "and here;";
+    fn Inside_The_Body() {}
+}
+
+pub fn Survivor() {}
+"#;
+
+        let blanked = Without_Test_Modules(source);
+        assert!(
+            !blanked.contains("Inside_The_Body"),
+            "a `;` in a comment was read as the end of a braced item: {blanked}"
+        );
+        assert!(blanked.contains("pub fn Survivor()"), "blanking reached past the body: {blanked}");
     }
 }
