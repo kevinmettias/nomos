@@ -1,10 +1,11 @@
 //! Turning a scan into a fact the analysis kernel can store.
 
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
-use crate::scan::{Scan, ScannedFile};
+use crate::scan::{Scan, ScannedFile, ScannedItem};
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
 use nomos_contracts::{
+    Guarantee,
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, ProviderId, SnapshotId,
     SubjectId,
 };
@@ -35,20 +36,7 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 {
     let scanned = Scan(source);
     let guarantee = Declared_Guarantee();
-
-    let key = nomos_analysis::FactKey {
-        contract: Capability(),
-        contract_version: CONTRACT_VERSION,
-        subject,
-        // The file text and only the file text, by the same rule and for the same reason as
-        // the parser: two copies of one file are one computation.
-        semantic_inputs: InputDigest::Of(&[source.as_bytes()]),
-        provider: ProviderId::New(PROVIDER),
-        provider_version: CONTRACT_VERSION,
-        guarantee: GuaranteeDigest::Of(&guarantee),
-        variant: context.variant,
-        configuration: context.configuration,
-    };
+    let key = Keyed(subject, source, &guarantee, context);
 
     return MaterializedFact {
         identity: key.At(context.generation),
@@ -61,6 +49,30 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
         evidence: EvidenceClass::Approximate,
         guarantee,
         payload: FactPayload::New(Payload_Schema(), Encode_Payload(&scanned)),
+    };
+}
+
+/// What this fact is, as against where it came from.
+///
+/// The semantic inputs are the file text and only the file text, by the same rule and for
+/// the same reason as the parser: two copies of one file are one computation.
+fn Keyed(
+    subject: SubjectId,
+    source: &str,
+    guarantee: &Guarantee,
+    context: FactContext,
+) -> nomos_analysis::FactKey
+{
+    return nomos_analysis::FactKey {
+        contract: Capability(),
+        contract_version: CONTRACT_VERSION,
+        subject,
+        semantic_inputs: InputDigest::Of(&[source.as_bytes()]),
+        provider: ProviderId::New(PROVIDER),
+        provider_version: CONTRACT_VERSION,
+        guarantee: GuaranteeDigest::Of(guarantee),
+        variant: context.variant,
+        configuration: context.configuration,
     };
 }
 
@@ -84,24 +96,30 @@ pub fn Encode_Payload(scanned: &ScannedFile) -> Vec<u8>
 
     for item in &scanned.items
     {
-        encoded.push_str("item\t");
-        encoded.push_str(&item.ordinal.to_string());
-        encoded.push('\t');
-        encoded.push_str(item.kind.Label());
-        encoded.push('\t');
-        encoded.push_str(&item.visibility.Label());
-        encoded.push('\t');
-        encoded.push_str(&item.name);
-        // Not observed, twice, and never absent. This reader skips comment lines and
-        // associates nothing with the item below them, and it never looks at a declared
-        // type at all. Writing `.` here would say it looked and found nothing — which for
-        // a list that does declare its mirror is a phantom silently downgraded to an
-        // admitted gap. See `OD-SYNTAX-002`.
-        encoded.push_str("\t-\t-");
-        encoded.push('\n');
+        Encode_Item(&mut encoded, item);
     }
 
     return encoded.into_bytes();
+}
+
+/// One item as a record, with both unobservable fields marked as unobserved.
+///
+/// Not observed, twice, and never absent. This reader skips comment lines and associates
+/// nothing with the item below them, and it never looks at a declared type at all. Writing
+/// `.` here would say it looked and found nothing — which for a list that does declare its
+/// mirror is a phantom silently downgraded to an admitted gap. See `OD-SYNTAX-002`.
+fn Encode_Item(encoded: &mut String, item: &ScannedItem)
+{
+    encoded.push_str("item\t");
+    encoded.push_str(&item.ordinal.to_string());
+    encoded.push('\t');
+    encoded.push_str(item.kind.Label());
+    encoded.push('\t');
+    encoded.push_str(&item.visibility.Label());
+    encoded.push('\t');
+    encoded.push_str(&item.name);
+    encoded.push_str("\t-\t-");
+    encoded.push('\n');
 }
 
 #[cfg(test)]

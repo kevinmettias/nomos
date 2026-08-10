@@ -381,41 +381,61 @@ pub struct Rolled
 /// store has already left.
 pub fn Materialize_Index(
     store: &mut MemoryFactStore,
-    registry: &Registry,
-    need: &Requirement,
+    against: &Against<'_>,
     module: &Module,
-    context: FactContext,
 ) -> Result<Rolled, FactError>
 {
     let members = Canonical(&module.members);
-    let key = Index_Key(module.subject, &members, context);
+    let key = Index_Key(module.subject, &members, against.context);
 
     // The read borrows the store immutably and the write needs it mutably, so the reader
     // is confined to this scope. What survives it is owned: the index, and the edges the
     // reader observed on the way to it.
-    let (index, dependencies) =
-        Read_Members(store, registry, need, module.subject, &members, context);
+    let (index, dependencies) = Read_Members(store, against, module.subject, &members);
 
-    store.Materialize(
-        MaterializedFact {
-            identity: key.clone().At(context.generation),
-            // Provenance: the tree this rollup was computed over. Not part of the key, so
-            // the workspace moving re-addresses nothing — `OD-ANALYSIS-001`.
-            snapshot: context.snapshot,
-            // No stronger than what it derived from. Promoting this to `Verified` would
-            // launder the rollup's own arithmetic into a measurement.
-            evidence: EvidenceClass::Derived,
-            guarantee: Declared_Guarantee(),
-            payload: FactPayload::New(Payload_Schema(), Encode_Index(&index)),
-        },
-        &dependencies,
-    )?;
+    let fact = Rollup_Fact(&key, &index, against.context);
+    store.Materialize(fact, &dependencies)?;
 
     return Ok(Rolled {
         key,
         index,
         dependencies,
     });
+}
+
+/// What a rollup is computed against: who may answer, how good the answer has to be, and
+/// the build its facts are filed under.
+///
+/// The three travel together through every step of a rollup and none of them is useful
+/// without the others — a registry with no floor admits everything, and a floor with no
+/// build has nothing to file the result under.
+#[derive(Clone, Copy)]
+pub struct Against<'a>
+{
+    /// Who may answer for a member.
+    pub registry: &'a Registry,
+    /// How good an answer has to be to count.
+    pub need: &'a Requirement,
+    /// The build every fact read and written here is filed under.
+    pub context: FactContext,
+}
+
+/// The rollup as a fact.
+///
+/// The snapshot is provenance — the tree this rollup was computed over — and not part of
+/// the key, so the workspace moving re-addresses nothing, per `OD-ANALYSIS-001`.
+///
+/// The evidence is no stronger than what it derived from. Promoting it to `Verified` would
+/// launder the rollup's own arithmetic into a measurement.
+fn Rollup_Fact(key: &FactKey, index: &ModuleIndex, context: FactContext) -> MaterializedFact
+{
+    return MaterializedFact {
+        identity: key.clone().At(context.generation),
+        snapshot: context.snapshot,
+        evidence: EvidenceClass::Derived,
+        guarantee: Declared_Guarantee(),
+        payload: FactPayload::New(Payload_Schema(), Encode_Index(index)),
+    };
 }
 
 /// The key a module's index is filed under.
@@ -473,24 +493,13 @@ fn Index_Inputs(members: &[ModuleMember]) -> InputDigest
 /// Reads every member's syntax fact through the registry and indexes what they declare.
 fn Read_Members(
     store: &MemoryFactStore,
-    registry: &Registry,
-    need: &Requirement,
+    against: &Against<'_>,
     module: SubjectId,
     members: &[ModuleMember],
-    context: FactContext,
 ) -> (ModuleIndex, Vec<Dependency>)
 {
-    let mut reader = Reader::On(
-        store,
-        registry,
-        Context {
-            snapshot: context.snapshot,
-            variant: context.variant,
-            configuration: context.configuration,
-            generation: context.generation,
-        },
-    );
-    let capability = nomos_cap_syntax::Capability();
+    let context = Reading_Context(against.context);
+    let mut reader = Reader::On(store, against.registry, context);
     let mut index = ModuleIndex {
         module,
         members: Vec::new(),
@@ -499,61 +508,98 @@ fn Read_Members(
 
     for member in members
     {
-        // `Require_Any` rather than `Require`: reading only the chosen provider leaves a
-        // weaker provider's answer written into the store and unread, and the rollup
-        // reports the member missing while the answer sits one lookup away.
-        let read = reader.Require_Any(&capability, &member.subject, member.inputs, need);
-
-        let Ok((fact, applicability)) = read
-        else
-        {
-            index.members.push(MemberReading {
-                subject: member.subject,
-                outcome: Outcome::Unreachable,
-            });
-            continue;
-        };
-
-        let decoded = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes);
-
-        let Ok(payload) = decoded
-        else
-        {
-            // Bytes filed under the syntax schema that are not the syntax schema. Counted
-            // unreachable rather than as an empty answer: a member that could not be read
-            // must not encode like a member that declares nothing.
-            index.members.push(MemberReading {
-                subject: member.subject,
-                outcome: Outcome::Unreachable,
-            });
-            continue;
-        };
-
-        index.members.push(MemberReading {
-            subject: member.subject,
-            outcome: if applicability == Applicability::SupportedWithFallback
-            {
-                Outcome::Approximate
-            }
-            else
-            {
-                Outcome::Read
-            },
-        });
-
-        for item in payload.items
-        {
-            index.items.push(IndexEntry {
-                member: member.subject,
-                ordinal: item.ordinal,
-                kind: item.kind,
-                visibility: item.visibility,
-                qualified_name: item.qualified_name,
-            });
-        }
+        Index_Member(&mut index, &mut reader, member, against.need);
     }
 
     return (index, reader.Into_Dependencies());
+}
+
+/// The reading context, as the reader takes it.
+fn Reading_Context(context: FactContext) -> Context
+{
+    return Context {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
+}
+
+/// One member's declarations, or the fact that it could not be read.
+///
+/// `Require_Any` rather than `Require`: reading only the chosen provider leaves a weaker
+/// provider's answer written into the store and unread, and the rollup would report the
+/// member missing while the answer sat one lookup away.
+///
+/// Bytes filed under the syntax schema that are not the syntax schema count as unreachable
+/// rather than as an empty answer — a member that could not be read must not encode like a
+/// member that declares nothing.
+fn Index_Member(
+    index: &mut ModuleIndex,
+    reader: &mut Reader<'_, '_>,
+    member: &ModuleMember,
+    need: &Requirement,
+)
+{
+    let Some((payload, applicability)) = Declared_By(reader, member, need)
+    else
+    {
+        index.members.push(MemberReading {
+            subject: member.subject,
+            outcome: Outcome::Unreachable,
+        });
+
+        return;
+    };
+
+    index.members.push(MemberReading {
+        subject: member.subject,
+        outcome: Outcome_Of(applicability),
+    });
+    for item in payload.items
+    {
+        let entry = Entry_Of(member.subject, item);
+        index.items.push(entry);
+    }
+}
+
+/// What one member's fact says, and how good the answer was.
+fn Declared_By(
+    reader: &mut Reader<'_, '_>,
+    member: &ModuleMember,
+    need: &Requirement,
+) -> Option<(nomos_cap_syntax::SyntaxPayload, Applicability)>
+{
+    let capability = nomos_cap_syntax::Capability();
+    let (fact, applicability) = reader
+        .Require_Any(&capability, &member.subject, member.inputs, need)
+        .ok()?;
+    let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).ok()?;
+
+    return Some((payload, applicability));
+}
+
+/// One declared item, filed under the member that declared it.
+fn Entry_Of(member: SubjectId, item: nomos_cap_syntax::PayloadItem) -> IndexEntry
+{
+    return IndexEntry {
+        member,
+        ordinal: item.ordinal,
+        kind: item.kind,
+        visibility: item.visibility,
+        qualified_name: item.qualified_name,
+    };
+}
+
+/// Whether the answer came from the chosen provider or from a weaker one below it.
+fn Outcome_Of(applicability: Applicability) -> Outcome
+{
+    if applicability == Applicability::SupportedWithFallback
+    {
+        return Outcome::Approximate;
+    }
+
+    return Outcome::Read;
 }
 
 /// The canonical byte encoding of an index.
@@ -606,20 +652,26 @@ pub fn Encode_Index(index: &ModuleIndex) -> Vec<u8>
 
     for item in &index.items
     {
-        encoded.push_str("item\t");
-        encoded.push_str(&item.member.Digest().to_string());
-        encoded.push('\t');
-        encoded.push_str(&item.ordinal.to_string());
-        encoded.push('\t');
-        encoded.push_str(&item.kind);
-        encoded.push('\t');
-        encoded.push_str(&item.visibility);
-        encoded.push('\t');
-        encoded.push_str(&item.qualified_name);
-        encoded.push('\n');
+        Encode_Entry(&mut encoded, item);
     }
 
     return encoded.into_bytes();
+}
+
+/// One item record: the member that declared it, then the syntax schema's own fields.
+fn Encode_Entry(encoded: &mut String, item: &IndexEntry)
+{
+    encoded.push_str("item\t");
+    encoded.push_str(&item.member.Digest().to_string());
+    encoded.push('\t');
+    encoded.push_str(&item.ordinal.to_string());
+    encoded.push('\t');
+    encoded.push_str(&item.kind);
+    encoded.push('\t');
+    encoded.push_str(&item.visibility);
+    encoded.push('\t');
+    encoded.push_str(&item.qualified_name);
+    encoded.push('\n');
 }
 
 /// Reads an index payload back.
@@ -636,11 +688,28 @@ pub fn Encode_Index(index: &ModuleIndex) -> Vec<u8>
 /// indistinguishable from a module that genuinely does.
 pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
 {
-    let text = core::str::from_utf8(payload)
-        .map_err(|error| return format!("the payload is not UTF-8, so it is not this schema: {error}"))?;
+    let text = core::str::from_utf8(payload).map_err(|error| {
+        return format!("the payload is not UTF-8, so it is not this schema: {error}");
+    })?;
 
     let mut lines = text.lines().enumerate();
+    let mut index = Opened(&mut lines)?;
 
+    for (offset, line) in lines
+    {
+        Read_Record(&mut index, line, offset.saturating_add(1))?;
+    }
+
+    return Ok(index);
+}
+
+/// The `module` record, and the empty index it opens.
+///
+/// It appears exactly once and first. That is what makes an index over a module with no
+/// members a payload rather than the empty byte string — a module nothing was read for and
+/// a module that declares nothing are two answers and must not share an encoding.
+fn Opened(lines: &mut core::iter::Enumerate<core::str::Lines<'_>>) -> Result<ModuleIndex, String>
+{
     let Some((_, header)) = lines.next()
     else
     {
@@ -649,44 +718,63 @@ pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
             .to_owned());
     };
 
-    let header_fields: Vec<&str> = header.split('\t').collect();
-    if header_fields.first().copied() != Some("module")
+    let fields: Vec<&str> = header.split('\t').collect();
+    if fields.first().copied() != Some("module")
     {
         return Err(format!("the first record is `{header}` and not a `module` record"));
     }
-    Expect_Fields("module", &header_fields, MODULE_FIELDS, 1)?;
+    Expect_Fields("module", &fields, MODULE_FIELDS, 1)?;
 
-    let mut index = ModuleIndex {
-        module: Subject_From(header_fields.get(1).copied().unwrap_or_default(), 1)?,
+    return Ok(ModuleIndex {
+        module: Subject_From(fields.get(1).copied().unwrap_or_default(), 1)?,
         members: Vec::new(),
         items: Vec::new(),
-    };
+    });
+}
 
-    for (offset, line) in lines
+/// One record after the header.
+///
+/// An unrecognised tag is refused rather than skipped, for the reason the schema gives: a
+/// record this build does not know is most likely a newer schema, and passing over it reads
+/// the payload down to the part that has not changed.
+fn Read_Record(index: &mut ModuleIndex, line: &str, number: usize) -> Result<(), String>
+{
+    let fields: Vec<&str> = line.split('\t').collect();
+
+    // `split` yields at least one element for every input, so `first` is only `None` for an
+    // iterator that is already exhausted, which this one is not.
+    match fields.first().copied().unwrap_or_default()
     {
-        let number = offset.saturating_add(1);
-        let fields: Vec<&str> = line.split('\t').collect();
-
-        // `split` yields at least one element for every input, so `first` is only `None`
-        // for an iterator that is already exhausted, which this one is not.
-        match fields.first().copied().unwrap_or_default()
+        "member" =>
         {
-            "module" => return Err(format!("line {number} is a second `module` record")),
-            "member" =>
-            {
-                let member = Member_Record(&fields, number)?;
-                index.members.push(member);
-            }
-            "item" =>
-            {
-                let item = Item_Record(&fields, number)?;
-                index.items.push(item);
-            }
-            tag => return Err(format!("line {number} has record tag `{tag}`, which this build does not understand")),
+            let member = Member_Record(&fields, number)?;
+            index.members.push(member);
         }
+        "item" =>
+        {
+            let item = Item_Record(&fields, number)?;
+            index.items.push(item);
+        }
+        tag => return Err(Unreadable_Record(tag, number)),
     }
 
-    return Ok(index);
+    return Ok(());
+}
+
+/// A record this build will not read.
+///
+/// A second `module` record is refused because the first one is the index's identity and a
+/// payload carrying two does not say which. Anything else is refused because a tag this
+/// build does not know is most likely a newer schema, and passing over it would read the
+/// payload down to the part that has not changed.
+fn Unreadable_Record(tag: &str, number: usize) -> String
+{
+    if tag == "module"
+    {
+        return format!("line {number} is a second `module` record");
+    }
+
+    return format!("line {number} has record tag `{tag}`, which this build does not understand");
 }
 
 fn Member_Record(fields: &[&str], line: usize) -> Result<MemberReading, String>

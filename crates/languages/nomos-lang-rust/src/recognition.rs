@@ -47,20 +47,7 @@ impl Recognition
     #[must_use]
     pub fn Of_Path(path: &str) -> Self
     {
-        let name = path
-            .rsplit(['/', '\\'])
-            .next()
-            .unwrap_or(path);
-
-        // Split on the last dot in the file name rather than in the whole path, so a
-        // directory like `crates/nomos.spec/lib` does not lend its dot to a file that
-        // has none. A leading dot is a hidden file rather than an extension, which is
-        // why the search is over everything after the first character.
-        let extension = name
-            .rfind('.')
-            .filter(|at| return *at > 0)
-            .and_then(|at| return name.get(at.saturating_add(1)..))
-            .filter(|extension| return !extension.is_empty());
+        let extension = Extension_Of(path);
 
         return match extension
         {
@@ -71,6 +58,23 @@ impl Recognition
             None => Self::Unrecognized { extension: None },
         };
     }
+}
+
+/// The extension a path's file name carries, if it carries one.
+///
+/// Split on the last dot in the file name rather than in the whole path, so a directory
+/// like `crates/nomos.spec/lib` does not lend its dot to a file that has none. A leading
+/// dot is a hidden file rather than an extension, which is why the search is over
+/// everything after the first character.
+fn Extension_Of(path: &str) -> Option<&str>
+{
+    let name = path.rsplit(['/', '\\']).next().unwrap_or(path);
+
+    return name
+        .rfind('.')
+        .filter(|at| return *at > 0)
+        .and_then(|at| return name.get(at.saturating_add(1)..))
+        .filter(|extension| return !extension.is_empty());
 }
 
 #[cfg(test)]

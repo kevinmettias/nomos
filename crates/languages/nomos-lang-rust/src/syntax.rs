@@ -313,25 +313,18 @@ impl Walk
     /// could be seen. This provider parses, so everything it does not record is an absence
     /// it looked for — the distinction the payload spells `.` rather than `-`, and the
     /// whole reason `nomos.syntax.items.v2` exists.
-    fn Record(
-        &mut self,
-        kind: ItemKind,
-        name: String,
-        visibility: Visibility,
-        attributes: &[syn::Attribute],
-        shape: Option<String>,
-    )
+    fn Record(&mut self, declared: Declared, attributes: &[syn::Attribute])
     {
         let ordinal = u32::try_from(self.items.len()).unwrap_or(u32::MAX);
 
         self.items.push(SyntaxItem {
             ordinal,
-            kind,
+            kind: declared.kind,
             scope: self.scope.clone(),
-            name,
-            visibility,
+            name: declared.name,
+            visibility: declared.visibility,
             documentation: Documentation(attributes),
-            shape,
+            shape: declared.shape,
         });
     }
 
@@ -356,38 +349,72 @@ impl Walk
                     self.Record_Use_Tree(branch, visibility, attributes);
                 }
             }
-            syn::UseTree::Name(name) =>
+            leaf =>
             {
+                let bound = Bound_By(leaf);
                 self.Record(
-                    ItemKind::Use,
-                    name.ident.to_string(),
-                    visibility.clone(),
-                    attributes,
-                    None,
-                );
-            }
-            // The binding is the alias, because the alias is what this file now has. What
-            // it aliases is on the other side of a name resolution this provider does not
-            // perform.
-            syn::UseTree::Rename(rename) =>
-            {
-                self.Record(
-                    ItemKind::Use,
-                    rename.rename.to_string(),
-                    visibility.clone(),
-                    attributes,
-                    None,
-                );
-            }
-            // A glob introduces names this provider cannot enumerate — it would have to
-            // read the module being imported. Recorded as `*` so the import is visible
-            // and not mistaken for a set of known bindings.
-            syn::UseTree::Glob(_) =>
-            {
-                self.Record(ItemKind::Use, "*".to_owned(), visibility.clone(), attributes, None);
+            Declared {
+                kind: ItemKind::Use,
+                name: bound,
+                visibility: visibility.clone(),
+                shape: None,
+            },
+            attributes,
+        );
             }
         }
     }
+}
+
+/// One declaration, as the walk saw it.
+///
+/// `shape` is `None` where the form has no shape to describe rather than where none could
+/// be seen. This provider parses, so everything it does not record is an absence it looked
+/// for — the distinction the payload spells `.` rather than `-`, and the whole reason
+/// `nomos.syntax.items.v2` exists.
+struct Declared
+{
+    kind: ItemKind,
+    name: String,
+    visibility: Visibility,
+    shape: Option<String>,
+}
+
+/// Whether an `impl` block serves a trait or is inherent.
+///
+/// It is the only thing that tells two `impl` blocks for one type apart. A member of
+/// `impl Display for Table` carries the same qualified name as a member of `impl Table` and
+/// does not belong to `Table` the same way, which is a distinction a consumer cannot
+/// recover from any other field.
+fn Impl_Shape(serves_a_trait: bool) -> String
+{
+    if serves_a_trait
+    {
+        return nomos_cap_syntax::TRAIT.to_owned();
+    }
+
+    return nomos_cap_syntax::INHERENT.to_owned();
+}
+
+/// The single name a leaf of a use tree binds into this file.
+///
+/// A rename binds the alias, because the alias is what this file now has — what it aliases
+/// is on the other side of a name resolution this provider does not perform. A glob binds
+/// names this provider cannot enumerate without reading the module being imported, so it is
+/// recorded as `*` rather than mistaken for a set of known bindings.
+///
+/// The two branching arms never reach here: [`Walk::Record_Use_Tree`] answers `Path` and
+/// `Group` itself, because both are structure rather than a binding. They fall through to
+/// the empty name, which records the `use` without claiming it introduced anything.
+fn Bound_By(leaf: &syn::UseTree) -> String
+{
+    return match leaf
+    {
+        syn::UseTree::Name(name) => name.ident.to_string(),
+        syn::UseTree::Rename(rename) => rename.rename.to_string(),
+        syn::UseTree::Glob(_) => "*".to_owned(),
+        syn::UseTree::Path(_) | syn::UseTree::Group(_) => String::new(),
+    };
 }
 
 /// The shape a declared type has, in the payload's vocabulary.
@@ -424,22 +451,7 @@ fn Function_Shape(arity: usize) -> String
 /// wrote it, and the payload escapes the newlines rather than losing them.
 fn Documentation(attributes: &[syn::Attribute]) -> Option<String>
 {
-    let mut lines = Vec::new();
-
-    for attribute in attributes
-    {
-        if !attribute.path().is_ident("doc")
-        {
-            continue;
-        }
-
-        if let syn::Meta::NameValue(pair) = &attribute.meta
-            && let syn::Expr::Lit(literal) = &pair.value
-            && let syn::Lit::Str(text) = &literal.lit
-        {
-            lines.push(text.value());
-        }
-    }
+    let lines: Vec<String> = attributes.iter().filter_map(Doc_Line).collect();
 
     if lines.is_empty()
     {
@@ -449,16 +461,45 @@ fn Documentation(attributes: &[syn::Attribute]) -> Option<String>
     return Some(lines.join("\n"));
 }
 
+/// One `#[doc = "..."]` attribute's text, or nothing when the attribute is something else.
+fn Doc_Line(attribute: &syn::Attribute) -> Option<String>
+{
+    if !attribute.path().is_ident("doc")
+    {
+        return None;
+    }
+
+    let syn::Meta::NameValue(pair) = &attribute.meta
+    else
+    {
+        return None;
+    };
+    let syn::Expr::Lit(literal) = &pair.value
+    else
+    {
+        return None;
+    };
+    let syn::Lit::Str(text) = &literal.lit
+    else
+    {
+        return None;
+    };
+
+    return Some(text.value());
+}
+
 impl<'ast> Visit<'ast> for Walk
 {
     fn visit_item_const(&mut self, node: &'ast syn::ItemConst)
     {
         self.Record(
-            ItemKind::Constant,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Constant,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: Some(Type_Shape(&node.ty)),
+            },
             &node.attrs,
-            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_item_const(self, node);
     }
@@ -466,11 +507,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_enum(&mut self, node: &'ast syn::ItemEnum)
     {
         self.Record(
-            ItemKind::Enum,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Enum,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_item_enum(self, node);
     }
@@ -478,11 +521,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_extern_crate(&mut self, node: &'ast syn::ItemExternCrate)
     {
         self.Record(
-            ItemKind::ExternCrate,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::ExternCrate,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_item_extern_crate(self, node);
     }
@@ -490,11 +535,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_fn(&mut self, node: &'ast syn::ItemFn)
     {
         self.Record(
-            ItemKind::Function,
-            node.sig.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Function,
+                name: node.sig.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: Some(Function_Shape(node.sig.inputs.len())),
+            },
             &node.attrs,
-            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_item_fn(self, node);
     }
@@ -510,11 +557,13 @@ impl<'ast> Visit<'ast> for Walk
             .map_or_else(|| return "extern".to_owned(), |name| return name.value());
 
         self.Record(
-            ItemKind::ForeignModule,
-            abi,
-            Visibility::NotApplicable,
+            Declared {
+                kind: ItemKind::ForeignModule,
+                name: abi,
+                visibility: Visibility::NotApplicable,
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
 
         syn::visit::visit_item_foreign_mod(self, node);
@@ -528,25 +577,16 @@ impl<'ast> Visit<'ast> for Walk
         // any such claim wrong.
         let name = Type_Head(&node.self_ty);
 
-        // Inherent or not is the shape, and it is the only thing that tells two `impl`
-        // blocks for one type apart. A member of `impl Display for Table` carries the same
-        // qualified name as a member of `impl Table` and does not belong to `Table` the
-        // same way, which is a distinction a consumer cannot recover from any other field.
-        let shape = if node.trait_.is_some()
-        {
-            nomos_cap_syntax::TRAIT
-        }
-        else
-        {
-            nomos_cap_syntax::INHERENT
-        };
+        let shape = Impl_Shape(node.trait_.is_some());
 
         self.Record(
-            ItemKind::Implementation,
-            name.clone(),
-            Visibility::NotApplicable,
+            Declared {
+                kind: ItemKind::Implementation,
+                name: name.clone(),
+                visibility: Visibility::NotApplicable,
+                shape: Some(shape),
+            },
             &node.attrs,
-            Some(shape.to_owned()),
         );
         self.scope.push(name);
         syn::visit::visit_item_impl(self, node);
@@ -563,11 +603,13 @@ impl<'ast> Visit<'ast> for Walk
         );
 
         self.Record(
-            ItemKind::MacroDefinition,
-            name,
-            Visibility::NotApplicable,
+            Declared {
+                kind: ItemKind::MacroDefinition,
+                name: name,
+                visibility: Visibility::NotApplicable,
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_item_macro(self, node);
     }
@@ -575,11 +617,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_mod(&mut self, node: &'ast syn::ItemMod)
     {
         self.Record(
-            ItemKind::Module,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Module,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         self.scope.push(node.ident.to_string());
         syn::visit::visit_item_mod(self, node);
@@ -589,11 +633,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_static(&mut self, node: &'ast syn::ItemStatic)
     {
         self.Record(
-            ItemKind::Static,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Static,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: Some(Type_Shape(&node.ty)),
+            },
             &node.attrs,
-            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_item_static(self, node);
     }
@@ -601,11 +647,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_struct(&mut self, node: &'ast syn::ItemStruct)
     {
         self.Record(
-            ItemKind::Struct,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Struct,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_item_struct(self, node);
     }
@@ -613,11 +661,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_trait(&mut self, node: &'ast syn::ItemTrait)
     {
         self.Record(
-            ItemKind::Trait,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Trait,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         self.scope.push(node.ident.to_string());
         syn::visit::visit_item_trait(self, node);
@@ -627,11 +677,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_trait_alias(&mut self, node: &'ast syn::ItemTraitAlias)
     {
         self.Record(
-            ItemKind::TraitAlias,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::TraitAlias,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_item_trait_alias(self, node);
     }
@@ -639,11 +691,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_type(&mut self, node: &'ast syn::ItemType)
     {
         self.Record(
-            ItemKind::TypeAlias,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::TypeAlias,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_item_type(self, node);
     }
@@ -651,11 +705,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_item_union(&mut self, node: &'ast syn::ItemUnion)
     {
         self.Record(
-            ItemKind::Union,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Union,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_item_union(self, node);
     }
@@ -675,11 +731,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_impl_item_const(&mut self, node: &'ast syn::ImplItemConst)
     {
         self.Record(
-            ItemKind::Constant,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Constant,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: Some(Type_Shape(&node.ty)),
+            },
             &node.attrs,
-            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_impl_item_const(self, node);
     }
@@ -687,11 +745,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_impl_item_fn(&mut self, node: &'ast syn::ImplItemFn)
     {
         self.Record(
-            ItemKind::Function,
-            node.sig.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Function,
+                name: node.sig.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: Some(Function_Shape(node.sig.inputs.len())),
+            },
             &node.attrs,
-            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_impl_item_fn(self, node);
     }
@@ -699,11 +759,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_impl_item_type(&mut self, node: &'ast syn::ImplItemType)
     {
         self.Record(
-            ItemKind::TypeAlias,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::TypeAlias,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_impl_item_type(self, node);
     }
@@ -711,11 +773,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_trait_item_const(&mut self, node: &'ast syn::TraitItemConst)
     {
         self.Record(
-            ItemKind::Constant,
-            node.ident.to_string(),
-            Visibility::NotApplicable,
+            Declared {
+                kind: ItemKind::Constant,
+                name: node.ident.to_string(),
+                visibility: Visibility::NotApplicable,
+                shape: Some(Type_Shape(&node.ty)),
+            },
             &node.attrs,
-            Some(Type_Shape(&node.ty)),
         );
         syn::visit::visit_trait_item_const(self, node);
     }
@@ -723,11 +787,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_trait_item_fn(&mut self, node: &'ast syn::TraitItemFn)
     {
         self.Record(
-            ItemKind::Function,
-            node.sig.ident.to_string(),
-            Visibility::NotApplicable,
+            Declared {
+                kind: ItemKind::Function,
+                name: node.sig.ident.to_string(),
+                visibility: Visibility::NotApplicable,
+                shape: Some(Function_Shape(node.sig.inputs.len())),
+            },
             &node.attrs,
-            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_trait_item_fn(self, node);
     }
@@ -735,11 +801,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_trait_item_type(&mut self, node: &'ast syn::TraitItemType)
     {
         self.Record(
-            ItemKind::TypeAlias,
-            node.ident.to_string(),
-            Visibility::NotApplicable,
+            Declared {
+                kind: ItemKind::TypeAlias,
+                name: node.ident.to_string(),
+                visibility: Visibility::NotApplicable,
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_trait_item_type(self, node);
     }
@@ -747,11 +815,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_foreign_item_fn(&mut self, node: &'ast syn::ForeignItemFn)
     {
         self.Record(
-            ItemKind::Function,
-            node.sig.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Function,
+                name: node.sig.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: Some(Function_Shape(node.sig.inputs.len())),
+            },
             &node.attrs,
-            Some(Function_Shape(node.sig.inputs.len())),
         );
         syn::visit::visit_foreign_item_fn(self, node);
     }
@@ -759,11 +829,13 @@ impl<'ast> Visit<'ast> for Walk
     fn visit_foreign_item_static(&mut self, node: &'ast syn::ForeignItemStatic)
     {
         self.Record(
-            ItemKind::Static,
-            node.ident.to_string(),
-            Visibility::Of(&node.vis),
+            Declared {
+                kind: ItemKind::Static,
+                name: node.ident.to_string(),
+                visibility: Visibility::Of(&node.vis),
+                shape: None,
+            },
             &node.attrs,
-            None,
         );
         syn::visit::visit_foreign_item_static(self, node);
     }

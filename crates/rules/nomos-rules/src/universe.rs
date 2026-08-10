@@ -125,25 +125,13 @@ pub fn Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
 {
     if let Some(field) = Unobserved_Field(payload)
     {
-        return Reading::Unobserved {
-            because: format!(
-                "the provider that answered did not observe each item's {field}, which is \
-                 what a declared universe and its claimed mirror are read from"
-            ),
-        };
+        return Unobserved(field);
     }
 
     let mut found = Vec::new();
-
     for (index, item) in payload.items.iter().enumerate()
     {
-        if let Some(universe) = Constant_Universe(path, item)
-        {
-            found.push(universe);
-            continue;
-        }
-
-        if let Some(universe) = Enumeration_Universe(path, payload, index, item)
+        if let Some(universe) = Declared_By(path, payload, index, item)
         {
             found.push(universe);
         }
@@ -151,7 +139,42 @@ pub fn Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
 
     found.sort();
     found.dedup();
+
     return Reading::Observed(found);
+}
+
+/// A provider that answered without observing what a universe is read from.
+///
+/// Named as unobserved rather than reported as no universe, because a file the reader could
+/// not see the doc comments of is not a file that declares nothing.
+fn Unobserved(field: &str) -> Reading
+{
+    return Reading::Unobserved {
+        because: format!(
+            "the provider that answered did not observe each item's {field}, which is what a \
+             declared universe and its claimed mirror are read from"
+        ),
+    };
+}
+
+/// The universe one item declares, if it declares one.
+///
+/// A constant is asked about first because it carries its own membership; an enumeration
+/// has to be read against the file around it, which is why it needs the payload and not
+/// only the item.
+fn Declared_By(
+    path: &str,
+    payload: &SyntaxPayload,
+    index: usize,
+    item: &PayloadItem,
+) -> Option<DeclaredUniverse>
+{
+    if let Some(universe) = Constant_Universe(path, item)
+    {
+        return Some(universe);
+    }
+
+    return Enumeration_Universe(path, payload, index, item);
 }
 
 /// The universes one file declares, or none when the provider could not observe them.
@@ -266,31 +289,32 @@ fn Claimed_Mirror(documentation: Option<&str>) -> Option<String>
 {
     for line in documentation?.lines()
     {
-        let Some(after) = line.split_once(MIRROR_MARKER).map(|(_, rest)| return rest)
-        else
+        if let Some(name) = Named_On(line)
         {
-            continue;
-        };
-
-        let Some(quoted) = after.strip_prefix('`')
-        else
-        {
-            continue;
-        };
-
-        let Some((name, _)) = quoted.split_once('`')
-        else
-        {
-            continue;
-        };
-
-        if !name.trim().is_empty()
-        {
-            return Some(name.trim().to_owned());
+            return Some(name);
         }
     }
 
     return None;
+}
+
+/// The mirror one line names, if it names one.
+///
+/// The name has to be in backticks and non-empty. A marker followed by prose is a sentence
+/// about mirrors rather than a claim to have one, and admitting it would invent a check
+/// name out of whatever word came next.
+fn Named_On(line: &str) -> Option<String>
+{
+    let (_, after) = line.split_once(MIRROR_MARKER)?;
+    let quoted = after.strip_prefix('`')?;
+    let (name, _) = quoted.split_once('`')?;
+
+    if name.trim().is_empty()
+    {
+        return None;
+    }
+
+    return Some(name.trim().to_owned());
 }
 
 #[cfg(test)]

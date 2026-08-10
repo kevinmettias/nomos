@@ -66,7 +66,7 @@ pub fn nomos_lang_rust::rollup::Capability() -> CapabilityId
 pub fn nomos_lang_rust::rollup::Capability_Contract() -> CapabilityContract
 pub fn nomos_lang_rust::rollup::Encode_Index(index: &ModuleIndex) -> Vec<u8>
 pub fn nomos_lang_rust::rollup::Index_Key(module: SubjectId, members: &[ModuleMember], context: FactContext) -> FactKey
-pub fn nomos_lang_rust::rollup::Materialize_Index( store: &mut MemoryFactStore, registry: &Registry, need: &Requirement, module: &Module, context: FactContext, ) -> Result<Rolled, FactError>
+pub fn nomos_lang_rust::rollup::Materialize_Index( store: &mut MemoryFactStore, against: &Against<'_>, module: &Module, ) -> Result<Rolled, FactError>
 pub fn nomos_lang_rust::rollup::ModuleIndex::Answered(&self) -> usize
 pub fn nomos_lang_rust::rollup::ModuleIndex::Approximated(&self) -> usize
 pub fn nomos_lang_rust::rollup::ModuleIndex::Unreachable(&self) -> usize
@@ -95,6 +95,9 @@ pub struct field nomos_lang_rust::SyntaxItem::ordinal: u32
 pub struct field nomos_lang_rust::SyntaxItem::scope: Vec<String>
 pub struct field nomos_lang_rust::SyntaxItem::shape: Option<String>
 pub struct field nomos_lang_rust::SyntaxItem::visibility: Visibility
+pub struct field nomos_lang_rust::rollup::Against::context: FactContext
+pub struct field nomos_lang_rust::rollup::Against::need: &'a Requirement
+pub struct field nomos_lang_rust::rollup::Against::registry: &'a Registry
 pub struct field nomos_lang_rust::rollup::IndexEntry::kind: String
 pub struct field nomos_lang_rust::rollup::IndexEntry::member: SubjectId
 pub struct field nomos_lang_rust::rollup::IndexEntry::ordinal: u32
@@ -117,6 +120,7 @@ pub struct nomos_lang_rust::ParseFailure
 pub struct nomos_lang_rust::SyntaxFactProduction
 pub struct nomos_lang_rust::SyntaxFacts
 pub struct nomos_lang_rust::SyntaxItem
+pub struct nomos_lang_rust::rollup::Against<'a>
 pub struct nomos_lang_rust::rollup::IndexEntry
 pub struct nomos_lang_rust::rollup::MemberReading
 pub struct nomos_lang_rust::rollup::Module

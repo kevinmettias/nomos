@@ -172,36 +172,41 @@ pub fn Scan(source: &str) -> ScannedFile
     {
         scanned.lines = scanned.lines.saturating_add(1);
         let line = u32::try_from(index).unwrap_or(u32::MAX).saturating_add(1);
-        let trimmed = Without_Marks(raw.trim());
 
-        // A line comment is not a declaration. This is the one accuracy the scanner buys
-        // cheaply and it is worth buying: `// pub fn Old_Name()` above a rename is common
-        // enough that not skipping it would make the disagreement with a parser mostly
-        // noise, and noise is what hides the interesting cases.
-        if trimmed.starts_with("//")
+        if let Some(item) = Declared_On(raw, line, ordinal)
         {
-            continue;
+            scanned.items.push(item);
+            ordinal = ordinal.saturating_add(1);
         }
-
-        let (visibility, rest) = Visibility_Of(trimmed);
-
-        let Some((kind, name)) = Declaration(rest)
-        else
-        {
-            continue;
-        };
-
-        scanned.items.push(ScannedItem {
-            ordinal,
-            line,
-            kind,
-            visibility,
-            name,
-        });
-        ordinal = ordinal.saturating_add(1);
     }
 
     return scanned;
+}
+
+/// What one line declares, if it declares anything.
+///
+/// A line comment is not a declaration. That is the one accuracy the scanner buys cheaply
+/// and it is worth buying: `// pub fn Old_Name()` above a rename is common enough that not
+/// skipping it would make the disagreement with a parser mostly noise, and noise is what
+/// hides the interesting cases.
+fn Declared_On(raw: &str, line: u32, ordinal: u32) -> Option<ScannedItem>
+{
+    let trimmed = Without_Marks(raw.trim());
+    if trimmed.starts_with("//")
+    {
+        return None;
+    }
+
+    let (visibility, rest) = Visibility_Of(trimmed);
+    let (kind, name) = Declaration(rest)?;
+
+    return Some(ScannedItem {
+        ordinal,
+        line,
+        kind,
+        visibility,
+        name,
+    });
 }
 
 /// Strips a leading byte order mark and any attribute prefix on the same line.
@@ -223,18 +228,9 @@ fn Visibility_Of(line: &str) -> (Visibility, &str)
         return (Visibility::Private, line);
     };
 
-    // `pub(crate)`, `pub(super)`, `pub(in path)`. Taken textually: a scanner that resolved
-    // the path would be claiming to know what module it is in, which it does not.
-    if let Some(open) = rest.strip_prefix('(')
-        && let Some(close) = open.find(')')
-        && let (Some(scope), Some(after)) = (open.get(..close), open.get(close.saturating_add(1)..))
+    if let Some(restricted) = Restriction_On(rest)
     {
-        return (
-            Visibility::Restricted {
-                scope: scope.trim().to_owned(),
-            },
-            after.trim_start(),
-        );
+        return restricted;
     }
 
     // `pub` must be a whole word. Without this, `pubfn` and `public_thing` would both look
@@ -246,6 +242,25 @@ fn Visibility_Of(line: &str) -> (Visibility, &str)
     };
 
     return (Visibility::Public, after.trim_start());
+}
+
+/// A `pub(crate)`, `pub(super)` or `pub(in path)` restriction, taken textually.
+///
+/// Textually because a scanner that resolved the path would be claiming to know which
+/// module it is in, and it does not.
+fn Restriction_On(rest: &str) -> Option<(Visibility, &str)>
+{
+    let open = rest.strip_prefix('(')?;
+    let close = open.find(')')?;
+    let scope = open.get(..close)?;
+    let after = open.get(close.saturating_add(1)..)?;
+
+    return Some((
+        Visibility::Restricted {
+            scope: scope.trim().to_owned(),
+        },
+        after.trim_start(),
+    ));
 }
 
 /// Matches a declaration keyword and the name that follows it.

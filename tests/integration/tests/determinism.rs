@@ -231,7 +231,7 @@ fn Rolled_Production() -> Vec<u8>
         nomos_lang_rust::Declared_Guarantee(),
     );
 
-    let rolled = rollup::Materialize_Index(&mut store, &registry, &need, &module, context)
+    let rolled = rollup::Materialize_Index(&mut store, &rollup::Against { registry: &registry, need: &need, context }, &module)
         .expect("the rollup is not written behind the generation it names");
 
     // The same guard `Bundle_Bytes` carries, for the same reason. A rollup that read none

@@ -7,10 +7,11 @@
 //! badly.
 
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
-use crate::syntax::{ParseFailure, Reading, Read_Source, SyntaxFacts};
+use crate::syntax::{ParseFailure, Reading, Read_Source, SyntaxFacts, SyntaxItem};
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
 use nomos_contracts::{
+    Guarantee,
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, ProviderId, SnapshotId,
     SubjectId,
 };
@@ -73,32 +74,61 @@ pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Ma
 
     let payload = Encode_Payload(&facts);
     let guarantee = Declared_Guarantee();
+    let key = Keyed(subject, source, &guarantee, context);
 
-    let key = nomos_analysis::FactKey {
+    let fact = Fact(key, guarantee, payload, context);
+
+    return Materialization::Materialized(Box::new(fact));
+}
+
+/// The fact itself, once its identity is settled.
+///
+/// The snapshot is provenance and not identity — the tree this file was read from, recorded
+/// beside the fact rather than folded into what it is, per `OD-ANALYSIS-001`.
+///
+/// The evidence is `Verified`: a parser either found the item in the token stream or it did
+/// not, and there is no inference step by which this could report something the text does
+/// not contain. Not `Derived`, which is for conclusions drawn from other facts — the source
+/// is not a fact, it is the territory.
+fn Fact(
+    key: nomos_analysis::FactKey,
+    guarantee: Guarantee,
+    payload: Vec<u8>,
+    context: FactContext,
+) -> MaterializedFact
+{
+    return MaterializedFact {
+        identity: key.At(context.generation),
+        snapshot: context.snapshot,
+        evidence: EvidenceClass::Verified,
+        guarantee,
+        payload: FactPayload::New(Payload_Schema(), payload),
+    };
+}
+
+/// What this fact is, as against where it came from.
+///
+/// Every component is either the capability being served, the provider serving it, or an
+/// input it was computed over. The snapshot is deliberately not among them — it is
+/// provenance rather than identity, per `OD-ANALYSIS-001`.
+fn Keyed(
+    subject: SubjectId,
+    source: &str,
+    guarantee: &Guarantee,
+    context: FactContext,
+) -> nomos_analysis::FactKey
+{
+    return nomos_analysis::FactKey {
         contract: Capability(),
         contract_version: CONTRACT_VERSION,
         subject,
         semantic_inputs: Syntax_Inputs(source),
         provider: ProviderId::New(PROVIDER),
         provider_version: CONTRACT_VERSION,
-        guarantee: GuaranteeDigest::Of(&guarantee),
+        guarantee: GuaranteeDigest::Of(guarantee),
         variant: context.variant,
         configuration: context.configuration,
     };
-
-    return Materialization::Materialized(Box::new(MaterializedFact {
-        identity: key.At(context.generation),
-        // Provenance, not identity. The tree this file was read from, recorded beside the
-        // fact rather than folded into what it is — see OD-ANALYSIS-001.
-        snapshot: context.snapshot,
-        // A parser either found the item in the token stream or it did not; there is no
-        // inference step by which this could report something the text does not contain.
-        // Not `Derived`, which is for conclusions drawn from other facts — the source is
-        // not a fact, it is the territory.
-        evidence: EvidenceClass::Verified,
-        guarantee,
-        payload: FactPayload::New(Payload_Schema(), payload),
-    }));
 }
 
 /// The canonical byte encoding of a reading.
@@ -127,22 +157,28 @@ pub fn Encode_Payload(facts: &SyntaxFacts) -> Vec<u8>
 
     for item in &facts.items
     {
-        encoded.push_str("item\t");
-        encoded.push_str(&item.ordinal.to_string());
-        encoded.push('\t');
-        encoded.push_str(item.kind.Label());
-        encoded.push('\t');
-        encoded.push_str(&item.visibility.Label());
-        encoded.push('\t');
-        encoded.push_str(&item.Qualified_Name());
-        encoded.push('\t');
-        encoded.push_str(&Observed(item.documentation.as_deref()));
-        encoded.push('\t');
-        encoded.push_str(&Observed(item.shape.as_deref()));
-        encoded.push('\n');
+        Encode_Item(&mut encoded, item);
     }
 
     return encoded.into_bytes();
+}
+
+/// One item as a record: ordinal, kind, visibility, name, documentation and shape.
+fn Encode_Item(encoded: &mut String, item: &SyntaxItem)
+{
+    encoded.push_str("item\t");
+    encoded.push_str(&item.ordinal.to_string());
+    encoded.push('\t');
+    encoded.push_str(item.kind.Label());
+    encoded.push('\t');
+    encoded.push_str(&item.visibility.Label());
+    encoded.push('\t');
+    encoded.push_str(&item.Qualified_Name());
+    encoded.push('\t');
+    encoded.push_str(&Observed(item.documentation.as_deref()));
+    encoded.push('\t');
+    encoded.push_str(&Observed(item.shape.as_deref()));
+    encoded.push('\n');
 }
 
 /// One observed field, in the schema's spelling.

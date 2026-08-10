@@ -109,35 +109,51 @@ pub fn Check_Completeness_Mirrors(
     // where the fact is read rather than from `source.text`, which is what removed this
     // crate's second Rust front end — `OD-RULES-001` named that the end condition and
     // `OD-SYNTAX-002` is the schema that met it.
+    let mut findings = Unobserved_Findings(sources, &index);
+
+    // One finding per subject whose fact could not be read, before any universe is judged.
+    // A run that materialized nothing must not be able to render as a clean tree, and that
+    // property has to hold whether or not the tree happens to declare a universe.
+    findings.extend(index.unread.iter().map(Unread_Subject));
+
+    findings.extend(Judged(&index));
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+
+    return findings;
+}
+
+/// A finding for every declared universe that is not mirrored.
+///
+/// Deduplicated first, because one universe declared in two files is one claim and two
+/// findings about it would double-count the same defect.
+fn Judged(index: &CheckIndex<'_>) -> Vec<Finding>
+{
     let mut universes: Vec<DeclaredUniverse> = index.universes.clone();
+    universes.sort();
+    universes.dedup();
+
+    return universes
+        .iter()
+        .filter_map(|universe| return Judge(universe, index))
+        .collect();
+}
+
+/// One finding per file whose provider could not see doc comments.
+///
+/// Reported rather than skipped: folding it into "no universe here" is the
+/// phantom-becomes-admitted-gap downgrade the schema version exists to stop.
+fn Unobserved_Findings(sources: &[SourceFile], index: &CheckIndex<'_>) -> Vec<Finding>
+{
     let mut findings: Vec<Finding> = Vec::new();
 
     for (path, because) in &index.unobserved
     {
-        // The provider that answered cannot see doc comments, so it has said nothing about
-        // this file's mirrors. Reported and not skipped: folding it into "no universe here"
-        // is the phantom-becomes-admitted-gap downgrade the schema version exists to stop.
         if let Some(source) = sources.iter().find(|candidate| return &candidate.path == path)
         {
             let finding = Unreadable(source, because);
             findings.push(finding);
         }
     }
-
-    // One finding per subject whose fact could not be read, before any universe is
-    // judged. A run that materialized nothing must not be able to render as a clean tree,
-    // and that property has to hold whether or not the tree happens to declare a universe.
-    findings.extend(index.unread.iter().map(Unread_Subject));
-
-    universes.sort();
-    universes.dedup();
-
-    findings.extend(
-        universes
-            .iter()
-            .filter_map(|universe| return Judge(universe, &index)),
-    );
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
 
     return findings;
 }
@@ -179,38 +195,60 @@ fn Judge(universe: &DeclaredUniverse, index: &CheckIndex<'_>) -> Option<Finding>
         return None;
     }
 
-    let (applicability, gate, summary) = match reach.breaches.first()
-    {
-        // The name is read back off the universe rather than off the breach because the
-        // breach's payload is `nomos-contracts`' shape and this is the rule's own claim.
-        // The two cannot disagree: `Reach_Of` produces a breach only in the arm where
-        // `claimed_mirror` is `Some`, and produces none in the arm where it is `None`, so
-        // the `unwrap_or_default` below is unreachable rather than a fallback with a
-        // meaning. An empty name matches every text, which would downgrade rather than
-        // block — the safe direction, for the reason [`Unread::Could_Have_Declared`]
-        // gives.
-        Some(breach) => Unresolved_Claim(
-            breach,
-            universe.claimed_mirror.as_deref().unwrap_or_default(),
-            index,
-        ),
-        None => Admitted_Gap(universe),
-    };
+    let verdict = Verdict(universe, &reach, index);
 
-    return Some(Finding {
+    return Some(Shortcoming(universe, verdict));
+}
+
+/// A universe's shortfall as a finding.
+///
+/// An admitted gap does not depend on the index at all — nothing was resolved, so nothing
+/// could have been missed — and stays `Supported` however short the index is. Only a claim
+/// that failed to resolve inherits the doubt. The evidence is `Derived` either way: computed
+/// from source by a deterministic rule, and no stronger than that source.
+fn Shortcoming(
+    universe: &DeclaredUniverse,
+    verdict: (Applicability, GateCategory, String),
+) -> Finding
+{
+    let (applicability, gate, summary) = verdict;
+
+    return Finding {
         rule: RuleId::New(COMPLETENESS_MIRROR),
         subject: SubjectId::From_Digest(Content_Digest(universe.name.as_bytes())),
         subject_name: universe.name.clone(),
-        // An admitted gap does not depend on the index at all — nothing was resolved, so
-        // nothing could have been missed — and stays `Supported` however short the index
-        // is. Only a claim that failed to resolve inherits the doubt.
         applicability,
-        // Computed from source by a deterministic rule, and no stronger than that source.
         evidence: EvidenceClass::Derived,
         gate,
         summary,
         locations: vec![universe.path.clone()],
-    });
+    };
+}
+
+/// How the universe's shortfall is reported.
+///
+/// The claimed name is read back off the universe rather than off the breach, because the
+/// breach's payload is `nomos-contracts`' shape and this is the rule's own claim. The two
+/// cannot disagree: [`Reach_Of`] produces a breach only in the arm where `claimed_mirror`
+/// is `Some` and none in the arm where it is `None`, so the `unwrap_or_default` below is
+/// unreachable rather than a fallback with a meaning. An empty name matches every text,
+/// which would downgrade rather than block — the safe direction, for the reason
+/// [`Unread::Could_Have_Declared`] gives.
+fn Verdict(
+    universe: &DeclaredUniverse,
+    reach: &EnforcementReach,
+    index: &CheckIndex<'_>,
+) -> (Applicability, GateCategory, String)
+{
+    let Some(breach) = reach.breaches.first()
+    else
+    {
+        return Admitted_Gap(universe);
+    };
+
+    let claimed = universe.claimed_mirror.as_deref().unwrap_or_default();
+
+    return Unresolved_Claim(breach, claimed, index);
 }
 
 /// How to report a claimed mirror that did not resolve against the index.
@@ -302,45 +340,54 @@ fn Reach_Of(universe: &DeclaredUniverse, checks: &BTreeSet<String>) -> Enforceme
     let Some(claimed) = universe.claimed_mirror.as_ref()
     else
     {
-        return EnforcementReach {
-            rule: RuleId::New(COMPLETENESS_MIRROR),
-            declared: vec![EnforcerRef::Review],
-            expected: GateCategory::Review,
-            computed: GateCategory::Review,
-            breaches: Vec::new(),
-        };
+        return Reviewed();
     };
 
     let enforcer = EnforcerRef::Check {
         name: claimed.clone(),
     };
-    let resolves = checks.contains(claimed);
+    let (computed, breaches) = Resolution(claimed, checks.contains(claimed));
 
     return EnforcementReach {
         rule: RuleId::New(COMPLETENESS_MIRROR),
         declared: vec![enforcer],
-        // Naming a check is a claim that a violation would be caught. That is what
-        // makes a name that resolves to nothing a false claim rather than a typo.
+        // Naming a check is a claim that a violation would be caught. That is what makes a
+        // name resolving to nothing a false claim rather than a typo.
         expected: GateCategory::Blocking,
-        computed: if resolves
-        {
-            GateCategory::Blocking
-        }
-        else
-        {
-            GateCategory::Unreachable
-        },
-        breaches: if resolves
-        {
-            Vec::new()
-        }
-        else
-        {
-            vec![EnforcementBreach::Phantom {
-                name: claimed.clone(),
-            }]
-        },
+        computed,
+        breaches,
     };
+}
+
+/// The reach of a universe that names no mirror.
+///
+/// Declared and expected agree, so there is no breach: an admitted gap is a truthful
+/// declaration that this universe is reviewed rather than checked.
+fn Reviewed() -> EnforcementReach
+{
+    return EnforcementReach {
+        rule: RuleId::New(COMPLETENESS_MIRROR),
+        declared: vec![EnforcerRef::Review],
+        expected: GateCategory::Review,
+        computed: GateCategory::Review,
+        breaches: Vec::new(),
+    };
+}
+
+/// What a claimed name amounts to, given whether the index holds it.
+fn Resolution(claimed: &str, resolves: bool) -> (GateCategory, Vec<EnforcementBreach>)
+{
+    if resolves
+    {
+        return (GateCategory::Blocking, Vec::new());
+    }
+
+    return (
+        GateCategory::Unreachable,
+        vec![EnforcementBreach::Phantom {
+            name: claimed.to_owned(),
+        }],
+    );
 }
 
 /// One subject whose check names could not be read, and why not.
@@ -526,16 +573,105 @@ impl CheckIndex<'_>
             .iter()
             .filter(|subject| return subject.Could_Have_Declared(claimed))
             .collect();
-
         let first = bearing.first()?;
+        let subjects = bearing.iter().map(|subject| return subject.path.as_str()).collect();
 
         return Some(Shortfall::Withheld {
             applicability: first.applicability,
-            subjects: bearing
-                .iter()
-                .map(|subject| return subject.path.as_str())
-                .collect(),
+            subjects,
         });
+    }
+}
+
+/// What one file's syntax fact declares, or why the rule could not read it.
+///
+/// The reading is reduced to owned values before returning, because the fact is borrowed
+/// from the reader and the next subject needs the reader back.
+fn Declared_By<'source>(
+    source: &'source SourceFile,
+    facts: &mut dyn FactReader,
+) -> Result<(BTreeSet<String>, Reading), Unread<'source>>
+{
+    let need = Syntax_Requirement();
+    let capability = nomos_cap_syntax::Capability();
+    let inputs = InputDigest::Of(&[source.text.as_bytes()]);
+
+    let read = match facts.Require(&capability, &source.subject, inputs, &need)
+    {
+        Ok(fact) => Decoded(fact, &source.path),
+        Err(applicability) =>
+        {
+            let because =
+                format!("no admitted provider answered for it ({})", applicability.Label());
+
+            return Err(Unread_Of(source, applicability, because));
+        }
+    };
+
+    // A payload this build cannot read is not an empty payload. Folding the two together
+    // would make a fact nobody could decode indistinguishable from a file that declares no
+    // checks, and the second is a real answer.
+    return read.map_err(|because| return Unread_Of(source, Applicability::Unparseable, because));
+}
+
+/// What one fact's payload says, or why this build cannot read it.
+///
+/// Decoded once. Two decodes of one fact would be two answers to what the bytes say, which
+/// is the objection `OD-SYNTAX-001` settled for the whole tree.
+fn Decoded(
+    fact: &nomos_analysis::MaterializedFact,
+    path: &str,
+) -> Result<(BTreeSet<String>, Reading), String>
+{
+    if fact.payload.schema != nomos_cap_syntax::Payload_Schema()
+    {
+        return Err(format!(
+            "the fact for this file carries payload schema `{}`, which this build does not \
+             read",
+            fact.payload.schema
+        ));
+    }
+
+    let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
+        .map_err(|refusal| return refusal.Describe())?;
+
+    return Ok((Check_Names_In(&payload), Read_Universes(path, &payload)));
+}
+
+/// A subject whose check names could not be read, however the reading failed.
+///
+/// A fact nobody answered for and a payload this build cannot decode are two causes with
+/// one consequence. Spelling the record out at both sites was one edit away from the two
+/// disagreeing about how an unread subject is identified.
+fn Unread_Of(
+    source: &SourceFile,
+    applicability: Applicability,
+    because: String,
+) -> Unread<'_>
+{
+    return Unread {
+        path: source.path.clone(),
+        text: &source.text,
+        inputs: SubjectId::From_Digest(Content_Digest(source.text.as_bytes())),
+        applicability,
+        because,
+    };
+}
+
+/// Files one file's reading into the index.
+fn Note_Reading<'source>(
+    index: &mut CheckIndex<'source>,
+    source: &'source SourceFile,
+    names: BTreeSet<String>,
+    reading: Reading,
+)
+{
+    index.names.extend(names);
+
+    match reading
+    {
+        Reading::Observed(found) => index.universes.extend(found),
+        Reading::Unobserved { because } => index.unobserved.push((source.path.clone(), because)),
     }
 }
 
@@ -558,10 +694,6 @@ fn Check_Index_Of<'source>(
     facts: &mut dyn FactReader,
 ) -> CheckIndex<'source>
 {
-    let need = Syntax_Requirement();
-    let capability = nomos_cap_syntax::Capability();
-    let schema = nomos_cap_syntax::Payload_Schema();
-
     let mut index = CheckIndex {
         names: BTreeSet::new(),
         universes: Vec::new(),
@@ -571,68 +703,10 @@ fn Check_Index_Of<'source>(
 
     for source in sources
     {
-        let inputs = InputDigest::Of(&[source.text.as_bytes()]);
-
-        // The outcome is reduced to owned values inside the match, because the fact is
-        // borrowed from the reader and the next subject needs the reader back.
-        let outcome = match facts.Require(&capability, &source.subject, inputs, &need)
+        match Declared_By(source, facts)
         {
-            Ok(fact) if fact.payload.schema != schema => Err(format!(
-                "the fact for this file carries payload schema `{}`, which this build does \
-                 not read",
-                fact.payload.schema
-            )),
-            // Decoded once. Two decodes of one fact would be two answers to what the bytes
-            // say, which is the objection `OD-SYNTAX-001` settled for the whole tree.
-            Ok(fact) => nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
-                .map(|payload| {
-                    return (
-                        Check_Names_In(&payload),
-                        Read_Universes(&source.path, &payload),
-                    );
-                })
-                .map_err(|refusal| return refusal.Describe()),
-            Err(applicability) =>
-            {
-                index.unread.push(Unread {
-                    path: source.path.clone(),
-                    text: &source.text,
-                    inputs: SubjectId::From_Digest(Content_Digest(source.text.as_bytes())),
-                    applicability,
-                    because: format!(
-                        "no admitted provider answered for it ({})",
-                        applicability.Label()
-                    ),
-                });
-                continue;
-            }
-        };
-
-        match outcome
-        {
-            Ok((names, reading)) =>
-            {
-                index.names.extend(names);
-
-                match reading
-                {
-                    Reading::Observed(found) => index.universes.extend(found),
-                    Reading::Unobserved { because } =>
-                    {
-                        index.unobserved.push((source.path.clone(), because));
-                    }
-                }
-            }
-            // A payload this build cannot read is not an empty payload. Folding it into
-            // one would make a fact nobody could decode indistinguishable from a file that
-            // declares no checks, and the second is a real answer.
-            Err(because) => index.unread.push(Unread {
-                path: source.path.clone(),
-                text: &source.text,
-                inputs: SubjectId::From_Digest(Content_Digest(source.text.as_bytes())),
-                applicability: Applicability::Unparseable,
-                because,
-            }),
+            Ok((names, reading)) => Note_Reading(&mut index, source, names, reading),
+            Err(unread) => index.unread.push(unread),
         }
     }
 

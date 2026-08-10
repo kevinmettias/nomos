@@ -19,7 +19,7 @@ use nomos_contracts::{
     Assurance, BuildVariantId, ConfigurationId, Digest128, EvidenceClass, FactVariant,
     GenerationId, Guarantee, IncrementalGranularity, SnapshotId, SubjectId,
 };
-use nomos_lang_rust::rollup::{self, Module, ModuleMember, Outcome, Rolled};
+use nomos_lang_rust::rollup::{self, Against, Module, ModuleMember, Outcome, Rolled};
 use nomos_lang_rust::{FactContext, Materialization};
 use nomos_model::Content_Digest;
 
@@ -131,7 +131,7 @@ fn Roll_Up_Two_Files() -> RolledModule
         ],
     };
 
-    let rolled = rollup::Materialize_Index(&mut store, &registry, &Need(), &module, context)
+    let rolled = rollup::Materialize_Index(&mut store, &Against { registry: &registry, need: &Need(), context }, &module)
         .expect("the rollup is not written behind the generation it names");
 
     return RolledModule {
@@ -257,7 +257,7 @@ fn Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge()
         ],
     };
 
-    let rolled = rollup::Materialize_Index(&mut store, &registry, &Need(), &module, context)
+    let rolled = rollup::Materialize_Index(&mut store, &Against { registry: &registry, need: &Need(), context }, &module)
         .expect("materializes");
 
     assert_eq!(rolled.index.Unreachable(), 1, "{:#?}", rolled.index.members);
