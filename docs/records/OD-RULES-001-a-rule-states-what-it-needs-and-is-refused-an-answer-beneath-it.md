@@ -3,7 +3,7 @@ id: OD-RULES-001
 type: decision
 title: A rule states what it needs and is refused an answer beneath it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -141,14 +141,24 @@ below.
 **Absence is not a clean tree, and it is not a phantom either.** A subject whose syntax fact
 cannot be read produces a finding carrying the `Applicability` the reader returned —
 `DependencyUnavailable` when the store has nothing, `MissingCapability` when nothing
-satisfies the floor, `Unparseable` when the payload itself could not be decoded. And the
-check index is marked incomplete for the whole run: while it is incomplete, a claimed mirror
-that fails to resolve is **not** reported as a phantom and **cannot** fail a build, because
-the rule cannot tell a false claim of coverage from a name it did not get to look for.
+satisfies the floor, `Unparseable` when the payload itself could not be decoded. And where
+the check index is short of something that could have resolved a claimed mirror, that mirror
+is **not** reported as a phantom and **cannot** fail a build, because the rule cannot tell a
+false claim of coverage from a name it did not get to look for. A mirror that no missing
+subject could have carried is one the rule *did* resolve, negatively, and it blocks.
 `D-134`'s asymmetry survives — a false claim outranks an admitted gap — with a third state
 above both: the rule saying it could not answer. An *admitted* gap does not inherit that
 doubt and stays `Supported`, because nothing was resolved for it and so nothing could have
 been missed.
+
+*(Amended at version 2. This paragraph originally said that "the check index is marked
+incomplete for the whole run: while it is incomplete, a claimed mirror that fails to resolve
+is **not** reported as a phantom and **cannot** fail a build". Both halves are superseded.
+`OD-RULES-002` replaced `CheckIndex::Incompleteness()` with `Shortfall_For(claimed)`, so
+incompleteness is a property of the claim and not of the run; and a claim whose name no
+missing subject could have carried now blocks and fails the build. What the rule must not
+do — manufacture a phantom out of its own inability to look — is unchanged, and is what
+decides which claims the doubt reaches. See the amendment note below.)*
 
 **The second `syn` front end remains, in one place, for a stated and bounded reason.**
 `mirror.rs` stops parsing entirely; `universe.rs` keeps `syn` because doc comments and
@@ -166,6 +176,65 @@ no mirror: a phantom silently downgraded to an admitted gap, which is absence be
 success in the one field this rule's whole severity ordering turns on. Getting that right is
 schema design — a per-field statement of what was observed, bounded by each provider's
 guarantee — and it is `P10-SYNTAX-V2`'s subject, not a step in this one.
+
+## Amendment, Version 2
+
+`P10-PHANTOM-FLOOR` found that this record attached the doubt to the wrong object, and the
+finding is upheld. `OD-RULES-002` holds the argument, the vocabulary and the measurement;
+this note records what moved here and what did not.
+
+The downgrade is not disturbed. A claimed mirror that fails to resolve against an index
+missing a subject's names is not thereby established false — the name may be in the file that
+was not read — and reporting it as a phantom would be the rule manufacturing the one finding
+it is entitled to stop a build over out of its own inability to look. Absence becomes neither
+success nor failure, and the third state above `D-134`'s two stands exactly as written.
+`OD-RULES-002` upholds that reasoning without qualification and *sharpens* it: the doubt now
+reaches the claims it actually bears on and no others, which is a stronger statement of the
+same principle rather than a retreat from it.
+
+What was wrong is the scope. Incompleteness was one flag over the whole run, so one
+unreadable subject anywhere silenced a phantom claimed in a file whose facts were read
+perfectly well, and those two facts have nothing to do with each other. Over this workspace
+the consequence was total rather than occasional: `tests/corpus/analysis/gamma/broken.rs` is
+a fixture `nomos-lang-rust` is *supposed* to refuse, so `CheckIndex::Incompleteness()`
+returned `Some` on every run, so the blocking arm of this rule was unreachable by
+construction and every test was green. A severity table whose top row no input can reach is
+the defect `OD-GATE-001` names, and this record published one.
+
+`CheckIndex::Incompleteness()` is replaced by `CheckIndex::Shortfall_For(claimed)`, which
+answers about one name rather than about the run. A claim is downgraded only when something
+missing from the index could have carried *that* name, decided by whether an unread subject's
+own text spells it: an identifier a provider reads out of a token stream is spelled in the
+bytes the stream was lexed from, so a subject whose text does not contain the name cannot
+have declared it. That the same signal is inadmissible as a *source of names* — which this
+record's floor section establishes and which is unchanged — and admissible as a *bound on
+what an unread file could have held* is argued in `OD-RULES-002`: the unsoundness is confined
+to the arm that adds doubt, where it can withhold a block and can never manufacture one.
+
+So the last clause of the superseded sentence was false and not merely imprecise. Measured
+with the shipped binary at `52dbf1a`, over this workspace and with only the rule changed: 14
+findings, 0 that can fail a build, exit `0` on the unplanted tree, those fourteen lines
+byte-identical to the ones this record's own binary printed; and under a phantom planted as
+one `pub const` claiming a mirror that exists nowhere, 15 findings, 1 that can fail a build,
+exit `1`. A claimed mirror that fails to resolve now can fail a build, and does.
+
+Two things this record states are inherited rather than revised. `MissingCapability` remains
+a whole-run answer, and not as a residue of the framing above: `Resolution::Applicability`
+reads the registry and the requirement, neither of which varies by subject, so when it holds
+there is no index at all and a name cannot be shown absent from an index that was never
+built. And the `Assurance::Unknown` paragraph is untouched — the scoping inherits this rule's
+existing completeness bound rather than introducing a second one, so a macro-generated
+`Test_X` in a readable file is reported as a phantom before this change and after it.
+
+One sentence of this record moved, and it is the one marked above. Two passages that turn on
+the same behaviour are left as written, for reasons worth stating. **What The Fact Layer Is
+For** says that with the parser admitted the rule blocks on a phantom mirror; that was not
+reachable from the binary this record landed, and it is reachable now, so the amendment makes
+the sentence true rather than requiring it to change. **Controls** names
+`CheckIndex::Incompleteness` in its fourth weakening; that is a measurement of the code as it
+stood here and is kept as it was run, and the same control against a later tree means
+weakening `Shortfall_For` instead — `OD-RULES-002`'s first control does exactly that, and
+three tests fail across two crates.
 
 ## What The Fact Layer Is For
 
