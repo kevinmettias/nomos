@@ -1821,6 +1821,7 @@
           "crates/spec",
           "crates/host/nomos-cli",
           "docs/records/OD-SPEC-006",
+          "docs/records/D-129-the-store-is-the-identity-substrate.md",
           "Cargo.toml",
           "tests/contract"
         ],
@@ -1841,12 +1842,20 @@
           "-p",
           "nomos-spec-model",
           "-p",
-          "nomos-cli"
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": []
+      "abandoned": [
+        {
+          "holder": "claude-authoring-0809",
+          "reason": "Released unstarted. done_when requires D-129 to be amended, and the item's territory does not reserve its file; widening belongs before a claim rather than during one.",
+          "abandoned_at": 1786331621
+        }
+      ]
     },
     {
       "id": "P9-PREDICATE",
