@@ -39,9 +39,9 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
     // Declared, and checked against `docs/records` in both directions by the test below.
     // Raising it is the deliberate step adding a governing record is meant to cost;
     // OD-COMPLETENESS-001 was the twentieth, OD-LEDGER-005 the twenty-third,
-    // OD-PLATFORM-001 the twenty-fourth, OD-PROJECT-001 the twenty-fifth and OD-GATE-002
-    // the twenty-sixth.
-    assert_eq!(GOVERNING_RECORD_IDS.len(), 26);
+    // OD-PLATFORM-001 the twenty-fourth, OD-PROJECT-001 the twenty-fifth, OD-GATE-002
+    // the twenty-sixth and OD-LEDGER-006 the twenty-seventh.
+    assert_eq!(GOVERNING_RECORD_IDS.len(), 27);
 }
 
 /// Every record on disk that claims to be canonical and normative is in the store.

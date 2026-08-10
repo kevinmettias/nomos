@@ -141,6 +141,7 @@ fn Tree(name: &str, workflow: Option<&str>) -> PathBuf
             "nomos-ledger".to_owned(),
         ])),
         verified: None,
+        abandoned: Vec::new(),
     };
     item.claim = Some(Claim {
         holder: HOLDER.to_owned(),

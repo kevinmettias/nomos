@@ -159,6 +159,24 @@ impl Claim
     }
 }
 
+/// A claim somebody gave up on purpose, and why.
+///
+/// Kept on the item rather than in the transition that produced it, which is the whole
+/// point. [`ItemState::Declined`] carries its reason and survives for exactly one reason:
+/// it is part of a *state*, and states are what get written down. An abandonment is a
+/// *transition*, and a transition leaves nothing behind unless something on the item is
+/// given the job of holding it. This is that job.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Abandonment
+{
+    /// Who gave it up.
+    pub holder: String,
+    /// Why, in the words they gave.
+    pub reason: String,
+    /// When they gave it up.
+    pub abandoned_at: Timestamp,
+}
+
 /// A command that decides whether an item is actually finished.
 ///
 /// An argument vector, never a command string. The prototype stored a string and split
@@ -266,6 +284,16 @@ pub struct LedgerItem
     /// The recorded result of running that predicate.
     #[serde(default)]
     pub verified: Option<VerificationRecord>,
+    /// Every claim on this item that was given up deliberately, oldest first.
+    ///
+    /// A list, not the most recent one. An item abandoned twice was abandoned twice, and
+    /// keeping only the latest discards the earlier reason — which is the loss this field
+    /// exists to stop, one scale down.
+    ///
+    /// `#[serde(default)]` because every item written before this field existed has none,
+    /// and that is a fact about those items rather than something to backfill.
+    #[serde(default)]
+    pub abandoned: Vec<Abandonment>,
 }
 
 impl LedgerItem
@@ -303,6 +331,7 @@ mod tests
             claim: None,
             verification: None,
             verified: None,
+            abandoned: Vec::new(),
         };
     }
 

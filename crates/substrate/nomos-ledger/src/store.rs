@@ -616,6 +616,7 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
         outcome: ReleaseOutcome,
     ) -> Result<(), ClaimRefusal>
     {
+        let now = self.clock.Now();
         let mut document = self.Load().map_err(|_| ClaimRefusal::NoSuchItem {
             item: item.clone(),
         })?;
@@ -631,16 +632,10 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
             {
                 Some(claim) if claim.holder == holder =>
                 {
-                    candidate.claim = None;
-                    match &outcome
-                    {
-                        ReleaseOutcome::Finished(record) =>
-                        {
-                            candidate.state = ItemState::Done;
-                            candidate.verified = Some(record.clone());
-                        }
-                        ReleaseOutcome::Abandoned { .. } => candidate.state = ItemState::Ready,
-                    }
+                    // Both arms, written once, in `ReleaseOutcome::Record_On`. Spelling
+                    // them out here is what let this store keep the finished arm's
+                    // evidence and drop the abandoned arm's.
+                    outcome.Record_On(candidate, holder, now);
                     released = true;
                 }
                 Some(claim) =>

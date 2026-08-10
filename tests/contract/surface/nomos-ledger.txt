@@ -80,6 +80,7 @@ pub fn nomos_ledger::LedgerError::fmt(&self, formatter: &mut core::fmt::Formatte
 pub fn nomos_ledger::LedgerItem::Has_Active_Claim(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::Normalize_Path(path: &str) -> String
 pub fn nomos_ledger::Refusal_From( intersection: &Intersection, against: &ItemId, holder: &str, until: Timestamp, ) -> Option<ClaimRefusal>
+pub fn nomos_ledger::ReleaseOutcome::Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
 pub fn nomos_ledger::Subject_Of(path: &str) -> SubjectId
 pub fn nomos_ledger::Territory::Ambiguous_Paths(&self) -> Vec<(String, String)>
 pub fn nomos_ledger::Territory::As_Subject_Set(&self) -> SubjectSet
@@ -96,6 +97,9 @@ pub impl nomos_ledger::FileLedger implements ExclusionLedger
 pub impl nomos_ledger::ItemId implements core::fmt::Display
 pub impl nomos_ledger::LedgerError implements core::fmt::Display
 pub impl nomos_ledger::LedgerError implements std::error::Error
+pub struct field nomos_ledger::Abandonment::abandoned_at: Timestamp
+pub struct field nomos_ledger::Abandonment::holder: String
+pub struct field nomos_ledger::Abandonment::reason: String
 pub struct field nomos_ledger::Claim::acquired_at: Timestamp
 pub struct field nomos_ledger::Claim::holder: String
 pub struct field nomos_ledger::Claim::lease_expires_at: Timestamp
@@ -103,6 +107,7 @@ pub struct field nomos_ledger::GateOutcome::argv: Vec<String>
 pub struct field nomos_ledger::GateOutcome::exit_code: i32
 pub struct field nomos_ledger::LedgerDocument::items: Vec<LedgerItem>
 pub struct field nomos_ledger::LedgerDocument::schema_version: u32
+pub struct field nomos_ledger::LedgerItem::abandoned: Vec<Abandonment>
 pub struct field nomos_ledger::LedgerItem::blocked: Option<Blocker>
 pub struct field nomos_ledger::LedgerItem::claim: Option<Claim>
 pub struct field nomos_ledger::LedgerItem::depends_on: Vec<ItemId>
@@ -127,6 +132,7 @@ pub struct field nomos_ledger::VerificationRecord::exit_code: i32
 pub struct field nomos_ledger::VerificationRecord::gate: Option<GateOutcome>
 pub struct field nomos_ledger::VerificationRecord::output_tail: String
 pub struct field nomos_ledger::VerificationRecord::verified_at: Timestamp
+pub struct nomos_ledger::Abandonment
 pub struct nomos_ledger::Claim
 pub struct nomos_ledger::FileLedger<F, C, L>
 pub struct nomos_ledger::GateOutcome

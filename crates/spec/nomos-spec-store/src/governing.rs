@@ -152,6 +152,12 @@ const RECORDS: &[(&str, &str)] = &[
             "../../../../docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md"
         ),
     ),
+    (
+        "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md",
+        include_str!(
+            "../../../../docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md"
+        ),
+    ),
 ];
 
 /// Every record identifier this build claims to govern itself by.
@@ -190,6 +196,7 @@ pub const GOVERNING_RECORD_IDS: &[&str] = &[
     "OD-PLATFORM-001",
     "OD-PROJECT-001",
     "OD-GATE-002",
+    "OD-LEDGER-006",
 ];
 
 /// The relation vocabulary the governing records use.

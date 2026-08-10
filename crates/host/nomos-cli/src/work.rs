@@ -56,6 +56,12 @@ pub enum WorkCommand
         /// Only items in this state.
         state: Option<String>,
     },
+    /// Report one item, including what has happened to it.
+    Show
+    {
+        /// Which item.
+        item: ItemId,
+    },
     /// Put a new item on the ledger.
     Add
     {
@@ -138,6 +144,9 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
     {
         "list" => Ok(WorkCommand::List {
             state: value_of("--state"),
+        }),
+        "show" => Ok(WorkCommand::Show {
+            item: ItemId::New(Required(value_of("--item").as_ref(), "--item")?),
         }),
         "add" => Parse_Add(named, predicate_argv),
         "finish" => Ok(WorkCommand::Finish {
@@ -229,6 +238,7 @@ fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand,
             claim: None,
             verification,
             verified: None,
+            abandoned: Vec::new(),
         }),
     });
 }
@@ -268,6 +278,10 @@ fn Usage_Text() -> String
             reported as `waiting` (a dependency is unfinished), `held` (somebody holds \
             overlapping territory) or `snagged` (independence cannot be established), \
             from the same refusal `claim` would give.\n\
+            \x20 show     --item <id>\n\
+            \x20          one item in full: its claim, every claim given up on it with the \
+            reason given, and its verification. `list` is a column per item and cannot \
+            carry prose.\n\
             \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
             \x20          --territory <path> [--territory <path> …]\n\
             \x20          [--territory-pattern <glob> …] [--depends-on <id> …]\n\
@@ -309,6 +323,7 @@ pub fn Run(
     return match command
     {
         WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
+        WorkCommand::Show { item } => Show(&ledger, item, output),
         WorkCommand::Add { item } => Add(&ledger, item, output),
         WorkCommand::Finish { item, holder } => Report_Finish(
             // No working directory: the predicate runs where the user invoked `nomos`,
@@ -387,6 +402,78 @@ fn List(
             Some(wanted) => writeln!(output, "no items are {wanted}"),
             None => writeln!(output, "the ledger has no items"),
         };
+    }
+
+    return ExitCode::Ok;
+}
+
+/// Reports one item, including what has happened to it.
+///
+/// `list` is one line per item and cannot carry prose. That is why an abandonment had
+/// nowhere to be read even once the ledger began keeping one: a record no surface reports
+/// is a record only somebody willing to read the JSON can find, which is most of the way
+/// back to not keeping it.
+fn Show(
+    ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
+    item: &ItemId,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let document = match ledger.Load()
+    {
+        Ok(document) => document,
+        Err(error) => return Report_Error(&error, output),
+    };
+
+    let Some(found) = document
+        .items
+        .iter()
+        .find(|candidate| return &candidate.id == item)
+    else
+    {
+        let _ = writeln!(output, "no item named {item}");
+        return ExitCode::Conflict;
+    };
+
+    let now = SystemClock.Now();
+
+    let _ = writeln!(output, "{} {}", found.id, found.title);
+    let _ = writeln!(output, "state: {}", Listing_Label(&document, found, now));
+
+    if let Some(claim) = &found.claim
+    {
+        // A lapsed claim is still shown, and still says it lapsed. It stops excluding
+        // without being removed, so a reader who is not told would take it for a live one.
+        let lapsed = if claim.Has_Lapsed(now) { " (lapsed)" } else { "" };
+        let _ = writeln!(
+            output,
+            "held by {} since unix {} until unix {}{lapsed}",
+            claim.holder,
+            claim.acquired_at.Unix_Seconds(),
+            claim.lease_expires_at.Unix_Seconds()
+        );
+    }
+
+    for abandonment in &found.abandoned
+    {
+        let _ = writeln!(
+            output,
+            "abandoned by {} at unix {}: {}",
+            abandonment.holder,
+            abandonment.abandoned_at.Unix_Seconds(),
+            abandonment.reason
+        );
+    }
+
+    if let Some(record) = &found.verified
+    {
+        let _ = writeln!(
+            output,
+            "verified by `{}` at unix {} with exit {}",
+            record.argv.join(" "),
+            record.verified_at.Unix_Seconds(),
+            record.exit_code
+        );
     }
 
     return ExitCode::Ok;

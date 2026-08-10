@@ -54,6 +54,7 @@ fn Item(id: &str, files: &[&str]) -> LedgerItem
         claim: None,
         verification: None,
         verified: None,
+        abandoned: Vec::new(),
     };
 }
 
@@ -570,6 +571,206 @@ fn Test_Releasing_As_Finished_Should_Record_The_Verification()
     assert_eq!(
         finished.verified.as_ref().map(|record| record.exit_code),
         Some(0)
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The reason these tests assert on.
+///
+/// Prose rather than a marker, and asserted as text rather than as presence. A field that
+/// exists and holds an empty string satisfies `is_some()`, which is exactly the assertion
+/// that would have let the old behaviour through.
+const REASON: &str =
+    "the fixture never reproduced the shape that broke it, so the control proved nothing";
+
+/// The arm adjacent to the one above, which used to throw its evidence away.
+///
+/// [`ReleaseOutcome::Abandoned`] has always carried `reason: String` non-optionally — the
+/// same technique the doc comment praises the finished arm for — and the store matched it
+/// with `{ .. }` and set the state and nothing else. One match, two arms, one keeping its
+/// evidence and one discarding it.
+#[test]
+fn Test_Releasing_As_Abandoned_Should_Record_Who_Stopped_And_Why()
+{
+    let directory = Temp_Dir("abandon-records");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    ledger
+        .Release(
+            &ItemId::New("T-1"),
+            "agent-a",
+            ReleaseOutcome::Abandoned {
+                reason: REASON.to_owned(),
+            },
+        )
+        .expect("a holder may give up its own claim");
+
+    let after = ledger.Load().expect("readable");
+    let item = after.items.first().expect("the item survives");
+    let abandonment = item
+        .abandoned
+        .first()
+        .expect("the abandonment must survive the release that produced it");
+
+    assert_eq!(abandonment.reason, REASON, "the reason the holder gave was not kept");
+    assert_eq!(abandonment.holder, "agent-a", "the record does not say who stopped");
+    assert_eq!(abandonment.abandoned_at, At(NOW), "the record does not say when");
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The second control, holding a line the crate already drew.
+///
+/// An abandonment is a record of something that stopped. A record that went on excluding
+/// people would be a worse defect than the one it replaced, so the item must go back to
+/// `Ready`, the claim must go, and — the part worth checking rather than inferring —
+/// somebody else must actually be able to take it.
+#[test]
+fn Test_An_Abandoned_Item_Should_Return_To_Ready_And_Stop_Excluding()
+{
+    let directory = Temp_Dir("abandon-releases");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+    ledger
+        .Release(
+            &ItemId::New("T-1"),
+            "agent-a",
+            ReleaseOutcome::Abandoned {
+                reason: REASON.to_owned(),
+            },
+        )
+        .expect("a holder may give up its own claim");
+
+    let after = ledger.Load().expect("readable");
+    let item = after.items.first().expect("the item survives");
+    assert_eq!(item.state, ItemState::Ready);
+    assert!(item.claim.is_none(), "a claim that survives an abandonment goes on excluding");
+
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+        .expect("an abandoned item must be claimable by somebody else");
+
+    let taken = ledger.Load().expect("readable");
+    let again = taken.items.first().expect("the item survives");
+    assert_eq!(
+        again.abandoned.len(),
+        1,
+        "the next claim erased the record of the last one"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// Why the field is a list and not the most recent one.
+///
+/// An item abandoned twice was abandoned twice. Keeping only the latest would discard the
+/// earlier reason, which is the loss this whole item is about, one scale down.
+#[test]
+fn Test_An_Item_Abandoned_Twice_Should_Keep_Both_Reasons()
+{
+    let directory = Temp_Dir("abandon-twice");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+
+    for (holder, reason) in [("agent-a", "ran out of lease"), ("agent-b", REASON)]
+    {
+        ledger
+            .Claim(&ItemId::New("T-1"), holder, Duration::from_secs(3_600))
+            .expect("an abandoned item is claimable again");
+        ledger
+            .Release(
+                &ItemId::New("T-1"),
+                holder,
+                ReleaseOutcome::Abandoned {
+                    reason: reason.to_owned(),
+                },
+            )
+            .expect("a holder may give up its own claim");
+    }
+
+    let after = ledger.Load().expect("readable");
+    let item = after.items.first().expect("the item survives");
+
+    let said: Vec<(&str, &str)> = item
+        .abandoned
+        .iter()
+        .map(|entry| return (entry.holder.as_str(), entry.reason.as_str()))
+        .collect();
+
+    assert_eq!(
+        said,
+        vec![("agent-a", "ran out of lease"), ("agent-b", REASON)],
+        "both abandonments must survive, oldest first"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The question `OD-LEDGER-006` settles, asserted here rather than left in the prose.
+///
+/// A lapsed claim is given no synthesized abandonment. Nobody was there to write a reason,
+/// and inventing one — "the lease expired" — would be filler wearing a record's clothes.
+/// What a lapse leaves is the claim itself: it stops counting as active without being
+/// removed, so a reader can still see who held it and when they stopped. The two paths now
+/// differ by what is actually knowable rather than by which one ran.
+///
+/// What this test deliberately does not assert is that the next agent can take the item.
+/// It cannot: a lapse leaves `state` at `Claimed`, and `Claim_Refusal` rejects anything
+/// that is not `Ready` before it ever reaches the lease. That contradicts `item.rs`, which
+/// says a lapse "stops excluding, which is what lets the next agent take the item", and it
+/// is a different defect from this one — recorded in `OD-LEDGER-006` and on the ledger,
+/// not asserted here, because an assertion would pin the behaviour in place.
+#[test]
+fn Test_A_Lapsed_Claim_Should_Stay_Visible_And_Invent_No_Reason()
+{
+    let directory = Temp_Dir("abandon-lapse");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
+        .expect("a fresh ledger is valid");
+    ledger
+        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let later = FixedClock(NOW + 7_200);
+    let lapsed = Ledger_At(&directory, &later);
+    let after = lapsed.Load().expect("readable");
+    let item = after.items.first().expect("the item survives");
+
+    assert!(
+        item.abandoned.is_empty(),
+        "a lapse wrote a reason nobody gave: {:?}",
+        item.abandoned
+    );
+    assert!(
+        item.claim.is_some(),
+        "the lapsed claim was removed, so nothing says the work was ever started"
+    );
+    assert!(
+        !item.Has_Active_Claim(At(NOW + 7_200)),
+        "a lapsed claim must stop counting as an active claim"
     );
 
     let _ = std::fs::remove_dir_all(&directory);

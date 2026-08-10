@@ -12,7 +12,10 @@
 //!
 //! **A claim is a lease, not a lock.** It lapses. An agent that dies holding one stops
 //! excluding others when the lease runs out, and the lapsed claim stays visible so a
-//! person can see the work was abandoned rather than never started.
+//! person can see the work was abandoned rather than never started. Giving a claim up
+//! deliberately is recorded too, with the reason its holder was required to give — see
+//! [`Abandonment`]. Until that existed only the lapse left a trace, so an agent that died
+//! was legible afterwards and one that stopped on purpose was not.
 //!
 //! **Finishing runs a predicate.** `done_when` is prose for a human;
 //! [`VerificationPredicate`] is an argument vector that gets executed, and an item
@@ -43,8 +46,8 @@ pub use exclusion::{
 pub use finish::{Finish, FinishRefusal};
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateUnknown, LINT_STEP, Workflow_Path};
 pub use item::{
-    Blocker, Claim, DEFAULT_LEASE, GateOutcome, ItemId, ItemState, LedgerItem, MAXIMUM_LEASE,
-    VerificationPredicate, VerificationRecord,
+    Abandonment, Blocker, Claim, DEFAULT_LEASE, GateOutcome, ItemId, ItemState, LedgerItem,
+    MAXIMUM_LEASE, VerificationPredicate, VerificationRecord,
 };
 pub use store::{
     Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, LedgerError,

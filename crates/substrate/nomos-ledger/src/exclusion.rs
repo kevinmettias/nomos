@@ -1,6 +1,8 @@
 //! Taking and holding territory.
 
-use crate::item::{ItemId, MAXIMUM_LEASE, VerificationRecord};
+use crate::item::{
+    Abandonment, ItemId, ItemState, LedgerItem, MAXIMUM_LEASE, VerificationRecord,
+};
 use crate::territory::Territory;
 use nomos_model::{Intersection, UnknownReason};
 use nomos_platform::Timestamp;
@@ -153,6 +155,47 @@ pub enum ReleaseOutcome
         /// Why.
         reason: String,
     },
+}
+
+impl ReleaseOutcome
+{
+    /// Writes this outcome onto the item it happened to, and ends the claim.
+    ///
+    /// The single place a release's evidence is persisted, for the same reason
+    /// [`Refusal_From`] is the single place independence is judged: an implementation
+    /// that spells the rule out for itself is free to spell one arm of it and not the
+    /// other. That is not hypothetical — it is how this function came to exist. The
+    /// `Finished` arm carried its [`VerificationRecord`] into storage and the `Abandoned`
+    /// arm matched `{ .. }` and dropped the reason, adjacent arms of one match, one
+    /// keeping its evidence and one discarding it. Both arms are now written once, next
+    /// to the type that carries the evidence, so a second [`ExclusionLedger`] cannot
+    /// persist half of it.
+    ///
+    /// Ending the claim is part of this rather than left to the caller. An abandonment is
+    /// a record of something that stopped, and a record that went on excluding people
+    /// would be a worse defect than the one this fixes.
+    pub fn Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
+    {
+        item.claim = None;
+
+        match self
+        {
+            Self::Finished(record) =>
+            {
+                item.state = ItemState::Done;
+                item.verified = Some(record.clone());
+            }
+            Self::Abandoned { reason } =>
+            {
+                item.state = ItemState::Ready;
+                item.abandoned.push(Abandonment {
+                    holder: holder.to_owned(),
+                    reason: reason.clone(),
+                    abandoned_at: at,
+                });
+            }
+        }
+    }
 }
 
 /// Territory-based mutual exclusion.
