@@ -4290,7 +4290,8 @@
         "resolution": "File",
         "paths": [
           "crates/spec/nomos-spec-project/src/build.rs",
-          "crates/spec/nomos-spec-project/tests/projections.rs"
+          "crates/spec/nomos-spec-project/tests/projections.rs",
+          "tests/contract/surface/nomos-spec-project.txt"
         ],
         "patterns": []
       },
@@ -4299,8 +4300,8 @@
       "blocked": null,
       "claim": {
         "holder": "claude-stamp-consistency-w21",
-        "acquired_at": 1786346882,
-        "lease_expires_at": 1786354082
+        "acquired_at": 1786347127,
+        "lease_expires_at": 1786354327
       },
       "verification": {
         "argv": [
@@ -4313,7 +4314,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-stamp-consistency-w21",
+          "reason": "Released unstarted, nothing edited. The item needs a third verdict on Freshness to keep the store moved and somebody typed into the file from collapsing into one, and Freshness fields are recorded in tests/contract/surface/nomos-spec-project.txt, which public_surface.rs compares by exact string equality. That file is not in this item's two-file territory, so the change cannot land inside it. Widening then re-taking rather than widening underneath the claim, the order a5da564 established. The path is declared only by P10-SPEC-DETERMINISM (Done) and P10-SUBJECT-PROJECTIONS (released), so nobody holds it.",
+          "abandoned_at": 1786347040
+        }
+      ],
       "displaced": []
     },
     {
