@@ -4775,7 +4775,7 @@
       "claim": {
         "holder": "claude-diagram-owed-w22",
         "acquired_at": 1786348163,
-        "lease_expires_at": 1786355363
+        "lease_expires_at": 1786363575
       },
       "verification": {
         "argv": [
@@ -5083,6 +5083,117 @@
           "exit_code": 0
         }
       },
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-INTAKE-SURFACE",
+      "title": "A born-structured submission has no intake surface, so nothing can write one",
+      "why": "OD-SPEC-008 makes FeatureRequest, DesignSpec and FeatureResult born structured and leaves the intake surface undecided among form, CLI, API and MCP. Nothing writes a submission today, and the layout question inherits the constraint that only tables something writes to exist, so the whole typed layer waits on this answer. Left undecided, the choice is made by whichever surface gets built first, which puts it in code nobody can disagree with.",
+      "done_when": "A governing record OD-SPEC-009 decides which intake surface is primary and states why the others are adapters onto it rather than parallel write doors, against the one-write-door-per-authority shape nomos-store already carries. It names what crosses the seam as a submission. It decides neither the validation rule set nor the physical table layout, which are OD-SPEC-010 and OD-SPEC-011. The record is governing only once its file under crates/spec/nomos-spec-store/records exists.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-009",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-009.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-SUBMISSION-VALIDATION",
+      "title": "Write-time validation is owed by every born-structured object and no rule set exists",
+      "why": "ARC-SPECDB-002 charges a born-structured object with validation at write time that refuses an incomplete submission rather than accepting it, and with keeping what was originally submitted apart from what was later clarified, inferred or decided. OD-SPEC-008 defers the rule set, including the conditional rules a form contract needs. Until the rules are written down the first writer encodes them, and a rule encoded in a writer cannot be read, cited or disagreed with.",
+      "done_when": "A governing record OD-SPEC-010 states the validation rule set: which fields a submission must carry, which are conditional and on what, what a refusal names, and how a draft differs from an accepted submission. It states the shape that keeps the original submission apart from later clarification, inference and decision, and where a decision gap nobody has closed is recorded rather than silently resolved. It decides no physical table layout. The record is governing only once its file under crates/spec/nomos-spec-store/records exists.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-010",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-010.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": []
+    },
+    {
+      "id": "P10-REQUEST-LAYOUT",
+      "title": "The typed layer has no tables, and it cannot get them before a writer exists",
+      "why": "OD-SPEC-008 leaves the physical layout open and hands it the constraint that only tables something writes to exist, because a table nothing writes to looks like a feature in a schema dump and is not one. That makes the layout and its first writer one landing rather than two: tables committed ahead of a writer would be that failure committed deliberately. This is the item that turns the two decisions above into a submission that persists, and it is the first thing to exercise the durable form P10-DURABLE-LOAD landed.",
+      "done_when": "The layout OD-SPEC-011 decides lands together with the writer that fills it, so no table lands empty. A submission made through the surface OD-SPEC-009 decided is validated by the rules OD-SPEC-010 states, is persisted, survives bundle export and import as the committed durable form, and renders a projection carrying the freshness stamp ARC-SPECDB-002 charges it with. An incomplete submission is refused and stored nowhere. Public surface snapshots move for every crate whose API moves, and README names any crate this adds.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-011",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-011.record",
+          "crates/spec/nomos-spec-store/src",
+          "crates/spec/nomos-spec-model/src",
+          "crates/host/nomos-cli/src/request.rs",
+          "crates/host/nomos-cli/tests/request_submit.rs",
+          "tests/contract/surface/nomos-spec-store.txt",
+          "tests/contract/surface/nomos-spec-model.txt",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-INTAKE-SURFACE",
+        "P10-SUBMISSION-VALIDATION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": []
     }
