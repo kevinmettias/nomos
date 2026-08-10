@@ -82,6 +82,7 @@ pub fn nomos_model::Coverage::Is_Complete(&self) -> bool
 pub fn nomos_model::Digest_Of_Parts(parts: &[&[u8]]) -> Digest128
 pub fn nomos_model::EntityId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model::Intersection::Conflicting(&self) -> &[SubjectId]
+pub fn nomos_model::Normalize_Path(path: &str) -> String
 pub fn nomos_model::SetResolution::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model::SubjectSet::Empty(resolution: SetResolution) -> Self
 pub fn nomos_model::SubjectSet::Insert(&mut self, subject: SubjectId)
@@ -91,6 +92,7 @@ pub fn nomos_model::SubjectSet::Len(&self) -> usize
 pub fn nomos_model::SubjectSet::Members(&self) -> impl Iterator<Item = &SubjectId>
 pub fn nomos_model::SubjectSet::Of(resolution: SetResolution, members: impl IntoIterator<Item = SubjectId>) -> Self
 pub fn nomos_model::SubjectSet::With_Unexpanded_Pattern(mut self, pattern: impl Into<String>) -> Self
+pub fn nomos_model::Subject_Of_Path(path: &str) -> SubjectId
 pub fn nomos_model::Transition::Is_Evidenced(&self) -> bool
 pub fn nomos_model::UnknownReason::Describe(&self) -> String
 pub impl nomos_model::EntityId implements core::fmt::Display

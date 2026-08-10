@@ -54,6 +54,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md@authored | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md | authored | 108 | 19 | sha256:37c30a7fb96b566768cb5b23df4bb92b037c769ce8f7eabc087b4dd91742d730 |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md | authored | 42 | 12 | sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944 |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 27 | 8 | sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b |
@@ -486,6 +487,14 @@ profile: domain-specification
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#49 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#51 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53 | authored | 2 | Status |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#11 | authored | 2 | The Answer |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#17 | authored | 2 | Why The Composition Runs Ledger-Over-Kernel |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#22 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#26 | authored | 2 | What Holds It |
+| docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#28 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#1 | authored | 1 | Independently versioned is a property of a package, and this build has no package |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#2 | authored | 2 | The Question |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#6 | authored | 2 | What The Corpus Actually Says |
@@ -14080,6 +14089,243 @@ unusable for its own motivating case.
 *revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Status · hash: sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5*
 
 Closed by `P10-DECLINE-VERB`.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger · hash: sha256:f8c5c2d9a62f8885a1b5399e69827138d3be4b147693b001857ec8c9172fa72a*
+
+# A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#3
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Question · hash: sha256:7eba00b0e8148016c47fc020e6c5e7242e7d8846e0c67a0b37ec710a854bfe2b*
+
+Three places in this workspace reduced a repository path to a `SubjectId`, and all three
+had written the reduction out longhand:
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#4
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Question · hash: sha256:89dfbe62edced74820f5bec510c0ff10a77db7ab10e4c4a170b8c0d3e56e343d*
+
+- `nomos_ledger::Subject_Of`, addressing the territory an item **claims**;
+- `tests/integration/src/corpus.rs`, addressing a **fact** about a corpus file;
+- `crates/host/nomos-cli/src/check.rs`, addressing a **fact** from the composition root.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#5
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Question · hash: sha256:ceff368582360ea33b1e8d9eade76487777e23abc802604f8234323bc02de878*
+
+The spelling rule in all three was byte-for-byte identical: trim, unify separators, drop
+empty and `.` segments, lowercase. The ledger then applied one more step the other two did
+not — folding a record filename onto the record identifier it carries.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#6
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Question · hash: sha256:30a2ce5b14ba2454401cd952ee4147c06cca5bca0735cccf4aadd7ae5893efd6*
+
+The corpus copy carried a doc comment saying the duplication was "worth converging behind
+one home the moment a third caller appears". `OD-RULES-001` made `check.rs` that third
+caller, and it said so in its own comment while declining to do anything about it.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#7
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Question · hash: sha256:1c31f6d680190ddf6d1f1f69cda06356908bface43ced71b57f35fbfb5ac6b57*
+
+Converging is not a move of one function. Two of these compute what a *fact* is about and
+one computes what a *claim* is about, and the question underneath is whether those are the
+same kind of address.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Was Actually Wrong · hash: sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7*
+
+## What Was Actually Wrong
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#9
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Was Actually Wrong · hash: sha256:6809be54ddca089e9e914d733309dd79b11bf6f622e245f1b57db31a263cc6e6*
+
+**Three copies of a rule that decides identity.** Not three copies of a convenience. If two
+of them drift, a composition root files facts under subjects a rule computes differently,
+and every affected fact reads as *unavailable* rather than as one function being wrong.
+That failure is silent in exactly the way this system exists to prevent.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#10
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Was Actually Wrong · hash: sha256:e2d07f62322f650623754a6002a8a1868fef56142d8490709b039045f4c0d557*
+
+**The existing comments made the duplication look considered.** Each site explained that
+importing one of the others would "couple what a fact is about to what a claim is about".
+That reasoning was right about the *record fold* and wrong about everything else, and
+because it was stated once and copied twice it read as settled.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#11
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / The Answer · hash: sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d*
+
+## The Answer
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#12
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / The Answer · hash: sha256:816f480392c94f7c4ecb9057a00e3b338fb338c20b1e7c5ba8cfb70b9c7bb9b2*
+
+**The spelling rule is one rule, and it lives in the kernel.**
+`nomos_model::Normalize_Path` and `nomos_model::Subject_Of_Path` are the single home, beside
+`SubjectSet` and `Intersection` — which are in the kernel for the same reason, recorded in
+that module's own documentation: three subsystems at three levels need to ask one question,
+and a type defined at any one of those levels cannot be used by the others.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#13
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / The Answer · hash: sha256:ca052691a610c9e4ce1ddbae24d5c925d4e8d33e79f3e29d1783b497172006a6*
+
+A claim and a fact *do* ask the same question of a path spelling. "Which file is this?" has
+one answer, and `src/Main.rs` against `src/main.rs` is one file whether the asker is
+reserving it or measuring it. Keeping two copies did not preserve a distinction; it
+preserved the *option* of a distinction nobody wanted, at the price of a real drift risk.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#14
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / The Answer · hash: sha256:0e67f31bf3b22801239cdb77c261c1258af3fa5336d78c6ded2770fbe86d5710*
+
+**The record-identifier fold stays with the ledger, and composes on top.**
+`nomos_ledger::Normalize_Path` now calls the kernel's and applies
+`Record_Identifier_Form` to the result. Its public signature is unchanged and its behaviour
+is unchanged, which is the whole of what a reader needs to check.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#15
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / The Answer · hash: sha256:82a1d08689331499fec8f616283daac460be32f73b9a599f0bcab803e8b5d45e*
+
+The fold is not a fact about what a path spells. It exists because an item must reserve a
+record *before the file exists*, so the identifier is the only name two items can both write
+down in advance — `OD-LEDGER-001`'s authoring rule, and `OD-SPEC-006` makes `docs/records`
+the one directory where the identifier-to-filename relation is written down rather than
+inferred. That is a fact about coordinating unwritten work.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#16
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / The Answer · hash: sha256:cb87440d6c27b3f6fcb59bdec51c74a55c5fe61f357824105acd650f7fc49066*
+
+So the two subject rules differ on exactly one shape of path and agree everywhere else, and
+the difference is now visible at one site instead of being the residue of two copies.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#17
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Why The Composition Runs Ledger-Over-Kernel · hash: sha256:229e4239f9f45c199eb4409c0b31714d00ad5256725f4122f8d8c13a5b2388ad*
+
+## Why The Composition Runs Ledger-Over-Kernel
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#18
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Why The Composition Runs Ledger-Over-Kernel · hash: sha256:9ca8c85fd4af8be98c47a2ce19e1854bc5ac3c5a0d3f2b36c4c7faa59c437bd0*
+
+The obvious alternative was one function with a parameter — `Normalize_Path(path, folding)`
+— so that the caller "asks for" the fold. It was rejected on two counts.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#19
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Why The Composition Runs Ledger-Over-Kernel · hash: sha256:12472a51abfda2977c6f63902785714f4f149d630b26456b4cf7ff8aa94b9e8a*
+
+**It teaches the kernel what a decision record is.** Band 1 would then carry
+`docs/records`, the identifier grammar, and the ordinal rule. A fact about a record file
+would become one flag away from being a fact about the identifier instead, and the flag
+would be at every call site rather than at one.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#20
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Why The Composition Runs Ledger-Over-Kernel · hash: sha256:00d0d01257e50bb306d0f76990d9362d81d04a85b5328f3a2afc4e07f3183613*
+
+**The direction is what makes the difference safe.** A subsystem may add a rule of its own
+on top of the kernel's; the kernel may not host every subsystem's rule and hope each caller
+selects correctly. The first is composition and the second is a switch.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#21
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Why The Composition Runs Ledger-Over-Kernel · hash: sha256:5a75b877b1c6bfcaccb62f508d9eaeaabf5a90680d9d52d9cc64ddb0d891d4bc*
+
+The cost is that `nomos_ledger::Subject_Of` and `nomos_model::Subject_Of_Path` are two
+functions of the same shape that disagree on one input. Both now say so at their
+definitions and name this record, and the harness asserts the direction of the difference
+rather than assuming it.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#22
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#23
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Was Considered And Rejected · hash: sha256:ea8086645fe669c37bf94e9f181062387e102442763c146d490b969cb9c89b12*
+
+**Importing the ledger's into the two fact producers.** The item's `done_when` refuses it
+outright, and correctly: it would have made every fact about a file in `docs/records` a fact
+about the identifier instead, so editing one record would invalidate facts about another.
+The corpus test named below is the guard against someone doing it later.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#24
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Was Considered And Rejected · hash: sha256:aefa516555646aa085114eac07b137ff6619019beeab02fa9c5370f1ae7fc343*
+
+**Recording that the three are deliberately different and leaving them.** Available, and
+dishonest — they were not different. Two of them were identical and the third differed by a
+step neither of the others wanted. Writing "these are deliberately three" would have
+converted an accident into a decision.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#25
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Was Considered And Rejected · hash: sha256:2089398be0d4df89fa707c9bade9b16c0464045c8bfece9eaf4f6453bb126c45*
+
+**Putting the home in `nomos-contracts` beside `SubjectId`.** The rule needs
+`Content_Digest`, which is in the kernel, and `nomos-contracts` sits below it. Following
+`SubjectId` down would have meant moving the digest too.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#26
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#27
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / What Holds It · hash: sha256:fd4854a36f7cb70dd838468ce1252fd0155cec9665a12077653173cbf4d29b14*
+
+- `crates/kernel/nomos-model/src/path.rs` — the spelling assertions, including the negative
+  control that different paths stay different subjects, and
+  `Test_A_Record_Filename_Should_Not_Fold_Onto_Its_Identifier`, which fails if the kernel
+  ever absorbs the ledger's step.
+- `crates/substrate/nomos-ledger/src/territory.rs` — the existing record-fold tests are
+  unchanged and still pass, which is what says the composition preserved behaviour rather
+  than merely compiling.
+- `tests/integration/src/corpus.rs` —
+  `Test_A_Fact_About_A_Record_File_Should_Be_About_That_File`, asserting which of the two
+  rules the fact side takes. The spelling assertions moved to the kernel with the rule,
+  because repeating them beside the caller would have been the same duplication in a second
+  costume.
+- `tests/contract/surface/nomos-model.txt` — the two names are public surface now, so
+  narrowing them is a snapshot change somebody has to bless on purpose.
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#28
+
+*revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#29
+
+*revision: authored · kind: prose · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger / Status · hash: sha256:ef3ddef0a29b76548386e2b05b0c2f490b51a0bef50791b6fa5a889a7540e236*
+
+Closed by P10-SUBJECT-HOME. A fourth longhand copy exists in
+`tests/integration/tests/determinism.rs`, outside this item's territory and inside
+`P10-ROLLUP-DETERMINISM`'s; it addresses fixture text rather than repository paths, and
+converging it is that item's to weigh.
 
 ### docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#1
 

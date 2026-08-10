@@ -48,7 +48,6 @@ pub fn nomos_integration_tests::Slice::Run(&mut self, corpus: &Corpus) -> RunRep
 pub fn nomos_integration_tests::Slice::Surface_Of(&self, members: &[&SourceFile]) -> Option<MaterializedFact>
 pub fn nomos_integration_tests::Slice::Syntax_Key(&self, file: &SourceFile) -> FactKey
 pub fn nomos_integration_tests::Slice::Syntax_Key_Of(&self, file: &SourceFile, offer: &nomos_capability::ProviderOffer) -> FactKey
-pub fn nomos_integration_tests::Subject_Of_Path(path: &str) -> SubjectId
 pub fn nomos_integration_tests::Surface::Encode(&self) -> Vec<u8>
 pub fn nomos_integration_tests::Verify<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>) -> Verification
 pub fn nomos_integration_tests::Walk(root: &Path) -> Corpus

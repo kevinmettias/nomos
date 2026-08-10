@@ -2,8 +2,17 @@
 
 use nomos_contracts::SubjectId;
 use nomos_lang_rust::Recognition;
-use nomos_model::Content_Digest;
+use nomos_model::Normalize_Path;
 use std::path::{Path, PathBuf};
+
+/// The identity of the subject a corpus-relative path denotes.
+///
+/// Re-exported rather than written here. This module used to carry its own copy, with a
+/// doc comment saying the duplication was "worth converging behind one home the moment a
+/// third caller appears" — `OD-RULES-001` made that third caller and `OD-MODEL-001` did
+/// the converging. The re-export is what keeps `crate::corpus::Subject_Of_Path` the name
+/// the rest of the harness already spells.
+pub use nomos_model::Subject_Of_Path;
 
 /// One file, as the slice sees it.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -80,38 +89,6 @@ impl Corpus
     }
 }
 
-/// The identity of the subject a corpus-relative path denotes.
-///
-/// # Why this normalization is written here and not imported
-///
-/// `nomos_ledger::Subject_Of` computes the same thing by the same rules for work
-/// territory. Reaching for it would couple what a *fact* is about to what a *claim* is
-/// about — two vocabularies that agree today and have no reason to stay agreed. The rules
-/// are duplicated deliberately and the duplication is worth converging behind one home
-/// the moment a third caller appears; until then, an import would be the wrong kind of
-/// agreement.
-///
-/// Separators are unified, `.` segments dropped, and case folded — because `Main.rs` and
-/// `main.rs` are one file on the two platforms this runs on, and treating them as two
-/// subjects would let one edit invalidate neither.
-#[must_use]
-pub fn Subject_Of_Path(path: &str) -> SubjectId
-{
-    return SubjectId::From_Digest(Content_Digest(Normalize(path).as_bytes()));
-}
-
-fn Normalize(path: &str) -> String
-{
-    return path
-        .trim()
-        .replace('\\', "/")
-        .split('/')
-        .filter(|segment| return !segment.is_empty() && *segment != ".")
-        .collect::<Vec<&str>>()
-        .join("/")
-        .to_lowercase();
-}
-
 /// Directories that are not somebody's source.
 const NOT_SOURCE: &[&str] = &["target", ".git"];
 
@@ -165,7 +142,7 @@ pub fn Walk(root: &Path) -> Corpus
     for path in paths
     {
         let relative = path.strip_prefix(root).unwrap_or(&path).to_string_lossy();
-        let relative = Normalize(&relative);
+        let relative = Normalize_Path(&relative);
         let group = relative
             .rsplit_once('/')
             .map_or_else(|| return String::new(), |(directory, _)| return directory.to_owned());
@@ -198,24 +175,22 @@ mod tests
 {
     use super::*;
 
+    /// The spelling assertions moved to the kernel with the rule, and repeating them here
+    /// would be the duplication this module just gave up in a second costume. What is left
+    /// is the one thing only this side can say: which of the two subject rules a *fact*
+    /// takes.
+    ///
+    /// The ledger folds `docs/records/<id>-<slug>.md` onto `docs/records/<id>`, so that an
+    /// item can reserve a record before the file exists. Addressing a fact that way would
+    /// file a record and its identifier under one subject, and an edit to one record would
+    /// invalidate facts about another. `OD-MODEL-001` is why the two rules stayed
+    /// distinct; this is the assertion that the harness took the right one.
     #[test]
-    fn Test_Spellings_Of_One_Path_Should_Be_One_Subject()
+    fn Test_A_Fact_About_A_Record_File_Should_Be_About_That_File()
     {
-        let canonical = Subject_Of_Path("alpha/one.rs");
-
-        for spelling in ["./alpha/one.rs", "alpha\\one.rs", "alpha//one.rs", "Alpha/One.rs"]
-        {
-            assert_eq!(Subject_Of_Path(spelling), canonical, "`{spelling}`");
-        }
-    }
-
-    /// The negative control. If normalization collapsed everything, every file in the
-    /// corpus would be one subject and a single edit would invalidate the world.
-    #[test]
-    fn Test_Different_Paths_Should_Be_Different_Subjects()
-    {
-        assert_ne!(Subject_Of_Path("alpha/one.rs"), Subject_Of_Path("alpha/two.rs"));
-        assert_ne!(Subject_Of_Path("alpha/one.rs"), Subject_Of_Path("beta/one.rs"));
-        assert_ne!(Subject_Of_Path("alpha"), Subject_Of_Path("alpha/one.rs"));
+        assert_ne!(
+            Subject_Of_Path("docs/records/od-model-001-a-slug.md"),
+            Subject_Of_Path("docs/records/od-model-001")
+        );
     }
 }

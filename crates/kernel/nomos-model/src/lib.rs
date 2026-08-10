@@ -37,6 +37,11 @@
 //!
 //! Defining it once, here, is what makes "one exclusion primitive" a structural fact
 //! rather than a convention three implementations are each asked to remember.
+//!
+//! [`Subject_Of_Path`] is here for the same reason and arrived the same way: the ledger,
+//! the composition root and the integration corpus had each written the identical rule for
+//! reducing a path spelling to a subject. `OD-MODEL-001` records why the spelling rule is
+//! one rule while the ledger's record-identifier fold stays with the ledger.
 
 #![forbid(unsafe_code)]
 
@@ -44,6 +49,7 @@ mod digest;
 mod entity;
 mod evidence;
 mod identity;
+mod path;
 mod subject;
 mod subject_set;
 mod transition;
@@ -52,6 +58,7 @@ pub use digest::{Content_Digest, Digest_Of_Parts};
 pub use entity::{Artifact, ArtifactKind, EntityId, Resource, ResourceKind, Symbol, SymbolKind};
 pub use evidence::{Coverage, CoverageGap, Evidence, EvidenceRef};
 pub use identity::{CompositeIdentity, IdentityPolicy, SourceProvenance, StructuralFingerprint};
+pub use path::{Normalize_Path, Subject_Of_Path};
 pub use subject::{Subject, SubjectKind, SubjectTarget, SnapshotEntity};
 pub use subject_set::{Intersection, SetResolution, SubjectSet, UnknownReason};
 pub use transition::{Confidence, IdentityTransition, IdentityTransitionKind, Transition};

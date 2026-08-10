@@ -258,7 +258,13 @@ fn Contains_Or_Equals(left: &str, right: &str) -> bool
     return right.starts_with(&format!("{left}/")) || left.starts_with(&format!("{right}/"));
 }
 
-/// The identity of the subject a path denotes.
+/// The identity of the subject a path denotes, for the purpose of holding it.
+///
+/// Deliberately not [`nomos_model::Subject_Of_Path`], which is what a *fact* is about.
+/// The two agree on every path but one shape: this one folds a record filename onto the
+/// identifier it carries, so an item that reserved `docs/records/OD-LEDGER-006` excludes
+/// the holder of the file it became. See [`Normalize_Path`] for that rule and
+/// `OD-MODEL-001` for why the difference is kept rather than settled either way.
 #[must_use]
 pub fn Subject_Of(path: &str) -> SubjectId
 {
@@ -271,16 +277,19 @@ pub fn Subject_Of(path: &str) -> SubjectId
 /// dropped, the result is lowercased, and a record filename is reduced to the record
 /// identifier it carries.
 ///
-/// # Why case is folded
+/// # Why the spelling half is not written here
 ///
-/// On Windows and macOS, `src/Main.rs` and `src/main.rs` are one file. Not folding means
-/// two agents claim the same file, both are told the territory is disjoint, and the
-/// second one's edit silently replaces the first — the exact failure this ledger exists
-/// to prevent.
+/// Everything up to the record fold is [`nomos_model::Normalize_Path`], and it is called
+/// rather than repeated. It used to be repeated — three times, here and in two fact
+/// producers — and `OD-MODEL-001` records the decision to converge them. What a path
+/// spells is the same question whether the answer addresses a claim or a fact, so the
+/// reasoning for unifying separators and folding case now lives with the rule, in the
+/// kernel.
 ///
-/// Folding has a cost, and it is the honest one to pay: on Linux those really are two
-/// files, so two agents who could have worked in parallel are serialized instead. That
-/// costs throughput. The alternative costs an edit, and an edit does not come back.
+/// What survives here is the half that is genuinely the ledger's, and the composition runs
+/// in this direction — ledger over kernel, never a flag passed down — because the kernel
+/// must not learn what a decision record is. A fact *about* a record file has to stay a
+/// fact about that file.
 ///
 /// # Why a record filename folds onto its identifier
 ///
@@ -333,20 +342,7 @@ pub fn Subject_Of(path: &str) -> SubjectId
 #[must_use]
 pub fn Normalize_Path(path: &str) -> String
 {
-    let unified = path.trim().replace('\\', "/");
-
-    // `.` segments are dropped along with empty ones, so `.`, `./`, `a/./b` and `a//b`
-    // all reduce the same way. This is also what makes a lone `.` normalize to the empty
-    // string, which is how the repository root is represented — and the root has to be
-    // empty rather than a name, or it would compare as a sibling of everything it
-    // actually contains.
-    let joined = unified
-        .split('/')
-        .filter(|segment| !segment.is_empty() && *segment != ".")
-        .collect::<Vec<&str>>()
-        .join("/");
-
-    let folded = joined.to_lowercase();
+    let folded = nomos_model::Normalize_Path(path);
 
     // Applied last, and to the folded text rather than to the authored spelling, so that
     // `Docs\Records\OD-LEDGER-006-x.md` reaches the same identifier as

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:62383da3dd5d6a499e6ed60c0d992aeda63e19f907bf88a681866186fbd54ed3",
-  "inputs_digest": "sha256:301801d8bbf7acd7787c47202a40bf06fffc480db71fe47609517873f3c8c7dd",
+  "content_digest": "sha256:c0da7ced6a64e8d86fcffab564355342ecad45bb838b6737b4f04f1e54a6cd30",
+  "inputs_digest": "sha256:8bd6259aec06622b4553a777507d5bdf655aa886361c2c5543c3327e748d6d44",
   "sections": [
     [
       "Documents",
-      66
+      67
     ],
     [
       "Sections",
-      613
+      621
     ],
     [
       "Source blocks",
-      2451
+      2480
     ]
   ],
   "inputs": [
@@ -239,6 +239,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored",
       "hash": "sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored",
+      "hash": "sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962"
     },
     {
       "content": "documents",
@@ -2374,6 +2379,46 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53",
       "hash": "sha256:9617271589e0ca04597ad3176dbb9afacaf716a4591b088a34c6f5e58ee55948"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1",
+      "hash": "sha256:d854d2d5072c0ba6069567f321d6ae052ea2afa66f7b8e82f62e5aadb302ebf7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2",
+      "hash": "sha256:25be8d75601a485a9564cf74927c48720e8f8f1f88efc01efaaae755e845c49f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8",
+      "hash": "sha256:e465f424341808165e77b757dadc1ed29e983477a0b81863d41b3441c2203ecb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#11",
+      "hash": "sha256:c8256690e18560de14095530d3859f9e4352af5f6574d70ce448956ec0e16dea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#17",
+      "hash": "sha256:a7ebc1eb1600feeb4d556952000619c900c71581a404d7aab0bf2204b03d0ec8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#22",
+      "hash": "sha256:d5ae4f9335f7a16e9538bd3ac1c4f7f5b0517a3d1c0c652dbb7a3b2edea11905"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#26",
+      "hash": "sha256:681721ae74be939a1c80f309f9c81745426b8e5f353074ba359c63ed36888628"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#28",
+      "hash": "sha256:7189ad0e47450086e8bc10f148ca8875db6c4a41782b86d517097a65b3d432bf"
     },
     {
       "content": "headings",
@@ -11384,6 +11429,151 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#54",
       "hash": "sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1",
+      "hash": "sha256:f8c5c2d9a62f8885a1b5399e69827138d3be4b147693b001857ec8c9172fa72a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#3",
+      "hash": "sha256:7eba00b0e8148016c47fc020e6c5e7242e7d8846e0c67a0b37ec710a854bfe2b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#4",
+      "hash": "sha256:89dfbe62edced74820f5bec510c0ff10a77db7ab10e4c4a170b8c0d3e56e343d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#5",
+      "hash": "sha256:ceff368582360ea33b1e8d9eade76487777e23abc802604f8234323bc02de878"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#6",
+      "hash": "sha256:30a2ce5b14ba2454401cd952ee4147c06cca5bca0735cccf4aadd7ae5893efd6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#7",
+      "hash": "sha256:1c31f6d680190ddf6d1f1f69cda06356908bface43ced71b57f35fbfb5ac6b57"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8",
+      "hash": "sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#9",
+      "hash": "sha256:6809be54ddca089e9e914d733309dd79b11bf6f622e245f1b57db31a263cc6e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#10",
+      "hash": "sha256:e2d07f62322f650623754a6002a8a1868fef56142d8490709b039045f4c0d557"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#11",
+      "hash": "sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#12",
+      "hash": "sha256:816f480392c94f7c4ecb9057a00e3b338fb338c20b1e7c5ba8cfb70b9c7bb9b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#13",
+      "hash": "sha256:ca052691a610c9e4ce1ddbae24d5c925d4e8d33e79f3e29d1783b497172006a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#14",
+      "hash": "sha256:0e67f31bf3b22801239cdb77c261c1258af3fa5336d78c6ded2770fbe86d5710"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#15",
+      "hash": "sha256:82a1d08689331499fec8f616283daac460be32f73b9a599f0bcab803e8b5d45e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#16",
+      "hash": "sha256:cb87440d6c27b3f6fcb59bdec51c74a55c5fe61f357824105acd650f7fc49066"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#17",
+      "hash": "sha256:229e4239f9f45c199eb4409c0b31714d00ad5256725f4122f8d8c13a5b2388ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#18",
+      "hash": "sha256:9ca8c85fd4af8be98c47a2ce19e1854bc5ac3c5a0d3f2b36c4c7faa59c437bd0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#19",
+      "hash": "sha256:12472a51abfda2977c6f63902785714f4f149d630b26456b4cf7ff8aa94b9e8a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#20",
+      "hash": "sha256:00d0d01257e50bb306d0f76990d9362d81d04a85b5328f3a2afc4e07f3183613"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#21",
+      "hash": "sha256:5a75b877b1c6bfcaccb62f508d9eaeaabf5a90680d9d52d9cc64ddb0d891d4bc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#22",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#23",
+      "hash": "sha256:ea8086645fe669c37bf94e9f181062387e102442763c146d490b969cb9c89b12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#24",
+      "hash": "sha256:aefa516555646aa085114eac07b137ff6619019beeab02fa9c5370f1ae7fc343"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#25",
+      "hash": "sha256:2089398be0d4df89fa707c9bade9b16c0464045c8bfece9eaf4f6453bb126c45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#26",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#27",
+      "hash": "sha256:fd4854a36f7cb70dd838468ce1252fd0155cec9665a12077653173cbf4d29b14"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#29",
+      "hash": "sha256:ef3ddef0a29b76548386e2b05b0c2f490b51a0bef50791b6fa5a889a7540e236"
     },
     {
       "content": "blocks",

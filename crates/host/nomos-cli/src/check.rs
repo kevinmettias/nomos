@@ -90,9 +90,9 @@
 use crate::arguments::Named_Value;
 use nomos_analysis::{Context, MemoryFactStore, Reader};
 use nomos_capability::Registry;
-use nomos_contracts::{ConfigurationId, Finding, Guarantee, SubjectId};
+use nomos_contracts::{ConfigurationId, Finding, Guarantee};
 use nomos_lang_rust::{FactContext, Materialization};
-use nomos_model::Content_Digest;
+use nomos_model::{Content_Digest, Subject_Of_Path};
 use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 use std::io::Write;
@@ -490,6 +490,10 @@ fn Read_Sources(root: &Path) -> Vec<SourceFile>
                 && let Ok(text) = std::fs::read_to_string(&path)
             {
                 let relative = Relative(root, &path);
+                // This root files a fact under the subject and hands the same value to the
+                // rule on `SourceFile::subject`, so the two cannot disagree about
+                // addressing. It is the kernel's rule and not a local one, which is what
+                // keeps that agreement from being a coincidence — see `OD-MODEL-001`.
                 let subject = Subject_Of_Path(&relative);
                 sources.push(SourceFile::New(relative, subject, text));
             }
@@ -512,38 +516,6 @@ fn Relative(root: &Path, path: &Path) -> String
         .display()
         .to_string()
         .replace('\\', "/");
-}
-
-/// The identity of the subject a tree-relative path denotes.
-///
-/// This root files a fact under it and hands the same value to the rule on
-/// [`SourceFile::subject`], so the two cannot disagree about addressing. Separators are
-/// unified, `.` segments dropped, and case folded — because `Main.rs` and `main.rs` are one
-/// file on two of the three platforms this runs on, and treating them as two subjects would
-/// let one edit invalidate neither.
-///
-/// # Why this normalization is written here
-///
-/// It is the third copy in the workspace. `nomos_ledger::Subject_Of` computes a subject for
-/// work *territory* and additionally folds a record filename onto its identifier;
-/// `tests/integration/src/corpus.rs` computes one for a *fact* and says in its own doc
-/// comment that the duplication "is worth converging behind one home the moment a third
-/// caller appears". This is that third caller, and converging is not this item's: it would
-/// mean editing a crate this item does not hold, and importing the ledger's would couple
-/// what a fact is about to what a claim is about — two vocabularies that agree today and
-/// have no reason to stay agreed. `P10-SUBJECT-HOME` holds the convergence.
-fn Subject_Of_Path(path: &str) -> SubjectId
-{
-    let normalized = path
-        .trim()
-        .replace('\\', "/")
-        .split('/')
-        .filter(|segment| return !segment.is_empty() && *segment != ".")
-        .collect::<Vec<&str>>()
-        .join("/")
-        .to_lowercase();
-
-    return SubjectId::From_Digest(Content_Digest(normalized.as_bytes()));
 }
 
 #[cfg(test)]
