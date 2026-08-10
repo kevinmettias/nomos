@@ -916,7 +916,12 @@ fn Audit(
             "{:<13} {:<9} {}",
             item.id,
             Refusal_Label(&refusal),
-            Blocking_Reason(&refusal)
+            // `Describe` directly, and no local rephrasing. Its held arm used to name the
+            // blocker where the subject belongs, so this line phrased that one arm itself;
+            // `OD-LEDGER-014` fixed the library and deleted the workaround in the same
+            // commit, because the whole cost of the workaround was that two renderings of
+            // one refusal outlived the reason for the second.
+            refusal.Describe()
         );
         reported = reported.saturating_add(1);
     }
@@ -929,32 +934,6 @@ fn Audit(
     }
 
     return ExitCode::Ok;
-}
-
-/// How the audit phrases one refusal, from the reported item's side.
-///
-/// [`ClaimRefusal::Describe`] was written for `claim`, where the reader already knows which
-/// item they asked about, so its held arm names the *holder's* item. Printed under an
-/// identifier of its own that reads `P9-README … P10-AUDIT-STATE overlaps territory held by
-/// …`, which puts the blocker where the subject belongs and says the reverse of what
-/// happened. That arm is therefore phrased here, naming the blocker as the blocker. The
-/// others read correctly from the subject's side already and are left to `Describe`, so
-/// this is a rendering and not a second opinion about whether anything is refused.
-/// Repairing `Describe` itself belongs to `nomos-ledger`, which has other callers.
-fn Blocking_Reason(refusal: &ClaimRefusal) -> String
-{
-    return match refusal
-    {
-        ClaimRefusal::HeldBy {
-            holder,
-            until,
-            item,
-        } => format!(
-            "territory overlaps {item}, held by {holder} until unix {}",
-            until.Unix_Seconds()
-        ),
-        other => other.Describe(),
-    };
 }
 
 fn Report_Error(error: &LedgerError, output: &mut impl std::io::Write) -> ExitCode

@@ -3,7 +3,6 @@
 use crate::item::{
     Abandonment, ItemId, ItemState, LedgerItem, MAXIMUM_LEASE, VerificationRecord,
 };
-use crate::territory::Territory;
 use nomos_model::{Intersection, UnknownReason};
 use nomos_platform::Timestamp;
 use std::time::Duration;
@@ -111,6 +110,26 @@ pub enum ClaimRefusal
 impl ClaimRefusal
 {
     /// A one-line explanation a person or an agent can act on.
+    ///
+    /// # The refused item is never the grammatical subject here
+    ///
+    /// This is the form for a caller that has **not** already named the item it asked about,
+    /// and every arm is phrased so that it composes under one that has. The distinction is
+    /// not cosmetic: several arms carry the identifier of a *different* item — the blocker in
+    /// [`ClaimRefusal::HeldBy`], the unfinished dependency in
+    /// [`ClaimRefusal::DependencyUnmet`] — and a sentence that opens with one of those names
+    /// reads as a statement about the wrong item.
+    ///
+    /// `OD-LEDGER-014` records the measurement. The held arm used to read
+    /// `{blocker} overlaps territory held by {holder}`, which is true standing alone and says
+    /// the reverse of what happened the moment a caller prints it beneath the subject's own
+    /// identifier: `work audit` emitted `P1-MODEL: P9-AUTHORING overlaps territory held by …`
+    /// for forty-four items, and no reader could tell which of the two names was refused.
+    ///
+    /// So a caller that has named its subject prints this straight after it, and one that has
+    /// not still gets a sentence that claims nothing false. Anything needing a different
+    /// phrasing reads the identifiers off the variant rather than writing a second rendering
+    /// — that second rendering is what this record removed.
     #[must_use]
     pub fn Describe(&self) -> String
     {
@@ -121,7 +140,7 @@ impl ClaimRefusal
                 until,
                 item,
             } => format!(
-                "{item} overlaps territory held by {holder} until unix {}",
+                "territory overlaps {item}, held by {holder} until unix {}",
                 until.Unix_Seconds()
             ),
             Self::UnknownIndependence { against, reason } => format!(
@@ -287,9 +306,6 @@ pub trait ExclusionLedger
         holder: &str,
         outcome: ReleaseOutcome,
     ) -> Result<(), ClaimRefusal>;
-
-    /// Everything that would stop `territory` from being claimed right now.
-    fn Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>;
 }
 
 /// Checks a requested lease against the ceiling.

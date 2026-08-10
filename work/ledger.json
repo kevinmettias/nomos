@@ -4584,14 +4584,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-band0-w62",
-        "acquired_at": 1786382572,
-        "lease_expires_at": 1786393372
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -4604,7 +4600,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ery_Kind_Should_Carry_The_Label_The_Corpus_Names ... ok\ntest package::tests::Test_Kernel_Modules_Should_Not_Be_Optional ... ok\ntest package::tests::Test_Labels_Should_Be_Distinct ... ok\ntest package::tests::Test_Provider_Kinds_Should_Be_Recognized_As_Hosting_Foreign_Code ... ok\ntest package::tests::Test_Rule_And_Language_Packages_Should_Not_Host_Foreign_Code ... ok\ntest peer::tests::Test_Divergence_Should_Require_An_Authorized_Decision ... ok\ntest peer::tests::Test_Silence_Should_Never_Read_As_Knowledge ... ok\ntest peer::tests::Test_Unavailability_Should_Carry_Its_Reason_Into_The_Description ... ok\ntest peer::tests::Test_Unavailable_Should_Not_Read_As_Current ... ok\n\ntest result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-5199bdafaa913a2e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-51aa4e2ffacb6dea.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-9ae75b5b09cb3bc0.exe)\n     Running tests\\completeness_universes.rs (target\\debug\\deps\\completeness_universes-0c1de3a56028c300.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-fde27190f260795e.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-260c96e353d2afad.exe)\n     Running tests\\public_surface.rs (target\\debug\\deps\\public_surface-291be51620867033.exe)\n     Running tests\\requirement_trace.rs (target\\debug\\deps\\requirement_trace-b2691cd1a57ec67c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-7c55b876dd85ab8e.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1786382850,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": []
     },

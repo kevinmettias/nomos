@@ -24,9 +24,14 @@ overlaps one somebody already holds. Nothing checks that the work then stayed in
 
 ## What Is Actually Enforced
 
-Exclusion between competing claims, and only that. `Conflicts` compares the requested
-territory against held ones and refuses on overlap or on an unanswerable overlap question.
-That is the whole mechanism.
+Exclusion between competing claims, and only that. Claiming compares the requested territory
+against the territories of items holding a live claim, and refuses on overlap or on an
+unanswerable overlap question. That is the whole mechanism.
+
+This paragraph named `Conflicts` until `OD-LEDGER-014` removed it. The mechanism it described
+is unchanged and is now reached only through `Claim`, which asks the same question under the
+lock; the standalone method had lost its last caller and a record describing a method nobody
+can call is a promise the crate no longer keeps.
 
 An agent holding a claim may edit any file in the repository. The territory is a promise
 about where it intends to write, and a promise is what this system exists to stop relying

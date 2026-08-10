@@ -59,12 +59,10 @@ pub fn nomos_ledger::ClaimRefusal::Describe(&self) -> String
 pub fn nomos_ledger::Claim_Refusal( document: &LedgerDocument, item: &ItemId, now: Timestamp, ) -> Option<ClaimRefusal>
 pub fn nomos_ledger::Derive_Step(workflow: &str, step: &str) -> Result<Vec<String>, GateUnknown>
 pub fn nomos_ledger::ExclusionLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
-pub fn nomos_ledger::ExclusionLedger::Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Release( &mut self, item: &ItemId, holder: &str, outcome: ReleaseOutcome, ) -> Result<(), ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Renew(&mut self, item: &ItemId, holder: &str, lease: Duration) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::FileLedger::At(path: impl Into<PathBuf>, filesystem: F, clock: C, lock: L) -> Self
 pub fn nomos_ledger::FileLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
-pub fn nomos_ledger::FileLedger::Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>
 pub fn nomos_ledger::FileLedger::Load(&self) -> Result<LedgerDocument, LedgerError>
 pub fn nomos_ledger::FileLedger::Now(&self) -> Timestamp
 pub fn nomos_ledger::FileLedger::Path(&self) -> &Path

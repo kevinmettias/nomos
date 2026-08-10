@@ -4,7 +4,6 @@ use crate::exclusion::{
     Check_Lease, ClaimRefusal, ExclusionLedger, Refusal_From, ReleaseOutcome, Reservation,
 };
 use crate::item::{Claim, ItemId, ItemState, LedgerItem};
-use crate::territory::Territory;
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timestamp};
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
@@ -1066,36 +1065,4 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> ExclusionLedger for FileLedge
         });
     }
 
-    /// Deliberately the one verb here that takes no lock.
-    ///
-    /// It reads and answers; it never writes. `Save` replaces the file atomically, so a
-    /// reader sees one whole document or another whole document and never half of one, and
-    /// there is no read-modify-write for a concurrent write to land inside. Taking the lock
-    /// would only make every listing queue behind every writer while answering exactly the
-    /// same question. The answer can be stale by the time the caller acts on it — which is
-    /// why acting on it goes through `Claim`, which re-asks under the lock.
-    fn Conflicts(&self, territory: &Territory) -> Vec<ClaimRefusal>
-    {
-        let now = self.clock.Now();
-        let Ok(document) = self.Load()
-        else
-        {
-            return Vec::new();
-        };
-
-        return document
-            .items
-            .iter()
-            .filter(|item| item.Has_Active_Claim(now))
-            .filter_map(|item| {
-                let claim = item.claim.as_ref()?;
-                Refusal_From(
-                    &territory.Intersect(&item.territory),
-                    &item.id,
-                    &claim.holder,
-                    claim.lease_expires_at,
-                )
-            })
-            .collect();
-    }
 }

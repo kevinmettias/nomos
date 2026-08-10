@@ -477,6 +477,94 @@ fn Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held()
     let _ = std::fs::remove_dir_all(&directory);
 }
 
+/// A refusal printed under the refused item's own identifier must not read as a statement
+/// about the blocker.
+///
+/// `P10-AUDIT-STATE` measured the failure: `work audit` prints one line per blocked item, the
+/// identifier first, and the held arm of `Describe` used to open with the *blocker's* name.
+/// Forty-four lines read `P1-MODEL: P9-AUTHORING overlaps territory held by …`, in which the
+/// only thing a reader can be sure of is that one of the two names was refused, and nothing
+/// says which. `OD-LEDGER-014` moved the phrasing into the library.
+///
+/// The assertion is positional rather than a substring search, because a substring search is
+/// what a wrong sentence also passes: both spellings contain both identifiers, and only the
+/// order distinguishes them.
+#[test]
+fn Test_A_Refusal_Should_Not_Open_With_The_Blockers_Name()
+{
+    let directory = Temp_Dir("refusal-subject");
+    let clock = FixedClock(NOW);
+    let mut ledger = Ledger_At(&directory, &clock);
+
+    ledger
+        .Save(&Document(vec![
+            Item("T-BLOCKER", &["src/shared.rs"]),
+            Item("T-REFUSED", &["src/shared.rs"]),
+        ]))
+        .expect("a fresh ledger is valid");
+
+    ledger
+        .Claim(&ItemId::New("T-BLOCKER"), "agent-a", Duration::from_secs(3_600))
+        .expect("uncontended");
+
+    let refusal = ledger
+        .Claim(&ItemId::New("T-REFUSED"), "agent-b", Duration::from_secs(3_600))
+        .expect_err("overlapping territory must be refused");
+
+    let sentence = refusal.Describe();
+
+    // The whole defect in one assertion: the blocker's name must not be the first thing the
+    // sentence says. Restoring `{item} overlaps territory held by {holder} …` makes this red
+    // and leaves every other assertion in this file green, which is what makes it the control
+    // for this arm rather than a restatement of the ones above.
+    assert!(
+        !sentence.starts_with("T-BLOCKER"),
+        "the refusal opens with the blocker's name, so printed under the refused item's own \
+         identifier it says the reverse of what happened: {sentence}"
+    );
+
+    // And it still has to say who is in the way, or the fix would have been to delete the
+    // information rather than to place it.
+    assert!(
+        sentence.contains("T-BLOCKER"),
+        "the refusal must still name the blocker: {sentence}"
+    );
+    assert!(
+        sentence.contains("agent-a"),
+        "and who holds it: {sentence}"
+    );
+
+    // The composed line `work audit` actually prints. Read as English, the subject is
+    // `T-REFUSED` and `T-BLOCKER` is what its territory runs into.
+    let line = format!("{:<13} {:<9} {sentence}", "T-REFUSED", "held");
+    assert!(
+        line.starts_with("T-REFUSED"),
+        "the caller names the subject and the description follows it: {line}"
+    );
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// One rendering, not two.
+///
+/// `work audit` carried its own copy of the held arm while the library's was wrong. Both are
+/// now the library's, and this pins the sentence the CLI composes so the workaround cannot
+/// quietly come back as a local `format!` that drifts from this one.
+#[test]
+fn Test_The_Held_Arm_Should_Have_Exactly_One_Rendering()
+{
+    let refusal = ClaimRefusal::HeldBy {
+        holder: "agent-a".to_owned(),
+        until: At(NOW + 3_600),
+        item: ItemId::New("T-BLOCKER"),
+    };
+
+    assert_eq!(
+        refusal.Describe(),
+        format!("territory overlaps T-BLOCKER, held by agent-a until unix {}", NOW + 3_600)
+    );
+}
+
 /// The negative control for the test above: the same two items, minus the pattern.
 ///
 /// Without this, `Test_An_Unexpanded_Pattern_Should_Brick_Every_Claim_On_The_Board` would
