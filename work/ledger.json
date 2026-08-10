@@ -2478,6 +2478,39 @@
       },
       "verified": null,
       "abandoned": []
+    },
+    {
+      "id": "P10-SURFACE-GRAIN",
+      "title": "Items reserve the whole snapshot directory to write one file in it",
+      "why": "OD-LEDGER-007 names this as the structural fix and declines to force it, and the debt register it introduced is meant to empty. This is the entry for the second of its two serializers. An item that widens one crate's API must update tests/contract/surface/<crate>.txt, and every such item reserves tests/contract entire - so any two of them exclude each other over files neither will touch. That is exactly the shape OD-LEDGER-004 named when it took docs/records apart: claim the artefact, not the directory. The record directory was merely the most complete instance because every item writes a record; this one is the same defect at the level above, and it was introduced by P9-PUBLIC-API in the same body of work that repaired the first. Nothing in the mechanism prevents the finer grain. Territory is file resolution and Territory::Intersect already compares by containment, so tests/contract/surface/nomos-ledger.txt and tests/contract/surface/nomos-cli.txt are Disjoint today with no code change at all - the same fact that made the record repair possible. What stops it is that four open items belonging to other work reserve the directory, and P10-SEEDING-SERIALIZES explicitly refused to narrow somebody else's territory to manufacture a pair. That refusal was right for that item and is the reason this one exists rather than a reason the work should not happen. Measured on this board rather than asserted: with the record directory already fine-grained and both serializers in place, six probes on 2026-08-09 refused six for six against one claim, and that pattern has now been measured four times in one day under four different holders. The two declared serializers are what remains, and this is the one of them that can be removed without touching a declared universe - deriving the seeded record list is refused on OD-SPEC-005's evidence and overlaps P10-MIRROR-DISAGREEMENT, but reserving a snapshot file rather than the snapshot directory gives up nothing and is checkable by the person authoring the item. This item also declares work/ledger.json in its territory, which nothing has ever done while re-authoring it - OD-LEDGER-001's own defect, at the file every item on the board is edited in.",
+      "done_when": "An item that changes one crate's public API reserves that crate's snapshot file rather than the snapshot directory, and two such items for different crates can be held at once. The open items that reserve tests/contract are re-authored to the files they will actually write, and any that genuinely need the directory - a new crate joining the band table, a change to the harness itself - keep it and say why in the item, since the point is accuracy and not a smaller number. The re-authoring happens only against items that are unclaimed at the time, and the record says so: narrowing a territory somebody is holding is the move this ledger has twice refused, and doing it here would buy parallelism with the thing that makes territory mean anything. The guard proves it rather than the author asserting it. tests/contract leaves KNOWN_SERIALIZERS, and Test_Every_Declared_Serializer_Should_Still_Serialize is what confirms the entry is gone rather than merely deleted - removing an entry that still serializes must fail. A test claims two items writing different records and widening different crates' APIs at once, through the real ledger against a copy of the real board, and the negative control is confirmed red alone: restoring one of them to the bare directory must fail that test and name it, the way the straggler guard already does for docs/records. The census that P10-SEEDING-SERIALIZES prints reports fewer blocked pairs afterwards, and the number is recorded in the record beside the number before it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/spec/nomos-spec-store",
+          "work/ledger.json",
+          "docs/records/OD-LEDGER-011"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": []
     }
   ]
 }
