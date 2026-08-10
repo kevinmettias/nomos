@@ -21,8 +21,30 @@
 //! command whose answer is empty *because* something was missing says so and exits
 //! [`ExitCode::Absent`] rather than printing nothing and succeeding. See [`crate::corpus`].
 
-use crate::arguments::{Named_Value, Named_Values, Required};
-use crate::corpus::{Assemble, Assembly, CorpusRequest};
+mod exit_code;
+mod spec_command;
+mod record_request;
+mod table_request;
+mod render_request;
+mod freshness_request;
+mod edit_request;
+mod commit_request;
+
+pub use exit_code::ExitCode;
+pub use spec_command::SpecCommand;
+pub use record_request::RecordRequest;
+pub use table_request::TableRequest;
+pub use render_request::RenderRequest;
+pub use freshness_request::FreshnessRequest;
+pub use edit_request::EditRequest;
+pub use commit_request::CommitRequest;
+
+use crate::arguments::Named_Value;
+use crate::arguments::Named_Values;
+use crate::arguments::Required;
+use crate::corpus::Assemble;
+use crate::corpus::Assembly;
+use crate::corpus::CorpusRequest;
 use nomos_spec_project::{
     Build, Catalogue, Check, Output, Profile, ProjectError, SIDECAR_SUFFIX, Stamp,
 };
@@ -31,174 +53,6 @@ use nomos_spec_store::{
     RecordProjection, RowCensus, RowScope, StoreError, TableLine,
 };
 use std::path::{Path, PathBuf};
-
-/// What the process exits with.
-///
-/// The numbers are shared with every other group on this binary: an exit code means one
-/// thing per binary rather than one thing per group, or an agent that runs both has to
-/// know which command it ran before it can read the number. `3` and `4` are `work`'s
-/// claim codes and are deliberately not reused here.
-///
-/// [`ExitCode::Absent`] is the distinction that earns its own code. An agent told the
-/// corpus is absent should configure one; an agent told the identifier is unknown should
-/// correct the identifier. Collapsing those into "non-zero" makes the fixable case
-/// indistinguishable from the mistaken one — which is the confusion this whole group was
-/// written to end.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ExitCode
-{
-    /// The question was answered.
-    Ok = 0,
-    /// The store does not hold it, and everything it would have come from was read.
-    NotFound = 1,
-    /// The command line was wrong.
-    Usage = 2,
-    /// The store could not be built or read at all.
-    StoreError = 5,
-    /// The answer is empty because something the store expected was not there.
-    Absent = 6,
-    /// The answer was produced and could not be written where it was asked to go.
-    Unwritable = 7,
-    /// A governed output on disk is no longer what the store and its stamp say it is.
-    ///
-    /// Apart from [`ExitCode::Absent`] on purpose. Absent is "nobody could find out";
-    /// this is "somebody found out, and the answer is that the file drifted". A gate
-    /// collapsing the two would report a machine without a corpus exactly as it reports
-    /// an edited output, which is the confusion `OD-GATE-001` is already about.
-    Stale = 8,
-    /// An authoring step refused the edit it was given.
-    ///
-    /// Apart from [`ExitCode::Usage`] because the command line was right: the author asked
-    /// for exactly what they meant and the *content* was refused — a text this surface would
-    /// not have written, a front matter naming a different record, a rename onto an occupied
-    /// path. An agent told its arguments were wrong will retype them; an agent told its edit
-    /// was refused will read the reason.
-    Refused = 9,
-}
-
-impl ExitCode
-{
-    /// The numeric code.
-    #[must_use]
-    pub const fn Value(self) -> i32
-    {
-        return self as i32;
-    }
-}
-
-/// What to read.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum SpecCommand
-{
-    /// Print a record's source, byte for byte.
-    Record(RecordRequest),
-    /// Print a document's table rows, as authored.
-    Table(TableRequest),
-    /// Build a projection profile and write it out.
-    Render(RenderRequest),
-    /// Compare the outputs already on disk against the store and their own stamps.
-    Freshness(FreshnessRequest),
-    /// Read a record out of the store as markdown, rendered from its rows.
-    Markdown(RecordRequest),
-    /// Say what committing an edited record would change, and change nothing.
-    Preview(EditRequest),
-    /// Preview an edited record and then commit it.
-    Commit(CommitRequest),
-    /// List the shipped projection profiles.
-    Profiles,
-    /// Say what this store was assembled from, and what was missing.
-    Sources,
-}
-
-/// Which record is being asked about.
-///
-/// One type for `record` and `markdown` because they address the same thing and differ in
-/// what they answer about it, which is the distinction `Markdown`'s own documentation
-/// draws. A second identical type would let the two drift apart in what they accept.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct RecordRequest
-{
-    /// The node identifier.
-    pub id: String,
-    /// Which revision of it, when more than one is held.
-    pub revision: Option<String>,
-}
-
-/// Which rows are being asked for.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct TableRequest
-{
-    /// A path, a file name, or a fragment of one.
-    pub document: String,
-    /// Only this block of the document.
-    pub block: Option<u32>,
-    /// Only this table within a block. Counted per block, so it narrows rather than
-    /// addresses on its own.
-    pub table: Option<u32>,
-    /// Only this revision.
-    pub revision: Option<String>,
-}
-
-/// Which projection is being built, and where it lands.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct RenderRequest
-{
-    /// A shipped profile identifier.
-    pub profile: String,
-    /// The build root the profile's own relative output is placed under.
-    pub into: PathBuf,
-    /// The node a subject-addressed profile is pointed at.
-    ///
-    /// Absent for the whole-store profiles, which have nowhere to put it. Which kind a
-    /// profile is is decided by the profile, so this is not a mode the caller selects.
-    pub subject: Option<String>,
-}
-
-/// Which outputs are being checked, and which of them were promised.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct FreshnessRequest
-{
-    /// The build root the profiles' own relative outputs are read from.
-    pub into: PathBuf,
-    /// Only this profile. Without it, every shipped profile is looked for.
-    pub profile: Option<String>,
-    /// The profiles this run requires to be there, whose absence is a failure.
-    ///
-    /// Empty by default, which is the question this command already answered: what is
-    /// here, and is what is here current. A build root legitimately holds a subset, so
-    /// absence is only a finding when a caller says which outputs it was promised — and
-    /// that promise belongs to the repository asking, not to the profile, which describes
-    /// how a projection is built and not whether anyone ships it.
-    pub require: Vec<String>,
-}
-
-/// The edit itself, without saying whether it will be committed.
-///
-/// `preview` and `commit` take the same edit and differ only in what they do with it,
-/// which is what makes "the preview and then the commit, in that order" expressible at
-/// all: `commit` holds one of these and runs the preview from it.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct EditRequest
-{
-    /// The node identifier.
-    pub id: String,
-    /// The edited markdown.
-    pub from: PathBuf,
-    /// The path the record should move to. A rename is an ordinary edit.
-    pub rename: Option<String>,
-}
-
-/// An edit, and the tree its record's own path is written under.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct CommitRequest
-{
-    /// What is being committed.
-    pub edit: EditRequest,
-    /// The tree the record's own path is written under. A record's path is repository
-    /// relative, so a commit has to be told which tree it means; `.` is the default rather
-    /// than the only option, so a test does not have to write into the tree it is testing.
-    pub into: PathBuf,
-}
 
 /// Where a command writes: content to `output`, everything about it to `notes`.
 ///

@@ -17,6 +17,14 @@
 //! saying so. A read command that prints an empty table for a corpus it never had is the
 //! same defect wearing a different hat.
 
+mod absence;
+mod corpus_request;
+mod assembly;
+
+pub use absence::Absence;
+pub use corpus_request::CorpusRequest;
+pub use assembly::Assembly;
+
 use nomos_spec_ingest::{
     Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, IngestError, Parse_Catalog,
     Parse_Statements,
@@ -40,83 +48,6 @@ const CATALOG: &str = "02_machine/catalog/catalog.json";
 /// happens to point. `--corpus-revision` exists so a differently-labelled tree can be
 /// read without that claim becoming false.
 pub const DEFAULT_REVISION: &str = "v14.36";
-
-/// Something the store was expected to hold and does not.
-///
-/// Every field is required. An absence that says only "no corpus" leaves the reader to
-/// discover the variable's name, the path, and what is missing from the answer they just
-/// received — and the last of those is the one they will not think to ask about.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Absence
-{
-    /// What is missing, as a person would name it.
-    pub subject: String,
-    /// Where it was looked for, concretely.
-    pub expected: String,
-    /// Why it is not here.
-    pub cause: String,
-    /// What is therefore not in this store.
-    pub cost: String,
-}
-
-impl Absence
-{
-    #[must_use]
-    pub fn Describe(&self) -> String
-    {
-        return format!(
-            "absent: {}\n  expected: {}\n  cause:    {}\n  so:       {}",
-            self.subject, self.expected, self.cause, self.cost
-        );
-    }
-}
-
-/// Where a corpus root was named, so an absence can say how to supply one.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct CorpusRequest
-{
-    /// The environment variable that names the corpus root.
-    ///
-    /// Passed in rather than read here. The composition root owns the environment; this
-    /// module is handed a value and a name for where it came from, which is what lets
-    /// every test below run without one.
-    pub variable: String,
-    /// The root, if anything named one.
-    pub root: Option<PathBuf>,
-    /// The revision label to ingest the corpus under.
-    pub revision: String,
-}
-
-/// A store, what went into it, and what did not.
-pub struct Assembly
-{
-    pub store: SpecificationStore,
-    /// One line per input that was read, in the order it was read.
-    pub read: Vec<String>,
-    pub absent: Vec<Absence>,
-}
-
-impl Assembly
-{
-    /// Whether anything the store was expected to hold is missing.
-    #[must_use]
-    pub fn Is_Complete(&self) -> bool
-    {
-        return self.absent.is_empty();
-    }
-
-    /// Every absence, one after another.
-    #[must_use]
-    pub fn Describe_Absences(&self) -> String
-    {
-        return self
-            .absent
-            .iter()
-            .map(Absence::Describe)
-            .collect::<Vec<String>>()
-            .join("\n");
-    }
-}
 
 /// Builds the store this invocation will answer from.
 ///
