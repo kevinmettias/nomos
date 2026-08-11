@@ -136,10 +136,7 @@ impl core::fmt::Display for EditError
     {
         return match self
         {
-            Self::NoSuchRecord { node_id } =>
-            {
-                write!(formatter, "no node in this store is identified {node_id}")
-            }
+            Self::NoSuchRecord { node_id } => write!(formatter, "no node identified {node_id} is in this store"),
             Self::NoContent { node_id } => write!(
                 formatter,
                 "{node_id} is in this store as an identity with no source document behind it, \
@@ -149,8 +146,7 @@ impl core::fmt::Display for EditError
                 formatter,
                 "{node_id} is held at {} revisions ({}); name one with a revision, because \
                  editing whichever came back first is a guess",
-                revisions.len(),
-                revisions.join(", ")
+                revisions.len(), revisions.join(", ")
             ),
             Self::NotAuthored { path } => write!(
                 formatter,
@@ -380,27 +376,7 @@ impl ClaimedRecord
     /// [`EditError::NotCanonical`] if this surface would not have written those bytes.
     pub fn Stage(self, markdown: &str, rename: Option<&str>) -> Result<StagedEdit, EditError>
     {
-        let record = Parse_Record(markdown).map_err(|error| {
-            return EditError::Unreadable {
-                cause: error.to_string(),
-            };
-        })?;
-
-        if record.front_matter.id != self.projection.node_id
-        {
-            return Err(EditError::IdentityChanged {
-                held: self.projection.node_id.clone(),
-                staged: record.front_matter.id,
-            });
-        }
-
-        if !Round_Trips(markdown)
-        {
-            return Err(EditError::NotCanonical {
-                cause: Why_Not_Canonical(markdown, &record),
-            });
-        }
-
+        let record = self.Accepted(markdown)?;
         let path = rename.unwrap_or(&self.projection.path).to_owned();
 
         return Ok(StagedEdit {
@@ -409,6 +385,29 @@ impl ClaimedRecord
             markdown: markdown.to_owned(),
             record,
         });
+    }
+
+    /// The staged text as a record, or why this surface will not take those bytes.
+    fn Accepted(&self, markdown: &str) -> Result<Record, EditError>
+    {
+        let record = Parse_Record(markdown)
+            .map_err(|error| return EditError::Unreadable { cause: error.to_string() })?;
+
+        if record.front_matter.id != self.projection.node_id
+        {
+            return Err(EditError::IdentityChanged {
+                held: self.projection.node_id.clone(),
+                staged: record.front_matter.id,
+            });
+        }
+        if !Round_Trips(markdown)
+        {
+            return Err(EditError::NotCanonical {
+                cause: Why_Not_Canonical(markdown, &record),
+            });
+        }
+
+        return Ok(record);
     }
 }
 
@@ -565,16 +564,26 @@ impl EditPreview
     {
         let mut lines = vec![format!("{} at {}", self.Node_Id(), self.Path())];
 
+        self.Describe_Changes(&mut lines);
+        if self.Changes_Nothing()
+        {
+            lines.push("  nothing changes".to_owned());
+        }
+        lines.push(self.Describe_Normative());
+
+        return lines.join("\n");
+    }
+
+    /// One line for each thing the edit changes, in the order an author reads them.
+    fn Describe_Changes(&self, lines: &mut Vec<String>)
+    {
         if let Some((before, after)) = self.Rename()
         {
             lines.push(format!("  renamed: {before} -> {after}"));
         }
         for change in &self.identity
         {
-            lines.push(format!(
-                "  {}: {:?} -> {:?}",
-                change.field, change.before, change.after
-            ));
+            lines.push(format!("  {}: {:?} -> {:?}", change.field, change.before, change.after));
         }
         for change in &self.blocks
         {
@@ -586,31 +595,14 @@ impl EditPreview
         }
         for relation in &self.relations_removed
         {
-            lines.push(format!(
-                "  relation removed: {} {}",
-                relation.relation, relation.target
-            ));
+            lines.push(format!("  relation removed: {} {}", relation.relation, relation.target));
         }
-        if self.Changes_Nothing()
-        {
-            lines.push("  nothing changes".to_owned());
-        }
-        lines.push(self.Describe_Normative());
-
-        return lines.join("\n");
     }
 
     /// The mandatory sentence, and what it was derived from.
     fn Describe_Normative(&self) -> String
     {
-        let verdict = if self.Wording_Moved()
-        {
-            "normative wording moved"
-        }
-        else
-        {
-            "no normative wording moved"
-        };
+        let verdict = self.Verdict();
 
         if self.statements.is_empty()
         {
@@ -621,7 +613,24 @@ impl EditPreview
             );
         }
 
-        let detail = self
+        return format!("  {verdict} - {}", self.Statement_Detail());
+    }
+
+    /// The sentence `D-129` calls mandatory, in the two words it can take.
+    fn Verdict(&self) -> &'static str
+    {
+        if self.Wording_Moved()
+        {
+            return "normative wording moved";
+        }
+
+        return "no normative wording moved";
+    }
+
+    /// Each statement recorded against this record, and what became of it.
+    fn Statement_Detail(&self) -> String
+    {
+        return self
             .statements
             .iter()
             .map(|movement| {
@@ -629,8 +638,6 @@ impl EditPreview
             })
             .collect::<Vec<String>>()
             .join(", ");
-
-        return format!("  {verdict} - {detail}");
     }
 }
 
@@ -782,13 +789,7 @@ impl SpecificationStore
             });
         })?;
 
-        let mut blocks = Vec::new();
-        for block in rows
-        {
-            blocks.push(block?);
-        }
-
-        return Ok(blocks);
+        return Collected(rows);
     }
 
     /// The front matter a document declared, as it declared it.
@@ -801,7 +802,7 @@ impl SpecificationStore
         document_uid: i64,
     ) -> Result<Option<RecordFrontMatter>, StoreError>
     {
-        let found: Option<(String, String, String, String, String, u32, String)> = self
+        let found = self
             .Connection()
             .query_row(
                 "SELECT node.node_id, node.kind, node.title, node.authority,
@@ -810,34 +811,23 @@ impl SpecificationStore
                  JOIN nodes node ON node.uid = front.node_uid
                  WHERE front.document_uid = ?1",
                 params![document_uid],
-                |row| {
-                    return Ok((
-                        row.get(0)?,
-                        row.get(1)?,
-                        row.get(2)?,
-                        row.get(3)?,
-                        row.get(4)?,
-                        row.get(5)?,
-                        row.get(6)?,
-                    ));
-                },
+                Declared_Row,
             )
             .optional()?;
-
-        let Some((id, kind, title, authority, status, version, tags)) = found
+        let Some(declared) = found
         else
         {
             return Ok(None);
         };
 
         return Ok(Some(RecordFrontMatter {
-            id,
-            kind,
-            title,
-            status,
-            version,
-            authority,
-            tags: serde_json::from_str(&tags).unwrap_or_default(),
+            id: declared.id,
+            kind: declared.kind,
+            title: declared.title,
+            status: declared.status,
+            version: declared.version,
+            authority: declared.authority,
+            tags: serde_json::from_str(&declared.tags).unwrap_or_default(),
             relations: self.Declared_Relations(document_uid)?,
         }));
     }
@@ -863,13 +853,7 @@ impl SpecificationStore
             });
         })?;
 
-        let mut relations = Vec::new();
-        for relation in rows
-        {
-            relations.push(relation?);
-        }
-
-        return Ok(relations);
+        return Collected(rows);
     }
 
     /// The one document behind an identifier, or why there is not exactly one.
@@ -885,26 +869,26 @@ impl SpecificationStore
         {
             return Ok(only.clone());
         }
-
         if documents.len() > 1
         {
-            return Err(EditError::Ambiguous {
-                node_id: node_id.to_owned(),
-                revisions: documents
-                    .iter()
-                    .map(|document| return document.revision.clone())
-                    .collect(),
-            });
+            return Err(Too_Many_Revisions(node_id, &documents));
         }
 
+        return Err(self.Nothing_To_Read(node_id)?);
+    }
+
+    /// Which refusal a record with no document behind it deserves: an identity this store
+    /// holds and has no content for, or no identity at all.
+    fn Nothing_To_Read(&self, node_id: &str) -> Result<EditError, StoreError>
+    {
         if self.Node_Summary(node_id)?.is_some()
         {
-            return Err(EditError::NoContent {
+            return Ok(EditError::NoContent {
                 node_id: node_id.to_owned(),
             });
         }
 
-        return Err(EditError::NoSuchRecord {
+        return Ok(EditError::NoSuchRecord {
             node_id: node_id.to_owned(),
         });
     }
@@ -940,25 +924,9 @@ impl SpecificationStore
         after: &[SourceBlock],
     ) -> Result<Vec<NormativeMovement>, StoreError>
     {
-        let mut statement = self.Connection().prepare(
-            "SELECT s.statement_id, s.canonical_text, s.canonical_hash
-             FROM normative_statements s
-             JOIN nodes n ON n.uid = s.node_uid
-             WHERE n.node_id = ?1
-             ORDER BY s.statement_id",
-        )?;
-        let rows = statement.query_map(params![node_id], |row| {
-            let id: String = row.get(0)?;
-            let text: String = row.get(1)?;
-            let hash: String = row.get(2)?;
-
-            return Ok((id, text, hash));
-        })?;
-
         let mut movements = Vec::new();
-        for row in rows
+        for (statement_id, canonical_text, canonical_hash) in self.Recorded_Statements(node_id)?
         {
-            let (statement_id, canonical_text, canonical_hash) = row?;
             movements.push(NormativeMovement {
                 statement_id,
                 canonical_hash,
@@ -968,7 +936,28 @@ impl SpecificationStore
 
         return Ok(movements);
     }
+
+    /// Every normative statement recorded against a record: its identifier, its canonical
+    /// text, and what that text hashes to.
+    fn Recorded_Statements(&self, node_id: &str) -> Result<Vec<Recorded>, StoreError>
+    {
+        let mut statement = self.Connection().prepare(
+            "SELECT s.statement_id, s.canonical_text, s.canonical_hash
+             FROM normative_statements s
+             JOIN nodes n ON n.uid = s.node_uid
+             WHERE n.node_id = ?1
+             ORDER BY s.statement_id",
+        )?;
+        let rows = statement.query_map(params![node_id], |row| {
+            return Ok((row.get(0)?, row.get(1)?, row.get(2)?));
+        })?;
+
+        return Collected(rows);
+    }
 }
+
+/// A normative statement as the store keeps it: identifier, canonical text, canonical hash.
+type Recorded = (String, String, String);
 
 /// The authored document a record arrived as: where it lives, at which revision, and the
 /// bytes themselves.
@@ -1002,7 +991,6 @@ pub(crate) fn Write_Record(
     })?;
     let document_uid = Write_Source_Document(connection, path, revision, markdown)?;
     let blocks = Segment(&record.body);
-
     Write_Source_Blocks(connection, document_uid, &blocks)?;
     let headings = Write_Headings(connection, document_uid, node_uid, &blocks)?;
     Dispose_Blocks(connection, document_uid, node_uid, &blocks)?;
@@ -1031,7 +1019,6 @@ fn Write_Headings(
     blocks: &[SourceBlock],
 ) -> Result<u32, StoreError>
 {
-    let mut written = 0_u32;
     let mut insert_heading = connection.prepare(
         "INSERT OR IGNORE INTO source_headings (document_uid, ordinal, depth, title)
          VALUES (?1, ?2, ?3, ?4)",
@@ -1041,32 +1028,46 @@ fn Write_Headings(
          SELECT uid, ?4, ?5 FROM source_headings
          WHERE document_uid = ?1 AND title = ?2 AND depth = ?3",
     )?;
-
-    for block in blocks
+    let headings: Vec<Heading<'_>> = blocks
         .iter()
         .filter(|block| return block.kind == BlockKind::Heading)
+        .map(Heading_Of)
+        .collect();
+    for heading in &headings
     {
-        let depth = block.text.chars().take_while(|character| return *character == '#').count();
-        let title = block.text.trim_start_matches('#').trim();
-
-        insert_heading.execute(params![
-            document_uid,
-            block.ordinal,
-            i64::try_from(depth).unwrap_or(0),
-            title
-        ])?;
+        insert_heading
+            .execute(params![document_uid, heading.ordinal, heading.depth, heading.title])?;
         dispose_heading.execute(params![
             document_uid,
-            title,
-            i64::try_from(depth).unwrap_or(0),
+            heading.title,
+            heading.depth,
             Disposition::PreservedVerbatim.Label(),
             node_uid
         ])?;
-
-        written = written.saturating_add(1);
     }
 
-    return Ok(written);
+    return Ok(u32::try_from(headings.len()).unwrap_or(u32::MAX));
+}
+
+/// A heading as the schema files it: where it sat, and the identity the lineage row matches
+/// on.
+struct Heading<'a>
+{
+    ordinal: u32,
+    depth: i64,
+    title: &'a str,
+}
+
+/// Reads a heading's depth from its markers and its title from what follows them.
+fn Heading_Of(block: &SourceBlock) -> Heading<'_>
+{
+    let depth = block.text.chars().take_while(|character| return *character == '#').count();
+
+    return Heading {
+        ordinal: block.ordinal,
+        depth: i64::try_from(depth).unwrap_or(0),
+        title: block.text.trim_start_matches('#').trim(),
+    };
 }
 
 /// Points every block at the record it belongs to.
@@ -1168,18 +1169,41 @@ fn Apply(connection: &Connection, preview: &EditPreview) -> Result<CommitReport,
     {
         Rename_Document(connection, document_uid, after, &claimed.projection.revision)?;
     }
+    Rewrite_Bytes(connection, document_uid, &preview.staged.markdown)?;
+    let node_uid = Restate_Node(connection, front_matter)?;
+    let blocks = Segment(&preview.staged.record.body);
+    let blocks_removed = Rewrite_Blocks(connection, document_uid, node_uid, &blocks)?;
+    Write_Front_Matter(connection, document_uid, node_uid, front_matter)?;
+    Write_Declared_Relations(connection, document_uid, &front_matter.relations)?;
+    Update_Graph(connection, &front_matter.id, preview)?;
 
-    let blob_uid = Write_Blob(connection, preview.staged.markdown.as_bytes())?;
+    return Ok(Reported(preview, blocks.len(), blocks_removed));
+}
+
+/// Replaces the document's stored bytes with the ones the author staged.
+fn Rewrite_Bytes(connection: &Connection, document_uid: i64, markdown: &str)
+    -> Result<(), StoreError>
+{
+    let blob_uid = Write_Blob(connection, markdown.as_bytes())?;
+
     connection.execute(
         "UPDATE source_documents SET blob_uid = ?2 WHERE uid = ?1",
         params![document_uid, blob_uid],
     )?;
 
-    // The author's own edit, so the title and the kind move with it. `Write_Node` refuses to
-    // overwrite a real node deliberately — the first writer of a record is its author and a
-    // later ingest pass must not restate it — and this is that author, arriving through the
-    // door the record decided they would use.
+    return Ok(());
+}
+
+/// Moves the title and the kind with the author's own edit.
+///
+/// `Write_Node` refuses to overwrite a real node deliberately — the first writer of a record
+/// is its author and a later ingest pass must not restate it — and this is that author,
+/// arriving through the door the record decided they would use.
+fn Restate_Node(connection: &Connection, front_matter: &RecordFrontMatter)
+    -> Result<i64, StoreError>
+{
     let node_uid = Node_Uid_Of(connection, &front_matter.id)?;
+
     connection.execute(
         "UPDATE nodes SET kind = ?2, authority = ?3, title = ?4 WHERE uid = ?1",
         params![
@@ -1190,24 +1214,37 @@ fn Apply(connection: &Connection, preview: &EditPreview) -> Result<CommitReport,
         ],
     )?;
 
-    let blocks = Segment(&preview.staged.record.body);
-    Write_Source_Blocks(connection, document_uid, &blocks)?;
-    Write_Headings(connection, document_uid, node_uid, &blocks)?;
-    Dispose_Blocks(connection, document_uid, node_uid, &blocks)?;
-    let blocks_removed = Prune_Blocks_Beyond(connection, document_uid, blocks.len())?;
-    Write_Front_Matter(connection, document_uid, node_uid, front_matter)?;
-    Write_Declared_Relations(connection, document_uid, &front_matter.relations)?;
-    Update_Graph(connection, &front_matter.id, preview)?;
+    return Ok(node_uid);
+}
 
-    return Ok(CommitReport {
-        node_id: front_matter.id.clone(),
+/// Replaces the document's blocks with the staged ones, and reports how many the edit
+/// shortened it past.
+fn Rewrite_Blocks(
+    connection: &Connection,
+    document_uid: i64,
+    node_uid: i64,
+    blocks: &[SourceBlock],
+) -> Result<usize, EditError>
+{
+    Write_Source_Blocks(connection, document_uid, blocks)?;
+    Write_Headings(connection, document_uid, node_uid, blocks)?;
+    Dispose_Blocks(connection, document_uid, node_uid, blocks)?;
+
+    return Prune_Blocks_Beyond(connection, document_uid, blocks.len());
+}
+
+/// What the commit did, as the caller reads it back.
+fn Reported(preview: &EditPreview, blocks: usize, blocks_removed: usize) -> CommitReport
+{
+    return CommitReport {
+        node_id: preview.staged.record.front_matter.id.clone(),
         path: preview.staged.path.clone(),
-        blocks: blocks.len(),
+        blocks,
         blocks_removed,
         relations_added: preview.relations_added.len(),
         relations_removed: preview.relations_removed.len(),
         renamed: preview.Rename().is_some(),
-    });
+    };
 }
 
 /// Moves a document to a new path, keeping its surrogate.
@@ -1223,14 +1260,7 @@ fn Rename_Document(
     revision: &str,
 ) -> Result<(), EditError>
 {
-    let holder: Option<i64> = connection
-        .query_row(
-            "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
-            params![path, revision],
-            |row| row.get(0),
-        )
-        .optional()
-        .map_err(StoreError::from)?;
+    let holder = Document_At(connection, path, revision)?;
 
     if holder.is_some_and(|found| return found != document_uid)
     {
@@ -1249,6 +1279,19 @@ fn Rename_Document(
     return Ok(());
 }
 
+/// Which document, if any, already lives at this address.
+fn Document_At(connection: &Connection, path: &str, revision: &str)
+    -> Result<Option<i64>, StoreError>
+{
+    return Ok(connection
+        .query_row(
+            "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
+            params![path, revision],
+            |row| row.get(0),
+        )
+        .optional()?);
+}
+
 /// Removes the blocks an edit shortened the document past.
 ///
 /// Refuses rather than deletes where a block carries a justified omission. An omission row
@@ -1262,16 +1305,7 @@ fn Prune_Blocks_Beyond(
 ) -> Result<usize, EditError>
 {
     let keep = i64::try_from(keep).unwrap_or(i64::MAX);
-
-    let justified: u32 = connection
-        .query_row(
-            "SELECT count(*) FROM omissions o
-             JOIN source_blocks b ON b.uid = o.source_block_uid
-             WHERE b.document_uid = ?1 AND b.ordinal > ?2",
-            params![document_uid, keep],
-            |row| row.get(0),
-        )
-        .map_err(StoreError::from)?;
+    let justified = Justified_Omissions_Beyond(connection, document_uid, keep)?;
 
     if justified > 0
     {
@@ -1281,33 +1315,7 @@ fn Prune_Blocks_Beyond(
         ))));
     }
 
-    // Written out rather than iterated over a list. These are three different statements run
-    // once each, in an order the foreign keys require — a row's lineage before the row, and
-    // both before the block they hang from — and a loop said "repeat this" about three steps
-    // that are not repetitions of one another.
-    connection
-        .execute(
-            "DELETE FROM lineage WHERE source_table_row_uid IN (
-                 SELECT r.uid FROM source_table_rows r
-                 JOIN source_blocks b ON b.uid = r.source_block_uid
-                 WHERE b.document_uid = ?1 AND b.ordinal > ?2)",
-            params![document_uid, keep],
-        )
-        .map_err(StoreError::from)?;
-    connection
-        .execute(
-            "DELETE FROM lineage WHERE source_block_uid IN (
-                 SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
-            params![document_uid, keep],
-        )
-        .map_err(StoreError::from)?;
-    connection
-        .execute(
-            "DELETE FROM source_table_rows WHERE source_block_uid IN (
-                 SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
-            params![document_uid, keep],
-        )
-        .map_err(StoreError::from)?;
+    Detach_Blocks_Beyond(connection, document_uid, keep)?;
 
     let removed = connection
         .execute(
@@ -1319,6 +1327,49 @@ fn Prune_Blocks_Beyond(
     return Ok(removed);
 }
 
+/// How many blocks past `keep` carry a justified omission.
+fn Justified_Omissions_Beyond(connection: &Connection, document_uid: i64, keep: i64)
+    -> Result<u32, StoreError>
+{
+    return Ok(connection.query_row(
+        "SELECT count(*) FROM omissions o
+         JOIN source_blocks b ON b.uid = o.source_block_uid
+         WHERE b.document_uid = ?1 AND b.ordinal > ?2",
+        params![document_uid, keep],
+        |row| row.get(0),
+    )?);
+}
+
+/// Removes everything hanging from the blocks past `keep`, so the blocks themselves can go.
+///
+/// Written out rather than iterated over a list. These are three different statements run
+/// once each, in an order the foreign keys require — a row's lineage before the row, and both
+/// before the block they hang from — and a loop said "repeat this" about three steps that are
+/// not repetitions of one another.
+fn Detach_Blocks_Beyond(connection: &Connection, document_uid: i64, keep: i64)
+    -> Result<(), StoreError>
+{
+    connection.execute(
+        "DELETE FROM lineage WHERE source_table_row_uid IN (
+             SELECT r.uid FROM source_table_rows r
+             JOIN source_blocks b ON b.uid = r.source_block_uid
+             WHERE b.document_uid = ?1 AND b.ordinal > ?2)",
+        params![document_uid, keep],
+    )?;
+    connection.execute(
+        "DELETE FROM lineage WHERE source_block_uid IN (
+             SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
+        params![document_uid, keep],
+    )?;
+    connection.execute(
+        "DELETE FROM source_table_rows WHERE source_block_uid IN (
+             SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
+        params![document_uid, keep],
+    )?;
+
+    return Ok(());
+}
+
 /// Brings the graph into line with what the record now declares.
 fn Update_Graph(
     connection: &Connection,
@@ -1328,27 +1379,43 @@ fn Update_Graph(
 {
     for relation in &preview.relations_added
     {
-        if Optional_Node_Uid(connection, &relation.target)?.is_none()
-        {
-            Write_Node(connection, NodeRow {
-                node_id: &relation.target,
-                kind: "unknown",
-                authority: EXTERNAL,
-                representation: "record",
-                title: &relation.target,
-            })?;
-        }
-        Write_Relation(connection, node_id, &relation.relation, &relation.target)?;
+        Add_Relation(connection, node_id, relation)?;
     }
-
     for relation in &preview.relations_removed
     {
-        Delete_Relation(connection, node_id, &relation.relation, &relation.target)?;
+        Remove_Relation(connection, node_id, relation)?;
+    }
 
-        if let Some(inverse) = Inverse_Of(connection, &relation.relation)?
-        {
-            Delete_Relation(connection, &relation.target, &inverse, node_id)?;
-        }
+    return Ok(());
+}
+
+/// Declares a relation, minting the target as an external node when nothing holds it yet.
+fn Add_Relation(connection: &Connection, node_id: &str, relation: &RecordRelation)
+    -> Result<(), StoreError>
+{
+    if Optional_Node_Uid(connection, &relation.target)?.is_none()
+    {
+        Write_Node(connection, NodeRow {
+            node_id: &relation.target,
+            kind: "unknown",
+            authority: EXTERNAL,
+            representation: "record",
+            title: &relation.target,
+        })?;
+    }
+
+    return Write_Relation(connection, node_id, &relation.relation, &relation.target);
+}
+
+/// Withdraws a relation, and the inverse the schema keeps beside it.
+fn Remove_Relation(connection: &Connection, node_id: &str, relation: &RecordRelation)
+    -> Result<(), StoreError>
+{
+    Delete_Relation(connection, node_id, &relation.relation, &relation.target)?;
+
+    if let Some(inverse) = Inverse_Of(connection, &relation.relation)?
+    {
+        Delete_Relation(connection, &relation.target, &inverse, node_id)?;
     }
 
     return Ok(());
@@ -1401,48 +1468,81 @@ fn Block_Changes(before: &[SourceBlock], after: &[SourceBlock]) -> Vec<BlockChan
 
     for block in after
     {
-        if let Some(index) = Unmatched(before, &taken, |candidate| {
-            return candidate.text == block.text;
-        })
+        match Claimed(before, &mut taken, block)
         {
-            Take(&mut taken, index);
-            if let Some(found) = before.get(index)
-                && found.ordinal != block.ordinal
-            {
-                changes.push(BlockChange::Moved {
-                    from: found.ordinal,
-                    to: block.ordinal,
-                });
-            }
-            continue;
+            Match::Held(change) => changes.extend(change),
+            Match::New => added.push(block),
         }
-
-        if let Some(index) = Unmatched(before, &taken, |candidate| {
-            return Normalize(&candidate.text) == Normalize(&block.text);
-        })
-        {
-            Take(&mut taken, index);
-            changes.push(BlockChange::Reflowed {
-                ordinal: block.ordinal,
-            });
-            continue;
-        }
-
-        added.push(block);
     }
 
-    let removed: Vec<&SourceBlock> = before
-        .iter()
-        .enumerate()
-        .filter(|(index, _)| return !taken.get(*index).copied().unwrap_or(true))
-        .map(|(_, block)| return block)
-        .collect();
-
+    let removed = Untaken(before, &taken);
     let paired = Paired(&added, &removed);
+
     changes.extend(paired);
     changes.sort_by_key(Position_Of);
 
     return changes;
+}
+
+/// What a staged block turned out to be against the blocks that were already there.
+enum Match
+{
+    /// One of them is this block, and this is what became of it — nothing worth reporting,
+    /// where it neither moved nor was reflowed.
+    Held(Option<BlockChange>),
+    /// Nothing before this edit carries this wording.
+    New,
+}
+
+/// Claims the block this staged one is — verbatim first, then under the normalizer — so that
+/// no earlier block is matched twice, and says what became of it.
+fn Claimed(before: &[SourceBlock], taken: &mut [bool], block: &SourceBlock) -> Match
+{
+    if let Some(index) = Unmatched(before, taken, |candidate| return candidate.text == block.text)
+    {
+        Take(taken, index);
+        let found = before.get(index);
+        let moved = Displaced(found, block.ordinal);
+
+        return Match::Held(moved);
+    }
+    if let Some(index) = Unmatched(before, taken, |candidate| {
+        return Normalize(&candidate.text) == Normalize(&block.text);
+    })
+    {
+        Take(taken, index);
+
+        return Match::Held(Some(BlockChange::Reflowed {
+            ordinal: block.ordinal,
+        }));
+    }
+
+    return Match::New;
+}
+
+/// The same wording at a different ordinal moved. At the same ordinal, nothing happened to
+/// it, and reporting that would be noise in a preview an author has to read every time.
+fn Displaced(found: Option<&SourceBlock>, to: u32) -> Option<BlockChange>
+{
+    return found
+        .filter(|block| return block.ordinal != to)
+        .map(|block| {
+            return BlockChange::Moved {
+                from: block.ordinal,
+                to,
+            };
+        });
+}
+
+/// The blocks no staged block claimed, which are the ones the edit removed.
+fn Untaken<'a>(before: &'a [SourceBlock], taken: &[bool]) -> Vec<&'a SourceBlock>
+{
+    return before
+        .iter()
+        .enumerate()
+        .filter(|(index, _)| return Is_Free(taken, *index))
+        .map(|(_, block)| return block)
+        .collect();
 }
 
 /// An addition and a removal at one ordinal are a rewording, and saying so is more use to a
@@ -1453,22 +1553,9 @@ fn Paired(added: &[&SourceBlock], removed: &[&SourceBlock]) -> Vec<BlockChange>
 
     for block in added
     {
-        match removed
-            .iter()
-            .find(|gone| return gone.ordinal == block.ordinal)
-        {
-            Some(gone) => changes.push(BlockChange::Reworded {
-                ordinal: block.ordinal,
-                before: ContentHash::Of(&gone.text).As_Str().to_owned(),
-                after: ContentHash::Of(&block.text).As_Str().to_owned(),
-            }),
-            None => changes.push(BlockChange::Added {
-                ordinal: block.ordinal,
-                kind: Kind_Label(block.kind).to_owned(),
-            }),
-        }
+        let change = Added_Or_Reworded(block, removed);
+        changes.push(change);
     }
-
     for gone in removed
     {
         if !added.iter().any(|block| return block.ordinal == gone.ordinal)
@@ -1481,6 +1568,25 @@ fn Paired(added: &[&SourceBlock], removed: &[&SourceBlock]) -> Vec<BlockChange>
     }
 
     return changes;
+}
+
+/// An addition at an ordinal something was removed from is that block, reworded.
+fn Added_Or_Reworded(block: &SourceBlock, removed: &[&SourceBlock]) -> BlockChange
+{
+    let Some(gone) = removed.iter().find(|gone| return gone.ordinal == block.ordinal)
+    else
+    {
+        return BlockChange::Added {
+            ordinal: block.ordinal,
+            kind: Kind_Label(block.kind).to_owned(),
+        };
+    };
+
+    return BlockChange::Reworded {
+        ordinal: block.ordinal,
+        before: ContentHash::Of(&gone.text).As_Str().to_owned(),
+        after: ContentHash::Of(&block.text).As_Str().to_owned(),
+    };
 }
 
 const fn Position_Of(change: &BlockChange) -> u32
@@ -1627,6 +1733,55 @@ fn First_Difference(expected: &str, found: &str) -> String
 
     return "every line matches, so the difference is in the leading or trailing whitespace"
         .to_owned();
+}
+
+/// More than one revision answered, so editing whichever came back first would be a guess.
+fn Too_Many_Revisions(node_id: &str, documents: &[DocumentSource]) -> EditError
+{
+    return EditError::Ambiguous {
+        node_id: node_id.to_owned(),
+        revisions: documents
+            .iter()
+            .map(|document| return document.revision.clone())
+            .collect(),
+    };
+}
+
+/// The row a document's declared front matter joins to.
+struct DeclaredRow
+{
+    id: String,
+    kind: String,
+    title: String,
+    authority: String,
+    status: String,
+    version: u32,
+    tags: String,
+}
+
+fn Declared_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<DeclaredRow>
+{
+    return Ok(DeclaredRow {
+        id: row.get(0)?,
+        kind: row.get(1)?,
+        title: row.get(2)?,
+        authority: row.get(3)?,
+        status: row.get(4)?,
+        version: row.get(5)?,
+        tags: row.get(6)?,
+    });
+}
+
+/// Every row a mapped query produced, or the first failure it hit.
+fn Collected<T>(rows: impl Iterator<Item = rusqlite::Result<T>>) -> Result<Vec<T>, StoreError>
+{
+    let mut collected = Vec::new();
+    for row in rows
+    {
+        collected.push(row?);
+    }
+
+    return Ok(collected);
 }
 
 fn Heading_Path(stored: &str) -> Vec<String>
