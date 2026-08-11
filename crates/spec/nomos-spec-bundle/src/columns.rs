@@ -256,7 +256,7 @@ const COVERAGE: &[Coverage] = &[
 /// Returns [`BundleError::UncoveredColumn`] for a column the exporter does not carry,
 /// [`BundleError::PhantomColumn`] for a declaration the schema does not have, and
 /// [`BundleError::Uncarried`] for a declared field no record of that table holds.
-pub fn Assert_Columns_Covered(
+pub(crate) fn Assert_Columns_Covered(
     connection: &Connection,
     records: &[Record],
 ) -> Result<(), BundleError>

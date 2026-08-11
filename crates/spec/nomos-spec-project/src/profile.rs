@@ -4,6 +4,12 @@ use crate::ProjectError;
 use nomos_spec_model::ContentHash;
 use serde::{Deserialize, Serialize};
 
+/// Whether a field says nothing once its surrounding space is discounted.
+fn Is_Blank(text: &str) -> bool
+{
+    return text.trim().is_empty();
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
 pub struct Profile
@@ -37,7 +43,7 @@ impl Profile
     /// A profile has to say what it is and what it renders as a heading.
     fn Named(&self) -> Result<(), ProjectError>
     {
-        if !self.id.trim().is_empty() && !self.title.trim().is_empty()
+        if !Is_Blank(&self.id) && !Is_Blank(&self.title)
         {
             return Ok(());
         }

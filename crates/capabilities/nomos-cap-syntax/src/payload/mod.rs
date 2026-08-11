@@ -131,12 +131,16 @@ mod render;
 #[cfg(test)]
 mod tests;
 
-pub use observation::{FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, Observation, PUBLIC, SLICE, TRAIT, VALUE};
+pub use observation::{
+    FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, Observation, PUBLIC, SLICE,
+    TRAIT, VALUE,
+};
 use observation::Observed;
 pub use parse::Parse_Payload;
-pub use render::{Escape, Render_Payload, Unescape};
+pub use render::Escape;
+pub(crate) use render::Unescape;
+pub use render::Render_Payload;
 
 use crate::payload_item::PayloadItem;
 use crate::payload_refusal::{PayloadRefusal, PayloadRefusalKind};
 use crate::syntax_payload::SyntaxPayload;
-use core::fmt::Write as _;

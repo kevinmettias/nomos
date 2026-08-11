@@ -16,7 +16,8 @@ mod walk;
 mod tests;
 
 pub use labels::{Gaps, Revisions_In};
-pub use fingerprint::{Fingerprint, Fingerprint_Of};
+pub(crate) use fingerprint::Fingerprint_Of;
+pub use fingerprint::Fingerprint;
 pub use walk::Walk;
 
 use crate::kind_census::KindCensus;

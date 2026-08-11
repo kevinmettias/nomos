@@ -24,7 +24,8 @@ mod overlap;
 #[cfg(test)]
 mod tests;
 
-pub use spelling::{Normalize_Path, Subject_Of};
+pub use spelling::Normalize_Path;
+pub(crate) use spelling::Subject_Of;
 use overlap::Shared_Subjects;
 
 use nomos_contracts::SubjectId;

@@ -13,7 +13,7 @@
 /// indistinguishable from the mistaken one — which is the confusion this whole group was
 /// written to end.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ExitCode
+pub(crate) enum ExitCode
 {
     /// The question was answered.
     Ok = 0,

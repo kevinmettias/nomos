@@ -61,7 +61,7 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR};
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
-pub use universe::{Read_Universes, UniverseKind, Universes_In};
+pub use universe::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.
 ///
@@ -101,7 +101,7 @@ pub use universe::{Read_Universes, UniverseKind, Universes_In};
 /// There is deliberately no `Preferring`. Naming a provider would be the rule deciding
 /// what the registry exists to decide.
 #[must_use]
-pub fn Syntax_Requirement() -> Requirement
+pub(crate) fn Syntax_Requirement() -> Requirement
 {
     let guarantee = Guarantee::New(
         FactVariant::Syntactic,

@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use crate::spec::edit_request::EditRequest;
 /// An edit, and the tree its record's own path is written under.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct CommitRequest
+pub(crate) struct CommitRequest
 {
     /// What is being committed.
     pub edit: EditRequest,

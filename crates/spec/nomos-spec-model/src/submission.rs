@@ -532,8 +532,7 @@ fn Check_Deviations(submission: &Submission, failures: &mut Vec<Failure>)
 /// above runs in both states. These are the three that acceptance adds.
 fn Check_Acceptance(submission: &Submission, failures: &mut Vec<Failure>)
 {
-    if submission.kind == SubmissionKind::FeatureResult
-        && submission.Current("evidence").is_none()
+    if submission.kind == SubmissionKind::FeatureResult && Lacks_Evidence(submission)
     {
         failures.push(Failure {
             field: "evidence".to_owned(),
@@ -587,6 +586,12 @@ fn Check_Acceptance(submission: &Submission, failures: &mut Vec<Failure>)
             ),
         });
     }
+}
+
+/// Whether an accepted submission still has no evidence recorded against it.
+fn Lacks_Evidence(submission: &Submission) -> bool
+{
+    return submission.Current("evidence").is_none();
 }
 
 /// The entries of a multi-entry value: its non-empty lines.

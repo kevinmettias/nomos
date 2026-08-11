@@ -74,7 +74,10 @@ mod parse;
 #[cfg(test)]
 mod tests;
 
-pub use contract::{CAPABILITY, CONTRACT_VERSION, Capability, Capability_Contract, Ceiling, Declared_Guarantee, PROVIDER, Payload_Schema, Provider_Offer, SCHEMA};
+pub use contract::{
+    CAPABILITY, Capability, Capability_Contract, Ceiling, CONTRACT_VERSION, Declared_Guarantee, Payload_Schema,
+    PROVIDER, Provider_Offer, SCHEMA,
+};
 pub use materialize::{Index_Key, Materialize_Index};
 pub use encode::Encode_Index;
 pub use parse::Parse_Index;
@@ -99,13 +102,13 @@ pub use rolled::Rolled;
 
 use crate::provider::FactContext;
 use nomos_analysis::{
-    Context, Dependency, FactError, FactKey, FactPayload, FactReader, GuaranteeDigest, InputDigest,
-    MaterializedFact, MemoryFactStore, Reader,
+    Context, Dependency, FactError, FactKey, FactPayload, FactReader, GuaranteeDigest, InputDigest, MaterializedFact,
+    MemoryFactStore, Reader,
 };
 use nomos_capability::{CapabilityContract, ProviderOffer, Requirement};
 use nomos_contracts::{
-    Applicability, Assurance, CapabilityId, ContractVersion, Digest128, EvidenceClass, FactVariant,
-    Guarantee, IncrementalGranularity, ProviderId, SchemaId, SubjectId,
+    Applicability, Assurance, CapabilityId, ContractVersion, Digest128, EvidenceClass, FactVariant, Guarantee,
+    IncrementalGranularity, ProviderId, SchemaId, SubjectId,
 };
 
 /// The `outcome` field for a member read from the provider the caller asked for.

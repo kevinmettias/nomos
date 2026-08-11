@@ -52,7 +52,7 @@ mod suite_report;
 mod tally;
 mod template;
 
-pub use archaeology::{Regression, Relocations, Revision, SHARED_BY};
+pub use archaeology::{Regression, Revision, SHARED_BY};
 pub use archive::{Archive, Archives_In};
 pub use archive_error::{ArchiveError, ArchiveErrorKind};
 pub use artifact::Artifact;
@@ -60,7 +60,6 @@ pub use block_lineage::BlockLineage;
 pub use block_mismatch::{BlockField, BlockMismatch, BlockMismatchKind};
 pub use catalog_entity::CatalogEntity;
 pub use catalog_report::CatalogReport;
-pub use collision::Collision;
 pub use disposition::Disposition;
 pub use document_fate::DocumentFate;
 pub use family::Family;
@@ -72,20 +71,19 @@ pub use hollow::Hollow;
 pub use identifier_outcome::IdentifierOutcome;
 pub use kind_census::KindCensus;
 pub use listing::Listing;
-pub use lineage::{Ingest_Block_Dispositions, Ingest_Section_Lineage, Parse_Section_Lineage,
-                  SectionReport};
+pub use lineage::{Ingest_Block_Dispositions, Ingest_Section_Lineage, Parse_Section_Lineage, SectionReport};
 pub use member::Member;
 pub use member_fate::MemberFate;
 pub use origin::Origin;
 pub use overlaid::Overlaid;
 pub use overlay::{
-    FILLER_PATTERNS, Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, OverlayReport,
-    Parse_Artifact, Reconcile, Statements_In,
+    FILLER_PATTERNS, Ingest_Overlay_Document, Ingest_v15_Record, Is_Filler, OverlayReport, Parse_Artifact, Reconcile,
+    Statements_In,
 };
 pub use pair_change::PairChange;
 pub use phases::{
-    IngestError, Ingest_Blob, Ingest_Catalog, Ingest_Source_Document, Ingest_Statements,
-    Parse_Catalog, Parse_Statements,
+    Ingest_Blob, Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, IngestError, Parse_Catalog,
+    Parse_Statements,
 };
 pub use recorded_block::RecordedBlock;
 pub use recorded_section::RecordedSection;
@@ -93,17 +91,14 @@ pub use recorded_statement::RecordedStatement;
 pub use reconciliation_report::ReconciliationReport;
 pub use regression_report::RegressionReport;
 pub use relocation::Relocation;
-pub use restore::{Extract, Models_In, Resolve, RestorationReport, Restore};
+pub use restore::{Models_In, Resolve, RestorationReport, Restore};
 pub use restored::Restored;
-pub use revisions::{
-    Census, DOMAIN_VOLUMES, Fingerprint, Fingerprint_Of, Gaps, RevisionFingerprint, Revisions_In,
-    Walk,
-};
+pub use revisions::{Census, DOMAIN_VOLUMES, Fingerprint, Gaps, RevisionFingerprint, Revisions_In, Walk};
 pub use scope::Scope;
 pub use section_lineage::SectionLineage;
 pub use siblings::{
-    COMMENTARY, Ingest_Game_Plan, Ingest_Sibling_Suite, LINEAGE_NOTES, Prepare_Commentary_View,
-    ROOT_SUITE, Sibling, Statements_Sourced_Only_From_Commentary,
+    COMMENTARY, Ingest_Game_Plan, Ingest_Sibling_Suite, LINEAGE_NOTES, Prepare_Commentary_View, ROOT_SUITE, Sibling,
+    Statements_Sourced_Only_From_Commentary,
 };
 pub use statement_divergence::StatementDivergence;
 pub use statement_file::StatementFile;

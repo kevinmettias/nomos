@@ -6,9 +6,7 @@ pub enum variant nomos_rules::Reading::Unobserved { because: String, }
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
-pub fn nomos_rules::Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
 pub fn nomos_rules::SourceFile::New(path: impl Into<String>, subject: SubjectId, text: impl Into<String>) -> Self
-pub fn nomos_rules::Syntax_Requirement() -> Requirement
 pub fn nomos_rules::Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
 pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
 pub struct field nomos_rules::DeclaredUniverse::kind: UniverseKind

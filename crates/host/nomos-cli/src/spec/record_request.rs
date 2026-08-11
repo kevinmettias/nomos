@@ -6,7 +6,7 @@
 /// what they answer about it, which is the distinction `Markdown`'s own documentation
 /// draws. A second identical type would let the two drift apart in what they accept.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct RecordRequest
+pub(crate) struct RecordRequest
 {
     /// The node identifier.
     pub id: String,

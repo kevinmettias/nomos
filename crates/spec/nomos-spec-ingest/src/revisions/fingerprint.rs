@@ -1,6 +1,6 @@
 //! What one revision contains, reduced to something two revisions can be compared by.
 
-use super::{Archive, RevisionFingerprint, IngestError, BTreeMap, ContentHash};
+use super::{Archive, BTreeMap, ContentHash, IngestError, RevisionFingerprint};
 
 /// One revision's fingerprints, read without unpacking.
 ///
@@ -25,7 +25,7 @@ pub fn Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerp
 }
 
 #[allow(clippy::missing_errors_doc)]
-pub fn Fingerprint_Of(
+pub(crate) fn Fingerprint_Of(
     label: &str,
     documents: &BTreeMap<String, String>,
 ) -> Result<RevisionFingerprint, IngestError>

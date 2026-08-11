@@ -23,7 +23,7 @@ impl StatementId
     {
         let (prefix, number) = text.rsplit_once('-')?;
 
-        if prefix.is_empty() || number.len() < 3 || !number.bytes().all(|b| b.is_ascii_digit())
+        if prefix.is_empty() || !Is_A_Suffix(number)
         {
             return None;
         }
@@ -46,6 +46,20 @@ impl StatementId
     {
         return &self.0;
     }
+}
+
+/// Whether a trailing segment is the number a statement identifier ends in.
+///
+/// Three digits at least, because two would let a section number read as a statement.
+fn Is_A_Suffix(number: &str) -> bool
+{
+    return number.len() >= 3 && All_Digits(number);
+}
+
+/// A non-empty run of ASCII digits and nothing else.
+fn All_Digits(text: &str) -> bool
+{
+    return !text.is_empty() && text.bytes().all(|byte| return byte.is_ascii_digit());
 }
 
 impl core::fmt::Display for StatementId

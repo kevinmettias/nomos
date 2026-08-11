@@ -1,6 +1,6 @@
 //! Putting raw bytes in and getting their identity back.
 
-use super::{SpecificationStore, IngestError};
+use super::{IngestError, SpecificationStore};
 
 /// I0 — store a byte-stream by content.
 ///

@@ -1,6 +1,9 @@
 //! Recognising a family member in a heading or a table row.
 
-use super::*;
+use super::{
+    BlockKind, BTreeMap, Collision, DOMAIN_MODEL, EXTENDED_TERMS, GLOSSARY, IngestError, Member, Origin, Restored,
+    RowKind, Segment, SERVICES, SourceBlock, Table_Rows, TableRow,
+};
 
 /// Reads one volume's family members without touching a store.
 ///
@@ -10,7 +13,7 @@ use super::*;
 /// # Errors
 ///
 /// Returns [`IngestError::Parse`] naming both members when two would take one identifier.
-pub fn Extract(document: &str, markdown: &str) -> Result<Vec<Member>, IngestError>
+pub(crate) fn Extract(document: &str, markdown: &str) -> Result<Vec<Member>, IngestError>
 {
     let mut members: Vec<Member> = Vec::new();
 
@@ -156,7 +159,7 @@ pub(super) fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
 {
     let mut found = Numbered(title, 2, DEPTH_4);
 
-    if Under(path, SERVICES) && title.split_whitespace().any(|word| return word == "Service")
+    if Under(path, SERVICES) && Names_A_Service(title)
     {
         found.push((Restored::Service, title.to_owned(), None));
     }
@@ -166,6 +169,12 @@ pub(super) fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
     }
 
     return found;
+}
+
+/// Whether a heading calls its subject a service in so many words.
+fn Names_A_Service(title: &str) -> bool
+{
+    return title.split_whitespace().any(|word| return word == "Service");
 }
 
 pub(super) fn From_Rows(document: &str, block: &SourceBlock, members: &mut Vec<Member>)
@@ -292,7 +301,7 @@ pub(super) fn Milestone(title: &str) -> Option<String>
     {
         return None;
     }
-    if number.is_empty() || !number.bytes().all(|byte| return byte.is_ascii_digit())
+    if !All_Digits(number)
     {
         return None;
     }
@@ -316,15 +325,18 @@ pub(super) fn Numbering(title: &str, letter: char, parts: usize) -> Option<Strin
     {
         return None;
     }
-    if !segments
-        .iter()
-        .skip(1)
-        .all(|segment| return !segment.is_empty() && segment.bytes().all(|b| return b.is_ascii_digit()))
+    if !segments.iter().skip(1).all(|segment| return All_Digits(segment))
     {
         return None;
     }
 
     return Some(format!("{letter}{numbering}"));
+}
+
+/// A non-empty run of ASCII digits and nothing else.
+fn All_Digits(text: &str) -> bool
+{
+    return !text.is_empty() && text.bytes().all(|byte| return byte.is_ascii_digit());
 }
 
 /// The identifier, minted from the family's prefix and what the document already says.

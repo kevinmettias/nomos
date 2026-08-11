@@ -7,7 +7,7 @@
 
 /// The value following `name`, if it is present.
 #[must_use]
-pub fn Named_Value(arguments: &[String], name: &str) -> Option<String>
+pub(crate) fn Named_Value(arguments: &[String], name: &str) -> Option<String>
 {
     let position = arguments.iter().position(|argument| return argument == name)?;
 
@@ -19,7 +19,7 @@ pub fn Named_Value(arguments: &[String], name: &str) -> Option<String>
 /// Repeating rather than comma-splitting, because a path may contain a comma and a
 /// separator character invents a quoting problem the argument vector already solved.
 #[must_use]
-pub fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
+pub(crate) fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
 {
     let mut values = Vec::new();
     let mut index = 0_usize;
@@ -44,7 +44,7 @@ pub fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
 /// # Errors
 ///
 /// Returns the message when the value is absent.
-pub fn Required(value: Option<&String>, name: &str, usage: &str) -> Result<String, String>
+pub(crate) fn Required(value: Option<&String>, name: &str, usage: &str) -> Result<String, String>
 {
     return value
         .cloned()

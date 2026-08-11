@@ -17,12 +17,9 @@ mod rule_result;
 mod run;
 mod violation;
 
-pub use changed_wording_is_justified::ChangedWordingIsJustified;
-pub use every_block_has_a_disposition::EveryBlockHasADisposition;
-pub use every_statement_traces_to_source::EveryStatementTracesToSource;
-pub use preserve::{EveryHeadingHasADisposition, Registered};
+pub use preserve::Registered;
 pub use rule::Rule;
 pub use rule_outcome::RuleOutcome;
 pub use rule_result::RuleResult;
-pub use run::{DECLARED_RULES, Ruleset_Hash, Validate, ValidationRun};
+pub use run::{DECLARED_RULES, Validate, ValidationRun};
 pub use violation::Violation;

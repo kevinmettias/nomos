@@ -61,7 +61,7 @@ pub trait ExclusionLedger
 /// # Errors
 ///
 /// Returns [`ClaimRefusal::LeaseTooLong`] when the request exceeds [`MAXIMUM_LEASE`].
-pub fn Check_Lease(requested: Duration) -> Result<(), ClaimRefusal>
+pub(crate) fn Check_Lease(requested: Duration) -> Result<(), ClaimRefusal>
 {
     if requested > MAXIMUM_LEASE
     {
@@ -79,7 +79,7 @@ pub fn Check_Lease(requested: Duration) -> Result<(), ClaimRefusal>
 /// can implement it slightly differently. Note that both non-`Disjoint` arms produce a
 /// refusal: there is no code path here that turns an unanswered question into a grant.
 #[must_use]
-pub fn Refusal_From(
+pub(crate) fn Refusal_From(
     intersection: &Intersection,
     against: &ItemId,
     holder: &str,

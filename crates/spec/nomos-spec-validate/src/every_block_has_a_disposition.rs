@@ -1,15 +1,13 @@
 //! Every block carried into v15 says what became of it.
 
-use crate::offending::Traced;
-use crate::offending::Undisposed;
-use crate::offending::Undisposed_Statement;
+use crate::offending::{Traced, Undisposed, Undisposed_Statement};
 use crate::rule_outcome::RuleOutcome;
 use crate::rule::Rule;
 use nomos_spec_store::{SpecificationStore, Table};
 /// The rule that would have caught v15.0's 282 dropped table rows — at the granularity
 /// v14 recorded, which is the block. A row lost from inside a preserved table block does
 /// not violate this rule, because v14's segmenter never saw rows as blocks.
-pub struct EveryBlockHasADisposition;
+pub(crate) struct EveryBlockHasADisposition;
 
 impl Rule for EveryBlockHasADisposition
 {

@@ -40,7 +40,7 @@ use record::Record;
 use table::Table;
 use render::{Render, Report_Build_Error};
 use freshness::{Freshness_Of, Resolved};
-use listing::{EmptySection, Empty_Section, Profiles, Sources};
+use listing::{Empty_Section, EmptySection, Profiles, Sources};
 use reporting::{Absent_Or, Report_Project_Error, Report_Store_Error, Vanished};
 
 mod exit_code;
@@ -52,27 +52,21 @@ mod freshness_request;
 mod edit_request;
 mod commit_request;
 
-pub use exit_code::ExitCode;
-pub use spec_command::SpecCommand;
-pub use record_request::RecordRequest;
-pub use table_request::TableRequest;
-pub use render_request::RenderRequest;
-pub use freshness_request::FreshnessRequest;
-pub use edit_request::EditRequest;
-pub use commit_request::CommitRequest;
+pub(crate) use exit_code::ExitCode;
+pub(crate) use spec_command::SpecCommand;
+pub(crate) use record_request::RecordRequest;
+pub(crate) use table_request::TableRequest;
+pub(crate) use render_request::RenderRequest;
+pub(crate) use freshness_request::FreshnessRequest;
+pub(crate) use edit_request::EditRequest;
+pub(crate) use commit_request::CommitRequest;
 
-use crate::arguments::Named_Value;
-use crate::arguments::Named_Values;
-use crate::arguments::Required;
-use crate::corpus::Assemble;
-use crate::corpus::Assembly;
-use crate::corpus::CorpusRequest;
-use nomos_spec_project::{
-    Build, Catalogue, Check, Output, Profile, ProjectError, SIDECAR_SUFFIX, Stamp,
-};
+use crate::arguments::{Named_Value, Named_Values, Required};
+use crate::corpus::{Assemble, Assembly, CorpusRequest};
+use nomos_spec_project::{Build, Catalogue, Check, Output, Profile, ProjectError, SIDECAR_SUFFIX, Stamp};
 use nomos_spec_store::{
-    CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch,
-    RecordProjection, RowCensus, RowScope, StoreError, TableLine,
+    CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch, RecordProjection, RowCensus, RowScope,
+    StoreError, TableLine,
 };
 use std::path::{Path, PathBuf};
 

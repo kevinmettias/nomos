@@ -2,7 +2,7 @@
 
 /// Which rows are being asked for.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct TableRequest
+pub(crate) struct TableRequest
 {
     /// A path, a file name, or a fragment of one.
     pub document: String,

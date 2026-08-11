@@ -3,7 +3,7 @@
 use std::path::PathBuf;
 /// Where a corpus root was named, so an absence can say how to supply one.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct CorpusRequest
+pub(crate) struct CorpusRequest
 {
     /// The environment variable that names the corpus root.
     ///

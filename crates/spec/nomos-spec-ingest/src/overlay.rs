@@ -123,12 +123,18 @@ fn Anchored_In(line: &str) -> Option<(&str, &str)>
 {
     let (_, after) = line.split_once("{#")?;
     let (id, rest) = after.split_once('}')?;
-    if id.is_empty() || !id.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-')
+    if !Is_Anchor_Id(id)
     {
         return None;
     }
 
     return Some((id, rest));
+}
+
+/// Whether an identifier is spelled the way an anchor spells one.
+fn Is_Anchor_Id(id: &str) -> bool
+{
+    return !id.is_empty() && id.bytes().all(|b| return b.is_ascii_alphanumeric() || b == b'-');
 }
 
 /// Compares every v14 identifier against what v15 carries.

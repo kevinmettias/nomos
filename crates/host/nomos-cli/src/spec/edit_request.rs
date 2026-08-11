@@ -7,7 +7,7 @@ use std::path::PathBuf;
 /// which is what makes "the preview and then the commit, in that order" expressible at
 /// all: `commit` holds one of these and runs the preview from it.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct EditRequest
+pub(crate) struct EditRequest
 {
     /// The node identifier.
     pub id: String,

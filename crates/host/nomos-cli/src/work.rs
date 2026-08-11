@@ -2,10 +2,9 @@
 
 use crate::arguments::{Named_Value, Named_Values};
 use nomos_ledger::{
-    Finishing,
-    AddRefusal, ClaimRefusal, Claim_Refusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish,
-    FinishRefusal, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome,
-    SCHEMA_VERSION, Territory, Validate, VerificationPredicate,
+    AddRefusal, Claim_Refusal, ClaimRefusal, DEFAULT_LEASE, ExclusionLedger, FileLedger, Finish, Finishing,
+    FinishRefusal, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem, ReleaseOutcome, SCHEMA_VERSION,
+    Territory, Validate, VerificationPredicate,
 };
 use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
@@ -21,7 +20,7 @@ use std::time::Duration;
 /// stop and get a human — collapsing those into "non-zero" makes the first case
 /// indistinguishable from the second.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ExitCode
+pub(crate) enum ExitCode
 {
     /// The operation succeeded.
     Ok = 0,
@@ -49,7 +48,7 @@ impl ExitCode
 
 /// What to do.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum WorkCommand
+pub(crate) enum WorkCommand
 {
     /// Show items, optionally filtered by state.
     List
@@ -114,7 +113,7 @@ pub enum WorkCommand
 /// arguments and default the lease the same way. Three identical types would be three
 /// chances for them to drift apart in what they accept while being documented as identical.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ClaimRequest
+pub(crate) struct ClaimRequest
 {
     /// Which item.
     pub item: ItemId,
@@ -129,7 +128,7 @@ pub struct ClaimRequest
 /// Shared by `abandon` and `decline` for the shape of the argument list only. What they end
 /// is different, which is why they stay two verbs and two ledger calls — `OD-LEDGER-019`.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct EndingRequest
+pub(crate) struct EndingRequest
 {
     /// Which item.
     pub item: ItemId,

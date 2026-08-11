@@ -7,18 +7,15 @@
 //! badly.
 
 use crate::materialization::Materialization;
-use crate::guarantee::Declared_Guarantee;
-use crate::guarantee::PROVIDER;
+use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::reading::Reading;
 use crate::syntax::Read_Source;
 use crate::syntax_facts::SyntaxFacts;
 use crate::syntax_item::SyntaxItem;
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
-use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
+use nomos_cap_syntax::{Capability, CONTRACT_VERSION, Payload_Schema};
 use nomos_contracts::{
-    Guarantee,
-    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, ProviderId, SnapshotId,
-    SubjectId,
+    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId, SubjectId,
 };
 
 /// Where in the workspace's history a fact is being produced.
@@ -46,7 +43,7 @@ pub struct FactContext
 /// been analyzed. [`crate::rollup`] is the first such reader in this crate; the slice in
 /// `tests/integration` is the second.
 #[must_use]
-pub fn Syntax_Inputs(source: &str) -> InputDigest
+pub(crate) fn Syntax_Inputs(source: &str) -> InputDigest
 {
     return InputDigest::Of(&[source.as_bytes()]);
 }

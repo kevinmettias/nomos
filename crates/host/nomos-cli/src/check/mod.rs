@@ -104,8 +104,8 @@ use report::{Examined, Report};
 mod exit_code;
 mod check_command;
 
-pub use exit_code::ExitCode;
-pub use check_command::CheckCommand;
+pub(crate) use exit_code::ExitCode;
+pub(crate) use check_command::CheckCommand;
 
 use crate::arguments::Named_Value;
 use nomos_analysis::{Context, MemoryFactStore, Reader};

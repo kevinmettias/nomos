@@ -58,12 +58,10 @@ mod payload_item;
 mod payload_refusal;
 mod syntax_payload;
 
-pub use contract::{
-    Capability, Capability_Contract, Payload_Schema, Ceiling, CAPABILITY, CONTRACT_VERSION, SCHEMA,
-};
+pub use contract::{CAPABILITY, Capability, Capability_Contract, Ceiling, CONTRACT_VERSION, Payload_Schema, SCHEMA};
 pub use payload::{
-    Escape, Function_Arity, Function_Shape, Observation, Parse_Payload, Render_Payload, Unescape,
-    FUNCTION, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, PUBLIC, SLICE, TRAIT, VALUE,
+    Escape, FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, Observation,
+    Parse_Payload, PUBLIC, Render_Payload, SLICE, TRAIT, VALUE,
 };
 pub use payload_item::PayloadItem;
 pub use payload_refusal::{PayloadRefusal, PayloadRefusalKind};

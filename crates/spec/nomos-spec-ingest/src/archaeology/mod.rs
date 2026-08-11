@@ -9,8 +9,8 @@ mod census;
 mod tests;
 
 pub use regression::Regression;
-pub use relocations::Relocations;
-use sections::{Later, Position, Body, Repetition};
+pub(crate) use relocations::Relocations;
+use sections::{Body, Later, Position, Repetition};
 use judgment::Judge;
 use census::Census;
 
@@ -31,11 +31,8 @@ use crate::restore::Models_In;
 use crate::restored::Restored;
 use crate::revisions::Fingerprint_Of;
 use crate::pair_change::PairChange;
-use crate::revisions::RevisionFingerprint;
-use crate::revisions::Walk;
-use crate::revisions::Within;
-use crate::revisions::DOMAIN_VOLUMES;
-use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, TableRow, Table_Rows};
+use crate::revisions::{DOMAIN_VOLUMES, RevisionFingerprint, Walk, Within};
+use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, Table_Rows, TableRow};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub const SHARED_BY: u32 = 3;

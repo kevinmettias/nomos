@@ -1,6 +1,4 @@
-use crate::offending::Traced;
-use crate::offending::Undisposed;
-use crate::offending::Undisposed_Statement;
+use crate::offending::{Traced, Undisposed, Undisposed_Statement};
 use nomos_spec_store::Table;
 use crate::every_statement_traces_to_source::EveryStatementTracesToSource;
 use crate::changed_wording_is_justified::ChangedWordingIsJustified;
@@ -9,7 +7,7 @@ use crate::rule::Rule;
 use crate::rule_outcome::RuleOutcome;
 use nomos_spec_store::SpecificationStore;
 
-pub struct EveryHeadingHasADisposition;
+pub(crate) struct EveryHeadingHasADisposition;
 
 impl Rule for EveryHeadingHasADisposition
 {

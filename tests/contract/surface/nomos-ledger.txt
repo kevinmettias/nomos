@@ -63,7 +63,6 @@ pub enum variant nomos_ledger::ReleaseOutcome::Abandoned { reason: String, }
 pub enum variant nomos_ledger::ReleaseOutcome::Finished(VerificationRecord)
 pub fn nomos_ledger::AddRefusal::Describe(&self) -> String
 pub fn nomos_ledger::AddRefusal::from(error: &LedgerError) -> Self
-pub fn nomos_ledger::Check_Lease(requested: Duration) -> Result<(), ClaimRefusal>
 pub fn nomos_ledger::Claim::Has_Lapsed(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::ClaimRefusal::Describe(&self) -> String
 pub fn nomos_ledger::Claim_Refusal( document: &LedgerDocument, item: &ItemId, now: Timestamp, ) -> Option<ClaimRefusal>
@@ -97,9 +96,7 @@ pub fn nomos_ledger::LedgerItem::Decline(&mut self, reason: &str, holder: &str, 
 pub fn nomos_ledger::LedgerItem::Has_Active_Claim(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::LedgerItem::Replace_Lapsed_Claim(&mut self, replacement: Claim, now: Timestamp) -> bool
 pub fn nomos_ledger::Normalize_Path(path: &str) -> String
-pub fn nomos_ledger::Refusal_From( intersection: &Intersection, against: &ItemId, holder: &str, until: Timestamp, ) -> Option<ClaimRefusal>
 pub fn nomos_ledger::ReleaseOutcome::Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
-pub fn nomos_ledger::Subject_Of(path: &str) -> SubjectId
 pub fn nomos_ledger::Territory::Ambiguous_Paths(&self) -> Vec<(String, String)>
 pub fn nomos_ledger::Territory::As_Subject_Set(&self) -> SubjectSet
 pub fn nomos_ledger::Territory::Empty() -> Self

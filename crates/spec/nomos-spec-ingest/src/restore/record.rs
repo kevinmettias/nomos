@@ -1,6 +1,9 @@
 //! Writing what was recognised into the store, and finding it again by name.
 
-use super::*;
+use super::{
+    BTreeMap, Extract, IngestError, Member, Origin, Refuse_Collisions, RestorationReport, SpecificationStore,
+    StoreError,
+};
 
 /// I5 — restores every family across the corpus into a store that already holds it.
 ///

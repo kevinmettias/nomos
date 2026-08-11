@@ -50,9 +50,7 @@
 
 use crate::declared_universe::DeclaredUniverse;
 use crate::reading::Reading;
-use nomos_cap_syntax::{
-    Function_Arity, PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, INHERENT, SLICE,
-};
+use nomos_cap_syntax::{FUNCTION, Function_Arity, IMPLEMENTATION, INHERENT, PayloadItem, SLICE, SyntaxPayload};
 
 /// How a universe is written down.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -80,7 +78,7 @@ const ALL: &str = "All";
 /// cheap to classify once; a list that is never surfaced is the defect this exists to
 /// prevent.
 #[must_use]
-pub fn Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
+pub(crate) fn Read_Universes(path: &str, payload: &SyntaxPayload) -> Reading
 {
     if let Some(field) = Unobserved_Field(payload)
     {
@@ -188,7 +186,7 @@ fn Unobserved_Field(payload: &SyntaxPayload) -> Option<&'static str>
 /// matched anything measurable.
 fn Constant_Universe(path: &str, item: &PayloadItem) -> Option<DeclaredUniverse>
 {
-    if item.kind != "Constant" || !item.Is_Public() || item.shape.Value() != Some(SLICE)
+    if !Declares_A_Constant_Universe(item)
     {
         return None;
     }
@@ -201,6 +199,15 @@ fn Constant_Universe(path: &str, item: &PayloadItem) -> Option<DeclaredUniverse>
     });
 }
 
+/// Whether an item is a public constant holding a list.
+///
+/// The three together are the whole of what a declared constant universe is: a private one
+/// is out of scope by the narrowing above, and a scalar constant is not a list of anything.
+fn Declares_A_Constant_Universe(item: &PayloadItem) -> bool
+{
+    return item.kind == "Constant" && item.Is_Public() && item.shape.Value() == Some(SLICE);
+}
+
 /// An `All()` in an inherent implementation names the type's own variant list.
 ///
 /// Inherent implementations only. `impl Display for Table` does not own the variant list,
@@ -210,6 +217,15 @@ fn Constant_Universe(path: &str, item: &PayloadItem) -> Option<DeclaredUniverse>
 ///
 /// Arity zero, for the same reason it always was: `All(&self)` is an accessor on an
 /// instance and not the type's list of itself.
+/// Whether an item is the zero-argument `All()` that names a type's variants.
+///
+/// Arity zero is part of the shape rather than a detail: `All(&self)` is an accessor on an
+/// instance, and it does not enumerate the type.
+fn Is_The_Variant_List(item: &PayloadItem) -> bool
+{
+    return item.kind == FUNCTION && item.Own_Name() == ALL && Function_Arity(&item.shape) == Some(0);
+}
+
 fn Enumeration_Universe(
     path: &str,
     payload: &SyntaxPayload,
@@ -217,7 +233,7 @@ fn Enumeration_Universe(
     item: &PayloadItem,
 ) -> Option<DeclaredUniverse>
 {
-    if item.kind != FUNCTION || item.Own_Name() != ALL || Function_Arity(&item.shape) != Some(0)
+    if !Is_The_Variant_List(item)
     {
         return None;
     }

@@ -20,10 +20,9 @@ mod table;
 pub use block::{BlockKind, Segment, SourceBlock};
 pub use normalize::{ContentHash, HASH_PREFIX, Is_Normalized, Normalize};
 pub use record::{Parse_Record, Record, RecordError, RecordFrontMatter, RecordRelation};
-pub use render::{RenderError, Render_Record, Round_Trips};
+pub use render::{Render_Record, RenderError, Round_Trips};
 pub use statement::{NormativeStatement, StatementId, StatementKind};
 pub use submission::{
-    DecisionGap, Failure, FieldValue, Origin, Refusal, Severity, Submission, SubmissionKind,
-    SubmissionState, Validate,
+    DecisionGap, Failure, FieldValue, Origin, Refusal, Severity, Submission, SubmissionKind, SubmissionState, Validate,
 };
-pub use table::{RowKind, TableDefect, TableRow, Table_Defects, Table_Rows};
+pub use table::{RowKind, Table_Defects, Table_Rows, TableDefect, TableRow};

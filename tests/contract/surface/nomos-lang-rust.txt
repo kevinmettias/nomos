@@ -59,7 +59,6 @@ pub fn nomos_lang_rust::Read_Source(source: &str) -> Reading
 pub fn nomos_lang_rust::Recognition::Of_Path(path: &str) -> Self
 pub fn nomos_lang_rust::SyntaxFacts::Declares_Nothing(&self) -> bool
 pub fn nomos_lang_rust::SyntaxItem::Qualified_Name(&self) -> String
-pub fn nomos_lang_rust::Syntax_Inputs(source: &str) -> InputDigest
 pub fn nomos_lang_rust::Visibility::Label(&self) -> String
 pub fn nomos_lang_rust::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_lang_rust::rollup::Capability() -> CapabilityId

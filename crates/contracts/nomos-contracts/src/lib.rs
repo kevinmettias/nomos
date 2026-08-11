@@ -80,9 +80,7 @@ pub use applicability::Applicability;
 pub use assurance::Assurance;
 pub use authority::{AuthorityClass, MutationClass};
 pub use contract_version::ContractVersion;
-pub use determinism::{
-    Declaration_Is_Coherent, DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence,
-};
+pub use determinism::{Declaration_Is_Coherent, DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 pub use display_label::DisplayLabel;
 pub use enforcement::{EnforcementBreach, EnforcementReach, EnforcerRef, GateCategory};
 pub use evidence::EvidenceClass;
@@ -91,8 +89,8 @@ pub use finding::Finding;
 pub use generation_id::GenerationId;
 pub use guarantee::Guarantee;
 pub use identity::{
-    BuildVariantId, CapabilityId, ConfigurationId, Digest128, OperationName, PackageId, ProviderId,
-    RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId, SubjectId,
+    BuildVariantId, CapabilityId, ConfigurationId, Digest128, OperationName, PackageId, ProviderId, RuleId, RunId,
+    SchemaId, SnapshotEntityId, SnapshotId, SubjectId,
 };
 pub use incremental_granularity::IncrementalGranularity;
 pub use package::PackageKind;

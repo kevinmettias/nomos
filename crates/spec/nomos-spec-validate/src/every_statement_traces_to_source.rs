@@ -23,7 +23,7 @@ const UNTRACED: &str = "SELECT s.statement_id
 ///
 /// v15.0 shipped exactly this violation for all 363 requirements: the statements existed
 /// and nothing connected them to the text they came from.
-pub struct EveryStatementTracesToSource;
+pub(crate) struct EveryStatementTracesToSource;
 
 impl Rule for EveryStatementTracesToSource
 {

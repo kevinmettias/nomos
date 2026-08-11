@@ -5,7 +5,7 @@
 /// Refused rather than merged. Merging would give one node two origins and make "which row
 /// did this come from" unanswerable, which is the question the restoration is for.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Collision
+pub(crate) struct Collision
 {
     pub id: String,
     pub first: String,

@@ -1,9 +1,9 @@
 //! Where content that left one document turned up.
 
-use super::{PairChange, RevisionFingerprint, DocumentFate, BTreeMap, BTreeSet, Relocation};
+use super::{BTreeMap, BTreeSet, DocumentFate, PairChange, Relocation, RevisionFingerprint};
 
 #[must_use]
-pub fn Relocations(
+pub(crate) fn Relocations(
     pair: &PairChange,
     from: &RevisionFingerprint,
     to: &RevisionFingerprint,

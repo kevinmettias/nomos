@@ -32,13 +32,12 @@ mod absence;
 mod corpus_request;
 mod assembly;
 
-pub use absence::Absence;
-pub use corpus_request::CorpusRequest;
-pub use assembly::Assembly;
+pub(crate) use absence::Absence;
+pub(crate) use corpus_request::CorpusRequest;
+pub(crate) use assembly::Assembly;
 
 use nomos_spec_ingest::{
-    Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, IngestError, Parse_Catalog,
-    Parse_Statements,
+    Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, IngestError, Parse_Catalog, Parse_Statements,
 };
 use nomos_spec_store::{Seed_Governing_Records, SpecificationStore, StoreError};
 use std::collections::BTreeMap;
@@ -56,7 +55,7 @@ use std::path::{Path, PathBuf};
 /// Returns [`StoreError`] if the database cannot be opened or the embedded records cannot
 /// be seeded. A corpus that cannot be read is not an error: it is an absence, because the
 /// commands over this store still have a true answer to give without it.
-pub fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
+pub(crate) fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
 {
     let mut assembly = Seeded()?;
 

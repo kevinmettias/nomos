@@ -83,12 +83,9 @@ pub fn nomos_spec_ingest::Archives_In(directory: &Path) -> Result<Vec<PathBuf>, 
 pub fn nomos_spec_ingest::BlockMismatch::Describe(&self) -> String
 pub fn nomos_spec_ingest::Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestError>
 pub fn nomos_spec_ingest::Check_Against_Manifest( lineage: &BlockLineage, documents: &BTreeMap<String, String>, ) -> GateReport
-pub fn nomos_spec_ingest::Collision::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_spec_ingest::Extract(document: &str, markdown: &str) -> Result<Vec<Member>, IngestError>
 pub fn nomos_spec_ingest::FillerCensus::Undeclared(&self) -> Vec<&Template>
 pub fn nomos_spec_ingest::FillerCensus::Widest_Undeclared(&self) -> Option<&Template>
 pub fn nomos_spec_ingest::Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerprint, IngestError>
-pub fn nomos_spec_ingest::Fingerprint_Of( label: &str, documents: &BTreeMap<String, String>, ) -> Result<RevisionFingerprint, IngestError>
 pub fn nomos_spec_ingest::Gaps(labels: &[String]) -> Vec<String>
 pub fn nomos_spec_ingest::GateReport::Exercised_The_Normalizer(&self) -> bool
 pub fn nomos_spec_ingest::GateReport::Passed(&self) -> bool
@@ -129,7 +126,6 @@ pub fn nomos_spec_ingest::RegressionReport::In(&self, family: Restored) -> Vec<&
 pub fn nomos_spec_ingest::RegressionReport::Named(&self, name: &str) -> Option<&MemberFate>
 pub fn nomos_spec_ingest::RegressionReport::Summary(&self) -> String
 pub fn nomos_spec_ingest::RegressionReport::Tally(&self, family: Restored) -> Tally
-pub fn nomos_spec_ingest::Relocations( pair: &PairChange, from: &RevisionFingerprint, to: &RevisionFingerprint, ) -> DocumentFate
 pub fn nomos_spec_ingest::Resolve(store: &SpecificationStore, name: &str) -> Result<Option<i64>, IngestError>
 pub fn nomos_spec_ingest::RestorationReport::In(&self, family: Restored) -> Vec<&Member>
 pub fn nomos_spec_ingest::RestorationReport::Named(&self, name: &str) -> Option<&Member>
@@ -146,7 +142,6 @@ pub fn nomos_spec_ingest::Statements_Sourced_Only_From_Commentary( store: &Speci
 pub fn nomos_spec_ingest::Walk(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
 pub impl nomos_spec_ingest::ArchiveError implements core::fmt::Display
 pub impl nomos_spec_ingest::ArchiveError implements std::error::Error
-pub impl nomos_spec_ingest::Collision implements core::fmt::Display
 pub impl nomos_spec_ingest::IngestError implements From<StoreError>
 pub impl nomos_spec_ingest::IngestError implements core::fmt::Display
 pub impl nomos_spec_ingest::IngestError implements std::error::Error
@@ -169,9 +164,6 @@ pub struct field nomos_spec_ingest::CatalogReport::aliases: u32
 pub struct field nomos_spec_ingest::CatalogReport::dangling_edges: Vec<String>
 pub struct field nomos_spec_ingest::CatalogReport::nodes: u32
 pub struct field nomos_spec_ingest::CatalogReport::relations: u32
-pub struct field nomos_spec_ingest::Collision::first: String
-pub struct field nomos_spec_ingest::Collision::id: String
-pub struct field nomos_spec_ingest::Collision::second: String
 pub struct field nomos_spec_ingest::DocumentFate::appeared: Vec<String>
 pub struct field nomos_spec_ingest::DocumentFate::changed: Vec<String>
 pub struct field nomos_spec_ingest::DocumentFate::disappeared: Vec<String>
@@ -285,7 +277,6 @@ pub struct nomos_spec_ingest::BlockLineage
 pub struct nomos_spec_ingest::BlockMismatch
 pub struct nomos_spec_ingest::CatalogEntity
 pub struct nomos_spec_ingest::CatalogReport
-pub struct nomos_spec_ingest::Collision
 pub struct nomos_spec_ingest::DocumentFate
 pub struct nomos_spec_ingest::FillerBlock
 pub struct nomos_spec_ingest::FillerCensus

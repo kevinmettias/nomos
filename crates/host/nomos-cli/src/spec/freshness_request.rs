@@ -3,7 +3,7 @@
 use std::path::PathBuf;
 /// Which outputs are being checked, and which of them were promised.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct FreshnessRequest
+pub(crate) struct FreshnessRequest
 {
     /// The build root the profiles' own relative outputs are read from.
     pub into: PathBuf,

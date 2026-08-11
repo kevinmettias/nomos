@@ -77,7 +77,7 @@ pub use blocker::Blocker;
 pub use claim::Claim;
 pub use claim_refusal::ClaimRefusal;
 pub use declination::Declination;
-pub use exclusion::{Check_Lease, ExclusionLedger, Refusal_From};
+pub use exclusion::ExclusionLedger;
 pub use finish::{Finish, FinishRefusal};
 pub use finishing::Finishing;
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateUnknown, LINT_STEP, Workflow_Path};
@@ -89,9 +89,7 @@ pub use ledger_document::LedgerDocument;
 pub use ledger_error::LedgerError;
 pub use release_outcome::ReleaseOutcome;
 pub use reservation::Reservation;
-pub use store::{
-    Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, SCHEMA_VERSION, Validate,
-};
+pub use store::{Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, SCHEMA_VERSION, Validate};
 pub use verification_predicate::VerificationPredicate;
 pub use verification_record::VerificationRecord;
-pub use territory::{Normalize_Path, Subject_Of, Territory};
+pub use territory::{Normalize_Path, Territory};

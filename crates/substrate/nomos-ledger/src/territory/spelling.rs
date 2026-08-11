@@ -1,6 +1,6 @@
 //! Reducing a path spelling to the subject it names.
 
-use super::{SubjectId, Content_Digest};
+use super::{Content_Digest, SubjectId};
 
 /// A record stem up to and including its ordinal component.
 ///
@@ -17,7 +17,7 @@ pub(super) fn Up_To_The_Ordinal(stem: &str) -> Option<String>
 
     for (position, component) in stem.split('-').enumerate()
     {
-        if position == 0 && !component.bytes().any(|byte| return byte.is_ascii_alphabetic())
+        if position == 0 && !Has_A_Letter(component)
         {
             return None;
         }
@@ -35,6 +35,12 @@ pub(super) fn Up_To_The_Ordinal(stem: &str) -> Option<String>
     }
 
     return None;
+}
+
+/// Whether a component carries at least one letter.
+fn Has_A_Letter(component: &str) -> bool
+{
+    return component.bytes().any(|byte| return byte.is_ascii_alphabetic());
 }
 
 /// Whether a component is the ordinal that ends an identifier.
@@ -56,7 +62,7 @@ pub(super) fn Is_Ordinal(component: &str, position: usize) -> bool
 /// the holder of the file it became. See [`Normalize_Path`] for that rule and
 /// `OD-MODEL-001` for why the difference is kept rather than settled either way.
 #[must_use]
-pub fn Subject_Of(path: &str) -> SubjectId
+pub(crate) fn Subject_Of(path: &str) -> SubjectId
 {
     return SubjectId::From_Digest(Content_Digest(Normalize_Path(path).as_bytes()));
 }

@@ -6,16 +6,14 @@ use sections::{Blocks, Documents, Headings, Lineage, Nodes, Omissions, Relations
 
 use crate::content::Content;
 use crate::filter::Filter;
-use crate::profile::Profile;
-use crate::profile::SUBJECT;
+use crate::profile::{Profile, SUBJECT};
 use crate::input::Input;
 use crate::item::Item;
 use crate::projection::Projection;
 use crate::section::Section;
 use crate::ProjectError;
-use core::fmt::Write as _;
 use nomos_spec_store::SpecificationStore;
-use rusqlite::{params_from_iter, Connection, Row};
+use rusqlite::{Connection, params_from_iter, Row};
 
 impl Filter
 {

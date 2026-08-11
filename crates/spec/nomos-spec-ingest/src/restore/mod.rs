@@ -20,7 +20,8 @@ mod record;
 #[cfg(test)]
 mod tests;
 
-pub use extract::{Extract, Models_In};
+pub(crate) use extract::Extract;
+pub use extract::Models_In;
 pub use record::{Resolve, Restore};
 
 use crate::origin::Origin;
@@ -28,7 +29,7 @@ use crate::collision::Collision;
 use crate::restored::Restored;
 use crate::member::Member;
 use crate::phases::IngestError;
-use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, TableRow, Table_Rows};
+use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, Table_Rows, TableRow};
 use nomos_spec_store::{SpecificationStore, StoreError};
 use core::fmt::Write as _;
 use std::collections::BTreeMap;

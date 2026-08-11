@@ -12,7 +12,7 @@
 /// `Ok`. A run that judged nothing and a run that judged everything and approved are the
 /// two states this binary must never render the same.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ExitCode
+pub(crate) enum ExitCode
 {
     /// The rules ran and nothing they found can fail a build.
     Ok = 0,

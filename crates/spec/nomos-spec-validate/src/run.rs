@@ -195,7 +195,7 @@ struct Reconciliation
 /// A snapshot records this. Without it, "validated clean" does not say clean *against
 /// what*, and a run with three rules disabled is indistinguishable from a full one.
 #[must_use]
-pub fn Ruleset_Hash(ids: &[&str]) -> ContentHash
+pub(crate) fn Ruleset_Hash(ids: &[&str]) -> ContentHash
 {
     let mut sorted: Vec<&str> = ids.to_vec();
     sorted.sort_unstable();

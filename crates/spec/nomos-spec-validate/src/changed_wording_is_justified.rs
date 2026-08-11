@@ -16,7 +16,7 @@ const UNJUSTIFIED: &str = "SELECT s.statement_id
      ORDER BY s.statement_id";
 
 /// A changed `canonical_hash` needs a recorded reason and the hash it supersedes.
-pub struct ChangedWordingIsJustified;
+pub(crate) struct ChangedWordingIsJustified;
 
 impl Rule for ChangedWordingIsJustified
 {

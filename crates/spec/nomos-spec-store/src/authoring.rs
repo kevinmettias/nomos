@@ -1479,13 +1479,22 @@ fn Unmatched(
 {
     for (index, block) in before.iter().enumerate()
     {
-        if !taken.get(index).copied().unwrap_or(true) && predicate(block)
+        if Is_Free(taken, index) && predicate(block)
         {
             return Some(index);
         }
     }
 
     return None;
+}
+
+/// Whether the block at this index is still unclaimed.
+///
+/// An index past the end reads as taken, so a walk that runs off the slice matches nothing
+/// rather than pairing a change with a block that is not there.
+fn Is_Free(taken: &[bool], index: usize) -> bool
+{
+    return !taken.get(index).copied().unwrap_or(true);
 }
 
 fn Take(taken: &mut [bool], index: usize)

@@ -33,7 +33,7 @@ impl ContentHash
     pub fn Parse(text: &str) -> Option<Self>
     {
         let digest = text.strip_prefix(HASH_PREFIX)?;
-        if digest.len() == 64 && digest.bytes().all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
+        if digest.len() == 64 && Is_Lowercase_Hex(digest)
         {
             return Some(Self(text.to_owned()));
         }
@@ -45,6 +45,15 @@ impl ContentHash
     {
         return &self.0;
     }
+}
+
+/// A run of ASCII hex digits with no upper case in it.
+///
+/// Case is part of the address rather than presentation: two spellings of one digest would
+/// be two content addresses for one piece of content.
+fn Is_Lowercase_Hex(text: &str) -> bool
+{
+    return text.bytes().all(|byte| return byte.is_ascii_hexdigit() && !byte.is_ascii_uppercase());
 }
 
 impl core::fmt::Display for ContentHash

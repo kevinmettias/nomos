@@ -103,7 +103,6 @@ pub fn nomos_spec_store::EditPreview::Relations_Removed(&self) -> &[RecordRelati
 pub fn nomos_spec_store::EditPreview::Rename(&self) -> Option<(&str, &str)>
 pub fn nomos_spec_store::EditPreview::Statements(&self) -> &[NormativeMovement]
 pub fn nomos_spec_store::EditPreview::Wording_Moved(&self) -> bool
-pub fn nomos_spec_store::Kind_Of(label: &str) -> Option<BlockKind>
 pub fn nomos_spec_store::Latest_Version() -> u32
 pub fn nomos_spec_store::NormativeOutcome::Describe(&self) -> String
 pub fn nomos_spec_store::RecordProjection::Matches_Source(&self) -> bool

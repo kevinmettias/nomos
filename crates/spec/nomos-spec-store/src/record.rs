@@ -19,7 +19,7 @@ pub const fn Kind_Label(kind: BlockKind) -> &'static str
 /// `None` for a label this build does not know, so a store written by a newer one reads as
 /// unknown rather than as prose.
 #[must_use]
-pub fn Kind_Of(label: &str) -> Option<BlockKind>
+pub(crate) fn Kind_Of(label: &str) -> Option<BlockKind>
 {
     return [BlockKind::Heading, BlockKind::Prose, BlockKind::Code]
         .into_iter()

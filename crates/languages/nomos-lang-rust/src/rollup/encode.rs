@@ -1,6 +1,6 @@
 //! Writing a module index out.
 
-use super::{ModuleIndex, IndexEntry};
+use super::{IndexEntry, ModuleIndex};
 
 /// Fields in a `module` record, counting the tag.
 pub(super) const MODULE_FIELDS: usize = 2;

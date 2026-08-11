@@ -1,6 +1,6 @@
 //! What a provider observed about one declaration, and the words it says it in.
 
-use super::*;
+use super::{Escape, PayloadRefusal, PayloadRefusalKind, Unescape};
 
 /// The `kind` label every provider writes for a function form.
 pub const FUNCTION: &str = "Function";

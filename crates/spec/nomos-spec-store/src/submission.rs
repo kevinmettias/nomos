@@ -9,9 +9,7 @@
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
 use crate::store::{SpecificationStore, StoreError};
-use nomos_spec_model::{
-    ContentHash, Failure, Origin, Refusal, Submission, SubmissionState, Validate,
-};
+use nomos_spec_model::{ContentHash, Failure, Origin, Refusal, Submission, SubmissionState, Validate};
 use rusqlite::Transaction;
 
 /// Why a submission did not become durable.

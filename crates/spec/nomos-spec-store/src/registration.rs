@@ -332,6 +332,16 @@ fn Named_Record(text: &str, at: &str) -> Result<String, RegistrationError>
     });
 }
 
+/// Whether a registered path is one this store will read a record from.
+///
+/// `inside` and `markdown` are the two halves already computed above. The other two clauses
+/// are traversal: a `..` or a backslash would leave the record directory while still
+/// spelling a name that looks as though it sits inside it.
+fn Is_A_Record_Path(named: &str, inside: bool, markdown: bool) -> bool
+{
+    return inside && markdown && !named.contains("..") && !named.contains('\\');
+}
+
 /// That what a registration names is a record file, and that it is there.
 fn Check_Is_A_Record(named: &str, at: &str, root: &Path) -> Result<(), RegistrationError>
 {
@@ -344,7 +354,7 @@ fn Check_Is_A_Record(named: &str, at: &str, root: &Path) -> Result<(), Registrat
         .extension()
         .is_some_and(|extension| return extension == "md");
 
-    if !inside || !markdown || named.contains("..") || named.contains('\\')
+    if !Is_A_Record_Path(named, inside, markdown)
     {
         return Err(RegistrationError::Outside {
             at: at.to_owned(),

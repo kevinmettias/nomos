@@ -41,7 +41,6 @@ pub fn nomos_cap_syntax::PayloadRefusalKind::Describe(&self) -> String
 pub fn nomos_cap_syntax::Payload_Schema() -> SchemaId
 pub fn nomos_cap_syntax::Render_Payload(payload: &SyntaxPayload) -> Vec<u8>
 pub fn nomos_cap_syntax::SyntaxPayload::Enclosing(&self, ordinal: usize) -> Option<&PayloadItem>
-pub fn nomos_cap_syntax::Unescape(value: &str) -> String
 pub struct field nomos_cap_syntax::PayloadItem::documentation: Observation
 pub struct field nomos_cap_syntax::PayloadItem::kind: String
 pub struct field nomos_cap_syntax::PayloadItem::ordinal: u32

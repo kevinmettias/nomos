@@ -8,7 +8,7 @@ use crate::spec::table_request::TableRequest;
 use crate::spec::record_request::RecordRequest;
 /// What to read.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum SpecCommand
+pub(crate) enum SpecCommand
 {
     /// Print a record's source, byte for byte.
     Record(RecordRequest),
