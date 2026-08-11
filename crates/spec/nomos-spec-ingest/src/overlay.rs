@@ -439,44 +439,44 @@ mod tests
         assert!(matches!(outcome.disposition, Disposition::Reworded { .. }));
     }
 
+    /// One acceptance artifact declaring two criteria.
+    const ACCEPTANCE: &str = concat!(
+        "---
+",
+        "id: US-A-001-AC
+",
+        "kind: acceptance_criteria
+",
+        "criteria:
+",
+        "- id: US-A-001-AC-01
+",
+        "  statement: One holds
+",
+        "- id: US-A-001-AC-02
+",
+        "  statement: Two holds
+",
+        "---
+
+# X
+"
+    );
+
     /// Acceptance artifacts declare a list, not a statement, and joining it in declared
     /// order is what makes a silently dropped criterion change the hash.
     #[test]
     fn Test_An_Acceptance_Artifact_Should_Reconcile_Through_Its_Criteria()
     {
-        const ACCEPTANCE: &str = concat!(
-            "---
-",
-            "id: US-A-001-AC
-",
-            "kind: acceptance_criteria
-",
-            "criteria:
-",
-            "- id: US-A-001-AC-01
-",
-            "  statement: One holds
-",
-            "- id: US-A-001-AC-02
-",
-            "  statement: Two holds
-",
-            "---
-
-# X
-"
-        );
-
         let artifact = Parse_Artifact(ACCEPTANCE, Family::Acceptance).expect("reads");
-
-        assert_eq!(artifact.criteria, 2);
-        assert!(artifact.statement.contains("US-A-001-AC-01 One holds"));
-        assert!(artifact.statement.contains("US-A-001-AC-02 Two holds"));
-
         let dropped = ACCEPTANCE.replace("- id: US-A-001-AC-02
   statement: Two holds
 ", "");
         let shorter = Parse_Artifact(&dropped, Family::Acceptance).expect("reads");
+
+        assert_eq!(artifact.criteria, 2);
+        assert!(artifact.statement.contains("US-A-001-AC-01 One holds"));
+        assert!(artifact.statement.contains("US-A-001-AC-02 Two holds"));
         assert_ne!(
             shorter.statement, artifact.statement,
             "dropping a criterion did not change the text reconciliation hashes"

@@ -102,18 +102,9 @@ impl Archive
         let mut file = self.inner.by_name(entry).map_err(|cause| {
             return ArchiveError {
                 archive: self.path.clone(),
-                kind: match cause
-                {
-                    zip::result::ZipError::FileNotFound => ArchiveErrorKind::NoSuchEntry {
-                        entry: entry.to_owned(),
-                    },
-                    other => ArchiveErrorKind::Unreadable {
-                        cause: format!("{entry}: {other}"),
-                    },
-                },
+                kind: Why_Not_Read(entry, &cause),
             };
         })?;
-
         let mut bytes = Vec::new();
         file.read_to_end(&mut bytes)
             .map_err(|error| ArchiveError {
@@ -149,6 +140,24 @@ impl Archive
     }
 }
 
+/// Whether an entry is missing or the archive itself would not open.
+///
+/// Told apart rather than folded together: a corrupt central directory answers "no such
+/// entry" otherwise, which sends the reader looking for a name that was never the problem.
+fn Why_Not_Read(entry: &str, cause: &zip::result::ZipError) -> ArchiveErrorKind
+{
+    if matches!(cause, zip::result::ZipError::FileNotFound)
+    {
+        return ArchiveErrorKind::NoSuchEntry {
+            entry: entry.to_owned(),
+        };
+    }
+
+    return ArchiveErrorKind::Unreadable {
+        cause: format!("{entry}: {cause}"),
+    };
+}
+
 /// Every archive in a directory, sorted by path.
 ///
 /// # Errors
@@ -163,14 +172,13 @@ pub fn Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
             cause: error.to_string(),
         },
     })?;
-
     let mut archives: Vec<PathBuf> = entries
         .flatten()
         .map(|entry| return entry.path())
         .filter(|path| path.extension().and_then(std::ffi::OsStr::to_str) == Some("zip"))
         .collect();
-    archives.sort();
 
+    archives.sort();
     if archives.is_empty()
     {
         return Err(ArchiveError {

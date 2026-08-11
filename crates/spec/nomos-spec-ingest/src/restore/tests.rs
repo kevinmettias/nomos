@@ -288,7 +288,6 @@ fn Test_A_Contested_Alias_Should_Be_Reported_Rather_Than_Silently_Repointed()
             rusqlite::params![other],
         )
         .expect("takes the alias");
-
     let report = Restore(&mut store, "v14.36", &documents).expect("restores");
 
     assert_eq!(report.contested_aliases, vec!["WorkspaceContext".to_owned()]);

@@ -42,6 +42,20 @@ pub(super) fn Record_Aliases(
 
 /// I3 — the node graph.
 ///
+/// The authority a catalog entity claims, or the word for claiming none.
+///
+/// An empty string in the catalog is an entity that said nothing about who decided it, and
+/// storing that as an empty authority would read as an authority nobody has named yet.
+fn Stated_Authority(entity: &CatalogEntity) -> &str
+{
+    if entity.authority.is_empty()
+    {
+        return "unstated";
+    }
+
+    return &entity.authority;
+}
+
 /// # Errors
 ///
 /// Returns [`IngestError`] on any store failure.
@@ -54,22 +68,14 @@ pub fn Ingest_Catalog(
 
     for entity in entities
     {
-        let authority = if entity.authority.is_empty()
-        {
-            "unstated"
-        }
-        else
-        {
-            &entity.authority
-        };
-
         let node_uid = store.Upsert_Node(NodeRow {
             node_id: &entity.id,
             kind: &entity.kind,
-            authority,
+            authority: Stated_Authority(entity),
             representation: "record",
             title: &entity.title,
         })?;
+
         report.nodes = report.nodes.saturating_add(1);
         Record_Aliases(store, entity, node_uid, &mut report)?;
     }

@@ -122,7 +122,6 @@ fn Check_Document(
 {
     report.documents_checked = report.documents_checked.saturating_add(1);
     let recomputed = Segment(markdown);
-
     if recomputed.len() != recorded.len()
     {
         report.mismatches.push(BlockMismatch {

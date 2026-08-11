@@ -94,7 +94,6 @@ fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
         .expect("ingests");
     Statement(&mut store, "AGT-001");
     Trace_To_Plan(&store, "AGT-001");
-
     store
         .Connection()
         .execute(
@@ -106,8 +105,8 @@ fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
             [],
         )
         .expect("links the real source");
-    Prepare_Commentary_View(&store).expect("prepares");
 
+    Prepare_Commentary_View(&store).expect("prepares");
     assert!(
         Statements_Sourced_Only_From_Commentary(&store)
             .expect("queries")

@@ -1,6 +1,6 @@
 
 use nomos_spec_ingest::{
-    Archive, Fate, Hollow, Regression, RegressionReport, Restored, Revision, Revisions_In,
+    Archive, Fate, Hollow, Regression, RegressionReport, Restored, Revision, Revisions_In, Tally,
     DOMAIN_VOLUMES,
 };
 use serde::Deserialize;
@@ -177,15 +177,7 @@ fn Test_A_Family_Should_Sum_To_The_Size_The_Counts_Register_Measured()
         {
             continue;
         };
-        let quoted = entry
-            .quoted
-            .as_deref()
-            .unwrap_or_else(|| panic!("{}: states fates and quotes no measured size", entry.id));
-        let measured = counts
-            .iter()
-            .find(|count| return count.id == quoted)
-            .unwrap_or_else(|| panic!("{}: {quoted} is not in the counts register", entry.id))
-            .measured;
+        let measured = Measured_Size(&entry, &counts);
 
         assert_eq!(
             fates.Total(),
@@ -236,6 +228,21 @@ fn Test_Every_Quoted_Count_Should_Exist_In_The_Counts_Register()
     }
 }
 
+/// The size the counts register measured for the family an entry quotes.
+fn Measured_Size(entry: &Entry, counts: &[Count]) -> u32
+{
+    let quoted = entry
+        .quoted
+        .as_deref()
+        .unwrap_or_else(|| panic!("{}: states fates and quotes no measured size", entry.id));
+
+    return counts
+        .iter()
+        .find(|count| return count.id == quoted)
+        .unwrap_or_else(|| panic!("{}: {quoted} is not in the counts register", entry.id))
+        .measured;
+}
+
 #[test]
 fn Test_The_Headline_Should_Reproduce_From_The_Archives()
 {
@@ -244,12 +251,11 @@ fn Test_The_Headline_Should_Reproduce_From_The_Archives()
     {
         return;
     };
-
     let report = Headline(&root);
+    let mut checked = 0_u32;
+
     assert_eq!(report.from, V14_LAST);
     assert_eq!(report.to, V15);
-
-    let mut checked = 0_u32;
     for entry in Register()
     {
         let (Some(label), Some(fates)) = (entry.family.as_deref(), entry.fates.as_ref())
@@ -257,18 +263,10 @@ fn Test_The_Headline_Should_Reproduce_From_The_Archives()
         {
             continue;
         };
-        let tally = report.Tally(Family(label));
 
-        assert_eq!(
-            (tally.preserved, tally.hollowed, tally.mentioned, tally.gone),
-            (fates.preserved, fates.hollowed, fates.mentioned, fates.gone),
-            "{}: the register says {fates:?} and the archives say {tally:?}\n{}",
-            entry.id,
-            report.Summary()
-        );
+        Assert_The_Archives_Agree(&report, &entry, Family(label), fates);
         checked = checked.saturating_add(1);
     }
-
     assert_eq!(checked, 9, "a family went unmeasured");
 }
 
@@ -280,10 +278,8 @@ fn Test_Every_Measured_Figure_Should_Reproduce()
     {
         return;
     };
-
     let report = Headline(&root);
     let mut checked = 0_u32;
-
     for entry in Register()
     {
         for (key, stated) in &entry.measured
@@ -302,7 +298,67 @@ fn Test_Every_Measured_Figure_Should_Reproduce()
     assert!(checked > 0, "the register states no figure, so this measured nothing");
 }
 
+/// The archives' answer for one registered key.
+///
+/// Split by what the key is about rather than written as one match, because the families
+/// measure different things. A key nothing answers still panics, which is what keeps a
+/// register entry from being carried by a figure nobody takes.
 fn Measure(key: &str, report: &RegressionReport) -> u32
+{
+    let measured = Documents_Figure(key, report)
+        .or_else(|| return Records_Figure(key, report))
+        .or_else(|| return Filler_Figure(key, report))
+        .or_else(|| return Members_Figure(key, report));
+
+    return measured.unwrap_or_else(|| {
+        panic!("{key} is in the register and nothing measures it");
+    });
+}
+
+/// What became of the documents, and of the volumes among them.
+fn Documents_Figure(key: &str, report: &RegressionReport) -> Option<u32>
+{
+    return match key
+    {
+        "volumes.absent" => Some(Count(
+            report
+                .documents
+                .disappeared
+                .iter()
+                .filter(|path| return path.contains(DOMAIN_VOLUMES))
+                .count(),
+        )),
+        "documents.appeared" => Some(Count(report.documents.appeared.len())),
+        "documents.disappeared" => Some(Count(report.documents.disappeared.len())),
+        "documents.changed" => Some(Count(report.documents.changed.len())),
+        "documents.relocated" => Some(Count(report.documents.relocated.len())),
+        _ => None,
+    };
+}
+
+/// The same questions asked of records, which are the documents under one path.
+fn Records_Figure(key: &str, report: &RegressionReport) -> Option<u32>
+{
+    return match key
+    {
+        "records.relocated" => Some(Records_Among(
+            report.documents.relocated.iter().map(|moved| return moved.to.as_str()),
+        )),
+        "records.new" => Some(Records_Among(
+            report.documents.appeared.iter().map(String::as_str),
+        )),
+        _ => None,
+    };
+}
+
+/// How many of these paths are records.
+fn Records_Among<'a>(paths: impl Iterator<Item = &'a str>) -> u32
+{
+    return Count(paths.filter(|path| return Is_Record(path)).count());
+}
+
+/// What the blocklist declares, and what it does not see.
+fn Filler_Figure(key: &str, report: &RegressionReport) -> Option<u32>
 {
     let widest = || {
         return report
@@ -310,64 +366,41 @@ fn Measure(key: &str, report: &RegressionReport) -> u32
             .Widest_Undeclared()
             .unwrap_or_else(|| panic!("v15.0 carries no undeclared template"));
     };
-    let records = |paths: &[String]| {
-        return Count(
-            paths
-                .iter()
-                .filter(|path| return Is_Record(path))
-                .count(),
-        );
-    };
 
     return match key
     {
-        "volumes.absent" => Count(
-            report
-                .documents
-                .disappeared
-                .iter()
-                .filter(|path| return path.contains(DOMAIN_VOLUMES))
-                .count(),
-        ),
-
-        "documents.appeared" => Count(report.documents.appeared.len()),
-        "documents.disappeared" => Count(report.documents.disappeared.len()),
-        "documents.changed" => Count(report.documents.changed.len()),
-        "documents.relocated" => Count(report.documents.relocated.len()),
-
-        "records.relocated" => Count(
-            report
-                .documents
-                .relocated
-                .iter()
-                .filter(|moved| return Is_Record(&moved.to))
-                .count(),
-        ),
-        "records.new" => records(&report.documents.appeared),
-
-        "filler.declared_documents" => Count(report.filler.declared.len()),
-        "filler.stub_documents" => Count(report.filler.stubs.len()),
-        "filler.widest_undeclared_sections" => widest().sections,
-        "filler.widest_undeclared_documents" => Count(widest().documents.len()),
-
-        "members.gone" => Count(report.members.iter().filter(|member| return member.fate == Fate::Gone).count()),
-        "members.hollowed_by_a_declared_pattern" => Count(
-            report
-                .members
-                .iter()
-                .filter(|member| return Hollowed_By_A_Declared_Pattern(&member.fate))
-                .count(),
-        ),
-        "members.hollowed_by_an_undeclared_template" => Count(
-            report
-                .members
-                .iter()
-                .filter(|member| return Hollowed_By_An_Undeclared_Template(&member.fate))
-                .count(),
-        ),
-
-        other => panic!("{other} is in the register and nothing measures it"),
+        "filler.declared_documents" => Some(Count(report.filler.declared.len())),
+        "filler.stub_documents" => Some(Count(report.filler.stubs.len())),
+        "filler.widest_undeclared_sections" => Some(widest().sections),
+        "filler.widest_undeclared_documents" => Some(Count(widest().documents.len())),
+        _ => None,
     };
+}
+
+/// What became of each member.
+fn Members_Figure(key: &str, report: &RegressionReport) -> Option<u32>
+{
+    return match key
+    {
+        "members.gone" => Some(Members_Whose_Fate(report, |fate| return *fate == Fate::Gone)),
+        "members.hollowed_by_a_declared_pattern" =>
+        {
+            Some(Members_Whose_Fate(report, Hollowed_By_A_Declared_Pattern))
+        }
+        "members.hollowed_by_an_undeclared_template" =>
+        {
+            Some(Members_Whose_Fate(report, Hollowed_By_An_Undeclared_Template))
+        }
+        _ => None,
+    };
+}
+
+/// How many members' fates answer a question.
+fn Members_Whose_Fate(report: &RegressionReport, wanted: impl Fn(&Fate) -> bool) -> u32
+{
+    let matched = report.members.iter().filter(|member| return wanted(&member.fate));
+
+    return Count(matched.count());
 }
 
 fn Hollowed_By_A_Declared_Pattern(fate: &Fate) -> bool
@@ -412,8 +445,8 @@ fn Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent()
     {
         return;
     };
-
     let report = Headline(&root);
+    let mut hollowed = 0_u32;
     let heading_shaped = [
         Restored::RoadmapMilestone,
         Restored::Scenario,
@@ -424,26 +457,13 @@ fn Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent()
         Restored::IdeProfile,
     ];
 
-    let mut hollowed = 0_u32;
     for family in heading_shaped
     {
         let tally = report.Tally(family);
-        assert_eq!(
-            tally.gone, 0,
-            "{}: the plan calls this family gone and {} members are absent from v15.0",
-            family.Label(),
-            tally.gone
-        );
-        assert_eq!(
-            tally.hollowed,
-            tally.Total(),
-            "{}: not every member is hollowed\n{}",
-            family.Label(),
-            report.Summary()
-        );
+
+        Assert_Every_Member_Is_Hollowed(&report, family, &tally);
         hollowed = hollowed.saturating_add(tally.hollowed);
     }
-
     assert_eq!(hollowed, 92, "members whose heading survives and whose content does not");
 }
 
@@ -455,7 +475,6 @@ fn Test_The_Content_That_Really_Went_Should_Be_Named()
     {
         return;
     };
-
     let report = Headline(&root);
     let gone: Vec<&str> = report
         .members
@@ -463,6 +482,11 @@ fn Test_The_Content_That_Really_Went_Should_Be_Named()
         .filter(|member| return member.fate == Fate::Gone)
         .map(|member| return member.name.as_str())
         .collect();
+    let Some(lost) = report.Named("ModelUsageObservation")
+    else
+    {
+        panic!("the member does not resolve by the name the corpus gives it");
+    };
 
     assert_eq!(gone.len(), 19, "{gone:?}");
     for name in [
@@ -478,12 +502,6 @@ fn Test_The_Content_That_Really_Went_Should_Be_Named()
     {
         assert!(gone.contains(&name), "{name} is not among the members v15.0 lost: {gone:?}");
     }
-
-    let Some(lost) = report.Named("ModelUsageObservation")
-    else
-    {
-        panic!("the member does not resolve by the name the corpus gives it");
-    };
     assert_eq!(lost.id, "CDM-MODELUSAGEOBSERVATION");
     assert!(lost.was.starts_with("02-core"), "{}", lost.was);
     assert_eq!(lost.family, Restored::CanonicalDomainModel);
@@ -497,9 +515,7 @@ fn Test_The_Records_The_Plan_Calls_New_Should_Be_Relocations()
     {
         return;
     };
-
     let report = Headline(&root);
-
     let moved: Vec<&str> = report
         .documents
         .relocated
@@ -507,8 +523,6 @@ fn Test_The_Records_The_Plan_Calls_New_Should_Be_Relocations()
         .filter(|relocation| return Is_Record(&relocation.to))
         .map(|relocation| return relocation.to.as_str())
         .collect();
-    assert_eq!(moved.len(), 64, "record documents v15.0 carries unchanged from v14.36");
-
     let written: Vec<&str> = report
         .documents
         .appeared
@@ -516,8 +530,9 @@ fn Test_The_Records_The_Plan_Calls_New_Should_Be_Relocations()
         .filter(|path| return Is_Record(path))
         .map(String::as_str)
         .collect();
-    assert_eq!(written, NEW_RECORDS, "the records v15.0 actually wrote");
 
+    assert_eq!(moved.len(), 64, "record documents v15.0 carries unchanged from v14.36");
+    assert_eq!(written, NEW_RECORDS, "the records v15.0 actually wrote");
     for relocation in &report.documents.relocated
     {
         assert_eq!(
@@ -538,7 +553,6 @@ fn Test_The_Filler_The_Blocklist_Does_Not_See_Should_Be_Named()
     {
         return;
     };
-
     let report = Headline(&root);
     let Some(widest) = report.filler.Widest_Undeclared()
     else
@@ -555,7 +569,6 @@ fn Test_The_Filler_The_Blocklist_Does_Not_See_Should_Be_Named()
     );
     assert_eq!(widest.sections, 196);
     assert_eq!(widest.documents.len(), 132, "the plan's 132, reproduced");
-
     assert_eq!(report.filler.declared.len(), 99, "documents the blocklist does match");
     assert!(
         report.filler.templates.iter().any(|template| return template.declared.is_some()),
@@ -572,7 +585,6 @@ fn Test_The_Summary_Should_Name_What_It_Counted()
     {
         return;
     };
-
     let summary = Headline(&root).Summary();
 
     assert!(summary.contains(V14_LAST) && summary.contains(V15), "{summary}");
@@ -591,11 +603,9 @@ fn Test_An_Ordinary_Pair_Should_Preserve_Every_Member()
     {
         return;
     };
-
     let before = Read(&root, V14_PREVIOUS);
     let after = Read(&root, V14_LAST);
     let report = Regression(&before, &after).expect("reports");
-
     for family in Restored::All()
     {
         let tally = report.Tally(*family);
@@ -607,6 +617,7 @@ fn Test_An_Ordinary_Pair_Should_Preserve_Every_Member()
             report.Summary()
         );
     }
+
     assert!(
         report.members.len() > 100,
         "the control measured {} members",
@@ -622,11 +633,47 @@ fn Test_A_Revision_Without_The_Volumes_Should_Be_Refused()
     {
         return;
     };
-
     let before = Read(&root, V15);
     let after = Read(&root, V14_LAST);
     let refusal = Regression(&before, &after)
         .expect_err("v15.0 has no domain volumes and must not report every family gone");
 
     assert!(format!("{refusal}").contains("no family to ask after"), "{refusal}");
+}
+
+/// The register's fates for a family and the archives' tally of it are the same four numbers.
+fn Assert_The_Archives_Agree(
+    report: &RegressionReport,
+    entry: &Entry,
+    family: Restored,
+    fates: &Fates,
+)
+{
+    let tally = report.Tally(family);
+
+    assert_eq!(
+        (tally.preserved, tally.hollowed, tally.mentioned, tally.gone),
+        (fates.preserved, fates.hollowed, fates.mentioned, fates.gone),
+        "{}: the register says {fates:?} and the archives say {tally:?}\n{}",
+        entry.id,
+        report.Summary()
+    );
+}
+
+/// The plan calls this family gone, so no member may be absent and every one must be hollow.
+fn Assert_Every_Member_Is_Hollowed(report: &RegressionReport, family: Restored, tally: &Tally)
+{
+    assert_eq!(
+        tally.gone, 0,
+        "{}: the plan calls this family gone and {} members are absent from v15.0",
+        family.Label(),
+        tally.gone
+    );
+    assert_eq!(
+        tally.hollowed,
+        tally.Total(),
+        "{}: not every member is hollowed\n{}",
+        family.Label(),
+        report.Summary()
+    );
 }
