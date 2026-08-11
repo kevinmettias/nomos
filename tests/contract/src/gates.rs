@@ -53,44 +53,67 @@ pub fn Corpus_Gates() -> Vec<CorpusGate>
     {
         // The crate doing the counting names the variables in order to count them, so
         // scanning itself would report its own inventory as a gate. Nothing here reads a
-        // corpus: these are assertions about the workspace, and they must hold on a
-        // runner that has none.
-        if member.name == "nomos-contract-tests"
+        // corpus: these are assertions about the workspace, and they must hold on a runner
+        // that has none.
+        if member.name != "nomos-contract-tests"
         {
-            continue;
-        }
-
-        for directory in ["src", "tests"]
-        {
-            let source_root = member.root.join(directory);
-            if !source_root.is_dir()
-            {
-                continue;
-            }
-
-            for file in Source_Files(&source_root)
-            {
-                let Ok(text) = std::fs::read_to_string(&file)
-                else
-                {
-                    continue;
-                };
-
-                let relative = file
-                    .strip_prefix(&root)
-                    .unwrap_or(&file)
-                    .display()
-                    .to_string()
-                    .replace('\\', "/");
-
-                let found = Gates_In(&relative, &text);
-                gates.extend(found);
-            }
+            let found = Gates_In_Member(&member.root, &root);
+            gates.extend(found);
         }
     }
 
     gates.sort();
     return gates;
+}
+
+/// Every gate one member declares, from both of the roots a crate compiles from.
+fn Gates_In_Member(member_root: &Path, root: &Path) -> Vec<CorpusGate>
+{
+    let mut gates = Vec::new();
+
+    for directory in ["src", "tests"]
+    {
+        let source_root = member_root.join(directory);
+        if source_root.is_dir()
+        {
+            let found = Gates_Under(&source_root, root);
+            gates.extend(found);
+        }
+    }
+
+    return gates;
+}
+
+/// Every gate the files under one source root declare.
+fn Gates_Under(source_root: &Path, root: &Path) -> Vec<CorpusGate>
+{
+    let mut gates = Vec::new();
+
+    for file in Source_Files(source_root)
+    {
+        let Ok(text) = std::fs::read_to_string(&file)
+        else
+        {
+            continue;
+        };
+        let relative = Relative_To(root, &file);
+        let found = Gates_In(&relative, &text);
+
+        gates.extend(found);
+    }
+
+    return gates;
+}
+
+/// A path as it reads from the workspace root, in the one spelling this crate compares on.
+fn Relative_To(root: &Path, file: &Path) -> String
+{
+    return file
+        .strip_prefix(root)
+        .unwrap_or(file)
+        .display()
+        .to_string()
+        .replace('\\', "/");
 }
 
 /// The gated tests in one file.
@@ -106,48 +129,9 @@ pub fn Corpus_Gates() -> Vec<CorpusGate>
 fn Gates_In(file: &str, text: &str) -> Vec<CorpusGate>
 {
     let functions = Functions(text);
-    let mut reach: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    let mut reach = Named_Outright(&functions);
 
-    for function in &functions
-    {
-        for variable in CORPUS_VARIABLES
-        {
-            if function.body.contains(variable)
-            {
-                reach
-                    .entry(function.name.clone())
-                    .or_default()
-                    .insert((*variable).to_owned());
-            }
-        }
-    }
-
-    loop
-    {
-        let mut discovered: Vec<(String, BTreeSet<String>)> = Vec::new();
-
-        for function in &functions
-        {
-            let gained = Gained(function, &reach);
-            let known = reach.get(&function.name);
-            if gained
-                .iter()
-                .any(|variable| return known.is_none_or(|set| return !set.contains(variable)))
-            {
-                discovered.push((function.name.clone(), gained));
-            }
-        }
-
-        if discovered.is_empty()
-        {
-            break;
-        }
-
-        for (name, variables) in discovered
-        {
-            reach.entry(name).or_default().extend(variables);
-        }
-    }
+    Propagate(&functions, &mut reach);
 
     return functions
         .iter()
@@ -161,6 +145,71 @@ fn Gates_In(file: &str, text: &str) -> Vec<CorpusGate>
             });
         })
         .collect();
+}
+
+/// The functions that name a corpus variable in their own body, which is where the second
+/// pass starts from.
+fn Named_Outright(functions: &[Function]) -> BTreeMap<String, BTreeSet<String>>
+{
+    let mut reach: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+
+    for function in functions
+    {
+        for variable in CORPUS_VARIABLES
+        {
+            if function.body.contains(variable)
+            {
+                reach
+                    .entry(function.name.clone())
+                    .or_default()
+                    .insert((*variable).to_owned());
+            }
+        }
+    }
+
+    return reach;
+}
+
+/// Carries each function's corpus variables along the calls it makes, until a pass discovers
+/// nothing new.
+fn Propagate(functions: &[Function], reach: &mut BTreeMap<String, BTreeSet<String>>)
+{
+    loop
+    {
+        let discovered = Newly_Reached(functions, reach);
+        if discovered.is_empty()
+        {
+            break;
+        }
+
+        for (name, variables) in discovered
+        {
+            reach.entry(name).or_default().extend(variables);
+        }
+    }
+}
+
+/// What each function would gain this pass, for the functions that would gain anything.
+fn Newly_Reached(
+    functions: &[Function],
+    reach: &BTreeMap<String, BTreeSet<String>>,
+) -> Vec<(String, BTreeSet<String>)>
+{
+    let mut discovered = Vec::new();
+
+    for function in functions
+    {
+        let gained = Gained(function, reach);
+        let known = reach.get(&function.name);
+        if gained
+            .iter()
+            .any(|variable| return known.is_none_or(|set| return !set.contains(variable)))
+        {
+            discovered.push((function.name.clone(), gained));
+        }
+    }
+
+    return discovered;
 }
 
 /// The corpus variables one function reaches through the helpers its body calls.
@@ -198,61 +247,68 @@ struct Function
 ///
 /// A nested helper is found in its own right and also remains part of its parent's body,
 /// which is what makes a test that inlines its own corpus lookup count as gated.
+///
+/// Bodies are read with comments blanked. A variable has to be named in a string to reach
+/// `var_os`, so string contents are kept — but a doc comment saying "opt-in by
+/// `NOMOS_V14_CORPUS`" describes a gate rather than being one, and every gate in this
+/// workspace carries exactly that sentence.
 fn Functions(text: &str) -> Vec<Function>
 {
-    let bytes = text.as_bytes();
     let masks = Scan(text);
-    let mask = &masks.code;
-    // Bodies are read with comments blanked. A variable has to be named in a string to
-    // reach `var_os`, so string contents are kept — but a doc comment saying "opt-in by
-    // NOMOS_V14_CORPUS" describes a gate rather than being one, and every gate in this
-    // workspace carries exactly that sentence.
     let cleaned = Without_Comments(text, &masks.comment);
     let mut found = Vec::new();
     let mut index = 0_usize;
-
-    while index < bytes.len()
+    while index < text.len()
     {
-        if !Is_Code(mask, index)
-            || !Starts_Keyword(bytes, index, b"fn")
-            || !Only_Modifiers_Before(text, index)
-        {
-            index = index.saturating_add(1);
-            continue;
-        }
-
-        let Some((name, after_name)) = Identifier_After(bytes, index.saturating_add(2))
+        let Some(defined) = Definition_At(text, &masks.code, index)
         else
         {
             index = index.saturating_add(1);
             continue;
         };
-
-        // The first brace after the name opens the body. A signature cannot contain one:
-        // generics, argument types and return types are all brace-free in Rust.
-        let Some(open) = Next_Code_Byte(bytes, mask, after_name, b'{')
-        else
-        {
-            break;
-        };
-
-        let Some(close) = Matching_Brace(bytes, mask, open)
-        else
-        {
-            break;
-        };
-
         found.push(Function {
-            name,
+            name: defined.name,
             is_test: Carries_Test_Attribute(text, index),
-            body: cleaned.get(open..=close).unwrap_or_default().to_owned(),
+            body: cleaned.get(defined.open..=defined.close).unwrap_or_default().to_owned(),
         });
-
         // Resume inside the body rather than past it, so a nested definition is seen.
-        index = open.saturating_add(1);
+        index = defined.open.saturating_add(1);
     }
 
     return found;
+}
+
+/// One `fn` definition: its name, and the offsets of the braces around its body.
+struct Definition
+{
+    name: String,
+    open: usize,
+    close: usize,
+}
+
+/// The function definition starting at exactly this offset, if one does.
+///
+/// `None` also covers a definition this scan cannot bound — no opening brace after the name,
+/// or no brace matching it — which means a truncated source. The caller steps past and keeps
+/// looking rather than stopping, so one malformed item cannot hide every item after it.
+fn Definition_At(text: &str, mask: &[bool], index: usize) -> Option<Definition>
+{
+    let bytes = text.as_bytes();
+
+    if !Is_Code(mask, index)
+        || !Starts_Keyword(bytes, index, b"fn")
+        || !Only_Modifiers_Before(text, index)
+    {
+        return None;
+    }
+
+    // The first brace after the name opens the body. A signature cannot contain one:
+    // generics, argument types and return types are all brace-free in Rust.
+    let (name, after_name) = Identifier_After(bytes, index.saturating_add(2))?;
+    let open = Next_Code_Byte(bytes, mask, after_name, b'{')?;
+    let close = Matching_Brace(bytes, mask, open)?;
+
+    return Some(Definition { name, open, close });
 }
 
 /// Whether the attribute block immediately above an offset contains `#[test]`.
@@ -262,17 +318,7 @@ fn Functions(text: &str) -> Vec<Function>
 /// one.
 fn Carries_Test_Attribute(text: &str, offset: usize) -> bool
 {
-    let Some(prefix) = text.get(..offset)
-    else
-    {
-        return false;
-    };
-
-    // Everything above the line the `fn` sits on. Cutting at the line start rather than
-    // dropping the last element of `lines()`: a prefix ending in a newline has no final
-    // empty element, so dropping one would discard the attribute itself.
-    let line_start = prefix.rfind('\n').map_or(0, |at| return at.saturating_add(1));
-    let Some(above) = text.get(..line_start)
+    let Some(above) = Lines_Above(text, offset)
     else
     {
         return false;
@@ -285,18 +331,38 @@ fn Carries_Test_Attribute(text: &str, offset: usize) -> bool
         {
             return true;
         }
-        // A multi-line attribute such as `#[cfg_attr(\n    ...\n)]` ends on `)]`.
-        if trimmed.is_empty()
-            || trimmed.starts_with("//")
-            || trimmed.starts_with("#[")
-            || trimmed.ends_with(']')
+        if !Is_Attribute_Furniture(trimmed)
         {
-            continue;
+            return false;
         }
-        return false;
     }
 
     return false;
+}
+
+/// Everything above the line an offset sits on.
+///
+/// Cut at the line start rather than by dropping the last element of `lines()`: a prefix
+/// ending in a newline has no final empty element, so dropping one would discard the
+/// attribute itself.
+fn Lines_Above(text: &str, offset: usize) -> Option<&str>
+{
+    let prefix = text.get(..offset)?;
+    let line_start = prefix.rfind('\n').map_or(0, |at| return at.saturating_add(1));
+
+    return text.get(..line_start);
+}
+
+/// Whether a line belongs to the attribute block above an item rather than ending it.
+///
+/// Blank lines, comments and attributes all belong to it. A multi-line attribute such as
+/// `#[cfg_attr(\n    ...\n)]` ends on `)]`, which is why a trailing `]` counts.
+fn Is_Attribute_Furniture(line: &str) -> bool
+{
+    return line.is_empty()
+        || line.starts_with("//")
+        || line.starts_with("#[")
+        || line.ends_with(']');
 }
 
 /// What each byte of a file is.
@@ -315,7 +381,6 @@ fn Block_Comment_End(bytes: &[u8], index: usize) -> usize
 {
     let mut cursor = index.saturating_add(2);
     let mut depth = 1_u32;
-
     while cursor < bytes.len() && depth > 0
     {
         let opening = bytes.get(cursor).copied().unwrap_or(0);
@@ -374,61 +439,64 @@ pub(crate) fn Scan(text: &str) -> Masks
         comment: vec![false; bytes.len()],
     };
     let mut index = 0_usize;
-
     while index < bytes.len()
     {
-        let current = bytes.get(index).copied().unwrap_or(0);
-        let next = bytes.get(index.saturating_add(1)).copied().unwrap_or(0);
-
-        if current == b'/' && next == b'/'
-        {
-            let start = index;
-            while index < bytes.len() && bytes.get(index).copied() != Some(b'\n')
-            {
-                index = index.saturating_add(1);
-            }
-            Mark(&mut masks.comment, start, index);
-            continue;
-        }
-
-        if current == b'/' && next == b'*'
-        {
-            let start = index;
-            index = Block_Comment_End(bytes, index);
-            Mark(&mut masks.comment, start, index);
-            continue;
-        }
-
-        if let Some(after) = Raw_String_End(bytes, index)
-        {
-            index = after;
-            continue;
-        }
-
-        if current == b'"'
-        {
-            index = String_Literal_End(bytes, index);
-            continue;
-        }
-
-        if current == b'\''
-        {
-            if let Some(after) = Character_Literal_End(bytes, index)
-            {
-                index = after;
-                continue;
-            }
-            // Otherwise a lifetime, which is ordinary code.
-        }
-
-        if let Some(slot) = masks.code.get_mut(index)
-        {
-            *slot = true;
-        }
-        index = index.saturating_add(1);
+        index = Classified(bytes, &mut masks, index);
     }
 
     return masks;
+}
+
+/// Classifies whatever begins at `index`, and answers where the next thing begins.
+fn Classified(bytes: &[u8], masks: &mut Masks, index: usize) -> usize
+{
+    let current = bytes.get(index).copied().unwrap_or(0);
+    let next = bytes.get(index.saturating_add(1)).copied().unwrap_or(0);
+    if current == b'/' && next == b'/'
+    {
+        let end = Line_End(bytes, index);
+        Mark(&mut masks.comment, index, end);
+
+        return end;
+    }
+    if current == b'/' && next == b'*'
+    {
+        let end = Block_Comment_End(bytes, index);
+        Mark(&mut masks.comment, index, end);
+
+        return end;
+    }
+    if let Some(after) = Raw_String_End(bytes, index)
+    {
+        return after;
+    }
+    if current == b'"'
+    {
+        return String_Literal_End(bytes, index);
+    }
+    // A `'` that opens no literal is a lifetime, which is ordinary code.
+    if current == b'\'' && let Some(after) = Character_Literal_End(bytes, index)
+    {
+        return after;
+    }
+    if let Some(slot) = masks.code.get_mut(index)
+    {
+        *slot = true;
+    }
+
+    return index.saturating_add(1);
+}
+
+/// The offset of the newline ending the line `index` sits on, or the end of the file.
+fn Line_End(bytes: &[u8], index: usize) -> usize
+{
+    let mut cursor = index;
+    while cursor < bytes.len() && bytes.get(cursor).copied() != Some(b'\n')
+    {
+        cursor = cursor.saturating_add(1);
+    }
+
+    return cursor;
 }
 
 /// Marks a half-open byte range.
@@ -474,15 +542,26 @@ pub(crate) fn Without_Comments(text: &str, comment: &[bool]) -> String
 /// `r` is part of an identifier, which is the common case — `for revision in ...`.
 fn Raw_String_End(bytes: &[u8], index: usize) -> Option<usize>
 {
-    if index > 0
-    {
-        let previous = bytes.get(index.saturating_sub(1)).copied().unwrap_or(0);
-        if previous.is_ascii_alphanumeric() || previous == b'_'
-        {
-            return None;
-        }
-    }
+    let opened = Raw_String_Opening(bytes, index)?;
 
+    return Some(Raw_String_Close(bytes, opened));
+}
+
+/// Where a raw string's contents begin, and how many hashes have to close it.
+#[derive(Clone, Copy)]
+struct RawOpening
+{
+    from: usize,
+    hashes: usize,
+}
+
+/// The opening of a raw string at `index`, if one opens there.
+fn Raw_String_Opening(bytes: &[u8], index: usize) -> Option<RawOpening>
+{
+    if index > 0 && Is_Word_Byte(bytes, index.saturating_sub(1))
+    {
+        return None;
+    }
     let mut cursor = index;
     if bytes.get(cursor).copied() == Some(b'b')
     {
@@ -493,7 +572,6 @@ fn Raw_String_End(bytes: &[u8], index: usize) -> Option<usize>
         return None;
     }
     cursor = cursor.saturating_add(1);
-
     let mut hashes = 0_usize;
     while bytes.get(cursor).copied() == Some(b'#')
     {
@@ -504,28 +582,43 @@ fn Raw_String_End(bytes: &[u8], index: usize) -> Option<usize>
     {
         return None;
     }
-    cursor = cursor.saturating_add(1);
 
+    return Some(RawOpening {
+        from: cursor.saturating_add(1),
+        hashes,
+    });
+}
+
+/// The offset just past the quote and hashes that close a raw string.
+///
+/// The end of the file closes it. An unterminated raw string is a truncated source, and
+/// reading the remainder as string content is what keeps the scan from finding code in it.
+fn Raw_String_Close(bytes: &[u8], opened: RawOpening) -> usize
+{
+    let mut cursor = opened.from;
     while cursor < bytes.len()
     {
-        if bytes.get(cursor).copied() == Some(b'"')
+        if bytes.get(cursor).copied() == Some(b'"') && Hashes_Follow(bytes, cursor, opened.hashes)
         {
-            let mut closing = 0_usize;
-            while closing < hashes
-                && bytes.get(cursor.saturating_add(closing).saturating_add(1)).copied()
-                    == Some(b'#')
-            {
-                closing = closing.saturating_add(1);
-            }
-            if closing == hashes
-            {
-                return Some(cursor.saturating_add(hashes).saturating_add(1));
-            }
+            return cursor.saturating_add(opened.hashes).saturating_add(1);
         }
         cursor = cursor.saturating_add(1);
     }
 
-    return Some(bytes.len());
+    return bytes.len();
+}
+
+/// Whether `wanted` hashes follow the quote at `cursor`.
+fn Hashes_Follow(bytes: &[u8], cursor: usize, wanted: usize) -> bool
+{
+    let mut closing = 0_usize;
+    while closing < wanted
+        && bytes.get(cursor.saturating_add(closing).saturating_add(1)).copied() == Some(b'#')
+    {
+        closing = closing.saturating_add(1);
+    }
+
+    return closing == wanted;
 }
 
 /// The offset just past a character literal starting at `index`, if one starts there.
@@ -538,37 +631,10 @@ fn Character_Literal_End(bytes: &[u8], index: usize) -> Option<usize>
 
     if first == b'\\'
     {
-        // An escape is at most `'\u{10FFFF}'`; anything longer is not a literal.
-        let mut cursor = index.saturating_add(2);
-        let limit = index.saturating_add(12);
-        while cursor <= limit
-        {
-            if bytes.get(cursor).copied()? == b'\''
-            {
-                return Some(cursor.saturating_add(1));
-            }
-            cursor = cursor.saturating_add(1);
-        }
-        return None;
+        return Escaped_Literal_End(bytes, index);
     }
 
-    let width = if first < 0x80
-    {
-        1_usize
-    }
-    else if first >> 5 == 0b110
-    {
-        2_usize
-    }
-    else if first >> 4 == 0b1110
-    {
-        3_usize
-    }
-    else
-    {
-        4_usize
-    };
-
+    let width = Utf8_Width(first);
     let closing = index.saturating_add(1).saturating_add(width);
     if bytes.get(closing).copied() == Some(b'\'')
     {
@@ -576,6 +642,46 @@ fn Character_Literal_End(bytes: &[u8], index: usize) -> Option<usize>
     }
 
     return None;
+}
+
+/// The offset just past an escaped character literal such as `'\n'` or `'\u{1F600}'`.
+///
+/// An escape is at most `'\u{10FFFF}'`, so a quote further out than that closes something
+/// else and there is no literal here.
+fn Escaped_Literal_End(bytes: &[u8], index: usize) -> Option<usize>
+{
+    let mut cursor = index.saturating_add(2);
+    let limit = index.saturating_add(12);
+
+    while cursor <= limit
+    {
+        if bytes.get(cursor).copied()? == b'\''
+        {
+            return Some(cursor.saturating_add(1));
+        }
+        cursor = cursor.saturating_add(1);
+    }
+
+    return None;
+}
+
+/// How many bytes the character beginning with this byte occupies.
+const fn Utf8_Width(first: u8) -> usize
+{
+    if first < 0x80
+    {
+        return 1;
+    }
+    if first >> 5 == 0b110
+    {
+        return 2;
+    }
+    if first >> 4 == 0b1110
+    {
+        return 3;
+    }
+
+    return 4;
 }
 
 /// Whether a keyword starts at `index` and is a whole word.
@@ -588,22 +694,23 @@ fn Starts_Keyword(bytes: &[u8], index: usize, keyword: &[u8]) -> bool
             return false;
         }
     }
-
-    if index > 0
+    if index > 0 && Is_Word_Byte(bytes, index.saturating_sub(1))
     {
-        let previous = bytes.get(index.saturating_sub(1)).copied().unwrap_or(0);
-        if previous.is_ascii_alphanumeric() || previous == b'_'
-        {
-            return false;
-        }
+        return false;
     }
 
-    let following = bytes
-        .get(index.saturating_add(keyword.len()))
-        .copied()
-        .unwrap_or(b' ');
+    return !Is_Word_Byte(bytes, index.saturating_add(keyword.len()));
+}
 
-    return !(following.is_ascii_alphanumeric() || following == b'_');
+/// Whether the byte at an offset could continue an identifier.
+///
+/// A byte off either end of the slice cannot, so a keyword at the very start or the very end
+/// of a file is a whole word.
+fn Is_Word_Byte(bytes: &[u8], index: usize) -> bool
+{
+    let byte = bytes.get(index).copied().unwrap_or(b' ');
+
+    return byte.is_ascii_alphanumeric() || byte == b'_';
 }
 
 /// Whether everything before `offset` on its line is whitespace or an item modifier.
@@ -641,17 +748,11 @@ pub(crate) fn Identifier_After(bytes: &[u8], from: usize) -> Option<(String, usi
     {
         cursor = cursor.saturating_add(1);
     }
-
     let start = cursor;
-    while let Some(byte) = bytes.get(cursor).copied()
+    while Is_Word_Byte(bytes, cursor)
     {
-        if !(byte.is_ascii_alphanumeric() || byte == b'_')
-        {
-            break;
-        }
         cursor = cursor.saturating_add(1);
     }
-
     if cursor == start
     {
         return None;
@@ -687,7 +788,6 @@ pub(crate) fn Matching_Brace(bytes: &[u8], mask: &[bool], open: usize) -> Option
 {
     let mut depth = 0_u32;
     let mut cursor = open;
-
     while cursor < bytes.len()
     {
         if !Is_Code(mask, cursor)
@@ -755,41 +855,16 @@ pub(crate) fn Without_Test_Modules(text: &str) -> String
     // to spaces keeps every offset and every line break where it was.
     let mut blanked = bytes.to_vec();
     let mut index = 0_usize;
-
     while index < bytes.len()
     {
-        if !Is_Code(&masks.code, index) || !Starts_Marker(bytes, index)
+        let Some((from, to)) = Marked_Range(bytes, &masks.code, index)
+        else
         {
             index = index.saturating_add(1);
             continue;
-        }
-
-        let Some(shape) = Item_Shape_After(bytes, &masks.code, index.saturating_add(MARKER.len()))
-        else
-        {
-            break;
-        };
-
-        // A body is blanked from its opening brace, leaving the attribute and the item's
-        // signature legible, which is what every caller has always seen. A declaration has
-        // no body to blank, so what goes is the declaration itself — from the attribute
-        // through its `;` — and nothing beyond it.
-        let (from, to) = match shape
-        {
-            ItemShape::Body(open) =>
-            {
-                let Some(close) = Matching_Brace(bytes, &masks.code, open)
-                else
-                {
-                    break;
-                };
-                (open, close)
-            }
-            ItemShape::Declaration(end) => (index, end),
         };
 
         Blank(&mut blanked, from, to);
-
         index = to.saturating_add(1);
     }
 
@@ -798,6 +873,35 @@ pub(crate) fn Without_Test_Modules(text: &str) -> String
     // not be, and the lossy conversion is what keeps a scanner bug from becoming a panic in
     // a check that is supposed to report.
     return String::from_utf8_lossy(&blanked).into_owned();
+}
+
+/// The byte range one `#[cfg(test)]` item occupies, if the marker begins at `index`.
+///
+/// A body is blanked from its opening brace, leaving the attribute and the item's signature
+/// legible, which is what every caller has always seen. A declaration has no body to blank,
+/// so what goes is the declaration itself — from the attribute through its `;` — and nothing
+/// beyond it.
+///
+/// `None` for an offset the marker does not begin at, and for an item this scan cannot bound,
+/// which means a truncated source.
+fn Marked_Range(bytes: &[u8], mask: &[bool], index: usize) -> Option<(usize, usize)>
+{
+    if !Is_Code(mask, index) || !Starts_Marker(bytes, index)
+    {
+        return None;
+    }
+
+    let after = index.saturating_add(MARKER.len());
+    match Item_Shape_After(bytes, mask, after)?
+    {
+        ItemShape::Body(open) =>
+        {
+            let close = Matching_Brace(bytes, mask, open)?;
+
+            return Some((open, close));
+        }
+        ItemShape::Declaration(end) => return Some((index, end)),
+    }
 }
 
 /// Overwrites a byte range with spaces, leaving line breaks where they were.
@@ -904,9 +1008,19 @@ fn Item_Shape_After(bytes: &[u8], mask: &[bool], from: usize) -> Option<ItemShap
 /// happened to `nomos-rules` the first time its `mirror` module became a directory.
 pub(crate) fn Source_Files(root: &Path) -> Vec<PathBuf>
 {
+    let mut found = Rust_Files_Under(root);
+    let test_only = Test_Only_Modules(&found);
+
+    found.retain(|path| return !test_only.iter().any(|excluded| return path.starts_with(excluded)));
+
+    return found;
+}
+
+/// Every `.rs` file under a directory, in whatever order the filesystem answers.
+fn Rust_Files_Under(root: &Path) -> Vec<PathBuf>
+{
     let mut found = Vec::new();
     let mut pending = vec![root.to_path_buf()];
-
     while let Some(directory) = pending.pop()
     {
         let Ok(entries) = std::fs::read_dir(&directory)
@@ -929,9 +1043,6 @@ pub(crate) fn Source_Files(root: &Path) -> Vec<PathBuf>
         }
     }
 
-    let test_only = Test_Only_Modules(&found);
-    found.retain(|path| return !test_only.iter().any(|excluded| return path.starts_with(excluded)));
-
     return found;
 }
 
@@ -943,31 +1054,38 @@ pub(crate) fn Source_Files(root: &Path) -> Vec<PathBuf>
 fn Test_Only_Modules(files: &[PathBuf]) -> Vec<PathBuf>
 {
     let mut excluded = Vec::new();
-
     for file in files
     {
-        let Ok(text) = std::fs::read_to_string(file)
-        else
-        {
-            continue;
-        };
-        let Some(home) = file.parent()
-        else
-        {
-            continue;
-        };
+        excluded.extend(Test_Only_In(file));
+    }
 
-        let mut gated = false;
-        for line in text.lines()
+    return excluded;
+}
+
+/// The paths the `#[cfg(test)] mod <name>;` declarations in one file point at.
+fn Test_Only_In(file: &Path) -> Vec<PathBuf>
+{
+    let mut excluded = Vec::new();
+    let Ok(text) = std::fs::read_to_string(file)
+    else
+    {
+        return excluded;
+    };
+    let Some(home) = file.parent()
+    else
+    {
+        return excluded;
+    };
+    let mut gated = false;
+    for line in text.lines()
+    {
+        let line = line.trim();
+        if let Some(name) = Declared_Module(line).filter(|_| return gated)
         {
-            let line = line.trim();
-            if let Some(name) = Declared_Module(line).filter(|_| return gated)
-            {
-                excluded.push(home.join(format!("{name}.rs")));
-                excluded.push(home.join(name));
-            }
-            gated = line == "#[cfg(test)]";
+            excluded.push(home.join(format!("{name}.rs")));
+            excluded.push(home.join(name));
         }
+        gated = line == "#[cfg(test)]";
     }
 
     return excluded;
