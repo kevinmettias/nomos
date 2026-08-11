@@ -6,11 +6,31 @@ use nomos_spec_store::{
     EXTERNAL,
     GOVERNING_RECORD_IDS,
     NodeRow,
+    SeedReport,
     Seed_Governing_Records,
     SpecificationStore,
     SuiteAuthority,
     Table,
 };
+use std::path::Path;
+
+/// One counted answer, for a query that binds nothing.
+fn Counted(store: &SpecificationStore, sql: &str) -> u32
+{
+    return store
+        .Connection()
+        .query_row(sql, [], |row| return row.get(0))
+        .expect("queries");
+}
+
+/// One text answer, for a query naming one node as `?1`.
+fn Column(store: &SpecificationStore, sql: &str, node_id: &str) -> String
+{
+    return store
+        .Connection()
+        .query_row(sql, rusqlite::params![node_id], |row| return row.get(0))
+        .expect("queries");
+}
 
 fn Seeded() -> SpecificationStore
 {
@@ -67,39 +87,47 @@ fn Canonical_Records() -> Vec<String>
     let directory = Record_Directory();
     let entries = std::fs::read_dir(&directory)
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
-
     let mut canonical = Vec::new();
 
     for entry in entries.flatten()
     {
         let path = entry.path();
-        if path.extension().is_none_or(|extension| extension != "md")
-        {
-            continue;
-        }
+        let declared = Canonical_Id(&path);
 
-        let Ok(text) = std::fs::read_to_string(&path)
-        else
-        {
-            continue;
-        };
-        if !text.contains("authority: canonical-normative-record")
-        {
-            continue;
-        }
-
-        let Some(id) = text
-            .lines()
-            .find_map(|line| return line.strip_prefix("id: "))
-        else
-        {
-            panic!("{} claims canonical authority and declares no id", path.display());
-        };
-
-        canonical.push(id.trim().to_owned());
+        canonical.extend(declared);
     }
 
     return canonical;
+}
+
+/// The identifier a file declares, if it is a record claiming canonical normative authority.
+///
+/// # Panics
+///
+/// Panics if a file claims that authority and declares no `id:`. That is a record no
+/// registration can name, which is the state this whole file exists to make visible.
+fn Canonical_Id(path: &Path) -> Option<String>
+{
+    if path.extension().is_none_or(|extension| return extension != "md")
+    {
+        return None;
+    }
+    let Ok(text) = std::fs::read_to_string(path)
+    else
+    {
+        return None;
+    };
+    if !text.contains("authority: canonical-normative-record")
+    {
+        return None;
+    }
+    let Some(id) = text.lines().find_map(|line| return line.strip_prefix("id: "))
+    else
+    {
+        panic!("{} claims canonical authority and declares no id", path.display());
+    };
+
+    return Some(id.trim().to_owned());
 }
 
 /// The two directions of a set disagreement: on side A and not side B, and the reverse.
@@ -187,14 +215,12 @@ fn Test_Every_Governing_Record_Should_Resolve_By_Id()
 fn Test_Every_Canonical_Record_On_Disk_Should_Be_Governing()
 {
     let canonical = Canonical_Records();
-
     assert!(
         !canonical.is_empty(),
         "no canonical record was found under {}. Every assertion here iterates over that \
          set, so an empty one passes having checked nothing",
         Record_Directory().display()
     );
-
     let Disagreement { unseeded, phantom } = Disagreements(&canonical, GOVERNING_RECORD_IDS);
 
     assert!(
@@ -283,29 +309,12 @@ fn Test_A_Registration_With_No_Record_Should_Be_A_Phantom()
 fn Test_The_Governing_List_Should_Be_The_Registration_Directory()
 {
     let directory = Registration_Directory();
-    let entries = std::fs::read_dir(&directory)
-        .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
-
-    let mut stems: Vec<String> = Vec::new();
-    for entry in entries.flatten()
-    {
-        let path = entry.path();
-        if path.extension().is_none_or(|extension| extension != "record")
-        {
-            continue;
-        }
-        if let Some(stem) = path.file_stem().and_then(|stem| stem.to_str())
-        {
-            stems.push(stem.to_owned());
-        }
-    }
-
+    let stems = Registered_Stems(&directory);
     assert!(
         !stems.is_empty(),
         "no registration was found under {}, so this compared nothing",
         directory.display()
     );
-
     let Disagreement {
         unseeded: unregistered,
         phantom: undeclared,
@@ -318,6 +327,38 @@ fn Test_The_Governing_List_Should_Be_The_Registration_Directory()
          The list is generated from that directory, so a disagreement means the build ran \
          against a different one."
     );
+}
+
+/// Every registration stem in a directory, read at test time.
+fn Registered_Stems(directory: &Path) -> Vec<String>
+{
+    let entries = std::fs::read_dir(directory)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
+    let mut stems = Vec::new();
+
+    for entry in entries.flatten()
+    {
+        let path = entry.path();
+        let stem = Registration_Stem(&path);
+
+        stems.extend(stem);
+    }
+
+    return stems;
+}
+
+/// The stem of a registration file, or `None` for anything else in the directory.
+fn Registration_Stem(path: &Path) -> Option<String>
+{
+    if path.extension().is_none_or(|extension| return extension != "record")
+    {
+        return None;
+    }
+
+    return path
+        .file_stem()
+        .and_then(|stem| return stem.to_str())
+        .map(str::to_owned);
 }
 
 /// What the refused derivation would check, exhibited rather than argued.
@@ -417,38 +458,27 @@ fn Test_An_Unseeded_Store_Should_Hold_None_Of_Them()
 fn Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge()
 {
     let store = Seeded();
+    let forward = Counted(
+        &store,
+        "SELECT count(*) FROM relations r
+         JOIN nodes f ON f.uid = r.from_node_uid
+         JOIN nodes t ON t.uid = r.to_node_uid
+         WHERE f.node_id = 'D-129' AND r.relation_type = 'supersedes'
+           AND t.node_id = 'ADR-DOC-001'",
+    );
+    let inverse = Counted(
+        &store,
+        "SELECT count(*) FROM relations r
+         JOIN nodes f ON f.uid = r.from_node_uid
+         JOIN nodes t ON t.uid = r.to_node_uid
+         WHERE f.node_id = 'ADR-DOC-001' AND r.relation_type = 'superseded_by'
+           AND t.node_id = 'D-129'",
+    );
 
     assert!(
         store.Node_Uid("ADR-DOC-001").expect("queries").is_some(),
         "the superseded record must exist for the edge to mean anything"
     );
-
-    let forward: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM relations r
-             JOIN nodes f ON f.uid = r.from_node_uid
-             JOIN nodes t ON t.uid = r.to_node_uid
-             WHERE f.node_id = 'D-129' AND r.relation_type = 'supersedes'
-               AND t.node_id = 'ADR-DOC-001'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
-
-    let inverse: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM relations r
-             JOIN nodes f ON f.uid = r.from_node_uid
-             JOIN nodes t ON t.uid = r.to_node_uid
-             WHERE f.node_id = 'ADR-DOC-001' AND r.relation_type = 'superseded_by'
-               AND t.node_id = 'D-129'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
-
     assert_eq!(forward, 1, "D-129 does not supersede ADR-DOC-001");
     assert_eq!(inverse, 1, "the inverse edge is missing, so the fact is only half recorded");
 }
@@ -460,27 +490,15 @@ fn Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge()
 fn Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder()
 {
     let store = Seeded();
-
-    let authority: String = store
-        .Connection()
-        .query_row(
-            "SELECT authority FROM nodes WHERE node_id = 'ADR-DOC-001'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
+    let authority = Column(&store, "SELECT authority FROM nodes WHERE node_id = ?1", "ADR-DOC-001");
+    let bodies = Counted(
+        &store,
+        "SELECT count(*) FROM source_documents WHERE path LIKE '%ADR-DOC-001%'",
+    );
 
     assert_eq!(authority, EXTERNAL);
     assert_eq!(
-        store
-            .Connection()
-            .query_row(
-                "SELECT count(*) FROM source_documents WHERE path LIKE '%ADR-DOC-001%'",
-                [],
-                |row| row.get::<_, u32>(0)
-            )
-            .expect("queries"),
-        0,
+        bodies, 0,
         "a placeholder with a body would be filler wearing a record's clothes"
     );
 }
@@ -490,7 +508,6 @@ fn Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder()
 fn Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One()
 {
     let mut store = Seeded();
-
     store
         .Upsert_Node(NodeRow {
             node_id: "ADR-DOC-001",
@@ -586,6 +603,16 @@ fn Test_Seeding_Should_Be_Idempotent()
 fn Test_The_Records_Should_Be_Present_As_Disposed_Content()
 {
     let store = Seeded();
+    let empty = Counted(
+        &store,
+        "SELECT count(*) FROM source_documents d
+         WHERE NOT EXISTS (SELECT 1 FROM source_blocks b WHERE b.document_uid = d.uid)",
+    );
+    let undisposed = Counted(
+        &store,
+        "SELECT count(*) FROM source_blocks b
+         WHERE NOT EXISTS (SELECT 1 FROM lineage l WHERE l.source_block_uid = b.uid)",
+    );
 
     assert_eq!(
         store.Count(Table::SourceDocuments).expect("counts") as usize,
@@ -595,29 +622,7 @@ fn Test_The_Records_Should_Be_Present_As_Disposed_Content()
     );
     assert!(store.Count(Table::SourceBlocks).expect("counts") >= 40);
     assert!(store.Count(Table::SourceHeadings).expect("counts") >= 16);
-
-    let empty: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM source_documents d
-             WHERE NOT EXISTS (SELECT 1 FROM source_blocks b WHERE b.document_uid = d.uid)",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
-
     assert_eq!(empty, 0, "{empty} record(s) segmented to nothing");
-
-    let undisposed: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM source_blocks b
-             WHERE NOT EXISTS (SELECT 1 FROM lineage l WHERE l.source_block_uid = b.uid)",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
-
     assert_eq!(undisposed, 0, "{undisposed} seeded block(s) have no disposition");
 }
 
@@ -625,15 +630,10 @@ fn Test_The_Records_Should_Be_Present_As_Disposed_Content()
 fn Test_Authored_Content_Should_Be_Distinguishable_From_An_Ingested_Revision()
 {
     let store = Seeded();
-
-    let revisions: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM source_documents WHERE revision <> ?1",
-            rusqlite::params![AUTHORED],
-            |row| row.get(0),
-        )
-        .expect("queries");
+    let revisions = Counted(
+        &store,
+        &format!("SELECT count(*) FROM source_documents WHERE revision <> '{AUTHORED}'"),
+    );
 
     assert_eq!(revisions, 0, "a governing record claims to come from a corpus revision");
 }
@@ -645,28 +645,35 @@ fn Test_Authored_Content_Should_Be_Distinguishable_From_An_Ingested_Revision()
 fn Test_No_Governing_Record_Should_Carry_A_Carriage_Return()
 {
     let store = Seeded();
-
-    let mut statement = store
-        .Connection()
-        .prepare("SELECT path, text FROM source_blocks b JOIN source_documents d ON d.uid = b.document_uid")
-        .expect("prepares");
-    let offenders: Vec<String> = statement
-        .query_map([], |row| {
-            let path: String = row.get(0)?;
-            let text: String = row.get(1)?;
-            return Ok((path, text));
-        })
-        .expect("queries")
-        .filter_map(Result::ok)
-        .filter(|(_, text)| text.contains('\r'))
-        .map(|(path, _)| path)
-        .collect();
+    let offenders = Blocks_Carrying_A_Carriage_Return(&store);
 
     assert!(offenders.is_empty(), "CRLF reached the store from {offenders:?}");
     assert!(
         store.Count(Table::SourceBlocks).expect("counts") > 0,
         "no blocks were examined, so this found nothing by looking at nothing"
     );
+}
+
+/// The documents holding a block with a carriage return in it.
+fn Blocks_Carrying_A_Carriage_Return(store: &SpecificationStore) -> Vec<String>
+{
+    let mut statement = store
+        .Connection()
+        .prepare("SELECT path, text FROM source_blocks b JOIN source_documents d ON d.uid = b.document_uid")
+        .expect("prepares");
+
+    return statement
+        .query_map([], |row| {
+            let path: String = row.get(0)?;
+            let text: String = row.get(1)?;
+
+            return Ok((path, text));
+        })
+        .expect("queries")
+        .filter_map(Result::ok)
+        .filter(|(_, text)| return text.contains('\r'))
+        .map(|(path, _)| return path)
+        .collect();
 }
 
 /// The sibling records `ARC-ECOSYSTEM-001` cites, named here rather than counted.
@@ -693,28 +700,27 @@ fn Test_A_Relation_To_A_Sibling_Record_Should_Arrive_As_A_Reported_Placeholder()
 
     for record in CITED_SIBLING_RECORDS
     {
-        assert!(
-            report.references.iter().any(|reference| return reference == record),
-            "{record} is cited across the seam and the seed report does not name it, so an \
-             edge into a sibling suite is indistinguishable from an edge into nothing"
-        );
-
-        let authority: String = store
-            .Connection()
-            .query_row(
-                "SELECT authority FROM nodes WHERE node_id = ?1",
-                rusqlite::params![record],
-                |row| row.get(0),
-            )
-            .expect("queries");
-
-        assert_eq!(authority, EXTERNAL, "{record}");
-        assert_eq!(
-            store.Suite_Of(record).expect("queries"),
-            None,
-            "{record} claims a suite in a store no suite was ingested into"
-        );
+        Assert_Arrived_As_A_Placeholder(&store, &report, record);
     }
+}
+
+/// One cited sibling record: named in the report, minted as external, claiming no suite.
+fn Assert_Arrived_As_A_Placeholder(store: &SpecificationStore, report: &SeedReport, record: &str)
+{
+    assert!(
+        report.references.iter().any(|reference| return reference == record),
+        "{record} is cited across the seam and the seed report does not name it, so an edge \
+         into a sibling suite is indistinguishable from an edge into nothing"
+    );
+
+    let authority = Column(store, "SELECT authority FROM nodes WHERE node_id = ?1", record);
+
+    assert_eq!(authority, EXTERNAL, "{record}");
+    assert_eq!(
+        store.Suite_Of(record).expect("queries"),
+        None,
+        "{record} claims a suite in a store no suite was ingested into"
+    );
 }
 
 /// The other half: a placeholder is the sibling's own node once the sibling claims it.
@@ -731,21 +737,16 @@ fn Test_A_Relation_To_A_Sibling_Record_Should_Arrive_As_A_Reported_Placeholder()
 #[test]
 fn Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It()
 {
-    let mut store = Seeded();
-    let suite = store
-        .Put_Suite("xvpe-spec-seed", "XVPE specification seed", SuiteAuthority::Sibling)
-        .expect("records the sibling suite");
-
-    let node = store
-        .Upsert_Node(NodeRow {
-            node_id: "D-090",
-            kind: "decision",
-            authority: "canonical-normative-record",
-            representation: "document",
-            title: "Reuse alone does not justify platform ownership",
-        })
-        .expect("claims the placeholder");
-    store.Assign_Suite(node, suite).expect("assigns");
+    let store = Claimed_By_The_Sibling_Suite();
+    let edges = Counted(
+        &store,
+        "SELECT count(*) FROM relations r
+         JOIN nodes f ON f.uid = r.from_node_uid
+         JOIN nodes t ON t.uid = r.to_node_uid
+         JOIN suites s ON s.uid = t.suite_uid
+         WHERE f.node_id = 'ARC-ECOSYSTEM-001' AND r.relation_type = 'relates-to'
+           AND t.node_id = 'D-090' AND s.authority_root = 0",
+    );
 
     assert_eq!(
         store.Suite_Of("D-090").expect("queries"),
@@ -758,24 +759,35 @@ fn Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It()
         Some("Reuse alone does not justify platform ownership"),
         "the placeholder kept its own name, so the sibling's record never arrived"
     );
-
-    let edges: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM relations r
-             JOIN nodes f ON f.uid = r.from_node_uid
-             JOIN nodes t ON t.uid = r.to_node_uid
-             JOIN suites s ON s.uid = t.suite_uid
-             WHERE f.node_id = 'ARC-ECOSYSTEM-001' AND r.relation_type = 'relates-to'
-               AND t.node_id = 'D-090' AND s.authority_root = 0",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
-
     assert_eq!(
         edges, 1,
         "the cross-suite edge does not join a non-root suite, which is the whole distinction \
          P3-SIBLINGS bought"
     );
+}
+
+/// A seeded store in which the sibling suite has claimed the `D-090` placeholder as its own.
+///
+/// The suite is created here rather than ingested from an archive on purpose: the archives
+/// are outside this repository and a test that cannot find its corpus passes. This one has
+/// no corpus to miss.
+fn Claimed_By_The_Sibling_Suite() -> SpecificationStore
+{
+    let mut store = Seeded();
+    let suite = store
+        .Put_Suite("xvpe-spec-seed", "XVPE specification seed", SuiteAuthority::Sibling)
+        .expect("records the sibling suite");
+    let node = store
+        .Upsert_Node(NodeRow {
+            node_id: "D-090",
+            kind: "decision",
+            authority: "canonical-normative-record",
+            representation: "document",
+            title: "Reuse alone does not justify platform ownership",
+        })
+        .expect("claims the placeholder");
+
+    store.Assign_Suite(node, suite).expect("assigns");
+
+    return store;
 }
