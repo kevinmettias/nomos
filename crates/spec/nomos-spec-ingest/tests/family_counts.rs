@@ -714,7 +714,6 @@ fn Test_The_Register_Should_Agree_With_The_Store_Census()
     {
         return;
     };
-
     let census = Volume_Census(&corpus.join(VOLUMES));
     let register = Register();
     let value = |id: &str| {

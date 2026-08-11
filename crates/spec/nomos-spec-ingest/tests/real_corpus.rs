@@ -68,7 +68,6 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
     {
         return;
     };
-
     let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
     let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
     let documents = Domain_Volumes(&root);
@@ -108,7 +107,6 @@ fn Test_I2_Should_Ingest_Every_Statement_Without_Divergence()
     {
         return;
     };
-
     let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
     let file = Parse_Statements(&source).expect("the statement file parses");
 
@@ -143,7 +141,6 @@ fn Test_The_Whole_Corpus_Should_Ingest_Into_One_Store()
     {
         return;
     };
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
 
     let documents = Domain_Volumes(&root);
@@ -189,7 +186,6 @@ fn Test_Re_Ingesting_The_Corpus_Should_Be_A_No_Op()
     {
         return;
     };
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let documents = Domain_Volumes(&root);
 

@@ -80,7 +80,6 @@ fn Test_Every_Sibling_Suite_Should_Be_Non_Root()
     {
         return;
     };
-
     let roots: Vec<String> = store
         .Connection()
         .prepare("SELECT suite_id FROM suites WHERE authority_root = 1 ORDER BY suite_id")
@@ -249,7 +248,6 @@ fn Test_Every_Game_Plan_Block_Should_Be_Commentary()
     {
         return;
     };
-
     let blocks: u32 = store
         .Connection()
         .query_row(
@@ -313,7 +311,6 @@ fn Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught()
     {
         return;
     };
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let root = store.Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root).expect("records");
 
@@ -404,7 +401,6 @@ fn Test_Re_Ingesting_The_Suites_Should_Change_Nothing()
     {
         return;
     };
-
     let Some(mut store) = Ecosystem()
     else
     {

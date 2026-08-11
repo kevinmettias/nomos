@@ -171,7 +171,6 @@ fn Test_Every_Family_Should_Restore_The_Count_The_Register_Declares()
     {
         return;
     };
-
     let RestoredStore { report, .. } = Restored_Store(&root);
 
     for (family, id) in MEMBERSHIP
@@ -202,7 +201,6 @@ fn Test_Every_Restored_Member_Should_Resolve_By_Its_Identifier()
     {
         return;
     };
-
     let RestoredStore { store, report } = Restored_Store(&root);
 
     assert!(!report.members.is_empty(), "nothing was restored, so nothing was checked");
@@ -227,7 +225,6 @@ fn Test_The_Canonical_Domain_Models_Should_Resolve_By_Name_And_Trace_To_Their_Ro
     {
         return;
     };
-
     let RestoredStore { store, report } = Restored_Store(&root);
 
     for name in NAMED_MODELS
@@ -285,7 +282,6 @@ fn Test_Every_Restored_Member_Should_Carry_A_Lineage_To_What_Produced_It()
     {
         return;
     };
-
     let RestoredStore { store, report } = Restored_Store(&root);
 
     let untraced: Vec<&str> = report
@@ -320,7 +316,6 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
     {
         return;
     };
-
     let RestoredStore {
         mut store, report
     } = Restored_Store(&root);
@@ -395,7 +390,6 @@ fn Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing()
     {
         return;
     };
-
     let RestoredStore {
         mut store,
         report: first,

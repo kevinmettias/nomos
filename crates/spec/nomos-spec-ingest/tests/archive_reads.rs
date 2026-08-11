@@ -149,7 +149,6 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
     {
         return;
     };
-
     let archives = Archives_In(&root).unwrap_or_else(|error| panic!("{error}"));
     assert_eq!(archives.len(), 32, "the archive count changed");
 
@@ -216,7 +215,6 @@ fn Test_The_v15_Archive_Should_Yield_Its_Records()
     {
         return;
     };
-
     let path = root.join("nomos-spec-v15.0.zip");
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));
 
@@ -247,7 +245,6 @@ fn Test_Reading_Should_Not_Unpack()
     {
         return;
     };
-
     let before = Listing(&root);
     let path = root.join("nomos-spec-v15.0.zip");
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));

@@ -103,7 +103,6 @@ fn Test_Every_Identifier_Should_Reconcile_By_Name()
     {
         return;
     };
-
     let v14 = V14_Artifacts(&corpus);
     assert_eq!(v14.len(), 689, "the v14 artifact count changed");
 
@@ -148,7 +147,6 @@ fn Test_The_Report_Should_Name_What_It_Lost()
     {
         return;
     };
-
     let report = Reconcile(&V14_Artifacts(&corpus), &V15_Statements(&mut archive));
 
     let spelled = report.Summary();
@@ -170,7 +168,6 @@ fn Test_Every_Filler_Block_Should_Carry_A_Lineage_Row()
     {
         return;
     };
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let headings = V14_Headings(&corpus);
     let mut report = OverlayReport::default();
@@ -235,7 +232,6 @@ fn Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes()
     {
         return;
     };
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let mut ingested = Vec::new();
 

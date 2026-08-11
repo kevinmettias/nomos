@@ -60,7 +60,6 @@ fn Test_The_Revision_Set_Should_Be_Ordered_And_Name_Its_Gaps()
     {
         return;
     };
-
     let revisions = Revisions_In(&root).expect("reads the directory");
     let labels: Vec<String> = revisions.iter().map(|(label, _)| return label.clone()).collect();
 
@@ -83,7 +82,6 @@ fn Test_Every_Adjacent_Pair_Should_Yield_The_Four_Sets()
     {
         return;
     };
-
     let fingerprints = Fingerprints(&root);
     let walk = Walk(&fingerprints);
 
@@ -119,7 +117,6 @@ fn Test_No_Document_Should_Have_Disappeared_And_Come_Back()
     {
         return;
     };
-
     let walk = Walk(&Fingerprints(&root));
 
     let returned: Vec<&String> = walk.iter().flat_map(|pair| return &pair.reappeared).collect();
@@ -146,7 +143,6 @@ fn Test_The_Last_Pair_Should_Carry_Its_Measured_Sizes()
     {
         return;
     };
-
     let walk = Walk(&Fingerprints(&root));
     let Some(pair) = walk.last()
     else
@@ -167,7 +163,6 @@ fn Test_The_Last_Pair_Should_Show_The_Whole_Narrative_Tree_Disappearing()
     {
         return;
     };
-
     let walk = Walk(&Fingerprints(&root));
     let Some(pair) = walk.last()
     else
@@ -207,7 +202,6 @@ fn Test_The_Headline_Counts_Should_Name_Their_Unit_And_Their_Scope()
     {
         return;
     };
-
     let mut archive = Opened(&root, V14_LAST);
     let v14 = Census(&mut archive, Scope::DomainVolumes).expect("counts v14.36");
 
@@ -235,7 +229,6 @@ fn Test_A_Scope_The_Revision_Does_Not_Have_Should_Be_Refused()
     {
         return;
     };
-
     let mut archive = Opened(&root, V15);
     let refusal = Census(&mut archive, Scope::DomainVolumes)
         .expect_err("v15.0 has no domain volumes and must not report zero");
@@ -252,7 +245,6 @@ fn Test_v15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
     {
         return;
     };
-
     let mut v15_archive = Opened(&root, V15);
     let v15 = Census(&mut v15_archive, Scope::EveryMarkdown).expect("counts v15.0");
     let mut v14_archive = Opened(&root, V14_LAST);
@@ -287,7 +279,6 @@ fn Test_Fingerprinting_Should_Be_Stable()
     {
         return;
     };
-
     let mut first = Opened(&root, V15);
     let mut second = Opened(&root, V15);
 
@@ -307,7 +298,6 @@ fn Test_A_Pair_Summary_Should_Name_What_It_Counted()
     {
         return;
     };
-
     let walk = Walk(&Fingerprints(&root));
     let Some(pair) = walk.last()
     else
@@ -334,7 +324,6 @@ fn Test_The_Archaeology_Should_Cover_Every_Revision_Exactly_Once()
     {
         return;
     };
-
     let fingerprints = Fingerprints(&root);
     let walk = Walk(&fingerprints);
 
@@ -371,7 +360,6 @@ fn Test_Dropping_A_Revision_Should_Change_The_Walk()
     {
         return;
     };
-
     let full = Fingerprints(&root);
     assert!(full.len() > 3, "too few revisions to drop one");
 
