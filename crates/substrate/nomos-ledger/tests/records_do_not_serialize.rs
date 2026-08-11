@@ -78,13 +78,60 @@ fn Reserved_Records(item: &LedgerItem) -> Vec<String>
         .collect();
 }
 
-fn Temp_Dir(name: &str) -> PathBuf
+/// A temporary board that removes itself when the test holding it ends.
+///
+/// Every test here used to close with its own `remove_dir_all`, which is a line that only
+/// runs when the test passes: a failed assertion unwinds straight past it. `Drop` runs on the
+/// unwind too, so the tree is cleared exactly when the value goes out of scope.
+struct Scratch(PathBuf);
+
+impl Drop for Scratch
+{
+    fn drop(&mut self)
+    {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
+impl std::ops::Deref for Scratch
+{
+    type Target = Path;
+
+    fn deref(&self) -> &Path
+    {
+        return &self.0;
+    }
+}
+
+fn Temp_Dir(name: &str) -> Scratch
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-record-lock-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&path);
     std::fs::create_dir_all(&path).expect("test needs a temp directory");
-    return path;
+    return Scratch(path);
+}
+
+/// The ledger every test here opens: a temporary file, read against the shared clock.
+type Board = FileLedger<StdFileSystem, &'static FixedClock, FileLock>;
+
+/// A doctored board on disk, and the ledger open over it.
+fn Saved(name: &str, document: &LedgerDocument) -> (Scratch, Board)
+{
+    let directory = Temp_Dir(name);
+    let ledger = Ledger_At(&directory, &AT_NOW);
+
+    ledger.Save(document).expect("the doctored board is still a valid ledger");
+
+    return (directory, ledger);
+}
+
+/// Claims an item, or fails naming what the refusal means for the property under test.
+fn Claimed(ledger: &mut Board, writer: &ItemId, agent: &str, blame: &str)
+{
+    ledger
+        .Claim(writer, agent, Duration::from_secs(3_600))
+        .unwrap_or_else(|refusal| panic!("{blame}: {}", refusal.Describe()));
 }
 
 /// The clock every test that does not move time shares.
@@ -119,17 +166,16 @@ fn Two_Record_Writers() -> (LedgerDocument, ItemId, ItemId)
 /// Puts a doctored board on disk and lets two agents contest it, first come first served.
 ///
 /// The refusal handed back is the second agent's, which is what every test using this is
-/// about; the directory comes back so the caller can clean it up.
+/// about; the directory comes back so that it outlives the assertion rather than being
+/// cleared while the ledger is still open over it.
 fn Contested(
     name: &str,
     document: &LedgerDocument,
     first: &ItemId,
     second: &ItemId,
-) -> (PathBuf, ClaimRefusal)
+) -> (Scratch, ClaimRefusal)
 {
-    let directory = Temp_Dir(name);
-    let mut ledger = Ledger_At(&directory, &AT_NOW);
-    ledger.Save(document).expect("the doctored board is still a valid ledger");
+    let (directory, mut ledger) = Saved(name, document);
 
     ledger
         .Claim(first, "agent-a", Duration::from_secs(3_600))
@@ -200,6 +246,42 @@ fn Only_Records(item: &LedgerItem) -> Territory
     return Territory::Of_Files(Reserved_Records(item));
 }
 
+/// The identifiers of every open record writer on a board.
+fn Writer_Ids(document: &LedgerDocument) -> Vec<ItemId>
+{
+    return Record_Writers(document)
+        .iter()
+        .map(|item| return item.id.clone())
+        .collect();
+}
+
+/// Reduces every named item to the records it reserves, and nothing else.
+fn Project_Onto_Records(document: &mut LedgerDocument, writers: &[ItemId])
+{
+    for item in &mut document.items
+    {
+        if writers.contains(&item.id)
+        {
+            item.territory = Only_Records(item);
+        }
+    }
+}
+
+/// An item's territory with one more path on it.
+fn Widened(item: &LedgerItem, path: &str) -> Territory
+{
+    let mut paths = item.territory.paths.clone();
+    paths.push(path.to_owned());
+
+    return Territory::Of_Files(paths);
+}
+
+/// The paths the register declares, without what forces each of them.
+fn Declared() -> Vec<&'static str>
+{
+    return KNOWN_SERIALIZERS.iter().map(|(path, _)| return *path).collect();
+}
+
 /// Whether two paths exclude each other, decided by the ledger's own rule.
 ///
 /// Single-path territories rather than a containment check written here. `a/b` contains
@@ -242,29 +324,8 @@ fn Shared_Paths(left: &LedgerItem, right: &LedgerItem) -> Vec<String>
 
     for mine in &left.territory.paths
     {
-        if Normalize_Path(mine).starts_with(RECORD_DIRECTORY)
+        for broader in Broader_Of(mine, right)
         {
-            continue;
-        }
-
-        for theirs in &right.territory.paths
-        {
-            if Normalize_Path(theirs).starts_with(RECORD_DIRECTORY) || !Paths_Collide(mine, theirs)
-            {
-                continue;
-            }
-
-            // The broader of the two is the one that serializes: an item reserving a whole
-            // crate is what a file inside it collides with, and naming the file would
-            // report the symptom.
-            let broader = if Normalize_Path(mine).len() <= Normalize_Path(theirs).len()
-            {
-                Normalize_Path(mine)
-            }
-            else
-            {
-                Normalize_Path(theirs)
-            };
             if !shared.contains(&broader)
             {
                 shared.push(broader);
@@ -274,6 +335,39 @@ fn Shared_Paths(left: &LedgerItem, right: &LedgerItem) -> Vec<String>
 
     shared.sort();
     return shared;
+}
+
+/// The broader spelling of every non-record path in `right` that `mine` collides with.
+fn Broader_Of(mine: &str, right: &LedgerItem) -> Vec<String>
+{
+    if Normalize_Path(mine).starts_with(RECORD_DIRECTORY)
+    {
+        return Vec::new();
+    }
+
+    return right
+        .territory
+        .paths
+        .iter()
+        .filter(|theirs| return !Normalize_Path(theirs).starts_with(RECORD_DIRECTORY))
+        .filter(|theirs| return Paths_Collide(mine, theirs))
+        .map(|theirs| return Broader(mine, theirs))
+        .collect();
+}
+
+/// The broader of two colliding paths, which is the one that serializes.
+///
+/// An item reserving a whole crate is what a file inside it collides with, and naming the
+/// file would report the symptom. The shorter normalized spelling is the container — the
+/// same tie-break [`Covers`] takes the direction of a containment from.
+fn Broader(mine: &str, theirs: &str) -> String
+{
+    if Normalize_Path(mine).len() <= Normalize_Path(theirs).len()
+    {
+        return Normalize_Path(mine);
+    }
+
+    return Normalize_Path(theirs);
 }
 
 /// Two open items that each reserve a record and are otherwise territorially independent.
@@ -383,51 +477,29 @@ fn Test_The_Board_Should_Have_Record_Writing_Items_To_Talk_About()
 fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
 {
     let mut document = Unclaimed_Copy();
-    let writers: Vec<ItemId> = Record_Writers(&document)
-        .iter()
-        .map(|item| return item.id.clone())
-        .collect();
-
+    let writers = Writer_Ids(&document);
     assert!(
         writers.len() >= 2,
         "fewer than two open record writers, so a claim of independence would be a claim \
          about nothing; got {}",
         writers.len()
     );
-
-    for item in &mut document.items
-    {
-        if writers.contains(&item.id)
-        {
-            item.territory = Only_Records(item);
-        }
-    }
-
-    let directory = Temp_Dir("records-only");
-    let mut ledger = Ledger_At(&directory, &AT_NOW);
-    ledger.Save(&document).expect("a records-only board is a valid ledger");
+    Project_Onto_Records(&mut document, &writers);
 
     // Every one of them, not a pair. A pair could be independent by accident; all of them
-    // being claimable at once is the property, and it is the one that survives an item
-    // being added to the board tomorrow.
+    // being claimable at once is the property, and it is the one that survives an item being
+    // added to the board tomorrow.
+    let (_scratch, mut ledger) = Saved("records-only", &document);
     for (ordinal, writer) in writers.iter().enumerate()
     {
-        ledger
-            .Claim(writer, &format!("agent-{ordinal}"), Duration::from_secs(3_600))
-            .unwrap_or_else(|refusal| {
-                panic!(
-                    "{writer} was refused on its record alone, so two records still exclude \
-                     each other: {}",
-                    refusal.Describe()
-                )
-            });
+        let blame = format!(
+            "{writer} was refused on its record alone, so two records still exclude each other"
+        );
+        Claimed(&mut ledger, writer, &format!("agent-{ordinal}"), &blame);
     }
-
     ledger
         .Validate_Current()
         .expect("independent claims are a valid ledger");
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 // ---------------------------------------------------------------------------
@@ -488,6 +560,23 @@ fn A_Pair_Widening_Different_Crates(document: &LedgerDocument) -> Option<(ItemId
     return None;
 }
 
+/// The board, and the pair of items widening different crates that the two tests below are
+/// both about.
+///
+/// The pair is derived rather than named, so `blame` is what each caller says when the board
+/// no longer holds one.
+fn A_Widening_Pair(blame: &str) -> (LedgerDocument, ItemId, ItemId)
+{
+    let document = Unclaimed_Copy();
+    let Some((first, second)) = A_Pair_Widening_Different_Crates(&document)
+    else
+    {
+        panic!("{blame}")
+    };
+
+    return (document, first, second);
+}
+
 /// The property `P10-SURFACE-GRAIN` bought, claimed through the ledger rather than argued.
 ///
 /// Two items each widening one crate's public API are two items writing two different files
@@ -505,41 +594,24 @@ fn A_Pair_Widening_Different_Crates(document: &LedgerDocument) -> Option<(ItemId
 #[test]
 fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
 {
-    let document = Unclaimed_Copy();
-
-    let Some((first, second)) = A_Pair_Widening_Different_Crates(&document)
-    else
-    {
-        panic!(
-            "no two open record writers widen different crates' APIs and are otherwise \
-             independent. Either every such item is back to reserving `{HARNESS_DIRECTORY}` \
-             — which is the defect OD-LEDGER-011 closed — or the board no longer holds two \
-             items that widen an API at all."
-        )
-    };
-
-    let directory = Temp_Dir("snapshot-grain");
-    let mut ledger = Ledger_At(&directory, &AT_NOW);
-    ledger.Save(&document).expect("the real board is a valid ledger");
+    let (document, first, second) = A_Widening_Pair(&format!(
+        "no two open record writers widen different crates' APIs and are otherwise \
+         independent. Either every such item is back to reserving `{HARNESS_DIRECTORY}` — \
+         which is the defect OD-LEDGER-011 closed — or the board no longer holds two items \
+         that widen an API at all."
+    ));
+    let (_scratch, mut ledger) = Saved("snapshot-grain", &document);
 
     for (writer, agent) in [(&first, "agent-a"), (&second, "agent-b")]
     {
-        ledger
-            .Claim(writer, agent, Duration::from_secs(3_600))
-            .unwrap_or_else(|refusal| {
-                panic!(
-                    "{first} and {second} widen different crates' APIs and {writer} was \
-                     still refused: {}",
-                    refusal.Describe()
-                )
-            });
+        let blame = format!(
+            "{first} and {second} widen different crates' APIs and {writer} was still refused"
+        );
+        Claimed(&mut ledger, writer, agent, &blame);
     }
-
     ledger
         .Validate_Current()
         .expect("two independent claims are a valid ledger");
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The control that keeps the test above from passing for some other reason.
@@ -552,33 +624,16 @@ fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
 #[test]
 fn Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair()
 {
-    let mut document = Unclaimed_Copy();
-
-    let Some((first, second)) = A_Pair_Widening_Different_Crates(&document)
-    else
-    {
-        panic!("the acceptance test's pair must exist for its control to mean anything")
-    };
-
+    let (mut document, first, second) =
+        A_Widening_Pair("the acceptance test's pair must exist for its control to mean anything");
     for item in &mut document.items
     {
-        if item.id != first
+        if item.id == first
         {
-            continue;
+            item.territory = On_The_Snapshot_Directory(item);
         }
-        let snapshots = Reserved_Snapshots(item);
-        let mut paths: Vec<String> = item
-            .territory
-            .paths
-            .iter()
-            .filter(|path| return !snapshots.contains(&Normalize_Path(path)))
-            .cloned()
-            .collect();
-        paths.push(HARNESS_DIRECTORY.to_owned());
-        item.territory = Territory::Of_Files(paths);
     }
-
-    let (directory, refusal) = Contested("snapshot-directory-restored", &document, &first, &second);
+    let (_scratch, refusal) = Contested("snapshot-directory-restored", &document, &first, &second);
 
     assert!(
         refusal.Describe().contains("agent-a"),
@@ -586,8 +641,24 @@ fn Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair()
          because the two then share nineteen snapshots neither will write: {}",
         refusal.Describe()
     );
+}
 
-    let _ = std::fs::remove_dir_all(&directory);
+/// An item's territory with its snapshot files replaced by the directory holding them, which
+/// is how every one of these items was authored before `OD-LEDGER-011`.
+fn On_The_Snapshot_Directory(item: &LedgerItem) -> Territory
+{
+    let snapshots = Reserved_Snapshots(item);
+    let mut paths: Vec<String> = item
+        .territory
+        .paths
+        .iter()
+        .filter(|path| return !snapshots.contains(&Normalize_Path(path)))
+        .cloned()
+        .collect();
+
+    paths.push(HARNESS_DIRECTORY.to_owned());
+
+    return Territory::Of_Files(paths);
 }
 
 // ---------------------------------------------------------------------------
@@ -672,23 +743,9 @@ fn Test_Every_Declared_Serializer_Should_Still_Serialize()
     let document = Unclaimed_Copy();
     let writers = Record_Writers(&document);
 
-    let stale: Vec<&str> = KNOWN_SERIALIZERS
-        .iter()
-        .map(|(path, _)| return *path)
-        .filter(|declared| {
-            let reserving = writers
-                .iter()
-                .filter(|item| {
-                    return item
-                        .territory
-                        .paths
-                        .iter()
-                        .any(|path| return Covers(path, declared));
-                })
-                .count();
-
-            return reserving < 2;
-        })
+    let stale: Vec<&str> = Declared()
+        .into_iter()
+        .filter(|declared| return Reserving(&writers, declared) < 2)
         .collect();
 
     assert!(
@@ -698,6 +755,15 @@ fn Test_Every_Declared_Serializer_Should_Still_Serialize()
          Either the coupling is gone and the entry should be too, or the board no longer \
          has the items that made it visible."
     );
+}
+
+/// How many of these items reserve a path coarsely enough to still be serializing on it.
+fn Reserving(writers: &[&LedgerItem], declared: &str) -> usize
+{
+    return writers
+        .iter()
+        .filter(|item| return item.territory.paths.iter().any(|path| return Covers(path, declared)))
+        .count();
 }
 
 /// The control that keeps the census above from being satisfied by an empty search.
@@ -710,22 +776,15 @@ fn Test_Every_Declared_Serializer_Should_Still_Serialize()
 fn Test_An_Undeclared_Serializer_Should_Be_Found()
 {
     let mut document = Unclaimed_Copy();
-    let writers: Vec<ItemId> = Record_Writers(&document)
-        .iter()
-        .map(|item| return item.id.clone())
-        .collect();
+    let writers = Writer_Ids(&document);
     let invented = "crates/invented/shared-by-everyone";
-
     for item in &mut document.items
     {
         if writers.contains(&item.id)
         {
-            let mut paths = item.territory.paths.clone();
-            paths.push(invented.to_owned());
-            item.territory = Territory::Of_Files(paths);
+            item.territory = Widened(item, invented);
         }
     }
-
     let found = Undeclared_Serializers(&document);
 
     assert!(
@@ -744,43 +803,43 @@ fn Test_An_Undeclared_Serializer_Should_Be_Found()
 fn Undeclared_Serializers(document: &LedgerDocument) -> BTreeSet<String>
 {
     let writers = Record_Writers(document);
-    let declared: Vec<&str> = KNOWN_SERIALIZERS.iter().map(|(path, _)| return *path).collect();
+    let declared = Declared();
     let Some(first) = writers.first()
     else
     {
         return BTreeSet::new();
     };
 
-    let mut undeclared = BTreeSet::new();
-
     // Candidates come from one writer and are tested against the rest, which is enough:
     // a path all of them reserve is reserved by this one too.
-    for candidate in &first.territory.paths
+    return first
+        .territory
+        .paths
+        .iter()
+        .filter(|candidate| return Serializes(candidate, &writers, &declared))
+        .map(|candidate| return Normalize_Path(candidate))
+        .collect();
+}
+
+/// Whether every record writer reserves this path, and nobody declared it.
+fn Serializes(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bool
+{
+    if Normalize_Path(candidate).starts_with(RECORD_DIRECTORY)
     {
-        if Normalize_Path(candidate).starts_with(RECORD_DIRECTORY)
-        {
-            continue;
-        }
-        if declared.iter().any(|known| return Paths_Collide(known, candidate))
-        {
-            continue;
-        }
-
-        let universal = writers.iter().all(|item| {
-            return item
-                .territory
-                .paths
-                .iter()
-                .any(|path| return Paths_Collide(candidate, path));
-        });
-
-        if universal
-        {
-            undeclared.insert(Normalize_Path(candidate));
-        }
+        return false;
+    }
+    if declared.iter().any(|known| return Paths_Collide(known, candidate))
+    {
+        return false;
     }
 
-    return undeclared;
+    return writers.iter().all(|item| {
+        return item
+            .territory
+            .paths
+            .iter()
+            .any(|path| return Paths_Collide(candidate, path));
+    });
 }
 
 /// Whether the board is parallel today, reported rather than asserted.
@@ -794,51 +853,75 @@ fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
 {
     let document = Unclaimed_Copy();
     let writers = Record_Writers(&document);
-    let declared: Vec<&str> = KNOWN_SERIALIZERS.iter().map(|(path, _)| return *path).collect();
-
-    let mut pairs = 0_usize;
-    let mut blocked = 0_usize;
-    let mut structural = 0_usize;
-
-    for (index, left) in writers.iter().enumerate()
-    {
-        for right in writers.iter().skip(index.saturating_add(1))
-        {
-            pairs = pairs.saturating_add(1);
-            if left.territory.Intersect(&right.territory).Permits_Concurrency()
-            {
-                continue;
-            }
-            blocked = blocked.saturating_add(1);
-
-            // Blocked *only* by the register. The rest is two items wanting the same crate,
-            // which is territory doing its job and resolves when one of them finishes.
-            if Shared_Paths(left, right)
-                .iter()
-                .all(|path| return declared.iter().any(|known| return Paths_Collide(known, path)))
-            {
-                structural = structural.saturating_add(1);
-            }
-        }
-    }
-
+    let counted = Exclusions_Among(&writers);
     let parallel = A_Concurrent_Pair(&document)
         .map_or_else(|| return "none".to_owned(), |(first, second)| {
             return format!("{first} + {second}");
         });
 
     eprintln!(
-        "record writers: {} items, {pairs} pair(s), {blocked} blocked, {structural} of those \
-         only by a declared serializer. Concurrent pair available: {parallel}.\n\
-         The {structural} are OD-LEDGER-007's debt; the other {} are ordinary contention.",
+        "record writers: {} items, {} pair(s), {} blocked, {} of those only by a declared \
+         serializer. Concurrent pair available: {parallel}.\n\
+         The {} are OD-LEDGER-007's debt; the other {} are ordinary contention.",
         writers.len(),
-        blocked.saturating_sub(structural)
+        counted.pairs,
+        counted.blocked,
+        counted.structural,
+        counted.structural,
+        counted.blocked.saturating_sub(counted.structural)
     );
-
     assert!(
         !writers.is_empty(),
         "no open item writes a record, so this reported on nothing"
     );
+}
+
+/// How many pairs of record writers there are, how many exclude each other, and how many of
+/// those are excluded only by a path the register declares.
+#[derive(Default)]
+struct Exclusions
+{
+    pairs: usize,
+    blocked: usize,
+    structural: usize,
+}
+
+fn Exclusions_Among(writers: &[&LedgerItem]) -> Exclusions
+{
+    let declared = Declared();
+    let mut counted = Exclusions::default();
+
+    for (index, left) in writers.iter().enumerate()
+    {
+        for right in writers.iter().skip(index.saturating_add(1))
+        {
+            counted.pairs = counted.pairs.saturating_add(1);
+            Count_Exclusion(&mut counted, (left, right), &declared);
+        }
+    }
+
+    return counted;
+}
+
+/// Whether one pair excludes the other, and whether the register is the only reason.
+///
+/// Anything else is two items wanting the same crate, which is territory doing its job and
+/// resolves when one of them finishes.
+fn Count_Exclusion(counted: &mut Exclusions, pair: (&LedgerItem, &LedgerItem), declared: &[&str])
+{
+    let (left, right) = pair;
+    if left.territory.Intersect(&right.territory).Permits_Concurrency()
+    {
+        return;
+    }
+
+    counted.blocked = counted.blocked.saturating_add(1);
+    if Shared_Paths(left, right)
+        .iter()
+        .all(|path| return declared.iter().any(|known| return Paths_Collide(known, path)))
+    {
+        counted.structural = counted.structural.saturating_add(1);
+    }
 }
 
 /// The control for the acceptance test above, and the reason it cannot pass vacuously.
@@ -854,22 +937,12 @@ fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
 fn Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair()
 {
     let mut document = Unclaimed_Copy();
-
     for item in &mut document.items
     {
-        if !Is_Open(item)
+        if Is_Open(item)
         {
-            continue;
+            item.territory = On_The_Record_Directory(item);
         }
-        let mut paths: Vec<String> = item
-            .territory
-            .paths
-            .iter()
-            .filter(|path| !Normalize_Path(path).starts_with(RECORD_DIRECTORY))
-            .cloned()
-            .collect();
-        paths.push(RECORD_DIRECTORY.to_owned());
-        item.territory = Territory::Of_Files(paths);
     }
 
     assert!(
@@ -877,12 +950,40 @@ fn Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair()
         "with every open item reserving `{RECORD_DIRECTORY}` the board must serialize \
          completely, which is the defect this item closed"
     );
-
     // And the same reconstruction against the property that replaced it. The records-only
     // projection is what `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` claims
-    // over, so it has to be red here: under the old authoring every item's record
-    // projection is the whole directory, and the whole directory contains every record.
-    let writers = Record_Writers(&document);
+    // over, so it has to be red here: under the old authoring every item's record projection
+    // is the whole directory, and the whole directory contains every record.
+    assert_eq!(
+        Independent_Record_Pairs(&document),
+        0,
+        "under the old authoring the record projection must exclude every pair, or the \
+         projection has stopped measuring exclusion and the acceptance test is reporting a \
+         success it did not earn"
+    );
+}
+
+/// An item's territory with its records replaced by the directory holding them, which is the
+/// authoring `P10-RECORD-LOCK` replaced.
+fn On_The_Record_Directory(item: &LedgerItem) -> Territory
+{
+    let mut paths: Vec<String> = item
+        .territory
+        .paths
+        .iter()
+        .filter(|path| return !Normalize_Path(path).starts_with(RECORD_DIRECTORY))
+        .cloned()
+        .collect();
+
+    paths.push(RECORD_DIRECTORY.to_owned());
+
+    return Territory::Of_Files(paths);
+}
+
+/// How many pairs of record writers are independent over their records alone.
+fn Independent_Record_Pairs(document: &LedgerDocument) -> usize
+{
+    let writers = Record_Writers(document);
     let mut independent = 0_usize;
 
     for (index, left) in writers.iter().enumerate()
@@ -898,12 +999,7 @@ fn Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair()
         }
     }
 
-    assert_eq!(
-        independent, 0,
-        "under the old authoring the record projection must exclude every pair, or the \
-         projection has stopped measuring exclusion and the acceptance test is reporting a \
-         success it did not earn"
-    );
+    return independent;
 }
 
 // ---------------------------------------------------------------------------
@@ -923,7 +1019,6 @@ fn Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair()
 fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
 {
     let (mut document, first, second) = Two_Record_Writers();
-
     let contested = format!("{RECORD_DIRECTORY}/OD-CONTESTED-001");
     for item in &mut document.items
     {
@@ -932,21 +1027,14 @@ fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
             item.territory = Territory::Of_Files([contested.clone()]);
         }
     }
-
-    let (directory, refusal) = Contested("contested-record", &document, &first, &second);
+    let (_scratch, refusal) = Contested("contested-record", &document, &first, &second);
 
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),
         "the refusal must name the holder: {}",
         refusal.Describe()
     );
-    assert!(
-        refusal.Describe().contains("agent-a"),
-        "{}",
-        refusal.Describe()
-    );
-
-    let _ = std::fs::remove_dir_all(&directory);
+    assert!(refusal.Describe().contains("agent-a"), "{}", refusal.Describe());
 }
 
 /// The spelling control. A finer grain must not reintroduce the hole
@@ -992,7 +1080,6 @@ const THE_FILE_IT_NAMES: &str =
 fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder()
 {
     let (mut document, first, second) = Two_Record_Writers();
-
     for item in &mut document.items
     {
         if item.id == first
@@ -1004,21 +1091,7 @@ fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holde
             item.territory = Territory::Of_Files([THE_FILE_IT_NAMES]);
         }
     }
-
-    let directory = Temp_Dir("record-stem");
-    let mut ledger = Ledger_At(&directory, &AT_NOW);
-    ledger.Save(&document).expect("still a valid ledger");
-
-    ledger
-        .Claim(&first, "agent-a", Duration::from_secs(3_600))
-        .expect("the first claim is uncontended");
-
-    let refusal = ledger
-        .Claim(&second, "agent-b", Duration::from_secs(3_600))
-        .expect_err(
-            "`docs/records/OD-LEDGER-006` and the file it names are one record, so the \
-             second of them must not be claimable",
-        );
+    let (_scratch, refusal) = Contested("record-stem", &document, &first, &second);
 
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),
@@ -1031,8 +1104,6 @@ fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holde
          two are one record: {}",
         refusal.Describe()
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// Every record in `docs/records`, as the identifier it declares and the file it is.
@@ -1044,37 +1115,41 @@ fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holde
 fn Records_On_Disk() -> Vec<(String, String)>
 {
     let directory = Repository_Root().join("docs").join("records");
+    let entries = std::fs::read_dir(&directory).expect("the record directory must be readable");
     let mut records = Vec::new();
 
-    for entry in std::fs::read_dir(&directory).expect("the record directory must be readable")
+    for entry in entries
     {
         let path = entry.expect("a record directory entry must read").path();
-        let Some(name) = path.file_name().and_then(|name| return name.to_str()).map(str::to_owned)
-        else
-        {
-            continue;
-        };
-        // Case-insensitively, because the reservation is folded case-insensitively and a
-        // record shouted onto disk is still a record.
-        let is_record = path
-            .extension()
-            .is_some_and(|extension| return extension.eq_ignore_ascii_case("md"));
-        if !is_record
-        {
-            continue;
-        }
-
-        let text = std::fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("{name} must be readable: {error}"));
-        let identifier = text
-            .lines()
-            .find_map(|line| return line.trim().strip_prefix("id:").map(|id| return id.trim().to_owned()))
-            .unwrap_or_else(|| panic!("{name} must declare an id in its front matter"));
-
-        records.push((identifier, format!("{RECORD_DIRECTORY}/{name}")));
+        records.extend(Record_At(&path));
     }
 
     return records;
+}
+
+/// One record's declared identifier and the path it lives at, or `None` for a file that is
+/// not a record.
+///
+/// The extension is read case-insensitively, because the reservation is folded
+/// case-insensitively and a record shouted onto disk is still a record.
+fn Record_At(path: &Path) -> Option<(String, String)>
+{
+    let name = path.file_name().and_then(|name| return name.to_str())?;
+    let is_record = path
+        .extension()
+        .is_some_and(|extension| return extension.eq_ignore_ascii_case("md"));
+    if !is_record
+    {
+        return None;
+    }
+    let text = std::fs::read_to_string(path)
+        .unwrap_or_else(|error| panic!("{name} must be readable: {error}"));
+    let identifier = text
+        .lines()
+        .find_map(|line| return line.trim().strip_prefix("id:").map(|id| return id.trim().to_owned()))
+        .unwrap_or_else(|| panic!("{name} must declare an id in its front matter"));
+
+    return Some((identifier, format!("{RECORD_DIRECTORY}/{name}")));
 }
 
 /// The rule against every record this repository actually has.
@@ -1088,13 +1163,11 @@ fn Records_On_Disk() -> Vec<(String, String)>
 fn Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier()
 {
     let records = Records_On_Disk();
-
     assert!(
         records.len() >= 20,
         "the record directory must hold the records this compares; got {}",
         records.len()
     );
-
     let divergent: Vec<String> = records
         .iter()
         .filter(|(identifier, path)| {
