@@ -1,26 +1,25 @@
 //! The registry this build composes, and what it can be asked to say about itself.
 
 use super::{Registry, BuildVariant, ConfigurationId, Content_Digest, CapabilityId, Guarantee};
+use nomos_capability::RegistryError;
 
 /// The capability this run declares and the providers it admits.
 ///
-/// # Panics
+/// # Errors
 ///
-/// If the registry refuses a declaration or an offer. Both are decided by this function's
-/// own constants, so a refusal is a contradiction in the composition rather than a runtime
-/// condition, and continuing past it would produce a run whose facts nobody offered.
-pub(super) fn Registered() -> Registry
+/// [`RegistryError`] if the registry refuses the declaration or the offer. Both are
+/// decided by this function's own constants, so a refusal is a contradiction in the
+/// composition rather than a runtime condition — and it is still handed back rather than
+/// unwound, because continuing past it would produce a run whose facts nobody offered and
+/// the caller is the one that decides what a run it cannot compose is worth.
+pub(super) fn Registered() -> Result<Registry, RegistryError>
 {
     let mut registry = Registry::New();
 
-    registry
-        .Declare(nomos_cap_syntax::Capability_Contract())
-        .expect("the syntax capability is declared once");
-    registry
-        .Offer(nomos_lang_rust::Provider_Offer())
-        .expect("the Rust provider's offer is within its capability's ceiling");
+    registry.Declare(nomos_cap_syntax::Capability_Contract())?;
+    registry.Offer(nomos_lang_rust::Provider_Offer())?;
 
-    return registry;
+    return Ok(registry);
 }
 
 /// The build variant this binary was compiled as.

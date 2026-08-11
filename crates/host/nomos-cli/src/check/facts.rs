@@ -14,13 +14,32 @@ pub(super) struct Prepared
 pub(super) fn Prepare(root: &Path, stderr: &mut impl Write) -> Result<Prepared, ExitCode>
 {
     let sources = Walked(root, stderr)?;
-    let registry = Registered();
+    let registry = Composed(stderr)?;
     let context = Ingested(&sources, root, &registry, stderr)?;
 
     return Ok(Prepared {
         sources,
         registry,
         context,
+    });
+}
+
+/// The registry this build composes, or a refusal nobody can act on but the operator.
+///
+/// A contradiction here is a contradiction between two constants inside this binary, so
+/// there is nothing for the caller to retry. It is still reported and returned rather than
+/// unwound: an operator reading `nomos check` output is owed the sentence, and a stack
+/// trace is not one.
+fn Composed(stderr: &mut impl Write) -> Result<Registry, ExitCode>
+{
+    return Registered().map_err(|error| {
+        let _ignored = writeln!(
+            stderr,
+            "this build's own composition is contradictory, so no fact it produced would \
+             have been offered by anybody: {error}"
+        );
+
+        return ExitCode::Unreadable;
     });
 }
 

@@ -36,29 +36,42 @@ use registration::{Registration, Registrations_In};
 use std::fmt::Write;
 use std::path::{Path, PathBuf};
 
-fn main()
+fn main() -> Result<(), String>
 {
-    let manifest = PathBuf::from(
-        std::env::var("CARGO_MANIFEST_DIR")
-            .expect("cargo sets CARGO_MANIFEST_DIR for every build script"),
-    );
-    let out = PathBuf::from(
-        std::env::var("OUT_DIR").expect("cargo sets OUT_DIR for every build script"),
-    );
+    let manifest = PathBuf::from(Cargo_Variable("CARGO_MANIFEST_DIR")?);
+    let out = PathBuf::from(Cargo_Variable("OUT_DIR")?);
 
     let directory = manifest.join("records");
-    let root = Repository_Root(&manifest);
-    let registrations = Registered(&directory, &root);
+    let root = Repository_Root(&manifest)?;
+    let registrations = Registered(&directory, &root)?;
 
-    let identifiers = Identifier_Table(&registrations);
-    std::fs::write(out.join("governing_record_ids.rs"), identifiers)
-        .expect("the generated identifier table must be writable");
+    let identifiers = Identifier_Table(&registrations)?;
+    Written(&out.join("governing_record_ids.rs"), &identifiers)?;
 
-    let records = Record_Table(&registrations, &root);
-    std::fs::write(out.join("governing_records.rs"), records)
-        .expect("the generated record table must be writable");
+    let records = Record_Table(&registrations, &root)?;
+    Written(&out.join("governing_records.rs"), &records)?;
 
     Rerun_Triggers(&directory, &root, &registrations);
+
+    return Ok(());
+}
+
+/// One variable cargo sets for every build script.
+///
+/// Returned rather than unwound. A build script's caller is cargo, which prints the `Err`
+/// and fails the build — the same stop, with the same sentence, reached by a path the
+/// caller acknowledged.
+fn Cargo_Variable(name: &str) -> Result<String, String>
+{
+    return std::env::var(name)
+        .map_err(|_| return format!("cargo sets {name} for every build script, and did not"));
+}
+
+/// One generated table, written where `governing.rs` will `include!` it.
+fn Written(path: &Path, table: &str) -> Result<(), String>
+{
+    return std::fs::write(path, table)
+        .map_err(|error| return format!("{} must be writable: {error}", path.display()));
 }
 
 /// `crates/spec/nomos-spec-store` -> the repository.
@@ -66,46 +79,59 @@ fn main()
 /// Used only to check that a named record is on disk and to spell the `include_str!`
 /// argument; nothing under it is enumerated, which is the whole of why this arrangement is
 /// not vacuous.
-fn Repository_Root(manifest: &Path) -> PathBuf
+fn Repository_Root(manifest: &Path) -> Result<PathBuf, String>
 {
     return manifest
         .ancestors()
         .nth(3)
-        .expect("the crate sits three directories below the repository root")
-        .to_path_buf();
+        .map(Path::to_path_buf)
+        .ok_or_else(|| {
+            return format!(
+                "{} is not three directories below a repository root, so no record path can \
+                 be spelled from it",
+                manifest.display()
+            );
+        });
 }
 
 /// Every registered record, or a stopped build.
 ///
 /// A refusal here stops the build, which is the point. A registration skipped instead of
-/// refused is a governing record that quietly stops governing.
-fn Registered(directory: &Path, root: &Path) -> Vec<Registration>
+/// refused is a governing record that quietly stops governing, and the table is a
+/// compile-time constant, so the skip would be permanent and silent.
+///
+/// The refusal travels as a value rather than as a panic. Cargo is `main`'s caller, prints
+/// the `Err` and fails the build, so the stop is the same one and the reader of it is the
+/// same reader — the difference is that every frame between here and there had to say what
+/// it does with a failure.
+fn Registered(directory: &Path, root: &Path) -> Result<Vec<Registration>, String>
 {
-    return match Registrations_In(directory, root)
-    {
-        Ok(registrations) => registrations,
-        // rust-panic: allow: this is a build script, and the invariant is that
-        // `GOVERNING_RECORD_IDS` names every registered record. There is no recoverable path:
-        // the table is a compile-time constant, so a registration that cannot be read would be
-        // compiled away into a record that has silently stopped governing. Stopping the build
-        // is the defect being surfaced, not a failure to handle one.
-        Err(error) => panic!("{}", error.Describe()),
-    };
+    return Registrations_In(directory, root).map_err(|error| return error.Describe());
 }
 
 /// The initializer for `GOVERNING_RECORD_IDS`.
-fn Identifier_Table(registrations: &[Registration]) -> String
+fn Identifier_Table(registrations: &[Registration]) -> Result<String, String>
 {
     let mut table = String::from("&[\n");
 
     for registration in registrations
     {
         // `{:?}` so the string literal is escaped by the formatter rather than by hand.
-        writeln!(table, "    {:?},", registration.id).expect("a string is always writable");
+        writeln!(table, "    {:?},", registration.id).map_err(Unwritable)?;
     }
 
     table.push_str("]\n");
-    return table;
+    return Ok(table);
+}
+
+/// A `fmt::Error` from a `String` sink, said out loud rather than unwound past.
+///
+/// `String`'s `fmt::Write` does not fail, so this is a `Result` the trait requires and not
+/// a condition. It is still returned: a boundary nobody can reach is cheaper to propagate
+/// than to argue about at every site.
+fn Unwritable(error: core::fmt::Error) -> String
+{
+    return format!("the generated table could not be assembled: {error}");
 }
 
 /// The initializer for `RECORDS`.
@@ -117,7 +143,7 @@ fn Identifier_Table(registrations: &[Registration]) -> String
 /// The `include_str!` argument is absolute, because a relative path inside a file included
 /// from `OUT_DIR` resolves against `OUT_DIR`, which is opaque. It reaches no hash and no
 /// stored row, so determinism is unaffected.
-fn Record_Table(registrations: &[Registration], root: &Path) -> String
+fn Record_Table(registrations: &[Registration], root: &Path) -> Result<String, String>
 {
     let mut table = String::from("&[\n");
 
@@ -129,11 +155,11 @@ fn Record_Table(registrations: &[Registration], root: &Path) -> String
             "    (\n        {:?},\n        include_str!({absolute:?}),\n    ),",
             registration.path
         )
-        .expect("a string is always writable");
+        .map_err(Unwritable)?;
     }
 
     table.push_str("]\n");
-    return table;
+    return Ok(table);
 }
 
 /// A repository-relative record path as an absolute one, in the spelling rustc accepts on

@@ -21,7 +21,7 @@ impl Composed
 {
     fn Over(sources: &[SourceFile]) -> Self
     {
-        let registry = Registered();
+        let registry = Registered().expect("the fixture composition is this binary's own");
         let mut refused = Vec::new();
         let context = Ingested(sources, Path::new("."), &registry, &mut refused)
             .expect("the fixture is a valid tree");

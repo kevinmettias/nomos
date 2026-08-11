@@ -6,19 +6,31 @@
 
 use nomos_contracts::Digest128;
 
+/// BLAKE3 is wider than a [`Digest128`], checked where the two constants are, and not at
+/// the truncation.
+///
+/// A `const` block is evaluated during compilation, so this is the width relationship
+/// established once rather than re-established on every hash. The previous spelling asked
+/// it at run time and answered with `.expect`, which is a panic in the analysis path — and
+/// a panic there is a determinism defect and not merely a crash: a replay must reach the
+/// same panic at the same step, and one that depends on a digest width would not.
+const _: () = assert!(blake3::OUT_LEN >= Digest128::BYTE_LENGTH);
+
 /// Takes the leading [`Digest128::BYTE_LENGTH`] bytes of a full-width digest.
 ///
-/// Written with `first_chunk` rather than a range slice so that the length relationship
-/// is checked rather than assumed. A range slice here would be a panicking index on a
-/// value nothing in the type system constrains, and this workspace denies those — the
-/// rule exists because a panic in the analysis path is a determinism defect, not merely
-/// a crash: a replay must reach the same panic at the same step, and one that depends
-/// on a digest width would not.
+/// Written as a zip rather than a slice or a chunk so that no length is asserted here at
+/// all. `zip` stops at the shorter of the two, the shorter is the output by its own type,
+/// and the assertion above is what makes "the shorter" a fact rather than a hope.
 fn Truncate(full: &[u8; blake3::OUT_LEN]) -> [u8; Digest128::BYTE_LENGTH]
 {
-    return *full
-        .first_chunk()
-        .expect("BLAKE3 emits 32 bytes, which is wider than Digest128::BYTE_LENGTH");
+    let mut truncated = [0_u8; Digest128::BYTE_LENGTH];
+
+    for (slot, byte) in truncated.iter_mut().zip(full)
+    {
+        *slot = *byte;
+    }
+
+    return truncated;
 }
 
 /// The digest of a byte sequence.

@@ -17,13 +17,13 @@
 
 use std::collections::BTreeSet;
 
-fn main()
+fn main() -> Result<(), String>
 {
     // Cargo sets both for every build script. A missing one means the contract with cargo
     // has changed, and guessing would produce a variant identity describing a build that
     // never happened.
-    let target = std::env::var("TARGET").expect("cargo sets TARGET for every build script");
-    let profile = std::env::var("PROFILE").expect("cargo sets PROFILE for every build script");
+    let target = Cargo_Variable("TARGET")?;
+    let profile = Cargo_Variable("PROFILE")?;
 
     // Absent outside rustup — a direct rustc invocation, a distribution toolchain, a
     // vendored compiler. Named as unstated rather than defaulted to a version, because a
@@ -41,6 +41,19 @@ fn main()
 
     println!("cargo::rerun-if-changed=build.rs");
     println!("cargo::rerun-if-env-changed=RUSTUP_TOOLCHAIN");
+
+    return Ok(());
+}
+
+/// One variable cargo sets for every build script.
+///
+/// Returned rather than unwound. A build script's caller is cargo, which prints the `Err`
+/// and fails the build — the same stop, with the same sentence, reached by a path the
+/// caller acknowledged.
+fn Cargo_Variable(name: &str) -> Result<String, String>
+{
+    return std::env::var(name)
+        .map_err(|_| return format!("cargo sets {name} for every build script, and did not"));
 }
 
 /// The enabled features as one comma-separated field.
