@@ -10,7 +10,9 @@
 use nomos_spec_store::{
     AUTHORED,
     BlockChange,
+    DocumentSource,
     EditError,
+    EditPreview,
     GOVERNING_RECORD_IDS,
     NodeRow,
     NormativeOutcome,
@@ -18,6 +20,54 @@ use nomos_spec_store::{
     SpecificationStore,
     Table,
 };
+
+/// The one document behind a record.
+fn Only_Document(store: &SpecificationStore, id: &str) -> DocumentSource
+{
+    return store
+        .Documents_Behind(id, None)
+        .expect("queries")
+        .first()
+        .cloned()
+        .unwrap_or_else(|| panic!("{id} has no document behind it"));
+}
+
+/// How many edges join two nodes, in the direction named.
+fn Edge_Count(store: &SpecificationStore, from: &str, to: &str) -> u32
+{
+    return store
+        .Connection()
+        .query_row(
+            "SELECT count(*) FROM relations r
+             JOIN nodes f ON f.uid = r.from_node_uid
+             JOIN nodes t ON t.uid = r.to_node_uid
+             WHERE f.node_id = ?1 AND t.node_id = ?2",
+            rusqlite::params![from, to],
+            |row| return row.get(0),
+        )
+        .expect("queries");
+}
+
+/// What committing this edit to the synthetic record would change.
+fn Previewed(store: &SpecificationStore, markdown: &str) -> EditPreview
+{
+    return store
+        .Claim_For_Edit("D-900", None)
+        .expect("claims")
+        .Stage(markdown, None)
+        .expect("stages")
+        .Preview(store)
+        .expect("previews");
+}
+
+/// The synthetic record with its two sections in the other order and nothing else changed.
+fn Swapped() -> String
+{
+    return SYNTHETIC.replace(
+        "## Decision\n\nFirst paragraph.\n\n## Rationale\n\nSecond paragraph.\n",
+        "## Rationale\n\nSecond paragraph.\n\n## Decision\n\nFirst paragraph.\n",
+    );
+}
 
 /// A record written through the door, so the edit tests do not depend on the shape of any
 /// particular governing record.
@@ -91,21 +141,7 @@ fn Test_Every_Governing_Record_Should_Project_To_Its_Own_Bytes()
 
     for id in GOVERNING_RECORD_IDS
     {
-        let projection = store
-            .Record_Markdown(id, None)
-            .unwrap_or_else(|error| panic!("{id}: {error}"));
-        let source = store
-            .Documents_Behind(id, None)
-            .expect("queries")
-            .first()
-            .cloned()
-            .unwrap_or_else(|| panic!("{id} has no document behind it"));
-
-        assert_eq!(
-            projection.markdown, source.text,
-            "{id} does not render back to the bytes it was seeded from"
-        );
-        assert!(projection.Matches_Source(), "{id}: the content addresses disagree");
+        Assert_Projects_To_Its_Own_Bytes(&store, id);
         checked = checked.saturating_add(1);
     }
 
@@ -114,6 +150,22 @@ fn Test_Every_Governing_Record_Should_Project_To_Its_Own_Bytes()
         GOVERNING_RECORD_IDS.len(),
         "the loop skipped records, so a pass here would mean less than it says"
     );
+}
+
+/// One record renders back to the bytes it was seeded from, and its two content addresses
+/// agree about that.
+fn Assert_Projects_To_Its_Own_Bytes(store: &SpecificationStore, id: &str)
+{
+    let projection = store
+        .Record_Markdown(id, None)
+        .unwrap_or_else(|error| panic!("{id}: {error}"));
+    let source = Only_Document(store, id);
+
+    assert_eq!(
+        projection.markdown, source.text,
+        "{id} does not render back to the bytes it was seeded from"
+    );
+    assert!(projection.Matches_Source(), "{id}: the content addresses disagree");
 }
 
 /// The negative control for the test above, and the reason the projection is worth having:
@@ -152,24 +204,8 @@ fn Test_A_Projection_Should_Come_From_The_Rows_And_Not_The_Blob()
 fn Test_The_Graph_Holds_An_Edge_The_Record_Never_Declared()
 {
     let store = Seeded();
-
-    let in_graph: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM relations r
-             JOIN nodes f ON f.uid = r.from_node_uid
-             JOIN nodes t ON t.uid = r.to_node_uid
-             WHERE f.node_id = 'OD-LEDGER-001' AND t.node_id = 'OD-LEDGER-009'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
-    let document = store
-        .Documents_Behind("OD-LEDGER-001", None)
-        .expect("queries")
-        .first()
-        .cloned()
-        .expect("is seeded");
+    let in_graph = Edge_Count(&store, "OD-LEDGER-001", "OD-LEDGER-009");
+    let document = Only_Document(&store, "OD-LEDGER-001");
     let declared = store.Declared_Relations(document.uid).expect("queries");
 
     assert_eq!(in_graph, 1, "the inverse edge is not there, so this proves nothing");
@@ -216,25 +252,16 @@ fn Test_Identity_Should_Survive_An_Edit()
     let relations_before = store.Node_Summary("D-900").expect("queries");
 
     let revised = SYNTHETIC.replace("Second paragraph.", "Second paragraph, revised.");
+
     Commit(&mut store, &revised, None);
+
+    let document = Only_Document(&store, "D-900");
 
     assert!(!blocks_before.is_empty(), "no blocks, so this test proved nothing");
     assert_eq!(store.Node_Uid("D-900").expect("queries"), node_before);
     assert_eq!(Block_Uids(&store, SYNTHETIC_PATH), blocks_before);
     assert_eq!(store.Node_Summary("D-900").expect("queries"), relations_before);
-    assert_eq!(
-        store
-            .Declared_Relations(
-                store
-                    .Documents_Behind("D-900", None)
-                    .expect("queries")
-                    .first()
-                    .map_or(0, |document| return document.uid)
-            )
-            .expect("queries")
-            .len(),
-        1
-    );
+    assert_eq!(store.Declared_Relations(document.uid).expect("queries").len(), 1);
 }
 
 /// `done_when`'s rename clause. The path moves, and nothing about the record's identity does —
@@ -301,22 +328,22 @@ fn Test_The_Preview_Should_Say_Whether_Normative_Wording_Moved()
         (&appended, false, "adding a paragraph moves nothing that was there"),
     ]
     {
-        assert_ne!(markdown.as_str(), SYNTHETIC, "the {why} case changed nothing");
-        let preview = store
-            .Claim_For_Edit("D-900", None)
-            .expect("claims")
-            .Stage(markdown, None)
-            .expect("stages")
-            .Preview(&store)
-            .expect("previews");
+        let preview = Previewed(&store, markdown);
 
-        assert_eq!(preview.Wording_Moved(), moved, "{why}: {}", preview.Describe());
-        assert!(
-            preview.Describe().contains("normative wording"),
-            "the preview does not answer the mandatory question: {}",
-            preview.Describe()
-        );
+        assert_ne!(markdown.as_str(), SYNTHETIC, "the {why} case changed nothing");
+        Assert_Answers_The_Mandatory_Question(&preview, moved, why);
     }
+}
+
+/// The preview says whether normative wording moved, and says it in those words.
+fn Assert_Answers_The_Mandatory_Question(preview: &EditPreview, moved: bool, why: &str)
+{
+    assert_eq!(preview.Wording_Moved(), moved, "{why}: {}", preview.Describe());
+    assert!(
+        preview.Describe().contains("normative wording"),
+        "the preview does not answer the mandatory question: {}",
+        preview.Describe()
+    );
 }
 
 /// A reflow reports as a reflow rather than as a rewording, because the normalizer — the
@@ -354,21 +381,10 @@ fn Test_A_Reflowed_Block_Should_Be_Told_From_A_Reworded_One()
 fn Test_A_Moved_Block_Should_Report_As_Moved()
 {
     let store = With_Synthetic();
-    let swapped = SYNTHETIC
-        .replace(
-            "## Decision\n\nFirst paragraph.\n\n## Rationale\n\nSecond paragraph.\n",
-            "## Rationale\n\nSecond paragraph.\n\n## Decision\n\nFirst paragraph.\n",
-        );
+    let swapped = Swapped();
+    let preview = Previewed(&store, &swapped);
+
     assert_ne!(swapped, SYNTHETIC, "the negative control changed nothing");
-
-    let preview = store
-        .Claim_For_Edit("D-900", None)
-        .expect("claims")
-        .Stage(&swapped, None)
-        .expect("stages")
-        .Preview(&store)
-        .expect("previews");
-
     assert!(
         preview
             .Blocks()
@@ -397,20 +413,10 @@ fn Test_A_Recorded_Statement_Should_Be_Followed_Through_The_Edit()
             [],
         )
         .expect("records a statement");
-
-    let swapped = SYNTHETIC.replace(
-        "## Decision\n\nFirst paragraph.\n\n## Rationale\n\nSecond paragraph.\n",
-        "## Rationale\n\nSecond paragraph.\n\n## Decision\n\nFirst paragraph.\n",
-    );
-    let preview = store
-        .Claim_For_Edit("D-900", None)
-        .expect("claims")
-        .Stage(&swapped, None)
-        .expect("stages")
-        .Preview(&store)
-        .expect("previews");
-
+    let swapped = Swapped();
+    let preview = Previewed(&store, &swapped);
     let movement = preview.Statements().first().expect("the statement is recorded");
+
     assert_eq!(movement.statement_id, "AGT-001");
     assert!(
         matches!(movement.outcome, NormativeOutcome::Moved { .. }),
@@ -525,13 +531,7 @@ fn Test_An_Edit_Should_Not_Delete_A_Block_A_Justified_Omission_Points_At()
         .expect("records an omission");
 
     let edited = SYNTHETIC.replace("\n## Rationale\n\nSecond paragraph.\n", "");
-    let preview = store
-        .Claim_For_Edit("D-900", None)
-        .expect("claims")
-        .Stage(&edited, None)
-        .expect("stages")
-        .Preview(&store)
-        .expect("previews");
+    let preview = Previewed(&store, &edited);
     let refusal = store.Commit_Edit(&preview).expect_err("must refuse");
 
     assert!(refusal.to_string().contains("justification"), "{refusal}");
@@ -548,30 +548,21 @@ fn Test_An_Edit_Should_Not_Delete_A_Block_A_Justified_Omission_Points_At()
 fn Test_Editing_A_Relation_Should_Move_The_Graph_Both_Ways()
 {
     let mut store = With_Synthetic();
-    let edges = |store: &SpecificationStore, from: &str, to: &str| -> u32 {
-        return store
-            .Connection()
-            .query_row(
-                "SELECT count(*) FROM relations r
-                 JOIN nodes f ON f.uid = r.from_node_uid
-                 JOIN nodes t ON t.uid = r.to_node_uid
-                 WHERE f.node_id = ?1 AND t.node_id = ?2",
-                rusqlite::params![from, to],
-                |row| row.get(0),
-            )
-            .expect("queries");
-    };
-
     let retargeted = SYNTHETIC.replace(
         "  - target: D-129\n    type: relates-to\n",
         "  - target: D-130\n    type: affects\n",
     );
+
     Commit(&mut store, &retargeted, None);
 
-    assert_eq!(edges(&store, "D-900", "D-130"), 1, "the added edge is missing");
-    assert_eq!(edges(&store, "D-130", "D-900"), 1, "its inverse is missing");
-    assert_eq!(edges(&store, "D-900", "D-129"), 0, "the removed edge is still there");
-    assert_eq!(edges(&store, "D-129", "D-900"), 0, "half the removed fact stayed behind");
+    assert_eq!(Edge_Count(&store, "D-900", "D-130"), 1, "the added edge is missing");
+    assert_eq!(Edge_Count(&store, "D-130", "D-900"), 1, "its inverse is missing");
+    assert_eq!(Edge_Count(&store, "D-900", "D-129"), 0, "the removed edge is still there");
+    assert_eq!(
+        Edge_Count(&store, "D-129", "D-900"),
+        0,
+        "half the removed fact stayed behind"
+    );
 }
 
 /// The vocabulary is governed, and an edit does not get to extend it. `relation_types` is a
@@ -632,31 +623,7 @@ fn Test_A_Refused_Commit_Should_Leave_Every_Table_As_It_Was()
 #[test]
 fn Test_A_Document_With_No_Declared_Front_Matter_Should_Say_So()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    let uid = store
-        .Put_Source_Document("volumes/one.md", "v14.36", "# Volume\n\nBody.\n")
-        .expect("writes");
-    store
-        .Put_Source_Blocks(uid, &nomos_spec_model::Segment("# Volume\n\nBody.\n"))
-        .expect("writes blocks");
-    let node = store
-        .Upsert_Node(NodeRow {
-            node_id: "VOL-001",
-            kind: "volume",
-            authority: "canonical",
-            representation: "document",
-            title: "Volume",
-        })
-        .expect("writes a node");
-    store
-        .Connection()
-        .execute(
-            "INSERT INTO lineage (source_block_uid, disposition, target_node_uid)
-             SELECT uid, 'preserved-verbatim', ?1 FROM source_blocks WHERE document_uid = ?2",
-            rusqlite::params![node, uid],
-        )
-        .expect("disposes");
-
+    let store = An_Ingested_Document();
     let refusal = store.Record_Markdown("VOL-001", None).expect_err("must refuse");
 
     assert!(matches!(refusal, EditError::NotAuthored { .. }), "{refusal}");
@@ -667,6 +634,38 @@ fn Test_A_Document_With_No_Declared_Front_Matter_Should_Say_So()
         ),
         "an unknown identifier and an unauthored document report the same way"
     );
+}
+
+/// A document that arrived as blocks and lineage rather than through the authoring door, so
+/// it can be read, hashed and preserved but not rendered back.
+fn An_Ingested_Document() -> SpecificationStore
+{
+    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let uid = store
+        .Put_Source_Document("volumes/one.md", "v14.36", "# Volume\n\nBody.\n")
+        .expect("writes");
+    let node = store
+        .Upsert_Node(NodeRow {
+            node_id: "VOL-001",
+            kind: "volume",
+            authority: "canonical",
+            representation: "document",
+            title: "Volume",
+        })
+        .expect("writes a node");
+    store
+        .Put_Source_Blocks(uid, &nomos_spec_model::Segment("# Volume\n\nBody.\n"))
+        .expect("writes blocks");
+    store
+        .Connection()
+        .execute(
+            "INSERT INTO lineage (source_block_uid, disposition, target_node_uid)
+             SELECT uid, 'preserved-verbatim', ?1 FROM source_blocks WHERE document_uid = ?2",
+            rusqlite::params![node, uid],
+        )
+        .expect("disposes");
+
+    return store;
 }
 
 /// Committing the bytes that were read out changes nothing, and the preview says so rather

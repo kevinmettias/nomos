@@ -46,6 +46,46 @@ fn Census(store: &SpecificationStore, scope: RowScope) -> RowCensus
     return store.Row_Census(scope).expect("takes a census");
 }
 
+/// One column of one row, from a query that binds nothing.
+fn One<T: rusqlite::types::FromSql>(store: &SpecificationStore, sql: &str, blame: &str) -> T
+{
+    return store
+        .Connection()
+        .query_row(sql, [], |row| return row.get(0))
+        .expect(blame);
+}
+
+/// Two columns of one row, which is what it takes to address a table row.
+fn Two<A: rusqlite::types::FromSql, B: rusqlite::types::FromSql>(
+    store: &SpecificationStore,
+    sql: &str,
+    blame: &str,
+) -> (A, B)
+{
+    return store
+        .Connection()
+        .query_row(sql, [], |row| return Ok((row.get(0)?, row.get(1)?)))
+        .expect(blame);
+}
+
+/// The corpus root, if this machine has one.
+///
+/// A configured root that is not a directory is a failure rather than a skip: a gate that
+/// quietly passes over its own subject is worse than one that fails.
+fn Corpus_Root() -> Option<PathBuf>
+{
+    let configured = std::env::var_os("NOMOS_V14_CORPUS")?;
+    let root = PathBuf::from(configured);
+
+    assert!(
+        root.is_dir(),
+        "NOMOS_V14_CORPUS is set to {}, which is not a directory",
+        root.display()
+    );
+
+    return Some(root);
+}
+
 #[test]
 fn Test_A_Table_Block_Should_Store_Every_Pipe_Line()
 {
@@ -93,27 +133,12 @@ fn Test_A_Census_Should_Narrow_To_One_Table()
     let store = Stored(markdown).expect("stores");
 
     let everything = Census(&store, RowScope::Everything);
-    assert_eq!(everything.content, 3);
-
-    let block_uid: i64 = store
-        .Connection()
-        .query_row(
-            "SELECT source_block_uid FROM source_table_rows
-             WHERE cells_json LIKE '%\"3\"%' LIMIT 1",
-            [],
-            |row| row.get(0),
-        )
-        .expect("finds the second table's block");
-    let table_ordinal: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT table_ordinal FROM source_table_rows
-             WHERE cells_json LIKE '%\"3\"%' LIMIT 1",
-            [],
-            |row| row.get(0),
-        )
-        .expect("finds the second table");
-
+    let (block_uid, table_ordinal): (i64, u32) = Two(
+        &store,
+        "SELECT source_block_uid, table_ordinal FROM source_table_rows
+         WHERE cells_json LIKE '%\"3\"%' LIMIT 1",
+        "finds the second table",
+    );
     let scoped = Census(
         &store,
         RowScope::Table {
@@ -122,6 +147,7 @@ fn Test_A_Census_Should_Narrow_To_One_Table()
         },
     );
 
+    assert_eq!(everything.content, 3);
     assert_eq!(scoped.content, 2, "the scope leaked into the other table");
     assert_eq!(scoped.header, 1);
     assert_eq!(scoped.lines, 4);
@@ -227,51 +253,54 @@ fn Row_Uids(store: &SpecificationStore) -> Vec<i64>
 #[test]
 fn Test_The_Domain_Volumes_Should_Answer_282_258_And_234()
 {
-    let Some(root) = std::env::var_os("NOMOS_V14_CORPUS")
+    let Some(root) = Corpus_Root()
     else
     {
         return;
     };
-
-    let root = PathBuf::from(root);
-    assert!(
-        root.is_dir(),
-        "NOMOS_V14_CORPUS is set to {}, which is not a directory",
-        root.display()
-    );
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let mut volumes = 0_u32;
     let mut with_tables = 0_u32;
 
     for path in Volumes(&root.join("01_authoring/domain_volumes"))
     {
-        let markdown = std::fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-        let name = path.file_name().and_then(std::ffi::OsStr::to_str).unwrap_or("?");
-        let blocks = Segment(&markdown);
-
-        let document = store
-            .Put_Source_Document(name, "v14.36", &markdown)
-            .expect("stores the document");
-        store
-            .Put_Source_Blocks(document, &blocks)
-            .unwrap_or_else(|error| panic!("{name}: {error}"));
+        let carries = Store_Volume(&mut store, &path);
 
         volumes = volumes.saturating_add(1);
-        if blocks.iter().any(|block| !Table_Rows(block).is_empty())
-        {
-            with_tables = with_tables.saturating_add(1);
-        }
+        with_tables = with_tables.saturating_add(u32::from(carries));
     }
-
-    assert_eq!(volumes, 10, "the ten domain volumes are the corpus this is measured over");
-    assert_eq!(with_tables, 6, "six of the ten carry tables");
 
     let census = Census(&store, RowScope::Everything);
 
-    // Each figure names what it counted. The plan's 282 is the pipe-line count; OD-SPEC-002
-    // records that. 258 is every authored line, header included. 234 is the data.
+    assert_eq!(volumes, 10, "the ten domain volumes are the corpus this is measured over");
+    assert_eq!(with_tables, 6, "six of the ten carry tables");
+    Assert_The_Census_Reconciles(&census);
+}
+
+/// One volume, stored, and whether it carries a table at all.
+fn Store_Volume(store: &mut SpecificationStore, path: &Path) -> bool
+{
+    let markdown = std::fs::read_to_string(path)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+    let name = path.file_name().and_then(std::ffi::OsStr::to_str).unwrap_or("?");
+    let blocks = Segment(&markdown);
+    let document = store
+        .Put_Source_Document(name, "v14.36", &markdown)
+        .expect("stores the document");
+
+    store
+        .Put_Source_Blocks(document, &blocks)
+        .unwrap_or_else(|error| panic!("{name}: {error}"));
+
+    return blocks.iter().any(|block| return !Table_Rows(block).is_empty());
+}
+
+/// Each figure names what it counted, and the three of them add up.
+///
+/// The plan's 282 is the pipe-line count; `OD-SPEC-002` records that. 258 is every authored
+/// line, header included. 234 is the data.
+fn Assert_The_Census_Reconciles(census: &RowCensus)
+{
     assert_eq!(census.lines, 282, "pipe lines over the ten domain volumes");
     assert_eq!(census.non_separator, 258, "authored lines, header rows included");
     assert_eq!(census.content, 234, "data rows");
@@ -305,36 +334,22 @@ fn Test_The_Domain_Volumes_Should_Answer_282_258_And_234()
 #[test]
 fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
 {
-    let Some(root) = std::env::var_os("NOMOS_V14_CORPUS")
+    let Some(root) = Corpus_Root()
     else
     {
         return;
     };
-
-    let path = PathBuf::from(root).join(
+    let path = root.join(
         "01_authoring/domain_volumes/02-core-architecture-identity-and-configuration.md",
     );
-    let markdown = std::fs::read_to_string(&path)
-        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
-    let document = store
-        .Put_Source_Document("02-core.md", "v14.36", &markdown)
-        .expect("stores the document");
-    store
-        .Put_Source_Blocks(document, &Segment(&markdown))
-        .expect("stores the blocks");
-
-    let (block_uid, table_ordinal): (i64, u32) = store
-        .Connection()
-        .query_row(
-            "SELECT source_block_uid, table_ordinal FROM source_table_rows
-             WHERE kind = 'content' AND cells_json LIKE '%WorkspaceContext%'",
-            [],
-            |row| return Ok((row.get(0)?, row.get(1)?)),
-        )
-        .expect("the canonical domain model is no longer in this volume");
-
+    Store_Volume(&mut store, &path);
+    let (block_uid, table_ordinal): (i64, u32) = Two(
+        &store,
+        "SELECT source_block_uid, table_ordinal FROM source_table_rows
+         WHERE kind = 'content' AND cells_json LIKE '%WorkspaceContext%'",
+        "the canonical domain model is no longer in this volume",
+    );
     let census = Census(
         &store,
         RowScope::Table {
@@ -369,34 +384,38 @@ fn Volumes(directory: &Path) -> Vec<PathBuf>
 #[test]
 fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    let document = store
-        .Put_Source_Document("doc.md", "v14.36", TABLE)
-        .expect("stores the document");
-    store
-        .Put_Source_Blocks(document, &Segment(TABLE))
-        .expect("stores the blocks");
+    let store = With_A_Concept_Minted_From_A_Row();
+    let traced: String = One(
+        &store,
+        "SELECT r.text FROM lineage l
+         JOIN source_table_rows r ON r.uid = l.source_table_row_uid
+         JOIN nodes n ON n.uid = l.target_node_uid
+         WHERE n.node_id = 'CON-METRICTRADEOFF-001'",
+        "the concept traces to no row",
+    );
 
-    let block_ordinal: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT b.ordinal FROM source_blocks b
-             JOIN source_table_rows r ON r.source_block_uid = b.uid
-             WHERE r.cells_json LIKE '%MetricTradeoffProjection%'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("finds the block");
-    let row_ordinal: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT ordinal FROM source_table_rows
-             WHERE cells_json LIKE '%MetricTradeoffProjection%'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("finds the row");
+    assert!(
+        traced.contains("MetricTradeoffProjection"),
+        "the concept traced to the wrong row: {traced}"
+    );
+    assert!(
+        !traced.contains("WorkspaceContext"),
+        "the concept traced to the whole table, not to its own row"
+    );
+}
 
+/// The fixture table, with a concept minted from one of its rows and pointed back at it.
+fn With_A_Concept_Minted_From_A_Row() -> SpecificationStore
+{
+    let mut store = Stored(TABLE).expect("stores");
+    let document: i64 = One(&store, "SELECT uid FROM source_documents LIMIT 1", "one document");
+    let (block_ordinal, row_ordinal): (u32, u32) = Two(
+        &store,
+        "SELECT b.ordinal, r.ordinal FROM source_blocks b
+         JOIN source_table_rows r ON r.source_block_uid = b.uid
+         WHERE r.cells_json LIKE '%MetricTradeoffProjection%'",
+        "finds the row",
+    );
     let row_uid = store
         .Table_Row_Uid(document, block_ordinal, row_ordinal)
         .expect("queries")
@@ -410,31 +429,11 @@ fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
             title: "MetricTradeoffProjection",
         })
         .expect("mints the concept");
-
     store
         .Put_Row_Lineage(row_uid, "preserved-verbatim", Some(node))
         .expect("records the lineage");
 
-    let traced: String = store
-        .Connection()
-        .query_row(
-            "SELECT r.text FROM lineage l
-             JOIN source_table_rows r ON r.uid = l.source_table_row_uid
-             JOIN nodes n ON n.uid = l.target_node_uid
-             WHERE n.node_id = 'CON-METRICTRADEOFF-001'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("the concept traces to no row");
-
-    assert!(
-        traced.contains("MetricTradeoffProjection"),
-        "the concept traced to the wrong row: {traced}"
-    );
-    assert!(
-        !traced.contains("WorkspaceContext"),
-        "the concept traced to the whole table, not to its own row"
-    );
+    return store;
 }
 
 /// Idempotence, over the column that is new. Re-running a restoration must not double
@@ -442,22 +441,12 @@ fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
 #[test]
 fn Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    let document = store
-        .Put_Source_Document("doc.md", AUTHORED, TABLE)
-        .expect("stores the document");
-    store
-        .Put_Source_Blocks(document, &Segment(TABLE))
-        .expect("stores the blocks");
-
-    let row_uid: i64 = store
-        .Connection()
-        .query_row(
-            "SELECT uid FROM source_table_rows WHERE kind = 'content' LIMIT 1",
-            [],
-            |row| row.get(0),
-        )
-        .expect("finds a row");
+    let mut store = Stored(TABLE).expect("stores");
+    let row_uid: i64 = One(
+        &store,
+        "SELECT uid FROM source_table_rows WHERE kind = 'content' LIMIT 1",
+        "finds a row",
+    );
 
     store
         .Put_Row_Lineage(row_uid, "preserved-verbatim", None)
@@ -496,60 +485,63 @@ fn Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers()
 {
     let connection = rusqlite::Connection::open_in_memory().expect("opens");
 
-    for migration in nomos_spec_store::MIGRATIONS.iter().filter(|m| m.version <= 2)
-    {
-        for statement in migration.statements
-        {
-            connection.execute_batch(statement).expect("applies");
-        }
-    }
-
+    Apply_Migrations(&connection, 1..=2);
     connection
-        .execute_batch(
-            "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 1, x'61');
-             INSERT INTO source_documents (path, revision, blob_uid)
-             SELECT 'doc.md', 'v14.36', uid FROM blobs;
-             INSERT INTO source_blocks
-             (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
-             SELECT uid, 1, 'prose', '', '| Model |', 'sha256:bb', 'sha256:cc'
-             FROM source_documents;
-
-             -- Version 2 had no header kind, so the column titles landed as content.
-             INSERT INTO source_table_rows
-             (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
-              content_hash, normalized_hash)
-             SELECT uid, 1, 1, 'content', '[\"Model\"]', '| Model |', 'sha256:01', 'sha256:01'
-             FROM source_blocks;
-             INSERT INTO source_table_rows
-             (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
-              content_hash, normalized_hash)
-             SELECT uid, 2, 1, 'separator', '[\"---\"]', '| --- |', 'sha256:02', 'sha256:02'
-             FROM source_blocks;
-             INSERT INTO source_table_rows
-             (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
-              content_hash, normalized_hash)
-             SELECT uid, 3, 1, 'content', '[\"A\"]', '| A |', 'sha256:03', 'sha256:03'
-             FROM source_blocks;",
-        )
+        .execute_batch(A_VERSION_TWO_TABLE)
         .expect("populates the version-2 shape");
 
     let before = Kinds(&connection);
+
     assert_eq!(before, vec!["content", "separator", "content"], "the fixture is not version 2");
-
-    for migration in nomos_spec_store::MIGRATIONS.iter().filter(|m| m.version == 3)
-    {
-        for statement in migration.statements
-        {
-            connection.execute_batch(statement).expect("migrates");
-        }
-    }
-
+    Apply_Migrations(&connection, 3..=3);
     assert_eq!(
         Kinds(&connection),
         vec!["header", "separator", "content"],
         "the header still reads as a datum after the migration"
     );
 }
+
+/// Every migration in a version range, in order.
+fn Apply_Migrations(connection: &rusqlite::Connection, versions: std::ops::RangeInclusive<u32>)
+{
+    let wanted = nomos_spec_store::MIGRATIONS
+        .iter()
+        .filter(|migration| return versions.contains(&migration.version));
+
+    for migration in wanted
+    {
+        for statement in migration.statements
+        {
+            connection.execute_batch(statement).expect("applies");
+        }
+    }
+}
+
+/// One table as a version-2 store held it: no header kind, so the column titles are content.
+const A_VERSION_TWO_TABLE: &str =
+    "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 1, x'61');
+     INSERT INTO source_documents (path, revision, blob_uid)
+     SELECT 'doc.md', 'v14.36', uid FROM blobs;
+     INSERT INTO source_blocks
+     (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
+     SELECT uid, 1, 'prose', '', '| Model |', 'sha256:bb', 'sha256:cc'
+     FROM source_documents;
+
+     INSERT INTO source_table_rows
+     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+      content_hash, normalized_hash)
+     SELECT uid, 1, 1, 'content', '[\"Model\"]', '| Model |', 'sha256:01', 'sha256:01'
+     FROM source_blocks;
+     INSERT INTO source_table_rows
+     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+      content_hash, normalized_hash)
+     SELECT uid, 2, 1, 'separator', '[\"---\"]', '| --- |', 'sha256:02', 'sha256:02'
+     FROM source_blocks;
+     INSERT INTO source_table_rows
+     (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
+      content_hash, normalized_hash)
+     SELECT uid, 3, 1, 'content', '[\"A\"]', '| A |', 'sha256:03', 'sha256:03'
+     FROM source_blocks;";
 
 fn Kinds(connection: &rusqlite::Connection) -> Vec<String>
 {
