@@ -43,7 +43,7 @@ pub fn nomos_integration_tests::Slice::Over(corpus: &Corpus) -> Self
 pub fn nomos_integration_tests::Slice::Preferring(mut self, provider: &str) -> Self
 pub fn nomos_integration_tests::Slice::Registered() -> Registry
 pub fn nomos_integration_tests::Slice::Requirement(&self) -> Requirement
-pub fn nomos_integration_tests::Slice::Resolved(&self) -> (Selection, Applicability)
+pub fn nomos_integration_tests::Slice::Resolved(&self) -> Resolved
 pub fn nomos_integration_tests::Slice::Run(&mut self, corpus: &Corpus) -> RunReport
 pub fn nomos_integration_tests::Slice::Surface_Of(&self, members: &[&SourceFile]) -> Option<MaterializedFact>
 pub fn nomos_integration_tests::Slice::Syntax_Key(&self, file: &SourceFile) -> FactKey
@@ -57,6 +57,8 @@ pub struct field nomos_integration_tests::Corpus::unreadable: Vec<PathBuf>
 pub struct field nomos_integration_tests::Production::trace: Vec<u8>
 pub struct field nomos_integration_tests::Recompute::capability: String
 pub struct field nomos_integration_tests::Recompute::subject: String
+pub struct field nomos_integration_tests::Resolved::applicability: Applicability
+pub struct field nomos_integration_tests::Resolved::selection: Selection
 pub struct field nomos_integration_tests::RunReport::answered_by: std::collections::BTreeMap<String, usize>
 pub struct field nomos_integration_tests::RunReport::approximated: Vec<String>
 pub struct field nomos_integration_tests::RunReport::degraded: Vec<String>
@@ -85,6 +87,7 @@ pub struct field nomos_integration_tests::Verification::domain: String
 pub struct nomos_integration_tests::Corpus
 pub struct nomos_integration_tests::Production
 pub struct nomos_integration_tests::Recompute
+pub struct nomos_integration_tests::Resolved
 pub struct nomos_integration_tests::RunReport
 pub struct nomos_integration_tests::Slice
 pub struct nomos_integration_tests::SourceFile

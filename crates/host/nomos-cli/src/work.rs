@@ -152,7 +152,10 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
         return Err(Usage_Text());
     };
 
-    let (named, predicate_argv) = Split_At_Separator(arguments);
+    let Split {
+        named,
+        predicate_argv,
+    } = Split_At_Separator(arguments);
 
     return match verb.as_str()
     {
@@ -169,23 +172,37 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
     };
 }
 
+/// An argument list cut in two at a bare `--`.
+///
+/// Named rather than a pair. Both halves are `&[String]` and the compiler cannot tell
+/// them apart, so a caller that took them in the wrong order would hand a verb its
+/// predicate's flags and still build.
+struct Split<'a>
+{
+    named: &'a [String],
+    predicate_argv: &'a [String],
+}
+
 /// The named arguments and the verification argv, split at a bare `--`.
 ///
 /// Everything after the separator is the predicate's own argv, so a predicate carrying its
 /// own flags needs no quoting and no escaping. The split happens once here rather than
 /// per-command.
-fn Split_At_Separator(arguments: &[String]) -> (&[String], &[String])
+fn Split_At_Separator(arguments: &[String]) -> Split<'_>
 {
     let Some(index) = arguments.iter().position(|argument| return argument == "--")
     else
     {
-        return (arguments, &[]);
+        return Split {
+            named: arguments,
+            predicate_argv: &[],
+        };
     };
 
-    return (
-        arguments.get(..index).unwrap_or_default(),
-        arguments.get(index.saturating_add(1)..).unwrap_or_default(),
-    );
+    return Split {
+        named: arguments.get(..index).unwrap_or_default(),
+        predicate_argv: arguments.get(index.saturating_add(1)..).unwrap_or_default(),
+    };
 }
 
 /// The item an argument list names.
@@ -1573,11 +1590,21 @@ mod tests
     }
 
     /// The command and the declaration it carries beside the item.
-    fn Add_Of(text: &str) -> (LedgerItem, Territory)
+    struct AddedItem
+    {
+        item: LedgerItem,
+        amending: Territory,
+    }
+
+    /// The command and the declaration it carries beside the item.
+    fn Add_Of(text: &str) -> AddedItem
     {
         return match Parse(&Arguments(text)).unwrap()
         {
-            WorkCommand::Add { item, amending } => (*item, amending),
+            WorkCommand::Add { item, amending } => AddedItem {
+                item: *item,
+                amending,
+            },
             other => panic!("expected an add, got {other:?}"),
         };
     }
@@ -1591,7 +1618,7 @@ mod tests
     #[test]
     fn Test_Amends_Should_Reserve_The_Record_It_Declares()
     {
-        let (item, amending) = Add_Of(
+        let AddedItem { item, amending } = Add_Of(
             "add --item T-1 --title t --why w --done-when d \
              --amends docs/records/ARC-HARNESS-001-a-slug.md",
         );
@@ -1634,7 +1661,7 @@ mod tests
     #[test]
     fn Test_Amends_Should_Declare_Only_What_It_Names()
     {
-        let (item, amending) = Add_Of(
+        let AddedItem { item, amending } = Add_Of(
             "add --item T-1 --title t --why w --done-when d --territory src/a.rs \
              --amends docs/records/ARC-HARNESS-001-a-slug.md",
         );

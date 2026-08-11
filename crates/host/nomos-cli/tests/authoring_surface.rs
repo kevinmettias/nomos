@@ -89,12 +89,22 @@ fn Staged(name: &str, text: &str) -> PathBuf
 /// rename, and a run whose only subject is what the command says about itself — and a guard
 /// that cannot tell those from a `replace` that silently matched nothing is a guard that fires
 /// on the wrong cases.
-fn Edited(name: &str, edit: impl Fn(&str) -> String) -> (PathBuf, String)
+fn Edited(name: &str, edit: impl Fn(&str) -> String) -> Fixture
 {
     let text = edit(&On_Disk());
     assert_ne!(text, On_Disk(), "the {name} fixture changed nothing");
 
-    return (Staged(name, &text), text);
+    return Fixture {
+        staged: Staged(name, &text),
+        text,
+    };
+}
+
+/// A staged fixture: where it was written, and what was written there.
+struct Fixture
+{
+    staged: PathBuf,
+    text: String,
 }
 
 /// The read half of the round trip: the store renders the record back, byte for byte.
@@ -132,7 +142,7 @@ fn Test_Markdown_Should_Keep_Content_And_Commentary_Apart()
 #[test]
 fn Test_Preview_Should_Describe_The_Edit_And_Write_Nothing()
 {
-    let (staged, _) = Edited("preview-describes", |text| {
+    let Fixture { staged, .. } = Edited("preview-describes", |text| {
         return text.replace("## Decision", "## The decision");
     });
     let before = On_Disk();
@@ -157,7 +167,7 @@ fn Test_Preview_Should_Describe_The_Edit_And_Write_Nothing()
 #[test]
 fn Test_Commit_Should_Preview_Then_Write_The_Record()
 {
-    let (staged, text) = Edited("commit-writes", |source| {
+    let Fixture { staged, text } = Edited("commit-writes", |source| {
         return source.replace("belongs to the front matter fence", "belongs to the fence");
     });
     let into = Scratch("commit-writes-tree");
@@ -232,7 +242,7 @@ fn Test_Commit_Should_Move_A_Renamed_Record_And_Vacate_Its_Old_Path()
 #[test]
 fn Test_An_Edit_This_Surface_Would_Not_Write_Should_Exit_Refused()
 {
-    let (staged, _) = Edited("commit-refuses", |text| {
+    let Fixture { staged, .. } = Edited("commit-refuses", |text| {
         return text.replace("## Decision\n\n", "## Decision\n\n\n");
     });
     let into = Scratch("commit-refuses-tree");
@@ -261,7 +271,7 @@ fn Test_An_Edit_This_Surface_Would_Not_Write_Should_Exit_Refused()
 #[test]
 fn Test_Restating_The_Identifier_Should_Be_Refused()
 {
-    let (staged, _) = Edited("commit-reidentifies", |text| {
+    let Fixture { staged, .. } = Edited("commit-reidentifies", |text| {
         return text.replace("id: D-131", "id: D-131-2");
     });
 

@@ -27,6 +27,17 @@ const LAPSED_AT: i64 = 1_003_600;
 /// Far enough ahead that `T-3`'s claim is live whenever this suite runs. Unix seconds in 2096.
 const STILL_LIVE: i64 = 4_000_000_000;
 
+/// What one `nomos work` run said, and what it exited with.
+///
+/// Named rather than a pair. The same two values were spelled `(String, i32)` in one of
+/// these files and `(i32, String)` in the next, which is exactly the swap a name makes
+/// impossible and a type does not.
+struct Ran
+{
+    said: String,
+    code: i32,
+}
+
 struct Board
 {
     root: PathBuf,
@@ -79,8 +90,8 @@ impl Board
         return Self { root };
     }
 
-    /// Runs `nomos work …`, returning stdout and the exit code.
-    fn Work(&self, arguments: &[&str]) -> (String, i32)
+    /// Runs `nomos work …`, returning what it said and what it exited with.
+    fn Work(&self, arguments: &[&str]) -> Ran
     {
         let output = Command::new(NOMOS)
             .arg("work")
@@ -89,10 +100,10 @@ impl Board
             .output()
             .expect("the binary runs");
 
-        return (
-            String::from_utf8_lossy(&output.stdout).into_owned(),
-            output.status.code().unwrap_or(-1),
-        );
+        return Ran {
+            said: String::from_utf8_lossy(&output.stdout).into_owned(),
+            code: output.status.code().unwrap_or(-1),
+        };
     }
 
     /// The ledger file as text, for asserting on what was written rather than on what was said.
@@ -120,7 +131,7 @@ fn Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced()
 {
     let board = Board::New("records-what-it-displaced");
 
-    let (said, code) = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
+    let Ran { said, code } = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
 
     assert_eq!(code, 0, "a lapsed item must be takeable: {said}");
     assert!(said.contains("agent-b"), "{said}");
@@ -156,10 +167,10 @@ fn Test_Show_Should_Report_The_Claim_A_Takeover_Displaced()
 {
     let board = Board::New("show-reports-it");
 
-    let (_, code) = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
+    let Ran { code, .. } = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
     assert_eq!(code, 0);
 
-    let (said, code) = board.Work(&["show", "--item", "T-1"]);
+    let Ran { said, code } = board.Work(&["show", "--item", "T-1"]);
 
     assert_eq!(code, 0, "{said}");
     assert!(
@@ -185,7 +196,7 @@ fn Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable()
 {
     let board = Board::New("lists-lapsed-and-takes");
 
-    let (listed, code) = board.Work(&["list", "--state", "lapsed"]);
+    let Ran { said: listed, code } = board.Work(&["list", "--state", "lapsed"]);
 
     assert_eq!(code, 0, "{listed}");
     assert!(
@@ -197,7 +208,7 @@ fn Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable()
         "a free item and a held item are not lapsed:\n{listed}"
     );
 
-    let (said, code) = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
+    let Ran { said, code } = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
     assert_eq!(
         code, 0,
         "the listing said `lapsed` and the takeover refused it, so the two disagree: {said}"
@@ -215,7 +226,7 @@ fn Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover()
 {
     let board = Board::New("claim-refuses-lapsed");
 
-    let (said, code) = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
 
     assert_eq!(
         code, 4,
@@ -244,20 +255,20 @@ fn Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_No
 {
     let board = Board::New("exit-codes");
 
-    let (live, code) = board.Work(&["takeover", "--item", "T-3", "--holder", "agent-b"]);
+    let Ran { said: live, code } = board.Work(&["takeover", "--item", "T-3", "--holder", "agent-b"]);
     assert_eq!(
         code, 3,
         "taking over a live claim is a queue, not a conflict: {live}"
     );
     assert!(live.contains("agent-a"), "{live}");
 
-    let (free, code) = board.Work(&["takeover", "--item", "T-2", "--holder", "agent-b"]);
+    let Ran { said: free, code } = board.Work(&["takeover", "--item", "T-2", "--holder", "agent-b"]);
     assert_eq!(
         code, 4,
         "taking over an item nobody holds is the wrong verb, and waiting will not fix it: {free}"
     );
 
-    let (missing, code) = board.Work(&["takeover", "--item", "T-9", "--holder", "agent-b"]);
+    let Ran { said: missing, code } = board.Work(&["takeover", "--item", "T-9", "--holder", "agent-b"]);
     assert_eq!(code, 4, "{missing}");
 
     assert!(

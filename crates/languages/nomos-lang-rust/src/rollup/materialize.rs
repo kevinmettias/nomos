@@ -30,7 +30,10 @@ pub fn Materialize_Index(
     // The read borrows the store immutably and the write needs it mutably, so the reader
     // is confined to this scope. What survives it is owned: the index, and the edges the
     // reader observed on the way to it.
-    let (index, dependencies) = Read_Members(store, against, module.subject, &members);
+    let Members {
+        index,
+        dependencies,
+    } = Read_Members(store, against, module.subject, &members);
 
     let fact = Rollup_Fact(&key, &index, against.context);
     store.Materialize(fact, &dependencies)?;
@@ -112,13 +115,23 @@ pub(super) fn Index_Inputs(members: &[ModuleMember]) -> InputDigest
     return InputDigest::Of(&borrowed);
 }
 
+/// What a reading of a module's members produced.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+pub(super) struct Members
+{
+    pub(super) index: ModuleIndex,
+    pub(super) dependencies: Vec<Dependency>,
+}
+
 /// Reads every member's syntax fact through the registry and indexes what they declare.
 pub(super) fn Read_Members(
     store: &MemoryFactStore,
     against: &Against<'_>,
     module: SubjectId,
     members: &[ModuleMember],
-) -> (ModuleIndex, Vec<Dependency>)
+) -> Members
 {
     let context = Reading_Context(against.context);
     let mut reader = Reader::On(store, against.registry, context);
@@ -133,7 +146,10 @@ pub(super) fn Read_Members(
         Index_Member(&mut index, &mut reader, member, against.need);
     }
 
-    return (index, reader.Into_Dependencies());
+    return Members {
+        index,
+        dependencies: reader.Into_Dependencies(),
+    };
 }
 
 /// The reading context, as the reader takes it.

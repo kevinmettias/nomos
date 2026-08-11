@@ -195,6 +195,27 @@ pub const fn Approximate_Floor() -> Guarantee
     );
 }
 
+/// Which provider the registry chose, and how far its answer can be stood behind.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+pub struct Resolved
+{
+    pub selection: Selection,
+    pub applicability: Applicability,
+}
+
+/// What a rollup produced: the summed surface, and the reads it was derived from.
+///
+/// Named rather than a pair. The dependency edges are a record of what was read, not a
+/// second description of the surface, and a name is what keeps the two apart at the call
+/// site.
+struct RolledUp
+{
+    surface: Surface,
+    dependencies: Vec<Dependency>,
+}
+
 /// The composed system: a workspace that says what is there, a registry that resolves
 /// providers, and a store that holds what they produced.
 pub struct Slice
@@ -448,7 +469,7 @@ impl Slice
     /// facts and reported a clean corpus, which is the single most repeated defect in the
     /// prototype: a check that could not run reading like a check that found nothing.
     #[must_use]
-    pub fn Resolved(&self) -> (Selection, Applicability)
+    pub fn Resolved(&self) -> Resolved
     {
         let resolution = self.registry.Resolve(&self.Requirement());
 
@@ -461,7 +482,10 @@ impl Slice
             panic!("no provider offers {} at this run's floor: {resolution:?}", syntax::CAPABILITY)
         };
 
-        return (selection, applicability);
+        return Resolved {
+            selection,
+            applicability,
+        };
     }
 
     /// The key a syntax fact about this file is filed under.
@@ -480,7 +504,7 @@ impl Slice
     #[must_use]
     pub fn Syntax_Key(&self, file: &SourceFile) -> FactKey
     {
-        return self.Syntax_Key_Of(file, &self.Resolved().0.chosen);
+        return self.Syntax_Key_Of(file, &self.Resolved().selection.chosen);
     }
 
     /// The key one named offer's answer about a file would be filed under.
@@ -518,7 +542,7 @@ impl Slice
     #[must_use]
     pub fn Candidates(&self) -> Vec<nomos_capability::ProviderOffer>
     {
-        let selection = self.Resolved().0;
+        let selection = self.Resolved().selection;
         let mut offers = vec![selection.chosen.clone()];
         offers.extend(selection.Weaker().into_iter().cloned());
 
@@ -687,7 +711,10 @@ impl Slice
                 continue;
             }
 
-            let (surface, dependencies) = self.Roll_Up(&members);
+            let RolledUp {
+                surface,
+                dependencies,
+            } = self.Roll_Up(&members);
 
             if surface.unreachable > 0
             {
@@ -817,7 +844,7 @@ impl Slice
     /// The dependency edges come from [`Reader`] observing the reads, not from this
     /// function listing them. That distinction is the point: a hand-written edge list is a
     /// claim about what was read, and this is a record of it.
-    fn Roll_Up(&self, members: &[&SourceFile]) -> (Surface, Vec<Dependency>)
+    fn Roll_Up(&self, members: &[&SourceFile]) -> RolledUp
     {
         // The run's own requirement, not a second one written here.
         //
@@ -877,7 +904,10 @@ impl Slice
             }
         }
 
-        return (surface, reader.Into_Dependencies());
+        return RolledUp {
+            surface,
+            dependencies: reader.Into_Dependencies(),
+        };
     }
 
     /// One edit, through the one door.

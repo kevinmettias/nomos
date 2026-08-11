@@ -16,6 +16,16 @@ use crate::variant::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
 use nomos_store::{Authority, Commit, DocumentKind, DocumentStore, Recorded};
 
+/// What applying a set of changes came to.
+///
+/// Named rather than a pair, so that the caller reading `altered` is reading the question
+/// it is asking — whether the generation must advance — and not a position.
+struct Outcome
+{
+    effects: Vec<Effect>,
+    altered: bool,
+}
+
 /// What the workspace currently is.
 ///
 /// The only `&mut self` method that changes anything is [`Workspace::Apply`]. That is the
@@ -77,7 +87,7 @@ impl Workspace
             return Err(WorkspaceError::Vacuous);
         }
 
-        let (effects, altered) = self.Apply_Each(Normalized(changes)?);
+        let Outcome { effects, altered } = self.Apply_Each(Normalized(changes)?);
         if !altered
         {
             return Ok(Applied::Unchanged {
@@ -101,7 +111,7 @@ impl Workspace
     /// A set of changes that all turn out to be redundant is applied and alters nothing,
     /// which is what keeps a re-run of one checkout from advancing the generation and
     /// invalidating a corpus of facts that are still true.
-    fn Apply_Each(&mut self, normalized: Vec<(String, &Change)>) -> (Vec<Effect>, bool)
+    fn Apply_Each(&mut self, normalized: Vec<(String, &Change)>) -> Outcome
     {
         let mut effects = Vec::new();
         let mut altered = false;
@@ -114,7 +124,7 @@ impl Workspace
         }
         effects.sort();
 
-        return (effects, altered);
+        return Outcome { effects, altered };
     }
 
     /// One change against the snapshot, and what it did to it.

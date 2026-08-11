@@ -95,13 +95,22 @@ fn Canonical_Records() -> Vec<String>
     return canonical;
 }
 
-/// The comparison the guard makes, over two sets handed to it.
+/// The two directions of a set disagreement: on side A and not side B, and the reverse.
 ///
-/// Returns `(unseeded, phantom)`: identifiers on side A and not side B, then the reverse.
+/// Named rather than a pair. Both members are `Vec<String>` and the compiler cannot tell
+/// them apart, so a call site that swapped them would report an unseeded record as a
+/// phantom one and still build.
+struct Disagreement
+{
+    unseeded: Vec<String>,
+    phantom: Vec<String>,
+}
+
+/// The comparison the guard makes, over two sets handed to it.
 ///
 /// Extracted so that a control claiming the guard would have caught something is exercising
 /// **the guard** rather than a second implementation of it written beside the first.
-fn Disagreements(canonical: &[String], governing: &[&str]) -> (Vec<String>, Vec<String>)
+fn Disagreements(canonical: &[String], governing: &[&str]) -> Disagreement
 {
     let unseeded: Vec<String> = canonical
         .iter()
@@ -115,7 +124,7 @@ fn Disagreements(canonical: &[String], governing: &[&str]) -> (Vec<String>, Vec<
         .map(|id| return (*id).to_owned())
         .collect();
 
-    return (unseeded, phantom);
+    return Disagreement { unseeded, phantom };
 }
 
 fn Title(store: &SpecificationStore, node_id: &str) -> Option<String>
@@ -179,7 +188,7 @@ fn Test_Every_Canonical_Record_On_Disk_Should_Be_Governing()
         Record_Directory().display()
     );
 
-    let (unseeded, phantom) = Disagreements(&canonical, GOVERNING_RECORD_IDS);
+    let Disagreement { unseeded, phantom } = Disagreements(&canonical, GOVERNING_RECORD_IDS);
 
     assert!(
         unseeded.is_empty(),
@@ -224,7 +233,7 @@ fn Test_A_Record_Whose_Registration_Is_Missing_Should_Be_Unseeded()
         .copied()
         .collect();
 
-    let (unseeded, phantom) = Disagreements(&canonical, &governing);
+    let Disagreement { unseeded, phantom } = Disagreements(&canonical, &governing);
 
     assert_eq!(
         unseeded,
@@ -245,7 +254,7 @@ fn Test_A_Registration_With_No_Record_Should_Be_A_Phantom()
     let mut governing: Vec<&str> = GOVERNING_RECORD_IDS.to_vec();
     governing.push(invented);
 
-    let (unseeded, phantom) = Disagreements(&canonical, &governing);
+    let Disagreement { unseeded, phantom } = Disagreements(&canonical, &governing);
 
     assert_eq!(phantom, vec![invented.to_owned()]);
     assert!(unseeded.is_empty(), "inventing a registration unseeded a record: {unseeded:?}");
@@ -290,7 +299,10 @@ fn Test_The_Governing_List_Should_Be_The_Registration_Directory()
         directory.display()
     );
 
-    let (unregistered, undeclared) = Disagreements(&stems, GOVERNING_RECORD_IDS);
+    let Disagreement {
+        unseeded: unregistered,
+        phantom: undeclared,
+    } = Disagreements(&stems, GOVERNING_RECORD_IDS);
 
     assert!(
         unregistered.is_empty() && undeclared.is_empty(),
@@ -322,8 +334,10 @@ fn Test_Comparing_The_Directory_Against_Itself_Would_Check_Nothing()
         .map(|id| return id.as_str())
         .collect();
 
-    let (would_be_unseeded, would_be_phantom) =
-        Disagreements(&would_be_canonical, &would_be_governing);
+    let Disagreement {
+        unseeded: would_be_unseeded,
+        phantom: would_be_phantom,
+    } = Disagreements(&would_be_canonical, &would_be_governing);
 
     assert!(
         would_be_unseeded.is_empty() && would_be_phantom.is_empty(),

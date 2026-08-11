@@ -24,6 +24,17 @@ const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 /// stop being the case it was written for by the schema catching up with it.
 const UNDECLARED: &str = ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}";
 
+/// What one `nomos work` run said, and what it exited with.
+///
+/// Named rather than a pair. The same two values were spelled `(String, i32)` in one of
+/// these files and `(i32, String)` in the next, which is exactly the swap a name makes
+/// impossible and a type does not.
+struct Ran
+{
+    said: String,
+    code: i32,
+}
+
 struct Board
 {
     root: PathBuf,
@@ -54,8 +65,8 @@ impl Board
         return Self { root };
     }
 
-    /// Runs `nomos work …`, returning stdout and the exit code.
-    fn Work(&self, arguments: &[&str]) -> (String, i32)
+    /// Runs `nomos work …`, returning what it said and what it exited with.
+    fn Work(&self, arguments: &[&str]) -> Ran
     {
         let output = Command::new(NOMOS)
             .arg("work")
@@ -64,10 +75,10 @@ impl Board
             .output()
             .expect("the binary runs");
 
-        return (
-            String::from_utf8_lossy(&output.stdout).into_owned(),
-            output.status.code().unwrap_or(-1),
-        );
+        return Ran {
+            said: String::from_utf8_lossy(&output.stdout).into_owned(),
+            code: output.status.code().unwrap_or(-1),
+        };
     }
 
     /// The ledger file exactly as it stands, bytes and all.
@@ -96,7 +107,7 @@ fn Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It()
     let board = Board::New("refuses-to-rewrite", UNDECLARED);
     let before = board.Bytes();
 
-    let (said, code) = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
 
     assert_eq!(
         code, 5,
@@ -120,7 +131,7 @@ fn Test_Listing_A_Ledger_This_Build_Cannot_Account_For_Should_Refuse()
 {
     let board = Board::New("refuses-to-list", UNDECLARED);
 
-    let (said, code) = board.Work(&["list"]);
+    let Ran { said, code } = board.Work(&["list"]);
 
     assert_eq!(code, 5, "{said}");
     assert!(
@@ -140,7 +151,7 @@ fn Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It()
     let board = Board::New("still-writes", "");
     let before = board.Bytes();
 
-    let (said, code) = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
 
     assert_eq!(code, 0, "a readable board must still be claimable: {said}");
     assert_ne!(
@@ -160,7 +171,7 @@ fn Test_Validate_Should_Report_The_Files_Schema_And_The_Builds()
 {
     let board = Board::New("validate-reports-both", "");
 
-    let (said, code) = board.Work(&["validate"]);
+    let Ran { said, code } = board.Work(&["validate"]);
 
     assert_eq!(code, 0, "{said}");
     // A literal `1`, and it stays one: this reads the *fixture's* own version, which `Board`

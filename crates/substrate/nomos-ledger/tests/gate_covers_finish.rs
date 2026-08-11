@@ -175,7 +175,17 @@ fn Ledger_At<'clock>(
     );
 }
 
-fn State_Of(directory: &Path) -> (ItemState, Option<nomos_ledger::VerificationRecord>)
+/// What the item on disk says about itself.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct Standing
+{
+    state: ItemState,
+    verified: Option<nomos_ledger::VerificationRecord>,
+}
+
+fn State_Of(directory: &Path) -> Standing
 {
     let clock = FixedClock(NOW);
     let ledger = Ledger_At(directory, &clock);
@@ -186,7 +196,10 @@ fn State_Of(directory: &Path) -> (ItemState, Option<nomos_ledger::VerificationRe
         .cloned()
         .expect("the ledger has the item");
 
-    return (item.state, item.verified);
+    return Standing {
+        state: item.state,
+        verified: item.verified,
+    };
 }
 
 // ---------------------------------------------------------------------------
@@ -219,7 +232,7 @@ fn Test_A_Passing_Predicate_Should_Not_Finish_An_Item_While_The_Gate_Is_Red()
         refusal.Describe()
     );
 
-    let (state, verified) = State_Of(&directory);
+    let Standing { state, verified } = State_Of(&directory);
     assert_eq!(state, ItemState::Claimed, "the item must not have finished");
     assert!(
         verified.is_none(),
@@ -260,7 +273,7 @@ fn Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item()
         gate.argv
     );
 
-    let (state, verified) = State_Of(&directory);
+    let Standing { state, verified } = State_Of(&directory);
     assert_eq!(state, ItemState::Done);
     assert!(
         verified.and_then(|record| return record.gate).is_some(),
@@ -377,7 +390,7 @@ fn Test_A_Missing_Workflow_Should_Refuse_Rather_Than_Finish_On_The_Predicate_Alo
         "nothing should have been run once the gate could not be established"
     );
 
-    let (state, _) = State_Of(&directory);
+    let Standing { state, .. } = State_Of(&directory);
     assert_eq!(state, ItemState::Claimed);
 }
 

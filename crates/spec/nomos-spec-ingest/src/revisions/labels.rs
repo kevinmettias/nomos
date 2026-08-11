@@ -59,16 +59,36 @@ pub(super) fn Label_Of(name: &str) -> Option<String>
     return Version(label).map(|_| return label.to_owned());
 }
 
-/// `v14.36` as a pair of numbers, so `v14.9` sorts before `v14.10`.
-pub(super) fn Version(label: &str) -> Option<(u32, u32)>
+/// A revision label read as the two numbers it is.
+///
+/// Named rather than a pair of `u32`. The compiler cannot tell a major from a minor, so
+/// a call site that took them in the wrong order would sort `v14.36` before `v9.14` and
+/// still build — and the ordering these derive is the whole reason the type exists.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub(super) struct Numbered
 {
-    let (major, minor) = label.strip_prefix('v')?.split_once('.')?;
-    return Some((major.parse().ok()?, minor.parse().ok()?));
+    pub(super) major: u32,
+    pub(super) minor: u32,
 }
 
-pub(super) fn Order(label: &str) -> (u32, u32)
+/// `v14.36` as two numbers, so `v14.9` sorts before `v14.10`.
+pub(super) fn Version(label: &str) -> Option<Numbered>
 {
-    return Version(label).unwrap_or((u32::MAX, u32::MAX));
+    let (major, minor) = label.strip_prefix('v')?.split_once('.')?;
+
+    return Some(Numbered {
+        major: major.parse().ok()?,
+        minor: minor.parse().ok()?,
+    });
+}
+
+/// The sort key of a label, with an unreadable one sorting last rather than first.
+pub(super) fn Order(label: &str) -> Numbered
+{
+    return Version(label).unwrap_or(Numbered {
+        major: u32::MAX,
+        minor: u32::MAX,
+    });
 }
 
 /// Revision numbers the archive set skips.
@@ -79,7 +99,7 @@ pub(super) fn Order(label: &str) -> (u32, u32)
 #[must_use]
 pub fn Gaps(labels: &[String]) -> Vec<String>
 {
-    let numbered: Vec<(u32, u32)> = labels.iter().filter_map(|label| return Version(label)).collect();
+    let numbered: Vec<Numbered> = labels.iter().filter_map(|label| return Version(label)).collect();
     let mut missing = Vec::new();
 
     for pair in numbered.windows(2)
@@ -100,18 +120,18 @@ pub fn Gaps(labels: &[String]) -> Vec<String>
 ///
 /// Only within one major version. A major bump is a renumbering rather than a run, so
 /// counting from `v14.36` to `v15.0` would report thirty-six revisions nobody ever cut.
-pub(super) fn Between(before: (u32, u32), after: (u32, u32)) -> Vec<String>
+pub(super) fn Between(before: Numbered, after: Numbered) -> Vec<String>
 {
-    if before.0 != after.0
+    if before.major != after.major
     {
         return Vec::new();
     }
 
     let mut missing = Vec::new();
-    let mut minor = before.1.saturating_add(1);
-    while minor < after.1
+    let mut minor = before.minor.saturating_add(1);
+    while minor < after.minor
     {
-        missing.push(format!("v{}.{minor}", before.0));
+        missing.push(format!("v{}.{minor}", before.major));
         minor = minor.saturating_add(1);
     }
 

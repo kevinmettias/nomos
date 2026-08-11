@@ -5,19 +5,30 @@ use super::*;
 const PLAN: &str = "4. How Nomos relates to KnowledgeWorkbench\n\n\
                     Nomos deterministically enforces the standards.\n";
 
-fn Rooted() -> (SpecificationStore, i64)
+/// A store holding the root suite, and the row that suite landed on.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct RootedStore
+{
+    store: SpecificationStore,
+    root: i64,
+}
+
+fn Rooted() -> RootedStore
 {
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let root = store
         .Put_Suite(ROOT_SUITE, "The Nomos specification", true)
         .expect("records the root suite");
-    return (store, root);
+
+    return RootedStore { store, root };
 }
 
 #[test]
 fn Test_A_Game_Plan_Should_Enter_As_Commentary()
 {
-    let (mut store, root) = Rooted();
+    let RootedStore { mut store, root } = Rooted();
 
     let node = Ingest_Game_Plan(&mut store, root, "nomos full game plan.txt", PLAN)
         .expect("ingests");
@@ -39,7 +50,7 @@ fn Test_A_Game_Plan_Should_Enter_As_Commentary()
 #[test]
 fn Test_Every_Game_Plan_Block_Should_Be_Disposed_To_The_Commentary_Node()
 {
-    let (mut store, root) = Rooted();
+    let RootedStore { mut store, root } = Rooted();
     Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
 
     let undisposed: u32 = store
@@ -60,7 +71,7 @@ fn Test_Every_Game_Plan_Block_Should_Be_Disposed_To_The_Commentary_Node()
 #[test]
 fn Test_A_Statement_Sourced_Only_From_A_Game_Plan_Should_Be_Reported()
 {
-    let (mut store, root) = Rooted();
+    let RootedStore { mut store, root } = Rooted();
     Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
     Statement(&mut store, "AGT-001");
     Trace_To_Plan(&store, "AGT-001");
@@ -77,7 +88,7 @@ fn Test_A_Statement_Sourced_Only_From_A_Game_Plan_Should_Be_Reported()
 #[test]
 fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
 {
-    let (mut store, root) = Rooted();
+    let RootedStore { mut store, root } = Rooted();
     Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
     crate::phases::Ingest_Source_Document(&mut store, "v.md", "v14.36", "# T\n\nReal.\n")
         .expect("ingests");
@@ -108,7 +119,7 @@ fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
 #[test]
 fn Test_A_Statement_With_No_Lineage_Should_Not_Be_Reported_Here()
 {
-    let (mut store, root) = Rooted();
+    let RootedStore { mut store, root } = Rooted();
     Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
     Statement(&mut store, "AGT-002");
     Prepare_Commentary_View(&store).expect("prepares");

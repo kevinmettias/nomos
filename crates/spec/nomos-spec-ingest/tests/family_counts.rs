@@ -233,8 +233,11 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
         "code.fence_lines" => Fence_Lines(&volumes),
         "code.blocks" => Code_Blocks(&volumes),
 
-        "domain_model.pipe_lines" => Table_Under(corpus, "02-core", "5. Canonical domain model").0,
-        "domain_model.rows" => Table_Under(corpus, "02-core", "5. Canonical domain model").1,
+        "domain_model.pipe_lines" =>
+        {
+            Table_Under(corpus, "02-core", "5. Canonical domain model").lines
+        }
+        "domain_model.rows" => Table_Under(corpus, "02-core", "5. Canonical domain model").content,
         "domain_model.named_models" => Named_Models(corpus),
 
         "roadmap.milestones" => Headings_Matching(corpus, "08-roadmap", 3, &["Foundation ", "Release "]),
@@ -243,11 +246,11 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
         "scenario.appendix_g_sections" => Lettered(corpus, "09-reference", 3, 'G', 1),
         "scenario.end_to_end" => End_To_End(corpus),
 
-        "service.section_6_headings" => Section_Six(corpus).0,
-        "service.leaf_headings" => Section_Six(corpus).1,
-        "service.service_headings" => Section_Six(corpus).2,
+        "service.section_6_headings" => Section_Six(corpus).all,
+        "service.leaf_headings" => Section_Six(corpus).leaves,
+        "service.service_headings" => Section_Six(corpus).services,
         "service.subsystem_table_rows" => {
-            Table_Under(corpus, "02-core", "6. Systems and subsystem responsibilities").1
+            Table_Under(corpus, "02-core", "6. Systems and subsystem responsibilities").content
         }
 
         "appendix_d.sections" => Lettered(corpus, "09-reference", 3, 'D', 1),
@@ -258,10 +261,10 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
         "headless_inventory.sections" => Prefixed(corpus, "07-clients", 4, "E.1."),
         "ide_profiles.sections" => Prefixed(corpus, "07-clients", 4, "F.1."),
 
-        "glossary.table_terms" => Table_Under(corpus, "09-reference", "Glossary").1,
+        "glossary.table_terms" => Table_Under(corpus, "09-reference", "Glossary").content,
         "glossary.extended_terms" => Under_Path(corpus, "09-reference", 4, "Extended operational terms"),
         "glossary.definitions" => Table_Under(corpus, "09-reference", "Glossary")
-            .1
+            .content
             .saturating_add(Under_Path(corpus, "09-reference", 4, "Extended operational terms")),
 
         "catalog.entities" => Catalog_Entities(corpus),
@@ -394,7 +397,7 @@ fn Code_Blocks(volumes: &Path) -> u32
 ///
 /// Refuses a heading carrying more than one table rather than summing them: "the table
 /// under §5" would then mean something the register's sentence does not say.
-fn Table_Under(corpus: &Path, stem: &str, heading: &str) -> (u32, u32)
+fn Table_Under(corpus: &Path, stem: &str, heading: &str) -> TableCounts
 {
     let markdown = Volume(corpus, stem);
     let mut found: Vec<SourceBlock> = Vec::new();
@@ -419,7 +422,17 @@ fn Table_Under(corpus: &Path, stem: &str, heading: &str) -> (u32, u32)
     )
     .unwrap_or(u32::MAX);
 
-    return (lines, content);
+    return TableCounts { lines, content };
+}
+
+/// What one table under a heading amounts to.
+///
+/// Named rather than a pair. Both members are `u32` and the compiler cannot tell them
+/// apart, so a call site reading the wrong position gets a number that looks right.
+struct TableCounts
+{
+    lines: u32,
+    content: u32,
 }
 
 /// Counted through the restoration's own reader, not a second implementation of the split.
@@ -578,7 +591,7 @@ fn End_To_End(corpus: &Path) -> u32
 }
 
 /// Every heading of section 6, its leaves, and the leaves naming a service.
-fn Section_Six(corpus: &Path) -> (u32, u32, u32)
+fn Section_Six(corpus: &Path) -> SectionCounts
 {
     const SECTION: &str = "6. Systems and subsystem responsibilities";
 
@@ -615,7 +628,23 @@ fn Section_Six(corpus: &Path) -> (u32, u32, u32)
     }
 
     assert!(all > 0, "section 6 is no longer in volume 02 under that title");
-    return (all, leaves, services);
+
+    return SectionCounts {
+        all,
+        leaves,
+        services,
+    };
+}
+
+/// What section 6 amounts to: every heading, the leaves, and the leaves naming a service.
+///
+/// Named rather than a triple of `u32`. At three members of one type a caller is counting
+/// positions and the compiler is helping with none of it.
+struct SectionCounts
+{
+    all: u32,
+    leaves: u32,
+    services: u32,
 }
 
 fn Catalog_Entities(corpus: &Path) -> u32

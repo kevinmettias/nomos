@@ -26,12 +26,13 @@ pub(super) fn Judge(universe: &DeclaredUniverse, index: &CheckIndex<'_>) -> Opti
 /// could have been missed — and stays `Supported` however short the index is. Only a claim
 /// that failed to resolve inherits the doubt. The evidence is `Derived` either way: computed
 /// from source by a deterministic rule, and no stronger than that source.
-pub(super) fn Shortcoming(
-    universe: &DeclaredUniverse,
-    verdict: (Applicability, GateCategory, String),
-) -> Finding
+pub(super) fn Shortcoming(universe: &DeclaredUniverse, verdict: Judgment) -> Finding
 {
-    let (applicability, gate, summary) = verdict;
+    let Judgment {
+        applicability,
+        gate,
+        summary,
+    } = verdict;
 
     return Finding {
         rule: RuleId::New(COMPLETENESS_MIRROR),
@@ -58,7 +59,7 @@ pub(super) fn Verdict(
     universe: &DeclaredUniverse,
     reach: &EnforcementReach,
     index: &CheckIndex<'_>,
-) -> (Applicability, GateCategory, String)
+) -> Judgment
 {
     let Some(breach) = reach.breaches.first()
     else
@@ -95,15 +96,15 @@ pub(super) fn Unresolved_Claim(
     breach: &EnforcementBreach,
     claimed: &str,
     index: &CheckIndex<'_>,
-) -> (Applicability, GateCategory, String)
+) -> Judgment
 {
     let Some(shortfall) = index.Shortfall_For(claimed)
     else
     {
-        return (
-            Applicability::Supported,
-            GateCategory::Blocking,
-            if index.unread.is_empty()
+        return Judgment {
+            applicability: Applicability::Supported,
+            gate: GateCategory::Blocking,
+            summary: if index.unread.is_empty()
             {
                 breach.Describe()
             }
@@ -116,26 +117,26 @@ pub(super) fn Unresolved_Claim(
                     index.unread.len()
                 )
             },
-        );
+        };
     };
 
-    return (
-        shortfall.Applicability(),
-        GateCategory::Advisory,
-        format!("{} — and {}", breach.Describe(), shortfall.Describe()),
-    );
+    return Judgment {
+        applicability: shortfall.Applicability(),
+        gate: GateCategory::Advisory,
+        summary: format!("{} — and {}", breach.Describe(), shortfall.Describe()),
+    };
 }
 
 /// How to report a universe that claims no mirror at all.
 ///
 /// An admitted gap does not depend on the index in any way — nothing was resolved, so
 /// nothing could have been missed — which is why no shortfall is consulted here.
-pub(super) fn Admitted_Gap(universe: &DeclaredUniverse) -> (Applicability, GateCategory, String)
+pub(super) fn Admitted_Gap(universe: &DeclaredUniverse) -> Judgment
 {
-    return (
-        Applicability::Supported,
-        GateCategory::Advisory,
-        format!(
+    return Judgment {
+        applicability: Applicability::Supported,
+        gate: GateCategory::Advisory,
+        summary: format!(
             "declares no mirror, so nothing compares this list against the reality it \
              enumerates; a {} added without adding it here is outside every guard built \
              on it, and those guards then pass by not looking",
@@ -145,5 +146,18 @@ pub(super) fn Admitted_Gap(universe: &DeclaredUniverse) -> (Applicability, GateC
                 UniverseKind::Enumeration => "variant",
             }
         ),
-    );
+    };
+}
+
+/// What one universe is owed: how far the rule can stand behind it, what the rule does
+/// about it, and what it says.
+///
+/// Named rather than a triple. At three members a caller is counting positions, and these
+/// three travel together through four functions — [`Verdict`], [`Unresolved_Claim`],
+/// [`Admitted_Gap`] and [`Shortcoming`] — which is four places for a position to slip.
+pub(super) struct Judgment
+{
+    pub(super) applicability: Applicability,
+    pub(super) gate: GateCategory,
+    pub(super) summary: String,
 }

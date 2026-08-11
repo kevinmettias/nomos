@@ -133,7 +133,10 @@ impl ValidationRun
 pub fn Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> ValidationRun
 {
     let registered: Vec<&'static str> = rules.iter().map(|rule| rule.Id()).collect();
-    let (unregistered, undeclared) = Reconciled(&registered);
+    let Reconciliation {
+        unregistered,
+        undeclared,
+    } = Reconciled(&registered);
 
     let results = rules
         .iter()
@@ -156,7 +159,7 @@ pub fn Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> Validati
 /// A rule declared and not registered would be reported nowhere, and one registered and not
 /// declared would run without the manifest naming it. Checking one direction only leaves
 /// half of a disagreement invisible, which is the failure this reconciliation exists for.
-fn Reconciled(registered: &[&'static str]) -> (Vec<String>, Vec<String>)
+fn Reconciled(registered: &[&'static str]) -> Reconciliation
 {
     let unregistered: Vec<String> = DECLARED_RULES
         .iter()
@@ -170,7 +173,21 @@ fn Reconciled(registered: &[&'static str]) -> (Vec<String>, Vec<String>)
         .map(|id| (*id).to_owned())
         .collect();
 
-    return (unregistered, undeclared);
+    return Reconciliation {
+        unregistered,
+        undeclared,
+    };
+}
+
+/// The two directions of a registry-against-manifest disagreement.
+///
+/// Named rather than a pair. Both members are `Vec<String>` and the compiler cannot tell
+/// them apart, so a call site that swapped them would report every declared-but-absent
+/// rule as registered-but-undeclared and still build.
+struct Reconciliation
+{
+    unregistered: Vec<String>,
+    undeclared: Vec<String>,
 }
 
 /// Identifies the ruleset that produced a result.

@@ -28,6 +28,16 @@ const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 const FOREVER: i64 = 4_102_444_800;
 
 /// A ledger of this test's own, under the target directory rather than the repository.
+/// What one `nomos work` run exited with, and what it said.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct Ran
+{
+    code: i32,
+    said: String,
+}
+
 struct Board
 {
     root: PathBuf,
@@ -48,8 +58,8 @@ impl Board
         return Self { root };
     }
 
-    /// Runs `nomos work <arguments>`, returning the exit code and stdout.
-    fn Work(&self, arguments: &[&str]) -> (i32, String)
+    /// Runs `nomos work <arguments>`, returning what it exited with and what it said.
+    fn Work(&self, arguments: &[&str]) -> Ran
     {
         let output = Command::new(NOMOS)
             .arg("work")
@@ -58,10 +68,10 @@ impl Board
             .output()
             .expect("the binary runs");
 
-        return (
-            output.status.code().unwrap_or(-1),
-            String::from_utf8_lossy(&output.stdout).into_owned(),
-        );
+        return Ran {
+            code: output.status.code().unwrap_or(-1),
+            said: String::from_utf8_lossy(&output.stdout).into_owned(),
+        };
     }
 
     /// The ledger file exactly as it sits on disk.
@@ -77,7 +87,7 @@ impl Board
     /// The label `work list` prints for one item, or `None` if it is not listed at all.
     fn Label_Of(&self, item: &str) -> Option<String>
     {
-        let (_, listing) = self.Work(&["list"]);
+        let Ran { said: listing, .. } = self.Work(&["list"]);
 
         return listing
             .lines()
@@ -134,7 +144,7 @@ fn Add_Arguments(id: &str) -> Vec<String>
 }
 
 /// `nomos work add` for `id`, with whatever trailing arguments the test needs.
-fn Add(board: &Board, id: &str, rest: &[&str]) -> (i32, String)
+fn Add(board: &Board, id: &str, rest: &[&str]) -> Ran
 {
     let mut arguments = Add_Arguments(id);
     arguments.extend(rest.iter().map(|argument| return (*argument).to_owned()));
@@ -169,7 +179,7 @@ fn Test_Adding_An_Item_On_Held_Ground_Should_Be_Accepted()
 {
     let board = Held_Ground("held-ground");
 
-    let (code, message) = Add(&board, "T-2", &["--territory", "src/shared.rs"]);
+    let Ran { code, said: message } = Add(&board, "T-2", &["--territory", "src/shared.rs"]);
 
     assert_eq!(
         code, 0,
@@ -194,9 +204,9 @@ fn Test_The_Item_Added_On_Held_Ground_Should_Still_Be_Refused_A_Claim()
 {
     let board = Held_Ground("deferred-exclusion");
 
-    assert_eq!(Add(&board, "T-2", &["--territory", "src/shared.rs"]).0, 0);
+    assert_eq!(Add(&board, "T-2", &["--territory", "src/shared.rs"]).code, 0);
 
-    let (code, message) = board.Work(&["claim", "--item", "T-2", "--holder", "agent-b"]);
+    let Ran { code, said: message } = board.Work(&["claim", "--item", "T-2", "--holder", "agent-b"]);
 
     assert_eq!(
         code, 3,
@@ -223,7 +233,7 @@ fn Test_An_Item_Added_On_Free_Ground_Should_Claim()
 {
     let board = Held_Ground("free-ground");
 
-    assert_eq!(Add(&board, "T-2", &["--territory", "src/other.rs"]).0, 0);
+    assert_eq!(Add(&board, "T-2", &["--territory", "src/other.rs"]).code, 0);
 
     assert_eq!(
         board.Label_Of("T-2").as_deref(),
@@ -233,7 +243,7 @@ fn Test_An_Item_Added_On_Free_Ground_Should_Claim()
     assert_eq!(
         board
             .Work(&["claim", "--item", "T-2", "--holder", "agent-b"])
-            .0,
+            .code,
         0
     );
 }
@@ -255,7 +265,7 @@ fn Test_A_Duplicate_Identifier_Should_Be_Refused()
     );
     let before = board.On_Disk();
 
-    let (code, message) = Add(&board, "T-1", &["--territory", "src/b.rs"]);
+    let Ran { code, said: message } = Add(&board, "T-1", &["--territory", "src/b.rs"]);
 
     assert_eq!(code, 4, "a taken identifier is a conflict, not a retryable one:\n{message}");
     assert!(message.contains("T-1"), "the refusal must name the identifier:\n{message}");
@@ -279,7 +289,7 @@ fn Test_An_Item_That_Would_Invalidate_The_Document_Should_Not_Land()
     );
     let before = board.On_Disk();
 
-    let (code, message) = Add(
+    let Ran { code, said: message } = Add(
         &board,
         "T-2",
         &["--territory", "src/b.rs", "--depends-on", "T-9"],
@@ -313,7 +323,7 @@ fn Test_An_Item_Reserving_One_Subject_Twice_Should_Not_Land()
     );
     let before = board.On_Disk();
 
-    let (code, message) = Add(
+    let Ran { code, said: message } = Add(
         &board,
         "T-2",
         &["--territory", "src/b.rs", "--territory", "SRC/B.rs"],
@@ -340,7 +350,7 @@ fn Test_A_Well_Formed_Item_Should_Land()
         &Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM),
     );
 
-    let (code, message) = Add(
+    let Ran { code, said: message } = Add(
         &board,
         "T-2",
         &["--territory", "src/b.rs", "--depends-on", "T-1"],

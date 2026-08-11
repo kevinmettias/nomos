@@ -336,7 +336,7 @@ mod tests
     ///
     /// Returns the text it should produce, so that a test can ask whether the transcript
     /// is the program's own output rather than whatever fitted.
-    fn Loud(name: &str) -> (Command, PathBuf, String)
+    fn Loud(name: &str) -> LoudFixture
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-launcher-loud-{name}-{}.txt", std::process::id()));
@@ -350,7 +350,23 @@ mod tests
 
         let argv = Shout(&path.display().to_string());
 
-        return (Command::New(argv, Duration::from_secs(10)), path, text);
+        return LoudFixture {
+            command: Command::New(argv, Duration::from_secs(10)),
+            path,
+            text,
+        };
+    }
+
+    /// The loud fixture: the command to run, the file it prints, and what it prints.
+    ///
+    /// Named rather than a triple. At three members a caller is counting positions, and
+    /// the position of the fixture path and the position of its contents are two facts
+    /// nobody should have to hold in their head.
+    struct LoudFixture
+    {
+        command: Command,
+        path: PathBuf,
+        text: String,
     }
 
     /// An argv that prints a file and then exits loudly, in the shell of the host.
@@ -381,7 +397,7 @@ mod tests
     #[test]
     fn Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume()
     {
-        let (command, path, _) = Loud("result");
+        let LoudFixture { command, path, .. } = Loud("result");
 
         let output = StdProcessLauncher.Run(&command).unwrap();
         let _ = std::fs::remove_file(&path);
@@ -404,7 +420,11 @@ mod tests
     #[test]
     fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
     {
-        let (command, path, expected) = Loud("whole");
+        let LoudFixture {
+            command,
+            path,
+            text: expected,
+        } = Loud("whole");
 
         let output = StdProcessLauncher.Run(&command).unwrap();
         let _ = std::fs::remove_file(&path);

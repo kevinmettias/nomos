@@ -901,7 +901,7 @@ fn Members_In(
             continue;
         }
 
-        let (payload, after) = Payload(text, masks, after_name, end);
+        let Carried { payload, after } = Payload(text, masks, after_name, end);
         found.push((name, payload));
         cursor = after.max(Next_Line(text, line_end, end)).min(end);
     }
@@ -910,12 +910,22 @@ fn Members_In(
 }
 
 /// What a member carries, and where the next one starts.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct Carried
+{
+    payload: String,
+    after: usize,
+}
+
+/// What a member carries, and where the next one starts.
 fn Payload(
     text: &str,
     masks: &crate::gates::Masks,
     from: usize,
     end: usize,
-) -> (String, usize)
+) -> Carried
 {
     let bytes = text.as_bytes();
     let mut cursor = from;
@@ -934,20 +944,32 @@ fn Payload(
         let close = Comma_At_Depth(bytes, &masks.code, cursor, end);
         let carried = text.get(cursor..close).map(Collapsed).unwrap_or_default();
 
-        return (carried, close.saturating_add(1));
+        return Carried {
+            payload: carried,
+            after: close.saturating_add(1),
+        };
     }
 
     let close = match opener
     {
         Some(b'{') => Matching_Brace(bytes, &masks.code, cursor),
         Some(b'(') => Matching_Parenthesis(bytes, &masks.code, cursor),
-        _ => return (String::new(), cursor.saturating_add(1)),
+        _ =>
+        {
+            return Carried {
+                payload: String::new(),
+                after: cursor.saturating_add(1),
+            };
+        }
     };
 
     let Some(close) = close
     else
     {
-        return (String::new(), end);
+        return Carried {
+            payload: String::new(),
+            after: end,
+        };
     };
 
     let carried = text
@@ -956,7 +978,10 @@ fn Payload(
         .unwrap_or_default();
     let separator = if opener == Some(b'{') { " " } else { "" };
 
-    return (format!("{separator}{carried}"), close.saturating_add(1));
+    return Carried {
+        payload: format!("{separator}{carried}"),
+        after: close.saturating_add(1),
+    };
 }
 
 /// The first comma outside any bracket, or the end of the range.

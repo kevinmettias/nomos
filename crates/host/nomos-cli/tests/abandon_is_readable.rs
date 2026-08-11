@@ -22,6 +22,17 @@ const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 /// the defect would come back as.
 const REASON: &str = "the corpus this needs is on no runner here; stopped before inventing one";
 
+/// What one `nomos work` run said, and what it exited with.
+///
+/// Named rather than a pair. The same two values were spelled `(String, i32)` in one of
+/// these files and `(i32, String)` in the next, which is exactly the swap a name makes
+/// impossible and a type does not.
+struct Ran
+{
+    said: String,
+    code: i32,
+}
+
 struct Board
 {
     root: PathBuf,
@@ -48,8 +59,8 @@ impl Board
         return Self { root };
     }
 
-    /// Runs `nomos work …`, returning stdout and the exit code.
-    fn Work(&self, arguments: &[&str]) -> (String, i32)
+    /// Runs `nomos work …`, returning what it said and what it exited with.
+    fn Work(&self, arguments: &[&str]) -> Ran
     {
         let output = Command::new(NOMOS)
             .arg("work")
@@ -58,19 +69,19 @@ impl Board
             .output()
             .expect("the binary runs");
 
-        return (
-            String::from_utf8_lossy(&output.stdout).into_owned(),
-            output.status.code().unwrap_or(-1),
-        );
+        return Ran {
+            said: String::from_utf8_lossy(&output.stdout).into_owned(),
+            code: output.status.code().unwrap_or(-1),
+        };
     }
 
     /// Claims and then gives up, which is the cycle every test here needs.
     fn Claim_Then_Abandon(&self, holder: &str, reason: &str)
     {
-        let (said, code) = self.Work(&["claim", "--item", "T-1", "--holder", holder]);
+        let Ran { said, code } = self.Work(&["claim", "--item", "T-1", "--holder", holder]);
         assert_eq!(code, 0, "the claim must be granted: {said}");
 
-        let (said, code) = self.Work(&[
+        let Ran { said, code } = self.Work(&[
             "abandon", "--item", "T-1", "--holder", holder, "--reason", reason,
         ]);
         assert_eq!(code, 0, "a holder may give up its own claim: {said}");
@@ -92,7 +103,7 @@ fn Test_An_Abandoned_Item_Should_Report_Who_Stopped_And_Why()
     let board = Board::New("reports-reason");
     board.Claim_Then_Abandon("agent-a", REASON);
 
-    let (shown, code) = board.Work(&["show", "--item", "T-1"]);
+    let Ran { said: shown, code } = board.Work(&["show", "--item", "T-1"]);
 
     assert_eq!(code, 0, "{shown}");
     assert!(
@@ -116,10 +127,10 @@ fn Test_An_Abandoned_Item_Should_Be_Claimable_By_Somebody_Else()
     let board = Board::New("still-claimable");
     board.Claim_Then_Abandon("agent-a", REASON);
 
-    let (said, code) = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
     assert_eq!(code, 0, "an abandoned item must be takeable: {said}");
 
-    let (shown, _) = board.Work(&["show", "--item", "T-1"]);
+    let Ran { said: shown, .. } = board.Work(&["show", "--item", "T-1"]);
     assert!(
         shown.contains(REASON),
         "the next claim erased the record of the last one:\n{shown}"
@@ -134,7 +145,7 @@ fn Test_Every_Abandonment_Should_Be_Reported_And_Not_Only_The_Last()
     board.Claim_Then_Abandon("agent-a", "went to look at something else");
     board.Claim_Then_Abandon("agent-b", REASON);
 
-    let (shown, _) = board.Work(&["show", "--item", "T-1"]);
+    let Ran { said: shown, .. } = board.Work(&["show", "--item", "T-1"]);
 
     assert!(
         shown.contains("went to look at something else"),
@@ -154,10 +165,10 @@ fn Test_An_Item_Nobody_Abandoned_Should_Report_None()
 {
     let board = Board::New("nothing-to-report");
 
-    let (said, code) = board.Work(&["claim", "--item", "T-1", "--holder", "agent-a"]);
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-a"]);
     assert_eq!(code, 0, "{said}");
 
-    let (shown, code) = board.Work(&["show", "--item", "T-1"]);
+    let Ran { said: shown, code } = board.Work(&["show", "--item", "T-1"]);
 
     assert_eq!(code, 0, "{shown}");
     assert!(
@@ -177,7 +188,7 @@ fn Test_Showing_An_Item_That_Is_Not_There_Should_Refuse()
 {
     let board = Board::New("no-such-item");
 
-    let (shown, code) = board.Work(&["show", "--item", "T-9"]);
+    let Ran { said: shown, code } = board.Work(&["show", "--item", "T-9"]);
 
     assert_ne!(code, 0, "a missing item reported as success: {shown}");
     assert!(shown.contains("T-9"), "{shown}");

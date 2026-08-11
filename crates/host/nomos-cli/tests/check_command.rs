@@ -75,6 +75,16 @@ fn Text_The_Parser_Refuses() -> String
 }
 
 /// A scratch tree, removed when the test ends.
+/// What one run of the binary exited with, and what it said.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct Ran
+{
+    code: i32,
+    said: String,
+}
+
 struct Tree
 {
     root: PathBuf,
@@ -101,8 +111,8 @@ impl Tree
         return self;
     }
 
-    /// Runs `nomos check` over it, returning the exit code and stdout.
-    fn Check(&self) -> (i32, String)
+    /// Runs `nomos check` over it, returning what it exited with and what it said.
+    fn Check(&self) -> Ran
     {
         return Run(&["check", "--root", &self.root.display().to_string()]);
     }
@@ -116,18 +126,18 @@ impl Drop for Tree
     }
 }
 
-/// Runs the binary and returns its exit code and stdout.
-fn Run(arguments: &[&str]) -> (i32, String)
+/// Runs the binary and returns what it exited with and what it said.
+fn Run(arguments: &[&str]) -> Ran
 {
     let finished = Command::new(Path::new(NOMOS))
         .args(arguments)
         .output()
         .expect("the binary cargo just built must be runnable");
 
-    return (
-        finished.status.code().unwrap_or(-1),
-        String::from_utf8_lossy(&finished.stdout).into_owned(),
-    );
+    return Ran {
+        code: finished.status.code().unwrap_or(-1),
+        said: String::from_utf8_lossy(&finished.stdout).into_owned(),
+    };
 }
 
 /// The headline, over the shape of tree the gate actually judges.
@@ -159,7 +169,7 @@ fn Test_A_Phantom_Should_Fail_The_Command_Though_The_Tree_Holds_A_File_The_Parse
         )
         .With("broken.rs", &Text_The_Parser_Refuses());
 
-    let (code, output) = tree.Check();
+    let Ran { code, said: output } = tree.Check();
 
     assert_eq!(code, 1, "a false claim of coverage must fail: {output}");
     assert!(output.contains("Blocking"), "{output}");
@@ -192,7 +202,7 @@ fn Test_A_Mirror_That_Exists_Should_Pass_The_Command()
             "#[test]\nfn Test_Every_Table_Should_Be_Declared()\n{\n}\n",
         );
 
-    let (code, output) = tree.Check();
+    let Ran { code, said: output } = tree.Check();
 
     assert_eq!(code, 0, "{output}");
     assert!(output.contains("0 of which can fail a build"), "{output}");
@@ -220,7 +230,7 @@ fn Test_A_Mirror_That_Exists_Should_Still_Pass_Beside_A_File_The_Parser_Refuses(
         )
         .With("broken.rs", &Text_The_Parser_Refuses());
 
-    let (code, output) = tree.Check();
+    let Ran { code, said: output } = tree.Check();
 
     assert_eq!(code, 0, "{output}");
     assert!(output.contains("0 of which can fail a build"), "{output}");
@@ -237,7 +247,7 @@ fn Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing()
 {
     let tree = Tree::New("gap").With("universe.rs", "pub const TABLES: &[&str] = &[];\n");
 
-    let (code, output) = tree.Check();
+    let Ran { code, said: output } = tree.Check();
 
     assert_eq!(code, 0, "{output}");
     assert!(output.contains("Advisory"), "{output}");
@@ -252,7 +262,7 @@ fn Test_A_Tree_With_No_Source_Should_Not_Report_Clean()
 {
     let tree = Tree::New("vacuous").With("README.md", "no rust here\n");
 
-    let (code, output) = tree.Check();
+    let Ran { code, said: output } = tree.Check();
 
     assert_eq!(code, 6, "an empty walk must not share an exit code with success");
     assert!(!output.contains("0 finding(s)"), "{output}");
@@ -272,7 +282,7 @@ fn Test_A_Run_That_Materialised_No_Facts_Should_Not_Exit_Zero()
 {
     let tree = Tree::New("no-facts").With("broken.rs", &Text_The_Parser_Refuses());
 
-    let (code, output) = tree.Check();
+    let Ran { code, said: output } = tree.Check();
 
     assert_eq!(
         code, 6,
@@ -286,7 +296,7 @@ fn Test_A_Run_That_Materialised_No_Facts_Should_Not_Exit_Zero()
 #[test]
 fn Test_A_Root_That_Does_Not_Exist_Should_Be_Unreadable()
 {
-    let (code, _output) = Run(&["check", "--root", "no-such-tree-anywhere-at-all"]);
+    let Ran { code, .. } = Run(&["check", "--root", "no-such-tree-anywhere-at-all"]);
 
     assert_eq!(code, 5);
 }
@@ -296,7 +306,7 @@ fn Test_A_Root_That_Does_Not_Exist_Should_Be_Unreadable()
 #[test]
 fn Test_A_Mistyped_Flag_Should_Be_A_Usage_Error()
 {
-    let (code, _output) = Run(&["check", "--rooot", "."]);
+    let Ran { code, .. } = Run(&["check", "--rooot", "."]);
 
     assert_eq!(code, 2);
 }
@@ -323,7 +333,7 @@ fn Test_A_Mistyped_Flag_Should_Be_A_Usage_Error()
 fn Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build()
 {
     let root = Repository_Root();
-    let (code, output) = Run(&["check", "--root", &root.display().to_string()]);
+    let Ran { code, said: output } = Run(&["check", "--root", &root.display().to_string()]);
 
     assert!(
         output.contains("file(s) examined"),

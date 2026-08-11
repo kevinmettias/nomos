@@ -111,8 +111,18 @@ fn Volumes(root: &Path) -> BTreeMap<String, String>
     return documents;
 }
 
+/// A restored store and the report the restoration produced.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct RestoredStore
+{
+    store: SpecificationStore,
+    report: RestorationReport,
+}
+
 /// Source truth, then the restoration on top of it.
-fn Restored_Store(root: &Path) -> (SpecificationStore, RestorationReport)
+fn Restored_Store(root: &Path) -> RestoredStore
 {
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let documents = Volumes(root);
@@ -150,7 +160,7 @@ fn Restored_Store(root: &Path) -> (SpecificationStore, RestorationReport)
         "the set of names carried by two members changed"
     );
 
-    return (store, report);
+    return RestoredStore { store, report };
 }
 
 #[test]
@@ -162,7 +172,7 @@ fn Test_Every_Family_Should_Restore_The_Count_The_Register_Declares()
         return;
     };
 
-    let (_, report) = Restored_Store(&root);
+    let RestoredStore { report, .. } = Restored_Store(&root);
 
     for (family, id) in MEMBERSHIP
     {
@@ -193,7 +203,7 @@ fn Test_Every_Restored_Member_Should_Resolve_By_Its_Identifier()
         return;
     };
 
-    let (store, report) = Restored_Store(&root);
+    let RestoredStore { store, report } = Restored_Store(&root);
 
     assert!(!report.members.is_empty(), "nothing was restored, so nothing was checked");
 
@@ -218,7 +228,7 @@ fn Test_The_Canonical_Domain_Models_Should_Resolve_By_Name_And_Trace_To_Their_Ro
         return;
     };
 
-    let (store, report) = Restored_Store(&root);
+    let RestoredStore { store, report } = Restored_Store(&root);
 
     for name in NAMED_MODELS
     {
@@ -276,7 +286,7 @@ fn Test_Every_Restored_Member_Should_Carry_A_Lineage_To_What_Produced_It()
         return;
     };
 
-    let (store, report) = Restored_Store(&root);
+    let RestoredStore { store, report } = Restored_Store(&root);
 
     let untraced: Vec<&str> = report
         .members
@@ -311,7 +321,9 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
         return;
     };
 
-    let (mut store, report) = Restored_Store(&root);
+    let RestoredStore {
+        mut store, report
+    } = Restored_Store(&root);
 
     let sections = Parse_Section_Lineage(&Read(&root, "01_authoring/source_lineage/section-lineage.yaml"))
         .expect("the section lineage parses");
@@ -386,7 +398,10 @@ fn Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing()
         return;
     };
 
-    let (mut store, first) = Restored_Store(&root);
+    let RestoredStore {
+        mut store,
+        report: first,
+    } = Restored_Store(&root);
     let nodes = store.Count(Table::Nodes).expect("counts");
     let lineage = store.Count(Table::Lineage).expect("counts");
     let aliases = store.Count(Table::NodeAliases).expect("counts");
@@ -398,5 +413,5 @@ fn Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing()
     assert_eq!(store.Count(Table::Nodes).expect("counts"), nodes);
     assert_eq!(store.Count(Table::Lineage).expect("counts"), lineage);
     assert_eq!(store.Count(Table::NodeAliases).expect("counts"), aliases);
-    assert_eq!(first.members.len(), Restored_Store(&root).1.members.len());
+    assert_eq!(first.members.len(), Restored_Store(&root).report.members.len());
 }

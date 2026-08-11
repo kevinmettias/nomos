@@ -23,8 +23,8 @@ use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity,
 };
 use nomos_integration_tests::{
-    Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Resolved_Configuration, Slice,
-    Walk, SURFACE_CAPABILITY,
+    Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Resolved,
+    Resolved_Configuration, Slice, Walk, SURFACE_CAPABILITY,
 };
 use nomos_lang_rust as rust;
 use nomos_lang_rust_scan as scan;
@@ -792,7 +792,10 @@ fn Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One()
 {
     let corpus = Precision_Corpus();
 
-    let (parsed, how) = Slice::Over(&corpus).Resolved();
+    let Resolved {
+        selection: parsed,
+        applicability: how,
+    } = Slice::Over(&corpus).Resolved();
     assert_eq!(parsed.chosen.provider.As_Str(), rust::PROVIDER);
     assert_eq!(how, Applicability::Supported);
     assert!(
@@ -809,7 +812,7 @@ fn Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One()
             .Accepting(Approximate_Floor())
             .Preferring(scan::PROVIDER)
             .Resolved()
-            .0
+            .selection
             .chosen
             .provider
             .As_Str(),
@@ -829,7 +832,10 @@ fn Test_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback()
 {
     let corpus = Precision_Corpus();
 
-    let (selection, how) = Slice::Over(&corpus).Preferring(scan::PROVIDER).Resolved();
+    let Resolved {
+        selection,
+        applicability: how,
+    } = Slice::Over(&corpus).Preferring(scan::PROVIDER).Resolved();
 
     assert_eq!(
         selection.chosen.provider.As_Str(),
@@ -850,7 +856,7 @@ fn Test_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback()
             .Accepting(Approximate_Floor())
             .Preferring(scan::PROVIDER)
             .Resolved()
-            .1,
+            .applicability,
         Applicability::Supported
     );
 }
@@ -1112,7 +1118,10 @@ fn Test_The_Strongest_Usable_Offer_Should_Answer_Whatever_The_Providers_Are_Call
 {
     let corpus = Precision_Corpus();
 
-    let (selection, how) = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
+    let Resolved {
+        selection,
+        applicability: how,
+    } = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
 
     assert_eq!(
         selection.chosen.provider.As_Str(),
@@ -1166,8 +1175,11 @@ fn Test_A_Lowered_Floor_Should_Make_The_Weaker_Offer_Reachable_Without_Serving_I
 {
     let corpus = Precision_Corpus();
 
-    let (parsed, _) = Slice::Over(&corpus).Resolved();
-    let (lowered, _) = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
+    let parsed = Slice::Over(&corpus).Resolved().selection;
+    let lowered = Slice::Over(&corpus)
+        .Accepting(Approximate_Floor())
+        .Resolved()
+        .selection;
 
     assert_eq!(
         parsed.chosen, lowered.chosen,

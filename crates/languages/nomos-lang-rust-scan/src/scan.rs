@@ -79,7 +79,7 @@ fn Declared_On(raw: &str, line: u32, ordinal: u32) -> Option<ScannedItem>
         return None;
     }
 
-    let (visibility, rest) = Visibility_Of(trimmed);
+    let Declared { visibility, rest } = Visibility_Of(trimmed);
     let (kind, name) = Declaration(rest)?;
 
     return Some(ScannedItem {
@@ -101,13 +101,26 @@ fn Without_Marks(line: &str) -> &str
     return line.trim_start_matches('\u{feff}').trim_start();
 }
 
+/// A line with its leading visibility taken off.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct Declared<'a>
+{
+    visibility: Visibility,
+    rest: &'a str,
+}
+
 /// Splits a leading visibility off a line.
-fn Visibility_Of(line: &str) -> (Visibility, &str)
+fn Visibility_Of(line: &str) -> Declared<'_>
 {
     let Some(rest) = line.strip_prefix("pub")
     else
     {
-        return (Visibility::Private, line);
+        return Declared {
+            visibility: Visibility::Private,
+            rest: line,
+        };
     };
 
     if let Some(restricted) = Restriction_On(rest)
@@ -120,29 +133,35 @@ fn Visibility_Of(line: &str) -> (Visibility, &str)
     let Some(after) = rest.strip_prefix(' ')
     else
     {
-        return (Visibility::Private, line);
+        return Declared {
+            visibility: Visibility::Private,
+            rest: line,
+        };
     };
 
-    return (Visibility::Public, after.trim_start());
+    return Declared {
+        visibility: Visibility::Public,
+        rest: after.trim_start(),
+    };
 }
 
 /// A `pub(crate)`, `pub(super)` or `pub(in path)` restriction, taken textually.
 ///
 /// Textually because a scanner that resolved the path would be claiming to know which
 /// module it is in, and it does not.
-fn Restriction_On(rest: &str) -> Option<(Visibility, &str)>
+fn Restriction_On(rest: &str) -> Option<Declared<'_>>
 {
     let open = rest.strip_prefix('(')?;
     let close = open.find(')')?;
     let scope = open.get(..close)?;
     let after = open.get(close.saturating_add(1)..)?;
 
-    return Some((
-        Visibility::Restricted {
+    return Some(Declared {
+        visibility: Visibility::Restricted {
             scope: scope.trim().to_owned(),
         },
-        after.trim_start(),
-    ));
+        rest: after.trim_start(),
+    });
 }
 
 /// Matches a declaration keyword and the name that follows it.

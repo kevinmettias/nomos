@@ -36,7 +36,10 @@ pub(super) fn Volumes_Under(assembly: &mut Assembly, directory: &Path) -> Option
         return None;
     };
 
-    let (documents, unreadable) = Read_Volumes(entries);
+    let Volumes {
+        documents,
+        unreadable,
+    } = Read_Volumes(entries);
     Note_Unreadable(assembly, directory, &unreadable);
     if documents.is_empty()
     {
@@ -49,8 +52,19 @@ pub(super) fn Volumes_Under(assembly: &mut Assembly, directory: &Path) -> Option
     return Some(documents);
 }
 
+/// What one directory yielded: the documents read, and the paths that would not open.
+///
+/// Named rather than a pair. Both members are collections of text keyed to a path, so a
+/// caller that swapped them would be handed the wrong one by a signature that still
+/// compiles.
+pub(super) struct Volumes
+{
+    pub(super) documents: BTreeMap<String, String>,
+    pub(super) unreadable: Vec<String>,
+}
+
 /// Every markdown document the directory yielded, and the paths that would not open.
-pub(super) fn Read_Volumes(entries: std::fs::ReadDir) -> (BTreeMap<String, String>, Vec<String>)
+pub(super) fn Read_Volumes(entries: std::fs::ReadDir) -> Volumes
 {
     let mut documents: BTreeMap<String, String> = BTreeMap::new();
     let mut unreadable: Vec<String> = Vec::new();
@@ -61,7 +75,10 @@ pub(super) fn Read_Volumes(entries: std::fs::ReadDir) -> (BTreeMap<String, Strin
         Read_Volume(&path, &mut documents, &mut unreadable);
     }
 
-    return (documents, unreadable);
+    return Volumes {
+        documents,
+        unreadable,
+    };
 }
 
 /// One directory entry: a markdown document read, an unreadable one named, anything else

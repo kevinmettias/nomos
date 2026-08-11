@@ -21,7 +21,17 @@ const REFERENCE: &str = "# Reference\n\n## Glossary\n\n\
                          ### G.1 Scenario catalog and coverage\n\nA catalog.\n\n\
                          ### G.2 End-to-end scenario: add a strategy\n\nA scenario.\n";
 
-fn Corpus(documents: &[(&str, &str)]) -> (SpecificationStore, BTreeMap<String, String>)
+/// A store and the markdown it was built from.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+struct Built
+{
+    store: SpecificationStore,
+    documents: BTreeMap<String, String>,
+}
+
+fn Corpus(documents: &[(&str, &str)]) -> Built
 {
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let mut set = BTreeMap::new();
@@ -32,10 +42,13 @@ fn Corpus(documents: &[(&str, &str)]) -> (SpecificationStore, BTreeMap<String, S
         set.insert((*document).to_owned(), (*markdown).to_owned());
     }
 
-    return (store, set);
+    return Built {
+        store,
+        documents: set,
+    };
 }
 
-fn Core() -> (SpecificationStore, BTreeMap<String, String>)
+fn Core() -> Built
 {
     return Corpus(&[("02-core.md", CORE)]);
 }
@@ -148,7 +161,10 @@ fn Test_Numbering_Should_Require_Exactly_Its_Depth()
 #[test]
 fn Test_A_Restored_Concept_Should_Trace_To_Its_Own_Row()
 {
-    let (mut store, documents) = Core();
+    let Built {
+        mut store,
+        documents,
+    } = Core();
 
     let report = Restore(&mut store, "v14.36", &documents).expect("restores");
 
@@ -172,7 +188,10 @@ fn Test_A_Restored_Concept_Should_Trace_To_Its_Own_Row()
 #[test]
 fn Test_A_Restored_Concept_Should_Resolve_By_Its_Authored_Name()
 {
-    let (mut store, documents) = Core();
+    let Built {
+        mut store,
+        documents,
+    } = Core();
     Restore(&mut store, "v14.36", &documents).expect("restores");
 
     assert!(Resolve(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some());
@@ -193,7 +212,10 @@ fn Test_A_Name_Two_Members_Carry_Should_Resolve_To_Neither()
                           | Term | Definition |\n| --- | --- |\n\
                           | WorkspaceContext | The term, not the model. |\n";
 
-    let (mut store, documents) = Corpus(&[("02-core.md", CORE), ("09-reference.md", SHARED)]);
+    let Built {
+        mut store,
+        documents,
+    } = Corpus(&[("02-core.md", CORE), ("09-reference.md", SHARED)]);
 
     let report = Restore(&mut store, "v14.36", &documents).expect("restores");
 
@@ -212,7 +234,10 @@ fn Test_A_Name_Two_Members_Carry_Should_Resolve_To_Neither()
 #[test]
 fn Test_Restoring_Twice_Should_Change_Nothing()
 {
-    let (mut store, documents) = Core();
+    let Built {
+        mut store,
+        documents,
+    } = Core();
 
     let first = Restore(&mut store, "v14.36", &documents).expect("restores");
     let nodes = store.Count(nomos_spec_store::Table::Nodes).expect("counts");
@@ -243,7 +268,10 @@ fn Test_Restoring_A_Document_The_Store_Does_Not_Hold_Should_Be_Refused()
 #[test]
 fn Test_A_Contested_Alias_Should_Be_Reported_Rather_Than_Silently_Repointed()
 {
-    let (mut store, documents) = Core();
+    let Built {
+        mut store,
+        documents,
+    } = Core();
     let other = store
         .Upsert_Node("OTHER-001", "concept", "canonical", "record", "Something else")
         .expect("mints");
@@ -268,7 +296,10 @@ fn Test_A_Contested_Alias_Should_Be_Reported_Rather_Than_Silently_Repointed()
 #[test]
 fn Test_The_Summary_Should_Name_Members_Rather_Than_Only_Count_Them()
 {
-    let (mut store, documents) = Core();
+    let Built {
+        mut store,
+        documents,
+    } = Core();
     let report = Restore(&mut store, "v14.36", &documents).expect("restores");
 
     assert!(report.Summary().contains("WorkspaceContext"), "{}", report.Summary());

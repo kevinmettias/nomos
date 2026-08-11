@@ -43,7 +43,7 @@ pub use determinism::{
     Verification, Verify,
 };
 pub use slice::{
-    Approximate_Floor, Edited, Parsed_Floor, Recompute, RunReport, Slice,
+    Approximate_Floor, Edited, Parsed_Floor, Recompute, Resolved, RunReport, Slice,
 };
 pub use surface::{
     Decode_Surface, Public_Items, Surface, CAPABILITY as SURFACE_CAPABILITY,

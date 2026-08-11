@@ -20,7 +20,7 @@ pub(super) fn Reach_Of(universe: &DeclaredUniverse, checks: &BTreeSet<String>) -
     let enforcer = EnforcerRef::Check {
         name: claimed.clone(),
     };
-    let (computed, breaches) = Resolution(claimed, checks.contains(claimed));
+    let Resolved { computed, breaches } = Resolution(claimed, checks.contains(claimed));
 
     return EnforcementReach {
         rule: RuleId::New(COMPLETENESS_MIRROR),
@@ -48,18 +48,31 @@ pub(super) fn Reviewed() -> EnforcementReach
     };
 }
 
+/// What a claimed name amounts to, and what it breached in amounting to that.
+///
+/// Named rather than a pair, so that a caller reading one member is reading a name and
+/// not a position.
+pub(super) struct Resolved
+{
+    pub(super) computed: GateCategory,
+    pub(super) breaches: Vec<EnforcementBreach>,
+}
+
 /// What a claimed name amounts to, given whether the index holds it.
-pub(super) fn Resolution(claimed: &str, resolves: bool) -> (GateCategory, Vec<EnforcementBreach>)
+pub(super) fn Resolution(claimed: &str, resolves: bool) -> Resolved
 {
     if resolves
     {
-        return (GateCategory::Blocking, Vec::new());
+        return Resolved {
+            computed: GateCategory::Blocking,
+            breaches: Vec::new(),
+        };
     }
 
-    return (
-        GateCategory::Unreachable,
-        vec![EnforcementBreach::Phantom {
+    return Resolved {
+        computed: GateCategory::Unreachable,
+        breaches: vec![EnforcementBreach::Phantom {
             name: claimed.to_owned(),
         }],
-    );
+    };
 }
