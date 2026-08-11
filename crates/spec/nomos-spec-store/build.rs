@@ -84,6 +84,11 @@ fn Registered(directory: &Path, root: &Path) -> Vec<Registration>
     return match Registrations_In(directory, root)
     {
         Ok(registrations) => registrations,
+        // rust-panic: allow: this is a build script, and the invariant is that
+        // `GOVERNING_RECORD_IDS` names every registered record. There is no recoverable path:
+        // the table is a compile-time constant, so a registration that cannot be read would be
+        // compiled away into a record that has silently stopped governing. Stopping the build
+        // is the defect being surfaced, not a failure to handle one.
         Err(error) => panic!("{}", error.Describe()),
     };
 }

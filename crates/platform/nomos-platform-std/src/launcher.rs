@@ -77,6 +77,9 @@ fn Drain_Into<R: Read>(source: &mut R, sink: &Mutex<Vec<u8>>)
 
 impl Drain
 {
+    // rust-lifetime: allow: `std::thread::spawn` requires it. The reader is moved onto a
+    // detached thread that outlives this call, so no borrow of the caller can reach it and
+    // `'static` is the bound the standard library demands rather than one chosen here.
     /// Starts reading `source` on a thread of its own.
     fn Reading<R: Read + Send + 'static>(mut source: R) -> Self
     {
@@ -87,6 +90,10 @@ impl Drain
 
         std::thread::spawn(move || {
             Drain_Into(&mut source, &sink);
+            // atomic-ordering: allow: pairs with the `Acquire` load in `Finished`. Every write
+            // `Drain_Into` made into `collected` through the mutex happens before this store, so a
+            // reader that observes `true` is guaranteed to observe the drained bytes as well. A
+            // `Relaxed` store would publish the flag without the buffer behind it.
             reached_end.store(true, Ordering::Release);
         });
 
@@ -99,6 +106,9 @@ impl Drain
     /// Whether the reader reached end of file.
     fn Finished(&self) -> bool
     {
+        // atomic-ordering: allow: pairs with the `Release` store in `Reading`. Reading `true` here
+        // establishes happens-before against the draining thread, so the caller that then takes
+        // `collected` sees the complete buffer rather than a prefix of it.
         return self.finished.load(Ordering::Acquire);
     }
 

@@ -262,30 +262,33 @@ fn Write_Values(
     let mut previous: std::collections::BTreeMap<&str, String> =
         std::collections::BTreeMap::new();
 
+    let mut insert = transaction
+        .prepare(
+            "INSERT INTO submission_values
+                 (submission_uid, field, ordinal, origin, value, value_hash,
+                  supersedes_hash, recorded_at)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+             ON CONFLICT (submission_uid, field, ordinal) DO NOTHING",
+        )
+        .map_err(|error| return StoreError::Sql(error.to_string()))?;
+
     for value in &submission.values
     {
         let field = value.field.as_str();
         let ordinal = ordinals.entry(field).or_insert(0);
         let hash = ContentHash::Of(&value.value).As_Str().to_owned();
 
-        transaction
-            .execute(
-                "INSERT INTO submission_values
-                     (submission_uid, field, ordinal, origin, value, value_hash,
-                      supersedes_hash, recorded_at)
-                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
-                 ON CONFLICT (submission_uid, field, ordinal) DO NOTHING",
-                rusqlite::params![
-                    submission_uid,
-                    field,
-                    *ordinal,
-                    value.origin.Label(),
-                    value.value,
-                    hash,
-                    previous.get(field),
-                    Recorded_At(),
-                ],
-            )
+        insert
+            .execute(rusqlite::params![
+                submission_uid,
+                field,
+                *ordinal,
+                value.origin.Label(),
+                value.value,
+                hash,
+                previous.get(field),
+                Recorded_At(),
+            ])
             .map_err(|error| return StoreError::Sql(error.to_string()))?;
 
         previous.insert(field, hash);
@@ -302,29 +305,32 @@ fn Write_Gaps(
     submission: &Submission,
 ) -> Result<(), StoreError>
 {
+    let mut insert = transaction
+        .prepare(
+            "INSERT INTO submission_gaps
+                 (submission_uid, ordinal, question, blocks, severity, closed_by)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+             ON CONFLICT (submission_uid, ordinal) DO UPDATE SET
+                 question = excluded.question,
+                 blocks = excluded.blocks,
+                 severity = excluded.severity,
+                 closed_by = excluded.closed_by",
+        )
+        .map_err(|error| return StoreError::Sql(error.to_string()))?;
+
     for (index, gap) in submission.gaps.iter().enumerate()
     {
         let ordinal = u32::try_from(index).unwrap_or(u32::MAX);
 
-        transaction
-            .execute(
-                "INSERT INTO submission_gaps
-                     (submission_uid, ordinal, question, blocks, severity, closed_by)
-                 VALUES (?1, ?2, ?3, ?4, ?5, ?6)
-                 ON CONFLICT (submission_uid, ordinal) DO UPDATE SET
-                     question = excluded.question,
-                     blocks = excluded.blocks,
-                     severity = excluded.severity,
-                     closed_by = excluded.closed_by",
-                rusqlite::params![
-                    submission_uid,
-                    ordinal,
-                    gap.question,
-                    gap.blocks.join("\n"),
-                    gap.severity.Label(),
-                    gap.closed_by,
-                ],
-            )
+        insert
+            .execute(rusqlite::params![
+                submission_uid,
+                ordinal,
+                gap.question,
+                gap.blocks.join("\n"),
+                gap.severity.Label(),
+                gap.closed_by,
+            ])
             .map_err(|error| return StoreError::Sql(error.to_string()))?;
     }
 

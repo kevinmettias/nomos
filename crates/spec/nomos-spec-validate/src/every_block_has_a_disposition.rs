@@ -2,9 +2,10 @@
 
 use crate::offending::Traced;
 use crate::offending::Undisposed;
+use crate::offending::Undisposed_Statement;
 use crate::rule_outcome::RuleOutcome;
 use crate::rule::Rule;
-use nomos_spec_store::SpecificationStore;
+use nomos_spec_store::{SpecificationStore, Table};
 /// The rule that would have caught v15.0's 282 dropped table rows — at the granularity
 /// v14 recorded, which is the block. A row lost from inside a preserved table block does
 /// not violate this rule, because v14's segmenter never saw rows as blocks.
@@ -27,9 +28,12 @@ impl Rule for EveryBlockHasADisposition
         return Undisposed(
             store,
             &Traced {
-                table: "source_blocks",
-                lineage: "source_block_uid",
-                omission: "source_block_uid",
+                table: Table::SourceBlocks,
+                offenders: Undisposed_Statement!(
+                    "source_blocks",
+                    "source_block_uid",
+                    "source_block_uid"
+                ),
                 label: "block",
             },
         );

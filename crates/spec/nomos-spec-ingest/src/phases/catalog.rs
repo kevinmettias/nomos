@@ -19,14 +19,20 @@ pub(super) fn Record_Aliases(
     report: &mut CatalogReport,
 ) -> Result<(), IngestError>
 {
+    // The statement is prepared once and executed per alias, rather than prepared inside the
+    // loop. Preparing is the parse and plan step, and it does not depend on the alias, so
+    // hoisting it does the work once for the entity instead of once for every name it answers
+    // to. The execute must stay per alias: this is a local file with no batch form that would
+    // let one crossing insert them all.
+    let mut insert = store
+        .Connection()
+        .prepare("INSERT OR IGNORE INTO node_aliases (alias, node_uid) VALUES (?1, ?2)")
+        .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
+
     for alias in &entity.aliases
     {
-        store
-            .Connection()
-            .execute(
-                "INSERT OR IGNORE INTO node_aliases (alias, node_uid) VALUES (?1, ?2)",
-                rusqlite::params![alias, node_uid],
-            )
+        insert
+            .execute(rusqlite::params![alias, node_uid])
             .map_err(|error| IngestError::Store(StoreError::Sql(error.to_string())))?;
         report.aliases = report.aliases.saturating_add(1);
     }

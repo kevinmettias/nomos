@@ -4,7 +4,7 @@ use crate::offending::Offending;
 use crate::violation::Violation;
 use crate::rule_outcome::RuleOutcome;
 use crate::rule::Rule;
-use nomos_spec_store::SpecificationStore;
+use nomos_spec_store::{SpecificationStore, Table};
 /// Statements with no preserved lineage row reaching any source block.
 ///
 /// The disposition has to be one of the two preserving ones. A statement whose only lineage
@@ -39,7 +39,7 @@ impl Rule for EveryStatementTracesToSource
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
-        return Offending(store, "normative_statements", UNTRACED, |row| {
+        return Offending(store, Table::NormativeStatements, UNTRACED, |row| {
             let id: String = row.get(0)?;
             return Ok(Violation {
                 subject: id,

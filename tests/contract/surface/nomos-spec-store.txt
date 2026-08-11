@@ -5,6 +5,7 @@ pub const fn nomos_spec_store::Kind_Label(kind: BlockKind) -> &'static str
 pub const fn nomos_spec_store::PathMatch::Label(self) -> &'static str
 pub const fn nomos_spec_store::Table::All() -> &'static [Self]
 pub const fn nomos_spec_store::Table::Name(self) -> &'static str
+pub const fn nomos_spec_store::Table::Tally_Sql(self) -> &'static str
 pub const fn nomos_spec_store::Transport_Origin() -> Origin
 pub const nomos_spec_store::AUTHORED: &str
 pub const nomos_spec_store::EXTERNAL: &str

@@ -280,9 +280,24 @@ pub(crate) fn Write_Source_Blocks(
                 ])?;
             }
 
-            let mut block_uid = connection.prepare(
-                "SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal = ?2",
-            )?;
+            // Every block's uid in one crossing, indexed by ordinal. Asking per block cost one
+            // round trip for each row of the document to learn surrogates the same document
+            // already decides as a set.
+            let mut block_uids: std::collections::BTreeMap<u32, i64> =
+                std::collections::BTreeMap::new();
+            {
+                let mut every_uid = connection.prepare(
+                    "SELECT ordinal, uid FROM source_blocks WHERE document_uid = ?1",
+                )?;
+                let found = every_uid.query_map(params![document_uid], |row| {
+                    return Ok((row.get::<_, u32>(0)?, row.get::<_, i64>(1)?));
+                })?;
+                for entry in found
+                {
+                    let (ordinal, uid) = entry?;
+                    block_uids.insert(ordinal, uid);
+                }
+            }
             // Same reasoning as the blocks above: update in place rather than REPLACE, so
             // a re-ingest does not hand a row a new uid.
             let mut insert_row = connection.prepare(
@@ -307,8 +322,14 @@ pub(crate) fn Write_Source_Blocks(
                     continue;
                 }
 
-                let uid: i64 =
-                    block_uid.query_row(params![document_uid, block.ordinal], |row| row.get(0))?;
+                // The insert above put every block in, so a missing ordinal is a broken
+                // invariant rather than a row that has not arrived yet, and it says so.
+                let uid: i64 = *block_uids.get(&block.ordinal).ok_or_else(|| {
+                    return StoreError::Sql(format!(
+                        "source block {} of document {document_uid} has no uid after insertion",
+                        block.ordinal
+                    ));
+                })?;
 
                 for row in &rows
                 {
@@ -713,8 +734,9 @@ impl SpecificationStore
     /// Returns [`StoreError`] on any SQL failure.
     pub fn Count(&self, table: Table) -> Result<u32, StoreError>
     {
-        let sql = format!("SELECT count(*) FROM {}", table.Name());
-        return Ok(self.connection.query_row(&sql, [], |row| row.get(0))?);
+        return Ok(self
+            .connection
+            .query_row(table.Tally_Sql(), [], |row| row.get(1))?);
     }
 
     #[must_use]
@@ -778,6 +800,81 @@ impl Table
             Self::Submissions => "submissions",
             Self::SubmissionValues => "submission_values",
             Self::SubmissionGaps => "submission_gaps",
+        };
+    }
+
+    /// The statement counting this table's rows, labelled with the table's own name.
+    ///
+    /// Written out per variant rather than interpolated from [`Table::Name`] at the call
+    /// site. A table identifier occupies no value position, so no driver can bind one and
+    /// there is no parameterized form to prefer; the only way to keep the statement out of
+    /// runtime string building is for each variant to carry its own. The label is selected
+    /// rather than assumed from row order, because a compound `SELECT` without `ORDER BY`
+    /// is not promised to come back in the order its arms were written.
+    #[must_use]
+    pub const fn Tally_Sql(self) -> &'static str
+    {
+        return match self
+        {
+            Self::Blobs => "SELECT 'blobs' AS which, count(*) AS tally FROM blobs",
+            Self::SourceDocuments =>
+            {
+                "SELECT 'source_documents' AS which, count(*) AS tally FROM source_documents"
+            },
+            Self::SourceHeadings =>
+            {
+                "SELECT 'source_headings' AS which, count(*) AS tally FROM source_headings"
+            },
+            Self::SourceBlocks =>
+            {
+                "SELECT 'source_blocks' AS which, count(*) AS tally FROM source_blocks"
+            },
+            Self::SourceTableRows =>
+            {
+                "SELECT 'source_table_rows' AS which, count(*) AS tally FROM source_table_rows"
+            },
+            Self::Suites => "SELECT 'suites' AS which, count(*) AS tally FROM suites",
+            Self::Nodes => "SELECT 'nodes' AS which, count(*) AS tally FROM nodes",
+            Self::NodeAliases =>
+            {
+                "SELECT 'node_aliases' AS which, count(*) AS tally FROM node_aliases"
+            },
+            Self::NodeHistory =>
+            {
+                "SELECT 'node_history' AS which, count(*) AS tally FROM node_history"
+            },
+            Self::Relations => "SELECT 'relations' AS which, count(*) AS tally FROM relations",
+            Self::RelationTypes =>
+            {
+                "SELECT 'relation_types' AS which, count(*) AS tally FROM relation_types"
+            },
+            Self::NormativeStatements =>
+            {
+                "SELECT 'normative_statements' AS which, count(*) AS tally \
+                 FROM normative_statements"
+            },
+            Self::Lineage => "SELECT 'lineage' AS which, count(*) AS tally FROM lineage",
+            Self::Omissions => "SELECT 'omissions' AS which, count(*) AS tally FROM omissions",
+            Self::RecordFrontMatter =>
+            {
+                "SELECT 'record_front_matter' AS which, count(*) AS tally FROM record_front_matter"
+            },
+            Self::RecordRelations =>
+            {
+                "SELECT 'record_relations' AS which, count(*) AS tally FROM record_relations"
+            },
+            Self::Submissions =>
+            {
+                "SELECT 'submissions' AS which, count(*) AS tally FROM submissions"
+            },
+            Self::SubmissionValues =>
+            {
+                "SELECT 'submission_values' AS which, count(*) AS tally FROM submission_values"
+            },
+            Self::SubmissionGaps =>
+            {
+                "SELECT 'submission_gaps' AS which, count(*) AS tally FROM submission_gaps"
+            },
         };
     }
 

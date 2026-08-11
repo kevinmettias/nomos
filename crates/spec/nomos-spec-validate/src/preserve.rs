@@ -1,5 +1,7 @@
 use crate::offending::Traced;
 use crate::offending::Undisposed;
+use crate::offending::Undisposed_Statement;
+use nomos_spec_store::Table;
 use crate::every_statement_traces_to_source::EveryStatementTracesToSource;
 use crate::changed_wording_is_justified::ChangedWordingIsJustified;
 use crate::every_block_has_a_disposition::EveryBlockHasADisposition;
@@ -26,9 +28,12 @@ impl Rule for EveryHeadingHasADisposition
         return Undisposed(
             store,
             &Traced {
-                table: "source_headings",
-                lineage: "source_heading_uid",
-                omission: "source_heading_uid",
+                table: Table::SourceHeadings,
+                offenders: Undisposed_Statement!(
+                    "source_headings",
+                    "source_heading_uid",
+                    "source_heading_uid"
+                ),
                 label: "heading",
             },
         );

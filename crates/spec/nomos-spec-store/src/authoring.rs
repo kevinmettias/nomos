@@ -1004,6 +1004,15 @@ fn Write_Headings(
 ) -> Result<u32, StoreError>
 {
     let mut written = 0_u32;
+    let mut insert_heading = connection.prepare(
+        "INSERT OR IGNORE INTO source_headings (document_uid, ordinal, depth, title)
+         VALUES (?1, ?2, ?3, ?4)",
+    )?;
+    let mut dispose_heading = connection.prepare(
+        "INSERT OR IGNORE INTO lineage (source_heading_uid, disposition, target_node_uid)
+         SELECT uid, ?4, ?5 FROM source_headings
+         WHERE document_uid = ?1 AND title = ?2 AND depth = ?3",
+    )?;
 
     for block in blocks
         .iter()
@@ -1012,28 +1021,19 @@ fn Write_Headings(
         let depth = block.text.chars().take_while(|character| return *character == '#').count();
         let title = block.text.trim_start_matches('#').trim();
 
-        connection.execute(
-            "INSERT OR IGNORE INTO source_headings (document_uid, ordinal, depth, title)
-             VALUES (?1, ?2, ?3, ?4)",
-            params![
-                document_uid,
-                block.ordinal,
-                i64::try_from(depth).unwrap_or(0),
-                title
-            ],
-        )?;
-        connection.execute(
-            "INSERT OR IGNORE INTO lineage (source_heading_uid, disposition, target_node_uid)
-             SELECT uid, ?4, ?5 FROM source_headings
-             WHERE document_uid = ?1 AND title = ?2 AND depth = ?3",
-            params![
-                document_uid,
-                title,
-                i64::try_from(depth).unwrap_or(0),
-                Disposition::PreservedVerbatim.Label(),
-                node_uid
-            ],
-        )?;
+        insert_heading.execute(params![
+            document_uid,
+            block.ordinal,
+            i64::try_from(depth).unwrap_or(0),
+            title
+        ])?;
+        dispose_heading.execute(params![
+            document_uid,
+            title,
+            i64::try_from(depth).unwrap_or(0),
+            Disposition::PreservedVerbatim.Label(),
+            node_uid
+        ])?;
 
         written = written.saturating_add(1);
     }
@@ -1049,19 +1049,20 @@ fn Dispose_Blocks(
     blocks: &[SourceBlock],
 ) -> Result<(), StoreError>
 {
+    let mut dispose = connection.prepare(
+        "INSERT OR IGNORE INTO lineage (source_block_uid, disposition, target_node_uid)
+         SELECT uid, ?3, ?4 FROM source_blocks
+         WHERE document_uid = ?1 AND ordinal = ?2",
+    )?;
+
     for block in blocks
     {
-        connection.execute(
-            "INSERT OR IGNORE INTO lineage (source_block_uid, disposition, target_node_uid)
-             SELECT uid, ?3, ?4 FROM source_blocks
-             WHERE document_uid = ?1 AND ordinal = ?2",
-            params![
-                document_uid,
-                block.ordinal,
-                Disposition::PreservedVerbatim.Label(),
-                node_uid
-            ],
-        )?;
+        dispose.execute(params![
+            document_uid,
+            block.ordinal,
+            Disposition::PreservedVerbatim.Label(),
+            node_uid
+        ])?;
     }
 
     return Ok(());
@@ -1113,15 +1114,16 @@ fn Write_Declared_Relations(
         params![document_uid],
     )?;
 
+    let mut insert = connection.prepare(
+        "INSERT INTO record_relations (document_uid, ordinal, target, relation)
+         VALUES (?1, ?2, ?3, ?4)",
+    )?;
+
     let mut ordinal = 0_u32;
     for relation in relations
     {
         ordinal = ordinal.saturating_add(1);
-        connection.execute(
-            "INSERT INTO record_relations (document_uid, ordinal, target, relation)
-             VALUES (?1, ?2, ?3, ?4)",
-            params![document_uid, ordinal, relation.target, relation.relation],
-        )?;
+        insert.execute(params![document_uid, ordinal, relation.target, relation.relation])?;
     }
 
     return Ok(ordinal);
@@ -1251,21 +1253,33 @@ fn Prune_Blocks_Beyond(
         ))));
     }
 
-    for statement in [
-        "DELETE FROM lineage WHERE source_table_row_uid IN (
-             SELECT r.uid FROM source_table_rows r
-             JOIN source_blocks b ON b.uid = r.source_block_uid
-             WHERE b.document_uid = ?1 AND b.ordinal > ?2)",
-        "DELETE FROM lineage WHERE source_block_uid IN (
-             SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
-        "DELETE FROM source_table_rows WHERE source_block_uid IN (
-             SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
-    ]
-    {
-        connection
-            .execute(statement, params![document_uid, keep])
-            .map_err(StoreError::from)?;
-    }
+    // Written out rather than iterated over a list. These are three different statements run
+    // once each, in an order the foreign keys require — a row's lineage before the row, and
+    // both before the block they hang from — and a loop said "repeat this" about three steps
+    // that are not repetitions of one another.
+    connection
+        .execute(
+            "DELETE FROM lineage WHERE source_table_row_uid IN (
+                 SELECT r.uid FROM source_table_rows r
+                 JOIN source_blocks b ON b.uid = r.source_block_uid
+                 WHERE b.document_uid = ?1 AND b.ordinal > ?2)",
+            params![document_uid, keep],
+        )
+        .map_err(StoreError::from)?;
+    connection
+        .execute(
+            "DELETE FROM lineage WHERE source_block_uid IN (
+                 SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
+            params![document_uid, keep],
+        )
+        .map_err(StoreError::from)?;
+    connection
+        .execute(
+            "DELETE FROM source_table_rows WHERE source_block_uid IN (
+                 SELECT uid FROM source_blocks WHERE document_uid = ?1 AND ordinal > ?2)",
+            params![document_uid, keep],
+        )
+        .map_err(StoreError::from)?;
 
     let removed = connection
         .execute(

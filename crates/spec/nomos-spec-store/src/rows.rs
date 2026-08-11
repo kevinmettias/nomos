@@ -1,10 +1,14 @@
-//! Counting table rows, one query per number.
+//! Counting table rows, each number its own measurement.
 //!
 //! Every count the regression report carries is a line count under a looser definition
 //! than the thing it names — 282 pipe lines for 258 non-separator rows, 30 pipe lines for
 //! 28 domain models. The fix is not a better definition; it is a census where each number
-//! comes from its own query over a typed column, so no caller has to subtract one figure
-//! from another and hope the two were measured the same way.
+//! comes from its own aggregate over a typed column, so no caller has to subtract one
+//! figure from another and hope the two were measured the same way.
+//!
+//! The aggregates share one scan rather than one query each. That is a change in how the
+//! numbers are fetched and not in what they mean: `non_separator` is still counted, never
+//! derived from `lines` and `separator`, which is the property this module exists to keep.
 
 use crate::store::StoreError;
 use rusqlite::Connection;
@@ -26,21 +30,55 @@ pub enum RowScope
     },
 }
 
+/// One scope's whole census statement, joined at COMPILE time.
+///
+/// `concat!` joins string literals into a constant, so a scope carries a finished statement
+/// rather than a predicate woven into a template at runtime — there is no point at which
+/// this SQL is a value the program built. The shared select list is written once here
+/// instead of once per scope.
+macro_rules! Census_Statement
+{
+    ($predicate:literal) =>
+    {
+        concat!(
+            "SELECT count(*),
+                    coalesce(sum(line.kind = 'header'), 0),
+                    coalesce(sum(line.kind = 'content'), 0),
+                    coalesce(sum(line.kind = 'separator'), 0),
+                    coalesce(sum(line.kind <> 'separator'), 0)
+             FROM source_table_rows line
+             JOIN source_blocks block ON block.uid = line.source_block_uid
+             WHERE ",
+            $predicate
+        )
+    };
+}
+
 impl RowScope
 {
-    fn Predicate(self) -> (&'static str, Vec<i64>)
+    const fn Statement(self) -> &'static str
     {
         return match self
         {
-            Self::Everything => ("1 = 1", Vec::new()),
-            Self::Document(uid) => ("block.document_uid = ?1", vec![uid]),
+            Self::Everything => Census_Statement!("1 = 1"),
+            Self::Document(_) => Census_Statement!("block.document_uid = ?1"),
+            Self::Table { .. } =>
+            {
+                Census_Statement!("line.source_block_uid = ?1 AND line.table_ordinal = ?2")
+            },
+        };
+    }
+
+    fn Arguments(self) -> Vec<i64>
+    {
+        return match self
+        {
+            Self::Everything => Vec::new(),
+            Self::Document(uid) => vec![uid],
             Self::Table {
                 block_uid,
                 table_ordinal,
-            } => (
-                "line.source_block_uid = ?1 AND line.table_ordinal = ?2",
-                vec![block_uid, i64::from(table_ordinal)],
-            ),
+            } => vec![block_uid, i64::from(table_ordinal)],
         };
     }
 }
@@ -48,7 +86,7 @@ impl RowScope
 /// The counts, each measured separately.
 ///
 /// `lines` and `non_separator` are not derived from the other fields. They are their own
-/// queries, so a caller reporting "282 pipe lines, 258 non-separator" is quoting two
+/// aggregates, so a caller reporting "282 pipe lines, 258 non-separator" is quoting two
 /// measurements rather than one measurement and one subtraction.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct RowCensus
@@ -67,27 +105,19 @@ pub struct RowCensus
 /// Returns [`StoreError`] on any SQL failure.
 pub fn Census(connection: &Connection, scope: RowScope) -> Result<RowCensus, StoreError>
 {
-    return Ok(RowCensus {
-        lines: Count(connection, scope, "1 = 1")?,
-        header: Count(connection, scope, "line.kind = 'header'")?,
-        content: Count(connection, scope, "line.kind = 'content'")?,
-        separator: Count(connection, scope, "line.kind = 'separator'")?,
-        non_separator: Count(connection, scope, "line.kind <> 'separator'")?,
-    });
-}
-
-fn Count(connection: &Connection, scope: RowScope, kind: &str) -> Result<u32, StoreError>
-{
-    let (predicate, arguments) = scope.Predicate();
-    let sql = format!(
-        "SELECT count(*) FROM source_table_rows line
-         JOIN source_blocks block ON block.uid = line.source_block_uid
-         WHERE ({predicate}) AND ({kind})"
-    );
-
-    return Ok(connection.query_row(&sql, rusqlite::params_from_iter(arguments), |row| {
-        row.get(0)
-    })?);
+    return Ok(connection.query_row(
+        scope.Statement(),
+        rusqlite::params_from_iter(scope.Arguments()),
+        |row| {
+            return Ok(RowCensus {
+                lines: row.get(0)?,
+                header: row.get(1)?,
+                content: row.get(2)?,
+                separator: row.get(3)?,
+                non_separator: row.get(4)?,
+            });
+        },
+    )?);
 }
 
 #[cfg(test)]

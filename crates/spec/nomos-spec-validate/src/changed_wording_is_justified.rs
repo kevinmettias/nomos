@@ -4,7 +4,7 @@ use crate::offending::Offending;
 use crate::violation::Violation;
 use crate::rule_outcome::RuleOutcome;
 use crate::rule::Rule;
-use nomos_spec_store::SpecificationStore;
+use nomos_spec_store::{SpecificationStore, Table};
 /// Statements that claim to supersede a hash with no history event saying they changed.
 const UNJUSTIFIED: &str = "SELECT s.statement_id
      FROM normative_statements s
@@ -32,7 +32,7 @@ impl Rule for ChangedWordingIsJustified
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
-        return Offending(store, "normative_statements", UNJUSTIFIED, |row| {
+        return Offending(store, Table::NormativeStatements, UNJUSTIFIED, |row| {
             let id: String = row.get(0)?;
             return Ok(Violation {
                 subject: id,
