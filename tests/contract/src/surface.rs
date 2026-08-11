@@ -73,42 +73,22 @@ pub fn Public_Surface(package: &str, root: &Path) -> Option<Surface>
     {
         return None;
     }
-
     let mut modules = BTreeMap::new();
     Load_Module(&entry, &[], &mut modules);
-
     let identifier = Crate_Identifier(package);
     let mut declarations = BTreeSet::new();
     let mut unresolved = BTreeSet::new();
-
-    for (path, module) in &modules
+    let mut emitting = Emitting {
+        into: &mut declarations,
+        unresolved: &mut unresolved,
+    };
+    for path in modules.keys()
     {
-        if !module.exported
-        {
-            continue;
-        }
-
-        let prefix = Prefixed(&identifier, path);
-        for item in &module.items
-        {
-            Emit(item, &prefix, &mut declarations);
-        }
-
-        for re_export in &module.re_exports
-        {
-            Emit_Re_Export(
-                re_export,
-                &identifier,
-                Tree {
-                    from: path,
-                    modules: &modules,
-                },
-                &mut Emitting {
-                    into: &mut declarations,
-                    unresolved: &mut unresolved,
-                },
-            );
-        }
+        let tree = Tree {
+            from: path,
+            modules: &modules,
+        };
+        Emit_Module(&identifier, tree, &mut emitting);
     }
 
     return Some(Surface {
@@ -116,6 +96,29 @@ pub fn Public_Surface(package: &str, root: &Path) -> Option<Surface>
         declarations: declarations.into_iter().collect(),
         unresolved: unresolved.into_iter().collect(),
     });
+}
+
+/// Everything one exported module contributes: its own declarations, then its re-exports.
+///
+/// A module that is not exported contributes nothing, and one the tree does not hold cannot
+/// be asked.
+fn Emit_Module(identifier: &str, tree: Tree<'_>, emitting: &mut Emitting<'_>)
+{
+    let Some(module) = tree.modules.get(tree.from).filter(|held| return held.exported)
+    else
+    {
+        return;
+    };
+    let prefix = Prefixed(identifier, tree.from);
+
+    for item in &module.items
+    {
+        Emit(item, &prefix, emitting.into);
+    }
+    for re_export in &module.re_exports
+    {
+        Emit_Re_Export(re_export, identifier, tree, emitting);
+    }
 }
 
 /// The path a declaration in `module` is written under.
@@ -160,26 +163,61 @@ struct Item
 /// Reads a module file and every module it declares, into `into`.
 fn Load_Module(file: &Path, path: &[String], into: &mut BTreeMap<Vec<String>, Module>)
 {
+    let cleaned = Readable(file);
+    let (mut module, children) = Scanned(&cleaned, path, into);
+    let previously_exported = into.get(path).is_some_and(|held| return held.exported);
+
+    module.exported = module.exported || previously_exported;
+    let exported = module.exported;
+    into.insert(path.to_vec(), module);
+
+    let directory = Module_Directory(file, path);
+    for (name, is_public) in children
+    {
+        let child = Child {
+            name,
+            exported: exported && is_public,
+        };
+        Load_Child(&directory, path, child, into);
+    }
+}
+
+/// A module file's text, with test module bodies and then comments blanked in place.
+///
+/// Blanked rather than removed so every byte offset still means the same place. Comments have
+/// to go: this workspace documents almost every item, and a doc comment reading "/// Returns
+/// the pub fn's answer" is prose that a scanner looking for declarations would otherwise take
+/// at its word.
+///
+/// # Panics
+///
+/// Panics if the file cannot be read.
+fn Readable(file: &Path) -> String
+{
     let text = std::fs::read_to_string(file)
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", file.display()));
-    // Test module bodies and then comments, both blanked in place so every byte offset
-    // still means the same place. Comments have to go: this workspace documents almost
-    // every item, and a doc comment reading "/// Returns the pub fn's answer" is prose
-    // that a scanner looking for declarations would otherwise take at its word.
     let without_tests = Without_Test_Modules(&text);
-    let cleaned = Without_Comments(&without_tests, &Scan(&without_tests).comment);
-    let masks = Scan(&cleaned);
 
+    return Without_Comments(&without_tests, &Scan(&without_tests).comment);
+}
+
+/// One module's own declarations, and the child modules it names.
+fn Scanned(
+    cleaned: &str,
+    path: &[String],
+    into: &mut BTreeMap<Vec<String>, Module>,
+) -> (Module, Vec<(String, bool)>)
+{
+    let masks = Scan(cleaned);
     let mut module = Module {
         // The root is exported by definition; a child's flag is set by its parent below.
         exported: path.is_empty(),
         ..Module::default()
     };
     let mut children: Vec<(String, bool)> = Vec::new();
-
     Walk(
         Source {
-            text: &cleaned,
+            text: cleaned,
             masks: &masks,
         },
         (0, cleaned.len()),
@@ -192,34 +230,44 @@ fn Load_Module(file: &Path, path: &[String], into: &mut BTreeMap<Vec<String>, Mo
         },
     );
 
-    let previously_exported = into.get(path).is_some_and(|held| return held.exported);
-    module.exported = module.exported || previously_exported;
-    let exported = module.exported;
-    into.insert(path.to_vec(), module);
+    return (module, children);
+}
 
-    let directory = Module_Directory(file, path);
-    for (name, is_public) in children
+/// A child module as its parent declares it: its name, and whether the chain of `mod`
+/// declarations from the crate root down to it is public the whole way.
+struct Child
+{
+    name: String,
+    exported: bool,
+}
+
+/// Loads one child module, whether or not a file backs it.
+fn Load_Child(
+    directory: &Path,
+    path: &[String],
+    child: Child,
+    into: &mut BTreeMap<Vec<String>, Module>,
+)
+{
+    let Child { name, exported } = child;
+    let mut child_path = path.to_vec();
+    child_path.push(name.clone());
+    // Recorded before the file is read, so that a module whose file is missing still carries
+    // its visibility and an inline `mod` block already loaded keeps it.
+    let entry = into.entry(child_path.clone()).or_default();
+    entry.exported = entry.exported || exported;
+
+    let Some(child_file) = Module_File(directory, &name)
+    else
     {
-        let mut child_path = path.to_vec();
-        child_path.push(name.clone());
+        return;
+    };
+    let inherited = into.get(&child_path).is_some_and(|held| return held.exported);
 
-        // Recorded before the file is read, so that a module whose file is missing still
-        // carries its visibility and an inline `mod` block already loaded keeps it.
-        let entry = into.entry(child_path.clone()).or_default();
-        entry.exported = entry.exported || (exported && is_public);
-
-        let Some(child_file) = Module_File(&directory, &name)
-        else
-        {
-            continue;
-        };
-
-        let inherited = into.get(&child_path).is_some_and(|held| return held.exported);
-        Load_Module(&child_file, &child_path, into);
-        if inherited && let Some(held) = into.get_mut(&child_path)
-        {
-            held.exported = true;
-        }
+    Load_Module(&child_file, &child_path, into);
+    if inherited && let Some(held) = into.get_mut(&child_path)
+    {
+        held.exported = true;
     }
 }
 
@@ -298,52 +346,80 @@ struct Filing<'a>
 /// Collects the public items in a byte range.
 fn Walk(source: Source<'_>, range: (usize, usize), inside: Option<Inside<'_>>, filing: &mut Filing<'_>)
 {
-    let Source { text, masks } = source;
     let (start, end) = range;
     let mut cursor = start;
 
     while cursor < end
     {
+        if let Some(body) = Member_Body(inside)
+        {
+            Collect_Members(source, (cursor, end), body, filing);
+
+            return;
+        }
+        cursor = Advanced(source, (cursor, end), inside, filing);
+    }
+}
+
+/// Which member list a walk is inside, if it is inside one at all.
+fn Member_Body(inside: Option<Inside<'_>>) -> Option<(Reading, &str)>
+{
+    return match inside
+    {
+        Some(Inside::Variants(owner)) => Some((Reading::Variants, owner)),
+        Some(Inside::Fields(owner)) => Some((Reading::Fields, owner)),
+        _ => None,
+    };
+}
+
+/// Files every member of a struct or enum body, which is the whole of what that body holds.
+fn Collect_Members(
+    source: Source<'_>,
+    range: (usize, usize),
+    body: (Reading, &str),
+    filing: &mut Filing<'_>,
+)
+{
+    let Source { text, masks } = source;
+    let (reading, owner) = body;
+    let kind = match reading
+    {
+        Reading::Variants => "enum variant",
+        Reading::Fields => "struct field",
+    };
+
+    for (name, carried) in Members_In(text, masks, range, reading)
+    {
+        filing.module.items.push(Item {
+            kind: kind.to_owned(),
+            name: format!("{owner}::{name}"),
+            tail: carried,
+            modifiers: String::new(),
+        });
+    }
+}
+
+/// Files whatever declaration begins at `range.0`, and answers where to look next.
+fn Advanced(
+    source: Source<'_>,
+    range: (usize, usize),
+    inside: Option<Inside<'_>>,
+    filing: &mut Filing<'_>,
+) -> usize
+{
+    let Source { text, masks } = source;
+    let (cursor, end) = range;
+    let Some(head) = Head(text, masks, cursor, end)
+    else
+    {
         let line_end = Line_End(text, cursor, end);
 
-        if let Some(Inside::Variants(owner)) = inside
-        {
-            for (name, payload) in Members_In(text, masks, (cursor, end), Reading::Variants)
-            {
-                filing.module.items.push(Item {
-                    kind: "enum variant".to_owned(),
-                    name: format!("{owner}::{name}"),
-                    tail: payload,
-                    modifiers: String::new(),
-                });
-            }
-            return;
-        }
+        return Next_Line(text, line_end, end);
+    };
 
-        if let Some(Inside::Fields(owner)) = inside
-        {
-            for (name, declared) in Members_In(text, masks, (cursor, end), Reading::Fields)
-            {
-                filing.module.items.push(Item {
-                    kind: "struct field".to_owned(),
-                    name: format!("{owner}::{name}"),
-                    tail: declared,
-                    modifiers: String::new(),
-                });
-            }
-            return;
-        }
+    Record(&head, inside, source, filing);
 
-        let Some(head) = Head(text, masks, cursor, end)
-        else
-        {
-            cursor = Next_Line(text, line_end, end);
-            continue;
-        };
-
-        Record(&head, inside, source, filing);
-        cursor = Next_Line(text, head.after, end);
-    }
+    return Next_Line(text, head.after, end);
 }
 
 /// One recognised declaration and where it ends.
@@ -375,44 +451,11 @@ fn Head(text: &str, masks: &crate::gates::Masks, from: usize, end: usize) -> Opt
     let line = text.get(from..line_end)?.trim_start();
     let indent = text.get(from..line_end)?.len().checked_sub(line.len())?;
     let begins = from.checked_add(indent)?;
-
     let (visibility, modifiers, kind) = Opening(line)?;
-
-    // A declaration ends at the first `{` or `;` outside parentheses. `where` clauses and
-    // return types cannot introduce either, and a body-bearing item always reaches a
-    // brace before a semicolon.
-    //
-    // `use` is the exception and the one that mattered: the braces in `use a::{B, C};` are
-    // a list, not a body. Reading them as one truncated every grouped re-export in this
-    // workspace to `pub use a::` and left the items behind them out of every snapshot —
-    // which is a surface check reporting an empty surface.
-    let (terminator, at) = if kind == "use"
-    {
-        Semicolon(text, masks, begins, end).map(|at| return (b';', at))?
-    }
-    else
-    {
-        Terminator(text, masks, begins, end)?
-    };
-
-    // A constant's value is not its surface. `SHIPPED` is a fourteen-entry table of
-    // `include_str!` calls, and putting it in a snapshot would make every profile file
-    // rename read as an API change.
-    let cut = if matches!(kind.as_str(), "const" | "static" | "type")
-    {
-        Assignment(text, masks, begins, at).unwrap_or(at)
-    }
-    else
-    {
-        at
-    };
+    let (terminator, at) = Ends_At(text, masks, (begins, end), &kind)?;
+    let cut = Value_Cut(text, masks, (begins, at), &kind);
     let declaration = text.get(begins..cut)?;
-
-    let body = (terminator == b'{')
-        .then(|| return Matching_Brace(text.as_bytes(), &masks.code, at))
-        .flatten()
-        .map(|close| return (at.saturating_add(1), close));
-
+    let body = Body_Range(text, masks, terminator, at);
     let after = body.map_or_else(
         || return at.saturating_add(1),
         |(_, close)| return close.saturating_add(1),
@@ -428,60 +471,142 @@ fn Head(text: &str, masks: &crate::gates::Masks, from: usize, end: usize) -> Opt
     });
 }
 
+/// Where a declaration ends: the first `{` or `;` outside parentheses, and which it was.
+///
+/// `where` clauses and return types cannot introduce either, and a body-bearing item always
+/// reaches a brace before a semicolon.
+///
+/// `use` is the exception and the one that mattered: the braces in `use a::{B, C};` are a
+/// list, not a body. Reading them as one truncated every grouped re-export in this workspace
+/// to `pub use a::` and left the items behind them out of every snapshot — which is a surface
+/// check reporting an empty surface.
+fn Ends_At(
+    text: &str,
+    masks: &crate::gates::Masks,
+    range: (usize, usize),
+    kind: &str,
+) -> Option<(u8, usize)>
+{
+    let (begins, end) = range;
+    if kind != "use"
+    {
+        return Terminator(text, masks, begins, end);
+    }
+    let at = Semicolon(text, masks, begins, end)?;
+
+    return Some((b';', at));
+}
+
+/// Where a declaration's text stops being its surface.
+///
+/// A constant's value is not its surface. `SHIPPED` is a fourteen-entry table of
+/// `include_str!` calls, and putting it in a snapshot would make every profile file rename
+/// read as an API change.
+fn Value_Cut(text: &str, masks: &crate::gates::Masks, range: (usize, usize), kind: &str) -> usize
+{
+    let (begins, at) = range;
+    if !matches!(kind, "const" | "static" | "type")
+    {
+        return at;
+    }
+
+    return Assignment(text, masks, begins, at).unwrap_or(at);
+}
+
+/// The byte range of a declaration's body, when the terminator opened one.
+fn Body_Range(
+    text: &str,
+    masks: &crate::gates::Masks,
+    terminator: u8,
+    at: usize,
+) -> Option<(usize, usize)>
+{
+    if terminator != b'{'
+    {
+        return None;
+    }
+    let close = Matching_Brace(text.as_bytes(), &masks.code, at)?;
+
+    return Some((at.saturating_add(1), close));
+}
+
 /// Splits a line's leading tokens into visibility, other modifiers and the item keyword.
 fn Opening(line: &str) -> Option<(String, String, String)>
 {
-    let mut visibility = String::new();
-    let mut modifiers: Vec<&str> = Vec::new();
-    let mut rest = line;
-
-    if let Some(after) = rest.strip_prefix("pub")
-    {
-        if let Some(restricted) = after.strip_prefix('(')
-        {
-            let close = restricted.find(')')?;
-            visibility = format!("pub({})", restricted.get(..close)?);
-            rest = restricted.get(close.saturating_add(1)..)?;
-        }
-        else if after.starts_with(char::is_whitespace)
-        {
-            "pub".clone_into(&mut visibility);
-            rest = after;
-        }
-        else
-        {
-            return None;
-        }
-    }
-
+    let (visibility, rest) = Visibility(line)?;
     let words: Vec<&str> = rest
         .split_whitespace()
         .map(|token| return token.split(['<', '(', '!', ':']).next().unwrap_or(token))
         .collect();
+    let mut modifiers: Vec<&str> = Vec::new();
 
     for (index, word) in words.iter().enumerate()
     {
-        // `const` is the one ambiguous word: `const NAME: T = …` declares an item and
-        // `const fn` qualifies one. Reading it as the item keyword turned every
-        // `pub const fn` in this workspace into a const named `fn`.
-        if *word == "const" && words.get(index.saturating_add(1)) == Some(&"fn")
+        match Classify(&words, index, word)
         {
-            modifiers.push("const");
-            continue;
+            Word::Keyword => return Some((visibility, modifiers.join(" "), (*word).to_owned())),
+            Word::Modifier => modifiers.push(word),
+            Word::Other => return None,
         }
-        if KEYWORDS.contains(word)
-        {
-            return Some(((visibility), modifiers.join(" "), (*word).to_owned()));
-        }
-        if matches!(*word, "unsafe" | "async" | "extern" | "default")
-        {
-            modifiers.push(word);
-            continue;
-        }
-        return None;
     }
 
     return None;
+}
+
+/// The visibility a line opens with, and everything after it.
+///
+/// `None` for a `pub` glued to something else — `public`, `pubs` — which declares nothing
+/// this reader is looking for.
+fn Visibility(line: &str) -> Option<(String, &str)>
+{
+    let Some(after) = line.strip_prefix("pub")
+    else
+    {
+        return Some((String::new(), line));
+    };
+    if let Some(restricted) = after.strip_prefix('(')
+    {
+        let close = restricted.find(')')?;
+        let visibility = format!("pub({})", restricted.get(..close)?);
+
+        return Some((visibility, restricted.get(close.saturating_add(1)..)?));
+    }
+    if after.starts_with(char::is_whitespace)
+    {
+        return Some(("pub".to_owned(), after));
+    }
+
+    return None;
+}
+
+/// What a leading word is: the keyword naming the item, a modifier in front of it, or
+/// something that means this line declares nothing.
+enum Word
+{
+    Keyword,
+    Modifier,
+    Other,
+}
+
+/// `const` is the one ambiguous word: `const NAME: T = …` declares an item and `const fn`
+/// qualifies one. Reading it as the item keyword turned every `pub const fn` in this
+/// workspace into a const named `fn`.
+fn Classify(words: &[&str], index: usize, word: &str) -> Word
+{
+    if word == "const" && words.get(index.saturating_add(1)) == Some(&"fn")
+    {
+        return Word::Modifier;
+    }
+    if KEYWORDS.contains(&word)
+    {
+        return Word::Keyword;
+    }
+    if matches!(word, "unsafe" | "async" | "extern" | "default")
+    {
+        return Word::Modifier;
+    }
+
+    return Word::Other;
 }
 
 /// The `=` that starts a declaration's value, if it has one.
@@ -565,64 +690,88 @@ fn Record(
     filing: &mut Filing<'_>,
 )
 {
-    // A trait's items and a trait implementation's items are as public as the trait, so
-    // they carry no `pub` of their own. An inherent `impl` is not like that.
+    match head.kind.as_str()
+    {
+        "mod" => Record_Mod(head, source, filing),
+        "use" => Record_Use(head, filing),
+        "impl" => Record_Impl(head, source, filing),
+        _ => Record_Item(head, inside, source, filing),
+    }
+}
+
+/// A `mod` declaration: an inline body is loaded now, a file is queued for its parent.
+fn Record_Mod(head: &Recognised, source: Source<'_>, filing: &mut Filing<'_>)
+{
+    let Some(name) = Named(&head.text, "mod")
+    else
+    {
+        return;
+    };
+    let public = head.visibility == "pub";
+    let Some(body) = head.body
+    else
+    {
+        filing.children.push((name, public));
+
+        return;
+    };
+    let inline = Inline {
+        name: &name,
+        exported: Exported::Of(public),
+        body,
+    };
+
+    Load_Inline(inline, source, filing.path, filing.into);
+}
+
+/// A `pub use`, recorded as a re-export to be resolved once every module is loaded.
+fn Record_Use(head: &Recognised, filing: &mut Filing<'_>)
+{
+    if head.visibility == "pub"
+        && let Some(target) = head.text.split_once("use ").map(|(_, rest)| return rest)
+    {
+        filing.module.re_exports.push(target.trim().to_owned());
+    }
+}
+
+/// Any other declaration: filed when it is public, then descended into where its members are
+/// part of the surface too.
+///
+/// A trait's items and a trait implementation's items are as public as the trait, so they
+/// carry no `pub` of their own. An inherent `impl` is not like that.
+fn Record_Item(
+    head: &Recognised,
+    inside: Option<Inside<'_>>,
+    source: Source<'_>,
+    filing: &mut Filing<'_>,
+)
+{
     let associated = matches!(inside, Some(Inside::Conformance(_) | Inside::Declaration(_)));
     let public = head.visibility == "pub" || (associated && head.visibility.is_empty());
-
-    if head.kind == "mod"
-    {
-        if let Some(name) = Named(&head.text, "mod")
-        {
-            match head.body
-            {
-                Some(body) =>
-                {
-                    let exported = Exported::Of(head.visibility == "pub");
-                    Load_Inline(
-                        Inline {
-                            name: &name,
-                            exported,
-                            body,
-                        },
-                        source,
-                        filing.path,
-                        filing.into,
-                    );
-                }
-                None => filing.children.push((name, head.visibility == "pub")),
-            }
-        }
-        return;
-    }
-
-    if head.kind == "use"
-    {
-        if head.visibility == "pub"
-            && let Some(target) = head.text.split_once("use ").map(|(_, rest)| return rest)
-        {
-            filing.module.re_exports.push(target.trim().to_owned());
-        }
-        return;
-    }
-
-    if head.kind == "impl"
-    {
-        Record_Impl(head, source, filing);
-        return;
-    }
-
     if !public
     {
         return;
     }
-
     let Some(name) = Named(&head.text, &head.kind)
     else
     {
         return;
     };
-    let owner = match inside
+    let owner = Owner_Prefix(inside);
+
+    filing.module.items.push(Item {
+        kind: head.kind.clone(),
+        name: format!("{owner}{name}"),
+        tail: Tail(&head.text, &head.kind, &name),
+        modifiers: head.modifiers.clone(),
+    });
+    Descend(head, &name, source, filing);
+}
+
+/// The type or trait a member is written under, as a prefix for its own name.
+fn Owner_Prefix(inside: Option<Inside<'_>>) -> String
+{
+    return match inside
     {
         Some(
             Inside::Implementation(owner)
@@ -632,15 +781,6 @@ fn Record(
         ) => format!("{owner}::"),
         _ => String::new(),
     };
-
-    filing.module.items.push(Item {
-        kind: head.kind.clone(),
-        name: format!("{owner}{name}"),
-        tail: Tail(&head.text, &head.kind, &name),
-        modifiers: head.modifiers.clone(),
-    });
-
-    Descend(head, &name, source, filing);
 }
 
 /// Walks into the body of a declaration whose members are part of the surface.
@@ -673,29 +813,12 @@ fn Record_Impl(head: &Recognised, source: Source<'_>, filing: &mut Filing<'_>)
     {
         return;
     };
-
-    let inside = if let Some(trait_name) = implemented
-    {
-        filing.module.items.push(Item {
-            kind: "impl".to_owned(),
-            name: subject.clone(),
-            tail: format!(" implements {trait_name}"),
-            modifiers: String::new(),
-        });
-
-        Inside::Conformance(&subject)
-    }
-    else
-    {
-        Inside::Implementation(&subject)
-    };
-
+    let inside = Header_Of(&subject, implemented.as_deref(), filing.module);
     let Some(body) = head.body
     else
     {
         return;
     };
-
     let mut ignored = Vec::new();
     Walk(source, body, Some(inside), &mut Filing {
         module: filing.module,
@@ -703,6 +826,26 @@ fn Record_Impl(head: &Recognised, source: Source<'_>, filing: &mut Filing<'_>)
         path: filing.path,
         into: filing.into,
     });
+}
+
+/// An `impl` header is itself surface when it implements a trait, and the members below it
+/// are then as public as that trait; an inherent `impl` contributes only its `pub` members.
+fn Header_Of<'a>(subject: &'a str, implemented: Option<&str>, module: &mut Module) -> Inside<'a>
+{
+    let Some(trait_name) = implemented
+    else
+    {
+        return Inside::Implementation(subject);
+    };
+
+    module.items.push(Item {
+        kind: "impl".to_owned(),
+        name: subject.to_owned(),
+        tail: format!(" implements {trait_name}"),
+        modifiers: String::new(),
+    });
+
+    return Inside::Conformance(subject);
 }
 
 /// The type an `impl` header is about, and the trait it implements if it implements one.
@@ -744,7 +887,6 @@ fn Without_Generics(text: &str) -> String
     {
         return text.to_owned();
     }
-
     let mut depth = 0_i32;
     for (offset, character) in text.char_indices()
     {
@@ -875,28 +1017,31 @@ fn Keyword_At(declaration: &str, keyword: &str) -> Option<usize>
     while let Some(offset) = declaration.get(from..)?.find(keyword)
     {
         let at = from.checked_add(offset)?;
-        let before = at
-            .checked_sub(1)
-            .and_then(|index| return declaration.as_bytes().get(index).copied())
-            .unwrap_or(b' ');
-        let after = declaration
-            .as_bytes()
-            .get(at.saturating_add(keyword.len()))
-            .copied()
-            .unwrap_or(b' ');
-
-        if !before.is_ascii_alphanumeric()
-            && before != b'_'
-            && !after.is_ascii_alphanumeric()
-            && after != b'_'
+        if Whole_Word(declaration, at, keyword.len())
         {
             return Some(at);
         }
-
         from = at.saturating_add(1);
     }
 
     return None;
+}
+
+/// Whether the `length` bytes at `at` are bounded by something that cannot continue an
+/// identifier, which is what makes an occurrence the word rather than part of one.
+fn Whole_Word(declaration: &str, at: usize, length: usize) -> bool
+{
+    let bytes = declaration.as_bytes();
+    let before = at
+        .checked_sub(1)
+        .and_then(|index| return bytes.get(index).copied())
+        .unwrap_or(b' ');
+    let after = bytes.get(at.saturating_add(length)).copied().unwrap_or(b' ');
+
+    return !before.is_ascii_alphanumeric()
+        && before != b'_'
+        && !after.is_ascii_alphanumeric()
+        && after != b'_';
 }
 
 /// Which of the two bodies is being read.
@@ -935,51 +1080,81 @@ fn Members_In(
 
     while cursor < end
     {
-        let line_end = Line_End(text, cursor, end);
-        let raw = text.get(cursor..line_end).unwrap_or_default();
-        let line = raw.trim_start();
-        let at = cursor.saturating_add(raw.len().saturating_sub(line.len()));
+        let read = Read_Member(text, masks, (cursor, end), reading);
 
-        let declared = if reading == Reading::Fields
-        {
-            line.strip_prefix("pub ").map(|rest| {
-                return (rest, at.saturating_add(4));
-            })
-        }
-        else
-        {
-            Some((line, at))
-        };
-
-        let Some((rest, from)) = declared
-        else
-        {
-            cursor = Next_Line(text, line_end, end);
-            continue;
-        };
-
-        let Some((name, after_name)) = Identifier_After(text.as_bytes(), from)
-        else
-        {
-            cursor = Next_Line(text, line_end, end);
-            continue;
-        };
-
-        // A member is a bare identifier at the start of its line. Attributes open with
-        // `#`, the closing brace with `}`, and a nested item with a keyword.
-        if !rest.starts_with(&name) || KEYWORDS.contains(&name.as_str())
-        {
-            cursor = Next_Line(text, line_end, end);
-            continue;
-        }
-
-        let Carried { payload, after } = Payload(text, masks, after_name, end);
-        found.push((name, payload));
-        let next_line = Next_Line(text, line_end, end);
-        cursor = after.max(next_line).min(end);
+        found.extend(read.member);
+        cursor = read.next;
     }
 
     return found;
+}
+
+/// One line of a member body: whatever member it declares, and where the next line begins.
+struct Line
+{
+    member: Option<(String, String)>,
+    next: usize,
+}
+
+/// Reads the line beginning at `range.0`.
+fn Read_Member(
+    text: &str,
+    masks: &crate::gates::Masks,
+    range: (usize, usize),
+    reading: Reading,
+) -> Line
+{
+    let (cursor, end) = range;
+    let line_end = Line_End(text, cursor, end);
+    let next_line = Next_Line(text, line_end, end);
+    let Some(named) = Named_Member(text, (cursor, line_end), reading)
+    else
+    {
+        return Line {
+            member: None,
+            next: next_line,
+        };
+    };
+    let Carried { payload, after } = Payload(text, masks, named.after, end);
+
+    return Line {
+        member: Some((named.name, payload)),
+        next: after.max(next_line).min(end),
+    };
+}
+
+/// A member's name, and the offset just past it.
+struct NamedMember
+{
+    name: String,
+    after: usize,
+}
+
+/// The member a line declares, if it declares one.
+///
+/// A member is a bare identifier at the start of its line. Attributes open with `#`, the
+/// closing brace with `}`, and a nested item with a keyword. A struct's fields are public one
+/// at a time and a private one is not an export; an enum's variants are as public as the enum
+/// in front of them.
+fn Named_Member(text: &str, line: (usize, usize), reading: Reading) -> Option<NamedMember>
+{
+    let (cursor, line_end) = line;
+    let raw = text.get(cursor..line_end).unwrap_or_default();
+    let trimmed = raw.trim_start();
+    let at = cursor.saturating_add(raw.len().saturating_sub(trimmed.len()));
+    let (rest, from) = match reading
+    {
+        Reading::Fields => (trimmed.strip_prefix("pub ")?, at.saturating_add(4)),
+        Reading::Variants => (trimmed, at),
+    };
+    let (name, after) = Identifier_After(text.as_bytes(), from)?;
+
+    if !rest.starts_with(&name) || KEYWORDS.contains(&name.as_str())
+    {
+        return None;
+    }
+
+    return Some(NamedMember { name, after });
 }
 
 /// What a member carries, and where the next one starts.
@@ -1002,12 +1177,10 @@ fn Payload(
 {
     let bytes = text.as_bytes();
     let mut cursor = from;
-
     while cursor < end && bytes.get(cursor).is_some_and(u8::is_ascii_whitespace)
     {
         cursor = cursor.saturating_add(1);
     }
-
     let opener = bytes.get(cursor).copied();
 
     // A field's type, up to the comma that ends it. Depth-counted, so
@@ -1023,7 +1196,23 @@ fn Payload(
         };
     }
 
-    let close = match opener
+    return Bracketed(text, masks, (cursor, end), opener);
+}
+
+/// What a member carries between brackets, and where the next one starts.
+///
+/// A variant's fields are on the lines after its name, so the payload is taken by matching
+/// the bracket rather than by reading to the end of the line.
+fn Bracketed(
+    text: &str,
+    masks: &crate::gates::Masks,
+    range: (usize, usize),
+    opener: Option<u8>,
+) -> Carried
+{
+    let (cursor, end) = range;
+    let bytes = text.as_bytes();
+    let matched = match opener
     {
         Some(b'{') => Matching_Brace(bytes, &masks.code, cursor),
         Some(b'(') => Matching_Parenthesis(bytes, &masks.code, cursor),
@@ -1035,8 +1224,7 @@ fn Payload(
             };
         }
     };
-
-    let Some(close) = close
+    let Some(close) = matched
     else
     {
         return Carried {
@@ -1044,11 +1232,7 @@ fn Payload(
             after: end,
         };
     };
-
-    let carried = text
-        .get(cursor..=close)
-        .map(Collapsed)
-        .unwrap_or_default();
+    let carried = text.get(cursor..=close).map(Collapsed).unwrap_or_default();
     let separator = if opener == Some(b'{') { " " } else { "" };
 
     return Carried {
@@ -1087,7 +1271,6 @@ fn Matching_Parenthesis(bytes: &[u8], mask: &[bool], open: usize) -> Option<usiz
 {
     let mut depth = 0_u32;
     let mut cursor = open;
-
     while cursor < bytes.len()
     {
         if !Is_Code(mask, cursor)
@@ -1247,24 +1430,7 @@ fn Renamed(item: &Item, declared: &str, exported_as: &str) -> Item
 fn Named_Imports(target: &str) -> Vec<(Vec<String>, String, String)>
 {
     let cleaned = target.trim().trim_end_matches(';').trim();
-
-    let (route, names) = match cleaned.split_once("::{")
-    {
-        Some((route, list)) =>
-        {
-            let list = list.trim_end_matches('}');
-            (
-                route.to_owned(),
-                list.split(',').map(str::trim).filter(|name| return !name.is_empty()).map(str::to_owned).collect::<Vec<String>>(),
-            )
-        }
-        None => match cleaned.rsplit_once("::")
-        {
-            Some((route, name)) => (route.to_owned(), vec![name.trim().to_owned()]),
-            None => (String::new(), vec![cleaned.to_owned()]),
-        },
-    };
-
+    let (route, names) = Route_And_Names(cleaned);
     let segments: Vec<String> = route
         .split("::")
         .map(str::trim)
@@ -1284,6 +1450,30 @@ fn Named_Imports(target: &str) -> Vec<(Vec<String>, String, String)>
             return (segments.clone(), declared.to_owned(), exported_as.to_owned());
         })
         .collect();
+}
+
+/// The module route a use declaration names, and the names it takes from that route.
+fn Route_And_Names(cleaned: &str) -> (String, Vec<String>)
+{
+    if let Some((route, list)) = cleaned.split_once("::{")
+    {
+        let names = list
+            .trim_end_matches('}')
+            .split(',')
+            .map(str::trim)
+            .filter(|name| return !name.is_empty())
+            .map(str::to_owned)
+            .collect();
+
+        return (route.to_owned(), names);
+    }
+    let Some((route, name)) = cleaned.rsplit_once("::")
+    else
+    {
+        return (String::new(), vec![cleaned.to_owned()]);
+    };
+
+    return (route.to_owned(), vec![name.trim().to_owned()]);
 }
 
 /// The module tree a lookup runs against, and the module it starts from.
@@ -1323,74 +1513,96 @@ fn Locate(
 fn Located(route: &[String], name: &str, tree: Tree<'_>, depth: u32) -> Vec<Item>
 {
     let Tree { from, modules } = tree;
-    let mut trimmed = route.to_vec();
-    let anchored_at_root = matches!(trimmed.first().map(String::as_str), Some("crate"));
-    if anchored_at_root || matches!(trimmed.first().map(String::as_str), Some("self"))
+
+    for candidate in Candidates(route, from)
     {
-        trimmed.remove(0);
-    }
-
-    let mut candidates: Vec<Vec<String>> = Vec::new();
-    if anchored_at_root
-    {
-        candidates.push(trimmed.clone());
-    }
-    else
-    {
-        // Uniform paths: a bare route is tried against the current module first and then
-        // against the crate root, which is what `pub use build::Build` in a lib.rs means.
-        let mut local = from.to_vec();
-        local.extend(trimmed.iter().cloned());
-        candidates.push(local);
-        candidates.push(trimmed.clone());
-        // `super::` and a parent's sibling, spelled without an anchor.
-        if let Some((_, parent)) = from.split_last()
-        {
-            let mut beside = parent.to_vec();
-            beside.extend(trimmed.iter().cloned());
-            candidates.push(beside);
-        }
-    }
-
-    let owned = format!("{name}::");
-
-    for candidate in candidates
-    {
-        let Some(module) = modules.get(&candidate)
-        else
-        {
-            continue;
-        };
-
-        let found: Vec<Item> = module
-            .items
-            .iter()
-            .filter(|item| return item.name == name || item.name.starts_with(&owned))
-            .cloned()
-            .collect();
-
-        if !found.is_empty()
-        {
-            return found;
-        }
-
-        // The module names it and did not declare it: it re-exported it from somewhere
-        // further down. `nomos-contracts` is built this way — `src/determinism/mod.rs`
-        // gathers four types from four files and the crate root re-exports the gathering
-        // — and stopping at the first hop left the whole of that crate's determinism
-        // vocabulary out of its snapshot while reporting the re-export as unresolvable.
-        let reachable = Tree {
-            from: &candidate,
-            modules,
-        };
-        if depth < CHAIN_LIMIT
-            && let Some(reached) = Through_A_Re_Export(module, name, reachable, depth)
+        let reached = Answered_By(&candidate, name, modules, depth);
+        if !reached.is_empty()
         {
             return reached;
         }
     }
 
     return Vec::new();
+}
+
+/// The module paths a route could mean, in the order Rust would try them.
+fn Candidates(route: &[String], from: &[String]) -> Vec<Vec<String>>
+{
+    let mut trimmed = route.to_vec();
+    let anchored_at_root = matches!(trimmed.first().map(String::as_str), Some("crate"));
+    if anchored_at_root || matches!(trimmed.first().map(String::as_str), Some("self"))
+    {
+        trimmed.remove(0);
+    }
+    if anchored_at_root
+    {
+        return vec![trimmed];
+    }
+    // Uniform paths: a bare route is tried against the current module first and then against
+    // the crate root, which is what `pub use build::Build` in a lib.rs means.
+    let mut local = from.to_vec();
+    local.extend(trimmed.iter().cloned());
+    let mut candidates = vec![local, trimmed.clone()];
+    // `super::` and a parent's sibling, spelled without an anchor.
+    if let Some((_, parent)) = from.split_last()
+    {
+        let mut beside = parent.to_vec();
+        beside.extend(trimmed.iter().cloned());
+        candidates.push(beside);
+    }
+
+    return candidates;
+}
+
+/// What one candidate module answers for a name: what it declares, and failing that, what its
+/// own `pub use` declarations reach.
+///
+/// A module that names it without declaring it re-exported it from somewhere further down.
+/// `nomos-contracts` is built that way — `src/determinism/mod.rs` gathers four types from
+/// four files and the crate root re-exports the gathering — and stopping at the first hop
+/// left the whole of that crate's determinism vocabulary out of its snapshot while reporting
+/// the re-export as unresolvable.
+fn Answered_By(
+    candidate: &[String],
+    name: &str,
+    modules: &BTreeMap<Vec<String>, Module>,
+    depth: u32,
+) -> Vec<Item>
+{
+    let Some(module) = modules.get(candidate)
+    else
+    {
+        return Vec::new();
+    };
+    let declared = Declared_As(module, name);
+    if !declared.is_empty() || depth >= CHAIN_LIMIT
+    {
+        return declared;
+    }
+    let reachable = Tree {
+        from: candidate,
+        modules,
+    };
+
+    return Through_A_Re_Export(module, name, reachable, depth).unwrap_or_default();
+}
+
+/// Everything one module declares under a name.
+///
+/// More than the item itself, because re-exporting a type re-exports what is written on it.
+/// `pub use catalogue::Catalogue` exports the struct and every `pub fn` in its `impl` block,
+/// and a snapshot holding only the struct would not notice a method being added to it.
+fn Declared_As(module: &Module, name: &str) -> Vec<Item>
+{
+    let owned = format!("{name}::");
+
+    return module
+        .items
+        .iter()
+        .filter(|item| return item.name == name || item.name.starts_with(&owned))
+        .cloned()
+        .collect();
 }
 
 /// Follows a module's own `pub use` declarations looking for `name`.
