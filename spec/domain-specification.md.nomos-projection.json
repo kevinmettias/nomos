@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:ae50bcc65a093fb6e09f4e544178b601396ad29485cb85ff9854f4a50fc16b64",
-  "inputs_digest": "sha256:dd0c13c4c7b19ec623747d7e6773e3d07b0f71712445be149ee3e78d72c40a35",
+  "content_digest": "sha256:28733e5c3d5f17703339ffd828760ee0580e363fec4abbf30bd918e4f3cbfe2f",
+  "inputs_digest": "sha256:329a54c489f1b864ccec9b4c4880a91504640dc0aba3f4ca1776a112372496cf",
   "sections": [
     [
       "Documents",
-      74
+      75
     ],
     [
       "Sections",
-      699
+      710
     ],
     [
       "Source blocks",
-      2760
+      2799
     ]
   ],
   "inputs": [
@@ -159,6 +159,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored",
       "hash": "sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored",
+      "hash": "sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a"
     },
     {
       "content": "documents",
@@ -1589,6 +1594,61 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#45",
       "hash": "sha256:a8e8cb412a263b158a4502f9d13bdc963e931aac57f544b81e6ba0d5520a10c9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#1",
+      "hash": "sha256:4e5521b948e4e8805f903e416423fcd439474f12e0b8d40a5ec966babebce2ff"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#2",
+      "hash": "sha256:3ed7ec1e8c68d9560cb314243d90a77c4c4b68da5ec0a3599f3e94321949c39f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#6",
+      "hash": "sha256:c258e32047e2c164b50f653680409e28b8903e3cd9a4794813baa26265b64646"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#11",
+      "hash": "sha256:0abb4eca86bd473391566e4a1e3f73359952cc09940ccf37661e14581e5dd266"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#15",
+      "hash": "sha256:837444fa8c78de019f29c0192e734f53c89c6937ac461998956959a07462294a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#18",
+      "hash": "sha256:c272714c9a5736247ba34f224533a8ca9414f11dc482aaea00f94bbed3c98ad4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#21",
+      "hash": "sha256:3e75690753a0cec0d5a5bd67623e8d2a2ccec641408bfc0cbc78ace7e9bcaa37"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#25",
+      "hash": "sha256:5643d31e098f347d1ffcbb9f4b0478db4060a9c08b23d20484a2507cb99ec277"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#29",
+      "hash": "sha256:65cb27c2ae301d1f0b94567ab0631bff129606bdbb75bde436f52c05af6403c1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#35",
+      "hash": "sha256:d7d7c42293094c37ec73e35d56b7a97b51b0dec9089c6649ed729a353e21d631"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38",
+      "hash": "sha256:826b11a5f13e89c87c68c6add168eedb08f13db5b0763cc7d6ebea97907964b6"
     },
     {
       "content": "headings",
@@ -8514,6 +8574,201 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#47",
       "hash": "sha256:59623f4ceaff764027fdd976c693d19a11fb1a67446841e02bb728e5c91667a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#1",
+      "hash": "sha256:e96bfac44c8cd1b8364cd512ca66ab8f892723c611d28b85e1d8ddcf645b08c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#3",
+      "hash": "sha256:091ab4549a186037181dcac9fe89c2af254ae6a37fac2f71de36e15dd0cb6807"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#4",
+      "hash": "sha256:02a23d48aaccc7e3d739b519242515ed65b04ce456bc14901f16e00aa9fea3d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#5",
+      "hash": "sha256:dce74f026d2d2370cd83e6d943f1d1eb767d7bdc1fd28359195350c06382a795"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#7",
+      "hash": "sha256:b11255a4e8dd3edaeca4d95fa1cae391ae9fb916907a87a0bfc916c5e7c25208"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#8",
+      "hash": "sha256:f019d3b01e10240350d70178f97bdf98485922f0468bb5ccb510c755a0cc8fa2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#9",
+      "hash": "sha256:0ef66d659582dfe7622616ebea616cf0a9244e13d2b3740f067f7c82c1ff3f9b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#10",
+      "hash": "sha256:50c3a68fa0c4fb479e4533711fdb936e58cfa97c8dcbb16661d0127a715ea844"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#11",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#12",
+      "hash": "sha256:ac0f5dea1d3a2464c3f2900a6897323168ede8505fdda461671096f2c27cbece"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#13",
+      "hash": "sha256:76e20f877109e4d11370bc97789b91670dffec96b29b3a0e517f8ec5bd8da573"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#14",
+      "hash": "sha256:6842b0f378015ea5223e9fd0fd64d2b1415c1501e2a934bf8cef9abb8180e230"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#15",
+      "hash": "sha256:9597848ce1b9150ebb26f0535fa9cea12d4f7f97548d63b8995fa36a7d24eb2d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#16",
+      "hash": "sha256:2e214d2025e48f660b252db27d6a887a3263157c63a682c79fbd8ab7caca093c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#17",
+      "hash": "sha256:c946a14af85c0951a9acc417b6b6db2b9a9dc3868d1a97a792e3f2d7a233ba75"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#18",
+      "hash": "sha256:3ab57851ee401e0f6ac475d7c41372c9a5ef56c77edca22da92d28e84ee8c6ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#19",
+      "hash": "sha256:bbc1cec15de5af20ef9faed1c9db4eeca0c5bfa8c2922c3643308e5de47aa55a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#20",
+      "hash": "sha256:0d9458db812cd1908ca7fb1f4b0ee259c39331bf5bff313970b2a40266f858b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#21",
+      "hash": "sha256:8d2ca72e79ed50da14382531dd6e63b12593cba2c975a5da8c240b6f43001b96"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#22",
+      "hash": "sha256:5f4660b7cd5d9fef2fd9f350d16002fb8a0e7180bfccf7eed8602d35fa472782"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#23",
+      "hash": "sha256:1ced60d637c0358cd55891028d4567cc7c10ae63e7de405270d6ac3611360b29"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#24",
+      "hash": "sha256:d6095290e1d89c05064313620699dcefbfa3b7a4e7db84a47cc8a829963b6a65"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#25",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#26",
+      "hash": "sha256:4721e9a8e58d9f557bb7f4f7ad047534d3e1fb14d93b31fac852b732b8460fd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#27",
+      "hash": "sha256:ec2b1f6bf305f8198fc6513a316e148ceface8ec2e4bbcd473357dc9d938105e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#28",
+      "hash": "sha256:cb8c87116314134b0e484d1af75dc7158f1cb7c4050ada5ffc8f9cce0adab2f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#29",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#30",
+      "hash": "sha256:328d83d1d5a9a5e9b83ab17b587fdd312bd7fb7836f9550b1ca3a416671dbfba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#31",
+      "hash": "sha256:1bbf4a7fbec60e5937f6f9b2653964cd32ddabf01e356d183183621df8e8bb2d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#32",
+      "hash": "sha256:fe3ae7627159b2ad38ea22c8dbb2ee41674d6a5346923009bd2c6efcf6de4b97"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#33",
+      "hash": "sha256:147c786086717a979833f27fcb160f5272406dd6f0bda57dfea931ba471ba8cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#34",
+      "hash": "sha256:1fc2c428e2f37d4473c6568e59f9decd8022746e9fc3cef58d57bc84a5afd920"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#35",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#36",
+      "hash": "sha256:b98a6a7c579fd32eb8cff8966adaed8d8df463e49588e261b5c614d923a63bb3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#37",
+      "hash": "sha256:b3775771ddc6c3cfca298193f8a22d8b1784bb5b3cf6c8be91719d89f7242b44"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#39",
+      "hash": "sha256:bc9606320bd153286deaaa7811deac5563c2555ff84896378f81555f5083aec9"
     },
     {
       "content": "blocks",

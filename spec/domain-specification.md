@@ -38,6 +38,7 @@ profile: domain-specification
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md | authored | 47 | 10 | sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7 |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -329,6 +330,17 @@ profile: domain-specification
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#36 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#41 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#45 | authored | 2 | Status |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#1 | authored | 1 | The second operating system is chosen by which claim needs it, and so is the subset that runs there |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#11 | authored | 2 | The Decision |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#15 | authored | 2 | Why Windows Rather Than Whatever Was Available |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#18 | authored | 2 | `fail-fast: false` Is Not `continue-on-error`, And The Distinction Is The Whole Point |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#21 | authored | 2 | A Matrix Rather Than A Second Job, For A Reason Discovered Rather Than Chosen |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#25 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#29 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#35 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -8660,6 +8672,316 @@ Amended to version 2 by `P11-WORKFLOW-TRUST`, which pins what this gate executes
 `permissions: contents: read`, because every step here reads and none writes. The wrong
 argument is stated above rather than deleted: a record whose whole subject is claims that
 nothing checks cannot quietly drop the paragraph that turned out to be one.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#1
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there · hash: sha256:e96bfac44c8cd1b8364cd512ca66ab8f892723c611d28b85e1d8ddcf645b08c4*
+
+# The second operating system is chosen by which claim needs it, and so is the subset that runs there
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#2
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#3
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Question · hash: sha256:091ab4549a186037181dcac9fe89c2af254ae6a37fac2f71de36e15dd0cb6807*
+
+`OD-GATE-006` decided that a declaration of enforcement is incomplete until something executes
+it, *in every environment the claim needs*, and named four instances. This record carries the
+fourth and the only one where the missing environment is a host rather than a step.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#4
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Question · hash: sha256:02a23d48aaccc7e3d739b519242515ed65b04ce456bc14901f16e00aa9fea3d9*
+
+The gate ran one job on `ubuntu-latest`. This repository is developed on Windows — every
+measurement in its ledger carries an `F:\repos\nomos` path — so the two environments that matter
+were the one CI checked and the one nobody checked, and the second is where the code is written.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#5
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Question · hash: sha256:dce74f026d2d2370cd83e6d943f1d1eb767d7bdc1fd28359195350c06382a795*
+
+Two questions follow and they have different answers. **Which** second host, and **what** runs
+there. The first is easy to answer badly, by taking whatever the runner catalogue offers. The
+second is easy to answer badly in the opposite direction, by running everything twice: a gate
+that costs double to re-answer questions with no host in them is a gate somebody will later
+narrow under time pressure, and narrowing it then is done without the reasoning that chose it.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#6
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#7
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Measured · hash: sha256:b11255a4e8dd3edaeca4d95fa1cae391ae9fb916907a87a0bfc916c5e7c25208*
+
+All of it on Windows, in a detached worktree at `41de751`, before any of it was decided.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#8
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Measured · hash: sha256:f019d3b01e10240350d70178f97bdf98485922f0468bb5ccb510c755a0cc8fa2*
+
+| Measurement | Result |
+|---|---|
+| `cfg(windows)`, `cfg(unix)`, `cfg(target_os = …)` in the workspace | **none, anywhere** |
+| the nine candidate packages, `cargo test --no-fail-fast` | 458 passed, 0 failed |
+| `spec freshness --require diagram-set --require domain-specification` | exit 0, both current |
+| `check --root .` | exit 0, 466 files examined, 13 findings, 0 that can fail a build |
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#9
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Measured · hash: sha256:0ef66d659582dfe7622616ebea616cf0a9244e13d2b3740f067f7c82c1ff3f9b*
+
+The first row decides more than it looks. With no conditional compilation anywhere in the
+workspace, a second `clippy` run lints an identical token stream — so the lint step's exclusion
+from the Windows leg is a measurement rather than a cost argument, and it stops being true the
+day somebody adds the first `cfg`. That sentence is in the workflow beside the step, because the
+next author to add a `cfg` will be reading the workflow and not this record.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#10
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Measured · hash: sha256:50c3a68fa0c4fb479e4533711fdb936e58cfa97c8dcbb16661d0127a715ea844*
+
+The remaining rows say the Windows leg is green today. That matters for a reason the item
+carrying this was explicit about: a lane nobody has to fix is the corpus-gate shape without the
+corpus gate's reason for it, so this leg is added knowing it passes, not hoping.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#11
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#12
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / The Decision · hash: sha256:ac0f5dea1d3a2464c3f2900a6897323168ede8505fdda461671096f2c27cbece*
+
+One job, a matrix over `[ubuntu-latest, windows-latest]`, and each step declares which legs it
+runs on.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#13
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / The Decision · hash: sha256:76e20f877109e4d11370bc97789b91670dffec96b29b3a0e517f8ec5bd8da573*
+
+| Step | Legs | Why |
+|---|---|---|
+| `checkout`, `Show toolchain` | both | the leg cannot run otherwise |
+| `Lint` | Linux | no `cfg` in the workspace, so the second run lints the same tokens |
+| `Test` (`--workspace`) | Linux | the whole suite once; the subset that has a host in it runs opposite |
+| `Determinism` | Windows | the seven crates carrying a `determinism.rs`, plus `nomos-spec-store` |
+| `Boundaries` | both | surface snapshots are produced by walking source files |
+| `Required projections` | both | a content hash over rendered bytes, which is the cross-host claim |
+| `Rules` | Linux | judges code content, measured identical on Windows |
+| `Install cargo-deny`, `Supply chain` | Linux | read `Cargo.lock` and a policy file, neither of which has a host |
+| `Corpus gates` | Linux | reports an absence that is absent from both runners for one reason |
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#14
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / The Decision · hash: sha256:6842b0f378015ea5223e9fd0fd64d2b1415c1501e2a934bf8cef9abb8180e230*
+
+`nomos-spec-store` is on the Windows leg for a different reason from the determinism crates. It
+owns the embedded-record carriage-return test that `.gitattributes` names as its **only** defence
+against a class it describes in full — "content hashes are computed over file bytes and the
+governing records are embedded with `include_str!`", so a clone with `core.autocrlf=true` would
+change every block hash and "the same commit would validate on one machine and not on another".
+A line ending is the one input that cannot be checked on the host that cannot produce it.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#15
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Why Windows Rather Than Whatever Was Available · hash: sha256:9597848ce1b9150ebb26f0535fa9cea12d4f7f97548d63b8995fa36a7d24eb2d*
+
+## Why Windows Rather Than Whatever Was Available
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#16
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Why Windows Rather Than Whatever Was Available · hash: sha256:2e214d2025e48f660b252db27d6a887a3263157c63a682c79fbd8ab7caca093c*
+
+Because a claim in this tree depends on it and names it. `.gitattributes` is not a lint
+preference; it is a defence, written as prose, against a specific failure of a specific pair of
+hosts, and its own text says the defence is one test. Line endings differ across exactly this
+pair. The rest of the class this repository is exposed to — path separators, directory iteration
+order, filename case — differs on the same axis, and the six crates carrying a `determinism.rs`
+make claims of the form "the same input yields the same output" over inputs of exactly that kind.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#17
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Why Windows Rather Than Whatever Was Available · hash: sha256:c946a14af85c0951a9acc417b6b6db2b9a9dc3868d1a97a792e3f2d7a233ba75*
+
+A third host would have to be justified the same way, by a claim that needs it, and none in this
+tree does today.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#18
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / `fail-fast: false` Is Not `continue-on-error`, And The Distinction Is The Whole Point · hash: sha256:3ab57851ee401e0f6ac475d7c41372c9a5ef56c77edca22da92d28e84ee8c6ad*
+
+## `fail-fast: false` Is Not `continue-on-error`, And The Distinction Is The Whole Point
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#19
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / `fail-fast: false` Is Not `continue-on-error`, And The Distinction Is The Whole Point · hash: sha256:bbc1cec15de5af20ef9faed1c9db4eeca0c5bfa8c2922c3643308e5de47aa55a*
+
+The matrix sets `fail-fast: false`. It does not permit a leg to fail: both legs must be green for
+the gate to pass. It stops one leg's failure from cancelling the other, which is the difference
+between learning "Windows is red and Linux is fine" and learning "something was red".
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#20
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / `fail-fast: false` Is Not `continue-on-error`, And The Distinction Is The Whole Point · hash: sha256:0d9458db812cd1908ca7fb1f4b0ee259c39331bf5bff313970b2a40266f858b1*
+
+`continue-on-error` is the excuse, it appears nowhere in this workflow, and
+`Test_No_Step_In_The_Gate_Should_Excuse_Itself` refuses it by name along with `|| true` and a
+trailing `exit 0`. A red lane here is a finding, and a finding gets an item.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#21
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / A Matrix Rather Than A Second Job, For A Reason Discovered Rather Than Chosen · hash: sha256:8d2ca72e79ed50da14382531dd6e63b12593cba2c975a5da8c240b6f43001b96*
+
+## A Matrix Rather Than A Second Job, For A Reason Discovered Rather Than Chosen
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#22
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / A Matrix Rather Than A Second Job, For A Reason Discovered Rather Than Chosen · hash: sha256:5f4660b7cd5d9fef2fd9f350d16002fb8a0e7180bfccf7eed8602d35fa472782*
+
+The obvious shape is a second job, and it was written first. It fails a guard this workflow
+already carries: a second job needs its own `checkout`, and
+`Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag` measures the pin check against a fixture
+built from the real workflow with one action in it, asserting the reported list is exactly one
+entry. Two checkouts make it two.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#23
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / A Matrix Rather Than A Second Job, For A Reason Discovered Rather Than Chosen · hash: sha256:1ced60d637c0358cd55891028d4567cc7c10ae63e7de405270d6ac3611360b29*
+
+That test lives in `crates/host/nomos-cli/tests/gate_step.rs`, which the item carrying this
+record does not reserve, so the choice was between widening a claimed territory mid-item and
+finding a shape that fits inside it. One job with one `checkout` fits, and it is not a
+compromise: per-step `if:` conditions express the decided split more directly than duplicated
+step lists would, because the two legs stay side by side in one place instead of drifting apart
+in two.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#24
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / A Matrix Rather Than A Second Job, For A Reason Discovered Rather Than Chosen · hash: sha256:d6095290e1d89c05064313620699dcefbfa3b7a4e7db84a47cc8a829963b6a65*
+
+The guard was right to fire and the assertion should probably become "every action reported" once
+some workflow here legitimately runs two. That is not this item's to change.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#25
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#26
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What This Record Does Not Decide · hash: sha256:4721e9a8e58d9f557bb7f4f7ad047534d3e1fb14d93b31fac852b732b8460fd4*
+
+It does not decide that the Windows leg's subset is permanent. It decides that the subset is
+chosen by which claims have a host in them, and the workflow states the reason beside each step
+so the next editor can re-derive it rather than guess.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#27
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What This Record Does Not Decide · hash: sha256:ec2b1f6bf305f8198fc6513a316e148ceface8ec2e4bbcd473357dc9d938105e*
+
+It does not decide anything about the determinism declarations themselves. `OD-DETERMINISM-001`
+and `OD-DETERMINISM-002` govern those, and if this leg ever reddens, the defect lives in the
+crate that declares the determinism — which this item does not reserve and must not widen into.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#28
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What This Record Does Not Decide · hash: sha256:cb8c87116314134b0e484d1af75dc7158f1cb7c4050ada5ffc8f9cce0adab2f1*
+
+It does not decide that the corpora gap is narrowed. Neither runner has them, `Corpus gates`
+reports that on one leg, and a second report of the same absence would read as two measurements.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#29
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#30
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Considered And Rejected · hash: sha256:328d83d1d5a9a5e9b83ab17b587fdd312bd7fb7836f9550b1ca3a416671dbfba*
+
+**Run the whole workspace on both legs.** Rejected on the item's own terms: the steps that could
+differ by platform are not the same set as the steps that are expensive, and the most expensive
+steps here — the full suite, clippy, building cargo-deny — are the ones with no host in them.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#31
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Considered And Rejected · hash: sha256:1bbf4a7fbec60e5937f6f9b2653964cd32ddabf01e356d183183621df8e8bb2d*
+
+**A matrix whose extra leg may fail.** Rejected, and it is worth naming because it is what most
+repositories do. It converts a gate into a dashboard; nobody fixes a leg nobody has to fix.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#32
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Considered And Rejected · hash: sha256:fe3ae7627159b2ad38ea22c8dbb2ee41674d6a5346923009bd2c6efcf6de4b97*
+
+**A second job.** Rejected on evidence, above, not on taste.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#33
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Considered And Rejected · hash: sha256:147c786086717a979833f27fcb160f5272406dd6f0bda57dfea931ba471ba8cd*
+
+**macOS as a third leg.** Rejected for now because no claim in this tree names it. Adding a host
+because a runner exists is the defaulting this record refuses in its first paragraph.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#34
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Was Considered And Rejected · hash: sha256:1fc2c428e2f37d4473c6568e59f9decd8022746e9fc3cef58d57bc84a5afd920*
+
+**Leaving the Windows leg to a contributor's own machine.** That is the status quo this record
+ends. It is how `rust-version` stayed false for as long as it did — a configuration everybody
+assumed somebody was exercising, which `P11-MSRV-UNCHECKED` measured and nobody was.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#35
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#36
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Holds It · hash: sha256:b98a6a7c579fd32eb8cff8966adaed8d8df463e49588e261b5c614d923a63bb3*
+
+The leg itself holds it, by running rather than by asserting, on every push to `main` and `dev`
+and on every pull request.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#37
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Holds It · hash: sha256:b3775771ddc6c3cfca298193f8a22d8b1784bb5b3cf6c8be91719d89f7242b44*
+
+What does **not** hold it should be said plainly. No test asserts that the matrix still has two
+entries in it, so a later editor can delete `windows-latest` and every guard in this repository
+stays green. The same is true of the per-step `if:` conditions: nothing checks that the
+`Determinism` step still runs somewhere. This record and the comments beside the steps are the
+whole of the defence, which is exactly the shape `OD-GATE-006` was written about, one level up.
+It is named here rather than quietly left, and `P12-UNENFORCED-DECLARATION` is open against the
+class.
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38
+
+*revision: authored · kind: heading · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#39
+
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / Status · hash: sha256:bc9606320bd153286deaaa7811deac5563c2555ff84896378f81555f5083aec9*
+
+Closed. `P11-PLATFORM-UNCHECKED` carries it, and it discharges the fourth and last of the
+instances `OD-GATE-006` measured. The third, `P11-MSRV-UNCHECKED`, is measured but not landed:
+correcting the compatibility floor unmasks clippy findings in files that item does not reserve,
+which `P11-COLLAPSIBLE-UNMASKED` carries.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

@@ -22,7 +22,38 @@ permissions:
 
 jobs:
   gate:
-    runs-on: ubuntu-latest
+    # Two operating systems, and the second is chosen rather than reached for. This
+    # repository is developed on Windows -- every measurement in its ledger carries an
+    # `F:\repos\nomos` path -- so a gate on `ubuntu-latest` alone checked the environment
+    # nobody writes code in and nothing checked the one everybody does. OD-GATE-009 carries
+    # the choice and OD-GATE-006 is the principle: a declaration is exercised in every
+    # environment the claim needs, and a determinism claim's necessary environments are more
+    # than one.
+    #
+    # What makes it *this* platform is a claim in the tree rather than runner availability.
+    # `.gitattributes` states the risk in as many words -- content hashes are computed over
+    # file bytes and the governing records are embedded with `include_str!`, so a clone with
+    # `core.autocrlf=true` would change every block hash and "the same commit would validate
+    # on one machine and not on another". Line endings differ across exactly this pair of
+    # hosts, and the rest of the class -- path separators, directory iteration order,
+    # filename case -- differs on the same axis.
+    #
+    # `fail-fast: false` is not an excuse and must not be read as one. It does not let a leg
+    # fail; both legs must still be green. It stops one leg's failure from cancelling the
+    # other, which is what turns "Windows is red" into "Windows is red and Linux is fine" --
+    # the difference between a finding and a mystery. `continue-on-error` IS the excuse and
+    # appears nowhere here; `Test_No_Step_In_The_Gate_Should_Excuse_Itself` refuses it by name.
+    #
+    # A matrix, rather than a second job, because a second job needs a second `checkout` and
+    # this workflow asserts that every action it runs is pinned to a commit by listing them
+    # -- `Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag` measures that check against a
+    # fixture with one action in it. One job keeps one `uses:` line. Which steps run on which
+    # leg is then decided per step below, so nothing is copied.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       # Pinned to a commit rather than to `v4`. A tag is a name its owner can move to any
       # commit at any time, so `@v4` fetches whatever it points at on the morning the job
@@ -41,16 +72,53 @@ jobs:
       # Denied lints are part of the gate, not advice. unwrap_used, indexing_slicing
       # and arithmetic_side_effects all deny: a panic on the analysis path is a
       # determinism defect, because a replay must reach the same panic at the same step.
+      #
+      # Linux only, and the exclusion is measured rather than assumed. There is no
+      # `cfg(windows)`, no `cfg(unix)` and no `cfg(target_os = …)` anywhere in this
+      # workspace, so no code is hidden from this run and a second one would lint an
+      # identical token stream at full cost. That is a property of this tree and stops being
+      # true the day somebody adds the first `cfg`.
+      #
+      # The `if:` does not disturb `work finish`. `nomos_ledger::Derive_Step` moves between
+      # steps on `- name:` / `name:` and returns the first `run:` inside the one it wants,
+      # ignoring every other key, so this step still yields the same argv.
       - name: Lint
+        if: matrix.os == 'ubuntu-latest'
         run: cargo clippy --workspace --all-targets -- -D warnings
 
+      # The whole suite runs on Linux. On Windows the subset that makes platform-sensitive
+      # claims runs instead, below -- running the workspace twice would double the most
+      # expensive step in this gate to re-answer, on a second host, questions that have no
+      # host in them.
       - name: Test
+        if: matrix.os == 'ubuntu-latest'
         run: cargo test --workspace
+
+      # Windows only, because on Linux `Test` above already covers it.
+      #
+      # A decided subset, not a copy. Seven of these crates carry a `determinism.rs` and are
+      # therefore what `OD-DETERMINISM-001` and `OD-DETERMINISM-002` govern -- a determinism
+      # claim says the same input yields the same output, and the inputs that differ between
+      # these two hosts are exactly the ones such claims are usually wrong about.
+      # `nomos-spec-store` is here for a different reason: it owns the embedded-record
+      # carriage-return test that `.gitattributes` names as its only defence, and a line
+      # ending is the one input that cannot be checked on the host that cannot produce it.
+      #
+      # `--no-fail-fast` because a run that stops at the first failure reports one number
+      # when several are true, and a platform difference arrives in clusters.
+      - name: Determinism
+        if: matrix.os == 'windows-latest'
+        run: cargo test --no-fail-fast -p nomos-analysis -p nomos-workspace -p nomos-spec-bundle -p nomos-spec-project -p nomos-lang-rust -p nomos-lang-rust-scan -p nomos-integration-tests -p nomos-spec-store
 
       # The boundary assertions run as ordinary tests above. This step names them
       # separately so a failure is legible in the job list rather than buried among
       # a hundred unit tests -- these are the ones that fail when the architecture
       # has quietly stopped being true.
+      #
+      # Deliberately on both legs, and it is the only test step that is. The surface
+      # snapshots it compares are produced by walking source files, so directory iteration
+      # order and filename case reach them -- which is the same class as the determinism
+      # crates above and not paperwork.
       - name: Boundaries
         run: cargo test -p nomos-contract-tests
 
@@ -80,6 +148,14 @@ jobs:
       #
       # This is publication policy, not a property of the profile: the catalogue says how
       # each projection is built and nothing there says whether this repository ships it.
+      #
+      # On both legs, and the second one asks a different question. `freshness` recomputes a
+      # content hash over the rendered bytes and compares it to the committed sidecar, so a
+      # render that picked up a path separator or a directory order would agree with itself
+      # on the host that produced it and disagree on the other. The Linux leg checks that the
+      # committed projection is current; the Windows leg checks that "current" means the same
+      # thing on both hosts. That is the general form of what `.gitattributes` fears, applied
+      # to the artifacts this repository actually publishes.
       - name: Required projections
         run: cargo run --quiet -p nomos-cli -- spec freshness --into . --require diagram-set --require domain-specification
 
@@ -101,7 +177,13 @@ jobs:
       # this file for the step named `Lint` (nomos_ledger::Derive_Step), so that name here
       # would make finishing run this command instead of clippy, silently. A scripted
       # `run:` is refused outright. See OD-GATE-004.
+      #
+      # Linux only. It judges code content, and code content does not vary with the host --
+      # measured green on Windows while this item was open, 466 files examined and the same
+      # 13 findings, none of which can fail a build. A second run buys a second identical
+      # answer.
       - name: Rules
+        if: matrix.os == 'ubuntu-latest'
         run: cargo run --quiet -p nomos-cli --bin nomos -- check --root .
 
       # deny.toml is policy this repository declared and never ran. D-130 cites it as
@@ -136,10 +218,16 @@ jobs:
       # otherwise fully determined. `--locked` was never that -- it pins the dependencies
       # of the version it selected and does not select a version. OD-GATE-006 carries the
       # correction, because that is where the reasoning was published.
+      #
+      # Linux only, with the step below it. Both read `Cargo.lock` and a policy file, neither
+      # of which has a host in it, and building cargo-deny a second time is the most
+      # expensive way in this workflow to obtain an answer that cannot differ.
       - name: Install cargo-deny
+        if: matrix.os == 'ubuntu-latest'
         run: cargo install cargo-deny --locked --version 0.20.2
 
       - name: Supply chain
+        if: matrix.os == 'ubuntu-latest'
         run: cargo deny check advisories bans licenses sources
 
       # None of the three corpora is present on a CI runner: they live outside this
@@ -152,5 +240,10 @@ jobs:
       # to ignore, and a runner without the corpora is the normal case rather than a
       # misconfiguration. What is guarded is the number: tests/contract/tests/
       # corpus_gates.rs fails if the declared count stops matching the source.
+      #
+      # Linux only. The hole it reports is the absence of three corpora from the runner, and
+      # they are absent from both runners for the same reason -- they live outside this
+      # repository. Reporting the same number twice would make it look measured per host.
       - name: Corpus gates (reports what did not run)
+        if: matrix.os == 'ubuntu-latest'
         run: cargo test -p nomos-contract-tests --test corpus_gates -- --nocapture
