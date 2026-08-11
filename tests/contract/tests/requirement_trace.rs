@@ -262,7 +262,6 @@ fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
 {
     let root = Workspace::Workspace_Root();
     let assessments = Committed(&root);
-
     let entry = assessments
         .iter()
         .find(|assessment| return assessment.requirement == "CHK-003")
@@ -270,7 +269,6 @@ fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
 
     assert_eq!(entry.verdict, Verdict::Met);
     assert_eq!(entry.record.as_deref(), Some("OD-CONTRACTS-002"));
-
     for file in [
         "crates/contracts/nomos-contracts/src/applicability.rs",
         "crates/contracts/nomos-contracts/src/evidence.rs",
@@ -296,25 +294,12 @@ fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
 fn Test_An_Entry_Naming_A_Vanished_Site_Should_Be_Reported()
 {
     let root = Workspace::Workspace_Root();
-
-    let gone_file = Assessment {
-        requirement: "CHK-003".to_owned(),
-        verdict: Verdict::Met,
-        record: None,
-        sites: vec![Site {
-            path: "crates/contracts/nomos-contracts/src/no_such_file.rs".to_owned(),
-            symbol: "Applicability".to_owned(),
-        }],
-    };
-    let gone_symbol = Assessment {
-        requirement: "EVID-001".to_owned(),
-        verdict: Verdict::Met,
-        record: None,
-        sites: vec![Site {
-            path: "crates/contracts/nomos-contracts/src/evidence.rs".to_owned(),
-            symbol: "A_Name_This_Workspace_Does_Not_Use".to_owned(),
-        }],
-    };
+    let gone_file = Naming("CHK-003", "crates/contracts/nomos-contracts/src/no_such_file.rs", "Applicability");
+    let gone_symbol = Naming(
+        "EVID-001",
+        "crates/contracts/nomos-contracts/src/evidence.rs",
+        "A_Name_This_Workspace_Does_Not_Use",
+    );
 
     assert_eq!(Unresolved_Sites(&root, &[gone_file]).len(), 1);
     assert_eq!(
@@ -323,6 +308,20 @@ fn Test_An_Entry_Naming_A_Vanished_Site_Should_Be_Reported()
         "a renamed symbol in a file that still exists is the case a path-only check misses, \
          and it is the common one"
     );
+}
+
+/// A `Met` assessment naming exactly one site and no record.
+fn Naming(requirement: &str, path: &str, symbol: &str) -> Assessment
+{
+    return Assessment {
+        requirement: requirement.to_owned(),
+        verdict: Verdict::Met,
+        record: None,
+        sites: vec![Site {
+            path: path.to_owned(),
+            symbol: symbol.to_owned(),
+        }],
+    };
 }
 
 /// The negative control for [`Test_Every_Named_Record_Should_Exist_And_Be_Registered`],
@@ -335,17 +334,14 @@ fn Test_An_Entry_Naming_A_Vanished_Site_Should_Be_Reported()
 fn Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported()
 {
     let root = Workspace::Workspace_Root();
-
     let invented = Assessment {
-        requirement: "CAP-002".to_owned(),
-        verdict: Verdict::Met,
         record: Some("OD-NOTHING-999".to_owned()),
-        sites: vec![Site {
-            path: "crates/contracts/nomos-contracts/src/guarantee.rs".to_owned(),
-            symbol: "FactVariant".to_owned(),
-        }],
+        ..Naming(
+            "CAP-002",
+            "crates/contracts/nomos-contracts/src/guarantee.rs",
+            "FactVariant",
+        )
     };
-
     assert_eq!(Unresolved_Records(&root, &[invented]).len(), 1);
 
     let real = Assessment {
@@ -367,15 +363,13 @@ fn Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported()
 fn Test_A_Divergence_With_No_Record_Should_Be_Refused()
 {
     let unreasoned = Assessment {
-        requirement: "WORK-LEDGER-005".to_owned(),
         verdict: Verdict::Diverges,
-        record: None,
-        sites: vec![Site {
-            path: "crates/substrate/nomos-ledger/src/item.rs".to_owned(),
-            symbol: "Blocker".to_owned(),
-        }],
+        ..Naming(
+            "WORK-LEDGER-005",
+            "crates/substrate/nomos-ledger/src/item.rs",
+            "Blocker",
+        )
     };
-
     assert_eq!(
         Divergences_With_No_Record(std::slice::from_ref(&unreasoned)).len(),
         1
@@ -386,7 +380,6 @@ fn Test_A_Divergence_With_No_Record_Should_Be_Refused()
         ..unreasoned.clone()
     };
     assert!(Divergences_With_No_Record(&[reasoned]).is_empty());
-
     let met = Assessment {
         verdict: Verdict::Met,
         ..unreasoned
@@ -416,71 +409,7 @@ fn Test_The_Reader_Should_Refuse_Every_Malformed_Entry()
          reader refuses everything"
     );
 
-    for (stem, text, because) in [
-        ("CHK-003", "site: README.md#Nomos\n", "no verdict"),
-        ("CHK-003", "verdict: Met\n", "no site"),
-        (
-            "CHK-003",
-            "verdict: Unassessed\nsite: README.md#Nomos\n",
-            "Unassessed is held by the absence of an entry and must not be writable",
-        ),
-        (
-            "CHK-003",
-            "verdict: Satisfied\nsite: README.md#Nomos\n",
-            "a verdict outside the three",
-        ),
-        (
-            "CHK-003",
-            "verdict: Met\nverdict: Diverges\nsite: README.md#Nomos\n",
-            "two verdicts",
-        ),
-        (
-            "CHK-003",
-            "verdict: Met\nrecord: OD-TRACE-001\nrecord: OD-SPEC-007\nsite: README.md#Nomos\n",
-            "two records",
-        ),
-        (
-            "CHK-003",
-            "verdict: Met\nsite: README.md\n",
-            "a site with no symbol",
-        ),
-        (
-            "CHK-003",
-            "verdict: Met\nsite: #Nomos\n",
-            "a site with no path",
-        ),
-        (
-            "CHK-003",
-            "verdict: Met\nsite: /absolute.rs#Nomos\n",
-            "a site that is not repo-relative",
-        ),
-        (
-            "CHK-003",
-            "verdict: Met\nsite: ../outside.rs#Nomos\n",
-            "a site reaching outside the workspace",
-        ),
-        (
-            "CHK-003",
-            "verdict: Met\nid: CHK-003\nsite: README.md#Nomos\n",
-            "an unknown key — an id: line would be a second place for the identity to be \
-             wrong, which is the rule OD-SPEC-007 set for a record registration",
-        ),
-        (
-            "CHK-003",
-            "verdict Met\nsite: README.md#Nomos\n",
-            "a line that is not a key",
-        ),
-        (
-            "chk-3",
-            "verdict: Met\nsite: README.md#Nomos\n",
-            "a stem that is not a requirement identifier",
-        ),
-        (
-            "CHK-003",
-            "verdict: Diverges\nsite: README.md#Nomos\n",
-            "a divergence with no record, refused at read time as well as compared",
-        ),
-    ]
+    for (stem, text, because) in MALFORMED
     {
         assert!(
             Parse(stem, text).is_err(),
@@ -488,6 +417,68 @@ fn Test_The_Reader_Should_Refuse_Every_Malformed_Entry()
         );
     }
 }
+
+/// Every shape the reader must refuse, and what is wrong with each.
+///
+/// A table rather than one test apiece. They are one rule — the reader has no lenient path —
+/// and fourteen near-identical test functions would state it fourteen times.
+const MALFORMED: &[(&str, &str, &str)] = &[
+    ("CHK-003", "site: README.md#Nomos\n", "no verdict"),
+    ("CHK-003", "verdict: Met\n", "no site"),
+    (
+        "CHK-003",
+        "verdict: Unassessed\nsite: README.md#Nomos\n",
+        "Unassessed is held by the absence of an entry and must not be writable",
+    ),
+    (
+        "CHK-003",
+        "verdict: Satisfied\nsite: README.md#Nomos\n",
+        "a verdict outside the three",
+    ),
+    (
+        "CHK-003",
+        "verdict: Met\nverdict: Diverges\nsite: README.md#Nomos\n",
+        "two verdicts",
+    ),
+    (
+        "CHK-003",
+        "verdict: Met\nrecord: OD-TRACE-001\nrecord: OD-SPEC-007\nsite: README.md#Nomos\n",
+        "two records",
+    ),
+    ("CHK-003", "verdict: Met\nsite: README.md\n", "a site with no symbol"),
+    ("CHK-003", "verdict: Met\nsite: #Nomos\n", "a site with no path"),
+    (
+        "CHK-003",
+        "verdict: Met\nsite: /absolute.rs#Nomos\n",
+        "a site that is not repo-relative",
+    ),
+    (
+        "CHK-003",
+        "verdict: Met\nsite: ../outside.rs#Nomos\n",
+        "a site reaching outside the workspace",
+    ),
+    (
+        "CHK-003",
+        "verdict: Met\nid: CHK-003\nsite: README.md#Nomos\n",
+        "an unknown key — an id: line would be a second place for the identity to be wrong, \
+         which is the rule OD-SPEC-007 set for a record registration",
+    ),
+    (
+        "CHK-003",
+        "verdict Met\nsite: README.md#Nomos\n",
+        "a line that is not a key",
+    ),
+    (
+        "chk-3",
+        "verdict: Met\nsite: README.md#Nomos\n",
+        "a stem that is not a requirement identifier",
+    ),
+    (
+        "CHK-003",
+        "verdict: Diverges\nsite: README.md#Nomos\n",
+        "a divergence with no record, refused at read time as well as compared",
+    ),
+];
 
 /// The identifier is the stem, and nothing inside the file may restate it.
 #[test]
@@ -542,28 +533,35 @@ fn Unresolved_Sites(root: &Path, assessments: &[Assessment]) -> Vec<String>
     {
         for site in &assessment.sites
         {
-            let path = root.join(&site.path);
-            let Ok(text) = std::fs::read_to_string(&path)
-            else
-            {
-                missing.push(format!(
-                    "{}: {} is not a file in this workspace",
-                    assessment.requirement, site.path
-                ));
-                continue;
-            };
-
-            if !text.contains(&site.symbol)
-            {
-                missing.push(format!(
-                    "{}: {} no longer occurs in {}",
-                    assessment.requirement, site.symbol, site.path
-                ));
-            }
+            let unresolved = Unresolved(root, &assessment.requirement, site);
+            missing.extend(unresolved);
         }
     }
 
     return missing;
+}
+
+/// Why one site is not where its entry says it is, if it is not.
+fn Unresolved(root: &Path, requirement: &str, site: &Site) -> Option<String>
+{
+    let path = root.join(&site.path);
+    let Ok(text) = std::fs::read_to_string(&path)
+    else
+    {
+        return Some(format!(
+            "{requirement}: {} is not a file in this workspace",
+            site.path
+        ));
+    };
+    if text.contains(&site.symbol)
+    {
+        return None;
+    }
+
+    return Some(format!(
+        "{requirement}: {} no longer occurs in {}",
+        site.symbol, site.path
+    ));
 }
 
 /// Every named record that is not a registered governing record.
@@ -579,26 +577,31 @@ fn Unresolved_Records(root: &Path, assessments: &[Assessment]) -> Vec<String>
             continue;
         };
 
-        if !Registration_Exists(root, record)
-        {
-            unresolved.push(format!(
-                "{}: {record} has no registration under \
-                 crates/spec/nomos-spec-store/records/",
-                assessment.requirement
-            ));
-            continue;
-        }
-
-        if !Document_Exists(root, record)
-        {
-            unresolved.push(format!(
-                "{}: {record} is registered and its document is not under docs/records/",
-                assessment.requirement
-            ));
-        }
+        let missing = Unregistered(root, &assessment.requirement, record);
+        unresolved.extend(missing);
     }
 
     return unresolved;
+}
+
+/// Why one named record does not resolve to a registered governing record, if it does not.
+fn Unregistered(root: &Path, requirement: &str, record: &str) -> Option<String>
+{
+    if !Registration_Exists(root, record)
+    {
+        return Some(format!(
+            "{requirement}: {record} has no registration under \
+             crates/spec/nomos-spec-store/records/"
+        ));
+    }
+    if Document_Exists(root, record)
+    {
+        return None;
+    }
+
+    return Some(format!(
+        "{requirement}: {record} is registered and its document is not under docs/records/"
+    ));
 }
 
 /// Every entry that departs from a requirement without saying why.
@@ -673,36 +676,40 @@ fn Committed(root: &Path) -> Vec<Assessment>
 /// Takes the directory rather than finding it, so a control can hand it one.
 fn Entries(directory: &Path) -> Result<Vec<Assessment>, String>
 {
-    let mut found = Vec::new();
-
     let listing = std::fs::read_dir(directory)
         .map_err(|error| return format!("{} cannot be read: {error}", directory.display()))?;
+    let mut found = Vec::new();
 
     for entry in listing.flatten()
     {
         let path = entry.path();
-        if !path
-            .extension()
-            .is_some_and(|extension| return extension == EXTENSION)
-        {
-            continue;
-        }
-
-        let stem = path
-            .file_stem()
-            .and_then(|stem| return stem.to_str())
-            .ok_or_else(|| return format!("{} has no readable stem", path.display()))?;
-
-        let text = std::fs::read_to_string(&path)
-            .map_err(|error| return format!("{} cannot be read: {error}", path.display()))?;
-
-        found.push(Parse(stem, &text).map_err(|refusal| {
-            return format!("{}: {refusal}", path.display());
-        })?);
+        found.extend(Read_Entry(&path)?);
     }
 
     found.sort_by(|left, right| return left.requirement.cmp(&right.requirement));
     return Ok(found);
+}
+
+/// The assessment one directory entry holds, or `None` for a file that is not an entry.
+fn Read_Entry(path: &Path) -> Result<Option<Assessment>, String>
+{
+    let is_entry = path
+        .extension()
+        .is_some_and(|extension| return extension == EXTENSION);
+    if !is_entry
+    {
+        return Ok(None);
+    }
+    let stem = path
+        .file_stem()
+        .and_then(|stem| return stem.to_str())
+        .ok_or_else(|| return format!("{} has no readable stem", path.display()))?;
+    let text = std::fs::read_to_string(path)
+        .map_err(|error| return format!("{} cannot be read: {error}", path.display()))?;
+
+    return Parse(stem, &text)
+        .map(Some)
+        .map_err(|refusal| return format!("{}: {refusal}", path.display()));
 }
 
 /// One entry, or the reason it is not one.
@@ -720,60 +727,100 @@ fn Parse(stem: &str, text: &str) -> Result<Assessment, String>
         ));
     }
 
-    let mut verdict: Option<Verdict> = None;
-    let mut record: Option<String> = None;
-    let mut sites: Vec<Site> = Vec::new();
+    let read = Read_Lines(text)?;
+    let verdict = read.verdict.ok_or_else(|| {
+        return "no verdict; an entry with none is not an assessment".to_owned();
+    })?;
+
+    Assert_Complete(verdict, read.record.as_deref(), &read.sites)?;
+
+    return Ok(Assessment {
+        requirement: stem.to_owned(),
+        verdict,
+        record: read.record,
+        sites: read.sites,
+    });
+}
+
+/// What the lines of an entry said, before anything is required of them.
+#[derive(Default)]
+struct Read
+{
+    verdict: Option<Verdict>,
+    record: Option<String>,
+    sites: Vec<Site>,
+}
+
+/// Every `key: value` line an entry holds, filed under its key.
+fn Read_Lines(text: &str) -> Result<Read, String>
+{
+    let mut read = Read::default();
 
     for line in text.lines()
     {
         let trimmed = line.trim();
-        if trimmed.is_empty() || trimmed.starts_with('#')
+        if !trimmed.is_empty() && !trimmed.starts_with('#')
         {
-            continue;
-        }
-
-        let Some((key, value)) = trimmed.split_once(':')
-        else
-        {
-            return Err(format!("`{trimmed}` is not a `key: value` line"));
-        };
-        let value = value.trim();
-
-        match key.trim()
-        {
-            "verdict" =>
-            {
-                if verdict.is_some()
-                {
-                    return Err("two verdict lines; an entry says one thing".to_owned());
-                }
-                verdict = Some(Read_Verdict(value)?);
-            }
-            "record" =>
-            {
-                if record.is_some()
-                {
-                    return Err(
-                        "two record lines; one reason, in one record, or the entry does \
-                         not say which"
-                            .to_owned(),
-                    );
-                }
-                if value.is_empty()
-                {
-                    return Err("an empty record line".to_owned());
-                }
-                record = Some(value.to_owned());
-            }
-            "site" => sites.push(Read_Site(value)?),
-            other => return Err(format!("unknown key `{other}`")),
+            Read_One(&mut read, trimmed)?;
         }
     }
 
-    let verdict = verdict.ok_or_else(|| {
-        return "no verdict; an entry with none is not an assessment".to_owned();
-    })?;
+    return Ok(read);
+}
 
+/// One line, filed under the key it names.
+fn Read_One(read: &mut Read, line: &str) -> Result<(), String>
+{
+    let Some((key, value)) = line.split_once(':')
+    else
+    {
+        return Err(format!("`{line}` is not a `key: value` line"));
+    };
+    let value = value.trim();
+
+    match key.trim()
+    {
+        "verdict" => read.verdict = Some(Second_Verdict(read.verdict.as_ref(), value)?),
+        "record" => read.record = Some(Second_Record(read.record.as_deref(), value)?),
+        "site" => read.sites.push(Read_Site(value)?),
+        other => return Err(format!("unknown key `{other}`")),
+    }
+
+    return Ok(());
+}
+
+/// The verdict a line names, refusing a second one: an entry says one thing.
+fn Second_Verdict(held: Option<&Verdict>, value: &str) -> Result<Verdict, String>
+{
+    if held.is_some()
+    {
+        return Err("two verdict lines; an entry says one thing".to_owned());
+    }
+
+    return Read_Verdict(value);
+}
+
+/// The record a line names, refusing an empty one and a second one.
+fn Second_Record(held: Option<&str>, value: &str) -> Result<String, String>
+{
+    if held.is_some()
+    {
+        return Err(
+            "two record lines; one reason, in one record, or the entry does not say which"
+                .to_owned(),
+        );
+    }
+    if value.is_empty()
+    {
+        return Err("an empty record line".to_owned());
+    }
+
+    return Ok(value.to_owned());
+}
+
+/// What an entry owes once its lines have been read.
+fn Assert_Complete(verdict: Verdict, record: Option<&str>, sites: &[Site]) -> Result<(), String>
+{
     if sites.is_empty()
     {
         return Err(
@@ -782,7 +829,6 @@ fn Parse(stem: &str, text: &str) -> Result<Assessment, String>
                 .to_owned(),
         );
     }
-
     if verdict.Owes_A_Record() && record.is_none()
     {
         return Err(format!(
@@ -792,12 +838,7 @@ fn Parse(stem: &str, text: &str) -> Result<Assessment, String>
         ));
     }
 
-    return Ok(Assessment {
-        requirement: stem.to_owned(),
-        verdict,
-        record,
-        sites,
-    });
+    return Ok(());
 }
 
 /// One of the three writable verdicts.
@@ -837,15 +878,12 @@ fn Read_Site(value: &str) -> Result<Site, String>
              survives every rename that matters"
         ));
     };
-
     let path = path.trim();
     let symbol = symbol.trim();
-
     if path.is_empty() || symbol.is_empty()
     {
         return Err(format!("`{value}` has an empty path or symbol"));
     }
-
     if path.starts_with('/') || path.starts_with('\\') || path.contains("..")
     {
         return Err(format!(
@@ -872,12 +910,10 @@ fn Is_Requirement_Id(stem: &str) -> bool
     {
         return false;
     };
-
     if number.len() != 3 || !number.bytes().all(|byte| return byte.is_ascii_digit())
     {
         return false;
     }
-
     if family.is_empty()
     {
         return false;
