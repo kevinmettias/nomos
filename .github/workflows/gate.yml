@@ -11,11 +11,26 @@ on:
   push:
     branches: [main, dev]
 
+# Every step in this gate reads. Checkout reads, and the rest run `cargo` over what it
+# fetched -- nothing here writes to the repository, and the token says so rather than
+# carrying whatever the repository-wide default happens to be. A default is a permission
+# grant decided in a settings page this file cannot show, which makes it the same shape as
+# a declaration nothing executes. Declared at the top level so a job or step added later
+# inherits the floor instead of the default.
+permissions:
+  contents: read
+
 jobs:
   gate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Pinned to a commit rather than to `v4`. A tag is a name its owner can move to any
+      # commit at any time, so `@v4` fetches whatever it points at on the morning the job
+      # runs -- and a tag that moves changes what executes here while changing nothing in
+      # this repository, which means the diff that would show it does not exist. The
+      # trailing comment names the release the SHA is, because forty unreviewable
+      # characters are how a pin becomes a paste nobody can check.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       # The toolchain is pinned in rust-toolchain.toml and honoured automatically.
       # It is nightly because rustfmt's Allman brace option is unstable -- see
@@ -109,12 +124,20 @@ jobs:
       # the build does not already depend on. The cost is runner minutes, and it is
       # chosen rather than defaulted into.
       #
-      # The tool version is deliberately not pinned. The advisory database varies with
-      # time whatever this step does, so pinning would buy determinism only for the three
-      # classes that already have it from Cargo.lock, while costing fixes for the one
-      # class that cannot have it.
+      # The tool version is pinned, and the argument that it should not be was wrong.
+      # That argument ran: the advisory database varies with time whatever this step
+      # does, so pinning would buy determinism only for the three classes that already
+      # have it from Cargo.lock while costing fixes for the one class that cannot. It
+      # conflates the tool with the database the tool fetches. `cargo-deny` reads the
+      # advisory database over the network at run time, so the database moves with the
+      # calendar whichever binary reads it and a version pin costs no advisory freshness
+      # whatsoever. What the pin buys is the other half: the binary reading `Cargo.lock`
+      # for licenses, bans and sources stops changing underneath three classes that are
+      # otherwise fully determined. `--locked` was never that -- it pins the dependencies
+      # of the version it selected and does not select a version. OD-GATE-006 carries the
+      # correction, because that is where the reasoning was published.
       - name: Install cargo-deny
-        run: cargo install cargo-deny --locked
+        run: cargo install cargo-deny --locked --version 0.20.2
 
       - name: Supply chain
         run: cargo deny check advisories bans licenses sources

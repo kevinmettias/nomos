@@ -3,7 +3,7 @@ id: OD-GATE-006
 type: decision
 title: A declaration of enforcement is incomplete until something executes it, in every environment the claim needs
 status: closed
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -140,6 +140,46 @@ This is a decision about this repository at this size and it is the part of this
 likely to be revisited. What would change it is a second cadence that somebody is accountable
 to, not a larger dependency graph.
 
+## What Executes The Gate, Which Version 1 Of This Record Argued Need Not Be Pinned
+
+The section above is about the *cadence* of one class. This one is about the programs that run
+all four, and it corrects an argument this record published rather than adding a new one.
+
+Beside the step it added, `P11-UNRUN-POLICY` wrote that the tool version was deliberately not
+pinned: the advisory database varies with time whatever the step does, so pinning would buy
+determinism only for the three classes that already have it from `Cargo.lock`, while costing
+fixes for the one class that cannot have it.
+
+That is wrong, and it is wrong in the way this record is otherwise about — it reads as
+considered. It conflates the tool with the database the tool fetches. `cargo-deny` reads the
+advisory database over the network at run time, so the database moves with the calendar
+whichever binary reads it, and a version pin costs no advisory freshness whatsoever. The
+freshness the argument was protecting was never at risk from pinning. What the pin buys is the
+half the argument gave away: the binary reading `Cargo.lock` for `licenses`, `bans` and
+`sources` stops changing underneath three classes that are otherwise fully determined.
+`--locked` was mistaken for that guarantee and is not it — it pins the dependencies of the
+version it selected and does not select a version.
+
+The same reasoning reaches one step further up, to `actions/checkout@v4`. A tag is a name its
+owner may repoint at any commit at any time, so that reference fetches whatever it names on the
+morning the job runs. What makes it a defect rather than a preference is the shape this record
+keeps finding: a moved tag changes what executes and changes nothing here, so there is no diff
+for a reviewer to miss and no commit for the gate to run on. An unpinned tool and a moving tag
+are the same unexecuted claim `deny.toml` was. "This gate checks the workspace" is a statement
+about a program, and until the program is named it is a statement about whatever arrived.
+
+Two consequences, both narrower than they look:
+
+**This still does not make CI a product surface.** The section below holds unchanged. Pinning
+what one bootstrap workflow executes is hygiene about this file, not a canonical CI policy, a
+generated workflow, or a vendor-neutral runner.
+
+**A pin is a maintenance obligation, and it is accepted as one rather than overlooked.** A
+pinned action stops receiving its own fixes, so somebody must advance it deliberately. That
+cost is chosen on the same ground as the runner minutes this step already spends: an
+unreviewable automatic upgrade is not a security property, it is the absence of one, and this
+record exists because absences that read like mechanisms are expensive here.
+
 ## What This Record Does Not Decide
 
 It does not decide anything about a declaration that *is* executed. The workspace lint table in
@@ -192,6 +232,14 @@ make the claims. It is named here so the next reader knows the gap is known.
 `continue-on-error` on any of them, and `Test_The_Workflow_Should_Not_Appear_Empty` is the floor
 that fails if the file is emptied rather than fixed.
 
+The amendment above is held the same way, in the same file:
+`Test_Every_Action_Should_Be_Pinned_To_A_Commit`,
+`Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version` and
+`Test_The_Gate_Should_Declare_The_Token_It_Runs_With`. The first has a control,
+`Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag`, which puts an action back on a moving tag
+and requires the check to report it — an absence assertion nobody has watched fail is a comment,
+and this record is the wrong place to install one.
+
 What does **not** hold it is worth stating plainly, because the shape of this record invites the
 opposite reading. Nothing prevents the next declaration from arriving unexecuted. The two
 instances still open are open items and not tests, and if both are declined this record's
@@ -204,3 +252,9 @@ Closed. `P11-UNRUN-POLICY` carries it and discharges two of the four instances m
 the gate now runs on the branch the work lands on, and `cargo deny` runs all four classes and
 exits 0. `P11-MSRV-UNCHECKED` and `P11-PLATFORM-UNCHECKED` carry the other two and depend on
 this item, so the record exists before the instances that cite it rather than after.
+
+Amended to version 2 by `P11-WORKFLOW-TRUST`, which pins what this gate executes —
+`actions/checkout` to a commit and `cargo-deny` to a version — and declares
+`permissions: contents: read`, because every step here reads and none writes. The wrong
+argument is stated above rather than deleted: a record whose whole subject is claims that
+nothing checks cannot quietly drop the paragraph that turned out to be one.

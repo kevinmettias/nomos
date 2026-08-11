@@ -35,6 +35,20 @@ const RULES_STEP: &str = "Rules";
 /// code", which `P10-CHECK-GATE`'s `done_when` names as not closing the item.
 const EXCUSES: [&str; 3] = ["continue-on-error", "|| true", "exit 0"];
 
+/// The step that puts the supply-chain tool on the runner.
+///
+/// Named as a constant for the same reason `RULES_STEP` is: the assertions below derive it
+/// rather than grepping for the command, so a step renamed out from under them fails loudly
+/// instead of matching nothing.
+const SUPPLY_CHAIN_TOOL_STEP: &str = "Install cargo-deny";
+
+/// How long a git commit identifier is, in hexadecimal characters.
+///
+/// The full identifier and not a prefix. An abbreviated one is ambiguous by construction and
+/// GitHub Actions refuses to resolve it, so a short "pin" is a broken reference rather than a
+/// weak one.
+const COMMIT_IDENTIFIER_LENGTH: usize = 40;
+
 /// This repository's root, from this crate's manifest directory.
 fn Repository_Root() -> PathBuf
 {
@@ -54,6 +68,23 @@ fn Workflow() -> String
         .unwrap_or_else(|error| panic!("this repository has a gate workflow at {}: {error}", path.display()));
 }
 
+/// A workflow with its comment lines dropped, which is the part that runs.
+///
+/// Extracted rather than written twice. Every structural assertion in this file is about what
+/// the workflow *does*, and the steps here explain themselves at length in prose that names
+/// the very strings being guarded against — `continue-on-error`, `@v4`, `contents: read` all
+/// appear in comments arguing for or against them. A predicate that read the prose would make
+/// explaining a decision impossible in the file the decision lives in, and a second copy of
+/// this rule beside the first is how two guards come to disagree about what a comment is.
+fn Executable_Part(workflow: &str) -> String
+{
+    return workflow
+        .lines()
+        .filter(|line| return !line.trim_start().starts_with('#'))
+        .collect::<Vec<&str>>()
+        .join("\n");
+}
+
 /// Which excuses a workflow carries, comments not counted.
 ///
 /// Extracted so that the control below exercises **this** predicate rather than a second
@@ -66,17 +97,87 @@ fn Workflow() -> String
 /// is in.
 fn Excuses_In(workflow: &str) -> Vec<String>
 {
-    let executable = workflow
-        .lines()
-        .filter(|line| return !line.trim_start().starts_with('#'))
-        .collect::<Vec<&str>>()
-        .join("\n");
+    let executable = Executable_Part(workflow);
 
     return EXCUSES
         .iter()
         .filter(|excuse| return executable.contains(**excuse))
         .map(|excuse| return (*excuse).to_owned())
         .collect();
+}
+
+/// The action reference a `uses:` line names, with any trailing comment removed.
+///
+/// The comment is where the pin says which release it is, so it is deliberately not part of
+/// the reference being judged — a pin is the SHA, and the note beside it is for the reader.
+fn Action_Reference(line: &str) -> Option<&str>
+{
+    let reference = line
+        .strip_prefix("- uses:")
+        .or_else(|| return line.strip_prefix("uses:"))?;
+
+    return Some(reference.split('#').next().unwrap_or(reference).trim());
+}
+
+/// Whether a reference is pinned to a full commit identifier.
+fn Is_A_Commit_Pin(version: &str) -> bool
+{
+    return version.len() == COMMIT_IDENTIFIER_LENGTH
+        && version
+            .chars()
+            .all(|character| return character.is_ascii_hexdigit());
+}
+
+/// Which actions this workflow reaches for by something other than a commit, comments not
+/// counted.
+///
+/// A reference carrying no `@` at all is reported too. That is not this repository's case
+/// today, and it is included because the shape it would take — a local composite action — is
+/// still a decision about what executes here, and reporting it is what keeps this from being
+/// a check that only understands the one line it was written for.
+fn Unpinned_Actions_In(workflow: &str) -> Vec<String>
+{
+    return Executable_Part(workflow)
+        .lines()
+        .map(str::trim)
+        .filter_map(Action_Reference)
+        .filter(|reference| {
+            return !reference
+                .rsplit_once('@')
+                .is_some_and(|(_, version)| return Is_A_Commit_Pin(version));
+        })
+        .map(str::to_owned)
+        .collect();
+}
+
+/// The same workflow with every action reached for by a moving tag instead of a commit.
+///
+/// Written by walking the `uses:` lines rather than replacing the SHA that is there today, so
+/// it keeps working the next time the pin is advanced and cannot silently rewrite nothing —
+/// the arrangement `With_A_Scripted_Rules_Step` uses for its own subject.
+fn With_A_Tagged_Action(workflow: &str) -> String
+{
+    let mut rewritten = String::new();
+
+    for line in workflow.lines()
+    {
+        let trimmed = line.trim();
+
+        if !trimmed.starts_with('#')
+            && let Some(reference) = Action_Reference(trimmed)
+            && let Some((action, _)) = reference.rsplit_once('@')
+        {
+            rewritten.push_str("      - uses: ");
+            rewritten.push_str(action);
+            rewritten.push_str("@v4\n");
+            continue;
+        }
+
+        rewritten.push_str(line);
+        rewritten.push('\n');
+    }
+
+    return rewritten;
 }
 
 /// The same workflow with the `Rules` step's `run:` turned into a block scalar.
@@ -363,5 +464,121 @@ fn Test_The_Workflow_Should_Not_Appear_Empty()
         steps >= 5,
         "{steps} named step(s) in the gate workflow. Every assertion in this file is a \
          statement about a file that has been truncated or replaced"
+    );
+}
+
+// ---------------------------------------------------------------------------
+// What the gate runs is pinned, and so is what it runs as.
+// ---------------------------------------------------------------------------
+
+/// Nothing executes here by a name its owner can move.
+///
+/// This gate pins the code it checks — `Cargo.lock` for the dependency graph,
+/// `rust-toolchain.toml` for the compiler — and for a while pinned nothing that does the
+/// checking. A tag is a reference its owner may repoint at any commit at any time, so `@v4`
+/// fetches whatever it names on the morning the job runs. The failure that makes this worth a
+/// test rather than a review habit is that a moved tag changes what executes and changes
+/// nothing in this repository: there is no diff to notice, so the only thing standing between
+/// a repointed tag and a run of it is an assertion that the reference is not a tag at all.
+#[test]
+fn Test_Every_Action_Should_Be_Pinned_To_A_Commit()
+{
+    let unpinned = Unpinned_Actions_In(&Workflow());
+
+    assert!(
+        unpinned.is_empty(),
+        "the gate reaches for {unpinned:?} by something other than a full commit identifier. \
+         A tag is a name its owner can move, so this workflow would run different code with \
+         no change in this repository to show it"
+    );
+}
+
+/// The control that shows the assertion above can fire.
+///
+/// Without it, `Test_Every_Action_Should_Be_Pinned_To_A_Commit` is satisfied by a workflow
+/// with no actions in it at all, and a string-absence assertion that has never been shown to
+/// fail is indistinguishable from a comment — the reasoning
+/// `Test_The_Excuse_Check_Should_Reject_An_Excused_Step` already makes for its own subject.
+#[test]
+fn Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag()
+{
+    let tagged = With_A_Tagged_Action(&Workflow());
+
+    assert!(
+        tagged.contains("@v4"),
+        "the fixture rewrote nothing, so this control is about a workflow that does not exist"
+    );
+    assert_eq!(
+        Unpinned_Actions_In(&tagged),
+        vec!["actions/checkout@v4".to_owned()],
+        "the check did not report an action this fixture put back on a moving tag"
+    );
+}
+
+/// The supply-chain tool arrives at a version this file chose.
+///
+/// `cargo install cargo-deny --locked` builds whatever `crates.io` serves that day.
+/// `--locked` pins the dependencies of the version it selected and does not select a version,
+/// so it reads like a pin while leaving the binary free to change — which is the whole of why
+/// this is asserted rather than left to the flag that looks like it already covers it.
+///
+/// Derived by step name rather than grepped, so rewriting the install into a script fails
+/// here instead of satisfying this by containing the right words.
+#[test]
+fn Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version()
+{
+    let argv = nomos_ledger::Derive_Step(&Workflow(), SUPPLY_CHAIN_TOOL_STEP)
+        .unwrap_or_else(|refusal| panic!("{}", refusal.Describe()));
+
+    assert!(
+        argv.iter().any(|argument| return argument == "--locked"),
+        "the install must still lock the tool's own dependency graph, got {argv:?}"
+    );
+
+    let flag = argv
+        .iter()
+        .position(|argument| return argument == "--version")
+        .unwrap_or_else(|| {
+            panic!(
+                "the supply-chain tool is installed at whatever version crates.io serves \
+                 today: {argv:?}"
+            )
+        });
+
+    let pinned = argv
+        .get(flag.saturating_add(1))
+        .unwrap_or_else(|| panic!("`--version` names no version: {argv:?}"));
+
+    assert!(
+        pinned
+            .chars()
+            .next()
+            .is_some_and(|character| return character.is_ascii_digit()),
+        "`--version {pinned}` is not a version"
+    );
+}
+
+/// The job declares the token it runs with, rather than inheriting it.
+///
+/// Every step in this gate reads. Without a `permissions:` block the workflow runs with
+/// whatever the repository-wide default happens to be, which is a permission grant decided in
+/// a settings page this file cannot show and no test in this repository can read — the same
+/// shape as a declaration nothing executes, which is `OD-GATE-006`'s subject.
+#[test]
+fn Test_The_Gate_Should_Declare_The_Token_It_Runs_With()
+{
+    let executable = Executable_Part(&Workflow());
+
+    assert!(
+        executable.contains("\npermissions:"),
+        "the gate declares no permissions, so its token carries the repository default"
+    );
+    assert!(
+        executable.contains("contents: read"),
+        "the gate's permissions do not grant the read this job needs to check out"
+    );
+    assert!(
+        !executable.contains("contents: write"),
+        "no step in this gate writes to the repository, so nothing here needs write"
     );
 }

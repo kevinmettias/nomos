@@ -7857,6 +7857,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-WORKFLOW-TRUST",
+      "title": "The gate pins the code it checks and not the tools that check it, and the argument for one of them is wrong",
+      "why": "Measured at 8d19b66, on 2026-08-10. The gate pins the code it checks, through Cargo.lock and rust-toolchain.toml, and pins nothing that does the checking.\n\nactions/checkout@v4 is a mutable tag. It resolves today to 11d5960a326750d5838078e36cf38b85af677262, which is also what v4.4.0 names, and whoever owns that tag can move it to any commit at any time. Every run fetches whatever the tag names at that moment, and a moved tag is invisible in the diff of this repository because the reference did not change.\n\nThe Install cargo-deny step runs cargo install cargo-deny --locked with no --version, so the runner builds whatever crates.io serves that day. --locked pins the dependencies of the version it selected; it does not select a version. This is a second unpinned input rather than the same one.\n\nThe workflow declares no permissions block, so GITHUB_TOKEN carries the repository default for every step. No step in this gate writes to the repository: checkout reads, and the other seven run cargo.\n\nThe comment above the install step argues the tool version is deliberately not pinned, on the ground that pinning would buy determinism only for the three classes that already have it from Cargo.lock while costing fixes for the one class that cannot have it. That argument is wrong, and it is wrong in a way that reads as considered. cargo-deny fetches the advisory database at run time, so the database moves with the calendar whichever binary reads it. Pinning the tool costs no advisory freshness at all. What it buys is that the binary reading Cargo.lock for licenses, bans and sources stops changing under three classes that are otherwise fully determined.\n\nThis is a defect in a landed commit rather than a new idea. P11-UNRUN-POLICY put the step there, and its own done_when observed that this workflow trusts exactly one third-party action, on a mutable tag, and that a second one is a trust decision rather than a convenience. It named the decision and did not take it. OD-GATE-006 is the record behind that item and it is where the wrong argument has to be corrected, because the paragraph in gate.yml is downstream of it.",
+      "done_when": "gate.yml pins actions/checkout to a full 40-character commit SHA, with the version that SHA corresponds to named in a comment beside it so a later reader can tell a pin from a paste. It pins cargo-deny with an explicit --version. It declares permissions: contents: read at a scope that covers every step, because no step here writes to the repository.\n\nEach of those three is asserted mechanically in crates/host/nomos-cli/tests/gate_step.rs, read from this workflow rather than from a fixture, in the pattern that file already uses for the excuse check and the Lint-step count. The assertion that no action is referenced by a mutable tag has a control that shows it can fire, as Test_The_Excuse_Check_Should_Reject_An_Excused_Step does for its own subject: a string-absence assertion that has never been shown to fail is indistinguishable from a comment.\n\nWhat gate_step.rs already guarantees still holds, and is run rather than assumed: exactly one step is named Lint, the derived lint argv is still clippy with -D warnings, no step carries continue-on-error, and the named-step floor still counts five or more.\n\nOD-GATE-006 reaches version 2. The unpinned-tool reasoning is corrected rather than deleted: the record states what the argument was, that it conflated the tool with the advisory database the tool fetches, and what follows once that conflation is removed. A record that quietly loses a paragraph teaches the next reader nothing, and this record is specifically about claims that nothing checks.\n\nBoth required projections are re-rendered from a tree holding exactly the registered records this commit publishes, per OD-GATE-005.\n\nNot closed by pinning the action and leaving the tool unpinned, or the reverse, and not closed by correcting gate.yml while leaving the record that argued for it standing.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".github/workflows/gate.yml",
+          "crates/host/nomos-cli/tests/gate_step.rs",
+          "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 13 tests\ntest Test_A_Scripted_Rules_Step_Should_Not_Satisfy_That_Assertion ... ok\ntest Test_The_Derived_Lint_Step_Should_Still_Be_Clippy ... ok\ntest Test_Only_One_Step_Should_Be_Named_Lint ... ok\ntest Test_Every_Action_Should_Be_Pinned_To_A_Commit ... ok\ntest Test_The_Rules_Step_Should_Not_Be_The_Lint_Step ... ok\ntest Test_No_Step_In_The_Gate_Should_Excuse_Itself ... ok\ntest Test_The_Rules_Step_Should_Judge_The_Whole_Workspace ... ok\ntest Test_This_Repository_Gate_Should_Run_The_Rules ... ok\ntest Test_The_Gate_Should_Declare_The_Token_It_Runs_With ... ok\ntest Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version ... ok\ntest Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag ... ok\ntest Test_The_Excuse_Check_Should_Reject_An_Excused_Step ... ok\ntest Test_The_Workflow_Should_Not_Appear_Empty ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\gate_step.rs (target\\debug\\deps\\gate_step-651a678d29995d98.exe)\n",
+        "verified_at": 1786407766,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
