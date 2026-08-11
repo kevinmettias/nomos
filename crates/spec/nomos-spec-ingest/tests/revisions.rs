@@ -169,22 +169,20 @@ fn Test_The_Last_Pair_Should_Show_The_Whole_Narrative_Tree_Disappearing()
     {
         panic!("no pairs");
     };
-
-    assert_eq!(pair.from, V14_LAST);
-    assert_eq!(pair.to, V15);
-
     let volumes: Vec<&String> = pair
         .disappeared
         .iter()
         .filter(|path| return path.contains(nomos_spec_ingest::DOMAIN_VOLUMES))
         .collect();
+
+    assert_eq!(pair.from, V14_LAST);
+    assert_eq!(pair.to, V15);
     assert_eq!(
         volumes.len(),
         10,
         "the ten domain volumes are what v15.0 dropped\n{}",
         pair.Summary()
     );
-
     assert!(
         pair.changed.is_empty(),
         "v15.0 kept no path at its old location, so nothing can have changed in place: {:?}",
@@ -253,7 +251,6 @@ fn Test_v15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
     assert!(v15.documents > 0, "v15.0 has no markdown at all, so this measured nothing");
     assert_eq!(v15.code_blocks, 0, "fenced blocks anywhere in v15.0");
     assert_eq!(v15.fence_lines, 0, "fence lines anywhere in v15.0");
-
     // One table survives tree-wide, in the non-negotiable-principles document: 12 pipe
     // lines, of which 1 is the header, 1 the delimiter and 10 the actors. OD-SPEC-002's
     // "retains 11 table rows" is the non-separator count and is right; it predates the
@@ -262,7 +259,6 @@ fn Test_v15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
     assert_eq!(v15.pipe_lines, 12, "pipe lines anywhere in v15.0");
     assert_eq!(v15.non_separator_rows, 11, "authored rows, which is OD-SPEC-002's figure");
     assert_eq!(v15.content_rows, 10, "data rows");
-
     assert!(
         v14.pipe_lines > v15.pipe_lines,
         "v15.0 did not lose table content tree-wide, so the headline is wrong"
@@ -326,8 +322,8 @@ fn Test_The_Archaeology_Should_Cover_Every_Revision_Exactly_Once()
     };
     let fingerprints = Fingerprints(&root);
     let walk = Walk(&fingerprints);
-
     let mut visited: Vec<&str> = Vec::new();
+
     for pair in &walk
     {
         if visited.is_empty()
@@ -342,7 +338,6 @@ fn Test_The_Archaeology_Should_Cover_Every_Revision_Exactly_Once()
         );
         visited.push(&pair.to);
     }
-
     assert_eq!(visited.len(), fingerprints.len());
     assert!(
         fingerprints.iter().all(|revision| return !revision.documents.is_empty()),

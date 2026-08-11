@@ -140,7 +140,7 @@ fn Test_A_Plan_Figure_Should_Be_Superseded_Exactly_When_It_Differs()
 {
     for entry in Register()
     {
-        let Some(plan) = entry.plan
+        let Some(plan) = entry.plan.as_ref()
         else
         {
             continue;
@@ -148,30 +148,37 @@ fn Test_A_Plan_Figure_Should_Be_Superseded_Exactly_When_It_Differs()
 
         assert!(!plan.note.trim().is_empty(), "{}: the plan's figure carries no reading", entry.id);
         assert!(!plan.named.trim().is_empty(), "{}: the plan's figure names nothing", entry.id);
-
-        match plan.figure
-        {
-            None => assert_eq!(
-                plan.status, "unnumbered",
-                "{}: the plan states no figure, so nothing can be superseded",
-                entry.id
-            ),
-            Some(figure) =>
-            {
-                assert_eq!(
-                    plan.status, "superseded",
-                    "{}: a stated figure is either superseded or absent from the register",
-                    entry.id
-                );
-                assert!(
-                    figure != entry.measured || plan.note.contains("count"),
-                    "{}: the plan's figure equals the measurement and the note does not say \
-                     what it counted instead",
-                    entry.id
-                );
-            }
-        }
+        Assert_Superseded_Exactly_When_It_Differs(&entry, plan);
     }
+}
+
+/// A stated figure is marked superseded; an unstated one is marked unnumbered; and a stated
+/// figure equal to the measurement has to say what it counted instead.
+fn Assert_Superseded_Exactly_When_It_Differs(entry: &Entry, plan: &PlanFigure)
+{
+    let Some(figure) = plan.figure
+    else
+    {
+        assert_eq!(
+            plan.status, "unnumbered",
+            "{}: the plan states no figure, so nothing can be superseded",
+            entry.id
+        );
+
+        return;
+    };
+
+    assert_eq!(
+        plan.status, "superseded",
+        "{}: a stated figure is either superseded or absent from the register",
+        entry.id
+    );
+    assert!(
+        figure != entry.measured || plan.note.contains("count"),
+        "{}: the plan's figure equals the measurement and the note does not say what it \
+         counted instead",
+        entry.id
+    );
 }
 
 // ---------------------------------------------------------------- measurement
@@ -191,11 +198,11 @@ fn Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus()
         );
         return;
     };
-
     let mut checked = 0_u32;
     for entry in Register()
     {
         let measured = Measure(&entry.id, &corpus, &archives);
+
         assert_eq!(
             measured, entry.measured,
             "{}: the register says {} {}(s) and the corpus says {measured}. \
@@ -216,84 +223,141 @@ fn Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus()
 /// measures is the shape this whole item exists to remove.
 fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
 {
+    let measured = Table_Figure(id, corpus)
+        .or_else(|| return Volume_Figure(id, corpus))
+        .or_else(|| return Appendix_Figure(id, corpus))
+        .or_else(|| return Glossary_Figure(id, corpus))
+        .or_else(|| return Whole_Corpus_Figure(id, corpus, archives));
+
+    return measured.unwrap_or_else(|| {
+        panic!("{id} is in the register and nothing measures it");
+    });
+}
+
+/// The tables and the code across all ten volumes.
+fn Table_Figure(id: &str, corpus: &Path) -> Option<u32>
+{
     let volumes = corpus.join(VOLUMES);
 
     return match id
     {
-        "table.pipe_lines" => Volume_Census(&volumes).lines,
-        "table.header_rows" => Volume_Census(&volumes).header,
-        "table.content_rows" => Volume_Census(&volumes).content,
-        "table.separator_rows" => Volume_Census(&volumes).separator,
-        "table.non_separator_rows" => Volume_Census(&volumes).non_separator,
+        "table.pipe_lines" => Some(Volume_Census(&volumes).lines),
+        "table.header_rows" => Some(Volume_Census(&volumes).header),
+        "table.content_rows" => Some(Volume_Census(&volumes).content),
+        "table.separator_rows" => Some(Volume_Census(&volumes).separator),
+        "table.non_separator_rows" => Some(Volume_Census(&volumes).non_separator),
         // One delimiter per table is an invariant the store enforces on write, so the
         // delimiter count is the table count. Stated as its own definition rather than
         // read off the separator row, because the two mean different things.
-        "table.tables" => Tables(&volumes),
+        "table.tables" => Some(Tables(&volumes)),
+        "code.fence_lines" => Some(Fence_Lines(&volumes)),
+        "code.blocks" => Some(Code_Blocks(&volumes)),
+        _ => None,
+    };
+}
 
-        "code.fence_lines" => Fence_Lines(&volumes),
-        "code.blocks" => Code_Blocks(&volumes),
-
+/// The figures a single volume answers: the domain model, the roadmap, the services.
+fn Volume_Figure(id: &str, corpus: &Path) -> Option<u32>
+{
+    return match id
+    {
         "domain_model.pipe_lines" =>
         {
-            Table_Under(corpus, "02-core", "5. Canonical domain model").lines
+            Some(Table_Under(corpus, "02-core", "5. Canonical domain model").lines)
         }
-        "domain_model.rows" => Table_Under(corpus, "02-core", "5. Canonical domain model").content,
-        "domain_model.named_models" => Named_Models(corpus),
-
-        "roadmap.milestones" => Headings_Matching(corpus, "08-roadmap", 3, &["Foundation ", "Release "]),
-        "roadmap.releases" => Headings_Matching(corpus, "08-roadmap", 3, &["Release "]),
-
-        "scenario.appendix_g_sections" => Lettered(corpus, "09-reference", 3, Appendix {
-            letter: 'G',
-            parts: 1,
-        }),
-        "scenario.end_to_end" => End_To_End(corpus),
-
-        "service.section_6_headings" => Section_Six(corpus).all,
-        "service.leaf_headings" => Section_Six(corpus).leaves,
-        "service.service_headings" => Section_Six(corpus).services,
-        "service.subsystem_table_rows" => {
-            Table_Under(corpus, "02-core", "6. Systems and subsystem responsibilities").content
+        "domain_model.rows" =>
+        {
+            Some(Table_Under(corpus, "02-core", "5. Canonical domain model").content)
         }
-
-        "appendix_d.sections" => Lettered(corpus, "09-reference", 3, Appendix {
-            letter: 'D',
-            parts: 1,
-        }),
-        "appendix_d.report_profiles" => Lettered(corpus, "09-reference", 4, Appendix {
-            letter: 'D',
-            parts: 2,
-        }),
-        "appendix_d.members" => {
-            let profiles = Lettered(corpus, "09-reference", 4, Appendix {
-            letter: 'D',
-            parts: 2,
-        });
-            Lettered(corpus, "09-reference", 3, Appendix {
-            letter: 'D',
-            parts: 1,
-        }).saturating_add(profiles)
+        "domain_model.named_models" => Some(Named_Models(corpus)),
+        "roadmap.milestones" =>
+        {
+            Some(Headings_Matching(corpus, "08-roadmap", 3, &["Foundation ", "Release "]))
         }
-        "appendix_h.sections" => Lettered(corpus, "06-agents", 3, Appendix {
-            letter: 'H',
-            parts: 1,
-        }),
-        "headless_inventory.sections" => Prefixed(corpus, "07-clients", 4, "E.1."),
-        "ide_profiles.sections" => Prefixed(corpus, "07-clients", 4, "F.1."),
-
-        "glossary.table_terms" => Table_Under(corpus, "09-reference", "Glossary").content,
-        "glossary.extended_terms" => Under_Path(corpus, "09-reference", 4, "Extended operational terms"),
-        "glossary.definitions" => {
-            let extended = Under_Path(corpus, "09-reference", 4, "Extended operational terms");
-            Table_Under(corpus, "09-reference", "Glossary")
-                .content
-                .saturating_add(extended)
+        "roadmap.releases" => Some(Headings_Matching(corpus, "08-roadmap", 3, &["Release "])),
+        "scenario.end_to_end" => Some(End_To_End(corpus)),
+        "service.section_6_headings" => Some(Section_Six(corpus).all),
+        "service.leaf_headings" => Some(Section_Six(corpus).leaves),
+        "service.service_headings" => Some(Section_Six(corpus).services),
+        "service.subsystem_table_rows" =>
+        {
+            Some(Table_Under(corpus, "02-core", "6. Systems and subsystem responsibilities").content)
         }
+        _ => None,
+    };
+}
 
-        "catalog.entities" => Catalog_Entities(corpus),
-        "v15.records" => V15_Records(archives),
+/// The lettered appendices, counted by the depth their sections sit at.
+fn Appendix_Figure(id: &str, corpus: &Path) -> Option<u32>
+{
+    let sections = Appendix {
+        letter: 'D',
+        parts: 1,
+    };
+    let profiles = Appendix {
+        letter: 'D',
+        parts: 2,
+    };
 
-        other => panic!("{other} is in the register and nothing measures it"),
+    return match id
+    {
+        "scenario.appendix_g_sections" =>
+        {
+            Some(Lettered(corpus, "09-reference", 3, Appendix { letter: 'G', parts: 1 }))
+        }
+        "appendix_d.sections" => Some(Lettered(corpus, "09-reference", 3, sections)),
+        "appendix_d.report_profiles" => Some(Lettered(corpus, "09-reference", 4, profiles)),
+        "appendix_d.members" =>
+        {
+            let under = Lettered(corpus, "09-reference", 3, sections);
+            let reports = Lettered(corpus, "09-reference", 4, profiles);
+
+            Some(under.saturating_add(reports))
+        }
+        "appendix_h.sections" =>
+        {
+            Some(Lettered(corpus, "06-agents", 3, Appendix { letter: 'H', parts: 1 }))
+        }
+        "headless_inventory.sections" => Some(Prefixed(corpus, "07-clients", 4, "E.1.")),
+        "ide_profiles.sections" => Some(Prefixed(corpus, "07-clients", 4, "F.1.")),
+        _ => None,
+    };
+}
+
+/// The glossary, which is a table and a prose section that together define the terms.
+fn Glossary_Figure(id: &str, corpus: &Path) -> Option<u32>
+{
+    let extended = "Extended operational terms";
+
+    return match id
+    {
+        "glossary.table_terms" =>
+        {
+            Some(Table_Under(corpus, "09-reference", "Glossary").content)
+        }
+        "glossary.extended_terms" =>
+        {
+            Some(Under_Path(corpus, "09-reference", 4, extended))
+        }
+        "glossary.definitions" =>
+        {
+            let tabled = Table_Under(corpus, "09-reference", "Glossary").content;
+            let prose = Under_Path(corpus, "09-reference", 4, extended);
+
+            Some(tabled.saturating_add(prose))
+        }
+        _ => None,
+    };
+}
+
+/// The figures taken over something other than the volumes.
+fn Whole_Corpus_Figure(id: &str, corpus: &Path, archives: &Path) -> Option<u32>
+{
+    return match id
+    {
+        "catalog.entities" => Some(Catalog_Entities(corpus)),
+        "v15.records" => Some(V15_Records(archives)),
+        _ => None,
     };
 }
 
@@ -424,7 +488,6 @@ fn Table_Under(corpus: &Path, stem: &str, heading: &str) -> TableCounts
 {
     let markdown = Volume(corpus, stem);
     let mut found: Vec<SourceBlock> = Vec::new();
-
     for block in Segment(&markdown)
     {
         let directly_under = block.heading_path.last().map(String::as_str) == Some(heading);
@@ -433,19 +496,17 @@ fn Table_Under(corpus: &Path, stem: &str, heading: &str) -> TableCounts
             found.push(block);
         }
     }
-
     assert_eq!(found.len(), 1, "{heading} in {stem} carries {} tables, not one", found.len());
-
     let rows = found.first().map(nomos_spec_model::Table_Rows).unwrap_or_default();
-    let lines = u32::try_from(rows.len()).unwrap_or(u32::MAX);
-    let content = u32::try_from(
-        rows.iter()
-            .filter(|row| return row.kind == nomos_spec_model::RowKind::Content)
-            .count(),
-    )
-    .unwrap_or(u32::MAX);
+    let content = rows
+        .iter()
+        .filter(|row| return row.kind == nomos_spec_model::RowKind::Content)
+        .count();
 
-    return TableCounts { lines, content };
+    return TableCounts {
+        lines: u32::try_from(rows.len()).unwrap_or(u32::MAX),
+        content: u32::try_from(content).unwrap_or(u32::MAX),
+    };
 }
 
 /// What one table under a heading amounts to.
@@ -625,15 +686,23 @@ fn End_To_End(corpus: &Path) -> u32
 /// Every heading of section 6, its leaves, and the leaves naming a service.
 fn Section_Six(corpus: &Path) -> SectionCounts
 {
-    const SECTION: &str = "6. Systems and subsystem responsibilities";
-
     let markdown = Volume(corpus, "02-core");
     let headings = Headings(&markdown);
+    let counted = Counted_Under_Section_Six(&headings);
 
+    assert!(counted.all > 0, "section 6 is no longer in volume 02 under that title");
+
+    return counted;
+}
+
+/// The walk itself: everything from section 6's own heading until the next section at its
+/// level or above.
+fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
+{
+    const SECTION: &str = "6. Systems and subsystem responsibilities";
     let mut inside = false;
     let (mut all, mut leaves, mut services) = (0_u32, 0_u32, 0_u32);
-
-    for heading in &headings
+    for heading in headings
     {
         if heading.title == SECTION
         {
@@ -643,29 +712,30 @@ fn Section_Six(corpus: &Path) -> SectionCounts
         {
             break;
         }
-        if !inside
+        if inside
         {
-            continue;
-        }
-
-        all = all.saturating_add(1);
-        if heading.depth == 4
-        {
-            leaves = leaves.saturating_add(1);
-            if heading.title.split_whitespace().any(|word| return word == "Service")
-            {
-                services = services.saturating_add(1);
-            }
+            all = all.saturating_add(1);
+            leaves = leaves.saturating_add(u32::from(heading.depth == 4));
+            services = services.saturating_add(u32::from(Names_A_Service(heading)));
         }
     }
-
-    assert!(all > 0, "section 6 is no longer in volume 02 under that title");
 
     return SectionCounts {
         all,
         leaves,
         services,
     };
+}
+
+/// Whether a leaf heading names a service, which is the count the register quotes.
+fn Names_A_Service(heading: &Heading) -> bool
+{
+    if heading.depth != 4
+    {
+        return false;
+    }
+
+    return heading.title.split_whitespace().any(|word| return word == "Service");
 }
 
 /// What section 6 amounts to: every heading, the leaves, and the leaves naming a service.
@@ -722,7 +792,6 @@ fn Test_The_Register_Should_Agree_With_The_Store_Census()
             .find(|entry| return entry.id == id)
             .map_or_else(|| panic!("{id} left the register"), |entry| return entry.measured);
     };
-
     assert_eq!(census.lines, value("table.pipe_lines"));
     assert_eq!(census.header, value("table.header_rows"));
     assert_eq!(census.content, value("table.content_rows"));

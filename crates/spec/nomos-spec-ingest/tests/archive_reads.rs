@@ -150,52 +150,18 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
         return;
     };
     let archives = Archives_In(&root).unwrap_or_else(|error| panic!("{error}"));
-    assert_eq!(archives.len(), 32, "the archive count changed");
-
-    let mut with_markdown = 0_u32;
-    let mut revision_trees = 0_u32;
-    let mut docx_deliveries = 0_u32;
-
+    let mut counted = Series::default();
     for path in &archives
     {
-        let archive = Archive::Open(path).unwrap_or_else(|error| panic!("{error}"));
-        let name = path
-            .file_name()
-            .and_then(std::ffi::OsStr::to_str)
-            .unwrap_or_default()
-            .to_owned();
-
-        assert!(
-            !archive.Listing().Paths().is_empty(),
-            "{} opened but lists nothing",
-            path.display()
-        );
-
-        let markdown = archive.Listing().Ending_With(".md").len();
-        if markdown > 0
-        {
-            with_markdown = with_markdown.saturating_add(1);
-        }
-
-        if name.starts_with("nomos-spec-internal-artifacts-v14.")
-        {
-            revision_trees = revision_trees.saturating_add(1);
-            assert!(
-                markdown > 2000,
-                "{name} is a revision tree holding only {markdown} markdown file(s)"
-            );
-        }
-        else if name.starts_with("nomos_v14_")
-        {
-            docx_deliveries = docx_deliveries.saturating_add(1);
-            assert_eq!(markdown, 0, "{name} was classed a DOCX delivery but holds markdown");
-            assert!(
-                !archive.Listing().Ending_With(".docx").is_empty(),
-                "{name} holds neither markdown nor DOCX, so what it is was never established"
-            );
-        }
+        Count_One_Archive(path, &mut counted);
     }
+    let Series {
+        with_markdown,
+        revision_trees,
+        docx_deliveries,
+    } = counted;
 
+    assert_eq!(archives.len(), 32, "the archive count changed");
     assert_eq!(with_markdown, 16, "the number of archives carrying markdown changed");
     assert_eq!(revision_trees, 12, "the v14 revision series changed length");
     assert_eq!(docx_deliveries, 16, "the DOCX delivery series changed length");
@@ -204,6 +170,54 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
         32,
         "the two series plus v15.0 and the three seed suites no longer account for every archive"
     );
+}
+
+/// How many archives of each kind the directory holds.
+#[derive(Default)]
+struct Series
+{
+    with_markdown: u32,
+    revision_trees: u32,
+    docx_deliveries: u32,
+}
+
+/// One archive: it opens, it lists something, and it is one of the two series or neither.
+fn Count_One_Archive(path: &std::path::Path, counted: &mut Series)
+{
+    let archive = Archive::Open(path).unwrap_or_else(|error| panic!("{error}"));
+    let name = path
+        .file_name()
+        .and_then(std::ffi::OsStr::to_str)
+        .unwrap_or_default()
+        .to_owned();
+    let markdown = archive.Listing().Ending_With(".md").len();
+
+    assert!(
+        !archive.Listing().Paths().is_empty(),
+        "{} opened but lists nothing",
+        path.display()
+    );
+    if markdown > 0
+    {
+        counted.with_markdown = counted.with_markdown.saturating_add(1);
+    }
+    if name.starts_with("nomos-spec-internal-artifacts-v14.")
+    {
+        counted.revision_trees = counted.revision_trees.saturating_add(1);
+        assert!(
+            markdown > 2000,
+            "{name} is a revision tree holding only {markdown} markdown file(s)"
+        );
+    }
+    else if name.starts_with("nomos_v14_")
+    {
+        counted.docx_deliveries = counted.docx_deliveries.saturating_add(1);
+        assert_eq!(markdown, 0, "{name} was classed a DOCX delivery but holds markdown");
+        assert!(
+            !archive.Listing().Ending_With(".docx").is_empty(),
+            "{name} holds neither markdown nor DOCX, so what it is was never established"
+        );
+    }
 }
 
 /// v15.0 in particular, since it is what P3-OVERLAY reads.
@@ -217,18 +231,16 @@ fn Test_The_v15_Archive_Should_Yield_Its_Records()
     };
     let path = root.join("nomos-spec-v15.0.zip");
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));
-
-    assert_eq!(archive.Listing().Paths().len(), 273, "the v15.0 file count changed");
-
     let records = archive
         .Listing()
         .Paths()
         .iter()
         .filter(|name| name.contains("/records/") && name.to_lowercase().ends_with(".md"))
         .count();
-    assert!(records >= 60, "only {records} records under records/");
-
     let decision = "nomos-spec-v15.0/records/decisions/D-045-runtime-capture-boundary.md";
+
+    assert_eq!(archive.Listing().Paths().len(), 273, "the v15.0 file count changed");
+    assert!(records >= 60, "only {records} records under records/");
     assert!(archive.Listing().Contains(decision), "the v15 decision records are not where I4 expects");
     assert!(
         archive.Read_Text(decision).expect("reads").starts_with("---\nid: D-045"),
