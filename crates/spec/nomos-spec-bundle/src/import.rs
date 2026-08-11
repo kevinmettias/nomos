@@ -1,6 +1,6 @@
 use crate::BundleError;
 use crate::bundle::Bundle;
-use crate::model::{BlobEncoding, DocumentRef, OrdinalRef, Record, TableRowRef};
+use crate::model::{Blob, BlobEncoding, DocumentRef, OrdinalRef, Record, TableRowRef};
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use nomos_spec_model::ContentHash;
@@ -34,9 +34,29 @@ pub struct ImportReport
 pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
 {
     bundle.Verify_Counts()?;
+    Assert_Same_Schema(store, bundle)?;
 
+    // Self-containment first, because it reads the bundle alone and so gives the same
+    // answer whatever the store holds. Disjointness then asks the one question that does
+    // depend on the store.
+    Assert_Self_Contained(bundle)?;
+    Assert_Disjoint(store, bundle)?;
+
+    let before = Census(store)?;
+
+    return store.In_Transaction(|transaction| return Insert_All(transaction, bundle, &before));
+}
+
+/// The bundle and the store are at the same schema version.
+///
+/// Refused in both directions. A bundle from a newer store carries columns this build has
+/// nowhere to put; one from an older store would need migrating, and importing it unmigrated
+/// would be a guess about what the missing columns meant.
+fn Assert_Same_Schema(store: &SpecificationStore, bundle: &Bundle) -> Result<(), BundleError>
+{
     let supported = store.Version();
     let declared = bundle.Header().schema_version;
+
     if declared > supported
     {
         return Err(BundleError::TooNew {
@@ -52,47 +72,76 @@ pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportR
         )));
     }
 
-    // Self-containment first, because it reads the bundle alone and so gives the same
-    // answer whatever the store holds. Disjointness then asks the one question that does
-    // depend on the store.
-    Assert_Self_Contained(bundle)?;
-    Assert_Disjoint(store, bundle)?;
+    return Ok(());
+}
 
-    let before = Census(store)?;
+/// Everything the bundle carries, in one transaction, and the guard that all of it landed.
+fn Insert_All(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+    before: &BTreeMap<&'static str, u32>,
+) -> Result<ImportReport, BundleError>
+{
+    // The relation-type vocabulary is self-referential (`inverse_of` names another row in the
+    // same table), so no insertion order satisfies it. Deferring moves every foreign-key check
+    // to commit without weakening any of them.
+    transaction.pragma_update(None, "defer_foreign_keys", "ON")?;
+    Insert_Sources(transaction, bundle)?;
+    Insert_Graph(transaction, bundle)?;
+    Insert_Declarations(transaction, bundle)?;
+    Insert_Submission_Rows(transaction, bundle)?;
+    Assert_Landed(transaction, bundle, before)?;
 
-    return store.In_Transaction(|transaction| {
-        // The relation-type vocabulary is self-referential (`inverse_of` names another
-        // row in the same table), so no insertion order satisfies it. Deferring moves
-        // every foreign-key check to commit without weakening any of them.
-        transaction.pragma_update(None, "defer_foreign_keys", "ON")?;
-
-        Insert_Blobs(transaction, bundle)?;
-        Insert_Source_Documents(transaction, bundle)?;
-        Insert_Source_Headings(transaction, bundle)?;
-        Insert_Source_Blocks(transaction, bundle)?;
-        Insert_Source_Table_Rows(transaction, bundle)?;
-        Insert_Suites(transaction, bundle)?;
-        Insert_Nodes(transaction, bundle)?;
-        Insert_Node_Aliases(transaction, bundle)?;
-        Insert_Node_History(transaction, bundle)?;
-        Insert_Relation_Types(transaction, bundle)?;
-        Insert_Relations(transaction, bundle)?;
-        Insert_Normative_Statements(transaction, bundle)?;
-        Insert_Lineage(transaction, bundle)?;
-        Insert_Omissions(transaction, bundle)?;
-        Insert_Record_Front_Matter(transaction, bundle)?;
-        Insert_Record_Relations(transaction, bundle)?;
-        Insert_Submissions(transaction, bundle)?;
-        Insert_Submission_Values(transaction, bundle)?;
-        Insert_Submission_Gaps(transaction, bundle)?;
-
-        Assert_Landed(transaction, bundle, &before)?;
-
-        return Ok(ImportReport {
-            records: bundle.Manifest().records,
-            counts: bundle.Manifest().counts.clone(),
-        });
+    return Ok(ImportReport {
+        records: bundle.Manifest().records,
+        counts: bundle.Manifest().counts.clone(),
     });
+}
+
+/// The bytes, and the documents cut from them.
+fn Insert_Sources(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
+{
+    Insert_Blobs(transaction, bundle)?;
+    Insert_Source_Documents(transaction, bundle)?;
+    Insert_Source_Headings(transaction, bundle)?;
+    Insert_Source_Blocks(transaction, bundle)?;
+
+    return Insert_Source_Table_Rows(transaction, bundle);
+}
+
+/// The identities those documents were read into, and the edges between them.
+fn Insert_Graph(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
+{
+    Insert_Suites(transaction, bundle)?;
+    Insert_Nodes(transaction, bundle)?;
+    Insert_Node_Aliases(transaction, bundle)?;
+    Insert_Node_History(transaction, bundle)?;
+    Insert_Relation_Types(transaction, bundle)?;
+    Insert_Relations(transaction, bundle)?;
+    Insert_Normative_Statements(transaction, bundle)?;
+    Insert_Lineage(transaction, bundle)?;
+
+    return Insert_Omissions(transaction, bundle);
+}
+
+/// What a record declared about itself in its own front matter.
+fn Insert_Declarations(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
+{
+    Insert_Record_Front_Matter(transaction, bundle)?;
+
+    return Insert_Record_Relations(transaction, bundle);
+}
+
+/// The submissions, the values attributed to them, and the gaps left open.
+fn Insert_Submission_Rows(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+) -> Result<(), BundleError>
+{
+    Insert_Submissions(transaction, bundle)?;
+    Insert_Submission_Values(transaction, bundle)?;
+
+    return Insert_Submission_Gaps(transaction, bundle);
 }
 
 /// How many rows each table held before the import.
@@ -112,95 +161,101 @@ fn Census(store: &SpecificationStore) -> Result<BTreeMap<&'static str, u32>, Bun
 }
 
 /// The store holds nothing this bundle also carries.
-///
-/// Only the tables whose identity a bundle states in its own right are asked about. Every
-/// other table is reached through one of these — a block through its document, a history
-/// entry through its node, a table row through its block — so once these are disjoint a
-/// child row cannot collide either: the parent it hangs from is one this import just
-/// inserted. Listing the pass-through kinds explicitly rather than matching `_` so that a
-/// new record kind has to be thought about here instead of defaulting to unchecked.
 fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Result<(), BundleError>
 {
     let connection = store.Connection();
 
     for record in bundle.Records()
     {
-        let collision = match record
+        let Some(identity) = Collides(connection, record)?
+        else
         {
-            Record::Blob(blob) => Already_Holds(
-                connection,
-                "SELECT 1 FROM blobs WHERE sha256 = ?1",
-                &[&blob.sha256],
-            )?
-            .then(|| return blob.sha256.clone()),
-            Record::SourceDocument(document) => Already_Holds(
-                connection,
-                "SELECT 1 FROM source_documents WHERE path = ?1 AND revision = ?2",
-                &[&document.path, &document.revision],
-            )?
-            .then(|| return format!("{}@{}", document.path, document.revision)),
-            Record::Suite(suite) => Already_Holds(
-                connection,
-                "SELECT 1 FROM suites WHERE suite_id = ?1",
-                &[&suite.suite_id],
-            )?
-            .then(|| return suite.suite_id.clone()),
-            Record::Node(node) => Already_Holds(
-                connection,
-                "SELECT 1 FROM nodes WHERE node_id = ?1",
-                &[&node.node_id],
-            )?
-            .then(|| return node.node_id.clone()),
-            Record::NodeAlias(alias) => Already_Holds(
-                connection,
-                "SELECT 1 FROM node_aliases WHERE alias = ?1",
-                &[&alias.alias],
-            )?
-            .then(|| return alias.alias.clone()),
-            Record::RelationType(relation_type) => Already_Holds(
-                connection,
-                "SELECT 1 FROM relation_types WHERE name = ?1",
-                &[&relation_type.name],
-            )?
-            .then(|| return relation_type.name.clone()),
-            Record::NormativeStatement(statement) => Already_Holds(
-                connection,
-                "SELECT 1 FROM normative_statements WHERE statement_id = ?1",
-                &[&statement.statement_id],
-            )?
-            .then(|| return statement.statement_id.clone()),
-            // A submission's identity is the node it is, which `nodes` already collides on.
-            // Checking it here as well would report one arrival twice.
-            Record::Submission(submission) => Already_Holds(
-                connection,
-                "SELECT 1 FROM submissions s JOIN nodes n ON n.uid = s.node_uid
-                 WHERE n.node_id = ?1",
-                &[&submission.node_id],
-            )?
-            .then(|| return submission.node_id.clone()),
-            Record::SourceHeading(_)
-            | Record::SourceBlock(_)
-            | Record::SourceTableRow(_)
-            | Record::NodeHistory(_)
-            | Record::Relation(_)
-            | Record::Lineage(_)
-            | Record::Omission(_)
-            | Record::RecordFrontMatter(_)
-            | Record::RecordRelation(_)
-            | Record::SubmissionValue(_)
-            | Record::SubmissionGap(_) => None,
+            continue;
         };
 
-        if let Some(identity) = collision
-        {
-            return Err(BundleError::Occupied {
-                table: record.Table().to_owned(),
-                identity,
-            });
-        }
+        return Err(BundleError::Occupied {
+            table: record.Table().to_owned(),
+            identity,
+        });
     }
 
     return Ok(());
+}
+
+/// What this record would arrive on top of, if the store already holds it.
+fn Collides(connection: &Connection, record: &Record) -> Result<Option<String>, BundleError>
+{
+    let Some(stated) = Stated_Identity(record)
+    else
+    {
+        return Ok(None);
+    };
+    let held = Already_Holds(connection, stated.sql, &stated.arguments)?;
+
+    return Ok(held.then(|| return stated.identity));
+}
+
+/// How a record states its own identity: where a store would already hold it, what that
+/// question binds, and how the identity reads in a refusal.
+struct Stated<'a>
+{
+    sql: &'static str,
+    arguments: Vec<&'a str>,
+    identity: String,
+}
+
+/// The identity a record states in its own right, for the records that state one.
+///
+/// Only these tables are asked about. Every other table is reached through one of them — a
+/// block through its document, a history entry through its node, a table row through its
+/// block — so once these are disjoint a child row cannot collide either: the parent it hangs
+/// from is one this import just inserted. The pass-through kinds are listed explicitly rather
+/// than matched with `_`, so that a new record kind has to be thought about here instead of
+/// defaulting to unchecked.
+///
+/// A submission's identity is the node it is, which `nodes` already collides on, so it is
+/// deliberately not asked about a second time under its own table.
+fn Stated_Identity(record: &Record) -> Option<Stated<'_>>
+{
+    return match record
+    {
+        Record::Blob(blob) => Some(By_One("SELECT 1 FROM blobs WHERE sha256 = ?1", &blob.sha256)),
+        Record::SourceDocument(document) => Some(Stated {
+            sql: "SELECT 1 FROM source_documents WHERE path = ?1 AND revision = ?2",
+            arguments: vec![document.path.as_str(), document.revision.as_str()],
+            identity: Document_Key_Of(&document.path, &document.revision),
+        }),
+        Record::Suite(suite) => Some(By_One("SELECT 1 FROM suites WHERE suite_id = ?1", &suite.suite_id)),
+        Record::Node(node) => Some(By_One("SELECT 1 FROM nodes WHERE node_id = ?1", &node.node_id)),
+        Record::NodeAlias(alias) => Some(By_One("SELECT 1 FROM node_aliases WHERE alias = ?1", &alias.alias)),
+        Record::RelationType(relation_type) => Some(By_One(
+            "SELECT 1 FROM relation_types WHERE name = ?1",
+            &relation_type.name,
+        )),
+        Record::NormativeStatement(statement) => Some(By_One(
+            "SELECT 1 FROM normative_statements WHERE statement_id = ?1",
+            &statement.statement_id,
+        )),
+        Record::Submission(submission) => Some(By_One(
+            "SELECT 1 FROM submissions s JOIN nodes n ON n.uid = s.node_uid
+             WHERE n.node_id = ?1",
+            &submission.node_id,
+        )),
+        Record::SourceHeading(_) | Record::SourceBlock(_) | Record::SourceTableRow(_)
+        | Record::NodeHistory(_) | Record::Relation(_) | Record::Lineage(_)
+        | Record::Omission(_) | Record::RecordFrontMatter(_) | Record::RecordRelation(_)
+        | Record::SubmissionValue(_) | Record::SubmissionGap(_) => None,
+    };
+}
+
+/// A record whose identity is one column, and reads as that column's value.
+fn By_One<'a>(sql: &'static str, key: &'a str) -> Stated<'a>
+{
+    return Stated {
+        sql,
+        arguments: vec![key],
+        identity: key.to_owned(),
+    };
 }
 
 /// `sql` is `&'static str` so that the statement cannot be built at runtime. Every collision
@@ -209,11 +264,13 @@ fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Result<(), Bu
 fn Already_Holds(
     connection: &Connection,
     sql: &'static str,
-    arguments: &[&dyn rusqlite::ToSql],
+    arguments: &[&str],
 ) -> Result<bool, BundleError>
 {
+    let bound = rusqlite::params_from_iter(arguments);
+
     return Ok(connection
-        .query_row(sql, arguments, |row| return row.get::<_, i64>(0))
+        .query_row(sql, bound, |row| return row.get::<_, i64>(0))
         .optional()?
         .is_some());
 }
@@ -239,6 +296,7 @@ fn Assert_Self_Contained(bundle: &Bundle) -> Result<(), BundleError>
 }
 
 /// The identities a bundle states in its own right, indexed for lookup.
+#[derive(Default)]
 struct Identities
 {
     blobs: BTreeSet<String>,
@@ -253,99 +311,71 @@ struct Identities
     submissions: BTreeSet<String>,
 }
 
-fn Carried_By(bundle: &Bundle) -> Identities
+impl Identities
 {
-    let mut blobs: BTreeSet<String> = BTreeSet::new();
-    let mut documents: BTreeSet<String> = BTreeSet::new();
-    let mut headings: BTreeSet<String> = BTreeSet::new();
-    let mut blocks: BTreeSet<String> = BTreeSet::new();
-    let mut rows: BTreeSet<String> = BTreeSet::new();
-    let mut suites: BTreeSet<String> = BTreeSet::new();
-    let mut nodes: BTreeSet<String> = BTreeSet::new();
-    let mut relation_types: BTreeSet<String> = BTreeSet::new();
-    let mut statements: BTreeSet<String> = BTreeSet::new();
-    let mut submissions: BTreeSet<String> = BTreeSet::new();
-
-    for record in bundle.Records()
+    /// Files a record under the identity it states in its own right, and passes over the
+    /// records that state none. The pass-through kinds are listed rather than matched with
+    /// `_`, so a new record kind has to be thought about here.
+    fn Note(&mut self, record: &Record)
     {
         match record
         {
-            Record::Blob(blob) =>
-            {
-                blobs.insert(blob.sha256.clone());
-            }
+            Record::Blob(blob) => Keep(&mut self.blobs, blob.sha256.clone()),
             Record::SourceDocument(document) =>
             {
                 let key = Document_Key_Of(&document.path, &document.revision);
-                documents.insert(key);
+                Keep(&mut self.documents, key);
             }
             Record::SourceHeading(heading) =>
             {
                 let key = Ordinal_Key(&heading.document, heading.ordinal);
-                headings.insert(key);
+                Keep(&mut self.headings, key);
             }
             Record::SourceBlock(block) =>
             {
                 let key = Ordinal_Key(&block.document, block.ordinal);
-                blocks.insert(key);
+                Keep(&mut self.blocks, key);
             }
             Record::SourceTableRow(row) =>
             {
                 let key = Row_Key(&row.block, row.ordinal);
-                rows.insert(key);
+                Keep(&mut self.rows, key);
             }
-            Record::Suite(suite) =>
-            {
-                suites.insert(suite.suite_id.clone());
-            }
-            Record::Node(node) =>
-            {
-                nodes.insert(node.node_id.clone());
-            }
-            Record::RelationType(relation_type) =>
-            {
-                relation_types.insert(relation_type.name.clone());
-            }
-            Record::NormativeStatement(statement) =>
-            {
-                statements.insert(statement.statement_id.clone());
-            }
-            Record::Submission(submission) =>
-            {
-                submissions.insert(submission.node_id.clone());
-            }
-            Record::NodeAlias(_)
-            | Record::NodeHistory(_)
-            | Record::Relation(_)
-            | Record::Lineage(_)
-            | Record::Omission(_)
-            | Record::RecordFrontMatter(_)
-            | Record::RecordRelation(_)
-            | Record::SubmissionValue(_)
-            | Record::SubmissionGap(_) =>
-            {}
+            Record::Suite(suite) => Keep(&mut self.suites, suite.suite_id.clone()),
+            Record::Node(node) => Keep(&mut self.nodes, node.node_id.clone()),
+            Record::RelationType(kind) => Keep(&mut self.relation_types, kind.name.clone()),
+            Record::NormativeStatement(one) => Keep(&mut self.statements, one.statement_id.clone()),
+            Record::Submission(submission) => Keep(&mut self.submissions, submission.node_id.clone()),
+            Record::NodeAlias(_) | Record::NodeHistory(_) | Record::Relation(_)
+            | Record::Lineage(_) | Record::Omission(_) | Record::RecordFrontMatter(_)
+            | Record::RecordRelation(_) | Record::SubmissionValue(_)
+            | Record::SubmissionGap(_) => {}
         }
     }
+}
 
-    return Identities {
-        blobs,
-        documents,
-        headings,
-        blocks,
-        rows,
-        suites,
-        nodes,
-        relation_types,
-        statements,
-        submissions,
-    };
+/// Files one identity under the set that states it.
+fn Keep(identities: &mut BTreeSet<String>, key: String)
+{
+    identities.insert(key);
+}
+
+fn Carried_By(bundle: &Bundle) -> Identities
+{
+    let mut carried = Identities::default();
+
+    for record in bundle.Records()
+    {
+        carried.Note(record);
+    }
+
+    return carried;
 }
 
 /// The three submission records' references.
 ///
-/// Lifted out of [`Assert_Resolves`] rather than inlined beside its siblings, because three
-/// more arms took that function past the length the workspace lint allows. The rule is the
-/// same one every arm there states: a record may only name what the bundle carries.
+/// One of the families [`Assert_Resolves`] dispatches to. The rule is the same one every arm
+/// there states: a record may only name what the bundle carries.
 fn Assert_Submission_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
 {
     match record
@@ -371,7 +401,50 @@ fn Assert_Submission_Resolves(record: &Record, carried: &Identities) -> Result<(
 }
 
 /// One record's references, each against what the bundle carries.
+///
+/// Exhaustive here and grouped by what the reference is about, because the whole of it in one
+/// body was longer than anyone reads. Each group below is a `_ => {}` match over its own
+/// family; this is the one place that decides which family a record kind belongs to, so a new
+/// kind cannot slip through by defaulting.
 fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
+{
+    match record
+    {
+        Record::SourceDocument(_)
+        | Record::SourceHeading(_)
+        | Record::SourceBlock(_)
+        | Record::SourceTableRow(_) => Assert_Source_Record_Resolves(record, carried)?,
+        Record::Node(_)
+        | Record::NodeAlias(_)
+        | Record::NodeHistory(_)
+        | Record::RelationType(_)
+        | Record::Relation(_)
+        | Record::NormativeStatement(_) => Assert_Graph_Record_Resolves(record, carried)?,
+        Record::RecordFrontMatter(_) | Record::RecordRelation(_) =>
+        {
+            Assert_Declared_Resolves(record, carried)?;
+        }
+        Record::Submission(_) | Record::SubmissionValue(_) | Record::SubmissionGap(_) =>
+        {
+            Assert_Submission_Resolves(record, carried)?;
+        }
+        Record::Lineage(lineage) => Assert_Lineage_Resolves(lineage, carried)?,
+        Record::Omission(omission) => Assert_Source_Resolves(
+            omission.source_block.as_ref(),
+            omission.source_heading.as_ref(),
+            carried,
+        )?,
+        Record::Blob(_) | Record::Suite(_) =>
+        {}
+    }
+
+    return Ok(());
+}
+
+/// A document names the blob it was read from, and everything cut from a document names the
+/// document it was cut from.
+fn Assert_Source_Record_Resolves(record: &Record, carried: &Identities)
+    -> Result<(), BundleError>
 {
     match record
     {
@@ -381,25 +454,33 @@ fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleEr
         }
         Record::SourceHeading(heading) =>
         {
-            Carried(
-                &carried.documents,
-                &Document_Key(&heading.document),
-                "source document",
-            )?;
+            let key = Document_Key(&heading.document);
+            Carried(&carried.documents, &key, "source document")?;
         }
         Record::SourceBlock(block) =>
         {
-            Carried(
-                &carried.documents,
-                &Document_Key(&block.document),
-                "source document",
-            )?;
+            let key = Document_Key(&block.document);
+            Carried(&carried.documents, &key, "source document")?;
         }
         Record::SourceTableRow(row) =>
         {
             let key = Ordinal_Key(&row.block.document, row.block.ordinal);
             Carried(&carried.blocks, &key, "source block")?;
         }
+        _ =>
+        {}
+    }
+
+    return Ok(());
+}
+
+/// The graph's own references: a node's suite, an alias and a history entry's node, a
+/// relation's two ends and its type, and the inverse a relation type names.
+fn Assert_Graph_Record_Resolves(record: &Record, carried: &Identities)
+    -> Result<(), BundleError>
+{
+    match record
+    {
         Record::Node(node) =>
         {
             if let Some(suite_id) = node.suite_id.as_deref()
@@ -420,47 +501,37 @@ fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleEr
         {
             Carried(&carried.nodes, &relation.from_node_id, "node")?;
             Carried(&carried.nodes, &relation.to_node_id, "node")?;
-            Carried(
-                &carried.relation_types,
-                &relation.relation_type,
-                "relation type",
-            )?;
+            Carried(&carried.relation_types, &relation.relation_type, "relation type")?;
         }
         Record::NormativeStatement(statement) =>
         {
             Carried(&carried.nodes, &statement.node_id, "node")?;
         }
-        Record::Lineage(lineage) => Assert_Lineage_Resolves(lineage, carried)?,
-        Record::Omission(omission) =>
-        {
-            Assert_Source_Resolves(
-                omission.source_block.as_ref(),
-                omission.source_heading.as_ref(),
-                carried,
-            )?;
-        }
+        _ =>
+        {}
+    }
+
+    return Ok(());
+}
+
+/// What a record declared about itself names: the document it was declared in, and the node
+/// that declaration is about.
+fn Assert_Declared_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleError>
+{
+    match record
+    {
         Record::RecordFrontMatter(front_matter) =>
         {
-            Carried(
-                &carried.documents,
-                &Document_Key(&front_matter.document),
-                "source document",
-            )?;
+            let key = Document_Key(&front_matter.document);
+            Carried(&carried.documents, &key, "source document")?;
             Carried(&carried.nodes, &front_matter.node_id, "node")?;
-        }
-        Record::Submission(_) | Record::SubmissionValue(_) | Record::SubmissionGap(_) =>
-        {
-            Assert_Submission_Resolves(record, carried)?;
         }
         Record::RecordRelation(relation) =>
         {
-            Carried(
-                &carried.documents,
-                &Document_Key(&relation.document),
-                "source document",
-            )?;
+            let key = Document_Key(&relation.document);
+            Carried(&carried.documents, &key, "source document")?;
         }
-        Record::Blob(_) | Record::Suite(_) =>
+        _ =>
         {}
     }
 
@@ -568,17 +639,8 @@ fn Assert_Landed(
 
     for table in Table::All()
     {
-        let landed = after
-            .get(table.Name())
-            .copied()
-            .unwrap_or(0)
-            .saturating_sub(before.get(table.Name()).copied().unwrap_or(0));
-        let declared = bundle
-            .Manifest()
-            .counts
-            .get(table.Name())
-            .copied()
-            .unwrap_or(0);
+        let landed = Added(&after, before, table.Name());
+        let declared = bundle.Manifest().counts.get(table.Name()).copied().unwrap_or(0);
 
         if landed != declared
         {
@@ -593,6 +655,32 @@ fn Assert_Landed(
     return Ok(());
 }
 
+/// How many rows this import added to one table.
+fn Added(
+    after: &BTreeMap<&'static str, u32>,
+    before: &BTreeMap<&'static str, u32>,
+    table: &'static str,
+) -> u32
+{
+    let now = after.get(table).copied().unwrap_or(0);
+
+    return now.saturating_sub(before.get(table).copied().unwrap_or(0));
+}
+
+/// Every table's tally in one statement.
+///
+/// Every arm is a `&'static str` the table itself carries, joined rather than assembled: no
+/// value is woven into the statement text at any point, so there is nothing here for a caller
+/// to reach.
+fn Tally_Statement() -> String
+{
+    return Table::All()
+        .iter()
+        .map(|table| return table.Tally_Sql())
+        .collect::<Vec<&'static str>>()
+        .join(" UNION ALL ");
+}
+
 /// Every table's row count, in one crossing rather than one per table.
 ///
 /// The counts are compared against the manifest afterwards, in memory. Asking each table
@@ -600,15 +688,7 @@ fn Assert_Landed(
 /// one statement returns whole.
 fn Landed_Counts(transaction: &Transaction<'_>) -> Result<BTreeMap<&'static str, u32>, BundleError>
 {
-    // Every arm is a `&'static str` the table itself carries, joined rather than assembled:
-    // no value is woven into the statement text at any point, so there is nothing here for a
-    // caller to reach.
-    let tally = Table::All()
-        .iter()
-        .map(|table| return table.Tally_Sql())
-        .collect::<Vec<&'static str>>()
-        .join(" UNION ALL ");
-
+    let tally = Tally_Statement();
     let mut statement = transaction.prepare(&tally)?;
     let counted = statement.query_map([], |row| {
         return Ok((row.get::<_, String>(0)?, row.get::<_, u32>(1)?));
@@ -656,44 +736,61 @@ where
 
 fn Insert_Blobs(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction
-        .prepare("INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)")?;
+    return Insert_Each(
+        transaction,
+        bundle,
+        "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
+        |insert, record| {
+            let Record::Blob(blob) = record
+            else
+            {
+                return Ok(());
+            };
+            let bytes = Decoded(blob)?;
+            Assert_Declared(blob, &bytes)?;
+            insert.execute(params![blob.sha256, blob.byte_length, bytes])?;
 
-    for record in bundle.Records()
+            return Ok(());
+        },
+    );
+}
+
+/// A blob's bytes, in whichever form the bundle carried them.
+fn Decoded(blob: &Blob) -> Result<Vec<u8>, BundleError>
+{
+    return match blob.encoding
     {
-        let Record::Blob(blob) = record
-        else
-        {
-            continue;
-        };
+        BlobEncoding::Utf8 => Ok(blob.content.clone().into_bytes()),
+        BlobEncoding::Base64 => STANDARD.decode(&blob.content).map_err(|error| {
+            return BundleError::Malformed(format!("blob {}: {error}", blob.sha256));
+        }),
+    };
+}
 
-        let bytes = match blob.encoding
-        {
-            BlobEncoding::Utf8 => blob.content.clone().into_bytes(),
-            BlobEncoding::Base64 => STANDARD
-                .decode(&blob.content)
-                .map_err(|error| BundleError::Malformed(format!("blob {}: {error}", blob.sha256)))?,
-        };
+/// The bytes are what the blob said they were.
+///
+/// Both the digest and the length are checked, because they fail differently: a digest that
+/// disagrees is content that changed on the way here, and a length that disagrees is a
+/// bundle that miscounted what it was carrying.
+fn Assert_Declared(blob: &Blob, bytes: &[u8]) -> Result<(), BundleError>
+{
+    let digest = ContentHash::Of_Bytes(bytes);
 
-        let digest = ContentHash::Of_Bytes(&bytes);
-        if digest.As_Str() != blob.sha256
-        {
-            return Err(BundleError::Tampered {
-                declared: blob.sha256.clone(),
-                computed: digest.As_Str().to_owned(),
-            });
-        }
-        if i64::try_from(bytes.len()).unwrap_or(i64::MAX) != blob.byte_length
-        {
-            return Err(BundleError::Malformed(format!(
-                "blob {} declares {} byte(s) and carries {}",
-                blob.sha256,
-                blob.byte_length,
-                bytes.len()
-            )));
-        }
-
-        insert.execute(params![blob.sha256, blob.byte_length, bytes])?;
+    if digest.As_Str() != blob.sha256
+    {
+        return Err(BundleError::Tampered {
+            declared: blob.sha256.clone(),
+            computed: digest.As_Str().to_owned(),
+        });
+    }
+    if i64::try_from(bytes.len()).unwrap_or(i64::MAX) != blob.byte_length
+    {
+        return Err(BundleError::Malformed(format!(
+            "blob {} declares {} byte(s) and carries {}",
+            blob.sha256,
+            blob.byte_length,
+            bytes.len()
+        )));
     }
 
     return Ok(());
@@ -1042,14 +1139,12 @@ fn Insert_Lineage(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), 
             {
                 return Ok(());
             };
-
             let block_uid = Optional_Block_Uid(transaction, lineage.source_block.as_ref())?;
             let heading_uid = Optional_Heading_Uid(transaction, lineage.source_heading.as_ref())?;
             let row_uid = Optional_Table_Row_Uid(transaction, lineage.source_table_row.as_ref())?;
             let node_uid = Optional_Node_Uid(transaction, lineage.target_node_id.as_deref())?;
             let statement_uid =
                 Optional_Statement_Uid(transaction, lineage.target_statement_id.as_deref())?;
-
             insert.execute(params![
                 block_uid,
                 heading_uid,
@@ -1066,33 +1161,31 @@ fn Insert_Lineage(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), 
 
 fn Insert_Omissions(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO omissions
          (source_block_uid, source_heading_uid, reason, justification, decision_record)
          VALUES (?1, ?2, ?3, ?4, ?5)",
-    )?;
+        |insert, record| {
+            let Record::Omission(omission) = record
+            else
+            {
+                return Ok(());
+            };
+            let block_uid = Optional_Block_Uid(transaction, omission.source_block.as_ref())?;
+            let heading_uid = Optional_Heading_Uid(transaction, omission.source_heading.as_ref())?;
+            insert.execute(params![
+                block_uid,
+                heading_uid,
+                omission.reason,
+                omission.justification,
+                omission.decision_record
+            ])?;
 
-    for record in bundle.Records()
-    {
-        let Record::Omission(omission) = record
-        else
-        {
-            continue;
-        };
-
-        let block_uid = Optional_Block_Uid(transaction, omission.source_block.as_ref())?;
-        let heading_uid = Optional_Heading_Uid(transaction, omission.source_heading.as_ref())?;
-
-        insert.execute(params![
-            block_uid,
-            heading_uid,
-            omission.reason,
-            omission.justification,
-            omission.decision_record
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 /// What a failed lookup names in its error: the kind of record that carried the reference,
@@ -1332,59 +1425,57 @@ fn Insert_Record_Relations(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO record_relations (document_uid, ordinal, target, relation)
          VALUES (?1, ?2, ?3, ?4)",
-    )?;
+        |insert, record| {
+            let Record::RecordRelation(relation) = record
+            else
+            {
+                return Ok(());
+            };
+            let document_uid = Document_Uid(transaction, &relation.document)?;
+            insert.execute(params![
+                document_uid,
+                relation.ordinal,
+                relation.target,
+                relation.relation
+            ])?;
 
-    for record in bundle.Records()
-    {
-        let Record::RecordRelation(relation) = record
-        else
-        {
-            continue;
-        };
-
-        let document_uid = Document_Uid(transaction, &relation.document)?;
-        insert.execute(params![
-            document_uid,
-            relation.ordinal,
-            relation.target,
-            relation.relation
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 /// The submission rows, each onto the node it is.
 fn Insert_Submissions(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO submissions
              (node_uid, kind, form_contract_version, state, submitted_by, submitted_through)
          VALUES ((SELECT uid FROM nodes WHERE node_id = ?1), ?2, ?3, ?4, ?5, ?6)",
-    )?;
+        |insert, record| {
+            let Record::Submission(submission) = record
+            else
+            {
+                return Ok(());
+            };
+            insert.execute(params![
+                submission.node_id,
+                submission.kind,
+                submission.form_contract_version,
+                submission.state,
+                submission.submitted_by,
+                submission.submitted_through
+            ])?;
 
-    for record in bundle.Records()
-    {
-        let Record::Submission(submission) = record
-        else
-        {
-            continue;
-        };
-
-        insert.execute(params![
-            submission.node_id,
-            submission.kind,
-            submission.form_contract_version,
-            submission.state,
-            submission.submitted_by,
-            submission.submitted_through
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 /// Every attributed value, keeping the ordinal that decides which reading is current.
@@ -1393,35 +1484,34 @@ fn Insert_Submission_Values(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO submission_values
              (submission_uid, field, ordinal, origin, value, value_hash, supersedes_hash,
               recorded_at)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-    )?;
+        |insert, record| {
+            let Record::SubmissionValue(value) = record
+            else
+            {
+                return Ok(());
+            };
+            let submission_uid = Submission_Uid(transaction, &value.node_id)?;
+            insert.execute(params![
+                submission_uid,
+                value.field,
+                value.ordinal,
+                value.origin,
+                value.value,
+                value.value_hash,
+                value.supersedes_hash,
+                value.recorded_at
+            ])?;
 
-    for record in bundle.Records()
-    {
-        let Record::SubmissionValue(value) = record
-        else
-        {
-            continue;
-        };
-
-        let submission_uid = Submission_Uid(transaction, &value.node_id)?;
-        insert.execute(params![
-            submission_uid,
-            value.field,
-            value.ordinal,
-            value.origin,
-            value.value,
-            value.value_hash,
-            value.supersedes_hash,
-            value.recorded_at
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 /// Every gap, open and closed alike.
@@ -1430,32 +1520,31 @@ fn Insert_Submission_Gaps(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO submission_gaps
              (submission_uid, ordinal, question, blocks, severity, closed_by)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
-    )?;
+        |insert, record| {
+            let Record::SubmissionGap(gap) = record
+            else
+            {
+                return Ok(());
+            };
+            let submission_uid = Submission_Uid(transaction, &gap.node_id)?;
+            insert.execute(params![
+                submission_uid,
+                gap.ordinal,
+                gap.question,
+                gap.blocks,
+                gap.severity,
+                gap.closed_by
+            ])?;
 
-    for record in bundle.Records()
-    {
-        let Record::SubmissionGap(gap) = record
-        else
-        {
-            continue;
-        };
-
-        let submission_uid = Submission_Uid(transaction, &gap.node_id)?;
-        insert.execute(params![
-            submission_uid,
-            gap.ordinal,
-            gap.question,
-            gap.blocks,
-            gap.severity,
-            gap.closed_by
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 /// The surrogate of the submission filed under `node_id`.
