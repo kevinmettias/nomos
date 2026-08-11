@@ -7806,16 +7806,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [
         "P11-UNRUN-POLICY"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-msrv-s2",
-        "acquired_at": 1786420159,
-        "lease_expires_at": 1786430959
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -7829,7 +7825,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-msrv-s2",
+          "reason": "Blocked by a finding this item produced, and the work is parked rather than lost.\n\nMeasured and not in dispute. The declared floor 1.85 is false: cargo check --workspace --all-targets refuses on 1.85.1 and 1.87.0 with error[E0658] let expressions in this position are unstable, and compiles clean on 1.88.0, so the floor is exactly 1.88 and the release below it refuses.\n\nWhat blocks the correction is a second-order effect the item why did not predict. clippy takes its MSRV from rust-version and clippy.toml sets no msrv here, so raising the floor to 1.88 unmasks three collapsible_if findings that 1.85 was suppressing, and the gate `-D warnings` turns them into errors. Control in a detached worktree at 3cd2261, one variable: clippy exits 0 at rust-version 1.85 and 101 at 1.88, reporting crates/spec/nomos-spec-ingest/src/restore/extract.rs:139 and tests/contract/src/gates.rs:384 and :760.\n\nNeither file is in this item territory, and one of them is under a live peer uncommitted edits right now. P11-COLLAPSIBLE-UNMASKED carries them and this item should be retaken after it lands.\n\nThe tree was left clean deliberately. A rust-version bump sitting uncommitted here would fail the next peer work finish on the workspace lint, for a reason that is mine and would read as theirs.\n\nPrepared and verified, awaiting only that item: Cargo.toml at 1.88 with the measurement in a comment; a two-step Compatibility floor lane in gate.yml using RUSTUP_TOOLCHAIN rather than a plus-toolchain argument, because that is the only override that beats rust-toolchain.toml, measured as bare nightly 1.97 against 1.88.0 under the variable; and OD-GATE-008 written and registered, arguing check over test, and answering why the number in two files is not a second authority since cargo enforces the relation itself in both directions that matter, one of them measured at rust-version 1.90 refusing on toolchain 1.88. The predicate cargo test -p nomos-cli -p nomos-contract-tests passed, and both required projections rendered current at exit 0 with the record registered.\n\nTwo follow-on items were opened while it was held and both stand independently of it: P11-FLOOR-AGREEMENT for the one drift direction cargo does not catch, and P11-NIGHTLY-PURPOSE because rust-toolchain.toml pins nightly for rustfmt brace_style while README.md and rustfmt.toml both forbid running cargo fmt at all.",
+          "abandoned_at": 1786420862
+        }
+      ],
       "displaced": [],
       "declined": null
     },
@@ -8829,6 +8831,40 @@
           "nomos-spec-store",
           "-p",
           "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-COLLAPSIBLE-UNMASKED",
+      "title": "Three clippy findings are suppressed by a compatibility floor that is false, and the gate reddens the moment it is corrected",
+      "why": "clippy reads its MSRV from Cargo.toml rust-version, because clippy.toml sets no msrv key here. rust-version says 1.85, and clippy therefore withholds every suggestion that would require a newer language feature. collapsible_if is one of those: collapsing `if let Some(x) = e { if cond { } }` needs a let chain, which stabilized in 1.88.\n\nSo three findings are currently invisible, and they become errors under the gate `-D warnings` the moment the floor is corrected to the number that actually compiles this workspace:\n\n  crates/spec/nomos-spec-ingest/src/restore/extract.rs:139\n  tests/contract/src/gates.rs:384\n  tests/contract/src/gates.rs:760\n\nMeasured as a control rather than inferred, in a detached worktree at 3cd2261 with one variable changed and nothing else: cargo clippy --workspace --all-targets -- -D warnings exits 0 with rust-version 1.85 and exits 101 with rust-version 1.88, reporting exactly those three sites.\n\nThis is why P11-MSRV-UNCHECKED could not land its own measurement. It reserves Cargo.toml and the workflow, and neither of these two files, and a floor correction that reddens the gate is not a correction anybody can commit.\n\nHazard for whoever takes this. extract.rs is under a live peer uncommitted module-split edits as of this writing and still carries the pattern at the same site. Territory is declared and not enforced, so claiming this item does not stop that work; check git status before touching that file and take gates.rs first if the peer is still in flight.",
+      "done_when": "cargo clippy --workspace --all-targets -- -D warnings exits 0 with rust-version set to 1.88, and the item reports that run rather than asserting it.\n\nThe floor itself is not changed here. Cargo.toml belongs to P11-MSRV-UNCHECKED and this item raises it only as a measurement, in a worktree, and reverts it. An item that lands the bump has done the other item work inside a territory it does not hold.\n\nThe three sites collapse into let chains, which is what clippy asks for and what the nine chains already in this workspace look like. Collapsing them is correct under the current declared floor too: nothing checks feature usage against rust-version, and the pinned nightly compiles either form.\n\nNot closed by adding an allow attribute at the three sites. That converts a finding into a suppression and leaves the next author to discover the same class again, which is the shape P12-UNENFORCED-DECLARATION is open against.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/restore/extract.rs",
+          "tests/contract/src/gates.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-ingest",
           "-p",
           "nomos-contract-tests"
         ],
