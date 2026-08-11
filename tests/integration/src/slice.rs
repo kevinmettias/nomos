@@ -897,11 +897,9 @@ impl Slice
                 continue;
             };
 
-            let approximated = applicability == Applicability::SupportedWithFallback;
-
             match crate::surface::Public_Items(&fact.payload.bytes)
             {
-                Ok((items, public)) => Self::Summed(&mut surface, items, public, approximated),
+                Ok((items, public)) => Self::Summed(&mut surface, items, public, applicability),
                 Err(_) => surface.unreachable = surface.unreachable.saturating_add(1),
             }
         }
@@ -914,17 +912,18 @@ impl Slice
 
     /// One readable member folded into the rollup.
     ///
-    /// `approximated` is counted here rather than left to the caller because of
-    /// `OD-CAPABILITY-003`'s third condition: without it the scanner's answer covers the
-    /// file the parser refused, `unreachable` drops to zero, and a corpus that was visibly
-    /// incomplete starts reading as complete and sound.
-    fn Summed(surface: &mut Surface, items: u32, public: u32, approximated: bool)
+    /// The [`Applicability`] is taken whole rather than reduced to a flag by the caller,
+    /// so the one place that acts on it is the one place that reads it. It is counted here
+    /// at all because of `OD-CAPABILITY-003`'s third condition: without it the scanner's
+    /// answer covers the file the parser refused, `unreachable` drops to zero, and a corpus
+    /// that was visibly incomplete starts reading as complete and sound.
+    fn Summed(surface: &mut Surface, items: u32, public: u32, applicability: Applicability)
     {
         surface.files = surface.files.saturating_add(1);
         surface.items = surface.items.saturating_add(items);
         surface.public = surface.public.saturating_add(public);
 
-        if approximated
+        if applicability == Applicability::SupportedWithFallback
         {
             surface.approximate = surface.approximate.saturating_add(1);
         }
