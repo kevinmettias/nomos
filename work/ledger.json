@@ -7781,7 +7781,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-lint-authority-s2",
+          "reason": "Territory cannot do the work. The only collapse satisfying done_when removes -D warnings from the Lint step, and two tests assert -D in the derived argv of the real workflow: crates/host/nomos-cli/tests/gate_step.rs Test_The_Derived_Lint_Step_Should_Still_Be_Clippy, and crates/substrate/nomos-ledger/tests/gate_covers_finish.rs Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step. Both are inside this item verification predicate, so the predicate cannot pass within the four reserved paths. README.md line 210 restates the same command and is a third authority. Needs re-adding with gate_step.rs, gate_covers_finish.rs and README.md reserved; README.md is held by P10-SUBMISSION-LAYOUT today.",
+          "abandoned_at": 1786420101
+        }
+      ],
       "displaced": [],
       "declined": null
     },
@@ -7800,12 +7806,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P11-UNRUN-POLICY"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-msrv-s2",
+        "acquired_at": 1786420159,
+        "lease_expires_at": 1786430959
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -7912,6 +7922,919 @@
           "exit_code": 0
         }
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-CONNECTOR-SEAM",
+      "title": "External systems have no recorded crossing, and the seam record governing the other two does not reach them",
+      "why": "ARC-ECOSYSTEM-001 draws two crossings and governs both: KWB semantic intent projects down into a Nomos executable contract, and XVPE generic primitives are consumed upward by adaptation. An external system of record is neither.\n\nNothing in this workspace names one. A search for connector, external system, GitHub, Jira, Confluence or SharePoint across every .rs file in the tree returns two files, crates/host/nomos-cli/tests/gate_step.rs and crates/substrate/nomos-ledger/src/gate.rs, and both are about this repository's own gate step rather than an external service. So there is no crate, no trait, no evidence class assignment and no identity rule for state that originates outside the workspace, and the first connector written will decide all four by being the only thing that has.\n\nThat is the same shape OD-AGENT-001 recorded for the KWB boundary before ARC-ECOSYSTEM-001 answered it: not a missing feature, a missing decision that the first implementation would make silently. The specific risk here is authority. An external tracker's status field is a fact about that tracker, not about this codebase, and a connector that returns it as an ordinary value hands a vendor's workflow the standing of a Nomos verdict. EvidenceClass already exists to keep those apart and nothing routes an external read through it.\n\nFour invariants are already settled enough to be written down and are not written anywhere: external identity is derived from semantic addressing rather than minted from a vendor key; vendor schemas and authentication stay below the seam so no canonical type names a vendor; external state enters as Observed and never as authority; and a write capability is omitted from the interface rather than present and permission-checked.",
+      "done_when": "A registered governing record names the third crossing and states, for each of the four invariants above, either the rule or what it is waiting on.\n\nIt must say what the layers are - external system, generic connector substrate, vendor to canonical translation, and the two projections above it - and which of them Nomos owns, in the vocabulary ARC-ECOSYSTEM-001 already uses for the other two crossings, so that the three crossings read as one seam rather than three unrelated decisions.\n\nIt cites ARC-ECOSYSTEM-001 rather than restating it, for the reason OD-SEAM-CITATION already settled: a seam decided in two record sets where neither names the other is the duplication a seam record exists to prevent.\n\nA new record rather than a third version of ARC-ECOSYSTEM-001, because P11-ECOSYSTEM-UPWARD already holds that document for the upward crossing and two items amending one record cannot both be right about what version 3 says.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-CONNECTOR-001",
+          "crates/spec/nomos-spec-store/records/ARC-CONNECTOR-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-WRITE-CAPABILITY",
+      "title": "An outward write is a second door, and the interface that would make the dangerous method absent is undecided",
+      "why": "OD-SPEC-009 already decided the general form: a submission enters through one accept function and every surface is a transport onto it. A connector that posts a review comment, transitions a tracker issue or creates a draft page is a surface, and nothing says so.\n\nThe risk is that a connector is the one kind of surface that arrives with its own client library already able to write. A vendor SDK hands the caller a client whose read and write methods sit on one object, so the shortest correct-looking implementation of reflect",
+      "done_when": "A registered governing record states that an outward mutation is a command through a canonical service and never an act a connector initiates, and cites OD-SPEC-009 as the decision it is applying rather than restating it.\n\nIt states the structural rule in the strong form: a component receives an interface carrying only the operations it may perform, so a write it may not do is absent rather than refused, and runtime authorization is an additional layer rather than the mechanism. It says explicitly where structural absence is not achievable and what stands in for it there.\n\nIt names the scope beyond connectors - executor, plugin, agent, transport - or states that it deliberately does not, and says which record would.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONNECTOR-001",
+          "crates/spec/nomos-spec-store/records/OD-CONNECTOR-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P12-CONNECTOR-SEAM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-CONNECTOR-REPLAY",
+      "title": "A live endpoint would be the only way to observe a connector, and a test that cannot reach it passes",
+      "why": "Every test in this repository that reaches a corpus can be run offline because the corpus is a directory. An external system is not, and the first connector will make a live SaaS endpoint the only way to observe what the code does.\n\nOD-GATE-001 already measured what that costs in the one direction this repository has met: a test that cannot find its input returns early and prints ok, CI has none of the three corpora, and tests/contract declares the size of that hole rather than pretending it is closed. A connector test that cannot reach GitHub has the same two options and the same wrong default.\n\nThe reasons to record and replay are wider than CI, and the wider ones are why this should be decided before the first connector rather than added after it. A recorded interaction is what makes a failure reproducible without a token, what lets an offline session work on translation logic, what proves a vendor API version migration changed nothing this build reads, and what makes a regression in a translation comparable against the exact bytes that produced the previous answer. A connector written against a live endpoint first is very hard to retrofit with any of that, because the seam where the recording would be taken is the seam nobody drew.",
+      "done_when": "A registered governing record states that a vendor interaction is recorded and replayable, and names the seam the recording is taken at - which side of vendor-to-canonical translation the fixture sits on, since a fixture above the translation cannot detect a translation defect and one below it is a vendor wire format this repository would then own.\n\nIt states what a fixture is evidence of and what it is not, in EvidenceClass terms, so a replayed pass is not read as a claim about the live system.\n\nIt says what happens when a fixture is absent: the answer that must not be ok, for OD-GATE-001's reason, restated in this setting rather than assumed to carry.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CONNECTOR-002",
+          "crates/spec/nomos-spec-store/records/OD-CONNECTOR-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P12-CONNECTOR-SEAM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-INTEGRATION-CONTENTS",
+      "title": "IntegrationPackage is a declared kind and nothing says what one places in a repository that adopts Nomos",
+      "why": "IntegrationPackage is one of the sixteen kinds in crates/contracts/nomos-contracts/src/package.rs and nothing says what one contains. PackageKind's own note records that no package manifest exists on disk and that nothing installs or resolves one, and OD-PACKAGE-001 holds that as its open subject - but both are about the manifest reader. What an integration package materializes into a consuming repository is a different question and is answered nowhere.\n\nIt is answerable now because this repository is already the worked example. A repository that adopts Nomos needs an agent contract file, a per-agent adapter, skills, subagent definitions, hooks, an MCP server registration, CI projections, connector configuration, and optionally rules and providers. Every one of those exists here as a hand-placed file, and this tree is where the shape of the answer can be read off rather than invented.\n\nThe cost of leaving it undecided is specific and is already visible in the vocabulary: without a package substrate, each of those surfaces acquires its own installer. Nine ad hoc installers is the outcome the sixteen-kind taxonomy exists to prevent, and PackageKind's note gives the reason in general - a single undifferentiated Plugin variant forces activation, isolation, permission and conformance semantics into per-package configuration where nothing can validate it. Nine separate scripts is that failure with the enum still intact.",
+      "done_when": "A registered governing record states what an IntegrationPackage materializes into a consuming repository: the surfaces it may place, and for each one whether it is placed, merged, or only declared.\n\nIt states which of those surfaces Nomos owns and which belong to another product, routed through ARC-ECOSYSTEM-001 rather than decided again here.\n\nIt says what an integration package is not, so that the boundary against LanguagePackage, RulePackage and ProjectionPackage is readable - a package kind that overlaps another is the undifferentiated bucket PackageKind's note argues against.\n\nIt does not restate OD-PACKAGE-001's subject. The manifest reader remains that record's open question and this one cites it.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-003",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-ASSET-OWNERSHIP",
+      "title": "Three kinds of generated file already live in this tree and nothing names the difference between overwriting them",
+      "why": "This repository already generates files into itself, already has three different ownership relationships to them, and names none of the three.\n\ndiagrams/relations.mmd and spec/domain-specification.md are rendered from the record set and are fully owned by the renderer: AGENTS.md says a commit touching docs/records changes both whether or not it meant to, and the gate fails on a stale one. README.md is derived too, and P9-README exists because it was hand-maintained where it was supposed to be a profile output - the composed case, discovered by it going wrong. .claude/settings.local.json is the third: CLAUDE.md says it is personal and stays out of git, so it is user-owned and a generator must never write it.\n\nThree relationships, three different correct behaviours on regeneration, and the only thing distinguishing them today is which prose file a reader happened to open. That is survivable while a human runs the renderer against a tree they are looking at. It stops being survivable when a package materializes files it did not write into a repository it has never seen, which is exactly what P12-INTEGRATION-CONTENTS describes.\n\nThe failure is asymmetric and that is why it needs a type rather than a convention. Refusing to regenerate a GeneratedOwned file costs a stale projection, which the gate already catches. Regenerating a UserOwned file costs the user's work with no diff to recover it from, and an installer that gets it wrong gets it wrong on every machine it runs on.",
+      "done_when": "A registered governing record names the ownership classes a generated asset may hold - at minimum fully generated, composed from generated and user content, and user-owned and never written - and states for each what regeneration does and what a conflict does.\n\nIt states where the classification lives: whether an asset declares its own class, the package declares it, or a manifest does, and what happens to an asset whose class is undeclared. The default must be the safe direction, and the record says which that is and why.\n\nIt classifies the four assets this repository already generates or protects - the two required projections, README.md, and the personal settings file - so the model is validated against cases that exist rather than only against cases imagined for it.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-004",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-PUBLICATION-SCOPE",
+      "title": "Whether a materialized asset may leave the machine is enforced by a gitignore entry and a sentence in prose",
+      "why": "A materialized asset has a second attribute beside who owns it, and it is orthogonal to ownership: whether it is meant to leave the machine it was written on.\n\nAgent scaffolding is usually local. CI configuration and deliberately shared team settings are committed. A scratch projection is neither - it should not survive the session. This repository already holds the distinction informally: CLAUDE.md says .claude/settings.local.json is personal and stays out of git, while .github/workflows/gate.yml is shared and committed, and the difference between them is enforced by a .gitignore entry and a sentence in a prose file.\n\nGit exclusion alone is not sufficient for the local case and this is the part worth deciding rather than assuming. An ignore entry stops an accidental add and stops nothing else: a file can be staged with an explicit path, force-added, or swept in by git add -A, and this repository has already had a git add -A sweep another session's untracked work into a commit. So the mechanism that keeps a local-only asset local has to refuse at stage or commit time, not merely omit the file from a listing.\n\nThe reason to settle this beside ownership rather than inside it is that the two combine. A fully generated asset may be shared, a user-owned one may be local, and collapsing them into one enum would force four or six values whose names describe combinations rather than properties.",
+      "done_when": "A registered governing record names the publication scopes a materialized asset may hold - at minimum ephemeral, local and never published, and shared - and states which scope is the default for an asset whose scope is undeclared.\n\nIt states the enforcement for the local scope explicitly, and states that a .gitignore entry is not it, with the reason: exclusion is advisory against an explicit path and against git add -A, both of which have already happened in this tree.\n\nIt states how scope and ownership compose, since they are orthogonal, and gives the combinations this repository already contains as the worked cases.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-005",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-TRACE-PARTIAL",
+      "title": "A binding requirement that is half satisfied has no verdict, so an honest assessment is stored as nobody looked",
+      "why": "tests/contract/tests/requirement_trace.rs declares three writable verdicts and holds a fourth by absence. Met is documented as the site satisfies the requirement. Diverges is the site is derived from the requirement and departs from it deliberately, and owes a governing record. NotBinding is the requirement is read as not reaching this build. Unassessed is held by the absence of an entry and Read_Verdict refuses it as a written word, deliberately, because a file saying Unassessed would be somebody looking and recording that they had not.\n\nA requirement that binds this build and is half implemented is none of the four. Met overclaims and is exactly the stale Met the module doc already names as the guard's blind spot. Diverges asserts the departure is deliberate and demands a record explaining a decision nobody made, because unfinished is not a decision. NotBinding is false. And the fourth is not available: the honest author writes no entry, which the registry defines as nobody looked.\n\nThat last step is the defect rather than an inconvenience. OD-TRACE-001 exists because met and unmet had the same shape from outside, and this reproduces that property one level in - a requirement somebody assessed and found partially satisfied is stored identically to one nobody has opened. The registry's floor then counts it as neither, so the one number that says how much of the corpus has been examined silently excludes the cases where examination found the most.\n\nSix entries are committed and all six are Met, so nothing has forced the question yet. It is forced by the first honest partial assessment, and the pressure at that moment is to write Met.",
+      "done_when": "Either the registry can express a binding requirement that is partially satisfied, or a registered governing record states that it deliberately cannot and names where partial state lives instead.\n\nIf it can, the verdict carries its own obligation rather than being a softer Met. At minimum the entry says what is not satisfied, in a form that decays visibly the way a site does, so that a partial entry cannot quietly become a description of nothing. Whether it owes a governing record, an open ledger item, or neither is part of the decision and is stated with the reason.\n\nRead_Verdict and Parse enforce whatever is decided, and Test_The_Reader_Should_Refuse_Every_Malformed_Entry gains the cases. A new verdict gets a control that runs the real predicate over a constructed entry, the shape every other assertion in that file already has, because an assertion over the committed set is vacuous here - all six entries are Met.\n\nIf a fourth verdict lands, FEWEST_ASSESSMENTS and the module doc's four-verdicts sentence both stop being true as written and are corrected in the same commit.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/requirement_trace.rs",
+          "tests/contract/requirements",
+          "docs/records/OD-TRACE-003",
+          "crates/spec/nomos-spec-store/records/OD-TRACE-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "requirement_trace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-TRACE-POPULATION",
+      "title": "The reader accepts a User Story identifier and no decision says whether a User Story is assessable",
+      "why": "requirement_trace.rs measures itself against a population it never declares. Its module doc says the v14 corpus carries 363 requirements at authority canonical-normative-record, and FEWEST_ASSESSMENTS is a floor over the entries that exist - but nothing states that those 363 are the assessable set, and one line of the file quietly says otherwise.\n\nTest_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number accepts US-CHK-001. Is_Requirement_Id checks shape only: uppercase family segments, then three digits. So a User Story identifier parses, an entry named for one would be read, counted toward the floor, and held to the same record obligation on divergence as a normative requirement - and no decision anywhere says a User Story statement is assessable, or that it is not.\n\nWhichever answer is right, it should not be this one. The population is currently whatever Is_Requirement_Id's shape check happens to admit, which is an artifact of writing a validator for identifier form rather than a statement about what this build is answerable to. The two failure directions are both real: a User Story that binds and is excluded is unmeasured, and a User Story admitted without a decision means the traceability surface reports coverage of a population nobody chose - the same class of overstatement OD-TRACE-002 refused when it kept the corpus comparison out of the guard entirely.\n\nIt matters more once P12-TRACE-PARTIAL exists, because a partial verdict against a statement that was never in scope is a finding about nothing.",
+      "done_when": "A registered governing record states which statements are assessable: which artifact kinds, at which authority, and whether User Story statements are among them. It states the answer as a decision with a reason, not as a description of what the reader currently accepts.\n\nIs_Requirement_Id and the population agree afterwards. If User Story statements are out, the reader refuses US-CHK-001 and Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number moves it from the accepted list to the refused list. If they are in, the identifier stays accepted and the record says what a User Story entry means, since satisfying a narrative statement is not the same act as satisfying a normative one.\n\nEither way the file stops being the only place the population is decided, and the module doc says what the assessable set is rather than only how many requirements the corpus holds.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/requirement_trace.rs",
+          "tests/contract/requirements",
+          "docs/records/OD-TRACE-004",
+          "crates/spec/nomos-spec-store/records/OD-TRACE-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "requirement_trace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-PROGRAM-SEMANTICS",
+      "title": "Two of the five resolution levels have no producer, and the expansion that would add them has no recorded boundary",
+      "why": "FactVariant in crates/contracts/nomos-contracts/src/fact_variant.rs orders five resolution levels and documents the comparison as the thing that lets a rule refuse an answer established too weakly. Two of the five - SemanticallyResolved and RuntimeObserved - have no producer in this workspace. crates/capabilities holds exactly one crate, nomos-cap-syntax, and P10-DEPENDENT-EDGE already recorded that the one capability this build declares is a leaf by construction.\n\nSo the ordering that is supposed to let a rule demand resolved names is currently an ordering over one value. Nothing has tested whether the levels above Syntactic can be produced through the same seam, and the first attempt is where that gets found out.\n\nProgram semantics is the expansion that forces it: ownership, borrowing, lifetime, allocation, escape, async and concurrency structure, synchronization, and effects. Every one of those is a fact about a program that no syntactic reading can establish, and every one is the kind of claim Nomos exists to make rather than a language server's private business.\n\nThe decision worth recording before the first such capability, rather than after, is that this stays inside the existing epistemic vocabulary. Observation, EvidenceClass, Guarantee, Applicability and FactVariant already answer what was established, how strongly, by what, and over what. A capability that arrives with its own confidence enum or its own notion of partial coverage would be a second authority for a question already governed, and it would be the natural thing to write, because ownership analysis has vocabulary of its own that reads like it belongs in the fact type.",
+      "done_when": "A registered governing record states that program-semantics facts are Nomos-owned and are expressed through the existing epistemic types, naming them, and states what a new capability in this family may and may not introduce.\n\nIt says what the family covers, at the grain of the questions above, and where its boundary against a language provider's own diagnostics falls - the distinction being whether Nomos is restating a tool's answer or making a claim the tool does not make.\n\nIt states what FactVariant::SemanticallyResolved obliges a producer to have done, since the level is currently defined only by a doc comment and the first producer will fix its meaning by example.\n\nIt does not build a capability. The first one is separate work and this record is what it is measured against.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-004",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-RECOMPUTE-EQUIVALENCE",
+      "title": "Nothing asserts that incremental recomputation agrees with clean recomputation, and a stale read is a wrong answer rather than a missing one",
+      "why": "P11-INVALIDATION-ORDER fixes what the invalidation report can say. It does not establish that invalidation is correct, and those are different claims that the same work can easily be read as covering.\n\nThe property that matters once anything is actually rematerialized is that recomputing incrementally and recomputing from empty produce the same facts. Nothing asserts it, and nothing can yet, because P10-DEPENDENT-EDGE recorded that the dependent half of invalidation has no producer - every fact this build materializes is a leaf. A leaf graph cannot distinguish a correct invalidation from one that recomputes everything, and equally cannot distinguish it from one that recomputes nothing it should have.\n\nThe failure this guards against is the characteristic one for derived state and it is silent in exactly the conditions a test suite runs under. An under-invalidating dependency graph serves a stale fact, and the answer is wrong rather than missing - it looks like a correct answer computed earlier. It appears only when a dependency edge exists and only when the recomputation order lets a stale read win, which is why it survives every test written before the second derived hop and fails after it.\n\nWriting the equivalence now, while the graph is still leaves, is cheap and pins the property to the moment the second hop arrives rather than to the moment somebody notices a wrong answer.",
+      "done_when": "A test asserts that materializing a fact set incrementally after a change and materializing it from an empty store produce the same facts, over a graph with at least one derived hop.\n\nIt fails when invalidation under-invalidates, which means the fixture has a dependent fact whose input changes and whose stale value is observably different from its fresh one - a graph where both computations trivially agree asserts nothing, and that is the way this test is usually written wrong.\n\nThe comparison is over fact identity and value together. Comparing counts, or comparing identities alone, passes on the stale-value case this exists to catch.\n\nIt states what it cannot yet reach, in the file, if the dependent producer is still absent when this lands - the shape OD-TRACE-001 and requirement_trace.rs already use for a vacuous assertion, rather than a green test that read nothing.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs",
+          "docs/records/OD-ANALYSIS-005",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P11-INVALIDATION-ORDER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-IDENTITY-DERIVATION",
+      "title": "The identity module decides the shape of an identifier and not whether it was derived or minted, and both shapes pass",
+      "why": "crates/contracts/nomos-contracts/src/identity.rs decides the shape and not the derivation. Its module doc says every identity in Nomos is one of two shapes, a 128-bit content digest or a human-authored string with a stable spelling, and that nothing is identified by its path and line, ever - carried over from the prototype, where every comparative feature turned out to be a join with no key.\n\nThat settles what an identifier looks like. It does not settle what goes into the digest, and those fail differently. A digest over semantic addressing is reproducible: two machines, two runs, and two clones of the corpus compute the same identifier for the same thing, so the join the module doc is about actually closes. A digest over whatever the constructing code happened to hold is a mint - it has the right shape, passes every type check, and produces a different value on the next run, which is the same join failure the prototype had, now wearing a Digest128.\n\nNothing distinguishes the two. There is no rule that an identifier is derived where derivation is possible, no statement of what counts as semantic addressing, and no obligation on a caller that mints one to say why derivation was unavailable. P10-CANONICITY-DECISION settled which substrate is canonical for a feature request, which is a neighbouring question and not this one.\n\nExternal identity is what raised it - P12-CONNECTOR-SEAM carries derived stable external identity as one of its four invariants - but the same rule should hold for work items, requirements, decisions, runs, packages, projections and external artifacts, and deciding it once per crossing is how it ends up decided differently in each.",
+      "done_when": "A registered governing record states that an identifier is derived from semantic addressing wherever it can be, that minting an opaque one is the exception, and what a caller owes when it mints - at minimum a stated reason that identity is not derivable for that subject.\n\nIt says what semantic addressing means concretely enough to be checkable: what may go into a derived digest and what may not, with the machine-local and run-local inputs that would silently break reproducibility named as the excluded cases.\n\nIt states the scope - the entity families the rule covers - and cites the identity module rather than restating its two shapes, which are already decided there.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-MODEL-002",
+          "crates/spec/nomos-spec-store/records/OD-MODEL-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-NO-PRIVILEGED-SURFACE",
+      "title": "Nothing says the official surface holds no state the canonical services cannot rebuild, and one surface makes it invisible",
+      "why": "P10-SERVICE-SEAM records that one crate chooses the platform, runs the verb and renders the answer, and that a second adapter would duplicate all three. It is about the duplication. The property that has to survive the fix is different and is not written anywhere: that no surface holds state the canonical services cannot reconstruct.\n\nToday the question is nearly invisible because there is one surface and it is a CLI that exits. It becomes load-bearing the moment a second one exists - an editor session, a long-lived service, a web view - because that surface has a process lifetime and will accumulate things that are cheap to keep and expensive to ask for. Resolved provider selections, an in-memory work graph, connector session state, computed traces. Each is individually reasonable and collectively they are a second copy of the system's state that no other client can read and no test can address.\n\nThe failure mode is not corruption, it is that the official surface quietly becomes the only complete one. Every other client - a script, a peer implementation, a CI step, an agent - then sees a subset, and the gap is discovered by somebody trying to reproduce in the API something the UI already shows.\n\nThis repository has the vocabulary to state the rule and the list to state it over: work graph, analysis graphs, provider resolution, connector state, requirement traces, package state, external references, evidence, decision traces and control commands.",
+      "done_when": "A registered governing record states that the official surface holds no privileged state, and says what that means operationally: every state a surface can display is reconstructable through a canonical service by any client, and every action it can take is a command through one.\n\nIt enumerates the state families this applies to rather than stating the principle abstractly, because a principle with no list is checkable against nothing.\n\nIt says what a surface may legitimately hold that is not privileged state - caches, view state, selections - and what makes the difference, since the rule is unusable if it reads as forbidding a surface from remembering anything.\n\nIt cites OD-HOST-001 as the seam it constrains rather than re-deciding the seam.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-002",
+          "crates/spec/nomos-spec-store/records/OD-HOST-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-SERVICE-SEAM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-KWB-EVIDENCE",
+      "title": "The existing C# KWB has no recorded status, so the default reading of it is port rather than mine",
+      "why": "An existing C# KWB implementation holds working knowledge this project will otherwise rediscover, and there is no recorded position on what it is for. Absent one, the default reading of an existing codebase that does roughly the right thing is that it should be ported, and a port is the wrong answer here for a reason that is already recorded: ARC-ECOSYSTEM-001 draws ownership boundaries this code predates, so porting it would import a decomposition made before the boundary existed and then argue about the boundary from inside it.\n\nThe right reading is that it is evidence. What it holds that is worth extracting is not its structure: proven invariants, the failure cases it actually hit, semantic models that survived contact, replay mechanisms, project integration lessons, authentication and connector mistakes, and operational experience. Those are findings, and findings transfer across a rewrite. Class layout does not.\n\nThis repository already has the machinery to treat a prior implementation as a source rather than as an ancestor - the specification store ingests corpora, and D-132 already settled that the corpus outranks the game plan when they disagree. What is missing is the decision that the C# tree is that kind of input, which is what stops the first person who reads it from opening a port.\n\nThe cost of not deciding is asymmetric. Extracting evidence from a codebase treated as an ancestor is still possible later; unwinding a port that has already fixed the wrong boundaries is not.",
+      "done_when": "A registered governing record states that the existing C# KWB is an evidence source and not a port target, with the reason stated as a boundary argument rather than a preference.\n\nIt names what is to be extracted, at the grain of the list above, and says where an extracted finding lands - whether it becomes a governing record, a corpus artifact, a ledger item, or KWB knowledge once P11-ECOSYSTEM-UPWARD has said what that crossing is.\n\nIt says what would change the answer, since a blanket never is not a decision anybody can revisit.\n\nIt cites ARC-ECOSYSTEM-001 as the boundary the rebuild targets rather than restating the product split.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ECOSYSTEM-002",
+          "crates/spec/nomos-spec-store/records/ARC-ECOSYSTEM-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-CONFORMANCE-SEAM",
+      "title": "Nothing says what a Nomos claim is that a linter's is not, so every capability argument defaults to restating a provider",
+      "why": "Nomos has a check surface - nomos check, nomos-rules, Finding, EnforcementReach, GateCategory - and nothing states what kind of claim it makes that an existing analyzer does not. Without that, every capability argument is decided case by case, and the case-by-case answer trends one way: toward restating what rustc, Clippy or rust-analyzer already said, because that is the work whose value is obvious and whose provider is already written.\n\nThe distinction is stateable. A linter analyzes code using language semantics. The claims this repository already makes are about a software system: tests/contract asserts the README's ownership tables against the real workspace in both directions, boundaries.rs asserts a dependency ordering no compiler knows about, requirement_trace.rs asserts that a corpus requirement's site still exists, and the freshness stamp asserts that a projection matches the record set it was rendered from. None of those is a language question and none has a provider that could answer it.\n\nSo the layering is already implicit in what got built, and writing it down is what keeps the next capability from being chosen for the wrong reason. Compiler and language-server facts flow in as evidence at the resolution level FactVariant already names; Nomos composes them with architecture, requirements, history, runtime evidence and policy into a claim; and native analysis is what Nomos writes only where no provider exposes the fact it needs.\n\nThe negative half matters as much and is easier to lose: this does not compete with rustc on parsing, with Roslyn on types, or with rust-analyzer on responsiveness. A record that only says what Nomos does will be read as licence to do all of it.",
+      "done_when": "A registered governing record states what a Nomos conformance claim is and what distinguishes it from a language tool's diagnostic, in terms of the inputs a claim composes rather than by listing example checks.\n\nIt states the layering explicitly, including the negative half: which questions belong to an external provider and are never reimplemented here, and the test for when Nomos may analyze natively - that no provider exposes the fact, not that writing it would be convenient.\n\nIt says where a rationale source fits, since KWB supplies intent that no static analysis can derive and the boundary is that KWB provides evidence while Nomos decides the engineering claim. It cites ARC-ECOSYSTEM-001 for that crossing rather than re-deciding it.\n\nIt names the claims this repository already makes as the worked examples, because they are the evidence that the distinction is real rather than aspirational.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-CONFORMANCE-001",
+          "crates/spec/nomos-spec-store/records/ARC-CONFORMANCE-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-DRIFT-CAPABILITY",
+      "title": "The architecture check knows this workspace by name, so a second repository wanting it would copy the file",
+      "why": "This repository already detects architecture drift and can only do it to itself. tests/contract/tests/boundaries.rs compares a declared dependency ordering against the real workspace, and its BANDS table is authored by hand with the reason given in the file: a band is a design decision and there is nothing in the source to infer it from. Adding a crate without adding it there fails Test_Every_Member_Should_Declare_A_Band, so a new crate cannot quietly join the workspace outside the ordering.\n\nThat is the strongest architecture check in the tree and it is a contract test, not a capability. It knows the crate names of this workspace, reads Cargo manifests directly, and has no contract, no provider, no applicability and no guarantee. Nothing about it can be pointed at another repository, and a second repository wanting the same property would copy the file.\n\nThe claim underneath it generalizes cleanly and is the class of finding no language tool can produce: a forbidden dependency direction, a bypassed layer, a cycle between components, a boundary leak, a provider-specific type escaping a canonical seam, a transport implementing domain semantics. Each is a statement about a declared architecture compared against the observed one, and each is unavailable to a linter for the same reason - the declaration is not in the code.\n\nThe obvious wrong move is to generalize the test. Widening boundaries.rs to read a configurable table would make this repository's own guard the mechanism for everybody, which is the copy-the-file problem with an extra parameter. What is missing is the seam: where a declared architecture is stated, how the observed one is established as facts, and which of those two Nomos owns.",
+      "done_when": "A registered governing record states how a declared architecture is expressed, how the observed one is established, and where the comparison lives - specifically whether the observed dependency graph is a fact produced through a capability or something a rule reads directly.\n\nIt states what happens for a repository that declares no architecture, since the answer must not be that everything passes. Applicability and Guarantee already exist for exactly that reporting and the record says which is used.\n\nIt says what becomes of boundaries.rs: whether this repository's own ordering eventually becomes a declaration consumed by the general mechanism, or stays a bespoke guard, with the reason. It does not widen that file, and it does not change it - P10-SERVICE-SEAM holds it.\n\nIt cites ARC-CONFORMANCE-001 for why this is a Nomos claim rather than a provider's.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-003",
+          "crates/spec/nomos-spec-store/records/OD-RULES-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P12-CONFORMANCE-SEAM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-UNENFORCED-DECLARATION",
+      "title": "A declaration that enforces nothing produces no output, and this tree has found four of them one at a time",
+      "why": "This repository has produced the same defect four times under four different names and has never named the class.\n\nP11-UNRUN-POLICY closed a gate that did not run on the branch it protects, together with a ban policy nothing had ever executed. P11-MSRV-UNCHECKED is open because rust-version says 1.85 and this workspace has not compiled on 1.85 since it grew let chains. P11-PLATFORM-UNCHECKED is open because every determinism claim here is checked on one operating system and it is not the one they were written on. deny.toml declares enforcement that no gate step executes.\n\nEach was found by a person noticing, one at a time, and each was fixed as its own item. The shared property is mechanical and is the reason they keep recurring: an artifact declares that something is enforced, and no executed step enforces it. That is decidable without understanding any of the four subjects, because both halves are written down - the declaration is in a manifest or a policy file, and the executed set is in a workflow.\n\nIt is also the class most likely to be silently wrong, because a declaration that enforces nothing produces no output at all. There is no failing check to investigate. The tree reads as governed, the gate is green, and the only evidence is the absence of a step nobody is looking for.\n\nFour instances is enough to stop finding them by hand, and this repository is the corpus the general check can be validated against - three of the four are documented and one is already closed, so a check that misses the closed one or invents a fifth is measurably wrong.",
+      "done_when": "A check reports a declaration of enforcement that no executed step performs, and reports it as a finding rather than as prose.\n\nIt is validated against the four instances this repository has already produced: the unrun workflow, the unexecuted ban policy, the unchecked minimum supported version, the single-platform determinism claim. A check that cannot see the three still open, or that reports a fifth that turns out not to be one, has not been validated.\n\nIt states what it cannot see. An enforcement mechanism it does not understand must be reported as unexamined and never as absent, which is the difference between this and a check that fails every repository whose tooling it has not been taught.\n\nThe finding names both halves - the declaration and the executed set it was compared against - because a report saying only that something is unenforced cannot be acted on or disputed.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-010",
+          "crates/spec/nomos-spec-store/records/OD-GATE-010.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-DUPLICATE-AUTHORITY",
+      "title": "Two artifacts encoding one decision agree until somebody edits one, and this tree has closed five of them",
+      "why": "P11-LINT-AUTHORITY is one instance: the gate's -D warnings and the workspace lint table are two authorities for one severity policy. It is not the first and the pattern is dense enough here to be worth naming.\n\nP10-MIRROR-DISAGREEMENT closed two guards that disagreed about whether DECLARED_RULES is mirrored. P10-BAND0-ADMISSION closed two authorities describing band 0 differently, and the wider one was the copy no test read. P10-AUDIT-STATE closed a second guard that disagreed with the first. P10-SUBJECT-HOME closed three normalizations of a path into a subject. AGENTS.md opens by explaining that a summary of a checked file is an unchecked copy of it and that this repository has already paid for one.\n\nFive closed items and a contract file's opening paragraph, all the same defect. It is not duplicate code - the two encodings usually look nothing alike, which is exactly why review misses them. A severity in a manifest and a flag in a workflow, a rule mirrored in a guard and in a table, a default in a CLI and in a service, a schema written once in Rust and once in JSON, a timeout in an executor and in a workflow config, a requirement paraphrased in two documents. What makes each a defect is not the repetition, it is that both are authoritative and nothing decides which wins when they diverge.\n\nThey diverge silently and asymmetrically. While the two agree there is no signal at all, so the clock starts at the moment somebody edits one - and the edit that causes the damage looks complete, because the author changed the authority they knew about.\n\nAGENTS.md already states the resolution rule for this repository: when two authorities disagree, the mechanical one wins and the disagreement is a defect worth an item. What is missing is anything that finds the disagreement.",
+      "done_when": "A check reports two artifacts that independently encode one decision, and reports the pair rather than either half - a finding naming only one side is not actionable, since the reader cannot tell which is the copy.\n\nIt is validated against the instances this repository has already closed, which are the corpus that proves it detects the real shape rather than a shape invented for it. Missing all five means it is measuring something else.\n\nIt states what it treats as one decision. This is the hard part and the record says how it is decided, because a check that flags every value appearing twice is noise and a check that requires them to be textually identical finds nothing - the closed instances above were all textually dissimilar.\n\nIt says what a legitimate second encoding is - a protocol commitment restated for a peer implementation is one, and PackageKind's labels are the worked example - and how such a case is declared so it is not reported forever.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-011",
+          "crates/spec/nomos-spec-store/records/OD-GATE-011.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P11-LINT-AUTHORITY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-PROVENANCE-FLOOR",
+      "title": "Eight evidence classes exist, nothing requires a claim to carry one, and nothing lets a consumer demand a floor",
+      "why": "EvidenceClass in crates/contracts/nomos-contracts/src/evidence.rs orders eight classes - AgentJudged, HumanAsserted, Predicted, Approximate, Derived, Observed, Verified, Authoritative - so the vocabulary for saying how strongly something was established already exists. Nothing requires a claim to carry one, and nothing lets a consumer demand a floor.\n\nThe consequence is that strength is currently a property of whoever reads the answer. An external tracker's acceptance status is Observed at best; a passing test is Verified. A requirement discharge that accepts either is accepting both, and the two are five classes apart in an ordering this workspace already defines. The same gap runs the other way in the projections: P10-STAMP-CONSISTENCY closed the case where a projection agreeing with its own stamp was not thereby what the store renders, which is a claim whose provenance was self-referential and passed.\n\nThree questions have no mechanical answer today for an arbitrary claim: what established it, how strong that is, and whether the consumer required at least that much. The first two have types and no obligation; the third has nothing.\n\nThis becomes the load-bearing check rather than a nice one as soon as two things land that are already on the board. P12-CONNECTOR-SEAM brings in state whose honest class is Observed and whose presentation looks authoritative. P11-ECOSYSTEM-UPWARD is about a run's observations becoming knowledge, and its stated risk is a loop where a review inspects evidence produced by the machine the rule will govern - which is precisely a provenance question that no reader can answer by looking at the claim.",
+      "done_when": "A check reports a claim whose provenance cannot be established, and a consumer that accepted evidence weaker than it required, as two distinct findings - they have different remedies and collapsing them makes both unactionable.\n\nA consumer can state an evidence floor, and the comparison uses EvidenceClass's existing ordering rather than a second notion of strength.\n\nSelf-referential provenance is reported. A claim established only by the thing it is about is the P10-STAMP-CONSISTENCY shape and it passes every check that only asks whether provenance is present.\n\nIt states what an absent provenance means: unexamined rather than unsupported, since a claim from a source the check does not understand is not thereby weak, and reporting it as weak would make the check unusable against anything it was not taught.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-COMPLETENESS-003",
+          "crates/spec/nomos-spec-store/records/OD-COMPLETENESS-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-FLOOR-AGREEMENT",
+      "title": "The compatibility floor is agreed between two files by cargo in one direction and by nothing in the other",
+      "why": "OD-GATE-008 pins rust-version to 1.88 and adds a gate lane that installs 1.88 and compiles the workspace on it. The number therefore appears in Cargo.toml as the declaration and in .github/workflows/gate.yml as a toolchain to install.\n\nTwo of the three drift directions are already caught, and both were measured rather than reasoned about. Code that outruns the declaration fails to compile on the floor: that is the E0658 let-chain failure on 1.85 and 1.87 that produced the evidence for OD-GATE-008. A declaration raised above the lane is refused by cargo before anything compiles, measured at rust-version 1.90 against toolchain 1.88 as `rustc 1.88.0 is not supported by the following packages`.\n\nThe third direction is unguarded. Lower rust-version below what the code needs and the lane still installs the higher toolchain, compiles clean and reports green, so the false low claim survives untouched. That is precisely the failure OD-GATE-008 exists to end, arriving through the one door its mechanism does not cover, and the record says so in as many words rather than leaving it to be found.\n\nThis was deferred and not overlooked. The comparison belongs in a test, and no test file was inside P11-MSRV-UNCHECKED territory; widening a claimed territory mid-item is the failure this repository has already had twice.",
+      "done_when": "Lowering rust-version in Cargo.toml without lowering the toolchain the gate installs fails a check, and the check has a control that has been watched fail rather than an absence assertion nobody has exercised.\n\nWhich mechanism closes it is the decision and both are open. A test comparing the two files is the shape README tables already have, compared both ways by tests/contract/tests/boundaries.rs. Deriving the toolchain from Cargo.toml in the workflow removes the second mention entirely, and costs a shell substitution in a run line, which this workflow has so far kept free of metacharacters for reasons OD-GATE-004 records about the Lint step.\n\nIf the derivation is chosen, nomos_ledger::Derive_Step must still yield a runnable argv from the step named Lint, and no step may be named Lint but that one.\n\nNot closed by asserting the two strings are equal today. The assertion has to fail when they stop being equal, and the item shows it failing.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/toolchain_floor.rs",
+          ".github/workflows/gate.yml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P11-MSRV-UNCHECKED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-TRACE-DRIFT",
+      "title": "Six assessments were made against corpus text nothing has compared since, and the guard cannot be where that comparison runs",
+      "why": "requirement_trace.rs catches a site that vanished. It cannot catch the other direction, and the other direction is the one that happens on a live corpus: the requirement changed and the code did not.\n\nThe module doc is explicit that semantic drift - code at a valid path drifting out of satisfying a requirement - is out of scope, and OD-TRACE-001 takes that trade with reasons this item does not reopen. A changed requirement is a different case and is not semantic. The requirement text is content in the specification store, the store already computes canonical hashes, and comparing the text an assessment was made against with the text that is there now needs no understanding of either.\n\nWhat blocks it is where the comparison can run. OD-TRACE-002 kept corpus comparison out of the guard crate entirely, and the reason is stronger than not yet: a traceability surface computed from the corpus would be green on every pull request by being unable to look, which is green about the entire corpus rather than about the sixty-eight tests OD-GATE-001's hole already covers. So this cannot be a contract test, and an item that adds one to requirement_trace.rs is reintroducing the exact defect that file was built to avoid.\n\nThat makes it a decision about where a corpus-backed check lives, not a test to write. Six assessments are committed and all six were made against corpus text nobody has compared since.",
+      "done_when": "A registered governing record states where a corpus-backed comparison of assessed requirement text against current requirement text runs, given that it cannot run in the guard crate, and what its verdict is called when the corpus is absent - which must not be pass.\n\nIt says what an assessment records so the comparison is possible at all: whether the entry carries the canonical hash of the requirement text it was made against, and what happens to the six committed entries, which predate any such field.\n\nIt states what a changed requirement does to an existing verdict. Whether Met becomes stale automatically or becomes a finding for a person is a decision, and it is the one that determines whether the registry stays trustworthy as the corpus moves.\n\nIt cites OD-TRACE-002 as the constraint it is working within rather than as an obstacle it is routing around.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-TRACE-005",
+          "crates/spec/nomos-spec-store/records/OD-TRACE-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-RUNTIME-EVIDENCE",
+      "title": "The strongest resolution level has no producer, and a runtime observation is the first fact that cannot be deterministic",
+      "why": "FactVariant declares RuntimeObserved as its strongest resolution level and nothing in this workspace produces one. EvidenceClass declares Observed and Verified and no runtime source feeds either. So the two type systems that exist to let a claim say it was established by watching execution have no execution to watch.\n\nThe claims this unlocks are the ones static analysis structurally cannot make, and they are not more precision on the same questions - they are different questions. Whether an allocation site on a path declared allocation-free actually allocates. Whether a lock that is statically permitted is contended past the latency budget the architecture states. Whether a code path that type-checks is ever taken. Each combines a static fact, a runtime fact and a declared constraint, and dropping any of the three leaves a claim nobody can act on: static alone says it is legal, runtime alone says it is slow, and the constraint is what makes either a finding.\n\nThe reason to decide the seam rather than write a profiler integration is that runtime evidence has a property none of the existing facts have. A syntactic fact is a function of the source and the same input gives the same answer. A runtime observation is a function of an execution, so it carries a workload, a machine and a build variant, and it is not reproducible in the sense the determinism vocabulary in this workspace means. The determinism declarations already govern every fact producer here and a runtime producer is the first one that cannot satisfy them as written.",
+      "done_when": "A registered governing record states how a runtime observation enters as a fact: what identifies it, what it carries beyond the value - at minimum the workload, the build variant and the environment it was observed under - and how it composes with a static fact in a single claim.\n\nIt states how a runtime producer relates to the determinism declarations every other producer satisfies. Either they are satisfiable and it says how, or they are not and it says what replaces them, because a producer that quietly declares itself deterministic when it is not corrupts a vocabulary this repository already gates on.\n\nIt says what a claim means when runtime evidence is absent. Applicability and Guarantee already carry that reporting and a runtime-informed check must be able to say it did not look, rather than that it found nothing.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-006",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-006.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P12-PROGRAM-SEMANTICS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-NIGHTLY-PURPOSE",
+      "title": "The nightly pin is held for a formatter this repository forbids running",
+      "why": "rust-toolchain.toml pins this workspace to nightly, and its own comment gives one reason: rustfmt Allman brace_style option is unstable. The gate repeats that reason at its Show toolchain step.\n\nThat reason is spent. README.md and rustfmt.toml both record that cargo fmt cannot produce this workspace style and damages the tree when run, and that cargo fmt --check is deliberately not a gate step because a gate containing two contradictory checks can never be green. So the toolchain is pinned to nightly to enable an option belonging to a command nobody is allowed to run.\n\nThe cost is not theoretical and it is what makes this worth an item rather than a comment. Because every build here and in CI used nightly, no older compiler was ever pointed at this tree, which is exactly why rust-version could sit at 1.85 for as long as it did while being false. An unpinned reason is how P11-MSRV-UNCHECKED came to exist.\n\nMeasured under P11-MSRV-UNCHECKED at 3cd2261: the workspace compiles on stable 1.88.0, cargo check --workspace --all-targets, exit 0, zero errors. So the pin is not load-bearing for compilation.",
+      "done_when": "rust-toolchain.toml states a reason that is true of a command this repository permits, or the pin is removed.\n\nThree answers and the record says which and why. Keep nightly for a reason other than rustfmt, and name it. Keep nightly for rustfmt and lift the ban on running it, which contradicts README and rustfmt.toml and is a larger decision than this item. Or drop to stable, which the measurement above shows compiles.\n\nWhat the choice costs the losing side is stated. Dropping the pin changes the compiler every contributor and every gate step runs, and nightly-only behaviour that nobody has looked for would surface as a finding rather than as this item failing.\n\nAnything the pin is silently buying is found by looking rather than assumed absent: a nightly-gated feature, a lint, or a dependency that resolves differently. The item reports what it found, including nothing.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "rust-toolchain.toml",
+          "rustfmt.toml",
+          "README.md",
+          "docs/records/OD-GATE-012",
+          "crates/spec/nomos-spec-store/records/OD-GATE-012.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-HISTORICAL-EVIDENCE",
+      "title": "Every public API change is committed in a snapshot and nothing has asked whether a record accompanied one",
+      "why": "Every check in this repository inspects one tree. Nothing compares a run against the runs before it, and a whole class of claim is only visible across revisions: a regression accumulated in small accepted steps, a finding corrected and reintroduced, a dependency removed by a decision and quietly returned, an API behaviour that changed with no corresponding record or version transition.\n\nThe last one is the case where the evidence already exists and is unused. tests/contract/surface holds a committed snapshot of every exported declaration per crate, and P9-PUBLIC-API made re-blessing it a deliberate act that rewrites and then fails. So every public API change in this workspace's history is recorded, in git, with the commit that made it - and nothing has ever asked whether a given one was accompanied by a governing record. The join exists and no query runs it.\n\nThe reason this is not simply a matter of writing that query is that the temporal subject is undecided. Nomos stores facts pinned to a workspace state - P8-PIN removed the workspace state from fact identity deliberately - and nothing says whether a fact from an earlier state is retained, how a series is addressed, or what identity makes two facts from different revisions the same fact. Without that, a comparison across revisions has no key, which is precisely the failure crates/contracts/nomos-contracts/src/identity.rs says the prototype died of: every comparative feature - diffing, history, trajectories, co-change, transformation tracking - turned out to be a join with no key.\n\nThat module doc names history as one of the five features that failed, and this is the item where it either gets a key or stays unavailable.",
+      "done_when": "A registered governing record states whether facts from prior revisions are retained, what addresses a series across revisions, and what identity makes two facts from different revisions comparable - the key the identity module says every comparative feature needs.\n\nIt says what a temporal claim is evidence of and what it is not, since a trend over accepted revisions is not the same kind of statement as a fact about the current tree, and reporting them identically would let a historical inference block a change on evidence about other changes.\n\nIt names the comparison the existing surface snapshots already permit - a public API change with no accompanying record - as the worked case, because it is the one where both sides are committed today and the only missing thing is the question.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-STORE-002",
+          "crates/spec/nomos-spec-store/records/OD-STORE-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-CROSS-LANGUAGE",
+      "title": "Two language providers here are two answers to one language, so nothing has tested whether facts compose across two",
+      "why": "crates/languages holds nomos-lang-rust and nomos-lang-rust-scan, and they are two providers of one language rather than two languages. The bands table in tests/contract/tests/boundaries.rs puts them at the same band deliberately and forbids an edge between crates at one band, with the reason stated in the file: two providers that shared a parser could not disagree.\n\nThat is the right rule for two answers to one question. It says nothing about two languages, and the questions worth asking there are all about the seam between them. Ownership compatibility across an FFI boundary. Agreement between a serialized producer and its consumer. Error propagation across a protocol. Threading assumptions that hold on one side and not the other. Version compatibility between components built separately.\n\nNone of those belongs to either language's tooling, and that is the structural point rather than a convenience argument: a Rust language server cannot see the Python process, a Python type checker cannot see the C library's ownership contract, and no single-language tool is wrong for failing to - the claim is about the join and neither side holds it.\n\nProvider-neutral facts are what make the claim possible at all, and this repository has the mechanism and no second language to test it with. Whether canonical facts from two different language providers actually compose into one claim is unproven, and it is the same generalization test the capability architecture already faces from a second provider - P8-SECOND-PROVIDER proved two providers of one capability can disagree, which is the neighbouring property and not this one.",
+      "done_when": "A registered governing record states what a cross-language claim is, what facts it composes, and what has to be true of two providers for their facts to be comparable at all - since two providers normalizing into the same fact type is not by itself evidence that a claim spanning both means anything.\n\nIt names the claim families above and says which of them are reachable with syntactic facts and which require the resolution levels that have no producer yet, so the record is honest about what is available now.\n\nIt states what a cross-language check reports when one side has no provider, using Applicability rather than silence, because the common real case is a stack where exactly one language is covered.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-006",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-006.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P12-CONFORMANCE-SEAM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-EDITOR-PROJECTION",
+      "title": "The editor surface is the second adapter and the first that does not exit, and the easy version makes rendered text a protocol",
+      "why": "An editor surface is the second adapter P10-SERVICE-SEAM is about, and it is the worst-case one on both counts that record raises. It duplicates platform choice, verb execution and rendering if the seam is not fixed first, and unlike the CLI it does not exit - so it is also the first surface that can accumulate the privileged state P12-NO-PRIVILEGED-SURFACE exists to forbid.\n\nIt is worth deciding rather than deferring because the interesting content is already built and is currently unreachable. Finding, EvidenceClass, Guarantee, Applicability, the requirement registry, the record set, the work ledger and the projection profiles all exist. What none of them has is a way to be looked at from inside the code they are about. Hovering a symbol and being told the architecture component, the governing requirement, the record that decided it, the evidence behind it and the open item that touches it is not new analysis - it is a projection of state this repository already holds, onto a subject the editor already knows.\n\nThe same is true of the actions. Moving a dependency behind a canonical capability, creating a missing trace entry, replacing a leaked vendor type, opening a correction item - each is an engineering refactoring rather than a syntactic one, and each is an existing command with a subject the editor can supply.\n\nThe failure to avoid is the obvious first implementation: an adapter that shells out to the CLI and parses its rendered output. That makes the CLI's presentation a protocol, which is the third duplication in P10-SERVICE-SEAM's list arriving as an integration rather than as a copy, and it is very hard to undo once an editor depends on the text.",
+      "done_when": "A registered governing record states what an editor surface is in this architecture: which canonical services it consumes, that it consumes them as services rather than by invoking and parsing a rendered surface, and that it holds no state the services cannot rebuild.\n\nIt states what a diagnostic carries beyond a message and a span - the finding, the rule, the governing requirement or record, the evidence class and guarantee, and the correction if one exists - since a diagnostic that carries only text is a linter's diagnostic and gives up everything this repository has that a linter does not.\n\nIt says which navigations and actions are in scope and which are explicitly not, with the negative half stated: this does not reimplement completion, type information or responsiveness that a language server already provides, and it composes with one rather than replacing it.\n\nIt cites OD-HOST-001 for the seam and OD-HOST-002 for the state rule rather than re-deciding either.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-003",
+          "crates/spec/nomos-spec-store/records/OD-HOST-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-SERVICE-SEAM",
+        "P12-NO-PRIVILEGED-SURFACE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
