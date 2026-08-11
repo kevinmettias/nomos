@@ -9,8 +9,10 @@
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
 use crate::store::{NodeRow, SpecificationStore, StoreError};
-use nomos_spec_model::{ContentHash, Failure, Origin, Refusal, Submission, SubmissionState, Validate};
-use rusqlite::Transaction;
+use nomos_spec_model::{
+    ContentHash, Failure, FieldValue, Origin, Refusal, Submission, SubmissionState, Validate,
+};
+use rusqlite::{OptionalExtension, Transaction};
 
 /// Why a submission did not become durable.
 ///
@@ -72,10 +74,7 @@ pub fn Accept_Submission(
     submission: &Submission,
 ) -> Result<i64, AcceptError>
 {
-    let mut failures = Validate(submission);
-    let unresolved = Unresolved_Citations(store, submission)?;
-    failures.extend(unresolved);
-
+    let failures = Refusals(store, submission)?;
     if !failures.is_empty()
     {
         return Err(AcceptError::Refused(Refusal {
@@ -91,14 +90,27 @@ pub fn Accept_Submission(
         representation: "structured",
         title: Title_Of(submission),
     })?;
-
     let uid = store.In_Transaction(|transaction| {
         return Write_Submission(transaction, node_uid, submission);
     })?;
-
     Write_Lifecycle_Edges(store, submission)?;
 
     return Ok(uid);
+}
+
+/// Every rule this submission fails: the ones about its shape and the ones about what it
+/// cites, gathered so a refusal names all of them at once.
+fn Refusals(
+    store: &SpecificationStore,
+    submission: &Submission,
+) -> Result<Vec<Failure>, StoreError>
+{
+    let mut failures = Validate(submission);
+    let unresolved = Unresolved_Citations(store, submission)?;
+
+    failures.extend(unresolved);
+
+    return Ok(failures);
 }
 
 /// The title a submission is filed under.
@@ -131,39 +143,51 @@ fn Unresolved_Citations(
 
     for (field, wanted) in [("answers", "feature-request"), ("implements", "design-spec")]
     {
-        let Some(cited) = submission.Current(field)
-        else
-        {
-            continue;
-        };
+        let unresolved = Unresolved_Citation(store, submission, field, wanted)?;
 
-        let target = cited.value.trim();
-        let found = Cited_State(store, target)?;
-
-        let remedy = match found
-        {
-            None => format!(
-                "no submission is filed under `{target}`; cite one that exists, and one that \
-                 is a {wanted}"
-            ),
-            Some((kind, _)) if kind != wanted => format!(
-                "`{target}` is a {kind} and `{field}` must name a {wanted}"
-            ),
-            Some((_, state)) if state != SubmissionState::Accepted.Label() => format!(
-                "`{target}` is a {state}; accept it first, because work built against a draft \
-                 is work whose target may still change under it"
-            ),
-            Some(_) => continue,
-        };
-
-        failures.push(Failure {
-            field: field.to_owned(),
-            rule: "citation-resolves-to-an-accepted-submission".to_owned(),
-            remedy,
-        });
+        failures.extend(unresolved);
     }
 
     return Ok(failures);
+}
+
+/// Why one cited field does not resolve to an accepted submission of the kind it must name.
+fn Unresolved_Citation(
+    store: &SpecificationStore,
+    submission: &Submission,
+    field: &str,
+    wanted: &str,
+) -> Result<Option<Failure>, StoreError>
+{
+    let Some(cited) = submission.Current(field)
+    else
+    {
+        return Ok(None);
+    };
+    let target = cited.value.trim();
+    let found = Cited_State(store, target)?;
+    let remedy = match found
+    {
+        None => format!(
+            "no submission is filed under `{target}`; cite one that exists, and one that is \
+             a {wanted}"
+        ),
+        Some((kind, _)) if kind != wanted =>
+        {
+            format!("`{target}` is a {kind} and `{field}` must name a {wanted}")
+        }
+        Some((_, state)) if state != SubmissionState::Accepted.Label() => format!(
+            "`{target}` is a {state}; accept it first, because work built against a draft is \
+             work whose target may still change under it"
+        ),
+        Some(_) => return Ok(None),
+    };
+
+    return Ok(Some(Failure {
+        field: field.to_owned(),
+        rule: "citation-resolves-to-an-accepted-submission".to_owned(),
+        remedy,
+    }));
 }
 
 /// The kind and state of the submission filed under `node_id`, if one is.
@@ -172,36 +196,20 @@ fn Cited_State(
     node_id: &str,
 ) -> Result<Option<(String, String)>, StoreError>
 {
-    let mut statement = store
+    let found = store
         .Connection()
-        .prepare(
+        .query_row(
             "SELECT s.kind, s.state
              FROM submissions s
              JOIN nodes n ON n.uid = s.node_uid
              WHERE n.node_id = ?1",
+            [node_id],
+            |row| return Ok((row.get(0)?, row.get(1)?)),
         )
+        .optional()
         .map_err(|error| return StoreError::Sql(error.to_string()))?;
 
-    let mut rows = statement
-        .query([node_id])
-        .map_err(|error| return StoreError::Sql(error.to_string()))?;
-
-    let Some(row) = rows
-        .next()
-        .map_err(|error| return StoreError::Sql(error.to_string()))?
-    else
-    {
-        return Ok(None);
-    };
-
-    let kind: String = row
-        .get(0)
-        .map_err(|error| return StoreError::Sql(error.to_string()))?;
-    let state: String = row
-        .get(1)
-        .map_err(|error| return StoreError::Sql(error.to_string()))?;
-
-    return Ok(Some((kind, state)));
+    return Ok(found);
 }
 
 /// Writes the submission, its values and its gaps under one transaction.
@@ -232,7 +240,6 @@ fn Write_Submission(
             ],
         )
         .map_err(|error| return StoreError::Sql(error.to_string()))?;
-
     let uid: i64 = transaction
         .query_row(
             "SELECT uid FROM submissions WHERE node_uid = ?1",
@@ -240,7 +247,6 @@ fn Write_Submission(
             |row| return row.get(0),
         )
         .map_err(|error| return StoreError::Sql(error.to_string()))?;
-
     Write_Values(transaction, uid, submission)?;
     Write_Gaps(transaction, uid, submission)?;
 
@@ -257,10 +263,6 @@ fn Write_Values(
     submission: &Submission,
 ) -> Result<(), StoreError>
 {
-    let mut ordinals: std::collections::BTreeMap<&str, u32> = std::collections::BTreeMap::new();
-    let mut previous: std::collections::BTreeMap<&str, String> =
-        std::collections::BTreeMap::new();
-
     let mut insert = transaction
         .prepare(
             "INSERT INTO submission_values
@@ -270,29 +272,50 @@ fn Write_Values(
              ON CONFLICT (submission_uid, field, ordinal) DO NOTHING",
         )
         .map_err(|error| return StoreError::Sql(error.to_string()))?;
+    let mut sequence = Sequence::default();
 
     for value in &submission.values
     {
-        let field = value.field.as_str();
-        let ordinal = ordinals.entry(field).or_insert(0);
-        let hash = ContentHash::Of(&value.value).As_Str().to_owned();
-
-        insert
-            .execute(rusqlite::params![
-                submission_uid,
-                field,
-                *ordinal,
-                value.origin.Label(),
-                value.value,
-                hash,
-                previous.get(field),
-                Recorded_At(),
-            ])
-            .map_err(|error| return StoreError::Sql(error.to_string()))?;
-
-        previous.insert(field, hash);
-        *ordinal = ordinal.saturating_add(1);
+        Insert_Value(&mut insert, submission_uid, value, &mut sequence)?;
     }
+
+    return Ok(());
+}
+
+/// Where each field's next value goes, and what the last one there hashed to.
+#[derive(Default)]
+struct Sequence
+{
+    ordinals: std::collections::BTreeMap<String, u32>,
+    previous: std::collections::BTreeMap<String, String>,
+}
+
+/// One value, at the next ordinal of its own field, superseding the last one written there.
+fn Insert_Value(
+    insert: &mut rusqlite::Statement<'_>,
+    submission_uid: i64,
+    value: &FieldValue,
+    sequence: &mut Sequence,
+) -> Result<(), StoreError>
+{
+    let field = value.field.clone();
+    let hash = ContentHash::Of(&value.value).As_Str().to_owned();
+    let ordinal = sequence.ordinals.entry(field.clone()).or_insert(0);
+
+    insert
+        .execute(rusqlite::params![
+            submission_uid,
+            field,
+            *ordinal,
+            value.origin.Label(),
+            value.value,
+            hash,
+            sequence.previous.get(&field),
+            Recorded_At(),
+        ])
+        .map_err(|error| return StoreError::Sql(error.to_string()))?;
+    *ordinal = ordinal.saturating_add(1);
+    sequence.previous.insert(field, hash);
 
     return Ok(());
 }
@@ -316,7 +339,6 @@ fn Write_Gaps(
                  closed_by = excluded.closed_by",
         )
         .map_err(|error| return StoreError::Sql(error.to_string()))?;
-
     for (index, gap) in submission.gaps.iter().enumerate()
     {
         let ordinal = u32::try_from(index).unwrap_or(u32::MAX);
@@ -461,7 +483,6 @@ mod tests
         let mut store = Store();
         let mut submission = Request("FR-002", SubmissionState::Accepted);
         submission.values.retain(|value| return value.field != "goal");
-
         let error = Accept_Submission(&mut store, &submission).expect_err("refused");
 
         match error
@@ -474,7 +495,6 @@ mod tests
             }
             AcceptError::Store(error) => panic!("refused for the wrong reason: {error}"),
         }
-
         assert_eq!(store.Count(Table::Submissions).expect("a count"), 0);
         assert_eq!(store.Count(Table::SubmissionValues).expect("a count"), 0);
         assert!(
@@ -509,9 +529,20 @@ mod tests
         let mut submission = Request("FR-004", SubmissionState::Accepted);
         let clarified = Value("goal", "what it became", Origin::Clarified);
         submission.values.push(clarified);
-
         Accept_Submission(&mut store, &submission).expect("accepted");
 
+        let rows = Goal_Values(&store);
+
+        assert_eq!(rows.len(), 2, "the original is still in storage");
+        assert_eq!(Nth(&rows, 0).0, "close superseded work");
+        assert_eq!(Nth(&rows, 1).0, "what it became");
+        assert!(Nth(&rows, 0).2.is_none(), "the first supersedes nothing");
+        assert!(Nth(&rows, 1).2.is_some(), "the second names what it superseded");
+    }
+
+    /// Every value ever written for `goal`, oldest first, with what each superseded.
+    fn Goal_Values(store: &SpecificationStore) -> Vec<(String, u32, Option<String>)>
+    {
         let mut statement = store
             .Connection()
             .prepare(
@@ -519,19 +550,14 @@ mod tests
                  WHERE field = 'goal' ORDER BY ordinal",
             )
             .expect("a query");
-        let rows: Vec<(String, u32, Option<String>)> = statement
+
+        return statement
             .query_map([], |row| {
                 return Ok((row.get(0)?, row.get(1)?, row.get(2)?));
             })
             .expect("rows")
             .map(|row| return row.expect("a row"))
             .collect();
-
-        assert_eq!(rows.len(), 2, "the original is still in storage");
-        assert_eq!(Nth(&rows, 0).0, "close superseded work");
-        assert_eq!(Nth(&rows, 1).0, "what it became");
-        assert!(Nth(&rows, 0).2.is_none(), "the first supersedes nothing");
-        assert!(Nth(&rows, 1).2.is_some(), "the second names what it superseded");
     }
 
     #[test]

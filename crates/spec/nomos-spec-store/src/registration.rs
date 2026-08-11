@@ -127,50 +127,86 @@ impl RegistrationError
     /// What went wrong, and what the reader would have had to guess to continue.
     pub(crate) fn Describe(&self) -> String
     {
+        return format!("{} {}", self.Fault(), self.Because());
+    }
+
+    /// The fault itself, naming the file and what it said.
+    fn Fault(&self) -> String
+    {
         return match self
         {
-            Self::Unreadable { at, cause } => format!(
-                "{at} did not read: {cause}. A registration directory that half-opens is a \
-                 governing list that is quietly short."
-            ),
-            Self::Empty { at } => format!(
-                "{at} holds no *.{REGISTRATION_EXTENSION} file. An empty governing table is \
-                 the vacuous outcome this arrangement exists to prevent, so it is refused \
-                 rather than produced."
-            ),
+            Self::Unreadable { at, cause } => format!("{at} did not read: {cause}."),
+            Self::Empty { at } => format!("{at} holds no *.{REGISTRATION_EXTENSION} file."),
             Self::NotARegistration { at } => format!(
                 "{at} is in the registration directory and is not a \
-                 *.{REGISTRATION_EXTENSION} file. A typo'd extension would be a record \
-                 silently dropped, so nothing in this directory is ignored."
+                 *.{REGISTRATION_EXTENSION} file."
             ),
-            Self::NotAnIdentifier { at, stem } => format!(
-                "{at} has the stem `{stem}`, which is not a record identifier. The stem is \
-                 the identity; `od-foo-001` is not an identifier this store uses."
-            ),
-            Self::NoPath { at } => format!(
-                "{at} carries no `{PATH_KEY}:` line, so it names no record. A registration \
-                 that names nothing is a phantom governing record."
-            ),
-            Self::RepeatedKey { at, key } => format!(
-                "{at} carries `{key}:` more than once. Resolving that by taking the first is \
-                 the defect, not the fix."
-            ),
+            Self::NotAnIdentifier { at, stem } =>
+            {
+                format!("{at} has the stem `{stem}`, which is not a record identifier.")
+            }
+            Self::NoPath { at } =>
+            {
+                format!("{at} carries no `{PATH_KEY}:` line, so it names no record.")
+            }
+            Self::RepeatedKey { at, key } => format!("{at} carries `{key}:` more than once."),
             Self::UnknownKey { at, key } => format!(
-                "{at} carries `{key}`, which this format does not define. The only key is \
-                 `{PATH_KEY}:`; comments start with `#`."
+                "{at} carries `{key}`, which this format does not define; the only key is \
+                 `{PATH_KEY}:`."
             ),
             Self::Outside { at, named } => format!(
                 "{at} names `{named}`, which is not a markdown file under \
-                 `{RECORD_DIRECTORY}/`. A registration may only name a record."
+                 `{RECORD_DIRECTORY}/`."
             ),
-            Self::Absent { at, named } => format!(
-                "{at} names `{named}`, which is not on disk. Left to `include_str!`, the \
-                 error would name a generated file instead of the registration that is wrong."
-            ),
-            Self::Shared { named, first, second } => format!(
-                "`{first}` and `{second}` both name `{named}`. Two identities over one \
-                 document would make the two generated tables disagree in length."
-            ),
+            Self::Absent { at, named } => format!("{at} names `{named}`, which is not on disk."),
+            Self::Shared { named, first, second } =>
+            {
+                format!("`{first}` and `{second}` both name `{named}`.")
+            }
+        };
+    }
+
+    /// Why that is refused rather than passed over.
+    ///
+    /// Held apart from the fault because it is the invariant half: the fault names a file
+    /// that differs every time, and this is the sentence that does not.
+    const fn Because(&self) -> &'static str
+    {
+        return match self
+        {
+            Self::Unreadable { .. } =>
+            {
+                "A registration directory that half-opens is a governing list that is quietly \
+                 short."
+            }
+            Self::Empty { .. } =>
+            {
+                "An empty governing table is the vacuous outcome this arrangement exists to \
+                 prevent, so it is refused rather than produced."
+            }
+            Self::NotARegistration { .. } =>
+            {
+                "A typo'd extension would be a record silently dropped, so nothing in this \
+                 directory is ignored."
+            }
+            Self::NotAnIdentifier { .. } =>
+            {
+                "The stem is the identity; `od-foo-001` is not an identifier this store uses."
+            }
+            Self::NoPath { .. } => "A registration that names nothing is a phantom governing record.",
+            Self::RepeatedKey { .. } => "Resolving that by taking the first is the defect, not the fix.",
+            Self::UnknownKey { .. } => "Comments start with `#`.",
+            Self::Outside { .. } => "A registration may only name a record.",
+            Self::Absent { .. } =>
+            {
+                "Left to `include_str!`, the error would name a generated file instead of the \
+                 registration that is wrong."
+            }
+            Self::Shared { .. } =>
+            {
+                "Two identities over one document would make the two generated tables \
+                 disagree in length."
+            }
         };
     }
 }
@@ -200,9 +236,7 @@ pub(crate) fn Registrations_In(
             cause: error.to_string(),
         };
     })?;
-
     let mut found: Vec<Registration> = Vec::new();
-
     for entry in entries
     {
         let entry = entry.map_err(|error| {
@@ -211,56 +245,70 @@ pub(crate) fn Registrations_In(
                 cause: error.to_string(),
             };
         })?;
+        let registration = Read_Registration(&entry.path(), root)?;
 
-        let file = entry.path();
-        let at = file.display().to_string();
-
-        if file
-            .extension()
-            .is_none_or(|extension| return extension != REGISTRATION_EXTENSION)
-        {
-            return Err(RegistrationError::NotARegistration { at });
-        }
-
-        let Some(stem) = file.file_stem().and_then(|stem| return stem.to_str())
-        else
-        {
-            return Err(RegistrationError::NotARegistration { at });
-        };
-
-        if !Is_Identifier(stem)
-        {
-            return Err(RegistrationError::NotAnIdentifier {
-                at,
-                stem: stem.to_owned(),
-            });
-        }
-
-        let text = std::fs::read_to_string(&file).map_err(|error| {
-            return RegistrationError::Unreadable {
-                at: at.clone(),
-                cause: error.to_string(),
-            };
-        })?;
-
-        let named = Named_Record(&text, &at)?;
-        Check_Is_A_Record(&named, &at, root)?;
-
-        found.push(Registration {
-            id: stem.to_owned(),
-            path: named,
-        });
+        found.push(registration);
     }
-
     if found.is_empty()
     {
         return Err(RegistrationError::Empty {
             at: directory.display().to_string(),
         });
     }
+    Assert_One_Identity_Per_Record(&found)?;
+    // Byte order on the identifier. `read_dir` order is not deterministic across platforms
+    // and must not reach a generated table, or two machines build two different binaries
+    // from one commit.
+    found.sort_by(|left, right| return left.id.cmp(&right.id));
 
+    return Ok(found);
+}
+
+/// One registration file: its identity from the stem, and the record it names.
+fn Read_Registration(file: &Path, root: &Path) -> Result<Registration, RegistrationError>
+{
+    let at = file.display().to_string();
+    let is_registration = file
+        .extension()
+        .is_some_and(|extension| return extension == REGISTRATION_EXTENSION);
+    if !is_registration
+    {
+        return Err(RegistrationError::NotARegistration { at });
+    }
+    let Some(stem) = file.file_stem().and_then(|stem| return stem.to_str())
+    else
+    {
+        return Err(RegistrationError::NotARegistration { at });
+    };
+    if !Is_Identifier(stem)
+    {
+        return Err(RegistrationError::NotAnIdentifier {
+            at,
+            stem: stem.to_owned(),
+        });
+    }
+    let text = std::fs::read_to_string(file).map_err(|error| {
+        return RegistrationError::Unreadable {
+            at: at.clone(),
+            cause: error.to_string(),
+        };
+    })?;
+    let named = Named_Record(&text, &at)?;
+    Check_Is_A_Record(&named, &at, root)?;
+
+    return Ok(Registration {
+        id: stem.to_owned(),
+        path: named,
+    });
+}
+
+/// Two registrations naming one record would make the two generated tables disagree in
+/// length, so the second one is refused rather than taken.
+fn Assert_One_Identity_Per_Record(found: &[Registration]) -> Result<(), RegistrationError>
+{
     let mut by_record: BTreeMap<String, String> = BTreeMap::new();
-    for registration in &found
+
+    for registration in found
     {
         if let Some(first) = by_record.insert(registration.path.clone(), registration.id.clone())
         {
@@ -272,12 +320,7 @@ pub(crate) fn Registrations_In(
         }
     }
 
-    // Byte order on the identifier. `read_dir` order is not deterministic across platforms
-    // and must not reach a generated table, or two machines build two different binaries
-    // from one commit.
-    found.sort_by(|left, right| return left.id.cmp(&right.id));
-
-    return Ok(found);
+    return Ok(());
 }
 
 /// The record a registration body names.
@@ -290,46 +333,56 @@ fn Named_Record(text: &str, at: &str) -> Result<String, RegistrationError>
 
     for line in text.lines()
     {
-        // Trimming also removes a carriage return a CRLF checkout would leave behind, so
-        // the path a registration names does not depend on how the tree was cloned.
-        let line = line.trim();
+        // Trimming also removes a carriage return a CRLF checkout would leave behind, so the
+        // path a registration names does not depend on how the tree was cloned.
+        let found = Path_Line(line.trim(), at, named.as_deref())?;
 
-        if line.is_empty() || line.starts_with('#')
-        {
-            continue;
-        }
-
-        let Some((key, value)) = line.split_once(':')
-        else
-        {
-            return Err(RegistrationError::UnknownKey {
-                at: at.to_owned(),
-                key: line.to_owned(),
-            });
-        };
-
-        if key.trim() != PATH_KEY
-        {
-            return Err(RegistrationError::UnknownKey {
-                at: at.to_owned(),
-                key: key.trim().to_owned(),
-            });
-        }
-
-        if named.is_some()
-        {
-            return Err(RegistrationError::RepeatedKey {
-                at: at.to_owned(),
-                key: PATH_KEY.to_owned(),
-            });
-        }
-
-        named = Some(value.trim().to_owned());
+        named = found.or(named);
     }
 
     return named.ok_or_else(|| {
         return RegistrationError::NoPath { at: at.to_owned() };
     });
+}
+
+/// The path one line names, or `None` for a blank line or a comment.
+///
+/// `held` is what an earlier line already named, because a second `path:` is refused rather
+/// than resolved by taking one of them.
+fn Path_Line(
+    line: &str,
+    at: &str,
+    held: Option<&str>,
+) -> Result<Option<String>, RegistrationError>
+{
+    if line.is_empty() || line.starts_with('#')
+    {
+        return Ok(None);
+    }
+    let Some((key, value)) = line.split_once(':')
+    else
+    {
+        return Err(RegistrationError::UnknownKey {
+            at: at.to_owned(),
+            key: line.to_owned(),
+        });
+    };
+    if key.trim() != PATH_KEY
+    {
+        return Err(RegistrationError::UnknownKey {
+            at: at.to_owned(),
+            key: key.trim().to_owned(),
+        });
+    }
+    if held.is_some()
+    {
+        return Err(RegistrationError::RepeatedKey {
+            at: at.to_owned(),
+            key: PATH_KEY.to_owned(),
+        });
+    }
+
+    return Ok(Some(value.trim().to_owned()));
 }
 
 /// Whether a registered path is one this store will read a record from.
@@ -349,11 +402,9 @@ fn Check_Is_A_Record(named: &str, at: &str, root: &Path) -> Result<(), Registrat
         .strip_prefix(RECORD_DIRECTORY)
         .and_then(|rest| return rest.strip_prefix('/'))
         .is_some_and(|rest| return !rest.is_empty() && !rest.contains('/'));
-
     let markdown = Path::new(named)
         .extension()
         .is_some_and(|extension| return extension == "md");
-
     if !Is_A_Record_Path(named, inside, markdown)
     {
         return Err(RegistrationError::Outside {
@@ -361,7 +412,6 @@ fn Check_Is_A_Record(named: &str, at: &str, root: &Path) -> Result<(), Registrat
             named: named.to_owned(),
         });
     }
-
     if !root.join(named).is_file()
     {
         return Err(RegistrationError::Absent {
