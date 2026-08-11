@@ -12,7 +12,38 @@ use nomos_spec_ingest::{
 };
 use nomos_spec_store::{NodeRow, SpecificationStore, SuiteAuthority, Table};
 use nomos_spec_validate::{Registered, Validate};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+
+/// One counted answer, for a query that binds nothing.
+fn Counted(store: &SpecificationStore, sql: &str) -> u32
+{
+    return store
+        .Connection()
+        .query_row(sql, [], |row| return row.get(0))
+        .expect("queries");
+}
+
+/// One counted answer, for a query that binds one value as `?1`.
+fn Counted_For(store: &SpecificationStore, sql: &str, bound: &str) -> u32
+{
+    return store
+        .Connection()
+        .query_row(sql, rusqlite::params![bound], |row| return row.get(0))
+        .expect("queries");
+}
+
+/// The root suite's surrogate.
+fn Root_Suite_Uid(store: &SpecificationStore) -> i64
+{
+    return store
+        .Connection()
+        .query_row(
+            "SELECT uid FROM suites WHERE suite_id = ?1",
+            rusqlite::params![ROOT_SUITE],
+            |row| return row.get(0),
+        )
+        .expect("queries");
+}
 
 /// The two plans, and whose lineage each one is.
 const PLANS: &[(&str, Option<Sibling>)] = &[
@@ -39,36 +70,59 @@ fn Ecosystem() -> Option<SpecificationStore>
 
     for sibling in Sibling::All()
     {
-        let mut archive = Archive::Open(&archives.join(sibling.Archive()))
-            .unwrap_or_else(|error| panic!("{error}"));
-        let report = Ingest_Sibling_Suite(&mut store, &mut archive, *sibling)
-            .unwrap_or_else(|error| panic!("{}: {error}", sibling.Suite_Id()));
-
-        assert!(
-            report.contested.is_empty(),
-            "{} declares identifiers another suite already owns: {:?}",
-            sibling.Suite_Id(),
-            report.contested
-        );
-        assert!(!report.records.is_empty(), "{} ingested nothing", sibling.Suite_Id());
-        assert!(!report.schemas.is_empty(), "{} carries no machine schemas", sibling.Suite_Id());
+        Ingest_One_Sibling(&mut store, &archives, *sibling);
     }
-
     for (name, owner) in PLANS
     {
-        let path = archives.join(name);
-        let text = std::fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-        let suite = owner.map_or(root, |sibling| {
-            return store
-                .Put_Suite(sibling.Suite_Id(), sibling.Title(), SuiteAuthority::Sibling)
-                .expect("records the suite");
-        });
+        let suite = Suite_For(&mut store, root, *owner);
+        let text = Plan_Text(&archives, name);
+
         Ingest_Game_Plan(&mut store, suite, name, &text)
             .unwrap_or_else(|error| panic!("{name}: {error}"));
     }
 
     return Some(store);
+}
+
+/// One sibling suite, ingested and checked for the two ways it could arrive empty.
+fn Ingest_One_Sibling(store: &mut SpecificationStore, archives: &Path, sibling: Sibling)
+{
+    let mut archive = Archive::Open(&archives.join(sibling.Archive()))
+        .unwrap_or_else(|error| panic!("{error}"));
+    let report = Ingest_Sibling_Suite(store, &mut archive, sibling)
+        .unwrap_or_else(|error| panic!("{}: {error}", sibling.Suite_Id()));
+
+    assert!(
+        report.contested.is_empty(),
+        "{} declares identifiers another suite already owns: {:?}",
+        sibling.Suite_Id(),
+        report.contested
+    );
+    assert!(!report.records.is_empty(), "{} ingested nothing", sibling.Suite_Id());
+    assert!(!report.schemas.is_empty(), "{} carries no machine schemas", sibling.Suite_Id());
+}
+
+/// The suite a plan's lineage belongs to: a sibling's own, or this repository's root.
+fn Suite_For(store: &mut SpecificationStore, root: i64, owner: Option<Sibling>) -> i64
+{
+    let Some(sibling) = owner
+    else
+    {
+        return root;
+    };
+
+    return store
+        .Put_Suite(sibling.Suite_Id(), sibling.Title(), SuiteAuthority::Sibling)
+        .expect("records the suite");
+}
+
+/// One plan's text, or a panic naming the file that would not read.
+fn Plan_Text(archives: &Path, name: &str) -> String
+{
+    let path = archives.join(name);
+
+    return std::fs::read_to_string(&path)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
 /// I6's own sentence: a sibling suite is not the root.
@@ -120,28 +174,28 @@ fn Test_Every_Sibling_Schema_Should_Resolve_As_A_Node_In_Its_Own_Suite()
 
     for sibling in Sibling::All()
     {
-        let rooted: u32 = store
-            .Connection()
-            .query_row(
-                "SELECT count(*) FROM nodes n JOIN suites s ON s.uid = n.suite_uid
-                 WHERE n.kind = 'schema' AND s.suite_id = ?1 AND s.authority_root = 1",
-                rusqlite::params![sibling.Suite_Id()],
-                |row| row.get(0),
-            )
-            .expect("queries");
-        assert_eq!(rooted, 0, "{} claimed root authority", sibling.Suite_Id());
-
-        let owned: u32 = store
-            .Connection()
-            .query_row(
-                "SELECT count(*) FROM nodes n JOIN suites s ON s.uid = n.suite_uid
-                 WHERE n.kind = 'schema' AND s.suite_id = ?1",
-                rusqlite::params![sibling.Suite_Id()],
-                |row| row.get(0),
-            )
-            .expect("queries");
-        assert!(owned > 0, "{} has no schema nodes", sibling.Suite_Id());
+        Assert_Owned_By_Its_Own_Suite(&store, *sibling);
     }
+}
+
+/// A sibling's schemas belong to the sibling's own suite, and none of them claims root.
+fn Assert_Owned_By_Its_Own_Suite(store: &SpecificationStore, sibling: Sibling)
+{
+    let rooted = Counted_For(
+        store,
+        "SELECT count(*) FROM nodes n JOIN suites s ON s.uid = n.suite_uid
+         WHERE n.kind = 'schema' AND s.suite_id = ?1 AND s.authority_root = 1",
+        sibling.Suite_Id(),
+    );
+    let owned = Counted_For(
+        store,
+        "SELECT count(*) FROM nodes n JOIN suites s ON s.uid = n.suite_uid
+         WHERE n.kind = 'schema' AND s.suite_id = ?1",
+        sibling.Suite_Id(),
+    );
+
+    assert_eq!(rooted, 0, "{} claimed root authority", sibling.Suite_Id());
+    assert!(owned > 0, "{} has no schema nodes", sibling.Suite_Id());
 }
 
 fn Kind_Count(store: &SpecificationStore, kind: &str) -> u32
@@ -198,7 +252,7 @@ fn Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row()
     {
         return;
     };
-
+    let root_uid = Root_Suite_Uid(&store);
     store.Put_Relation_Type("depends_on", "seed").expect("names the type");
     store
         .Upsert_Node(NodeRow {
@@ -209,32 +263,18 @@ fn Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row()
             title: "No XVPE before Phase 5",
         })
         .expect("mints this repository's decision");
-    let root_uid: i64 = store
-        .Connection()
-        .query_row(
-            "SELECT uid FROM suites WHERE suite_id = ?1",
-            rusqlite::params![ROOT_SUITE],
-            |row| row.get(0),
-        )
-        .expect("queries");
     let node = store.Node_Uid("D-130").expect("queries").expect("exists");
     store.Assign_Suite(node, root_uid).expect("places it");
-
     store.Put_Relation("D-130", "depends_on", "D-085").expect("relates");
-
-    let across: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM relations r
-             JOIN nodes f ON f.uid = r.from_node_uid
-             JOIN nodes t ON t.uid = r.to_node_uid
-             JOIN suites fs ON fs.uid = f.suite_uid
-             JOIN suites ts ON ts.uid = t.suite_uid
-             WHERE fs.authority_root = 1 AND ts.authority_root = 0",
-            [],
-            |row| row.get(0),
-        )
-        .expect("queries");
+    let across = Counted(
+        &store,
+        "SELECT count(*) FROM relations r
+         JOIN nodes f ON f.uid = r.from_node_uid
+         JOIN nodes t ON t.uid = r.to_node_uid
+         JOIN suites fs ON fs.uid = f.suite_uid
+         JOIN suites ts ON ts.uid = t.suite_uid
+         WHERE fs.authority_root = 1 AND ts.authority_root = 0",
+    );
 
     assert_eq!(across, 1, "the relation crossing the suite boundary is not visible as one");
 }
@@ -248,18 +288,13 @@ fn Test_Every_Game_Plan_Block_Should_Be_Commentary()
     {
         return;
     };
-    let blocks: u32 = store
-        .Connection()
-        .query_row(
-            "SELECT count(*) FROM source_blocks b
-             JOIN source_documents d ON d.uid = b.document_uid
-             WHERE d.revision = ?1",
-            rusqlite::params![LINEAGE_NOTES],
-            |row| row.get(0),
-        )
-        .expect("queries");
-    assert!(blocks > 100, "only {blocks} game-plan block(s), so the plans did not land");
-
+    let blocks = Counted_For(
+        &store,
+        "SELECT count(*) FROM source_blocks b
+         JOIN source_documents d ON d.uid = b.document_uid
+         WHERE d.revision = ?1",
+        LINEAGE_NOTES,
+    );
     let uncommentary: u32 = store
         .Connection()
         .query_row(
@@ -271,10 +306,11 @@ fn Test_Every_Game_Plan_Block_Should_Be_Commentary()
                    WHERE l.source_block_uid = b.uid AND n.authority = ?2
                )",
             rusqlite::params![LINEAGE_NOTES, COMMENTARY],
-            |row| row.get(0),
+            |row| return row.get(0),
         )
         .expect("queries");
 
+    assert!(blocks > 100, "only {blocks} game-plan block(s), so the plans did not land");
     assert_eq!(uncommentary, 0, "{uncommentary} game-plan block(s) carry no commentary authority");
 }
 
@@ -311,13 +347,35 @@ fn Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught()
     {
         return;
     };
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    let root = store.Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root).expect("records");
+    let mut store = A_Plan_Only_Store(&archives);
 
+    Rest_A_Statement_On_The_Plan(&mut store);
+    Prepare_Commentary_View(&store).expect("prepares");
+    assert_eq!(
+        Statements_Sourced_Only_From_Commentary(&store).expect("queries"),
+        vec!["AGT-999".to_owned()],
+        "a statement resting on the plan alone was not caught"
+    );
+}
+
+/// The nomos game plan in a store of its own, under the root suite and nothing else.
+fn A_Plan_Only_Store(archives: &Path) -> SpecificationStore
+{
+    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let root = store
+        .Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root)
+        .expect("records");
     let name = "nomos full game plan.txt";
-    let text = std::fs::read_to_string(archives.join(name)).expect("reads the plan");
+    let text = Plan_Text(archives, name);
+
     Ingest_Game_Plan(&mut store, root, name, &text).expect("ingests");
 
+    return store;
+}
+
+/// One normative statement whose only lineage is a game-plan block.
+fn Rest_A_Statement_On_The_Plan(store: &mut SpecificationStore)
+{
     let node = store
         .Upsert_Node(NodeRow {
             node_id: "AGT-999",
@@ -327,6 +385,7 @@ fn Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught()
             title: "AGT-999",
         })
         .expect("mints");
+
     store
         .Connection()
         .execute(
@@ -347,14 +406,6 @@ fn Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught()
             rusqlite::params![LINEAGE_NOTES],
         )
         .expect("rests it on the plan");
-
-    Prepare_Commentary_View(&store).expect("prepares");
-
-    assert_eq!(
-        Statements_Sourced_Only_From_Commentary(&store).expect("queries"),
-        vec!["AGT-999".to_owned()],
-        "a statement resting on the plan alone was not caught"
-    );
 }
 
 /// The suites and the plans must leave the preservation ledger clean, or I6 and I8 have
@@ -367,7 +418,6 @@ fn Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors()
     {
         return;
     };
-
     // One root-suite document too, so the run is over a store holding both authorities
     // rather than only over siblings.
     Ingest_Source_Document(&mut store, "own.md", "authored", "# Ours\n\nOne.\n").expect("ingests");
@@ -380,7 +430,6 @@ fn Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors()
             [],
         )
         .expect("disposes them");
-
     let run = Validate(&store, &Registered());
 
     assert!(run.Errors().is_empty(), "{:?}", run.Errors());
@@ -419,7 +468,6 @@ fn Test_Re_Ingesting_The_Suites_Should_Change_Nothing()
         let report = Ingest_Sibling_Suite(&mut store, &mut archive, *sibling).expect("re-ingests");
         assert!(report.contested.is_empty(), "{:?}", report.contested);
     }
-
     assert!(before.0 > 0 && before.1 > 0, "the first pass wrote nothing");
     assert_eq!(
         (

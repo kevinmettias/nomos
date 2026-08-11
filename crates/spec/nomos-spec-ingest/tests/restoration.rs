@@ -12,11 +12,11 @@
 //! ledger the whole system exists for.
 
 use nomos_spec_ingest::{
-    Ingest_Block_Dispositions, Ingest_Section_Lineage, Ingest_Source_Document, Parse_Block_Lineage,
-    Parse_Section_Lineage, Resolve, RestorationReport, Restore, Restored,
+    BlockLineage, Ingest_Block_Dispositions, Ingest_Section_Lineage, Ingest_Source_Document,
+    Parse_Block_Lineage, Parse_Section_Lineage, Resolve, RestorationReport, Restore, Restored,
 };
 use nomos_spec_store::{SpecificationStore, Table};
-use nomos_spec_validate::{RuleOutcome, Validate};
+use nomos_spec_validate::{RuleOutcome, Validate, ValidationRun};
 use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -93,17 +93,13 @@ fn Volumes(root: &Path) -> BTreeMap<String, String>
     let mut documents = BTreeMap::new();
     for entry in entries.flatten()
     {
-        let path = entry.path();
-        if path.extension().and_then(std::ffi::OsStr::to_str) != Some("md")
+        let Some(name) = Volume_Name(&entry.path())
+        else
         {
             continue;
-        }
-        let name = path
-            .file_name()
-            .and_then(std::ffi::OsStr::to_str)
-            .unwrap_or_default()
-            .to_owned();
+        };
         let text = Read(&directory, &name);
+
         documents.insert(name, text);
     }
 
@@ -121,6 +117,20 @@ struct RestoredStore
     report: RestorationReport,
 }
 
+/// A domain volume's file name, or `None` for anything else in the directory.
+fn Volume_Name(path: &Path) -> Option<String>
+{
+    if path.extension().and_then(std::ffi::OsStr::to_str) != Some("md")
+    {
+        return None;
+    }
+
+    return path
+        .file_name()
+        .and_then(std::ffi::OsStr::to_str)
+        .map(str::to_owned);
+}
+
 /// Source truth, then the restoration on top of it.
 fn Restored_Store(root: &Path) -> RestoredStore
 {
@@ -135,33 +145,41 @@ fn Restored_Store(root: &Path) -> RestoredStore
     let report =
         Restore(&mut store, REVISION, &documents).unwrap_or_else(|error| panic!("{error}"));
 
+    Assert_The_Restoration_Owns_Its_Names(&report);
+
+    return RestoredStore { store, report };
+}
+
+/// The restoration walked into no name another authority owns, and the names two members
+/// share are the seven this build knows about.
+///
+/// Seven names are carried by two members each: the canonical domain model and the glossary
+/// term of the same name. Both are real nodes and neither takes the bare name. Pinned rather
+/// than tolerated — an eighth appearing is something to look at, not something to absorb.
+fn Assert_The_Restoration_Owns_Its_Names(report: &RestorationReport)
+{
     assert!(
         report.contested_aliases.is_empty(),
         "the restoration walked into names it does not own: {:?}",
         report.contested_aliases
     );
-    // Seven names are carried by two members each: the canonical domain model and the
-    // glossary term of the same name. Both are real nodes and neither takes the bare
-    // name. Pinned rather than tolerated — an eighth appearing is something to look at,
-    // not something to absorb.
     assert_eq!(
         report.ambiguous_names,
-        [
-            "Applicability",
-            "Artifact",
-            "Capability",
-            "Gate",
-            "Phase",
-            "Snapshot",
-            "Workflow"
-        ]
-        .map(str::to_owned)
-        .to_vec(),
+        SHARED_NAMES.map(str::to_owned).to_vec(),
         "the set of names carried by two members changed"
     );
-
-    return RestoredStore { store, report };
 }
+
+/// The names a canonical domain model and a glossary term both carry.
+const SHARED_NAMES: [&str; 7] = [
+    "Applicability",
+    "Artifact",
+    "Capability",
+    "Gate",
+    "Phase",
+    "Snapshot",
+    "Workflow",
+];
 
 #[test]
 fn Test_Every_Family_Should_Restore_The_Count_The_Register_Declares()
@@ -172,7 +190,6 @@ fn Test_Every_Family_Should_Restore_The_Count_The_Register_Declares()
         return;
     };
     let RestoredStore { report, .. } = Restored_Store(&root);
-
     for (family, id) in MEMBERSHIP
     {
         let restored = u32::try_from(report.In(*family).len()).unwrap_or(u32::MAX);
@@ -226,21 +243,9 @@ fn Test_The_Canonical_Domain_Models_Should_Resolve_By_Name_And_Trace_To_Their_Ro
         return;
     };
     let RestoredStore { store, report } = Restored_Store(&root);
-
     for name in NAMED_MODELS
     {
-        let member = report
-            .Named(name)
-            .unwrap_or_else(|| panic!("{name} was not restored\n{}", report.Summary()));
-        assert_eq!(member.family, Restored::CanonicalDomainModel, "{name}");
-        assert!(
-            Resolve(&store, name).expect("resolves").is_some(),
-            "{name} resolves only by the identifier this build minted"
-        );
-        assert!(
-            !report.ambiguous_names.contains(&(*name).to_owned()),
-            "{name} became ambiguous, so resolving it by name is answering one of two"
-        );
+        Assert_Resolves_By_Its_Own_Name(&store, &report, name);
     }
 
     // Every model, not only the four the plan names: each traces to exactly one row, and
@@ -248,20 +253,7 @@ fn Test_The_Canonical_Domain_Models_Should_Resolve_By_Name_And_Trace_To_Their_Ro
     // "traces to something" and answer the wrong question.
     for member in report.In(Restored::CanonicalDomainModel)
     {
-        let traced: Vec<String> = store
-            .Connection()
-            .prepare(
-                "SELECT r.text FROM lineage l
-                 JOIN source_table_rows r ON r.uid = l.source_table_row_uid
-                 JOIN nodes n ON n.uid = l.target_node_uid
-                 WHERE n.node_id = ?1",
-            )
-            .and_then(|mut statement| {
-                return statement
-                    .query_map(rusqlite::params![member.id], |row| row.get(0))
-                    .and_then(std::iter::Iterator::collect);
-            })
-            .expect("queries");
+        let traced = Rows_Traced_To(&store, &member.id);
 
         assert_eq!(traced.len(), 1, "{} traces to {} rows", member.id, traced.len());
         assert!(
@@ -270,6 +262,48 @@ fn Test_The_Canonical_Domain_Models_Should_Resolve_By_Name_And_Trace_To_Their_Ro
             member.id
         );
     }
+}
+
+/// One named model is a canonical domain model, resolves by the name the corpus gives it,
+/// and is not one of the names two members share.
+fn Assert_Resolves_By_Its_Own_Name(
+    store: &SpecificationStore,
+    report: &RestorationReport,
+    name: &str,
+)
+{
+    let member = report
+        .Named(name)
+        .unwrap_or_else(|| panic!("{name} was not restored\n{}", report.Summary()));
+
+    assert_eq!(member.family, Restored::CanonicalDomainModel, "{name}");
+    assert!(
+        Resolve(store, name).expect("resolves").is_some(),
+        "{name} resolves only by the identifier this build minted"
+    );
+    assert!(
+        !report.ambiguous_names.contains(&name.to_owned()),
+        "{name} became ambiguous, so resolving it by name is answering one of two"
+    );
+}
+
+/// The text of every table row a node's lineage points at.
+fn Rows_Traced_To(store: &SpecificationStore, node_id: &str) -> Vec<String>
+{
+    return store
+        .Connection()
+        .prepare(
+            "SELECT r.text FROM lineage l
+             JOIN source_table_rows r ON r.uid = l.source_table_row_uid
+             JOIN nodes n ON n.uid = l.target_node_uid
+             WHERE n.node_id = ?1",
+        )
+        .and_then(|mut statement| {
+            return statement
+                .query_map(rusqlite::params![node_id], |row| return row.get(0))
+                .and_then(std::iter::Iterator::collect);
+        })
+        .expect("queries");
 }
 
 /// Every family member traces to a source, and the two shapes stay distinct: a heading
@@ -287,23 +321,26 @@ fn Test_Every_Restored_Member_Should_Carry_A_Lineage_To_What_Produced_It()
     let untraced: Vec<&str> = report
         .members
         .iter()
-        .filter(|member| {
-            let rows: u32 = store
-                .Connection()
-                .query_row(
-                    "SELECT count(*) FROM lineage l JOIN nodes n ON n.uid = l.target_node_uid
-                     WHERE n.node_id = ?1
-                       AND (l.source_block_uid IS NOT NULL OR l.source_table_row_uid IS NOT NULL)",
-                    rusqlite::params![member.id],
-                    |row| row.get(0),
-                )
-                .expect("queries");
-            return rows == 0;
-        })
+        .filter(|member| return Sources_Behind(&store, &member.id) == 0)
         .map(|member| return member.id.as_str())
         .collect();
 
     assert!(untraced.is_empty(), "restored with no lineage: {untraced:?}");
+}
+
+/// How many blocks or table rows a node's lineage points back at.
+fn Sources_Behind(store: &SpecificationStore, node_id: &str) -> u32
+{
+    return store
+        .Connection()
+        .query_row(
+            "SELECT count(*) FROM lineage l JOIN nodes n ON n.uid = l.target_node_uid
+             WHERE n.node_id = ?1
+               AND (l.source_block_uid IS NOT NULL OR l.source_table_row_uid IS NOT NULL)",
+            rusqlite::params![node_id],
+            |row| return row.get(0),
+        )
+        .expect("queries");
 }
 
 /// The preservation half. A restoration that leaves the ledger broken has not restored
@@ -319,32 +356,9 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
     let RestoredStore {
         mut store, report
     } = Restored_Store(&root);
-
-    let section_lineage = Read(&root, "01_authoring/source_lineage/section-lineage.yaml");
-    let sections =
-        Parse_Section_Lineage(&section_lineage).expect("the section lineage parses");
-    let headings = Ingest_Section_Lineage(&mut store, &sections, REVISION).expect("ingests");
-    assert!(headings.Passed(), "{:?}", headings.unknown_documents);
-
-    let block_lineage = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
-    let manifest = Parse_Block_Lineage(&block_lineage).expect("the block manifest parses");
-
-    let mut per_document: BTreeMap<String, Vec<(u32, String)>> = BTreeMap::new();
-    for block in &manifest.blocks
-    {
-        per_document
-            .entry(block.source_document.clone())
-            .or_default()
-            .push((block.block_ordinal, block.disposition.clone()));
-    }
-    for (document, dispositions) in &per_document
-    {
-        Ingest_Block_Dispositions(&mut store, document, REVISION, dispositions)
-            .unwrap_or_else(|error| panic!("{document}: {error}"));
-    }
+    Ingest_The_Lineage(&mut store, &root);
 
     let run = Validate(&store, &nomos_spec_validate::Registered());
-
     assert!(run.Errors().is_empty(), "{:?}", run.Errors());
     assert!(
         run.Violations().is_empty(),
@@ -353,9 +367,58 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
         run.Violations().iter().take(5).collect::<Vec<_>>()
     );
     assert!(run.Passed(), "{}", run.Summary());
+    Assert_The_Preservation_Rules_Examined_Something(&run);
+    // The two statement rules examined nothing, and this store is why: I2 is not part of
+    // the restoration, so it holds no statements. Asserted rather than left to the vacuity
+    // list, so the reason is recorded instead of inferred.
+    assert_eq!(store.Count(Table::NormativeStatements).expect("counts"), 0);
+    assert_eq!(
+        run.Vacuous_Rules(),
+        vec!["NSV-PRESERVE-003", "NSV-PRESERVE-006"],
+        "a rule went vacuous for a reason this test does not account for"
+    );
+    assert!(!report.members.is_empty(), "the ledger is clean over a store with no restoration");
+}
 
-    // Non-zero subject counts, per rule. "0 violations over 0 subjects" and "0 violations
-    // over 2533" print the same and mean opposite things.
+/// The section lineage and the block dispositions, on top of a restored store.
+fn Ingest_The_Lineage(store: &mut SpecificationStore, root: &Path)
+{
+    let section_lineage = Read(root, "01_authoring/source_lineage/section-lineage.yaml");
+    let sections = Parse_Section_Lineage(&section_lineage).expect("the section lineage parses");
+    let headings = Ingest_Section_Lineage(store, &sections, REVISION).expect("ingests");
+    let block_lineage = Read(root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let manifest = Parse_Block_Lineage(&block_lineage).expect("the block manifest parses");
+
+    assert!(headings.Passed(), "{:?}", headings.unknown_documents);
+    for (document, dispositions) in Per_Document(&manifest)
+    {
+        Ingest_Block_Dispositions(store, &document, REVISION, &dispositions)
+            .unwrap_or_else(|error| panic!("{document}: {error}"));
+    }
+}
+
+/// The manifest's blocks, gathered under the document each one came from.
+fn Per_Document(manifest: &BlockLineage) -> BTreeMap<String, Vec<(u32, String)>>
+{
+    let mut per_document: BTreeMap<String, Vec<(u32, String)>> = BTreeMap::new();
+
+    for block in &manifest.blocks
+    {
+        per_document
+            .entry(block.source_document.clone())
+            .or_default()
+            .push((block.block_ordinal, block.disposition.clone()));
+    }
+
+    return per_document;
+}
+
+/// Non-zero subject counts, per rule.
+///
+/// "0 violations over 0 subjects" and "0 violations over 2533" print the same and mean
+/// opposite things.
+fn Assert_The_Preservation_Rules_Examined_Something(run: &ValidationRun)
+{
     for rule in ["NSV-PRESERVE-001", "NSV-PRESERVE-002"]
     {
         let checked = run
@@ -363,23 +426,12 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
             .iter()
             .find(|result| return result.id == rule)
             .map(|result| return result.outcome.clone());
+
         assert!(
             matches!(checked, Some(RuleOutcome::Satisfied { checked }) if checked > 0),
             "{rule} concluded nothing was wrong having examined nothing: {checked:?}"
         );
     }
-
-    // The two statement rules examined nothing, and this store is why: I2 is not part of
-    // the restoration, so it holds no statements. Asserted rather than left to the
-    // vacuity list, so the reason is recorded instead of inferred.
-    assert_eq!(store.Count(Table::NormativeStatements).expect("counts"), 0);
-    assert_eq!(
-        run.Vacuous_Rules(),
-        vec!["NSV-PRESERVE-003", "NSV-PRESERVE-006"],
-        "a rule went vacuous for a reason this test does not account for"
-    );
-
-    assert!(!report.members.is_empty(), "the ledger is clean over a store with no restoration");
 }
 
 #[test]

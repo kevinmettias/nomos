@@ -40,18 +40,13 @@ fn Domain_Volumes(root: &Path) -> BTreeMap<String, String>
     for entry in entries.flatten()
     {
         let path = entry.path();
-        if path.extension().and_then(std::ffi::OsStr::to_str) != Some("md")
+        let Some(named) = Volume_At(&path)
+        else
         {
             continue;
-        }
-        let name = path
-            .file_name()
-            .and_then(std::ffi::OsStr::to_str)
-            .unwrap_or_default()
-            .to_owned();
-        let text = std::fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-        documents.insert(name, text);
+        };
+
+        documents.insert(named.0, named.1);
     }
 
     assert!(!documents.is_empty(), "no domain volumes under {}", directory.display());
@@ -59,6 +54,20 @@ fn Domain_Volumes(root: &Path) -> BTreeMap<String, String>
 }
 
 /// The gate the plan calls a hard stop: recompute every block hash and compare against
+/// A domain volume's name and text, or `None` for anything else in the directory.
+fn Volume_At(path: &Path) -> Option<(String, String)>
+{
+    if path.extension().and_then(std::ffi::OsStr::to_str) != Some("md")
+    {
+        return None;
+    }
+    let name = path.file_name().and_then(std::ffi::OsStr::to_str)?.to_owned();
+    let text = std::fs::read_to_string(path)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+
+    return Some((name, text));
+}
+
 /// the real 1.5 MB manifest.
 #[test]
 fn Test_I1_Should_Reproduce_Every_Recorded_Block()
@@ -71,7 +80,6 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
     let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
     let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
     let documents = Domain_Volumes(&root);
-
     let report = Check_Against_Manifest(&lineage, &documents);
 
     assert!(
@@ -109,7 +117,6 @@ fn Test_I2_Should_Ingest_Every_Statement_Without_Divergence()
     };
     let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
     let file = Parse_Statements(&source).expect("the statement file parses");
-
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let report = Ingest_Statements(&mut store, &file).expect("ingests");
 
@@ -142,39 +149,52 @@ fn Test_The_Whole_Corpus_Should_Ingest_Into_One_Store()
         return;
     };
     let mut store = SpecificationStore::In_Memory().expect("opens");
-
-    let documents = Domain_Volumes(&root);
-    let mut blocks = 0_u32;
-    for (name, markdown) in &documents
-    {
-        blocks = blocks
-            .saturating_add(Ingest_Source_Document(&mut store, name, "v14.36", markdown).expect("ingests"));
-    }
-    assert_eq!(blocks, 2533);
-
+    let blocks = Ingest_The_Volumes(&mut store, &root);
     let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
     let statements = Parse_Statements(&source).expect("parses");
     Ingest_Statements(&mut store, &statements).expect("ingests");
-
     let catalog_json = Read(&root, "02_machine/catalog/catalog.json");
     let catalog = Parse_Catalog(&catalog_json).expect("parses");
     let report = Ingest_Catalog(&mut store, &catalog).expect("ingests");
+    // Every statement resolves to a node, so nothing was ingested orphaned.
+    let orphans = Orphaned_Statements(&store);
 
+    assert_eq!(blocks, 2533);
     assert_eq!(report.nodes, 2619, "the catalog entity count changed");
     assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 10);
     assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2533);
+    assert_eq!(orphans, 0);
+}
 
-    // Every statement resolves to a node, so nothing was ingested orphaned.
-    let orphans: u32 = store
+/// Every domain volume, ingested, and how many blocks they came to.
+fn Ingest_The_Volumes(store: &mut SpecificationStore, root: &Path) -> u32
+{
+    let documents = Domain_Volumes(root);
+    let mut blocks = 0_u32;
+
+    for (name, markdown) in &documents
+    {
+        let ingested =
+            Ingest_Source_Document(store, name, "v14.36", markdown).expect("ingests");
+
+        blocks = blocks.saturating_add(ingested);
+    }
+
+    return blocks;
+}
+
+/// How many statements resolve to no node at all.
+fn Orphaned_Statements(store: &SpecificationStore) -> u32
+{
+    return store
         .Connection()
         .query_row(
             "SELECT count(*) FROM normative_statements s
              LEFT JOIN nodes n ON n.uid = s.node_uid WHERE n.uid IS NULL",
             [],
-            |row| row.get(0),
+            |row| return row.get(0),
         )
         .expect("queries");
-    assert_eq!(orphans, 0);
 }
 
 /// Re-ingesting the whole corpus must change nothing.
