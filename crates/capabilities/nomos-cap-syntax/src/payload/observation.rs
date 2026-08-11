@@ -119,10 +119,12 @@ pub fn Function_Shape(arity: usize) -> String
 pub(super) fn Observed(value: &str, field: &'static str, line: usize) -> Result<Observation, PayloadRefusal>
 {
     return Observation::Decode(value).ok_or_else(|| {
-        return PayloadRefusal::UnreadableObservation {
-            field,
-            value: value.to_owned(),
+        return PayloadRefusal::At(
             line,
-        };
+            PayloadRefusalKind::UnreadableObservation {
+                field,
+                value: value.to_owned(),
+            },
+        );
     });
 }

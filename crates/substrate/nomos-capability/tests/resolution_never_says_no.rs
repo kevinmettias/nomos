@@ -5,7 +5,8 @@
 //! reports clean because nothing contradicted it.
 
 use nomos_capability::{
-    CapabilityContract, ProviderOffer, Registry, RegistryError, Requirement, Resolution, Unmet,
+    CapabilityContract, OfferRefusal, ProviderOffer, Registry, RegistryErrorKind, Requirement,
+    Resolution, Unmet,
 };
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee,
@@ -204,7 +205,13 @@ fn Test_An_Offer_Above_The_Contract_Ceiling_Should_Be_Refused()
         .Offer(Offer("optimistic", FactVariant::SemanticallyResolved))
         .expect_err("a claim above the ceiling must be refused");
 
-    assert!(matches!(refusal, RegistryError::ExceedsCeiling { .. }), "{refusal}");
+    assert!(matches!(
+            refusal.kind,
+            RegistryErrorKind::Offer {
+                refusal: OfferRefusal::ExceedsCeiling,
+                ..
+            }
+        ), "{refusal}");
 }
 
 #[test]
@@ -216,7 +223,13 @@ fn Test_An_Offer_Against_No_Contract_Should_Be_Refused()
         .Offer(Offer("syn", FactVariant::Syntactic))
         .expect_err("an offer against nothing must be refused");
 
-    assert!(matches!(refusal, RegistryError::OfferForUndeclared { .. }), "{refusal}");
+    assert!(matches!(
+            refusal.kind,
+            RegistryErrorKind::Offer {
+                refusal: OfferRefusal::ForUndeclared,
+                ..
+            }
+        ), "{refusal}");
 }
 
 #[test]
@@ -229,7 +242,7 @@ fn Test_Two_Contracts_For_One_Capability_Should_Be_Refused()
         .Declare(Contract(FactVariant::SemanticallyResolved))
         .expect_err("one name, one meaning");
 
-    assert!(matches!(refusal, RegistryError::AlreadyDeclared { .. }), "{refusal}");
+    assert!(matches!(refusal.kind, RegistryErrorKind::AlreadyDeclared), "{refusal}");
 }
 
 /// A caller that cannot read the contract version must be told, not quietly served.

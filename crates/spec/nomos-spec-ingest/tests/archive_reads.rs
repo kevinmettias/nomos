@@ -9,7 +9,7 @@
 //! call site "this revision contained no files" and "this revision was never read" are
 //! the same answer, and one of them is a silent loss of a whole revision.
 
-use nomos_spec_ingest::{Archive, ArchiveError, Archives_In};
+use nomos_spec_ingest::{Archive, ArchiveErrorKind, Archives_In};
 use std::io::Write as _;
 use std::path::PathBuf;
 
@@ -93,7 +93,7 @@ fn Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry()
 
     let refusal = archive.Read("suite/absent.md").expect_err("must refuse");
 
-    assert!(matches!(refusal, ArchiveError::NoSuchEntry { .. }), "{refusal}");
+    assert!(matches!(refusal.kind, ArchiveErrorKind::NoSuchEntry { .. }), "{refusal}");
     let spelled = refusal.to_string();
     assert!(spelled.contains("suite/absent.md"), "{spelled}");
     assert!(spelled.contains(NAME), "{spelled}");
@@ -110,7 +110,7 @@ fn Test_A_Binary_Entry_Should_Refuse_To_Be_Read_As_Text()
     assert_eq!(archive.Read("suite/binary.bin").expect("reads"), vec![0xFF, 0xFE, 0x00]);
 
     let refusal = archive.Read_Text("suite/binary.bin").expect_err("must refuse");
-    assert!(matches!(refusal, ArchiveError::NotText { .. }), "{refusal}");
+    assert!(matches!(refusal.kind, ArchiveErrorKind::NotText { .. }), "{refusal}");
 }
 
 /// The refusal this item exists for.
@@ -127,7 +127,7 @@ fn Test_An_Archive_Holding_Nothing_Should_Be_Refused_Not_Reported_Empty()
         panic!("an empty archive must be refused, not opened");
     };
 
-    assert!(matches!(refusal, ArchiveError::Empty { .. }), "{refusal}");
+    assert!(matches!(refusal.kind, ArchiveErrorKind::Empty), "{refusal}");
     assert!(
         refusal.to_string().contains("nomos-p3-archive-empty.zip"),
         "the error does not say which archive: {refusal}"

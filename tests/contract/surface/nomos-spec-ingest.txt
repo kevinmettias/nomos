@@ -1,4 +1,5 @@
 pub const fn nomos_spec_ingest::Archive::Listing(&self) -> &Listing
+pub const fn nomos_spec_ingest::BlockField::Label(self) -> &'static str
 pub const fn nomos_spec_ingest::Family::All() -> &'static [Self]
 pub const fn nomos_spec_ingest::Family::Directory(self) -> &'static str
 pub const fn nomos_spec_ingest::Family::Label(self) -> &'static str
@@ -20,8 +21,9 @@ pub const nomos_spec_ingest::FILLER_PATTERNS: &[&str]
 pub const nomos_spec_ingest::LINEAGE_NOTES: &str
 pub const nomos_spec_ingest::ROOT_SUITE: &str
 pub const nomos_spec_ingest::SHARED_BY: u32
-pub enum nomos_spec_ingest::ArchiveError
-pub enum nomos_spec_ingest::BlockMismatch
+pub enum nomos_spec_ingest::ArchiveErrorKind
+pub enum nomos_spec_ingest::BlockField
+pub enum nomos_spec_ingest::BlockMismatchKind
 pub enum nomos_spec_ingest::Disposition
 pub enum nomos_spec_ingest::Family
 pub enum nomos_spec_ingest::Fate
@@ -31,15 +33,16 @@ pub enum nomos_spec_ingest::Origin
 pub enum nomos_spec_ingest::Restored
 pub enum nomos_spec_ingest::Scope
 pub enum nomos_spec_ingest::Sibling
-pub enum variant nomos_spec_ingest::ArchiveError::Empty { archive: PathBuf, }
-pub enum variant nomos_spec_ingest::ArchiveError::NoSuchEntry { archive: PathBuf, entry: String, }
-pub enum variant nomos_spec_ingest::ArchiveError::NotText { archive: PathBuf, entry: String, cause: String, }
-pub enum variant nomos_spec_ingest::ArchiveError::Unreadable { archive: PathBuf, cause: String, }
-pub enum variant nomos_spec_ingest::BlockMismatch::ContentHash { document: String, ordinal: u32, recorded: String, recomputed: String, }
-pub enum variant nomos_spec_ingest::BlockMismatch::CountDiffers { document: String, recorded: usize, recomputed: usize, }
-pub enum variant nomos_spec_ingest::BlockMismatch::DocumentMissing { document: String, }
-pub enum variant nomos_spec_ingest::BlockMismatch::Kind { document: String, ordinal: u32, recorded: String, recomputed: String, }
-pub enum variant nomos_spec_ingest::BlockMismatch::NormalizedHash { document: String, ordinal: u32, recorded: String, recomputed: String, }
+pub enum variant nomos_spec_ingest::ArchiveErrorKind::Empty
+pub enum variant nomos_spec_ingest::ArchiveErrorKind::NoSuchEntry { entry: String, }
+pub enum variant nomos_spec_ingest::ArchiveErrorKind::NotText { entry: String, cause: String, }
+pub enum variant nomos_spec_ingest::ArchiveErrorKind::Unreadable { cause: String, }
+pub enum variant nomos_spec_ingest::BlockField::ContentHash
+pub enum variant nomos_spec_ingest::BlockField::Kind
+pub enum variant nomos_spec_ingest::BlockField::NormalizedHash
+pub enum variant nomos_spec_ingest::BlockMismatchKind::Block { ordinal: u32, field: BlockField, recorded: String, recomputed: String, }
+pub enum variant nomos_spec_ingest::BlockMismatchKind::CountDiffers { recorded: usize, recomputed: usize, }
+pub enum variant nomos_spec_ingest::BlockMismatchKind::DocumentMissing
 pub enum variant nomos_spec_ingest::Disposition::Absent
 pub enum variant nomos_spec_ingest::Disposition::Preserved
 pub enum variant nomos_spec_ingest::Disposition::Reworded { v14: ContentHash, v15: ContentHash, }
@@ -147,11 +150,15 @@ pub impl nomos_spec_ingest::Collision implements core::fmt::Display
 pub impl nomos_spec_ingest::IngestError implements From<StoreError>
 pub impl nomos_spec_ingest::IngestError implements core::fmt::Display
 pub impl nomos_spec_ingest::IngestError implements std::error::Error
+pub struct field nomos_spec_ingest::ArchiveError::archive: PathBuf
+pub struct field nomos_spec_ingest::ArchiveError::kind: ArchiveErrorKind
 pub struct field nomos_spec_ingest::Artifact::criteria: usize
 pub struct field nomos_spec_ingest::Artifact::family: Family
 pub struct field nomos_spec_ingest::Artifact::id: String
 pub struct field nomos_spec_ingest::Artifact::statement: String
 pub struct field nomos_spec_ingest::BlockLineage::blocks: Vec<RecordedBlock>
+pub struct field nomos_spec_ingest::BlockMismatch::document: String
+pub struct field nomos_spec_ingest::BlockMismatch::kind: BlockMismatchKind
 pub struct field nomos_spec_ingest::CatalogEntity::aliases: Vec<String>
 pub struct field nomos_spec_ingest::CatalogEntity::authority: String
 pub struct field nomos_spec_ingest::CatalogEntity::id: String
@@ -272,8 +279,10 @@ pub struct field nomos_spec_ingest::Template::documents: Vec<String>
 pub struct field nomos_spec_ingest::Template::sections: u32
 pub struct field nomos_spec_ingest::Template::text: String
 pub struct nomos_spec_ingest::Archive
+pub struct nomos_spec_ingest::ArchiveError
 pub struct nomos_spec_ingest::Artifact
 pub struct nomos_spec_ingest::BlockLineage
+pub struct nomos_spec_ingest::BlockMismatch
 pub struct nomos_spec_ingest::CatalogEntity
 pub struct nomos_spec_ingest::CatalogReport
 pub struct nomos_spec_ingest::Collision

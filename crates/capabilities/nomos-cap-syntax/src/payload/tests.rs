@@ -1,7 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::payload_refusal::PayloadRefusal;
+use crate::payload_refusal::{PayloadRefusal, PayloadRefusalKind};
 use crate::payload_item::PayloadItem;
 use crate::syntax_payload::SyntaxPayload;
 
@@ -127,20 +127,26 @@ fn Test_A_File_That_Declares_Nothing_Should_Decode_To_No_Items()
 #[test]
 fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
 {
-    assert_eq!(Parse_Payload(&[0xFF, 0xFE]), Err(PayloadRefusal::NotUtf8));
-    assert_eq!(Parse_Payload(b""), Err(PayloadRefusal::NoHeader));
+    assert_eq!(Parse_Payload(&[0xFF, 0xFE]), Err(PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8)));
+    assert_eq!(Parse_Payload(b""), Err(PayloadRefusal::Whole(PayloadRefusalKind::NoHeader)));
     assert_eq!(
         Parse_Payload(b"item\t0\tFunction\tPublic\tOne\t.\t.\n"),
-        Err(PayloadRefusal::NoHeader)
+        Err(PayloadRefusal::Whole(PayloadRefusalKind::NoHeader))
     );
     assert_eq!(
         Parse_Payload(b"unexpanded\t0\nunexpanded\t1\n"),
-        Err(PayloadRefusal::RepeatedHeader { line: 2 })
+        Err(PayloadRefusal::At(2, PayloadRefusalKind::RepeatedHeader))
     );
 
     let unknown = Parse_Payload(b"unexpanded\t0\nregion\t0\t3\n").expect_err("unknown tag");
     assert!(
-        matches!(unknown, PayloadRefusal::UnknownRecord { ref tag, line: 2 } if tag == "region"),
+        matches!(
+            unknown,
+            PayloadRefusal {
+                kind: PayloadRefusalKind::UnknownRecord { ref tag },
+                line: Some(2),
+            } if tag == "region"
+        ),
         "{unknown:?}"
     );
 
@@ -151,11 +157,13 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
     assert!(
         matches!(
             previous,
-            PayloadRefusal::WrongFieldCount {
-                found: 5,
-                expected: 7,
-                line: 2,
-                ..
+            PayloadRefusal {
+                kind: PayloadRefusalKind::WrongFieldCount {
+                    found: 5,
+                    expected: 7,
+                    ..
+                },
+                line: Some(2),
             }
         ),
         "{previous:?}"
@@ -163,7 +171,16 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
 
     let unnumbered = Parse_Payload(b"unexpanded\tmany\n").expect_err("a count is a number");
     assert!(
-        matches!(unnumbered, PayloadRefusal::UnreadableNumber { field: "unexpanded", .. }),
+        matches!(
+            unnumbered,
+            PayloadRefusal {
+                kind: PayloadRefusalKind::UnreadableNumber {
+                    field: "unexpanded",
+                    ..
+                },
+                ..
+            }
+        ),
         "{unnumbered:?}"
     );
 
@@ -172,10 +189,12 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
     assert!(
         matches!(
             unmarked,
-            PayloadRefusal::UnreadableObservation {
-                field: "documentation",
-                line: 2,
-                ..
+            PayloadRefusal {
+                kind: PayloadRefusalKind::UnreadableObservation {
+                    field: "documentation",
+                    ..
+                },
+                line: Some(2),
             }
         ),
         "{unmarked:?}"

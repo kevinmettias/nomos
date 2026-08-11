@@ -3,6 +3,7 @@ pub const fn nomos_workspace::Applied::Snapshot(&self) -> SnapshotId
 pub const fn nomos_workspace::ChangeSource::All() -> &'static [Self]
 pub const fn nomos_workspace::ChangeSource::Label(self) -> &'static str
 pub const fn nomos_workspace::Effect::Altered(&self) -> bool
+pub const fn nomos_workspace::EffectKind::Altered(self) -> bool
 pub const fn nomos_workspace::Workspace::Authority() -> Authority
 pub const fn nomos_workspace::Workspace::Generation(&self) -> GenerationId
 pub const fn nomos_workspace::Workspace::Snapshot(&self) -> &WorkspaceSnapshot
@@ -17,7 +18,7 @@ pub const nomos_workspace::SnapshotSerialization::TRACE: TraceEquivalence
 pub enum nomos_workspace::Applied
 pub enum nomos_workspace::Change
 pub enum nomos_workspace::ChangeSource
-pub enum nomos_workspace::Effect
+pub enum nomos_workspace::EffectKind
 pub enum nomos_workspace::WorkspaceError
 pub enum variant nomos_workspace::Applied::Advanced { generation: GenerationId, snapshot: SnapshotId, effects: Vec<Effect>, }
 pub enum variant nomos_workspace::Applied::Unchanged { generation: GenerationId, snapshot: SnapshotId, effects: Vec<Effect>, }
@@ -28,11 +29,11 @@ pub enum variant nomos_workspace::ChangeSource::CodeGenerator
 pub enum variant nomos_workspace::ChangeSource::Correction
 pub enum variant nomos_workspace::ChangeSource::GitCheckout
 pub enum variant nomos_workspace::ChangeSource::IdeEdit
-pub enum variant nomos_workspace::Effect::Added { path: String, }
-pub enum variant nomos_workspace::Effect::AlreadyAbsent { path: String, }
-pub enum variant nomos_workspace::Effect::Modified { path: String, }
-pub enum variant nomos_workspace::Effect::Redundant { path: String, }
-pub enum variant nomos_workspace::Effect::Removed { path: String, }
+pub enum variant nomos_workspace::EffectKind::Added
+pub enum variant nomos_workspace::EffectKind::AlreadyAbsent
+pub enum variant nomos_workspace::EffectKind::Modified
+pub enum variant nomos_workspace::EffectKind::Redundant
+pub enum variant nomos_workspace::EffectKind::Removed
 pub enum variant nomos_workspace::WorkspaceError::Conflicting { path: String, }
 pub enum variant nomos_workspace::WorkspaceError::Store(StoreError)
 pub enum variant nomos_workspace::WorkspaceError::Unnamed { path: String, reason: String, }
@@ -73,9 +74,12 @@ pub struct field nomos_workspace::BuildVariant::features: BTreeSet<String>
 pub struct field nomos_workspace::BuildVariant::profile: String
 pub struct field nomos_workspace::BuildVariant::target: String
 pub struct field nomos_workspace::BuildVariant::toolchain: String
+pub struct field nomos_workspace::Effect::kind: EffectKind
+pub struct field nomos_workspace::Effect::path: String
 pub struct field nomos_workspace::Member::content: Digest128
 pub struct field nomos_workspace::Member::path: String
 pub struct nomos_workspace::BuildVariant
+pub struct nomos_workspace::Effect
 pub struct nomos_workspace::Member
 pub struct nomos_workspace::SnapshotSerialization
 pub struct nomos_workspace::Workspace

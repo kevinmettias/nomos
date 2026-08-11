@@ -64,8 +64,9 @@ fn Test_A_Change_That_Says_What_Is_Already_True_Should_Not_Advance()
     assert_eq!(workspace.Id(), identity);
     assert_eq!(
         applied.Effects(),
-        &[Effect::Redundant {
-            path: "src/a.rs".to_owned()
+        &[Effect {
+            path: "src/a.rs".to_owned(),
+            kind: EffectKind::Redundant
         }]
     );
 }
@@ -87,8 +88,9 @@ fn Test_A_Change_That_Says_Something_New_Should_Advance()
     assert!(workspace.Generation() > before);
     assert_eq!(
         applied.Effects(),
-        &[Effect::Modified {
-            path: "src/a.rs".to_owned()
+        &[Effect {
+            path: "src/a.rs".to_owned(),
+            kind: EffectKind::Modified
         }]
     );
 }
@@ -143,8 +145,9 @@ fn Test_A_Removal_Should_Take_The_Member_And_A_Second_Should_Not()
     assert!(matches!(again, Applied::Unchanged { .. }));
     assert_eq!(
         again.Effects(),
-        &[Effect::AlreadyAbsent {
-            path: "src/a.rs".to_owned()
+        &[Effect {
+            path: "src/a.rs".to_owned(),
+            kind: EffectKind::AlreadyAbsent
         }],
         "worth seeing: the submitter has a different idea of what is here"
     );

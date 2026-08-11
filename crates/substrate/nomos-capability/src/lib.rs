@@ -23,7 +23,7 @@ mod unmet;
 pub use contract::CapabilityContract;
 pub use provider_offer::ProviderOffer;
 pub use registry::Registry;
-pub use registry_error::RegistryError;
+pub use registry_error::{OfferRefusal, RegistryError, RegistryErrorKind};
 pub use requirement::Requirement;
 pub use resolution::Resolution;
 pub use selection::Selection;

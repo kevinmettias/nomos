@@ -1,6 +1,6 @@
 //! Reading a payload back, and refusing one that does not say what it claims.
 
-use super::{SyntaxPayload, PayloadRefusal, PayloadItem, Observed};
+use super::{SyntaxPayload, PayloadRefusal, PayloadRefusalKind, PayloadItem, Observed};
 
 /// Fields in an `item` record, tag included.
 const ITEM_FIELDS: usize = 7;
@@ -21,7 +21,7 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<SyntaxPayload, PayloadRefusal>
     let Ok(text) = core::str::from_utf8(bytes)
     else
     {
-        return Err(PayloadRefusal::NotUtf8);
+        return Err(PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8));
     };
 
     let mut read = Reading {
@@ -58,7 +58,7 @@ impl Reading
         let Some(unexpanded) = self.unexpanded
         else
         {
-            return Err(PayloadRefusal::NoHeader);
+            return Err(PayloadRefusal::Whole(PayloadRefusalKind::NoHeader));
         };
 
         return Ok(SyntaxPayload {
@@ -87,10 +87,12 @@ pub(super) fn Read_Record(line: &str, at: usize, read: &mut Reading) -> Result<(
         }
         other =>
         {
-            return Err(PayloadRefusal::UnknownRecord {
-                tag: other.to_owned(),
-                line: at,
-            });
+            return Err(PayloadRefusal::At(
+                at,
+                PayloadRefusalKind::UnknownRecord {
+                    tag: other.to_owned(),
+                },
+            ));
         }
     }
 
@@ -109,7 +111,7 @@ pub(super) fn Read_Item(
 {
     if unexpanded.is_none()
     {
-        return Err(PayloadRefusal::NoHeader);
+        return Err(PayloadRefusal::Whole(PayloadRefusalKind::NoHeader));
     }
     Expect_Fields("item", fields, ITEM_FIELDS, at)?;
 
@@ -124,7 +126,7 @@ pub(super) fn Header(fields: &[&str], at: usize, already: Option<u32>) -> Result
 {
     if already.is_some()
     {
-        return Err(PayloadRefusal::RepeatedHeader { line: at });
+        return Err(PayloadRefusal::At(at, PayloadRefusalKind::RepeatedHeader));
     }
     Expect_Fields("unexpanded", fields, HEADER_FIELDS, at)?;
 
@@ -161,22 +163,26 @@ pub(super) fn Expect_Fields(
         return Ok(());
     }
 
-    return Err(PayloadRefusal::WrongFieldCount {
-        tag: tag.to_owned(),
-        expected,
-        found: fields.len(),
+    return Err(PayloadRefusal::At(
         line,
-    });
+        PayloadRefusalKind::WrongFieldCount {
+            tag: tag.to_owned(),
+            expected,
+            found: fields.len(),
+        },
+    ));
 }
 
 /// Reads a field that must be a number.
 pub(super) fn Number(value: &str, field: &'static str, line: usize) -> Result<u32, PayloadRefusal>
 {
     return value.parse::<u32>().map_err(|_| {
-        return PayloadRefusal::UnreadableNumber {
-            field,
-            value: value.to_owned(),
+        return PayloadRefusal::At(
             line,
-        };
+            PayloadRefusalKind::UnreadableNumber {
+                field,
+                value: value.to_owned(),
+            },
+        );
     });
 }

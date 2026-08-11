@@ -137,6 +137,6 @@ pub use parse::Parse_Payload;
 pub use render::{Escape, Render_Payload, Unescape};
 
 use crate::payload_item::PayloadItem;
-use crate::payload_refusal::PayloadRefusal;
+use crate::payload_refusal::{PayloadRefusal, PayloadRefusalKind};
 use crate::syntax_payload::SyntaxPayload;
 use core::fmt::Write as _;

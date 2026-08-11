@@ -58,7 +58,7 @@ pub use change::Change;
 pub use change_set::ChangeSet;
 pub use change_source::ChangeSource;
 pub use determinism::SnapshotSerialization;
-pub use effect::Effect;
+pub use effect::{Effect, EffectKind};
 pub use member::Member;
 pub use snapshot::{WorkspaceSnapshot, SNAPSHOT_SCHEMA};
 pub use variant::BuildVariant;

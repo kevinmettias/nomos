@@ -3,14 +3,16 @@ pub const fn nomos_capability::Resolution::Offer(&self) -> Option<&ProviderOffer
 pub const fn nomos_capability::Resolution::Selection(&self) -> Option<&Selection>
 pub const fn nomos_capability::Standing::Decided(self) -> bool
 pub const fn nomos_capability::Unmet::Applicability(&self) -> Applicability
-pub enum nomos_capability::RegistryError
+pub enum nomos_capability::OfferRefusal
+pub enum nomos_capability::RegistryErrorKind
 pub enum nomos_capability::Resolution
 pub enum nomos_capability::Standing
 pub enum nomos_capability::Unmet
-pub enum variant nomos_capability::RegistryError::AlreadyDeclared { capability: CapabilityId, }
-pub enum variant nomos_capability::RegistryError::DuplicateOffer { capability: CapabilityId, provider: ProviderId, }
-pub enum variant nomos_capability::RegistryError::ExceedsCeiling { capability: CapabilityId, provider: ProviderId, }
-pub enum variant nomos_capability::RegistryError::OfferForUndeclared { capability: CapabilityId, provider: ProviderId, }
+pub enum variant nomos_capability::OfferRefusal::Duplicate
+pub enum variant nomos_capability::OfferRefusal::ExceedsCeiling
+pub enum variant nomos_capability::OfferRefusal::ForUndeclared
+pub enum variant nomos_capability::RegistryErrorKind::AlreadyDeclared
+pub enum variant nomos_capability::RegistryErrorKind::Offer { provider: ProviderId, refusal: OfferRefusal, }
 pub enum variant nomos_capability::Resolution::Satisfied { selection: Selection, applicability: Applicability, }
 pub enum variant nomos_capability::Resolution::Unsatisfied { capability: CapabilityId, reason: Unmet, }
 pub enum variant nomos_capability::Standing::Equivalent
@@ -46,6 +48,8 @@ pub struct field nomos_capability::ProviderOffer::capability: CapabilityId
 pub struct field nomos_capability::ProviderOffer::guarantee: Guarantee
 pub struct field nomos_capability::ProviderOffer::provider: ProviderId
 pub struct field nomos_capability::ProviderOffer::version: ContractVersion
+pub struct field nomos_capability::RegistryError::capability: CapabilityId
+pub struct field nomos_capability::RegistryError::kind: RegistryErrorKind
 pub struct field nomos_capability::Requirement::capability: CapabilityId
 pub struct field nomos_capability::Requirement::minimum: Guarantee
 pub struct field nomos_capability::Requirement::preferred: Option<ProviderId>
@@ -55,5 +59,6 @@ pub struct field nomos_capability::Selection::chosen: ProviderOffer
 pub struct nomos_capability::CapabilityContract
 pub struct nomos_capability::ProviderOffer
 pub struct nomos_capability::Registry
+pub struct nomos_capability::RegistryError
 pub struct nomos_capability::Requirement
 pub struct nomos_capability::Selection

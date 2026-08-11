@@ -1,4 +1,4 @@
-use crate::archive_error::ArchiveError;
+use crate::archive_error::{ArchiveError, ArchiveErrorKind};
 use crate::listing::Listing;
 use std::io::Read as _;
 use std::path::{Path, PathBuf};
@@ -9,15 +9,19 @@ use std::path::{Path, PathBuf};
 /// because a caller walking twenty archives cannot tell from "invalid zip" which one it was.
 fn Opened(path: &Path) -> Result<zip::ZipArchive<std::io::BufReader<std::fs::File>>, ArchiveError>
 {
-    let file = std::fs::File::open(path).map_err(|error| ArchiveError::Unreadable {
+    let file = std::fs::File::open(path).map_err(|error| ArchiveError {
         archive: path.to_path_buf(),
-        cause: error.to_string(),
+        kind: ArchiveErrorKind::Unreadable {
+            cause: error.to_string(),
+        },
     })?;
 
     return zip::ZipArchive::new(std::io::BufReader::new(file)).map_err(|error| {
-        return ArchiveError::Unreadable {
+        return ArchiveError {
             archive: path.to_path_buf(),
-            cause: error.to_string(),
+            kind: ArchiveErrorKind::Unreadable {
+                cause: error.to_string(),
+            },
         };
     });
 }
@@ -52,8 +56,8 @@ impl Archive
 {
     /// # Errors
     ///
-    /// Returns [`ArchiveError::Unreadable`] if the file is absent or is not a zip, and
-    /// [`ArchiveError::Empty`] if it holds no files.
+    /// Returns [`ArchiveErrorKind::Unreadable`] if the file is absent or is not a zip, and
+    /// [`ArchiveErrorKind::Empty`] if it holds no files.
     pub fn Open(path: &Path) -> Result<Self, ArchiveError>
     {
         let inner = Opened(path)?;
@@ -61,8 +65,9 @@ impl Archive
 
         if paths.is_empty()
         {
-            return Err(ArchiveError::Empty {
+            return Err(ArchiveError {
                 archive: path.to_path_buf(),
+                kind: ArchiveErrorKind::Empty,
             });
         }
 
@@ -88,22 +93,26 @@ impl Archive
 
     /// # Errors
     ///
-    /// Returns [`ArchiveError::NoSuchEntry`] if the archive has no such file.
+    /// Returns [`ArchiveErrorKind::NoSuchEntry`] if the archive has no such file.
     pub fn Read(&mut self, entry: &str) -> Result<Vec<u8>, ArchiveError>
     {
         let mut file = self
             .inner
             .by_name(entry)
-            .map_err(|_| return ArchiveError::NoSuchEntry {
+            .map_err(|_| return ArchiveError {
                 archive: self.path.clone(),
-                entry: entry.to_owned(),
+                kind: ArchiveErrorKind::NoSuchEntry {
+                    entry: entry.to_owned(),
+                },
             })?;
 
         let mut bytes = Vec::new();
         file.read_to_end(&mut bytes)
-            .map_err(|error| ArchiveError::Unreadable {
+            .map_err(|error| ArchiveError {
                 archive: self.path.clone(),
-                cause: format!("{entry}: {error}"),
+                kind: ArchiveErrorKind::Unreadable {
+                    cause: format!("{entry}: {error}"),
+                },
             })?;
 
         return Ok(bytes);
@@ -117,15 +126,17 @@ impl Archive
     ///
     /// # Errors
     ///
-    /// Returns [`ArchiveError::NoSuchEntry`] or [`ArchiveError::NotText`].
+    /// Returns [`ArchiveErrorKind::NoSuchEntry`] or [`ArchiveErrorKind::NotText`].
     pub fn Read_Text(&mut self, entry: &str) -> Result<String, ArchiveError>
     {
         let bytes = self.Read(entry)?;
 
-        return String::from_utf8(bytes).map_err(|error| ArchiveError::NotText {
+        return String::from_utf8(bytes).map_err(|error| ArchiveError {
             archive: self.path.clone(),
-            entry: entry.to_owned(),
-            cause: error.to_string(),
+            kind: ArchiveErrorKind::NotText {
+                entry: entry.to_owned(),
+                cause: error.to_string(),
+            },
         });
     }
 }
@@ -134,13 +145,15 @@ impl Archive
 ///
 /// # Errors
 ///
-/// Returns [`ArchiveError::Unreadable`] if the directory cannot be listed. A directory
+/// Returns [`ArchiveErrorKind::Unreadable`] if the directory cannot be listed. A directory
 /// holding no archives is an error for the same reason an empty archive is.
 pub fn Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
 {
-    let entries = std::fs::read_dir(directory).map_err(|error| ArchiveError::Unreadable {
+    let entries = std::fs::read_dir(directory).map_err(|error| ArchiveError {
         archive: directory.to_path_buf(),
-        cause: error.to_string(),
+        kind: ArchiveErrorKind::Unreadable {
+            cause: error.to_string(),
+        },
     })?;
 
     let mut archives: Vec<PathBuf> = entries
@@ -152,8 +165,9 @@ pub fn Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
 
     if archives.is_empty()
     {
-        return Err(ArchiveError::Empty {
+        return Err(ArchiveError {
             archive: directory.to_path_buf(),
+            kind: ArchiveErrorKind::Empty,
         });
     }
 
@@ -182,7 +196,7 @@ mod tests
     {
         let refusal = Refusal("no-such-file.zip");
 
-        assert!(matches!(refusal, ArchiveError::Unreadable { .. }), "{refusal}");
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
         assert!(
             refusal.to_string().contains("no-such-file.zip"),
             "the error does not say which archive: {refusal}"
@@ -194,7 +208,7 @@ mod tests
     {
         let refusal = Refusal("Cargo.toml");
 
-        assert!(matches!(refusal, ArchiveError::Unreadable { .. }), "{refusal}");
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
     }
 
     #[test]
@@ -202,7 +216,7 @@ mod tests
     {
         let refusal = Archives_In(Path::new("src")).expect_err("must refuse");
 
-        assert!(matches!(refusal, ArchiveError::Empty { .. }), "{refusal}");
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Empty), "{refusal}");
     }
 
     #[test]
@@ -210,6 +224,6 @@ mod tests
     {
         let refusal = Archives_In(Path::new("no-such-directory")).expect_err("must refuse");
 
-        assert!(matches!(refusal, ArchiveError::Unreadable { .. }), "{refusal}");
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
     }
 }

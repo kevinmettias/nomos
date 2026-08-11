@@ -1,6 +1,6 @@
 use crate::resolution::Resolution;
 use crate::unmet::Unmet;
-use crate::registry_error::RegistryError;
+use crate::registry_error::{OfferRefusal, RegistryError, RegistryErrorKind};
 use crate::contract::CapabilityContract;
 use crate::provider_offer::ProviderOffer;
 use crate::requirement::Requirement;
@@ -29,14 +29,15 @@ impl Registry
 
     /// # Errors
     ///
-    /// Returns [`RegistryError::AlreadyDeclared`] if the capability already has a
+    /// Returns [`RegistryErrorKind::AlreadyDeclared`] if the capability already has a
     /// contract. Two contracts for one capability is two meanings for one name.
     pub fn Declare(&mut self, contract: CapabilityContract) -> Result<(), RegistryError>
     {
         if self.declared.contains_key(&contract.id)
         {
-            return Err(RegistryError::AlreadyDeclared {
+            return Err(RegistryError {
                 capability: contract.id,
+                kind: RegistryErrorKind::AlreadyDeclared,
             });
         }
 
@@ -57,9 +58,12 @@ impl Registry
             .iter()
             .any(|existing| existing.provider == offer.provider)
         {
-            return Err(RegistryError::DuplicateOffer {
+            return Err(RegistryError {
                 capability: offer.capability,
-                provider: offer.provider,
+                kind: RegistryErrorKind::Offer {
+                    provider: offer.provider,
+                    refusal: OfferRefusal::Duplicate,
+                },
             });
         }
 
@@ -118,17 +122,23 @@ impl Registry
         let Some(contract) = self.declared.get(&offer.capability)
         else
         {
-            return Err(RegistryError::OfferForUndeclared {
+            return Err(RegistryError {
                 capability: offer.capability.clone(),
-                provider: offer.provider.clone(),
+                kind: RegistryErrorKind::Offer {
+                    provider: offer.provider.clone(),
+                    refusal: OfferRefusal::ForUndeclared,
+                },
             });
         };
 
         if !contract.ceiling.Satisfies(&offer.guarantee)
         {
-            return Err(RegistryError::ExceedsCeiling {
+            return Err(RegistryError {
                 capability: offer.capability.clone(),
-                provider: offer.provider.clone(),
+                kind: RegistryErrorKind::Offer {
+                    provider: offer.provider.clone(),
+                    refusal: OfferRefusal::ExceedsCeiling,
+                },
             });
         }
 

@@ -6,7 +6,7 @@ mod tests;
 
 use naming::{Normalize, Normalized};
 
-use crate::effect::Effect;
+use crate::effect::{Effect, EffectKind};
 use crate::workspace_error::WorkspaceError;
 use crate::applied::Applied;
 use crate::change::Change;
@@ -129,8 +129,14 @@ impl Workspace
         {
             return match self.snapshot.Take(&path)
             {
-                Some(_) => Effect::Removed { path },
-                None => Effect::AlreadyAbsent { path },
+                Some(_) => Effect {
+                    path,
+                    kind: EffectKind::Removed,
+                },
+                None => Effect {
+                    path,
+                    kind: EffectKind::AlreadyAbsent,
+                },
             };
         };
 
@@ -145,16 +151,25 @@ impl Workspace
         let held = self.snapshot.Content_Of(&path);
         if held == Some(digest)
         {
-            return Effect::Redundant { path };
+            return Effect {
+                path,
+                kind: EffectKind::Redundant,
+            };
         }
         self.snapshot.Put(path.clone(), digest);
 
         if held.is_some()
         {
-            return Effect::Modified { path };
+            return Effect {
+                path,
+                kind: EffectKind::Modified,
+            };
         }
 
-        return Effect::Added { path };
+        return Effect {
+            path,
+            kind: EffectKind::Added,
+        };
     }
 
     /// Records this state in a document store.

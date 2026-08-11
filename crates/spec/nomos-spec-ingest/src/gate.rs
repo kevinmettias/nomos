@@ -1,6 +1,6 @@
 use crate::recorded_block::RecordedBlock;
 use crate::block_lineage::BlockLineage;
-use crate::block_mismatch::BlockMismatch;
+use crate::block_mismatch::{BlockField, BlockMismatch, BlockMismatchKind};
 use nomos_spec_model::{ContentHash, Segment, SourceBlock};
 use std::collections::BTreeMap;
 
@@ -82,8 +82,9 @@ pub fn Check_Against_Manifest(
         let Some(markdown) = documents.get(name)
         else
         {
-            report.mismatches.push(BlockMismatch::DocumentMissing {
+            report.mismatches.push(BlockMismatch {
                 document: name.to_owned(),
+                kind: BlockMismatchKind::DocumentMissing,
             });
             continue;
         };
@@ -124,10 +125,12 @@ fn Check_Document(
 
     if recomputed.len() != recorded.len()
     {
-        report.mismatches.push(BlockMismatch::CountDiffers {
+        report.mismatches.push(BlockMismatch {
             document: name.to_owned(),
-            recorded: recorded.len(),
-            recomputed: recomputed.len(),
+            kind: BlockMismatchKind::CountDiffers {
+                recorded: recorded.len(),
+                recomputed: recomputed.len(),
+            },
         });
     }
 
@@ -165,11 +168,14 @@ fn Compare_Kind(
     let kind = nomos_spec_store::Kind_Label(got.kind);
     if kind != want.block_kind
     {
-        mismatches.push(BlockMismatch::Kind {
+        mismatches.push(BlockMismatch {
             document: document.to_owned(),
-            ordinal: want.block_ordinal,
-            recorded: want.block_kind.clone(),
-            recomputed: kind.to_owned(),
+            kind: BlockMismatchKind::Block {
+                ordinal: want.block_ordinal,
+                field: BlockField::Kind,
+                recorded: want.block_kind.clone(),
+                recomputed: kind.to_owned(),
+            },
         });
     }
 }
@@ -185,11 +191,14 @@ fn Compare_Content(
     let content = ContentHash::Of(&got.text);
     if content.As_Str() != want.content_hash
     {
-        mismatches.push(BlockMismatch::ContentHash {
+        mismatches.push(BlockMismatch {
             document: document.to_owned(),
-            ordinal: want.block_ordinal,
-            recorded: want.content_hash.clone(),
-            recomputed: content.As_Str().to_owned(),
+            kind: BlockMismatchKind::Block {
+                ordinal: want.block_ordinal,
+                field: BlockField::ContentHash,
+                recorded: want.content_hash.clone(),
+                recomputed: content.As_Str().to_owned(),
+            },
         });
     }
 }
@@ -209,11 +218,14 @@ fn Compare_Normalized(
     let normalized = ContentHash::Of_Normalized(&got.text);
     if normalized.As_Str() != want.normalized_hash
     {
-        mismatches.push(BlockMismatch::NormalizedHash {
+        mismatches.push(BlockMismatch {
             document: document.to_owned(),
-            ordinal: want.block_ordinal,
-            recorded: want.normalized_hash.clone(),
-            recomputed: normalized.As_Str().to_owned(),
+            kind: BlockMismatchKind::Block {
+                ordinal: want.block_ordinal,
+                field: BlockField::NormalizedHash,
+                recorded: want.normalized_hash.clone(),
+                recomputed: normalized.As_Str().to_owned(),
+            },
         });
     }
 }
@@ -293,7 +305,10 @@ mod tests
         assert!(!report.Passed());
         assert!(matches!(
             report.mismatches.first(),
-            Some(BlockMismatch::DocumentMissing { .. })
+            Some(BlockMismatch {
+                kind: BlockMismatchKind::DocumentMissing,
+                ..
+            })
         ));
     }
 

@@ -86,7 +86,7 @@ mod tests
 {
     use super::*;
     use nomos_cap_syntax::Capability_Contract;
-    use nomos_capability::{Registry, RegistryError, Requirement};
+    use nomos_capability::{OfferRefusal, Registry, RegistryError, RegistryErrorKind, Requirement};
 
     /// Not "its own contract". This provider does not author the terms it offers under,
     /// and every test below declares them from `nomos-cap-syntax` for that reason.
@@ -124,9 +124,12 @@ mod tests
 
         assert_eq!(
             registry.Offer(overreaching),
-            Err(RegistryError::ExceedsCeiling {
+            Err(RegistryError {
                 capability: Capability(),
-                provider: ProviderId::New(PROVIDER),
+                kind: RegistryErrorKind::Offer {
+                    provider: ProviderId::New(PROVIDER),
+                    refusal: OfferRefusal::ExceedsCeiling,
+                },
             })
         );
     }

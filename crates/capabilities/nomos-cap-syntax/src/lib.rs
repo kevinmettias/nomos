@@ -66,5 +66,5 @@ pub use payload::{
     FUNCTION, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, PUBLIC, SLICE, TRAIT, VALUE,
 };
 pub use payload_item::PayloadItem;
-pub use payload_refusal::PayloadRefusal;
+pub use payload_refusal::{PayloadRefusal, PayloadRefusalKind};
 pub use syntax_payload::SyntaxPayload;

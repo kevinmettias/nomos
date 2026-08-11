@@ -54,10 +54,10 @@ mod template;
 
 pub use archaeology::{Regression, Relocations, Revision, SHARED_BY};
 pub use archive::{Archive, Archives_In};
-pub use archive_error::ArchiveError;
+pub use archive_error::{ArchiveError, ArchiveErrorKind};
 pub use artifact::Artifact;
 pub use block_lineage::BlockLineage;
-pub use block_mismatch::BlockMismatch;
+pub use block_mismatch::{BlockField, BlockMismatch, BlockMismatchKind};
 pub use catalog_entity::CatalogEntity;
 pub use catalog_report::CatalogReport;
 pub use collision::Collision;
