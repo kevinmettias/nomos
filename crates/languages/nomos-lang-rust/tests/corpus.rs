@@ -24,8 +24,8 @@
 //! Reading these files is not a dependency on the sibling workspace. D-130 governs what
 //! Nomos may *build against*, and this crate builds against nothing there; it reads text.
 
-use nomos_lang_rust::{Read_Source, Reading, Recognition, SyntaxFacts};
-use std::collections::BTreeSet;
+use nomos_lang_rust::{Read_Source, Reading, Recognition, SyntaxFacts, SyntaxItem};
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 /// The corpus this provider was built to survive.
@@ -65,23 +65,12 @@ fn Corpus_Or_Skip() -> Option<Corpus>
     let root = configured
         .clone()
         .map_or_else(|| return PathBuf::from(DEFAULT_ROOT), PathBuf::from);
-
     if !root.is_dir()
     {
-        assert!(
-            configured.is_none(),
-            "NOMOS_RUST_CORPUS is set to {}, which is not a directory. A configured \
-             corpus that cannot be read is a failure, not a skip",
-            root.display()
-        );
+        Report_The_Absence(configured.as_deref(), &root);
 
-        eprintln!(
-            "skipped: no corpus at {} and NOMOS_RUST_CORPUS is unset",
-            root.display()
-        );
         return None;
     }
-
     let files = Rust_Files(&root);
 
     assert!(
@@ -96,13 +85,29 @@ fn Corpus_Or_Skip() -> Option<Corpus>
     return Some(Corpus { root, files });
 }
 
-/// Every recognized file under a root, in a deterministic order.
-///
-/// Sorted rather than left in directory order, so that a failure names the same file on
-/// two machines and a report of "the first ten failures" is the same ten.
-fn Rust_Files(root: &Path) -> Vec<PathBuf>
+/// A corpus that was configured and cannot be read is a failure, not a skip.
+fn Report_The_Absence(configured: Option<&std::ffi::OsStr>, root: &Path)
 {
-    let mut found = Vec::new();
+    assert!(
+        configured.is_none(),
+        "NOMOS_RUST_CORPUS is set to {}, which is not a directory. A configured corpus that \
+         cannot be read is a failure, not a skip",
+        root.display()
+    );
+
+    eprintln!(
+        "skipped: no corpus at {} and NOMOS_RUST_CORPUS is unset",
+        root.display()
+    );
+}
+
+/// Every file under a root that is not inside a directory nobody's source lives in.
+///
+/// The two walks in this file — the one collecting what the provider reads and the one
+/// counting what it skips — differ only in what they do with a file. The walk is shared, so
+/// a directory exclusion cannot apply to one of them and not the other.
+fn Each_File(root: &Path, mut visit: impl FnMut(&Path, &str))
+{
     let mut pending = vec![root.to_path_buf()];
 
     while let Some(directory) = pending.pop()
@@ -115,32 +120,52 @@ fn Rust_Files(root: &Path) -> Vec<PathBuf>
 
         for entry in entries.flatten()
         {
-            let path = entry.path();
-            let name = entry.file_name();
-            let name = name.to_string_lossy();
-
-            let is_directory = path.is_dir();
-            if is_directory && NOT_SOURCE.contains(&name.as_ref())
-            {
-                continue;
-            }
-
-            if is_directory
-            {
-                pending.push(path);
-                continue;
-            }
-
-            // Recognition decides, rather than a second extension check written here.
-            // Two answers to "does this provider read this file" is one answer too many.
-            if Recognition::Of_Path(&name) == Recognition::Recognized
-            {
-                found.push(path);
-            }
+            Visit(&entry, &mut pending, &mut visit);
         }
     }
+}
 
+/// One directory entry: a source directory is queued, and a file is handed to the caller.
+fn Visit(
+    entry: &std::fs::DirEntry,
+    pending: &mut Vec<PathBuf>,
+    visit: &mut impl FnMut(&Path, &str),
+)
+{
+    let path = entry.path();
+    let name = entry.file_name();
+    let name = name.to_string_lossy();
+
+    if !path.is_dir()
+    {
+        visit(&path, &name);
+
+        return;
+    }
+    if !NOT_SOURCE.contains(&name.as_ref())
+    {
+        pending.push(path);
+    }
+}
+
+/// Every recognized file under a root, in a deterministic order.
+///
+/// Sorted rather than left in directory order, so that a failure names the same file on
+/// two machines and a report of "the first ten failures" is the same ten.
+fn Rust_Files(root: &Path) -> Vec<PathBuf>
+{
+    let mut found = Vec::new();
+
+    // Recognition decides, rather than a second extension check written here. Two answers
+    // to "does this provider read this file" is one answer too many.
+    Each_File(root, |path, name| {
+        if Recognition::Of_Path(name) == Recognition::Recognized
+        {
+            found.push(path.to_path_buf());
+        }
+    });
     found.sort();
+
     return found;
 }
 
@@ -166,6 +191,7 @@ fn Identifiers(source: &str) -> BTreeSet<&str>
 }
 
 /// What a walk of the corpus found.
+#[derive(Default)]
 struct Walked
 {
     read: usize,
@@ -178,35 +204,11 @@ struct Walked
 
 fn Walk(corpus: &Corpus) -> Walked
 {
-    let mut walked = Walked {
-        read: 0,
-        refused: Vec::new(),
-        unreadable: Vec::new(),
-        items: 0,
-        unexpanded: 0,
-        declaring_nothing: 0,
-    };
+    let mut walked = Walked::default();
 
     for path in &corpus.files
     {
-        // A file that cannot be read off disk is not a file that failed to parse. One is
-        // this provider's answer about the source; the other is the machine, and folding
-        // them together would attribute an antivirus lock to a syntax error.
-        let Ok(source) = std::fs::read_to_string(path)
-        else
-        {
-            walked.unreadable.push(path.clone());
-            continue;
-        };
-
-        match Read_Source(&source)
-        {
-            Reading::Parsed(facts) => walked.Counted(&facts),
-            Reading::Unparseable(failure) =>
-            {
-                walked.refused.push((path.clone(), failure.to_string()));
-            }
-        }
+        walked.Read_One(path);
     }
 
     return walked;
@@ -214,6 +216,31 @@ fn Walk(corpus: &Corpus) -> Walked
 
 impl Walked
 {
+    /// One file, under whichever of the three outcomes it reached.
+    ///
+    /// A file that cannot be read off disk is not a file that failed to parse. One is this
+    /// provider's answer about the source; the other is the machine, and folding them
+    /// together would attribute an antivirus lock to a syntax error.
+    fn Read_One(&mut self, path: &Path)
+    {
+        let Ok(source) = std::fs::read_to_string(path)
+        else
+        {
+            self.unreadable.push(path.to_path_buf());
+
+            return;
+        };
+
+        match Read_Source(&source)
+        {
+            Reading::Parsed(facts) => self.Counted(&facts),
+            Reading::Unparseable(failure) =>
+            {
+                self.refused.push((path.to_path_buf(), failure.to_string()));
+            }
+        }
+    }
+
     /// One file this provider answered for, folded into the totals.
     fn Counted(&mut self, facts: &SyntaxFacts)
     {
@@ -237,35 +264,21 @@ fn Test_The_Corpus_Should_Yield_Syntax_Facts()
     {
         return;
     };
-
     let walked = Walk(&corpus);
     let total = corpus.files.len();
 
-    eprintln!(
-        "{}: {total} Rust files, {} read, {} refused, {} unreadable, {} items, {} \
-         unexpanded regions, {} files declaring nothing",
-        corpus.root.display(),
-        walked.read,
-        walked.refused.len(),
-        walked.unreadable.len(),
-        walked.items,
-        walked.unexpanded,
-        walked.declaring_nothing
-    );
-
+    Report_The_Walk(&corpus, &walked);
     assert!(
         walked.unreadable.is_empty(),
         "{} of {total} files could not be read off disk: {:?}",
         walked.unreadable.len(),
         walked.unreadable.iter().take(10).collect::<Vec<&PathBuf>>()
     );
-
     assert!(
         walked.items > 0,
         "{total} files produced no items at all. A provider that reads everything and \
          reports nothing is broken, not satisfied"
     );
-
     // Not "most files have items" — a corpus has `mod` stubs and generated stubs that
     // genuinely declare nothing. What must not happen is the reverse: a provider whose
     // usual answer is nothing.
@@ -275,6 +288,23 @@ fn Test_The_Corpus_Should_Yield_Syntax_Facts()
          reader that stopped reading",
         walked.declaring_nothing,
         walked.read
+    );
+}
+
+/// Every figure a run prints, each stated over the denominator it was measured against.
+fn Report_The_Walk(corpus: &Corpus, walked: &Walked)
+{
+    eprintln!(
+        "{}: {} Rust files, {} read, {} refused, {} unreadable, {} items, {} unexpanded \
+         regions, {} files declaring nothing",
+        corpus.root.display(),
+        corpus.files.len(),
+        walked.read,
+        walked.refused.len(),
+        walked.unreadable.len(),
+        walked.items,
+        walked.unexpanded,
+        walked.declaring_nothing
     );
 }
 
@@ -301,47 +331,26 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
     {
         return;
     };
-
     let walked = Walk(&corpus);
     let total = corpus.files.len();
+    let mut unexplained = Vec::new();
 
     assert_eq!(
         walked.read.saturating_add(walked.refused.len()),
         total,
         "every recognized file must reach exactly one outcome"
     );
-
-    let mut unexplained = Vec::new();
-
     for (path, failure) in &walked.refused
     {
-        assert!(
-            failure.starts_with("line "),
-            "a refusal must say where: {} — {failure}",
-            path.display()
-        );
+        let unaccounted = Unexplained(path, failure);
 
-        let stray_mark = std::fs::read_to_string(path)
-            .is_ok_and(|source| return source.trim_start_matches('\u{feff}').contains('\u{feff}'));
-
-        eprintln!(
-            "refused {} ({}): {failure}",
-            path.display(),
-            if stray_mark { "stray byte order mark" } else { "UNEXPLAINED" }
-        );
-
-        if !stray_mark
-        {
-            unexplained.push(path.clone());
-        }
+        unexplained.extend(unaccounted);
     }
-
     eprintln!(
         "refusals: {} of {total} files, {} explained by a stray byte order mark",
         walked.refused.len(),
         walked.refused.len().saturating_sub(unexplained.len())
     );
-
     assert!(
         unexplained.is_empty(),
         "{} of {total} files were refused for a reason this walk cannot account for: \
@@ -351,6 +360,32 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
          alone was never going to be enough",
         unexplained.len()
     );
+}
+
+/// A refused file this walk cannot account for, if it cannot account for it.
+///
+/// A stray byte order mark is the one damage this corpus is known to carry, so it is
+/// reported and excused. Anything else is either new damage or a provider that has fallen
+/// behind the language, and the two need different responses — which is why the count alone
+/// was never going to be enough.
+fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
+{
+    assert!(
+        failure.starts_with("line "),
+        "a refusal must say where: {} — {failure}",
+        path.display()
+    );
+
+    let stray_mark = std::fs::read_to_string(path)
+        .is_ok_and(|source| return source.trim_start_matches('\u{feff}').contains('\u{feff}'));
+
+    eprintln!(
+        "refused {} ({}): {failure}",
+        path.display(),
+        if stray_mark { "stray byte order mark" } else { "UNEXPLAINED" }
+    );
+
+    return (!stray_mark).then(|| return path.to_path_buf());
 }
 
 /// Soundness, over files nobody chose to make it pass.
@@ -366,57 +401,82 @@ fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
     {
         return;
     };
-
     let mut checked = 0_u64;
     let mut files = 0_usize;
 
     for path in &corpus.files
     {
-        let Ok(source) = std::fs::read_to_string(path)
-        else
-        {
-            continue;
-        };
-        let Reading::Parsed(facts) = Read_Source(&source)
+        let Some(names) = Names_Checked(path)
         else
         {
             continue;
         };
 
-        let identifiers = Identifiers(&source);
+        checked = checked.saturating_add(names);
         files = files.saturating_add(1);
-
-        for item in &facts.items
-        {
-            // `*` for a glob import and `_` for a type with no single head are this
-            // provider saying it has no name, not names it claims to have found.
-            let named = item
-                .name
-                .split("::")
-                .filter(|segment| return !segment.is_empty() && !NAMELESS.contains(segment));
-
-            for segment in named
-            {
-                assert!(
-                    identifiers.contains(segment),
-                    "{} reports `{}` ({}) and `{segment}` is not an identifier in that \
-                     file",
-                    path.display(),
-                    item.Qualified_Name(),
-                    item.kind
-                );
-                checked = checked.saturating_add(1);
-            }
-        }
     }
-
     eprintln!("soundness: {checked} names checked across {files} files");
-
     assert!(
         checked > 10_000,
         "only {checked} names were checked across {files} files; that is too few for this \
          corpus to have been read"
     );
+}
+
+/// How many names one file's facts were checked against its own identifiers.
+///
+/// `None` for a file this walk could not read or the provider would not parse. Those are
+/// counted elsewhere and neither is a soundness failure.
+fn Names_Checked(path: &Path) -> Option<u64>
+{
+    let Ok(source) = std::fs::read_to_string(path)
+    else
+    {
+        return None;
+    };
+    let Reading::Parsed(facts) = Read_Source(&source)
+    else
+    {
+        return None;
+    };
+    let identifiers = Identifiers(&source);
+    let mut checked = 0_u64;
+
+    for item in &facts.items
+    {
+        let named = Assert_Names_Occur(path, item, &identifiers);
+
+        checked = checked.saturating_add(named);
+    }
+
+    return Some(checked);
+}
+
+/// Every name segment one item reports occurs as an identifier in the file it came from.
+///
+/// `*` for a glob import and `_` for a type with no single head are this provider saying it
+/// has no name, not names it claims to have found.
+fn Assert_Names_Occur(path: &Path, item: &SyntaxItem, identifiers: &BTreeSet<&str>) -> u64
+{
+    let named = item
+        .name
+        .split("::")
+        .filter(|segment| return !segment.is_empty() && !NAMELESS.contains(segment));
+    let mut checked = 0_u64;
+
+    for segment in named
+    {
+        assert!(
+            identifiers.contains(segment),
+            "{} reports `{}` ({}) and `{segment}` is not an identifier in that file",
+            path.display(),
+            item.Qualified_Name(),
+            item.kind
+        );
+        checked = checked.saturating_add(1);
+    }
+
+    return checked;
 }
 
 /// Reading is a function of the bytes, checked against the corpus rather than against a
@@ -450,9 +510,7 @@ fn Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts()
     {
         return;
     };
-
     let mut compared = 0_usize;
-
     for path in corpus.files.iter().step_by(STRIDE)
     {
         let Ok(source) = std::fs::read_to_string(path)
@@ -469,12 +527,10 @@ fn Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts()
         );
         compared = compared.saturating_add(1);
     }
-
     eprintln!(
         "determinism: {compared} files compared, every {STRIDE}th of {}",
         corpus.files.len()
     );
-
     assert!(
         compared >= 50,
         "only {compared} files were compared; the stride sampled almost nothing"
@@ -491,9 +547,7 @@ fn Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown()
     {
         return;
     };
-
     let walked = Walk(&corpus);
-
     let per_file = walked
         .unexpanded
         .checked_div(u64::try_from(walked.read).unwrap_or(1))
@@ -503,7 +557,6 @@ fn Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown()
         "completeness: {} unexpanded regions across {} files read ({per_file} per file)",
         walked.unexpanded, walked.read
     );
-
     assert!(
         walked.unexpanded > 0,
         "{} files and not one macro invocation. Either the corpus is unlike every Rust \
@@ -525,46 +578,15 @@ fn Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed()
     {
         return;
     };
-
-    let mut skipped: std::collections::BTreeMap<String, usize> =
-        std::collections::BTreeMap::new();
-    let mut pending = vec![corpus.root.clone()];
-
-    while let Some(directory) = pending.pop()
-    {
-        let Ok(entries) = std::fs::read_dir(&directory)
-        else
+    let mut skipped: BTreeMap<String, usize> = BTreeMap::new();
+    Each_File(&corpus.root, |_, name| {
+        if let Recognition::Unrecognized { extension } = Recognition::Of_Path(name)
         {
-            continue;
-        };
-
-        for entry in entries.flatten()
-        {
-            let path = entry.path();
-            let name = entry.file_name();
-            let name = name.to_string_lossy();
-
-            let is_directory = path.is_dir();
-            if is_directory && NOT_SOURCE.contains(&name.as_ref())
-            {
-                continue;
-            }
-
-            if is_directory
-            {
-                pending.push(path);
-                continue;
-            }
-
-            if let Recognition::Unrecognized { extension } = Recognition::Of_Path(&name)
-            {
-                let label = extension.unwrap_or_else(|| return "<none>".to_owned());
-                let seen = skipped.entry(label).or_insert(0);
-                *seen = seen.saturating_add(1);
-            }
+            let label = extension.unwrap_or_else(|| return "<none>".to_owned());
+            let seen = skipped.entry(label).or_insert(0);
+            *seen = seen.saturating_add(1);
         }
-    }
-
+    });
     let total: usize = skipped.values().copied().sum();
 
     eprintln!(
@@ -572,7 +594,6 @@ fn Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed()
         corpus.files.len(),
         skipped.len()
     );
-
     assert!(
         !skipped.is_empty(),
         "a real tree has files that are not Rust; finding none means recognition \

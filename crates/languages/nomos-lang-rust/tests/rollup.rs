@@ -117,11 +117,10 @@ fn Roll_Up_Two_Files() -> RolledModule
 {
     let mut store = MemoryFactStore::New();
     let registry = Registry_With_Both();
+    let need = Need();
     let context = Context(GenerationId::INITIAL);
-
     let alpha = Materialize_Leaf(&mut store, "alpha.rs", ALPHA, context);
     let beta = Materialize_Leaf(&mut store, "beta.rs", BETA, context);
-
     let module = Module {
         // A subject of its own. Sharing one with a member would put the rollup in the
         // direct set of any change to that member, which is the property under test
@@ -132,8 +131,12 @@ fn Roll_Up_Two_Files() -> RolledModule
             ModuleMember::Of(Subject("beta.rs"), BETA),
         ],
     };
-
-    let rolled = rollup::Materialize_Index(&mut store, &Against { registry: &registry, need: &Need(), context }, &module)
+    let against = Against {
+        registry: &registry,
+        need: &need,
+        context,
+    };
+    let rolled = rollup::Materialize_Index(&mut store, &against, &module)
         .expect("the rollup is not written behind the generation it names");
 
     return RolledModule {
@@ -152,7 +155,6 @@ fn Test_Editing_A_Member_Should_Reach_The_Rollup_Through_A_Dependency_Edge()
 {
     let mut rolled = Roll_Up_Two_Files();
     let next = GenerationId::INITIAL.Next();
-
     let report = rolled.store.Invalidate(
         &GenerationCause::SubjectChanged {
             subject: Subject("alpha.rs"),
@@ -245,22 +247,22 @@ fn Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge()
 {
     let mut store = MemoryFactStore::New();
     let registry = Registry_With_Both();
+    let need = Need();
     let context = Context(GenerationId::INITIAL);
-
-    Materialize_Leaf(&mut store, "alpha.rs", ALPHA, context);
-
-    let module = Module {
-        subject: Subject("the/module"),
-        members: vec![
-            ModuleMember::Of(Subject("alpha.rs"), ALPHA),
-            // Never materialized. The rollup is asked for it anyway, which is what a real
-            // run does when a provider refused a file.
-            ModuleMember::Of(Subject("missing.rs"), "pub fn Absent() {}\n"),
-        ],
+    let module = A_Module_With_One_Missing_Member();
+    let against = Against {
+        registry: &registry,
+        need: &need,
+        context,
     };
-
-    let rolled = rollup::Materialize_Index(&mut store, &Against { registry: &registry, need: &Need(), context }, &module)
-        .expect("materializes");
+    Materialize_Leaf(&mut store, "alpha.rs", ALPHA, context);
+    let rolled =
+        rollup::Materialize_Index(&mut store, &against, &module).expect("materializes");
+    let missed = rolled
+        .dependencies
+        .iter()
+        .find(|dependency| return dependency.key.subject == Subject("missing.rs"))
+        .expect("the read that found nothing was recorded");
 
     assert_eq!(rolled.index.Unreachable(), 1, "{:#?}", rolled.index.members);
     assert_eq!(rolled.index.Answered(), 1);
@@ -270,17 +272,26 @@ fn Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge()
         "the member that answered and the member that did not are both edges: {:#?}",
         rolled.dependencies
     );
-
-    let missed = rolled
-        .dependencies
-        .iter()
-        .find(|dependency| return dependency.key.subject == Subject("missing.rs"))
-        .expect("the read that found nothing was recorded");
     assert_ne!(
         missed.outcome,
         ReadOutcome::Materialized,
         "an edge to a fact that does not exist must not read as a materialized one"
     );
+}
+
+/// A module of two members, one of which nothing has ever materialized.
+///
+/// The rollup is asked for the missing one anyway, which is what a real run does when a
+/// provider refused a file.
+fn A_Module_With_One_Missing_Member() -> Module
+{
+    return Module {
+        subject: Subject("the/module"),
+        members: vec![
+            ModuleMember::Of(Subject("alpha.rs"), ALPHA),
+            ModuleMember::Of(Subject("missing.rs"), "pub fn Absent() {}\n"),
+        ],
+    };
 }
 
 /// What the index is for: an item is attributed to the file that declared it.
@@ -293,33 +304,31 @@ fn Test_Every_Entry_Should_Name_The_Member_That_Declared_It()
 {
     let rolled = Roll_Up_Two_Files();
     let index = &rolled.rolled.index;
-
-    assert_eq!(index.Answered(), 2);
-    assert_eq!(index.Unreachable(), 0);
-    assert_eq!(index.Approximated(), 0);
-
-    let alpha_entries: Vec<&str> = index
-        .items
-        .iter()
-        .filter(|entry| return entry.member == Subject("alpha.rs"))
-        .map(|entry| return entry.qualified_name.as_str())
-        .collect();
-    let beta_entries: Vec<&str> = index
-        .items
-        .iter()
-        .filter(|entry| return entry.member == Subject("beta.rs"))
-        .map(|entry| return entry.qualified_name.as_str())
-        .collect();
-
-    assert_eq!(alpha_entries, vec!["Alpha", "hidden"]);
-    assert_eq!(beta_entries, vec!["Beta", "inner", "inner::Deep"]);
-
+    let alpha_entries = Names_Declared_By(index, "alpha.rs");
+    let beta_entries = Names_Declared_By(index, "beta.rs");
     let public = index
         .items
         .iter()
         .filter(|entry| return entry.visibility == PUBLIC)
         .count();
+
+    assert_eq!(index.Answered(), 2);
+    assert_eq!(index.Unreachable(), 0);
+    assert_eq!(index.Approximated(), 0);
+    assert_eq!(alpha_entries, vec!["Alpha", "hidden"]);
+    assert_eq!(beta_entries, vec!["Beta", "inner", "inner::Deep"]);
     assert_eq!(public, 4, "{:#?}", index.items);
+}
+
+/// Every name one member declared, in the order the index holds them.
+fn Names_Declared_By<'a>(index: &'a rollup::ModuleIndex, member: &str) -> Vec<&'a str>
+{
+    return index
+        .items
+        .iter()
+        .filter(|entry| return entry.member == Subject(member))
+        .map(|entry| return entry.qualified_name.as_str())
+        .collect();
 }
 
 /// A derivation is no stronger than what it derived from, on every axis and in the
@@ -328,7 +337,6 @@ fn Test_Every_Entry_Should_Name_The_Member_That_Declared_It()
 fn Test_The_Derived_Fact_Should_Claim_No_More_Than_Its_Inputs()
 {
     let rolled = Roll_Up_Two_Files();
-
     let held = rolled
         .store
         .Current(
@@ -336,13 +344,11 @@ fn Test_The_Derived_Fact_Should_Claim_No_More_Than_Its_Inputs()
             GenerationId::INITIAL,
         )
         .expect("the rollup was written and is current");
-
-    assert_eq!(held.evidence, EvidenceClass::Derived);
-    assert_eq!(held.payload.schema, rollup::Payload_Schema());
-
     let leaf = nomos_lang_rust::Declared_Guarantee();
     let derived = held.guarantee;
 
+    assert_eq!(held.evidence, EvidenceClass::Derived);
+    assert_eq!(held.payload.schema, rollup::Payload_Schema());
     assert_eq!(derived.variant, leaf.variant);
     assert_eq!(derived.completeness, leaf.completeness);
     // Stated with the type's own operation rather than with an ordering comparison, because
@@ -365,7 +371,6 @@ fn Test_The_Derived_Fact_Should_Claim_No_More_Than_Its_Inputs()
 fn Test_The_Rollup_Should_Broaden_A_File_Granular_Cause()
 {
     let mut rolled = Roll_Up_Two_Files();
-
     let report = rolled.store.Invalidate(
         &GenerationCause::SubjectChanged {
             subject: Subject("alpha.rs"),
@@ -373,7 +378,6 @@ fn Test_The_Rollup_Should_Broaden_A_File_Granular_Cause()
         },
         GenerationId::INITIAL.Next(),
     );
-
     let broadened: Vec<&nomos_analysis::FactKey> = report
         .broadened
         .iter()
@@ -421,7 +425,6 @@ fn Test_A_Module_Whose_Members_Changed_Should_Not_Keep_Its_Key()
     let edited = ModuleMember::Of(Subject("alpha.rs"), "pub fn Alpha() {}\npub fn Added() {}\n");
     // Same bytes as beta, different file.
     let renamed = ModuleMember::Of(Subject("gamma.rs"), BETA);
-
     let original = rollup::Index_Key(Subject("the/module"), &[alpha, beta], context).Digest();
 
     assert_ne!(
