@@ -24,7 +24,7 @@
 //! Reading these files is not a dependency on the sibling workspace. D-130 governs what
 //! Nomos may *build against*, and this crate builds against nothing there; it reads text.
 
-use nomos_lang_rust::{Read_Source, Reading, Recognition};
+use nomos_lang_rust::{Read_Source, Reading, Recognition, SyntaxFacts};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
@@ -192,16 +192,7 @@ fn Walk(corpus: &Corpus) -> Walked
 
         match Read_Source(&source)
         {
-            Reading::Parsed(facts) =>
-            {
-                walked.read = walked.read.saturating_add(1);
-                walked.items = walked.items.saturating_add(facts.items.len());
-                walked.unexpanded = walked.unexpanded.saturating_add(u64::from(facts.unexpanded));
-                if facts.Declares_Nothing()
-                {
-                    walked.declaring_nothing = walked.declaring_nothing.saturating_add(1);
-                }
-            }
+            Reading::Parsed(facts) => walked.Counted(&facts),
             Reading::Unparseable(failure) =>
             {
                 walked.refused.push((path.clone(), failure.to_string()));
@@ -210,6 +201,22 @@ fn Walk(corpus: &Corpus) -> Walked
     }
 
     return walked;
+}
+
+impl Walked
+{
+    /// One file this provider answered for, folded into the totals.
+    fn Counted(&mut self, facts: &SyntaxFacts)
+    {
+        self.read = self.read.saturating_add(1);
+        self.items = self.items.saturating_add(facts.items.len());
+        self.unexpanded = self.unexpanded.saturating_add(u64::from(facts.unexpanded));
+
+        if facts.Declares_Nothing()
+        {
+            self.declaring_nothing = self.declaring_nothing.saturating_add(1);
+        }
+    }
 }
 
 /// The headline. Real files, real items, and every figure stated over its denominator.

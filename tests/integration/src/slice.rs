@@ -794,18 +794,7 @@ impl Slice
             {
                 rust::Materialization::Materialized(fact) =>
                 {
-                    // A leaf: computed from the file and from nothing else, so it declares
-                    // no dependencies. This is also why the corpus needs the rollup — a
-                    // graph of leaves has no descendants to get wrong.
-                    self.store
-                        .Materialize(*fact, &[])
-                        .expect("a fact is never written behind the generation it names");
-                    report.syntax_materialized = report.syntax_materialized.saturating_add(1);
-                    report.recomputed.push(Recompute {
-                        capability: syntax::CAPABILITY.to_owned(),
-                        subject: file.path.clone(),
-                    });
-                    Self::Credit(report, &provider, rank, file);
+                    self.Kept(*fact, report, &provider, rank, file);
 
                     return;
                 }
@@ -828,6 +817,32 @@ impl Slice
     }
 
     /// Records who answered for a subject, and whether that was the chosen offer.
+    /// One provider's answer, stored and counted.
+    ///
+    /// A leaf: computed from the file and from nothing else, so it declares no
+    /// dependencies. This is also why the corpus needs the rollup — a graph of leaves has
+    /// no descendants to get wrong.
+    fn Kept(
+        &mut self,
+        fact: MaterializedFact,
+        report: &mut RunReport,
+        provider: &str,
+        rank: usize,
+        file: &SourceFile,
+    )
+    {
+        self.store
+            .Materialize(fact, &[])
+            .expect("a fact is never written behind the generation it names");
+
+        report.syntax_materialized = report.syntax_materialized.saturating_add(1);
+        report.recomputed.push(Recompute {
+            capability: syntax::CAPABILITY.to_owned(),
+            subject: file.path.clone(),
+        });
+        Self::Credit(report, provider, rank, file);
+    }
+
     fn Credit(report: &mut RunReport, provider: &str, rank: usize, file: &SourceFile)
     {
         let counted = report.answered_by.entry(provider.to_owned()).or_insert(0);
@@ -886,20 +901,7 @@ impl Slice
 
             match crate::surface::Public_Items(&fact.payload.bytes)
             {
-                Ok((items, public)) =>
-                {
-                    surface.files = surface.files.saturating_add(1);
-                    surface.items = surface.items.saturating_add(items);
-                    surface.public = surface.public.saturating_add(public);
-                    if approximated
-                    {
-                        // OD-CAPABILITY-003's third condition. Without this the scanner's
-                        // answer covers the file the parser refused, `unreachable` drops to
-                        // zero, and a corpus that was visibly incomplete starts reading as
-                        // complete and sound.
-                        surface.approximate = surface.approximate.saturating_add(1);
-                    }
-                }
+                Ok((items, public)) => Self::Summed(&mut surface, items, public, approximated),
                 Err(_) => surface.unreachable = surface.unreachable.saturating_add(1),
             }
         }
@@ -908,6 +910,24 @@ impl Slice
             surface,
             dependencies: reader.Into_Dependencies(),
         };
+    }
+
+    /// One readable member folded into the rollup.
+    ///
+    /// `approximated` is counted here rather than left to the caller because of
+    /// `OD-CAPABILITY-003`'s third condition: without it the scanner's answer covers the
+    /// file the parser refused, `unreachable` drops to zero, and a corpus that was visibly
+    /// incomplete starts reading as complete and sound.
+    fn Summed(surface: &mut Surface, items: u32, public: u32, approximated: bool)
+    {
+        surface.files = surface.files.saturating_add(1);
+        surface.items = surface.items.saturating_add(items);
+        surface.public = surface.public.saturating_add(public);
+
+        if approximated
+        {
+            surface.approximate = surface.approximate.saturating_add(1);
+        }
     }
 
     /// One edit, through the one door.
