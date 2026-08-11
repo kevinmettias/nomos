@@ -25,6 +25,7 @@ mod hollow;
 mod identifier_outcome;
 mod kind_census;
 mod lineage;
+mod listing;
 mod member;
 mod member_fate;
 mod origin;
@@ -70,6 +71,7 @@ pub use gate::{Check_Against_Manifest, GateReport, Parse_Block_Lineage};
 pub use hollow::Hollow;
 pub use identifier_outcome::IdentifierOutcome;
 pub use kind_census::KindCensus;
+pub use listing::Listing;
 pub use lineage::{Ingest_Block_Dispositions, Ingest_Section_Lineage, Parse_Section_Lineage,
                   SectionReport};
 pub use member::Member;

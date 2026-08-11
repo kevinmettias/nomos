@@ -20,7 +20,7 @@ pub(super) fn Ingest_Machine(
     report: &mut SuiteReport,
 ) -> Result<(), IngestError>
 {
-    for entry in archive.Ending_With(".json")
+    for entry in archive.Listing().Ending_With(".json")
     {
         let text = Text(archive, &entry)?;
         let header: SchemaHeader = serde_json::from_str(&text)

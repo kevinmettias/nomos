@@ -54,16 +54,16 @@ fn Test_An_Archive_Should_List_Its_Files_Sorted()
     let mut archive = Archive::Open(&Fixture(NAME)).expect("opens");
 
     assert_eq!(
-        archive.Paths(),
+        archive.Listing().Paths(),
         [
             "suite/00-index.md".to_owned(),
             "suite/binary.bin".to_owned(),
             "suite/nested/01-core.md".to_owned()
         ]
     );
-    assert!(archive.Contains("suite/nested/01-core.md"));
-    assert!(!archive.Contains("suite/absent.md"));
-    assert_eq!(archive.Ending_With(".md").len(), 2);
+    assert!(archive.Listing().Contains("suite/nested/01-core.md"));
+    assert!(!archive.Listing().Contains("suite/absent.md"));
+    assert_eq!(archive.Listing().Ending_With(".md").len(), 2);
     assert_eq!(
         archive.Read_Text("suite/00-index.md").expect("reads"),
         "---\nid: V0\n---\n\n# Index\n"
@@ -167,12 +167,12 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
             .to_owned();
 
         assert!(
-            !archive.Paths().is_empty(),
+            !archive.Listing().Paths().is_empty(),
             "{} opened but lists nothing",
             path.display()
         );
 
-        let markdown = archive.Ending_With(".md").len();
+        let markdown = archive.Listing().Ending_With(".md").len();
         if markdown > 0
         {
             with_markdown = with_markdown.saturating_add(1);
@@ -191,7 +191,7 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
             docx_deliveries = docx_deliveries.saturating_add(1);
             assert_eq!(markdown, 0, "{name} was classed a DOCX delivery but holds markdown");
             assert!(
-                !archive.Ending_With(".docx").is_empty(),
+                !archive.Listing().Ending_With(".docx").is_empty(),
                 "{name} holds neither markdown nor DOCX, so what it is was never established"
             );
         }
@@ -220,9 +220,10 @@ fn Test_The_v15_Archive_Should_Yield_Its_Records()
     let path = root.join("nomos-spec-v15.0.zip");
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));
 
-    assert_eq!(archive.Paths().len(), 273, "the v15.0 file count changed");
+    assert_eq!(archive.Listing().Paths().len(), 273, "the v15.0 file count changed");
 
     let records = archive
+        .Listing()
         .Paths()
         .iter()
         .filter(|name| name.contains("/records/") && name.to_lowercase().ends_with(".md"))
@@ -230,7 +231,7 @@ fn Test_The_v15_Archive_Should_Yield_Its_Records()
     assert!(records >= 60, "only {records} records under records/");
 
     let decision = "nomos-spec-v15.0/records/decisions/D-045-runtime-capture-boundary.md";
-    assert!(archive.Contains(decision), "the v15 decision records are not where I4 expects");
+    assert!(archive.Listing().Contains(decision), "the v15 decision records are not where I4 expects");
     assert!(
         archive.Read_Text(decision).expect("reads").starts_with("---\nid: D-045"),
         "the record did not read as its own front matter"
@@ -250,7 +251,7 @@ fn Test_Reading_Should_Not_Unpack()
     let before = Listing(&root);
     let path = root.join("nomos-spec-v15.0.zip");
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));
-    for entry in archive.Ending_With(".md").iter().take(20)
+    for entry in archive.Listing().Ending_With(".md").iter().take(20)
     {
         archive.Read(entry).unwrap_or_else(|error| panic!("{error}"));
     }

@@ -13,7 +13,7 @@ pub fn Fingerprint(archive: &mut Archive, label: &str) -> Result<RevisionFingerp
 {
     let mut documents = BTreeMap::new();
 
-    for entry in archive.Ending_With(".md")
+    for entry in archive.Listing().Ending_With(".md")
     {
         let text = archive
             .Read_Text(&entry)

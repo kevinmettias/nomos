@@ -1,3 +1,4 @@
+pub const fn nomos_spec_ingest::Archive::Listing(&self) -> &Listing
 pub const fn nomos_spec_ingest::Family::All() -> &'static [Self]
 pub const fn nomos_spec_ingest::Family::Directory(self) -> &'static str
 pub const fn nomos_spec_ingest::Family::Label(self) -> &'static str
@@ -70,11 +71,8 @@ pub enum variant nomos_spec_ingest::Scope::EveryMarkdown
 pub enum variant nomos_spec_ingest::Sibling::Ecosystem
 pub enum variant nomos_spec_ingest::Sibling::Kwb
 pub enum variant nomos_spec_ingest::Sibling::Xvpe
-pub fn nomos_spec_ingest::Archive::Contains(&self, entry: &str) -> bool
-pub fn nomos_spec_ingest::Archive::Ending_With(&self, suffix: &str) -> Vec<String>
 pub fn nomos_spec_ingest::Archive::Open(path: &Path) -> Result<Self, ArchiveError>
 pub fn nomos_spec_ingest::Archive::Path(&self) -> &Path
-pub fn nomos_spec_ingest::Archive::Paths(&self) -> &[String]
 pub fn nomos_spec_ingest::Archive::Read(&mut self, entry: &str) -> Result<Vec<u8>, ArchiveError>
 pub fn nomos_spec_ingest::Archive::Read_Text(&mut self, entry: &str) -> Result<String, ArchiveError>
 pub fn nomos_spec_ingest::ArchiveError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -105,6 +103,9 @@ pub fn nomos_spec_ingest::Ingest_Source_Document( store: &mut SpecificationStore
 pub fn nomos_spec_ingest::Ingest_Statements( store: &mut SpecificationStore, file: &StatementFile, ) -> Result<StatementReport, IngestError>
 pub fn nomos_spec_ingest::Ingest_v15_Record( store: &mut SpecificationStore, path: &str, markdown: &str, ) -> Result<String, IngestError>
 pub fn nomos_spec_ingest::Is_Filler(text: &str) -> Option<&'static str>
+pub fn nomos_spec_ingest::Listing::Contains(&self, entry: &str) -> bool
+pub fn nomos_spec_ingest::Listing::Ending_With(&self, suffix: &str) -> Vec<String>
+pub fn nomos_spec_ingest::Listing::Paths(&self) -> &[String]
 pub fn nomos_spec_ingest::Models_In(cell: &str) -> Vec<&str>
 pub fn nomos_spec_ingest::PairChange::Summary(&self) -> String
 pub fn nomos_spec_ingest::Parse_Artifact(markdown: &str, family: Family) -> Result<Artifact, IngestError>
@@ -282,6 +283,7 @@ pub struct nomos_spec_ingest::FillerCensus
 pub struct nomos_spec_ingest::GateReport
 pub struct nomos_spec_ingest::IdentifierOutcome
 pub struct nomos_spec_ingest::KindCensus
+pub struct nomos_spec_ingest::Listing
 pub struct nomos_spec_ingest::Member
 pub struct nomos_spec_ingest::MemberFate
 pub struct nomos_spec_ingest::Overlaid<'a>

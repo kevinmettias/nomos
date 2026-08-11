@@ -21,6 +21,7 @@ mod reader;
 mod reading;
 mod store;
 mod supersession;
+mod trail;
 
 pub use broadening::Broadening;
 pub use component::Component;

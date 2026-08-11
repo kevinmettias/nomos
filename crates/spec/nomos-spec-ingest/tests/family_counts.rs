@@ -633,6 +633,7 @@ fn V15_Records(archives: &Path) -> u32
     let archive =
         Archive::Open(&archives.join(V15)).unwrap_or_else(|error| panic!("{error}"));
     let matched = archive
+        .Listing()
         .Ending_With(".md")
         .iter()
         .filter(|entry| return entry.contains("/records/"))

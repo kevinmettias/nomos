@@ -20,12 +20,13 @@ use crate::fact_key::FactKey;
 use crate::dependency::Dependency;
 use crate::context::Context;
 use crate::memory_fact_store::MemoryFactStore;
+use crate::trail::Trail;
 pub struct Reader<'store, 'registry>
 {
     store: &'store MemoryFactStore,
     registry: &'registry Registry,
     context: Context,
-    recorded: Vec<Dependency>,
+    trail: Trail,
 }
 
 impl<'store, 'registry> Reader<'store, 'registry>
@@ -41,7 +42,7 @@ impl<'store, 'registry> Reader<'store, 'registry>
             store,
             registry,
             context,
-            recorded: Vec::new(),
+            trail: Trail::New(),
         };
     }
 
@@ -54,15 +55,7 @@ impl<'store, 'registry> Reader<'store, 'registry>
     #[must_use]
     pub fn Into_Dependencies(self) -> Vec<Dependency>
     {
-        return self.recorded;
-    }
-
-    fn Record(&mut self, key: &FactKey, outcome: ReadOutcome)
-    {
-        self.recorded.push(Dependency {
-            key: key.clone(),
-            outcome,
-        });
+        return self.trail.Into_Dependencies();
     }
 
     fn Key_For(
@@ -113,6 +106,28 @@ struct Walked
     missed: Vec<FactKey>,
 }
 
+impl Walked
+{
+    /// Writes every read this walk performed onto a trail, and says which one answered.
+    ///
+    /// The misses are written after the walk rather than during it, because recording takes
+    /// the reader mutably and the candidates borrow the resolution. They are written either
+    /// way: "the parser had nothing here" is a real read and a real dependency, and a fact
+    /// that must be invalidated once the parser does have something needs that edge.
+    fn Recorded_Into(self, trail: &mut Trail) -> Option<(FactKey, usize)>
+    {
+        for key in &self.missed
+        {
+            trail.Note_Miss(key);
+        }
+
+        let (key, rank) = self.answered?;
+        trail.Note(&key, ReadOutcome::Materialized);
+
+        return Some((key, rank));
+    }
+}
+
 /// How good an answer is, given where in the selection it came from.
 ///
 /// Only the chosen offer answers at the requirement's own applicability. Anything below it
@@ -160,25 +175,6 @@ impl Reader<'_, '_>
             .store
             .Lookup(key, self.context.generation)
             .map_err(|()| return Applicability::DependencyUnavailable);
-    }
-
-    /// Records every read the walk performed, and says which one answered.
-    ///
-    /// The misses are recorded after the walk rather than during it, because recording takes
-    /// `&mut self` and the candidates borrow the resolution. They are recorded either way:
-    /// "the parser had nothing here" is a real read and a real dependency, and a rollup that
-    /// later has to be invalidated when the parser does have something needs the edge.
-    fn Record_Walk(&mut self, walked: Walked) -> Option<(FactKey, usize)>
-    {
-        for key in &walked.missed
-        {
-            self.Record(key, ReadOutcome::Degraded(Applicability::DependencyUnavailable));
-        }
-
-        let (key, rank) = walked.answered?;
-        self.Record(&key, ReadOutcome::Materialized);
-
-        return Some((key, rank));
     }
 
     /// Asks the chosen offer, then everything the floor also admitted, weakest last.
@@ -236,7 +232,7 @@ impl FactReader for Reader<'_, '_>
     {
         let at = self.context.generation;
         let outcome = self.Outcome_For(&identity.key, at);
-        self.Record(&identity.key, outcome);
+        self.trail.Note(&identity.key, outcome);
 
         let superseded = self.store.Superseded_At(&identity.key);
         if let Some(invalidated_at) = superseded
@@ -273,12 +269,12 @@ impl FactReader for Reader<'_, '_>
         let at = self.context.generation;
         if self.store.Lookup(&key, at).is_err()
         {
-            self.Record(&key, ReadOutcome::Degraded(Applicability::DependencyUnavailable));
+            self.trail.Note_Miss(&key);
 
             return Err(Applicability::DependencyUnavailable);
         }
 
-        self.Record(&key, ReadOutcome::Materialized);
+        self.trail.Note(&key, ReadOutcome::Materialized);
 
         return self
             .store
@@ -305,7 +301,7 @@ impl FactReader for Reader<'_, '_>
         };
 
         let walked = self.Walk_Offers(capability, subject, inputs, selection);
-        let Some((key, rank)) = self.Record_Walk(walked)
+        let Some((key, rank)) = walked.Recorded_Into(&mut self.trail)
         else
         {
             return Err(Applicability::DependencyUnavailable);
@@ -318,6 +314,6 @@ impl FactReader for Reader<'_, '_>
 
     fn Dependencies(&self) -> &[Dependency]
     {
-        return &self.recorded;
+        return self.trail.Recorded();
     }
 }

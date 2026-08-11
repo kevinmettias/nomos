@@ -1,4 +1,5 @@
 use crate::archive_error::ArchiveError;
+use crate::listing::Listing;
 use std::io::Read as _;
 use std::path::{Path, PathBuf};
 
@@ -44,7 +45,7 @@ pub struct Archive
 {
     path: PathBuf,
     inner: zip::ZipArchive<std::io::BufReader<std::fs::File>>,
-    paths: Vec<String>,
+    listing: Listing,
 }
 
 impl Archive
@@ -68,7 +69,7 @@ impl Archive
         return Ok(Self {
             path: path.to_path_buf(),
             inner,
-            paths,
+            listing: Listing::Of(paths),
         });
     }
 
@@ -78,29 +79,11 @@ impl Archive
         return &self.path;
     }
 
-    /// Every file in the archive, sorted. Never empty: [`Self::Open`] refuses that.
+    /// What the archive holds, without opening any of it.
     #[must_use]
-    pub fn Paths(&self) -> &[String]
+    pub const fn Listing(&self) -> &Listing
     {
-        return &self.paths;
-    }
-
-    #[must_use]
-    pub fn Contains(&self, entry: &str) -> bool
-    {
-        return self.paths.iter().any(|name| name == entry);
-    }
-
-    /// Entries whose path ends with `suffix`, sorted.
-    #[must_use]
-    pub fn Ending_With(&self, suffix: &str) -> Vec<String>
-    {
-        return self
-            .paths
-            .iter()
-            .filter(|name| name.ends_with(suffix))
-            .cloned()
-            .collect();
+        return &self.listing;
     }
 
     /// # Errors

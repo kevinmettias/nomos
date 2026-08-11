@@ -84,7 +84,7 @@ fn V14_Artifacts(corpus: &std::path::Path) -> Vec<nomos_spec_ingest::Artifact>
 
 fn V15_Statements(archive: &mut Archive) -> BTreeMap<String, String> {
     let mut found = BTreeMap::new();
-    for entry in archive.Ending_With(".md")
+    for entry in archive.Listing().Ending_With(".md")
     {
         let text = archive
             .Read_Text(&entry)
@@ -175,7 +175,7 @@ fn Test_Every_Filler_Block_Should_Carry_A_Lineage_Row()
     let headings = V14_Headings(&corpus);
     let mut report = OverlayReport::default();
 
-    for entry in archive.Ending_With(".md")
+    for entry in archive.Listing().Ending_With(".md")
     {
         if entry.contains("/records/")
         {
@@ -239,7 +239,7 @@ fn Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes()
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let mut ingested = Vec::new();
 
-    for entry in archive.Ending_With(".md")
+    for entry in archive.Listing().Ending_With(".md")
     {
         if !entry.contains("/records/")
         {

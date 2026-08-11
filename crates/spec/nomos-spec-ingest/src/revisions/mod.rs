@@ -54,7 +54,7 @@ pub fn Census(archive: &mut Archive, scope: Scope) -> Result<KindCensus, IngestE
 {
     let mut census = KindCensus::default();
 
-    for entry in archive.Ending_With(".md")
+    for entry in archive.Listing().Ending_With(".md")
     {
         if !scope.Covers(&entry)
         {

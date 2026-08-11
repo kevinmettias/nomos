@@ -26,7 +26,7 @@ pub(super) fn Ingest_Prose(
     report: &mut SuiteReport,
 ) -> Result<(), IngestError>
 {
-    for entry in archive.Ending_With(".md")
+    for entry in archive.Listing().Ending_With(".md")
     {
         let text = Text(archive, &entry)?;
         let declared = Declared_By(suite.sibling, &entry, &text)?;
