@@ -1,8 +1,8 @@
 //! Writing what was recognised into the store, and finding it again by name.
 
 use super::{
-    BTreeMap, Extract, IngestError, Member, Origin, Refuse_Collisions, RestorationReport, SpecificationStore,
-    StoreError,
+    BTreeMap, Extract, IngestError, Member, NodeRow, Origin, Refuse_Collisions, RestorationReport,
+    SpecificationStore, StoreError,
 };
 
 /// I5 — restores every family across the corpus into a store that already holds it.
@@ -76,13 +76,13 @@ pub(super) fn Record(
     report: &mut RestorationReport,
 ) -> Result<(), IngestError>
 {
-    let node_uid = store.Upsert_Node(
-        &member.id,
-        member.family.Node_Kind(),
-        "canonical",
-        "record",
-        &member.name,
-    )?;
+    let node_uid = store.Upsert_Node(NodeRow {
+        node_id: &member.id,
+        kind: member.family.Node_Kind(),
+        authority: "canonical",
+        representation: "record",
+        title: &member.name,
+    })?;
 
     Trace(store, document_uid, &member, node_uid)?;
     Claim_Alias(store, &member, node_uid, report)?;

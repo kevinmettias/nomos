@@ -1,6 +1,6 @@
 //! Ingesting a sibling suite's machine-readable schemas.
 
-use super::{Deserialize, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Text, Declared, Claim, Sibling, Qualified};
+use super::{Deserialize, NodeRow, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Text, Declared, Claim, Sibling, Qualified};
 
 /// What a schema file declares about itself.
 #[derive(Debug, Deserialize)]
@@ -40,13 +40,13 @@ pub(super) fn Record_Machine(
     report: &mut SuiteReport,
 ) -> Result<(), IngestError>
 {
-    let node = store.Upsert_Node(
-        &declared.id,
-        &declared.kind,
-        &declared.authority,
-        "record",
-        &declared.title,
-    )?;
+    let node = store.Upsert_Node(NodeRow {
+        node_id: &declared.id,
+        kind: &declared.kind,
+        authority: &declared.authority,
+        representation: "record",
+        title: &declared.title,
+    })?;
 
     if !Claim(store, &declared.id, node, suite)?
     {

@@ -458,16 +458,18 @@ fn Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical()
         "the foreign snapshot must disagree with the tree, or this test proves nothing"
     );
 
-    std::fs::write(Snapshot_Path(&directory, foreign), mid_edit).expect("seeds the foreign one");
-    std::fs::write(Snapshot_Path(&directory, named), stale).expect("seeds the named one");
+    let foreign_path = Snapshot_Path(&directory, foreign);
+    let named_path = Snapshot_Path(&directory, named);
+    std::fs::write(&foreign_path, mid_edit).expect("seeds the foreign one");
+    std::fs::write(&named_path, stale).expect("seeds the named one");
 
     let written = Rewrite(&[named.to_owned()], &surfaces, &directory);
 
     // The file on disk, before the returned list. What the writer *says* it wrote is a
     // weaker claim than what is there afterwards, and it is the file that another session
     // loses.
-    let after = std::fs::read_to_string(Snapshot_Path(&directory, foreign))
-        .expect("the foreign snapshot still exists");
+    let after =
+        std::fs::read_to_string(&foreign_path).expect("the foreign snapshot still exists");
     assert_eq!(
         after, mid_edit,
         "blessing {named} rewrote {foreign}'s snapshot. That is a territory violation \
@@ -476,8 +478,8 @@ fn Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical()
          green on it"
     );
 
-    let rewritten = std::fs::read_to_string(Snapshot_Path(&directory, named))
-        .expect("the named snapshot still exists");
+    let rewritten =
+        std::fs::read_to_string(&named_path).expect("the named snapshot still exists");
     assert_eq!(
         rewritten,
         Rendered(Surface_Of(&surfaces, named)),
@@ -582,8 +584,8 @@ fn Rewrite(targets: &[String], surfaces: &[Surface], directory: &Path) -> Vec<St
             continue;
         }
 
-        std::fs::write(Snapshot_Path(directory, &surface.package), Rendered(surface))
-            .expect("writes a snapshot");
+        let path = Snapshot_Path(directory, &surface.package);
+        std::fs::write(path, Rendered(surface)).expect("writes a snapshot");
         written.push(surface.package.clone());
     }
 

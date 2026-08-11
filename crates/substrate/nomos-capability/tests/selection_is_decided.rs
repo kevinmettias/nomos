@@ -90,16 +90,14 @@ fn Offer(provider: &str, guarantee: Guarantee) -> ProviderOffer
 /// incremental capability required.
 fn Admitting_Everything() -> Requirement
 {
-    return Requirement::New(
-        Capability(),
-        V1,
-        Guarantee::New(
-            FactVariant::Approximate,
-            Assurance::Unknown,
-            Assurance::Unknown,
-            IncrementalGranularity::None,
-        ),
+    let guarantee = Guarantee::New(
+        FactVariant::Approximate,
+        Assurance::Unknown,
+        Assurance::Unknown,
+        IncrementalGranularity::None,
     );
+
+    return Requirement::New(Capability(), V1, guarantee);
 }
 
 fn Registered(offers: &[ProviderOffer]) -> Registry

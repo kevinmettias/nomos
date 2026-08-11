@@ -18,7 +18,7 @@
 use nomos_ledger::{
     Finishing,
     Claim, FileLedger, Finish, FinishRefusal, GateUnknown, ItemId, ItemState,
-    LedgerDocument, LedgerItem, Territory, VerificationPredicate,
+    LedgerDocument, LedgerItem, Territory, VerificationPredicate, VerificationRecord,
 };
 use nomos_platform::{
     Clock, Command, ExitOutcome, ProcessLauncher, ProcessOutput, Timestamp,
@@ -202,6 +202,53 @@ fn State_Of(directory: &Path) -> Standing
     };
 }
 
+/// One test's whole apparatus: a repository, a ledger over it, and the launcher whose exit
+/// codes are what the test is actually varying.
+///
+/// Held together because they are built together and every test needs all three — the
+/// directory to point the gate at, the ledger to finish through, the launcher to script.
+struct Bench
+{
+    directory: PathBuf,
+    ledger: FileLedger<StdFileSystem, &'static FixedClock, FileLock>,
+    launcher: Scripted,
+}
+
+/// The clock these tests share. `'static` so the ledger [`Bench_At`] returns can outlive it.
+static AT_NOW: FixedClock = FixedClock(NOW);
+
+/// A repository with a board, and a launcher scripted to answer the gate and the predicate.
+fn Bench_At(name: &str, workflow: Option<&str>, launcher: Scripted) -> Bench
+{
+    let directory = Tree(name, workflow);
+    let ledger = Ledger_At(&directory, &AT_NOW);
+
+    return Bench {
+        directory,
+        ledger,
+        launcher,
+    };
+}
+
+/// Runs `T-1`'s verification through the ledger against a scripted launcher.
+fn Finish_In(
+    ledger: &mut FileLedger<StdFileSystem, &'static FixedClock, FileLock>,
+    directory: &Path,
+    launcher: &Scripted,
+    item: &str,
+) -> Result<VerificationRecord, FinishRefusal>
+{
+    return Finish(
+        ledger,
+        &launcher,
+        &Finishing {
+            item: &ItemId::New(item),
+            holder: HOLDER,
+        },
+        Some(directory),
+    );
+}
+
 // ---------------------------------------------------------------------------
 // The instance. A passing predicate and a red gate must not finish an item.
 // ---------------------------------------------------------------------------
@@ -209,21 +256,14 @@ fn State_Of(directory: &Path) -> Standing
 #[test]
 fn Test_A_Passing_Predicate_Should_Not_Finish_An_Item_While_The_Gate_Is_Red()
 {
-    let directory = Tree("red-gate", Some(WORKFLOW));
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    let launcher = Scripted::New(101, 0);
+    let scripted = Scripted::New(101, 0);
+    let Bench {
+        directory,
+        mut ledger,
+        launcher,
+    } = Bench_At("red-gate", Some(WORKFLOW), scripted);
 
-    let refusal = Finish(
-        &mut ledger,
-        &&launcher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: HOLDER,
-        },
-        Some(&directory,
-    ),
-    )
+    let refusal = Finish_In(&mut ledger, &directory, &launcher, "T-1")
     .expect_err("a red gate must refuse the finish");
 
     assert!(
@@ -245,21 +285,14 @@ fn Test_A_Passing_Predicate_Should_Not_Finish_An_Item_While_The_Gate_Is_Red()
 #[test]
 fn Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item()
 {
-    let directory = Tree("green-gate", Some(WORKFLOW));
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    let launcher = Scripted::New(0, 0);
+    let scripted = Scripted::New(0, 0);
+    let Bench {
+        directory,
+        mut ledger,
+        launcher,
+    } = Bench_At("green-gate", Some(WORKFLOW), scripted);
 
-    let record = Finish(
-        &mut ledger,
-        &&launcher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: HOLDER,
-        },
-        Some(&directory,
-    ),
-    )
+    let record = Finish_In(&mut ledger, &directory, &launcher, "T-1")
     .expect("a green gate and a passing predicate finish the item");
 
     let gate = record
@@ -289,21 +322,14 @@ fn Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item()
 #[test]
 fn Test_The_Gate_Should_Run_Before_The_Predicate_And_Short_Circuit()
 {
-    let directory = Tree("ordering", Some(WORKFLOW));
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    let launcher = Scripted::New(101, 0);
+    let scripted = Scripted::New(101, 0);
+    let Bench {
+        directory,
+        mut ledger,
+        launcher,
+    } = Bench_At("ordering", Some(WORKFLOW), scripted);
 
-    let _ = Finish(
-        &mut ledger,
-        &&launcher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: HOLDER,
-        },
-        Some(&directory,
-    ),
-    );
+    let _ = Finish_In(&mut ledger, &directory, &launcher, "T-1");
 
     let calls = launcher.Calls();
     assert_eq!(
@@ -319,21 +345,14 @@ fn Test_The_Gate_Should_Run_Before_The_Predicate_And_Short_Circuit()
 #[test]
 fn Test_A_Green_Gate_Should_Still_Run_The_Predicate_Second()
 {
-    let directory = Tree("ordering-green", Some(WORKFLOW));
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    let launcher = Scripted::New(0, 0);
+    let scripted = Scripted::New(0, 0);
+    let Bench {
+        directory,
+        mut ledger,
+        launcher,
+    } = Bench_At("ordering-green", Some(WORKFLOW), scripted);
 
-    let _ = Finish(
-        &mut ledger,
-        &&launcher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: HOLDER,
-        },
-        Some(&directory,
-    ),
-    );
+    let _ = Finish_In(&mut ledger, &directory, &launcher, "T-1");
 
     let calls = launcher.Calls();
     assert_eq!(calls.len(), 2, "both steps must run: {calls:?}");
@@ -352,21 +371,14 @@ fn Test_A_Green_Gate_Should_Still_Run_The_Predicate_Second()
 #[test]
 fn Test_A_Missing_Workflow_Should_Refuse_Rather_Than_Finish_On_The_Predicate_Alone()
 {
-    let directory = Tree("no-workflow", None);
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    let launcher = Scripted::New(0, 0);
+    let scripted = Scripted::New(0, 0);
+    let Bench {
+        directory,
+        mut ledger,
+        launcher,
+    } = Bench_At("no-workflow", None, scripted);
 
-    let refusal = Finish(
-        &mut ledger,
-        &&launcher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: HOLDER,
-        },
-        Some(&directory,
-    ),
-    )
+    let refusal = Finish_In(&mut ledger, &directory, &launcher, "T-1")
     .expect_err("an underived gate must refuse");
 
     assert!(
@@ -398,25 +410,18 @@ fn Test_A_Missing_Workflow_Should_Refuse_Rather_Than_Finish_On_The_Predicate_Alo
 #[test]
 fn Test_A_Scripted_Gate_Step_Should_Refuse_Rather_Than_Be_Guessed_At()
 {
-    let scripted = WORKFLOW.replace(
+    let workflow = WORKFLOW.replace(
         "cargo clippy --workspace --all-targets -- -D warnings",
         "cargo clippy && cargo doc",
     );
-    let directory = Tree("scripted", Some(&scripted));
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    let launcher = Scripted::New(0, 0);
+    let scripted = Scripted::New(0, 0);
+    let Bench {
+        directory,
+        mut ledger,
+        launcher,
+    } = Bench_At("scripted", Some(&workflow), scripted);
 
-    let refusal = Finish(
-        &mut ledger,
-        &&launcher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: HOLDER,
-        },
-        Some(&directory,
-    ),
-    )
+    let refusal = Finish_In(&mut ledger, &directory, &launcher, "T-1")
     .expect_err("a scripted gate step must refuse");
 
     assert!(matches!(
@@ -439,21 +444,14 @@ fn Test_A_Scripted_Gate_Step_Should_Refuse_Rather_Than_Be_Guessed_At()
 fn Test_Changing_The_Workflow_Should_Change_What_Finish_Runs()
 {
     let altered = WORKFLOW.replace("--all-targets", "--lib");
-    let directory = Tree("derived", Some(&altered));
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    let launcher = Scripted::New(0, 0);
+    let scripted = Scripted::New(0, 0);
+    let Bench {
+        directory,
+        mut ledger,
+        launcher,
+    } = Bench_At("derived", Some(&altered), scripted);
 
-    let record = Finish(
-        &mut ledger,
-        &&launcher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: HOLDER,
-        },
-        Some(&directory,
-    ),
-    )
+    let record = Finish_In(&mut ledger, &directory, &launcher, "T-1")
     .expect("the altered workflow still lints");
 
     let gate = record.gate.expect("the gate ran");

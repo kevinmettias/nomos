@@ -98,11 +98,15 @@ pub fn Public_Surface(package: &str, root: &Path) -> Option<Surface>
         {
             Emit_Re_Export(
                 re_export,
-                path,
                 &identifier,
-                &modules,
-                &mut declarations,
-                &mut unresolved,
+                Tree {
+                    from: path,
+                    modules: &modules,
+                },
+                &mut Emitting {
+                    into: &mut declarations,
+                    unresolved: &mut unresolved,
+                },
             );
         }
     }
@@ -174,14 +178,18 @@ fn Load_Module(file: &Path, path: &[String], into: &mut BTreeMap<Vec<String>, Mo
     let mut children: Vec<(String, bool)> = Vec::new();
 
     Walk(
-        &cleaned,
-        &masks,
+        Source {
+            text: &cleaned,
+            masks: &masks,
+        },
         (0, cleaned.len()),
         None,
-        &mut module,
-        &mut children,
-        path,
-        into,
+        &mut Filing {
+            module: &mut module,
+            children: &mut children,
+            path,
+            into,
+        },
     );
 
     let previously_exported = into.get(path).is_some_and(|held| return held.exported);
@@ -262,19 +270,35 @@ enum Inside<'a>
     Variants(&'a str),
 }
 
-/// Collects the public items in a byte range.
-#[allow(clippy::too_many_arguments)]
-fn Walk(
-    text: &str,
-    masks: &crate::gates::Masks,
-    range: (usize, usize),
-    inside: Option<Inside<'_>>,
-    module: &mut Module,
-    children: &mut Vec<(String, bool)>,
-    path: &[String],
-    into: &mut BTreeMap<Vec<String>, Module>,
-)
+/// The bytes a walk reads, and the classification of them it reads through.
+///
+/// The two are one value because neither answers anything alone: an offset into the text is
+/// only meaningful beside the mask that says whether it is code, a comment or a string.
+#[derive(Clone, Copy)]
+struct Source<'a>
 {
+    text: &'a str,
+    masks: &'a crate::gates::Masks,
+}
+
+/// Where a walk files what it finds.
+///
+/// Four destinations that are threaded together through every step of the descent: the
+/// module being built, the child modules still to descend into, the path this module sits
+/// at, and the map every module lands in. Passing them one at a time made eight-argument
+/// signatures whose order was the only thing keeping them straight.
+struct Filing<'a>
+{
+    module: &'a mut Module,
+    children: &'a mut Vec<(String, bool)>,
+    path: &'a [String],
+    into: &'a mut BTreeMap<Vec<String>, Module>,
+}
+
+/// Collects the public items in a byte range.
+fn Walk(source: Source<'_>, range: (usize, usize), inside: Option<Inside<'_>>, filing: &mut Filing<'_>)
+{
+    let Source { text, masks } = source;
     let (start, end) = range;
     let mut cursor = start;
 
@@ -286,7 +310,7 @@ fn Walk(
         {
             for (name, payload) in Members_In(text, masks, (cursor, end), Reading::Variants)
             {
-                module.items.push(Item {
+                filing.module.items.push(Item {
                     kind: "enum variant".to_owned(),
                     name: format!("{owner}::{name}"),
                     tail: payload,
@@ -300,7 +324,7 @@ fn Walk(
         {
             for (name, declared) in Members_In(text, masks, (cursor, end), Reading::Fields)
             {
-                module.items.push(Item {
+                filing.module.items.push(Item {
                     kind: "struct field".to_owned(),
                     name: format!("{owner}::{name}"),
                     tail: declared,
@@ -317,7 +341,7 @@ fn Walk(
             continue;
         };
 
-        Record(&head, inside, module, children, path, into, text, masks);
+        Record(&head, inside, source, filing);
         cursor = Next_Line(text, head.after, end);
     }
 }
@@ -537,12 +561,8 @@ fn Terminator(
 fn Record(
     head: &Recognised,
     inside: Option<Inside<'_>>,
-    module: &mut Module,
-    children: &mut Vec<(String, bool)>,
-    path: &[String],
-    into: &mut BTreeMap<Vec<String>, Module>,
-    text: &str,
-    masks: &crate::gates::Masks,
+    source: Source<'_>,
+    filing: &mut Filing<'_>,
 )
 {
     // A trait's items and a trait implementation's items are as public as the trait, so
@@ -559,9 +579,18 @@ fn Record(
                 Some(body) =>
                 {
                     let exported = Exported::Of(head.visibility == "pub");
-                    Load_Inline(&name, exported, body, path, into, text, masks);
+                    Load_Inline(
+                        Inline {
+                            name: &name,
+                            exported,
+                            body,
+                        },
+                        source,
+                        filing.path,
+                        filing.into,
+                    );
                 }
-                None => children.push((name, head.visibility == "pub")),
+                None => filing.children.push((name, head.visibility == "pub")),
             }
         }
         return;
@@ -572,14 +601,14 @@ fn Record(
         if head.visibility == "pub"
             && let Some(target) = head.text.split_once("use ").map(|(_, rest)| return rest)
         {
-            module.re_exports.push(target.trim().to_owned());
+            filing.module.re_exports.push(target.trim().to_owned());
         }
         return;
     }
 
     if head.kind == "impl"
     {
-        Record_Impl(head, module, path, into, text, masks);
+        Record_Impl(head, source, filing);
         return;
     }
 
@@ -604,28 +633,19 @@ fn Record(
         _ => String::new(),
     };
 
-    module.items.push(Item {
+    filing.module.items.push(Item {
         kind: head.kind.clone(),
         name: format!("{owner}{name}"),
         tail: Tail(&head.text, &head.kind, &name),
         modifiers: head.modifiers.clone(),
     });
 
-    Descend(head, &name, module, children, path, into, text, masks);
+    Descend(head, &name, source, filing);
 }
 
 /// Walks into the body of a declaration whose members are part of the surface.
 #[allow(clippy::too_many_arguments)]
-fn Descend(
-    head: &Recognised,
-    name: &str,
-    module: &mut Module,
-    children: &mut Vec<(String, bool)>,
-    path: &[String],
-    into: &mut BTreeMap<Vec<String>, Module>,
-    text: &str,
-    masks: &crate::gates::Masks,
-)
+fn Descend(head: &Recognised, name: &str, source: Source<'_>, filing: &mut Filing<'_>)
 {
     let Some(body) = head.body
     else
@@ -641,19 +661,12 @@ fn Descend(
         _ => return,
     };
 
-    Walk(text, masks, body, Some(inside), module, children, path, into);
+    Walk(source, body, Some(inside), filing);
 }
 
 /// An `impl` block: the header is surface when it implements a trait, and its `pub`
 /// members are surface either way.
-fn Record_Impl(
-    head: &Recognised,
-    module: &mut Module,
-    path: &[String],
-    into: &mut BTreeMap<Vec<String>, Module>,
-    text: &str,
-    masks: &crate::gates::Masks,
-)
+fn Record_Impl(head: &Recognised, source: Source<'_>, filing: &mut Filing<'_>)
 {
     let Some((subject, implemented)) = Implemented(&head.text)
     else
@@ -663,7 +676,7 @@ fn Record_Impl(
 
     let inside = if let Some(trait_name) = implemented
     {
-        module.items.push(Item {
+        filing.module.items.push(Item {
             kind: "impl".to_owned(),
             name: subject.clone(),
             tail: format!(" implements {trait_name}"),
@@ -684,7 +697,12 @@ fn Record_Impl(
     };
 
     let mut ignored = Vec::new();
-    Walk(text, masks, body, Some(inside), module, &mut ignored, path, into);
+    Walk(source, body, Some(inside), &mut Filing {
+        module: filing.module,
+        children: &mut ignored,
+        path: filing.path,
+        into: filing.into,
+    });
 }
 
 /// The type an `impl` header is about, and the trait it implements if it implements one.
@@ -778,18 +796,25 @@ impl Exported
     }
 }
 
-/// An inline `mod name { … }`, loaded as its own module.
-#[allow(clippy::too_many_arguments)]
-fn Load_Inline(
-    name: &str,
+/// An inline module as it was declared: its name, whether the declaration exports it, and
+/// the byte range of its body.
+#[derive(Clone, Copy)]
+struct Inline<'a>
+{
+    name: &'a str,
     exported: Exported,
     body: (usize, usize),
+}
+
+/// An inline `mod name { … }`, loaded as its own module.
+fn Load_Inline(
+    inline: Inline<'_>,
+    source: Source<'_>,
     path: &[String],
     into: &mut BTreeMap<Vec<String>, Module>,
-    text: &str,
-    masks: &crate::gates::Masks,
 )
 {
+    let Inline { name, exported, body } = inline;
     let mut child_path = path.to_vec();
     child_path.push(name.to_owned());
 
@@ -800,7 +825,12 @@ fn Load_Inline(
     };
     let mut grandchildren = Vec::new();
 
-    Walk(text, masks, body, None, &mut child, &mut grandchildren, &child_path, into);
+    Walk(source, body, None, &mut Filing {
+        module: &mut child,
+        children: &mut grandchildren,
+        path: &child_path,
+        into,
+    });
 
     into.insert(child_path, child);
 }
@@ -945,7 +975,8 @@ fn Members_In(
 
         let Carried { payload, after } = Payload(text, masks, after_name, end);
         found.push((name, payload));
-        cursor = after.max(Next_Line(text, line_end, end)).min(end);
+        let next_line = Next_Line(text, line_end, end);
+        cursor = after.max(next_line).min(end);
     }
 
     return found;
@@ -1059,22 +1090,25 @@ fn Matching_Parenthesis(bytes: &[u8], mask: &[bool], open: usize) -> Option<usiz
 
     while cursor < bytes.len()
     {
-        if Is_Code(mask, cursor)
+        if !Is_Code(mask, cursor)
         {
-            match bytes.get(cursor).copied()
+            cursor = cursor.saturating_add(1);
+            continue;
+        }
+
+        match bytes.get(cursor).copied()
+        {
+            Some(b'(') => depth = depth.saturating_add(1),
+            Some(b')') =>
             {
-                Some(b'(') => depth = depth.saturating_add(1),
-                Some(b')') =>
+                depth = depth.saturating_sub(1);
+                if depth == 0
                 {
-                    depth = depth.saturating_sub(1);
-                    if depth == 0
-                    {
-                        return Some(cursor);
-                    }
+                    return Some(cursor);
                 }
-                _ =>
-                {}
             }
+            _ =>
+            {}
         }
         cursor = cursor.saturating_add(1);
     }
@@ -1116,15 +1150,11 @@ fn Emit(item: &Item, prefix: &str, into: &mut BTreeSet<String>)
 /// reported rather than dropped. A glob was only ever reported because it is the sole name
 /// in its declaration, so the promise held by accident and failed the moment a name that
 /// resolves stood beside one that does not.
-fn Emit_Re_Export(
-    target: &str,
-    module: &[String],
-    identifier: &str,
-    modules: &BTreeMap<Vec<String>, Module>,
-    into: &mut BTreeSet<String>,
-    unresolved: &mut BTreeSet<String>,
-)
+fn Emit_Re_Export(target: &str, identifier: &str, tree: Tree<'_>, emitting: &mut Emitting<'_>)
 {
+    let module = tree.from;
+    let modules = tree.modules;
+    let Emitting { into, unresolved } = emitting;
     // The re-exporting module, not the declaring one. `pub use build::Build` in a lib.rs
     // makes the item `nomos_spec_project::Build`, and recording it under the private
     // module it happens to be written in would describe a path no caller can name.
@@ -1135,15 +1165,25 @@ fn Emit_Re_Export(
         let exported = Locate(&route, &declared, module, modules);
         if exported.is_empty()
         {
-            unresolved.insert(Unfollowed(&route, &declared, &exported_as));
+            let unfollowed = Unfollowed(&route, &declared, &exported_as);
+            unresolved.insert(unfollowed);
             continue;
         }
 
         for item in exported
         {
-            Emit(&Renamed(&item, &declared, &exported_as), &prefix, into);
+            let renamed = Renamed(&item, &declared, &exported_as);
+            Emit(&renamed, &prefix, into);
         }
     }
+}
+
+/// The two sets a re-export writes into: the declarations it exports, and the names it
+/// could not be followed to.
+struct Emitting<'a>
+{
+    into: &'a mut BTreeSet<String>,
+    unresolved: &'a mut BTreeSet<String>,
 }
 
 /// One name a re-export could not be followed to, spelled as a `pub use` of its own.
@@ -1246,6 +1286,18 @@ fn Named_Imports(target: &str) -> Vec<(Vec<String>, String, String)>
         .collect();
 }
 
+/// The module tree a lookup runs against, and the module it starts from.
+///
+/// One value because a route is resolved relative to somewhere: the same `build::Build`
+/// means different declarations depending on which module wrote it, so the map and the
+/// starting module are never separately useful.
+#[derive(Clone, Copy)]
+struct Tree<'a>
+{
+    from: &'a [String],
+    modules: &'a BTreeMap<Vec<String>, Module>,
+}
+
 /// How far a chain of re-exports is followed before giving up.
 ///
 /// A bound rather than a visited set: the chains here are two links at most, and a
@@ -1264,18 +1316,13 @@ fn Locate(
     modules: &BTreeMap<Vec<String>, Module>,
 ) -> Vec<Item>
 {
-    return Located(route, name, from, modules, 0);
+    return Located(route, name, Tree { from, modules }, 0);
 }
 
 /// [`Locate`], carrying how many re-exports have already been followed.
-fn Located(
-    route: &[String],
-    name: &str,
-    from: &[String],
-    modules: &BTreeMap<Vec<String>, Module>,
-    depth: u32,
-) -> Vec<Item>
+fn Located(route: &[String], name: &str, tree: Tree<'_>, depth: u32) -> Vec<Item>
 {
+    let Tree { from, modules } = tree;
     let mut trimmed = route.to_vec();
     let anchored_at_root = matches!(trimmed.first().map(String::as_str), Some("crate"));
     if anchored_at_root || matches!(trimmed.first().map(String::as_str), Some("self"))
@@ -1332,8 +1379,12 @@ fn Located(
         // gathers four types from four files and the crate root re-exports the gathering
         // — and stopping at the first hop left the whole of that crate's determinism
         // vocabulary out of its snapshot while reporting the re-export as unresolvable.
+        let reachable = Tree {
+            from: &candidate,
+            modules,
+        };
         if depth < CHAIN_LIMIT
-            && let Some(reached) = Through_A_Re_Export(module, name, &candidate, modules, depth)
+            && let Some(reached) = Through_A_Re_Export(module, name, reachable, depth)
         {
             return reached;
         }
@@ -1346,8 +1397,7 @@ fn Located(
 fn Through_A_Re_Export(
     module: &Module,
     name: &str,
-    at: &[String],
-    modules: &BTreeMap<Vec<String>, Module>,
+    tree: Tree<'_>,
     depth: u32,
 ) -> Option<Vec<Item>>
 {
@@ -1360,7 +1410,7 @@ fn Through_A_Re_Export(
                 continue;
             }
 
-            let found = Located(&route, &declared, at, modules, depth.saturating_add(1));
+            let found = Located(&route, &declared, tree, depth.saturating_add(1));
             if !found.is_empty()
             {
                 return Some(

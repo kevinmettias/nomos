@@ -2,8 +2,14 @@
 //! govern is trusted.
 
 use nomos_spec_store::{
-    AUTHORED, EXTERNAL, GOVERNING_RECORD_IDS, Seed_Governing_Records, SpecificationStore,
-    SuiteAuthority, Table,
+    AUTHORED,
+    EXTERNAL,
+    GOVERNING_RECORD_IDS,
+    NodeRow,
+    Seed_Governing_Records,
+    SpecificationStore,
+    SuiteAuthority,
+    Table,
 };
 
 fn Seeded() -> SpecificationStore
@@ -486,16 +492,22 @@ fn Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One()
     let mut store = Seeded();
 
     store
-        .Upsert_Node(
-            "ADR-DOC-001",
-            "decision",
-            "canonical-normative-record",
-            "document",
-            "Markdown is the canonical authored documentation format",
-        )
+        .Upsert_Node(NodeRow {
+            node_id: "ADR-DOC-001",
+            kind: "decision",
+            authority: "canonical-normative-record",
+            representation: "document",
+            title: "Markdown is the canonical authored documentation format",
+        })
         .expect("upgrades");
     store
-        .Upsert_Node("D-129", "decision", "commentary", "document", "Something else")
+        .Upsert_Node(NodeRow {
+            node_id: "D-129",
+            kind: "decision",
+            authority: "commentary",
+            representation: "document",
+            title: "Something else",
+        })
         .expect("attempts to restate");
 
     assert_eq!(
@@ -725,13 +737,13 @@ fn Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It()
         .expect("records the sibling suite");
 
     let node = store
-        .Upsert_Node(
-            "D-090",
-            "decision",
-            "canonical-normative-record",
-            "document",
-            "Reuse alone does not justify platform ownership",
-        )
+        .Upsert_Node(NodeRow {
+            node_id: "D-090",
+            kind: "decision",
+            authority: "canonical-normative-record",
+            representation: "document",
+            title: "Reuse alone does not justify platform ownership",
+        })
         .expect("claims the placeholder");
     store.Assign_Suite(node, suite).expect("assigns");
 

@@ -445,21 +445,37 @@ pub(crate) fn Write_Source_Document(
     )?);
 }
 
+/// The columns a node carries, as one value.
+///
+/// Grouped because they only mean anything together: an identifier without the authority
+/// that speaks for it says nothing about whether a later writer may overwrite it, and five
+/// bare strings in a fixed order is a shape a caller gets wrong silently.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct NodeRow<'a>
+{
+    pub node_id: &'a str,
+    pub kind: &'a str,
+    pub authority: &'a str,
+    pub representation: &'a str,
+    pub title: &'a str,
+}
+
 /// Writes a node, upgrading a placeholder but never overwriting a real one, through a
 /// caller's transaction.
 ///
 /// # Errors
 ///
 /// Returns [`StoreError`] on any SQL failure.
-pub(crate) fn Write_Node(
-    connection: &Connection,
-    node_id: &str,
-    kind: &str,
-    authority: &str,
-    representation: &str,
-    title: &str,
-) -> Result<i64, StoreError>
+pub(crate) fn Write_Node(connection: &Connection, node: NodeRow<'_>) -> Result<i64, StoreError>
 {
+    let NodeRow {
+        node_id,
+        kind,
+        authority,
+        representation,
+        title,
+    } = node;
+
     connection.execute(
         "INSERT INTO nodes (node_id, kind, authority, representation, title)
          VALUES (?1, ?2, ?3, ?4, ?5)
@@ -601,16 +617,9 @@ impl SpecificationStore
     /// # Errors
     ///
     /// Returns [`StoreError`] on any SQL failure.
-    pub fn Upsert_Node(
-        &mut self,
-        node_id: &str,
-        kind: &str,
-        authority: &str,
-        representation: &str,
-        title: &str,
-    ) -> Result<i64, StoreError>
+    pub fn Upsert_Node(&mut self, node: NodeRow<'_>) -> Result<i64, StoreError>
     {
-        return Write_Node(&self.connection, node_id, kind, authority, representation, title);
+        return Write_Node(&self.connection, node);
     }
 
     /// Records a suite and whether it is this repository's own.
@@ -687,7 +696,13 @@ impl SpecificationStore
     /// Returns [`StoreError`] on any SQL failure.
     pub fn Reference_Node(&mut self, node_id: &str) -> Result<i64, StoreError>
     {
-        return self.Upsert_Node(node_id, "unknown", EXTERNAL, "record", node_id);
+        return self.Upsert_Node(NodeRow {
+            node_id,
+            kind: "unknown",
+            authority: EXTERNAL,
+            representation: "record",
+            title: node_id,
+        });
     }
 
     /// # Errors

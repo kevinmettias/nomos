@@ -26,8 +26,8 @@
 use crate::read::DocumentSource;
 use crate::record::{Disposition, Kind_Label, Kind_Of};
 use crate::store::{
-    EXTERNAL, Inverse_Of, SpecificationStore, StoreError, Write_Blob, Write_Node, Write_Relation,
-    Write_Source_Blocks, Write_Source_Document,
+    EXTERNAL, Inverse_Of, NodeRow, SpecificationStore, StoreError, Write_Blob, Write_Node,
+    Write_Relation, Write_Source_Blocks, Write_Source_Document,
 };
 use nomos_spec_model::{
     BlockKind, ContentHash, Normalize, Parse_Record, Record, RecordFrontMatter, RecordRelation,
@@ -689,7 +689,15 @@ impl SpecificationStore
         })?;
 
         return self.In_Transaction(|transaction| {
-            return Write_Record(transaction, path, revision, markdown, &record);
+            return Write_Record(
+                transaction,
+                Authored {
+                    path,
+                    revision,
+                    markdown,
+                },
+                &record,
+            );
         });
     }
 
@@ -962,6 +970,16 @@ impl SpecificationStore
     }
 }
 
+/// The authored document a record arrived as: where it lives, at which revision, and the
+/// bytes themselves.
+#[derive(Clone, Copy)]
+pub(crate) struct Authored<'a>
+{
+    pub(crate) path: &'a str,
+    pub(crate) revision: &'a str,
+    pub(crate) markdown: &'a str,
+}
+
 /// Writes one record through a caller's transaction.
 ///
 /// # Errors
@@ -969,21 +987,19 @@ impl SpecificationStore
 /// Returns [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Record(
     connection: &Connection,
-    path: &str,
-    revision: &str,
-    markdown: &str,
+    authored: Authored<'_>,
     record: &Record,
 ) -> Result<RecordWrite, StoreError>
 {
+    let Authored { path, revision, markdown } = authored;
     let front_matter = &record.front_matter;
-    let node_uid = Write_Node(
-        connection,
-        &front_matter.id,
-        &front_matter.kind,
-        &front_matter.authority,
-        "document",
-        &front_matter.title,
-    )?;
+    let node_uid = Write_Node(connection, NodeRow {
+        node_id: &front_matter.id,
+        kind: &front_matter.kind,
+        authority: &front_matter.authority,
+        representation: "document",
+        title: &front_matter.title,
+    })?;
     let document_uid = Write_Source_Document(connection, path, revision, markdown)?;
     let blocks = Segment(&record.body);
 
@@ -1314,7 +1330,13 @@ fn Update_Graph(
     {
         if Optional_Node_Uid(connection, &relation.target)?.is_none()
         {
-            Write_Node(connection, &relation.target, "unknown", EXTERNAL, "record", &relation.target)?;
+            Write_Node(connection, NodeRow {
+                node_id: &relation.target,
+                kind: "unknown",
+                authority: EXTERNAL,
+                representation: "record",
+                title: &relation.target,
+            })?;
         }
         Write_Relation(connection, node_id, &relation.relation, &relation.target)?;
     }
@@ -1416,7 +1438,8 @@ fn Block_Changes(before: &[SourceBlock], after: &[SourceBlock]) -> Vec<BlockChan
         .map(|(_, block)| return block)
         .collect();
 
-    changes.extend(Paired(&added, &removed));
+    let paired = Paired(&added, &removed);
+    changes.extend(paired);
     changes.sort_by_key(Position_Of);
 
     return changes;

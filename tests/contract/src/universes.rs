@@ -84,7 +84,8 @@ pub fn Declared_Universes() -> Vec<DeclaredUniverse>
                     continue;
                 };
 
-                universes.extend(nomos_rules::Universes_In(&relative, &payload));
+                let found = nomos_rules::Universes_In(&relative, &payload);
+                universes.extend(found);
             }
         }
     }

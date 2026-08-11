@@ -13,7 +13,7 @@
 //! and a concept minted from a row traces to that row and not to the block around it.
 
 use nomos_spec_model::{Segment, SourceBlock, Table_Rows};
-use nomos_spec_store::{AUTHORED, RowCensus, RowScope, SpecificationStore, StoreError, Table};
+use nomos_spec_store::{AUTHORED, NodeRow, RowCensus, RowScope, SpecificationStore, StoreError, Table};
 use std::path::{Path, PathBuf};
 
 const TABLE: &str = "# Canonical domain model\n\n\
@@ -402,13 +402,13 @@ fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
         .expect("queries")
         .expect("the row is addressable");
     let node = store
-        .Upsert_Node(
-            "CON-METRICTRADEOFF-001",
-            "concept",
-            "canonical",
-            "record",
-            "MetricTradeoffProjection",
-        )
+        .Upsert_Node(NodeRow {
+            node_id: "CON-METRICTRADEOFF-001",
+            kind: "concept",
+            authority: "canonical",
+            representation: "record",
+            title: "MetricTradeoffProjection",
+        })
         .expect("mints the concept");
 
     store

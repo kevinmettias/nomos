@@ -314,7 +314,8 @@ fn Parse_Reservation(verb: &str, named: &[String]) -> Result<WorkCommand, String
 /// the one that silently opts out of the exclusion the ledger exists to provide.
 fn Parse_Add(named: &[String], predicate_argv: &[String]) -> Result<WorkCommand, String>
 {
-    let amending = Territory::Of_Files(Named_Values(named, "--amends"));
+    let amended = Named_Values(named, "--amends");
+    let amending = Territory::Of_Files(amended);
     let territory = Parse_Territory(named, &amending)?;
     let verification = Parse_Predicate(predicate_argv);
     let item = New_Item(named, territory, verification)?;
@@ -521,7 +522,10 @@ pub fn Run(
         {
             let published = Published_Records(directory);
 
-            Add(&mut ledger, item, &published, amending, output)
+            Add(&mut ledger, item, Declared {
+                published: &published,
+                amending,
+            }, output)
         }
         WorkCommand::Finish { item, holder } => Finished(&mut ledger, item, holder, output),
         WorkCommand::Claim(request) => Claimed(&mut ledger, request, output),
@@ -916,14 +920,23 @@ fn Record_Files(root: &Path) -> Vec<String>
 /// Where this repository authors its decision records, relative to the repository root.
 const RECORD_DIRECTORY: &str = "docs/records";
 
+/// The two territories an `add` declares beside the item's own: what the repository has
+/// already published, and what this item reserves in order to amend.
+#[derive(Clone, Copy)]
+struct Declared<'a>
+{
+    published: &'a Territory,
+    amending: &'a Territory,
+}
+
 fn Add(
     ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
     item: &LedgerItem,
-    published: &Territory,
-    amending: &Territory,
+    declared: Declared<'_>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
+    let Declared { published, amending } = declared;
     // The lock's holder name is a courtesy for a stale-takeover report and never an
     // identity that is checked, which is why `add` can name itself here while every other
     // verb passes the agent that asked. `add` takes no `--holder` because it takes no

@@ -248,6 +248,23 @@ fn Test_One_Profile_Should_Be_Checkable_Without_The_Other_Thirteen()
     assert!(!said.contains("not built here"), "{said}");
 }
 
+/// Overwrites one digest a sidecar declares, leaving the file it describes untouched.
+///
+/// What every staleness test below needs: a stamp that disagrees with the thing it
+/// describes, so the comparison has to read the sidecar rather than trust it.
+fn Restamp(sidecar: &Path, field: &str, replacement: &str)
+{
+    let stamp = std::fs::read_to_string(sidecar).expect("reads the sidecar");
+    let digest = stamp
+        .lines()
+        .find_map(|line| return line.trim().strip_prefix(field))
+        .and_then(|rest| return rest.strip_suffix("\","))
+        .unwrap_or_else(|| panic!("the sidecar declares no {field}"));
+
+    let rewritten = stamp.replace(digest, replacement);
+    std::fs::write(sidecar, rewritten).expect("rewrites the stamp");
+}
+
 /// The negative control for the whole file.
 ///
 /// Every assertion above would also pass against a command that answered "current" to
@@ -259,14 +276,7 @@ fn Test_A_Rewritten_Stamp_Should_Not_Excuse_The_File_It_Describes()
 {
     let into = Rendered("freshness-restamped");
     let sidecar = into.join(format!("{EMBEDDED_BODY}.nomos-projection.json"));
-    let stamp = std::fs::read_to_string(&sidecar).expect("reads the sidecar");
-    let digest = stamp
-        .lines()
-        .find_map(|line| return line.trim().strip_prefix("\"content_digest\": \""))
-        .and_then(|rest| return rest.strip_suffix("\","))
-        .expect("the sidecar declares a content digest");
-    std::fs::write(&sidecar, stamp.replace(digest, "blake3:0000000000000000"))
-        .expect("rewrites the stamp");
+    Restamp(&sidecar, "\"content_digest\": \"", "blake3:0000000000000000");
 
     let output = Freshness(&into, &[]);
 
@@ -378,14 +388,7 @@ fn Test_A_Required_Output_Built_Over_Other_Inputs_Should_Not_Count_As_Kept()
 {
     let into = Rendered_As("required-stale-inputs", REQUIRED);
     let sidecar = into.join(format!("{REQUIRED_BODY}.nomos-projection.json"));
-    let stamp = std::fs::read_to_string(&sidecar).expect("reads the sidecar");
-    let digest = stamp
-        .lines()
-        .find_map(|line| return line.trim().strip_prefix("\"inputs_digest\": \""))
-        .and_then(|rest| return rest.strip_suffix("\","))
-        .expect("the sidecar declares an inputs digest");
-    std::fs::write(&sidecar, stamp.replace(digest, "sha256:0000000000000000"))
-        .expect("rewrites the recorded inputs");
+    Restamp(&sidecar, "\"inputs_digest\": \"", "sha256:0000000000000000");
 
     let output = Freshness(&into, &["--require", REQUIRED]);
 

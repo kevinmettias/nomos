@@ -27,7 +27,7 @@ use crate::archive::Archive;
 use crate::archive_error::ArchiveError;
 use crate::phases::IngestError;
 use nomos_spec_model::{Parse_Record, Segment};
-use nomos_spec_store::{SpecificationStore, StoreError, SuiteAuthority};
+use nomos_spec_store::{NodeRow, SpecificationStore, StoreError, SuiteAuthority};
 use serde::Deserialize;
 
 /// The revision a game plan is ingested under.
@@ -137,7 +137,13 @@ pub fn Ingest_Game_Plan(
 ) -> Result<String, IngestError>
 {
     let node_id = format!("PLAN-{}", Slug(Stem(path)));
-    let node = store.Upsert_Node(&node_id, "game_plan", COMMENTARY, "document", Stem(path))?;
+    let node = store.Upsert_Node(NodeRow {
+        node_id: &node_id,
+        kind: "game_plan",
+        authority: COMMENTARY,
+        representation: "document",
+        title: Stem(path),
+    })?;
     store.Assign_Suite(node, suite_uid)?;
 
     let document_uid = store.Put_Source_Document(path, LINEAGE_NOTES, text)?;

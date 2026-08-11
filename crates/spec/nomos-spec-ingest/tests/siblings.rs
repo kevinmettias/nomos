@@ -10,7 +10,7 @@ use nomos_spec_ingest::{
     LINEAGE_NOTES, Prepare_Commentary_View, ROOT_SUITE, Sibling,
     Statements_Sourced_Only_From_Commentary,
 };
-use nomos_spec_store::{SpecificationStore, SuiteAuthority, Table};
+use nomos_spec_store::{NodeRow, SpecificationStore, SuiteAuthority, Table};
 use nomos_spec_validate::{Registered, Validate};
 use std::path::PathBuf;
 
@@ -202,7 +202,13 @@ fn Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row()
 
     store.Put_Relation_Type("depends_on", "seed").expect("names the type");
     store
-        .Upsert_Node("D-130", "decision", "canonical", "record", "No XVPE before Phase 5")
+        .Upsert_Node(NodeRow {
+            node_id: "D-130",
+            kind: "decision",
+            authority: "canonical",
+            representation: "record",
+            title: "No XVPE before Phase 5",
+        })
         .expect("mints this repository's decision");
     let root_uid: i64 = store
         .Connection()
@@ -316,7 +322,13 @@ fn Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught()
     Ingest_Game_Plan(&mut store, root, name, &text).expect("ingests");
 
     let node = store
-        .Upsert_Node("AGT-999", "requirement", "canonical", "record", "AGT-999")
+        .Upsert_Node(NodeRow {
+            node_id: "AGT-999",
+            kind: "requirement",
+            authority: "canonical",
+            representation: "record",
+            title: "AGT-999",
+        })
         .expect("mints");
     store
         .Connection()

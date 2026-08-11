@@ -38,6 +38,12 @@ const DEFAULT_ROOT: &str = "F:/repos/xvpe";
 /// `.git` is object storage that happens to sit in the tree.
 const NOT_SOURCE: &[&str] = &["target", ".git"];
 
+/// Name segments that are the provider declining to name something.
+///
+/// `*` is a glob import and `_` is a type with no single head. Neither is a claim that an
+/// identifier of that spelling appears in the file, so neither is checked against one.
+const NAMELESS: &[&str] = &["*", "_"];
+
 /// The floor below which this corpus is not the corpus.
 ///
 /// Guards every assertion in this file against passing vacuously. If the walk breaks —
@@ -113,12 +119,15 @@ fn Rust_Files(root: &Path) -> Vec<PathBuf>
             let name = entry.file_name();
             let name = name.to_string_lossy();
 
-            if path.is_dir()
+            let is_directory = path.is_dir();
+            if is_directory && NOT_SOURCE.contains(&name.as_ref())
             {
-                if !NOT_SOURCE.contains(&name.as_ref())
-                {
-                    pending.push(path);
-                }
+                continue;
+            }
+
+            if is_directory
+            {
+                pending.push(path);
                 continue;
             }
 
@@ -379,15 +388,15 @@ fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
 
         for item in &facts.items
         {
-            for segment in item.name.split("::")
-            {
-                // `*` for a glob import and `_` for a type with no single head are this
-                // provider saying it has no name, not names it claims to have found.
-                if segment == "*" || segment == "_" || segment.is_empty()
-                {
-                    continue;
-                }
+            // `*` for a glob import and `_` for a type with no single head are this
+            // provider saying it has no name, not names it claims to have found.
+            let named = item
+                .name
+                .split("::")
+                .filter(|segment| return !segment.is_empty() && !NAMELESS.contains(segment));
 
+            for segment in named
+            {
                 assert!(
                     identifiers.contains(segment),
                     "{} reports `{}` ({}) and `{segment}` is not an identifier in that \
@@ -535,12 +544,15 @@ fn Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed()
             let name = entry.file_name();
             let name = name.to_string_lossy();
 
-            if path.is_dir()
+            let is_directory = path.is_dir();
+            if is_directory && NOT_SOURCE.contains(&name.as_ref())
             {
-                if !NOT_SOURCE.contains(&name.as_ref())
-                {
-                    pending.push(path);
-                }
+                continue;
+            }
+
+            if is_directory
+            {
+                pending.push(path);
                 continue;
             }
 

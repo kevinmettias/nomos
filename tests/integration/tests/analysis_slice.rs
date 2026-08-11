@@ -1546,15 +1546,17 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
 {
     let slice = Slice::Composed();
 
+    let guarantee = Guarantee::New(
+        FactVariant::SemanticallyResolved,
+        Assurance::Sound,
+        Assurance::Sound,
+        IncrementalGranularity::Symbol,
+    );
+
     let needs_resolution = Requirement::New(
         CapabilityId::New(syntax::CAPABILITY),
         syntax::CONTRACT_VERSION,
-        Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Symbol,
-        ),
+        guarantee,
     );
 
     let resolved = slice.Registry().Resolve(&needs_resolution);

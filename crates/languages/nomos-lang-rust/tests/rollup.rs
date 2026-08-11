@@ -68,15 +68,17 @@ fn Registry_With_Both() -> Registry
 /// by it, which is what keeps the key it rebuilds the same key the run wrote.
 fn Need() -> Requirement
 {
+    let guarantee = Guarantee::New(
+        FactVariant::Syntactic,
+        Assurance::Sound,
+        Assurance::Unknown,
+        IncrementalGranularity::File,
+    );
+
     return Requirement::New(
         nomos_cap_syntax::Capability(),
         nomos_cap_syntax::CONTRACT_VERSION,
-        Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Sound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        ),
+        guarantee,
     );
 }
 

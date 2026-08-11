@@ -8,8 +8,15 @@
 //! than only for the corpus-ingested ones a statement table covers.
 
 use nomos_spec_store::{
-    AUTHORED, BlockChange, EditError, GOVERNING_RECORD_IDS, NormativeOutcome,
-    Seed_Governing_Records, SpecificationStore, Table,
+    AUTHORED,
+    BlockChange,
+    EditError,
+    GOVERNING_RECORD_IDS,
+    NodeRow,
+    NormativeOutcome,
+    Seed_Governing_Records,
+    SpecificationStore,
+    Table,
 };
 
 /// A record written through the door, so the edit tests do not depend on the shape of any
@@ -208,11 +215,8 @@ fn Test_Identity_Should_Survive_An_Edit()
     let blocks_before = Block_Uids(&store, SYNTHETIC_PATH);
     let relations_before = store.Node_Summary("D-900").expect("queries");
 
-    Commit(
-        &mut store,
-        &SYNTHETIC.replace("Second paragraph.", "Second paragraph, revised."),
-        None,
-    );
+    let revised = SYNTHETIC.replace("Second paragraph.", "Second paragraph, revised.");
+    Commit(&mut store, &revised, None);
 
     assert!(!blocks_before.is_empty(), "no blocks, so this test proved nothing");
     assert_eq!(store.Node_Uid("D-900").expect("queries"), node_before);
@@ -424,10 +428,11 @@ fn Test_A_Record_With_No_Recorded_Statement_Should_Still_Get_An_Answer()
 {
     let store = With_Synthetic();
 
+    let edited = SYNTHETIC.replace("First paragraph.", "Something else.");
     let preview = store
         .Claim_For_Edit("D-900", None)
         .expect("claims")
-        .Stage(&SYNTHETIC.replace("First paragraph.", "Something else."), None)
+        .Stage(&edited, None)
         .expect("stages")
         .Preview(&store)
         .expect("previews");
@@ -446,10 +451,11 @@ fn Test_A_Staged_Text_Naming_A_Different_Record_Should_Be_Refused()
 {
     let store = With_Synthetic();
 
+    let edited = SYNTHETIC.replace("id: D-900", "id: D-901");
     let refusal = store
         .Claim_For_Edit("D-900", None)
         .expect("claims")
-        .Stage(&SYNTHETIC.replace("id: D-900", "id: D-901"), None)
+        .Stage(&edited, None)
         .expect_err("must refuse");
 
     assert!(matches!(refusal, EditError::IdentityChanged { .. }), "{refusal}");
@@ -518,10 +524,11 @@ fn Test_An_Edit_Should_Not_Delete_A_Block_A_Justified_Omission_Points_At()
         )
         .expect("records an omission");
 
+    let edited = SYNTHETIC.replace("\n## Rationale\n\nSecond paragraph.\n", "");
     let preview = store
         .Claim_For_Edit("D-900", None)
         .expect("claims")
-        .Stage(&SYNTHETIC.replace("\n## Rationale\n\nSecond paragraph.\n", ""), None)
+        .Stage(&edited, None)
         .expect("stages")
         .Preview(&store)
         .expect("previews");
@@ -555,14 +562,11 @@ fn Test_Editing_A_Relation_Should_Move_The_Graph_Both_Ways()
             .expect("queries");
     };
 
-    Commit(
-        &mut store,
-        &SYNTHETIC.replace(
-            "  - target: D-129\n    type: relates-to\n",
-            "  - target: D-130\n    type: affects\n",
-        ),
-        None,
+    let retargeted = SYNTHETIC.replace(
+        "  - target: D-129\n    type: relates-to\n",
+        "  - target: D-130\n    type: affects\n",
     );
+    Commit(&mut store, &retargeted, None);
 
     assert_eq!(edges(&store, "D-900", "D-130"), 1, "the added edge is missing");
     assert_eq!(edges(&store, "D-130", "D-900"), 1, "its inverse is missing");
@@ -577,10 +581,11 @@ fn Test_A_Relation_Type_Nothing_Declares_Should_Be_Refused()
 {
     let mut store = With_Synthetic();
 
+    let edited = SYNTHETIC.replace("type: relates-to", "type: invented-by-an-author");
     let preview = store
         .Claim_For_Edit("D-900", None)
         .expect("claims")
-        .Stage(&SYNTHETIC.replace("type: relates-to", "type: invented-by-an-author"), None)
+        .Stage(&edited, None)
         .expect("stages")
         .Preview(&store)
         .expect("previews");
@@ -604,10 +609,11 @@ fn Test_A_Refused_Commit_Should_Leave_Every_Table_As_It_Was()
         .map(|table| return store.Count(*table).expect("counts"))
         .collect();
 
+    let edited = SYNTHETIC.replace("type: relates-to", "type: invented-by-an-author");
     let preview = store
         .Claim_For_Edit("D-900", None)
         .expect("claims")
-        .Stage(&SYNTHETIC.replace("type: relates-to", "type: invented-by-an-author"), None)
+        .Stage(&edited, None)
         .expect("stages")
         .Preview(&store)
         .expect("previews");
@@ -634,7 +640,13 @@ fn Test_A_Document_With_No_Declared_Front_Matter_Should_Say_So()
         .Put_Source_Blocks(uid, &nomos_spec_model::Segment("# Volume\n\nBody.\n"))
         .expect("writes blocks");
     let node = store
-        .Upsert_Node("VOL-001", "volume", "canonical", "document", "Volume")
+        .Upsert_Node(NodeRow {
+            node_id: "VOL-001",
+            kind: "volume",
+            authority: "canonical",
+            representation: "document",
+            title: "Volume",
+        })
         .expect("writes a node");
     store
         .Connection()

@@ -208,7 +208,8 @@ fn Test_The_Headline_Counts_Should_Name_Their_Unit_And_Their_Scope()
         return;
     };
 
-    let v14 = Census(&mut Opened(&root, V14_LAST), Scope::DomainVolumes).expect("counts v14.36");
+    let mut archive = Opened(&root, V14_LAST);
+    let v14 = Census(&mut archive, Scope::DomainVolumes).expect("counts v14.36");
 
     assert_eq!(v14.documents, 10, "domain volumes");
     assert_eq!(v14.documents_with_tables, 6, "of the ten, the ones carrying a table");
@@ -235,7 +236,8 @@ fn Test_A_Scope_The_Revision_Does_Not_Have_Should_Be_Refused()
         return;
     };
 
-    let refusal = Census(&mut Opened(&root, V15), Scope::DomainVolumes)
+    let mut archive = Opened(&root, V15);
+    let refusal = Census(&mut archive, Scope::DomainVolumes)
         .expect_err("v15.0 has no domain volumes and must not report zero");
 
     assert!(format!("{refusal}").contains("does not exist"), "{refusal}");
@@ -251,8 +253,10 @@ fn Test_v15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
         return;
     };
 
-    let v15 = Census(&mut Opened(&root, V15), Scope::EveryMarkdown).expect("counts v15.0");
-    let v14 = Census(&mut Opened(&root, V14_LAST), Scope::EveryMarkdown).expect("counts v14.36");
+    let mut v15_archive = Opened(&root, V15);
+    let v15 = Census(&mut v15_archive, Scope::EveryMarkdown).expect("counts v15.0");
+    let mut v14_archive = Opened(&root, V14_LAST);
+    let v14 = Census(&mut v14_archive, Scope::EveryMarkdown).expect("counts v14.36");
 
     assert!(v15.documents > 0, "v15.0 has no markdown at all, so this measured nothing");
     assert_eq!(v15.code_blocks, 0, "fenced blocks anywhere in v15.0");

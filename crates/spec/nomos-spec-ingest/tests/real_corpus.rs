@@ -69,8 +69,8 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
         return;
     };
 
-    let lineage = Parse_Block_Lineage(&Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml"))
-        .expect("the manifest parses");
+    let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
     let documents = Domain_Volumes(&root);
 
     let report = Check_Against_Manifest(&lineage, &documents);
@@ -109,11 +109,8 @@ fn Test_I2_Should_Ingest_Every_Statement_Without_Divergence()
         return;
     };
 
-    let file = Parse_Statements(&Read(
-        &root,
-        "01_authoring/source_lineage/normative-source-statements.yaml",
-    ))
-    .expect("the statement file parses");
+    let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
+    let file = Parse_Statements(&source).expect("the statement file parses");
 
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let report = Ingest_Statements(&mut store, &file).expect("ingests");
@@ -158,14 +155,12 @@ fn Test_The_Whole_Corpus_Should_Ingest_Into_One_Store()
     }
     assert_eq!(blocks, 2533);
 
-    let statements = Parse_Statements(&Read(
-        &root,
-        "01_authoring/source_lineage/normative-source-statements.yaml",
-    ))
-    .expect("parses");
+    let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
+    let statements = Parse_Statements(&source).expect("parses");
     Ingest_Statements(&mut store, &statements).expect("ingests");
 
-    let catalog = Parse_Catalog(&Read(&root, "02_machine/catalog/catalog.json")).expect("parses");
+    let catalog_json = Read(&root, "02_machine/catalog/catalog.json");
+    let catalog = Parse_Catalog(&catalog_json).expect("parses");
     let report = Ingest_Catalog(&mut store, &catalog).expect("ingests");
 
     assert_eq!(report.nodes, 2619, "the catalog entity count changed");

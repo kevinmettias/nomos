@@ -87,6 +87,60 @@ fn Temp_Dir(name: &str) -> PathBuf
     return path;
 }
 
+/// The clock every test that does not move time shares.
+///
+/// A `'static` clock rather than a local one in each test: nothing here moves time, so one
+/// shared reading is what every ledger these tests open is read against.
+static AT_NOW: FixedClock = FixedClock(NOW);
+
+/// The board, and the identifiers of the first two open items that write records.
+///
+/// Every contest below needs exactly this: a copy nobody holds, and two writers to set
+/// against each other. A board without two of them cannot host a contest, so that is a
+/// panic rather than a test that passes having contested nothing.
+fn Two_Record_Writers() -> (LedgerDocument, ItemId, ItemId)
+{
+    let document = Unclaimed_Copy();
+    let writers: Vec<ItemId> = Record_Writers(&document)
+        .iter()
+        .map(|item| return item.id.clone())
+        .take(2)
+        .collect();
+
+    let (Some(first), Some(second)) = (writers.first().cloned(), writers.get(1).cloned())
+    else
+    {
+        panic!("the board must hold two open record writers for a contest to be possible")
+    };
+
+    return (document, first, second);
+}
+
+/// Puts a doctored board on disk and lets two agents contest it, first come first served.
+///
+/// The refusal handed back is the second agent's, which is what every test using this is
+/// about; the directory comes back so the caller can clean it up.
+fn Contested(
+    name: &str,
+    document: &LedgerDocument,
+    first: &ItemId,
+    second: &ItemId,
+) -> (PathBuf, ClaimRefusal)
+{
+    let directory = Temp_Dir(name);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
+    ledger.Save(document).expect("the doctored board is still a valid ledger");
+
+    ledger
+        .Claim(first, "agent-a", Duration::from_secs(3_600))
+        .expect("the first claim is uncontended");
+    let refusal = ledger
+        .Claim(second, "agent-b", Duration::from_secs(3_600))
+        .expect_err("the second of a contesting pair must be refused");
+
+    return (directory, refusal);
+}
+
 fn Ledger_At<'clock>(
     directory: &Path,
     clock: &'clock FixedClock,
@@ -350,8 +404,7 @@ fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
     }
 
     let directory = Temp_Dir("records-only");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
     ledger.Save(&document).expect("a records-only board is a valid ledger");
 
     // Every one of them, not a pair. A pair could be independent by accident; all of them
@@ -466,8 +519,7 @@ fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
     };
 
     let directory = Temp_Dir("snapshot-grain");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
     ledger.Save(&document).expect("the real board is a valid ledger");
 
     for (writer, agent) in [(&first, "agent-a"), (&second, "agent-b")]
@@ -526,18 +578,7 @@ fn Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair()
         item.territory = Territory::Of_Files(paths);
     }
 
-    let directory = Temp_Dir("snapshot-directory-restored");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    ledger.Save(&document).expect("the coarse authoring is still a valid ledger");
-
-    ledger
-        .Claim(&first, "agent-a", Duration::from_secs(3_600))
-        .expect("the first claim is uncontended");
-
-    let refusal = ledger
-        .Claim(&second, "agent-b", Duration::from_secs(3_600))
-        .expect_err("the coarse authoring must refuse the second of the pair");
+    let (directory, refusal) = Contested("snapshot-directory-restored", &document, &first, &second);
 
     assert!(
         refusal.Describe().contains("agent-a"),
@@ -881,17 +922,7 @@ fn Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair()
 #[test]
 fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
 {
-    let mut document = Unclaimed_Copy();
-    let writers: Vec<ItemId> = Record_Writers(&document)
-        .iter()
-        .map(|item| return item.id.clone())
-        .take(2)
-        .collect();
-    let (Some(first), Some(second)) = (writers.first().cloned(), writers.get(1).cloned())
-    else
-    {
-        panic!("the board must hold two open record writers for a contest to be possible")
-    };
+    let (mut document, first, second) = Two_Record_Writers();
 
     let contested = format!("{RECORD_DIRECTORY}/OD-CONTESTED-001");
     for item in &mut document.items
@@ -902,18 +933,7 @@ fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
         }
     }
 
-    let directory = Temp_Dir("contested-record");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-    ledger.Save(&document).expect("still a valid ledger");
-
-    ledger
-        .Claim(&first, "agent-a", Duration::from_secs(3_600))
-        .expect("the first claim is uncontended");
-
-    let refusal = ledger
-        .Claim(&second, "agent-b", Duration::from_secs(3_600))
-        .expect_err("two items writing one record must not both be claimable");
+    let (directory, refusal) = Contested("contested-record", &document, &first, &second);
 
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),
@@ -971,17 +991,7 @@ const THE_FILE_IT_NAMES: &str =
 #[test]
 fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder()
 {
-    let mut document = Unclaimed_Copy();
-    let writers: Vec<ItemId> = Record_Writers(&document)
-        .iter()
-        .map(|item| return item.id.clone())
-        .take(2)
-        .collect();
-    let (Some(first), Some(second)) = (writers.first().cloned(), writers.get(1).cloned())
-    else
-    {
-        panic!("the board must hold two open record writers for a contest to be possible")
-    };
+    let (mut document, first, second) = Two_Record_Writers();
 
     for item in &mut document.items
     {
@@ -996,8 +1006,7 @@ fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holde
     }
 
     let directory = Temp_Dir("record-stem");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
     ledger.Save(&document).expect("still a valid ledger");
 
     ledger

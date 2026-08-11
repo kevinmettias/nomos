@@ -269,7 +269,8 @@ pub(crate) fn Assert_Columns_Covered(
             .find(|coverage| coverage.table == name)
             .map_or(&[] as &[(&str, Carried)], |coverage| coverage.columns);
 
-        Compare(name, &Schema_Columns(connection, name)?, declared)?;
+        let present = Schema_Columns(connection, name)?;
+        Compare(name, &present, declared)?;
         Assert_Fields_Exist(name, declared, records)?;
     }
 

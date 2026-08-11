@@ -88,6 +88,32 @@ fn Assert_Complete(store: &SpecificationStore, records: &[Record]) -> Result<(),
     return Ok(());
 }
 
+/// Runs one query and files every row it returns as a record.
+///
+/// Every uniform exporter below is this shape, and the shape is the whole of what they
+/// share: prepare, read each row into its own type, wrap it in the variant that carries it,
+/// extend the list. Written out per table it was the same twelve lines of plumbing around
+/// the two that differ, and the SQL was the hardest thing on the screen to find.
+///
+/// The exporters that are not uniform keep their own bodies. `Source_Table_Rows` decodes a
+/// JSON column after the query and `Relations` reads two, so folding them in would mean a
+/// helper with a hole in it rather than one concept.
+fn Collect<Read>(
+    connection: &Connection,
+    records: &mut Vec<Record>,
+    sql: &str,
+    read: Read,
+) -> Result<(), BundleError>
+where
+    Read: FnMut(&rusqlite::Row<'_>) -> rusqlite::Result<Record>,
+{
+    let mut statement = connection.prepare(sql)?;
+    let rows = statement.query_map([], read)?.collect::<Result<Vec<_>, _>>()?;
+
+    records.extend(rows);
+    return Ok(());
+}
+
 fn Blobs(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     let mut statement =
@@ -122,35 +148,32 @@ fn Blobs(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bundl
 
 fn Source_Documents(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT d.path, d.revision, b.sha256
          FROM source_documents d JOIN blobs b ON b.uid = d.blob_uid
          ORDER BY d.path, d.revision",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(SourceDocument {
+        |row| {
+            return Ok(Record::SourceDocument(SourceDocument {
                 path: row.get(0)?,
                 revision: row.get(1)?,
                 blob_sha256: row.get(2)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::SourceDocument));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Source_Headings(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT d.path, d.revision, h.ordinal, h.depth, h.title
          FROM source_headings h JOIN source_documents d ON d.uid = h.document_uid
          ORDER BY d.path, d.revision, h.ordinal",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(SourceHeading {
+        |row| {
+            return Ok(Record::SourceHeading(SourceHeading {
                 document: DocumentRef {
                     path: row.get(0)?,
                     revision: row.get(1)?,
@@ -158,25 +181,22 @@ fn Source_Headings(connection: &Connection, records: &mut Vec<Record>) -> Result
                 ordinal: row.get(2)?,
                 depth: row.get(3)?,
                 title: row.get(4)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::SourceHeading));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT d.path, d.revision, b.ordinal, b.kind, b.heading_path, b.text,
                 b.content_hash, b.normalized_hash
          FROM source_blocks b JOIN source_documents d ON d.uid = b.document_uid
          ORDER BY d.path, d.revision, b.ordinal",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(SourceBlock {
+        |row| {
+            return Ok(Record::SourceBlock(SourceBlock {
                 document: DocumentRef {
                     path: row.get(0)?,
                     revision: row.get(1)?,
@@ -187,12 +207,9 @@ fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(
                 text: row.get(5)?,
                 content_hash: row.get(6)?,
                 normalized_hash: row.get(7)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::SourceBlock));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Record>)
@@ -243,34 +260,32 @@ fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Record>)
 
 fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement =
-        connection.prepare("SELECT suite_id, title, authority_root FROM suites ORDER BY suite_id")?;
-    let rows = statement
-        .query_map([], |row| {
+    return Collect(
+        connection,
+        records,
+        "SELECT suite_id, title, authority_root FROM suites ORDER BY suite_id",
+        |row| {
             let root: i64 = row.get(2)?;
-            return Ok(Suite {
+            return Ok(Record::Suite(Suite {
                 suite_id: row.get(0)?,
                 title: row.get(1)?,
                 authority_root: root != 0,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::Suite));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT n.node_id, n.kind, n.authority, n.representation, n.title, n.deleted_at,
                 s.suite_id
          FROM nodes n LEFT JOIN suites s ON s.uid = n.suite_uid
          ORDER BY n.node_id",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(Node {
+        |row| {
+            return Ok(Record::Node(Node {
                 node_id: row.get(0)?,
                 kind: row.get(1)?,
                 authority: row.get(2)?,
@@ -278,45 +293,39 @@ fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bundl
                 title: row.get(4)?,
                 deleted_at: row.get(5)?,
                 suite_id: row.get(6)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::Node));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT a.alias, n.node_id
          FROM node_aliases a JOIN nodes n ON n.uid = a.node_uid
          ORDER BY a.alias",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(NodeAlias {
+        |row| {
+            return Ok(Record::NodeAlias(NodeAlias {
                 alias: row.get(0)?,
                 node_id: row.get(1)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::NodeAlias));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Node_Histories(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT n.node_id, h.ordinal, h.event, h.reason, h.previous_event_hash,
                 h.event_hash, h.recorded_at
          FROM node_history h JOIN nodes n ON n.uid = h.node_uid
          ORDER BY n.node_id, h.ordinal",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(NodeHistory {
+        |row| {
+            return Ok(Record::NodeHistory(NodeHistory {
                 node_id: row.get(0)?,
                 ordinal: row.get(1)?,
                 event: row.get(2)?,
@@ -324,53 +333,45 @@ fn Node_Histories(connection: &Connection, records: &mut Vec<Record>) -> Result<
                 previous_event_hash: row.get(4)?,
                 event_hash: row.get(5)?,
                 recorded_at: row.get(6)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::NodeHistory));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Relation_Types(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement =
-        connection.prepare("SELECT name, tier, inverse_of FROM relation_types ORDER BY name")?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(RelationType {
+    return Collect(
+        connection,
+        records,
+        "SELECT name, tier, inverse_of FROM relation_types ORDER BY name",
+        |row| {
+            return Ok(Record::RelationType(RelationType {
                 name: row.get(0)?,
                 tier: row.get(1)?,
                 inverse_of: row.get(2)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::RelationType));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT f.node_id, r.relation_type, t.node_id
          FROM relations r
          JOIN nodes f ON f.uid = r.from_node_uid
          JOIN nodes t ON t.uid = r.to_node_uid
          ORDER BY f.node_id, r.relation_type, t.node_id",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(Relation {
+        |row| {
+            return Ok(Record::Relation(Relation {
                 from_node_id: row.get(0)?,
                 relation_type: row.get(1)?,
                 to_node_id: row.get(2)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::Relation));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Normative_Statements(
@@ -378,27 +379,24 @@ fn Normative_Statements(
     records: &mut Vec<Record>,
 ) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT s.statement_id, n.node_id, s.kind, s.canonical_text, s.canonical_hash,
                 s.supersedes_hash
          FROM normative_statements s JOIN nodes n ON n.uid = s.node_uid
          ORDER BY s.statement_id",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(NormativeStatement {
+        |row| {
+            return Ok(Record::NormativeStatement(NormativeStatement {
                 statement_id: row.get(0)?,
                 node_id: row.get(1)?,
                 kind: row.get(2)?,
                 canonical_text: row.get(3)?,
                 canonical_hash: row.get(4)?,
                 supersedes_hash: row.get(5)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::NormativeStatement));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 /// Every join here is a LEFT JOIN because both source references are nullable. An inner
@@ -406,7 +404,9 @@ fn Normative_Statements(
 /// the same silent-loss shape this crate exists to make impossible.
 fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT bd.path, bd.revision, b.ordinal,
                 hd.path, hd.revision, h.ordinal,
                 rd.path, rd.revision, rb.ordinal, r.ordinal,
@@ -426,22 +426,22 @@ fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bu
                   coalesce(rd.path, ''), coalesce(rd.revision, ''), coalesce(rb.ordinal, -1),
                   coalesce(r.ordinal, -1),
                   l.disposition, coalesce(n.node_id, ''), coalesce(s.statement_id, '')",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(Lineage {
+        |row| {
+            return Ok(Record::Lineage(Lineage {
                 source_block: Ordinal_Reference(row, 0, 1, 2)?,
                 source_heading: Ordinal_Reference(row, 3, 4, 5)?,
-                source_table_row: Table_Row_Reference(row, 6, 7, 8, 9)?,
+                source_table_row: Table_Row_Reference(row, RowColumns {
+                    path: 6,
+                    revision: 7,
+                    block_ordinal: 8,
+                    row_ordinal: 9,
+                })?,
                 disposition: row.get(10)?,
                 target_node_id: row.get(11)?,
                 target_statement_id: row.get(12)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::Lineage));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
@@ -475,16 +475,23 @@ fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), B
     return Ok(());
 }
 
-fn Table_Row_Reference(
-    row: &rusqlite::Row<'_>,
+/// Where in a query's columns a table-row reference is spelled.
+#[derive(Clone, Copy)]
+struct RowColumns
+{
     path: usize,
     revision: usize,
     block_ordinal: usize,
     row_ordinal: usize,
+}
+
+fn Table_Row_Reference(
+    row: &rusqlite::Row<'_>,
+    columns: RowColumns,
 ) -> rusqlite::Result<Option<TableRowRef>>
 {
-    let block = Ordinal_Reference(row, path, revision, block_ordinal)?;
-    let ordinal: Option<i64> = row.get(row_ordinal)?;
+    let block = Ordinal_Reference(row, columns.path, columns.revision, columns.block_ordinal)?;
+    let ordinal: Option<i64> = row.get(columns.row_ordinal)?;
 
     return Ok(match (block, ordinal)
     {
@@ -586,28 +593,25 @@ fn Record_Relations(connection: &Connection, records: &mut Vec<Record>) -> Resul
 /// The submissions, ordered by the node they are.
 fn Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
+    return Collect(
+        connection,
+        records,
         "SELECT n.node_id, s.kind, s.form_contract_version, s.state, s.submitted_by,
                 s.submitted_through
          FROM submissions s
          JOIN nodes n ON n.uid = s.node_uid
          ORDER BY n.node_id",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(Submission {
+        |row| {
+            return Ok(Record::Submission(Submission {
                 node_id: row.get(0)?,
                 kind: row.get(1)?,
                 form_contract_version: row.get(2)?,
                 state: row.get(3)?,
                 submitted_by: row.get(4)?,
                 submitted_through: row.get(5)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::Submission));
-    return Ok(());
+            }));
+        },
+    );
 }
 
 /// Every value of every field, in the order that makes the last one the current reading.
@@ -647,26 +651,23 @@ fn Submission_Values(connection: &Connection, records: &mut Vec<Record>)
 /// a bundle that dropped them would lose the record that a question was ever asked.
 fn Submission_Gaps(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
-        "SELECT n.node_id, g.ordinal, g.question, g.blocks, g.severity, g.closed_by
+    return Collect(
+        connection,
+        records,
+"SELECT n.node_id, g.ordinal, g.question, g.blocks, g.severity, g.closed_by
          FROM submission_gaps g
          JOIN submissions s ON s.uid = g.submission_uid
          JOIN nodes n ON n.uid = s.node_uid
          ORDER BY n.node_id, g.ordinal",
-    )?;
-    let rows = statement
-        .query_map([], |row| {
-            return Ok(SubmissionGap {
+        |row| {
+            return Ok(Record::SubmissionGap(SubmissionGap {
                 node_id: row.get(0)?,
                 ordinal: row.get(1)?,
                 question: row.get(2)?,
                 blocks: row.get(3)?,
                 severity: row.get(4)?,
                 closed_by: row.get(5)?,
-            });
-        })?
-        .collect::<Result<Vec<_>, _>>()?;
-
-    records.extend(rows.into_iter().map(Record::SubmissionGap));
-    return Ok(());
+        }));
+    },
+);
 }

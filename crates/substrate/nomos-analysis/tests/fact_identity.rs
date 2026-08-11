@@ -107,9 +107,8 @@ fn Fact(key: &FactKey, generation: GenerationId) -> MaterializedFact
 fn Stored(key: &FactKey) -> MemoryFactStore
 {
     let mut store = MemoryFactStore::New();
-    store
-        .Materialize(Fact(key, GenerationId::INITIAL), &[])
-        .expect("materializes");
+    let fact = Fact(key, GenerationId::INITIAL);
+    store.Materialize(fact, &[]).expect("materializes");
 
     return store;
 }
@@ -154,11 +153,10 @@ fn Offering(guarantee: Guarantee) -> Registry
 
 fn Needing(guarantee: Guarantee) -> Requirement
 {
-    return Requirement::New(
-        CapabilityId::New(SYNTAX),
-        ContractVersion::New(1, 0),
-        guarantee,
-    );
+    let capability = CapabilityId::New(SYNTAX);
+    let version = ContractVersion::New(1, 0);
+
+    return Requirement::New(capability, version, guarantee);
 }
 
 #[test]
@@ -287,9 +285,8 @@ fn Test_Replacing_A_Snapshot_Should_Invalidate_Exactly_The_Members_That_Differ()
     untouched.subject = Subject(9);
 
     let mut store = Stored(&changed);
-    store
-        .Materialize(Fact(&untouched, GenerationId::INITIAL), &[])
-        .expect("materializes");
+    let fact = Fact(&untouched, GenerationId::INITIAL);
+    store.Materialize(fact, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
     let report = store.Invalidate(
@@ -371,9 +368,8 @@ fn Test_The_Same_Question_Twice_Should_Materialize_Once()
     let already = store.Current(&key.clone().At(GenerationId::INITIAL), GenerationId::INITIAL);
     if already.is_none()
     {
-        store
-            .Materialize(Fact(&key, GenerationId::INITIAL), &[])
-            .expect("materializes");
+        let fact = Fact(&key, GenerationId::INITIAL);
+        store.Materialize(fact, &[]).expect("materializes");
     }
 
     assert_eq!(
@@ -388,13 +384,11 @@ fn Test_A_Backdated_Materialization_Should_Be_Refused()
 {
     let key = Base();
     let mut store = MemoryFactStore::New();
-    store
-        .Materialize(Fact(&key, GenerationId::INITIAL.Next()), &[])
-        .expect("materializes");
+    let ahead = Fact(&key, GenerationId::INITIAL.Next());
+    let behind = Fact(&key, GenerationId::INITIAL);
+    store.Materialize(ahead, &[]).expect("materializes");
 
-    let refusal = store
-        .Materialize(Fact(&key, GenerationId::INITIAL), &[])
-        .expect_err("must refuse");
+    let refusal = store.Materialize(behind, &[]).expect_err("must refuse");
 
     assert!(format!("{refusal}").contains("behind"), "{refusal}");
 }
@@ -426,9 +420,8 @@ fn Test_An_Unrelated_Fact_Should_Be_Retained()
     elsewhere.subject = Subject(9);
 
     let mut store = Stored(&key);
-    store
-        .Materialize(Fact(&elsewhere, GenerationId::INITIAL), &[])
-        .expect("materializes");
+    let fact = Fact(&elsewhere, GenerationId::INITIAL);
+    store.Materialize(fact, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
     let report = store.Invalidate(
@@ -456,9 +449,10 @@ fn Test_Invalidation_Should_Follow_Dependency_Edges()
     derived.subject = Subject(7);
 
     let mut store = Stored(&read);
+    let fact = Fact(&derived, GenerationId::INITIAL);
     store
         .Materialize(
-            Fact(&derived, GenerationId::INITIAL),
+            fact,
             &[Dependency {
                 key: read.clone(),
                 outcome: ReadOutcome::Materialized,
@@ -496,9 +490,10 @@ fn Test_Invalidation_Should_Follow_Edges_Transitively()
     let mut store = Stored(&read);
     for (key, upstream) in [(&middle, &read), (&outer, &middle)]
     {
+        let fact = Fact(key, GenerationId::INITIAL);
         store
             .Materialize(
-                Fact(key, GenerationId::INITIAL),
+                fact,
                 &[Dependency {
                     key: upstream.clone(),
                     outcome: ReadOutcome::Materialized,
@@ -529,18 +524,18 @@ fn Test_An_Edge_Recorded_By_A_Missed_Read_Should_Still_Carry_Invalidation()
     consumer.subject = Subject(7);
 
     let mut store = MemoryFactStore::New();
+    let consuming = Fact(&consumer, GenerationId::INITIAL);
+    let appearing = Fact(&absent, GenerationId::INITIAL);
     store
         .Materialize(
-            Fact(&consumer, GenerationId::INITIAL),
+            consuming,
             &[Dependency {
                 key: absent.clone(),
                 outcome: ReadOutcome::Absent,
             }],
         )
         .expect("materializes");
-    store
-        .Materialize(Fact(&absent, GenerationId::INITIAL), &[])
-        .expect("materializes");
+    store.Materialize(appearing, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
     let report = store.Invalidate(
@@ -706,9 +701,8 @@ fn Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies()
         let _ = reader.Get(&read.clone().At(GenerationId::INITIAL));
         reader.Into_Dependencies()
     };
-    store
-        .Materialize(Fact(&derived, GenerationId::INITIAL), &dependencies)
-        .expect("materializes");
+    let fact = Fact(&derived, GenerationId::INITIAL);
+    store.Materialize(fact, &dependencies).expect("materializes");
 
     assert_eq!(store.Dependencies_Of(&derived).len(), 1);
     assert_eq!(

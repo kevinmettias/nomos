@@ -131,7 +131,8 @@ fn Test_A_Provider_That_Meets_The_Requirement_Should_Satisfy_It()
 {
     let mut registry = Registry::New();
     registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("declares");
-    registry.Offer(Offer("syn", FactVariant::Syntactic)).expect("offers");
+    let offer = Offer("syn", FactVariant::Syntactic);
+    registry.Offer(offer).expect("offers");
 
     let resolution = registry.Resolve(&Needing(FactVariant::Syntactic));
 
@@ -149,7 +150,8 @@ fn Test_A_Provider_Below_The_Requirement_Should_Not_Satisfy_It()
 {
     let mut registry = Registry::New();
     registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("declares");
-    registry.Offer(Offer("syn", FactVariant::Syntactic)).expect("offers");
+    let offer = Offer("syn", FactVariant::Syntactic);
+    registry.Offer(offer).expect("offers");
 
     let resolution = registry.Resolve(&Needing(FactVariant::SemanticallyResolved));
 
@@ -173,7 +175,8 @@ fn Test_An_Unhonoured_Preference_Should_Read_As_Fallback()
 {
     let mut registry = Registry::New();
     registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("declares");
-    registry.Offer(Offer("syn", FactVariant::Syntactic)).expect("offers");
+    let offer = Offer("syn", FactVariant::Syntactic);
+    registry.Offer(offer).expect("offers");
 
     let honoured = registry
         .Resolve(&Needing(FactVariant::Syntactic).Preferring(ProviderId::New("syn")));
@@ -201,8 +204,9 @@ fn Test_An_Offer_Above_The_Contract_Ceiling_Should_Be_Refused()
     let mut registry = Registry::New();
     registry.Declare(Contract(FactVariant::Syntactic)).expect("declares");
 
+    let optimistic = Offer("optimistic", FactVariant::SemanticallyResolved);
     let refusal = registry
-        .Offer(Offer("optimistic", FactVariant::SemanticallyResolved))
+        .Offer(optimistic)
         .expect_err("a claim above the ceiling must be refused");
 
     assert!(matches!(
@@ -219,8 +223,9 @@ fn Test_An_Offer_Against_No_Contract_Should_Be_Refused()
 {
     let mut registry = Registry::New();
 
+    let offer = Offer("syn", FactVariant::Syntactic);
     let refusal = registry
-        .Offer(Offer("syn", FactVariant::Syntactic))
+        .Offer(offer)
         .expect_err("an offer against nothing must be refused");
 
     assert!(matches!(
@@ -276,8 +281,10 @@ fn Test_Provider_Selection_Should_Not_Depend_On_Registration_Order()
     let build = |first: &str, second: &str| {
         let mut registry = Registry::New();
         registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("declares");
-        registry.Offer(Offer(first, FactVariant::Syntactic)).expect("offers");
-        registry.Offer(Offer(second, FactVariant::Syntactic)).expect("offers");
+        let earlier = Offer(first, FactVariant::Syntactic);
+        let later = Offer(second, FactVariant::Syntactic);
+        registry.Offer(earlier).expect("offers");
+        registry.Offer(later).expect("offers");
         return registry
             .Resolve(&Needing(FactVariant::Syntactic))
             .Offer()

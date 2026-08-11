@@ -243,7 +243,10 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
         "roadmap.milestones" => Headings_Matching(corpus, "08-roadmap", 3, &["Foundation ", "Release "]),
         "roadmap.releases" => Headings_Matching(corpus, "08-roadmap", 3, &["Release "]),
 
-        "scenario.appendix_g_sections" => Lettered(corpus, "09-reference", 3, 'G', 1),
+        "scenario.appendix_g_sections" => Lettered(corpus, "09-reference", 3, Appendix {
+            letter: 'G',
+            parts: 1,
+        }),
         "scenario.end_to_end" => End_To_End(corpus),
 
         "service.section_6_headings" => Section_Six(corpus).all,
@@ -253,19 +256,39 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
             Table_Under(corpus, "02-core", "6. Systems and subsystem responsibilities").content
         }
 
-        "appendix_d.sections" => Lettered(corpus, "09-reference", 3, 'D', 1),
-        "appendix_d.report_profiles" => Lettered(corpus, "09-reference", 4, 'D', 2),
-        "appendix_d.members" => Lettered(corpus, "09-reference", 3, 'D', 1)
-            .saturating_add(Lettered(corpus, "09-reference", 4, 'D', 2)),
-        "appendix_h.sections" => Lettered(corpus, "06-agents", 3, 'H', 1),
+        "appendix_d.sections" => Lettered(corpus, "09-reference", 3, Appendix {
+            letter: 'D',
+            parts: 1,
+        }),
+        "appendix_d.report_profiles" => Lettered(corpus, "09-reference", 4, Appendix {
+            letter: 'D',
+            parts: 2,
+        }),
+        "appendix_d.members" => {
+            let profiles = Lettered(corpus, "09-reference", 4, Appendix {
+            letter: 'D',
+            parts: 2,
+        });
+            Lettered(corpus, "09-reference", 3, Appendix {
+            letter: 'D',
+            parts: 1,
+        }).saturating_add(profiles)
+        }
+        "appendix_h.sections" => Lettered(corpus, "06-agents", 3, Appendix {
+            letter: 'H',
+            parts: 1,
+        }),
         "headless_inventory.sections" => Prefixed(corpus, "07-clients", 4, "E.1."),
         "ide_profiles.sections" => Prefixed(corpus, "07-clients", 4, "F.1."),
 
         "glossary.table_terms" => Table_Under(corpus, "09-reference", "Glossary").content,
         "glossary.extended_terms" => Under_Path(corpus, "09-reference", 4, "Extended operational terms"),
-        "glossary.definitions" => Table_Under(corpus, "09-reference", "Glossary")
-            .content
-            .saturating_add(Under_Path(corpus, "09-reference", 4, "Extended operational terms")),
+        "glossary.definitions" => {
+            let extended = Under_Path(corpus, "09-reference", 4, "Extended operational terms");
+            Table_Under(corpus, "09-reference", "Glossary")
+                .content
+                .saturating_add(extended)
+        }
 
         "catalog.entities" => Catalog_Entities(corpus),
         "v15.records" => V15_Records(archives),
@@ -506,10 +529,19 @@ fn Headings_Matching(corpus: &Path, stem: &str, depth: usize, prefixes: &[&str])
     return u32::try_from(matched).unwrap_or(u32::MAX);
 }
 
+/// How an appendix numbers its sections: a letter, then that many dotted numbers.
+#[derive(Clone, Copy)]
+struct Appendix
+{
+    letter: char,
+    parts: usize,
+}
+
 /// Appendix sections, addressed the way the documents number them: a letter, then
 /// `parts` dotted numbers, then a space.
-fn Lettered(corpus: &Path, stem: &str, depth: usize, letter: char, parts: usize) -> u32
+fn Lettered(corpus: &Path, stem: &str, depth: usize, address: Appendix) -> u32
 {
+    let Appendix { letter, parts } = address;
     let markdown = Volume(corpus, stem);
     let matched = Headings(&markdown)
         .iter()

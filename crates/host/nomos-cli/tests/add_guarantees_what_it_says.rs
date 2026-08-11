@@ -160,10 +160,10 @@ fn Add(board: &Board, id: &str, rest: &[&str]) -> Ran
 /// A board with `T-1` held by `agent-a` on ground a second item would want.
 fn Held_Ground(name: &str) -> Board
 {
-    return Board::New(
-        name,
-        &Item("T-1", "\"src/shared.rs\"", "Claimed", &Held_By("agent-a")),
-    );
+    let claim = Held_By("agent-a");
+    let item = Item("T-1", "\"src/shared.rs\"", "Claimed", &claim);
+
+    return Board::New(name, &item);
 }
 
 // ---------------------------------------------------------------------------
@@ -259,10 +259,8 @@ fn Test_An_Item_Added_On_Free_Ground_Should_Claim()
 #[test]
 fn Test_A_Duplicate_Identifier_Should_Be_Refused()
 {
-    let board = Board::New(
-        "duplicate-id",
-        &Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM),
-    );
+    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
+    let board = Board::New("duplicate-id", &item);
     let before = board.On_Disk();
 
     let Ran { code, said: message } = Add(&board, "T-1", &["--territory", "src/b.rs"]);
@@ -283,10 +281,8 @@ fn Test_A_Duplicate_Identifier_Should_Be_Refused()
 #[test]
 fn Test_An_Item_That_Would_Invalidate_The_Document_Should_Not_Land()
 {
-    let board = Board::New(
-        "invalid-dependency",
-        &Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM),
-    );
+    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
+    let board = Board::New("invalid-dependency", &item);
     let before = board.On_Disk();
 
     let Ran { code, said: message } = Add(
@@ -317,10 +313,8 @@ fn Test_An_Item_That_Would_Invalidate_The_Document_Should_Not_Land()
 #[test]
 fn Test_An_Item_Reserving_One_Subject_Twice_Should_Not_Land()
 {
-    let board = Board::New(
-        "ambiguous-territory",
-        &Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM),
-    );
+    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
+    let board = Board::New("ambiguous-territory", &item);
     let before = board.On_Disk();
 
     let Ran { code, said: message } = Add(
@@ -345,10 +339,8 @@ fn Test_An_Item_Reserving_One_Subject_Twice_Should_Not_Land()
 #[test]
 fn Test_A_Well_Formed_Item_Should_Land()
 {
-    let board = Board::New(
-        "well-formed",
-        &Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM),
-    );
+    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
+    let board = Board::New("well-formed", &item);
 
     let Ran { code, said: message } = Add(
         &board,

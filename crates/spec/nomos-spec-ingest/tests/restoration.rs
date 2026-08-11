@@ -325,16 +325,14 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
         mut store, report
     } = Restored_Store(&root);
 
-    let sections = Parse_Section_Lineage(&Read(&root, "01_authoring/source_lineage/section-lineage.yaml"))
-        .expect("the section lineage parses");
+    let section_lineage = Read(&root, "01_authoring/source_lineage/section-lineage.yaml");
+    let sections =
+        Parse_Section_Lineage(&section_lineage).expect("the section lineage parses");
     let headings = Ingest_Section_Lineage(&mut store, &sections, REVISION).expect("ingests");
     assert!(headings.Passed(), "{:?}", headings.unknown_documents);
 
-    let manifest = Parse_Block_Lineage(&Read(
-        &root,
-        "01_authoring/source_lineage/source-block-lineage.yaml",
-    ))
-    .expect("the block manifest parses");
+    let block_lineage = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let manifest = Parse_Block_Lineage(&block_lineage).expect("the block manifest parses");
 
     let mut per_document: BTreeMap<String, Vec<(u32, String)>> = BTreeMap::new();
     for block in &manifest.blocks

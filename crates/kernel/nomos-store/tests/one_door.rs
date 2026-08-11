@@ -262,17 +262,19 @@ fn Test_Every_Document_Should_Be_Reachable_From_A_Snapshot()
 fn Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store()
 {
     let mut store = Observed();
+    let recorded = Recorded::New(
+        DocumentKind::Record,
+        SchemaId::New("nomos.record.v1"),
+        b"D-129".to_vec(),
+    );
+
     let authored = Commit::Under(
         SnapshotId::From_Digest(Digest(1)),
         BuildVariantId::From_Digest(Digest(2)),
         ConfigurationId::From_Digest(Digest(3)),
         GenerationId::INITIAL,
     )
-    .Recording(Recorded::New(
-        DocumentKind::Record,
-        SchemaId::New("nomos.record.v1"),
-        b"D-129".to_vec(),
-    ));
+    .Recording(recorded);
 
     let refusal = store.Commit(&authored).expect_err("must refuse");
 

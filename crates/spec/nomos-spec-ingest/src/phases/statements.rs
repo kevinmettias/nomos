@@ -1,6 +1,6 @@
 //! Putting the normative statements in, and reporting the ones that disagree with their source.
 
-use super::{StatementFile, IngestError, SpecificationStore, StatementReport, RecordedStatement, ContentHash, Is_Normalized, StatementDivergence, Store_Text};
+use super::{NodeRow, StatementFile, IngestError, SpecificationStore, StatementReport, RecordedStatement, ContentHash, Is_Normalized, StatementDivergence, Store_Text};
 
 /// # Errors
 ///
@@ -69,13 +69,13 @@ pub(super) fn Store_Statement(
     statement: &RecordedStatement,
 ) -> Result<(), IngestError>
 {
-    let node_uid = store.Upsert_Node(
-        &statement.id,
-        &statement.kind,
-        "canonical",
-        "record",
-        &statement.source_document,
-    )?;
+    let node_uid = store.Upsert_Node(NodeRow {
+        node_id: &statement.id,
+        kind: &statement.kind,
+        authority: "canonical",
+        representation: "record",
+        title: &statement.source_document,
+    })?;
 
     return Store_Text(store, statement, node_uid);
 }

@@ -84,21 +84,24 @@ pub fn Render_Record(
         ("status", &front_matter.status),
     ]
     {
-        text.push_str(&Scalar(field, value)?);
+        let scalar = Scalar(field, value)?;
+        text.push_str(&scalar);
     }
 
     text.push_str("version: ");
     text.push_str(&front_matter.version.to_string());
     text.push('\n');
-    text.push_str(&Scalar("authority", &front_matter.authority)?);
+    let authority = Scalar("authority", &front_matter.authority)?;
+    text.push_str(&authority);
 
     if !front_matter.tags.is_empty()
     {
         text.push_str("tags:\n");
         for tag in &front_matter.tags
         {
+            let plain = Plain("tags", tag)?;
             text.push_str("  - ");
-            text.push_str(Plain("tags", tag)?);
+            text.push_str(plain);
             text.push('\n');
         }
     }
@@ -108,10 +111,12 @@ pub fn Render_Record(
         text.push_str("relations:\n");
         for relation in &front_matter.relations
         {
+            let target = Plain("relations.target", &relation.target)?;
+            let kind = Plain("relations.type", &relation.relation)?;
             text.push_str("  - target: ");
-            text.push_str(Plain("relations.target", &relation.target)?);
+            text.push_str(target);
             text.push_str("\n    type: ");
-            text.push_str(Plain("relations.type", &relation.relation)?);
+            text.push_str(kind);
             text.push('\n');
         }
     }

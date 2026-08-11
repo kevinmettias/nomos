@@ -83,7 +83,8 @@ pub fn Corpus_Gates() -> Vec<CorpusGate>
                     .to_string()
                     .replace('\\', "/");
 
-                gates.extend(Gates_In(&relative, &text));
+                let found = Gates_In(&relative, &text);
+                gates.extend(found);
             }
         }
     }
@@ -127,19 +128,7 @@ fn Gates_In(file: &str, text: &str) -> Vec<CorpusGate>
 
         for function in &functions
         {
-            let mut gained = BTreeSet::new();
-            for (name, variables) in &reach
-            {
-                if name == &function.name
-                {
-                    continue;
-                }
-                if function.body.contains(&format!("{name}("))
-                {
-                    gained.extend(variables.iter().cloned());
-                }
-            }
-
+            let gained = Gained(function, &reach);
             let known = reach.get(&function.name);
             if gained
                 .iter()
@@ -172,6 +161,29 @@ fn Gates_In(file: &str, text: &str) -> Vec<CorpusGate>
             });
         })
         .collect();
+}
+
+/// The corpus variables one function reaches through the helpers its body calls.
+///
+/// A function does not gain from itself: a recursive call would otherwise report a variable
+/// as newly reached on every pass and the fixpoint above would never settle.
+fn Gained(function: &Function, reach: &BTreeMap<String, BTreeSet<String>>) -> BTreeSet<String>
+{
+    let mut gained = BTreeSet::new();
+
+    for (name, variables) in reach
+    {
+        if name == &function.name
+        {
+            continue;
+        }
+        if function.body.contains(&format!("{name}("))
+        {
+            gained.extend(variables.iter().cloned());
+        }
+    }
+
+    return gained;
 }
 
 /// One function definition, with the text of its body.
@@ -296,6 +308,59 @@ pub(crate) struct Masks
     pub(crate) comment: Vec<bool>,
 }
 
+/// The byte after a block comment opening at `index`.
+///
+/// Rust nests block comments, so a depth counter rather than a search for the first `*/`.
+fn Block_Comment_End(bytes: &[u8], index: usize) -> usize
+{
+    let mut cursor = index.saturating_add(2);
+    let mut depth = 1_u32;
+
+    while cursor < bytes.len() && depth > 0
+    {
+        let opening = bytes.get(cursor).copied().unwrap_or(0);
+        let following = bytes.get(cursor.saturating_add(1)).copied().unwrap_or(0);
+        if opening == b'/' && following == b'*'
+        {
+            depth = depth.saturating_add(1);
+            cursor = cursor.saturating_add(2);
+        }
+        else if opening == b'*' && following == b'/'
+        {
+            depth = depth.saturating_sub(1);
+            cursor = cursor.saturating_add(2);
+        }
+        else
+        {
+            cursor = cursor.saturating_add(1);
+        }
+    }
+
+    return cursor;
+}
+
+/// The byte after an ordinary string literal opening at `index`.
+fn String_Literal_End(bytes: &[u8], index: usize) -> usize
+{
+    let mut cursor = index.saturating_add(1);
+
+    while let Some(byte) = bytes.get(cursor).copied()
+    {
+        if byte == b'\\'
+        {
+            cursor = cursor.saturating_add(2);
+            continue;
+        }
+        cursor = cursor.saturating_add(1);
+        if byte == b'"'
+        {
+            break;
+        }
+    }
+
+    return cursor;
+}
+
 /// Classifies every byte of a file.
 ///
 /// Brace matching without this counts the braces in `format!("{name}")` and desynchronises
@@ -328,30 +393,8 @@ pub(crate) fn Scan(text: &str) -> Masks
 
         if current == b'/' && next == b'*'
         {
-            // Rust nests block comments, so a depth counter rather than a search for the
-            // first `*/`.
             let start = index;
-            let mut depth = 1_u32;
-            index = index.saturating_add(2);
-            while index < bytes.len() && depth > 0
-            {
-                let opening = bytes.get(index).copied().unwrap_or(0);
-                let following = bytes.get(index.saturating_add(1)).copied().unwrap_or(0);
-                if opening == b'/' && following == b'*'
-                {
-                    depth = depth.saturating_add(1);
-                    index = index.saturating_add(2);
-                }
-                else if opening == b'*' && following == b'/'
-                {
-                    depth = depth.saturating_sub(1);
-                    index = index.saturating_add(2);
-                }
-                else
-                {
-                    index = index.saturating_add(1);
-                }
-            }
+            index = Block_Comment_End(bytes, index);
             Mark(&mut masks.comment, start, index);
             continue;
         }
@@ -364,20 +407,7 @@ pub(crate) fn Scan(text: &str) -> Masks
 
         if current == b'"'
         {
-            index = index.saturating_add(1);
-            while let Some(byte) = bytes.get(index).copied()
-            {
-                if byte == b'\\'
-                {
-                    index = index.saturating_add(2);
-                    continue;
-                }
-                index = index.saturating_add(1);
-                if byte == b'"'
-                {
-                    break;
-                }
-            }
+            index = String_Literal_End(bytes, index);
             continue;
         }
 
@@ -660,22 +690,25 @@ pub(crate) fn Matching_Brace(bytes: &[u8], mask: &[bool], open: usize) -> Option
 
     while cursor < bytes.len()
     {
-        if Is_Code(mask, cursor)
+        if !Is_Code(mask, cursor)
         {
-            match bytes.get(cursor).copied()
+            cursor = cursor.saturating_add(1);
+            continue;
+        }
+
+        match bytes.get(cursor).copied()
+        {
+            Some(b'{') => depth = depth.saturating_add(1),
+            Some(b'}') =>
             {
-                Some(b'{') => depth = depth.saturating_add(1),
-                Some(b'}') =>
+                depth = depth.saturating_sub(1);
+                if depth == 0
                 {
-                    depth = depth.saturating_sub(1);
-                    if depth == 0
-                    {
-                        return Some(cursor);
-                    }
+                    return Some(cursor);
                 }
-                _ =>
-                {}
             }
+            _ =>
+            {}
         }
         cursor = cursor.saturating_add(1);
     }
@@ -755,16 +788,7 @@ pub(crate) fn Without_Test_Modules(text: &str) -> String
             ItemShape::Declaration(end) => (index, end),
         };
 
-        for offset in from..=to
-        {
-            if let Some(slot) = blanked.get_mut(offset)
-            {
-                if *slot != b'\n'
-                {
-                    *slot = b' ';
-                }
-            }
-        }
+        Blank(&mut blanked, from, to);
 
         index = to.saturating_add(1);
     }
@@ -774,6 +798,27 @@ pub(crate) fn Without_Test_Modules(text: &str) -> String
     // not be, and the lossy conversion is what keeps a scanner bug from becoming a panic in
     // a check that is supposed to report.
     return String::from_utf8_lossy(&blanked).into_owned();
+}
+
+/// Overwrites a byte range with spaces, leaving line breaks where they were.
+///
+/// Keeping the newlines is what lets a caller line a blanked buffer up with the original by
+/// line as well as by offset.
+fn Blank(bytes: &mut [u8], from: usize, to: usize)
+{
+    for offset in from..=to
+    {
+        let Some(slot) = bytes.get_mut(offset)
+        else
+        {
+            continue;
+        };
+
+        if *slot != b'\n'
+        {
+            *slot = b' ';
+        }
+    }
 }
 
 /// The attribute that marks an item as test-only.

@@ -8,7 +8,7 @@ use nomos_ledger::{
     Finishing,
     Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish,
     FinishRefusal, GateOutcome, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem,
-    ReleaseOutcome, SCHEMA_VERSION, Territory as ItemTerritory, Validate, VerificationPredicate,
+    ReleaseOutcome, Reservation, SCHEMA_VERSION, Territory as ItemTerritory, Validate, VerificationPredicate,
     VerificationRecord,
 };
 use nomos_model::SetResolution;
@@ -25,6 +25,16 @@ use std::time::Duration;
 /// intermittently wrong.
 struct FixedClock(i64);
 
+impl Clock for FixedClock
+{
+    fn Now(&self) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(self.0);
+    }
+}
+
+/// Offered by reference as well, so the two shared statics can be lent to many ledgers while
+/// a test that needs its own moment hands one over by value.
 impl Clock for &FixedClock
 {
     fn Now(&self) -> Timestamp
@@ -90,14 +100,41 @@ fn Document(items: Vec<LedgerItem>) -> LedgerDocument
     };
 }
 
-fn Temp_Dir(name: &str) -> PathBuf
+/// A temporary repository that removes itself when the test holding it ends.
+///
+/// Every test here used to close with its own `remove_dir_all`, which is a line that only
+/// runs when the test passes: a failed assertion unwinds straight past it. `Drop` runs on
+/// the unwind too, so the tree is cleared exactly when the value goes out of scope and the
+/// cleanup is no longer a step a test can forget or an assertion can skip.
+struct Scratch(PathBuf);
+
+impl Drop for Scratch
+{
+    fn drop(&mut self)
+    {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
+impl std::ops::Deref for Scratch
+{
+    type Target = Path;
+
+    fn deref(&self) -> &Path
+    {
+        return &self.0;
+    }
+}
+
+fn Temp_Dir(name: &str) -> Scratch
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-ledger-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&path);
     std::fs::create_dir_all(&path).expect("test needs a temp directory");
     Write_Gate(&path);
-    return path;
+
+    return Scratch(path);
 }
 
 /// Every tree these tests build is a repository with a gate, because finishing now reads
@@ -123,10 +160,252 @@ fn Write_Gate(directory: &Path)
     .expect("test needs a workflow");
 }
 
-fn Ledger_At<'clock>(
+/// The clock every test that does not move time shares.
+///
+/// A `'static` clock is what lets [`Board_At`] hand back a ledger: the ledger borrows its
+/// clock, so a local one could not outlive the call that built it. A test that needs time
+/// to move builds its own later clock and a second ledger over the same directory.
+static AT_NOW: FixedClock = FixedClock(NOW);
+
+/// The one-hour lease every test here takes, said once.
+const LEASE: Duration = Duration::from_secs(3_600);
+
+/// One agent claims one item for the standard lease, and it is expected to succeed.
+///
+/// A refusal here is the fixture failing rather than the assertion under test, so it panics
+/// with the refusal's own words instead of returning it.
+fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str)
+{
+    ledger
+        .Claim(&ItemId::New(item), holder, LEASE)
+        .unwrap_or_else(|refusal| panic!("the fixture claim was refused: {}", refusal.Describe()));
+}
+
+/// An item whose territory carries a pattern, which nothing on the command line can build
+/// any more — `OD-LEDGER-013` withdrew `--territory-pattern` — and which these two tests
+/// still construct by hand, because the state stays reachable by editing the document.
+fn Patterned(id: &str, files: &[&str], pattern: &str) -> LedgerItem
+{
+    let mut item = Item(id, files);
+    item.territory = item.territory.With_Pattern(pattern);
+
+    return item;
+}
+
+/// An item that is `Done` and carries the evidence that made it done.
+///
+/// A `Done` item without a verification record is not a valid ledger, so the two are built
+/// together or not at all.
+fn Finished(id: &str, files: &[&str]) -> LedgerItem
+{
+    let mut item = Item(id, files);
+    item.state = ItemState::Done;
+    item.verified = Some(VerificationRecord {
+        argv: vec!["cargo".to_owned(), "test".to_owned()],
+        exit_code: 0,
+        output_tail: "ok".to_owned(),
+        verified_at: At(NOW),
+        gate: None,
+    });
+
+    return item;
+}
+
+/// A holder releases its own claim as finished, carrying the evidence that made it so.
+///
+/// The record is the fixture rather than the subject — what these tests assert is what the
+/// store does with it — so building it here keeps eleven lines of literal out of the test.
+fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str)
+{
+    ledger
+        .Release(
+            &ItemId::New(item),
+            holder,
+            ReleaseOutcome::Finished(VerificationRecord {
+                argv: vec!["cargo".to_owned(), "test".to_owned()],
+                exit_code: 0,
+                output_tail: "ok".to_owned(),
+                verified_at: At(NOW),
+                gate: None,
+            }),
+        )
+        .expect("a release carrying evidence must be accepted");
+}
+
+/// Every abandonment the item kept, as who stopped and what they said, oldest first.
+fn Abandonments(item: &LedgerItem) -> Vec<(&str, &str)>
+{
+    return item
+        .abandoned
+        .iter()
+        .map(|entry| return (entry.holder.as_str(), entry.reason.as_str()))
+        .collect();
+}
+
+/// A holder gives up its own claim, with the words it gave for stopping.
+fn Abandon<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str, reason: &str)
+{
+    ledger
+        .Release(
+            &ItemId::New(item),
+            holder,
+            ReleaseOutcome::Abandoned {
+                reason: reason.to_owned(),
+            },
+        )
+        .expect("a holder may give up its own claim");
+}
+
+/// A claim that is expected to be refused, with the refusal handed back as the value the
+/// test is about.
+fn Refused<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str) -> ClaimRefusal
+{
+    return ledger
+        .Claim(&ItemId::New(item), holder, LEASE)
+        .expect_err("this claim is contended and must be refused");
+}
+
+/// Runs an item's own verification predicate through the ledger, in a named repository.
+fn Finish_In(
+    ledger: &mut FileLedger<StdFileSystem, &FixedClock, FileLock>,
     directory: &Path,
-    clock: &'clock FixedClock,
-) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
+    item: &str,
+    holder: &str,
+) -> Result<VerificationRecord, FinishRefusal>
+{
+    return Finish(
+        ledger,
+        &StdProcessLauncher,
+        &Finishing {
+            item: &ItemId::New(item),
+            holder,
+        },
+        Some(directory),
+    );
+}
+
+/// The one item a single-item board carries, read back through the file.
+///
+/// Nearly every test below reaches the same pair of lines to get at the one value it asserts
+/// on. Naming the pair keeps the load out of the assertion's way, and going through the file
+/// rather than through the in-memory value is the point of asserting at all: what the next
+/// session sees is what was written, not what this one still holds.
+fn Only_Item<Clock: nomos_platform::Clock>(
+    ledger: &FileLedger<StdFileSystem, Clock, FileLock>,
+) -> LedgerItem
+{
+    return ledger
+        .Load()
+        .expect("the ledger is readable")
+        .items
+        .into_iter()
+        .next()
+        .expect("the item survives");
+}
+
+/// One named item on a board carrying several, read back through the file.
+///
+/// The multi-item boards assert about one of their items and use the others as the context
+/// that makes the assertion mean something, so reaching the subject by name rather than by
+/// position keeps the test honest when the board is reordered.
+fn Named<Clock: nomos_platform::Clock>(
+    id: &str,
+    ledger: &FileLedger<StdFileSystem, Clock, FileLock>,
+) -> LedgerItem
+{
+    return ledger
+        .Load()
+        .expect("the ledger is readable")
+        .items
+        .into_iter()
+        .find(|item| return item.id == ItemId::New(id))
+        .unwrap_or_else(|| panic!("{id} survives"));
+}
+
+/// Who an item's own claim names, or nothing when it carries none.
+///
+/// The tests compare holders, and `claim.as_ref().map(|claim| claim.holder.clone())` is four
+/// tokens of plumbing in front of one word. This says the word.
+fn Holder(item: &LedgerItem) -> Option<&str>
+{
+    return item.claim.as_ref().map(|claim| return claim.holder.as_str());
+}
+
+/// Who holds an item now and every holder a takeover displaced, as one value.
+///
+/// The takeover tests all turn on the *pair*: a takeover that installs the new holder while
+/// dropping the old one passes an assertion on either field alone, and is exactly the outcome
+/// `OD-LEDGER-012` exists to prevent. Comparing the pair is what makes that one failure.
+#[derive(Debug, PartialEq, Eq)]
+struct Standing<'a>
+{
+    held_by: Option<&'a str>,
+    displaced: Vec<&'a str>,
+}
+
+fn Standing_Of(item: &LedgerItem) -> Standing<'_>
+{
+    return Standing {
+        held_by: Holder(item),
+        displaced: item
+            .displaced
+            .iter()
+            .map(|claim| return claim.holder.as_str())
+            .collect(),
+    };
+}
+
+/// Two hours after [`AT_NOW`], by which time the one-hour lease these tests take has lapsed.
+static AT_LATER: FixedClock = FixedClock(NOW + 7_200);
+
+/// The same board read again once its lease has lapsed.
+fn After_The_Lapse(
+    directory: &Path,
+) -> FileLedger<StdFileSystem, &'static FixedClock, FileLock>
+{
+    return Ledger_At(directory, &AT_LATER);
+}
+
+/// One agent takes a lapsed item over for the standard lease, with the verdict handed back.
+///
+/// Unlike [`Take`] this returns rather than panics, because both outcomes are subjects here:
+/// half these tests are about the takeover succeeding and half about it being refused.
+fn Take_Over_In<Clock: nomos_platform::Clock>(
+    ledger: &mut FileLedger<StdFileSystem, Clock, FileLock>,
+    item: &str,
+    holder: &str,
+) -> Result<Reservation, ClaimRefusal>
+{
+    return ledger.Take_Over(&ItemId::New(item), holder, LEASE);
+}
+
+/// The same board read again by a ledger standing at a named moment.
+///
+/// A ledger that owns its clock is what makes a moment one argument. Borrowing one forces
+/// every test that moves time to bind the clock first and keep it alive by hand, which is two
+/// lines of scaffolding in front of the one number the test is actually varying.
+fn Ledger_When(directory: &Path, seconds: i64) -> FileLedger<StdFileSystem, FixedClock, FileLock>
+{
+    return Ledger_At(directory, FixedClock(seconds));
+}
+
+/// A ledger on a fresh temporary directory, already holding the board it starts from.
+fn Board_At(
+    name: &str,
+    items: Vec<LedgerItem>,
+) -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
+{
+    let directory = Temp_Dir(name);
+    let ledger = Ledger_At(&directory, &AT_NOW);
+    ledger.Save(&Document(items)).expect("a fresh ledger is valid");
+
+    return (directory, ledger);
+}
+
+fn Ledger_At<Clock: nomos_platform::Clock>(
+    directory: &Path,
+    clock: Clock,
+) -> FileLedger<StdFileSystem, Clock, FileLock>
 {
     let ledger_path = directory.join("ledger.json");
     let lock_path = directory.join("ledger.lock");
@@ -313,30 +592,18 @@ fn Test_Validation_Should_Report_Every_Violation_At_Once()
 #[test]
 fn Test_Claiming_Overlapping_Territory_Should_Be_Refused()
 {
-    let directory = Temp_Dir("claim-overlap");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("claim-overlap", vec![
+        Item("T-1", &["src/a.rs", "src/shared.rs"]),
+        Item("T-2", &["src/shared.rs", "src/b.rs"]),
+    ]);
 
-    ledger
-        .Save(&Document(vec![
-            Item("T-1", &["src/a.rs", "src/shared.rs"]),
-            Item("T-2", &["src/shared.rs", "src/b.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("the first claim is uncontended");
-
-    let refusal = ledger
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect_err("overlapping territory must be refused");
+    let refusal = Refused(&mut ledger, "T-2", "agent-b");
 
     assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }));
     assert!(refusal.Is_Retryable(), "a held item is a queue, not a wall");
     assert!(refusal.Describe().contains("agent-a"));
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The negative control: disjoint territory claims concurrently, which is the entire
@@ -344,27 +611,15 @@ fn Test_Claiming_Overlapping_Territory_Should_Be_Refused()
 #[test]
 fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
 {
-    let directory = Temp_Dir("claim-disjoint");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("claim-disjoint", vec![
+        Item("T-1", &["src/a.rs"]),
+        Item("T-2", &["src/b.rs"]),
+    ]);
 
-    ledger
-        .Save(&Document(vec![
-            Item("T-1", &["src/a.rs"]),
-            Item("T-2", &["src/b.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-    ledger
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect("disjoint territory must be claimable concurrently");
+    Take(&mut ledger, "T-1", "agent-a");
+    Take(&mut ledger, "T-2", "agent-b");
 
     ledger.Validate_Current().expect("both claims are legitimate");
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// What an unexpanded pattern does to the board, pinned as measured rather than as argued.
@@ -397,48 +652,35 @@ fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
 #[test]
 fn Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board()
 {
-    let directory = Temp_Dir("pattern-brick");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    let mut vague = Item("T-1", &["src/a.rs"]);
-    vague.territory = vague.territory.With_Pattern("crates/spec/**");
-
-    ledger
-        .Save(&Document(vec![
-            vague,
-            Item("T-2", &["docs/unrelated.md"]),
-            Item("T-3", &["tests/also-unrelated.rs"]),
-        ]))
-        .expect("a document carrying a pattern is well-formed, which is the problem");
-
+    let (_directory, mut ledger) = Board_At("pattern-brick", vec![
+        Patterned("T-1", &["src/a.rs"], "crates/spec/**"),
+        Item("T-2", &["docs/unrelated.md"]),
+        Item("T-3", &["tests/also-unrelated.rs"]),
+    ]);
     // 1. It claims without complaint. Nothing is held yet, so nothing is compared, so the
     //    pattern is never consulted. This is the step the item's description missed.
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("on a quiet board a pattern item claims like any other, which is the trap");
+    Take(&mut ledger, "T-1", "agent-a");
 
     // 2. And now the board is shut. `docs/unrelated.md` shares nothing with `src/a.rs` or
     //    with `crates/spec/**`, and is refused anyway — the short-circuit runs before any
     //    path is looked at, so being unrelated is no defence.
     for (item, holder) in [("T-2", "agent-b"), ("T-3", "agent-c")]
     {
-        let collateral = ledger
-            .Claim(&ItemId::New(item), holder, Duration::from_secs(3_600))
-            .expect_err("every other claim is refused against the held pattern");
-
-        assert!(
-            matches!(collateral, ClaimRefusal::UnknownIndependence { .. }),
-            "{item}: {collateral:?}"
-        );
-        assert!(
-            !collateral.Is_Retryable(),
-            "{item}: this is the sharp end — a non-retryable refusal tells the agent to stop \
-             and fetch a person, so one held pattern reads to every session as a broken ledger"
-        );
+        let collateral = Refused(&mut ledger, item, holder);
+        Is_Collateral_Damage(item, &collateral);
     }
+}
 
-    let _ = std::fs::remove_dir_all(&directory);
+/// A claim refused for no reason of its own: unanswerable rather than contended, and
+/// non-retryable, which is what tells the agent to stop and fetch a person. One held pattern
+/// therefore reads to every other session as a broken ledger.
+fn Is_Collateral_Damage(item: &str, refusal: &ClaimRefusal)
+{
+    assert!(
+        matches!(refusal, ClaimRefusal::UnknownIndependence { .. }),
+        "{item}: {refusal:?}"
+    );
+    assert!(!refusal.Is_Retryable(), "{item}: {}", refusal.Describe());
 }
 
 /// And it shuts in the other direction too, once anything at all is held.
@@ -450,24 +692,13 @@ fn Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board()
 #[test]
 fn Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held()
 {
-    let directory = Temp_Dir("pattern-brick-reverse");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("pattern-brick-reverse", vec![
+        Item("T-1", &["docs/unrelated.md"]),
+        Patterned("T-2", &["src/b.rs"], "crates/spec/**"),
+    ]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    let mut vague = Item("T-2", &["src/b.rs"]);
-    vague.territory = vague.territory.With_Pattern("crates/spec/**");
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["docs/unrelated.md"]), vague]))
-        .expect("a document carrying a pattern is well-formed");
-
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("an ordinary item on a quiet board");
-
-    let refused = ledger
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect_err("the pattern item cannot be claimed while anything is held");
+    let refused = Refused(&mut ledger, "T-2", "agent-b");
 
     assert!(matches!(refused, ClaimRefusal::UnknownIndependence { .. }), "{refused:?}");
     assert!(
@@ -475,8 +706,6 @@ fn Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held()
         "and waiting will not help: `docs/unrelated.md` is disjoint from `src/b.rs`, so the \
          refusal is not contention and no lease expiring resolves it"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A refusal printed under the refused item's own identifier must not read as a statement
@@ -494,27 +723,21 @@ fn Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held()
 #[test]
 fn Test_A_Refusal_Should_Not_Open_With_The_Blockers_Name()
 {
-    let directory = Temp_Dir("refusal-subject");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("refusal-subject", vec![
+        Item("T-BLOCKER", &["src/shared.rs"]),
+        Item("T-REFUSED", &["src/shared.rs"]),
+    ]);
 
-    ledger
-        .Save(&Document(vec![
-            Item("T-BLOCKER", &["src/shared.rs"]),
-            Item("T-REFUSED", &["src/shared.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
+    Take(&mut ledger, "T-BLOCKER", "agent-a");
 
-    ledger
-        .Claim(&ItemId::New("T-BLOCKER"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
+    Reads_As_A_Statement_About_The_Refused_Item(
+        &Refused(&mut ledger, "T-REFUSED", "agent-b").Describe(),
+    );
+}
 
-    let refusal = ledger
-        .Claim(&ItemId::New("T-REFUSED"), "agent-b", Duration::from_secs(3_600))
-        .expect_err("overlapping territory must be refused");
-
-    let sentence = refusal.Describe();
-
+/// The three things the sentence has to do, and the line `work audit` composes from it.
+fn Reads_As_A_Statement_About_The_Refused_Item(sentence: &str)
+{
     // The whole defect in one assertion: the blocker's name must not be the first thing the
     // sentence says. Restoring `{item} overlaps territory held by {holder} …` makes this red
     // and leaves every other assertion in this file green, which is what makes it the control
@@ -526,25 +749,16 @@ fn Test_A_Refusal_Should_Not_Open_With_The_Blockers_Name()
     );
 
     // And it still has to say who is in the way, or the fix would have been to delete the
-    // information rather than to place it.
-    assert!(
-        sentence.contains("T-BLOCKER"),
-        "the refusal must still name the blocker: {sentence}"
-    );
-    assert!(
-        sentence.contains("agent-a"),
-        "and who holds it: {sentence}"
-    );
-
-    // The composed line `work audit` actually prints. Read as English, the subject is
-    // `T-REFUSED` and `T-BLOCKER` is what its territory runs into.
+    // information rather than to place it. The composed line is what `work audit` prints:
+    // read as English its subject is `T-REFUSED`, and `T-BLOCKER` is what the territory runs
+    // into.
     let line = format!("{:<13} {:<9} {sentence}", "T-REFUSED", "held");
+    assert!(sentence.contains("T-BLOCKER"), "must still name the blocker: {sentence}");
+    assert!(sentence.contains("agent-a"), "and who holds it: {sentence}");
     assert!(
         line.starts_with("T-REFUSED"),
         "the caller names the subject and the description follows it: {line}"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// One rendering, not two.
@@ -575,25 +789,13 @@ fn Test_The_Held_Arm_Should_Have_Exactly_One_Rendering()
 #[test]
 fn Test_The_Same_Board_Without_The_Pattern_Should_Claim_Freely()
 {
-    let directory = Temp_Dir("pattern-brick-control");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("pattern-brick-control", vec![
+        Item("T-1", &["src/a.rs"]),
+        Item("T-2", &["docs/unrelated.md"]),
+    ]);
 
-    ledger
-        .Save(&Document(vec![
-            Item("T-1", &["src/a.rs"]),
-            Item("T-2", &["docs/unrelated.md"]),
-        ]))
-        .expect("a fresh ledger is valid");
-
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("the pattern was the only thing stopping this");
-    ledger
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect("and the only thing stopping this");
-
-    let _ = std::fs::remove_dir_all(&directory);
+    Take(&mut ledger, "T-1", "agent-a");
+    Take(&mut ledger, "T-2", "agent-b");
 }
 
 /// A directory reserves what is beneath it, which is what the withdrawn flag was for.
@@ -605,26 +807,14 @@ fn Test_The_Same_Board_Without_The_Pattern_Should_Claim_Freely()
 #[test]
 fn Test_A_Directory_Should_Reserve_Its_Subtree_Without_A_Pattern()
 {
-    let directory = Temp_Dir("subtree-without-pattern");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("subtree-without-pattern", vec![
+        Item("T-1", &["crates/spec"]),
+        Item("T-2", &["crates/spec/nomos-spec-model/src/lib.rs"]),
+        Item("T-3", &["crates/host/nomos-cli/src/work.rs"]),
+    ]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![
-            Item("T-1", &["crates/spec"]),
-            Item("T-2", &["crates/spec/nomos-spec-model/src/lib.rs"]),
-            Item("T-3", &["crates/host/nomos-cli/src/work.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let refusal = ledger
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect_err("a file inside a reserved directory is reserved");
-
+    let refusal = Refused(&mut ledger, "T-2", "agent-b");
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),
         "the subtree is *held*, not unanswerable — the distinction is the whole record: \
@@ -634,14 +824,9 @@ fn Test_A_Directory_Should_Reserve_Its_Subtree_Without_A_Pattern()
         refusal.Is_Retryable(),
         "and it is a queue rather than a wall, which the pattern never was"
     );
-
     // While genuinely unrelated territory is still free, so the directory entry reserves a
     // subtree rather than the repository.
-    ledger
-        .Claim(&ItemId::New("T-3"), "agent-c", Duration::from_secs(3_600))
-        .expect("a directory reserves its subtree, not the board");
-
-    let _ = std::fs::remove_dir_all(&directory);
+    Take(&mut ledger, "T-3", "agent-c");
 }
 
 // ---------------------------------------------------------------------------
@@ -673,31 +858,14 @@ fn Item_Verified_By(id: &str, files: &[&str], argv: Vec<String>) -> LedgerItem
 #[test]
 fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
 {
-    let directory = Temp_Dir("finish-fails");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("finish-fails", vec![Item_Verified_By(
+        "T-1",
+        &["src/a.rs"],
+        Exits_With(1),
+    )]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item_Verified_By(
-            "T-1",
-            &["src/a.rs"],
-            Exits_With(1),
-        )]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let refusal = Finish(
-        &mut ledger,
-        &StdProcessLauncher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: "agent-a",
-        },
-        Some(&directory,
-    ),
-    )
+    let refusal = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
     .expect_err("a predicate that exits non-zero must refuse the completion");
 
     assert!(matches!(refusal, FinishRefusal::PredicateFailed { .. }));
@@ -709,8 +877,6 @@ fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
         Some(&ItemState::Claimed),
         "a refused completion must leave the item claimed, not done"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The negative control. Without it, a `Finish` that refused everything unconditionally
@@ -718,38 +884,20 @@ fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
 #[test]
 fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
 {
-    let directory = Temp_Dir("finish-passes");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("finish-passes", vec![Item_Verified_By(
+        "T-1",
+        &["src/a.rs"],
+        Exits_With(0),
+    )]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item_Verified_By(
-            "T-1",
-            &["src/a.rs"],
-            Exits_With(0),
-        )]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let record = Finish(
-        &mut ledger,
-        &StdProcessLauncher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: "agent-a",
-        },
-        Some(&directory,
-    ),
-    )
+    let record = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
     .expect("a passing predicate must finish the item");
 
     assert_eq!(record.exit_code, 0);
     assert_eq!(record.verified_at, At(NOW));
 
-    let after = ledger.Load().expect("readable");
-    let finished = after.items.first().expect("the item survives");
+    let finished = Only_Item(&ledger);
     assert_eq!(finished.state, ItemState::Done);
     assert!(
         finished.verified.is_some(),
@@ -758,8 +906,6 @@ fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
     ledger
         .Validate_Current()
         .expect("a verified done item is a valid ledger");
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// An item with nothing to run cannot be shown to be finished. "There was nothing to
@@ -767,27 +913,10 @@ fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
 #[test]
 fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
 {
-    let directory = Temp_Dir("finish-no-predicate");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("finish-no-predicate", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let refusal = Finish(
-        &mut ledger,
-        &StdProcessLauncher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: "agent-a",
-        },
-        Some(&directory,
-    ),
-    )
+    let refusal = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
     .expect_err("an item with no predicate cannot be finished");
 
     assert!(matches!(refusal, FinishRefusal::NoPredicate { .. }));
@@ -795,8 +924,6 @@ fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
         !refusal.Judged_The_Work(),
         "nothing was learned about the work"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A predicate that cannot be started says nothing about the work. Reporting it as a
@@ -804,37 +931,18 @@ fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
 #[test]
 fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
 {
-    let directory = Temp_Dir("finish-unstartable");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("finish-unstartable", vec![Item_Verified_By(
+        "T-1",
+        &["src/a.rs"],
+        vec!["nomos-no-such-program-exists".to_owned()],
+    )]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item_Verified_By(
-            "T-1",
-            &["src/a.rs"],
-            vec!["nomos-no-such-program-exists".to_owned()],
-        )]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let refusal = Finish(
-        &mut ledger,
-        &StdProcessLauncher,
-        &Finishing {
-            item: &ItemId::New("T-1"),
-            holder: "agent-a",
-        },
-        Some(&directory,
-    ),
-    )
+    let refusal = Finish_In(&mut ledger, &directory, "T-1", "agent-a")
     .expect_err("a missing program is not a verdict");
 
     assert!(matches!(refusal, FinishRefusal::CouldNotRun { .. }));
     assert!(!refusal.Judged_The_Work());
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The state transition to `Done` carries its own evidence, so an item cannot arrive
@@ -842,40 +950,17 @@ fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
 #[test]
 fn Test_Releasing_As_Finished_Should_Record_The_Verification()
 {
-    let directory = Temp_Dir("finish-records");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("finish-records", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
+    Release_As_Finished(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Release(
-            &ItemId::New("T-1"),
-            "agent-a",
-            ReleaseOutcome::Finished(VerificationRecord {
-                argv: vec!["cargo".to_owned(), "test".to_owned()],
-                exit_code: 0,
-                output_tail: "ok".to_owned(),
-                verified_at: At(NOW),
-                gate: None,
-            }),
-        )
-        .expect("a release carrying evidence must be accepted");
-
-    let after = ledger.Load().expect("readable");
-    let finished = after.items.first().expect("the item survives");
+    let finished = Only_Item(&ledger);
     assert_eq!(finished.state, ItemState::Done);
     assert_eq!(
         finished.verified.as_ref().map(|record| record.exit_code),
         Some(0)
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The reason these tests assert on.
@@ -895,29 +980,12 @@ const REASON: &str =
 #[test]
 fn Test_Releasing_As_Abandoned_Should_Record_Who_Stopped_And_Why()
 {
-    let directory = Temp_Dir("abandon-records");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("abandon-records", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
+    Abandon(&mut ledger, "T-1", "agent-a", REASON);
 
-    ledger
-        .Release(
-            &ItemId::New("T-1"),
-            "agent-a",
-            ReleaseOutcome::Abandoned {
-                reason: REASON.to_owned(),
-            },
-        )
-        .expect("a holder may give up its own claim");
-
-    let after = ledger.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
+    let item = Only_Item(&ledger);
     let abandonment = item
         .abandoned
         .first()
@@ -926,8 +994,6 @@ fn Test_Releasing_As_Abandoned_Should_Record_Who_Stopped_And_Why()
     assert_eq!(abandonment.reason, REASON, "the reason the holder gave was not kept");
     assert_eq!(abandonment.holder, "agent-a", "the record does not say who stopped");
     assert_eq!(abandonment.abandoned_at, At(NOW), "the record does not say when");
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The second control, holding a line the crate already drew.
@@ -939,44 +1005,22 @@ fn Test_Releasing_As_Abandoned_Should_Record_Who_Stopped_And_Why()
 #[test]
 fn Test_An_Abandoned_Item_Should_Return_To_Ready_And_Stop_Excluding()
 {
-    let directory = Temp_Dir("abandon-releases");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("abandon-releases", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
+    Abandon(&mut ledger, "T-1", "agent-a", REASON);
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-    ledger
-        .Release(
-            &ItemId::New("T-1"),
-            "agent-a",
-            ReleaseOutcome::Abandoned {
-                reason: REASON.to_owned(),
-            },
-        )
-        .expect("a holder may give up its own claim");
-
-    let after = ledger.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
+    let item = Only_Item(&ledger);
     assert_eq!(item.state, ItemState::Ready);
     assert!(item.claim.is_none(), "a claim that survives an abandonment goes on excluding");
 
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
-        .expect("an abandoned item must be claimable by somebody else");
+    Take(&mut ledger, "T-1", "agent-b");
 
-    let taken = ledger.Load().expect("readable");
-    let again = taken.items.first().expect("the item survives");
+    let again = Only_Item(&ledger);
     assert_eq!(
         again.abandoned.len(),
         1,
         "the next claim erased the record of the last one"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// Why the field is a list and not the most recent one.
@@ -986,46 +1030,22 @@ fn Test_An_Abandoned_Item_Should_Return_To_Ready_And_Stop_Excluding()
 #[test]
 fn Test_An_Item_Abandoned_Twice_Should_Keep_Both_Reasons()
 {
-    let directory = Temp_Dir("abandon-twice");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (_directory, mut ledger) = Board_At("abandon-twice", vec![Item("T-1", &["src/a.rs"])]);
 
     for (holder, reason) in [("agent-a", "ran out of lease"), ("agent-b", REASON)]
     {
         ledger
             .Claim(&ItemId::New("T-1"), holder, Duration::from_secs(3_600))
             .expect("an abandoned item is claimable again");
-        ledger
-            .Release(
-                &ItemId::New("T-1"),
-                holder,
-                ReleaseOutcome::Abandoned {
-                    reason: reason.to_owned(),
-                },
-            )
-            .expect("a holder may give up its own claim");
+        Abandon(&mut ledger, "T-1", holder, reason);
     }
 
-    let after = ledger.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
-
-    let said: Vec<(&str, &str)> = item
-        .abandoned
-        .iter()
-        .map(|entry| return (entry.holder.as_str(), entry.reason.as_str()))
-        .collect();
-
+    let item = Only_Item(&ledger);
     assert_eq!(
-        said,
+        Abandonments(&item),
         vec![("agent-a", "ran out of lease"), ("agent-b", REASON)],
         "both abandonments must survive, oldest first"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The question `OD-LEDGER-006` settles, asserted here rather than left in the prose.
@@ -1045,21 +1065,11 @@ fn Test_An_Item_Abandoned_Twice_Should_Keep_Both_Reasons()
 #[test]
 fn Test_A_Lapsed_Claim_Should_Stay_Visible_And_Invent_No_Reason()
 {
-    let directory = Temp_Dir("abandon-lapse");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("abandon-lapse", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let later = FixedClock(NOW + 7_200);
-    let lapsed = Ledger_At(&directory, &later);
-    let after = lapsed.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
+    let lapsed = After_The_Lapse(&directory);
+    let item = Only_Item(&lapsed);
 
     assert!(
         item.abandoned.is_empty(),
@@ -1074,20 +1084,12 @@ fn Test_A_Lapsed_Claim_Should_Stay_Visible_And_Invent_No_Reason()
         !item.Has_Active_Claim(At(NOW + 7_200)),
         "a lapsed claim must stop counting as an active claim"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 #[test]
 fn Test_A_Lease_Beyond_The_Ceiling_Should_Be_Refused()
 {
-    let directory = Temp_Dir("claim-lease");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (_directory, mut ledger) = Board_At("claim-lease", vec![Item("T-1", &["src/a.rs"])]);
 
     let refusal = ledger
         .Claim(
@@ -1098,31 +1100,19 @@ fn Test_A_Lease_Beyond_The_Ceiling_Should_Be_Refused()
         .expect_err("an unbounded lease defeats the ledger");
 
     assert!(matches!(refusal, ClaimRefusal::LeaseTooLong { .. }));
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 #[test]
 fn Test_Renewing_Someone_Elses_Claim_Should_Be_Refused()
 {
-    let directory = Temp_Dir("renew-foreign");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
+    let (_directory, mut ledger) = Board_At("renew-foreign", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
     let refusal = ledger
         .Renew(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
         .expect_err("renewing another holder's claim must be refused");
 
     assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }));
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 // ---------------------------------------------------------------------------
@@ -1136,30 +1126,24 @@ fn Test_Renewing_Someone_Elses_Claim_Should_Be_Refused()
 fn Test_A_Corrupt_Ledger_Should_Be_An_Error_Not_An_Empty_One()
 {
     let directory = Temp_Dir("corrupt");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
+    let ledger = Ledger_At(&directory, &AT_NOW);
 
     std::fs::write(directory.join("ledger.json"), "{ this is not json").expect("write");
 
     let error = ledger.Load().expect_err("a corrupt ledger must not read as empty");
 
     assert!(matches!(error, LedgerError::Malformed { .. }));
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 #[test]
 fn Test_A_Missing_Ledger_Should_Read_As_Empty()
 {
     let directory = Temp_Dir("missing");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
+    let ledger = Ledger_At(&directory, &AT_NOW);
 
     let document = ledger.Load().expect("a missing ledger is not an error");
 
     assert!(document.items.is_empty());
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// An invalid document must be refused *before* it is written. A ledger that is written
@@ -1169,8 +1153,7 @@ fn Test_A_Missing_Ledger_Should_Read_As_Empty()
 fn Test_Saving_An_Invalid_Ledger_Should_Be_Refused_Before_The_Write()
 {
     let directory = Temp_Dir("refuse-invalid");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
+    let ledger = Ledger_At(&directory, &AT_NOW);
 
     let mut blocked = Item("T-1", &["src/a.rs"]);
     blocked.state = ItemState::Blocked;
@@ -1184,8 +1167,6 @@ fn Test_Saving_An_Invalid_Ledger_Should_Be_Refused_Before_The_Write()
         !directory.join("ledger.json").exists(),
         "nothing may be written when validation fails"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// Round-tripping must be lossless. If it is not, an agent's claim silently changes
@@ -1194,8 +1175,7 @@ fn Test_Saving_An_Invalid_Ledger_Should_Be_Refused_Before_The_Write()
 fn Test_The_Ledger_Should_Round_Trip_Losslessly()
 {
     let directory = Temp_Dir("round-trip");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
+    let ledger = Ledger_At(&directory, &AT_NOW);
 
     let original = Document(vec![
         Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", NOW + 3_600),
@@ -1206,8 +1186,6 @@ fn Test_The_Ledger_Should_Round_Trip_Losslessly()
     let reloaded = ledger.Load().expect("readable");
 
     assert_eq!(reloaded, original);
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 // ---------------------------------------------------------------------------
@@ -1246,17 +1224,13 @@ fn Raw_Ledger(schema_version: u32, extra: &str) -> String
 fn Test_A_Ledger_Carrying_An_Undeclared_Key_Should_Not_Load()
 {
     let directory = Temp_Dir("undeclared-key");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
+    let ledger = Ledger_At(&directory, &AT_NOW);
 
-    std::fs::write(
-        directory.join("ledger.json"),
-        Raw_Ledger(
-            SCHEMA_VERSION,
-            ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}",
-        ),
-    )
-    .expect("write");
+    let raw = Raw_Ledger(
+        SCHEMA_VERSION,
+        ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}",
+    );
+    std::fs::write(directory.join("ledger.json"), raw).expect("write");
 
     let error = ledger
         .Load()
@@ -1266,8 +1240,6 @@ fn Test_A_Ledger_Carrying_An_Undeclared_Key_Should_Not_Load()
         format!("{error}").contains("a_field_this_build_does_not_know"),
         "the refusal must name the key it could not account for: {error}"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// Every object in the document refuses, not a list of types somebody maintained.
@@ -1283,7 +1255,52 @@ fn Test_A_Ledger_Carrying_An_Undeclared_Key_Should_Not_Load()
 #[test]
 fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
 {
-    let mut item = Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 3_600);
+    let whole =
+        serde_json::to_value(Document(vec![Fully_Populated()])).expect("the document serializes");
+
+    let mut pointers = Vec::new();
+    Object_Pointers(&whole, "", &mut pointers);
+    for pointer in &pointers
+    {
+        assert!(
+            Probed(&whole, pointer).is_err(),
+            "an undeclared key was accepted at `{pointer}`, so a build that predates a field \
+             there would drop it and write the document back"
+        );
+    }
+
+    assert!(
+        pointers.len() >= 11,
+        "only {} object(s) were probed, so the fixture below has stopped being fully \
+         populated — the guard did not shrink, the universe did",
+        pointers.len()
+    );
+}
+
+/// The same document with one undeclared key inserted at `pointer`, read back strictly.
+fn Probed(whole: &serde_json::Value, pointer: &str) -> Result<LedgerDocument, serde_json::Error>
+{
+    let mut probed = whole.clone();
+    probed
+        .pointer_mut(pointer)
+        .expect("every pointer was collected from this same value")
+        .as_object_mut()
+        .expect("only object nodes were collected")
+        .insert("nomos_probe".to_owned(), serde_json::Value::Null);
+
+    return serde_json::from_value::<LedgerDocument>(probed);
+}
+
+/// An item with every optional field set and every list non-empty.
+///
+/// The walk above reaches an object only if the document actually contains one, so an empty
+/// list serializes as `[]`, contributes no node, and leaves the guard silent about whatever
+/// type lives inside it. Populating everything is what makes the count at the end mean
+/// something.
+fn Fully_Populated() -> LedgerItem
+{
+    let held = Item("T-1", &["src/a.rs"]);
+    let mut item = Held_By(held, "agent-a", NOW + 3_600);
     item.state = ItemState::Blocked;
     item.blocked = Some(Blocker::Dependency {
         items: vec![ItemId::New("T-0")],
@@ -1306,44 +1323,14 @@ fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
         reason: "went to look at something else".to_owned(),
         abandoned_at: At(NOW),
     }];
-    // The nested type `OD-LEDGER-012` added. Populated here rather than left empty because an
-    // empty list serializes as `[]` and contributes no object node, so the walk below would
-    // never reach a `Claim` inside `displaced` and the guard would be silent about it.
+    // The nested type `OD-LEDGER-012` added.
     item.displaced = vec![Claim {
         holder: "dead-agent".to_owned(),
         acquired_at: At(NOW),
         lease_expires_at: At(NOW + 60),
     }];
 
-    let whole = serde_json::to_value(Document(vec![item])).expect("the document serializes");
-
-    let mut pointers = Vec::new();
-    Object_Pointers(&whole, "", &mut pointers);
-
-    for pointer in &pointers
-    {
-        let mut probed = whole.clone();
-        let node = probed
-            .pointer_mut(pointer)
-            .expect("every pointer was collected from this same value");
-        let object = node
-            .as_object_mut()
-            .expect("only object nodes were collected");
-        object.insert("nomos_probe".to_owned(), serde_json::Value::Null);
-
-        assert!(
-            serde_json::from_value::<LedgerDocument>(probed).is_err(),
-            "an undeclared key was accepted at `{pointer}`, so a build that predates a field \
-             there would drop it and write the document back"
-        );
-    }
-
-    assert!(
-        pointers.len() >= 11,
-        "only {} object(s) were probed, so the fixture above has stopped being fully \
-         populated — the guard did not shrink, the universe did",
-        pointers.len()
-    );
+    return item;
 }
 
 /// Every object node in a value, as JSON pointers.
@@ -1381,22 +1368,13 @@ fn Object_Pointers(value: &serde_json::Value, at: &str, found: &mut Vec<String>)
 #[test]
 fn Test_A_Ledger_Newer_Than_This_Build_Should_Say_So_Rather_Than_Malformed()
 {
-    let directory = Temp_Dir("newer-than-build");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
-
     // The spliced key was `"displaced":[]` when this test was written, chosen as a field a
     // later build might add. `OD-LEDGER-012` added it, so it became declared and the parse it
     // was here to make fail started succeeding. Named for what it is instead, which is the
     // same lesson `Raw_Ledger`'s own fixture learned: a probe key must not be one the schema
     // can catch up with.
-    std::fs::write(
-        directory.join("ledger.json"),
-        Raw_Ledger(9_999, ",\"a_field_this_build_does_not_know\":[]"),
-    )
-    .expect("write");
-
-    let error = ledger.Load().expect_err("a newer document must not load");
+    let raw = Raw_Ledger(9_999, ",\"a_field_this_build_does_not_know\":[]");
+    let error = Load_Failure("newer-than-build", &raw);
 
     let LedgerError::Unrecognized {
         understood, found, ..
@@ -1405,19 +1383,35 @@ fn Test_A_Ledger_Newer_Than_This_Build_Should_Say_So_Rather_Than_Malformed()
     {
         panic!("a file newer than this build must not be reported as damaged: {error}");
     };
-
     assert_eq!(*understood, SCHEMA_VERSION);
     assert_eq!(*found, 9_999);
+    Names_The_Versions_And_The_Remedy(&format!("{error}"));
+}
 
-    let said = format!("{error}");
+/// Both numbers and the action, because a message naming only one of them leaves the reader
+/// with nothing to compare and no next step.
+fn Names_The_Versions_And_The_Remedy(said: &str)
+{
     assert!(said.contains("9999"), "{said}");
     assert!(said.contains(&format!("{SCHEMA_VERSION}")), "{said}");
     assert!(
         said.to_lowercase().contains("rebuild"),
         "the message must name the remedy: {said}"
     );
+}
 
-    let _ = std::fs::remove_dir_all(&directory);
+/// What `Load` says about a document written by hand.
+///
+/// These files are the ones `Save` refuses to produce, so writing the bytes directly is the
+/// only way to reach the arm under test — and the tree goes away with the value returned.
+fn Load_Failure(name: &str, raw: &str) -> LedgerError
+{
+    let directory = Temp_Dir(name);
+    std::fs::write(directory.join("ledger.json"), raw).expect("write");
+
+    return Ledger_At(&directory, &AT_NOW)
+        .Load()
+        .expect_err("this document must not load");
 }
 
 /// The control that keeps the distinction honest.
@@ -1430,8 +1424,7 @@ fn Test_A_Ledger_Newer_Than_This_Build_Should_Say_So_Rather_Than_Malformed()
 fn Test_A_Ledger_That_Is_Merely_Broken_Should_Still_Be_Malformed()
 {
     let directory = Temp_Dir("merely-broken");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
+    let ledger = Ledger_At(&directory, &AT_NOW);
 
     std::fs::write(directory.join("ledger.json"), "{ this is not json").expect("write");
 
@@ -1441,8 +1434,6 @@ fn Test_A_Ledger_That_Is_Merely_Broken_Should_Still_Be_Malformed()
         matches!(error, LedgerError::Malformed { .. }),
         "a damaged file must not be reported as one this build is too old for: {error}"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// What is written says what this build understands, not what the file it read said.
@@ -1459,8 +1450,7 @@ fn Test_A_Ledger_That_Is_Merely_Broken_Should_Still_Be_Malformed()
 fn Test_Saving_Should_Stamp_The_Version_This_Build_Understands()
 {
     let directory = Temp_Dir("stamps-version");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
+    let ledger = Ledger_At(&directory, &AT_NOW);
 
     ledger
         .Save(&LedgerDocument {
@@ -1475,8 +1465,6 @@ fn Test_Saving_Should_Stamp_The_Version_This_Build_Understands()
         written.contains(&format!("\"schema_version\": {SCHEMA_VERSION}")),
         "the write echoed the version it was handed rather than stamping this build's:\n{written}"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The other direction, and the control `done_when` asks for by name.
@@ -1490,9 +1478,6 @@ fn Test_Saving_Should_Stamp_The_Version_This_Build_Understands()
 fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
 {
     let directory = Temp_Dir("older-than-build");
-    let clock = FixedClock(NOW);
-    let ledger = Ledger_At(&directory, &clock);
-
     std::fs::write(
         directory.join("ledger.json"),
         "{\n  \"schema_version\": 1,\n  \"items\": [\
@@ -1505,10 +1490,9 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
     )
     .expect("write");
 
-    let document = ledger
+    let document = Ledger_At(&directory, &AT_NOW)
         .Load()
         .expect("a document written before a field existed must still read");
-
     assert_eq!(document.items.len(), 1);
     assert!(
         document
@@ -1517,8 +1501,6 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
             .is_some_and(|item| item.abandoned.is_empty() && item.displaced.is_empty()),
         "a missing field must read as absent rather than refusing the file"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A dependency edge that only `validate` reads is a comment. Claiming has to refuse an
@@ -1527,8 +1509,7 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
 fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
 {
     let directory = Temp_Dir("claim-dependency");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
 
     let mut dependent = Item("T-2", &["src/b.rs"]);
     dependent.depends_on = vec![ItemId::New("T-1")];
@@ -1537,15 +1518,11 @@ fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
         .Save(&Document(vec![Item("T-1", &["src/a.rs"]), dependent]))
         .expect("a fresh ledger is valid");
 
-    let refusal = ledger
-        .Claim(&ItemId::New("T-2"), "agent-a", Duration::from_secs(3_600))
-        .expect_err("an unfinished dependency must refuse the claim");
+    let refusal = Refused(&mut ledger, "T-2", "agent-a");
 
     assert!(matches!(refusal, ClaimRefusal::DependencyUnmet { .. }), "{}", refusal.Describe());
     assert!(refusal.Is_Retryable(), "finishing T-1 is what resolves this");
     assert!(refusal.Describe().contains("T-1"), "{}", refusal.Describe());
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The negative control. A satisfied dependency must not stand in the way.
@@ -1553,18 +1530,9 @@ fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
 fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
 {
     let directory = Temp_Dir("claim-dependency-met");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
 
-    let mut finished = Item("T-1", &["src/a.rs"]);
-    finished.state = ItemState::Done;
-    finished.verified = Some(VerificationRecord {
-        argv: vec!["cargo".to_owned(), "test".to_owned()],
-        exit_code: 0,
-        output_tail: "ok".to_owned(),
-        verified_at: At(NOW),
-        gate: None,
-    });
+    let finished = Finished("T-1", &["src/a.rs"]);
     let mut dependent = Item("T-2", &["src/b.rs"]);
     dependent.depends_on = vec![ItemId::New("T-1")];
 
@@ -1572,11 +1540,7 @@ fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
         .Save(&Document(vec![finished, dependent]))
         .expect("a fresh ledger is valid");
 
-    ledger
-        .Claim(&ItemId::New("T-2"), "agent-a", Duration::from_secs(3_600))
-        .expect("a met dependency must not refuse");
-
-    let _ = std::fs::remove_dir_all(&directory);
+    Take(&mut ledger, "T-2", "agent-a");
 }
 
 // ---------------------------------------------------------------------------
@@ -1597,46 +1561,26 @@ fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
 #[test]
 fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
 {
-    let directory = Temp_Dir("lapse-bricks");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("lapse-bricks", vec![
+        Item("T-1", &["src/a.rs"]),
+        Item("T-2", &["src/b.rs"]),
+    ]);
+    Take(&mut ledger, "T-1", "dead-agent");
 
-    ledger
-        .Save(&Document(vec![
-            Item("T-1", &["src/a.rs"]),
-            Item("T-2", &["src/b.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let later = FixedClock(NOW + 7_200);
-    let mut after = Ledger_At(&directory, &later);
-    let document = after.Load().expect("the file is still readable");
+    let mut after = After_The_Lapse(&directory);
 
     // One: the document is not called invalid because time passed.
     assert_eq!(
-        Validate(&document, At(NOW + 7_200)),
+        Validate(&after.Load().expect("the file is still readable"), At(NOW + 7_200)),
         Vec::<String>::new(),
         "a lapsed lease made the whole document invalid, so nothing can be written to it"
     );
     after
         .Validate_Current()
         .expect("validate must not call a board with a lapsed lease broken");
-
     // Two: an unrelated item is still claimable. `src/b.rs` shares nothing with `src/a.rs`,
     // so a refusal here is not exclusion — it is the board refusing to be written at all.
-    after
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .unwrap_or_else(|refusal| {
-            panic!(
-                "an item sharing no territory with the lapsed one was refused: {}",
-                refusal.Describe()
-            )
-        });
-
-    let _ = std::fs::remove_dir_all(&directory);
+    Take(&mut after, "T-2", "agent-b");
 }
 
 /// Three: what the lapsed item itself does, which is a decision rather than a consequence.
@@ -1668,27 +1612,29 @@ fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
 #[test]
 fn Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover()
 {
-    let directory = Temp_Dir("lapse-takeover");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("lapse-takeover", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "dead-agent");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
-        .expect("uncontended");
+    let mut after = After_The_Lapse(&directory);
 
-    let later = FixedClock(NOW + 7_200);
-    let mut after = Ledger_At(&directory, &later);
+    let refusal = Refused(&mut after, "T-1", "agent-b");
+    Says_The_Item_Is_Lapsed_And_Names_The_Verb(&refusal);
 
-    let refusal = after
-        .Claim(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
-        .expect_err(
-            "a lapsed item is not claimable, and silently allowing it would erase the only \
-             record that the work was started",
-        );
+    assert_eq!(
+        Standing_Of(&Only_Item(&after)),
+        Standing {
+            held_by: Some("dead-agent"),
+            displaced: Vec::new(),
+        },
+        "the lapsed claim was replaced, or a refused claim recorded a displacement — either \
+         way `claim` has quietly become `takeover`"
+    );
+}
 
+/// The three things the refusal has to say, and each is a different way of getting it wrong:
+/// blaming territory, giving no remedy, or advising a wait that will never end.
+fn Says_The_Item_Is_Lapsed_And_Names_The_Verb(refusal: &ClaimRefusal)
+{
     assert!(
         matches!(refusal, ClaimRefusal::Lapsed { .. }),
         "the refusal must say the item is not in a claimable state rather than blame \
@@ -1704,20 +1650,6 @@ fn Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover()
         !refusal.Is_Retryable(),
         "waiting does not revive a dead holder; somebody has to decide to take the work"
     );
-
-    let held = after.Load().expect("readable");
-    let item = held.items.first().expect("the item survives");
-    assert_eq!(
-        item.claim.as_ref().map(|claim| return claim.holder.clone()),
-        Some("dead-agent".to_owned()),
-        "the lapsed claim was replaced, so nothing says who walked away from this"
-    );
-    assert!(
-        item.displaced.is_empty(),
-        "a refused claim recorded a displacement, so `claim` has quietly become `takeover`"
-    );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The holder's own recovery still works, and is now the whole recovery story.
@@ -1729,19 +1661,10 @@ fn Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover()
 #[test]
 fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
 {
-    let directory = Temp_Dir("lapse-recover");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("lapse-recover", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let later = FixedClock(NOW + 7_200);
-    let mut after = Ledger_At(&directory, &later);
+    let mut after = After_The_Lapse(&directory);
 
     after
         .Renew(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
@@ -1756,8 +1679,6 @@ fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
             .is_some_and(|item| return item.Has_Active_Claim(At(NOW + 7_200))),
         "renewing a lapsed claim must make it active again"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 // ---------------------------------------------------------------------------
@@ -1779,42 +1700,38 @@ fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
 #[test]
 fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
 {
-    let directory = Temp_Dir("takeover-keeps-predecessor");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("takeover-keeps-predecessor", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "dead-agent");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
-        .expect("uncontended");
+    let mut after = After_The_Lapse(&directory);
 
-    let later = FixedClock(NOW + 7_200);
-    let mut after = Ledger_At(&directory, &later);
-
-    let reservation = after
-        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
-        .unwrap_or_else(|refusal| {
-            panic!(
-                "an item whose holder died must return to the pool without a person editing \
-                 the file: {}",
-                refusal.Describe()
-            )
-        });
-
+    let reservation = Take_Over_In(&mut after, "T-1", "agent-b").unwrap_or_else(|refusal| {
+        panic!(
+            "an item whose holder died must return to the pool without a person editing the \
+             file: {}",
+            refusal.Describe()
+        )
+    });
     assert_eq!(reservation.holder, "agent-b");
 
-    let held = after.Load().expect("readable");
-    let item = held.items.first().expect("the item survives");
+    let item = Only_Item(&after);
+    Installed_The_Taker(&item, At(NOW + 7_200));
+    Kept_The_Claim_It_Replaced(&item);
+}
 
+/// The takeover installed its new holder, on a live lease, without moving the state.
+///
+/// Three assertions rather than one because each names a different way the verb could be
+/// half-done, and a takeover that leaves the lease in the past has taken nothing.
+fn Installed_The_Taker(item: &LedgerItem, now: Timestamp)
+{
     assert_eq!(
-        item.claim.as_ref().map(|claim| return claim.holder.clone()),
-        Some("agent-b".to_owned()),
+        Holder(item),
+        Some("agent-b"),
         "the takeover did not install the new holder"
     );
     assert!(
-        item.Has_Active_Claim(At(NOW + 7_200)),
+        item.Has_Active_Claim(now),
         "a takeover that leaves the lease in the past has taken nothing"
     );
     assert_eq!(
@@ -1822,20 +1739,21 @@ fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
         ItemState::Claimed,
         "a takeover does not move the state; the item was claimed and still is"
     );
+}
 
-    // The half this item exists for. Who held it, when they took it, and when the lease ran
-    // out — all three survive, and they survive as the claim itself rather than as a summary.
-    assert_eq!(
-        item.displaced.len(),
-        1,
-        "the takeover kept {} displaced claim(s) rather than exactly the one it replaced, so \
-         either nothing records who walked away from this or something records it twice",
-        item.displaced.len()
-    );
-    let displaced = item
-        .displaced
-        .first()
-        .expect("the claim the takeover replaced is kept");
+/// The half `P10-LAPSE-TAKEOVER` exists for: who held it, when they took it, and when the
+/// lease ran out all survive, and they survive as the claim itself rather than as a summary.
+fn Kept_The_Claim_It_Replaced(item: &LedgerItem)
+{
+    let displaced = item.displaced.first().unwrap_or_else(|| {
+        panic!(
+            "the takeover kept {} displaced claim(s) rather than exactly the one it replaced, \
+             so nothing records who walked away from this",
+            item.displaced.len()
+        )
+    });
+
+    assert_eq!(item.displaced.len(), 1, "something records it twice");
     assert_eq!(
         displaced.holder, "dead-agent",
         "the takeover dropped the previous holder, which is the outcome this must not have"
@@ -1846,8 +1764,6 @@ fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
         At(NOW + 3_600),
         "when the lease ran out"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A live claim is not a lapse, and `takeover` is not a way to steal work in progress.
@@ -1859,44 +1775,27 @@ fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
 #[test]
 fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 {
-    let directory = Temp_Dir("takeover-refuses-live");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("takeover-refuses-live", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
+    let mut during = Ledger_When(&directory, NOW + 60);
 
-    let soon = FixedClock(NOW + 60);
-    let mut during = Ledger_At(&directory, &soon);
-
-    let refusal = during
-        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
+    let refusal = Take_Over_In(&mut during, "T-1", "agent-b")
         .expect_err("a live claim must not be displaced by a takeover");
-
-    assert!(
-        matches!(refusal, ClaimRefusal::HeldBy { .. }),
-        "{}",
-        refusal.Describe()
-    );
+    assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }), "{}", refusal.Describe());
     assert!(
         refusal.Is_Retryable(),
         "the lease running out is what resolves this, so waiting is the honest advice"
     );
 
-    let held = during.Load().expect("readable");
-    let item = held.items.first().expect("the item survives");
     assert_eq!(
-        item.claim.as_ref().map(|claim| return claim.holder.clone()),
-        Some("agent-a".to_owned()),
+        Standing_Of(&Only_Item(&during)),
+        Standing {
+            held_by: Some("agent-a"),
+            displaced: Vec::new(),
+        },
         "a takeover displaced a holder who was still working"
     );
-    assert!(item.displaced.is_empty(), "{:?}", item.displaced);
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The wrong verb is refused rather than accommodated.
@@ -1907,28 +1806,13 @@ fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 #[test]
 fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
 {
-    let directory = Temp_Dir("takeover-wrong-verb");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    let mut finished = Item("T-2", &["src/b.rs"]);
-    finished.state = ItemState::Done;
-    finished.verified = Some(VerificationRecord {
-        argv: vec!["cargo".to_owned(), "test".to_owned()],
-        exit_code: 0,
-        output_tail: "ok".to_owned(),
-        verified_at: At(NOW),
-        gate: None,
-    });
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"]), finished]))
-        .expect("a fresh ledger is valid");
-
+    let (_directory, mut ledger) = Board_At("takeover-wrong-verb", vec![
+        Item("T-1", &["src/a.rs"]),
+        Finished("T-2", &["src/b.rs"]),
+    ]);
     for (item, what) in [("T-1", "an item nobody holds"), ("T-2", "a finished item")]
     {
-        let refusal = ledger
-            .Take_Over(&ItemId::New(item), "agent-b", Duration::from_secs(3_600))
+        let refusal = Take_Over_In(&mut ledger, item, "agent-b")
             .expect_err("a takeover answers a lapse and nothing else");
 
         assert!(
@@ -1936,21 +1820,18 @@ fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
             "{what} must read as the wrong verb rather than as a queue: {}",
             refusal.Describe()
         );
-        assert!(
-            !refusal.Is_Retryable(),
-            "{what} will not become takeable by waiting"
-        );
+        assert!(!refusal.Is_Retryable(), "{what} will not become takeable by waiting");
     }
 
-    let held = ledger.Load().expect("readable");
     assert!(
-        held.items
+        ledger
+            .Load()
+            .expect("readable")
+            .items
             .iter()
             .all(|item| return item.claim.is_none() && item.displaced.is_empty()),
         "a refused takeover wrote to the item anyway"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// Independence is re-established, not assumed — the case that is easy to get wrong and
@@ -1966,59 +1847,33 @@ fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
 #[test]
 fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
 {
-    let directory = Temp_Dir("takeover-refuses-taken-ground");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
     // Two items over the same file. Concurrently claimable only while one of them is not.
-    ledger
-        .Save(&Document(vec![
-            Item("T-1", &["src/a.rs"]),
-            Item("T-2", &["src/a.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
-        .expect("uncontended");
+    let (directory, mut ledger) = Board_At("takeover-refuses-taken-ground", vec![
+        Item("T-1", &["src/a.rs"]),
+        Item("T-2", &["src/a.rs"]),
+    ]);
+    Take(&mut ledger, "T-1", "dead-agent");
+    // The second claim succeeds precisely because T-1's lapsed claim no longer excludes. That
+    // is the state the takeover then has to notice.
+    let mut after = After_The_Lapse(&directory);
+    Take(&mut after, "T-2", "agent-b");
 
-    let later = FixedClock(NOW + 7_200);
-    let mut after = Ledger_At(&directory, &later);
-
-    // Succeeds precisely because T-1's lapsed claim no longer excludes. This is the state the
-    // takeover then has to notice.
-    after
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect("a lapsed claim stops excluding, so this ground is free");
-
-    let refusal = after
-        .Take_Over(&ItemId::New("T-1"), "agent-c", Duration::from_secs(3_600))
+    let refusal = Take_Over_In(&mut after, "T-1", "agent-c")
         .expect_err("the ground T-1 reserves is held by a live claim on T-2");
-
-    assert!(
-        matches!(refusal, ClaimRefusal::HeldBy { .. }),
-        "{}",
-        refusal.Describe()
-    );
+    assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }), "{}", refusal.Describe());
     assert!(
         refusal.Describe().contains("agent-b"),
         "the refusal must name who holds the ground now: {}",
         refusal.Describe()
     );
-
-    let held = after.Load().expect("readable");
-    let taken = held
-        .items
-        .iter()
-        .find(|item| return item.id == ItemId::New("T-1"))
-        .expect("T-1 survives");
     assert_eq!(
-        taken.claim.as_ref().map(|claim| return claim.holder.clone()),
-        Some("dead-agent".to_owned()),
-        "a refused takeover replaced the claim anyway"
+        Standing_Of(&Named("T-1", &after)),
+        Standing {
+            held_by: Some("dead-agent"),
+            displaced: Vec::new(),
+        },
+        "a refused takeover wrote to the item anyway"
     );
-    assert!(taken.displaced.is_empty(), "{:?}", taken.displaced);
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A list, not a field.
@@ -2029,48 +1884,25 @@ fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
 #[test]
 fn Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors()
 {
-    let directory = Temp_Dir("takeover-twice");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("takeover-twice", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "dead-agent");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let second = FixedClock(NOW + 7_200);
-    let mut takes = Ledger_At(&directory, &second);
-    takes
-        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
-        .expect("the first holder's lease ran out");
+    let mut takes = Ledger_When(&directory, NOW + 7_200);
+    Take_Over_In(&mut takes, "T-1", "agent-b").expect("the first holder's lease ran out");
 
     // Past `agent-b`'s lease too: NOW + 7_200 + 3_600.
-    let third = FixedClock(NOW + 14_400);
-    let mut again = Ledger_At(&directory, &third);
-    again
-        .Take_Over(&ItemId::New("T-1"), "agent-c", Duration::from_secs(3_600))
-        .expect("the second holder's lease ran out as well");
-
-    let held = again.Load().expect("readable");
-    let item = held.items.first().expect("the item survives");
+    let mut again = Ledger_When(&directory, NOW + 14_400);
+    Take_Over_In(&mut again, "T-1", "agent-c").expect("the second holder's lease ran out as well");
 
     assert_eq!(
-        item.claim.as_ref().map(|claim| return claim.holder.clone()),
-        Some("agent-c".to_owned())
-    );
-    assert_eq!(
-        item.displaced
-            .iter()
-            .map(|claim| return claim.holder.clone())
-            .collect::<Vec<String>>(),
-        vec!["dead-agent".to_owned(), "agent-b".to_owned()],
+        Standing_Of(&Only_Item(&again)),
+        Standing {
+            held_by: Some("agent-c"),
+            displaced: vec!["dead-agent", "agent-b"],
+        },
         "oldest first, and both of them: keeping only the most recent is this same loss one \
          scale down"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// Absence is not permission.
@@ -2083,9 +1915,24 @@ fn Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors()
 fn Test_An_Item_Claimed_With_No_Claim_Recorded_Should_Not_Be_Taken_Over()
 {
     let directory = Temp_Dir("takeover-refuses-a-hole");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
+    let path = Write_A_Claimed_Item_With_No_Claim(&directory);
+    let before = std::fs::read(&path).expect("readable");
 
+    let refusal = Take_Over_In(&mut ledger, "T-1", "agent-b")
+        .expect_err("an item whose predecessor record is already missing is not taken over");
+    assert!(matches!(refusal, ClaimRefusal::NotClaimable { .. }), "{}", refusal.Describe());
+    assert_eq!(
+        std::fs::read(&path).expect("readable"),
+        before,
+        "a refused takeover rewrote the file"
+    );
+}
+
+/// The one corruption `Validate` still refuses, written by hand because nothing else can
+/// produce it: `Save` will not persist it, and `Load` does not validate what it reads.
+fn Write_A_Claimed_Item_With_No_Claim(directory: &Path) -> PathBuf
+{
     let path = directory.join("ledger.json");
     std::fs::write(
         &path,
@@ -2101,24 +1948,8 @@ fn Test_An_Item_Claimed_With_No_Claim_Recorded_Should_Not_Be_Taken_Over()
         ),
     )
     .expect("write");
-    let before = std::fs::read(&path).expect("readable");
 
-    let refusal = ledger
-        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
-        .expect_err("an item whose predecessor record is already missing is not taken over");
-
-    assert!(
-        matches!(refusal, ClaimRefusal::NotClaimable { .. }),
-        "{}",
-        refusal.Describe()
-    );
-    assert_eq!(
-        std::fs::read(&path).expect("readable"),
-        before,
-        "a refused takeover rewrote the file"
-    );
-
-    let _ = std::fs::remove_dir_all(&directory);
+    return path;
 }
 
 /// The new field through the strict deserializer, which is the pairing the two items exist to
@@ -2131,22 +1962,11 @@ fn Test_An_Item_Claimed_With_No_Claim_Recorded_Should_Not_Be_Taken_Over()
 #[test]
 fn Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly()
 {
-    let directory = Temp_Dir("takeover-round-trip");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("takeover-round-trip", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "dead-agent");
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "dead-agent", Duration::from_secs(3_600))
-        .expect("uncontended");
-
-    let later = FixedClock(NOW + 7_200);
-    let mut after = Ledger_At(&directory, &later);
-    after
-        .Take_Over(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
-        .expect("a lapsed item is takeable");
+    let mut after = After_The_Lapse(&directory);
+    Take_Over_In(&mut after, "T-1", "agent-b").expect("a lapsed item is takeable");
 
     let first = after.Load().expect("a document carrying `displaced` must read");
     assert_eq!(first.schema_version, SCHEMA_VERSION);
@@ -2162,8 +1982,6 @@ fn Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly()
     let second = after.Load().expect("readable");
 
     assert_eq!(second, first, "a displaced claim changed meaning on rewrite");
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The positive control: validation still catches the corruption it was aimed at.
@@ -2215,25 +2033,22 @@ fn Test_A_Lapsed_Claim_Should_Not_Be_Reported_As_A_Violation()
 #[test]
 fn Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item()
 {
-    let directory = Temp_Dir("unusable-ledger");
-    let clock = FixedClock(NOW);
+    // A genuinely missing item over a ledger that is fine, and then the same call over a file
+    // that is not a ledger at all.
+    let (directory, mut sound) = Board_At("unusable-ledger", vec![Item("T-1", &["src/a.rs"])]);
+    let missing = Refused(&mut sound, "T-NOPE", "agent-a");
 
-    // A genuinely missing item, over a ledger that is fine.
-    let mut sound = Ledger_At(&directory, &clock);
-    sound
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    let missing = sound
-        .Claim(&ItemId::New("T-NOPE"), "agent-a", Duration::from_secs(3_600))
-        .expect_err("no such item");
-
-    // The same call over a file that is not a ledger at all.
     std::fs::write(directory.join("ledger.json"), "{ not json").expect("writes the corruption");
-    let mut broken = Ledger_At(&directory, &clock);
-    let unusable = broken
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect_err("a ledger that will not parse cannot be claimed against");
+    let mut broken = Ledger_At(&directory, &AT_NOW);
+    let unusable = Refused(&mut broken, "T-1", "agent-a");
+    Told_Apart(&missing, &unusable);
+}
 
+/// The two causes must not read the same, which is the whole defect: every load and save
+/// failure used to discard its error and answer `NoSuchItem`, sending an operator whose file
+/// was damaged off to check a spelling.
+fn Told_Apart(missing: &ClaimRefusal, unusable: &ClaimRefusal)
+{
     assert!(
         matches!(missing, ClaimRefusal::NoSuchItem { .. }),
         "{}",
@@ -2244,11 +2059,7 @@ fn Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item()
         "a broken ledger was reported as {}",
         unusable.Describe()
     );
-    assert_ne!(
-        missing.Describe(),
-        unusable.Describe(),
-        "the two causes must not read the same, which is the defect"
-    );
+    assert_ne!(missing.Describe(), unusable.Describe(), "the two causes read the same");
     assert!(
         unusable.Describe().contains("malformed"),
         "the refusal must carry what the store said: {}",
@@ -2259,8 +2070,6 @@ fn Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item()
         "a broken ledger still sends the operator to check a spelling: {}",
         unusable.Describe()
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 // ---------------------------------------------------------------------------
@@ -2446,40 +2255,84 @@ fn Ledger_Over<'shared>(
 /// window and `first` then writes over it; with exclusion `second` is still waiting for the
 /// lock when the window closes, and it reads `first`'s write when it finally gets in.
 fn Two_Writers(
-    directory: &Path,
-    clock: &FixedClock,
+    name: &str,
+    items: Vec<LedgerItem>,
     first: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
     second: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
-)
+) -> LedgerDocument
 {
+    let directory = Contended(name, items);
     let filesystem = Interleaving::Over(directory.join("ledger.json"));
-    let shared = &filesystem;
-    let finished = Gate::New();
-    let done = &finished;
 
-    std::thread::scope(|scope| {
-        scope.spawn(move || {
-            shared.Hold_This_Thread();
-            let mut ledger = Ledger_Over(shared, directory, clock);
-            first(&mut ledger);
-        });
+    let over = Harness {
+        shared: &filesystem,
+        finished: &Gate::New(),
+        directory: &directory,
+    };
 
-        shared.read.Wait();
-
-        scope.spawn(move || {
-            let mut ledger = Ledger_Over(shared, directory, clock);
-            second(&mut ledger);
-            done.Open();
-        });
-
-        finished.Opened_Within(SECOND_WRITER_LIMIT);
-        shared.resume.Open();
-    });
-
+    Interleaved(over, first, second);
     assert!(
         filesystem.Stopped(),
         "the seam never fired, so nothing was interleaved and this run proves nothing"
     );
+
+    return Written(&directory);
+}
+
+/// The apparatus both writers share: the filesystem carrying the seam, the gate the second
+/// writer opens when it is through, and the tree they are both writing.
+#[derive(Clone, Copy)]
+struct Harness<'a>
+{
+    shared: &'a Interleaving,
+    finished: &'a Gate,
+    directory: &'a Path,
+}
+
+/// The scope itself: `second` starts once `first` has read, and `first` writes once `second`
+/// has either finished or been kept waiting for [`SECOND_WRITER_LIMIT`].
+fn Interleaved(
+    over: Harness<'_>,
+    first: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
+    second: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
+)
+{
+    std::thread::scope(|scope| {
+        scope.spawn(move || {
+            over.shared.Hold_This_Thread();
+            let mut ledger = Ledger_Over(over.shared, over.directory, &AT_NOW);
+            first(&mut ledger);
+        });
+
+        over.shared.read.Wait();
+
+        scope.spawn(move || {
+            let mut ledger = Ledger_Over(over.shared, over.directory, &AT_NOW);
+            second(&mut ledger);
+            over.finished.Open();
+        });
+
+        over.finished.Opened_Within(SECOND_WRITER_LIMIT);
+        over.shared.resume.Open();
+    });
+}
+
+/// A board for the interleaving tests, saved once before either writer starts.
+fn Contended(name: &str, items: Vec<LedgerItem>) -> Scratch
+{
+    let directory = Temp_Dir(name);
+    Ledger_At(&directory, &AT_NOW)
+        .Save(&Document(items))
+        .expect("a fresh ledger is valid");
+
+    return directory;
+}
+
+/// What is actually on disk once both writers have finished — the only thing that settles
+/// whether a write was lost, since each writer was told its own succeeded.
+fn Written(directory: &Path) -> LedgerDocument
+{
+    return Ledger_At(directory, &AT_NOW).Load().expect("readable");
 }
 
 fn Holder_Of(document: &LedgerDocument, id: &str) -> Option<String>
@@ -2507,32 +2360,19 @@ fn Holder_Of(document: &LedgerDocument, id: &str) -> Option<String>
 #[test]
 fn Test_Two_Concurrent_Claims_Should_Both_Survive()
 {
-    let directory = Temp_Dir("concurrent-claims");
-    let clock = FixedClock(NOW);
-
-    Ledger_At(&directory, &clock)
-        .Save(&Document(vec![
-            Item("T-1", &["src/a.rs"]),
-            Item("T-2", &["src/b.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-
-    Two_Writers(
-        &directory,
-        &clock,
+    let after = Two_Writers(
+        "concurrent-claims",
+        vec![
+        Item("T-1", &["src/a.rs"]),
+        Item("T-2", &["src/b.rs"]),
+    ],
         |ledger| {
-            ledger
-                .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-                .expect("T-1 is uncontended");
+            Take(ledger, "T-1", "agent-a");
         },
         |ledger| {
-            ledger
-                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-                .expect("T-2 shares no territory with T-1");
+            Take(ledger, "T-2", "agent-b");
         },
     );
-
-    let after = Ledger_At(&directory, &clock).Load().expect("readable");
 
     assert_eq!(
         Holder_Of(&after, "T-1"),
@@ -2545,8 +2385,6 @@ fn Test_Two_Concurrent_Claims_Should_Both_Survive()
         "the second writer was told its claim was granted and the ledger does not have it: \
          one writer wrote back a document it had read before the other one existed"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The same loss at the verb that ends a piece of work.
@@ -2558,38 +2396,19 @@ fn Test_Two_Concurrent_Claims_Should_Both_Survive()
 #[test]
 fn Test_A_Release_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
 {
-    let directory = Temp_Dir("concurrent-release");
-    let clock = FixedClock(NOW);
-
-    Ledger_At(&directory, &clock)
-        .Save(&Document(vec![
-            Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 3_600),
-            Item("T-2", &["src/b.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-
-    Two_Writers(
-        &directory,
-        &clock,
+    let after = Two_Writers(
+        "concurrent-release",
+        vec![
+        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 3_600),
+        Item("T-2", &["src/b.rs"]),
+    ],
         |ledger| {
-            ledger
-                .Release(
-                    &ItemId::New("T-1"),
-                    "agent-a",
-                    ReleaseOutcome::Abandoned {
-                        reason: REASON.to_owned(),
-                    },
-                )
-                .expect("a holder may give up its own claim");
+            Abandon(ledger, "T-1", "agent-a", REASON);
         },
         |ledger| {
-            ledger
-                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-                .expect("T-2 shares no territory with T-1");
+            Take(ledger, "T-2", "agent-b");
         },
     );
-
-    let after = Ledger_At(&directory, &clock).Load().expect("readable");
 
     assert_eq!(
         Holder_Of(&after, "T-2"),
@@ -2606,8 +2425,6 @@ fn Test_A_Release_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
         Some(1),
         "the abandonment the first writer was told had been recorded is not in the ledger"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// And at the verb an agent runs most often, which is the one that hides best.
@@ -2617,32 +2434,21 @@ fn Test_A_Release_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
 #[test]
 fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
 {
-    let directory = Temp_Dir("concurrent-renew");
-    let clock = FixedClock(NOW);
-
-    Ledger_At(&directory, &clock)
-        .Save(&Document(vec![
-            Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 10),
-            Item("T-2", &["src/b.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-
-    Two_Writers(
-        &directory,
-        &clock,
+    let after = Two_Writers(
+        "concurrent-renew",
+        vec![
+        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 10),
+        Item("T-2", &["src/b.rs"]),
+    ],
         |ledger| {
             ledger
                 .Renew(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
                 .expect("a holder may renew its own claim");
         },
         |ledger| {
-            ledger
-                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-                .expect("T-2 shares no territory with T-1");
+            Take(ledger, "T-2", "agent-b");
         },
     );
-
-    let after = Ledger_At(&directory, &clock).Load().expect("readable");
 
     assert_eq!(
         Holder_Of(&after, "T-2"),
@@ -2660,8 +2466,6 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
         Some(At(NOW + 3_600)),
         "the renewal the first writer was told had been recorded is not in the ledger"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The same loss at the verb that puts work on the board, which `OD-LEDGER-015` left behind.
@@ -2678,29 +2482,19 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
 #[test]
 fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
 {
-    let directory = Temp_Dir("concurrent-add");
-    let clock = FixedClock(NOW);
-
-    Ledger_At(&directory, &clock)
-        .Save(&Document(vec![Item("T-2", &["src/b.rs"])]))
-        .expect("a fresh ledger is valid");
-
-    Two_Writers(
-        &directory,
-        &clock,
+    let after = Two_Writers(
+        "concurrent-add",
+        vec![Item("T-2", &["src/b.rs"])],
         |ledger| {
+            let item = Item("T-1", &["src/a.rs"]);
             ledger
-                .Add(&Item("T-1", &["src/a.rs"]), "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty())
+                .Add(&item, "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty())
                 .expect("T-1 is not on the board yet");
         },
         |ledger| {
-            ledger
-                .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-                .expect("T-2 shares no territory with T-1");
+            Take(ledger, "T-2", "agent-b");
         },
     );
-
-    let after = Ledger_At(&directory, &clock).Load().expect("readable");
 
     assert!(
         after
@@ -2717,8 +2511,6 @@ fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
         "an add wrote back a document read before the other writer's claim, so the claim it \
          was granted is gone"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The duplicate check has to travel inside the lock with the write it guards.
@@ -2736,36 +2528,24 @@ fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
 #[test]
 fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
 {
-    let directory = Temp_Dir("concurrent-duplicate-add");
-    let clock = FixedClock(NOW);
-
-    Ledger_At(&directory, &clock)
-        .Save(&Document(Vec::new()))
-        .expect("an empty board is a valid ledger");
-
     let second_outcome = Mutex::new(None);
     let recorded = &second_outcome;
-
-    Two_Writers(
-        &directory,
-        &clock,
+    let after = Two_Writers(
+        "concurrent-duplicate-add",
+        Vec::new(),
         |ledger| {
-            ledger
-                .Add(&Item("T-1", &["src/a.rs"]), "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty())
-                .expect("the board is empty, so T-1 is free");
+            Adds_T_1(ledger, "src/a.rs", "agent-a").expect("the board is empty, so T-1 is free");
         },
         |ledger| {
-            let outcome = ledger.Add(&Item("T-1", &["src/b.rs"]), "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
-            *recorded.lock().expect("the harness never panics under this lock") =
-                Some(outcome);
+            let outcome = Adds_T_1(ledger, "src/b.rs", "agent-b");
+            *recorded.lock().expect("the harness never panics under this lock") = Some(outcome);
         },
     );
 
     assert_eq!(
         second_outcome
-            .lock()
+            .into_inner()
             .expect("the harness never panics under this lock")
-            .clone()
             .expect("the second writer ran"),
         Err(AddRefusal::AlreadyPresent {
             item: ItemId::New("T-1")
@@ -2773,15 +2553,8 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
         "the second add read the board before the first one's write and was told an \
          identifier that was already taken was free"
     );
-
-    let after = Ledger_At(&directory, &clock).Load().expect("readable");
-
     assert_eq!(
-        after
-            .items
-            .iter()
-            .filter(|item| return item.id == ItemId::New("T-1"))
-            .count(),
+        after.items.iter().filter(|item| return item.id == ItemId::New("T-1")).count(),
         1,
         "one identifier is on the board twice, so the board no longer loads for anybody"
     );
@@ -2789,8 +2562,19 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
         Validate(&after, At(NOW)).is_empty(),
         "the board two accepted adds left behind is one the ledger itself calls invalid"
     );
+}
 
-    let _ = std::fs::remove_dir_all(&directory);
+/// Both writers add `T-1`; only the territory and the holder differ, which is what makes the
+/// second one's refusal a statement about the identifier rather than about the files.
+fn Adds_T_1(
+    ledger: &mut InterleavedLedger<'_>,
+    file: &str,
+    holder: &str,
+) -> Result<(), AddRefusal>
+{
+    let item = Item("T-1", &[file]);
+
+    return ledger.Add(&item, holder, &ItemTerritory::Empty(), &ItemTerritory::Empty());
 }
 
 /// An item the board cannot hold is the caller's to correct, not a broken store.
@@ -2806,15 +2590,11 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
 #[test]
 fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
 {
-    let directory = Temp_Dir("add-would-not-validate");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("add-would-not-validate", Vec::new());
 
-    ledger
-        .Save(&Document(Vec::new()))
-        .expect("an empty board is a valid ledger");
-
-    let refused = ledger.Add(&Item("T-1", &[]), "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty());
+    let item = Item("T-1", &[]);
+    let refused =
+        ledger.Add(&item, "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty());
 
     assert!(
         matches!(refused, Err(AddRefusal::WouldBeInvalid { .. })),
@@ -2829,8 +2609,6 @@ fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
             .is_empty(),
         "the refusal was reported and the item landed anyway"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 // ---------------------------------------------------------------------------
@@ -2863,16 +2641,11 @@ fn Published(files: &[&str]) -> ItemTerritory
 #[test]
 fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
 {
-    let directory = Temp_Dir("add-record-published");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("add-record-published", Vec::new());
 
-    ledger
-        .Save(&Document(Vec::new()))
-        .expect("an empty board is a valid ledger");
-
+    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-006");
     let refused = ledger.Add(
-        &Reserving_Record("T-1", "docs/records/OD-LEDGER-006"),
+        &item,
         "agent-a",
         &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &ItemTerritory::Empty(),
@@ -2889,8 +2662,6 @@ fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
         ledger.Load().expect("readable").items.is_empty(),
         "the refusal was reported and the item landed anyway"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The negative control. An unspent identifier is still accepted, beside published ones.
@@ -2900,16 +2671,11 @@ fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
 #[test]
 fn Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted()
 {
-    let directory = Temp_Dir("add-record-unspent");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("add-record-unspent", Vec::new());
 
-    ledger
-        .Save(&Document(Vec::new()))
-        .expect("an empty board is a valid ledger");
-
+    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-007");
     let added = ledger.Add(
-        &Reserving_Record("T-1", "docs/records/OD-LEDGER-007"),
+        &item,
         "agent-a",
         &Published(&[
             "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md",
@@ -2922,8 +2688,6 @@ fn Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted()
 
     assert_eq!(added, Ok(()), "the next free identifier is free");
     assert_eq!(ledger.Load().expect("readable").items.len(), 1);
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// What the item says it is editing rather than allocating.
@@ -2954,29 +2718,15 @@ fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
         ("the published filename", FILE),
     ]
     {
-        let directory = Temp_Dir("add-record-amended");
-        let clock = FixedClock(NOW);
-        let mut ledger = Ledger_At(&directory, &clock);
-
-        ledger
-            .Save(&Document(Vec::new()))
-            .expect("an empty board is a valid ledger");
-
-        let added = ledger.Add(
-            &Reserving_Record("T-1", spelled),
-            "agent-a",
-            &Published(&[FILE]),
-            &Amending(&[spelled]),
-        );
+        let (_directory, mut ledger) = Board_At("add-record-amended", Vec::new());
+        let item = Reserving_Record("T-1", spelled);
 
         assert_eq!(
-            added,
+            ledger.Add(&item, "agent-a", &Published(&[FILE]), &Amending(&[spelled])),
             Ok(()),
             "an amendment declared by {described} was refused as an allocation"
         );
         assert_eq!(ledger.Load().expect("readable").items.len(), 1);
-
-        let _ = std::fs::remove_dir_all(&directory);
     }
 }
 
@@ -2990,19 +2740,14 @@ fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
 #[test]
 fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
 {
-    let directory = Temp_Dir("add-record-amend-contended");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("add-record-amend-contended", vec![Reserving_Record(
+        "T-1",
+        "docs/records/OD-LEDGER-006",
+    )]);
 
-    ledger
-        .Save(&Document(vec![Reserving_Record(
-            "T-1",
-            "docs/records/OD-LEDGER-006",
-        )]))
-        .expect("a board with one open item is a valid ledger");
-
+    let item = Reserving_Record("T-2", "docs/records/OD-LEDGER-006");
     let refused = ledger.Add(
-        &Reserving_Record("T-2", "docs/records/OD-LEDGER-006"),
+        &item,
         "agent-b",
         &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &Amending(&["docs/records/OD-LEDGER-006"]),
@@ -3015,8 +2760,6 @@ fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
     };
     assert_eq!(identifier, "docs/records/od-ledger-006");
     assert_eq!(item, ItemId::New("T-1"));
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// An amendment declared against a record nobody has published is refused.
@@ -3028,16 +2771,11 @@ fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
 #[test]
 fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
 {
-    let directory = Temp_Dir("add-record-amend-absent");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("add-record-amend-absent", Vec::new());
 
-    ledger
-        .Save(&Document(Vec::new()))
-        .expect("an empty board is a valid ledger");
-
+    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-099");
     let refused = ledger.Add(
-        &Reserving_Record("T-1", "docs/records/OD-LEDGER-099"),
+        &item,
         "agent-a",
         &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &Amending(&["docs/records/OD-LEDGER-099"]),
@@ -3053,8 +2791,6 @@ fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
         ledger.Load().expect("readable").items.is_empty(),
         "the refusal was reported and the item landed anyway"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A record identifier another open item reserves is refused, and that item is named.
@@ -3065,26 +2801,17 @@ fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
 #[test]
 fn Test_A_Record_Identifier_Another_Open_Item_Reserves_Should_Be_Refused_By_Its_Item()
 {
-    let directory = Temp_Dir("add-record-reserved");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Reserving_Record(
-            "T-1",
-            "docs/records/OD-LEDGER-020",
-        )]))
-        .expect("a board with one open item is a valid ledger");
+    let (_directory, mut ledger) = Board_At("add-record-reserved", vec![Reserving_Record(
+        "T-1",
+        "docs/records/OD-LEDGER-020",
+    )]);
 
     // The second author writes the identifier's file spelling rather than its bare form.
     // `OD-LEDGER-016` makes those one subject, so this must still be refused — an author
     // who reserved the file they were about to write has taken the identifier.
-    let refused = ledger.Add(
-        &Reserving_Record("T-2", "docs/records/OD-LEDGER-020-the-same-number.md"),
-        "agent-b",
-        &ItemTerritory::Empty(),
-        &ItemTerritory::Empty(),
-    );
+    let item = Reserving_Record("T-2", "docs/records/OD-LEDGER-020-the-same-number.md");
+    let refused =
+        ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
 
     let Err(AddRefusal::RecordReserved { identifier, item }) = refused
     else
@@ -3093,8 +2820,6 @@ fn Test_A_Record_Identifier_Another_Open_Item_Reserves_Should_Be_Refused_By_Its_
     };
     assert_eq!(identifier, "docs/records/od-ledger-020");
     assert_eq!(item, ItemId::New("T-1"));
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// The two refusals are different values, because the remedies are different.
@@ -3105,25 +2830,17 @@ fn Test_A_Record_Identifier_Another_Open_Item_Reserves_Should_Be_Refused_By_Its_
 #[test]
 fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
 {
-    let directory = Temp_Dir("add-record-distinct");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("add-record-distinct", vec![Reserving_Record(
+        "T-1",
+        "docs/records/OD-LEDGER-020",
+    )]);
 
-    ledger
-        .Save(&Document(vec![Reserving_Record(
-            "T-1",
-            "docs/records/OD-LEDGER-020",
-        )]))
-        .expect("valid");
-
-    let reserved = ledger.Add(
-        &Reserving_Record("T-2", "docs/records/OD-LEDGER-020"),
-        "agent-b",
-        &ItemTerritory::Empty(),
-        &ItemTerritory::Empty(),
-    );
+    let holding = Reserving_Record("T-2", "docs/records/OD-LEDGER-020");
+    let publishing = Reserving_Record("T-3", "docs/records/OD-LEDGER-006");
+    let reserved =
+        ledger.Add(&holding, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
     let published = ledger.Add(
-        &Reserving_Record("T-3", "docs/records/OD-LEDGER-006"),
+        &publishing,
         "agent-b",
         &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &ItemTerritory::Empty(),
@@ -3135,8 +2852,6 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
         published.as_ref().err().map(AddRefusal::Describe),
         "two refusals with one sentence send both authors to one remedy"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A closed item's territory is history, not a reservation.
@@ -3148,8 +2863,7 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
 fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 {
     let directory = Temp_Dir("add-record-closed");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let mut ledger = Ledger_At(&directory, &AT_NOW);
 
     let closed_states = [
         ItemState::Done,
@@ -3160,46 +2874,59 @@ fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 
     for state in closed_states
     {
-        let mut closed = Reserving_Record("T-1", "docs/records/OD-LEDGER-020");
-        let described = format!("{state:?}");
-        if matches!(state, ItemState::Declined { .. })
-        {
-            closed.declined = Some(Declination {
-                holder: "agent-a".to_owned(),
-                declined_at: At(NOW),
-            });
-        }
-        else
-        {
-            // A done item without one is refused by the board's own invariants, and this
-            // test is about reservations rather than about that rule.
-            closed.verified = Some(VerificationRecord {
-                argv: vec!["cargo".to_owned(), "test".to_owned()],
-                exit_code: 0,
-                output_tail: "test result: ok".to_owned(),
-                verified_at: At(NOW),
-                gate: None,
-            });
-        }
-        closed.state = state;
-
-        ledger.Save(&Document(vec![closed])).expect("valid");
-
-        let added = ledger.Add(
-            &Reserving_Record("T-2", "docs/records/OD-LEDGER-020"),
-            "agent-b",
-            &ItemTerritory::Empty(),
-            &ItemTerritory::Empty(),
-        );
-
-        assert_eq!(
-            added,
-            Ok(()),
-            "a {described} item's reservation outlived it, so the number is claimed forever"
-        );
+        Allocates_Over(&mut ledger, state);
     }
+}
 
-    let _ = std::fs::remove_dir_all(&directory);
+/// The board holds one closed item reserving a record, and the next author allocates it.
+fn Allocates_Over<Clock: nomos_platform::Clock>(
+    ledger: &mut FileLedger<StdFileSystem, Clock, FileLock>,
+    state: ItemState,
+)
+{
+    const RECORD: &str = "docs/records/OD-LEDGER-020";
+
+    let described = format!("{state:?}");
+    ledger
+        .Save(&Document(vec![Closed_Reserving(RECORD, state)]))
+        .expect("valid");
+
+    let item = Reserving_Record("T-2", RECORD);
+    assert_eq!(
+        ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty()),
+        Ok(()),
+        "a {described} item's reservation outlived it, so the number is claimed forever"
+    );
+}
+
+/// An item in a closed state, carrying whatever that state's own invariants require.
+///
+/// A `Done` item with no verification and a `Declined` one with no declination are both
+/// refused by the board before this test's subject is ever reached, so each arm has to be
+/// completed here — but the completing is scaffolding, not what the test is about.
+fn Closed_Reserving(record: &str, state: ItemState) -> LedgerItem
+{
+    let mut closed = Reserving_Record("T-1", record);
+    if matches!(state, ItemState::Declined { .. })
+    {
+        closed.declined = Some(Declination {
+            holder: "agent-a".to_owned(),
+            declined_at: At(NOW),
+        });
+    }
+    else
+    {
+        closed.verified = Some(VerificationRecord {
+            argv: vec!["cargo".to_owned(), "test".to_owned()],
+            exit_code: 0,
+            output_tail: "test result: ok".to_owned(),
+            verified_at: At(NOW),
+            gate: None,
+        });
+    }
+    closed.state = state;
+
+    return closed;
 }
 
 /// Ordinary overlapping territory is still accepted, and that is deliberate.
@@ -3211,26 +2938,15 @@ fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 #[test]
 fn Test_Ordinary_Shared_Territory_Should_Still_Be_Accepted()
 {
-    let directory = Temp_Dir("add-shared-territory");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (_directory, mut ledger) = Board_At("add-shared-territory", vec![Item("T-1", &["crates/a/src/lib.rs"])]);
 
-    ledger
-        .Save(&Document(vec![Item("T-1", &["crates/a/src/lib.rs"])]))
-        .expect("valid");
-
-    let added = ledger.Add(
-        &Item("T-2", &["crates/a/src/lib.rs"]),
-        "agent-b",
-        &ItemTerritory::Empty(),
-        &ItemTerritory::Empty(),
-    );
+    let item = Item("T-2", &["crates/a/src/lib.rs"]);
+    let added =
+        ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
 
     assert_eq!(
         added,
         Ok(()),
         "two items may reserve one path; a claim is what decides who holds it"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }

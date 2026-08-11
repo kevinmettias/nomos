@@ -683,8 +683,10 @@ mod tests
             Value("goal", "a goal", Origin::Submitted),
         ];
 
-        let draft = Validate(&Request(SubmissionState::Draft, missing.clone()));
-        let accepted = Validate(&Request(SubmissionState::Accepted, missing));
+        let as_draft = Request(SubmissionState::Draft, missing.clone());
+        let as_accepted = Request(SubmissionState::Accepted, missing);
+        let draft = Validate(&as_draft);
+        let accepted = Validate(&as_accepted);
 
         let draft_fields: Vec<&String> = draft.iter().map(|f| return &f.field).collect();
         let accepted_fields: Vec<&String> = accepted
@@ -710,10 +712,13 @@ mod tests
     fn Test_An_Inferred_Value_Should_Be_Readable_And_Never_Sufficient()
     {
         let mut values = Complete_Request_Values();
-        values.push(Value("goal", "guessed from the title", Origin::Inferred));
+        let inferred = Value("goal", "guessed from the title", Origin::Inferred);
+        values.push(inferred);
 
-        let draft = Validate(&Request(SubmissionState::Draft, values.clone()));
-        let accepted = Validate(&Request(SubmissionState::Accepted, values));
+        let as_draft = Request(SubmissionState::Draft, values.clone());
+        let as_accepted = Request(SubmissionState::Accepted, values);
+        let draft = Validate(&as_draft);
+        let accepted = Validate(&as_accepted);
 
         assert_eq!(draft, Vec::new(), "a draft may carry an inferred value");
         assert_eq!(accepted.len(), 1);
@@ -725,7 +730,8 @@ mod tests
     fn Test_A_Later_Value_Should_Supersede_An_Earlier_One_For_Reading_Only()
     {
         let mut values = Complete_Request_Values();
-        values.push(Value("goal", "what it became", Origin::Clarified));
+        let clarified = Value("goal", "what it became", Origin::Clarified);
+        values.push(clarified);
 
         let submission = Request(SubmissionState::Accepted, values);
 
@@ -820,7 +826,8 @@ mod tests
     #[test]
     fn Test_A_Design_With_One_Alternative_Should_Be_Refused()
     {
-        let failures = Validate(&Design("a new verb", "a new verb"));
+        let design = Design("a new verb", "a new verb");
+        let failures = Validate(&design);
 
         assert_eq!(failures.len(), 1);
         assert_eq!(First(&failures).rule, "at-least-two-alternatives");
@@ -829,13 +836,16 @@ mod tests
     #[test]
     fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative()
     {
-        assert_eq!(Validate(&Design("a new verb\ndo nothing", "a new verb")), Vec::new());
+        let design = Design("a new verb\ndo nothing", "a new verb");
+
+        assert_eq!(Validate(&design), Vec::new());
     }
 
     #[test]
     fn Test_A_Selected_Option_Absent_From_The_Alternatives_Should_Be_Refused()
     {
-        let failures = Validate(&Design("a new verb\ndo nothing", "a third thing"));
+        let design = Design("a new verb\ndo nothing", "a third thing");
+        let failures = Validate(&design);
 
         assert_eq!(failures.len(), 1);
         assert_eq!(First(&failures).rule, "selected-names-an-alternative");
@@ -852,7 +862,8 @@ mod tests
 
         if let Some(evidence) = evidence
         {
-            values.push(Value("evidence", evidence, Origin::Submitted));
+            let value = Value("evidence", evidence, Origin::Submitted);
+            values.push(value);
         }
 
         return Submission {
@@ -870,7 +881,8 @@ mod tests
     #[test]
     fn Test_A_Deviation_Naming_No_Clause_Should_Be_Refused()
     {
-        let failures = Validate(&Result_Submission("we did it differently", Some("cargo test: 0")));
+        let submission = Result_Submission("we did it differently", Some("cargo test: 0"));
+        let failures = Validate(&submission);
 
         assert_eq!(failures.len(), 1);
         assert_eq!(First(&failures).rule, "deviation-names-its-clause");

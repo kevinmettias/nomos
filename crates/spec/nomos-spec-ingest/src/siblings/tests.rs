@@ -134,7 +134,13 @@ fn Test_A_Statement_With_No_Lineage_Should_Not_Be_Reported_Here()
 fn Statement(store: &mut SpecificationStore, id: &str)
 {
     let node = store
-        .Upsert_Node(id, "requirement", "canonical", "record", id)
+        .Upsert_Node(NodeRow {
+            node_id: id,
+            kind: "requirement",
+            authority: "canonical",
+            representation: "record",
+            title: id,
+        })
         .expect("mints");
     store
         .Connection()

@@ -17,7 +17,7 @@ use crate::recorded_statement::RecordedStatement;
 use crate::statement_report::StatementReport;
 use crate::statement_file::StatementFile;
 use nomos_spec_model::{ContentHash, Is_Normalized, Segment};
-use nomos_spec_store::{SpecificationStore, StoreError};
+use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
 use source_document::Store_Text;
 
 #[derive(Debug)]

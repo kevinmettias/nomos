@@ -120,14 +120,14 @@ fn Test_A_Future_Schema_Version_Should_Be_Refused()
     let _ = std::fs::remove_file(&path);
 }
 
-/// The item's stated acceptance: a transaction that fails rolls back every table it
-/// touched, not merely the statement that failed.
-#[test]
-fn Test_A_Failed_Transaction_Should_Roll_Back_Every_Table()
+/// One transaction writing a blob, a node and a history row, in that order.
+///
+/// The reason on the history row is the only thing that varies: the schema refuses a blank
+/// one, which is how these tests get a transaction to fail at its last statement rather
+/// than its first. Rolling back has to reach the two rows written before it.
+fn Three_Rows(store: &mut SpecificationStore, reason: &str) -> Result<(), StoreError>
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-
-    let outcome: Result<(), StoreError> = store.In_Transaction(|transaction| {
+    return store.In_Transaction(|transaction| {
         transaction.execute(
             "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'0011')",
             [],
@@ -137,20 +137,43 @@ fn Test_A_Failed_Transaction_Should_Roll_Back_Every_Table()
              VALUES ('N-1', 'requirement', 'canonical', 'record', 'a node')",
             [],
         )?;
-        // A history row with a blank reason. The schema refuses it, which fails the
-        // whole transaction.
         transaction.execute(
             "INSERT INTO node_history (node_uid, ordinal, event, reason, event_hash, recorded_at)
-             VALUES (1, 1, 'created', '   ', 'sha256:bb', '2026-08-08')",
-            [],
+             VALUES (1, 1, 'created', ?1, 'sha256:bb', '2026-08-08')",
+            [reason],
         )?;
+
         Ok(())
     });
+}
+
+/// What the three tables [`Three_Rows`] writes to hold, read together.
+///
+/// Together because the claim is about all three at once: a rollback that reached the last
+/// statement and not the two before it is the defect, and three separate assertions report
+/// it as one table being wrong rather than as the rollback being partial.
+fn Written(store: &SpecificationStore) -> [u32; 3]
+{
+    return [
+        store.Count(Table::Blobs).expect("counts"),
+        store.Count(Table::Nodes).expect("counts"),
+        store.Count(Table::NodeHistory).expect("counts"),
+    ];
+}
+
+/// The item's stated acceptance: a transaction that fails rolls back every table it
+/// touched, not merely the statement that failed.
+#[test]
+fn Test_A_Failed_Transaction_Should_Roll_Back_Every_Table()
+{
+    let mut store = SpecificationStore::In_Memory().expect("opens");
+
+    // The history row carries a blank reason. The schema refuses it, which fails the
+    // whole transaction at its last statement rather than its first.
+    let outcome = Three_Rows(&mut store, "   ");
 
     assert!(outcome.is_err(), "a blank reason must not be accepted");
-    assert_eq!(store.Count(Table::Blobs).expect("counts"), 0);
-    assert_eq!(store.Count(Table::Nodes).expect("counts"), 0);
-    assert_eq!(store.Count(Table::NodeHistory).expect("counts"), 0);
+    assert_eq!(Written(&store), [0, 0, 0], "the rollback did not reach every table");
 }
 
 /// The negative control for the test above. Without it, an `In_Transaction` that always
@@ -160,28 +183,10 @@ fn Test_A_Successful_Transaction_Should_Commit_Every_Table()
 {
     let mut store = SpecificationStore::In_Memory().expect("opens");
 
-    let outcome: Result<(), StoreError> = store.In_Transaction(|transaction| {
-        transaction.execute(
-            "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'0011')",
-            [],
-        )?;
-        transaction.execute(
-            "INSERT INTO nodes (node_id, kind, authority, representation, title)
-             VALUES ('N-1', 'requirement', 'canonical', 'record', 'a node')",
-            [],
-        )?;
-        transaction.execute(
-            "INSERT INTO node_history (node_uid, ordinal, event, reason, event_hash, recorded_at)
-             VALUES (1, 1, 'created', 'ingested from v14.36', 'sha256:bb', '2026-08-08')",
-            [],
-        )?;
-        Ok(())
-    });
+    let outcome = Three_Rows(&mut store, "ingested from v14.36");
 
     assert!(outcome.is_ok(), "a well-formed transaction must commit");
-    assert_eq!(store.Count(Table::Blobs).expect("counts"), 1);
-    assert_eq!(store.Count(Table::Nodes).expect("counts"), 1);
-    assert_eq!(store.Count(Table::NodeHistory).expect("counts"), 1);
+    assert_eq!(Written(&store), [1, 1, 1], "the commit did not reach every table");
 }
 
 /// Content addressing: the same bytes stored twice are one blob.

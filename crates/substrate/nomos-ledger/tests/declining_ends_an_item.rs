@@ -95,6 +95,47 @@ fn Temp_Dir(name: &str) -> PathBuf
     return path;
 }
 
+/// The clock every test that does not move time shares.
+///
+/// A `'static` clock is what lets [`Board_At`] hand back a ledger: the ledger borrows its
+/// clock, so a local one could not outlive the call that built it.
+static AT_NOW: FixedClock = FixedClock(NOW);
+
+/// The one-hour lease every test here takes, said once.
+const LEASE: Duration = Duration::from_secs(3_600);
+
+/// A ledger on a fresh temporary directory, already holding the board it starts from.
+fn Board_At(
+    name: &str,
+    items: Vec<LedgerItem>,
+) -> (PathBuf, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
+{
+    let directory = Temp_Dir(name);
+    let ledger = Ledger_At(&directory, &AT_NOW);
+    ledger.Save(&Document(items)).expect("a fresh ledger is valid");
+
+    return (directory, ledger);
+}
+
+/// One agent claims one item for the standard lease, and it is expected to succeed.
+fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str)
+{
+    ledger
+        .Claim(&ItemId::New(item), holder, LEASE)
+        .unwrap_or_else(|refusal| {
+            panic!("the fixture claim was refused: {}", refusal.Describe())
+        });
+}
+
+/// A claim that is expected to be refused, with the refusal handed back as the value the
+/// test is about.
+fn Refused<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str) -> ClaimRefusal
+{
+    return ledger
+        .Claim(&ItemId::New(item), holder, LEASE)
+        .expect_err("this claim is contended and must be refused");
+}
+
 fn Ledger_At<'clock>(
     directory: &Path,
     clock: &'clock FixedClock,
@@ -115,13 +156,7 @@ fn Ledger_At<'clock>(
 #[test]
 fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
 {
-    let directory = Temp_Dir("ends-it");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (directory, mut ledger) = Board_At("ends-it", vec![Item("T-1", &["src/a.rs"])]);
 
     ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
@@ -156,13 +191,7 @@ fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
 #[test]
 fn Test_A_Declination_Should_Not_Carry_A_Second_Copy_Of_The_Reason()
 {
-    let directory = Temp_Dir("one-copy");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (directory, mut ledger) = Board_At("one-copy", vec![Item("T-1", &["src/a.rs"])]);
     ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("an unclaimed item may be declined");
@@ -182,19 +211,11 @@ fn Test_A_Declination_Should_Not_Carry_A_Second_Copy_Of_The_Reason()
 #[test]
 fn Test_A_Declined_Item_Should_Not_Be_Claimable()
 {
-    let directory = Temp_Dir("not-claimable");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (directory, mut ledger) = Board_At("not-claimable", vec![Item("T-1", &["src/a.rs"])]);
 
     // The control: it is claimable right up until it is declined, so the refusal below is
     // the decline's doing and not the fixture's.
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("a Ready item is claimable");
+    Take(&mut ledger, "T-1", "agent-a");
     ledger
         .Release(
             &ItemId::New("T-1"),
@@ -208,9 +229,7 @@ fn Test_A_Declined_Item_Should_Not_Be_Claimable()
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("an unclaimed item may be declined");
 
-    let refusal = ledger
-        .Claim(&ItemId::New("T-1"), "agent-b", Duration::from_secs(3_600))
-        .expect_err("a declined item is not work and must not be claimable");
+    let refusal = Refused(&mut ledger, "T-1", "agent-b");
 
     assert!(
         matches!(refusal, ClaimRefusal::NotClaimable { .. }),
@@ -233,25 +252,15 @@ fn Test_A_Declined_Item_Should_Not_Be_Claimable()
 #[test]
 fn Test_A_Declined_Item_Should_Stop_Excluding()
 {
-    let directory = Temp_Dir("stops-excluding");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
+    let (directory, mut ledger) = Board_At("stops-excluding", vec![
+        Item("T-1", &["src/shared.rs"]),
+        Item("T-2", &["src/shared.rs"]),
+    ]);
 
-    ledger
-        .Save(&Document(vec![
-            Item("T-1", &["src/shared.rs"]),
-            Item("T-2", &["src/shared.rs"]),
-        ]))
-        .expect("a fresh ledger is valid");
-
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
+    Take(&mut ledger, "T-1", "agent-a");
 
     // The control: while T-1 is held, the overlapping item is refused.
-    ledger
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect_err("overlapping territory is refused while T-1 is held");
+    let _refused = Refused(&mut ledger, "T-2", "agent-b");
 
     ledger
         .Release(
@@ -266,9 +275,7 @@ fn Test_A_Declined_Item_Should_Stop_Excluding()
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("an unclaimed item may be declined");
 
-    ledger
-        .Claim(&ItemId::New("T-2"), "agent-b", Duration::from_secs(3_600))
-        .expect("a declined item reserves nothing");
+    Take(&mut ledger, "T-2", "agent-b");
 
     let after = ledger.Load().expect("readable");
     let declined = after
@@ -297,16 +304,8 @@ fn Test_A_Declined_Item_Should_Stop_Excluding()
 #[test]
 fn Test_Declining_A_Held_Item_Should_Be_Refused_Retryably()
 {
-    let directory = Temp_Dir("held");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
-    ledger
-        .Claim(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
-        .expect("uncontended");
+    let (directory, mut ledger) = Board_At("held", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", "agent-a");
 
     let refusal = ledger
         .Decline(&ItemId::New("T-1"), "agent-b", REASON)
@@ -351,13 +350,7 @@ fn Test_Declining_A_Held_Item_Should_Be_Refused_Retryably()
 #[test]
 fn Test_Declining_A_Done_Item_Should_Be_A_Conflict()
 {
-    let directory = Temp_Dir("done");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Finished_Item("T-1", &["src/a.rs"])]))
-        .expect("a finished item is a valid ledger");
+    let (directory, mut ledger) = Board_At("done", vec![Finished_Item("T-1", &["src/a.rs"])]);
 
     let refusal = ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
@@ -380,13 +373,7 @@ fn Test_Declining_A_Done_Item_Should_Be_A_Conflict()
 #[test]
 fn Test_Declining_A_Declined_Item_Should_Keep_The_First_Reason()
 {
-    let directory = Temp_Dir("twice");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (directory, mut ledger) = Board_At("twice", vec![Item("T-1", &["src/a.rs"])]);
     ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("an unclaimed item may be declined");
@@ -441,13 +428,7 @@ fn Test_Declining_A_Declined_Item_Should_Keep_The_First_Reason()
 #[test]
 fn Test_A_Declined_Item_Should_Survive_Validation()
 {
-    let directory = Temp_Dir("valid");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (directory, mut ledger) = Board_At("valid", vec![Item("T-1", &["src/a.rs"])]);
     ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("an unclaimed item may be declined");
@@ -463,13 +444,7 @@ fn Test_A_Declined_Item_Should_Survive_Validation()
 #[test]
 fn Test_Declining_An_Unknown_Item_Should_Name_The_Identifier()
 {
-    let directory = Temp_Dir("unknown");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (directory, mut ledger) = Board_At("unknown", vec![Item("T-1", &["src/a.rs"])]);
 
     let refusal = ledger
         .Decline(&ItemId::New("T-2"), "agent-a", REASON)
@@ -490,13 +465,7 @@ fn Test_Declining_An_Unknown_Item_Should_Name_The_Identifier()
 #[test]
 fn Test_Declined_Should_Be_Reachable_Through_A_Verb()
 {
-    let directory = Temp_Dir("reachable");
-    let clock = FixedClock(NOW);
-    let mut ledger = Ledger_At(&directory, &clock);
-
-    ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"])]))
-        .expect("a fresh ledger is valid");
+    let (directory, mut ledger) = Board_At("reachable", vec![Item("T-1", &["src/a.rs"])]);
     ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("the verb is the only thing that may produce this state");

@@ -525,7 +525,8 @@ fn Files_Naming_A_Corpus(root: &Path) -> BTreeSet<String>
                 continue;
             };
 
-            found.insert(relative.display().to_string().replace('\\', "/"));
+            let spelled = relative.display().to_string().replace('\\', "/");
+            found.insert(spelled);
         }
     }
 

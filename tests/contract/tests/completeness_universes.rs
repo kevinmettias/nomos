@@ -525,22 +525,33 @@ fn Function_Names() -> BTreeSet<String>
                 continue;
             }
 
-            for file in Source_Files(&source_root)
-            {
-                let Ok(text) = std::fs::read_to_string(&file)
-                else
-                {
-                    continue;
-                };
+            let declared = Function_Names_Under(&source_root);
+            names.extend(declared);
+        }
+    }
 
-                for line in text.lines()
-                {
-                    if let Some(rest) = line.trim().strip_prefix("fn ")
-                        && let Some((name, _)) = rest.split_once('(')
-                    {
-                        names.insert(name.trim().to_owned());
-                    }
-                }
+    return names;
+}
+
+/// The function names declared under one source root.
+fn Function_Names_Under(root: &Path) -> BTreeSet<String>
+{
+    let mut names = BTreeSet::new();
+
+    for file in Source_Files(root)
+    {
+        let Ok(text) = std::fs::read_to_string(&file)
+        else
+        {
+            continue;
+        };
+
+        for line in text.lines()
+        {
+            if let Some(rest) = line.trim().strip_prefix("fn ")
+                && let Some((name, _)) = rest.split_once('(')
+            {
+                names.insert(name.trim().to_owned());
             }
         }
     }

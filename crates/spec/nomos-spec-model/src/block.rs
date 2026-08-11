@@ -34,6 +34,28 @@ impl SourceBlock
     }
 }
 
+/// The lines of the fenced block opening at `index`, and the index of its last line.
+///
+/// An unterminated fence runs to the end of the document rather than being refused, which
+/// is what v14's readers do and therefore what reproducing their segmentation requires.
+fn Fence<'a>(lines: &[&'a str], index: usize) -> (Vec<&'a str>, usize)
+{
+    let mut fence: Vec<&str> = Vec::new();
+    let mut cursor = index;
+
+    while let Some(inner) = lines.get(cursor)
+    {
+        fence.push(inner);
+        if cursor > index && inner.starts_with("```")
+        {
+            break;
+        }
+        cursor = cursor.saturating_add(1);
+    }
+
+    return (fence, cursor);
+}
+
 /// Splits an authored markdown document into the blocks the preservation ledger tracks.
 ///
 /// Reproduces v14's segmentation exactly; verified against all 2533 recorded blocks.
@@ -63,17 +85,8 @@ pub fn Segment(markdown: &str) -> Vec<SourceBlock>
         else if line.starts_with("```")
         {
             Flush(&mut blocks, &mut paragraph, &heading_path);
-            let mut fence = vec![*line];
-            index = index.saturating_add(1);
-            while let Some(inner) = lines.get(index)
-            {
-                fence.push(inner);
-                if inner.starts_with("```")
-                {
-                    break;
-                }
-                index = index.saturating_add(1);
-            }
+            let (fence, closing) = Fence(&lines, index);
+            index = closing;
             blocks.push(SourceBlock {
                 ordinal: Next_Ordinal(&blocks),
                 kind: BlockKind::Code,

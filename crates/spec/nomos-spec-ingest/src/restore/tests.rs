@@ -273,7 +273,13 @@ fn Test_A_Contested_Alias_Should_Be_Reported_Rather_Than_Silently_Repointed()
         documents,
     } = Core();
     let other = store
-        .Upsert_Node("OTHER-001", "concept", "canonical", "record", "Something else")
+        .Upsert_Node(NodeRow {
+            node_id: "OTHER-001",
+            kind: "concept",
+            authority: "canonical",
+            representation: "record",
+            title: "Something else",
+        })
         .expect("mints");
     store
         .Connection()

@@ -118,12 +118,15 @@ pub fn Walk(root: &Path) -> Corpus
             let name = entry.file_name();
             let name = name.to_string_lossy();
 
-            if path.is_dir()
+            let is_directory = path.is_dir();
+            if is_directory && NOT_SOURCE.contains(&name.as_ref())
             {
-                if !NOT_SOURCE.contains(&name.as_ref())
-                {
-                    pending.push(path);
-                }
+                continue;
+            }
+
+            if is_directory
+            {
+                pending.push(path);
                 continue;
             }
 

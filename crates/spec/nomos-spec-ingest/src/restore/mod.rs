@@ -30,7 +30,7 @@ use crate::restored::Restored;
 use crate::member::Member;
 use crate::phases::IngestError;
 use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, Table_Rows, TableRow};
-use nomos_spec_store::{SpecificationStore, StoreError};
+use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
 use core::fmt::Write as _;
 use std::collections::BTreeMap;
 use extract::Refuse_Collisions;

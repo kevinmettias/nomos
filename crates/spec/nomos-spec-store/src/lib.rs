@@ -35,5 +35,7 @@ pub use read::{DocumentSource, NodeSummary, PathMatch, TableLine};
 pub use record::{Disposition, Kind_Label};
 pub use rows::{RowCensus, RowScope};
 pub use schema::{Latest_Version, Migration, MIGRATIONS};
-pub use store::{AUTHORED, EXTERNAL, SpecificationStore, StoreError, SuiteAuthority, Table};
+pub use store::{
+    AUTHORED, EXTERNAL, NodeRow, SpecificationStore, StoreError, SuiteAuthority, Table,
+};
 pub use submission::{Accept_Submission, AcceptError, Transport_Origin};

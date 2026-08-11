@@ -8,7 +8,7 @@ use crate::artifact::Artifact;
 use crate::family::Family;
 use crate::phases::IngestError;
 use nomos_spec_model::{ContentHash, Parse_Record, Segment, SourceBlock};
-use nomos_spec_store::{SpecificationStore, StoreError};
+use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
 use std::collections::BTreeMap;
 
 /// Reads a v14 artifact's declared identity and statement.
@@ -338,13 +338,13 @@ pub fn Ingest_v15_Record(
     let record = Parse_Record(markdown)
         .map_err(|error| IngestError::Parse(format!("{path}: {error}")))?;
 
-    store.Upsert_Node(
-        &record.front_matter.id,
-        &record.front_matter.kind,
-        &record.front_matter.authority,
-        "document",
-        &record.front_matter.title,
-    )?;
+    store.Upsert_Node(NodeRow {
+        node_id: &record.front_matter.id,
+        kind: &record.front_matter.kind,
+        authority: &record.front_matter.authority,
+        representation: "document",
+        title: &record.front_matter.title,
+    })?;
 
     let document_uid = store.Put_Source_Document(path, "v15.0", markdown)?;
     store.Put_Source_Blocks(document_uid, &Segment(&record.body))?;

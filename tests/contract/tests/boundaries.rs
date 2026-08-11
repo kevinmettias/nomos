@@ -385,21 +385,9 @@ fn Test_A_Capability_Id_Should_Be_Written_In_One_Crate()
                 continue;
             };
 
-            for line in text.lines()
+            for id in Capability_Ids_In(&text)
             {
-                let trimmed = line.trim();
-                // A capability named in prose is a reference, not a declaration. Every
-                // doc comment in this workspace that explains a capability would
-                // otherwise read as a second party to it.
-                if trimmed.starts_with("//")
-                {
-                    continue;
-                }
-
-                for id in Capability_Ids(trimmed)
-                {
-                    spelled_by.entry(id).or_default().insert(member.name.clone());
-                }
+                spelled_by.entry(id).or_default().insert(member.name.clone());
             }
         }
     }
@@ -423,6 +411,30 @@ fn Test_A_Capability_Id_Should_Be_Written_In_One_Crate()
          party to it. Move the id to a crate below everything that offers against it, and \
          let the parties import it."
     );
+}
+
+/// Every `nomos.cap.…` id a file declares, as written.
+///
+/// A capability named in prose is a reference, not a declaration, so commented lines are
+/// passed over. Every doc comment in this workspace that explains a capability would
+/// otherwise read as a second party to it.
+fn Capability_Ids_In(text: &str) -> Vec<String>
+{
+    let mut found = Vec::new();
+
+    for line in text.lines()
+    {
+        let trimmed = line.trim();
+        if trimmed.starts_with("//")
+        {
+            continue;
+        }
+
+        let spelled = Capability_Ids(trimmed);
+        found.extend(spelled);
+    }
+
+    return found;
 }
 
 /// Every `nomos.cap.…` id in a line, as written.

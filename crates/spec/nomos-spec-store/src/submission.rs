@@ -8,7 +8,7 @@
 //! `OD-SPEC-013` decided what it writes: a submission is a node, a field is a sequence of
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
-use crate::store::{SpecificationStore, StoreError};
+use crate::store::{NodeRow, SpecificationStore, StoreError};
 use nomos_spec_model::{ContentHash, Failure, Origin, Refusal, Submission, SubmissionState, Validate};
 use rusqlite::Transaction;
 
@@ -73,7 +73,8 @@ pub fn Accept_Submission(
 ) -> Result<i64, AcceptError>
 {
     let mut failures = Validate(submission);
-    failures.extend(Unresolved_Citations(store, submission)?);
+    let unresolved = Unresolved_Citations(store, submission)?;
+    failures.extend(unresolved);
 
     if !failures.is_empty()
     {
@@ -83,13 +84,13 @@ pub fn Accept_Submission(
         }));
     }
 
-    let node_uid = store.Upsert_Node(
-        &submission.id,
-        submission.kind.Label(),
-        crate::store::AUTHORED,
-        "structured",
-        Title_Of(submission),
-    )?;
+    let node_uid = store.Upsert_Node(NodeRow {
+        node_id: &submission.id,
+        kind: submission.kind.Label(),
+        authority: crate::store::AUTHORED,
+        representation: "structured",
+        title: Title_Of(submission),
+    })?;
 
     let uid = store.In_Transaction(|transaction| {
         return Write_Submission(transaction, node_uid, submission);
@@ -443,8 +444,8 @@ mod tests
     {
         let mut store = Store();
 
-        Accept_Submission(&mut store, &Request("FR-001", SubmissionState::Accepted))
-            .expect("accepted");
+        let request = Request("FR-001", SubmissionState::Accepted);
+        Accept_Submission(&mut store, &request).expect("accepted");
 
         assert_eq!(store.Count(Table::Submissions).expect("a count"), 1);
         assert_eq!(store.Count(Table::SubmissionValues).expect("a count"), 5);
@@ -506,9 +507,8 @@ mod tests
     {
         let mut store = Store();
         let mut submission = Request("FR-004", SubmissionState::Accepted);
-        submission
-            .values
-            .push(Value("goal", "what it became", Origin::Clarified));
+        let clarified = Value("goal", "what it became", Origin::Clarified);
+        submission.values.push(clarified);
 
         Accept_Submission(&mut store, &submission).expect("accepted");
 
@@ -571,11 +571,8 @@ mod tests
             severity: Severity::Blocking,
             closed_by: None,
         }];
-        submission.values.push(Value(
-            "behaviour",
-            "the blocked value, supplied",
-            Origin::Submitted,
-        ));
+        let supplied = Value("behaviour", "the blocked value, supplied", Origin::Submitted);
+        submission.values.push(supplied);
 
         let error = Accept_Submission(&mut store, &submission).expect_err("still refused");
 
@@ -616,9 +613,8 @@ mod tests
     {
         let mut store = Store();
 
-        let error =
-            Accept_Submission(&mut store, &Design("DS-001", "FR-404", SubmissionState::Draft))
-                .expect_err("refused");
+        let design = Design("DS-001", "FR-404", SubmissionState::Draft);
+        let error = Accept_Submission(&mut store, &design).expect_err("refused");
 
         let AcceptError::Refused(refusal) = error
         else
@@ -658,10 +654,10 @@ mod tests
     fn Test_An_Accepted_Citation_Should_Write_The_Lifecycle_Edge()
     {
         let mut store = Store();
-        Accept_Submission(&mut store, &Request("FR-008", SubmissionState::Accepted))
-            .expect("a request");
-        Accept_Submission(&mut store, &Design("DS-003", "FR-008", SubmissionState::Draft))
-            .expect("a design");
+        let request = Request("FR-008", SubmissionState::Accepted);
+        let design = Design("DS-003", "FR-008", SubmissionState::Draft);
+        Accept_Submission(&mut store, &request).expect("a request");
+        Accept_Submission(&mut store, &design).expect("a design");
 
         let edges: u32 = store
             .Connection()

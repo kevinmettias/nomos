@@ -108,8 +108,10 @@ fn Read(root: &Path, label: &str) -> Revision
 
 fn Headline(root: &Path) -> RegressionReport
 {
-    return Regression(&Read(root, V14_LAST), &Read(root, V15))
-        .unwrap_or_else(|error| panic!("{error}"));
+    let before = Read(root, V14_LAST);
+    let after = Read(root, V15);
+
+    return Regression(&before, &after).unwrap_or_else(|error| panic!("{error}"));
 }
 
 fn Family(label: &str) -> Restored
@@ -590,7 +592,9 @@ fn Test_An_Ordinary_Pair_Should_Preserve_Every_Member()
         return;
     };
 
-    let report = Regression(&Read(&root, V14_PREVIOUS), &Read(&root, V14_LAST)).expect("reports");
+    let before = Read(&root, V14_PREVIOUS);
+    let after = Read(&root, V14_LAST);
+    let report = Regression(&before, &after).expect("reports");
 
     for family in Restored::All()
     {
@@ -619,7 +623,9 @@ fn Test_A_Revision_Without_The_Volumes_Should_Be_Refused()
         return;
     };
 
-    let refusal = Regression(&Read(&root, V15), &Read(&root, V14_LAST))
+    let before = Read(&root, V15);
+    let after = Read(&root, V14_LAST);
+    let refusal = Regression(&before, &after)
         .expect_err("v15.0 has no domain volumes and must not report every family gone");
 
     assert!(format!("{refusal}").contains("no family to ask after"), "{refusal}");

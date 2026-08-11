@@ -98,9 +98,21 @@ impl Drop for Board
     }
 }
 
-/// One item, authored inline so each test's board is readable in the test.
-fn Item(id: &str, paths: &str, state: &str, depends_on: &str, tail: &str) -> String
+/// Where an item stands: what state it is in, what it waits on, and the claim and
+/// verification fields that close it out.
+#[derive(Clone, Copy)]
+struct Standing<'a>
 {
+    state: &'a str,
+    depends_on: &'a str,
+    tail: &'a str,
+}
+
+/// One item, authored inline so each test's board is readable in the test.
+fn Item(id: &str, paths: &str, standing: Standing<'_>) -> String
+{
+    let Standing { state, depends_on, tail } = standing;
+
     return format!(
         "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
@@ -127,8 +139,16 @@ fn Test_An_Item_With_An_Unfinished_Dependency_Should_Not_Be_Listed_Ready()
         "unfinished-dependency",
         &format!(
             "{},{}",
-            Item("T-1", "\"src/a.rs\"", "Ready", "", NO_CLAIM),
-            Item("T-2", "\"src/b.rs\"", "Ready", "\"T-1\"", NO_CLAIM)
+            Item("T-1", "\"src/a.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            }),
+            Item("T-2", "\"src/b.rs\"", Standing {
+                state: "Ready",
+                depends_on: "\"T-1\"",
+                tail: NO_CLAIM,
+            })
         ),
     );
 
@@ -152,8 +172,16 @@ fn Test_An_Item_With_No_Dependency_Should_Still_Be_Listed_Ready()
         "no-dependency",
         &format!(
             "{},{}",
-            Item("T-1", "\"src/a.rs\"", "Ready", "", NO_CLAIM),
-            Item("T-2", "\"src/b.rs\"", "Ready", "", NO_CLAIM)
+            Item("T-1", "\"src/a.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            }),
+            Item("T-2", "\"src/b.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            })
         ),
     );
 
@@ -171,8 +199,16 @@ fn Test_A_Satisfied_Dependency_Should_Leave_An_Item_Ready()
         "satisfied-dependency",
         &format!(
             "{},{}",
-            Item("T-1", "\"src/a.rs\"", "Done", "", FINISHED),
-            Item("T-2", "\"src/b.rs\"", "Ready", "\"T-1\"", NO_CLAIM)
+            Item("T-1", "\"src/a.rs\"", Standing {
+                state: "Done",
+                depends_on: "",
+                tail: FINISHED,
+            }),
+            Item("T-2", "\"src/b.rs\"", Standing {
+                state: "Ready",
+                depends_on: "\"T-1\"",
+                tail: NO_CLAIM,
+            })
         ),
     );
 
@@ -193,8 +229,16 @@ fn Test_Filtering_For_Ready_Should_Not_Return_An_Item_Nothing_Can_Claim()
         "filter-ready",
         &format!(
             "{},{}",
-            Item("T-1", "\"src/a.rs\"", "Ready", "", NO_CLAIM),
-            Item("T-2", "\"src/b.rs\"", "Ready", "\"T-1\"", NO_CLAIM)
+            Item("T-1", "\"src/a.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            }),
+            Item("T-2", "\"src/b.rs\"", Standing {
+                state: "Ready",
+                depends_on: "\"T-1\"",
+                tail: NO_CLAIM,
+            })
         ),
     );
 
@@ -221,8 +265,16 @@ fn Test_An_Item_On_Held_Ground_Should_Not_Be_Listed_Ready()
         "held-ground",
         &format!(
             "{},{}",
-            Item("T-1", "\"src/shared.rs\"", "Claimed", "", &Held_By("agent-a")),
-            Item("T-2", "\"src/shared.rs\"", "Ready", "", NO_CLAIM)
+            Item("T-1", "\"src/shared.rs\"", Standing {
+                state: "Claimed",
+                depends_on: "",
+                tail: &Held_By("agent-a"),
+            }),
+            Item("T-2", "\"src/shared.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            })
         ),
     );
 
@@ -243,8 +295,16 @@ fn Test_An_Item_On_Free_Ground_Should_Still_Be_Listed_Ready()
         "free-ground",
         &format!(
             "{},{}",
-            Item("T-1", "\"src/a.rs\"", "Claimed", "", &Held_By("agent-a")),
-            Item("T-2", "\"src/b.rs\"", "Ready", "", NO_CLAIM)
+            Item("T-1", "\"src/a.rs\"", Standing {
+                state: "Claimed",
+                depends_on: "",
+                tail: &Held_By("agent-a"),
+            }),
+            Item("T-2", "\"src/b.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            })
         ),
     );
 
@@ -287,11 +347,31 @@ fn Mixed_Board(name: &str) -> Board
         name,
         &format!(
             "{},{},{},{},{}",
-            Item("T-1", "\"src/shared.rs\"", "Claimed", "", &Held_By("agent-a")),
-            Item("T-2", "\"src/shared.rs\"", "Ready", "", NO_CLAIM),
-            Item("T-3", "\"src/c.rs\"", "Ready", "\"T-4\"", NO_CLAIM),
-            Item("T-4", "\"src/d.rs\"", "Ready", "", NO_CLAIM),
-            Item("T-5", "\"src/shared.rs\"", "Done", "", FINISHED)
+            Item("T-1", "\"src/shared.rs\"", Standing {
+                state: "Claimed",
+                depends_on: "",
+                tail: &Held_By("agent-a"),
+            }),
+            Item("T-2", "\"src/shared.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            }),
+            Item("T-3", "\"src/c.rs\"", Standing {
+                state: "Ready",
+                depends_on: "\"T-4\"",
+                tail: NO_CLAIM,
+            }),
+            Item("T-4", "\"src/d.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            }),
+            Item("T-5", "\"src/shared.rs\"", Standing {
+                state: "Done",
+                depends_on: "",
+                tail: FINISHED,
+            })
         ),
     );
 }
@@ -392,10 +472,26 @@ fn Test_Audit_Should_Say_So_When_Nothing_Is_Blocked()
         "audit-clear",
         &format!(
             "{},{},{},{}",
-            Item("T-1", "\"src/a.rs\"", "Claimed", "", &Held_By("agent-a")),
-            Item("T-2", "\"src/b.rs\"", "Ready", "", NO_CLAIM),
-            Item("T-3", "\"src/c.rs\"", "Ready", "\"T-4\"", NO_CLAIM),
-            Item("T-4", "\"src/d.rs\"", "Done", "", FINISHED)
+            Item("T-1", "\"src/a.rs\"", Standing {
+                state: "Claimed",
+                depends_on: "",
+                tail: &Held_By("agent-a"),
+            }),
+            Item("T-2", "\"src/b.rs\"", Standing {
+                state: "Ready",
+                depends_on: "",
+                tail: NO_CLAIM,
+            }),
+            Item("T-3", "\"src/c.rs\"", Standing {
+                state: "Ready",
+                depends_on: "\"T-4\"",
+                tail: NO_CLAIM,
+            }),
+            Item("T-4", "\"src/d.rs\"", Standing {
+                state: "Done",
+                depends_on: "",
+                tail: FINISHED,
+            })
         ),
     );
 

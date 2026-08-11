@@ -1,6 +1,6 @@
 //! Ingesting a sibling suite's prose documents.
 
-use super::{SpecificationStore, Archive, Suite, SuiteReport, IngestError, Text, Ingest_Document, Sibling, Qualified, Stem, Parse_Record, Claim};
+use super::{NodeRow, SpecificationStore, Archive, Suite, SuiteReport, IngestError, Text, Ingest_Document, Sibling, Qualified, Stem, Parse_Record, Claim};
 
 /// A document as the archive holds it: where it sits, and what it says.
 pub(super) struct Sourced<'a>
@@ -80,13 +80,13 @@ pub(super) fn Take(
     report: &mut SuiteReport,
 ) -> Result<i64, IngestError>
 {
-    let node = store.Upsert_Node(
-        &declared.id,
-        &declared.kind,
-        &declared.authority,
-        "document",
-        &declared.title,
-    )?;
+    let node = store.Upsert_Node(NodeRow {
+        node_id: &declared.id,
+        kind: &declared.kind,
+        authority: &declared.authority,
+        representation: "document",
+        title: &declared.title,
+    })?;
 
     if Claim(store, &declared.id, node, suite)?
     {

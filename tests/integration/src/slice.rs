@@ -195,6 +195,15 @@ pub const fn Approximate_Floor() -> Guarantee
     );
 }
 
+/// Who answered for one file, and where in the offer order they came.
+#[derive(Clone, Copy)]
+struct Answered<'a>
+{
+    provider: &'a str,
+    rank: usize,
+    file: &'a SourceFile,
+}
+
 /// Which provider the registry chose, and how far its answer can be stood behind.
 ///
 /// Named rather than a pair, so that a caller reading one member is reading a name and
@@ -640,7 +649,7 @@ impl Slice
             // asymmetry is the interesting half of having two providers: they do not
             // merely differ in how good the answer is, they differ in which inputs they
             // can answer for at all.
-            return rust::Materialization::Materialized(Box::new(scan::Materialize(
+            let materialized = scan::Materialize(
                 file.subject,
                 &file.source,
                 scan::FactContext {
@@ -649,7 +658,9 @@ impl Slice
                     configuration: self.configuration,
                     generation: self.generation,
                 },
-            )));
+            );
+
+            return rust::Materialization::Materialized(Box::new(materialized));
         }
 
         panic!("{provider} was resolved and this composition cannot call it");
@@ -785,7 +796,11 @@ impl Slice
             if self.Held(&key)
             {
                 report.syntax_reused = report.syntax_reused.saturating_add(1);
-                Self::Credit(report, &provider, rank, file);
+                Self::Credit(report, Answered {
+                    provider: &provider,
+                    rank,
+                    file,
+                });
 
                 return;
             }
@@ -794,7 +809,11 @@ impl Slice
             {
                 rust::Materialization::Materialized(fact) =>
                 {
-                    self.Kept(*fact, report, &provider, rank, file);
+                    self.Kept(*fact, report, Answered {
+                        provider: &provider,
+                        rank,
+                        file,
+                    });
 
                     return;
                 }
@@ -822,14 +841,7 @@ impl Slice
     /// A leaf: computed from the file and from nothing else, so it declares no
     /// dependencies. This is also why the corpus needs the rollup — a graph of leaves has
     /// no descendants to get wrong.
-    fn Kept(
-        &mut self,
-        fact: MaterializedFact,
-        report: &mut RunReport,
-        provider: &str,
-        rank: usize,
-        file: &SourceFile,
-    )
+    fn Kept(&mut self, fact: MaterializedFact, report: &mut RunReport, answered: Answered<'_>)
     {
         self.store
             .Materialize(fact, &[])
@@ -838,13 +850,14 @@ impl Slice
         report.syntax_materialized = report.syntax_materialized.saturating_add(1);
         report.recomputed.push(Recompute {
             capability: syntax::CAPABILITY.to_owned(),
-            subject: file.path.clone(),
+            subject: answered.file.path.clone(),
         });
-        Self::Credit(report, provider, rank, file);
+        Self::Credit(report, answered);
     }
 
-    fn Credit(report: &mut RunReport, provider: &str, rank: usize, file: &SourceFile)
+    fn Credit(report: &mut RunReport, answered: Answered<'_>)
     {
+        let Answered { provider, rank, file } = answered;
         let counted = report.answered_by.entry(provider.to_owned()).or_insert(0);
         *counted = counted.saturating_add(1);
 
@@ -955,9 +968,10 @@ impl Slice
         content: &str,
     ) -> Edited
     {
+        let presented = WorkspaceChangeSet::From(source).Present(path, content);
         let applied = self
             .workspace
-            .Apply(&WorkspaceChangeSet::From(source).Present(path, content))
+            .Apply(&presented)
             .unwrap_or_else(|error| panic!("`{path}` could not be edited: {error}"));
 
         assert!(

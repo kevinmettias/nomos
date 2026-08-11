@@ -1,6 +1,6 @@
 //! Putting the catalog in, with the aliases each node answers to.
 
-use super::{CatalogEntity, IngestError, SpecificationStore, CatalogReport, StoreError};
+use super::{CatalogEntity, IngestError, NodeRow, SpecificationStore, CatalogReport, StoreError};
 
 /// # Errors
 ///
@@ -63,13 +63,13 @@ pub fn Ingest_Catalog(
             &entity.authority
         };
 
-        let node_uid = store.Upsert_Node(
-            &entity.id,
-            &entity.kind,
+        let node_uid = store.Upsert_Node(NodeRow {
+            node_id: &entity.id,
+            kind: &entity.kind,
             authority,
-            "record",
-            &entity.title,
-        )?;
+            representation: "record",
+            title: &entity.title,
+        })?;
         report.nodes = report.nodes.saturating_add(1);
         Record_Aliases(store, entity, node_uid, &mut report)?;
     }

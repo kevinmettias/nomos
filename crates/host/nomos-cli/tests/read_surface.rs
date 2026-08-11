@@ -40,6 +40,32 @@ fn Nomos(arguments: &[&str]) -> Output
         .expect("the binary runs");
 }
 
+/// Renders one profile into a build root.
+fn Render(profile: &str, into: &Path) -> Output
+{
+    return Nomos(&[
+        "spec",
+        "render",
+        "--profile",
+        profile,
+        "--into",
+        &into.display().to_string(),
+    ]);
+}
+
+/// Reads one record out of a store assembled over a corpus.
+fn Record_From(id: &str, corpus: &Path) -> Output
+{
+    return Nomos(&[
+        "spec",
+        "record",
+        "--id",
+        id,
+        "--corpus",
+        &corpus.display().to_string(),
+    ]);
+}
+
 fn Code(output: &Output) -> i32
 {
     return output.status.code().unwrap_or(-1);
@@ -247,14 +273,7 @@ fn Test_A_Profile_Should_Render_To_A_File()
 {
     let into = Scratch("render");
 
-    let output = Nomos(&[
-        "spec",
-        "render",
-        "--profile",
-        "domain-specification",
-        "--into",
-        &into.display().to_string(),
-    ]);
+    let output = Render("domain-specification", &into);
 
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
 
@@ -282,14 +301,7 @@ fn Test_A_Profile_That_Needs_The_Corpus_Should_Fail_As_An_Absence()
 {
     let into = Scratch("render-absent");
 
-    let output = Nomos(&[
-        "spec",
-        "render",
-        "--profile",
-        "architecture-document",
-        "--into",
-        &into.display().to_string(),
-    ]);
+    let output = Render("architecture-document", &into);
 
     assert_eq!(Code(&output), 6, "{}", Err_Text(&output));
     let notes = Err_Text(&output);
@@ -322,14 +334,7 @@ fn Test_An_Unknown_Identifier_Over_A_Whole_Store_Should_Not_Be_An_Absence()
 {
     let corpus = Fixture_Corpus("unknown-id");
 
-    let output = Nomos(&[
-        "spec",
-        "record",
-        "--id",
-        "D-99999",
-        "--corpus",
-        &corpus.display().to_string(),
-    ]);
+    let output = Record_From("D-99999", &corpus);
 
     assert_eq!(Code(&output), 1, "{}", Err_Text(&output));
     let notes = Err_Text(&output);

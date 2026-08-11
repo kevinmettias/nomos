@@ -276,19 +276,23 @@ fn Carried_By(bundle: &Bundle) -> Identities
             }
             Record::SourceDocument(document) =>
             {
-                documents.insert(Document_Key_Of(&document.path, &document.revision));
+                let key = Document_Key_Of(&document.path, &document.revision);
+                documents.insert(key);
             }
             Record::SourceHeading(heading) =>
             {
-                headings.insert(Ordinal_Key(&heading.document, heading.ordinal));
+                let key = Ordinal_Key(&heading.document, heading.ordinal);
+                headings.insert(key);
             }
             Record::SourceBlock(block) =>
             {
-                blocks.insert(Ordinal_Key(&block.document, block.ordinal));
+                let key = Ordinal_Key(&block.document, block.ordinal);
+                blocks.insert(key);
             }
             Record::SourceTableRow(row) =>
             {
-                rows.insert(Row_Key(&row.block, row.ordinal));
+                let key = Row_Key(&row.block, row.ordinal);
+                rows.insert(key);
             }
             Record::Suite(suite) =>
             {
@@ -393,11 +397,8 @@ fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleEr
         }
         Record::SourceTableRow(row) =>
         {
-            Carried(
-                &carried.blocks,
-                &Ordinal_Key(&row.block.document, row.block.ordinal),
-                "source block",
-            )?;
+            let key = Ordinal_Key(&row.block.document, row.block.ordinal);
+            Carried(&carried.blocks, &key, "source block")?;
         }
         Record::Node(node) =>
         {
@@ -479,11 +480,8 @@ fn Assert_Lineage_Resolves(
 
     if let Some(row) = lineage.source_table_row.as_ref()
     {
-        Carried(
-            &carried.rows,
-            &Row_Key(&row.block, row.ordinal),
-            "source table row",
-        )?;
+        let key = Row_Key(&row.block, row.ordinal);
+        Carried(&carried.rows, &key, "source table row")?;
     }
     if let Some(node_id) = lineage.target_node_id.as_deref()
     {
@@ -507,19 +505,13 @@ fn Assert_Source_Resolves(
 {
     if let Some(block) = block
     {
-        Carried(
-            &carried.blocks,
-            &Ordinal_Key(&block.document, block.ordinal),
-            "source block",
-        )?;
+        let key = Ordinal_Key(&block.document, block.ordinal);
+        Carried(&carried.blocks, &key, "source block")?;
     }
     if let Some(heading) = heading
     {
-        Carried(
-            &carried.headings,
-            &Ordinal_Key(&heading.document, heading.ordinal),
-            "source heading",
-        )?;
+        let key = Ordinal_Key(&heading.document, heading.ordinal);
+        Carried(&carried.headings, &key, "source heading")?;
     }
 
     return Ok(());
@@ -635,6 +627,33 @@ fn Landed_Counts(transaction: &Transaction<'_>) -> Result<BTreeMap<&'static str,
     return Ok(counts);
 }
 
+/// Prepares one insert and offers every record the bundle carries to it.
+///
+/// Each importer below was the same frame — prepare, walk the records, skip the ones this
+/// table is not about, resolve the parent row, execute — around the two lines that say
+/// which variant and which columns. The frame is what they share and the reader is what
+/// they do not, so the frame lives here and the reader stays at the call.
+///
+/// The reader returns `Ok(())` for a record of another kind, which is the skip.
+fn Insert_Each<Bind>(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+    sql: &str,
+    mut bind: Bind,
+) -> Result<(), BundleError>
+where
+    Bind: FnMut(&mut rusqlite::Statement<'_>, &Record) -> Result<(), BundleError>,
+{
+    let mut insert = transaction.prepare(sql)?;
+
+    for record in bundle.Records()
+    {
+        bind(&mut insert, record)?;
+    }
+
+    return Ok(());
+}
+
 fn Insert_Blobs(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
     let mut insert = transaction
@@ -685,23 +704,23 @@ fn Insert_Source_Documents(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO source_documents (path, revision, blob_uid) VALUES (?1, ?2, ?3)",
-    )?;
+        |insert, record| {
+            let Record::SourceDocument(document) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::SourceDocument(document) = record
-        else
-        {
-            continue;
-        };
+            let blob_uid = Blob_Uid(transaction, &document.blob_sha256)?;
+            insert.execute(params![document.path, document.revision, blob_uid])?;
 
-        let blob_uid = Blob_Uid(transaction, &document.blob_sha256)?;
-        insert.execute(params![document.path, document.revision, blob_uid])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Source_Headings(
@@ -709,60 +728,60 @@ fn Insert_Source_Headings(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO source_headings (document_uid, ordinal, depth, title)
          VALUES (?1, ?2, ?3, ?4)",
-    )?;
+        |insert, record| {
+            let Record::SourceHeading(heading) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::SourceHeading(heading) = record
-        else
-        {
-            continue;
-        };
+            let document_uid = Document_Uid(transaction, &heading.document)?;
+            insert.execute(params![
+                document_uid,
+                heading.ordinal,
+                heading.depth,
+                heading.title
+            ])?;
 
-        let document_uid = Document_Uid(transaction, &heading.document)?;
-        insert.execute(params![
-            document_uid,
-            heading.ordinal,
-            heading.depth,
-            heading.title
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Source_Blocks(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO source_blocks
          (document_uid, ordinal, kind, heading_path, text, content_hash, normalized_hash)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-    )?;
+        |insert, record| {
+            let Record::SourceBlock(block) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::SourceBlock(block) = record
-        else
-        {
-            continue;
-        };
+            let document_uid = Document_Uid(transaction, &block.document)?;
+            insert.execute(params![
+                document_uid,
+                block.ordinal,
+                block.kind,
+                block.heading_path,
+                block.text,
+                block.content_hash,
+                block.normalized_hash
+            ])?;
 
-        let document_uid = Document_Uid(transaction, &block.document)?;
-        insert.execute(params![
-            document_uid,
-            block.ordinal,
-            block.kind,
-            block.heading_path,
-            block.text,
-            block.content_hash,
-            block.normalized_hash
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Source_Table_Rows(
@@ -770,92 +789,92 @@ fn Insert_Source_Table_Rows(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO source_table_rows
          (source_block_uid, ordinal, table_ordinal, kind, cells_json, text,
           content_hash, normalized_hash)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-    )?;
+        |insert, record| {
+            let Record::SourceTableRow(row) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::SourceTableRow(row) = record
-        else
-        {
-            continue;
-        };
+            let block_uid = Block_Uid(transaction, &row.block)?;
+            let cells = serde_json::to_string(&row.cells)
+                .map_err(|error| BundleError::Sql(error.to_string()))?;
+            insert.execute(params![
+                block_uid,
+                row.ordinal,
+                row.table_ordinal,
+                row.kind,
+                cells,
+                row.text,
+                row.content_hash,
+                row.normalized_hash
+            ])?;
 
-        let block_uid = Block_Uid(transaction, &row.block)?;
-        let cells = serde_json::to_string(&row.cells)
-            .map_err(|error| BundleError::Sql(error.to_string()))?;
-        insert.execute(params![
-            block_uid,
-            row.ordinal,
-            row.table_ordinal,
-            row.kind,
-            cells,
-            row.text,
-            row.content_hash,
-            row.normalized_hash
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Suites(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)",
-    )?;
+        |insert, record| {
+            let Record::Suite(suite) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::Suite(suite) = record
-        else
-        {
-            continue;
-        };
+            insert.execute(params![
+                suite.suite_id,
+                suite.title,
+                i64::from(suite.authority_root)
+            ])?;
 
-        insert.execute(params![
-            suite.suite_id,
-            suite.title,
-            i64::from(suite.authority_root)
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Nodes(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO nodes
          (node_id, kind, authority, representation, title, deleted_at, suite_uid)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-    )?;
+        |insert, record| {
+            let Record::Node(node) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::Node(node) = record
-        else
-        {
-            continue;
-        };
+            let suite_uid = Optional_Suite_Uid(transaction, node.suite_id.as_deref())?;
+            insert.execute(params![
+                node.node_id,
+                node.kind,
+                node.authority,
+                node.representation,
+                node.title,
+                node.deleted_at,
+                suite_uid
+            ])?;
 
-        let suite_uid = Optional_Suite_Uid(transaction, node.suite_id.as_deref())?;
-        insert.execute(params![
-            node.node_id,
-            node.kind,
-            node.authority,
-            node.representation,
-            node.title,
-            node.deleted_at,
-            suite_uid
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Optional_Suite_Uid(
@@ -869,8 +888,10 @@ fn Optional_Suite_Uid(
                 transaction,
                 "SELECT uid FROM suites WHERE suite_id = ?1",
                 &[&id],
-                "suite",
-                id.to_owned(),
+                Referenced {
+                    record: "suite",
+                    reference: id.to_owned(),
+                },
             );
         })
         .transpose();
@@ -898,33 +919,33 @@ fn Insert_Node_Aliases(transaction: &Transaction<'_>, bundle: &Bundle) -> Result
 
 fn Insert_Node_History(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO node_history
          (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-    )?;
+        |insert, record| {
+            let Record::NodeHistory(entry) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::NodeHistory(entry) = record
-        else
-        {
-            continue;
-        };
+            let node_uid = Node_Uid(transaction, &entry.node_id)?;
+            insert.execute(params![
+                node_uid,
+                entry.ordinal,
+                entry.event,
+                entry.reason,
+                entry.previous_event_hash,
+                entry.event_hash,
+                entry.recorded_at
+            ])?;
 
-        let node_uid = Node_Uid(transaction, &entry.node_id)?;
-        insert.execute(params![
-            node_uid,
-            entry.ordinal,
-            entry.event,
-            entry.reason,
-            entry.previous_event_hash,
-            entry.event_hash,
-            entry.recorded_at
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Relation_Types(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
@@ -952,25 +973,25 @@ fn Insert_Relation_Types(transaction: &Transaction<'_>, bundle: &Bundle) -> Resu
 
 fn Insert_Relations(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
          VALUES (?1, ?2, ?3)",
-    )?;
+        |insert, record| {
+            let Record::Relation(relation) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::Relation(relation) = record
-        else
-        {
-            continue;
-        };
+            let from_uid = Node_Uid(transaction, &relation.from_node_id)?;
+            let to_uid = Node_Uid(transaction, &relation.to_node_id)?;
+            insert.execute(params![from_uid, relation.relation_type, to_uid])?;
 
-        let from_uid = Node_Uid(transaction, &relation.from_node_id)?;
-        let to_uid = Node_Uid(transaction, &relation.to_node_id)?;
-        insert.execute(params![from_uid, relation.relation_type, to_uid])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Normative_Statements(
@@ -978,69 +999,69 @@ fn Insert_Normative_Statements(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO normative_statements
          (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
-    )?;
+        |insert, record| {
+            let Record::NormativeStatement(statement) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::NormativeStatement(statement) = record
-        else
-        {
-            continue;
-        };
+            let node_uid = Node_Uid(transaction, &statement.node_id)?;
+            insert.execute(params![
+                node_uid,
+                statement.statement_id,
+                statement.kind,
+                statement.canonical_text,
+                statement.canonical_hash,
+                statement.supersedes_hash
+            ])?;
 
-        let node_uid = Node_Uid(transaction, &statement.node_id)?;
-        insert.execute(params![
-            node_uid,
-            statement.statement_id,
-            statement.kind,
-            statement.canonical_text,
-            statement.canonical_hash,
-            statement.supersedes_hash
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Lineage(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO lineage
          (source_block_uid, source_heading_uid, source_table_row_uid, disposition,
           target_node_uid, target_statement)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
-    )?;
+        |insert, record| {
+            let Record::Lineage(lineage) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::Lineage(lineage) = record
-        else
-        {
-            continue;
-        };
+            let block_uid = Optional_Block_Uid(transaction, lineage.source_block.as_ref())?;
+            let heading_uid = Optional_Heading_Uid(transaction, lineage.source_heading.as_ref())?;
+            let row_uid = Optional_Table_Row_Uid(transaction, lineage.source_table_row.as_ref())?;
+            let node_uid = Optional_Node_Uid(transaction, lineage.target_node_id.as_deref())?;
+            let statement_uid =
+                Optional_Statement_Uid(transaction, lineage.target_statement_id.as_deref())?;
 
-        let block_uid = Optional_Block_Uid(transaction, lineage.source_block.as_ref())?;
-        let heading_uid = Optional_Heading_Uid(transaction, lineage.source_heading.as_ref())?;
-        let row_uid = Optional_Table_Row_Uid(transaction, lineage.source_table_row.as_ref())?;
-        let node_uid = Optional_Node_Uid(transaction, lineage.target_node_id.as_deref())?;
-        let statement_uid =
-            Optional_Statement_Uid(transaction, lineage.target_statement_id.as_deref())?;
+            insert.execute(params![
+                block_uid,
+                heading_uid,
+                row_uid,
+                lineage.disposition,
+                node_uid,
+                statement_uid
+            ])?;
 
-        insert.execute(params![
-            block_uid,
-            heading_uid,
-            row_uid,
-            lineage.disposition,
-            node_uid,
-            statement_uid
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Omissions(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
@@ -1074,6 +1095,14 @@ fn Insert_Omissions(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<()
     return Ok(());
 }
 
+/// What a failed lookup names in its error: the kind of record that carried the reference,
+/// and the reference exactly as it was written.
+struct Referenced<'a>
+{
+    record: &'a str,
+    reference: String,
+}
+
 /// A reference that does not resolve is an error, never a NULL. The distinction is the
 /// whole point: a NULL here would leave a lineage row that counts as a row and points at
 /// nothing.
@@ -1084,8 +1113,7 @@ fn Resolve(
     transaction: &Transaction<'_>,
     sql: &'static str,
     arguments: &[&dyn rusqlite::ToSql],
-    record: &str,
-    reference: String,
+    referenced: Referenced<'_>,
 ) -> Result<i64, BundleError>
 {
     return transaction
@@ -1095,8 +1123,8 @@ fn Resolve(
         .map_err(|error| match error
         {
             rusqlite::Error::QueryReturnedNoRows => BundleError::Unresolved {
-                record: record.to_owned(),
-                reference,
+                record: referenced.record.to_owned(),
+                reference: referenced.reference,
             },
             other => BundleError::Sql(other.to_string()),
         });
@@ -1108,8 +1136,10 @@ fn Blob_Uid(transaction: &Transaction<'_>, sha256: &str) -> Result<i64, BundleEr
         transaction,
         "SELECT uid FROM blobs WHERE sha256 = ?1",
         &[&sha256],
-        "blob",
-        sha256.to_owned(),
+        Referenced {
+            record: "blob",
+            reference: sha256.to_owned(),
+        },
     );
 }
 
@@ -1119,8 +1149,10 @@ fn Document_Uid(transaction: &Transaction<'_>, document: &DocumentRef) -> Result
         transaction,
         "SELECT uid FROM source_documents WHERE path = ?1 AND revision = ?2",
         &[&document.path, &document.revision],
-        "source document",
-        format!("{}@{}", document.path, document.revision),
+        Referenced {
+            record: "source document",
+            reference: format!("{}@{}", document.path, document.revision),
+        },
     );
 }
 
@@ -1130,8 +1162,10 @@ fn Node_Uid(transaction: &Transaction<'_>, node_id: &str) -> Result<i64, BundleE
         transaction,
         "SELECT uid FROM nodes WHERE node_id = ?1",
         &[&node_id],
-        "node",
-        node_id.to_owned(),
+        Referenced {
+            record: "node",
+            reference: node_id.to_owned(),
+        },
     );
 }
 
@@ -1154,8 +1188,10 @@ fn Optional_Statement_Uid(
                 transaction,
                 "SELECT uid FROM normative_statements WHERE statement_id = ?1",
                 &[&id],
-                "normative statement",
-                id.to_owned(),
+                Referenced {
+                    record: "normative statement",
+                    reference: id.to_owned(),
+                },
             );
         })
         .transpose();
@@ -1173,11 +1209,13 @@ fn Block_Uid(transaction: &Transaction<'_>, reference: &OrdinalRef) -> Result<i6
             &reference.document.revision,
             &reference.ordinal,
         ],
-        "source block",
-        format!(
-            "{}@{}#{}",
-            reference.document.path, reference.document.revision, reference.ordinal
-        ),
+        Referenced {
+            record: "source block",
+            reference: format!(
+                "{}@{}#{}",
+                reference.document.path, reference.document.revision, reference.ordinal
+            ),
+        },
     );
 }
 
@@ -1200,14 +1238,16 @@ fn Optional_Table_Row_Uid(
                     &reference.block.ordinal,
                     &reference.ordinal,
                 ],
-                "source table row",
-                format!(
-                    "{}@{}#{}.{}",
-                    reference.block.document.path,
-                    reference.block.document.revision,
-                    reference.block.ordinal,
-                    reference.ordinal
-                ),
+                Referenced {
+                    record: "source table row",
+                    reference: format!(
+                        "{}@{}#{}.{}",
+                        reference.block.document.path,
+                        reference.block.document.revision,
+                        reference.block.ordinal,
+                        reference.ordinal
+                    ),
+                },
             );
         })
         .transpose();
@@ -1240,11 +1280,13 @@ fn Optional_Heading_Uid(
                     &reference.document.revision,
                     &reference.ordinal,
                 ],
-                "source heading",
-                format!(
-                    "{}@{}#{}",
-                    reference.document.path, reference.document.revision, reference.ordinal
-                ),
+                Referenced {
+                    record: "source heading",
+                    reference: format!(
+                        "{}@{}#{}",
+                        reference.document.path, reference.document.revision, reference.ordinal
+                    ),
+                },
             );
         })
         .transpose();
@@ -1255,34 +1297,34 @@ fn Insert_Record_Front_Matter(
     bundle: &Bundle,
 ) -> Result<(), BundleError>
 {
-    let mut insert = transaction.prepare(
+    return Insert_Each(
+        transaction,
+        bundle,
         "INSERT INTO record_front_matter
          (document_uid, node_uid, status, version, tags_json)
          VALUES (?1, ?2, ?3, ?4, ?5)",
-    )?;
+        |insert, record| {
+            let Record::RecordFrontMatter(front_matter) = record
+            else
+            {
+                return Ok(());
+            };
 
-    for record in bundle.Records()
-    {
-        let Record::RecordFrontMatter(front_matter) = record
-        else
-        {
-            continue;
-        };
+            let tags = serde_json::to_string(&front_matter.tags)
+                .map_err(|error| BundleError::Sql(error.to_string()))?;
+            let document_uid = Document_Uid(transaction, &front_matter.document)?;
+            let node_uid = Node_Uid(transaction, &front_matter.node_id)?;
+            insert.execute(params![
+                document_uid,
+                node_uid,
+                front_matter.status,
+                front_matter.version,
+                tags
+            ])?;
 
-        let tags = serde_json::to_string(&front_matter.tags)
-            .map_err(|error| BundleError::Sql(error.to_string()))?;
-        let document_uid = Document_Uid(transaction, &front_matter.document)?;
-        let node_uid = Node_Uid(transaction, &front_matter.node_id)?;
-        insert.execute(params![
-            document_uid,
-            node_uid,
-            front_matter.status,
-            front_matter.version,
-            tags
-        ])?;
-    }
-
-    return Ok(());
+            return Ok(());
+        },
+    );
 }
 
 fn Insert_Record_Relations(

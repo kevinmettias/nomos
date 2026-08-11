@@ -126,7 +126,7 @@ pub fn nomos_spec_store::SpecificationStore::Reference_Node(&mut self, node_id: 
 pub fn nomos_spec_store::SpecificationStore::Row_Census(&self, scope: RowScope) -> Result<RowCensus, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Suite_Of(&self, node_id: &str) -> Result<Option<(String, SuiteAuthority)>, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Table_Row_Uid( &self, document_uid: i64, block_ordinal: u32, row_ordinal: u32, ) -> Result<Option<i64>, StoreError>
-pub fn nomos_spec_store::SpecificationStore::Upsert_Node( &mut self, node_id: &str, kind: &str, authority: &str, representation: &str, title: &str, ) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Upsert_Node(&mut self, node: NodeRow<'_>) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Version(&self) -> u32
 pub fn nomos_spec_store::StagedEdit::Preview(self, store: &SpecificationStore) -> Result<EditPreview, EditError>
 pub fn nomos_spec_store::StoreError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -159,6 +159,11 @@ pub struct field nomos_spec_store::IdentityChange::field: String
 pub struct field nomos_spec_store::Migration::name: &'static str
 pub struct field nomos_spec_store::Migration::statements: &'static [&'static str]
 pub struct field nomos_spec_store::Migration::version: u32
+pub struct field nomos_spec_store::NodeRow::authority: &'a str
+pub struct field nomos_spec_store::NodeRow::kind: &'a str
+pub struct field nomos_spec_store::NodeRow::node_id: &'a str
+pub struct field nomos_spec_store::NodeRow::representation: &'a str
+pub struct field nomos_spec_store::NodeRow::title: &'a str
 pub struct field nomos_spec_store::NodeSummary::authority: String
 pub struct field nomos_spec_store::NodeSummary::kind: String
 pub struct field nomos_spec_store::NodeSummary::node_id: String
@@ -201,6 +206,7 @@ pub struct nomos_spec_store::DocumentSource
 pub struct nomos_spec_store::EditPreview
 pub struct nomos_spec_store::IdentityChange
 pub struct nomos_spec_store::Migration
+pub struct nomos_spec_store::NodeRow<'a>
 pub struct nomos_spec_store::NodeSummary
 pub struct nomos_spec_store::NormativeMovement
 pub struct nomos_spec_store::RecordProjection
