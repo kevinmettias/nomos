@@ -9,8 +9,22 @@
 //! `uid` is handed back only so a follow-up query can be scoped to the same document, and
 //! never printed.
 
-use crate::store::{SpecificationStore, StoreError};
+use crate::store::{Collected, SpecificationStore, StoreError};
 use rusqlite::{OptionalExtension, params};
+
+/// The stored bytes as text, or why this document cannot be read out as one.
+fn Readable_Text(path: &str, bytes: Vec<u8>) -> Result<String, StoreError>
+{
+    return String::from_utf8(bytes).map_err(|error| {
+        return StoreError::Record {
+            path: path.to_owned(),
+            cause: format!(
+                "the stored bytes are not valid UTF-8 ({error}), so this document cannot be \
+                 read out as text"
+            ),
+        };
+    });
+}
 
 /// A node as the graph holds it, with no content behind it.
 ///
@@ -134,23 +148,9 @@ impl SpecificationStore
         revision: Option<&str>,
     ) -> Result<Vec<DocumentSource>, StoreError>
     {
-        let mut uids = Vec::new();
-        {
-            let mut statement = self.Connection().prepare(
-                "SELECT DISTINCT block.document_uid
-                 FROM lineage line
-                 JOIN source_blocks block ON block.uid = line.source_block_uid
-                 JOIN nodes node ON node.uid = line.target_node_uid
-                 WHERE node.node_id = ?1",
-            )?;
-            let found = statement.query_map(params![node_id], |row| return row.get::<usize, i64>(0))?;
-            for uid in found
-            {
-                uids.push(uid?);
-            }
-        }
-
+        let uids = self.Documents_Disposed_To(node_id)?;
         let mut documents = Vec::new();
+
         for uid in uids
         {
             if let Some(document) = self.Document(uid)?
@@ -159,12 +159,26 @@ impl SpecificationStore
                 documents.push(document);
             }
         }
-
         documents.sort_by(|left, right| {
             return (&left.revision, &left.path).cmp(&(&right.revision, &right.path));
         });
 
         return Ok(documents);
+    }
+
+    /// The surrogate of every document a block disposed to this node was cut from.
+    fn Documents_Disposed_To(&self, node_id: &str) -> Result<Vec<i64>, StoreError>
+    {
+        let mut statement = self.Connection().prepare(
+            "SELECT DISTINCT block.document_uid
+             FROM lineage line
+             JOIN source_blocks block ON block.uid = line.source_block_uid
+             JOIN nodes node ON node.uid = line.target_node_uid
+             WHERE node.node_id = ?1",
+        )?;
+        let found = statement.query_map(params![node_id], |row| return row.get::<usize, i64>(0))?;
+
+        return Collected(found);
     }
 
     /// One source document by surrogate, with its bytes.
@@ -183,27 +197,15 @@ impl SpecificationStore
                  JOIN blobs blob ON blob.uid = document.blob_uid
                  WHERE document.uid = ?1",
                 params![uid],
-                |row| {
-                    return Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?));
-                },
+                |row| return Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
             )
             .optional()?;
-
         let Some((path, revision, content_hash, bytes)) = found
         else
         {
             return Ok(None);
         };
-
-        let text = String::from_utf8(bytes).map_err(|error| {
-            return StoreError::Record {
-                path: path.clone(),
-                cause: format!(
-                    "the stored bytes are not valid UTF-8 ({error}), so this document cannot \
-                     be read out as text"
-                ),
-            };
-        })?;
+        let text = Readable_Text(&path, bytes)?;
 
         return Ok(Some(DocumentSource {
             uid,
@@ -229,27 +231,7 @@ impl SpecificationStore
         revision: Option<&str>,
     ) -> Result<(Vec<i64>, PathMatch), StoreError>
     {
-        let mut candidates: Vec<(i64, String)> = Vec::new();
-        {
-            let mut statement = self
-                .Connection()
-                .prepare("SELECT uid, path, revision FROM source_documents ORDER BY revision, path")?;
-            let rows = statement.query_map([], |row| {
-                let uid: i64 = row.get(0)?;
-                let path: String = row.get(1)?;
-                let found: String = row.get(2)?;
-                return Ok((uid, path, found));
-            })?;
-
-            for row in rows
-            {
-                let (uid, path, found) = row?;
-                if revision.is_none_or(|wanted| return found == wanted)
-                {
-                    candidates.push((uid, path));
-                }
-            }
-        }
+        let candidates = self.Paths_At(revision)?;
 
         for tier in [PathMatch::Exact, PathMatch::FileName, PathMatch::Fragment]
         {
@@ -266,6 +248,33 @@ impl SpecificationStore
         }
 
         return Ok((Vec::new(), PathMatch::Exact));
+    }
+
+    /// Every document's surrogate and path, at one revision or across all of them.
+    fn Paths_At(&self, revision: Option<&str>) -> Result<Vec<(i64, String)>, StoreError>
+    {
+        let mut statement = self
+            .Connection()
+            .prepare("SELECT uid, path, revision FROM source_documents ORDER BY revision, path")?;
+        let rows = statement.query_map([], |row| {
+            let uid: i64 = row.get(0)?;
+            let path: String = row.get(1)?;
+            let found: String = row.get(2)?;
+
+            return Ok((uid, path, found));
+        })?;
+        let mut candidates = Vec::new();
+
+        for row in rows
+        {
+            let (uid, path, found) = row?;
+            if revision.is_none_or(|wanted| return found == wanted)
+            {
+                candidates.push((uid, path));
+            }
+        }
+
+        return Ok(candidates);
     }
 
     /// Every table line in a document, in the order it was authored.
@@ -293,7 +302,6 @@ impl SpecificationStore
                AND (?3 IS NULL OR line.table_ordinal = ?3)
              ORDER BY block.ordinal, line.table_ordinal, line.ordinal",
         )?;
-
         let rows = statement.query_map(params![document_uid, block, table], |row| {
             let cells: String = row.get(4)?;
 
@@ -308,13 +316,7 @@ impl SpecificationStore
             });
         })?;
 
-        let mut lines = Vec::new();
-        for line in rows
-        {
-            lines.push(line?);
-        }
-
-        return Ok(lines);
+        return Collected(rows);
     }
 }
 

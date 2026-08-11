@@ -26,8 +26,8 @@
 use crate::read::DocumentSource;
 use crate::record::{Disposition, Kind_Label, Kind_Of};
 use crate::store::{
-    EXTERNAL, Inverse_Of, NodeRow, SpecificationStore, StoreError, Write_Blob, Write_Node,
-    Write_Relation, Write_Source_Blocks, Write_Source_Document,
+    Collected, EXTERNAL, Inverse_Of, NodeRow, SpecificationStore, StoreError, Write_Blob,
+    Write_Node, Write_Relation, Write_Source_Blocks, Write_Source_Document,
 };
 use nomos_spec_model::{
     BlockKind, ContentHash, Normalize, Parse_Record, Record, RecordFrontMatter, RecordRelation,
@@ -1770,18 +1770,6 @@ fn Declared_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<DeclaredRow>
         version: row.get(5)?,
         tags: row.get(6)?,
     });
-}
-
-/// Every row a mapped query produced, or the first failure it hit.
-fn Collected<T>(rows: impl Iterator<Item = rusqlite::Result<T>>) -> Result<Vec<T>, StoreError>
-{
-    let mut collected = Vec::new();
-    for row in rows
-    {
-        collected.push(row?);
-    }
-
-    return Ok(collected);
 }
 
 fn Heading_Path(stored: &str) -> Vec<String>
