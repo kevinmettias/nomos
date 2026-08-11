@@ -29,7 +29,7 @@
 //! that cannot meet its declared scope fails here rather than in review.
 
 use nomos_analysis::{
-    Dependency, FactReuse, FactStore, GenerationCause, MemoryFactStore,
+    Dependency, FactIdentity, FactReuse, FactStore, GenerationCause, MemoryFactStore,
 };
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, DeterminismStrength, GenerationId, ReproducibilityScope,
@@ -153,22 +153,30 @@ fn Parsed_Production() -> Vec<u8>
 
     for (path, source) in FIXTURE
     {
-        match nomos_lang_rust::Materialize(Subject_Of(path), source, context)
-        {
-            nomos_lang_rust::Materialization::Materialized(fact) =>
-            {
-                rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
-                rendered.extend_from_slice(
-                    format!("key\t{}\n", fact.Key().Digest()).as_bytes(),
-                );
-                rendered.extend_from_slice(&fact.payload.bytes);
-            }
-            nomos_lang_rust::Materialization::Unparseable(failure) =>
-            {
-                panic!("the fixture must parse; {path} did not: {failure}");
-            }
-        }
+        let one = Rendered_Fact(path, source, context);
+
+        rendered.extend_from_slice(&one);
     }
+
+    return rendered;
+}
+
+/// One fixture file's fact: the path it came from, the key it landed under, and its payload.
+fn Rendered_Fact(path: &str, source: &str, context: nomos_lang_rust::FactContext) -> Vec<u8>
+{
+    let fact = match nomos_lang_rust::Materialize(Subject_Of(path), source, context)
+    {
+        nomos_lang_rust::Materialization::Materialized(fact) => fact,
+        nomos_lang_rust::Materialization::Unparseable(failure) =>
+        {
+            panic!("the fixture must parse; {path} did not: {failure}");
+        }
+    };
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
+    rendered.extend_from_slice(format!("key\t{}\n", fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.payload.bytes);
 
     return rendered;
 }
@@ -192,15 +200,75 @@ fn Parsed_Production() -> Vec<u8>
 fn Rolled_Production() -> Vec<u8>
 {
     let context = Fact_Context();
+    let registry = Syntax_Registry();
+    let need = Syntax_Requirement();
+    let module = Fixture_Module();
     let mut store = MemoryFactStore::New();
 
+    Fill_With_Fixture(&mut store, context);
+
+    let against = rollup::Against {
+        registry: &registry,
+        need: &need,
+        context,
+    };
+    let rolled = rollup::Materialize_Index(&mut store, &against, &module)
+        .expect("the rollup is not written behind the generation it names");
+
+    Assert_The_Rollup_Read_Its_Members(&rolled);
+
+    return Rendered_Rollup(&rolled);
+}
+
+/// The registry the rollup resolves its provider through.
+fn Syntax_Registry() -> nomos_capability::Registry
+{
     let mut registry = nomos_capability::Registry::New();
+
     registry
         .Declare(nomos_cap_syntax::Capability_Contract())
         .expect("the syntax contract is declared once");
     registry
         .Offer(nomos_lang_rust::Provider_Offer())
         .expect("the parser's offer is within the ceiling");
+
+    return registry;
+}
+
+/// What the rollup requires of whichever provider answers it.
+fn Syntax_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_syntax::Capability(),
+        nomos_cap_syntax::CONTRACT_VERSION,
+        nomos_lang_rust::Declared_Guarantee(),
+    );
+}
+
+/// The fixture as one module, walked in reverse.
+///
+/// Deliberately reversed. The provider claims the member order is its own rather than its
+/// caller's, and handing it the corpus order both times would agree under an implementation
+/// that simply kept whatever it was given.
+fn Fixture_Module() -> rollup::Module
+{
+    return rollup::Module {
+        subject: Subject_Of("the-fixture-module"),
+        members: FIXTURE
+            .iter()
+            .rev()
+            .map(|(path, source)| return rollup::ModuleMember::Of(Subject_Of(path), source))
+            .collect(),
+    };
+}
+
+/// Every fixture file materialized into a store, and the identities they landed under.
+fn Fill_With_Fixture(
+    store: &mut MemoryFactStore,
+    context: nomos_lang_rust::FactContext,
+) -> Vec<FactIdentity>
+{
+    let mut keys = Vec::new();
 
     for (path, source) in FIXTURE
     {
@@ -211,34 +279,23 @@ fn Rolled_Production() -> Vec<u8>
             panic!("the fixture must parse");
         };
 
+        keys.push(fact.identity.clone());
         store
             .Materialize(*fact, &[] as &[Dependency])
             .expect("a fresh store accepts a first materialization");
     }
 
-    let module = rollup::Module {
-        subject: Subject_Of("the-fixture-module"),
-        members: FIXTURE
-            .iter()
-            .rev()
-            .map(|(path, source)| return rollup::ModuleMember::Of(Subject_Of(path), source))
-            .collect(),
-    };
+    return keys;
+}
 
-    let need = nomos_capability::Requirement::New(
-        nomos_cap_syntax::Capability(),
-        nomos_cap_syntax::CONTRACT_VERSION,
-        nomos_lang_rust::Declared_Guarantee(),
-    );
-
-    let rolled = rollup::Materialize_Index(&mut store, &rollup::Against { registry: &registry, need: &need, context }, &module)
-        .expect("the rollup is not written behind the generation it names");
-
-    // The same guard `Bundle_Bytes` carries, for the same reason. A rollup that read none
-    // of its members produces a payload and a digest, and agreeing with itself across two
-    // processes would then be a claim about three lines of header. The fixture has three
-    // members and they all parse, so anything less means the reads missed — most likely a
-    // requirement that resolved a provider whose key nobody wrote.
+/// The same guard `Bundle_Bytes` carries, for the same reason.
+///
+/// A rollup that read none of its members produces a payload and a digest, and agreeing with
+/// itself across two processes would then be a claim about three lines of header. The fixture
+/// has three members and they all parse, so anything less means the reads missed — most
+/// likely a requirement that resolved a provider whose key nobody wrote.
+fn Assert_The_Rollup_Read_Its_Members(rolled: &rollup::Rolled)
+{
     assert_eq!(
         rolled.index.Answered(),
         FIXTURE.len(),
@@ -253,11 +310,20 @@ fn Rolled_Production() -> Vec<u8>
          almost nothing",
         rolled.index.items.len()
     );
+}
 
+/// The rollup's key, its encoded index, and every edge it declared.
+///
+/// The edges are rendered, not only the payload. They decide what a later change
+/// invalidates, so an edge list that varied between runs would leave invalidation itself
+/// non-reproducible while every payload digest still agreed — which no assertion over the
+/// bytes alone could see.
+fn Rendered_Rollup(rolled: &rollup::Rolled) -> Vec<u8>
+{
     let mut rendered = Vec::new();
+
     rendered.extend_from_slice(format!("key\t{}\n", rolled.key.Digest()).as_bytes());
     rendered.extend_from_slice(&rollup::Encode_Index(&rolled.index));
-
     for dependency in &rolled.dependencies
     {
         rendered.extend_from_slice(
@@ -295,39 +361,45 @@ fn Reuse_Production() -> Vec<u8>
 {
     let context = Fact_Context();
     let mut store = MemoryFactStore::New();
-    let mut keys = Vec::new();
-
-    for (path, source) in FIXTURE
-    {
-        let nomos_lang_rust::Materialization::Materialized(fact) =
-            nomos_lang_rust::Materialize(Subject_Of(path), source, context)
-        else
-        {
-            panic!("the fixture must parse");
-        };
-
-        keys.push(fact.identity.clone());
-        store
-            .Materialize(*fact, &[] as &[Dependency])
-            .expect("a fresh store accepts a first materialization");
-    }
-
+    let keys = Fill_With_Fixture(&mut store, context);
     let mut rendered = Vec::new();
+
     rendered.extend_from_slice(format!("live\t{}\n", store.Live()).as_bytes());
     rendered
         .extend_from_slice(format!("materializations\t{}\n", store.Materializations()).as_bytes());
-
     for identity in &keys
     {
-        let outcome = match store.Current(identity, context.generation)
-        {
-            Some(fact) => format!("hit\t{}\t{}", fact.Key().Digest(), fact.payload.Digest()),
-            None => format!("miss\t{}", identity.Key().Digest()),
-        };
+        let outcome = Read_Outcome(&store, identity, context.generation);
+
         rendered.extend_from_slice(outcome.as_bytes());
         rendered.push(b'\n');
     }
 
+    let invalidated = Invalidation_Report(&mut store);
+
+    rendered.extend_from_slice(&invalidated);
+    return rendered;
+}
+
+/// What the store answers for one key: a hit carrying its two digests, or a miss.
+fn Read_Outcome(
+    store: &MemoryFactStore,
+    identity: &FactIdentity,
+    generation: GenerationId,
+) -> String
+{
+    let Some(fact) = store.Current(identity, generation)
+    else
+    {
+        return format!("miss\t{}", identity.Key().Digest());
+    };
+
+    return format!("hit\t{}\t{}", fact.Key().Digest(), fact.payload.Digest());
+}
+
+/// What the store says it threw away when the configuration changes under it.
+fn Invalidation_Report(store: &mut MemoryFactStore) -> Vec<u8>
+{
     let report = store.Invalidate(
         &GenerationCause::ConfigurationChanged {
             configuration: ConfigurationId::From_Digest(Content_Digest(
@@ -336,6 +408,7 @@ fn Reuse_Production() -> Vec<u8>
         },
         GenerationId::INITIAL.Next(),
     );
+    let mut rendered = Vec::new();
 
     rendered.extend_from_slice(format!("report\t{}\n", report.Report()).as_bytes());
     for key in &report.direct
@@ -421,7 +494,6 @@ fn Spec_Store(order: Order) -> SpecificationStore
     {
         documents.reverse();
     }
-
     for (path, text) in documents
     {
         let document = store
@@ -431,7 +503,6 @@ fn Spec_Store(order: Order) -> SpecificationStore
             .Put_Source_Blocks(document, &Segment(text))
             .expect("the fixture blocks store");
     }
-
     Populate_Spec_Graph(&store, order);
 
     return store;
@@ -445,101 +516,124 @@ fn Spec_Store(order: Order) -> SpecificationStore
 /// authoring path builds would never exercise a row the ingest path produces.
 fn Populate_Spec_Graph(store: &SpecificationStore, order: Order)
 {
-    let nodes = "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'CDM-WORKSPACECONTEXT', 'concept', 'canonical', 'record',
-                        'WorkspaceContext', NULL, uid FROM suites WHERE suite_id = 'nomos';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record',
-                        'Agent execution ancestry', NULL, uid FROM suites WHERE suite_id = 'nomos';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'D-129', 'decision', 'canonical', 'record',
-                        'The store is the identity substrate', NULL, uid
-                 FROM suites WHERE suite_id = 'xvpe-seed';";
-
-    let mut statements: Vec<&str> = nodes.split(";\n").collect();
-    statements.reverse();
-    let reversed_nodes = statements.join(";\n");
+    let nodes = Nodes_In(order);
 
     store
         .Connection()
-        .execute_batch(
-            "INSERT INTO suites (suite_id, title, authority_root)
-             VALUES ('nomos', 'The Nomos specification', 1),
-                    ('xvpe-seed', 'XVPE specification seed', 0);
-
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 1, 1, 'Core architecture' FROM source_documents
-             WHERE path = 'volumes/02-core.md';
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 2, 2, 'Domain model' FROM source_documents
-             WHERE path = 'volumes/02-core.md';
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 1, 1, 'Conformance' FROM source_documents
-             WHERE path = 'volumes/03-conformance.md';",
-        )
+        .execute_batch(SPEC_SUITES_AND_HEADINGS)
         .expect("the fixture suites and headings store");
-
     store
         .Connection()
-        .execute_batch(if order == Order::Backwards { &reversed_nodes } else { nodes })
+        .execute_batch(&nodes)
         .expect("the fixture nodes store");
 
     Populate_Spec_Edges(store);
 }
+
+/// The node inserts, in whichever order this store is being written in.
+fn Nodes_In(order: Order) -> String
+{
+    if order == Order::Forwards
+    {
+        return SPEC_NODES.to_owned();
+    }
+
+    let mut statements: Vec<&str> = SPEC_NODES.split(";\n").collect();
+    statements.reverse();
+
+    return statements.join(";\n");
+}
+
+/// The two suites and the headings of the two documents.
+const SPEC_SUITES_AND_HEADINGS: &str =
+    "INSERT INTO suites (suite_id, title, authority_root)
+     VALUES ('nomos', 'The Nomos specification', 1),
+            ('xvpe-seed', 'XVPE specification seed', 0);
+
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 1, 1, 'Core architecture' FROM source_documents
+     WHERE path = 'volumes/02-core.md';
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 2, 2, 'Domain model' FROM source_documents
+     WHERE path = 'volumes/02-core.md';
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 1, 1, 'Conformance' FROM source_documents
+     WHERE path = 'volumes/03-conformance.md';";
+
+/// The three nodes the graph hangs from, one statement each so the order can be reversed.
+const SPEC_NODES: &str =
+    "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'CDM-WORKSPACECONTEXT', 'concept', 'canonical', 'record',
+            'WorkspaceContext', NULL, uid FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record',
+            'Agent execution ancestry', NULL, uid FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'D-129', 'decision', 'canonical', 'record',
+            'The store is the identity substrate', NULL, uid
+     FROM suites WHERE suite_id = 'xvpe-seed';";
 
 /// The edges, which are where a join can drop a row and an ordering can reach a surrogate.
 fn Populate_Spec_Edges(store: &SpecificationStore)
 {
     store
         .Connection()
-        .execute_batch(
-            "INSERT INTO node_aliases (alias, node_uid)
-             SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
-
-             INSERT INTO relation_types (name, tier, inverse_of)
-             VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies'),
-                    ('affects', 'extended', NULL);
-
-             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-             SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
-             WHERE f.node_id = 'CDM-WORKSPACECONTEXT' AND t.node_id = 'AGT-EXEC-001';
-             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-             SELECT f.uid, 'affects', t.uid FROM nodes f, nodes t
-             WHERE f.node_id = 'D-129' AND t.node_id = 'AGT-EXEC-001';
-
-             INSERT INTO normative_statements
-             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-             SELECT uid, 'AGT-EXEC-001', 'requirement', 'Nomos shall record ancestry.',
-                    'sha256:aa', 'sha256:99' FROM nodes WHERE node_id = 'AGT-EXEC-001';
-             INSERT INTO normative_statements
-             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-             SELECT uid, 'D-129-01', 'principle', 'The store is the identity substrate.',
-                    'sha256:bb', NULL FROM nodes WHERE node_id = 'D-129';
-
-             INSERT INTO lineage
-             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
-             SELECT b.uid, NULL, 'preserved-verbatim', NULL, s.uid
-             FROM source_blocks b, normative_statements s, source_documents d
-             WHERE d.path = 'volumes/02-core.md' AND b.document_uid = d.uid AND b.ordinal = 2
-               AND s.statement_id = 'AGT-EXEC-001';
-             INSERT INTO lineage (source_table_row_uid, disposition, target_node_uid)
-             SELECT r.uid, 'preserved-verbatim', n.uid
-             FROM source_table_rows r, nodes n
-             WHERE r.cells_json LIKE '%WorkspaceContext%'
-               AND n.node_id = 'CDM-WORKSPACECONTEXT';
-
-             INSERT INTO omissions
-             (source_block_uid, source_heading_uid, reason, justification, decision_record)
-             SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
-             FROM source_blocks b, source_documents d
-             WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
-               AND b.ordinal = 1;",
-        )
-        .expect("the fixture edges store");
+        .execute_batch(SPEC_RELATIONS)
+        .expect("the fixture aliases, relation types and relations store");
+    store
+        .Connection()
+        .execute_batch(SPEC_LINEAGE)
+        .expect("the fixture statements, lineage and omissions store");
 }
+
+/// What the nodes are to each other: an alias, a relation vocabulary, and two edges.
+const SPEC_RELATIONS: &str =
+    "INSERT INTO node_aliases (alias, node_uid)
+     SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
+
+     INSERT INTO relation_types (name, tier, inverse_of)
+     VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies'),
+            ('affects', 'extended', NULL);
+
+     INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+     SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
+     WHERE f.node_id = 'CDM-WORKSPACECONTEXT' AND t.node_id = 'AGT-EXEC-001';
+     INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+     SELECT f.uid, 'affects', t.uid FROM nodes f, nodes t
+     WHERE f.node_id = 'D-129' AND t.node_id = 'AGT-EXEC-001';";
+
+/// What the documents are to the nodes: statements, the lineage onto them, and one omission.
+const SPEC_LINEAGE: &str =
+    "INSERT INTO normative_statements
+     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+     SELECT uid, 'AGT-EXEC-001', 'requirement', 'Nomos shall record ancestry.',
+            'sha256:aa', 'sha256:99' FROM nodes WHERE node_id = 'AGT-EXEC-001';
+     INSERT INTO normative_statements
+     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+     SELECT uid, 'D-129-01', 'principle', 'The store is the identity substrate.',
+            'sha256:bb', NULL FROM nodes WHERE node_id = 'D-129';
+
+     INSERT INTO lineage
+     (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
+     SELECT b.uid, NULL, 'preserved-verbatim', NULL, s.uid
+     FROM source_blocks b, normative_statements s, source_documents d
+     WHERE d.path = 'volumes/02-core.md' AND b.document_uid = d.uid AND b.ordinal = 2
+       AND s.statement_id = 'AGT-EXEC-001';
+     INSERT INTO lineage (source_table_row_uid, disposition, target_node_uid)
+     SELECT r.uid, 'preserved-verbatim', n.uid
+     FROM source_table_rows r, nodes n
+     WHERE r.cells_json LIKE '%WorkspaceContext%'
+       AND n.node_id = 'CDM-WORKSPACECONTEXT';
+
+     INSERT INTO omissions
+     (source_block_uid, source_heading_uid, reason, justification, decision_record)
+     SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
+     FROM source_blocks b, source_documents d
+     WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
+       AND b.ordinal = 1;";
 
 /// The bundle a store of the fixture corpus exports, as text.
 fn Bundle_Bytes(order: Order) -> Vec<u8>
@@ -742,21 +836,17 @@ fn Discharge_Scope<S: Strategy>(domain: &str, verification: &Verification, golde
 fn Compare_Against_Child(domain: &str, verification: &Verification)
 {
     let executable = std::env::current_exe().expect("a running test has an executable path");
-
     let output = std::process::Command::new(executable)
         .args(["--exact", "--nocapture", Test_Name_For(domain)])
         .env(Child_Variable(), domain)
         .output()
         .expect("the test binary must be runnable as a child; a scope claim it cannot verify is a scope claim nothing checks");
-
     let printed = String::from_utf8_lossy(&output.stdout).into_owned();
-
     assert!(
         output.status.success(),
         "the child process running {domain} failed: {printed}{}",
         String::from_utf8_lossy(&output.stderr)
     );
-
     let reported = Digest_In(&printed, domain).unwrap_or_else(|| {
         panic!("the child running {domain} printed no digest line; it printed: {printed}")
     });
@@ -931,12 +1021,10 @@ fn Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness()
 
         return format!("line\tone\nline\t{seen}\n").into_bytes();
     };
-
     let refusal = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         return Verify::<Wobbly>("wobbly", &wobbles);
     }))
     .expect_err("a production that changes between repetitions must fail the harness");
-
     let said = refusal
         .downcast_ref::<String>()
         .map_or_else(String::new, Clone::clone);
@@ -972,7 +1060,6 @@ fn Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins()
         .get_mut(last)
         .expect("the position just found is in range");
     *target = target.to_ascii_uppercase();
-
     let tampered = Production { trace: altered };
 
     assert_ne!(
@@ -1031,7 +1118,6 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
         ("bundle-serialization", BundleSerialization::STRENGTH),
         ("projection-output", ProjectionOutput::STRENGTH),
     ];
-
     assert_eq!(
         declared.len(),
         7,
