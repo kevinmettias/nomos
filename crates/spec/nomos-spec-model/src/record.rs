@@ -94,7 +94,8 @@ impl core::fmt::Display for RecordError
     }
 }
 
-impl std::error::Error for RecordError {}
+impl std::error::Error for RecordError
+{}
 
 /// Reads a record and refuses one that names itself two different things.
 ///

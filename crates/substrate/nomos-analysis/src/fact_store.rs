@@ -7,9 +7,11 @@ use crate::supersession::Supersession;
 use crate::fact_key::FactKey;
 use crate::materialized_fact::MaterializedFact;
 use crate::fact_identity::FactIdentity;
+
 pub(crate) mod sealed
 {
-    pub trait Sealed {}
+    pub trait Sealed
+    {}
 }
 
 pub trait FactStore: sealed::Sealed

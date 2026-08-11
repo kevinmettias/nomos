@@ -140,7 +140,7 @@ pub(super) fn Ordinal(value: Option<&String>, name: &str) -> Result<Option<u32>,
     return text
         .parse::<u32>()
         .map(Some)
-        .map_err(|_| return format!("{name} takes a whole number; `{text}` is not one"));
+        .map_err(|cause| return format!("{name} takes a whole number; `{text}` is not one: {cause}"));
 }
 
 pub(super) fn Usage_Text() -> String

@@ -74,4 +74,5 @@ impl core::fmt::Display for LedgerError
     }
 }
 
-impl std::error::Error for LedgerError {}
+impl std::error::Error for LedgerError
+{}

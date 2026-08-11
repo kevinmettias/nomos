@@ -21,7 +21,7 @@ pub enum variant nomos_cap_syntax::PayloadRefusalKind::NoHeader
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::NotUtf8
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::RepeatedHeader
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnknownRecord { tag: String, }
-pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableNumber { field: &'static str, value: String, }
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableNumber { field: &'static str, value: String, cause: String, }
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableObservation { field: &'static str, value: String, }
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::WrongFieldCount { tag: String, expected: usize, found: usize, }
 pub fn nomos_cap_syntax::Capability() -> CapabilityId

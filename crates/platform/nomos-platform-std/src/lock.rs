@@ -64,21 +64,53 @@ impl FileLock
             .create_new(true)
             .open(&self.path)
         {
-            Ok(mut file) =>
-            {
-                let stamped = format!("{holder}\npid {}\n", std::process::id());
-                // A failed write leaves an empty lock file, which still excludes
-                // correctly — the lock is the file's existence, not its contents. The
-                // holder name is a courtesy for the takeover report, so losing it
-                // degrades a diagnostic rather than the exclusion itself.
-                let _ = file.write_all(stamped.as_bytes());
-                Ok(true)
-            }
+            Ok(mut file) => self.Stamped(&mut file, holder),
             Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => Ok(false),
             Err(error) => Err(LockError::Unusable {
                 cause: format!("{}: {error}", self.path.display()),
             }),
         };
+    }
+
+    /// Writes the holder line into a lock file this call has just created exclusively.
+    ///
+    /// # Why a failed stamp refuses the lock rather than degrading quietly
+    ///
+    /// The lock is the file's existence and not its contents, so an empty lock file still
+    /// excludes correctly and this could return `Ok(true)` and say nothing. It does not,
+    /// for two reasons. A filesystem that refuses twenty bytes to a file it created a
+    /// microsecond ago will refuse the resource the lock protects as well, and finding
+    /// that out here — with the write's own words — beats finding it out two steps later
+    /// from a replace that cannot say why the disk stopped answering. And an unstamped
+    /// lock is the one a takeover report cannot name, so the failure would resurface as
+    /// "an unnamed holder" in somebody else's refusal, where nothing connects it back.
+    ///
+    /// The file is removed before refusing. Leaving it would exclude every holder for a
+    /// full staleness window over a failure that may have lasted a moment, which is a
+    /// worse outcome than the one this is avoiding. A removal that fails too is carried in
+    /// the same sentence rather than replacing it: the caller then knows both that the
+    /// lock was not taken and that a file is standing where the lock goes.
+    fn Stamped(&self, file: &mut std::fs::File, holder: &str) -> Result<bool, LockError>
+    {
+        let stamped = format!("{holder}\npid {}\n", std::process::id());
+        let Err(cause) = file.write_all(stamped.as_bytes())
+        else
+        {
+            return Ok(true);
+        };
+
+        let stranded = match std::fs::remove_file(&self.path)
+        {
+            Ok(()) => String::new(),
+            Err(removal) => format!(", and it could not be removed either: {removal}"),
+        };
+
+        return Err(LockError::Unusable {
+            cause: format!(
+                "{}: the lock file was created but its holder line could not be written: {cause}{stranded}",
+                self.path.display()
+            ),
+        });
     }
 
     /// How long the lock file has existed, judged from its modification time.
@@ -187,11 +219,11 @@ impl CrossProcessLock for FileLock
         let started = std::time::Instant::now();
         let mut broke_stale = None;
 
-        loop
+        let acquired = loop
         {
             if self.Try_Create(holder)?
             {
-                return Ok(self.Held(broke_stale));
+                break self.Held(broke_stale);
             }
             if let Some(age) = self.Stale_By(stale_after)
             {
@@ -200,7 +232,9 @@ impl CrossProcessLock for FileLock
             }
 
             self.Wait_Or_Refuse(started, wait_limit)?;
-        }
+        };
+
+        return Ok(acquired);
     }
 }
 
@@ -213,7 +247,17 @@ mod tests
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-lock-test-{name}-{}", std::process::id()));
-        let _ = std::fs::remove_file(&path);
+
+        // A path that is already absent is the state this asks for, so `NotFound` is
+        // success. Anything else is said out loud rather than discarded, because a setup
+        // that quietly cannot delete hands the test a lock file a previous run left behind
+        // — and every one of these tests reads "the lock file exists" as "somebody holds it".
+        if let Err(cause) = std::fs::remove_file(&path)
+            && cause.kind() != std::io::ErrorKind::NotFound
+        {
+            eprintln!("{} could not be cleared: {cause}", path.display());
+        }
+
         return path;
     }
 

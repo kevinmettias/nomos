@@ -49,4 +49,5 @@ impl core::fmt::Display for FactError
     }
 }
 
-impl std::error::Error for FactError {}
+impl std::error::Error for FactError
+{}

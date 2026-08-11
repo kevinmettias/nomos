@@ -306,7 +306,7 @@ fn Decode_Digest(hex: &str) -> Result<Digest128, StoreError>
             .get(at..at.saturating_add(2))
             .ok_or_else(|| return StoreError::Malformed(format!("`{hex}` ended early")))?;
         *slot = u8::from_str_radix(pair, 16)
-            .map_err(|_| return StoreError::Malformed(format!("`{pair}` is not hex")))?;
+            .map_err(|cause| return StoreError::Malformed(format!("`{pair}` is not hex: {cause}")))?;
     }
 
     return Ok(Digest128::From_Bytes(bytes));

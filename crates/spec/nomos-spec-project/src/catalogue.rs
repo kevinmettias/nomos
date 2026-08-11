@@ -2,7 +2,7 @@ use crate::profile::Profile;
 use crate::ProjectError;
 use std::collections::{BTreeMap, BTreeSet};
 
-pub const SHIPPED: &[(&str, &str)] = &[ 
+pub const SHIPPED: &[(&str, &str)] = &[
     // Subject-addressed: one node, projected four ways. They share one selection and
     // differ only in format, which is the claim being made -- four artefacts about a
     // subject are four renderings of one record graph rather than four authorities.

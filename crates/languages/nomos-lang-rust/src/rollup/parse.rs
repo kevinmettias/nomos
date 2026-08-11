@@ -131,7 +131,7 @@ pub(super) fn Item_Record(fields: &[&str], line: usize) -> Result<IndexEntry, St
     let ordinal = fields.get(2).copied().unwrap_or_default();
     let ordinal: u32 = ordinal
         .parse()
-        .map_err(|_| return format!("`{ordinal}` on line {line} is not an ordinal"))?;
+        .map_err(|cause| return format!("`{ordinal}` on line {line} is not an ordinal: {cause}"))?;
 
     return Ok(IndexEntry {
         member: Subject_From(fields.get(1).copied().unwrap_or_default(), line)?,
@@ -191,7 +191,7 @@ pub(super) fn Subject_From(hexadecimal: &str, line: usize) -> Result<SubjectId, 
     for (slot, pair) in bytes.iter_mut().zip(Pairs(hexadecimal))
     {
         *slot = u8::from_str_radix(pair, 16)
-            .map_err(|_| return format!("`{pair}` on line {line} is not hexadecimal"))?;
+            .map_err(|cause| return format!("`{pair}` on line {line} is not hexadecimal: {cause}"))?;
     }
 
     return Ok(SubjectId::From_Digest(Digest128::From_Bytes(bytes)));

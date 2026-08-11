@@ -259,7 +259,8 @@ fn Test_Reading_Should_Not_Unpack()
     assert_eq!(before, Listing(&root), "reading the archive changed the directory");
 }
 
-fn Listing(directory: &std::path::Path) -> Vec<String> {
+fn Listing(directory: &std::path::Path) -> Vec<String>
+{
     let mut names: Vec<String> = std::fs::read_dir(directory)
         .expect("lists")
         .flatten()

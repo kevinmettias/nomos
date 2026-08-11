@@ -420,9 +420,25 @@ mod tests
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-registration-{name}-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&path);
+        Cleared(&path);
         std::fs::create_dir_all(&path).expect("a test needs a temporary directory");
         return path;
+    }
+
+    /// Removes a fixture directory, tolerating the one failure that is not one.
+    ///
+    /// A directory that is already absent is the state this asks for, so `NotFound` is
+    /// success. Anything else is said out loud rather than discarded, in both directions it
+    /// is called from: a setup that quietly cannot delete hands the test a file a previous
+    /// run wrote — which is exactly what `Synthetic` promises it cannot — and a teardown
+    /// that quietly cannot delete leaves one directory per run with nothing reporting it.
+    fn Cleared(path: &Path)
+    {
+        if let Err(cause) = std::fs::remove_dir_all(path)
+            && cause.kind() != std::io::ErrorKind::NotFound
+        {
+            eprintln!("{} could not be cleared: {cause}", path.display());
+        }
     }
 
     fn Write(directory: &Path, name: &str, body: &str)
@@ -451,7 +467,7 @@ mod tests
             "{}",
             refusal.Describe()
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -490,7 +506,7 @@ mod tests
                 "{intruder}: {}",
                 refusal.Describe()
             );
-            let _ = std::fs::remove_dir_all(&directory);
+            Cleared(&directory);
         }
     }
 
@@ -507,7 +523,7 @@ mod tests
             "{}",
             refusal.Describe()
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -527,7 +543,7 @@ mod tests
             "{}",
             refusal.Describe()
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -547,7 +563,7 @@ mod tests
             "{}",
             refusal.Describe()
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -567,7 +583,7 @@ mod tests
             "{}",
             refusal.Describe()
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -591,7 +607,7 @@ mod tests
                 "{named}: {}",
                 refusal.Describe()
             );
-            let _ = std::fs::remove_dir_all(&directory);
+            Cleared(&directory);
         }
     }
 
@@ -609,7 +625,7 @@ mod tests
             "{}",
             refusal.Describe()
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -631,7 +647,7 @@ mod tests
                 "{stem}: {}",
                 refusal.Describe()
             );
-            let _ = std::fs::remove_dir_all(&directory);
+            Cleared(&directory);
         }
     }
 
@@ -662,7 +678,7 @@ mod tests
                 },
             ]
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -685,7 +701,7 @@ mod tests
             "`read_dir` order reached the table, so two machines build two binaries from \
              one commit"
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -701,7 +717,7 @@ mod tests
         let read = Read(&directory).expect("the only tolerance is comments and blank lines");
 
         assert_eq!(read.first().map(|found| return found.path.as_str()), Some(A_REAL_RECORD));
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     #[test]
@@ -717,7 +733,7 @@ mod tests
         let read = Read(&directory).expect("a CRLF registration is still a registration");
 
         assert_eq!(read.first().map(|found| return found.path.as_str()), Some(A_REAL_RECORD));
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     /// The reader consults the directory it is given and nothing else.
@@ -740,7 +756,7 @@ mod tests
             1,
             "the reader returned more than the directory it was handed holds: {read:?}"
         );
-        let _ = std::fs::remove_dir_all(&directory);
+        Cleared(&directory);
     }
 
     /// And the real directory reads, so the synthetic cases are not the only ones exercised.

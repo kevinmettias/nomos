@@ -52,8 +52,9 @@ fn main() -> Result<(), String>
 /// caller acknowledged.
 fn Cargo_Variable(name: &str) -> Result<String, String>
 {
-    return std::env::var(name)
-        .map_err(|_| return format!("cargo sets {name} for every build script, and did not"));
+    return std::env::var(name).map_err(|cause| {
+        return format!("cargo sets {name} for every build script, and did not: {cause}");
+    });
 }
 
 /// The enabled features as one comma-separated field.

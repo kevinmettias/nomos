@@ -104,7 +104,8 @@ impl core::fmt::Display for StoreError
     }
 }
 
-impl std::error::Error for StoreError {}
+impl std::error::Error for StoreError
+{}
 
 impl From<rusqlite::Error> for StoreError
 {

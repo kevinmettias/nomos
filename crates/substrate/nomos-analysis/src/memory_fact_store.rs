@@ -332,7 +332,8 @@ impl MemoryFactStore
     }
 }
 
-impl sealed::Sealed for MemoryFactStore {}
+impl sealed::Sealed for MemoryFactStore
+{}
 
 impl FactStore for MemoryFactStore
 {

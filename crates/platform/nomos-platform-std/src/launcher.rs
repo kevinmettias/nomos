@@ -199,15 +199,15 @@ fn Waited(
 {
     let started = Instant::now();
 
-    loop
+    let outcome = loop
     {
         match child.try_wait()
         {
             Ok(Some(status)) =>
             {
-                return Ok(status.code().map_or(ExitOutcome::Terminated, |code| {
+                break status.code().map_or(ExitOutcome::Terminated, |code| {
                     return ExitOutcome::Exited { code };
-                }));
+                });
             }
             Ok(None) =>
             {}
@@ -216,14 +216,30 @@ fn Waited(
 
         if started.elapsed() >= timeout
         {
-            let _ = child.kill();
-            let _ = child.wait();
+            // A child that ended between the poll above and this kill is already in the
+            // state the kill was after, and the platforms disagree about how they say so:
+            // Unix reports success against a not-yet-reaped child, Windows answers
+            // `InvalidInput`. Every other failure means a process this function promised
+            // to stop is still running, and reporting the timeout would be a lie about it.
+            if let Err(cause) = child.kill()
+                && cause.kind() != std::io::ErrorKind::InvalidInput
+            {
+                return Err(format!("`{program}` outran its timeout and could not be killed: {cause}"));
+            }
 
-            return Ok(ExitOutcome::TimedOut);
+            // Reap it. A wait that fails here leaves the zombie this function exists to
+            // avoid, so it is reported rather than dropped.
+            child
+                .wait()
+                .map_err(|cause| return format!("could not reap `{program}` after killing it: {cause}"))?;
+
+            break ExitOutcome::TimedOut;
         }
 
         std::thread::sleep(POLL_INTERVAL);
-    }
+    };
+
+    return Ok(outcome);
 }
 
 /// Gives the readers a bounded moment to finish what is left in the pipes.
@@ -249,7 +265,7 @@ mod tests
 {
     use super::*;
     use std::fmt::Write as _;
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
     use std::time::Duration;
 
     /// A command that exits with the given code, on either platform family.
@@ -357,6 +373,21 @@ mod tests
         };
     }
 
+    /// Removes a fixture file, tolerating the one failure that is not one.
+    ///
+    /// A path that is already absent is the state this asks for, so `NotFound` is success.
+    /// Anything else is said out loud rather than discarded: these fixtures are several
+    /// hundred kilobytes each, and a teardown that quietly cannot delete leaves one per run
+    /// in the temporary directory with nothing anywhere saying so.
+    fn Cleared(path: &Path)
+    {
+        if let Err(cause) = std::fs::remove_file(path)
+            && cause.kind() != std::io::ErrorKind::NotFound
+        {
+            eprintln!("{} could not be cleared: {cause}", path.display());
+        }
+    }
+
     /// The loud fixture: the command to run, the file it prints, and what it prints.
     ///
     /// Named rather than a triple. At three members a caller is counting positions, and
@@ -400,7 +431,7 @@ mod tests
         let LoudFixture { command, path, .. } = Loud("result");
 
         let output = StdProcessLauncher.Run(&command).unwrap();
-        let _ = std::fs::remove_file(&path);
+        Cleared(&path);
 
         assert_eq!(
             output.outcome,
@@ -427,7 +458,7 @@ mod tests
         } = Loud("whole");
 
         let output = StdProcessLauncher.Run(&command).unwrap();
-        let _ = std::fs::remove_file(&path);
+        Cleared(&path);
 
         assert_eq!(
             output.stdout.len(),

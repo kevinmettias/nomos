@@ -81,10 +81,15 @@ pub enum PayloadRefusalKind
         found: usize,
     },
     /// A field that must be a number and is not.
+    ///
+    /// `cause` is the parser's own words for why. It is carried rather than dropped because
+    /// "too large for the field" and "not digits at all" are two different defects in the
+    /// writer, and a reader holding only the rejected text has to guess which one it met.
     UnreadableNumber
     {
         field: &'static str,
         value: String,
+        cause: String,
     },
     /// A field that must be an observation and is not one of its three spellings.
     UnreadableObservation
@@ -118,10 +123,11 @@ impl PayloadRefusalKind
                 expected,
                 found,
             } => format!("is a `{tag}` record with {found} field(s) where this build expects {expected}"),
-            Self::UnreadableNumber { field, value } =>
-            {
-                format!("carries `{value}` where `{field}` must be a number")
-            }
+            Self::UnreadableNumber {
+                field,
+                value,
+                cause,
+            } => format!("carries `{value}` where `{field}` must be a number: {cause}"),
             Self::UnreadableObservation { field, value } =>
             {
                 format!("carries `{value}` where `{field}` must be `-`, `.` or `+` and a value")

@@ -54,7 +54,8 @@ impl core::fmt::Display for WorkspaceError
     }
 }
 
-impl std::error::Error for WorkspaceError {}
+impl std::error::Error for WorkspaceError
+{}
 
 impl From<StoreError> for WorkspaceError
 {

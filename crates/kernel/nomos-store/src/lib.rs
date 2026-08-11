@@ -77,4 +77,5 @@ impl core::fmt::Display for StoreError
     }
 }
 
-impl std::error::Error for StoreError {}
+impl std::error::Error for StoreError
+{}

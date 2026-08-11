@@ -25,4 +25,5 @@ impl core::fmt::Display for ParseFailure
     }
 }
 
-impl std::error::Error for ParseFailure {}
+impl std::error::Error for ParseFailure
+{}

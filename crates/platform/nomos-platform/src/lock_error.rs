@@ -37,4 +37,5 @@ impl core::fmt::Display for LockError
     }
 }
 
-impl std::error::Error for LockError {}
+impl std::error::Error for LockError
+{}

@@ -54,4 +54,5 @@ impl core::fmt::Display for FileSystemError
     }
 }
 
-impl std::error::Error for FileSystemError {}
+impl std::error::Error for FileSystemError
+{}

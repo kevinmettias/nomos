@@ -13,4 +13,5 @@ pub trait Contract
     fn Run(&self);
 }
 
-mod inner {}
+mod inner
+{}

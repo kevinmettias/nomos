@@ -93,18 +93,26 @@ impl Archive
 
     /// # Errors
     ///
-    /// Returns [`ArchiveErrorKind::NoSuchEntry`] if the archive has no such file.
+    /// Returns [`ArchiveErrorKind::NoSuchEntry`] if the archive has no such file, and
+    /// [`ArchiveErrorKind::Unreadable`] carrying the cause if the lookup failed for any other
+    /// reason — a corrupt central directory answers "no such entry" otherwise, which sends the
+    /// reader looking for a name that was never the problem.
     pub fn Read(&mut self, entry: &str) -> Result<Vec<u8>, ArchiveError>
     {
-        let mut file = self
-            .inner
-            .by_name(entry)
-            .map_err(|_| return ArchiveError {
+        let mut file = self.inner.by_name(entry).map_err(|cause| {
+            return ArchiveError {
                 archive: self.path.clone(),
-                kind: ArchiveErrorKind::NoSuchEntry {
-                    entry: entry.to_owned(),
+                kind: match cause
+                {
+                    zip::result::ZipError::FileNotFound => ArchiveErrorKind::NoSuchEntry {
+                        entry: entry.to_owned(),
+                    },
+                    other => ArchiveErrorKind::Unreadable {
+                        cause: format!("{entry}: {other}"),
+                    },
                 },
-            })?;
+            };
+        })?;
 
         let mut bytes = Vec::new();
         file.read_to_end(&mut bytes)

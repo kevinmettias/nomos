@@ -53,7 +53,8 @@ impl core::fmt::Display for RegistryError
     }
 }
 
-impl std::error::Error for RegistryError {}
+impl std::error::Error for RegistryError
+{}
 
 /// Which of the two things being refused was refused.
 ///

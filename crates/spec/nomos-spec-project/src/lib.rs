@@ -231,7 +231,8 @@ fn Subject_Unresolved(
     );
 }
 
-impl std::error::Error for ProjectError {}
+impl std::error::Error for ProjectError
+{}
 
 impl From<nomos_spec_store::StoreError> for ProjectError
 {

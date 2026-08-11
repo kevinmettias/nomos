@@ -47,7 +47,8 @@ impl core::fmt::Display for ArchiveError
     }
 }
 
-impl std::error::Error for ArchiveError {}
+impl std::error::Error for ArchiveError
+{}
 
 /// Which of the four refusals it was.
 #[derive(Debug)]

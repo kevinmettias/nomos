@@ -182,7 +182,8 @@ impl core::fmt::Display for BundleError
     }
 }
 
-impl std::error::Error for BundleError {}
+impl std::error::Error for BundleError
+{}
 
 impl From<nomos_spec_store::StoreError> for BundleError
 {

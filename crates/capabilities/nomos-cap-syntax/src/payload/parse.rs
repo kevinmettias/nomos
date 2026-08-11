@@ -176,12 +176,13 @@ pub(super) fn Expect_Fields(
 /// Reads a field that must be a number.
 pub(super) fn Number(value: &str, field: &'static str, line: usize) -> Result<u32, PayloadRefusal>
 {
-    return value.parse::<u32>().map_err(|_| {
+    return value.parse::<u32>().map_err(|cause| {
         return PayloadRefusal::At(
             line,
             PayloadRefusalKind::UnreadableNumber {
                 field,
                 value: value.to_owned(),
+                cause: cause.to_string(),
             },
         );
     });

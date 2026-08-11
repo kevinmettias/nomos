@@ -70,10 +70,23 @@ impl FileSystem for StdFileSystem
         // a reader sees the old contents or the new ones and never anything between.
         return std::fs::rename(&temporary, path).map_err(|error| {
             // Leaving a stray temporary behind after a failed rename would accumulate
-            // one file per failure next to the real one, so clean it up — but report
-            // the rename's error, not the cleanup's.
-            let _ = std::fs::remove_file(&temporary);
-            Self::Classify(path, &error)
+            // one file per failure next to the real one, so clean it up. The rename's
+            // error stays the one reported, because it is the reason the caller's write
+            // did not happen — a cleanup that also failed is appended to it rather than
+            // replacing it, so neither failure is the price of naming the other.
+            let Err(stray) = std::fs::remove_file(&temporary)
+            else
+            {
+                return Self::Classify(path, &error);
+            };
+
+            return FileSystemError::Other {
+                path: path.display().to_string(),
+                cause: format!(
+                    "{error}, and the temporary {} it left could not be removed either: {stray}",
+                    temporary.display()
+                ),
+            };
         });
     }
 
@@ -93,8 +106,23 @@ mod tests
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-fs-test-{name}-{}", std::process::id()));
-        let _ = std::fs::remove_file(&path);
+        Cleared(&path);
         return path;
+    }
+
+    /// Removes a fixture file, tolerating the one failure that is not one.
+    ///
+    /// A path that is already absent is the state this asks for, so `NotFound` is success.
+    /// Anything else is said out loud rather than discarded: a teardown that quietly cannot
+    /// delete leaves one file per run in the temporary directory and never reports it, and a
+    /// setup that quietly cannot delete hands the test a fixture a previous run wrote.
+    fn Cleared(path: &Path)
+    {
+        if let Err(cause) = std::fs::remove_file(path)
+            && cause.kind() != std::io::ErrorKind::NotFound
+        {
+            eprintln!("{} could not be cleared: {cause}", path.display());
+        }
     }
 
     #[test]
@@ -109,7 +137,7 @@ mod tests
         filesystem.Replace_Atomically(&path, "second").unwrap();
         assert_eq!(filesystem.Read_To_String(&path).unwrap(), "second");
 
-        let _ = std::fs::remove_file(&path);
+        Cleared(&path);
     }
 
     /// A replace must not leave the temporary file behind. One stray file per write
@@ -123,7 +151,7 @@ mod tests
         filesystem.Replace_Atomically(&path, "contents").unwrap();
 
         assert!(!path.with_extension("tmp").exists());
-        let _ = std::fs::remove_file(&path);
+        Cleared(&path);
     }
 
     /// A missing file must be distinguishable from an empty one, because the ledger
@@ -153,8 +181,10 @@ mod tests
 
         assert_eq!(filesystem.Read_To_String(&path).unwrap(), "{}");
         if let Some(root) = path.parent().and_then(Path::parent)
+            && let Err(cause) = std::fs::remove_dir_all(root)
+            && cause.kind() != std::io::ErrorKind::NotFound
         {
-            let _ = std::fs::remove_dir_all(root);
+            eprintln!("{} could not be cleared: {cause}", root.display());
         }
     }
 }

@@ -61,7 +61,8 @@ impl core::fmt::Display for RenderError
     }
 }
 
-impl std::error::Error for RenderError {}
+impl std::error::Error for RenderError
+{}
 
 /// The declared front matter and the blocks, as one markdown document.
 ///

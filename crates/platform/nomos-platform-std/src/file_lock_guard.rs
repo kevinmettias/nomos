@@ -26,12 +26,33 @@ impl FileLockGuard
 
 impl Drop for FileLockGuard
 {
+    /// Releases the lock, and says so on standard error when it cannot.
+    ///
+    /// # Why the failure is printed rather than returned, panicked or dropped
+    ///
+    /// A drop has no return value, so there is no caller to hand this to. Panicking is
+    /// worse than the failure: a panic during unwinding aborts the process and takes the
+    /// original error with it, which is what `check-drop-panics` exists to stop.
+    ///
+    /// That leaves saying it or losing it, and losing it is not free. The lock file will be
+    /// broken as stale by whoever comes next — the mechanism that exists for holders that
+    /// die without cleaning up — but only after a full staleness window in which everybody
+    /// else is refused with "held by" and this process's name. Silence turns one failed
+    /// `remove_file` into somebody else's unexplained wait, minutes later, with nothing
+    /// anywhere connecting the two. One line naming the path is the cheapest thing that
+    /// closes that gap.
+    ///
+    /// A path that is already gone is not a failure: the lock is released either way, and a
+    /// takeover that judged this holder stale is a normal way for that to happen.
     fn drop(&mut self)
     {
-        // A failed release is not worth panicking over — the lock will be broken as
-        // stale by whoever comes next, which is exactly the mechanism that exists for
-        // holders that go away without cleaning up. Panicking here during unwinding
-        // would abort the process and lose the very error being handled.
-        let _ = std::fs::remove_file(&self.path);
+        if let Err(cause) = std::fs::remove_file(&self.path)
+            && cause.kind() != std::io::ErrorKind::NotFound
+        {
+            eprintln!(
+                "the lock at {} could not be released and will be held until it goes stale: {cause}",
+                self.path.display()
+            );
+        }
     }
 }

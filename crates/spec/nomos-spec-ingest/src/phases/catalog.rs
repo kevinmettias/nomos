@@ -54,10 +54,19 @@ pub fn Ingest_Catalog(
 
     for entity in entities
     {
+        let authority = if entity.authority.is_empty()
+        {
+            "unstated"
+        }
+        else
+        {
+            &entity.authority
+        };
+
         let node_uid = store.Upsert_Node(
             &entity.id,
             &entity.kind,
-            if entity.authority.is_empty() { "unstated" } else { &entity.authority },
+            authority,
             "record",
             &entity.title,
         )?;

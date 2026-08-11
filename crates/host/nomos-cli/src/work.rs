@@ -435,7 +435,7 @@ fn Parse_Duration(text: &str) -> Result<Duration, String>
     let (number, unit) = text.split_at(text.len().saturating_sub(1));
     let amount: u64 = number
         .parse()
-        .map_err(|_| format!("`{text}` is not a duration; try 2h, 30m or 45s"))?;
+        .map_err(|cause| format!("`{text}` is not a duration; try 2h, 30m or 45s: {cause}"))?;
 
     return match unit
     {
@@ -732,7 +732,15 @@ fn Print_Claim(found: &LedgerItem, now: Timestamp, output: &mut impl std::io::Wr
         return;
     };
 
-    let lapsed = if claim.Has_Lapsed(now) { " (lapsed)" } else { "" };
+    let lapsed = if claim.Has_Lapsed(now)
+    {
+        " (lapsed)"
+    }
+    else
+    {
+        ""
+    };
+
     let _ = writeln!(
         output,
         "held by {} since unix {} until unix {}{lapsed}",

@@ -220,10 +220,17 @@ pub(super) fn Document_Uid(
             rusqlite::params![document, revision],
             |row| row.get(0),
         )
-        .map_err(|_| {
+        .map_err(|cause| {
+            if matches!(cause, rusqlite::Error::QueryReturnedNoRows)
+            {
+                return IngestError::Parse(format!(
+                    "{document} is not in the store at {revision}, so there is nothing for a \
+                     restored node to trace back to"
+                ));
+            }
+
             return IngestError::Parse(format!(
-                "{document} is not in the store at {revision}, so there is nothing for a \
-                 restored node to trace back to"
+                "the store could not be asked for {document} at {revision}: {cause}"
             ));
         });
 }

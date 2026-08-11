@@ -51,7 +51,8 @@ impl core::fmt::Display for IngestError
     }
 }
 
-impl std::error::Error for IngestError {}
+impl std::error::Error for IngestError
+{}
 
 impl From<StoreError> for IngestError
 {

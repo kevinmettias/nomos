@@ -4,5 +4,7 @@ struct Private;
 
 impl Private
 {
-    fn Only(&self) {}
+    fn Only(&self)
+    {
+    }
 }

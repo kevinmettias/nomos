@@ -179,7 +179,8 @@ impl core::fmt::Display for EditError
     }
 }
 
-impl std::error::Error for EditError {}
+impl std::error::Error for EditError
+{}
 
 impl From<StoreError> for EditError
 {
