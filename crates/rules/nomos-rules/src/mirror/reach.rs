@@ -20,7 +20,8 @@ pub(super) fn Reach_Of(universe: &DeclaredUniverse, checks: &BTreeSet<String>) -
     let enforcer = EnforcerRef::Check {
         name: claimed.clone(),
     };
-    let Resolved { computed, breaches } = Resolution(claimed, checks.contains(claimed));
+    let Resolved { computed, breaches } =
+        Resolution(claimed, Claim::Of(checks.contains(claimed)));
 
     return EnforcementReach {
         rule: RuleId::New(COMPLETENESS_MIRROR),
@@ -58,10 +59,38 @@ pub(super) struct Resolved
     pub(super) breaches: Vec<EnforcementBreach>,
 }
 
-/// What a claimed name amounts to, given whether the index holds it.
-pub(super) fn Resolution(claimed: &str, resolves: bool) -> Resolved
+/// Whether the index holds the name a universe claimed.
+///
+/// Named rather than a bool. `Resolution(claimed, true)` said nothing at the call site
+/// about what `true` was true of, and the two outcomes are a build that fails and one
+/// that does not.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(super) enum Claim
 {
-    if resolves
+    /// The index holds the claimed name.
+    Resolves,
+    /// It does not, so the claim of coverage is a phantom.
+    Phantom,
+}
+
+impl Claim
+{
+    /// Whether the check index holds the claimed name.
+    pub(super) const fn Of(resolves: bool) -> Self
+    {
+        if resolves
+        {
+            return Self::Resolves;
+        }
+
+        return Self::Phantom;
+    }
+}
+
+/// What a claimed name amounts to, given whether the index holds it.
+pub(super) fn Resolution(claimed: &str, claim: Claim) -> Resolved
+{
+    if claim == Claim::Resolves
     {
         return Resolved {
             computed: GateCategory::Blocking,

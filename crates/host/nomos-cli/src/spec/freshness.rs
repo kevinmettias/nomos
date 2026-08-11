@@ -231,6 +231,34 @@ pub(super) fn Compared(
     return ExitCode::Stale;
 }
 
+/// Whether this repository promised the output a profile names.
+///
+/// Named rather than a bool. `Absent(profile, true, output)` said nothing at the call
+/// site about which of the two absences was being reported, and the two are not close:
+/// one is a broken promise and the other is a profile nobody builds here.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(super) enum Promise
+{
+    /// Promised, so an absence is an output that was never written or has been deleted.
+    Required,
+    /// Not promised, so an absence is simply a profile this build root does not carry.
+    Optional,
+}
+
+impl Promise
+{
+    /// Whether a profile's identifier is in the required list.
+    pub(super) const fn Of(required: bool) -> Self
+    {
+        if required
+        {
+            return Self::Required;
+        }
+
+        return Self::Optional;
+    }
+}
+
 /// What the run looked at, printed whether or not it found anything.
 ///
 /// A freshness command that prints nothing over a directory holding no outputs reads
@@ -299,16 +327,16 @@ impl<'a> Census<'a>
         output: &mut dyn std::io::Write,
     ) -> ExitCode
     {
-        let promised = self.required.contains(&profile.id.as_str());
+        let promise = Promise::Of(self.required.contains(&profile.id.as_str()));
 
         let Some(code) = found
         else
         {
-            return self.Absent(profile, promised, output);
+            return self.Absent(profile, promise, output);
         };
 
         self.checked = self.checked.saturating_add(1);
-        if promised && !matches!(code, ExitCode::Ok)
+        if promise == Promise::Required && !matches!(code, ExitCode::Ok)
         {
             self.unmet.push(profile.id.as_str());
         }
@@ -320,11 +348,11 @@ impl<'a> Census<'a>
     fn Absent(
         &mut self,
         profile: &'a Profile,
-        promised: bool,
+        promise: Promise,
         output: &mut dyn std::io::Write,
     ) -> ExitCode
     {
-        if !promised
+        if promise == Promise::Optional
         {
             self.unbuilt.push(profile.id.as_str());
 

@@ -398,14 +398,26 @@ const SPEC_CONFORMANCE: &str = "# Conformance\n\nUnknown is not pass \u{2014} ni
 /// a surrogate" — which is the failure mode both declarations are actually about, and the
 /// one an in-process repetition over a *single* store cannot see, because repeating a pure
 /// function over identical input agrees with itself whatever it is ordered by.
-fn Spec_Store(reversed: bool) -> SpecificationStore
+/// The order the fixture's documents and graph rows arrive in.
+///
+/// Named rather than a bool. `Populate_Graph(store, true)` said nothing at the call site
+/// about what `true` was true of, and the whole point of the fixture is that the two
+/// orders must produce the same bytes.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum Order
+{
+    Forwards,
+    Backwards,
+}
+
+fn Spec_Store(order: Order) -> SpecificationStore
 {
     let mut store = SpecificationStore::In_Memory().expect("an in-memory store opens");
     let mut documents = vec![
         ("volumes/02-core.md", SPEC_CORE),
         ("volumes/03-conformance.md", SPEC_CONFORMANCE),
     ];
-    if reversed
+    if order == Order::Backwards
     {
         documents.reverse();
     }
@@ -420,7 +432,7 @@ fn Spec_Store(reversed: bool) -> SpecificationStore
             .expect("the fixture blocks store");
     }
 
-    Populate_Spec_Graph(&store, reversed);
+    Populate_Spec_Graph(&store, order);
 
     return store;
 }
@@ -431,7 +443,7 @@ fn Spec_Store(reversed: bool) -> SpecificationStore
 /// `nomos-spec-bundle`'s own fixture is: the store's authoring API deliberately does not
 /// offer a way to write an arbitrary graph, and a fixture that could only build what the
 /// authoring path builds would never exercise a row the ingest path produces.
-fn Populate_Spec_Graph(store: &SpecificationStore, reversed: bool)
+fn Populate_Spec_Graph(store: &SpecificationStore, order: Order)
 {
     let nodes = "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
                         suite_uid)
@@ -472,7 +484,7 @@ fn Populate_Spec_Graph(store: &SpecificationStore, reversed: bool)
 
     store
         .Connection()
-        .execute_batch(if reversed { &reversed_nodes } else { nodes })
+        .execute_batch(if order == Order::Backwards { &reversed_nodes } else { nodes })
         .expect("the fixture nodes store");
 
     Populate_Spec_Edges(store);
@@ -530,9 +542,9 @@ fn Populate_Spec_Edges(store: &SpecificationStore)
 }
 
 /// The bundle a store of the fixture corpus exports, as text.
-fn Bundle_Bytes(reversed: bool) -> Vec<u8>
+fn Bundle_Bytes(order: Order) -> Vec<u8>
 {
-    let store = Spec_Store(reversed);
+    let store = Spec_Store(order);
     let bundle = Export(&store).expect("the fixture exports");
 
     assert!(
@@ -571,9 +583,9 @@ const PROJECTION_PROFILES: &[&str] = &[
 /// [`nomos_spec_project::Check`] decides freshness from, so a projection whose body was
 /// stable and whose stamp was not would report every generated file as stale without a
 /// single byte of output having moved — a determinism defect the body alone cannot see.
-fn Projection_Bytes(reversed: bool) -> Vec<u8>
+fn Projection_Bytes(order: Order) -> Vec<u8>
 {
-    let store = Spec_Store(reversed);
+    let store = Spec_Store(order);
     let mut rendered = Vec::new();
 
     for text in PROJECTION_PROFILES
@@ -607,15 +619,15 @@ fn Projection_Bytes(reversed: bool) -> Vec<u8>
 /// of the order the specification arrived in. The first call is always the forward order,
 /// so the digest the child process and the golden are compared against does not depend on
 /// how many times the closure has been called.
-fn Alternating(build: fn(bool) -> Vec<u8>) -> impl Fn() -> Vec<u8>
+fn Alternating(build: fn(Order) -> Vec<u8>) -> impl Fn() -> Vec<u8>
 {
-    let reversed = Cell::new(false);
+    let backwards = Cell::new(false);
 
     return move || {
-        let order = reversed.get();
-        reversed.set(!order);
+        let order = backwards.get();
+        backwards.set(!order);
 
-        return build(order);
+        return build(if order { Order::Backwards } else { Order::Forwards });
     };
 }
 
@@ -949,7 +961,7 @@ fn Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness()
 fn Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins()
 {
     let honest = Production {
-        trace: Bundle_Bytes(false),
+        trace: Bundle_Bytes(Order::Forwards),
     };
     let mut altered = honest.trace.clone();
     let last = altered

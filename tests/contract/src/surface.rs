@@ -284,7 +284,7 @@ fn Walk(
 
         if let Some(Inside::Variants(owner)) = inside
         {
-            for (name, payload) in Members_In(text, masks, (cursor, end), false)
+            for (name, payload) in Members_In(text, masks, (cursor, end), Reading::Variants)
             {
                 module.items.push(Item {
                     kind: "enum variant".to_owned(),
@@ -298,7 +298,7 @@ fn Walk(
 
         if let Some(Inside::Fields(owner)) = inside
         {
-            for (name, declared) in Members_In(text, masks, (cursor, end), true)
+            for (name, declared) in Members_In(text, masks, (cursor, end), Reading::Fields)
             {
                 module.items.push(Item {
                     kind: "struct field".to_owned(),
@@ -556,7 +556,11 @@ fn Record(
         {
             match head.body
             {
-                Some(body) => Load_Inline(&name, head.visibility == "pub", body, path, into, text, masks),
+                Some(body) =>
+                {
+                    let exported = Exported::Of(head.visibility == "pub");
+                    Load_Inline(&name, exported, body, path, into, text, masks);
+                }
                 None => children.push((name, head.visibility == "pub")),
             }
         }
@@ -749,11 +753,36 @@ fn Without_Generics(text: &str) -> String
     return text.to_owned();
 }
 
+/// Whether a declaration carries `pub`.
+///
+/// Named rather than a bool. Both call sites below passed it among four or more
+/// positional arguments, where `true` says nothing about what it is true of.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum Exported
+{
+    Yes,
+    No,
+}
+
+impl Exported
+{
+    /// Whether a declaration's visibility is `pub`.
+    const fn Of(is_public: bool) -> Self
+    {
+        if is_public
+        {
+            return Self::Yes;
+        }
+
+        return Self::No;
+    }
+}
+
 /// An inline `mod name { … }`, loaded as its own module.
 #[allow(clippy::too_many_arguments)]
 fn Load_Inline(
     name: &str,
-    is_public: bool,
+    exported: Exported,
     body: (usize, usize),
     path: &[String],
     into: &mut BTreeMap<Vec<String>, Module>,
@@ -766,7 +795,7 @@ fn Load_Inline(
 
     let parent_exported = into.get(path).is_some_and(|held| return held.exported) || path.is_empty();
     let mut child = Module {
-        exported: parent_exported && is_public,
+        exported: parent_exported && exported == Exported::Yes,
         ..Module::default()
     };
     let mut grandchildren = Vec::new();
@@ -840,6 +869,19 @@ fn Keyword_At(declaration: &str, keyword: &str) -> Option<usize>
     return None;
 }
 
+/// Which of the two bodies is being read.
+///
+/// Named rather than a bool. `Members_In(text, masks, range, true)` said nothing at the
+/// call site about which body it was reading, and the two read a line differently.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum Reading
+{
+    /// A struct's fields, each carrying its own visibility.
+    Fields,
+    /// An enum's variants, as public as the enum in front of them.
+    Variants,
+}
+
 /// The members of an enum or struct body, with whatever each one carries.
 ///
 /// Read line by line to find each member and then by brace matching to capture what it
@@ -848,13 +890,13 @@ fn Keyword_At(declaration: &str, keyword: &str) -> Option<usize>
 /// drops `{ profile: String, output: String }`. A payload's types are as much of the
 /// surface as the name in front of them.
 ///
-/// `wants_visibility` separates the two callers. A struct's fields are public one at a
-/// time and a private one is not an export; an enum's variants are as public as the enum.
+/// [`Reading`] separates the two callers. A struct's fields are public one at a time and
+/// a private one is not an export; an enum's variants are as public as the enum.
 fn Members_In(
     text: &str,
     masks: &crate::gates::Masks,
     range: (usize, usize),
-    wants_visibility: bool,
+    reading: Reading,
 ) -> Vec<(String, String)>
 {
     let (start, end) = range;
@@ -868,7 +910,7 @@ fn Members_In(
         let line = raw.trim_start();
         let at = cursor.saturating_add(raw.len().saturating_sub(line.len()));
 
-        let declared = if wants_visibility
+        let declared = if reading == Reading::Fields
         {
             line.strip_prefix("pub ").map(|rest| {
                 return (rest, at.saturating_add(4));

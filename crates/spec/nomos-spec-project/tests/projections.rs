@@ -14,19 +14,31 @@ const CORE: &str = "# Core architecture\n\nIdentity is not a path.\n\n\
 const CONFORMANCE: &str = "# Conformance\n\nUnknown is not pass \u{2014} ni\u{00f1}o, \
                            \u{4e2d}\u{6587}, \u{1f600}.\n";
 
-fn Populated() -> SpecificationStore
+/// The order the fixture's documents and graph rows arrive in.
+///
+/// Named rather than a bool. `Populate_Graph(store, true)` said nothing at the call site
+/// about what `true` was true of, and the whole point of the fixture is that the two
+/// orders must produce the same bytes.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum Order
 {
-    return Populated_In_Order(false);
+    Forwards,
+    Backwards,
 }
 
-fn Populated_In_Order(reversed: bool) -> SpecificationStore
+fn Populated() -> SpecificationStore
+{
+    return Populated_In_Order(Order::Forwards);
+}
+
+fn Populated_In_Order(order: Order) -> SpecificationStore
 {
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let mut documents = vec![
         ("volumes/02-core.md", CORE),
         ("volumes/03-conformance.md", CONFORMANCE),
     ];
-    if reversed
+    if order == Order::Backwards
     {
         documents.reverse();
     }
@@ -41,12 +53,12 @@ fn Populated_In_Order(reversed: bool) -> SpecificationStore
             .expect("stores the blocks");
     }
 
-    Populate_Graph(&store, reversed);
+    Populate_Graph(&store, order);
 
     return store;
 }
 
-fn Populate_Graph(store: &SpecificationStore, reversed: bool)
+fn Populate_Graph(store: &SpecificationStore, order: Order)
 {
     let nodes = "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
                         suite_uid)
@@ -106,7 +118,7 @@ fn Populate_Graph(store: &SpecificationStore, reversed: bool)
 
     store
         .Connection()
-        .execute_batch(if reversed { &reversed_nodes } else { nodes })
+        .execute_batch(if order == Order::Backwards { &reversed_nodes } else { nodes })
         .expect("populates the nodes");
 
     Populate_Graph_Edges(store);
@@ -330,8 +342,8 @@ fn Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original()
 #[test]
 fn Test_Insertion_Order_Should_Not_Reach_The_Output()
 {
-    let forwards = Populated_In_Order(false);
-    let backwards = Populated_In_Order(true);
+    let forwards = Populated_In_Order(Order::Forwards);
+    let backwards = Populated_In_Order(Order::Backwards);
 
     for profile in Shipped().Profiles()
     {
