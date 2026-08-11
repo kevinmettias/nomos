@@ -10,7 +10,7 @@ use nomos_spec_ingest::{
     LINEAGE_NOTES, Prepare_Commentary_View, ROOT_SUITE, Sibling,
     Statements_Sourced_Only_From_Commentary,
 };
-use nomos_spec_store::{SpecificationStore, Table};
+use nomos_spec_store::{SpecificationStore, SuiteAuthority, Table};
 use nomos_spec_validate::{Registered, Validate};
 use std::path::PathBuf;
 
@@ -34,7 +34,7 @@ fn Ecosystem() -> Option<SpecificationStore>
     let mut store = SpecificationStore::In_Memory().expect("opens");
 
     let root = store
-        .Put_Suite(ROOT_SUITE, "The Nomos specification", true)
+        .Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root)
         .expect("records the root suite");
 
     for sibling in Sibling::All()
@@ -61,7 +61,7 @@ fn Ecosystem() -> Option<SpecificationStore>
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
         let suite = owner.map_or(root, |sibling| {
             return store
-                .Put_Suite(sibling.Suite_Id(), sibling.Title(), false)
+                .Put_Suite(sibling.Suite_Id(), sibling.Title(), SuiteAuthority::Sibling)
                 .expect("records the suite");
         });
         Ingest_Game_Plan(&mut store, suite, name, &text)
@@ -182,7 +182,11 @@ fn Test_A_Sibling_Record_Should_Resolve_By_Its_Own_Identifier()
             .unwrap_or_else(|| panic!("{id} resolves to no suite"));
 
         assert_eq!(held.0, suite, "{id}");
-        assert!(!held.1, "{id} is a sibling's record and reads as this repository's");
+        assert_eq!(
+            held.1,
+            SuiteAuthority::Sibling,
+            "{id} is a sibling's record and reads as this repository's"
+        );
     }
 }
 
@@ -305,7 +309,7 @@ fn Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught()
     };
 
     let mut store = SpecificationStore::In_Memory().expect("opens");
-    let root = store.Put_Suite(ROOT_SUITE, "The Nomos specification", true).expect("records");
+    let root = store.Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root).expect("records");
 
     let name = "nomos full game plan.txt";
     let text = std::fs::read_to_string(archives.join(name)).expect("reads the plan");

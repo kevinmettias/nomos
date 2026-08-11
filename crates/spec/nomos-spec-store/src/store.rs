@@ -13,6 +13,39 @@ pub const AUTHORED: &str = "authored";
 /// The authority of a node that exists only because something points at it.
 pub const EXTERNAL: &str = "external";
 
+/// Whether a suite is this repository's own specification or one it merely references.
+///
+/// Named rather than a bool. `Put_Suite(suite_id, title, true)` said nothing at the call
+/// site about what was true, and the distinction it carries is the one the store exists to
+/// keep: a sibling's statement is quoted, not governed.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SuiteAuthority
+{
+    /// This repository's own specification, whose records govern here.
+    Root,
+    /// A suite read in from elsewhere, present so its nodes can be pointed at.
+    Sibling,
+}
+
+impl SuiteAuthority
+{
+    /// How the `authority_root` column spells this.
+    const fn Stored(self) -> i64
+    {
+        return match self
+        {
+            Self::Root => 1,
+            Self::Sibling => 0,
+        };
+    }
+
+    /// What the `authority_root` column meant.
+    const fn Read(stored: i64) -> Self
+    {
+        return if stored == 0 { Self::Sibling } else { Self::Root };
+    }
+}
+
 #[derive(Debug)]
 pub enum StoreError
 {
@@ -588,14 +621,14 @@ impl SpecificationStore
         &mut self,
         suite_id: &str,
         title: &str,
-        authority_root: bool,
+        authority: SuiteAuthority,
     ) -> Result<i64, StoreError>
     {
         self.connection.execute(
             "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)
              ON CONFLICT(suite_id) DO UPDATE SET title = excluded.title,
                                                  authority_root = excluded.authority_root",
-            params![suite_id, title, i64::from(authority_root)],
+            params![suite_id, title, authority.Stored()],
         )?;
 
         return Ok(self.connection.query_row(
@@ -628,7 +661,7 @@ impl SpecificationStore
     /// # Errors
     ///
     /// Returns [`StoreError`] on any SQL failure.
-    pub fn Suite_Of(&self, node_id: &str) -> Result<Option<(String, bool)>, StoreError>
+    pub fn Suite_Of(&self, node_id: &str) -> Result<Option<(String, SuiteAuthority)>, StoreError>
     {
         return Ok(self
             .connection
@@ -640,7 +673,7 @@ impl SpecificationStore
                 |row| {
                     let suite: String = row.get(0)?;
                     let root: i64 = row.get(1)?;
-                    return Ok((suite, root != 0));
+                    return Ok((suite, SuiteAuthority::Read(root)));
                 },
             )
             .optional()?);

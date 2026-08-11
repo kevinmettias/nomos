@@ -19,7 +19,7 @@ fn Rooted() -> RootedStore
 {
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let root = store
-        .Put_Suite(ROOT_SUITE, "The Nomos specification", true)
+        .Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root)
         .expect("records the root suite");
 
     return RootedStore { store, root };

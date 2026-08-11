@@ -19,6 +19,7 @@ pub enum nomos_spec_store::NormativeOutcome
 pub enum nomos_spec_store::PathMatch
 pub enum nomos_spec_store::RowScope
 pub enum nomos_spec_store::StoreError
+pub enum nomos_spec_store::SuiteAuthority
 pub enum nomos_spec_store::Table
 pub enum variant nomos_spec_store::AcceptError::Refused(Refusal)
 pub enum variant nomos_spec_store::AcceptError::Store(StoreError)
@@ -56,6 +57,8 @@ pub enum variant nomos_spec_store::StoreError::Record { path: String, cause: Str
 pub enum variant nomos_spec_store::StoreError::Sql(String)
 pub enum variant nomos_spec_store::StoreError::Table { document_uid: i64, ordinal: u32, cause: String, }
 pub enum variant nomos_spec_store::StoreError::TooNew { found: u32, supported: u32, }
+pub enum variant nomos_spec_store::SuiteAuthority::Root
+pub enum variant nomos_spec_store::SuiteAuthority::Sibling
 pub enum variant nomos_spec_store::Table::Blobs
 pub enum variant nomos_spec_store::Table::Lineage
 pub enum variant nomos_spec_store::Table::NodeAliases
@@ -119,10 +122,10 @@ pub fn nomos_spec_store::SpecificationStore::Put_Relation_Type(&mut self, name: 
 pub fn nomos_spec_store::SpecificationStore::Put_Row_Lineage( &mut self, row_uid: i64, disposition: &str, target_node_uid: Option<i64>, ) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Source_Blocks( &mut self, document_uid: i64, blocks: &[SourceBlock], ) -> Result<usize, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Source_Document( &mut self, path: &str, revision: &str, content: &str, ) -> Result<i64, StoreError>
-pub fn nomos_spec_store::SpecificationStore::Put_Suite( &mut self, suite_id: &str, title: &str, authority_root: bool, ) -> Result<i64, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Suite( &mut self, suite_id: &str, title: &str, authority: SuiteAuthority, ) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Reference_Node(&mut self, node_id: &str) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Row_Census(&self, scope: RowScope) -> Result<RowCensus, StoreError>
-pub fn nomos_spec_store::SpecificationStore::Suite_Of(&self, node_id: &str) -> Result<Option<(String, bool)>, StoreError>
+pub fn nomos_spec_store::SpecificationStore::Suite_Of(&self, node_id: &str) -> Result<Option<(String, SuiteAuthority)>, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Table_Row_Uid( &self, document_uid: i64, block_ordinal: u32, row_ordinal: u32, ) -> Result<Option<i64>, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Upsert_Node( &mut self, node_id: &str, kind: &str, authority: &str, representation: &str, title: &str, ) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Version(&self) -> u32

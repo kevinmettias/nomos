@@ -288,6 +288,17 @@ pub struct IdentityChange
     pub after: String,
 }
 
+/// Which relations the edit adds and which it removes.
+///
+/// Both halves are `Vec<RecordRelation>`, so returning them as a pair let a caller take them
+/// in either order and still compile. Named, the mistake cannot be written.
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct RelationChanges
+{
+    added: Vec<RecordRelation>,
+    removed: Vec<RecordRelation>,
+}
+
 /// What became of a normative statement recorded against this record.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct NormativeMovement
@@ -423,7 +434,7 @@ impl StagedEdit
         let after = Segment(&self.record.body);
         let blocks = Block_Changes(&before, &after);
         let identity = Identity_Changes(&self.claimed.front_matter, &self.record.front_matter);
-        let (relations_added, relations_removed) = Relation_Changes(
+        let relations = Relation_Changes(
             &self.claimed.front_matter.relations,
             &self.record.front_matter.relations,
         );
@@ -434,8 +445,8 @@ impl StagedEdit
             staged: self,
             blocks,
             identity,
-            relations_added,
-            relations_removed,
+            relations_added: relations.added,
+            relations_removed: relations.removed,
             statements,
         });
     }
@@ -1512,10 +1523,7 @@ fn Identity_Changes(before: &RecordFrontMatter, after: &RecordFrontMatter) -> Ve
     return changes;
 }
 
-fn Relation_Changes(
-    before: &[RecordRelation],
-    after: &[RecordRelation],
-) -> (Vec<RecordRelation>, Vec<RecordRelation>)
+fn Relation_Changes(before: &[RecordRelation], after: &[RecordRelation]) -> RelationChanges
 {
     let added = after
         .iter()
@@ -1528,7 +1536,7 @@ fn Relation_Changes(
         .cloned()
         .collect();
 
-    return (added, removed);
+    return RelationChanges { added, removed };
 }
 
 /// Where a statement's canonical text sits before and after the edit.

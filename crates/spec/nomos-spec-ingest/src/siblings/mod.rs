@@ -27,7 +27,7 @@ use crate::archive::Archive;
 use crate::archive_error::ArchiveError;
 use crate::phases::IngestError;
 use nomos_spec_model::{Parse_Record, Segment};
-use nomos_spec_store::{SpecificationStore, StoreError};
+use nomos_spec_store::{SpecificationStore, StoreError, SuiteAuthority};
 use serde::Deserialize;
 
 /// The revision a game plan is ingested under.
@@ -107,7 +107,7 @@ pub fn Ingest_Sibling_Suite(
 {
     let suite = Suite {
         sibling,
-        uid: store.Put_Suite(sibling.Suite_Id(), sibling.Title(), false)?,
+        uid: store.Put_Suite(sibling.Suite_Id(), sibling.Title(), SuiteAuthority::Sibling)?,
     };
     let mut report = SuiteReport {
         suite: sibling.Suite_Id().to_owned(),

@@ -2,7 +2,8 @@
 //! govern is trusted.
 
 use nomos_spec_store::{
-    AUTHORED, EXTERNAL, GOVERNING_RECORD_IDS, Seed_Governing_Records, SpecificationStore, Table,
+    AUTHORED, EXTERNAL, GOVERNING_RECORD_IDS, Seed_Governing_Records, SpecificationStore,
+    SuiteAuthority, Table,
 };
 
 fn Seeded() -> SpecificationStore
@@ -720,7 +721,7 @@ fn Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It()
 {
     let mut store = Seeded();
     let suite = store
-        .Put_Suite("xvpe-spec-seed", "XVPE specification seed", false)
+        .Put_Suite("xvpe-spec-seed", "XVPE specification seed", SuiteAuthority::Sibling)
         .expect("records the sibling suite");
 
     let node = store
@@ -736,7 +737,7 @@ fn Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It()
 
     assert_eq!(
         store.Suite_Of("D-090").expect("queries"),
-        Some(("xvpe-spec-seed".to_owned(), false)),
+        Some(("xvpe-spec-seed".to_owned(), SuiteAuthority::Sibling)),
         "D-090 resolved to no sibling suite, so the edge to it says nothing about whose \
          decision it is"
     );
