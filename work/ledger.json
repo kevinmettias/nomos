@@ -8501,8 +8501,8 @@
     {
       "id": "P12-UNENFORCED-DECLARATION",
       "title": "A declaration that enforces nothing produces no output, and this tree has found four of them one at a time",
-      "why": "This repository has produced the same defect four times under four different names and has never named the class.\n\nP11-UNRUN-POLICY closed a gate that did not run on the branch it protects, together with a ban policy nothing had ever executed. P11-MSRV-UNCHECKED is open because rust-version says 1.85 and this workspace has not compiled on 1.85 since it grew let chains. P11-PLATFORM-UNCHECKED is open because every determinism claim here is checked on one operating system and it is not the one they were written on. deny.toml declares enforcement that no gate step executes.\n\nEach was found by a person noticing, one at a time, and each was fixed as its own item. The shared property is mechanical and is the reason they keep recurring: an artifact declares that something is enforced, and no executed step enforces it. That is decidable without understanding any of the four subjects, because both halves are written down - the declaration is in a manifest or a policy file, and the executed set is in a workflow.\n\nIt is also the class most likely to be silently wrong, because a declaration that enforces nothing produces no output at all. There is no failing check to investigate. The tree reads as governed, the gate is green, and the only evidence is the absence of a step nobody is looking for.\n\nFour instances is enough to stop finding them by hand, and this repository is the corpus the general check can be validated against - three of the four are documented and one is already closed, so a check that misses the closed one or invents a fifth is measurably wrong.",
-      "done_when": "A check reports a declaration of enforcement that no executed step performs, and reports it as a finding rather than as prose.\n\nIt is validated against the four instances this repository has already produced: the unrun workflow, the unexecuted ban policy, the unchecked minimum supported version, the single-platform determinism claim. A check that cannot see the three still open, or that reports a fifth that turns out not to be one, has not been validated.\n\nIt states what it cannot see. An enforcement mechanism it does not understand must be reported as unexamined and never as absent, which is the difference between this and a check that fails every repository whose tooling it has not been taught.\n\nThe finding names both halves - the declaration and the executed set it was compared against - because a report saying only that something is unenforced cannot be acted on or disputed.",
+      "why": "This repository has produced the same defect four times under four different names and has never named the class.\n\nP11-UNRUN-POLICY closed a gate that did not run on the branch it protects, together with a ban policy nothing had ever executed. P11-MSRV-UNCHECKED: rust-version says 1.85 and this workspace has not compiled on 1.85 since it grew let chains. P11-PLATFORM-UNCHECKED: every determinism claim here was checked on one operating system and it was not the one they were written on. deny.toml declares enforcement that no gate step executes.\n\nEach was found by a person noticing, one at a time, and each was fixed as its own item. The shared property is mechanical and is the reason they keep recurring: an artifact declares that something is enforced, and no executed step enforces it. That is decidable without understanding any of the four subjects, because both halves are written down - the declaration is in a manifest or a policy file, and the executed set is in a workflow.\n\nIt is also the class most likely to be silently wrong, because a declaration that enforces nothing produces no output at all. There is no failing check to investigate. The tree reads as governed, the gate is green, and the only evidence is the absence of a step nobody is looking for.\n\nFour instances is enough to stop finding them by hand, and this repository is the corpus the general check can be validated against. All four are documented and their ledger states keep moving, so the corpus is the four cases rather than whichever happen to be open on the day somebody writes the check.",
+      "done_when": "A check reports a declaration of enforcement that no executed step performs, and reports it as a finding rather than as prose.\n\nIt is validated against the four instances this repository has already produced: the unrun workflow, the unexecuted ban policy, the unchecked minimum supported version, the single-platform determinism claim. Their ledger states move - two of the four were already closed when this item was authored - so the corpus is the four cases and never a count of open ones. A closed instance is the negative control: a check that still reports one after the commit that fixed it is wrong in the direction nobody notices, because a false report of an unenforced declaration is indistinguishable from a real one until somebody goes looking. A check that misses a live instance, or invents a fifth that turns out not to be one, has not been validated either.\n\nIt states what it cannot see. An enforcement mechanism it does not understand must be reported as unexamined and never as absent, which is the difference between this and a check that fails every repository whose tooling it has not been taught.\n\nThe finding names both halves - the declaration and the executed set it was compared against - because a report saying only that something is unenforced cannot be acted on or disputed.",
       "territory": {
         "resolution": "File",
         "paths": [
@@ -8890,6 +8890,84 @@
           "nomos-spec-ingest",
           "-p",
           "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-EVIDENCE-IDENTITY",
+      "title": "A verification record says when it ran and never what it ran against, so still-verified and verified-against-something-else read the same",
+      "why": "OD-ANALYSIS-001 decides what identifies a fact, and the reasoning is that a key carrying the wrong thing defeats the reuse the key exists for. Nothing in this repository decides what identifies run evidence.\n\nVerificationRecord in crates/substrate/nomos-ledger/src/verification_record.rs carries argv, exit_code, output_tail, verified_at and gate. There is no revision, no tree digest and no reference to the territory the item reserved. So the ledger records that a predicate exited 0 at a wall-clock instant, and every reader has to supply the missing half themselves.\n\nThe consequence is not hypothetical and this board has it today. An item finished at unix N against a tree, then the tree moves under it -- a peer lands a module split, a record is amended, the item's own files are edited by the next item that reserves them -- and work show reports exactly what it reported before. 'Verified' and 'was verified once, against something else' are the same three words. That is OD-GATE-001's shape moved from a test that read nothing to a record that means nothing in particular: both report a pass while the thing the pass was about is absent.\n\nIt is also the gap under the gate half. Since OD-LEDGER-003 the record carries the gate's own outcome, because 'this item was verified' is only true of a tree the gate also accepted. That reasoning is exactly right and it stops one step short: a tree is what both halves are about, and neither half names one.\n\nThe precedent for how to add it is in the same struct. gate is Option<GateOutcome> with serde default, None on every record written before the gate was part of finishing, and the doc comment says that is a fact about those records and is left visible rather than backfilled. A revision field is the same shape and should be the same shape deliberately.\n\nHAZARD, and it is the reason this item is larger than its diff. VerificationRecord is serde deny_unknown_fields, so a binary built before the new field refuses to read a ledger containing it -- that refusal is P10-STALE-WRITER working as designed. SCHEMA_VERSION at crates/substrate/nomos-ledger/src/store.rs:52 must rise from 3 to 4 in the same commit as the code, and every live session's copied binary starts refusing every work verb until it is rebuilt. ea3c167 did this accidentally and left dev unusable. Do it in one commit, and say so where sessions will read it.",
+      "done_when": "A verification record names what it was verified against, and work show can distinguish a record that still describes this tree from one that does not.\n\nWhat identifies a tree is the decision, and it is not obvious. A git revision is cheap, is what CI and every reader already speaks, and is wrong in the one case that matters most here -- a dirty working tree, which is the normal state of this repository and the state most finishing happens in. A digest over the item's own territory is honest about what the predicate could have been affected by and says nothing about the rest of the workspace, which is where a peer's breakage comes from. A whole-tree digest is the strongest and the most expensive, and it changes on every untracked scratch file unless it is scoped.\n\nThe record says which, and says what the losing options give up rather than only what the winner buys. A record that only reports the field was added has not answered this.\n\nStaleness is reported, not merely storable. A field nothing reads is a comment with a serializer: work show must say something different about a record whose revision no longer matches, and the item shows that output for both cases.\n\nSCHEMA_VERSION rises to 4 in the same commit as the code that understands it, and the migration is stated where a session running an older copied binary will meet it -- the refusal already names the two versions.\n\nRecords written before the field are None and stay None. Backfilling a revision nobody measured would manufacture the exact claim this item exists to stop.\n\nNot closed by storing the revision and leaving every existing caller printing the same sentence.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/verification_record.rs",
+          "crates/substrate/nomos-ledger/src/finish/mod.rs",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish.rs",
+          "crates/substrate/nomos-ledger/tests/declining_ends_an_item.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/tests/stale_writer_is_refused.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-027",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-027.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-COVERAGE-REPORT",
+      "title": "The report that decides what a run found never reads the enum whose first sentence is that unknown is not pass",
+      "why": "Applicability in crates/contracts/nomos-contracts/src/applicability.rs opens by calling itself the load-bearing expression of the product's first principle: unknown is not pass. A region no analyzer could read is not healthy, it is unknown, and the two must never render the same. Eleven variants carry that distinction and 189 occurrences across 30 files consume them - the registry, the analysis reader, the rules mirror, coverage and coverage_gap in the kernel.\n\ncrates/host/nomos-cli/src/check/report.rs contains the word zero times.\n\nThe report is not naive about the general problem, which is what makes the gap specific rather than an oversight. Its Examined struct carries two denominators deliberately, and its doc comment gives the reason: 0 findings over 400 files and 0 findings over 400 files none of which produced a fact are different claims, the second is a broken run, and the prototype reported the first shape for a check that had walked nothing. So the argument that a bare finding count is a lie has already been made here and acted on - and it stops one step short of the variant set that exists to finish it.\n\nThe consequence is that the surface a person reads can distinguish a clean tree from a broken walk and cannot distinguish a clean tree from an unexamined one. A subject whose provider is missing, whose toolchain is absent, whose parse failed or which needs a model contributes nothing to either denominator and produces no line, so it is reported by silence - which is exactly the rendering the enum's first sentence forbids.\n\nIt is worth doing now rather than with the next capability because every capability added from here makes the silence larger, and because the vocabulary needs no design work: the answer is to read a type that is already exhaustive, already has no Default, and already refuses to give a consumer a lenient arm.",
+      "done_when": "The check report carries applicability, so a run says what it could not judge and why, not only what it found and over how much.\n\nA subject that produced no judgment appears in the report with its Applicability variant rather than by omission. Grouping is by whatever makes the answer readable at scale - per capability, per language, per variant - and the record says which, but a subject falling into MissingCapability, DependencyUnavailable, ProviderUnavailable, Unparseable, AnalysisFailed or AgentRequired must not be indistinguishable from a subject that was judged clean.\n\nThe run carries a roll-up verdict saying whether the claim is complete, and the exit code contract states what an incomplete claim exits with. This is the decision rather than the rendering: complete-and-clean and incomplete-and-nothing-found currently share an exit code, and whether they should stop sharing one is what the record settles.\n\nExamined grows or is replaced. Two integer denominators cannot express eleven reasons, and adding a third integer is the shape this item exists to stop.\n\nThe negative control is the one that matters: a test in which a provider is absent must fail if the report renders that subject the same as a clean one.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check",
+          "docs/records/OD-COMPLETENESS-004",
+          "crates/spec/nomos-spec-store/records/OD-COMPLETENESS-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
         ],
         "timeout_seconds": 600
       },
