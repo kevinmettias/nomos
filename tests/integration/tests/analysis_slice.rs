@@ -16,15 +16,15 @@
 //!
 //! Each has a test here, and each is stated over its denominator.
 
-use nomos_analysis::FactStore;
+use nomos_analysis::{FactStore, InvalidationReport, MaterializedFact};
 use nomos_cap_syntax as syntax;
 use nomos_capability::Requirement;
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity,
 };
 use nomos_integration_tests::{
-    Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Resolved,
-    Resolved_Configuration, Slice, Walk, SURFACE_CAPABILITY,
+    Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Resolved, RunReport,
+    Resolved_Configuration, Slice, SourceFile, Surface, Walk, SURFACE_CAPABILITY,
 };
 use nomos_lang_rust as rust;
 use nomos_lang_rust_scan as scan;
@@ -57,6 +57,86 @@ fn Precision_Corpus() -> Corpus
     );
 
     return corpus;
+}
+
+/// The precision corpus with a fresh slice over it, which is where most tests below start.
+fn Over_The_Precision_Corpus() -> (Corpus, Slice)
+{
+    let corpus = Precision_Corpus();
+    let slice = Slice::Over(&corpus);
+
+    return (corpus, slice);
+}
+
+/// What an edit invalidated, given that the edit was a change at all.
+///
+/// The `else` arm is the premise rather than the subject: a test asserting on what an edit
+/// invalidated has nothing to say if the workspace never moved, so it fails here with the
+/// outcome it did get instead of asserting over an empty report.
+fn Advanced(edited: Edited) -> InvalidationReport
+{
+    let Edited::Advanced { invalidated, .. } = edited
+    else
+    {
+        panic!("this was supposed to be a change to the workspace: {edited:?}")
+    };
+
+    return invalidated;
+}
+
+/// One rewrite, as the door that announced it and the file it replaced.
+#[derive(Clone, Copy)]
+struct Rewrite<'a>
+{
+    source: ChangeSource,
+    file: &'a str,
+    text: &'a str,
+}
+
+/// A file rewritten through the workspace door, and what the change invalidated.
+fn Rewritten(slice: &mut Slice, corpus: &mut Corpus, rewrite: Rewrite<'_>) -> InvalidationReport
+{
+    let edited = slice.Edit(corpus, rewrite.source, rewrite.file, rewrite.text);
+
+    return Advanced(edited);
+}
+
+/// The facts an invalidation reached, directly and then along the edges the Reader recorded.
+fn Reached(corpus: &Corpus, invalidated: &InvalidationReport) -> (Vec<String>, Vec<String>)
+{
+    return (
+        Slice::Name_Keys(corpus, &invalidated.direct),
+        Slice::Name_Keys(corpus, &invalidated.dependent),
+    );
+}
+
+/// Every request the engine had to widen, as the fact, what was asked, and what was applied.
+fn Broadenings(corpus: &Corpus, invalidated: &InvalidationReport) -> Vec<String>
+{
+    return invalidated
+        .broadened
+        .iter()
+        .map(|record| {
+            let named = Slice::Name_Keys(corpus, core::slice::from_ref(&record.key));
+
+            return format!(
+                "{} {:?} -> {:?}",
+                named.first().cloned().unwrap_or_default(),
+                record.requested,
+                record.applied
+            );
+        })
+        .collect();
+}
+
+/// One named file's contents, out of the corpus that holds it.
+fn Source_Of(corpus: &Corpus, path: &str) -> String
+{
+    return corpus
+        .files
+        .iter()
+        .find(|file| return file.path == path)
+        .map_or_else(|| panic!("the precision corpus contains {path}"), |file| return file.source.clone());
 }
 
 /// The scale corpus, or an explanation.
@@ -104,6 +184,25 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
     let mut slice = Slice::Over(&corpus);
     let first = slice.Run(&corpus);
 
+    // The last assertion is that the workspace read the same corpus the providers did. A
+    // member count that disagreed with the file count would mean the checkout and the walk
+    // saw different trees, and every fact would be keyed on a workspace state that does not
+    // describe what was parsed.
+    Report_The_Run(&slice, &corpus, &first);
+    Read_The_Whole_Corpus(&first);
+    assert_eq!(
+        slice.Workspace().Snapshot().Len(),
+        first.files_seen,
+        "the ingested workspace and the walked corpus must be the same tree"
+    );
+}
+
+/// What the run over the scale corpus actually saw, printed beside the tree it read.
+///
+/// A count with no denominator beside it is unreadable when the test fails on somebody
+/// else's machine, and the scale corpus is not in this repository.
+fn Report_The_Run(slice: &Slice, corpus: &Corpus, first: &RunReport)
+{
     eprintln!(
         "{}: {} members ingested as one checkout, snapshot {}, variant {:?}\n\
          {}: {} files, {} syntax facts materialized, {} refused, {} groups, {} rollups, \
@@ -120,7 +219,13 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
         first.surface_materialized,
         first.degraded.len()
     );
+}
 
+/// The run reached the corpus this test is about, and every file in it reached exactly one
+/// outcome. Each assertion here is a denominator: a truncated walk makes all of them pass
+/// having read almost nothing.
+fn Read_The_Whole_Corpus(first: &RunReport)
+{
     assert!(
         first.files_seen >= 5_000,
         "{} files is not this corpus; every assertion below iterates over that set and a \
@@ -134,9 +239,7 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
         first.files_seen
     );
     assert_eq!(
-        first
-            .syntax_materialized
-            .saturating_add(first.refused.len()),
+        first.syntax_materialized.saturating_add(first.refused.len()),
         first.files_seen,
         "every file must reach exactly one outcome"
     );
@@ -144,16 +247,6 @@ fn Test_Facts_Should_Materialize_Over_The_Real_Corpus()
         first.surface_materialized > 0,
         "{} groups produced no rollups; the derived layer never ran",
         first.groups_seen
-    );
-
-    // The workspace read the same corpus the providers did. A member count that disagreed
-    // with the file count would mean the checkout and the walk saw different trees, and
-    // every fact would be keyed on a workspace state that does not describe what was
-    // parsed.
-    assert_eq!(
-        slice.Workspace().Snapshot().Len(),
-        first.files_seen,
-        "the ingested workspace and the walked corpus must be the same tree"
     );
 }
 
@@ -170,7 +263,6 @@ fn Test_A_Second_Run_Should_Materialize_Zero()
     let mut slice = Slice::Over(&corpus);
     let first = slice.Run(&corpus);
     let second = slice.Run(&corpus);
-
     eprintln!(
         "second run over {} files: {} syntax materialized (was {}), {} rollups \
          materialized (was {}), {} syntax reused, {} rollups reused",
@@ -183,6 +275,14 @@ fn Test_A_Second_Run_Should_Materialize_Zero()
         second.surface_reused
     );
 
+    Recognized_Rather_Than_Skipped(&second, &first);
+}
+
+/// Nothing was recomputed, and the reuse counts say the work was recognized rather than
+/// skipped. Both figures are also zero for a run that did nothing at all, which is why the
+/// second pair is not optional.
+fn Recognized_Rather_Than_Skipped(second: &RunReport, first: &RunReport)
+{
     assert_eq!(
         second.syntax_materialized, 0,
         "the corpus did not change and {} files were recomputed anyway",
@@ -193,10 +293,6 @@ fn Test_A_Second_Run_Should_Materialize_Zero()
         "the corpus did not change and {} rollups were recomputed anyway",
         second.surface_materialized
     );
-
-    // The positive control. Both figures above are also zero for a run that did nothing
-    // at all, so the reuse counts have to show that the work was recognized rather than
-    // skipped.
     assert_eq!(
         second.syntax_reused, first.syntax_materialized,
         "every fact materialized in the first run must be reused in the second"
@@ -217,54 +313,42 @@ fn Test_A_Second_Run_Should_Materialize_Zero()
 #[test]
 fn Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants()
 {
-    let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
-
+    let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     let first = slice.Run(&corpus);
     assert_eq!(first.syntax_materialized, 5, "five of six files parse");
     assert_eq!(first.surface_materialized, 3, "three groups");
 
     let before = slice.Generation();
-    let edited = slice.Edit(
-        &mut corpus,
-        ChangeSource::IdeEdit,
-        "alpha/one.rs",
-        "//! Rewritten.\n\npub fn Added() {}\n",
-    );
-
-    let Edited::Advanced { invalidated, .. } = edited
-    else
-    {
-        panic!("rewriting a file is a change to the workspace: {edited:?}")
-    };
+    let invalidated = Rewritten(&mut slice, &mut corpus, Rewrite {
+        source: ChangeSource::IdeEdit,
+        file: "alpha/one.rs",
+        text: "//! Rewritten.\n\npub fn Added() {}\n",
+    });
     assert!(
         slice.Generation() > before,
         "the generation facts materialize into is the one the workspace produced"
     );
-
     assert_eq!(
-        Slice::Name_Keys(&corpus, &invalidated.direct),
-        vec!["nomos.cap.syntax.items of alpha/one.rs"],
-        "exactly the changed file's own fact is directly invalidated"
+        Reached(&corpus, &invalidated),
+        (
+            vec!["nomos.cap.syntax.items of alpha/one.rs".to_owned()],
+            vec!["nomos.cap.module.surface of alpha".to_owned()],
+        ),
+        "exactly the changed file's own fact, and exactly the rollup that read it, along an \
+         edge the Reader recorded"
     );
-    assert_eq!(
-        Slice::Name_Keys(&corpus, &invalidated.dependent),
-        vec!["nomos.cap.module.surface of alpha"],
-        "exactly the rollup that read it follows, along an edge the Reader recorded"
-    );
+    Recomputed_Only_Alpha(&slice.Run(&corpus));
+}
 
-    let second = slice.Run(&corpus);
-
-    assert_eq!(
-        second.Recomputed(),
-        vec![
-            "nomos.cap.module.surface of alpha",
-            "nomos.cap.syntax.items of alpha/one.rs",
-        ],
-        "one file changed, so one syntax fact and one rollup recompute — and nothing in \
-         beta or gamma, which nothing connects to alpha"
-    );
-
+/// One file changed, so one syntax fact and one rollup recompute — and nothing in beta or
+/// gamma, which nothing connects to alpha. Stated as set equality so that recomputing *too
+/// little* fails as loudly as too much.
+fn Recomputed_Only_Alpha(second: &RunReport)
+{
+    assert_eq!(second.Recomputed(), vec![
+        "nomos.cap.module.surface of alpha",
+        "nomos.cap.syntax.items of alpha/one.rs",
+    ]);
     assert_eq!(
         second.syntax_reused, 4,
         "the four other parseable files are reused, not recomputed"
@@ -281,35 +365,22 @@ fn Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants()
 #[test]
 fn Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group()
 {
-    let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
-
+    let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     slice.Run(&corpus);
 
-    let edited = slice.Edit(
-        &mut corpus,
-        ChangeSource::AgentEdit,
-        "gamma/five.rs",
-        "//! Rewritten.\n\nstruct Other;\n",
-    );
-
-    let Edited::Advanced { invalidated, .. } = edited
-    else
-    {
-        panic!("rewriting a file is a change to the workspace: {edited:?}")
-    };
+    let invalidated = Rewritten(&mut slice, &mut corpus, Rewrite {
+        source: ChangeSource::AgentEdit,
+        file: "gamma/five.rs",
+        text: "//! Rewritten.\n\nstruct Other;\n",
+    });
     let reached = Slice::Name_Keys(&corpus, &invalidated.dependent);
-
     assert_eq!(reached, vec!["nomos.cap.module.surface of gamma"]);
     assert!(
         !reached.iter().any(|name| return name.ends_with("alpha") || name.ends_with("beta")),
         "a change in gamma reached {reached:?}"
     );
-
-    let second = slice.Run(&corpus);
-
     assert_eq!(
-        second.Recomputed_For(SURFACE_CAPABILITY),
+        slice.Run(&corpus).Recomputed_For(SURFACE_CAPABILITY),
         vec!["gamma"],
         "only gamma's rollup recomputes"
     );
@@ -333,19 +404,15 @@ fn Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group()
 #[test]
 fn Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale()
 {
-    let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
-
+    let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     let first = slice.Run(&corpus);
     assert_eq!(first.surface_materialized, 3, "three groups");
-
-    let workspace = slice.Workspace().Id();
 
     // Deliberately not through `Slice::Edit`. The corpus on disk is now something the
     // workspace has never been told about, which is what a checkout behind a running
     // process, or a store reopened over a tree that moved, actually looks like.
+    let workspace = slice.Workspace().Id();
     assert!(corpus.Rewrite("beta/four.rs", "//! Rewritten.\n\npub fn Now_Public() {}\n"));
-
     assert_eq!(
         slice.Workspace().Id(),
         workspace,
@@ -353,28 +420,30 @@ fn Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale()
          about identity, and a workspace that somehow knew would explain the recomputation \
          a second way"
     );
-
-    let second = slice.Run(&corpus);
-
     assert_eq!(
-        second.Recomputed(),
+        slice.Run(&corpus).Recomputed(),
         vec![
             "nomos.cap.module.surface of beta",
             "nomos.cap.syntax.items of beta/four.rs",
         ],
         "a changed member makes a different rollup, with no invalidation involved"
     );
-
-    let members = corpus.In_Group("beta");
-    let fact = slice.Surface_Of(&members).expect("beta has a rollup");
-    let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
-
     assert_eq!(
-        (surface.items, surface.public),
+        Rollup_Over(&slice, &corpus, "beta"),
         (6, 4),
         "and the recomputed rollup reflects the new contents rather than reusing the old \
          number under a key that no longer describes it"
     );
+}
+
+/// A group's rollup as the pair of numbers it carries: how many items, and how many public.
+fn Rollup_Over(slice: &Slice, corpus: &Corpus, group: &str) -> (u32, u32)
+{
+    let members = corpus.In_Group(group);
+    let fact = slice.Surface_Of(&members).unwrap_or_else(|| panic!("{group} has a rollup"));
+    let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
+
+    return (surface.items, surface.public);
 }
 
 /// The cost of the rollup's coarser granularity, recorded rather than absorbed.
@@ -386,40 +455,15 @@ fn Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale()
 #[test]
 fn Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So()
 {
-    let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
-
+    let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     slice.Run(&corpus);
 
-    let edited = slice.Edit(
-        &mut corpus,
-        ChangeSource::IdeEdit,
-        "alpha/two.rs",
-        "//! Rewritten.\n\nfn Changed() {}\n",
-    );
-
-    let Edited::Advanced { invalidated, .. } = edited
-    else
-    {
-        panic!("rewriting a file is a change to the workspace: {edited:?}")
-    };
-
-    let broadened: Vec<String> = invalidated
-        .broadened
-        .iter()
-        .map(|record| {
-            return format!(
-                "{} {:?} -> {:?}",
-                Slice::Name_Keys(&corpus, core::slice::from_ref(&record.key))
-                    .first()
-                    .cloned()
-                    .unwrap_or_default(),
-                record.requested,
-                record.applied
-            );
-        })
-        .collect();
-
+    let invalidated = Rewritten(&mut slice, &mut corpus, Rewrite {
+        source: ChangeSource::IdeEdit,
+        file: "alpha/two.rs",
+        text: "//! Rewritten.\n\nfn Changed() {}\n",
+    });
+    let broadened = Broadenings(&corpus, &invalidated);
     assert_eq!(
         broadened,
         vec!["nomos.cap.module.surface of alpha File -> Project"],
@@ -445,9 +489,49 @@ fn Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So()
 #[test]
 fn Test_The_Fact_Context_Should_Come_From_The_Workspace()
 {
-    let corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
-    let snapshot = slice.Workspace().Snapshot().clone();
+    let (corpus, mut slice) = Over_The_Precision_Corpus();
+    Every_Component_Is_Derived(&slice, &corpus);
+
+    // The negative control, and the one that matters. If the snapshot were still a
+    // constant, every one of the assertions above would pass while two entirely different
+    // corpora shared one workspace identity — and one corpus's facts would answer for the
+    // other's.
+    let mut other = Precision_Corpus();
+    assert!(other.Rewrite("beta/four.rs", "//! Different.\n\npub fn Elsewhere() {}\n"));
+    assert_ne!(
+        Slice::Over(&other).Workspace().Id(),
+        slice.Workspace().Id(),
+        "two corpora that differ in one file are two workspace states"
+    );
+
+    // And the state a fact records is the one it was measured against, which is a fact
+    // about the fact rather than about the key it is filed under.
+    slice.Run(&corpus);
+    A_Fact_Names_The_Tree_It_Was_Read_From(&slice, &corpus);
+}
+
+/// The state a fact records is the one it was measured against, which is a statement about
+/// the fact rather than about the key it is filed under — and the held value still agrees
+/// with the workspace after a run.
+fn A_Fact_Names_The_Tree_It_Was_Read_From(slice: &Slice, corpus: &Corpus)
+{
+    let alpha = slice.Surface_Of(&corpus.In_Group("alpha")).expect("alpha has a rollup");
+
+    assert_eq!(alpha.snapshot, slice.Workspace().Id());
+    assert_eq!(
+        slice.Snapshot(),
+        slice.Workspace().Id(),
+        "and the held value still agrees after a run"
+    );
+}
+
+/// Each component of the context comes from something real: the members, the workspace, the
+/// binary, the composition. An invented one cannot be wrong, which is exactly why it is
+/// dangerous — two machines and two toolchains agree under it, and the disagreement they
+/// should have had is the one the fact key exists to detect.
+fn Every_Component_Is_Derived(slice: &Slice, corpus: &Corpus)
+{
+    let snapshot = slice.Workspace().Snapshot();
 
     assert_eq!(snapshot.Len(), corpus.files.len(), "one member per file");
     assert_eq!(
@@ -464,37 +548,6 @@ fn Test_The_Fact_Context_Should_Come_From_The_Workspace()
         snapshot.Configuration(),
         Resolved_Configuration(slice.Registry()),
         "the configuration is the composition that was just built, not a constant beside it"
-    );
-
-    // The negative control, and the one that matters. If the snapshot were still a
-    // constant, every one of the assertions above would pass while two entirely different
-    // corpora shared one workspace identity — and one corpus's facts would answer for the
-    // other's.
-    let mut other = Precision_Corpus();
-    assert!(other.Rewrite("beta/four.rs", "//! Different.\n\npub fn Elsewhere() {}\n"));
-
-    assert_ne!(
-        Slice::Over(&other).Workspace().Id(),
-        slice.Workspace().Id(),
-        "two corpora that differ in one file are two workspace states"
-    );
-
-    // And the state a fact records is the one it was measured against, which is a fact
-    // about the fact rather than about the key it is filed under.
-    slice.Run(&corpus);
-    let fact = slice
-        .Surface_Of(&corpus.In_Group("alpha"))
-        .expect("alpha has a rollup");
-
-    assert_eq!(
-        fact.snapshot,
-        slice.Workspace().Id(),
-        "a fact names the tree it was read from"
-    );
-    assert_eq!(
-        slice.Snapshot(),
-        slice.Workspace().Id(),
-        "and the held value still agrees after a run"
     );
 }
 
@@ -519,20 +572,8 @@ fn Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States()
 
     let one = Slice::Over(&corpus);
     let two = Slice::Over(&other);
-
-    let key_of = |slice: &Slice, from: &Corpus| {
-        let file = from
-            .files
-            .iter()
-            .find(|file| return file.path == "alpha/one.rs")
-            .expect("the precision corpus contains alpha/one.rs");
-
-        return slice.Syntax_Key(file);
-    };
-
-    let left = key_of(&one, &corpus);
-    let right = key_of(&two, &other);
-
+    let left = one.Syntax_Key(Alpha_One(&corpus));
+    let right = two.Syntax_Key(Alpha_One(&other));
     // The premise. If the two slices sat over one workspace state, the equality below
     // would hold for a reason that has nothing to do with what this test is about.
     assert_ne!(
@@ -540,7 +581,6 @@ fn Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States()
         two.Workspace().Id(),
         "the two corpora must differ, or there is nothing here to be robust against"
     );
-
     assert_eq!(
         left.semantic_inputs, right.semantic_inputs,
         "the file itself did not change, so what the fact is computed from did not either"
@@ -551,7 +591,6 @@ fn Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States()
         "and one unchanged file is one fact under both workspace states. A change to \
          beta/four.rs is not a fact about alpha/one.rs"
     );
-
     // The negative control. If a key ignored the file, every file in the corpus would
     // share one identity and the equality above would be worthless.
     let elsewhere = corpus
@@ -572,8 +611,7 @@ fn Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States()
 #[test]
 fn Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More()
 {
-    let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
+    let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     slice.Run(&corpus);
 
     let before = slice.Workspace().Id();
@@ -584,12 +622,7 @@ fn Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More()
             ("gamma/five.rs", "//! Checked out.\n\nstruct Also;\n"),
         ],
     );
-
-    let Edited::Advanced { invalidated, .. } = replaced
-    else
-    {
-        panic!("a checkout that landed two files changed the workspace: {replaced:?}")
-    };
+    let invalidated = Advanced(replaced);
     assert_ne!(slice.Workspace().Id(), before, "the workspace is another state");
     assert_eq!(
         slice.Snapshot(),
@@ -597,36 +630,43 @@ fn Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More()
         "and the slice followed it. A held snapshot that stops following the workspace is \
          the pin this item removed, wearing a cache"
     );
+    Reached_Exactly_The_Two_Members(&corpus, &invalidated);
+    Kept_What_The_Checkout_Did_Not_Touch(&slice.Run(&corpus));
+}
 
+/// Beta's two files and `alpha/two.rs` survived a checkout that did not name them, and
+/// beta's rollup with them.
+fn Kept_What_The_Checkout_Did_Not_Touch(second: &RunReport)
+{
     assert_eq!(
-        Slice::Name_Keys(&corpus, &invalidated.direct),
-        vec![
-            "nomos.cap.syntax.items of alpha/one.rs",
-            "nomos.cap.syntax.items of gamma/five.rs",
-        ],
-        "exactly the two members that differ"
+        second.syntax_reused, 3,
+        "beta's two files and alpha/two.rs survived a checkout that did not touch them"
     );
+    assert_eq!(second.surface_reused, 1, "and beta's rollup with them");
+}
+
+/// The two members that differ, the rollups that read them, and nothing else — a
+/// replacement that names its members is a statement about files rather than about the tree.
+fn Reached_Exactly_The_Two_Members(corpus: &Corpus, invalidated: &InvalidationReport)
+{
     assert_eq!(
-        Slice::Name_Keys(&corpus, &invalidated.dependent),
-        vec![
-            "nomos.cap.module.surface of alpha",
-            "nomos.cap.module.surface of gamma",
-        ],
-        "and the rollups that read them, along edges the Reader recorded"
+        Reached(corpus, invalidated),
+        (
+            vec![
+                "nomos.cap.syntax.items of alpha/one.rs".to_owned(),
+                "nomos.cap.syntax.items of gamma/five.rs".to_owned(),
+            ],
+            vec![
+                "nomos.cap.module.surface of alpha".to_owned(),
+                "nomos.cap.module.surface of gamma".to_owned(),
+            ],
+        )
     );
     assert_eq!(
         invalidated.cause.Granularity(),
         IncrementalGranularity::File,
         "a replacement that names its members is a statement about files"
     );
-
-    let second = slice.Run(&corpus);
-
-    assert_eq!(
-        second.syntax_reused, 3,
-        "beta's two files and alpha/two.rs survived a checkout that did not touch them"
-    );
-    assert_eq!(second.surface_reused, 1, "and beta's rollup with them");
 }
 
 /// A save that changed nothing must not cost anything.
@@ -639,21 +679,12 @@ fn Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More()
 #[test]
 fn Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing()
 {
-    let mut corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
-
+    let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     let first = slice.Run(&corpus);
     let before = (slice.Generation(), slice.Workspace().Id());
 
-    let unchanged = corpus
-        .files
-        .iter()
-        .find(|file| return file.path == "alpha/one.rs")
-        .map(|file| return file.source.clone())
-        .expect("the precision corpus contains alpha/one.rs");
-
+    let unchanged = Source_Of(&corpus, "alpha/one.rs");
     let edited = slice.Edit(&mut corpus, ChangeSource::IdeEdit, "alpha/one.rs", &unchanged);
-
     assert!(
         matches!(edited, Edited::Unchanged { .. }),
         "an editor rewriting a file with its own contents changed nothing: {edited:?}"
@@ -663,20 +694,7 @@ fn Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing()
         before,
         "and neither the generation nor the workspace may move for it"
     );
-
-    let second = slice.Run(&corpus);
-
-    assert_eq!(
-        second.Recomputed(),
-        Vec::<String>::new(),
-        "nothing changed, so nothing recomputes"
-    );
-    assert_eq!(
-        second.syntax_reused, first.syntax_materialized,
-        "and every fact is still there to be reused, which is what makes the line above an \
-         assertion about reuse rather than about a store that lost everything"
-    );
-
+    Nothing_Recomputed_And_Nothing_Lost(&slice.Run(&corpus), &first);
     // The positive control. If `Edit` reported `Unchanged` for everything, the assertions
     // above would pass over a door that cannot register a change at all.
     let changed = slice.Edit(
@@ -686,6 +704,19 @@ fn Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing()
         "//! Actually different.\n\npub fn Moved() {}\n",
     );
     assert!(matches!(changed, Edited::Advanced { .. }), "{changed:?}");
+}
+
+/// Nothing changed, so nothing recomputes — and every fact is still there to be reused,
+/// which is what makes the first half an assertion about reuse rather than about a store
+/// that lost everything.
+fn Nothing_Recomputed_And_Nothing_Lost(second: &RunReport, first: &RunReport)
+{
+    assert_eq!(second.Recomputed(), Vec::<String>::new());
+    assert_eq!(
+        second.syntax_reused, first.syntax_materialized,
+        "and every fact is still there to be reused, which is what makes the line above an \
+         assertion about reuse rather than about a store that lost everything"
+    );
 }
 
 /// Nothing in this crate invents an identity.
@@ -702,53 +733,86 @@ fn Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing()
 fn Test_Nothing_In_The_Slice_Should_Invent_An_Identity()
 {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let banned = ["Digest128", "From_Bytes"].join("::");
-    let mut scanned = BTreeSet::new();
-    let mut offending = Vec::new();
-    let mut derived = 0_usize;
-
-    for directory in ["src", "tests"]
-    {
-        for file in Rust_Files(&root.join(directory))
-        {
-            let text = std::fs::read_to_string(&file)
-                .unwrap_or_else(|error| panic!("{} is this crate's own source: {error}", file.display()));
-            let named = file.strip_prefix(&root).unwrap_or(&file).display().to_string();
-            scanned.insert(named.clone());
-
-            if text.contains(&banned)
-            {
-                offending.push(named);
-            }
-            if text.contains("Content_Digest") || text.contains("Digest_Of_Parts")
-            {
-                derived = derived.saturating_add(1);
-            }
-        }
-    }
+    let scan = Scan_This_Crate(&root);
 
     // The guard against a vacuous pass. A scan that found no files reports a clean result
     // over nothing, which is the defect `Test_The_Workspace_Should_Not_Appear_Empty` exists
     // for one crate up.
     assert!(
-        scanned.len() >= 5,
-        "scanned {} files under {}, which is not this crate: {scanned:?}",
-        scanned.len(),
-        root.display()
+        scan.read.len() >= 5,
+        "scanned {} files under {}, which is not this crate: {:?}",
+        scan.read.len(),
+        root.display(),
+        scan.read
     );
     assert!(
-        derived > 0,
+        scan.derived > 0,
         "not one scanned file mentions a content digest, so the reader is not reading Rust"
     );
-
     assert!(
-        offending.is_empty(),
-        "these files build an identity out of literal bytes: {offending:?}.\n\
+        scan.offending.is_empty(),
+        "these files build an identity out of literal bytes: {:?}.\n\
          An invented identity component cannot be wrong, so it can never be observed to be \
          wrong — two machines, two toolchains and two policies all agree under it. Every \
          identity here comes from a workspace, a digest of content, or a resolved \
-         composition."
+         composition.",
+        scan.offending
     );
+}
+
+/// What one pass over this crate's own source found.
+///
+/// `read` is the denominator, `offending` is the finding, and `derived` is the evidence
+/// that the reader was reading Rust at all rather than an empty tree.
+struct Scanned
+{
+    read: BTreeSet<String>,
+    offending: Vec<String>,
+    derived: usize,
+}
+
+/// Reads every `.rs` file this crate owns and looks for an identity built out of literal
+/// bytes.
+///
+/// The banned spelling is assembled from its parts so that this file is subject to its own
+/// rule. A scanner that had to exempt itself would leave the one file nobody is checking as
+/// the easiest place to put the exemption.
+fn Scan_This_Crate(root: &Path) -> Scanned
+{
+    let banned = ["Digest128", "From_Bytes"].join("::");
+    let mut found = Scanned {
+        read: BTreeSet::new(),
+        offending: Vec::new(),
+        derived: 0,
+    };
+
+    for directory in ["src", "tests"]
+    {
+        for file in Rust_Files(&root.join(directory))
+        {
+            Judge_One(&mut found, root, &file, &banned);
+        }
+    }
+
+    return found;
+}
+
+/// One file read and filed: counted, and reported when it builds an identity by hand.
+fn Judge_One(found: &mut Scanned, root: &Path, file: &Path, banned: &str)
+{
+    let text = std::fs::read_to_string(file)
+        .unwrap_or_else(|error| panic!("{} is this crate's own source: {error}", file.display()));
+    let named = file.strip_prefix(root).unwrap_or(file).display().to_string();
+
+    found.read.insert(named.clone());
+    if text.contains(banned)
+    {
+        found.offending.push(named);
+    }
+    if text.contains("Content_Digest") || text.contains("Digest_Of_Parts")
+    {
+        found.derived = found.derived.saturating_add(1);
+    }
 }
 
 /// Every `.rs` file under a directory, recursively.
@@ -756,7 +820,6 @@ fn Rust_Files(root: &Path) -> Vec<PathBuf>
 {
     let mut found = Vec::new();
     let mut pending = vec![root.to_path_buf()];
-
     while let Some(directory) = pending.pop()
     {
         let Ok(entries) = std::fs::read_dir(&directory)
@@ -764,58 +827,94 @@ fn Rust_Files(root: &Path) -> Vec<PathBuf>
         {
             continue;
         };
-
         for entry in entries.flatten()
         {
-            let path = entry.path();
-            if path.is_dir()
-            {
-                pending.push(path);
-            }
-            else if path.extension().is_some_and(|extension| return extension == "rs")
-            {
-                found.push(path);
-            }
+            File_Or_Directory(entry.path(), &mut found, &mut pending);
         }
     }
 
     return found;
 }
 
+/// One entry filed: a directory to descend into later, a Rust file to keep, or neither.
+fn File_Or_Directory(path: PathBuf, found: &mut Vec<PathBuf>, pending: &mut Vec<PathBuf>)
+{
+    if path.is_dir()
+    {
+        pending.push(path);
+    }
+    else if path.extension().is_some_and(|extension| return extension == "rs")
+    {
+        found.push(path);
+    }
+}
+
 // ---------------------------------------------------------------------------------
 // Two providers of one capability
 // ---------------------------------------------------------------------------------
+
+/// The one file every provider test asks about, out of the corpus that holds it.
+fn Alpha_One(corpus: &Corpus) -> &SourceFile
+{
+    return corpus
+        .files
+        .iter()
+        .find(|file| return file.path == "alpha/one.rs")
+        .expect("the precision corpus contains alpha/one.rs");
+}
+
+/// One provider's answer about one file, read back out of its own store.
+fn Answer_About(slice: &Slice, file: &SourceFile) -> MaterializedFact
+{
+    let key = slice.Syntax_Key(file).At(slice.Generation());
+
+    return slice
+        .Store()
+        .Current(&key, slice.Generation())
+        .expect("this provider answered for alpha/one.rs");
+}
+
+/// A slice whose floor admits an approximate answer and which asks for the scanner.
+///
+/// The pairing is the point: lowering the floor is what makes the preference reachable, and
+/// naming the preference without lowering the floor gets the parser back.
+fn Loose(corpus: &Corpus) -> Slice
+{
+    return Slice::Over(corpus)
+        .Accepting(Approximate_Floor())
+        .Preferring(scan::PROVIDER);
+}
+
+/// A group's decoded rollup, which is where every claim about coverage is finally settled.
+fn Surface_Of(slice: &Slice, corpus: &Corpus, group: &str) -> Surface
+{
+    let members = corpus.In_Group(group);
+    let fact = slice.Surface_Of(&members).unwrap_or_else(|| panic!("{group} has a rollup"));
+
+    return Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
+}
 
 /// A floor only one offer clears resolves to that one.
 #[test]
 fn Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One()
 {
     let corpus = Precision_Corpus();
-
     let Resolved {
         selection: parsed,
         applicability: how,
     } = Slice::Over(&corpus).Resolved();
+
     assert_eq!(parsed.chosen.provider.As_Str(), rust::PROVIDER);
     assert_eq!(how, Applicability::Supported);
     assert!(
         parsed.alternatives.is_empty(),
-        "only one offer clears this floor, so there is nothing to have been chosen over: \
-         {:?}",
+        "only one offer clears this floor, so there is nothing to have been chosen over: {:?}",
         parsed.alternatives
     );
-
     // The scanner is registered and cannot serve this floor. Without that, the assertion
     // above passes over a registry that still has only one offer in it.
     assert_eq!(
-        Slice::Over(&corpus)
-            .Accepting(Approximate_Floor())
-            .Preferring(scan::PROVIDER)
-            .Resolved()
-            .selection
-            .chosen
-            .provider
-            .As_Str(),
+        Loose(&corpus).Resolved().selection.chosen.provider.As_Str(),
         scan::PROVIDER,
         "the scanner is in the registry and can be reached"
     );
@@ -831,7 +930,6 @@ fn Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One()
 fn Test_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback()
 {
     let corpus = Precision_Corpus();
-
     let Resolved {
         selection,
         applicability: how,
@@ -848,17 +946,9 @@ fn Test_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback()
         "and the caller must be told, or it cannot record why the answer came from \
          somewhere else"
     );
-
     // The positive control. A preference that *can* be served is not a fallback, and
     // without this the assertion above would pass over a registry that never honours one.
-    assert_eq!(
-        Slice::Over(&corpus)
-            .Accepting(Approximate_Floor())
-            .Preferring(scan::PROVIDER)
-            .Resolved()
-            .applicability,
-        Applicability::Supported
-    );
+    assert_eq!(Loose(&corpus).Resolved().applicability, Applicability::Supported);
 }
 
 /// Two providers' answers about one file are two facts.
@@ -870,17 +960,9 @@ fn Test_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback()
 fn Test_Facts_From_Two_Providers_Should_Not_Share_A_Key()
 {
     let corpus = Precision_Corpus();
-    let file = corpus
-        .files
-        .iter()
-        .find(|file| return file.path == "alpha/one.rs")
-        .expect("the precision corpus contains alpha/one.rs");
-
+    let file = Alpha_One(&corpus);
     let parsed = Slice::Over(&corpus).Syntax_Key(file);
-    let scanned = Slice::Over(&corpus)
-        .Accepting(Approximate_Floor())
-        .Preferring(scan::PROVIDER)
-        .Syntax_Key(file);
+    let scanned = Loose(&corpus).Syntax_Key(file);
 
     assert_eq!(parsed.subject, scanned.subject, "one file");
     assert_eq!(
@@ -908,18 +990,26 @@ fn Test_Facts_From_Two_Providers_Should_Not_Share_A_Key()
 fn Test_The_Weaker_Provider_Should_Answer_Where_The_Parser_Refuses()
 {
     let corpus = Precision_Corpus();
-
-    let mut strict = Slice::Over(&corpus);
-    let parsed = strict.Run(&corpus);
-
+    let parsed = Slice::Over(&corpus).Run(&corpus);
     assert_eq!(parsed.refused.len(), 1, "{:?}", parsed.refused);
     assert_eq!(parsed.degraded, vec!["gamma"]);
 
-    let mut loose = Slice::Over(&corpus)
-        .Accepting(Approximate_Floor())
-        .Preferring(scan::PROVIDER);
-    let scanned = loose.Run(&corpus);
+    let mut loose = Loose(&corpus);
+    Answered_For_Everything(&loose.Run(&corpus));
 
+    // What the coverage cost. The scanner reads gamma's second file and reports items in
+    // it, which the parser could not — and the rollup that follows is an approximation,
+    // which is exactly what the caller asked for by lowering its floor.
+    let gamma = loose.Surface_Of(&corpus.In_Group("gamma")).expect("gamma has a rollup");
+    let surface = Decode_Surface(&gamma.payload.bytes).expect("the rollup wrote this");
+    assert_eq!(surface.files, 2, "both of gamma's files answered");
+    assert_eq!(surface.unreachable, 0);
+}
+
+/// A line-reader has no refusal case, so every file gets an answer and no rollup is missing
+/// a member — six files, six answers, where the parser managed five.
+fn Answered_For_Everything(scanned: &RunReport)
+{
     assert!(
         scanned.refused.is_empty(),
         "a line-reader has no refusal case: {:?}",
@@ -934,17 +1024,6 @@ fn Test_The_Weaker_Provider_Should_Answer_Where_The_Parser_Refuses()
         scanned.syntax_materialized, 6,
         "six files, six answers, where the parser managed five"
     );
-
-    // What the coverage cost. The scanner reads gamma's second file and reports items in
-    // it, which the parser could not — and the rollup that follows is an approximation,
-    // which is exactly what the caller asked for by lowering its floor.
-    let gamma = loose
-        .Surface_Of(&corpus.In_Group("gamma"))
-        .expect("gamma has a rollup");
-    let surface = Decode_Surface(&gamma.payload.bytes).expect("the rollup wrote this");
-
-    assert_eq!(surface.files, 2, "both of gamma's files answered");
-    assert_eq!(surface.unreachable, 0);
 }
 
 /// The two providers do not merely differ in guarantee — they differ in what they say.
@@ -957,28 +1036,14 @@ fn Test_The_Weaker_Provider_Should_Answer_Where_The_Parser_Refuses()
 fn Test_The_Two_Providers_Should_Disagree_About_A_File_Both_Can_Read()
 {
     let corpus = Precision_Corpus();
-    let file = corpus
-        .files
-        .iter()
-        .find(|file| return file.path == "alpha/one.rs")
-        .expect("the precision corpus contains alpha/one.rs");
-
+    let file = Alpha_One(&corpus);
     let mut strict = Slice::Over(&corpus);
+    let mut loose = Loose(&corpus);
     strict.Run(&corpus);
-    let mut loose = Slice::Over(&corpus)
-        .Accepting(Approximate_Floor())
-        .Preferring(scan::PROVIDER);
     loose.Run(&corpus);
 
-    let parsed = strict
-        .Store()
-        .Current(&strict.Syntax_Key(file).At(strict.Generation()), strict.Generation())
-        .expect("the parser answered for alpha/one.rs");
-    let scanned = loose
-        .Store()
-        .Current(&loose.Syntax_Key(file).At(loose.Generation()), loose.Generation())
-        .expect("the scanner answered for alpha/one.rs");
-
+    let parsed = Answer_About(&strict, file);
+    let scanned = Answer_About(&loose, file);
     assert_eq!(
         parsed.payload.schema, scanned.payload.schema,
         "one schema: what they share is the shape of an answer, which is the interface"
@@ -992,7 +1057,6 @@ fn Test_The_Two_Providers_Should_Disagree_About_A_File_Both_Can_Read()
         parsed.evidence, scanned.evidence,
         "a parse is verified and a pattern match is approximate, and the fact says which"
     );
-
     eprintln!(
         "alpha/one.rs — parsed: {:?}\n              scanned: {:?}",
         String::from_utf8_lossy(&parsed.payload.bytes),
@@ -1010,14 +1074,8 @@ fn Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus()
         return;
     };
 
-    let mut strict = Slice::Over(&corpus);
-    let parsed = strict.Run(&corpus);
-
-    let mut loose = Slice::Over(&corpus)
-        .Accepting(Approximate_Floor())
-        .Preferring(scan::PROVIDER);
-    let scanned = loose.Run(&corpus);
-
+    let parsed = Slice::Over(&corpus).Run(&corpus);
+    let scanned = Loose(&corpus).Run(&corpus);
     eprintln!(
         "coverage: parser {} of {} files, {} degraded rollups; \
          scanner {} of {} files, {} degraded rollups",
@@ -1029,6 +1087,14 @@ fn Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus()
         scanned.degraded.len()
     );
 
+    Bought_Coverage(&parsed, &scanned);
+}
+
+/// The parser refuses something here, so there is coverage to buy; the scanner answers for
+/// every file, so it is the provider this describes; and it leaves fewer degraded rollups
+/// behind, so the coverage was actually bought.
+fn Bought_Coverage(parsed: &RunReport, scanned: &RunReport)
+{
     assert!(
         !parsed.refused.is_empty(),
         "the parser refuses nothing in this corpus, so there is no coverage to buy and \
@@ -1062,7 +1128,6 @@ fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
 {
     let registry = Slice::Registered();
     let capability = CapabilityId::New(syntax::CAPABILITY);
-
     let contract = registry
         .Declared()
         .find(|declared| return declared.id == capability)
@@ -1073,19 +1138,15 @@ fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
         syntax::Ceiling(),
         "the terms in the registry are the contract crate's, not a provider's"
     );
-
-    let offering: Vec<&str> = registry
-        .Offers(&capability)
-        .iter()
-        .map(|offer| return offer.provider.As_Str())
-        .collect();
-
     assert_eq!(
-        offering,
+        registry
+            .Offers(&capability)
+            .iter()
+            .map(|offer| return offer.provider.As_Str())
+            .collect::<Vec<&str>>(),
         vec![scan::PROVIDER, rust::PROVIDER],
         "both providers offer against the one contract"
     );
-
     // The ceiling leaves room neither provider occupies. Without this the assertion above
     // would pass over a ceiling that is merely the incumbent's guarantee restated — which
     // is a ceiling that has to be raised whenever somebody improves something, and one that
@@ -1117,11 +1178,28 @@ fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
 fn Test_The_Strongest_Usable_Offer_Should_Answer_Whatever_The_Providers_Are_Called()
 {
     let corpus = Precision_Corpus();
-
     let Resolved {
         selection,
         applicability: how,
     } = Slice::Over(&corpus).Accepting(Approximate_Floor()).Resolved();
+
+    assert_eq!(how, Applicability::Supported);
+    Answered_Despite_Its_Name(&selection);
+}
+
+/// The parser answers because it is stronger, not because of how it is spelled.
+///
+/// The name order really is against it here — `nomos.lang.rust.scan` sorts first — which is
+/// what makes this a statement about names rather than a coincidence, and the guarantee
+/// ranked the two, so the choice is a decision rather than a tiebreak.
+fn Answered_Despite_Its_Name(selection: &nomos_capability::Selection)
+{
+    let passed_over = selection
+        .alternatives
+        .first()
+        .expect("the scanner clears this floor too")
+        .provider
+        .clone();
 
     assert_eq!(
         selection.chosen.provider.As_Str(),
@@ -1129,19 +1207,12 @@ fn Test_The_Strongest_Usable_Offer_Should_Answer_Whatever_The_Providers_Are_Call
         "both offers clear this floor and the parser is strictly stronger, so it answers \
          — despite the scanner's name sorting first"
     );
-    let passed_over = selection
-        .alternatives
-        .first()
-        .expect("the scanner clears this floor too")
-        .provider
-        .clone();
     assert!(
         selection.chosen.provider.As_Str() > passed_over.As_Str(),
         "and the name order really is against it here, or this test proves nothing about \
          names: {} against {passed_over}",
         selection.chosen.provider
     );
-    assert_eq!(how, Applicability::Supported);
     assert!(
         !selection.Passed_Over_Stronger(),
         "nothing usable was stronger than what answered, which is the rule"
@@ -1174,7 +1245,6 @@ fn Test_The_Strongest_Usable_Offer_Should_Answer_Whatever_The_Providers_Are_Call
 fn Test_A_Lowered_Floor_Should_Make_The_Weaker_Offer_Reachable_Without_Serving_It()
 {
     let corpus = Precision_Corpus();
-
     let parsed = Slice::Over(&corpus).Resolved().selection;
     let lowered = Slice::Over(&corpus)
         .Accepting(Approximate_Floor())
@@ -1186,7 +1256,6 @@ fn Test_A_Lowered_Floor_Should_Make_The_Weaker_Offer_Reachable_Without_Serving_I
         "lowering the floor must not change who answers; it widens what is admitted, and \
          the strongest thing admitted did not change"
     );
-
     assert!(
         parsed.Weaker().is_empty(),
         "the strict floor admits the scanner nowhere, so there is nothing to fall back to"
@@ -1222,9 +1291,7 @@ fn Test_A_Lowered_Floor_Should_Make_The_Weaker_Offer_Reachable_Without_Serving_I
 fn Test_A_Lowered_Floor_Should_Be_Spent_On_The_Subjects_The_Parser_Refuses()
 {
     let corpus = Precision_Corpus();
-
-    let mut slice = Slice::Over(&corpus).Accepting(Approximate_Floor());
-    let run = slice.Run(&corpus);
+    let run = Slice::Over(&corpus).Accepting(Approximate_Floor()).Run(&corpus);
 
     assert!(
         run.refused.is_empty(),
@@ -1260,19 +1327,31 @@ fn Test_A_Lowered_Floor_Should_Be_Spent_On_The_Subjects_The_Parser_Refuses()
 fn Test_A_Run_That_Fell_Back_Should_Not_Report_The_Corpus_Clean()
 {
     let corpus = Precision_Corpus();
-
-    let mut strict = Slice::Over(&corpus);
-    let parsed = strict.Run(&corpus);
+    let parsed = Slice::Over(&corpus).Run(&corpus);
     let mut lowered = Slice::Over(&corpus).Accepting(Approximate_Floor());
     let covered = lowered.Run(&corpus);
 
-    // What the coverage bought, stated against the run that did not buy it.
+    Said_So_At_Every_Level(&parsed, &covered);
+
+    // The fact itself, which is the level that outlives the run.
+    let surface = Surface_Of(&lowered, &corpus, "gamma");
+    assert_eq!(surface.files, 2, "both members answered");
+    assert_eq!(surface.unreachable, 0, "and neither was missing");
+    assert_eq!(
+        surface.approximate, 1,
+        "one of them was pattern-matched rather than parsed, and the payload has to say \
+         so — otherwise buying coverage also buys the appearance of precision"
+    );
+}
+
+/// What the coverage bought, stated against the run that did not buy it, and what it did
+/// not buy: the run itself and the rollup both have to say a weaker answer was used.
+fn Said_So_At_Every_Level(parsed: &RunReport, covered: &RunReport)
+{
     assert_eq!(parsed.refused.len(), 1, "{:?}", parsed.refused);
     assert_eq!(parsed.degraded, vec!["gamma"]);
     assert!(covered.refused.is_empty());
     assert!(covered.degraded.is_empty());
-
-    // And what it did not buy. The run.
     assert!(
         !covered.Wholly_Chosen(),
         "a run that fell back reported itself as wholly served by the chosen provider"
@@ -1281,28 +1360,12 @@ fn Test_A_Run_That_Fell_Back_Should_Not_Report_The_Corpus_Clean()
         parsed.Wholly_Chosen(),
         "the strict run admits nobody weaker, so it cannot have fallen back"
     );
-
-    // The rollup.
     assert_eq!(
         covered.approximated,
         vec!["gamma"],
         "the group whose rollup read a weaker answer is named"
     );
     assert!(parsed.approximated.is_empty());
-
-    // The fact itself, which is the level that outlives the run.
-    let gamma = lowered
-        .Surface_Of(&corpus.In_Group("gamma"))
-        .expect("gamma has a rollup");
-    let surface = Decode_Surface(&gamma.payload.bytes).expect("the rollup wrote this");
-
-    assert_eq!(surface.files, 2, "both members answered");
-    assert_eq!(surface.unreachable, 0, "and neither was missing");
-    assert_eq!(
-        surface.approximate, 1,
-        "one of them was pattern-matched rather than parsed, and the payload has to say \
-         so — otherwise buying coverage also buys the appearance of precision"
-    );
 }
 
 /// A directory the parser read whole must not be marked approximate.
@@ -1313,22 +1376,13 @@ fn Test_A_Run_That_Fell_Back_Should_Not_Report_The_Corpus_Clean()
 fn Test_A_Group_The_Parser_Read_Whole_Should_Not_Be_Marked_Approximate()
 {
     let corpus = Precision_Corpus();
-
     let mut lowered = Slice::Over(&corpus).Accepting(Approximate_Floor());
     lowered.Run(&corpus);
 
     for group in ["alpha", "beta"]
     {
-        let members = corpus.In_Group(group);
-        let fact = lowered
-            .Surface_Of(&members)
-            .unwrap_or_else(|| panic!("{group} has a rollup"));
-        let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
-
-        assert_eq!(
-            surface.approximate, 0,
-            "{group} parsed whole and is marked approximate"
-        );
+        let surface = Surface_Of(&lowered, &corpus, group);
+        assert_eq!(surface.approximate, 0, "{group} parsed whole and is marked approximate");
         assert_eq!(surface.unreachable, 0, "{group} lost a member");
     }
 }
@@ -1343,7 +1397,6 @@ fn Test_A_Group_The_Parser_Read_Whole_Should_Not_Be_Marked_Approximate()
 fn Test_One_File_Should_Have_One_Syntax_Fact_At_A_Generation()
 {
     let corpus = Precision_Corpus();
-
     let mut slice = Slice::Over(&corpus).Accepting(Approximate_Floor());
     slice.Run(&corpus);
 
@@ -1354,19 +1407,9 @@ fn Test_One_File_Should_Have_One_Syntax_Fact_At_A_Generation()
         "this floor admits the parser and the scanner, and an assertion over one candidate \
          would prove nothing about a second"
     );
-
     for file in &corpus.files
     {
-        let held: Vec<String> = candidates
-            .iter()
-            .filter(|offer| {
-                let identity = slice.Syntax_Key_Of(file, offer).At(slice.Generation());
-
-                return slice.Store().Current(&identity, slice.Generation()).is_some();
-            })
-            .map(|offer| return offer.provider.As_Str().to_owned())
-            .collect();
-
+        let held = Answering(&slice, file, &candidates);
         assert_eq!(
             held.len(),
             1,
@@ -1375,6 +1418,20 @@ fn Test_One_File_Should_Have_One_Syntax_Fact_At_A_Generation()
             file.path
         );
     }
+}
+
+/// Which of the admitted providers actually holds a syntax fact about this file right now.
+fn Answering(slice: &Slice, file: &SourceFile, candidates: &[nomos_capability::ProviderOffer]) -> Vec<String>
+{
+    return candidates
+        .iter()
+        .filter(|offer| {
+            let identity = slice.Syntax_Key_Of(file, offer).At(slice.Generation());
+
+            return slice.Store().Current(&identity, slice.Generation()).is_some();
+        })
+        .map(|offer| return offer.provider.As_Str().to_owned())
+        .collect();
 }
 
 /// Falling back is not re-materializing.
@@ -1426,32 +1483,9 @@ fn Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum()
 
     let mut slice = Slice::Over(&corpus);
     slice.Run(&corpus);
-
-    let mut groups = 0_usize;
-    let mut silent = 0_usize;
-
-    for group in corpus.Groups()
-    {
-        let members = corpus.In_Group(&group);
-        let Some(fact) = slice.Surface_Of(&members)
-        else
-        {
-            continue;
-        };
-        let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
-
-        groups = groups.saturating_add(1);
-        if surface.public == 0
-        {
-            silent = silent.saturating_add(1);
-        }
-    }
-
+    let (groups, silent) = Publicly_Silent(&slice, &corpus);
     let percent = silent.saturating_mul(100).checked_div(groups).unwrap_or(0);
-    eprintln!(
-        "signal: {silent} of {groups} directories declare nothing publicly ({percent}%)"
-    );
-
+    eprintln!("signal: {silent} of {groups} directories declare nothing publicly ({percent}%)");
     assert!(
         silent > 0,
         "not one of {groups} directories declares nothing publicly. A check that finds \
@@ -1466,6 +1500,7 @@ fn Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum()
     );
 }
 
+
 /// A hole in the corpus stays visible.
 ///
 /// `gamma/broken.rs` cannot be read, so `gamma`'s rollup covers one of its two files. It
@@ -1474,11 +1509,8 @@ fn Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum()
 #[test]
 fn Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer()
 {
-    let corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
-
+    let (corpus, mut slice) = Over_The_Precision_Corpus();
     let report = slice.Run(&corpus);
-
     assert_eq!(
         report.refused.len(),
         1,
@@ -1487,29 +1519,20 @@ fn Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer()
     );
     assert_eq!(report.degraded, vec!["gamma"]);
 
-    let members = corpus.In_Group("gamma");
-    let fact = slice
-        .Surface_Of(&members)
-        .expect("gamma has a rollup even though one member is unreadable");
-    let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
-
+    let surface = Surface_Of(&slice, &corpus, "gamma");
     assert_eq!(surface.files, 1, "one of gamma's two files was readable");
     assert_eq!(
         surface.unreachable, 1,
         "and the other is counted, not dropped. A rollup reporting files=1 with \
          unreachable=0 would be claiming gamma has one file"
     );
-
     // The undegraded groups, as the control. If every rollup reported unreachable members
     // the assertion above would pass over a slice that could read nothing.
     for group in ["alpha", "beta"]
     {
-        let members = corpus.In_Group(group);
-        let fact = slice.Surface_Of(&members).expect("a rollup per group");
-        let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
-
-        assert_eq!(surface.unreachable, 0, "{group} has no unreadable members");
-        assert_eq!(surface.files, 2, "{group} has two files");
+        let whole = Surface_Of(&slice, &corpus, group);
+        assert_eq!(whole.unreachable, 0, "{group} has no unreadable members");
+        assert_eq!(whole.files, 2, "{group} has two files");
     }
 }
 
@@ -1517,16 +1540,12 @@ fn Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer()
 #[test]
 fn Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims()
 {
-    let corpus = Precision_Corpus();
-    let mut slice = Slice::Over(&corpus);
+    let (corpus, mut slice) = Over_The_Precision_Corpus();
     slice.Run(&corpus);
 
     for (group, files, items, public) in [("alpha", 2, 7, 3), ("beta", 2, 7, 3), ("gamma", 1, 3, 0)]
     {
-        let members = corpus.In_Group(group);
-        let fact = slice.Surface_Of(&members).expect("a rollup per group");
-        let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
-
+        let surface = Surface_Of(&slice, &corpus, group);
         assert_eq!(
             (surface.files, surface.items, surface.public),
             (files, items, public),
@@ -1545,14 +1564,12 @@ fn Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims()
 fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
 {
     let slice = Slice::Composed();
-
     let guarantee = Guarantee::New(
         FactVariant::SemanticallyResolved,
         Assurance::Sound,
         Assurance::Sound,
         IncrementalGranularity::Symbol,
     );
-
     let needs_resolution = Requirement::New(
         CapabilityId::New(syntax::CAPABILITY),
         syntax::CONTRACT_VERSION,
@@ -1560,7 +1577,6 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
     );
 
     let resolved = slice.Registry().Resolve(&needs_resolution);
-
     assert!(resolved.Offer().is_none());
     assert_eq!(
         resolved.Applicability(),
@@ -1568,7 +1584,6 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
         "nothing offers this, which is coverage debt. NotApplicable would say the subject \
          does not bind the rule, and the registry is in no position to say that"
     );
-
     // The positive control. If resolution refused everything the assertion above would
     // pass over a composition that serves nobody.
     let servable = Requirement::New(
@@ -1577,4 +1592,27 @@ fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
         rust::Declared_Guarantee(),
     );
     assert!(slice.Registry().Resolve(&servable).Offer().is_some());
+}
+
+/// How many of the corpus's groups have a rollup at all, and how many of those declare
+/// nothing publicly.
+fn Publicly_Silent(slice: &Slice, corpus: &Corpus) -> (usize, usize)
+{
+    let mut groups = 0_usize;
+    let mut silent = 0_usize;
+
+    for group in corpus.Groups()
+    {
+        let Some(fact) = slice.Surface_Of(&corpus.In_Group(&group))
+        else
+        {
+            continue;
+        };
+        let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
+
+        groups = groups.saturating_add(1);
+        silent = silent.saturating_add(usize::from(surface.public == 0));
+    }
+
+    return (groups, silent);
 }
