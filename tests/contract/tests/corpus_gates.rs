@@ -104,10 +104,12 @@ const GATES: &[Gate] = &[
         tests: 8,
     },
     Gate {
-        path: "crates/spec/nomos-spec-ingest/tests/family_counts.rs",
+        // The suite's other four tests keep the register honest about itself and read no
+        // corpus, so they are in a sibling module and out of this count.
+        path: "crates/spec/nomos-spec-ingest/tests/family_counts/measurement.rs",
         variables: &[ARCHIVES, V14],
         gated: 2,
-        tests: 6,
+        tests: 2,
     },
     Gate {
         path: "crates/spec/nomos-spec-ingest/tests/overlay.rs",
@@ -201,13 +203,14 @@ const GATED_TOTAL: usize = 68;
 /// reads a corpus. [`GATED_TOTAL`] is unchanged, and that is the point of keeping the two
 /// numbers apart: a gated file growing is not the hole growing.
 ///
-/// Fell to 110 as the test crates were decomposed for `check-file-size`: twenty of the tests
-/// inside gated files never read a corpus — fourteen of `table_rows.rs`'s sixteen, one of
-/// `portable.rs`'s six, five of `regression_report.rs`'s fourteen — and each now lives in a
-/// sibling module rather than inflating this denominator. That is the same move in the other
-/// direction. [`GATED_TOTAL`] is unchanged through every one of those splits, which is the
-/// check that they moved tests rather than silence.
-const TESTS_IN_GATED_FILES: usize = 110;
+/// Fell to 106 as the test crates were decomposed for `check-file-size`: twenty-four of the
+/// tests inside gated files never read a corpus — fourteen of `table_rows.rs`'s sixteen, one
+/// of `portable.rs`'s six, five of `regression_report.rs`'s fourteen, four of
+/// `family_counts.rs`'s six — and each now lives in a sibling module rather than inflating
+/// this denominator. That is the same move in the other direction. [`GATED_TOTAL`] is
+/// unchanged through every one of those splits, which is the check that they moved tests
+/// rather than silence.
+const TESTS_IN_GATED_FILES: usize = 106;
 
 /// The table accounts for every file that reaches a corpus.
 ///
