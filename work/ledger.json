@@ -9062,14 +9062,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-file-decomposition-s1",
-        "acquired_at": 1786505851,
-        "lease_expires_at": 1786520251
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -9099,7 +9095,49 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-workspace",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ve_reads.rs (target\\debug\\deps\\archive_reads-1f967c005abb2c09.exe)\n     Running tests\\family_counts.rs (target\\debug\\deps\\family_counts-ab55529451235691.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-ebbdcf7b45b19849.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-811d013be0297b1f.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-3b8290c0a7ae6e6c.exe)\n     Running tests\\regression_report.rs (target\\debug\\deps\\regression_report-4cb1e3d9bdcb0404.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-276eabde6de44d17.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-efccc9cf2fe630a5.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-a816996f8f9c77ae.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-48edbcc871df3710.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-55b6c675156f8a5a.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-b52836aa7b25e28c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa83e99f6fefcefd.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-e1a7f31ef6d45138.exe)\n     Running tests\\round_trip_holds.rs (target\\debug\\deps\\round_trip_holds-068429e6a83cf309.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-b249317d68381bfc.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-0505813eb6fce1bf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workspace-b923fa7763130556.exe)\n     Running tests\\portable.rs (target\\debug\\deps\\portable-6288a12c0ad205a2.exe)\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_capability\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_platform_std\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_workspace\n",
+        "verified_at": 1786509306,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
