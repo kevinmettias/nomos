@@ -1,0 +1,92 @@
+//! One test per declared domain, each discharging that domain's own declaration.
+//!
+//! These are the names [`Test_Name_For`] returns, so a rename here has to move with it —
+//! the child process is selected by `--exact` and a name that drifted would run no test at
+//! all.
+//!
+//! [`Test_Name_For`]: crate::common::Test_Name_For
+
+use crate::common::Check;
+use crate::goldens::{
+    BUNDLE_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, ROLLED_GOLDEN, SCANNED_GOLDEN,
+    SNAPSHOT_GOLDEN,
+};
+use crate::productions::{
+    Parsed_Production, Reuse_Production, Rolled_Production, Scanned_Production,
+    Snapshot_Production,
+};
+use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
+use nomos_analysis::FactReuse;
+use nomos_lang_rust::SyntaxFactProduction;
+use nomos_lang_rust_scan::ScanFactProduction;
+use nomos_spec_bundle::BundleSerialization;
+use nomos_spec_project::ProjectionOutput;
+use nomos_workspace::SnapshotSerialization;
+
+#[test]
+fn Test_The_Parser_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<SyntaxFactProduction>(
+        "syntax-fact-production",
+        &Parsed_Production,
+        PARSED_GOLDEN,
+    );
+}
+
+/// The second producer covered by `nomos-lang-rust`'s declaration, discharged separately.
+///
+/// Same `Strategy`, because it is the same execution domain holding the same triple —
+/// `SyntaxFactProduction`'s doc says why one declaration covers both. What must not be
+/// shared is the *production*: a declaration is only as good as what the harness runs it
+/// over, and this is the run that makes the crate's promise true of the rollup rather than
+/// merely stated about it.
+#[test]
+fn Test_The_Rollup_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<SyntaxFactProduction>("module-index-rollup", &Rolled_Production, ROLLED_GOLDEN);
+}
+
+#[test]
+fn Test_The_Scanner_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<ScanFactProduction>("scan-fact-production", &Scanned_Production, SCANNED_GOLDEN);
+}
+
+#[test]
+fn Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy()
+{
+    // No golden. `FactReuse` declares `CrossRun`, and `Cross_Environment_Owed` therefore
+    // never reaches for one — passing a real digest here would be a check the declaration
+    // did not ask for, which is the same defect as a missing one pointed the other way.
+    Check::<FactReuse>("fact-reuse", &Reuse_Production, "");
+}
+
+#[test]
+fn Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<SnapshotSerialization>(
+        "snapshot-serialization",
+        &Snapshot_Production,
+        SNAPSHOT_GOLDEN,
+    );
+}
+
+#[test]
+fn Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<BundleSerialization>(
+        "bundle-serialization",
+        &Alternating(Bundle_Bytes),
+        BUNDLE_GOLDEN,
+    );
+}
+
+#[test]
+fn Test_Projection_Output_Should_Meet_Its_Declared_Strategy()
+{
+    Check::<ProjectionOutput>(
+        "projection-output",
+        &Alternating(Projection_Bytes),
+        PROJECTION_GOLDEN,
+    );
+}

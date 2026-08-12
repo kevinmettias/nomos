@@ -1,0 +1,402 @@
+//! The fixture, and the bytes each in-tree domain produces over it.
+//!
+//! One source fixture for all five, so that a difference between two productions is a
+//! difference between the producers rather than between what they were shown.
+
+use nomos_analysis::{
+    Dependency, FactIdentity, FactStore, GenerationCause, MemoryFactStore,
+};
+use nomos_contracts::{
+    BuildVariantId, ConfigurationId, GenerationId, SnapshotId, SubjectId,
+};
+use nomos_lang_rust::rollup;
+use nomos_model::Content_Digest;
+use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
+
+/// The source every producing domain is measured over.
+///
+/// Small, and chosen rather than sampled. Each file carries at least one construct that
+/// has historically been a source of ordering instability in an item walk — nested
+/// modules, an impl block, a trait with several methods, and a macro invocation the parser
+/// cannot see through. A fixture of `pub fn a() {}` would repeat itself identically under
+/// any implementation at all, correct or not.
+const FIXTURE: &[(&str, &str)] = &[
+    (
+        "src/lib.rs",
+        "pub mod inner\n\
+         {\n\
+             pub struct Held { pub field: u32 }\n\
+             pub fn one() {}\n\
+             pub fn two() {}\n\
+         }\n\
+         pub trait Speaks\n\
+         {\n\
+             fn first(&self);\n\
+             fn second(&self);\n\
+             fn third(&self);\n\
+         }\n\
+         pub const NAMED: u32 = 7;\n",
+    ),
+    (
+        "src/held.rs",
+        "use std::collections::BTreeMap;\n\
+         pub struct Held;\n\
+         impl Held\n\
+         {\n\
+             pub fn build() -> BTreeMap<String, u32> { BTreeMap::new() }\n\
+             pub fn other(&self) {}\n\
+         }\n\
+         macro_rules! generated { () => { pub fn hidden() {} } }\n\
+         generated!();\n",
+    ),
+    (
+        "src/enumerated.rs",
+        "pub enum Kind\n\
+         {\n\
+             First,\n\
+             Second,\n\
+         }\n\
+         pub type Alias = Kind;\n\
+         pub static COUNT: usize = 2;\n\
+         pub fn last() {}\n",
+    ),
+];
+
+/// A context whose components are constants, which is right here and wrong elsewhere.
+///
+/// `tests/integration/src/context.rs` exists because a fact key built from byte-fill
+/// constants rests on nothing and can never be observed to be wrong. That argument is
+/// about facts a run produces and stores. These facts are produced twice inside one test
+/// and compared against each other, so what the context names is irrelevant as long as
+/// both productions name the same thing — and holding it fixed is what isolates the
+/// producer as the only thing that could vary.
+fn Fact_Context() -> nomos_lang_rust::FactContext
+{
+    return nomos_lang_rust::FactContext {
+        snapshot: SnapshotId::From_Digest(Content_Digest(b"nomos.determinism.snapshot")),
+        variant: BuildVariantId::From_Digest(Content_Digest(b"nomos.determinism.variant")),
+        configuration: ConfigurationId::From_Digest(Content_Digest(
+            b"nomos.determinism.configuration",
+        )),
+        generation: GenerationId::INITIAL,
+    };
+}
+
+fn Scan_Context() -> nomos_lang_rust_scan::FactContext
+{
+    let shared = Fact_Context();
+
+    return nomos_lang_rust_scan::FactContext {
+        snapshot: shared.snapshot,
+        variant: shared.variant,
+        configuration: shared.configuration,
+        generation: shared.generation,
+    };
+}
+
+fn Subject_Of(path: &str) -> SubjectId
+{
+    return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
+}
+
+/// The parser's facts over the fixture, rendered.
+pub(crate) fn Parsed_Production() -> Vec<u8>
+{
+    let context = Fact_Context();
+    let mut rendered = Vec::new();
+
+    for (path, source) in FIXTURE
+    {
+        let one = Rendered_Fact(path, source, context);
+
+        rendered.extend_from_slice(&one);
+    }
+
+    return rendered;
+}
+
+/// One fixture file's fact: the path it came from, the key it landed under, and its payload.
+fn Rendered_Fact(path: &str, source: &str, context: nomos_lang_rust::FactContext) -> Vec<u8>
+{
+    let fact = match nomos_lang_rust::Materialize(Subject_Of(path), source, context)
+    {
+        nomos_lang_rust::Materialization::Materialized(fact) => fact,
+        nomos_lang_rust::Materialization::Unparseable(failure) =>
+        {
+            panic!("the fixture must parse; {path} did not: {failure}");
+        }
+    };
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
+    rendered.extend_from_slice(format!("key\t{}\n", fact.Key().Digest()).as_bytes());
+    rendered.extend_from_slice(&fact.payload.bytes);
+
+    return rendered;
+}
+
+/// The rollup's fact over the same fixture, with the edges it declared.
+///
+/// The second producer in `nomos-lang-rust`, and the one whose reproducibility argument is
+/// not the parser's — see [`SyntaxFactProduction`]'s doc. It is measured as its own
+/// production rather than folded into [`Parsed_Production`] because a declaration is
+/// discharged by what the harness runs, and a rollup summed into another domain's bytes
+/// would be covered by that domain's digest without ever being the thing under test.
+///
+/// The edges are rendered, not only the payload. They decide what a later change
+/// invalidates, so an edge list that varied between runs would leave invalidation itself
+/// non-reproducible while every payload digest still agreed — which no assertion over the
+/// bytes alone could see.
+///
+/// The fixture is walked in reverse to build the module, deliberately. The provider claims
+/// the member order is its own rather than its caller's, and handing it the corpus order
+/// both times would agree under an implementation that simply kept whatever it was given.
+///
+/// [`SyntaxFactProduction`]: nomos_lang_rust::SyntaxFactProduction
+pub(crate) fn Rolled_Production() -> Vec<u8>
+{
+    let context = Fact_Context();
+    let registry = Syntax_Registry();
+    let need = Syntax_Requirement();
+    let module = Fixture_Module();
+    let mut store = MemoryFactStore::New();
+
+    Fill_With_Fixture(&mut store, context);
+
+    let against = rollup::Against {
+        registry: &registry,
+        need: &need,
+        context,
+    };
+    let rolled = rollup::Materialize_Index(&mut store, &against, &module)
+        .expect("the rollup is not written behind the generation it names");
+
+    Assert_The_Rollup_Read_Its_Members(&rolled);
+
+    return Rendered_Rollup(&rolled);
+}
+
+/// The registry the rollup resolves its provider through.
+fn Syntax_Registry() -> nomos_capability::Registry
+{
+    let mut registry = nomos_capability::Registry::New();
+
+    registry
+        .Declare(nomos_cap_syntax::Capability_Contract())
+        .expect("the syntax contract is declared once");
+    registry
+        .Offer(nomos_lang_rust::Provider_Offer())
+        .expect("the parser's offer is within the ceiling");
+
+    return registry;
+}
+
+/// What the rollup requires of whichever provider answers it.
+fn Syntax_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_syntax::Capability(),
+        nomos_cap_syntax::CONTRACT_VERSION,
+        nomos_lang_rust::Declared_Guarantee(),
+    );
+}
+
+/// The fixture as one module, walked in reverse.
+///
+/// Deliberately reversed. The provider claims the member order is its own rather than its
+/// caller's, and handing it the corpus order both times would agree under an implementation
+/// that simply kept whatever it was given.
+fn Fixture_Module() -> rollup::Module
+{
+    return rollup::Module {
+        subject: Subject_Of("the-fixture-module"),
+        members: FIXTURE
+            .iter()
+            .rev()
+            .map(|(path, source)| return rollup::ModuleMember::Of(Subject_Of(path), source))
+            .collect(),
+    };
+}
+
+/// Every fixture file materialized into a store, and the identities they landed under.
+fn Fill_With_Fixture(
+    store: &mut MemoryFactStore,
+    context: nomos_lang_rust::FactContext,
+) -> Vec<FactIdentity>
+{
+    let mut keys = Vec::new();
+
+    for (path, source) in FIXTURE
+    {
+        let nomos_lang_rust::Materialization::Materialized(fact) =
+            nomos_lang_rust::Materialize(Subject_Of(path), source, context)
+        else
+        {
+            panic!("the fixture must parse");
+        };
+
+        keys.push(fact.identity.clone());
+        store
+            .Materialize(*fact, &[] as &[Dependency])
+            .expect("a fresh store accepts a first materialization");
+    }
+
+    return keys;
+}
+
+/// The same guard `Bundle_Bytes` carries, for the same reason.
+///
+/// A rollup that read none of its members produces a payload and a digest, and agreeing with
+/// itself across two processes would then be a claim about three lines of header. The fixture
+/// has three members and they all parse, so anything less means the reads missed — most
+/// likely a requirement that resolved a provider whose key nobody wrote.
+fn Assert_The_Rollup_Read_Its_Members(rolled: &rollup::Rolled)
+{
+    assert_eq!(
+        rolled.index.Answered(),
+        FIXTURE.len(),
+        "the rollup read {} of {} members, so this production is mostly not a rollup: {:#?}",
+        rolled.index.Answered(),
+        FIXTURE.len(),
+        rolled.index.members
+    );
+    assert!(
+        rolled.index.items.len() > 10,
+        "the fixture reached the index as only {} item(s), so agreeing with itself says \
+         almost nothing",
+        rolled.index.items.len()
+    );
+}
+
+/// The rollup's key, its encoded index, and every edge it declared.
+///
+/// The edges are rendered, not only the payload. They decide what a later change
+/// invalidates, so an edge list that varied between runs would leave invalidation itself
+/// non-reproducible while every payload digest still agreed — which no assertion over the
+/// bytes alone could see.
+fn Rendered_Rollup(rolled: &rollup::Rolled) -> Vec<u8>
+{
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(format!("key\t{}\n", rolled.key.Digest()).as_bytes());
+    rendered.extend_from_slice(&rollup::Encode_Index(&rolled.index));
+    for dependency in &rolled.dependencies
+    {
+        rendered.extend_from_slice(
+            format!("edge\t{}\t{:?}\n", dependency.key.Digest(), dependency.outcome).as_bytes(),
+        );
+    }
+
+    return rendered;
+}
+
+/// The scanner's facts over the same fixture, rendered the same way.
+pub(crate) fn Scanned_Production() -> Vec<u8>
+{
+    let context = Scan_Context();
+    let mut rendered = Vec::new();
+
+    for (path, source) in FIXTURE
+    {
+        let fact = nomos_lang_rust_scan::Materialize(Subject_Of(path), source, context);
+        rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
+        rendered.extend_from_slice(format!("key\t{}\n", fact.Key().Digest()).as_bytes());
+        rendered.extend_from_slice(&fact.payload.bytes);
+    }
+
+    return rendered;
+}
+
+/// The fact cache after a load, a read of every key, and an invalidation.
+///
+/// The reuse domain's observable is not what a provider computed — that is the row above —
+/// but what the store answers afterwards and what it says it threw away. So the rendering
+/// is the read outcome per key and then the invalidation report, which is the artefact a
+/// caller diffs when it wants to know why a build recomputed what it did.
+pub(crate) fn Reuse_Production() -> Vec<u8>
+{
+    let context = Fact_Context();
+    let mut store = MemoryFactStore::New();
+    let keys = Fill_With_Fixture(&mut store, context);
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(format!("live\t{}\n", store.Live()).as_bytes());
+    rendered
+        .extend_from_slice(format!("materializations\t{}\n", store.Materializations()).as_bytes());
+    for identity in &keys
+    {
+        let outcome = Read_Outcome(&store, identity, context.generation);
+
+        rendered.extend_from_slice(outcome.as_bytes());
+        rendered.push(b'\n');
+    }
+
+    let invalidated = Invalidation_Report(&mut store);
+
+    rendered.extend_from_slice(&invalidated);
+    return rendered;
+}
+
+/// What the store answers for one key: a hit carrying its two digests, or a miss.
+fn Read_Outcome(
+    store: &MemoryFactStore,
+    identity: &FactIdentity,
+    generation: GenerationId,
+) -> String
+{
+    let Some(fact) = store.Current(identity, generation)
+    else
+    {
+        return format!("miss\t{}", identity.Key().Digest());
+    };
+
+    return format!("hit\t{}\t{}", fact.Key().Digest(), fact.payload.Digest());
+}
+
+/// What the store says it threw away when the configuration changes under it.
+fn Invalidation_Report(store: &mut MemoryFactStore) -> Vec<u8>
+{
+    let report = store.Invalidate(
+        &GenerationCause::ConfigurationChanged {
+            configuration: ConfigurationId::From_Digest(Content_Digest(
+                b"nomos.determinism.other",
+            )),
+        },
+        GenerationId::INITIAL.Next(),
+    );
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(format!("report\t{}\n", report.Report()).as_bytes());
+    for key in &report.direct
+    {
+        rendered.extend_from_slice(format!("direct\t{}\n", key.Digest()).as_bytes());
+    }
+
+    return rendered;
+}
+
+/// The workspace snapshot's canonical bytes, after the fixture arrives through the door.
+pub(crate) fn Snapshot_Production() -> Vec<u8>
+{
+    let variant = BuildVariant::New(
+        "x86_64-unknown-none",
+        "determinism",
+        "fixed",
+        ["one", "two"],
+    );
+    let configuration =
+        ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.configuration"));
+    let mut workspace = Workspace::Empty(variant, configuration);
+
+    let mut changes = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
+    for (path, source) in FIXTURE
+    {
+        changes = changes.Present(*path, *source);
+    }
+
+    workspace
+        .Apply(&changes)
+        .expect("the fixture is a valid change set");
+
+    return workspace.Snapshot().Encode();
+}
