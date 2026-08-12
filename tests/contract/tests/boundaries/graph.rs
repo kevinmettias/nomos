@@ -1,0 +1,171 @@
+//! What the dependency graph is allowed to do, and the vacuity guard in front of it.
+
+use crate::common::{Declared_Band, BANDS};
+use nomos_contract_tests::Workspace;
+use std::collections::BTreeSet;
+
+/// Everything `nomos-contracts` is permitted to reach, transitively.
+///
+/// `serde_core` and `serde_derive` are serde's own decomposition rather than choices
+/// made here.
+const CONTRACTS_ALLOWLIST: &[&str] = &["serde", "serde_core", "serde_derive"];
+
+/// The only crate permitted to name the sibling platform workspace.
+///
+/// It does not exist yet. Naming it here now means that when it arrives, the exception
+/// is already a decision somebody wrote down rather than a line added to make a failing
+/// test pass.
+const PLATFORM_ADAPTER: &[&str] = &["nomos-platform-xvpe"];
+
+/// Guards every other test in this suite against passing vacuously.
+///
+/// If package-id parsing breaks — cargo has changed that format more than once — the
+/// member set comes back empty, every loop below iterates zero times, and all five
+/// assertions report a clean result over nothing. The sibling workspace hit exactly
+/// this: `check-standards-tree /nonexistent` walked nothing, found nothing, and
+/// reported CLEAN, and the same defect was later found in three other checks.
+///
+/// A check that cannot find its subject must fail loudly, not quietly verify nothing.
+#[test]
+fn Test_The_Workspace_Should_Not_Appear_Empty()
+{
+    let workspace = Workspace::Load();
+    let members = workspace.Members();
+
+    assert!(
+        members.len() >= BANDS.len(),
+        "found {} workspace members but {} bands are declared: {:?}.\n\
+         Every other assertion in this suite iterates over these members, so an empty or \
+         truncated set makes all of them pass having checked nothing.",
+        members.len(),
+        BANDS.len(),
+        members.iter().map(|member| &member.name).collect::<Vec<_>>()
+    );
+
+    assert!(
+        workspace.Get("nomos-contracts").is_some(),
+        "nomos-contracts must be visible in the graph; the allowlist assertion is \
+         meaningless without it"
+    );
+}
+
+/// The load-bearing one.
+///
+/// Every type in `nomos-contracts` is reimplemented by systems that will never compile
+/// this crate — a knowledge service in another language, a client in TypeScript, a
+/// platform in another workspace. A dependency here makes the protocol Nomos-shaped and
+/// forces those peers to vendor a Rust crate in order to agree with us.
+///
+/// `serde` is the deliberate exception: the artifact a peer actually reads is the JSON
+/// Schema generated from these declarations, and the neutrality that matters is that no
+/// *Nomos* and no *platform* type appears in the protocol.
+#[test]
+fn Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else()
+{
+    let workspace = Workspace::Load();
+    let allowed: BTreeSet<String> = CONTRACTS_ALLOWLIST
+        .iter()
+        .map(|name| (*name).to_owned())
+        .collect();
+
+    let actual = workspace.Transitive_Dependencies("nomos-contracts");
+    let unexpected: Vec<&String> = actual.difference(&allowed).collect();
+
+    assert!(
+        unexpected.is_empty(),
+        "nomos-contracts grew a dependency: {unexpected:?}.\n\
+         Every type in that crate is copied into implementations that have never seen \
+         this repository. A dependency here makes the protocol Nomos-shaped and forces a \
+         peer to vendor a Rust crate in order to speak it."
+    );
+}
+
+/// Nothing below the host band may reach the sibling platform workspace.
+///
+/// When `nomos-platform-xvpe` exists it will be the single exception, and it will be
+/// named here explicitly so that the exception is a decision rather than an oversight.
+#[test]
+fn Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace()
+{
+    let workspace = Workspace::Load();
+
+    for member in workspace.Members()
+    {
+        if PLATFORM_ADAPTER.contains(&member.name.as_str())
+        {
+            continue;
+        }
+
+        let leaked: Vec<String> = workspace
+            .Transitive_Dependencies(&member.name)
+            .into_iter()
+            .filter(|dependency| dependency.starts_with("xvpe-"))
+            .collect();
+
+        assert!(
+            leaked.is_empty(),
+            "{} reaches {leaked:?}.\n\
+             The sibling workspace is a downward implementation dependency behind the \
+             platform port, not something the domain may name directly.",
+            member.name
+        );
+    }
+}
+
+/// A crate may depend only on crates in a strictly lower band.
+///
+/// Cargo already forbids cycles. This forbids the legal-but-wrong edges: a kernel crate
+/// reaching up into a service, a transport reaching past the service layer into
+/// analysis. Those compile perfectly and dissolve the architecture.
+#[test]
+fn Test_Dependencies_Should_Run_Strictly_Downward()
+{
+    let workspace = Workspace::Load();
+
+    for member in workspace.Members()
+    {
+        let Some(band) = Declared_Band(&member.name)
+        else
+        {
+            continue;
+        };
+
+        for dependency in &member.direct_dependencies
+        {
+            let Some(dependency_band) = Declared_Band(dependency)
+            else
+            {
+                continue;
+            };
+
+            assert!(
+                dependency_band < band,
+                "{} (band {band}) depends on {dependency} (band {dependency_band}).\n\
+                 Dependencies run strictly downward; equal or upward edges are how a \
+                 layered architecture becomes a graph nobody can reason about.",
+                member.name
+            );
+        }
+    }
+}
+
+/// A crate cannot join the workspace without declaring where it sits.
+#[test]
+fn Test_Every_Member_Should_Declare_A_Band()
+{
+    let workspace = Workspace::Load();
+
+    let undeclared: Vec<&str> = workspace
+        .Members()
+        .iter()
+        .map(|member| member.name.as_str())
+        .filter(|name| Declared_Band(name).is_none())
+        .collect();
+
+    assert!(
+        undeclared.is_empty(),
+        "these crates declare no band: {undeclared:?}.\n\
+         Add them to BANDS in common.rs. A crate outside the ordering is a crate the \
+         ordering does not constrain."
+    );
+}

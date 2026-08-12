@@ -564,7 +564,8 @@ fn Named_If_It_Reaches_A_Corpus(file: &Path, root: &Path) -> Option<String>
 
 /// Every `.rs` file under a directory, recursively.
 ///
-/// A local copy of `boundaries.rs`'s walk rather than a shared one. Two test binaries that
+/// A local copy of `boundaries/common.rs`'s walk rather than a shared one. Two test binaries
+/// that
 /// share a helper share its failure, and these two files check different properties for
 /// different reasons — the duplication is four lines and the coupling would be permanent.
 fn Rust_Files(root: &Path) -> Vec<PathBuf>
