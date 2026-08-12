@@ -61,10 +61,11 @@
 //!
 //! That check clusters a crate's files by which of them reference which, and reports a
 //! crate whose files fall into groups that never speak to each other. This crate is five
-//! such groups: applicability, determinism, guarantee, authority and peer never mention
-//! one another, and they never will, because a shared vocabulary's terms are independent
-//! by construction. The check's own standard names that case -- a boundary may exist to
-//! seal a subsystem, and no reference graph can see intent.
+//! such groups: enforcement together with the finding vocabulary it is reported through,
+//! then determinism, guarantee, authority and peer standing alone. They never mention one
+//! another and they never will, because a shared vocabulary's terms are independent by
+//! construction. The check's own standard names that case -- a boundary may exist to seal
+//! a subsystem, and no reference graph can see intent.
 //!
 //! The intent here is the band. `OD-CONTRACTS-001` admits a type when peers on both sides
 //! of a boundary need one stable representation of it, and `contracts_names_nothing`

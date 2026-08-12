@@ -25,15 +25,6 @@
 //! exactly its descendants and no more" is asserted by *naming* them, which is the only
 //! form of that assertion worth making: a count of two is satisfied by recomputing the
 //! wrong two.
-//!
-//! # Why `check-crate-split` reports this crate, and why the answer is no
-//!
-//! Its files fall into two groups that never reference each other: the slice and its
-//! readings, and the four types describing what one pass did. Both readings are true, and
-//! neither is an argument for a second crate. This crate's consumers are the test binaries
-//! beside it and nothing else -- it is published nowhere, pinned by nobody, and depended on
-//! by no version -- so the question that check exists to ask, whether somebody would want a
-//! subset of this and not the rest, has one answer here and it is no.
 
 #![forbid(unsafe_code)]
 
