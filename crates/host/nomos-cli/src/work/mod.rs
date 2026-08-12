@@ -6,147 +6,32 @@ use nomos_ledger::{
 use nomos_platform::Clock;
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
 use std::path::Path;
-use std::time::Duration;
 
+mod claim_request;
+mod ending_request;
+mod exit_code;
+mod listing;
 mod parse;
 mod report;
+mod work_command;
 #[cfg(test)]
 mod tests;
 
 pub use parse::Parse;
 
-use report::{
-    Amendment_Note, Blocking_Refusal, Code_For_Refusal, Listed_As, Listing_Label, Nothing_Listed,
-    Print_Blocked, Print_Claim, Print_History, Print_Listing, Report_Claim, Report_Decline,
-    Report_Error, Report_Finish, Report_Release, Report_Validation,
+pub(crate) use exit_code::ExitCode;
+pub(crate) use work_command::WorkCommand;
+
+use claim_request::ClaimRequest;
+use ending_request::EndingRequest;
+
+use listing::{
+    Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_History, Print_Listing,
 };
-
-/// What the process exits with.
-///
-/// A contract, not an implementation detail. Agents branch on these rather than parsing
-/// output, so they are documented here and covered by tests. The distinction that earns
-/// its own code is [`ExitCode::ClaimUnavailable`]: an agent that is told the item is
-/// taken should try another one, and an agent that is told the ledger is broken should
-/// stop and get a human — collapsing those into "non-zero" makes the first case
-/// indistinguishable from the second.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) enum ExitCode
-{
-    /// The operation succeeded.
-    Ok = 0,
-    /// The ledger is invalid, or an operation was refused on its merits.
-    ValidationError = 1,
-    /// The command line was wrong.
-    Usage = 2,
-    /// Somebody else holds it. Retryable.
-    ClaimUnavailable = 3,
-    /// A conflict a human has to resolve.
-    Conflict = 4,
-    /// The ledger or its lock could not be used at all.
-    StoreError = 5,
-}
-
-impl ExitCode
-{
-    /// The numeric code.
-    #[must_use]
-    pub const fn Value(self) -> i32
-    {
-        return self as i32;
-    }
-}
-
-/// What to do.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) enum WorkCommand
-{
-    /// Show items, optionally filtered by state.
-    List
-    {
-        /// Only items in this state.
-        state: Option<String>,
-    },
-    /// Report one item, including what has happened to it.
-    Show
-    {
-        /// Which item.
-        item: ItemId,
-    },
-    /// Put a new item on the ledger.
-    Add
-    {
-        /// The item to record.
-        item: Box<LedgerItem>,
-        /// Which of the records it reserves the item edits rather than allocates.
-        ///
-        /// Beside the item rather than on it. The declaration decides whether the add is
-        /// refused and has no reader afterwards, so carrying it on [`LedgerItem`] would put a
-        /// field on a document two sessions share — and a build older than a field drops it
-        /// silently at exit 0, which is what `OD-LEDGER-008` prices.
-        amending: Territory,
-    },
-    /// Run an item's verification predicate and record it done if it passes.
-    Finish
-    {
-        /// Which item.
-        item: ItemId,
-        /// Who holds it.
-        holder: String,
-    },
-    /// Take an item.
-    Claim(ClaimRequest),
-    /// Extend a held claim.
-    Renew(ClaimRequest),
-    /// Take over an item whose holder's lease ran out, keeping the claim it displaces.
-    ///
-    /// Separate from [`WorkCommand::Claim`] because taking another agent's abandoned work is
-    /// a decision, and a decision belongs in a verb somebody typed — `OD-LEDGER-012`.
-    TakeOver(ClaimRequest),
-    /// Give up a claim without finishing.
-    Abandon(EndingRequest),
-    /// End an item that turned out not to be work.
-    ///
-    /// Separate from [`WorkCommand::Abandon`] because they are about different subjects —
-    /// abandoning ends a claim and puts the item back on the board, declining ends the item —
-    /// and because the items this exists for are unclaimed, which `abandon` cannot reach.
-    /// `OD-LEDGER-019`.
-    Decline(EndingRequest),
-    /// Check the ledger's invariants.
-    Validate,
-    /// Show what would block a claim.
-    Audit,
-}
-
-/// Who is holding what, and for how long.
-///
-/// One type for `claim`, `renew` and `takeover` because they take exactly the same three
-/// arguments and default the lease the same way. Three identical types would be three
-/// chances for them to drift apart in what they accept while being documented as identical.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct ClaimRequest
-{
-    /// Which item.
-    pub item: ItemId,
-    /// Who is taking or holding it.
-    pub holder: String,
-    /// How long to hold it.
-    pub lease: Duration,
-}
-
-/// Who is ending what, and why.
-///
-/// Shared by `abandon` and `decline` for the shape of the argument list only. What they end
-/// is different, which is why they stay two verbs and two ledger calls — `OD-LEDGER-019`.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct EndingRequest
-{
-    /// Which item.
-    pub item: ItemId,
-    /// Who is ending it.
-    pub holder: String,
-    /// Why.
-    pub reason: String,
-}
+use report::{
+    Amendment_Note, Blocking_Refusal, Code_For_Refusal, Print_Blocked, Report_Claim,
+    Report_Decline, Report_Error, Report_Finish, Report_Release, Report_Validation,
+};
 
 /// Runs a command against the ledger at `directory`, writing to `output`.
 ///

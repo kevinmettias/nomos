@@ -1,5 +1,7 @@
 //! What the work verbs promise, exercised.
 
+use std::time::Duration;
+
 use super::*;
 use super::parse::{Parse_Duration, Usage_Text};
 use nomos_ledger::{DEFAULT_LEASE, ItemState, LedgerDocument};
