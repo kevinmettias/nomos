@@ -27,6 +27,29 @@ impl StdFileSystem
             },
         };
     }
+
+    /// Leaving a stray temporary behind after a failed rename would accumulate one file per
+    /// failure next to the real one, so it is cleaned up.
+    ///
+    /// The rename's error stays the one reported, because it is the reason the caller's write
+    /// did not happen — a cleanup that also failed is appended to it rather than replacing it,
+    /// so neither failure is the price of naming the other.
+    fn Unrenamed(path: &Path, temporary: &Path, error: &std::io::Error) -> FileSystemError
+    {
+        let Err(stray) = std::fs::remove_file(temporary)
+        else
+        {
+            return Self::Classify(path, error);
+        };
+
+        return FileSystemError::Other {
+            path: path.display().to_string(),
+            cause: format!(
+                "{error}, and the temporary {} it left could not be removed either: {stray}",
+                temporary.display()
+            ),
+        };
+    }
 }
 
 /// Writes and flushes a file completely before anybody can see it under its real name.
@@ -55,7 +78,6 @@ impl FileSystem for StdFileSystem
     fn Replace_Atomically(&self, path: &Path, contents: &str) -> Result<(), FileSystemError>
     {
         let temporary = path.with_extension("tmp");
-
         if let Some(parent) = path.parent()
             && !parent.as_os_str().is_empty()
         {
@@ -68,26 +90,8 @@ impl FileSystem for StdFileSystem
         // which the file is empty; a reader arriving in that window sees a ledger with
         // no items, and a crash landing in it leaves one. A rename has no such window:
         // a reader sees the old contents or the new ones and never anything between.
-        return std::fs::rename(&temporary, path).map_err(|error| {
-            // Leaving a stray temporary behind after a failed rename would accumulate
-            // one file per failure next to the real one, so clean it up. The rename's
-            // error stays the one reported, because it is the reason the caller's write
-            // did not happen — a cleanup that also failed is appended to it rather than
-            // replacing it, so neither failure is the price of naming the other.
-            let Err(stray) = std::fs::remove_file(&temporary)
-            else
-            {
-                return Self::Classify(path, &error);
-            };
-
-            return FileSystemError::Other {
-                path: path.display().to_string(),
-                cause: format!(
-                    "{error}, and the temporary {} it left could not be removed either: {stray}",
-                    temporary.display()
-                ),
-            };
-        });
+        return std::fs::rename(&temporary, path)
+            .map_err(|error| return Self::Unrenamed(path, &temporary, &error));
     }
 
     fn Exists(&self, path: &Path) -> bool

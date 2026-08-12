@@ -5,7 +5,7 @@ use crate::contract::CapabilityContract;
 use crate::provider_offer::ProviderOffer;
 use crate::requirement::Requirement;
 use crate::selection::Selection;
-use nomos_contracts::{Applicability, CapabilityId};
+use nomos_contracts::{Applicability, CapabilityId, ProviderId};
 use std::collections::BTreeMap;
 
 /// Capability contracts and the offers against them.
@@ -54,17 +54,13 @@ impl Registry
         self.Refuse_Unofferable(&offer)?;
 
         let against = self.offers.entry(offer.capability.clone()).or_default();
-        if against
-            .iter()
-            .any(|existing| existing.provider == offer.provider)
+        if against.iter().any(|existing| existing.provider == offer.provider)
         {
-            return Err(RegistryError {
-                capability: offer.capability,
-                kind: RegistryErrorKind::Offer {
-                    provider: offer.provider,
-                    refusal: OfferRefusal::Duplicate,
-                },
-            });
+            return Err(Self::Refused(
+                &offer.capability,
+                &offer.provider,
+                OfferRefusal::Duplicate,
+            ));
         }
 
         against.push(offer);
@@ -74,6 +70,22 @@ impl Registry
         // every time.
         against.sort_by(|left, right| left.provider.cmp(&right.provider));
         return Ok(());
+    }
+
+    /// One provider's offer, refused for a named reason.
+    fn Refused(
+        capability: &CapabilityId,
+        provider: &ProviderId,
+        refusal: OfferRefusal,
+    ) -> RegistryError
+    {
+        return RegistryError {
+            capability: capability.clone(),
+            kind: RegistryErrorKind::Offer {
+                provider: provider.clone(),
+                refusal,
+            },
+        };
     }
 
     /// Every offer standing against a capability, in name order.
@@ -122,24 +134,19 @@ impl Registry
         let Some(contract) = self.declared.get(&offer.capability)
         else
         {
-            return Err(RegistryError {
-                capability: offer.capability.clone(),
-                kind: RegistryErrorKind::Offer {
-                    provider: offer.provider.clone(),
-                    refusal: OfferRefusal::ForUndeclared,
-                },
-            });
+            return Err(Self::Refused(
+                &offer.capability,
+                &offer.provider,
+                OfferRefusal::ForUndeclared,
+            ));
         };
-
         if !contract.ceiling.Satisfies(&offer.guarantee)
         {
-            return Err(RegistryError {
-                capability: offer.capability.clone(),
-                kind: RegistryErrorKind::Offer {
-                    provider: offer.provider.clone(),
-                    refusal: OfferRefusal::ExceedsCeiling,
-                },
-            });
+            return Err(Self::Refused(
+                &offer.capability,
+                &offer.provider,
+                OfferRefusal::ExceedsCeiling,
+            ));
         }
 
         return Ok(());
@@ -374,26 +381,14 @@ mod tests
     fn Test_An_Undeclared_Capability_And_An_Unoffered_One_Should_Be_Different_Absences()
     {
         let undeclared = Registry::New().Resolve(&Need());
+        let mut declared = Registry::New();
+        declared.Declare(Contract()).expect("declared once");
 
-        let mut unoffered = Registry::New();
-        unoffered.Declare(Contract()).expect("declared once");
-        let unoffered = unoffered.Resolve(&Need());
+        let unoffered = declared.Resolve(&Need());
 
         assert_ne!(undeclared, unoffered);
-        assert!(matches!(
-            undeclared,
-            Resolution::Unsatisfied {
-                reason: Unmet::Undeclared,
-                ..
-            }
-        ));
-        assert!(matches!(
-            unoffered,
-            Resolution::Unsatisfied {
-                reason: Unmet::NoProvider,
-                ..
-            }
-        ));
+        assert!(matches!(undeclared, Resolution::Unsatisfied { reason: Unmet::Undeclared, .. }));
+        assert!(matches!(unoffered, Resolution::Unsatisfied { reason: Unmet::NoProvider, .. }));
         assert_ne!(
             undeclared.Applicability(),
             Applicability::NotApplicable,

@@ -198,7 +198,6 @@ fn Waited(
 ) -> Result<ExitOutcome, String>
 {
     let started = Instant::now();
-
     let outcome = loop
     {
         match child.try_wait()
@@ -213,25 +212,9 @@ fn Waited(
             {}
             Err(error) => return Err(format!("could not wait for `{program}`: {error}")),
         }
-
         if started.elapsed() >= timeout
         {
-            // A child that ended between the poll above and this kill is already in the
-            // state the kill was after, and the platforms disagree about how they say so:
-            // Unix reports success against a not-yet-reaped child, Windows answers
-            // `InvalidInput`. Every other failure means a process this function promised
-            // to stop is still running, and reporting the timeout would be a lie about it.
-            if let Err(cause) = child.kill()
-                && cause.kind() != std::io::ErrorKind::InvalidInput
-            {
-                return Err(format!("`{program}` outran its timeout and could not be killed: {cause}"));
-            }
-
-            // Reap it. A wait that fails here leaves the zombie this function exists to
-            // avoid, so it is reported rather than dropped.
-            child
-                .wait()
-                .map_err(|cause| return format!("could not reap `{program}` after killing it: {cause}"))?;
+            Stopped(child, program)?;
 
             break ExitOutcome::TimedOut;
         }
@@ -240,6 +223,31 @@ fn Waited(
     };
 
     return Ok(outcome);
+}
+
+/// Kills a child that outran its budget, and reaps it.
+///
+/// A child that ended between the last poll and this kill is already in the state the kill was
+/// after, and the platforms disagree about how they say so: Unix reports success against a
+/// not-yet-reaped child, Windows answers `InvalidInput`. Every other failure means a process
+/// this function promised to stop is still running, and reporting the timeout would be a lie
+/// about it.
+///
+/// A wait that fails leaves the zombie this exists to avoid, so it is reported rather than
+/// dropped.
+fn Stopped(child: &mut std::process::Child, program: &str) -> Result<(), String>
+{
+    if let Err(cause) = child.kill()
+        && cause.kind() != std::io::ErrorKind::InvalidInput
+    {
+        return Err(format!("`{program}` outran its timeout and could not be killed: {cause}"));
+    }
+
+    child
+        .wait()
+        .map_err(|cause| return format!("could not reap `{program}` after killing it: {cause}"))?;
+
+    return Ok(());
 }
 
 /// Gives the readers a bounded moment to finish what is left in the pipes.
@@ -477,25 +485,7 @@ mod tests
     #[test]
     fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
     {
-        // Run the slow program directly rather than under a shell. `timeout` on Windows
-        // refuses a redirected stdin and this launcher always gives it one, and a shell
-        // wrapper would put the sleeping process a generation away from the kill.
-        let argv = if cfg!(windows)
-        {
-            vec![
-                "ping".to_owned(),
-                "-n".to_owned(),
-                "8".to_owned(),
-                "127.0.0.1".to_owned(),
-            ]
-        }
-        else
-        {
-            vec!["sleep".to_owned(), "7".to_owned()]
-        };
-
-        let slow = Command::New(argv, Duration::from_secs(1));
-
+        let slow = Command::New(A_Slow_Program(), Duration::from_secs(1));
         let started = Instant::now();
         let output = StdProcessLauncher.Run(&slow).unwrap();
 
@@ -505,6 +495,24 @@ mod tests
             started.elapsed() < Duration::from_secs(7),
             "the timeout did not terminate the program, it waited for it"
         );
+    }
+
+    /// Run directly rather than under a shell. `timeout` on Windows refuses a redirected
+    /// stdin and this launcher always gives it one, and a shell wrapper would put the
+    /// sleeping process a generation away from the kill.
+    fn A_Slow_Program() -> Vec<String>
+    {
+        if cfg!(windows)
+        {
+            return vec![
+                "ping".to_owned(),
+                "-n".to_owned(),
+                "8".to_owned(),
+                "127.0.0.1".to_owned(),
+            ];
+        }
+
+        return vec!["sleep".to_owned(), "7".to_owned()];
     }
 
     /// A grandchild holding the pipe open must not hold the launcher open.
@@ -518,25 +526,7 @@ mod tests
     #[test]
     fn Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher()
     {
-        let argv = if cfg!(windows)
-        {
-            vec![
-                "cmd".to_owned(),
-                "/C".to_owned(),
-                "start /B ping -n 30 127.0.0.1 & echo parent-done".to_owned(),
-            ]
-        }
-        else
-        {
-            vec![
-                "sh".to_owned(),
-                "-c".to_owned(),
-                "sleep 29 & echo parent-done".to_owned(),
-            ]
-        };
-
-        let orphaning = Command::New(argv, Duration::from_secs(20));
-
+        let orphaning = Command::New(A_Program_That_Orphans(), Duration::from_secs(20));
         let started = Instant::now();
         let output = StdProcessLauncher.Run(&orphaning).unwrap();
         let waited = started.elapsed();
@@ -550,5 +540,25 @@ mod tests
             waited < Duration::from_secs(20),
             "waited {waited:?} for a process that was never the one being judged"
         );
+    }
+
+    /// A shell that hands a pipe to a background process and then exits, so the grandchild
+    /// outlives the budget by an order of magnitude.
+    fn A_Program_That_Orphans() -> Vec<String>
+    {
+        if cfg!(windows)
+        {
+            return vec![
+                "cmd".to_owned(),
+                "/C".to_owned(),
+                "start /B ping -n 30 127.0.0.1 & echo parent-done".to_owned(),
+            ];
+        }
+
+        return vec![
+            "sh".to_owned(),
+            "-c".to_owned(),
+            "sleep 29 & echo parent-done".to_owned(),
+        ];
     }
 }
