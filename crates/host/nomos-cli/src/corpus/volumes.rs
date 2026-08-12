@@ -94,16 +94,16 @@ pub(super) fn Read_Volume(
         return;
     }
 
-    let name = path
-        .file_name()
-        .and_then(std::ffi::OsStr::to_str)
-        .unwrap_or_default()
-        .to_owned();
-
     match std::fs::read_to_string(path)
     {
         Ok(text) =>
         {
+            let name = path
+                .file_name()
+                .and_then(std::ffi::OsStr::to_str)
+                .unwrap_or_default()
+                .to_owned();
+
             documents.insert(name, text);
         }
         Err(error) => unreadable.push(format!("{}: {error}", path.display())),

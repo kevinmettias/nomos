@@ -20,6 +20,11 @@ const REFERENCE: &str = "# Reference\n\n## Glossary\n\n\
                          ### G.1 Scenario catalog and coverage\n\nA catalog.\n\n\
                          ### G.2 End-to-end scenario: add a strategy\n\nA scenario.\n";
 
+/// A glossary carrying the name the domain model in [`CORE`] already carries.
+const SHARED: &str = "# Reference\n\n## Glossary\n\n\
+                      | Term | Definition |\n| --- | --- |\n\
+                      | WorkspaceContext | The term, not the model. |\n";
+
 /// A store and the markdown it was built from.
 ///
 /// Named rather than a pair, so that a caller reading one member is reading a name and
@@ -209,10 +214,6 @@ fn Test_A_Restored_Concept_Should_Resolve_By_Its_Authored_Name()
 #[test]
 fn Test_A_Name_Two_Members_Carry_Should_Resolve_To_Neither()
 {
-    const SHARED: &str = "# Reference\n\n## Glossary\n\n\
-                          | Term | Definition |\n| --- | --- |\n\
-                          | WorkspaceContext | The term, not the model. |\n";
-
     let Built {
         mut store,
         documents,

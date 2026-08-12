@@ -11,6 +11,9 @@ use crate::volumes::Volume;
 use nomos_spec_model::{BlockKind, Segment};
 use std::path::Path;
 
+/// Section 6's own heading, spelled as volume 02 titles it.
+const SECTION_SIX: &str = "6. Systems and subsystem responsibilities";
+
 pub(crate) struct Heading
 {
     pub(crate) depth: usize,
@@ -163,12 +166,11 @@ pub(crate) fn Section_Six(corpus: &Path) -> SectionCounts
 /// level or above.
 fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
 {
-    const SECTION: &str = "6. Systems and subsystem responsibilities";
     let mut inside = false;
     let (mut all, mut leaves, mut services) = (0_u32, 0_u32, 0_u32);
     for heading in headings
     {
-        if heading.title == SECTION
+        if heading.title == SECTION_SIX
         {
             inside = true;
         }

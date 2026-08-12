@@ -12,6 +12,16 @@
 use nomos_spec_ingest::{Archive, ArchiveErrorKind, Archives_In};
 use std::path::PathBuf;
 
+/// The fixture each always-on test writes and reads.
+///
+/// Four names rather than one, for the reason [`Fixture`] states: these tests run
+/// concurrently, and a shared name would have one reading a file another was still
+/// writing. They are four facts that happen to be spelled alike, not one fact.
+const LISTING_FIXTURE: &str = "listing";
+const ADDRESSING_FIXTURE: &str = "addressing";
+const MISSING_ENTRY_FIXTURE: &str = "missing-entry";
+const BINARY_FIXTURE: &str = "binary";
+
 fn Archives() -> Option<PathBuf>
 {
     let root = PathBuf::from(std::env::var_os("NOMOS_SPEC_ARCHIVES")?);
@@ -50,9 +60,7 @@ fn Fixture(name: &str) -> PathBuf
 #[test]
 fn Test_An_Archive_Should_List_Its_Files_Sorted()
 {
-    const NAME: &str = "listing";
-
-    let mut archive = Archive::Open(&Fixture(NAME)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(LISTING_FIXTURE)).expect("opens");
 
     assert_eq!(
         archive.Listing().Paths(),
@@ -75,9 +83,7 @@ fn Test_An_Archive_Should_List_Its_Files_Sorted()
 #[test]
 fn Test_An_Entry_Should_Be_Addressable_By_Its_Path()
 {
-    const NAME: &str = "addressing";
-
-    let mut archive = Archive::Open(&Fixture(NAME)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(ADDRESSING_FIXTURE)).expect("opens");
 
     let text = archive.Read_Text("suite/nested/01-core.md").expect("reads");
 
@@ -88,25 +94,21 @@ fn Test_An_Entry_Should_Be_Addressable_By_Its_Path()
 #[test]
 fn Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry()
 {
-    const NAME: &str = "missing-entry";
-
-    let mut archive = Archive::Open(&Fixture(NAME)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(MISSING_ENTRY_FIXTURE)).expect("opens");
 
     let refusal = archive.Read("suite/absent.md").expect_err("must refuse");
 
     assert!(matches!(refusal.kind, ArchiveErrorKind::NoSuchEntry { .. }), "{refusal}");
     let spelled = refusal.to_string();
     assert!(spelled.contains("suite/absent.md"), "{spelled}");
-    assert!(spelled.contains(NAME), "{spelled}");
+    assert!(spelled.contains(MISSING_ENTRY_FIXTURE), "{spelled}");
 }
 
 /// Bytes that are not text are an error, not a lossy replacement.
 #[test]
 fn Test_A_Binary_Entry_Should_Refuse_To_Be_Read_As_Text()
 {
-    const NAME: &str = "binary";
-
-    let mut archive = Archive::Open(&Fixture(NAME)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(BINARY_FIXTURE)).expect("opens");
 
     assert_eq!(archive.Read("suite/binary.bin").expect("reads"), vec![0xFF, 0xFE, 0x00]);
 

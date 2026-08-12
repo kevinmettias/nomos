@@ -211,6 +211,9 @@ mod tests
 {
     use super::*;
 
+    /// A document with front matter, read here both with a leading mark and without one.
+    const DOCUMENT: &str = "---\nid: D-045\n---\n\n# Runtime capture boundary\n\nBody.\n";
+
     #[test]
     fn Test_Front_Matter_Should_Not_Become_A_Block()
     {
@@ -226,8 +229,6 @@ mod tests
     #[test]
     fn Test_A_Byte_Order_Mark_Should_Not_Turn_Front_Matter_Into_Content()
     {
-        const DOCUMENT: &str = "---\nid: D-045\n---\n\n# Runtime capture boundary\n\nBody.\n";
-
         let marked = Segment(&format!("\u{feff}{DOCUMENT}"));
 
         assert_eq!(marked, Segment(DOCUMENT), "the mark changed how the document read");

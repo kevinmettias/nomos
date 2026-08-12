@@ -21,6 +21,12 @@ const DEFAULT_ROOT: &str = "F:/repos/xvpe";
 /// reporting success.
 const EXPECTED_AT_LEAST: usize = 5_000;
 
+/// The determinism sample: every 97th file in sorted order.
+///
+/// Named rather than a cap, because the count and the stride are both reported and a
+/// reader has to be able to tell a spread sample from a truncated walk.
+const STRIDE: usize = 97;
+
 pub(crate) struct Corpus
 {
     pub(crate) root: PathBuf,
@@ -247,8 +253,6 @@ fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
 #[test]
 fn Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts()
 {
-    const STRIDE: usize = 97;
-
     let Some(corpus) = Corpus_Or_Skip()
     else
     {

@@ -78,9 +78,9 @@ fn Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies()
     let mut derived = Base();
     derived.subject = Subject(7);
     let mut store = Stored(&read);
-    let registry = Offering(Syntactic());
 
     let dependencies = {
+        let registry = Offering(Syntactic());
         let mut reader = Reader::On(&store, &registry, Context_At(GenerationId::INITIAL));
         let _ = reader.Get(&read.clone().At(GenerationId::INITIAL));
         reader.Into_Dependencies()

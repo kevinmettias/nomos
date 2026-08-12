@@ -45,6 +45,12 @@ fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
 // A record identifier is allocated once, and `add` is where that is enforced.
 // ---------------------------------------------------------------------------
 
+/// A record that has been published, spelled as the file it actually is.
+const PUBLISHED_RECORD_FILE: &str = "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md";
+
+/// A record identifier some other item is holding, spelled bare.
+const RESERVED_RECORD: &str = "docs/records/OD-LEDGER-020";
+
 /// An item reserving `docs/records/<ID>` alongside whatever else it touches.
 fn Reserving_Record(id: &str, identifier: &str) -> LedgerItem
 {
@@ -141,18 +147,21 @@ fn Amending(files: &[&str]) -> ItemTerritory
 #[test]
 fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
 {
-    const FILE: &str = "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md";
-
     for (described, spelled) in [
         ("the bare identifier", "docs/records/OD-LEDGER-006"),
-        ("the published filename", FILE),
+        ("the published filename", PUBLISHED_RECORD_FILE),
     ]
     {
         let (_directory, mut ledger) = Board_At("add-record-amended", Vec::new());
         let item = Reserving_Record("T-1", spelled);
 
         assert_eq!(
-            ledger.Add(&item, "agent-a", &Published(&[FILE]), &Amending(&[spelled])),
+            ledger.Add(
+                &item,
+                "agent-a",
+                &Published(&[PUBLISHED_RECORD_FILE]),
+                &Amending(&[spelled])
+            ),
             Ok(()),
             "an amendment declared by {described} was refused as an allocation"
         );
@@ -314,14 +323,12 @@ fn Allocates_Over<Clock: nomos_platform::Clock>(
     state: ItemState,
 )
 {
-    const RECORD: &str = "docs/records/OD-LEDGER-020";
-
     let described = format!("{state:?}");
     ledger
-        .Save(&Document(vec![Closed_Reserving(RECORD, state)]))
+        .Save(&Document(vec![Closed_Reserving(RESERVED_RECORD, state)]))
         .expect("valid");
 
-    let item = Reserving_Record("T-2", RECORD);
+    let item = Reserving_Record("T-2", RESERVED_RECORD);
     assert_eq!(
         ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty()),
         Ok(()),
