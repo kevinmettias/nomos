@@ -8,6 +8,11 @@
 //! writes the result into the item, so `Done` is a state the ledger arrives at by
 //! observation.
 
+// A finish in progress, beside the verb that runs it.
+mod finishing;
+
+pub use finishing::Finishing;
+
 // The three ways an item stops being held without being finished. They sit beside the
 // finish they are the alternatives to, rather than in a `finishing` of their own that a
 // reader would have had to tell apart from this one by opening both.
@@ -30,7 +35,6 @@ use refusal::Tail_Of;
 use running::{Commanded, Ran, Ran_To_Completion, Refuse_Nonzero, Runnable_Predicate, Runner};
 use gate_step::Run_Gate_Step;
 
-use crate::Finishing;
 use crate::ClaimRefusal;
 use crate::ExclusionLedger;
 use crate::Derive_Step;

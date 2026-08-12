@@ -157,8 +157,8 @@ fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
     assert_eq!(entry.verdict, Verdict::Met);
     assert_eq!(entry.record.as_deref(), Some("OD-CONTRACTS-002"));
     for file in [
-        "crates/contracts/nomos-contracts/src/applicability.rs",
-        "crates/contracts/nomos-contracts/src/evidence.rs",
+        "crates/contracts/nomos-contracts/src/finding/applicability.rs",
+        "crates/contracts/nomos-contracts/src/finding/evidence.rs",
     ]
     {
         assert!(

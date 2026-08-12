@@ -257,7 +257,7 @@ fn Test_A_Registration_With_No_Record_Should_Be_A_Phantom()
 ///
 /// What it does **not** prove is that the build script reads `records/` rather than
 /// `docs/records`: in a consistent tree both produce the same identifiers. That is guarded
-/// structurally in `src/registration/mod.rs` and textually by
+/// structurally in `src/registration.rs` and textually by
 /// [`Test_The_Build_Script_Should_Not_Enumerate_The_Record_Directory`].
 #[test]
 fn Test_The_Governing_List_Should_Be_The_Registration_Directory()
@@ -351,7 +351,7 @@ fn Test_Comparing_The_Directory_Against_Itself_Would_Check_Nothing()
 /// The build script's input directory is the registration directory.
 ///
 /// **This is a textual check and it is nothing more than that.** It reads `build.rs` and
-/// `src/registration/mod.rs` as text and asserts that no directory enumeration in either of
+/// `src/registration.rs` as text and asserts that no directory enumeration in either of
 /// them is applied to a path built from `docs/records`. It cannot detect a rewrite that
 /// reaches the same directory by another spelling, and it is not evidence about behaviour.
 ///
@@ -360,14 +360,14 @@ fn Test_Comparing_The_Directory_Against_Itself_Would_Check_Nothing()
 /// other test in the tree: in a consistent tree the two directories yield the same
 /// identifiers, so everything still passes while the guard checks nothing. The behavioural
 /// half of the guard is `Test_The_Reader_Should_Enumerate_The_Directory_It_Is_Given` in
-/// `src/registration/mod.rs`, which hands the reader a directory of one and catches it if it
+/// `src/registration.rs`, which hands the reader a directory of one and catches it if it
 /// returns more.
 #[test]
 fn Test_The_Build_Script_Should_Not_Enumerate_The_Record_Directory()
 {
     let crate_root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
 
-    for file in ["build.rs", "src/registration/mod.rs"]
+    for file in ["build.rs", "src/registration.rs"]
     {
         let path = crate_root.join(file);
         let text = std::fs::read_to_string(&path)

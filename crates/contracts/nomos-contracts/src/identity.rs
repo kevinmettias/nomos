@@ -6,6 +6,11 @@
 //! prototype, where every comparative feature (diffing, history, trajectories,
 //! co-change, transformation tracking) turned out to be a join with no key.
 
+// The generation an identity was minted in.
+mod generation_id;
+
+pub use generation_id::GenerationId;
+
 use serde::{Deserialize, Serialize};
 
 /// A 128-bit content digest, rendered as 32 lowercase hex characters.

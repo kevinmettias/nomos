@@ -67,7 +67,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-store/src/governing.rs",
+        path: "crates/spec/nomos-spec-store/src/store/governing.rs",
         name: "GOVERNING_RECORD_IDS",
         kind: UniverseKind::Constant,
         standing: Standing::Mirrored {
@@ -131,7 +131,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-ingest/src/siblings/mod.rs",
+        path: "crates/spec/nomos-spec-ingest/src/siblings.rs",
         name: "Sibling::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
@@ -165,7 +165,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-project/src/format.rs",
+        path: "crates/spec/nomos-spec-project/src/projection/format.rs",
         name: "Format::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

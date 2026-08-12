@@ -47,7 +47,7 @@ fn Domain_Table_Path() -> Option<PathBuf>
     let workspace = Workspace::Load();
     let contracts = workspace.Get("nomos-contracts")?;
 
-    return Some(contracts.root.join("src/determinism/mod.rs"));
+    return Some(contracts.root.join("src/determinism.rs"));
 }
 
 /// Every row of the domain table, derived from the contracts crate's own source.

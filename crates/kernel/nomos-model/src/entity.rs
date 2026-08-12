@@ -7,6 +7,11 @@
 //! something new about one. The two change for different reasons and on different
 //! schedules.
 
+// An entity as one snapshot saw it.
+mod snapshot;
+
+pub use snapshot::SnapshotEntity;
+
 mod artifact;
 mod artifact_kind;
 mod id;

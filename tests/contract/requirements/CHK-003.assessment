@@ -15,7 +15,7 @@
 # to look.
 verdict: Met
 record: OD-CONTRACTS-002
-site: crates/contracts/nomos-contracts/src/applicability.rs#AgentRequired
-site: crates/contracts/nomos-contracts/src/applicability.rs#Requires_Agent
-site: crates/contracts/nomos-contracts/src/evidence.rs#AgentJudged
-site: crates/contracts/nomos-contracts/src/evidence.rs#Is_Mechanical
+site: crates/contracts/nomos-contracts/src/finding/applicability.rs#AgentRequired
+site: crates/contracts/nomos-contracts/src/finding/applicability.rs#Requires_Agent
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#AgentJudged
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#Is_Mechanical

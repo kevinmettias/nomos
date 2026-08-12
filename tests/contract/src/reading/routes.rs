@@ -279,7 +279,7 @@ fn Candidates(route: &[String], from: &[String]) -> Vec<Vec<String>>
 /// own `pub use` declarations reach.
 ///
 /// A module that names it without declaring it re-exported it from somewhere further down.
-/// `nomos-contracts` is built that way — `src/determinism/mod.rs` gathers four types from
+/// `nomos-contracts` is built that way — `src/determinism.rs` gathers four types from
 /// four files and the crate root re-exports the gathering — and stopping at the first hop
 /// left the whole of that crate's determinism vocabulary out of its snapshot while reporting
 /// the re-export as unresolvable.

@@ -1,5 +1,12 @@
 //! The specification store: one `SQLite` database, opened, migrated and queried.
 
+// Seeding this build's own governing records into a store. It sits here rather than under
+// `registration` because the build script reaches registration.rs by #[path] and compiles
+// it with no crate around it, so a child of registration cannot name `crate::`.
+mod governing;
+
+pub use governing::{GOVERNING_RECORD_IDS, Seed_Governing_Records, SeedReport};
+
 pub(crate) mod error;
 
 mod write;
@@ -235,7 +242,7 @@ impl SpecificationStore
     /// Returns [`StoreError`] on any SQL failure.
     pub fn Row_Census(&self, scope: RowScope) -> Result<RowCensus, StoreError>
     {
-        return crate::rows::Census(&self.connection, scope);
+        return crate::table::rows::Census(&self.connection, scope);
     }
 
     /// Writes a node, upgrading a placeholder but never overwriting a real one.

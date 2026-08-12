@@ -1,5 +1,16 @@
 //! The durable ledger: a JSON file, a lock beside it, and the rules it must satisfy.
 
+// The ledger file as a document, beside the reader that parses one.
+mod ledger_document;
+
+pub use ledger_document::LedgerDocument;
+pub(crate) use ledger_document::VersionProbe;
+
+// Why an add was refused, beside the guard in store.rs that refuses it.
+mod add_refusal;
+
+pub use add_refusal::AddRefusal;
+
 mod claiming;
 mod document;
 mod file;
@@ -22,13 +33,11 @@ use std::time::Duration;
 
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timestamp};
 
-use crate::AddRefusal;
 use crate::Claim;
 use crate::ClaimRefusal;
 use crate::exclusion::{Check_Lease, ExclusionLedger};
 use crate::LedgerItem;
 use crate::ItemId;
-use crate::LedgerDocument;
 use crate::LedgerError;
 use crate::ReleaseOutcome;
 use crate::Reservation;

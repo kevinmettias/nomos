@@ -256,24 +256,44 @@ fn Test_Only_In(file: &Path) -> Vec<PathBuf>
     {
         return excluded;
     };
-    let Some(home) = file.parent()
-    else
-    {
-        return excluded;
-    };
     let mut gated = false;
     for line in text.lines()
     {
         let line = line.trim();
         if let Some(name) = Declared_Module(line).filter(|_| return gated)
         {
-            excluded.push(home.join(format!("{name}.rs")));
-            excluded.push(home.join(name));
+            excluded.extend(Module_Homes(file).map(|home| return home.join(format!("{name}.rs"))));
+            excluded.extend(Module_Homes(file).map(|home| return home.join(name)));
         }
         gated = line == "#[cfg(test)]";
     }
 
     return excluded;
+}
+
+/// The directories a `mod <name>;` in `file` may resolve against.
+///
+/// Two of them, because Rust 2018 gives a module two spellings and this scan has to know
+/// both. A crate root, a `main.rs` and a `mod.rs` own the directory they sit in, so their
+/// children are beside them. Any other file owns the directory *named after it*, so
+/// `mirror.rs` declaring `mod tests;` means `mirror/tests.rs` and not `tests.rs`.
+///
+/// Reading only the first spelling is what this scan used to do, and it was invisible while
+/// every module root in the workspace was a `mod.rs`. The moment they became `<name>.rs` it
+/// stopped excluding a single test file, and `nomos-rules` was reported as constructing
+/// facts and promising nothing about them — a claim assembled entirely out of its own unit
+/// tests.
+fn Module_Homes(file: &Path) -> impl Iterator<Item = PathBuf>
+{
+    let beside = file.parent().map(Path::to_path_buf);
+    let stem = file.file_stem().and_then(std::ffi::OsStr::to_str).unwrap_or_default();
+    let owns_its_directory = matches!(stem, "lib" | "main" | "mod");
+    let beneath = beside
+        .clone()
+        .filter(|_| return !owns_its_directory)
+        .map(|home| return home.join(stem));
+
+    return beside.into_iter().chain(beneath);
 }
 
 /// The module name a `mod <name>;` line declares, if the line is one.

@@ -25,9 +25,7 @@
 
 mod block;
 mod failure;
-mod field_value;
 mod normalize;
-mod origin;
 mod record;
 mod render;
 mod statement;
@@ -36,11 +34,9 @@ mod table;
 
 pub use block::{BlockKind, Segment, SourceBlock};
 pub use failure::{DecisionGap, Failure, Refusal, Severity};
-pub use field_value::FieldValue;
 pub use normalize::{ContentHash, HASH_PREFIX, Is_Normalized, Normalize};
-pub use origin::Origin;
 pub use record::{Parse_Record, Record, RecordError, RecordFrontMatter, RecordRelation};
 pub use render::{Render_Record, RenderError, Round_Trips};
 pub use statement::{NormativeStatement, StatementId, StatementKind};
-pub use submission::{Submission, SubmissionKind, SubmissionState, Validate};
+pub use submission::{FieldValue, Origin, Submission, SubmissionKind, SubmissionState, Validate};
 pub use table::{RowKind, TableDefect, TableRow, Table_Defects, Table_Rows};

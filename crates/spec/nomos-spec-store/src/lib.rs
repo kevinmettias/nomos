@@ -8,7 +8,6 @@
 
 mod authoring;
 mod edit;
-mod governing;
 mod read;
 mod record;
 /// The registration reader, which the library itself never calls.
@@ -22,7 +21,6 @@ mod record;
 /// asserted. Under `cfg(test)` they run with `cargo test -p nomos-spec-store`.
 #[cfg(test)]
 mod registration;
-mod rows;
 mod schema;
 mod store;
 mod submission;
@@ -34,7 +32,6 @@ pub use edit::commit_report::CommitReport;
 pub use read::document_source::DocumentSource;
 pub use edit::error::EditError;
 pub use edit::preview::EditPreview;
-pub use governing::{GOVERNING_RECORD_IDS, Seed_Governing_Records, SeedReport};
 pub use edit::identity_change::IdentityChange;
 pub use read::node_row::NodeRow;
 pub use read::node_summary::NodeSummary;
@@ -48,7 +45,7 @@ pub use table::row_census::RowCensus;
 pub use table::row_scope::RowScope;
 pub use schema::{Latest_Version, Migration, MIGRATIONS};
 pub use edit::staged::StagedEdit;
-pub use store::{AUTHORED, EXTERNAL, SpecificationStore};
+pub use store::{AUTHORED, EXTERNAL, GOVERNING_RECORD_IDS, SeedReport, Seed_Governing_Records, SpecificationStore};
 pub use store::error::StoreError;
 pub use submission::{Accept_Submission, AcceptError, Transport_Origin};
 pub use table::suite_authority::SuiteAuthority;

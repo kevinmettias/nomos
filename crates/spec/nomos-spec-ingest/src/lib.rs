@@ -10,7 +10,6 @@ mod reconciliation;
 mod content;
 mod archive;
 mod family;
-mod gate;
 mod phases;
 mod restore;
 mod revisions;
@@ -33,7 +32,6 @@ pub use family::Family;
 pub use reconciliation::fate::Fate;
 pub use content::block::filler::FillerBlock;
 pub use reconciliation::report::filler_census::FillerCensus;
-pub use gate::{Check_Against_Manifest, GateReport, Parse_Block_Lineage};
 pub use reconciliation::hollow::Hollow;
 pub use reconciliation::identifier_outcome::IdentifierOutcome;
 pub use reconciliation::report::kind_census::KindCensus;
@@ -48,10 +46,7 @@ pub use reconciliation::overlay::{
     Statements_In,
 };
 pub use reconciliation::overlay::pair_change::PairChange;
-pub use phases::{
-    Ingest_Blob, Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, IngestError, Parse_Catalog,
-    Parse_Statements,
-};
+pub use phases::{Check_Against_Manifest, GateReport, IngestError, Ingest_Blob, Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, Parse_Block_Lineage, Parse_Catalog, Parse_Statements};
 pub use content::block::recorded::RecordedBlock;
 pub use content::section::recorded::RecordedSection;
 pub use content::statement::recorded::RecordedStatement;

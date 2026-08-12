@@ -10,5 +10,5 @@
 # the verdict readable by a machine.
 verdict: Met
 record: OD-TRACE-001
-site: crates/contracts/nomos-contracts/src/evidence.rs#EvidenceClass
-site: crates/contracts/nomos-contracts/src/evidence.rs#Is_Mechanical
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#EvidenceClass
+site: crates/contracts/nomos-contracts/src/finding/evidence.rs#Is_Mechanical

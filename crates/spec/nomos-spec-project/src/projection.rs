@@ -1,3 +1,10 @@
+// How a projection narrows what it selects, and what it renders it as.
+mod filter;
+mod format;
+
+pub use filter::Filter;
+pub use format::Format;
+
 // What a projection is made of: what goes in, the items it selects, the content it
 // carries, and what comes out.
 mod content;
@@ -11,7 +18,6 @@ pub use item::Item;
 pub use output::Output;
 
 use crate::Section;
-use crate::Format;
 use nomos_spec_model::ContentHash;
 use serde::Serialize;
 

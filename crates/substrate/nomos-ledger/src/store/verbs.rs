@@ -1,7 +1,7 @@
 //! The bodies of the three verbs that change the board, and of the check over the whole of it.
 //!
 //! Each of these is the body of a method on [`FileLedger`] and not the method. The method
-//! keeps its own documentation and its signature in `mod.rs`, because that is where a reader
+//! keeps its own documentation and its signature in `store.rs`, because that is where a reader
 //! of the crate's surface looks and where `tests/contract`'s snapshot reads it from: that
 //! reader resolves `pub use store::FileLedger` against one module, so a `pub fn` written on
 //! the type anywhere else is public and unrecorded.

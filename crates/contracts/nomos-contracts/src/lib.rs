@@ -74,33 +74,22 @@
 
 #![forbid(unsafe_code)]
 
-mod applicability;
 mod authority;
 mod contract_version;
 mod determinism;
-mod display_label;
 mod enforcement;
-mod evidence;
 mod finding;
-mod generation_id;
 mod guarantee;
 mod identity;
 mod package;
 mod peer;
 
-pub use applicability::Applicability;
 pub use authority::{AuthorityClass, MutationClass};
 pub use contract_version::ContractVersion;
 pub use determinism::{Declaration_Is_Coherent, DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
-pub use display_label::DisplayLabel;
 pub use enforcement::{EnforcementBreach, EnforcementReach, EnforcerRef, GateCategory};
-pub use evidence::EvidenceClass;
-pub use finding::Finding;
-pub use generation_id::GenerationId;
+pub use finding::{Applicability, DisplayLabel, EvidenceClass, Finding};
 pub use guarantee::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
-pub use identity::{
-    BuildVariantId, CapabilityId, ConfigurationId, Digest128, OperationName, PackageId, ProviderId, RuleId, RunId,
-    SchemaId, SnapshotEntityId, SnapshotId, SubjectId,
-};
+pub use identity::{BuildVariantId, CapabilityId, ConfigurationId, Digest128, GenerationId, OperationName, PackageId, ProviderId, RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId, SubjectId};
 pub use package::PackageKind;
 pub use peer::{PeerAvailability, SynchronizationState};

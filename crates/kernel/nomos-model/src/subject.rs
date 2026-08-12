@@ -1,5 +1,15 @@
 //! Addressing a thing a rule, metric or finding can be about.
 
+// Resolving a set of subjects: what two sets have in common, how far the resolution got,
+// and why part of it is unknown.
+mod intersection;
+mod set_resolution;
+mod unknown_reason;
+
+pub use intersection::Intersection;
+pub use set_resolution::SetResolution;
+pub use unknown_reason::UnknownReason;
+
 // What a subject is of, what set of them a rule reaches, and what one points at.
 mod kind;
 mod set;

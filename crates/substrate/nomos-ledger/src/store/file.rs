@@ -1,7 +1,7 @@
 //! Reading and writing the ledger file, and deciding a change inside one lock acquisition.
 //!
 //! The bodies here belong to methods on [`FileLedger`] that keep their documentation and
-//! signature in `mod.rs`, for the reason `verbs.rs` gives: the surface snapshot resolves
+//! signature in `store.rs`, for the reason `verbs.rs` gives: the surface snapshot resolves
 //! `pub use store::FileLedger` against one module, so a `pub fn` written on the type
 //! anywhere else is public and unrecorded.
 

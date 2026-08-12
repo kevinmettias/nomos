@@ -17,9 +17,17 @@
 //! system — nothing is identified by its path and line, ever — and a finding is the
 //! type most likely to break it, because a location is the field a human wants first.
 
-use crate::Applicability;
+// What a finding says beyond its text: whether the rule applied, what class of evidence
+// backs it, and how each of those is labelled for a reader.
+mod applicability;
+mod display_label;
+mod evidence;
+
+pub use applicability::Applicability;
+pub use display_label::DisplayLabel;
+pub use evidence::EvidenceClass;
+
 use crate::GateCategory;
-use crate::EvidenceClass;
 use crate::{RuleId, SubjectId};
 use serde::{Deserialize, Serialize};
 

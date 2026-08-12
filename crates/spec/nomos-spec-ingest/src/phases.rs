@@ -1,3 +1,8 @@
+// The manifest gate I1's source truth sits behind.
+mod gate;
+
+pub use gate::{Check_Against_Manifest, GateReport, Parse_Block_Lineage};
+
 mod blob;
 mod source_document;
 mod statements;

@@ -22,14 +22,14 @@
 //!
 //! # Why this script is not where the parse lives
 //!
-//! It is in `src/registration/mod.rs`, reached below with `#[path]`, because a build script
+//! It is in `src/registration.rs`, reached below with `#[path]`, because a build script
 //! cannot depend on its own crate and a second copy of a format's reader is how two readers
 //! come to disagree. See that module for the rest of the reasoning, and for the refusals.
 //!
 //! This script has no dependencies and must keep none: adding one would move the crate's
 //! band and the `tests/contract` allowlist with it.
 
-#[path = "src/registration/mod.rs"]
+#[path = "src/registration.rs"]
 mod registration;
 
 use registration::{Registration, Registrations_In};

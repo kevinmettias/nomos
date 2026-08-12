@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use crate::ledger_document::VersionProbe;
+use crate::store::VersionProbe;
 use crate::LedgerError;
 
 use super::SCHEMA_VERSION;

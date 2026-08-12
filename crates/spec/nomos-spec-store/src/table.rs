@@ -1,5 +1,8 @@
 //! The tables a caller may count, and the statement each one carries.
 
+// Counting a table's rows, each number its own measurement.
+pub(crate) mod rows;
+
 pub(crate) mod row_census;
 pub(crate) mod row_scope;
 
