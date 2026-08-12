@@ -119,33 +119,13 @@ impl core::fmt::Display for BundleError
             Self::Store(error) => write!(formatter, "{error}"),
             Self::Sql(cause) => write!(formatter, "bundle sql error: {cause}"),
             Self::Json(cause) => write!(formatter, "bundle json error: {cause}"),
-            Self::Incomplete {
-                table,
-                in_store,
-                exported,
-            } => write!(
-                formatter,
-                "{table} holds {in_store} row(s) but the export emitted {exported}. \
-                 Refusing to write a bundle that is missing content"
-            ),
-            Self::UncoveredColumn { table, column } => write!(
-                formatter,
-                "{table}.{column} reaches no bundle record. Refusing to write a bundle whose \
-                 rows all count and are each missing a field"
-            ),
+            Self::Incomplete { table, in_store, exported } => Say_Incomplete(formatter, table, *in_store, *exported),
+            Self::UncoveredColumn { table, column } => Say_Uncovered_Column(formatter, table, column),
             Self::PhantomColumn { table, column } => write!(
                 formatter,
                 "the exporter claims to carry {table}.{column}, which the schema does not have"
             ),
-            Self::Uncarried {
-                table,
-                column,
-                field,
-            } => write!(
-                formatter,
-                "{table}.{column} claims to travel as `{field}`, which is not a field of a \
-                 {table} record"
-            ),
+            Self::Uncarried { table, column, field } => Say_Uncarried(formatter, table, column, field),
             Self::Tampered { declared, computed } => write!(
                 formatter,
                 "the manifest declares {declared} but the content hashes to {computed}"
@@ -158,11 +138,7 @@ impl core::fmt::Display for BundleError
                 formatter,
                 "the manifest declares {declared} {table} record(s); {present} are present"
             ),
-            Self::NotCanonical { line } => write!(
-                formatter,
-                "line {line} is not the canonical serialization of its own content. A bundle \
-                 that cannot be regenerated to a fixpoint is a gate that can never go green"
-            ),
+            Self::NotCanonical { line } => Say_Not_Canonical(formatter, *line),
             Self::Malformed(cause) => write!(formatter, "malformed bundle: {cause}"),
             Self::TooNew { found, supported } => write!(
                 formatter,
@@ -172,14 +148,78 @@ impl core::fmt::Display for BundleError
                 formatter,
                 "{record} names {reference}, which the bundle does not contain"
             ),
-            Self::Occupied { table, identity } => write!(
-                formatter,
-                "the store already holds {table} {identity}, which this bundle also carries. \
-                 Import places a bundle beside what a store holds rather than merging into \
-                 it, so it refuses rather than deciding which of the two is right"
-            ),
+            Self::Occupied { table, identity } => Say_Occupied(formatter, table, identity),
         };
     }
+}
+
+/// The row guard: a table holds rows the export did not emit.
+fn Say_Incomplete(
+    formatter: &mut core::fmt::Formatter<'_>,
+    table: &str,
+    in_store: u32,
+    exported: u32,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{table} holds {in_store} row(s) but the export emitted {exported}. \
+         Refusing to write a bundle that is missing content"
+    );
+}
+
+/// The column guard: every row counts and each is missing a field.
+fn Say_Uncovered_Column(
+    formatter: &mut core::fmt::Formatter<'_>,
+    table: &str,
+    column: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{table}.{column} reaches no bundle record. Refusing to write a bundle whose \
+         rows all count and are each missing a field"
+    );
+}
+
+/// A declaration naming a field the record does not have.
+fn Say_Uncarried(
+    formatter: &mut core::fmt::Formatter<'_>,
+    table: &str,
+    column: &str,
+    field: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "{table}.{column} claims to travel as `{field}`, which is not a field of a \
+         {table} record"
+    );
+}
+
+/// A bundle no regeneration would reproduce.
+fn Say_Not_Canonical(formatter: &mut core::fmt::Formatter<'_>, line: usize) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "line {line} is not the canonical serialization of its own content. A bundle \
+         that cannot be regenerated to a fixpoint is a gate that can never go green"
+    );
+}
+
+/// Import places a bundle beside what a store holds rather than merging into it.
+fn Say_Occupied(
+    formatter: &mut core::fmt::Formatter<'_>,
+    table: &str,
+    identity: &str,
+) -> core::fmt::Result
+{
+    return write!(
+        formatter,
+        "the store already holds {table} {identity}, which this bundle also carries. \
+         Import places a bundle beside what a store holds rather than merging into \
+         it, so it refuses rather than deciding which of the two is right"
+    );
 }
 
 impl std::error::Error for BundleError

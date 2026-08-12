@@ -32,7 +32,29 @@ fn Populated() -> SpecificationStore
 fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
 {
     let mut store = SpecificationStore::In_Memory().expect("opens");
+    let documents = Documents_In_Order(reversed);
+    if !reversed
+    {
+        Put_The_Binary_Blob(&mut store);
+    }
+    for (path, text) in documents
+    {
+        Put_Document(&mut store, path, text);
+    }
+    if reversed
+    {
+        Put_The_Binary_Blob(&mut store);
+    }
 
+    Populate_Graph(&store);
+    Populate_Submissions(&mut store);
+
+    return store;
+}
+
+/// The fixture's two documents, in the order this store is to be written in.
+fn Documents_In_Order(reversed: bool) -> Vec<(&'static str, &'static str)>
+{
     let mut documents = vec![
         ("volumes/03-conformance.md", SECOND),
         ("volumes/02-core.md", FIRST),
@@ -41,32 +63,30 @@ fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
     {
         documents.reverse();
     }
-    else
-    {
-        // Not valid UTF-8, so the exporter must fall back to base64. Without it the
-        // fallback arm is dead code that no round trip ever visits.
-        store.Put_Blob(BINARY).expect("stores a binary blob");
-    }
 
-    for (path, text) in documents
-    {
-        let document = store
-            .Put_Source_Document(path, "v14.36", text)
-            .expect("stores the document");
-        store
-            .Put_Source_Blocks(document, &Segment(text))
-            .expect("stores the blocks");
-    }
+    return documents;
+}
 
-    if reversed
-    {
-        store.Put_Blob(BINARY).expect("stores a binary blob");
-    }
+/// Not valid UTF-8, so the exporter must fall back to base64. Without it the fallback arm is
+/// dead code that no round trip ever visits.
+///
+/// Written on the far side of the documents when the order is reversed, so the uid it lands
+/// on differs between the two stores.
+fn Put_The_Binary_Blob(store: &mut SpecificationStore)
+{
+    store.Put_Blob(BINARY).expect("stores a binary blob");
+}
 
-    Populate_Graph(&store);
-    Populate_Submissions(&mut store);
+/// One document and the blocks it segments into, which the store holds separately.
+fn Put_Document(store: &mut SpecificationStore, path: &str, text: &str)
+{
+    let document = store
+        .Put_Source_Document(path, "v14.36", text)
+        .expect("stores the document");
 
-    return store;
+    store
+        .Put_Source_Blocks(document, &Segment(text))
+        .expect("stores the blocks");
 }
 
 /// A submission carrying the three things `OD-SPEC-013`'s tables exist to hold: an attributed
@@ -78,15 +98,16 @@ fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
 /// write.
 fn Populate_Submissions(store: &mut SpecificationStore)
 {
-    let value = |field: &str, value: &str, origin: Origin| {
-        return FieldValue {
-            field: field.to_owned(),
-            value: value.to_owned(),
-            origin,
-        };
-    };
+    let submission = A_Round_Trip_Submission();
 
-    let submission = Submission {
+    Accept_Submission(store, &submission).expect("the door accepts it");
+}
+
+/// The submission itself, carrying an attributed value sequence, a superseded value that is
+/// still in storage, and a gap as a row.
+fn A_Round_Trip_Submission() -> Submission
+{
+    return Submission {
         id: "FR-ROUND-TRIP".to_owned(),
         kind: SubmissionKind::FeatureRequest,
         form_contract_version: 1,
@@ -94,143 +115,184 @@ fn Populate_Submissions(store: &mut SpecificationStore)
         submitted_by: "the fixture".to_owned(),
         submitted_through: "test".to_owned(),
         values: vec![
-            value("title", "A submission survives a round trip", Origin::Submitted),
-            value("goal", "what was first asked", Origin::Submitted),
+            Value("title", "A submission survives a round trip", Origin::Submitted),
+            Value("goal", "what was first asked", Origin::Submitted),
             // Supersedes the line above for reading, and never replaces it in storage.
-            value("goal", "what it became on being asked", Origin::Clarified),
-            value("behaviour", "it exports and imports unchanged", Origin::Submitted),
-            value("acceptance", "the bundle is byte-identical", Origin::Submitted),
-            value("invariants", "none", Origin::Submitted),
+            Value("goal", "what it became on being asked", Origin::Clarified),
+            Value("behaviour", "it exports and imports unchanged", Origin::Submitted),
+            Value("acceptance", "the bundle is byte-identical", Origin::Submitted),
+            Value("invariants", "none", Origin::Submitted),
         ],
-        gaps: vec![DecisionGap {
-            question: "whether a gap travels once closed".to_owned(),
-            blocks: vec!["behaviour".to_owned()],
-            severity: Severity::NonBlocking,
-            closed_by: None,
-        }],
+        gaps: vec![A_Gap()],
     };
+}
 
-    Accept_Submission(store, &submission).expect("the door accepts it");
+/// One attributed field value.
+fn Value(field: &str, value: &str, origin: Origin) -> FieldValue
+{
+    return FieldValue {
+        field: field.to_owned(),
+        value: value.to_owned(),
+        origin,
+    };
+}
+
+/// The gap the fixture carries as a row.
+fn A_Gap() -> DecisionGap
+{
+    return DecisionGap {
+        question: "whether a gap travels once closed".to_owned(),
+        blocks: vec!["behaviour".to_owned()],
+        severity: Severity::NonBlocking,
+        closed_by: None,
+    };
+}
+
+/// A store rebuilt from a bundle held in memory.
+fn Rebuilt_From(bundle: &Bundle) -> SpecificationStore
+{
+    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
+    Import(&mut rebuilt, bundle).expect("imports");
+
+    return rebuilt;
+}
+
+/// A store rebuilt from written bundle bytes and nothing else.
+fn Reimported(written: &str) -> SpecificationStore
+{
+    let bundle = Bundle::Parse(written).expect("parses");
+
+    return Rebuilt_From(&bundle);
+}
+
+/// How many records of one table the bundle carries.
+fn Records_In(bundle: &Bundle, table: Table) -> usize
+{
+    return bundle
+        .Records()
+        .iter()
+        .filter(|record| return record.Table() == table.Name())
+        .count();
 }
 
 /// Everything above the source documents: suites, nodes, relations, statements, lineage.
-///
+const GRAPH: &str =
+    "INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 1, 1, 'Core Architecture' FROM source_documents
+     WHERE path = 'volumes/02-core.md';
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 2, 2, 'Domain Model' FROM source_documents
+     WHERE path = 'volumes/02-core.md';
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 1, 1, 'Conformance' FROM source_documents
+     WHERE path = 'volumes/03-conformance.md';
+
+     -- Two suites, one root and one not, so the round trip carries a value in both
+     -- states rather than proving the column survives only when it is true.
+     INSERT INTO suites (suite_id, title, authority_root)
+     VALUES ('nomos', 'The Nomos specification', 1),
+            ('xvpe-seed', 'XVPE spec seed', 0);
+
+     -- The third node is left in no suite on purpose: unrecorded is a state the
+     -- bundle has to carry, and it is not the root.
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                        suite_uid)
+     SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Agent execution',
+            NULL, uid FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                        suite_uid)
+     SELECT 'CON-WORKSPACE-001', 'concept', 'canonical', 'record', 'WorkspaceContext',
+            NULL, uid FROM suites WHERE suite_id = 'xvpe-seed';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+                        suite_uid)
+     VALUES ('REQ-RETIRED-009', 'requirement', 'superseded', 'record', 'Retired',
+             '2026-01-14T00:00:00Z', NULL);
+
+     INSERT INTO node_aliases (alias, node_uid)
+     SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
+
+     INSERT INTO node_history
+     (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
+     SELECT uid, 1, 'created', 'ingested from v14.36', NULL, 'sha256:01',
+            '2026-01-01T00:00:00Z' FROM nodes WHERE node_id = 'AGT-EXEC-001';
+     INSERT INTO node_history
+     (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
+     SELECT uid, 2, 'content_changed', 'wording clarified by D-129', 'sha256:01',
+            'sha256:02', '2026-02-01T00:00:00Z' FROM nodes WHERE node_id = 'AGT-EXEC-001';
+
+     INSERT INTO relation_types (name, tier, inverse_of)
+     VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies');
+
+     INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+     SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
+     WHERE f.node_id = 'CON-WORKSPACE-001' AND t.node_id = 'AGT-EXEC-001';
+
+     INSERT INTO normative_statements
+     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+     SELECT uid, 'AGT-EXEC-001', 'Requirement', 'Nomos shall record ancestry.',
+            'sha256:aa', 'sha256:99' FROM nodes WHERE node_id = 'AGT-EXEC-001';
+
+     INSERT INTO lineage
+     (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
+     SELECT b.uid, NULL, 'preserved-verbatim', NULL, s.uid
+     FROM source_blocks b, normative_statements s, source_documents d
+     WHERE d.path = 'volumes/02-core.md' AND b.document_uid = d.uid AND b.ordinal = 2
+       AND s.statement_id = 'AGT-EXEC-001';
+     INSERT INTO lineage
+     (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
+     SELECT NULL, h.uid, 'preserved-normalized', n.uid, NULL
+     FROM source_headings h, nodes n, source_documents d
+     WHERE d.path = 'volumes/02-core.md' AND h.document_uid = d.uid AND h.ordinal = 1
+       AND n.node_id = 'CON-WORKSPACE-001';
+     INSERT INTO lineage
+     (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
+     SELECT b.uid, NULL, 'superseded', NULL, NULL
+     FROM source_blocks b, source_documents d
+     WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
+       AND b.ordinal = 1;
+
+     -- The concept comes from one row of the domain-model table, not from the
+     -- table. Without this the new column is never exercised by the round trip.
+     INSERT INTO lineage
+     (source_table_row_uid, disposition, target_node_uid)
+     SELECT r.uid, 'preserved-verbatim', n.uid
+     FROM source_table_rows r, nodes n
+     WHERE r.cells_json LIKE '%WorkspaceContext%'
+       AND n.node_id = 'CON-WORKSPACE-001';
+
+     INSERT INTO omissions
+     (source_block_uid, source_heading_uid, reason, justification, decision_record)
+     SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
+     FROM source_blocks b, source_documents d
+     WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
+       AND b.ordinal = 2;
+
+     -- The front matter one document declared. It is what lets a store rebuilt from
+     -- this bundle render the record back out as markdown, so a bundle that dropped
+     -- it would rebuild a store that can preserve every record and author none.
+     INSERT INTO record_front_matter
+     (document_uid, node_uid, status, version, tags_json)
+     SELECT d.uid, n.uid, 'accepted', 2, '[\"architecture\",\"identity\"]'
+     FROM source_documents d, nodes n
+     WHERE d.path = 'volumes/02-core.md' AND n.node_id = 'AGT-EXEC-001';
+
+     -- Two of them, in declared order, because the order is in the file and the
+     -- ordinal is the only thing that carries it.
+     INSERT INTO record_relations (document_uid, ordinal, target, relation)
+     SELECT d.uid, 1, 'CON-WORKSPACE-001', 'affects'
+     FROM source_documents d WHERE d.path = 'volumes/02-core.md';
+
+     INSERT INTO record_relations (document_uid, ordinal, target, relation)
+     SELECT d.uid, 2, 'REQ-RETIRED-009', 'verified_by'
+     FROM source_documents d WHERE d.path = 'volumes/02-core.md';";
+
 /// Split out of the fixture rather than inlined so the document-ordering half stays
 /// readable. Both halves are one fixture and neither is useful alone.
 fn Populate_Graph(store: &SpecificationStore)
 {
     store
         .Connection()
-        .execute_batch(
-            "INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 1, 1, 'Core Architecture' FROM source_documents
-             WHERE path = 'volumes/02-core.md';
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 2, 2, 'Domain Model' FROM source_documents
-             WHERE path = 'volumes/02-core.md';
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 1, 1, 'Conformance' FROM source_documents
-             WHERE path = 'volumes/03-conformance.md';
-
-             -- Two suites, one root and one not, so the round trip carries a value in both
-             -- states rather than proving the column survives only when it is true.
-             INSERT INTO suites (suite_id, title, authority_root)
-             VALUES ('nomos', 'The Nomos specification', 1),
-                    ('xvpe-seed', 'XVPE spec seed', 0);
-
-             -- The third node is left in no suite on purpose: unrecorded is a state the
-             -- bundle has to carry, and it is not the root.
-             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                                suite_uid)
-             SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record', 'Agent execution',
-                    NULL, uid FROM suites WHERE suite_id = 'nomos';
-             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                                suite_uid)
-             SELECT 'CON-WORKSPACE-001', 'concept', 'canonical', 'record', 'WorkspaceContext',
-                    NULL, uid FROM suites WHERE suite_id = 'xvpe-seed';
-             INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                                suite_uid)
-             VALUES ('REQ-RETIRED-009', 'requirement', 'superseded', 'record', 'Retired',
-                     '2026-01-14T00:00:00Z', NULL);
-
-             INSERT INTO node_aliases (alias, node_uid)
-             SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
-
-             INSERT INTO node_history
-             (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
-             SELECT uid, 1, 'created', 'ingested from v14.36', NULL, 'sha256:01',
-                    '2026-01-01T00:00:00Z' FROM nodes WHERE node_id = 'AGT-EXEC-001';
-             INSERT INTO node_history
-             (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
-             SELECT uid, 2, 'content_changed', 'wording clarified by D-129', 'sha256:01',
-                    'sha256:02', '2026-02-01T00:00:00Z' FROM nodes WHERE node_id = 'AGT-EXEC-001';
-
-             INSERT INTO relation_types (name, tier, inverse_of)
-             VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies');
-
-             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-             SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
-             WHERE f.node_id = 'CON-WORKSPACE-001' AND t.node_id = 'AGT-EXEC-001';
-
-             INSERT INTO normative_statements
-             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-             SELECT uid, 'AGT-EXEC-001', 'Requirement', 'Nomos shall record ancestry.',
-                    'sha256:aa', 'sha256:99' FROM nodes WHERE node_id = 'AGT-EXEC-001';
-
-             INSERT INTO lineage
-             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
-             SELECT b.uid, NULL, 'preserved-verbatim', NULL, s.uid
-             FROM source_blocks b, normative_statements s, source_documents d
-             WHERE d.path = 'volumes/02-core.md' AND b.document_uid = d.uid AND b.ordinal = 2
-               AND s.statement_id = 'AGT-EXEC-001';
-             INSERT INTO lineage
-             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
-             SELECT NULL, h.uid, 'preserved-normalized', n.uid, NULL
-             FROM source_headings h, nodes n, source_documents d
-             WHERE d.path = 'volumes/02-core.md' AND h.document_uid = d.uid AND h.ordinal = 1
-               AND n.node_id = 'CON-WORKSPACE-001';
-             INSERT INTO lineage
-             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
-             SELECT b.uid, NULL, 'superseded', NULL, NULL
-             FROM source_blocks b, source_documents d
-             WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
-               AND b.ordinal = 1;
-
-             -- The concept comes from one row of the domain-model table, not from the
-             -- table. Without this the new column is never exercised by the round trip.
-             INSERT INTO lineage
-             (source_table_row_uid, disposition, target_node_uid)
-             SELECT r.uid, 'preserved-verbatim', n.uid
-             FROM source_table_rows r, nodes n
-             WHERE r.cells_json LIKE '%WorkspaceContext%'
-               AND n.node_id = 'CON-WORKSPACE-001';
-
-             INSERT INTO omissions
-             (source_block_uid, source_heading_uid, reason, justification, decision_record)
-             SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
-             FROM source_blocks b, source_documents d
-             WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
-               AND b.ordinal = 2;
-
-             -- The front matter one document declared. It is what lets a store rebuilt from
-             -- this bundle render the record back out as markdown, so a bundle that dropped
-             -- it would rebuild a store that can preserve every record and author none.
-             INSERT INTO record_front_matter
-             (document_uid, node_uid, status, version, tags_json)
-             SELECT d.uid, n.uid, 'accepted', 2, '[\"architecture\",\"identity\"]'
-             FROM source_documents d, nodes n
-             WHERE d.path = 'volumes/02-core.md' AND n.node_id = 'AGT-EXEC-001';
-
-             -- Two of them, in declared order, because the order is in the file and the
-             -- ordinal is the only thing that carries it.
-             INSERT INTO record_relations (document_uid, ordinal, target, relation)
-             SELECT d.uid, 1, 'CON-WORKSPACE-001', 'affects'
-             FROM source_documents d WHERE d.path = 'volumes/02-core.md';
-
-             INSERT INTO record_relations (document_uid, ordinal, target, relation)
-             SELECT d.uid, 2, 'REQ-RETIRED-009', 'verified_by'
-             FROM source_documents d WHERE d.path = 'volumes/02-core.md';",
-        )
+        .execute_batch(GRAPH)
         .expect("populates every table");
 }
 
@@ -370,15 +432,8 @@ fn Test_Importing_Into_A_Store_That_Already_Holds_The_Content_Should_Be_Refused(
 fn Test_An_Unresolvable_Reference_Should_Be_Refused()
 {
     let complete = Export(&Populated()).expect("exports");
+    let salvaged = Without_The_Workspace_Concept(&complete);
 
-    let salvaged: Vec<Record> = complete
-        .Records()
-        .iter()
-        .filter(|record| {
-            return !matches!(record, Record::Node(node) if node.node_id == "CON-WORKSPACE-001");
-        })
-        .cloned()
-        .collect();
     assert!(
         salvaged.len() < complete.Records().len(),
         "the negative control removed nothing"
@@ -388,7 +443,6 @@ fn Test_An_Unresolvable_Reference_Should_Be_Refused()
     // and pinning the number here makes every migration fail it for the wrong reason.
     let broken = Bundle::New(complete.Header().schema_version, salvaged).expect("builds");
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-
     let refusal = Import(&mut rebuilt, &broken).expect_err("a dangling reference must be refused");
 
     assert!(matches!(refusal, BundleError::Unresolved { .. }), "{refusal}");
@@ -399,27 +453,28 @@ fn Test_An_Unresolvable_Reference_Should_Be_Refused()
     );
 }
 
+/// Every record but the node a lineage row points at, which is what makes that reference
+/// dangle.
+fn Without_The_Workspace_Concept(complete: &Bundle) -> Vec<Record>
+{
+    return complete
+        .Records()
+        .iter()
+        .filter(|record| {
+            return !matches!(record, Record::Node(node) if node.node_id == "CON-WORKSPACE-001");
+        })
+        .cloned()
+        .collect();
+}
+
 /// The exporter's completeness guard, against the bug it exists for: a join that drops
 /// rows. Without it the export would simply be missing a document and say so nowhere.
 #[test]
 fn Test_A_Row_The_Export_Query_Drops_Should_Fail_The_Export()
 {
     let store = Populated();
-    let connection = store.Connection();
 
-    connection
-        .pragma_update(None, "foreign_keys", "OFF")
-        .expect("relaxes the constraint");
-    connection
-        .execute(
-            "INSERT INTO source_documents (path, revision, blob_uid)
-             VALUES ('volumes/99-orphan.md', 'v14.36', 999999)",
-            [],
-        )
-        .expect("inserts an orphan");
-    connection
-        .pragma_update(None, "foreign_keys", "ON")
-        .expect("restores the constraint");
+    Insert_An_Orphan(&store);
 
     let refusal = Export(&store).expect_err("a dropped row must fail the export");
 
@@ -436,6 +491,27 @@ fn Test_A_Row_The_Export_Query_Drops_Should_Fail_The_Export()
     );
 }
 
+/// A document row the export's join will drop, written with the foreign key relaxed because
+/// the point is a row the store holds and the query does not return.
+fn Insert_An_Orphan(store: &SpecificationStore)
+{
+    let connection = store.Connection();
+
+    connection
+        .pragma_update(None, "foreign_keys", "OFF")
+        .expect("relaxes the constraint");
+    connection
+        .execute(
+            "INSERT INTO source_documents (path, revision, blob_uid)
+             VALUES ('volumes/99-orphan.md', 'v14.36', 999999)",
+            [],
+        )
+        .expect("inserts an orphan");
+    connection
+        .pragma_update(None, "foreign_keys", "ON")
+        .expect("restores the constraint");
+}
+
 /// The governing records are content like any other, so they must survive the bundle.
 /// If they did not, the store committed to git would be missing the records that say
 /// what the store is.
@@ -446,9 +522,7 @@ fn Test_The_Governing_Records_Should_Survive_The_Bundle()
     nomos_spec_store::Seed_Governing_Records(&mut seeded).expect("seeds");
 
     let first = Export(&seeded).expect("exports").Write().expect("writes");
-
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import(&mut rebuilt, &Bundle::Parse(&first).expect("parses")).expect("imports");
+    let rebuilt = Reimported(&first);
 
     for id in nomos_spec_store::GOVERNING_RECORD_IDS
     {
@@ -485,26 +559,27 @@ fn Test_The_Bundle_Should_Carry_Typed_Table_Rows()
     );
 
     let bundle = Export(&store).expect("exports");
-    let exported = bundle
-        .Records()
-        .iter()
-        .filter(|record| record.Table() == Table::SourceTableRows.Name())
-        .count();
+    let exported = Records_In(&bundle, Table::SourceTableRows);
+    let rebuilt = Rebuilt_From(&bundle);
+
     assert_eq!(u32::try_from(exported).unwrap_or(u32::MAX), rows);
-
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import(&mut rebuilt, &bundle).expect("imports");
-
     assert_eq!(rebuilt.Count(Table::SourceTableRows).expect("counts"), rows);
     assert_eq!(
         Export(&rebuilt).expect("re-exports").Write().expect("writes"),
         bundle.Write().expect("writes"),
         "the rows did not survive the round trip byte for byte"
     );
+    Assert_The_Row_Kinds_Survived(&rebuilt);
+}
 
+/// The kinds are what keep the pipe-line count and the content count from collapsing into one
+/// number, which is OD-SPEC-002's whole point.
+fn Assert_The_Row_Kinds_Survived(rebuilt: &SpecificationStore)
+{
     let census = rebuilt
         .Row_Census(nomos_spec_store::RowScope::Everything)
         .expect("takes a census");
+
     assert_eq!(census.separator, 1, "the row kinds did not survive");
     assert_eq!(census.header, 1, "the header kind did not survive");
     assert_eq!(census.content, 1, "the data kind did not survive");
@@ -524,7 +599,6 @@ fn Test_A_Lineage_To_A_Table_Row_Should_Survive_The_Round_Trip()
 {
     let source = Populated();
     let bundle = Export(&source).expect("exports");
-
     let carried = bundle
         .Records()
         .iter()
@@ -532,12 +606,21 @@ fn Test_A_Lineage_To_A_Table_Row_Should_Survive_The_Round_Trip()
             return matches!(record, Record::Lineage(lineage) if lineage.source_table_row.is_some());
         })
         .count();
+    let rebuilt = Rebuilt_From(&bundle);
+    let traced = Row_Behind_The_Concept(&rebuilt);
+
     assert_eq!(carried, 1, "the fixture's row lineage did not reach the bundle");
+    assert!(traced.contains("WorkspaceContext"), "it traced to the wrong row: {traced}");
+    assert_eq!(
+        Export(&rebuilt).expect("re-exports").Write().expect("writes"),
+        bundle.Write().expect("writes")
+    );
+}
 
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import(&mut rebuilt, &bundle).expect("imports");
-
-    let traced: String = rebuilt
+/// The table row the restored concept traces to, which must still be there on the far side.
+fn Row_Behind_The_Concept(rebuilt: &SpecificationStore) -> String
+{
+    return rebuilt
         .Connection()
         .query_row(
             "SELECT r.text FROM lineage l
@@ -548,12 +631,6 @@ fn Test_A_Lineage_To_A_Table_Row_Should_Survive_The_Round_Trip()
             |row| row.get(0),
         )
         .expect("the concept traces to no row");
-
-    assert!(traced.contains("WorkspaceContext"), "it traced to the wrong row: {traced}");
-    assert_eq!(
-        Export(&rebuilt).expect("re-exports").Write().expect("writes"),
-        bundle.Write().expect("writes")
-    );
 }
 
 /// The guard the row count cannot be: a column joins the schema and nothing exports it.

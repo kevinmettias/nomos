@@ -74,7 +74,6 @@ fn Test_The_Seeded_Rows_Should_Be_Left_Untouched_By_The_Load()
 {
     let mut store = Seeded();
     let bundle = Foreign_Bundle();
-
     let before: BTreeMap<&str, u32> = Table::All()
         .iter()
         .map(|table| return (table.Name(), store.Count(*table).expect("counts")))
@@ -84,17 +83,7 @@ fn Test_The_Seeded_Rows_Should_Be_Left_Untouched_By_The_Load()
 
     for table in Table::All()
     {
-        let declared = bundle
-            .Manifest()
-            .counts
-            .get(table.Name())
-            .copied()
-            .unwrap_or(0);
-        let expected = before
-            .get(table.Name())
-            .copied()
-            .expect("every table was counted")
-            .saturating_add(declared);
+        let expected = Expected_After(&before, &bundle, *table);
 
         assert_eq!(
             store.Count(*table).expect("counts"),
@@ -103,6 +92,23 @@ fn Test_The_Seeded_Rows_Should_Be_Left_Untouched_By_The_Load()
             table.Name()
         );
     }
+}
+
+/// What one table held before the load, plus exactly the rows the bundle declares for it.
+fn Expected_After(before: &BTreeMap<&str, u32>, bundle: &Bundle, table: Table) -> u32
+{
+    let declared = bundle
+        .Manifest()
+        .counts
+        .get(table.Name())
+        .copied()
+        .unwrap_or(0);
+
+    return before
+        .get(table.Name())
+        .copied()
+        .expect("every table was counted")
+        .saturating_add(declared);
 }
 
 /// Refused, and refused naming the row rather than reporting that a table was not empty —

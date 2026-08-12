@@ -286,31 +286,51 @@ fn Compare(
 ) -> Result<(), BundleError>
 {
     let named: BTreeSet<&str> = declared.iter().map(|(column, _)| return *column).collect();
-
-    for column in schema
-    {
-        if !named.contains(column.as_str())
-        {
-            return Err(BundleError::UncoveredColumn {
-                table: table.to_owned(),
-                column: column.clone(),
-            });
-        }
-    }
-
     let present: BTreeSet<&str> = schema.iter().map(String::as_str).collect();
-    for column in named
-    {
-        if !present.contains(column)
-        {
-            return Err(BundleError::PhantomColumn {
-                table: table.to_owned(),
-                column: column.to_owned(),
-            });
-        }
-    }
 
-    return Ok(());
+    Assert_Every_Column_Is_Declared(table, schema, &named)?;
+
+    return Assert_Every_Declaration_Is_A_Column(table, &named, &present);
+}
+
+/// A column nobody exports.
+fn Assert_Every_Column_Is_Declared(
+    table: &str,
+    schema: &[String],
+    named: &BTreeSet<&str>,
+) -> Result<(), BundleError>
+{
+    let uncovered = schema.iter().find(|column| return !named.contains(column.as_str()));
+    let Some(column) = uncovered
+    else
+    {
+        return Ok(());
+    };
+
+    return Err(BundleError::UncoveredColumn {
+        table: table.to_owned(),
+        column: column.clone(),
+    });
+}
+
+/// A declaration that stopped describing anything and would go on satisfying the guard.
+fn Assert_Every_Declaration_Is_A_Column(
+    table: &str,
+    named: &BTreeSet<&str>,
+    present: &BTreeSet<&str>,
+) -> Result<(), BundleError>
+{
+    let phantom = named.iter().find(|column| return !present.contains(*column));
+    let Some(column) = phantom
+    else
+    {
+        return Ok(());
+    };
+
+    return Err(BundleError::PhantomColumn {
+        table: table.to_owned(),
+        column: (*column).to_owned(),
+    });
 }
 
 /// The declaration names a field; the record has to have it.
@@ -334,23 +354,35 @@ fn Assert_Fields_Exist(
     let fields = Fields(sample)?;
     for (column, carried) in declared
     {
-        let Carried::Field(field) = carried
-        else
-        {
-            continue;
-        };
-
-        if !fields.contains(*field)
-        {
-            return Err(BundleError::Uncarried {
-                table: table.to_owned(),
-                column: (*column).to_owned(),
-                field: (*field).to_owned(),
-            });
-        }
+        Assert_The_Field_Is_Carried(table, column, carried, &fields)?;
     }
 
     return Ok(());
+}
+
+/// One declared column, and the field the record has to have for it.
+fn Assert_The_Field_Is_Carried(
+    table: &str,
+    column: &str,
+    carried: &Carried,
+    fields: &BTreeSet<String>,
+) -> Result<(), BundleError>
+{
+    let Carried::Field(field) = carried
+    else
+    {
+        return Ok(());
+    };
+    if fields.contains(*field)
+    {
+        return Ok(());
+    }
+
+    return Err(BundleError::Uncarried {
+        table: table.to_owned(),
+        column: column.to_owned(),
+        field: (*field).to_owned(),
+    });
 }
 
 fn Fields(record: &Record) -> Result<BTreeSet<String>, BundleError>

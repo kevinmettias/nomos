@@ -30,32 +30,65 @@ use rusqlite::Connection;
 pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
 {
     let connection = store.Connection();
-    let mut records: Vec<Record> = Vec::new();
-
-    Blobs(connection, &mut records)?;
-    Source_Documents(connection, &mut records)?;
-    Source_Headings(connection, &mut records)?;
-    Source_Blocks(connection, &mut records)?;
-    Source_Table_Rows(connection, &mut records)?;
-    Suites(connection, &mut records)?;
-    Nodes(connection, &mut records)?;
-    Node_Aliases(connection, &mut records)?;
-    Node_Histories(connection, &mut records)?;
-    Relation_Types(connection, &mut records)?;
-    Relations(connection, &mut records)?;
-    Normative_Statements(connection, &mut records)?;
-    Lineages(connection, &mut records)?;
-    Omissions(connection, &mut records)?;
-    Record_Front_Matter(connection, &mut records)?;
-    Record_Relations(connection, &mut records)?;
-    Submissions(connection, &mut records)?;
-    Submission_Values(connection, &mut records)?;
-    Submission_Gaps(connection, &mut records)?;
+    let records = Every_Record(connection)?;
 
     Assert_Complete(store, &records)?;
     Assert_Columns_Covered(connection, &records)?;
 
     return Bundle::New(store.Version(), records);
+}
+
+/// Every table, in the order the bundle carries them. The order is the bundle's identity, so
+/// moving a call here changes the bytes every store exports.
+fn Every_Record(connection: &Connection) -> Result<Vec<Record>, BundleError>
+{
+    let mut records: Vec<Record> = Vec::new();
+
+    The_Source_Corpus(connection, &mut records)?;
+    The_Graph(connection, &mut records)?;
+    The_Submissions(connection, &mut records)?;
+
+    return Ok(records);
+}
+
+/// The corpus as it was read: the blobs, the documents, and everything segmented out of them.
+fn The_Source_Corpus(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    Blobs(connection, records)?;
+    Source_Documents(connection, records)?;
+    Source_Headings(connection, records)?;
+    Source_Blocks(connection, records)?;
+    Source_Table_Rows(connection, records)?;
+
+    return Ok(());
+}
+
+/// The graph the corpus was turned into, and the preservation ledger tying the two together.
+fn The_Graph(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    Suites(connection, records)?;
+    Nodes(connection, records)?;
+    Node_Aliases(connection, records)?;
+    Node_Histories(connection, records)?;
+    Relation_Types(connection, records)?;
+    Relations(connection, records)?;
+    Normative_Statements(connection, records)?;
+    Lineages(connection, records)?;
+    Omissions(connection, records)?;
+    Record_Front_Matter(connection, records)?;
+    Record_Relations(connection, records)?;
+
+    return Ok(());
+}
+
+/// What arrived through the submission door.
+fn The_Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
+{
+    Submissions(connection, records)?;
+    Submission_Values(connection, records)?;
+    Submission_Gaps(connection, records)?;
+
+    return Ok(());
 }
 
 /// Every row in the store reached the bundle.
@@ -129,21 +162,36 @@ fn Blobs(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bundl
 
     for (sha256, byte_length, content) in rows
     {
-        let (encoding, spelled) = match String::from_utf8(content)
-        {
-            Ok(text) => (BlobEncoding::Utf8, text),
-            Err(error) => (BlobEncoding::Base64, STANDARD.encode(error.as_bytes())),
-        };
+        let blob = A_Blob(sha256, byte_length, content);
 
-        records.push(Record::Blob(Blob {
-            sha256,
-            byte_length,
-            encoding,
-            content: spelled,
-        }));
+        records.push(blob);
     }
 
     return Ok(());
+}
+
+/// A blob's bytes as the bundle spells them: the text itself where it is UTF-8, and base64
+/// where it is not.
+fn A_Blob(sha256: String, byte_length: i64, content: Vec<u8>) -> Record
+{
+    let (encoding, spelled) = match String::from_utf8(content)
+    {
+        Ok(text) => (BlobEncoding::Utf8, text),
+        Err(error) => (BlobEncoding::Base64, STANDARD.encode(error.as_bytes())),
+    };
+
+    return Record::Blob(Blob {
+        sha256,
+        byte_length,
+        encoding,
+        content: spelled,
+    });
+}
+
+/// A JSON column decoded, reported as a SQL failure because that is where it came from.
+fn Decoded<Value: serde::de::DeserializeOwned>(json: &str) -> Result<Value, BundleError>
+{
+    return serde_json::from_str(json).map_err(|error| BundleError::Sql(error.to_string()));
 }
 
 fn Source_Documents(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
@@ -212,50 +260,54 @@ fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(
     );
 }
 
+const TABLE_ROWS: &str =
+    "SELECT d.path, d.revision, b.ordinal, r.ordinal, r.table_ordinal, r.kind,
+            r.cells_json, r.text, r.content_hash, r.normalized_hash
+     FROM source_table_rows r
+     JOIN source_blocks b ON b.uid = r.source_block_uid
+     JOIN source_documents d ON d.uid = b.document_uid
+     ORDER BY d.path, d.revision, b.ordinal, r.ordinal";
+
 fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Record>)
     -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
-        "SELECT d.path, d.revision, b.ordinal, r.ordinal, r.table_ordinal, r.kind,
-                r.cells_json, r.text, r.content_hash, r.normalized_hash
-         FROM source_table_rows r
-         JOIN source_blocks b ON b.uid = r.source_block_uid
-         JOIN source_documents d ON d.uid = b.document_uid
-         ORDER BY d.path, d.revision, b.ordinal, r.ordinal",
-    )?;
+    let mut statement = connection.prepare(TABLE_ROWS)?;
     let rows = statement
-        .query_map([], |row| {
-            let cells: String = row.get(6)?;
-            return Ok((
-                SourceTableRow {
-                    block: OrdinalRef {
-                        document: DocumentRef {
-                            path: row.get(0)?,
-                            revision: row.get(1)?,
-                        },
-                        ordinal: row.get(2)?,
-                    },
-                    ordinal: row.get(3)?,
-                    table_ordinal: row.get(4)?,
-                    kind: row.get(5)?,
-                    cells: Vec::new(),
-                    text: row.get(7)?,
-                    content_hash: row.get(8)?,
-                    normalized_hash: row.get(9)?,
-                },
-                cells,
-            ));
-        })?
+        .query_map([], Read_A_Table_Row)?
         .collect::<Result<Vec<_>, _>>()?;
-
     for (mut record, cells) in rows
     {
-        record.cells =
-            serde_json::from_str(&cells).map_err(|error| BundleError::Sql(error.to_string()))?;
+        record.cells = Decoded(&cells)?;
         records.push(Record::SourceTableRow(record));
     }
 
     return Ok(());
+}
+
+/// One row and the JSON cells column that travels beside it, still undecoded.
+fn Read_A_Table_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(SourceTableRow, String)>
+{
+    let cells: String = row.get(6)?;
+
+    return Ok((
+        SourceTableRow {
+            block: OrdinalRef {
+                document: DocumentRef {
+                    path: row.get(0)?,
+                    revision: row.get(1)?,
+                },
+                ordinal: row.get(2)?,
+            },
+            ordinal: row.get(3)?,
+            table_ordinal: row.get(4)?,
+            kind: row.get(5)?,
+            cells: Vec::new(),
+            text: row.get(7)?,
+            content_hash: row.get(8)?,
+            normalized_hash: row.get(9)?,
+        },
+        cells,
+    ));
 }
 
 fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
@@ -522,45 +574,49 @@ fn Ordinal_Reference(
 }
 
 /// The declared front matter, addressed by the document that declared it.
+const FRONT_MATTER: &str =
+    "SELECT d.path, d.revision, n.node_id, f.status, f.version, f.tags_json
+     FROM record_front_matter f
+     JOIN source_documents d ON d.uid = f.document_uid
+     JOIN nodes n ON n.uid = f.node_uid
+     ORDER BY d.path, d.revision";
+
 fn Record_Front_Matter(
     connection: &Connection,
     records: &mut Vec<Record>,
 ) -> Result<(), BundleError>
 {
-    let mut statement = connection.prepare(
-        "SELECT d.path, d.revision, n.node_id, f.status, f.version, f.tags_json
-         FROM record_front_matter f
-         JOIN source_documents d ON d.uid = f.document_uid
-         JOIN nodes n ON n.uid = f.node_uid
-         ORDER BY d.path, d.revision",
-    )?;
+    let mut statement = connection.prepare(FRONT_MATTER)?;
     let rows = statement
-        .query_map([], |row| {
-            let tags: String = row.get(5)?;
-            return Ok((
-                RecordFrontMatter {
-                    document: DocumentRef {
-                        path: row.get(0)?,
-                        revision: row.get(1)?,
-                    },
-                    node_id: row.get(2)?,
-                    status: row.get(3)?,
-                    version: row.get(4)?,
-                    tags: Vec::new(),
-                },
-                tags,
-            ));
-        })?
+        .query_map([], Read_Front_Matter)?
         .collect::<Result<Vec<_>, _>>()?;
-
     for (mut record, tags) in rows
     {
-        record.tags =
-            serde_json::from_str(&tags).map_err(|error| BundleError::Sql(error.to_string()))?;
+        record.tags = Decoded(&tags)?;
         records.push(Record::RecordFrontMatter(record));
     }
 
     return Ok(());
+}
+
+/// One row and the JSON tags column that travels beside it, still undecoded.
+fn Read_Front_Matter(row: &rusqlite::Row<'_>) -> rusqlite::Result<(RecordFrontMatter, String)>
+{
+    let tags: String = row.get(5)?;
+
+    return Ok((
+        RecordFrontMatter {
+            document: DocumentRef {
+                path: row.get(0)?,
+                revision: row.get(1)?,
+            },
+            node_id: row.get(2)?,
+            status: row.get(3)?,
+            version: row.get(4)?,
+            tags: Vec::new(),
+        },
+        tags,
+    ));
 }
 
 /// The declared relations, in the order the record declared them.

@@ -55,19 +55,8 @@ impl Bundle
             schema_version,
         };
 
-        let mut counts: BTreeMap<String, u32> = BTreeMap::new();
-        for record in &records
-        {
-            let counter = counts.entry(record.Table().to_owned()).or_insert(0);
-            *counter = counter.saturating_add(1);
-        }
-
-        let mut covered = Self::Line_Text(&Line::Header(header.clone()))?;
-        for record in &records
-        {
-            covered.push_str(&Self::Line_Text(&Line::Record(record.clone()))?);
-        }
-
+        let counts = Self::Counts_In(&records);
+        let covered = Self::Covered_Text(&header, &records)?;
         let manifest = Manifest {
             records: u32::try_from(records.len()).unwrap_or(u32::MAX),
             counts,
@@ -79,6 +68,27 @@ impl Bundle
             records,
             manifest,
         });
+    }
+
+    /// How many records each table contributed.
+    fn Counts_In(records: &[Record]) -> BTreeMap<String, u32>
+    {
+        return Self::Counts_Present(records)
+            .into_iter()
+            .map(|(table, count)| return (table.to_owned(), count))
+            .collect();
+    }
+
+    /// Everything the manifest's digest is taken over: the header and every record.
+    fn Covered_Text(header: &Header, records: &[Record]) -> Result<String, BundleError>
+    {
+        let mut covered = Self::Line_Text(&Line::Header(header.clone()))?;
+        for record in records
+        {
+            covered.push_str(&Self::Line_Text(&Line::Record(record.clone()))?);
+        }
+
+        return Ok(covered);
     }
 
     #[must_use]
@@ -106,12 +116,9 @@ impl Bundle
     /// Returns [`BundleError::Json`] if a record cannot be serialized.
     pub fn Write(&self) -> Result<String, BundleError>
     {
-        let mut text = Self::Line_Text(&Line::Header(self.header.clone()))?;
-        for record in &self.records
-        {
-            text.push_str(&Self::Line_Text(&Line::Record(record.clone()))?);
-        }
+        let mut text = Self::Covered_Text(&self.header, &self.records)?;
         text.push_str(&Self::Line_Text(&Line::Manifest(self.manifest.clone()))?);
+
         return Ok(text);
     }
 
@@ -134,7 +141,25 @@ impl Bundle
                 "a bundle is at least a header and a manifest".to_owned(),
             ));
         };
+        let lines = Self::Canonical_Lines(covered)?;
+        let manifest = Self::Manifest_Line(manifest_line)?;
+        let header = Self::Header_Of(&lines)?;
+        let records = Self::Records_After_The_Header(lines)?;
 
+        Self::Assert_Untampered(covered, &manifest)?;
+        let bundle = Self {
+            header,
+            records,
+            manifest,
+        };
+        bundle.Verify_Counts()?;
+
+        return Ok(bundle);
+    }
+
+    /// Every line above the manifest, refusing one no regeneration would ever reproduce.
+    fn Canonical_Lines(covered: &str) -> Result<Vec<Line>, BundleError>
+    {
         let mut lines: Vec<Line> = Vec::new();
         for (index, line) in covered.lines().enumerate()
         {
@@ -148,7 +173,13 @@ impl Bundle
             lines.push(parsed);
         }
 
-        let Line::Manifest(manifest) = serde_json::from_str::<Line>(manifest_line)?
+        return Ok(lines);
+    }
+
+    /// The last line, which must be the manifest.
+    fn Manifest_Line(line: &str) -> Result<Manifest, BundleError>
+    {
+        let Line::Manifest(manifest) = serde_json::from_str::<Line>(line)?
         else
         {
             return Err(BundleError::Malformed(
@@ -156,15 +187,19 @@ impl Bundle
             ));
         };
 
-        let mut walked = lines.into_iter();
-        let Some(Line::Header(header)) = walked.next()
+        return Ok(manifest);
+    }
+
+    /// The first line, which must be a header this build is new enough to read.
+    fn Header_Of(lines: &[Line]) -> Result<Header, BundleError>
+    {
+        let Some(Line::Header(header)) = lines.first()
         else
         {
             return Err(BundleError::Malformed(
                 "the first line must be the header".to_owned(),
             ));
         };
-
         if header.format > FORMAT
         {
             return Err(BundleError::TooNew {
@@ -173,8 +208,14 @@ impl Bundle
             });
         }
 
+        return Ok(header.clone());
+    }
+
+    /// Everything after the header, which must all be records.
+    fn Records_After_The_Header(lines: Vec<Line>) -> Result<Vec<Record>, BundleError>
+    {
         let mut records: Vec<Record> = Vec::new();
-        for line in walked
+        for line in lines.into_iter().skip(1)
         {
             match line
             {
@@ -188,22 +229,22 @@ impl Bundle
             }
         }
 
+        return Ok(records);
+    }
+
+    /// The digest catches an edited record, which no count can see.
+    fn Assert_Untampered(covered: &str, manifest: &Manifest) -> Result<(), BundleError>
+    {
         let computed = ContentHash::Of(&format!("{covered}\n"));
-        if computed.As_Str() != manifest.digest
+        if computed.As_Str() == manifest.digest
         {
-            return Err(BundleError::Tampered {
-                declared: manifest.digest,
-                computed: computed.As_Str().to_owned(),
-            });
+            return Ok(());
         }
 
-        let bundle = Self {
-            header,
-            records,
-            manifest,
-        };
-        bundle.Verify_Counts()?;
-        return Ok(bundle);
+        return Err(BundleError::Tampered {
+            declared: manifest.digest.clone(),
+            computed: computed.As_Str().to_owned(),
+        });
     }
 
     /// # Errors
@@ -211,13 +252,40 @@ impl Bundle
     /// Returns [`BundleError::Miscounted`] if the manifest and the records disagree.
     pub fn Verify_Counts(&self) -> Result<(), BundleError>
     {
+        let present = Self::Counts_Present(&self.records);
+        let total = u32::try_from(self.records.len()).unwrap_or(u32::MAX);
+
+        self.Assert_Every_Declared_Count_Is_Met(&present)?;
+        self.Assert_Every_Table_Present_Is_Declared(&present)?;
+        if total != self.manifest.records
+        {
+            return Err(BundleError::Miscounted {
+                table: "*".to_owned(),
+                declared: self.manifest.records,
+                present: total,
+            });
+        }
+
+        return Ok(());
+    }
+
+    /// How many records of each table the bundle actually carries.
+    fn Counts_Present(records: &[Record]) -> BTreeMap<&str, u32>
+    {
         let mut present: BTreeMap<&str, u32> = BTreeMap::new();
-        for record in &self.records
+        for record in records
         {
             let counter = present.entry(record.Table()).or_insert(0);
             *counter = counter.saturating_add(1);
         }
 
+        return present;
+    }
+
+    /// A table the manifest declares a count for that the records do not meet.
+    fn Assert_Every_Declared_Count_Is_Met(&self, present: &BTreeMap<&str, u32>)
+        -> Result<(), BundleError>
+    {
         for (table, declared) in &self.manifest.counts
         {
             let found = present.get(table.as_str()).copied().unwrap_or(0);
@@ -231,29 +299,27 @@ impl Bundle
             }
         }
 
-        for (table, found) in &present
-        {
-            if !self.manifest.counts.contains_key(*table)
-            {
-                return Err(BundleError::Miscounted {
-                    table: (*table).to_owned(),
-                    declared: 0,
-                    present: *found,
-                });
-            }
-        }
-
-        let total = u32::try_from(self.records.len()).unwrap_or(u32::MAX);
-        if total != self.manifest.records
-        {
-            return Err(BundleError::Miscounted {
-                table: "*".to_owned(),
-                declared: self.manifest.records,
-                present: total,
-            });
-        }
-
         return Ok(());
+    }
+
+    /// A table the records carry that the manifest does not name at all.
+    fn Assert_Every_Table_Present_Is_Declared(&self, present: &BTreeMap<&str, u32>)
+        -> Result<(), BundleError>
+    {
+        let undeclared = present
+            .iter()
+            .find(|(table, _)| return !self.manifest.counts.contains_key(**table));
+        let Some((table, found)) = undeclared
+        else
+        {
+            return Ok(());
+        };
+
+        return Err(BundleError::Miscounted {
+            table: (*table).to_owned(),
+            declared: 0,
+            present: *found,
+        });
     }
 
     fn Line_Text(line: &Line) -> Result<String, BundleError>
