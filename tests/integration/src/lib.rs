@@ -30,21 +30,32 @@
 
 mod context;
 mod corpus;
+mod cross_environment;
 mod determinism;
+mod edited;
+mod production;
+mod recompute;
+mod resolved;
+mod run_report;
 mod slice;
+mod source_file;
 mod surface;
+mod verification;
 
 pub use context::{
     Configuration_Rendering, Host_Variant, Resolved_Configuration, CONFIGURATION_SCHEMA,
 };
-pub use corpus::{Corpus, SourceFile, Subject_Of_Path, Walk};
-pub use determinism::{
-    Child_Variable, Cross_Environment_Owed, CrossEnvironment, Digest_In, Production, Report_Line,
-    Verification, Verify,
-};
-pub use slice::{
-    Approximate_Floor, Edited, Parsed_Floor, Recompute, Resolved, RunReport, Slice,
-};
+pub use corpus::{Corpus, Subject_Of_Path, Walk};
+pub use cross_environment::{Cross_Environment_Owed, CrossEnvironment};
+pub use determinism::{Child_Variable, Digest_In, Report_Line};
+pub use edited::Edited;
+pub use production::Production;
+pub use recompute::Recompute;
+pub use resolved::Resolved;
+pub use run_report::RunReport;
+pub use slice::{Approximate_Floor, Parsed_Floor, Slice};
+pub use source_file::SourceFile;
+pub use verification::{Verification, Verify};
 pub use surface::{
     Decode_Surface, Public_Items, Surface, CAPABILITY as SURFACE_CAPABILITY,
 };

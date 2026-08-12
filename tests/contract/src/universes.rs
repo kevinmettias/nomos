@@ -26,7 +26,7 @@
 //! nothing about this crate; this crate sits at band 100 and observes it, along with
 //! everything else in the workspace.
 
-use crate::metadata::Workspace;
+use crate::workspace::Workspace;
 use std::path::{Path, PathBuf};
 
 pub use nomos_rules::{DeclaredUniverse, UniverseKind};

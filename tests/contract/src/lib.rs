@@ -8,16 +8,32 @@
 
 #![forbid(unsafe_code)]
 
+mod declaration;
+mod domain_row;
+mod exported;
+mod fact_domain;
+mod functions;
 mod gates;
-mod metadata;
-mod strategies;
+mod harnessed;
+mod items;
+mod masks;
+mod members;
+mod module_tree;
+mod package;
+mod recogniser;
+mod routes;
+mod source_files;
 mod surface;
+mod text;
 mod universes;
+mod workspace;
 
+pub use declaration::Declaration;
+pub use domain_row::{Domain_Table, DomainRow};
+pub use fact_domain::{Fact_Domains, FactDomain};
 pub use gates::{Corpus_Gates, CorpusGate, CORPUS_VARIABLES};
-pub use metadata::{Package, Workspace};
-pub use strategies::{
-    Declaration, Domain_Table, DomainRow, Fact_Domains, FactDomain, Harnessed_Strategies,
-};
+pub use harnessed::Harnessed_Strategies;
+pub use package::Package;
+pub use workspace::Workspace;
 pub use surface::{Crate_Identifier, Public_Surface, Surface};
 pub use universes::{Declared_Universes, DeclaredUniverse, UniverseKind};

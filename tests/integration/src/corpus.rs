@@ -1,6 +1,6 @@
 //! Turning a directory of files into subjects the analysis kernel can talk about.
 
-use nomos_contracts::SubjectId;
+use crate::SourceFile;
 use nomos_lang_rust::Recognition;
 use nomos_model::Normalize_Path;
 use std::path::{Path, PathBuf};
@@ -13,23 +13,6 @@ use std::path::{Path, PathBuf};
 /// the converging. The re-export is what keeps `crate::corpus::Subject_Of_Path` the name
 /// the rest of the harness already spells.
 pub use nomos_model::Subject_Of_Path;
-
-/// One file, as the slice sees it.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct SourceFile
-{
-    /// Identity of the file itself.
-    pub subject: SubjectId,
-    /// Corpus-relative path, normalized. Kept for reporting: a failure that names a
-    /// digest is a failure nobody can go and look at.
-    pub path: String,
-    /// The directory this file sits in, normalized. The subject of the rollup that reads
-    /// it, and the reason a change to one file has a descendant at all.
-    pub group: String,
-    /// Identity of that directory.
-    pub group_subject: SubjectId,
-    pub source: String,
-}
 
 /// A corpus, walked.
 #[derive(Clone, Debug)]
