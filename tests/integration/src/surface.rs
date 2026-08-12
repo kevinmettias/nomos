@@ -141,33 +141,40 @@ pub fn Decode_Surface(payload: &[u8]) -> Result<Surface, String>
 
     for line in text.lines()
     {
-        let Some((field, value)) = line.split_once('\t')
-        else
-        {
-            return Err(format!("`{line}` is not a field"));
-        };
-        let value: u32 = value
-            .parse()
-            .map_err(|_| return format!("`{value}` in `{field}` is not a count"))?;
-
-        match field
-        {
-            "files" => surface.files = value,
-            "unreachable" => surface.unreachable = value,
-            "approximate" => surface.approximate = value,
-            "items" => surface.items = value,
-            "public" => surface.public = value,
-            other => return Err(format!("`{other}` is not a surface field")),
-        }
+        Read_One_Field(&mut surface, line)?;
         seen = seen.saturating_add(1);
     }
-
     if seen != 5
     {
         return Err(format!("a surface has five fields and this had {seen}"));
     }
 
     return Ok(surface);
+}
+
+/// One `field\tcount` line folded into the surface being read.
+fn Read_One_Field(surface: &mut Surface, line: &str) -> Result<(), String>
+{
+    let Some((field, value)) = line.split_once('\t')
+    else
+    {
+        return Err(format!("`{line}` is not a field"));
+    };
+    let value: u32 = value
+        .parse()
+        .map_err(|_| return format!("`{value}` in `{field}` is not a count"))?;
+
+    match field
+    {
+        "files" => surface.files = value,
+        "unreachable" => surface.unreachable = value,
+        "approximate" => surface.approximate = value,
+        "items" => surface.items = value,
+        "public" => surface.public = value,
+        other => return Err(format!("`{other}` is not a surface field")),
+    }
+
+    return Ok(());
 }
 
 /// Counts the publicly declared items in a syntax payload.

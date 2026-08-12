@@ -92,22 +92,31 @@ pub fn Configuration_Rendering(registry: &Registry) -> String
         rendered.push('\t');
         rendered.push_str(&Rendered_Guarantee(contract.ceiling));
         rendered.push('\n');
-
-        for offer in registry.Offers(&contract.id)
-        {
-            rendered.push_str("offer\t");
-            rendered.push_str(contract.id.As_Str());
-            rendered.push('\t');
-            rendered.push_str(offer.provider.As_Str());
-            rendered.push('\t');
-            rendered.push_str(&offer.version.to_string());
-            rendered.push('\t');
-            rendered.push_str(&Rendered_Guarantee(offer.guarantee));
-            rendered.push('\n');
-        }
+        Render_The_Offers(&mut rendered, registry, &contract.id);
     }
 
     return rendered;
+}
+
+/// Every offer against one capability, in the order the registry holds them.
+fn Render_The_Offers(
+    rendered: &mut String,
+    registry: &Registry,
+    capability: &nomos_contracts::CapabilityId,
+)
+{
+    for offer in registry.Offers(capability)
+    {
+        rendered.push_str("offer\t");
+        rendered.push_str(capability.As_Str());
+        rendered.push('\t');
+        rendered.push_str(offer.provider.As_Str());
+        rendered.push('\t');
+        rendered.push_str(&offer.version.to_string());
+        rendered.push('\t');
+        rendered.push_str(&Rendered_Guarantee(offer.guarantee));
+        rendered.push('\n');
+    }
 }
 
 /// The identity of that policy.
@@ -142,6 +151,25 @@ mod tests
 
     fn Registry_With(providers: &[&str]) -> Registry
     {
+        let mut registry = Declaring_The_Test_Capability();
+        for provider in providers
+        {
+            registry
+                .Offer(ProviderOffer {
+                    provider: ProviderId::New(*provider),
+                    capability: CapabilityId::New("nomos.cap.test"),
+                    version: VERSION,
+                    guarantee: Syntactic(),
+                })
+                .expect("within the ceiling");
+        }
+
+        return registry;
+    }
+
+    /// A registry holding one capability and no offer against it yet.
+    fn Declaring_The_Test_Capability() -> Registry
+    {
         let mut registry = Registry::New();
         registry
             .Declare(CapabilityContract {
@@ -156,18 +184,6 @@ mod tests
                 ),
             })
             .expect("declared once");
-
-        for provider in providers
-        {
-            registry
-                .Offer(ProviderOffer {
-                    provider: ProviderId::New(*provider),
-                    capability: CapabilityId::New("nomos.cap.test"),
-                    version: VERSION,
-                    guarantee: Syntactic(),
-                })
-                .expect("within the ceiling");
-        }
 
         return registry;
     }

@@ -101,69 +101,21 @@ const NOT_SOURCE: &[&str] = &["target", ".git"];
 #[must_use]
 pub fn Walk(root: &Path) -> Corpus
 {
-    let mut paths = Vec::new();
-    let mut pending = vec![root.to_path_buf()];
-
-    while let Some(directory) = pending.pop()
-    {
-        let Ok(entries) = std::fs::read_dir(&directory)
-        else
-        {
-            continue;
-        };
-
-        for entry in entries.flatten()
-        {
-            let path = entry.path();
-            let name = entry.file_name();
-            let name = name.to_string_lossy();
-
-            let is_directory = path.is_dir();
-            if is_directory && NOT_SOURCE.contains(&name.as_ref())
-            {
-                continue;
-            }
-
-            if is_directory
-            {
-                pending.push(path);
-                continue;
-            }
-
-            if Recognition::Of_Path(&name) == Recognition::Recognized
-            {
-                paths.push(path);
-            }
-        }
-    }
-
+    let mut paths = Recognized_Files_Under(root);
     paths.sort();
 
     let mut files = Vec::new();
     let mut unreadable = Vec::new();
-
     for path in paths
     {
-        let relative = path.strip_prefix(root).unwrap_or(&path).to_string_lossy();
-        let relative = Normalize_Path(&relative);
-        let group = relative
-            .rsplit_once('/')
-            .map_or_else(|| return String::new(), |(directory, _)| return directory.to_owned());
-
-        let Ok(source) = std::fs::read_to_string(&path)
+        let read = Read_One(root, &path);
+        let Some(file) = read
         else
         {
             unreadable.push(path);
             continue;
         };
-
-        files.push(SourceFile {
-            subject: Subject_Of_Path(&relative),
-            path: relative,
-            group_subject: Subject_Of_Path(&group),
-            group,
-            source,
-        });
+        files.push(file);
     }
 
     return Corpus {
@@ -171,6 +123,69 @@ pub fn Walk(root: &Path) -> Corpus
         files,
         unreadable,
     };
+}
+
+/// Every file the providers recognize under a root, in whatever order the walk found them.
+fn Recognized_Files_Under(root: &Path) -> Vec<PathBuf>
+{
+    let mut paths = Vec::new();
+    let mut pending = vec![root.to_path_buf()];
+    while let Some(directory) = pending.pop()
+    {
+        let Ok(entries) = std::fs::read_dir(&directory)
+        else
+        {
+            continue;
+        };
+        for entry in entries.flatten()
+        {
+            Sort_One_Entry(&entry.path(), &mut pending, &mut paths);
+        }
+    }
+
+    return paths;
+}
+
+/// A source directory to descend into later, a recognized file to keep, or neither.
+///
+/// Recognition decides what is read, rather than a second extension check written here — two
+/// answers to "does this provider read this file" is one answer too many.
+fn Sort_One_Entry(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathBuf>)
+{
+    let Some(name) = path.file_name()
+    else
+    {
+        return;
+    };
+    let name = name.to_string_lossy();
+    let is_directory = path.is_dir();
+    if is_directory && !NOT_SOURCE.contains(&name.as_ref())
+    {
+        pending.push(path.to_path_buf());
+    }
+    else if !is_directory && Recognition::Of_Path(&name) == Recognition::Recognized
+    {
+        paths.push(path.to_path_buf());
+    }
+}
+
+/// One file as a subject, or nothing where this machine cannot read it.
+fn Read_One(root: &Path, path: &Path) -> Option<SourceFile>
+{
+    let relative = path.strip_prefix(root).unwrap_or(path).to_string_lossy();
+    let relative = Normalize_Path(&relative);
+    let group = relative
+        .rsplit_once('/')
+        .map_or_else(|| return String::new(), |(directory, _)| return directory.to_owned());
+    let source = std::fs::read_to_string(path).ok()?;
+
+    return Some(SourceFile {
+        subject: Subject_Of_Path(&relative),
+        path: relative,
+        group_subject: Subject_Of_Path(&group),
+        group,
+        source,
+    });
 }
 
 #[cfg(test)]

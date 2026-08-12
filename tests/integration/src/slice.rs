@@ -628,42 +628,52 @@ impl Slice
         -> rust::Materialization
     {
         let provider = offer.provider.As_Str();
-
         if provider == rust::PROVIDER
         {
-            return rust::Materialize(
-                file.subject,
-                &file.source,
-                rust::FactContext {
-                    snapshot: self.snapshot,
-                    variant: self.variant,
-                    configuration: self.configuration,
-                    generation: self.generation,
-                },
-            );
+            return self.Parsed(file);
         }
-
         if provider == scan::PROVIDER
         {
-            // A scan has no refusal case, so this arm cannot produce `Unparseable`. That
-            // asymmetry is the interesting half of having two providers: they do not
-            // merely differ in how good the answer is, they differ in which inputs they
-            // can answer for at all.
-            let materialized = scan::Materialize(
-                file.subject,
-                &file.source,
-                scan::FactContext {
-                    snapshot: self.snapshot,
-                    variant: self.variant,
-                    configuration: self.configuration,
-                    generation: self.generation,
-                },
-            );
-
-            return rust::Materialization::Materialized(Box::new(materialized));
+            return self.Scanned(file);
         }
 
         panic!("{provider} was resolved and this composition cannot call it");
+    }
+
+    /// The parser's answer, which may be a refusal.
+    fn Parsed(&self, file: &SourceFile) -> rust::Materialization
+    {
+        return rust::Materialize(
+            file.subject,
+            &file.source,
+            rust::FactContext {
+                snapshot: self.snapshot,
+                variant: self.variant,
+                configuration: self.configuration,
+                generation: self.generation,
+            },
+        );
+    }
+
+    /// A scan has no refusal case, so this cannot produce `Unparseable`.
+    ///
+    /// That asymmetry is the interesting half of having two providers: they do not merely
+    /// differ in how good the answer is, they differ in which inputs they can answer for at
+    /// all.
+    fn Scanned(&self, file: &SourceFile) -> rust::Materialization
+    {
+        let materialized = scan::Materialize(
+            file.subject,
+            &file.source,
+            scan::FactContext {
+                snapshot: self.snapshot,
+                variant: self.variant,
+                configuration: self.configuration,
+                generation: self.generation,
+            },
+        );
+
+        return rust::Materialization::Materialized(Box::new(materialized));
     }
 
     /// Whether the store already holds this fact at the current generation.
@@ -695,9 +705,7 @@ impl Slice
             files_seen: corpus.files.len(),
             ..RunReport::default()
         };
-
         let candidates = self.Candidates();
-
         for file in &corpus.files
         {
             self.Answer_For(file, &candidates, &mut report);
@@ -705,63 +713,81 @@ impl Slice
 
         let groups = corpus.Groups();
         report.groups_seen = groups.len();
-
         for group in groups
         {
-            let members = corpus.In_Group(&group);
-            let Some(subject) = members.first().map(|member| return member.group_subject)
-            else
-            {
-                continue;
-            };
-            let key = self.Surface_Key(subject, &members);
-
-            if self.Held(&key)
-            {
-                report.surface_reused = report.surface_reused.saturating_add(1);
-                continue;
-            }
-
-            let RolledUp {
-                surface,
-                dependencies,
-            } = self.Roll_Up(&members);
-
-            if surface.unreachable > 0
-            {
-                report.degraded.push(group.clone());
-            }
-            if surface.approximate > 0
-            {
-                report.approximated.push(group.clone());
-            }
-
-            self.store
-                .Materialize(
-                    MaterializedFact {
-                        identity: key.At(self.generation),
-                        // Provenance: the tree this rollup was computed over. Not part of
-                        // the key, so the workspace moving re-addresses nothing.
-                        snapshot: self.snapshot,
-                        // No stronger than what it derived from. A count of verified facts
-                        // is derived, and promoting it to Verified would launder the
-                        // rollup's own arithmetic into a measurement.
-                        evidence: EvidenceClass::Derived,
-                        guarantee: surface::Declared_Guarantee(),
-                        payload: FactPayload::New(surface::Payload_Schema(), surface.Encode()),
-                    },
-                    &dependencies,
-                )
-                .expect("a fact is never written behind the generation it names");
-
-            report.surface_materialized = report.surface_materialized.saturating_add(1);
-            report.recomputed.push(Recompute {
-                capability: surface::CAPABILITY.to_owned(),
-                subject: group,
-            });
+            self.Surface_For(corpus, group, &mut report);
         }
 
         return report;
+    }
+
+    /// One group's rollup: reused where the store already holds it, computed where it does
+    /// not.
+    fn Surface_For(&mut self, corpus: &Corpus, group: String, report: &mut RunReport)
+    {
+        let members = corpus.In_Group(&group);
+        let Some(subject) = members.first().map(|member| return member.group_subject)
+        else
+        {
+            return;
+        };
+        let key = self.Surface_Key(subject, &members);
+        if self.Held(&key)
+        {
+            report.surface_reused = report.surface_reused.saturating_add(1);
+
+            return;
+        }
+        let rolled = self.Roll_Up(&members);
+
+        Self::Note_The_Rollups_Reach(&rolled.surface, &group, report);
+        self.Write_The_Surface(&key, &rolled);
+        Self::Note_The_Surface_Was_Written(group, report);
+    }
+
+    /// What the rollup could not reach, and what it reached only approximately.
+    fn Note_The_Rollups_Reach(surface: &Surface, group: &str, report: &mut RunReport)
+    {
+        if surface.unreachable > 0
+        {
+            report.degraded.push(group.to_owned());
+        }
+        if surface.approximate > 0
+        {
+            report.approximated.push(group.to_owned());
+        }
+    }
+
+    /// The rollup as a fact, stamped with the tree it was computed over.
+    fn Write_The_Surface(&mut self, key: &FactKey, rolled: &RolledUp)
+    {
+        self.store
+            .Materialize(
+                MaterializedFact {
+                    identity: key.clone().At(self.generation),
+                    // Provenance: the tree this rollup was computed over. Not part of the
+                    // key, so the workspace moving re-addresses nothing.
+                    snapshot: self.snapshot,
+                    // No stronger than what it derived from. A count of verified facts is
+                    // derived, and promoting it to Verified would launder the rollup's own
+                    // arithmetic into a measurement.
+                    evidence: EvidenceClass::Derived,
+                    guarantee: surface::Declared_Guarantee(),
+                    payload: FactPayload::New(surface::Payload_Schema(), rolled.surface.Encode()),
+                },
+                &rolled.dependencies,
+            )
+            .expect("a fact is never written behind the generation it names");
+    }
+
+    /// The group's rollup landed, which is one recomputation.
+    fn Note_The_Surface_Was_Written(group: String, report: &mut RunReport)
+    {
+        report.surface_materialized = report.surface_materialized.saturating_add(1);
+        report.recomputed.push(Recompute {
+            capability: surface::CAPABILITY.to_owned(),
+            subject: group,
+        });
     }
 
     /// Walks the selection for one file until something answers.
@@ -787,52 +813,54 @@ impl Slice
     )
     {
         let mut refusal = None;
-
         for (rank, offer) in candidates.iter().enumerate()
         {
-            let key = self.Syntax_Key_Of(file, offer);
-            let provider = offer.provider.As_Str().to_owned();
-
-            if self.Held(&key)
+            let Some(failure) = self.Ask(file, offer, rank, report)
+            else
             {
-                report.syntax_reused = report.syntax_reused.saturating_add(1);
-                Self::Credit(report, Answered {
-                    provider: &provider,
-                    rank,
-                    file,
-                });
-
                 return;
-            }
-
-            match self.Dispatch(file, offer)
-            {
-                rust::Materialization::Materialized(fact) =>
-                {
-                    self.Kept(*fact, report, Answered {
-                        provider: &provider,
-                        rank,
-                        file,
-                    });
-
-                    return;
-                }
-                rust::Materialization::Unparseable(failure) =>
-                {
-                    // The chosen provider's refusal is the one a caller can act on, so it
-                    // is the one kept when nobody below can answer either.
-                    if refusal.is_none()
-                    {
-                        refusal = Some(failure.to_string());
-                    }
-                }
-            }
+            };
+            // The chosen provider's refusal is the one a caller can act on, so it is the
+            // one kept when nobody below can answer either.
+            refusal = refusal.or(Some(failure));
         }
 
         report.refused.push((
             file.path.clone(),
             refusal.unwrap_or_else(|| return "no admitted provider answered".to_owned()),
         ));
+    }
+
+    /// One offer asked for one file: nothing if it answered, its refusal if it did not.
+    fn Ask(
+        &mut self,
+        file: &SourceFile,
+        offer: &nomos_capability::ProviderOffer,
+        rank: usize,
+        report: &mut RunReport,
+    ) -> Option<String>
+    {
+        let key = self.Syntax_Key_Of(file, offer);
+        let provider = offer.provider.As_Str().to_owned();
+        let answered = Answered { provider: &provider, rank, file };
+        if self.Held(&key)
+        {
+            report.syntax_reused = report.syntax_reused.saturating_add(1);
+            Self::Credit(report, answered);
+
+            return None;
+        }
+
+        return match self.Dispatch(file, offer)
+        {
+            rust::Materialization::Materialized(fact) =>
+            {
+                self.Kept(*fact, report, answered);
+
+                None
+            }
+            rust::Materialization::Unparseable(failure) => Some(failure.to_string()),
+        };
     }
 
     /// Records who answered for a subject, and whether that was the chosen offer.
@@ -882,45 +910,54 @@ impl Slice
         // run did not ask for would resolve a different provider, rebuild a key nobody
         // wrote, and report every member unreachable — loudly, but for the wrong reason.
         let need = self.Requirement();
-
         let mut reader = Reader::On(&self.store, &self.registry, self.Context());
         let mut surface = Surface::default();
-
         for member in members
         {
-            // `Require_Any` rather than `Require`, which is what makes the coverage a
-            // lowered floor bought reachable by the thing that derives from it. Reading
-            // only the chosen provider would leave the scanner's answer written into the
-            // store and unread, and the rollup would still report the member missing —
-            // the same defect one level in.
-            let read = reader.Require_Any(
-                &CapabilityId::New(syntax::CAPABILITY),
-                &member.subject,
-                Self::Syntax_Inputs(&member.source),
-                &need,
-            );
-
-            let Ok((fact, applicability)) = read
-            else
-            {
-                // The member has no readable fact — every admitted provider refused it, or
-                // nothing has computed it. Counted, never skipped: a rollup that silently
-                // omits a member reports a smaller surface as if it were a complete one.
-                surface.unreachable = surface.unreachable.saturating_add(1);
-                continue;
-            };
-
-            match crate::surface::Public_Items(&fact.payload.bytes)
-            {
-                Ok((items, public)) => Self::Summed(&mut surface, items, public, applicability),
-                Err(_) => surface.unreachable = surface.unreachable.saturating_add(1),
-            }
+            Self::Fold_In(&mut surface, &mut reader, member, &need);
         }
 
         return RolledUp {
             surface,
             dependencies: reader.Into_Dependencies(),
         };
+    }
+
+    /// One member read through the registry and folded into the running surface.
+    ///
+    /// `Require_Any` rather than `Require`, which is what makes the coverage a lowered floor
+    /// bought reachable by the thing that derives from it. Reading only the chosen provider
+    /// would leave the scanner's answer written into the store and unread, and the rollup
+    /// would still report the member missing — the same defect one level in.
+    fn Fold_In(
+        surface: &mut Surface,
+        reader: &mut Reader<'_, '_>,
+        member: &SourceFile,
+        need: &Requirement,
+    )
+    {
+        let read = reader.Require_Any(
+            &CapabilityId::New(syntax::CAPABILITY),
+            &member.subject,
+            Self::Syntax_Inputs(&member.source),
+            need,
+        );
+        let Ok((fact, applicability)) = read
+        else
+        {
+            // The member has no readable fact — every admitted provider refused it, or
+            // nothing has computed it. Counted, never skipped: a rollup that silently
+            // omits a member reports a smaller surface as if it were a complete one.
+            surface.unreachable = surface.unreachable.saturating_add(1);
+
+            return;
+        };
+
+        match crate::surface::Public_Items(&fact.payload.bytes)
+        {
+            Ok((items, public)) => Self::Summed(surface, items, public, applicability),
+            Err(_) => surface.unreachable = surface.unreachable.saturating_add(1),
+        }
     }
 
     /// One readable member folded into the rollup.
@@ -974,36 +1011,48 @@ impl Slice
             .Apply(&presented)
             .unwrap_or_else(|error| panic!("`{path}` could not be edited: {error}"));
 
-        assert!(
-            corpus.Rewrite(path, content),
-            "`{path}` is not in the corpus, so this edit changed the workspace and nothing \
-             the providers read"
-        );
+        Self::Assert_The_Corpus_Holds(corpus, path, content);
 
         let Applied::Advanced { generation, .. } = applied
         else
         {
             return Edited::Unchanged { applied };
         };
-
         self.generation = generation;
         self.snapshot = applied.Snapshot();
 
-        let invalidated = self.store.Invalidate(
-            &nomos_analysis::GenerationCause::SubjectChanged {
-                subject: Subject_Of_Path(path),
-                // A file changed, so the cause is file-granular. The engine broadens it to
-                // whatever each affected provider can actually deliver, and records having
-                // done so — the rollup will be broadened to Project.
-                granularity: IncrementalGranularity::File,
-            },
-            self.generation,
-        );
+        let invalidated = self.Invalidate_One_Subject(path);
 
         return Edited::Advanced {
             applied,
             invalidated,
         };
+    }
+
+    /// The corpus is rewritten to match, because it is the reading of the tree the providers
+    /// actually parse. A silent no-op here would make an invalidation test assert that
+    /// changing nothing invalidates nothing.
+    fn Assert_The_Corpus_Holds(corpus: &mut Corpus, path: &str, content: &str)
+    {
+        assert!(
+            corpus.Rewrite(path, content),
+            "`{path}` is not in the corpus, so this edit changed the workspace and nothing \
+             the providers read"
+        );
+    }
+
+    /// A file changed, so the cause is file-granular. The engine broadens it to whatever each
+    /// affected provider can actually deliver, and records having done so — the rollup will be
+    /// broadened to Project.
+    fn Invalidate_One_Subject(&mut self, path: &str) -> InvalidationReport
+    {
+        return self.store.Invalidate(
+            &nomos_analysis::GenerationCause::SubjectChanged {
+                subject: Subject_Of_Path(path),
+                granularity: IncrementalGranularity::File,
+            },
+            self.generation,
+        );
     }
 
     /// A checkout: several members land at once, and the store is told which of them differ.
@@ -1023,17 +1072,45 @@ impl Slice
     pub fn Checkout(&mut self, corpus: &mut Corpus, landing: &[(&str, &str)]) -> Edited
     {
         let from = self.snapshot;
+        let applied = self.Land(landing);
+
+        Self::Assert_The_Corpus_Holds_Each(corpus, landing);
+
+        let Applied::Advanced { .. } = applied
+        else
+        {
+            return Edited::Unchanged { applied };
+        };
+        let differing = Self::Differing_Members(&applied);
+        self.generation = applied.Generation();
+        self.snapshot = applied.Snapshot();
+
+        let invalidated = self.Invalidate_The_Whole_Tree(from, applied.Snapshot(), differing);
+
+        return Edited::Advanced {
+            applied,
+            invalidated,
+        };
+    }
+
+    /// The whole landing as one change set, applied through the one door.
+    fn Land(&mut self, landing: &[(&str, &str)]) -> Applied
+    {
         let mut checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
         for (path, content) in landing
         {
             checkout = checkout.Present(*path, *content);
         }
 
-        let applied = self
+        return self
             .workspace
             .Apply(&checkout)
             .unwrap_or_else(|error| panic!("the checkout was refused: {error}"));
+    }
 
+    /// Every path in the landing has to be one the providers read.
+    fn Assert_The_Corpus_Holds_Each(corpus: &mut Corpus, landing: &[(&str, &str)])
+    {
         for (path, content) in landing
         {
             assert!(
@@ -1042,36 +1119,37 @@ impl Slice
                  nothing the providers read"
             );
         }
+    }
 
-        let Applied::Advanced { .. } = applied
-        else
-        {
-            return Edited::Unchanged { applied };
-        };
-
-        let differing: BTreeSet<SubjectId> = applied
+    /// Read off what the workspace said rather than recomputed against it. A second
+    /// computation of the same thing is a second answer waiting to disagree.
+    fn Differing_Members(applied: &Applied) -> BTreeSet<SubjectId>
+    {
+        return applied
             .Effects()
             .iter()
             .filter(|effect| return effect.Altered())
             .map(|effect| return Subject_Of_Path(effect.Path()))
             .collect();
+    }
 
-        self.generation = applied.Generation();
-        self.snapshot = applied.Snapshot();
-
-        let invalidated = self.store.Invalidate(
+    /// A checkout replaces the workspace state wholesale, so the store is told which members
+    /// are not the same in both.
+    fn Invalidate_The_Whole_Tree(
+        &mut self,
+        from: SnapshotId,
+        to: SnapshotId,
+        differing: BTreeSet<SubjectId>,
+    ) -> InvalidationReport
+    {
+        return self.store.Invalidate(
             &nomos_analysis::GenerationCause::SnapshotReplaced {
                 from,
-                to: applied.Snapshot(),
+                to,
                 differing,
             },
             self.generation,
         );
-
-        return Edited::Advanced {
-            applied,
-            invalidated,
-        };
     }
 
     /// The subjects named by a set of invalidated keys, resolved back to corpus paths.

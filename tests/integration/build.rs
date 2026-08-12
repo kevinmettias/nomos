@@ -20,16 +20,32 @@ fn main()
     // never happened.
     let target = std::env::var("TARGET").expect("cargo sets TARGET for every build script");
     let profile = std::env::var("PROFILE").expect("cargo sets PROFILE for every build script");
+    let toolchain = Toolchain();
+    let features = Features();
 
-    // Absent outside rustup — a direct rustc invocation, a distribution toolchain, a
-    // vendored compiler. Named as unstated rather than defaulted to a version, because a
-    // variant claiming `1.85` on a toolchain nobody identified is a false statement about
-    // which compiler produced the facts.
-    let toolchain = std::env::var("RUSTUP_TOOLCHAIN").unwrap_or_else(|_| return "unstated".to_owned());
+    println!("cargo::rustc-env=NOMOS_TARGET={target}");
+    println!("cargo::rustc-env=NOMOS_PROFILE={profile}");
+    println!("cargo::rustc-env=NOMOS_TOOLCHAIN={toolchain}");
+    println!("cargo::rustc-env=NOMOS_FEATURES={features}");
 
-    // Cargo exports one variable per enabled feature and no list. A set, so the order they
-    // are read in cannot reach the variant's identity.
-    let features: BTreeSet<String> = std::env::vars()
+    println!("cargo::rerun-if-changed=build.rs");
+    println!("cargo::rerun-if-env-changed=RUSTUP_TOOLCHAIN");
+}
+
+/// Absent outside rustup — a direct rustc invocation, a distribution toolchain, a vendored
+/// compiler. Named as unstated rather than defaulted to a version, because a variant claiming
+/// `1.85` on a toolchain nobody identified is a false statement about which compiler produced
+/// the facts.
+fn Toolchain() -> String
+{
+    return std::env::var("RUSTUP_TOOLCHAIN").unwrap_or_else(|_| return "unstated".to_owned());
+}
+
+/// Cargo exports one variable per enabled feature and no list. Collected into a set, so the
+/// order they are read in cannot reach the variant's identity.
+fn Features() -> String
+{
+    let named: BTreeSet<String> = std::env::vars()
         .filter_map(|(name, _)| {
             return name
                 .strip_prefix("CARGO_FEATURE_")
@@ -37,14 +53,5 @@ fn main()
         })
         .collect();
 
-    println!("cargo::rustc-env=NOMOS_TARGET={target}");
-    println!("cargo::rustc-env=NOMOS_PROFILE={profile}");
-    println!("cargo::rustc-env=NOMOS_TOOLCHAIN={toolchain}");
-    println!(
-        "cargo::rustc-env=NOMOS_FEATURES={}",
-        features.into_iter().collect::<Vec<String>>().join(",")
-    );
-
-    println!("cargo::rerun-if-changed=build.rs");
-    println!("cargo::rerun-if-env-changed=RUSTUP_TOOLCHAIN");
+    return named.into_iter().collect::<Vec<String>>().join(",");
 }

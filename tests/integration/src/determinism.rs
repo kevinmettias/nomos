@@ -159,15 +159,7 @@ pub struct Verification
 // mutable state between repetitions is exactly the thing this verifier exists to rule out.
 pub fn Verify<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>) -> Verification
 {
-    let mut discharged = Vec::new();
-
-    assert!(
-        Declaration_Is_Coherent(S::STRENGTH, S::TRACE),
-        "{domain} declares {} with a trace of {}, which is not a coherent claim",
-        S::STRENGTH,
-        S::TRACE
-    );
-    discharged.push("coherent".to_owned());
+    Assert_The_Declaration_Is_Coherent::<S>(domain);
 
     let first = Production { trace: produce() };
 
@@ -178,57 +170,85 @@ pub fn Verify<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>) -> Verif
         !first.trace.is_empty(),
         "{domain} produced no bytes, so repeating it asserts nothing"
     );
+    Assert_Repeats_Agree::<S>(domain, &first, produce);
 
+    return Verification {
+        domain: domain.to_owned(),
+        discharged: Discharged::<S>(),
+        digest: first.Digest_At(S::STRENGTH),
+    };
+}
+
+/// A strength and a trace that cannot both be true is a declaration nothing can discharge.
+fn Assert_The_Declaration_Is_Coherent<S: Strategy>(domain: &str)
+{
+    assert!(
+        Declaration_Is_Coherent(S::STRENGTH, S::TRACE),
+        "{domain} declares {} with a trace of {}, which is not a coherent claim",
+        S::STRENGTH,
+        S::TRACE
+    );
+}
+
+/// Every repetition, compared against the first production at the declared strength.
+fn Assert_Repeats_Agree<S: Strategy>(
+    domain: &str,
+    first: &Production,
+    produce: &dyn Fn() -> Vec<u8>,
+)
+{
     for repeat in 1..REPEATS
     {
         let again = Production { trace: produce() };
 
-        match S::STRENGTH
-        {
-            DeterminismStrength::StateTemporal =>
-            {
-                assert!(
-                    again.trace == first.trace,
-                    "{domain} declares {} and repetition {repeat} produced different bytes",
-                    DeterminismStrength::StateTemporal
-                );
-            }
-            DeterminismStrength::State =>
-            {
-                assert!(
-                    again.State() == first.State(),
-                    "{domain} declares {} and repetition {repeat} produced a different set",
-                    DeterminismStrength::State
-                );
-            }
-            // Nothing is promised, so nothing is checked. Coherence has already refused
-            // the case where this pairs with a trace claim.
-            DeterminismStrength::None =>
-            {}
-        }
+        Assert_Agrees::<S>(domain, first, &again, repeat);
     }
+}
 
+/// What the run discharged, which is what it is entitled to report having checked.
+///
+/// `BitIdentical` says what "the same" means when two runs are compared: equality, with no
+/// tolerance to define. It does not add a comparison of its own — the strength axis decides
+/// *what* is compared and this axis decides *how*, which is why a domain can declare `State`
+/// and `BitIdentical` together without contradiction. Recorded rather than checked, and said
+/// out loud because the tempting misreading is that `BitIdentical` alone obliges byte-stable
+/// repetition.
+fn Discharged<S: Strategy>() -> Vec<String>
+{
+    let mut discharged = vec!["coherent".to_owned()];
     if S::STRENGTH != DeterminismStrength::None
     {
         discharged.push(format!("repeated x{REPEATS} at {}", S::STRENGTH));
     }
-
-    // `BitIdentical` says what "the same" means when two runs are compared: equality, with
-    // no tolerance to define. It does not add a comparison of its own — the strength axis
-    // decides *what* is compared and this axis decides *how*, which is why a domain can
-    // declare `State` and `BitIdentical` together without contradiction. Recorded rather
-    // than checked, and said out loud because the tempting misreading is that
-    // `BitIdentical` alone obliges byte-stable repetition.
     if S::TRACE == TraceEquivalence::BitIdentical
     {
         discharged.push(format!("trace {}", TraceEquivalence::BitIdentical));
     }
 
-    return Verification {
-        domain: domain.to_owned(),
-        discharged,
-        digest: first.Digest_At(S::STRENGTH),
-    };
+    return discharged;
+}
+
+/// Two productions compared at whatever the declared strength says "the same" means.
+///
+/// `None` promises nothing, so nothing is checked. Coherence has already refused the case
+/// where it pairs with a trace claim.
+fn Assert_Agrees<S: Strategy>(domain: &str, first: &Production, again: &Production, repeat: usize)
+{
+    match S::STRENGTH
+    {
+        DeterminismStrength::StateTemporal => assert!(
+            again.trace == first.trace,
+            "{domain} declares {} and repetition {repeat} produced different bytes",
+            DeterminismStrength::StateTemporal
+        ),
+        DeterminismStrength::State => assert!(
+            again.State() == first.State(),
+            "{domain} declares {} and repetition {repeat} produced a different set",
+            DeterminismStrength::State
+        ),
+        DeterminismStrength::None =>
+        {}
+    }
 }
 
 /// What a scope claim owes beyond one process.
