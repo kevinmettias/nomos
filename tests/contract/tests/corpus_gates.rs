@@ -156,10 +156,14 @@ const GATES: &[Gate] = &[
         tests: 6,
     },
     Gate {
-        path: "crates/spec/nomos-spec-store/tests/table_rows.rs",
+        // The suite is `tests/table_rows/`, and only this module of it reaches a corpus.
+        // Both of its gated tests sit beside `Corpus_Root` deliberately: the derivation
+        // below follows helpers within one file, so a gated test in a sibling module would
+        // be counted by nobody.
+        path: "crates/spec/nomos-spec-store/tests/table_rows/corpus.rs",
         variables: &[V14],
         gated: 2,
-        tests: 16,
+        tests: 2,
     },
     Gate {
         path: "crates/substrate/nomos-workspace/tests/portable.rs",
@@ -189,7 +193,12 @@ const GATED_TOTAL: usize = 68;
 /// Rose to 130 with `P9-FALLBACK`'s five assertions in `analysis_slice.rs`, none of which
 /// reads a corpus. [`GATED_TOTAL`] is unchanged, and that is the point of keeping the two
 /// numbers apart: a gated file growing is not the hole growing.
-const TESTS_IN_GATED_FILES: usize = 130;
+///
+/// Fell to 116 when `table_rows.rs` was decomposed for `check-file-size`. Fourteen of its
+/// sixteen tests never read a corpus and now live in sibling modules, so they no longer
+/// inflate this denominator — the same move in the other direction. [`GATED_TOTAL`] is again
+/// unchanged, which is the check that the decomposition moved tests rather than silence.
+const TESTS_IN_GATED_FILES: usize = 116;
 
 /// The table accounts for every file that reaches a corpus.
 ///
