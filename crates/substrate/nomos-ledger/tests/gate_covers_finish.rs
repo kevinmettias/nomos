@@ -114,18 +114,36 @@ fn Temp_Dir(name: &str) -> PathBuf
 fn Tree(name: &str, workflow: Option<&str>) -> PathBuf
 {
     let directory = Temp_Dir(name);
-
     if let Some(text) = workflow
     {
-        let workflows = directory.join(".github").join("workflows");
-        std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
-        std::fs::write(workflows.join("gate.yml"), text).expect("test needs a workflow");
+        Write_The_Workflow(&directory, text);
     }
 
     let clock = FixedClock(NOW);
     let ledger = Ledger_At(&directory, &clock);
+    ledger
+        .Save(&LedgerDocument {
+            schema_version: 1,
+            items: vec![A_Claimed_Item()],
+        })
+        .expect("test needs a ledger");
 
-    let mut item = LedgerItem {
+    return directory;
+}
+
+/// The workflow the gate derives its step from, where the test declares one.
+fn Write_The_Workflow(directory: &Path, text: &str)
+{
+    let workflows = directory.join(".github").join("workflows");
+    std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
+    std::fs::write(workflows.join("gate.yml"), text).expect("test needs a workflow");
+}
+
+/// A claimed item whose predicate is a scoped `cargo test`, exactly as every item on the real
+/// ledger carries.
+fn A_Claimed_Item() -> LedgerItem
+{
+    return LedgerItem {
         id: ItemId::New("T-1"),
         title: "an item".to_owned(),
         why: "it needs doing".to_owned(),
@@ -134,7 +152,11 @@ fn Tree(name: &str, workflow: Option<&str>) -> PathBuf
         state: ItemState::Claimed,
         depends_on: Vec::new(),
         blocked: None,
-        claim: None,
+        claim: Some(Claim {
+            holder: HOLDER.to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(NOW),
+            lease_expires_at: Timestamp::From_Unix_Seconds(NOW + 3_600),
+        }),
         verification: Some(VerificationPredicate::New(vec![
             "cargo".to_owned(),
             "test".to_owned(),
@@ -146,20 +168,6 @@ fn Tree(name: &str, workflow: Option<&str>) -> PathBuf
         displaced: Vec::new(),
         declined: None,
     };
-    item.claim = Some(Claim {
-        holder: HOLDER.to_owned(),
-        acquired_at: Timestamp::From_Unix_Seconds(NOW),
-        lease_expires_at: Timestamp::From_Unix_Seconds(NOW + 3_600),
-    });
-
-    ledger
-        .Save(&LedgerDocument {
-            schema_version: 1,
-            items: vec![item],
-        })
-        .expect("test needs a ledger");
-
-    return directory;
 }
 
 fn Ledger_At<'clock>(
@@ -294,24 +302,30 @@ fn Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item()
 
     let record = Finish_In(&mut ledger, &directory, &launcher, "T-1")
     .expect("a green gate and a passing predicate finish the item");
-
-    let gate = record
-        .gate
-        .as_ref()
-        .expect("the record must say the gate ran");
-    assert_eq!(gate.exit_code, 0);
-    assert!(
-        gate.argv.iter().any(|argument| return argument == "clippy"),
-        "the recorded gate step must be the derived one, got {:?}",
-        gate.argv
-    );
-
     let Standing { state, verified } = State_Of(&directory);
+
+    Assert_The_Derived_Step_Ran(&record);
     assert_eq!(state, ItemState::Done);
     assert!(
         verified.and_then(|record| return record.gate).is_some(),
         "the ledger must record what the gate did, or a reader cannot tell an item \
          finished under the gate from one finished before it existed"
+    );
+}
+
+/// The step the record names must be the one derived from the workflow, not a guess.
+fn Assert_The_Derived_Step_Ran(record: &VerificationRecord)
+{
+    let gate = record
+        .gate
+        .as_ref()
+        .expect("the record must say the gate ran");
+
+    assert_eq!(gate.exit_code, 0);
+    assert!(
+        gate.argv.iter().any(|argument| return argument == "clippy"),
+        "the recorded gate step must be the derived one, got {:?}",
+        gate.argv
     );
 }
 
@@ -380,7 +394,19 @@ fn Test_A_Missing_Workflow_Should_Refuse_Rather_Than_Finish_On_The_Predicate_Alo
 
     let refusal = Finish_In(&mut ledger, &directory, &launcher, "T-1")
     .expect_err("an underived gate must refuse");
+    let Standing { state, .. } = State_Of(&directory);
 
+    Assert_Nobody_Found_Out(&refusal);
+    assert!(
+        launcher.Calls().is_empty(),
+        "nothing should have been run once the gate could not be established"
+    );
+    assert_eq!(state, ItemState::Claimed);
+}
+
+/// An undetermined gate is not a verdict on the work, and must not read as one.
+fn Assert_Nobody_Found_Out(refusal: &FinishRefusal)
+{
     assert!(
         matches!(
             refusal,
@@ -397,13 +423,6 @@ fn Test_A_Missing_Workflow_Should_Refuse_Rather_Than_Finish_On_The_Predicate_Alo
         "nobody found out whether the work passes the gate, so this must not read as \
          the work being wrong"
     );
-    assert!(
-        launcher.Calls().is_empty(),
-        "nothing should have been run once the gate could not be established"
-    );
-
-    let Standing { state, .. } = State_Of(&directory);
-    assert_eq!(state, ItemState::Claimed);
 }
 
 /// A workflow whose lint step is a shell script cannot yield an argv without guessing.

@@ -131,24 +131,10 @@ fn Declared_Causes() -> Vec<Blocker>
 fn Test_The_Declared_Causes_Should_Be_The_Corpus_Causes_Minus_The_Declined_One()
 {
     let mut occupied: Vec<usize> = Vec::new();
-
     for blocker in Declared_Causes()
     {
-        let position = Corpus_Position(&blocker);
-        let (cause, transcribed) = *CORPUS_CAUSES
-            .get(position)
-            .expect("Corpus_Position returns an index into CORPUS_CAUSES");
-
-        assert_eq!(
-            transcribed,
-            Some(Serialized_Tag(&blocker).as_str()),
-            "the variant declared for WORK-LEDGER-005's `{cause}` does not serialize as the \
-             name CORPUS_CAUSES transcribes for it"
-        );
-
-        occupied.push(position);
+        occupied.push(Assert_It_Serializes_As_Transcribed(&blocker));
     }
-
     occupied.sort_unstable();
 
     let transcribed: Vec<usize> = CORPUS_CAUSES
@@ -165,6 +151,25 @@ fn Test_The_Declared_Causes_Should_Be_The_Corpus_Causes_Minus_The_Declined_One()
          it declines, so changing the membership means amending that record and this table \
          together"
     );
+}
+
+/// The row of the corpus table one declared cause occupies, having checked that it serializes
+/// as the name that table transcribes for it.
+fn Assert_It_Serializes_As_Transcribed(blocker: &Blocker) -> usize
+{
+    let position = Corpus_Position(blocker);
+    let (cause, transcribed) = *CORPUS_CAUSES
+        .get(position)
+        .expect("Corpus_Position returns an index into CORPUS_CAUSES");
+
+    assert_eq!(
+        transcribed,
+        Some(Serialized_Tag(blocker).as_str()),
+        "the variant declared for WORK-LEDGER-005's `{cause}` does not serialize as the \
+         name CORPUS_CAUSES transcribes for it"
+    );
+
+    return position;
 }
 
 /// Which row is empty is the decision, not merely how many are.

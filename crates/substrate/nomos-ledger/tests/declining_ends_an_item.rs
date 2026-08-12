@@ -136,6 +136,44 @@ fn Refused<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &st
         .expect_err("this claim is contended and must be refused");
 }
 
+/// The ledger every test here builds, named once so the verbs below can take it.
+type Board = FileLedger<StdFileSystem, &'static FixedClock, FileLock>;
+
+/// An item ended with the standard reason, which is expected to succeed.
+fn Decline(ledger: &mut Board, item: &str, holder: &str)
+{
+    ledger
+        .Decline(&ItemId::New(item), holder, REASON)
+        .expect("an unclaimed item is the case this verb exists for");
+}
+
+/// A decline expected to be refused, with the refusal handed back as the value the test is
+/// about.
+fn Decline_Refused(ledger: &mut Board, item: &str, holder: &str, reason: &str) -> ClaimRefusal
+{
+    return ledger
+        .Decline(&ItemId::New(item), holder, reason)
+        .expect_err("this decline is contended and must be refused");
+}
+
+/// A holder giving up its own claim, which is the remedy every refusal here names.
+fn Give_Up(ledger: &mut Board, item: &str, holder: &str, reason: &str)
+{
+    ledger
+        .Release(&ItemId::New(item), holder, ReleaseOutcome::Abandoned {
+            reason: reason.to_owned(),
+        })
+        .expect("a holder may give up its own claim");
+}
+
+/// The board's only item, read back off disk.
+fn Only_Item(ledger: &Board) -> LedgerItem
+{
+    let after = ledger.Load().expect("readable");
+
+    return after.items.into_iter().next().expect("the item survives");
+}
+
 fn Ledger_At<'clock>(
     directory: &Path,
     clock: &'clock FixedClock,
@@ -158,12 +196,13 @@ fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
 {
     let (directory, mut ledger) = Board_At("ends-it", vec![Item("T-1", &["src/a.rs"])]);
 
-    ledger
-        .Decline(&ItemId::New("T-1"), "agent-a", REASON)
-        .expect("an unclaimed item is the case this verb exists for");
+    Decline(&mut ledger, "T-1", "agent-a");
 
-    let after = ledger.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
+    let item = Only_Item(&ledger);
+    let declination = item
+        .declined
+        .as_ref()
+        .expect("who ended it and when must survive the transition that ended it");
 
     assert_eq!(
         item.state,
@@ -172,11 +211,6 @@ fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
         },
         "the reason must be in the state, which is what makes it unreachable reasonlessly"
     );
-
-    let declination = item
-        .declined
-        .as_ref()
-        .expect("who ended it and when must survive the transition that ended it");
     assert_eq!(declination.holder, "agent-a", "the item does not say who declined it");
     assert_eq!(declination.declined_at, At(NOW), "the item does not say when");
 
@@ -192,9 +226,7 @@ fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
 fn Test_A_Declination_Should_Not_Carry_A_Second_Copy_Of_The_Reason()
 {
     let (directory, mut ledger) = Board_At("one-copy", vec![Item("T-1", &["src/a.rs"])]);
-    ledger
-        .Decline(&ItemId::New("T-1"), "agent-a", REASON)
-        .expect("an unclaimed item may be declined");
+    Decline(&mut ledger, "T-1", "agent-a");
 
     let raw = std::fs::read_to_string(directory.join("ledger.json")).expect("readable");
 
@@ -216,18 +248,8 @@ fn Test_A_Declined_Item_Should_Not_Be_Claimable()
     // The control: it is claimable right up until it is declined, so the refusal below is
     // the decline's doing and not the fixture's.
     Take(&mut ledger, "T-1", "agent-a");
-    ledger
-        .Release(
-            &ItemId::New("T-1"),
-            "agent-a",
-            ReleaseOutcome::Abandoned {
-                reason: "stopped to check whether the successor already landed it".to_owned(),
-            },
-        )
-        .expect("a holder may give up its own claim");
-    ledger
-        .Decline(&ItemId::New("T-1"), "agent-a", REASON)
-        .expect("an unclaimed item may be declined");
+    Give_Up(&mut ledger, "T-1", "agent-a", "stopped to check whether the successor landed it");
+    Decline(&mut ledger, "T-1", "agent-a");
 
     let refusal = Refused(&mut ledger, "T-1", "agent-b");
 
@@ -262,27 +284,26 @@ fn Test_A_Declined_Item_Should_Stop_Excluding()
     // The control: while T-1 is held, the overlapping item is refused.
     let _refused = Refused(&mut ledger, "T-2", "agent-b");
 
-    ledger
-        .Release(
-            &ItemId::New("T-1"),
-            "agent-a",
-            ReleaseOutcome::Abandoned {
-                reason: "the successor reserves this ground correctly".to_owned(),
-            },
-        )
-        .expect("a holder may give up its own claim");
-    ledger
-        .Decline(&ItemId::New("T-1"), "agent-a", REASON)
-        .expect("an unclaimed item may be declined");
-
+    Give_Up(&mut ledger, "T-1", "agent-a", "the successor reserves this ground correctly");
+    Decline(&mut ledger, "T-1", "agent-a");
     Take(&mut ledger, "T-2", "agent-b");
 
+    Assert_The_Decline_Left_No_Claim(&ledger);
+
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// A claim that survives a decline goes on excluding, and erasing the abandonment reason
+/// while ending the item is the loss OD-LEDGER-006 exists to stop.
+fn Assert_The_Decline_Left_No_Claim(ledger: &Board)
+{
     let after = ledger.Load().expect("readable");
     let declined = after
         .items
         .iter()
         .find(|item| item.id == ItemId::New("T-1"))
         .expect("the item survives");
+
     assert!(
         declined.claim.is_none(),
         "a claim that survives a decline goes on excluding"
@@ -292,8 +313,6 @@ fn Test_A_Declined_Item_Should_Stop_Excluding()
         1,
         "declining erased the abandonment reason, which is the loss OD-LEDGER-006 exists to stop"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// Ending somebody's live work is their call, and the refusal says so.
@@ -307,9 +326,7 @@ fn Test_Declining_A_Held_Item_Should_Be_Refused_Retryably()
     let (directory, mut ledger) = Board_At("held", vec![Item("T-1", &["src/a.rs"])]);
     Take(&mut ledger, "T-1", "agent-a");
 
-    let refusal = ledger
-        .Decline(&ItemId::New("T-1"), "agent-b", REASON)
-        .expect_err("a held item may not be ended by somebody who is not holding it");
+    let refusal = Decline_Refused(&mut ledger, "T-1", "agent-b", REASON);
 
     assert!(
         refusal.Describe().contains("agent-a"),
@@ -320,27 +337,22 @@ fn Test_Declining_A_Held_Item_Should_Be_Refused_Retryably()
         refusal.Is_Retryable(),
         "the claim will be released or will lapse, so this is a queue and not a dead end"
     );
-
-    let after = ledger.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
-    assert_eq!(item.state, ItemState::Claimed, "a refused decline changed the state");
-    assert!(item.declined.is_none(), "a refused decline was recorded anyway");
+    Assert_Nothing_Was_Recorded(&ledger);
 
     // The remedy the refusal names, run in full: the holder releases, and then it declines.
-    ledger
-        .Release(
-            &ItemId::New("T-1"),
-            "agent-a",
-            ReleaseOutcome::Abandoned {
-                reason: "there is nothing here to do".to_owned(),
-            },
-        )
-        .expect("a holder may give up its own claim");
-    ledger
-        .Decline(&ItemId::New("T-1"), "agent-b", REASON)
-        .expect("once released, anybody may end it");
+    Give_Up(&mut ledger, "T-1", "agent-a", "there is nothing here to do");
+    Decline(&mut ledger, "T-1", "agent-b");
 
     let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// A refused decline leaves the item exactly as it was.
+fn Assert_Nothing_Was_Recorded(ledger: &Board)
+{
+    let item = Only_Item(ledger);
+
+    assert_eq!(item.state, ItemState::Claimed, "a refused decline changed the state");
+    assert!(item.declined.is_none(), "a refused decline was recorded anyway");
 }
 
 /// Declining finished work would put prose where a verdict is.
@@ -352,17 +364,13 @@ fn Test_Declining_A_Done_Item_Should_Be_A_Conflict()
 {
     let (directory, mut ledger) = Board_At("done", vec![Finished_Item("T-1", &["src/a.rs"])]);
 
-    let refusal = ledger
-        .Decline(&ItemId::New("T-1"), "agent-a", REASON)
-        .expect_err("finished work is not declinable");
+    let refusal = Decline_Refused(&mut ledger, "T-1", "agent-a", REASON);
+    let item = Only_Item(&ledger);
 
     assert!(
         !refusal.Is_Retryable(),
         "a Done item never stops being Done, so retrying is a loop and a person is needed"
     );
-
-    let after = ledger.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
     assert_eq!(item.state, ItemState::Done, "the verdict was overwritten with prose");
     assert!(item.verified.is_some(), "the verification record was discarded");
 
@@ -374,13 +382,9 @@ fn Test_Declining_A_Done_Item_Should_Be_A_Conflict()
 fn Test_Declining_A_Declined_Item_Should_Keep_The_First_Reason()
 {
     let (directory, mut ledger) = Board_At("twice", vec![Item("T-1", &["src/a.rs"])]);
-    ledger
-        .Decline(&ItemId::New("T-1"), "agent-a", REASON)
-        .expect("an unclaimed item may be declined");
+    Decline(&mut ledger, "T-1", "agent-a");
 
-    let refusal = ledger
-        .Decline(&ItemId::New("T-1"), "agent-b", "a different reading entirely")
-        .expect_err("a declined item is already ended");
+    let refusal = Decline_Refused(&mut ledger, "T-1", "agent-b", "a different reading entirely");
 
     assert!(
         refusal.Describe().contains(REASON),
@@ -389,18 +393,28 @@ fn Test_Declining_A_Declined_Item_Should_Keep_The_First_Reason()
         refusal.Describe()
     );
     assert!(!refusal.Is_Retryable());
+    Assert_The_Refusal_Stays_One_Line(&mut ledger);
+    Assert_The_First_Reason_Survived(&ledger);
 
-    // …and it must stay one line while doing it. The reason `P10-DERIVED-FACT` was declined
-    // with runs to five paragraphs, and this refusal printed every one of them with the
-    // newlines escaped before `ItemState::Describe` existed.
-    let long = ledger
-        .Decline(&ItemId::New("T-1"), "agent-c", "first line\n\nand four more paragraphs")
-        .expect_err("still declined");
+    let _ = std::fs::remove_dir_all(&directory);
+}
+
+/// The reason `P10-DERIVED-FACT` was declined with runs to five paragraphs, and this refusal
+/// printed every one of them with the newlines escaped before `ItemState::Describe` existed.
+fn Assert_The_Refusal_Stays_One_Line(ledger: &mut Board)
+{
+    let long = Decline_Refused(ledger, "T-1", "agent-c", "first line\n\nand four more paragraphs");
+    let opening = REASON.lines().next().expect("the standard reason has a first line");
+
     assert_eq!(long.Describe().lines().count(), 1, "{}", long.Describe());
-    assert!(long.Describe().contains(REASON.lines().next().unwrap()));
+    assert!(long.Describe().contains(opening));
+}
 
-    let after = ledger.Load().expect("readable");
-    let item = after.items.first().expect("the item survives");
+/// Neither the reason nor who recorded it may be replaced by a second decline.
+fn Assert_The_First_Reason_Survived(ledger: &Board)
+{
+    let item = Only_Item(ledger);
+
     assert_eq!(
         item.state,
         ItemState::Declined {
@@ -416,8 +430,6 @@ fn Test_Declining_A_Declined_Item_Should_Keep_The_First_Reason()
         "agent-a",
         "the second decline replaced who ended it"
     );
-
-    let _ = std::fs::remove_dir_all(&directory);
 }
 
 /// A declined board is a valid board.

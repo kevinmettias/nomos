@@ -37,29 +37,46 @@ fn Test_Only_A_Failing_Predicate_Should_Judge_The_Work()
 {
     let item = ItemId::New("T-1");
 
-    assert!(
+    for judging in Refusals_That_Judged_The_Work(&item)
+    {
+        assert!(judging.Judged_The_Work(), "{} is a statement about the work", judging.Describe());
+    }
+    for prevented in Refusals_That_Judged_Nothing(&item)
+    {
+        assert!(
+            !prevented.Judged_The_Work(),
+            "{} is not a statement about the work",
+            prevented.Describe()
+        );
+    }
+}
+
+/// Somebody found out and the answer was no.
+///
+/// A red gate is an answer about the work too. The author's next move differs from a failing
+/// test, which is why it is a separate variant, but "nobody found out" it is not.
+fn Refusals_That_Judged_The_Work(item: &ItemId) -> Vec<FinishRefusal>
+{
+    return vec![
         FinishRefusal::PredicateFailed {
             item: item.clone(),
             exit_code: 1,
             output_tail: String::new(),
-        }
-        .Judged_The_Work()
-    );
-
-    // A red gate is an answer about the work too. The author's next move differs
-    // from a failing test, which is why it is a separate variant, but "nobody found
-    // out" it is not.
-    assert!(
+        },
         FinishRefusal::GateFailed {
             item: item.clone(),
             argv: vec!["cargo".to_owned(), "clippy".to_owned()],
             exit_code: 101,
             output_tail: String::new(),
-        }
-        .Judged_The_Work()
-    );
+        },
+    ];
+}
 
-    for prevented in [
+/// Every refusal that means nobody found out, as opposed to somebody finding out and the
+/// answer being no.
+fn Refusals_That_Judged_Nothing(item: &ItemId) -> Vec<FinishRefusal>
+{
+    return vec![
         FinishRefusal::GateUndetermined {
             item: item.clone(),
             cause: GateUnknown::NoSuchStep {
@@ -81,21 +98,28 @@ fn Test_Only_A_Failing_Predicate_Should_Judge_The_Work()
         FinishRefusal::NotRecorded {
             cause: "locked".to_owned(),
         },
-    ]
-    {
-        assert!(
-            !prevented.Judged_The_Work(),
-            "{} is not a statement about the work",
-            prevented.Describe()
-        );
-    }
+    ];
 }
 
 #[test]
 fn Test_Every_Refusal_Should_Describe_Itself_Usefully()
 {
     let item = ItemId::New("T-1");
-    let refusals = [
+
+    for refusal in Every_Refusal(item)
+    {
+        assert!(
+            refusal.Describe().len() > 15,
+            "{} is too terse to act on",
+            refusal.Describe()
+        );
+    }
+}
+
+/// One of each, so that a variant added without a sentence of its own fails here.
+fn Every_Refusal(item: ItemId) -> Vec<FinishRefusal>
+{
+    return vec![
         FinishRefusal::NotHeld {
             refusal: ClaimRefusal::NoSuchItem { item: item.clone() },
         },
@@ -133,13 +157,4 @@ fn Test_Every_Refusal_Should_Describe_Itself_Usefully()
             cause: "locked".to_owned(),
         },
     ];
-
-    for refusal in &refusals
-    {
-        assert!(
-            refusal.Describe().len() > 15,
-            "{} is too terse to act on",
-            refusal.Describe()
-        );
-    }
 }
