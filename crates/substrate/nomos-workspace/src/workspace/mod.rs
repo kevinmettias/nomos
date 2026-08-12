@@ -1,5 +1,12 @@
 //! The workspace, and the only thing that changes it.
 
+// A change set over a workspace, and the refusals a workspace raises.
+mod change_set;
+mod error;
+
+pub use change_set::WorkspaceChangeSet;
+pub use error::WorkspaceError;
+
 mod naming;
 #[cfg(test)]
 mod tests;
@@ -7,11 +14,9 @@ mod tests;
 use naming::{Normalize, Normalized};
 
 use crate::effect::Effect;
-use crate::effect_kind::EffectKind;
-use crate::workspace_error::WorkspaceError;
+use crate::effect::EffectKind;
 use crate::applied::Applied;
 use crate::change::Change;
-use crate::workspace_change_set::WorkspaceChangeSet;
 use crate::snapshot::WorkspaceSnapshot;
 use crate::variant::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};

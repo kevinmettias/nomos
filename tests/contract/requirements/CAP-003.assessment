@@ -11,4 +11,4 @@
 verdict: Met
 record: OD-TRACE-001
 site: crates/contracts/nomos-contracts/src/guarantee.rs#Satisfies
-site: crates/substrate/nomos-capability/src/selection.rs#Satisfies
+site: crates/substrate/nomos-capability/src/resolution/selection.rs#Satisfies

@@ -1,8 +1,17 @@
 //! What a provider promises about the facts it produces for one capability.
 
+// The three axes a guarantee is stated on. Each is only ever read as part of one, so
+// each sits beneath it rather than beside it.
+mod assurance;
+mod fact_variant;
+mod incremental_granularity;
+
+pub use assurance::Assurance;
+pub use fact_variant::FactVariant;
+pub use incremental_granularity::IncrementalGranularity;
+
 use serde::{Deserialize, Serialize};
 
-use crate::{Assurance, FactVariant, IncrementalGranularity};
 
 /// What a provider promises about the facts it produces for one capability.
 ///

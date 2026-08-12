@@ -51,8 +51,8 @@ impl<K> Transition<K>
 mod tests
 {
     use super::*;
-    use crate::identity_transition::IdentityTransition;
-    use crate::identity_transition_kind::IdentityTransitionKind;
+    use crate::identity::IdentityTransition;
+    use crate::identity::IdentityTransitionKind;
 
     /// An unevidenced inference must be visibly unevidenced. This is the field a review
     /// looks at when asking why the system thinks two declarations are the same one.

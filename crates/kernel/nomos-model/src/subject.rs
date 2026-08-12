@@ -1,7 +1,14 @@
 //! Addressing a thing a rule, metric or finding can be about.
 
-use crate::subject_kind::SubjectKind;
-use crate::subject_target::SubjectTarget;
+// What a subject is of, what set of them a rule reaches, and what one points at.
+mod kind;
+mod set;
+mod target;
+
+pub use kind::SubjectKind;
+pub use set::SubjectSet;
+pub use target::SubjectTarget;
+
 use nomos_contracts::{SnapshotEntityId, SubjectId};
 use serde::{Deserialize, Serialize};
 

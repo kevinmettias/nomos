@@ -1,5 +1,17 @@
 //! Reading one file, and what comes back when that fails.
 
+// What a read of a source file yields: the facts, the items in them, and the two
+// properties an item carries.
+mod facts;
+mod item;
+mod item_kind;
+mod visibility;
+
+pub use facts::SyntaxFacts;
+pub use item::SyntaxItem;
+pub use item_kind::ItemKind;
+pub use visibility::Visibility;
+
 mod walk;
 mod shape;
 mod documentation;
@@ -11,10 +23,6 @@ pub(crate) use shape::Path_As_Written;
 use shape::{Bound_By, Function_Shape, Impl_Shape, Type_Head, Type_Shape};
 use documentation::Documentation;
 
-use crate::item_kind::ItemKind;
-use crate::visibility::Visibility;
-use crate::syntax_item::SyntaxItem;
-use crate::syntax_facts::SyntaxFacts;
 use crate::parse_failure::ParseFailure;
 use crate::reading::Reading;
 use syn::visit::Visit;

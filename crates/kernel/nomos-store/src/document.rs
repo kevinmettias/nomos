@@ -2,9 +2,14 @@ use nomos_contracts::SchemaId;
 use nomos_model::Digest_Of_Parts;
 use serde::{Deserialize, Serialize};
 
+// A document's identity and its kind are parts of a document, not peers of one.
+mod id;
+mod kind;
+
+pub use id::DocumentId;
+pub use kind::DocumentKind;
+
 use crate::authority::Authority;
-use crate::document_id::DocumentId;
-use crate::document_kind::DocumentKind;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Document

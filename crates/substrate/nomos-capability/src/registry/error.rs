@@ -3,7 +3,7 @@
 use nomos_contracts::CapabilityId;
 
 use crate::offer_refusal::OfferRefusal;
-use crate::registry_error_kind::RegistryErrorKind;
+use super::RegistryErrorKind;
 
 /// Why a declaration or an offer was refused, always naming the capability it was about.
 ///

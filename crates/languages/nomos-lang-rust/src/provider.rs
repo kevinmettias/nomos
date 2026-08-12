@@ -10,8 +10,8 @@ use crate::materialization::Materialization;
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::reading::Reading;
 use crate::syntax::Read_Source;
-use crate::syntax_facts::SyntaxFacts;
-use crate::syntax_item::SyntaxItem;
+use crate::syntax::SyntaxFacts;
+use crate::syntax::SyntaxItem;
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, CONTRACT_VERSION, Payload_Schema};
 use nomos_contracts::{

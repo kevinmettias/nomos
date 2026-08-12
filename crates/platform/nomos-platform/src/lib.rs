@@ -28,28 +28,15 @@
 
 #![forbid(unsafe_code)]
 
+// One module per port, each holding the trait and the types only that port's callers
+// name. Flat, this level was thirteen files a reader had to sort into ports by opening
+// them; the ports are the crate's whole structure and the tree now says so.
 mod clock;
-mod command;
-mod exit_outcome;
-mod file_system_error;
 mod filesystem;
 mod launcher;
 mod lock;
-mod lock_acquisition;
-mod lock_error;
-mod process_output;
-mod stale_takeover;
-mod timestamp;
 
-pub use clock::Clock;
-pub use command::Command;
-pub use exit_outcome::ExitOutcome;
-pub use file_system_error::FileSystemError;
-pub use filesystem::FileSystem;
-pub use launcher::ProcessLauncher;
-pub use lock::CrossProcessLock;
-pub use lock_acquisition::LockAcquisition;
-pub use lock_error::LockError;
-pub use process_output::ProcessOutput;
-pub use stale_takeover::StaleTakeover;
-pub use timestamp::Timestamp;
+pub use clock::{Clock, Timestamp};
+pub use filesystem::{FileSystem, FileSystemError};
+pub use launcher::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+pub use lock::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};

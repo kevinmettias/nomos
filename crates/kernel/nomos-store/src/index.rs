@@ -1,7 +1,7 @@
 use crate::commit::Commit;
 use crate::document::Document;
-use crate::document_id::DocumentId;
-use crate::document_kind::DocumentKind;
+use crate::document::DocumentId;
+use crate::document::DocumentKind;
 use crate::StoreError;
 use nomos_contracts::{Digest128, SnapshotId};
 use nomos_model::Digest_Of_Parts;

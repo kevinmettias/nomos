@@ -1,6 +1,6 @@
 //! Everything a finished process left behind.
 
-use crate::exit_outcome::ExitOutcome;
+use crate::launcher::ExitOutcome;
 
 /// What a process produced.
 #[derive(Clone, Debug, PartialEq, Eq)]

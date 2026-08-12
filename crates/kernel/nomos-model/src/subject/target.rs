@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use nomos_contracts::SubjectId;
 
 use crate::entity::EntityId;
-use crate::subject_kind::SubjectKind;
+use crate::subject::SubjectKind;
 
 /// What a subject points at.
 ///

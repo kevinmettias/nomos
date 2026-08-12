@@ -1,6 +1,6 @@
 //! One rule, and what it answered.
 
-use crate::rule_outcome::RuleOutcome;
+use crate::rule::RuleOutcome;
 #[derive(Clone, Debug)]
 pub struct RuleResult
 {

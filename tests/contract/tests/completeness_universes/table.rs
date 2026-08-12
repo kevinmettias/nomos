@@ -97,7 +97,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
     },
     // ---- declared holes ----
     Universe {
-        path: "crates/kernel/nomos-store/src/document_kind.rs",
+        path: "crates/kernel/nomos-store/src/document/kind.rs",
         name: "DocumentKind::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
@@ -191,7 +191,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/substrate/nomos-workspace/src/change_source.rs",
+        path: "crates/substrate/nomos-workspace/src/change/source.rs",
         name: "ChangeSource::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

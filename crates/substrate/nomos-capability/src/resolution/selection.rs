@@ -30,7 +30,7 @@
 //! module does not invent a ranking; it reports that it did not decide, and the caller that
 //! needs determinism can check.
 
-use crate::standing::Standing;
+use super::Standing;
 use crate::provider_offer::ProviderOffer;
 use nomos_contracts::ProviderId;
 

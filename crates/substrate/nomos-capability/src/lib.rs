@@ -10,26 +10,19 @@
 
 #![forbid(unsafe_code)]
 
+// The registry's errors sit under the registry and resolution's parts under resolution.
+// Flat, this level was twelve files whose grouping a reader had to reconstruct from the
+// names; the two that have parts now say so in the tree.
 mod contract;
 mod offer_refusal;
 mod provider_offer;
 mod registry;
-mod registry_error;
-mod registry_error_kind;
 mod requirement;
 mod resolution;
-mod selection;
-mod standing;
-mod unmet;
 
 pub use contract::CapabilityContract;
 pub use offer_refusal::OfferRefusal;
 pub use provider_offer::ProviderOffer;
-pub use registry::Registry;
-pub use registry_error::RegistryError;
-pub use registry_error_kind::RegistryErrorKind;
+pub use registry::{Registry, RegistryError, RegistryErrorKind};
 pub use requirement::Requirement;
-pub use resolution::Resolution;
-pub use selection::Selection;
-pub use standing::Standing;
-pub use unmet::Unmet;
+pub use resolution::{Resolution, Selection, Standing, Unmet};

@@ -1,6 +1,18 @@
 //! What every preservation rule can be asked.
 
-use crate::rule_outcome::RuleOutcome;
+// The three declared rules and the two shapes a rule answers in. A rule implementation is
+// only ever reached through this trait, so it belongs beneath it rather than beside it.
+mod changed_wording_is_justified;
+mod every_block_has_a_disposition;
+mod every_statement_traces_to_source;
+mod outcome;
+mod result;
+
+pub(crate) use changed_wording_is_justified::ChangedWordingIsJustified;
+pub(crate) use every_block_has_a_disposition::EveryBlockHasADisposition;
+pub(crate) use every_statement_traces_to_source::EveryStatementTracesToSource;
+pub use outcome::RuleOutcome;
+pub use result::RuleResult;
 use nomos_spec_store::SpecificationStore;
 pub trait Rule
 {

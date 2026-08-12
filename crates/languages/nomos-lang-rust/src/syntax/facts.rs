@@ -1,6 +1,6 @@
 //! Everything one file was parsed into.
 
-use crate::syntax_item::SyntaxItem;
+use crate::syntax::SyntaxItem;
 /// Everything one file says on its face.
 #[derive(Clone, Debug, PartialEq, Eq, Default)]
 pub struct SyntaxFacts

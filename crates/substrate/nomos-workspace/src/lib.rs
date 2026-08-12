@@ -40,30 +40,23 @@
 #![forbid(unsafe_code)]
 #![allow(clippy::missing_errors_doc)]
 
+// A change's parts sit under `change`, an effect's kind under `effect`, and the change
+// set and refusals a workspace raises under `workspace`. Flat, this level was thirteen
+// files whose grouping was spelled only in their name prefixes.
 mod applied;
 mod change;
-mod change_set;
-mod change_source;
 mod determinism;
 mod effect;
-mod effect_kind;
 mod member;
 mod snapshot;
 mod variant;
 mod workspace;
-mod workspace_change_set;
-mod workspace_error;
 
 pub use applied::Applied;
-pub use change::Change;
-pub use change_set::ChangeSet;
-pub use change_source::ChangeSource;
+pub use change::{Change, ChangeSet, ChangeSource};
 pub use determinism::SnapshotSerialization;
-pub use effect::Effect;
-pub use effect_kind::EffectKind;
+pub use effect::{Effect, EffectKind};
 pub use member::Member;
 pub use snapshot::{SNAPSHOT_SCHEMA, WorkspaceSnapshot};
 pub use variant::BuildVariant;
-pub use workspace::Workspace;
-pub use workspace_change_set::WorkspaceChangeSet;
-pub use workspace_error::WorkspaceError;
+pub use workspace::{Workspace, WorkspaceChangeSet, WorkspaceError};

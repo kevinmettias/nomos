@@ -1,6 +1,8 @@
 //! Time, as a dependency rather than as an ambient fact.
 
-use crate::timestamp::Timestamp;
+mod timestamp;
+
+pub use timestamp::Timestamp;
 
 
 /// The source of the current time.

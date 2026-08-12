@@ -1,6 +1,6 @@
 //! A held lock, and what taking it displaced.
 
-use crate::stale_takeover::StaleTakeover;
+use crate::lock::StaleTakeover;
 
 /// A held lock, plus whatever had to be broken to get it.
 #[derive(Debug)]

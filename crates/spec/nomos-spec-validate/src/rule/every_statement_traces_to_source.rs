@@ -2,7 +2,7 @@
 
 use crate::offending::Offending;
 use crate::violation::Violation;
-use crate::rule_outcome::RuleOutcome;
+use crate::rule::RuleOutcome;
 use crate::rule::Rule;
 use nomos_spec_store::{SpecificationStore, Table};
 /// Statements with no preserved lineage row reaching any source block.

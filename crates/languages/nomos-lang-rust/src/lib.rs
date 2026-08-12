@@ -53,7 +53,6 @@
 
 mod determinism;
 mod guarantee;
-mod item_kind;
 mod materialization;
 mod parse_failure;
 mod provider;
@@ -61,19 +60,12 @@ mod reading;
 mod recognition;
 pub mod rollup;
 mod syntax;
-mod syntax_facts;
-mod syntax_item;
-mod visibility;
 
 pub use determinism::SyntaxFactProduction;
 pub use guarantee::{Declared_Guarantee, PROVIDER, Provider_Offer};
-pub use item_kind::ItemKind;
 pub use materialization::Materialization;
 pub use parse_failure::ParseFailure;
 pub use provider::{Encode_Payload, FactContext, Materialize};
 pub use reading::Reading;
 pub use recognition::{Recognition, RUST_EXTENSION};
-pub use syntax::Read_Source;
-pub use syntax_facts::SyntaxFacts;
-pub use syntax_item::SyntaxItem;
-pub use visibility::Visibility;
+pub use syntax::{ItemKind, Read_Source, SyntaxFacts, SyntaxItem, Visibility};

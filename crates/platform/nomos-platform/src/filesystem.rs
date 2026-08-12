@@ -1,6 +1,8 @@
 //! Reading and writing files, with the durability rules stated rather than assumed.
 
-use crate::file_system_error::FileSystemError;
+mod error;
+
+pub use error::FileSystemError;
 
 use std::path::Path;
 

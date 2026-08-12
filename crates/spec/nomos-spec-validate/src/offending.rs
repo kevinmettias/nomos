@@ -6,7 +6,7 @@
 //! satisfied over a query that never ran.
 
 use rusqlite::Row;
-use crate::rule_outcome::RuleOutcome;
+use crate::rule::RuleOutcome;
 use crate::violation::Violation;
 use nomos_spec_store::{SpecificationStore, Table};
 /// Every rule here has the same shape: count a table, run a query naming the rows that

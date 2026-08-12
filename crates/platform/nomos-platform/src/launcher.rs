@@ -1,7 +1,12 @@
 //! Running something, without a shell.
 
-use crate::command::Command;
-use crate::process_output::ProcessOutput;
+mod command;
+mod exit_outcome;
+mod process_output;
+
+pub use command::Command;
+pub use exit_outcome::ExitOutcome;
+pub use process_output::ProcessOutput;
 
 
 /// Runs a program directly, without shell mediation.

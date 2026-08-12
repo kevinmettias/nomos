@@ -1,6 +1,10 @@
 //! One consequence of applying a change.
 
-use crate::effect_kind::EffectKind;
+// What kind of effect this is, beneath the effect it describes.
+mod kind;
+
+pub use kind::EffectKind;
+
 
 /// What one change actually did, and to what.
 ///

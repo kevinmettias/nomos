@@ -1,7 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::syntax_item::SyntaxItem;
+use crate::syntax::SyntaxItem;
 use crate::reading::Reading;
 
 fn Parsed(source: &str) -> SyntaxFacts

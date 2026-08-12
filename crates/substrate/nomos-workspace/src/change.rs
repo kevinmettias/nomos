@@ -5,6 +5,13 @@
 //! answers to what the workspace currently is, and the second one is always discovered
 //! after something has been built on the first.
 
+// A change set and the source a change came from are parts of a change.
+mod set;
+mod source;
+
+pub use set::ChangeSet;
+pub use source::ChangeSource;
+
 use nomos_contracts::Digest128;
 use nomos_model::Content_Digest;
 
@@ -63,8 +70,8 @@ impl Change
 mod tests
 {
     use super::*;
-    use crate::change_source::ChangeSource;
-    use crate::workspace_change_set::WorkspaceChangeSet;
+    use crate::change::ChangeSource;
+    use crate::workspace::WorkspaceChangeSet;
 
     #[test]
     fn Test_A_Change_Set_Should_Carry_Its_Source_And_Its_Changes()

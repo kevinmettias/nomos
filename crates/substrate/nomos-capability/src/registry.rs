@@ -1,12 +1,16 @@
-use crate::resolution::Resolution;
-use crate::unmet::Unmet;
-use crate::offer_refusal::OfferRefusal;
-use crate::registry_error::RegistryError;
-use crate::registry_error_kind::RegistryErrorKind;
+// The two error types are the registry's own vocabulary and nobody else raises them, so
+// they live beneath it rather than beside it.
+mod error;
+mod error_kind;
+
+pub use error::RegistryError;
+pub use error_kind::RegistryErrorKind;
+
 use crate::contract::CapabilityContract;
+use crate::offer_refusal::OfferRefusal;
 use crate::provider_offer::ProviderOffer;
 use crate::requirement::Requirement;
-use crate::selection::Selection;
+use crate::resolution::{Resolution, Selection, Unmet};
 use nomos_contracts::{Applicability, CapabilityId, ProviderId};
 use std::collections::BTreeMap;
 

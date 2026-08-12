@@ -1,7 +1,7 @@
 //! What became of trying to read one file.
 
 use crate::parse_failure::ParseFailure;
-use crate::syntax_facts::SyntaxFacts;
+use crate::syntax::SyntaxFacts;
 /// The result of reading one recognized file.
 ///
 /// Two variants and no third. There is deliberately no `Reading::Empty` and no

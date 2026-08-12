@@ -1,7 +1,7 @@
 use crate::authority::Authority;
 use crate::document::Document;
-use crate::document_id::DocumentId;
-use crate::document_kind::DocumentKind;
+use crate::document::DocumentId;
+use crate::document::DocumentKind;
 use crate::index::Index;
 use crate::commit::{Commit, COMMIT_SCHEMA};
 use crate::StoreError;

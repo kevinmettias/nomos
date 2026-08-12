@@ -1,10 +1,10 @@
 use crate::offending::{Traced, Undisposed, Undisposed_Statement};
 use nomos_spec_store::Table;
-use crate::every_statement_traces_to_source::EveryStatementTracesToSource;
-use crate::changed_wording_is_justified::ChangedWordingIsJustified;
-use crate::every_block_has_a_disposition::EveryBlockHasADisposition;
+use crate::rule::EveryStatementTracesToSource;
+use crate::rule::ChangedWordingIsJustified;
+use crate::rule::EveryBlockHasADisposition;
 use crate::rule::Rule;
-use crate::rule_outcome::RuleOutcome;
+use crate::rule::RuleOutcome;
 use nomos_spec_store::SpecificationStore;
 
 pub(crate) struct EveryHeadingHasADisposition;

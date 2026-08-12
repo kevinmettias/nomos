@@ -1,7 +1,12 @@
 //! Mutual exclusion between processes that cannot see each other.
 
-use crate::lock_acquisition::LockAcquisition;
-use crate::lock_error::LockError;
+mod acquisition;
+mod error;
+mod stale_takeover;
+
+pub use acquisition::LockAcquisition;
+pub use error::LockError;
+pub use stale_takeover::StaleTakeover;
 
 use std::time::Duration;
 
