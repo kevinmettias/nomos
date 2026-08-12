@@ -41,52 +41,13 @@ pub fn Declared_Universes() -> Vec<DeclaredUniverse>
     let workspace = Workspace::Load();
     let root = Workspace::Workspace_Root();
     let mut universes = Vec::new();
-
     for member in workspace.Members()
     {
         for directory in ["src", "tests"]
         {
-            let source_root = member.root.join(directory);
-            if !source_root.is_dir()
-            {
-                continue;
-            }
+            let found = Universes_Under(&member.root.join(directory), &root);
 
-            for file in Source_Files(&source_root)
-            {
-                let Ok(text) = std::fs::read_to_string(&file)
-                else
-                {
-                    continue;
-                };
-
-                let relative = file
-                    .strip_prefix(&root)
-                    .unwrap_or(&file)
-                    .display()
-                    .to_string()
-                    .replace('\\', "/");
-
-                // Through the provider and its encoding, because that is the subject the
-                // rule is handed at run time. `nomos-rules` no longer parses — it reads a
-                // syntax fact — so a walk that handed it text would be testing a signature
-                // the product does not use. See `OD-SYNTAX-002`.
-                let nomos_lang_rust::Reading::Parsed(facts) = nomos_lang_rust::Read_Source(&text)
-                else
-                {
-                    continue;
-                };
-
-                let Ok(payload) =
-                    nomos_cap_syntax::Parse_Payload(&nomos_lang_rust::Encode_Payload(&facts))
-                else
-                {
-                    continue;
-                };
-
-                let found = nomos_rules::Universes_In(&relative, &payload);
-                universes.extend(found);
-            }
+            universes.extend(found);
         }
     }
 
@@ -95,12 +56,64 @@ pub fn Declared_Universes() -> Vec<DeclaredUniverse>
     return universes;
 }
 
+/// Every universe declared by any file under one source root.
+fn Universes_Under(source_root: &Path, root: &Path) -> Vec<DeclaredUniverse>
+{
+    let mut universes = Vec::new();
+    for file in Source_Files(source_root)
+    {
+        let found = Universes_In_File(&file, root);
+
+        universes.extend(found);
+    }
+
+    return universes;
+}
+
+/// Every universe one file declares.
+///
+/// Read through the provider and its encoding, because that is the subject the rule is handed
+/// at run time. `nomos-rules` no longer parses — it reads a syntax fact — so a walk that
+/// handed it text would be testing a signature the product does not use. See `OD-SYNTAX-002`.
+fn Universes_In_File(file: &Path, root: &Path) -> Vec<DeclaredUniverse>
+{
+    let Ok(text) = std::fs::read_to_string(file)
+    else
+    {
+        return Vec::new();
+    };
+    let nomos_lang_rust::Reading::Parsed(facts) = nomos_lang_rust::Read_Source(&text)
+    else
+    {
+        return Vec::new();
+    };
+    let encoded = nomos_lang_rust::Encode_Payload(&facts);
+    let Ok(payload) = nomos_cap_syntax::Parse_Payload(&encoded)
+    else
+    {
+        return Vec::new();
+    };
+    let relative = Relative_To(root, file);
+
+    return nomos_rules::Universes_In(&relative, &payload);
+}
+
+/// A file's repo-relative path with forward slashes, which is how a rule names its subject.
+fn Relative_To(root: &Path, file: &Path) -> String
+{
+    return file
+        .strip_prefix(root)
+        .unwrap_or(file)
+        .display()
+        .to_string()
+        .replace('\\', "/");
+}
+
 /// Every `.rs` file under a directory.
 fn Source_Files(root: &Path) -> Vec<PathBuf>
 {
     let mut files = Vec::new();
     let mut pending = vec![root.to_path_buf()];
-
     while let Some(directory) = pending.pop()
     {
         let Ok(entries) = std::fs::read_dir(&directory)
@@ -108,21 +121,25 @@ fn Source_Files(root: &Path) -> Vec<PathBuf>
         {
             continue;
         };
-
         for entry in entries.flatten()
         {
-            let path = entry.path();
-            if path.is_dir()
-            {
-                pending.push(path);
-            }
-            else if path.extension().is_some_and(|extension| extension == "rs")
-            {
-                files.push(path);
-            }
+            Keep_Or_Descend(&entry.path(), &mut pending, &mut files);
         }
     }
 
     files.sort();
     return files;
+}
+
+/// A directory to walk later, a Rust file to keep, or neither.
+fn Keep_Or_Descend(path: &Path, pending: &mut Vec<PathBuf>, files: &mut Vec<PathBuf>)
+{
+    if path.is_dir()
+    {
+        pending.push(path.to_path_buf());
+    }
+    else if path.extension().is_some_and(|extension| extension == "rs")
+    {
+        files.push(path.to_path_buf());
+    }
 }

@@ -208,11 +208,18 @@ fn Test_Every_File_That_Reaches_A_Corpus_Should_Be_Declared()
          Every assertion in this file is about that set, so an empty one passes having \
          checked nothing — and this workspace has corpus-gated tests."
     );
+    Assert_The_Table_And_The_Tree_Agree(&found);
+}
 
+/// Both directions: a file that reaches a corpus and is in no row, and a row naming a file
+/// that no longer reaches one.
+fn Assert_The_Table_And_The_Tree_Agree(found: &BTreeSet<String>)
+{
     let declared: BTreeSet<&str> = GATES.iter().map(|gate| return gate.path).collect();
     let actual: BTreeSet<&str> = found.iter().map(String::as_str).collect();
-
     let undeclared: Vec<&&str> = actual.difference(&declared).collect();
+    let vanished: Vec<&&str> = declared.difference(&actual).collect();
+
     assert!(
         undeclared.is_empty(),
         "these test files reach a corpus and are not in GATES: {undeclared:#?}.\n\
@@ -220,8 +227,6 @@ fn Test_Every_File_That_Reaches_A_Corpus_Should_Be_Declared()
          without a corpus, which is every CI machine. Add it to the table with what it \
          gates."
     );
-
-    let vanished: Vec<&&str> = declared.difference(&actual).collect();
     assert!(
         vanished.is_empty(),
         "GATES names these files and they no longer reach a corpus: {vanished:#?}.\n\
@@ -241,41 +246,12 @@ fn Test_Every_Declared_File_Should_Match_What_It_Declares()
 {
     let root = Workspace::Workspace_Root();
     let mut wrong = Vec::new();
-
     for gate in GATES
     {
-        let path = root.join(gate.path);
-        let text = std::fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+        let disagreements = Disagreements_With(&root, gate);
 
-        let tests = text
-            .lines()
-            .filter(|line| return line.trim() == "#[test]")
-            .count();
-        if tests != gate.tests
-        {
-            wrong.push(format!(
-                "{}: declares {} tests, has {tests}",
-                gate.path, gate.tests
-            ));
-        }
-
-        let named = Variables_Read_By(&text);
-        if named != gate.variables
-        {
-            wrong.push(format!(
-                "{}: declares {:?}, reads {named:?}",
-                gate.path, gate.variables
-            ));
-        }
-
-        assert!(
-            gate.gated <= gate.tests,
-            "{} declares {} gated of {} tests",
-            gate.path,
-            gate.gated,
-            gate.tests
-        );
+        Assert_The_Row_Is_Internally_Consistent(gate);
+        wrong.extend(disagreements);
     }
 
     assert!(
@@ -284,6 +260,49 @@ fn Test_Every_Declared_File_Should_Match_What_It_Declares()
          Update GATES deliberately. A test added to a gated file inherits that file's \
          silence, and whether it should is a decision rather than a consequence."
     );
+}
+
+/// A row cannot gate more tests than its own file holds.
+fn Assert_The_Row_Is_Internally_Consistent(gate: &Gate)
+{
+    assert!(
+        gate.gated <= gate.tests,
+        "{} declares {} gated of {} tests",
+        gate.path,
+        gate.gated,
+        gate.tests
+    );
+}
+
+/// What one row says about its file, against what the file holds.
+fn Disagreements_With(root: &Path, gate: &Gate) -> Vec<String>
+{
+    let text = Text_Of(root, gate.path);
+    let tests = text
+        .lines()
+        .filter(|line| return line.trim() == "#[test]")
+        .count();
+    let named = Variables_Read_By(&text);
+    let mut wrong = Vec::new();
+    if tests != gate.tests
+    {
+        wrong.push(format!("{}: declares {} tests, has {tests}", gate.path, gate.tests));
+    }
+    if named != gate.variables
+    {
+        wrong.push(format!("{}: declares {:?}, reads {named:?}", gate.path, gate.variables));
+    }
+
+    return wrong;
+}
+
+/// One of this repository's own files, which must be readable.
+fn Text_Of(root: &Path, relative: &str) -> String
+{
+    let path = root.join(relative);
+
+    return std::fs::read_to_string(&path)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
 /// The headline is the table's own sum.
@@ -338,28 +357,7 @@ fn Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source()
          this whole file is about."
     );
 
-    let mut wrong = Vec::new();
-
-    for gate in GATES
-    {
-        let found = derived.get(gate.path).copied().unwrap_or(0);
-        if found != gate.gated
-        {
-            wrong.push(format!(
-                "{}: declares {} gated, source has {found}",
-                gate.path, gate.gated
-            ));
-        }
-    }
-
-    let declared: BTreeSet<&str> = GATES.iter().map(|gate| return gate.path).collect();
-    for (path, found) in &derived
-    {
-        if !declared.contains(path.as_str())
-        {
-            wrong.push(format!("{path}: not in GATES, source has {found} gated"));
-        }
-    }
+    let wrong = Rows_Disagreeing_With(&derived);
 
     assert!(
         wrong.is_empty(),
@@ -368,6 +366,31 @@ fn Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source()
          file's silence should be a decision somebody made rather than a consequence of \
          where it was written."
     );
+}
+
+/// Both directions in one list: a row the source contradicts, and a file the source gates
+/// that no row names.
+fn Rows_Disagreeing_With(derived: &BTreeMap<String, usize>) -> Vec<String>
+{
+    let declared: BTreeSet<&str> = GATES.iter().map(|gate| return gate.path).collect();
+    let mut wrong = Vec::new();
+    for gate in GATES
+    {
+        let found = derived.get(gate.path).copied().unwrap_or(0);
+        if found != gate.gated
+        {
+            wrong.push(format!("{}: declares {} gated, source has {found}", gate.path, gate.gated));
+        }
+    }
+    for (path, found) in derived
+    {
+        if !declared.contains(path.as_str())
+        {
+            wrong.push(format!("{path}: not in GATES, source has {found} gated"));
+        }
+    }
+
+    return wrong;
 }
 
 /// The two spellings of the same three variables must not drift apart.
@@ -419,41 +442,8 @@ fn Gated_Tests_Per_File() -> BTreeMap<String, usize>
 #[test]
 fn Test_A_Run_Should_Report_What_It_Did_Not_Check()
 {
-    let mut skipped = 0_usize;
-    let mut lines = Vec::new();
-
-    for variable in VARIABLES
-    {
-        let carried = GATES
-            .iter()
-            .filter(|gate| return gate.variables.contains(variable))
-            .fold(0_usize, |running, gate| return running.saturating_add(gate.gated));
-
-        if let Some(value) = std::env::var_os(variable)
-        {
-            lines.push(format!(
-                "  {variable}: {} — {carried} assertion(s) reachable",
-                PathBuf::from(value).display()
-            ));
-        }
-        else
-        {
-            skipped = skipped.saturating_add(carried);
-            lines.push(format!("  {variable}: unset — up to {carried} assertion(s) skipped"));
-        }
-    }
-
-    // Not the sum of the per-variable figures: a file gated on two variables is counted
-    // against each, and is skipped once.
-    let unreachable = GATES
-        .iter()
-        .filter(|gate| {
-            return gate
-                .variables
-                .iter()
-                .any(|variable| return std::env::var_os(variable).is_none());
-        })
-        .fold(0_usize, |running, gate| return running.saturating_add(gate.gated));
+    let (skipped, lines) = Per_Variable_Report();
+    let unreachable = Assertions_No_Corpus_Reaches();
 
     eprintln!(
         "corpus gates: {unreachable} of {GATED_TOTAL} corpus-backed assertions did not run\n{}",
@@ -464,6 +454,53 @@ fn Test_A_Run_Should_Report_What_It_Did_Not_Check()
         skipped >= unreachable,
         "a file cannot be skipped for more variables than it reads"
     );
+}
+
+/// One line per corpus variable, and how many assertions the unset ones carry.
+fn Per_Variable_Report() -> (usize, Vec<String>)
+{
+    let mut skipped = 0_usize;
+    let mut lines = Vec::new();
+    for variable in VARIABLES
+    {
+        let carried = Assertions_Carried_By(variable);
+        let Some(value) = std::env::var_os(variable)
+        else
+        {
+            skipped = skipped.saturating_add(carried);
+            lines.push(format!("  {variable}: unset — up to {carried} assertion(s) skipped"));
+            continue;
+        };
+        let at = PathBuf::from(value);
+
+        lines.push(format!("  {variable}: {} — {carried} assertion(s) reachable", at.display()));
+    }
+
+    return (skipped, lines);
+}
+
+/// The assertions the table says the files reading this variable gate.
+fn Assertions_Carried_By(variable: &str) -> usize
+{
+    return GATES
+        .iter()
+        .filter(|gate| return gate.variables.contains(&variable))
+        .fold(0_usize, |running, gate| return running.saturating_add(gate.gated));
+}
+
+/// Not the sum of the per-variable figures: a file gated on two variables is counted against
+/// each, and is skipped once.
+fn Assertions_No_Corpus_Reaches() -> usize
+{
+    return GATES
+        .iter()
+        .filter(|gate| {
+            return gate
+                .variables
+                .iter()
+                .any(|variable| return std::env::var_os(variable).is_none());
+        })
+        .fold(0_usize, |running, gate| return running.saturating_add(gate.gated));
 }
 
 /// The corpus variables a file actually reads, in [`VARIABLES`] order.
@@ -497,40 +534,32 @@ fn Files_Naming_A_Corpus(root: &Path) -> BTreeSet<String>
 {
     let workspace = Workspace::Load();
     let mut found = BTreeSet::new();
-
     for member in workspace.Members()
     {
         let tests = member.root.join("tests");
-        if !tests.is_dir()
-        {
-            continue;
-        }
-
         for file in Rust_Files(&tests)
         {
-            let Ok(text) = std::fs::read_to_string(&file)
-            else
-            {
-                continue;
-            };
+            let named = Named_If_It_Reaches_A_Corpus(&file, root);
 
-            if Variables_Read_By(&text).is_empty()
-            {
-                continue;
-            }
-
-            let Ok(relative) = file.strip_prefix(root)
-            else
-            {
-                continue;
-            };
-
-            let spelled = relative.display().to_string().replace('\\', "/");
-            found.insert(spelled);
+            found.extend(named);
         }
     }
 
     return found;
+}
+
+/// A file's repo-relative path with forward slashes, if it reads a corpus variable.
+fn Named_If_It_Reaches_A_Corpus(file: &Path, root: &Path) -> Option<String>
+{
+    let text = std::fs::read_to_string(file).ok()?;
+    if Variables_Read_By(&text).is_empty()
+    {
+        return None;
+    }
+
+    let relative = file.strip_prefix(root).ok()?;
+
+    return Some(relative.display().to_string().replace('\\', "/"));
 }
 
 /// Every `.rs` file under a directory, recursively.
@@ -542,7 +571,6 @@ fn Rust_Files(root: &Path) -> Vec<PathBuf>
 {
     let mut found = Vec::new();
     let mut pending = vec![root.to_path_buf()];
-
     while let Some(directory) = pending.pop()
     {
         let Ok(entries) = std::fs::read_dir(&directory)
@@ -550,20 +578,24 @@ fn Rust_Files(root: &Path) -> Vec<PathBuf>
         {
             continue;
         };
-
         for entry in entries.flatten()
         {
-            let path = entry.path();
-            if path.is_dir()
-            {
-                pending.push(path);
-            }
-            else if path.extension().is_some_and(|extension| return extension == "rs")
-            {
-                found.push(path);
-            }
+            Keep_Or_Descend(&entry.path(), &mut pending, &mut found);
         }
     }
 
     return found;
+}
+
+/// A directory to walk later, a Rust file to keep, or neither.
+fn Keep_Or_Descend(path: &Path, pending: &mut Vec<PathBuf>, found: &mut Vec<PathBuf>)
+{
+    if path.is_dir()
+    {
+        pending.push(path.to_path_buf());
+    }
+    else if path.extension().is_some_and(|extension| return extension == "rs")
+    {
+        found.push(path.to_path_buf());
+    }
 }

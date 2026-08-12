@@ -49,6 +49,31 @@ impl Workspace
     #[must_use]
     pub fn Load() -> Self
     {
+        let parsed = Self::Metadata();
+        let members = Self::Member_Names(&parsed);
+        let mut packages = BTreeMap::new();
+        for package in parsed
+            .get("packages")
+            .and_then(serde_json::Value::as_array)
+            .expect("packages must be an array")
+        {
+            let read = Self::Read_Package(package, &members);
+
+            packages.extend(read);
+        }
+
+        assert!(
+            !packages.is_empty(),
+            "cargo metadata reported no packages; refusing to report a clean result over an \
+             empty graph"
+        );
+
+        return Self { packages };
+    }
+
+    /// The raw `cargo metadata` document for this workspace.
+    fn Metadata() -> serde_json::Value
+    {
         let output = std::process::Command::new(env!("CARGO"))
             .args([
                 "metadata",
@@ -67,10 +92,13 @@ impl Workspace
             String::from_utf8_lossy(&output.stderr)
         );
 
-        let parsed: serde_json::Value = serde_json::from_slice(&output.stdout)
-            .expect("cargo metadata must emit valid JSON");
+        return serde_json::from_slice(&output.stdout).expect("cargo metadata must emit valid JSON");
+    }
 
-        let members: BTreeSet<String> = parsed
+    /// The names of the workspace's own members, as opposed to its registry dependencies.
+    fn Member_Names(parsed: &serde_json::Value) -> BTreeSet<String>
+    {
+        return parsed
             .get("workspace_members")
             .and_then(serde_json::Value::as_array)
             .expect("workspace_members must be an array")
@@ -78,62 +106,55 @@ impl Workspace
             .filter_map(|entry| entry.as_str())
             .filter_map(Self::Name_From_Package_Id)
             .collect();
+    }
 
-        let mut packages = BTreeMap::new();
-        for package in parsed
-            .get("packages")
+    /// One package as the graph describes it, keyed by its name.
+    fn Read_Package(package: &serde_json::Value, members: &BTreeSet<String>)
+        -> Option<(String, Package)>
+    {
+        let name = package.get("name").and_then(serde_json::Value::as_str)?;
+        let direct_dependencies = Self::Direct_Dependencies(package);
+        let root = package
+            .get("manifest_path")
+            .and_then(serde_json::Value::as_str)
+            .map(PathBuf::from)
+            .and_then(|path| path.parent().map(PathBuf::from))
+            .unwrap_or_default();
+
+        return Some((
+            name.to_owned(),
+            Package {
+                name: name.to_owned(),
+                is_workspace_member: members.contains(name),
+                root,
+                direct_dependencies,
+            },
+        ));
+    }
+
+    /// Every name a package depends on directly, excluding dev-dependencies.
+    fn Direct_Dependencies(package: &serde_json::Value) -> BTreeSet<String>
+    {
+        return package
+            .get("dependencies")
             .and_then(serde_json::Value::as_array)
-            .expect("packages must be an array")
-        {
-            let Some(name) = package.get("name").and_then(serde_json::Value::as_str)
-            else
-            {
-                continue;
-            };
+            .map(|dependencies| {
+                dependencies
+                    .iter()
+                    .filter(|dependency| Self::Is_Not_Dev(dependency))
+                    .filter_map(|dependency| {
+                        dependency.get("name").and_then(serde_json::Value::as_str)
+                    })
+                    .map(str::to_owned)
+                    .collect()
+            })
+            .unwrap_or_default();
+    }
 
-            let direct_dependencies = package
-                .get("dependencies")
-                .and_then(serde_json::Value::as_array)
-                .map(|dependencies| {
-                    dependencies
-                        .iter()
-                        .filter(|dependency| {
-                            dependency.get("kind").and_then(serde_json::Value::as_str)
-                                != Some("dev")
-                        })
-                        .filter_map(|dependency| {
-                            dependency.get("name").and_then(serde_json::Value::as_str)
-                        })
-                        .map(str::to_owned)
-                        .collect()
-                })
-                .unwrap_or_default();
-
-            let root = package
-                .get("manifest_path")
-                .and_then(serde_json::Value::as_str)
-                .map(PathBuf::from)
-                .and_then(|path| path.parent().map(PathBuf::from))
-                .unwrap_or_default();
-
-            packages.insert(
-                name.to_owned(),
-                Package {
-                    name: name.to_owned(),
-                    is_workspace_member: members.contains(name),
-                    root,
-                    direct_dependencies,
-                },
-            );
-        }
-
-        assert!(
-            !packages.is_empty(),
-            "cargo metadata reported no packages; refusing to report a clean result over an \
-             empty graph"
-        );
-
-        return Self { packages };
+    /// A dev-dependency does not ship, so it is not part of the graph these checks are about.
+    fn Is_Not_Dev(dependency: &serde_json::Value) -> bool
+    {
+        return dependency.get("kind").and_then(serde_json::Value::as_str) != Some("dev");
     }
 
     /// The workspace root directory.
@@ -186,7 +207,6 @@ impl Workspace
     {
         let mut reached = BTreeSet::new();
         let mut pending = vec![name.to_owned()];
-
         while let Some(current) = pending.pop()
         {
             let Some(package) = self.packages.get(&current)
@@ -197,7 +217,6 @@ impl Workspace
                 // walk past it, and pretending it does not exist would understate reach.
                 continue;
             };
-
             for dependency in &package.direct_dependencies
             {
                 if reached.insert(dependency.clone())
@@ -206,8 +225,8 @@ impl Workspace
                 }
             }
         }
-
         reached.remove(name);
+
         return reached;
     }
 

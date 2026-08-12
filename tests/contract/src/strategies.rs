@@ -30,7 +30,7 @@
 use crate::gates::{Source_Files, Without_Test_Modules};
 use crate::Workspace;
 use std::collections::BTreeSet;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 /// The type whose construction marks a fact producer.
 ///
@@ -108,63 +108,61 @@ pub fn Fact_Domains() -> Vec<FactDomain>
     let workspace = Workspace::Load();
     let fact_type = Fact_Type();
     let mut found = Vec::new();
-
     for member in workspace.Members()
     {
-        // The two test crates are excluded, and this is the one exclusion here.
-        //
-        // `tests/integration` does construct facts — `src/slice.rs` builds them to drive
-        // the slice — and it is not an execution domain. It is the instrument that
-        // measures them, and a thermometer does not have a temperature to declare. The
-        // same holds for this crate, which names the type in order to search for it.
-        //
-        // Stated as a rule about what these crates *are* rather than as two names on a
-        // list, because `docs/records/OD-GATE-001` records what an exemption list does to
-        // a check: it becomes the easiest place to hide the thing the check exists to
-        // find.
-        if member.name.starts_with("nomos-integration-tests")
-            || member.name.starts_with("nomos-contract-tests")
+        if Measures_Rather_Than_Declares(&member.name)
         {
             continue;
         }
+        let domain = Domain_Of(&member.name, &member.root, &fact_type);
 
-        let source_root = member.root.join("src");
-        if !source_root.is_dir()
-        {
-            continue;
-        }
-
-        let mut produces = false;
-        let mut declarations = BTreeSet::new();
-
-        for file in Source_Files(&source_root)
-        {
-            let Ok(text) = std::fs::read_to_string(&file)
-            else
-            {
-                continue;
-            };
-
-            // A strategy declared inside a unit-test module is an example of the trait,
-            // not a domain occupying a row of the table. `nomos-contracts` has two.
-            let text = Without_Test_Modules(&text);
-
-            produces = produces || Constructs(&text, &fact_type);
-            declarations.extend(Declarations_In(&text));
-        }
-
-        if produces || !declarations.is_empty()
-        {
-            found.push(FactDomain {
-                crate_name: member.name.clone(),
-                produces,
-                declarations,
-            });
-        }
+        found.extend(domain);
     }
 
     found.sort();
     return found;
+}
+
+/// The two test crates are excluded, and this is the one exclusion here.
+///
+/// `tests/integration` does construct facts — `src/slice.rs` builds them to drive the slice —
+/// and it is not an execution domain. It is the instrument that measures them, and a
+/// thermometer does not have a temperature to declare. The same holds for this crate, which
+/// names the type in order to search for it.
+///
+/// Stated as a rule about what these crates *are* rather than as two names on a list, because
+/// `docs/records/OD-GATE-001` records what an exemption list does to a check: it becomes the
+/// easiest place to hide the thing the check exists to find.
+fn Measures_Rather_Than_Declares(name: &str) -> bool
+{
+    return name.starts_with("nomos-integration-tests") || name.starts_with("nomos-contract-tests");
+}
+
+/// One crate's domain, if it produces facts or declares a strategy.
+fn Domain_Of(name: &str, root: &Path, fact_type: &str) -> Option<FactDomain>
+{
+    // A strategy declared inside a unit-test module is an example of the trait, not a domain
+    // occupying a row of the table. `nomos-contracts` has two.
+    let sources: Vec<String> = Source_Files(&root.join("src"))
+        .iter()
+        .filter_map(|file| return std::fs::read_to_string(file).ok())
+        .map(|text| return Without_Test_Modules(&text))
+        .collect();
+    let produces = sources.iter().any(|text| return Constructs(text, fact_type));
+    let declarations: BTreeSet<Declaration> = sources
+        .iter()
+        .flat_map(|text| return Declarations_In(text))
+        .collect();
+    if !produces && declarations.is_empty()
+    {
+        return None;
+    }
+
+    return Some(FactDomain {
+        crate_name: name.to_owned(),
+        produces,
+        declarations,
+    });
 }
 
 /// Whether a source file builds the named type rather than mentioning it.
@@ -201,54 +199,74 @@ fn Declarations_In(text: &str) -> Vec<Declaration>
 {
     let strategy_impl = Strategy_Impl();
     let mut found: Vec<Declaration> = Vec::new();
-
     for line in text.lines()
     {
-        let trimmed = line.trim();
-        if trimmed.starts_with("//")
-        {
-            continue;
-        }
-
-        if let Some(rest) = trimmed.strip_prefix(&strategy_impl)
-        {
-            if let Some(name) = rest.split_whitespace().next()
-            {
-                found.push(Declaration {
-                    strategy: name.to_owned(),
-                    strength: String::new(),
-                    scope: String::new(),
-                    trace: String::new(),
-                });
-            }
-            continue;
-        }
-
-        // The constants follow the `impl` line, so they belong to the most recent one.
-        // A file with no `impl Strategy` in it has nothing to attach them to and the
-        // `else` below drops them, which is right: `const STRENGTH` in the contracts
-        // crate's own trait definition is the declaration of an obligation, not one.
-        let Some(last) = found.last_mut()
-        else
-        {
-            continue;
-        };
-
-        if let Some(value) = Constant_Value(trimmed, "STRENGTH")
-        {
-            last.strength = value;
-        }
-        else if let Some(value) = Constant_Value(trimmed, "SCOPE")
-        {
-            last.scope = value;
-        }
-        else if let Some(value) = Constant_Value(trimmed, "TRACE")
-        {
-            last.trace = value;
-        }
+        Read_One_Line(line.trim(), &strategy_impl, &mut found);
     }
 
     return found;
+}
+
+/// One line: an `impl Strategy for` opening a declaration, a constant filling in an axis of
+/// the most recent one, or neither.
+fn Read_One_Line(trimmed: &str, strategy_impl: &str, found: &mut Vec<Declaration>)
+{
+    if trimmed.starts_with("//")
+    {
+        return;
+    }
+    if let Some(rest) = trimmed.strip_prefix(strategy_impl)
+    {
+        Open_A_Declaration(rest, found);
+    }
+    else
+    {
+        Fill_In_An_Axis(trimmed, found);
+    }
+}
+
+/// A new declaration, with every axis still empty.
+fn Open_A_Declaration(rest: &str, found: &mut Vec<Declaration>)
+{
+    let Some(name) = rest.split_whitespace().next()
+    else
+    {
+        return;
+    };
+
+    found.push(Declaration {
+        strategy: name.to_owned(),
+        strength: String::new(),
+        scope: String::new(),
+        trace: String::new(),
+    });
+}
+
+/// The constants follow the `impl` line, so they belong to the most recent declaration.
+///
+/// A file with no `impl Strategy` in it has nothing to attach them to and this drops them,
+/// which is right: `const STRENGTH` in the contracts crate's own trait definition is the
+/// declaration of an obligation, not one.
+fn Fill_In_An_Axis(trimmed: &str, found: &mut [Declaration])
+{
+    let Some(last) = found.last_mut()
+    else
+    {
+        return;
+    };
+
+    if let Some(value) = Constant_Value(trimmed, "STRENGTH")
+    {
+        last.strength = value;
+    }
+    else if let Some(value) = Constant_Value(trimmed, "SCOPE")
+    {
+        last.scope = value;
+    }
+    else if let Some(value) = Constant_Value(trimmed, "TRACE")
+    {
+        last.trace = value;
+    }
 }
 
 /// The variant a `const NAME: Type = Type::Variant;` line assigns.
@@ -330,41 +348,42 @@ pub fn Domain_Table() -> Vec<DomainRow>
     };
 
     let mut rows = Vec::new();
-
     for line in text.lines()
     {
-        let Some(row) = line.trim().strip_prefix("//! |")
-        else
-        {
-            continue;
-        };
+        let row = Table_Row(line);
 
-        let cells: Vec<&str> = row.trim_end_matches('|').split('|').map(str::trim).collect();
-        let [domain, strength, scope, trace] = cells.as_slice()
-        else
-        {
-            continue;
-        };
-
-        let row = DomainRow {
-            domain: (*domain).to_owned(),
-            strength: Unquoted(strength),
-            scope: Unquoted(scope),
-            trace: Unquoted(trace),
-        };
-
-        // The header row and the `|---|` rule under it are table syntax rather than
-        // content, and both survive the cell split. A row whose axes are not written as
-        // code spans is one of those two.
-        if row.strength.is_empty() || strength.len() == row.strength.len()
-        {
-            continue;
-        }
-
-        rows.push(row);
+        rows.extend(row);
     }
 
     return rows;
+}
+
+/// One row of the table, or nothing where the line is prose or table syntax.
+///
+/// The header row and the `|---|` rule under it are table syntax rather than content, and
+/// both survive the cell split. A row whose axes are not written as code spans is one of
+/// those two.
+fn Table_Row(line: &str) -> Option<DomainRow>
+{
+    let cell_text = line.trim().strip_prefix("//! |")?;
+    let cells: Vec<&str> = cell_text.trim_end_matches('|').split('|').map(str::trim).collect();
+    let [domain, strength, scope, trace] = cells.as_slice()
+    else
+    {
+        return None;
+    };
+    let read = DomainRow {
+        domain: (*domain).to_owned(),
+        strength: Unquoted(strength),
+        scope: Unquoted(scope),
+        trace: Unquoted(trace),
+    };
+    if read.strength.is_empty() || strength.len() == read.strength.len()
+    {
+        return None;
+    }
+
+    return Some(read);
 }
 
 /// A markdown code span with its backticks removed.
@@ -389,28 +408,21 @@ pub fn Harnessed_Strategies() -> BTreeSet<String>
 {
     let workspace = Workspace::Load();
     let mut found = BTreeSet::new();
-
     let Some(harness) = workspace.Get("nomos-integration-tests")
     else
     {
         return found;
     };
-
-    let tests = harness.root.join("tests");
-    if !tests.is_dir()
-    {
-        return found;
-    }
-
-    for file in Source_Files(&tests)
+    for file in Source_Files(&harness.root.join("tests"))
     {
         let Ok(text) = std::fs::read_to_string(&file)
         else
         {
             continue;
         };
+        let registered = Registered_In(&text);
 
-        found.extend(Registered_In(&text));
+        found.extend(registered);
     }
 
     return found;
@@ -426,7 +438,6 @@ fn Registered_In(text: &str) -> Vec<String>
     let marker = concat!("Check", "::<");
     let mut found = Vec::new();
     let mut rest = text;
-
     while let Some(start) = rest.find(marker)
     {
         let Some(after) = rest.get(start.saturating_add(marker.len())..)
@@ -434,24 +445,29 @@ fn Registered_In(text: &str) -> Vec<String>
         {
             break;
         };
-
-        let Some((name, remainder)) = after.split_once('>')
+        let Some((inside, remainder)) = after.split_once('>')
         else
         {
             break;
         };
+        let named = Strategy_Name(inside);
 
-        let name = name.trim();
-        // A single-letter name is the generic parameter of the registering function itself,
-        // not a domain. Reporting `S` as a strategy would put a name in the harnessed set
-        // that no crate can ever declare.
-        if name.len() > 1 && name.chars().all(|letter| return letter.is_alphanumeric())
-        {
-            found.push(name.to_owned());
-        }
-
+        found.extend(named);
         rest = remainder;
     }
 
     return found;
+}
+
+/// The strategy a registration names, if it names one.
+///
+/// A single-letter name is the generic parameter of the registering function itself, not a
+/// domain. Reporting `S` as a strategy would put a name in the harnessed set that no crate
+/// can ever declare.
+fn Strategy_Name(inside: &str) -> Option<String>
+{
+    let name = inside.trim();
+    let named = name.len() > 1 && name.chars().all(|letter| return letter.is_alphanumeric());
+
+    return named.then(|| return name.to_owned());
 }

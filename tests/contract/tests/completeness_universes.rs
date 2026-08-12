@@ -230,15 +230,50 @@ const UNIVERSES: &[Universe] = &[
 #[test]
 fn Test_The_Declared_Table_Should_Match_What_Is_Derived()
 {
-    // The kind is part of the identity, so a row that calls a constant an enumeration is a
-    // mismatch rather than a harmless mislabel — the two carry different risks, and the
-    // risk text is what the next reader acts on.
-    let derived: BTreeSet<(String, String, UniverseKind)> = Declared_Universes()
+    let derived = Derived_Identities();
+    let declared = Declared_Identities();
+    let unclassified: Vec<&Identity> = derived.difference(&declared).collect();
+    let vanished: Vec<&Identity> = declared.difference(&derived).collect();
+
+    assert!(
+        !derived.is_empty(),
+        "nothing was derived, so every assertion here would pass having read nothing"
+    );
+    assert!(
+        unclassified.is_empty(),
+        "these declared universes are not classified in UNIVERSES: {unclassified:#?}.\n\
+         Add a row saying whether something compares the list against the reality it \
+         claims to enumerate. If nothing does, say so and raise UNMIRRORED_TOTAL — a \
+         universe nobody classified is the shape OD-COMPLETENESS-001 exists to stop."
+    );
+    assert!(
+        vanished.is_empty(),
+        "these rows name universes that are no longer in the source: {vanished:#?}.\n\
+         A table that keeps rows for things that are gone flatters itself in the other \
+         direction."
+    );
+}
+
+/// A universe's identity.
+///
+/// The kind is part of it, so a row that calls a constant an enumeration is a mismatch rather
+/// than a harmless mislabel — the two carry different risks, and the risk text is what the
+/// next reader acts on.
+type Identity = (String, String, UniverseKind);
+
+/// The identities the source declares, read through `nomos-rules`.
+fn Derived_Identities() -> BTreeSet<Identity>
+{
+    return Declared_Universes()
         .into_iter()
         .map(|universe| return (universe.path, universe.name, universe.kind))
         .collect();
+}
 
-    let declared: BTreeSet<(String, String, UniverseKind)> = UNIVERSES
+/// The identities this table declares.
+fn Declared_Identities() -> BTreeSet<Identity>
+{
+    return UNIVERSES
         .iter()
         .map(|universe| {
             return (
@@ -248,30 +283,6 @@ fn Test_The_Declared_Table_Should_Match_What_Is_Derived()
             );
         })
         .collect();
-
-    assert!(
-        !derived.is_empty(),
-        "nothing was derived, so every assertion here would pass having read nothing"
-    );
-
-    let unclassified: Vec<&(String, String, UniverseKind)> =
-        derived.difference(&declared).collect();
-    assert!(
-        unclassified.is_empty(),
-        "these declared universes are not classified in UNIVERSES: {unclassified:#?}.\n\
-         Add a row saying whether something compares the list against the reality it \
-         claims to enumerate. If nothing does, say so and raise UNMIRRORED_TOTAL — a \
-         universe nobody classified is the shape OD-COMPLETENESS-001 exists to stop."
-    );
-
-    let vanished: Vec<&(String, String, UniverseKind)> =
-        declared.difference(&derived).collect();
-    assert!(
-        vanished.is_empty(),
-        "these rows name universes that are no longer in the source: {vanished:#?}.\n\
-         A table that keeps rows for things that are gone flatters itself in the other \
-         direction."
-    );
 }
 
 // ---------------------------------------------------------------------------
@@ -328,17 +339,44 @@ fn Test_Every_Named_Mirror_Should_Exist_In_The_Source()
 #[test]
 fn Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror()
 {
-    let scanned: BTreeMap<(String, String), Option<String>> = Declared_Universes()
+    let scanned = Scanned_Claims();
+    let declared = Declared_Claims();
+    let (compared, disagreements) = Compare_Claims(&scanned, &declared);
+
+    assert!(!scanned.is_empty(), "nothing was scanned, so every comparison below would pass having read nothing");
+    assert_eq!(
+        compared,
+        scanned.len(),
+        "{} of {} scanned universes have no row here, so this test compared less than the \
+         whole set. Test_The_Declared_Table_Should_Match_What_Is_Derived says which.",
+        scanned.len().saturating_sub(compared),
+        scanned.len()
+    );
+    assert!(
+        disagreements.is_empty(),
+        "the workspace scan and this table disagree about these universes:\n{disagreements:#?}\n\
+         The site is the claim `nomos check` resolves and this table is a copy of it. Move \
+         the row to match the doc comment, or write the doc comment the row already \
+         promises — and if neither is true the row is Unmirrored and UNMIRRORED_TOTAL rises."
+    );
+}
+
+/// The mirror each universe claims, keyed by path and name.
+type Claims = BTreeMap<(String, String), Option<String>>;
+
+/// What each universe claims at its own site, which is what `nomos check` resolves.
+fn Scanned_Claims() -> Claims
+{
+    return Declared_Universes()
         .into_iter()
         .map(|universe| return ((universe.path, universe.name), universe.claimed_mirror))
         .collect();
+}
 
-    assert!(
-        !scanned.is_empty(),
-        "nothing was scanned, so every comparison below would pass having read nothing"
-    );
-
-    let declared: BTreeMap<(String, String), Option<String>> = UNIVERSES
+/// What each row of this table claims.
+fn Declared_Claims() -> Claims
+{
+    return UNIVERSES
         .iter()
         .map(|universe| {
             let claim = match universe.standing
@@ -349,48 +387,36 @@ fn Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror()
             return ((universe.path.to_owned(), universe.name.to_owned()), claim);
         })
         .collect();
+}
 
+/// How many universes had a row to compare against, and where the two claims differ.
+///
+/// Membership is `Test_The_Declared_Table_Should_Match_What_Is_Derived`'s fact, and reporting
+/// it here too would give one cause two red tests. The count is what stops that deferral
+/// turning into a comparison of nothing.
+fn Compare_Claims(scanned: &Claims, declared: &Claims) -> (usize, Vec<String>)
+{
     let mut compared = 0_usize;
     let mut disagreements: Vec<String> = Vec::new();
-
-    for (key, site) in &scanned
+    for (key, site) in scanned
     {
-        // Membership is Test_The_Declared_Table_Should_Match_What_Is_Derived's fact, and
-        // reporting it here too would give one cause two red tests. The count below is
-        // what stops that deferral turning into a comparison of nothing.
         let Some(row) = declared.get(key)
         else
         {
             continue;
         };
+        let (path, name) = key;
 
         compared = compared.saturating_add(1);
-
         if site != row
         {
-            let (path, name) = key;
             disagreements.push(format!(
                 "{name} ({path}): the site claims {site:?} and the table claims {row:?}"
             ));
         }
     }
 
-    assert_eq!(
-        compared,
-        scanned.len(),
-        "{} of {} scanned universes have no row here, so this test compared less than the \
-         whole set. Test_The_Declared_Table_Should_Match_What_Is_Derived says which.",
-        scanned.len().saturating_sub(compared),
-        scanned.len()
-    );
-
-    assert!(
-        disagreements.is_empty(),
-        "the workspace scan and this table disagree about these universes:\n{disagreements:#?}\n\
-         The site is the claim `nomos check` resolves and this table is a copy of it. Move \
-         the row to match the doc comment, or write the doc comment the row already \
-         promises — and if neither is true the row is Unmirrored and UNMIRRORED_TOTAL rises."
-    );
+    return (compared, disagreements);
 }
 
 // ---------------------------------------------------------------------------
@@ -426,53 +452,53 @@ fn Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared()
 #[test]
 fn Test_The_Three_Instances_Should_Have_Failed_This_Check()
 {
-    for (name, mirror) in [
-        (
-            "Table::All",
-            "Test_Every_Table_In_The_Schema_Should_Be_Declared",
-        ),
-        (
-            "GOVERNING_RECORD_IDS",
-            "Test_Every_Canonical_Record_On_Disk_Should_Be_Governing",
-        ),
-        (
-            "CORPUS_VARIABLES",
-            "Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables",
-        ),
-    ]
+    let instances = [
+        ("Table::All", "Test_Every_Table_In_The_Schema_Should_Be_Declared"),
+        ("GOVERNING_RECORD_IDS", "Test_Every_Canonical_Record_On_Disk_Should_Be_Governing"),
+        ("CORPUS_VARIABLES", "Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables"),
+    ];
+
+    for (name, mirror) in instances
     {
-        let row = UNIVERSES
-            .iter()
-            .find(|universe| return universe.name == name)
-            .unwrap_or_else(|| panic!("{name} must be classified"));
-
-        assert_eq!(
-            row.standing,
-            Standing::Mirrored { by: mirror },
-            "{name} is expected to be mirrored by {mirror} today"
-        );
-
-        // As originally written, before that mirror existed.
-        let before: Vec<&str> = UNIVERSES
-            .iter()
-            .filter(|universe| return universe.name != name)
-            .map(|universe| {
-                return match universe.standing
-                {
-                    Standing::Mirrored { .. } => "",
-                    Standing::Unmirrored { .. } => universe.name,
-                };
-            })
-            .filter(|entry| return !entry.is_empty())
-            .collect();
-
-        assert_eq!(
-            before.len().saturating_add(1),
-            UNMIRRORED_TOTAL.saturating_add(1),
-            "removing {name}'s mirror must leave the count one above UNMIRRORED_TOTAL, \
-             which is what would have failed"
-        );
+        Assert_It_Would_Have_Failed(name, mirror);
     }
+}
+
+/// One instance, reconstructed by taking its mirror away and asserting it lands in the
+/// counted hole.
+fn Assert_It_Would_Have_Failed(name: &'static str, mirror: &'static str)
+{
+    let row = UNIVERSES
+        .iter()
+        .find(|universe| return universe.name == name)
+        .unwrap_or_else(|| panic!("{name} must be classified"));
+
+    assert_eq!(
+        row.standing,
+        Standing::Mirrored { by: mirror },
+        "{name} is expected to be mirrored by {mirror} today"
+    );
+
+    // As originally written, before that mirror existed.
+    let before = Unmirrored_Names_Without(name);
+
+    assert_eq!(
+        before.len().saturating_add(1),
+        UNMIRRORED_TOTAL.saturating_add(1),
+        "removing {name}'s mirror must leave the count one above UNMIRRORED_TOTAL, \
+         which is what would have failed"
+    );
+}
+
+/// The unmirrored names as they would read with one universe's mirror removed.
+fn Unmirrored_Names_Without(name: &str) -> Vec<&'static str>
+{
+    return UNIVERSES
+        .iter()
+        .filter(|universe| return universe.name != name)
+        .filter(|universe| return matches!(universe.standing, Standing::Unmirrored { .. }))
+        .map(|universe| return universe.name)
+        .collect();
 }
 
 /// The negative control for the test above. If every universe were classified unmirrored,
@@ -563,7 +589,6 @@ fn Source_Files(root: &Path) -> Vec<PathBuf>
 {
     let mut files = Vec::new();
     let mut pending = vec![root.to_path_buf()];
-
     while let Some(directory) = pending.pop()
     {
         let Ok(entries) = std::fs::read_dir(&directory)
@@ -571,20 +596,24 @@ fn Source_Files(root: &Path) -> Vec<PathBuf>
         {
             continue;
         };
-
         for entry in entries.flatten()
         {
-            let path = entry.path();
-            if path.is_dir()
-            {
-                pending.push(path);
-            }
-            else if path.extension().is_some_and(|extension| extension == "rs")
-            {
-                files.push(path);
-            }
+            Keep_Or_Descend(&entry.path(), &mut pending, &mut files);
         }
     }
 
     return files;
+}
+
+/// A directory to walk later, a Rust file to keep, or neither.
+fn Keep_Or_Descend(path: &Path, pending: &mut Vec<PathBuf>, files: &mut Vec<PathBuf>)
+{
+    if path.is_dir()
+    {
+        pending.push(path.to_path_buf());
+    }
+    else if path.extension().is_some_and(|extension| extension == "rs")
+    {
+        files.push(path.to_path_buf());
+    }
 }
