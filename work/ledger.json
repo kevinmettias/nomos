@@ -9141,6 +9141,60 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P12-GROUPED-PARAMETERS",
+      "title": "The add verb carries a pair of territories as loose arguments and every reader of them takes both",
+      "why": "check-parameter-count reads five value parameters on the body of the add verb, which is the whole of the rust clean-file phase that this workspace does not currently pass on its merits. The two territory arguments -- what this repository has published, and the subset the item declares it is amending -- are never apart: the verb only forwards them, the refusal that reads them takes both, and the first thing that refusal does is compare one against the other. Passed loose they are two arguments a call site can transpose silently, since they share a type.",
+      "done_when": "check-parameter-count from the code-standards suite reports no finding in this workspace, and the other five checks of its rust clean-file phase -- nested-call, nesting-depth, function-size, literals, intrafile-duplication -- report no more than they did before. The public signature of FileLedger::Add is unchanged, so tests/contract surface snapshots and every existing call site still compile untouched. cargo test -p nomos-ledger stays green.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/verbs.rs",
+          "crates/substrate/nomos-ledger/src/store/reservation.rs",
+          "crates/substrate/nomos-ledger/src/store/mod.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "ok\ntest Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 14 tests\ntest Test_Two_Spellings_Of_One_Record_Should_Still_Collide ... ok\ntest Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier ... ok\ntest Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest Test_The_Board_Should_Have_Record_Writing_Items_To_Talk_About ... ok\ntest Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory ... ok\ntest Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel ... ok\ntest Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder ... ok\ntest Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair ... ok\ntest Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once ... ok\ntest Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.87s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-865ca4671a0b1aaa.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-86ef7dab3bb74601.exe)\n     Running tests\\exclusion_holds.rs (target\\debug\\deps\\exclusion_holds-312396d3f34c30f9.exe)\n     Running tests\\gate_covers_finish.rs (target\\debug\\deps\\gate_covers_finish-73271a9f5d38c893.exe)\n     Running tests\\records_do_not_serialize.rs (target\\debug\\deps\\records_do_not_serialize-6e15e5ec419ad275.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1786509970,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

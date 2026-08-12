@@ -11,6 +11,24 @@ use crate::territory::{Normalize_Path, Territory};
 
 
 
+/// What an item declares about record identifiers, as one value.
+///
+/// The two territories are one thing to everybody who reads them. The verb that receives
+/// them only forwards them; the refusal below takes both and begins by comparing one against
+/// the other, because `amending` is meaningful only as a subset of `published`. Loose, they
+/// are also two arguments of one type sitting next to each other, which a call site can
+/// transpose without the compiler noticing.
+///
+/// Borrowed rather than owned: this is a grouping of arguments already borrowed from the
+/// caller, and copying two territories to satisfy the grouping would be paying for the shape.
+pub(super) struct RecordDeclaration<'a>
+{
+    /// The record files this repository has already published.
+    pub(super) published: &'a Territory,
+    /// The subset the item declares it is editing rather than allocating.
+    pub(super) amending: &'a Territory,
+}
+
 /// Refuses an item whose territory reserves a record identifier that is already spent.
 ///
 /// Two comparisons, in the order an author can act on. A published identifier is spent
@@ -32,19 +50,18 @@ use crate::territory::{Normalize_Path, Territory};
 pub(super) fn Refuse_A_Spent_Record(
     item: &LedgerItem,
     document: &LedgerDocument,
-    published: &Territory,
-    amending: &Territory,
+    declared: &RecordDeclaration,
 ) -> Result<(), AddRefusal>
 {
-    Refuse_An_Unpublished_Amendment(amending, published)?;
+    Refuse_An_Unpublished_Amendment(declared.amending, declared.published)?;
 
     for reserved in Record_Reservations(&item.territory)
     {
         let mine = Territory::Of_Files([reserved.clone()]);
 
-        if !matches!(mine.Intersect(amending), Intersection::Overlaps(_))
+        if !matches!(mine.Intersect(declared.amending), Intersection::Overlaps(_))
         {
-            Refuse_If_Published(&mine, &reserved, published)?;
+            Refuse_If_Published(&mine, &reserved, declared.published)?;
         }
 
         Refuse_If_Reserved(&mine, &reserved, document)?;

@@ -18,12 +18,11 @@ use crate::item::LedgerItem;
 use crate::item_id::ItemId;
 use crate::ledger_error::LedgerError;
 use crate::reservation::Reservation;
-use crate::territory::Territory;
 
 use super::claiming::Replace_Lapsed;
 use super::file::Decide_Under_Lock;
 use super::refusal::{Decline_Refusal, Takeover_Refusal};
-use super::reservation::Refuse_A_Spent_Record;
+use super::reservation::{RecordDeclaration, Refuse_A_Spent_Record};
 use super::validation::Validate;
 use super::FileLedger;
 
@@ -49,8 +48,7 @@ pub(super) fn Add<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &mut FileLedger<F, C, L>,
     item: &LedgerItem,
     holder: &str,
-    published: &Territory,
-    amending: &Territory,
+    declared: &RecordDeclaration,
 ) -> Result<(), AddRefusal>
 {
     return Decide_Under_Lock(ledger, holder, |document, _now| {
@@ -64,7 +62,7 @@ pub(super) fn Add<F: FileSystem, C: Clock, L: CrossProcessLock>(
             });
         }
 
-        Refuse_A_Spent_Record(item, document, published, amending)?;
+        Refuse_A_Spent_Record(item, document, declared)?;
 
         document.items.push(item.clone());
 
