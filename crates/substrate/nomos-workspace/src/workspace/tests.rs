@@ -21,6 +21,11 @@ fn Edit(path: &str, content: &str) -> WorkspaceChangeSet
     return WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present(path, content);
 }
 
+fn Removal(path: &str) -> WorkspaceChangeSet
+{
+    return WorkspaceChangeSet::From(ChangeSource::AgentEdit).Absent(path);
+}
+
 #[test]
 fn Test_One_Applied_Set_Should_Produce_One_Generation()
 {
@@ -130,17 +135,14 @@ fn Test_A_Removal_Should_Take_The_Member_And_A_Second_Should_Not()
     let mut workspace = Fresh();
     let first = Edit("src/a.rs", "pub fn a() {}");
     workspace.Apply(&first).expect("applies");
+    let gone = Removal("src/a.rs");
 
-    let removed = workspace
-        .Apply(&WorkspaceChangeSet::From(ChangeSource::AgentEdit).Absent("src/a.rs"))
-        .expect("applies");
+    let removed = workspace.Apply(&gone).expect("applies");
 
     assert!(matches!(removed, Applied::Advanced { .. }));
     assert_eq!(workspace.Content_Of("src/a.rs"), None);
 
-    let again = workspace
-        .Apply(&WorkspaceChangeSet::From(ChangeSource::AgentEdit).Absent("src/a.rs"))
-        .expect("removing what is not there is not an error");
+    let again = workspace.Apply(&gone).expect("removing what is not there is not an error");
 
     assert!(matches!(again, Applied::Unchanged { .. }));
     assert_eq!(

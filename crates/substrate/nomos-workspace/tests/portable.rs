@@ -45,53 +45,12 @@ fn Fresh() -> Workspace
 /// stable baseline to permute away from.
 fn Corpus(root: &Path) -> Vec<(String, String)>
 {
-    let mut paths = Vec::new();
-    let mut pending = vec![root.to_path_buf()];
-
-    while let Some(directory) = pending.pop()
-    {
-        let Ok(entries) = std::fs::read_dir(&directory)
-        else
-        {
-            continue;
-        };
-
-        for entry in entries.flatten()
-        {
-            let path = entry.path();
-            let name = entry.file_name();
-            let name = name.to_string_lossy();
-
-            let is_directory = path.is_dir();
-            if is_directory && NOT_SOURCE.contains(&name.as_ref())
-            {
-                continue;
-            }
-
-            if is_directory
-            {
-                pending.push(path);
-                continue;
-            }
-
-            if path.extension().is_some_and(|extension| return extension == "rs")
-            {
-                paths.push(path);
-            }
-        }
-    }
-
+    let mut paths = Rust_Files_Under(root);
     paths.sort();
 
     let mut members = Vec::new();
     for path in paths
     {
-        let relative = path
-            .strip_prefix(root)
-            .unwrap_or(&path)
-            .to_string_lossy()
-            .replace('\\', "/");
-
         // Read as bytes and render lossily rather than requiring UTF-8. A file this
         // workspace cannot decode is still a member of it, and skipping it would make the
         // snapshot describe a tree that is missing files nobody was told about.
@@ -100,10 +59,62 @@ fn Corpus(root: &Path) -> Vec<(String, String)>
         {
             continue;
         };
+        let relative = Relative_To(root, &path);
         members.push((relative, String::from_utf8_lossy(&bytes).into_owned()));
     }
 
     return members;
+}
+
+/// Every Rust file under a root, in whatever order the walk found them.
+fn Rust_Files_Under(root: &Path) -> Vec<PathBuf>
+{
+    let mut paths = Vec::new();
+    let mut pending = vec![root.to_path_buf()];
+    while let Some(directory) = pending.pop()
+    {
+        let Ok(entries) = std::fs::read_dir(&directory)
+        else
+        {
+            continue;
+        };
+        for entry in entries.flatten()
+        {
+            Visit(&entry.path(), &mut pending, &mut paths);
+        }
+    }
+
+    return paths;
+}
+
+/// One entry: a source directory to descend into later, a Rust file to keep, or neither.
+fn Visit(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathBuf>)
+{
+    let Some(name) = path.file_name()
+    else
+    {
+        return;
+    };
+    let name = name.to_string_lossy();
+    let is_directory = path.is_dir();
+    if is_directory && !NOT_SOURCE.contains(&name.as_ref())
+    {
+        pending.push(path.to_path_buf());
+    }
+    else if !is_directory && path.extension().is_some_and(|extension| return extension == "rs")
+    {
+        paths.push(path.to_path_buf());
+    }
+}
+
+/// A path under the root, as the workspace-relative string a snapshot is allowed to record.
+fn Relative_To(root: &Path, path: &Path) -> String
+{
+    return path
+        .strip_prefix(root)
+        .unwrap_or(path)
+        .to_string_lossy()
+        .replace('\\', "/");
 }
 
 fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
@@ -112,22 +123,36 @@ fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
     let root = configured
         .clone()
         .map_or_else(|| return PathBuf::from(SCALE_CORPUS), PathBuf::from);
-
     if !root.is_dir()
     {
-        assert!(
-            configured.is_none(),
-            "NOMOS_RUST_CORPUS is set to {}, which is not a directory. A configured corpus \
-             that cannot be read is a failure, not a skip",
-            root.display()
-        );
-        eprintln!("skipped: no corpus at {}", root.display());
+        Report_The_Absence(configured.is_some(), &root);
 
         return None;
     }
-
     let members = Corpus(&root);
 
+    Assert_This_Is_That_Corpus(&members, &root);
+
+    return Some((root, members));
+}
+
+/// A corpus the environment named and this machine cannot read is a failure. An unconfigured
+/// one that is simply not here is a skip, said out loud so a green run is not read as a
+/// checked one.
+fn Report_The_Absence(configured: bool, root: &Path)
+{
+    assert!(
+        !configured,
+        "NOMOS_RUST_CORPUS is set to {}, which is not a directory. A configured corpus \
+         that cannot be read is a failure, not a skip",
+        root.display()
+    );
+    eprintln!("skipped: no corpus at {}", root.display());
+}
+
+/// The guard against a walk that found a directory but almost nothing in it.
+fn Assert_This_Is_That_Corpus(members: &[(String, String)], root: &Path)
+{
     assert!(
         members.len() >= 5_000,
         "found {} Rust files under {}, which is not this corpus. Every assertion below \
@@ -136,8 +161,6 @@ fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
         members.len(),
         root.display()
     );
-
-    return Some((root, members));
 }
 
 /// Ingests a corpus in the order given, as one change set per batch of `stride` files.
@@ -149,16 +172,24 @@ fn Ingest(workspace: &mut Workspace, members: &[(String, String)], stride: usize
 {
     for batch in members.chunks(stride.max(1))
     {
-        let mut set = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
-        for (path, content) in batch
-        {
-            set = set.Present(path.clone(), content.clone());
-        }
+        let set = Change_Set(batch);
 
         workspace
             .Apply(&set)
             .expect("every path in the corpus is workspace-relative");
     }
+}
+
+/// One batch of files, as the single change set a checkout would arrive as.
+fn Change_Set(batch: &[(String, String)]) -> WorkspaceChangeSet
+{
+    let mut set = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
+    for (path, content) in batch
+    {
+        set = set.Present(path.clone(), content.clone());
+    }
+
+    return set;
 }
 
 // ---------------------------------------------------------------------------------
@@ -179,12 +210,9 @@ fn Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself()
     {
         return;
     };
-
     let mut workspace = Fresh();
     Ingest(&mut workspace, &members, 512);
-
     let encoded = workspace.Snapshot().Encode();
-    let text = String::from_utf8(encoded.clone()).expect("the encoding is UTF-8");
 
     eprintln!(
         "{}: {} members, {} bytes of snapshot, identity {}",
@@ -193,14 +221,21 @@ fn Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself()
         encoded.len(),
         workspace.Id()
     );
-
     assert_eq!(
         workspace.Snapshot().Len(),
         members.len(),
         "every file in the corpus is a member"
     );
+    Assert_Names_Nothing_Outside_Itself(&encoded, &root);
+}
 
+/// The three ways a snapshot records where it was taken: the corpus root, a drive letter, and
+/// a member path that is not workspace-relative.
+fn Assert_Names_Nothing_Outside_Itself(encoded: &[u8], root: &Path)
+{
+    let text = String::from_utf8(encoded.to_vec()).expect("the encoding is UTF-8");
     let root_text = root.to_string_lossy().replace('\\', "/").to_lowercase();
+
     assert!(
         !text.contains(&root_text),
         "the snapshot records {root_text}, so it describes where it was taken rather than \
@@ -210,7 +245,6 @@ fn Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself()
         !text.contains("f:/") && !text.contains("c:/"),
         "the snapshot carries a drive letter"
     );
-
     for line in text.lines().filter(|line| return line.starts_with("member\t"))
     {
         let path = line.split('\t').nth(1).unwrap_or_default();
@@ -237,10 +271,20 @@ fn Test_A_Snapshot_Should_Be_Interpretable_Without_The_Tree()
 
     let mut workspace = Fresh();
     Ingest(&mut workspace, &members, 512);
-
     let encoded = workspace.Snapshot().Encode();
     let elsewhere = WorkspaceSnapshot::Decode(&encoded).expect("bytes are all it needs");
 
+    Assert_Decoded_Answers_As_The_Original(&elsewhere, &workspace, &encoded);
+    Assert_Every_Member_Survived(&elsewhere, &workspace);
+}
+
+/// Every question the workspace answers, asked of the copy that came from bytes alone.
+fn Assert_Decoded_Answers_As_The_Original(
+    elsewhere: &WorkspaceSnapshot,
+    workspace: &Workspace,
+    encoded: &[u8],
+)
+{
     assert_eq!(elsewhere.Id(), workspace.Id());
     assert_eq!(elsewhere.Len(), workspace.Snapshot().Len());
     assert_eq!(elsewhere.Variant(), &Variant());
@@ -250,11 +294,15 @@ fn Test_A_Snapshot_Should_Be_Interpretable_Without_The_Tree()
         encoded,
         "and re-encoding what it read is byte-identical, so the reading lost nothing"
     );
+}
 
-    // Every member, answered from the decoded bytes. Not a sample: the claim is about the
-    // whole snapshot, and a spot check would pass for a decoder that dropped a suffix.
+/// Every member, answered from the decoded bytes. Not a sample: the claim is about the whole
+/// snapshot, and a spot check would pass for a decoder that dropped a suffix.
+fn Assert_Every_Member_Survived(elsewhere: &WorkspaceSnapshot, workspace: &Workspace)
+{
     let here = workspace.Snapshot().Members();
     let there = elsewhere.Members();
+
     assert_eq!(here, there, "every member survives the crossing");
 
     // The positive control. If `Members` returned nothing, every assertion above would
@@ -279,10 +327,19 @@ fn Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone()
 
     let mut workspace = Fresh();
     Ingest(&mut workspace, &members, 512);
-
     let mut store = DocumentStore::For(Workspace::Authority());
     workspace.Record(&mut store).expect("the store admits an observed measurement");
 
+    let from_store = The_One_Recorded_Snapshot(&store);
+
+    assert_eq!(from_store.Id(), workspace.Id());
+    assert_eq!(from_store.Len(), members.len());
+    Assert_The_Index_Still_Derives(&mut store, &workspace);
+}
+
+/// The workspace state read back out of the store by something that never saw the corpus.
+fn The_One_Recorded_Snapshot(store: &DocumentStore) -> WorkspaceSnapshot
+{
     let recorded: Vec<Vec<u8>> = store
         .Documents()
         .values()
@@ -292,29 +349,29 @@ fn Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone()
 
     assert_eq!(recorded.len(), 1, "one workspace state was recorded");
 
-    let from_store = recorded
+    return recorded
         .first()
         .map(|bytes| return WorkspaceSnapshot::Decode(bytes))
         .expect("the document is there")
         .expect("and it is a workspace snapshot");
+}
 
-    assert_eq!(from_store.Id(), workspace.Id());
-    assert_eq!(from_store.Len(), members.len());
-
-    // The index has to survive it. A workspace state filed under DocumentKind::Commit
-    // would be decoded as a commit manifest and break the index for every document in the
-    // store — which is the behaviour that decides a kind, and the reason a workspace state
-    // does not get one of its own. OD-STORE-001.
+/// The index has to survive it. A workspace state filed under `DocumentKind::Commit` would be
+/// decoded as a commit manifest and break the index for every document in the store — which is
+/// the behaviour that decides a kind, and the reason a workspace state does not get one of its
+/// own. OD-STORE-001.
+///
+/// And the commit it arrived in is reachable under the state it was taken against, which is
+/// what makes "read the store, find the workspace" a question the index can answer without
+/// knowing this crate's schema string.
+fn Assert_The_Index_Still_Derives(store: &mut DocumentStore, workspace: &Workspace)
+{
     assert!(store.Index().is_ok(), "the store's index still derives");
     assert_eq!(
         store.Authority(),
         Authority::Observed,
         "a measurement of a tree is observed, not authored"
     );
-
-    // And the commit it arrived in is reachable under the state it was taken against, which
-    // is what makes "read the store, find the workspace" a question the index can answer
-    // without knowing this crate's schema string.
     assert_eq!(
         store.Index().expect("indexes").Commits_Under(workspace.Id()).len(),
         1,
@@ -357,57 +414,79 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
     {
         return;
     };
-
-    let mut baseline: Option<(Vec<u8>, usize)> = None;
-
+    let mut baseline: Option<Taken> = None;
     for permutation in 0..100_u32
     {
-        let ordered = Permuted(&members, permutation);
+        let taken = Snapshot_Of_One_Order(&members, permutation);
 
-        // The stride varies with the permutation too, so change-set boundaries fall
-        // between different files each time. Order-independence within one set is a much
-        // weaker property than order-independence across them, and only the second one is
-        // what a checkout and an editor arriving in either order actually needs.
-        let stride = 1_usize.saturating_add(
-            usize::try_from(permutation)
-                .unwrap_or(0)
-                .saturating_mul(7)
-                .checked_rem(511)
-                .unwrap_or(0),
-        );
-
-        let mut workspace = Fresh();
-        Ingest(&mut workspace, &ordered, stride);
-
-        let encoded = workspace.Snapshot().Encode();
-
-        match &baseline
-        {
-            None => baseline = Some((encoded, workspace.Snapshot().Len())),
-            Some((expected, count)) =>
-            {
-                assert_eq!(
-                    workspace.Snapshot().Len(),
-                    *count,
-                    "permutation {permutation} produced a different number of members"
-                );
-                assert!(
-                    encoded == *expected,
-                    "permutation {permutation} (stride {stride}) produced different bytes"
-                );
-            }
-        }
+        Assert_Same_As_The_First(&mut baseline, taken, permutation);
     }
+    let Taken { bytes, members, .. } = baseline.expect("a hundred permutations ran");
 
-    let (bytes, count) = baseline.expect("a hundred permutations ran");
-
-    eprintln!("permutations: 100 orders, {count} members, {} identical bytes", bytes.len());
+    eprintln!("permutations: 100 orders, {members} members, {} identical bytes", bytes.len());
 
     // The vacuity guard. If the corpus had one member — or none — every permutation would
     // be the same permutation and this would have asserted nothing.
     assert!(
-        count >= 5_000,
-        "{count} members cannot meaningfully be permuted a hundred ways"
+        members >= 5_000,
+        "{members} members cannot meaningfully be permuted a hundred ways"
+    );
+}
+
+/// What one arrival order produced, and the stride it arrived under.
+struct Taken
+{
+    bytes: Vec<u8>,
+    members: usize,
+    stride: usize,
+}
+
+/// One arrival order, ingested and encoded.
+///
+/// The stride varies with the permutation too, so change-set boundaries fall between
+/// different files each time. Order-independence within one set is a much weaker property
+/// than order-independence across them, and only the second one is what a checkout and an
+/// editor arriving in either order actually needs.
+fn Snapshot_Of_One_Order(members: &[(String, String)], permutation: u32) -> Taken
+{
+    let ordered = Permuted(members, permutation);
+    let stride = 1_usize.saturating_add(
+        usize::try_from(permutation)
+            .unwrap_or(0)
+            .saturating_mul(7)
+            .checked_rem(511)
+            .unwrap_or(0),
+    );
+    let mut workspace = Fresh();
+
+    Ingest(&mut workspace, &ordered, stride);
+
+    return Taken {
+        bytes: workspace.Snapshot().Encode(),
+        members: workspace.Snapshot().Len(),
+        stride,
+    };
+}
+
+/// The first order to arrive becomes the baseline every later one is compared against.
+fn Assert_Same_As_The_First(baseline: &mut Option<Taken>, taken: Taken, permutation: u32)
+{
+    let Some(first) = baseline.as_ref()
+    else
+    {
+        *baseline = Some(taken);
+
+        return;
+    };
+
+    assert_eq!(
+        taken.members, first.members,
+        "permutation {permutation} produced a different number of members"
+    );
+    assert!(
+        taken.bytes == first.bytes,
+        "permutation {permutation} (stride {}) produced different bytes",
+        taken.stride
     );
 }
 
@@ -417,28 +496,34 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
 /// the seeds used, the walk visits every element exactly once — a shuffle that dropped or
 /// repeated elements would make the test compare snapshots of different corpora and pass
 /// only by accident.
+/// A stride larger than any realistic corpus, and prime, so that stepping by it visits every
+/// index before repeating for the corpus lengths this runs over. The linear scan in
+/// `Walk_From` makes the walk a permutation for any stride at all; the prime is what keeps it
+/// from degenerating into the identity order.
+const STRIDE: usize = 7_919;
+
 fn Permuted(members: &[(String, String)], seed: u32) -> Vec<(String, String)>
 {
-    // A stride larger than any realistic corpus, and prime, so that stepping by it visits
-    // every index before repeating for the corpus lengths this runs over. The linear scan
-    // below makes the walk a permutation for any stride at all; the prime is what keeps it
-    // from degenerating into the identity order.
-    const STRIDE: usize = 7_919;
-
-    let len = members.len();
     let Some(offset) = usize::try_from(seed)
         .unwrap_or(0)
         .saturating_mul(97)
-        .checked_rem(len)
+        .checked_rem(members.len())
     else
     {
         return Vec::new();
     };
 
+    return Walk_From(members, offset);
+}
+
+/// Step by `STRIDE` from an offset, and where that lands on something already taken, scan
+/// forward to the next free slot.
+fn Walk_From(members: &[(String, String)], offset: usize) -> Vec<(String, String)>
+{
+    let len = members.len();
     let mut permuted = Vec::with_capacity(len);
     let mut taken = vec![false; len];
     let mut at = offset;
-
     for _ in 0..len
     {
         while taken.get(at).copied().unwrap_or(false)
@@ -466,25 +551,13 @@ fn Test_The_Permutation_Should_Reorder_Without_Losing_Anything()
         .collect();
 
     let mut orders = std::collections::BTreeSet::new();
-
     for seed in 0..100_u32
     {
         let permuted = Permuted(&members, seed);
+        let order = Path_Order(&permuted);
 
-        assert_eq!(permuted.len(), members.len(), "seed {seed} changed the length");
-
-        let mut sorted = permuted.clone();
-        sorted.sort();
-        let mut expected = members.clone();
-        expected.sort();
-        assert_eq!(sorted, expected, "seed {seed} lost or repeated a member");
-
-        orders.insert(
-            permuted
-                .iter()
-                .map(|(path, _)| return path.clone())
-                .collect::<Vec<String>>(),
-        );
+        Assert_Holds_Every_Member(&permuted, &members, seed);
+        orders.insert(order);
     }
 
     assert!(
@@ -493,6 +566,28 @@ fn Test_The_Permutation_Should_Reorder_Without_Losing_Anything()
          asserting the same order against itself",
         orders.len()
     );
+}
+
+/// The same members, the same count, in a different order — which is what a permutation is.
+fn Assert_Holds_Every_Member(permuted: &[(String, String)], members: &[(String, String)], seed: u32)
+{
+    assert_eq!(permuted.len(), members.len(), "seed {seed} changed the length");
+
+    let mut sorted = permuted.to_vec();
+    sorted.sort();
+    let mut expected = members.to_vec();
+    expected.sort();
+
+    assert_eq!(sorted, expected, "seed {seed} lost or repeated a member");
+}
+
+/// The order alone, which is what makes one permutation distinct from another.
+fn Path_Order(permuted: &[(String, String)]) -> Vec<String>
+{
+    return permuted
+        .iter()
+        .map(|(path, _)| return path.clone())
+        .collect();
 }
 
 // ---------------------------------------------------------------------------------
@@ -518,38 +613,48 @@ fn Test_Re_Ingesting_The_Corpus_Should_Advance_Nothing()
 
     let after_first = workspace.Generation();
     let identity = workspace.Id();
-
-    let mut redundant = 0_usize;
-    for batch in members.chunks(512)
-    {
-        let mut set = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
-        for (path, content) in batch
-        {
-            set = set.Present(path.clone(), content.clone());
-        }
-
-        let applied = workspace.Apply(&set).expect("applies");
-        assert!(
-            matches!(applied, Applied::Unchanged { .. }),
-            "a checkout of what is already there is not a change"
-        );
-        redundant = redundant.saturating_add(applied.Effects().len());
-    }
-
-    eprintln!(
-        "re-ingestion: {} paths, all redundant, generation still {}",
-        redundant,
-        workspace.Generation().Raw()
-    );
+    let redundant = Re_Ingest(&mut workspace, &members);
 
     assert_eq!(workspace.Generation(), after_first);
     assert_eq!(workspace.Id(), identity);
     assert_eq!(redundant, members.len());
-
     // The positive control. The first ingestion must have advanced, or "nothing advanced"
     // is a statement about a workspace that never did anything.
     assert!(
         after_first > GenerationId::INITIAL,
         "the first ingestion advanced nothing either"
     );
+}
+
+/// The same corpus applied a second time, and how many paths came back redundant.
+fn Re_Ingest(workspace: &mut Workspace, members: &[(String, String)]) -> usize
+{
+    let mut redundant = 0_usize;
+    for batch in members.chunks(512)
+    {
+        let effects = Apply_Again(workspace, batch);
+
+        redundant = redundant.saturating_add(effects);
+    }
+
+    eprintln!(
+        "re-ingestion: {redundant} paths, all redundant, generation still {}",
+        workspace.Generation().Raw()
+    );
+
+    return redundant;
+}
+
+/// One batch of what is already there, which must land as `Applied::Unchanged`.
+fn Apply_Again(workspace: &mut Workspace, batch: &[(String, String)]) -> usize
+{
+    let set = Change_Set(batch);
+    let applied = workspace.Apply(&set).expect("applies");
+
+    assert!(
+        matches!(applied, Applied::Unchanged { .. }),
+        "a checkout of what is already there is not a change"
+    );
+
+    return applied.Effects().len();
 }
