@@ -68,40 +68,6 @@ mod rollup;
 
 impl Slice
 {
-    /// Declares both capabilities and registers both providers.
-    ///
-    /// # Panics
-    ///
-    /// If the registry refuses a declaration or an offer. Both are decided by this
-    /// function's own constants, so a refusal here is a contradiction in the composition
-    /// rather than a runtime condition — and continuing past it would produce a run whose
-    /// facts nobody offered.
-    #[must_use]
-    pub fn Registered() -> Registry
-    {
-        let mut registry = Registry::New();
-
-        registry
-            .Declare(syntax::Capability_Contract())
-            .expect("the syntax capability is declared once");
-        registry
-            .Offer(rust::Provider_Offer())
-            .expect("the Rust provider's offer is within its capability's ceiling");
-        // The second offer against the same contract. It is accepted because the ceiling
-        // bounds what may be *claimed*, not how weak an offer may be — a provider that
-        // promises less than the ceiling is exactly what a ceiling is for.
-        registry
-            .Offer(scan::Provider_Offer())
-            .expect("the scanner's offer is within the same ceiling");
-        registry
-            .Declare(surface::Capability_Contract())
-            .expect("the surface capability is declared once");
-        registry
-            .Offer(surface::Provider_Offer())
-            .expect("the rollup's offer is within its capability's ceiling");
-
-        return registry;
-    }
 
     /// A slice over an empty workspace.
     ///
@@ -112,7 +78,7 @@ impl Slice
     #[must_use]
     pub fn Composed() -> Self
     {
-        let registry = Self::Registered();
+        let registry = crate::Registered();
         let workspace = Workspace::Empty(Host_Variant(), Resolved_Configuration(&registry));
 
         return Self {
@@ -471,36 +437,4 @@ impl Slice
         };
     }
 
-    /// The subjects named by a set of invalidated keys, resolved back to corpus paths.
-    ///
-    /// Keys carry digests, and an assertion that compares digests is an assertion nobody
-    /// can read when it fails. This maps them back through the corpus so a failure says
-    /// `alpha/one.rs` rather than thirty-two hex characters.
-    #[must_use]
-    pub fn Name_Keys(corpus: &Corpus, keys: &[FactKey]) -> Vec<String>
-    {
-        let mut named: Vec<String> = keys
-            .iter()
-            .map(|key| {
-                let subject = corpus
-                    .files
-                    .iter()
-                    .find(|file| return file.subject == key.subject)
-                    .map(|file| return file.path.clone())
-                    .or_else(|| {
-                        return corpus
-                            .files
-                            .iter()
-                            .find(|file| return file.group_subject == key.subject)
-                            .map(|file| return file.group.clone());
-                    })
-                    .unwrap_or_else(|| return format!("<unknown subject {}>", key.subject));
-
-                return format!("{} of {subject}", key.contract);
-            })
-            .collect();
-        named.sort();
-
-        return named;
-    }
 }

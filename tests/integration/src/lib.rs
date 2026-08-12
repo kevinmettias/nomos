@@ -28,12 +28,14 @@
 
 #![forbid(unsafe_code)]
 
+mod composition;
 mod context;
 mod corpus;
 mod cross_environment;
 mod determinism;
 mod edited;
 mod floors;
+mod key_names;
 mod production;
 mod recompute;
 mod resolved;
@@ -43,6 +45,7 @@ mod source_file;
 mod surface;
 mod verification;
 
+pub use composition::Registered;
 pub use context::{
     Configuration_Rendering, Host_Variant, Resolved_Configuration, CONFIGURATION_SCHEMA,
 };
@@ -51,6 +54,7 @@ pub use cross_environment::{Cross_Environment_Owed, CrossEnvironment};
 pub use determinism::{Child_Variable, Digest_In, Report_Line};
 pub use edited::Edited;
 pub use floors::{Approximate_Floor, Parsed_Floor};
+pub use key_names::Name_Keys;
 pub use production::Production;
 pub use recompute::Recompute;
 pub use resolved::Resolved;

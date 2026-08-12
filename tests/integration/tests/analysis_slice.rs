@@ -23,8 +23,9 @@ use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity,
 };
 use nomos_integration_tests::{
-    Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Resolved, RunReport,
-    Resolved_Configuration, Slice, SourceFile, Surface, Walk, SURFACE_CAPABILITY,
+    Approximate_Floor, Corpus, Decode_Surface, Edited, Host_Variant, Name_Keys, Registered,
+    Resolved, Resolved_Configuration, RunReport, Slice, SourceFile, Surface, Walk,
+    SURFACE_CAPABILITY,
 };
 use nomos_lang_rust as rust;
 use nomos_lang_rust_scan as scan;
@@ -105,8 +106,8 @@ fn Rewritten(slice: &mut Slice, corpus: &mut Corpus, rewrite: Rewrite<'_>) -> In
 fn Reached(corpus: &Corpus, invalidated: &InvalidationReport) -> (Vec<String>, Vec<String>)
 {
     return (
-        Slice::Name_Keys(corpus, &invalidated.direct),
-        Slice::Name_Keys(corpus, &invalidated.dependent),
+        Name_Keys(corpus, &invalidated.direct),
+        Name_Keys(corpus, &invalidated.dependent),
     );
 }
 
@@ -117,7 +118,7 @@ fn Broadenings(corpus: &Corpus, invalidated: &InvalidationReport) -> Vec<String>
         .broadened
         .iter()
         .map(|record| {
-            let named = Slice::Name_Keys(corpus, core::slice::from_ref(&record.key));
+            let named = Name_Keys(corpus, core::slice::from_ref(&record.key));
 
             return format!(
                 "{} {:?} -> {:?}",
@@ -373,7 +374,7 @@ fn Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group()
         file: "gamma/five.rs",
         text: "//! Rewritten.\n\nstruct Other;\n",
     });
-    let reached = Slice::Name_Keys(&corpus, &invalidated.dependent);
+    let reached = Name_Keys(&corpus, &invalidated.dependent);
     assert_eq!(reached, vec!["nomos.cap.module.surface of gamma"]);
     assert!(
         !reached.iter().any(|name| return name.ends_with("alpha") || name.ends_with("beta")),
@@ -1126,7 +1127,7 @@ fn Bought_Coverage(parsed: &RunReport, scanned: &RunReport)
 #[test]
 fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
 {
-    let registry = Slice::Registered();
+    let registry = Registered();
     let capability = CapabilityId::New(syntax::CAPABILITY);
     let contract = registry
         .Declared()

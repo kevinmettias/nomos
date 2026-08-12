@@ -24,9 +24,11 @@ pub fn nomos_integration_tests::Corpus::Rewrite(&mut self, path: &str, source: &
 pub fn nomos_integration_tests::Decode_Surface(payload: &[u8]) -> Result<Surface, String>
 pub fn nomos_integration_tests::Digest_In(output: &str, domain: &str) -> Option<String>
 pub fn nomos_integration_tests::Host_Variant() -> BuildVariant
+pub fn nomos_integration_tests::Name_Keys(corpus: &Corpus, keys: &[FactKey]) -> Vec<String>
 pub fn nomos_integration_tests::Production::Digest_At(&self, strength: DeterminismStrength) -> String
 pub fn nomos_integration_tests::Production::State(&self) -> Vec<Vec<u8>>
 pub fn nomos_integration_tests::Public_Items(payload: &[u8]) -> Result<(u32, u32), String>
+pub fn nomos_integration_tests::Registered() -> Registry
 pub fn nomos_integration_tests::Report_Line(domain: &str, digest: &str) -> String
 pub fn nomos_integration_tests::Resolved_Configuration(registry: &Registry) -> ConfigurationId
 pub fn nomos_integration_tests::RunReport::Answered_By(&self, provider: &str) -> usize
@@ -38,10 +40,8 @@ pub fn nomos_integration_tests::Slice::Candidates(&self) -> Vec<nomos_capability
 pub fn nomos_integration_tests::Slice::Checkout(&mut self, corpus: &mut Corpus, landing: &[(&str, &str)]) -> Edited
 pub fn nomos_integration_tests::Slice::Composed() -> Self
 pub fn nomos_integration_tests::Slice::Edit( &mut self, corpus: &mut Corpus, source: ChangeSource, path: &str, content: &str, ) -> Edited
-pub fn nomos_integration_tests::Slice::Name_Keys(corpus: &Corpus, keys: &[FactKey]) -> Vec<String>
 pub fn nomos_integration_tests::Slice::Over(corpus: &Corpus) -> Self
 pub fn nomos_integration_tests::Slice::Preferring(mut self, provider: &str) -> Self
-pub fn nomos_integration_tests::Slice::Registered() -> Registry
 pub fn nomos_integration_tests::Slice::Requirement(&self) -> Requirement
 pub fn nomos_integration_tests::Slice::Resolved(&self) -> Resolved
 pub fn nomos_integration_tests::Slice::Run(&mut self, corpus: &Corpus) -> RunReport
