@@ -9195,6 +9195,59 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P12-TEST-DECOMPOSITION",
+      "title": "The five decompose-file checks stop at the test crates, where the largest file in the tree now is",
+      "why": "P12-FILE-DECOMPOSITION brought production code clean against the five decompose-file checks and closed by putting test sources out of scope: the checks skip them by default and that item did not turn the flag off. Run with --include-tests, the same five read 41 findings, and every one of them is in a test source.\n\ncheck-file-size accounts for 27. Four are past the ~1500-line tier the standards make a MUST: crates/substrate/nomos-ledger/tests/exclusion_holds.rs at 2952 lines, tests/contract/src/surface.rs at 1776, tests/integration/tests/analysis_slice.rs at 1618, and tests/contract/src/gates.rs at 1384. The largest file in this workspace is now a test, and the argument the production sweep accepted -- that no reviewer holds such a file in one reading -- is not weaker because the lines are assertions.\n\ncheck-one-public-type reads 11 across five test-support modules; tests/integration/src/slice.rs alone declares five types. check-responsibility-extraction reads 3. check-class-size and check-extractable-subset are already clean, so the defect is the same one the production sweep found: file boundaries, not type cohesion.\n\nTwo couplings make this more than a mechanical split. tests/contract/src and tests/integration/src are snapshotted crates, so every inherent and trait impl of a re-exported type must stay in the module its route names or the method leaves tests/contract/surface silently -- the limitation OD-GATE-002 records and P11-REEXPORT-GRAIN is open against. And six of the oversized files are rows of the GATES table in tests/contract/tests/corpus_gates.rs, which is keyed by file path and declares each file gated and total test counts against a derivation that checks it.\n\ntests/corpus is excluded: those files are fixture input whose item counts are what the analysis tests assert.",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size, each run with --include-tests over this workspace, report no finding outside tests/corpus. Run in that order, and re-run every earlier one after each is clean, because splitting a file for one of them moves the other two.\n\ntests/corpus stays byte-identical. Its files are the input the analysis tests count, and three public items in beta/three.rs is an assertion rather than an accident.\n\nEvery type a split moves keeps the path it was imported by, so lib.rs re-exports its parts and nothing outside the moved module changes an import. Each type inherent and trait impls stay in the module its re-export names; where a file is split for length rather than for type count, only the body moves, to a pub(super) fn in a child module. tests/contract/surface/nomos-contract-tests.txt and nomos-integration-tests.txt change only where a name genuinely left the surface, and any change is committed with the split that caused it.\n\nA file kept whole against check-file-size carries a reasoned marker naming the coupling that keeps it together, not a bare one, and the reason names the algorithm rather than restating the length.\n\nSplitting a file named in the GATES table of tests/contract/tests/corpus_gates.rs updates that table in the same commit: a row per resulting file, counts its own tests bear out, and GATED_TOTAL unchanged unless an assertion genuinely became gated.\n\ncargo test --workspace --no-fail-fast --exclude nomos-lang-rust is green and the gate lint step is clean. nomos-lang-rust is excluded from the predicate and not from the work: its tests/corpus.rs is split too, and cargo test -p nomos-lang-rust --test corpus must still report 5 passed and the one pre-existing failure Test_Every_Refusal_Should_Be_Named_And_Explained, which refuses the same two xvpe bench files it refused before this item.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/tests",
+          "crates/languages/nomos-lang-rust/tests",
+          "crates/rules/nomos-rules/src/mirror",
+          "crates/spec/nomos-spec-bundle/tests",
+          "crates/spec/nomos-spec-ingest/tests",
+          "crates/spec/nomos-spec-project/tests",
+          "crates/spec/nomos-spec-store/tests",
+          "crates/substrate/nomos-analysis/tests",
+          "crates/substrate/nomos-ledger/tests",
+          "crates/substrate/nomos-workspace/tests",
+          "tests/contract/src",
+          "tests/contract/tests",
+          "tests/integration/src",
+          "tests/integration/tests",
+          "tests/contract/surface/nomos-contract-tests.txt",
+          "tests/contract/surface/nomos-integration-tests.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace",
+          "--no-fail-fast",
+          "--exclude",
+          "nomos-lang-rust"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-decompose-tests",
+          "reason": "Claim released, not the item. Four commits landed and each is verified: 62516e9, ba08ddf, 5e3a95b, a1494a1. The session ran out of context, not out of work.\n\nThree of the five checks are clean over the whole workspace with --include-tests. check-one-public-type went 11 to 0, check-responsibility-extraction 3 to 0, and check-extractable-subset was already clean. cargo test --workspace --no-fail-fast --exclude nomos-lang-rust is green after every commit, and both public-surface snapshots are byte-identical except the two lines 5e3a95b deliberately moved.\n\nWhat is left, for whoever takes this next:\n\ncheck-file-size reads 23, down from 27. exclusion_holds.rs is done and is the worked example: 2,952 lines became tests/exclusion_holds/ with a main.rs cargo discovers, ten modules named for what they assert, and one common.rs holding the fixtures. The shape matters -- a test binary root resolves `mod x;` against its own directory, so tests/foo.rs cannot have tests/foo/x.rs as a child; the target has to become tests/foo/main.rs first.\n\nSix of the 23 are rows of the GATES table in tests/contract/tests/corpus_gates.rs, which is keyed by file path and declares per-file gated and total counts against a derivation that checks it: corpus.rs, family_counts.rs, regression_report.rs, table_rows.rs, portable.rs and analysis_slice.rs. Splitting any of those moves rows and counts in the same commit, with GATED_TOTAL unchanged.\n\ncheck-class-size reads 1, and this sweep caused it. Moving Slice's private half into slice/{keys,dispatch,rollup,edit}.rs left its public methods delegating rather than touching fields, so the accessors and the operations no longer share state through anything the check can see. The check has no marker and its remedy is to split the type, which is a redesign of the integration harness's composition root rather than a decomposition of a file. It is worth its own item and is written up in 5e3a95b.\n\ntests/corpus stays out of scope throughout: its files are fixture input whose item counts the analysis tests assert.",
+          "abandoned_at": 1786514688
+        }
+      ],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
