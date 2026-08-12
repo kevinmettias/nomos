@@ -3,7 +3,10 @@
 //! A key is what makes a second run cheap and a wrong key is what makes it wrong, so the
 //! digest inputs are gathered in one place rather than at each call site that needs one.
 
-use super::*;
+use super::{
+    CapabilityId, Context, Digest128, Digest_Of_Parts, FactIdentity, FactKey, FactStore,
+    GuaranteeDigest, InputDigest, ProviderId, Slice, SourceFile, SubjectId, surface,
+};
 
 impl Slice
 {

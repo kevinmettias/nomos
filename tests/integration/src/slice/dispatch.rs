@@ -4,7 +4,9 @@
 //! chosen one refuses. A fallback answer is bought visibly — the census the run reports is
 //! what makes "one file was approximated" a name rather than a number.
 
-use super::*;
+use super::{
+    MaterializedFact, Recompute, RunReport, Slice, SourceFile, rust, scan, syntax,
+};
 
 /// Who answered for one file, and where in the offer order they came.
 #[derive(Clone, Copy)]

@@ -3,7 +3,10 @@
 //! An edit that says what the workspace already said invalidates nothing, and that is not
 //! the same as an invalidation pass that ran and reached nothing.
 
-use super::*;
+use super::{
+    Applied, BTreeSet, ChangeSource, Corpus, FactStore, IncrementalGranularity,
+    InvalidationReport, Slice, SnapshotId, SubjectId, Subject_Of_Path, WorkspaceChangeSet,
+};
 
 impl Slice
 {

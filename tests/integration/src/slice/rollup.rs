@@ -3,7 +3,11 @@
 //! A rollup that could not read a member is a degraded answer, and reporting it as an answer
 //! is how a corpus with a hole in it reads as a corpus that is fine.
 
-use super::*;
+use super::{
+    Applicability, CapabilityId, Corpus, Dependency, EvidenceClass, FactKey, FactPayload,
+    FactReader, MaterializedFact, Reader, Recompute, Requirement, RunReport, Slice, SourceFile,
+    Surface, surface, syntax,
+};
 
 /// What a rollup produced: the summed surface, and the reads it was derived from.
 ///
