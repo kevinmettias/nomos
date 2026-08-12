@@ -1,121 +1,21 @@
-//! The two properties the item is done when.
+//! Every assertion this suite makes against the real Rust corpus.
 //!
-//! A portable snapshot over `F:/repos/xvpe` interpretable by a process with no access to
-//! that tree, and 100 ingestion-order permutations that yield byte-identical queries.
-//!
-//! # Opt-in by path, loud when configured and unreadable
-//!
-//! `NOMOS_RUST_CORPUS` overrides the root. Set and unreadable is a failure; absent and
-//! unconfigured returns having asserted nothing and said so. The same bargain
-//! `nomos-spec-model`'s `normalizer_gate` strikes with `NOMOS_V14_CORPUS`.
+//! All five corpus-gated tests are here, beside [`Scale_Corpus_Or_Skip`], and that is a
+//! requirement rather than a tidy arrangement. `tests/contract/src/gates.rs` resolves a test
+//! to the corpora it reaches by following the calls it makes **within one file** — none of
+//! these tests names `NOMOS_RUST_CORPUS` itself — so a gated test moved to a sibling module
+//! would stop being counted, and the declared size of the hole in
+//! `tests/contract/tests/corpus_gates.rs` would drop without any assertion being removed.
 
-use nomos_contracts::{ConfigurationId, Digest128, GenerationId};
+use crate::common::{Configuration, Fresh, Ingest, Variant, Workspace};
+use crate::permutation::{Snapshot_Of_One_Order, Taken};
+use crate::walk::{Assert_This_Is_That_Corpus, Corpus};
+use nomos_contracts::GenerationId;
 use nomos_store::{Authority, DocumentKind, DocumentStore};
-use nomos_workspace::{
-    Applied, BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet, WorkspaceSnapshot,
-};
+use nomos_workspace::{Applied, WorkspaceSnapshot};
 use std::path::{Path, PathBuf};
 
 const SCALE_CORPUS: &str = "F:/repos/xvpe";
-const NOT_SOURCE: &[&str] = &["target", ".git"];
-
-fn Variant() -> BuildVariant
-{
-    return BuildVariant::New(
-        "x86_64-pc-windows-msvc",
-        "dev",
-        "1.85",
-        ["analysis", "telemetry"],
-    );
-}
-
-fn Configuration() -> ConfigurationId
-{
-    return ConfigurationId::From_Digest(Digest128::From_Bytes([0x2f; 16]));
-}
-
-fn Fresh() -> Workspace
-{
-    return Workspace::Empty(Variant(), Configuration());
-}
-
-/// Every Rust file under a root, as workspace-relative paths and contents.
-///
-/// Sorted, so a failure names the same file on two machines and the permutation test has a
-/// stable baseline to permute away from.
-fn Corpus(root: &Path) -> Vec<(String, String)>
-{
-    let mut paths = Rust_Files_Under(root);
-    paths.sort();
-
-    let mut members = Vec::new();
-    for path in paths
-    {
-        // Read as bytes and render lossily rather than requiring UTF-8. A file this
-        // workspace cannot decode is still a member of it, and skipping it would make the
-        // snapshot describe a tree that is missing files nobody was told about.
-        let Ok(bytes) = std::fs::read(&path)
-        else
-        {
-            continue;
-        };
-        let relative = Relative_To(root, &path);
-        members.push((relative, String::from_utf8_lossy(&bytes).into_owned()));
-    }
-
-    return members;
-}
-
-/// Every Rust file under a root, in whatever order the walk found them.
-fn Rust_Files_Under(root: &Path) -> Vec<PathBuf>
-{
-    let mut paths = Vec::new();
-    let mut pending = vec![root.to_path_buf()];
-    while let Some(directory) = pending.pop()
-    {
-        let Ok(entries) = std::fs::read_dir(&directory)
-        else
-        {
-            continue;
-        };
-        for entry in entries.flatten()
-        {
-            Visit(&entry.path(), &mut pending, &mut paths);
-        }
-    }
-
-    return paths;
-}
-
-/// One entry: a source directory to descend into later, a Rust file to keep, or neither.
-fn Visit(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathBuf>)
-{
-    let Some(name) = path.file_name()
-    else
-    {
-        return;
-    };
-    let name = name.to_string_lossy();
-    let is_directory = path.is_dir();
-    if is_directory && !NOT_SOURCE.contains(&name.as_ref())
-    {
-        pending.push(path.to_path_buf());
-    }
-    else if !is_directory && path.extension().is_some_and(|extension| return extension == "rs")
-    {
-        paths.push(path.to_path_buf());
-    }
-}
-
-/// A path under the root, as the workspace-relative string a snapshot is allowed to record.
-fn Relative_To(root: &Path, path: &Path) -> String
-{
-    return path
-        .strip_prefix(root)
-        .unwrap_or(path)
-        .to_string_lossy()
-        .replace('\\', "/");
-}
 
 fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
 {
@@ -148,48 +48,6 @@ fn Report_The_Absence(configured: bool, root: &Path)
         root.display()
     );
     eprintln!("skipped: no corpus at {}", root.display());
-}
-
-/// The guard against a walk that found a directory but almost nothing in it.
-fn Assert_This_Is_That_Corpus(members: &[(String, String)], root: &Path)
-{
-    assert!(
-        members.len() >= 5_000,
-        "found {} Rust files under {}, which is not this corpus. Every assertion below \
-         iterates over this set, so a truncated walk makes all of them pass having read \
-         almost nothing",
-        members.len(),
-        root.display()
-    );
-}
-
-/// Ingests a corpus in the order given, as one change set per batch of `stride` files.
-///
-/// Batched rather than one set per file, because that is what a real source does: a
-/// checkout arrives as one event covering hundreds of paths. It also means the permutation
-/// test permutes across change-set boundaries rather than only within one.
-fn Ingest(workspace: &mut Workspace, members: &[(String, String)], stride: usize)
-{
-    for batch in members.chunks(stride.max(1))
-    {
-        let set = Change_Set(batch);
-
-        workspace
-            .Apply(&set)
-            .expect("every path in the corpus is workspace-relative");
-    }
-}
-
-/// One batch of files, as the single change set a checkout would arrive as.
-fn Change_Set(batch: &[(String, String)]) -> WorkspaceChangeSet
-{
-    let mut set = WorkspaceChangeSet::From(ChangeSource::GitCheckout);
-    for (path, content) in batch
-    {
-        set = set.Present(path.clone(), content.clone());
-    }
-
-    return set;
 }
 
 // ---------------------------------------------------------------------------------
@@ -391,7 +249,8 @@ fn Assert_The_Index_Still_Derives(store: &mut DocumentStore, workspace: &Workspa
 ///
 /// The permutation is a deterministic shuffle rather than a random one. A random order
 /// that failed once would be a failure nobody could reproduce, and this test exists to
-/// produce a reproducible one.
+/// produce a reproducible one. [`crate::permutation`] holds the shuffle and the proof that
+/// it is one.
 ///
 /// # What this is evidence for
 ///
@@ -402,7 +261,7 @@ fn Assert_The_Index_Still_Derives(store: &mut DocumentStore, workspace: &Workspa
 /// did, which is the gap `P9-DETERMINISM` closed.
 ///
 /// Gated on the scale corpus, so it does not run in CI. The same declaration is checked
-/// over an in-repository fixture in `tests/integration/tests/determinism.rs`, including
+/// over an in-repository fixture in `tests/integration/tests/determinism/`, including
 /// the `CrossBinary` half that this test does not reach at all — a hundred permutations
 /// inside one process say nothing about what a different build of this analyzer would
 /// encode.
@@ -419,7 +278,7 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
     {
         let taken = Snapshot_Of_One_Order(&members, permutation);
 
-        Assert_Same_As_The_First(&mut baseline, taken, permutation);
+        crate::permutation::Assert_Same_As_The_First(&mut baseline, taken, permutation);
     }
     let Taken { bytes, members, .. } = baseline.expect("a hundred permutations ran");
 
@@ -431,163 +290,6 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
         members >= 5_000,
         "{members} members cannot meaningfully be permuted a hundred ways"
     );
-}
-
-/// What one arrival order produced, and the stride it arrived under.
-struct Taken
-{
-    bytes: Vec<u8>,
-    members: usize,
-    stride: usize,
-}
-
-/// One arrival order, ingested and encoded.
-///
-/// The stride varies with the permutation too, so change-set boundaries fall between
-/// different files each time. Order-independence within one set is a much weaker property
-/// than order-independence across them, and only the second one is what a checkout and an
-/// editor arriving in either order actually needs.
-fn Snapshot_Of_One_Order(members: &[(String, String)], permutation: u32) -> Taken
-{
-    let ordered = Permuted(members, permutation);
-    let stride = 1_usize.saturating_add(
-        usize::try_from(permutation)
-            .unwrap_or(0)
-            .saturating_mul(7)
-            .checked_rem(511)
-            .unwrap_or(0),
-    );
-    let mut workspace = Fresh();
-
-    Ingest(&mut workspace, &ordered, stride);
-
-    return Taken {
-        bytes: workspace.Snapshot().Encode(),
-        members: workspace.Snapshot().Len(),
-        stride,
-    };
-}
-
-/// The first order to arrive becomes the baseline every later one is compared against.
-fn Assert_Same_As_The_First(baseline: &mut Option<Taken>, taken: Taken, permutation: u32)
-{
-    let Some(first) = baseline.as_ref()
-    else
-    {
-        *baseline = Some(taken);
-
-        return;
-    };
-
-    assert_eq!(
-        taken.members, first.members,
-        "permutation {permutation} produced a different number of members"
-    );
-    assert!(
-        taken.bytes == first.bytes,
-        "permutation {permutation} (stride {}) produced different bytes",
-        taken.stride
-    );
-}
-
-/// A deterministic reordering, distinct for each `seed`.
-///
-/// A multiplicative step over the index. Because the step and the length are coprime for
-/// the seeds used, the walk visits every element exactly once — a shuffle that dropped or
-/// repeated elements would make the test compare snapshots of different corpora and pass
-/// only by accident.
-/// A stride larger than any realistic corpus, and prime, so that stepping by it visits every
-/// index before repeating for the corpus lengths this runs over. The linear scan in
-/// `Walk_From` makes the walk a permutation for any stride at all; the prime is what keeps it
-/// from degenerating into the identity order.
-const STRIDE: usize = 7_919;
-
-fn Permuted(members: &[(String, String)], seed: u32) -> Vec<(String, String)>
-{
-    let Some(offset) = usize::try_from(seed)
-        .unwrap_or(0)
-        .saturating_mul(97)
-        .checked_rem(members.len())
-    else
-    {
-        return Vec::new();
-    };
-
-    return Walk_From(members, offset);
-}
-
-/// Step by `STRIDE` from an offset, and where that lands on something already taken, scan
-/// forward to the next free slot.
-fn Walk_From(members: &[(String, String)], offset: usize) -> Vec<(String, String)>
-{
-    let len = members.len();
-    let mut permuted = Vec::with_capacity(len);
-    let mut taken = vec![false; len];
-    let mut at = offset;
-    for _ in 0..len
-    {
-        while taken.get(at).copied().unwrap_or(false)
-        {
-            at = at.saturating_add(1).checked_rem(len).unwrap_or(0);
-        }
-        if let (Some(member), Some(slot)) = (members.get(at), taken.get_mut(at))
-        {
-            permuted.push(member.clone());
-            *slot = true;
-        }
-        at = at.saturating_add(STRIDE).checked_rem(len).unwrap_or(0);
-    }
-
-    return permuted;
-}
-
-/// The permutation itself must be a permutation, or the test above compares snapshots of
-/// different corpora.
-#[test]
-fn Test_The_Permutation_Should_Reorder_Without_Losing_Anything()
-{
-    let members: Vec<(String, String)> = (0..500_u32)
-        .map(|index| return (format!("src/f{index}.rs"), format!("fn f{index}() {{}}")))
-        .collect();
-
-    let mut orders = std::collections::BTreeSet::new();
-    for seed in 0..100_u32
-    {
-        let permuted = Permuted(&members, seed);
-        let order = Path_Order(&permuted);
-
-        Assert_Holds_Every_Member(&permuted, &members, seed);
-        orders.insert(order);
-    }
-
-    assert!(
-        orders.len() > 50,
-        "a hundred seeds produced only {} distinct orders; the test above would be \
-         asserting the same order against itself",
-        orders.len()
-    );
-}
-
-/// The same members, the same count, in a different order — which is what a permutation is.
-fn Assert_Holds_Every_Member(permuted: &[(String, String)], members: &[(String, String)], seed: u32)
-{
-    assert_eq!(permuted.len(), members.len(), "seed {seed} changed the length");
-
-    let mut sorted = permuted.to_vec();
-    sorted.sort();
-    let mut expected = members.to_vec();
-    expected.sort();
-
-    assert_eq!(sorted, expected, "seed {seed} lost or repeated a member");
-}
-
-/// The order alone, which is what makes one permutation distinct from another.
-fn Path_Order(permuted: &[(String, String)]) -> Vec<String>
-{
-    return permuted
-        .iter()
-        .map(|(path, _)| return path.clone())
-        .collect();
 }
 
 // ---------------------------------------------------------------------------------
@@ -648,7 +350,7 @@ fn Re_Ingest(workspace: &mut Workspace, members: &[(String, String)]) -> usize
 /// One batch of what is already there, which must land as `Applied::Unchanged`.
 fn Apply_Again(workspace: &mut Workspace, batch: &[(String, String)]) -> usize
 {
-    let set = Change_Set(batch);
+    let set = crate::common::Change_Set(batch);
     let applied = workspace.Apply(&set).expect("applies");
 
     assert!(

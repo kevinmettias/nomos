@@ -166,10 +166,13 @@ const GATES: &[Gate] = &[
         tests: 2,
     },
     Gate {
-        path: "crates/substrate/nomos-workspace/tests/portable.rs",
+        // Five of the suite's six tests are gated, and all five are in this one module with
+        // the root that gates them. The sixth needs no corpus and lives with the permutation
+        // it is about.
+        path: "crates/substrate/nomos-workspace/tests/portable/over_the_corpus.rs",
         variables: &[RUST],
         gated: 5,
-        tests: 6,
+        tests: 5,
     },
     Gate {
         path: "tests/integration/tests/analysis_slice.rs",
@@ -194,11 +197,12 @@ const GATED_TOTAL: usize = 68;
 /// reads a corpus. [`GATED_TOTAL`] is unchanged, and that is the point of keeping the two
 /// numbers apart: a gated file growing is not the hole growing.
 ///
-/// Fell to 116 when `table_rows.rs` was decomposed for `check-file-size`. Fourteen of its
-/// sixteen tests never read a corpus and now live in sibling modules, so they no longer
-/// inflate this denominator — the same move in the other direction. [`GATED_TOTAL`] is again
-/// unchanged, which is the check that the decomposition moved tests rather than silence.
-const TESTS_IN_GATED_FILES: usize = 116;
+/// Fell to 115 as the test crates were decomposed for `check-file-size`: fourteen of
+/// `table_rows.rs`'s sixteen tests never read a corpus, and one of `portable.rs`'s six did
+/// not either, and all fifteen now live in sibling modules rather than inflating this
+/// denominator — the same move in the other direction. [`GATED_TOTAL`] is unchanged through
+/// every one of those splits, which is the check that they moved tests rather than silence.
+const TESTS_IN_GATED_FILES: usize = 115;
 
 /// The table accounts for every file that reaches a corpus.
 ///
