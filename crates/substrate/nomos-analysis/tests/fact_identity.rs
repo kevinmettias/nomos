@@ -1,6 +1,7 @@
 use nomos_analysis::{
     Component, Context, Dependency, FactKey, FactPayload, FactReader, FactStore, GenerationCause,
-    GuaranteeDigest, InputDigest, MaterializedFact, MemoryFactStore, ReadOutcome, Reader,
+    GuaranteeDigest, InputDigest, InvalidationReport, MaterializedFact, MemoryFactStore,
+    ReadOutcome, Reader,
 };
 use nomos_capability::{CapabilityContract, ProviderOffer, Registry, Requirement};
 use nomos_contracts::{
@@ -111,6 +112,62 @@ fn Stored(key: &FactKey) -> MemoryFactStore
     store.Materialize(fact, &[]).expect("materializes");
 
     return store;
+}
+
+/// The same fact, read from a named tree.
+fn Fact_From(key: &FactKey, snapshot: SnapshotId) -> MaterializedFact
+{
+    let mut fact = Fact(key, GenerationId::INITIAL);
+    fact.snapshot = snapshot;
+
+    return fact;
+}
+
+/// A fact for `key` that reached for `upstream` and got the given outcome.
+fn Materialize_Reading(
+    store: &mut MemoryFactStore,
+    key: &FactKey,
+    upstream: &FactKey,
+    outcome: ReadOutcome,
+)
+{
+    let fact = Fact(key, GenerationId::INITIAL);
+    let edge = Dependency {
+        key: upstream.clone(),
+        outcome,
+    };
+
+    store.Materialize(fact, &[edge]).expect("materializes");
+}
+
+/// What a change to one subject invalidates, at file granularity.
+fn Subject_Changed(store: &mut MemoryFactStore, subject: SubjectId, next: GenerationId)
+    -> InvalidationReport
+{
+    return store.Invalidate(
+        &GenerationCause::SubjectChanged {
+            subject,
+            granularity: IncrementalGranularity::File,
+        },
+        next,
+    );
+}
+
+/// What a checkout invalidates, naming the members that differ.
+fn Snapshot_Replaced(
+    store: &mut MemoryFactStore,
+    differing: BTreeSet<SubjectId>,
+    next: GenerationId,
+) -> InvalidationReport
+{
+    return store.Invalidate(
+        &GenerationCause::SnapshotReplaced {
+            from: Snapshot(2),
+            to: Snapshot(9),
+            differing,
+        },
+        next,
+    );
 }
 
 fn Context_At(generation: GenerationId) -> Context
@@ -244,11 +301,8 @@ fn Test_Two_Workspace_States_Should_Not_Produce_Two_Facts()
 {
     let key = Base();
     let mut store = MemoryFactStore::New();
-
-    let mut measured = Fact(&key, GenerationId::INITIAL);
-    measured.snapshot = Snapshot(2);
-    let mut asked_again = Fact(&key, GenerationId::INITIAL);
-    asked_again.snapshot = Snapshot(9);
+    let measured = Fact_From(&key, Snapshot(2));
+    let asked_again = Fact_From(&key, Snapshot(9));
 
     assert_eq!(
         measured.Key().Digest(),
@@ -256,9 +310,7 @@ fn Test_Two_Workspace_States_Should_Not_Produce_Two_Facts()
         "the tree reached the identity, so one file's fact is re-addressed by a change to \
          another file entirely"
     );
-
     store.Materialize(measured, &[]).expect("materializes");
-
     let served = store
         .Current(&asked_again.identity, GenerationId::INITIAL)
         .expect("the store holds the answer to the question the second one asks");
@@ -283,20 +335,12 @@ fn Test_Replacing_A_Snapshot_Should_Invalidate_Exactly_The_Members_That_Differ()
     let changed = Base();
     let mut untouched = Base();
     untouched.subject = Subject(9);
-
     let mut store = Stored(&changed);
     let fact = Fact(&untouched, GenerationId::INITIAL);
     store.Materialize(fact, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
-    let report = store.Invalidate(
-        &GenerationCause::SnapshotReplaced {
-            from: Snapshot(2),
-            to: Snapshot(9),
-            differing: BTreeSet::from([changed.subject]),
-        },
-        next,
-    );
+    let report = Snapshot_Replaced(&mut store, BTreeSet::from([changed.subject]), next);
 
     assert_eq!(report.direct, vec![changed]);
     assert!(
@@ -323,14 +367,7 @@ fn Test_A_Replacement_That_Differs_In_Nothing_Should_Say_So()
     let mut store = Stored(&key);
     let next = GenerationId::INITIAL.Next();
 
-    let report = store.Invalidate(
-        &GenerationCause::SnapshotReplaced {
-            from: Snapshot(2),
-            to: Snapshot(9),
-            differing: BTreeSet::new(),
-        },
-        next,
-    );
+    let report = Snapshot_Replaced(&mut store, BTreeSet::new(), next);
 
     assert_eq!(report.Invalidated(), 0);
     assert!(
@@ -400,13 +437,7 @@ fn Test_A_Changed_Subject_Should_Invalidate_Its_Facts()
     let mut store = Stored(&key);
     let next = GenerationId::INITIAL.Next();
 
-    let report = store.Invalidate(
-        &GenerationCause::SubjectChanged {
-            subject: key.subject,
-            granularity: IncrementalGranularity::File,
-        },
-        next,
-    );
+    let report = Subject_Changed(&mut store, key.subject, next);
 
     assert_eq!(report.direct, vec![key.clone()]);
     assert!(store.Current(&key.At(next), next).is_none(), "an invalidated fact read as current");
@@ -418,19 +449,12 @@ fn Test_An_Unrelated_Fact_Should_Be_Retained()
     let key = Base();
     let mut elsewhere = Base();
     elsewhere.subject = Subject(9);
-
     let mut store = Stored(&key);
     let fact = Fact(&elsewhere, GenerationId::INITIAL);
     store.Materialize(fact, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
-    let report = store.Invalidate(
-        &GenerationCause::SubjectChanged {
-            subject: key.subject,
-            granularity: IncrementalGranularity::File,
-        },
-        next,
-    );
+    let report = Subject_Changed(&mut store, key.subject, next);
 
     assert_eq!(report.Invalidated(), 1, "invalidation flushed the store");
     assert!(
@@ -447,27 +471,11 @@ fn Test_Invalidation_Should_Follow_Dependency_Edges()
     let mut derived = Base();
     derived.contract = CapabilityId::New(SEMANTIC);
     derived.subject = Subject(7);
-
     let mut store = Stored(&read);
-    let fact = Fact(&derived, GenerationId::INITIAL);
-    store
-        .Materialize(
-            fact,
-            &[Dependency {
-                key: read.clone(),
-                outcome: ReadOutcome::Materialized,
-            }],
-        )
-        .expect("materializes");
+    Materialize_Reading(&mut store, &derived, &read, ReadOutcome::Materialized);
     let next = GenerationId::INITIAL.Next();
 
-    let report = store.Invalidate(
-        &GenerationCause::SubjectChanged {
-            subject: read.subject,
-            granularity: IncrementalGranularity::File,
-        },
-        next,
-    );
+    let report = Subject_Changed(&mut store, read.subject, next);
 
     assert_eq!(report.direct, vec![read]);
     assert_eq!(
@@ -490,29 +498,14 @@ fn Test_Invalidation_Should_Follow_Edges_Transitively()
     let mut store = Stored(&read);
     for (key, upstream) in [(&middle, &read), (&outer, &middle)]
     {
-        let fact = Fact(key, GenerationId::INITIAL);
-        store
-            .Materialize(
-                fact,
-                &[Dependency {
-                    key: upstream.clone(),
-                    outcome: ReadOutcome::Materialized,
-                }],
-            )
-            .expect("materializes");
+        Materialize_Reading(&mut store, key, upstream, ReadOutcome::Materialized);
     }
     let next = GenerationId::INITIAL.Next();
 
-    let report = store.Invalidate(
-        &GenerationCause::SubjectChanged {
-            subject: read.subject,
-            granularity: IncrementalGranularity::File,
-        },
-        next,
-    );
-
+    let report = Subject_Changed(&mut store, read.subject, next);
     let mut expected = vec![middle, outer];
     expected.sort();
+
     assert_eq!(report.dependent, expected, "invalidation stopped one edge short");
 }
 
@@ -524,27 +517,12 @@ fn Test_An_Edge_Recorded_By_A_Missed_Read_Should_Still_Carry_Invalidation()
     consumer.subject = Subject(7);
 
     let mut store = MemoryFactStore::New();
-    let consuming = Fact(&consumer, GenerationId::INITIAL);
     let appearing = Fact(&absent, GenerationId::INITIAL);
-    store
-        .Materialize(
-            consuming,
-            &[Dependency {
-                key: absent.clone(),
-                outcome: ReadOutcome::Absent,
-            }],
-        )
-        .expect("materializes");
+    Materialize_Reading(&mut store, &consumer, &absent, ReadOutcome::Absent);
     store.Materialize(appearing, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
-    let report = store.Invalidate(
-        &GenerationCause::SubjectChanged {
-            subject: absent.subject,
-            granularity: IncrementalGranularity::File,
-        },
-        next,
-    );
+    let report = Subject_Changed(&mut store, absent.subject, next);
 
     assert_eq!(
         report.dependent,
@@ -774,12 +752,10 @@ fn Test_Require_Should_Refuse_A_Provider_Below_The_Requirement()
             &Needing(semantic),
         )
         .expect_err("must refuse");
+    let answered = reader.Dependencies().iter().any(|edge| return edge.outcome.Answered());
 
     assert_eq!(refusal, Applicability::MissingCapability);
-    assert!(
-        reader.Dependencies().is_empty() || reader.Dependencies().iter().all(|edge| return !edge.outcome.Answered()),
-        "a fact was returned for a requirement no provider reaches"
-    );
+    assert!(!answered, "a fact was returned for a requirement no provider reaches");
 }
 
 #[test]

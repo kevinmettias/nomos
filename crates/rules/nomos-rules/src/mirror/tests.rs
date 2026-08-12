@@ -278,6 +278,50 @@ fn Only(findings: &[Finding]) -> &Finding
     return findings.first().expect("just asserted the length is one");
 }
 
+/// The findings one world produces over a list of sources.
+fn Judged_In(world: &World, sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut reader = world.Reader();
+
+    return Check_Completeness_Mirrors(sources, &mut reader);
+}
+
+/// Whether anything in a run was called a phantom, which is the only verdict that blocks.
+fn Blocks_Anything(findings: &[Finding]) -> bool
+{
+    return findings
+        .iter()
+        .any(|finding| return finding.gate == GateCategory::Blocking);
+}
+
+/// How many findings the run produced about one subject.
+fn Reported_Times(subject: &str, findings: &[Finding]) -> usize
+{
+    return findings
+        .iter()
+        .filter(|finding| return finding.subject_name == subject)
+        .count();
+}
+
+/// How many findings report a subject the run could not read.
+fn Unavailable(findings: &[Finding]) -> usize
+{
+    return findings
+        .iter()
+        .filter(|finding| return finding.applicability == Applicability::DependencyUnavailable)
+        .count();
+}
+
+/// Every claim the run judged, as a name and a gate, in the order it reports them.
+fn Claims_Judged(findings: &[Finding]) -> Vec<(&str, GateCategory)>
+{
+    return findings
+        .iter()
+        .filter(|finding| return finding.subject_name.starts_with(char::is_uppercase))
+        .map(|finding| return (finding.subject_name.as_str(), finding.gate))
+        .collect();
+}
+
 /// ---- the three instances `OD-COMPLETENESS-001` analyses ----
 ///
 /// None of the three can be replayed from git; each was repaired at the site. They
@@ -567,31 +611,30 @@ fn Test_A_Mirror_Should_Resolve_Only_Through_A_Fact()
     );
     let checking = Source("b.rs", "#[test]\nfn Test_Present()\n{\n}\n");
     let sources = vec![declaring.clone(), checking.clone()];
-
     let with_fact = World_Over(&[(&declaring, &[]), (&checking, &["Test_Present"])]);
-    let mut reader = with_fact.Reader();
-    let resolved = Check_Completeness_Mirrors(&sources, &mut reader);
+    // The same two files, and the store is told about only one of them.
+    let without_fact = World_Over(&[(&declaring, &[])]);
+
+    let resolved = Judged_In(&with_fact, &sources);
+    let unresolved = Judged_In(&without_fact, &sources);
 
     assert!(
         resolved.is_empty(),
         "the fact for the defining file is present, so the claim resolves: {resolved:?}"
     );
+    Assert_Withholding_The_Fact_Leaves_Both_Unresolved(&unresolved);
+}
 
-    // The same two files, and the store is told about only one of them.
-    let without_fact = World_Over(&[(&declaring, &[])]);
-    let mut reader = without_fact.Reader();
-    let unresolved = Check_Completeness_Mirrors(&sources, &mut reader);
-
+/// With the defining file's fact withheld, the subject is named and the claim does not resolve
+/// out of a text the rule can still see.
+fn Assert_Withholding_The_Fact_Leaves_Both_Unresolved(unresolved: &[Finding])
+{
     assert!(
-        unresolved
-            .iter()
-            .any(|finding| return finding.subject_name == "b.rs"),
+        Named("b.rs", unresolved).is_some(),
         "the subject whose fact was withheld must be named: {unresolved:?}"
     );
     assert!(
-        unresolved
-            .iter()
-            .any(|finding| return finding.subject_name == "T"),
+        Named("T", unresolved).is_some(),
         "the claim must not resolve out of a text the rule can still see: {unresolved:?}"
     );
 }
@@ -620,25 +663,14 @@ fn Test_An_Empty_Store_Should_Not_Report_A_Clean_Tree()
         Source("a.rs", "/// Mirrored by `Test_Somewhere`.\npub const T: &[&str] = &[];\n"),
         Source("b.rs", "#[test]\nfn Test_Somewhere()\n{\n}\n"),
     ];
-
     let world = World::Offering(&[(PARSER, Parser_Guarantee())]);
-    let mut reader = world.Reader();
-    let findings = Check_Completeness_Mirrors(&sources, &mut reader);
+    let findings = Judged_In(&world, &sources);
 
     assert!(
         !findings.is_empty(),
         "a run that read no fact at all must not render as a clean tree"
     );
-    assert_eq!(
-        findings
-            .iter()
-            .filter(|finding| {
-                return finding.applicability == Applicability::DependencyUnavailable;
-            })
-            .count(),
-        2,
-        "one finding per unread subject: {findings:?}"
-    );
+    assert_eq!(Unavailable(&findings), 2, "one finding per unread subject: {findings:?}");
     assert!(
         findings
             .iter()
@@ -646,9 +678,7 @@ fn Test_An_Empty_Store_Should_Not_Report_A_Clean_Tree()
         "a rule that read nothing must not stop anybody: {findings:?}"
     );
     assert!(
-        findings
-            .iter()
-            .all(|finding| return finding.gate != GateCategory::Blocking),
+        !Blocks_Anything(&findings),
         "nothing may be reported as a phantom out of an index that was never built"
     );
 }
@@ -717,24 +747,25 @@ fn Test_A_Phantom_In_A_Read_Subject_Should_Block_Though_Another_Subject_Was_Unre
         "a phantom claimed in a file whose facts were read must stop a build whatever \
          some other subject did: {claim:?}"
     );
+    Assert_The_Shortfall_Travels_With_The_Judgment(claim, &judged);
+}
 
-    // The caveat travels with the judgment rather than replacing it. A reader who wants
-    // to know what the run did not see is owed that on the finding, not instead of it.
+/// The caveat travels with the judgment rather than replacing it. A reader who wants to know
+/// what the run did not see is owed that on the finding, not instead of it.
+///
+/// And the unreadable subject is still reported — once now rather than twice. It used to be
+/// counted by the text side as well, which was this rule parsing the file itself; there is one
+/// report because there is one reading.
+fn Assert_The_Shortfall_Travels_With_The_Judgment(claim: &Finding, judged: &[Finding])
+{
     assert!(
         claim.summary.contains("short 1 subject(s)")
             && claim.summary.contains("Test_Renamed_Away"),
         "the blocking finding must carry the shortfall it ruled out: {}",
         claim.summary
     );
-
-    // And the unreadable subject is still reported — once now rather than twice. It
-    // used to be counted by the text side as well, which was this rule parsing the file
-    // itself; there is one report because there is one reading.
     assert_eq!(
-        judged
-            .iter()
-            .filter(|finding| return finding.subject_name == "broken.rs")
-            .count(),
+        Reported_Times("broken.rs", judged),
         1,
         "the unreadable file must still be reported: {judged:?}"
     );
@@ -750,7 +781,29 @@ fn Test_A_Phantom_In_A_Read_Subject_Should_Block_Though_Another_Subject_Was_Unre
 #[test]
 fn Test_A_Claim_In_An_Unread_Subject_Should_Not_Be_A_Phantom()
 {
-    let declaring = Source(
+    let declaring = Declaring_Its_Own_Mirror();
+    let other = Source("b.rs", "#[test]\nfn Test_Something_Else()\n{\n}\n");
+    let sources = vec![declaring.clone(), other.clone()];
+    // Every fact but the declaring file's own, so the index is real and short of it.
+    let world = World_Over(&[(&other, &["Test_Something_Else"])]);
+    let findings = Judged_In(&world, &sources);
+
+    // Since `P10-SYNTAX-V2` the claim is not judged at all, because the universe is not
+    // discovered: discovery reads the fact and this file has none. The property the
+    // test is named for is unchanged and stronger — nothing here is a phantom — and the
+    // subject is still reported, which is what keeps the run from rendering clean.
+    assert!(
+        Named("T", &findings).is_none(),
+        "a claim in a file the rule never read must not be judged at all: {findings:?}"
+    );
+    Assert_The_Unread_Subject_Is_Advisory(&findings);
+}
+
+/// A file that declares a universe and holds the test mirroring it, which is the ordinary
+/// shape in this workspace.
+fn Declaring_Its_Own_Mirror() -> SourceFile
+{
+    return Source(
         "a.rs",
         "/// Mirrored by `Test_Right_Here`.\n\
          pub const T: &[&str] = &[];\n\
@@ -763,27 +816,13 @@ fn Test_A_Claim_In_An_Unread_Subject_Should_Not_Be_A_Phantom()
          \x20   }\n\
          }\n",
     );
-    let other = Source("b.rs", "#[test]\nfn Test_Something_Else()\n{\n}\n");
-    let sources = vec![declaring.clone(), other.clone()];
+}
 
-    // Every fact but the declaring file's own, so the index is real and short of it.
-    let world = World_Over(&[(&other, &["Test_Something_Else"])]);
-    let mut reader = world.Reader();
-    let findings = Check_Completeness_Mirrors(&sources, &mut reader);
-
-    // Since `P10-SYNTAX-V2` the claim is not judged at all, because the universe is not
-    // discovered: discovery reads the fact and this file has none. The property the
-    // test is named for is unchanged and stronger — nothing here is a phantom — and the
-    // subject is still reported, which is what keeps the run from rendering clean.
-    assert!(
-        !findings.iter().any(|finding| return finding.subject_name == "T"),
-        "a claim in a file the rule never read must not be judged at all: {findings:?}"
-    );
-
-    let unread = findings
-        .iter()
-        .find(|finding| return finding.subject_name == "a.rs")
-        .expect("the subject whose fact was missing must be reported");
+/// The subject whose fact was missing is reported, advisory, and stops nobody — and nothing in
+/// the run is a phantom.
+fn Assert_The_Unread_Subject_Is_Advisory(findings: &[Finding])
+{
+    let unread = Named("a.rs", findings).expect("the subject whose fact was missing is reported");
 
     assert_eq!(unread.gate, GateCategory::Advisory);
     assert_eq!(unread.applicability, Applicability::DependencyUnavailable);
@@ -792,9 +831,7 @@ fn Test_A_Claim_In_An_Unread_Subject_Should_Not_Be_A_Phantom()
         "a rule that did not read a subject must not stop anybody over it: {unread:?}"
     );
     assert!(
-        findings
-            .iter()
-            .all(|finding| return finding.gate != GateCategory::Blocking),
+        !Blocks_Anything(findings),
         "nothing may be reported as a phantom out of a file nobody read: {findings:?}"
     );
 }
@@ -847,16 +884,9 @@ fn Test_Two_Claims_Under_One_Shortfall_Should_Be_Judged_Separately()
     );
     let broken = Source("broken.rs", "fn Test_In_The_Broken_File( ??? = ;\n");
     let sources = vec![declaring.clone(), broken.clone()];
-
     let world = World_Over(&[(&declaring, &[])]);
-    let mut reader = world.Reader();
-    let findings = Check_Completeness_Mirrors(&sources, &mut reader);
-
-    let judged: Vec<(&str, GateCategory)> = findings
-        .iter()
-        .filter(|finding| return finding.subject_name.starts_with(char::is_uppercase))
-        .map(|finding| return (finding.subject_name.as_str(), finding.gate))
-        .collect();
+    let findings = Judged_In(&world, &sources);
+    let judged = Claims_Judged(&findings);
 
     assert_eq!(
         judged,
@@ -882,27 +912,21 @@ fn Test_With_No_Provider_Admitted_No_Claim_Should_Be_A_Phantom()
         "a.rs",
         "/// Mirrored by `Test_Nowhere_In_This_Tree`.\npub const T: &[&str] = &[];\n",
     );
-
     let world = World::Offering(&[]);
-    let mut reader = world.Reader();
-    let findings = Check_Completeness_Mirrors(&[source], &mut reader);
+    let findings = Judged_In(&world, &[source]);
 
     // With nothing offering, no fact exists and no universe is discovered — so the
     // claim is not judged rather than judged leniently. `MissingCapability` is still
     // what the run reports, on the subject instead of on the claim, and the finding
     // that must never appear is a phantom.
-    let unread = findings
-        .iter()
-        .find(|finding| return finding.subject_name == "a.rs")
+    let unread = Named("a.rs", &findings)
         .expect("a run with no provider must report the subject it could not read");
 
     assert_eq!(unread.applicability, Applicability::MissingCapability);
     assert_eq!(unread.gate, GateCategory::Advisory);
     assert!(!unread.Can_Fail_A_Build());
     assert!(
-        findings
-            .iter()
-            .all(|finding| return finding.gate != GateCategory::Blocking),
+        !Blocks_Anything(&findings),
         "with no provider admitted there is no index for a name to be absent from, so \
          nothing may be called a phantom: {findings:?}"
     );
@@ -980,6 +1004,25 @@ fn Test_A_Composition_With_No_Provider_Should_Report_A_Missing_Capability()
 #[test]
 fn Test_The_Scanners_Guarantee_Should_Not_Satisfy_This_Rules_Floor()
 {
+    Assert_The_Floor_Admits_Only_A_Parser();
+
+    let source = Source(
+        "a.rs",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+    );
+    let world = World::Offering(&[(SCANNER, Scanner_Guarantee())]);
+    let findings = Judged_In(&world, &[source]);
+
+    // The floor keeps the scanner's answer out, so no fact reaches the rule and the
+    // universe is not discovered. What the run reports is the subject, as a missing
+    // capability — and crucially not as a universe that declares no mirror, which is
+    // the downgrade `nomos.syntax.items.v2` and this floor both exist to prevent.
+    Assert_The_Run_Reports_A_Missing_Capability(&findings);
+}
+
+/// A scanner's approximation is below the floor and a parser's guarantee meets it.
+fn Assert_The_Floor_Admits_Only_A_Parser()
+{
     let floor = Syntax_Requirement().minimum;
 
     assert!(
@@ -990,22 +1033,13 @@ fn Test_The_Scanners_Guarantee_Should_Not_Satisfy_This_Rules_Floor()
         Parser_Guarantee().Satisfies(&floor),
         "a floor no provider can meet is a declared need with nothing behind it"
     );
+}
 
-    let source = Source(
-        "a.rs",
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
-    );
-    let world = World::Offering(&[(SCANNER, Scanner_Guarantee())]);
-    let mut reader = world.Reader();
-    let findings = Check_Completeness_Mirrors(&[source], &mut reader);
-
-    // The floor keeps the scanner's answer out, so no fact reaches the rule and the
-    // universe is not discovered. What the run reports is the subject, as a missing
-    // capability — and crucially not as a universe that declares no mirror, which is
-    // the downgrade `nomos.syntax.items.v2` and this floor both exist to prevent.
-    let unread = findings
-        .iter()
-        .find(|finding| return finding.subject_name == "a.rs")
+/// With only a scanner admitted the rule could not run, so it reports the subject rather than
+/// the universe, and may not block on anything.
+fn Assert_The_Run_Reports_A_Missing_Capability(findings: &[Finding])
+{
+    let unread = Named("a.rs", findings)
         .expect("the subject no admitted provider answered for must be reported");
 
     assert_eq!(unread.applicability, Applicability::MissingCapability);
@@ -1014,9 +1048,7 @@ fn Test_The_Scanners_Guarantee_Should_Not_Satisfy_This_Rules_Floor()
         "with only a scanner admitted the rule could not run, so it may not block"
     );
     assert!(
-        findings
-            .iter()
-            .all(|finding| return finding.gate != GateCategory::Blocking),
+        !Blocks_Anything(findings),
         "an approximate provider must not be able to produce a blocking finding here"
     );
 }
@@ -1043,12 +1075,16 @@ fn Test_A_Universe_Read_Through_A_Blind_Provider_Should_Not_Be_An_Admitted_Gap()
         nomos_cap_syntax::SCHEMA,
         Blind_Payload(&["T"]),
     );
-    let mut reader = world.Reader();
-    let findings = Check_Completeness_Mirrors(&[source], &mut reader);
+    let findings = Judged_In(&world, &[source]);
 
-    let unobserved = findings
-        .iter()
-        .find(|finding| return finding.subject_name == "a.rs")
+    Assert_Nothing_Was_Observed(&findings);
+}
+
+/// A payload that observed nothing about a file is reported as unparseable, naming the field
+/// it could not see — and the universe inside it is not judged at all.
+fn Assert_Nothing_Was_Observed(findings: &[Finding])
+{
+    let unobserved = Named("a.rs", findings)
         .expect("a file whose provider saw no documentation must be reported");
 
     assert_eq!(unobserved.applicability, Applicability::Unparseable);
@@ -1058,7 +1094,7 @@ fn Test_A_Universe_Read_Through_A_Blind_Provider_Should_Not_Be_An_Admitted_Gap()
         unobserved.summary
     );
     assert!(
-        !findings.iter().any(|finding| return finding.subject_name == "T"),
+        Named("T", findings).is_none(),
         "the universe must not be judged out of a payload that observed nothing about \
          it: {findings:?}"
     );
