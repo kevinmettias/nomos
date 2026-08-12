@@ -1,48 +1,19 @@
-//! The provider against a corpus it did not write.
+//! Every claim this suite makes about the corpus, beside the root that gates them all.
 //!
-//! Everything in `tests/guarantee.rs` is a sample chosen by the person asserting the
-//! property, which is the weakest possible evidence that a reader works: the samples were
-//! written by somebody who already knew what the reader did. This file points it at
-//! `F:/repos/xvpe` — several thousand files of somebody else's Rust, none of it written
-//! with this provider in mind.
-//!
-//! # Every number here comes with what it was measured over
-//!
-//! A corpus report that says "3 files failed" and not "3 of 7604" is a number nobody can
-//! calibrate, and one that says "0 findings" without saying how many files it opened is
-//! the shape of a check that walked nothing and reported clean. Every assertion below
-//! either names its denominator or fails.
-//!
-//! # Opt-in by path, and loud when configured and unreadable
-//!
-//! `NOMOS_RUST_CORPUS` overrides the root. When it is set and unreadable the tests fail,
-//! because a gate that quietly skips its own subject is worse than one that fails. When
-//! it is unset and the default root is absent — any machine that is not this one — the
-//! tests return, having asserted nothing and said so. This is the same bargain
-//! `nomos-spec-model`'s `normalizer_gate` strikes with `NOMOS_V14_CORPUS`.
-//!
-//! Reading these files is not a dependency on the sibling workspace. D-130 governs what
-//! Nomos may *build against*, and this crate builds against nothing there; it reads text.
+//! All six tests are here because all six are corpus-gated and the derivation behind
+//! `tests/contract/tests/corpus_gates.rs` follows calls within one file. None of these tests
+//! names `NOMOS_RUST_CORPUS`; each reaches it through [`Corpus_Or_Skip`], so moving one to a
+//! sibling module would leave it gated in fact and counted by nobody.
 
-use nomos_lang_rust::{Read_Source, Reading, Recognition, SyntaxFacts, SyntaxItem};
-use std::collections::{BTreeMap, BTreeSet};
+use crate::soundness::Names_Checked;
+use crate::walk::{Each_File, Rust_Files};
+use crate::walked::{Report_The_Walk, Walk};
+use nomos_lang_rust::{Read_Source, Recognition};
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
 /// The corpus this provider was built to survive.
 const DEFAULT_ROOT: &str = "F:/repos/xvpe";
-
-/// Directories that are not somebody's source.
-///
-/// `target` is compiler output — reading it would inflate every count here with generated
-/// code and measure this provider against rustc's formatting rather than against a person's.
-/// `.git` is object storage that happens to sit in the tree.
-const NOT_SOURCE: &[&str] = &["target", ".git"];
-
-/// Name segments that are the provider declining to name something.
-///
-/// `*` is a glob import and `_` is a type with no single head. Neither is a claim that an
-/// identifier of that spelling appears in the file, so neither is checked against one.
-const NAMELESS: &[&str] = &["*", "_"];
 
 /// The floor below which this corpus is not the corpus.
 ///
@@ -52,10 +23,10 @@ const NAMELESS: &[&str] = &["*", "_"];
 /// reporting success.
 const EXPECTED_AT_LEAST: usize = 5_000;
 
-struct Corpus
+pub(crate) struct Corpus
 {
-    root: PathBuf,
-    files: Vec<PathBuf>,
+    pub(crate) root: PathBuf,
+    pub(crate) files: Vec<PathBuf>,
 }
 
 /// Locates the corpus, or explains why there is nothing to measure.
@@ -101,160 +72,6 @@ fn Report_The_Absence(configured: Option<&std::ffi::OsStr>, root: &Path)
     );
 }
 
-/// Every file under a root that is not inside a directory nobody's source lives in.
-///
-/// The two walks in this file — the one collecting what the provider reads and the one
-/// counting what it skips — differ only in what they do with a file. The walk is shared, so
-/// a directory exclusion cannot apply to one of them and not the other.
-fn Each_File(root: &Path, mut visit: impl FnMut(&Path, &str))
-{
-    let mut pending = vec![root.to_path_buf()];
-
-    while let Some(directory) = pending.pop()
-    {
-        let Ok(entries) = std::fs::read_dir(&directory)
-        else
-        {
-            continue;
-        };
-
-        for entry in entries.flatten()
-        {
-            Visit(&entry, &mut pending, &mut visit);
-        }
-    }
-}
-
-/// One directory entry: a source directory is queued, and a file is handed to the caller.
-fn Visit(
-    entry: &std::fs::DirEntry,
-    pending: &mut Vec<PathBuf>,
-    visit: &mut impl FnMut(&Path, &str),
-)
-{
-    let path = entry.path();
-    let name = entry.file_name();
-    let name = name.to_string_lossy();
-
-    if !path.is_dir()
-    {
-        visit(&path, &name);
-
-        return;
-    }
-    if !NOT_SOURCE.contains(&name.as_ref())
-    {
-        pending.push(path);
-    }
-}
-
-/// Every recognized file under a root, in a deterministic order.
-///
-/// Sorted rather than left in directory order, so that a failure names the same file on
-/// two machines and a report of "the first ten failures" is the same ten.
-fn Rust_Files(root: &Path) -> Vec<PathBuf>
-{
-    let mut found = Vec::new();
-
-    // Recognition decides, rather than a second extension check written here. Two answers
-    // to "does this provider read this file" is one answer too many.
-    Each_File(root, |path, name| {
-        if Recognition::Of_Path(name) == Recognition::Recognized
-        {
-            found.push(path.to_path_buf());
-        }
-    });
-    found.sort();
-
-    return found;
-}
-
-/// Every identifier-shaped token in a source file.
-///
-/// Built once per file so soundness can be checked by membership rather than by a
-/// substring scan per item, which over this corpus is the difference between a test that
-/// runs and one nobody waits for.
-///
-/// `#` is part of a token because a raw identifier is spelled `r#match`, and the provider
-/// reports it that way — the name as written, which is the whole stance of a syntactic
-/// reader. The corpus is what surfaced this: `xvpe-collections` declares `mod r#match;`,
-/// and a tokenizer that split on `#` reported the provider unsound for saying exactly
-/// what the file says.
-fn Identifiers(source: &str) -> BTreeSet<&str>
-{
-    return source
-        .split(|character: char| {
-            return !character.is_alphanumeric() && character != '_' && character != '#';
-        })
-        .filter(|token| return !token.is_empty())
-        .collect();
-}
-
-/// What a walk of the corpus found.
-#[derive(Default)]
-struct Walked
-{
-    read: usize,
-    refused: Vec<(PathBuf, String)>,
-    unreadable: Vec<PathBuf>,
-    items: usize,
-    unexpanded: u64,
-    declaring_nothing: usize,
-}
-
-fn Walk(corpus: &Corpus) -> Walked
-{
-    let mut walked = Walked::default();
-
-    for path in &corpus.files
-    {
-        walked.Read_One(path);
-    }
-
-    return walked;
-}
-
-impl Walked
-{
-    /// One file, under whichever of the three outcomes it reached.
-    ///
-    /// A file that cannot be read off disk is not a file that failed to parse. One is this
-    /// provider's answer about the source; the other is the machine, and folding them
-    /// together would attribute an antivirus lock to a syntax error.
-    fn Read_One(&mut self, path: &Path)
-    {
-        let Ok(source) = std::fs::read_to_string(path)
-        else
-        {
-            self.unreadable.push(path.to_path_buf());
-
-            return;
-        };
-
-        match Read_Source(&source)
-        {
-            Reading::Parsed(facts) => self.Counted(&facts),
-            Reading::Unparseable(failure) =>
-            {
-                self.refused.push((path.to_path_buf(), failure.to_string()));
-            }
-        }
-    }
-
-    /// One file this provider answered for, folded into the totals.
-    fn Counted(&mut self, facts: &SyntaxFacts)
-    {
-        self.read = self.read.saturating_add(1);
-        self.items = self.items.saturating_add(facts.items.len());
-        self.unexpanded = self.unexpanded.saturating_add(u64::from(facts.unexpanded));
-
-        if facts.Declares_Nothing()
-        {
-            self.declaring_nothing = self.declaring_nothing.saturating_add(1);
-        }
-    }
-}
-
 /// The headline. Real files, real items, and every figure stated over its denominator.
 #[test]
 fn Test_The_Corpus_Should_Yield_Syntax_Facts()
@@ -288,23 +105,6 @@ fn Test_The_Corpus_Should_Yield_Syntax_Facts()
          reader that stopped reading",
         walked.declaring_nothing,
         walked.read
-    );
-}
-
-/// Every figure a run prints, each stated over the denominator it was measured against.
-fn Report_The_Walk(corpus: &Corpus, walked: &Walked)
-{
-    eprintln!(
-        "{}: {} Rust files, {} read, {} refused, {} unreadable, {} items, {} unexpanded \
-         regions, {} files declaring nothing",
-        corpus.root.display(),
-        corpus.files.len(),
-        walked.read,
-        walked.refused.len(),
-        walked.unreadable.len(),
-        walked.items,
-        walked.unexpanded,
-        walked.declaring_nothing
     );
 }
 
@@ -392,7 +192,7 @@ fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
 ///
 /// Every name the provider reports occurs as an identifier in the file it was read from.
 /// The sample version of this lives in `tests/guarantee.rs`; this is the version where
-/// the provider has not seen the input.
+/// the provider has not seen the input. [`crate::soundness`] holds the membership check.
 #[test]
 fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
 {
@@ -423,62 +223,6 @@ fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
     );
 }
 
-/// How many names one file's facts were checked against its own identifiers.
-///
-/// `None` for a file this walk could not read or the provider would not parse. Those are
-/// counted elsewhere and neither is a soundness failure.
-fn Names_Checked(path: &Path) -> Option<u64>
-{
-    let Ok(source) = std::fs::read_to_string(path)
-    else
-    {
-        return None;
-    };
-    let Reading::Parsed(facts) = Read_Source(&source)
-    else
-    {
-        return None;
-    };
-    let identifiers = Identifiers(&source);
-    let mut checked = 0_u64;
-
-    for item in &facts.items
-    {
-        let named = Assert_Names_Occur(path, item, &identifiers);
-
-        checked = checked.saturating_add(named);
-    }
-
-    return Some(checked);
-}
-
-/// Every name segment one item reports occurs as an identifier in the file it came from.
-///
-/// `*` for a glob import and `_` for a type with no single head are this provider saying it
-/// has no name, not names it claims to have found.
-fn Assert_Names_Occur(path: &Path, item: &SyntaxItem, identifiers: &BTreeSet<&str>) -> u64
-{
-    let named = item
-        .name
-        .split("::")
-        .filter(|segment| return !segment.is_empty() && !NAMELESS.contains(segment));
-    let mut checked = 0_u64;
-
-    for segment in named
-    {
-        assert!(
-            identifiers.contains(segment),
-            "{} reports `{}` ({}) and `{segment}` is not an identifier in that file",
-            path.display(),
-            item.Qualified_Name(),
-            item.kind
-        );
-        checked = checked.saturating_add(1);
-    }
-
-    return checked;
-}
-
 /// Reading is a function of the bytes, checked against the corpus rather than against a
 /// sample.
 ///
@@ -498,7 +242,7 @@ fn Assert_Names_Occur(path: &Path, item: &SyntaxItem, identifiers: &BTreeSet<&st
 /// CI, because it is gated: without `NOMOS_RUST_CORPUS` this returns early and prints
 /// `ok`, which `docs/records/OD-GATE-001` measures across the suite at 68 assertions. The
 /// declaration is therefore also checked over in-repository fixtures in
-/// `tests/integration/tests/determinism.rs`, which is where a gate run actually verifies
+/// `tests/integration/tests/determinism/`, which is where a gate run actually verifies
 /// it. Read the two together: this one has the scale, that one has the reach.
 #[test]
 fn Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts()

@@ -90,7 +90,9 @@ const VARIABLES: &[&str] = &[ARCHIVES, RUST, V14];
 /// Every test file that reaches a corpus, with what it gates.
 const GATES: &[Gate] = &[
     Gate {
-        path: "crates/languages/nomos-lang-rust/tests/corpus.rs",
+        // All six tests of the suite are gated, so all six are in this one module with the
+        // root that gates them; what moved out was the walk and the machinery, not a claim.
+        path: "crates/languages/nomos-lang-rust/tests/corpus/claims.rs",
         variables: &[RUST],
         gated: 6,
         tests: 6,
