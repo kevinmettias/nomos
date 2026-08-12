@@ -6508,17 +6508,13 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [
         "P10-INTAKE-SURFACE",
         "P10-SUBMISSION-VALIDATION"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-submission-layout-s22",
-        "acquired_at": 1786386001,
-        "lease_expires_at": 1786401710
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -6540,7 +6536,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-submission-layout-s22",
+          "reason": "Lapsed claim released. The lease on this ran out on 2026-08-10 at 15:41 and the holder has not renewed it in over a day, so the item is back on the board unchanged.\n\nReleased rather than left lapsed because its territory reserves crates/spec/nomos-spec-store/src, crates/spec/nomos-spec-model/src and crates/spec/nomos-spec-bundle/src whole, and a lapsed claim on three source directories reports every file under them as held to anyone reading the board. Nothing about the item is decided here. Confirmed stale with the operator before releasing.",
+          "abandoned_at": 1786505786
+        }
+      ],
       "displaced": [],
       "declined": null
     },
@@ -9015,19 +9017,85 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-named-literals-s1",
-        "acquired_at": 1786500720,
-        "lease_expires_at": 1786515120
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
           "test",
           "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-named-literals-s1",
+          "reason": "Claim released, not the item. The session holding this committed its first pass at 77906ff and did not return; check-literals still reads 151 findings in this workspace, so the done_when is unmet and the item stays on the board for whoever takes it next.\n\nThe claim is released because its territory -- 28 files across the spec band, the CLI and substrate -- is most of what the decompose-file sweep must split, and a lease running to a wall-clock hour is not evidence a session is alive behind it. Confirmed stale with the operator before releasing.",
+          "abandoned_at": 1786505751
+        }
+      ],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-FILE-DECOMPOSITION",
+      "title": "A file here can hold twenty-four types, so its name stops saying what is in it",
+      "why": "A file is the unit a reader navigates by, and this workspace has files whose names no longer say what they hold. crates/spec/nomos-spec-bundle/src/model.rs declares twenty-four public types; crates/spec/nomos-spec-store/src/authoring.rs declares eleven across 1789 lines; crates/spec/nomos-spec-model/src/submission.rs declares nine across 973. A reader looking for Blob, StagedEdit or Severity cannot find it by filename, an import pulls in twenty-three types it did not want, and no reviewer can hold the surface of such a file in one reading.\n\nThe decompose-file phase of the code-standards suite reads three of its five checks red against this workspace: check-one-public-type 66 findings across 19 files, check-responsibility-extraction 16 across 12, check-file-size 12 across 12. The other two, check-class-size and check-extractable-subset, are already clean, so the defect is file boundaries and not type cohesion. The three overlap by construction: the same twenty-four-type file is one finding for its type count, one for its public surface breadth, and one for its length.\n\nTwo earlier sweeps did this for the substrate band -- 43c5a63..ef1c93f, Give",
+      "done_when": "check-one-public-type, check-responsibility-extraction, check-class-size, check-extractable-subset and check-file-size from the code-standards suite each report no finding in this workspace production code, run in that order and each re-run over every file after the previous one is clean, because splitting a file for one of them moves the other two.\n\nEvery type the split moves keeps the path it is imported by, so no caller outside its crate changes: a file that becomes a directory re-exports its parts from the module that replaced it. The three public-surface snapshots under tests/contract/surface stay byte-identical unless a name genuinely left the surface, and any that changes is committed with the change that caused it.\n\nA file kept whole against the rule carries a reasoned marker naming the coupling that keeps it together, not a bare one, and the reason names the algorithm or the locality rather than restating the size.\n\ncargo test for every crate the split reaches stays green, and the gate lint step stays clean. Findings inside inline #[cfg(test)] modules and under tests/ are out of scope: the checks skip test sources by default and this item does not turn that off.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/src",
+          "crates/spec/nomos-spec-model/src",
+          "crates/spec/nomos-spec-store/src",
+          "crates/spec/nomos-spec-ingest/src",
+          "crates/capabilities/nomos-cap-syntax/src",
+          "crates/substrate/nomos-capability/src",
+          "crates/substrate/nomos-workspace/src",
+          "crates/substrate/nomos-ledger/src",
+          "crates/host/nomos-cli/src",
+          "crates/platform/nomos-platform-std/src",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-file-decomposition-s1",
+        "acquired_at": 1786505851,
+        "lease_expires_at": 1786520251
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-capability",
+          "-p",
+          "nomos-workspace",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 600
       },
