@@ -1,0 +1,136 @@
+//! The bodies of the three verbs that change the board, and of the check over the whole of it.
+//!
+//! Each of these is the body of a method on [`FileLedger`] and not the method. The method
+//! keeps its own documentation and its signature in `mod.rs`, because that is where a reader
+//! of the crate's surface looks and where `tests/contract`'s snapshot reads it from: that
+//! reader resolves `pub use store::FileLedger` against one module, so a `pub fn` written on
+//! the type anywhere else is public and unrecorded.
+
+use std::time::Duration;
+
+use nomos_platform::{Clock, CrossProcessLock, FileSystem};
+
+use crate::add_refusal::AddRefusal;
+use crate::claim::Claim;
+use crate::claim_refusal::ClaimRefusal;
+use crate::exclusion::Check_Lease;
+use crate::item::LedgerItem;
+use crate::item_id::ItemId;
+use crate::ledger_error::LedgerError;
+use crate::reservation::Reservation;
+use crate::territory::Territory;
+
+use super::claiming::Replace_Lapsed;
+use super::file::Decide_Under_Lock;
+use super::refusal::{Decline_Refusal, Takeover_Refusal};
+use super::reservation::Refuse_A_Spent_Record;
+use super::validation::Validate;
+use super::FileLedger;
+
+/// The body of [`FileLedger::Validate_Current`], which keeps the documentation and the signature.
+pub(super) fn Validate_Current<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+) -> Result<(), LedgerError>
+{
+    let violations = Validate(&ledger.Load()?, ledger.clock.Now());
+
+    return if violations.is_empty()
+    {
+        Ok(())
+    }
+    else
+    {
+        Err(LedgerError::Invalid { violations })
+    };
+}
+
+/// The body of [`FileLedger::Add`], which keeps the documentation and the signature.
+pub(super) fn Add<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    item: &LedgerItem,
+    holder: &str,
+    published: &Territory,
+    amending: &Territory,
+) -> Result<(), AddRefusal>
+{
+    return Decide_Under_Lock(ledger, holder, |document, _now| {
+        if document
+            .items
+            .iter()
+            .any(|existing| existing.id == item.id)
+        {
+            return Err(AddRefusal::AlreadyPresent {
+                item: item.id.clone(),
+            });
+        }
+
+        Refuse_A_Spent_Record(item, document, published, amending)?;
+
+        document.items.push(item.clone());
+
+        return Ok(());
+    });
+}
+
+/// The body of [`FileLedger::Decline`], which keeps the documentation and the signature.
+pub(super) fn Decline<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    item: &ItemId,
+    holder: &str,
+    reason: &str,
+) -> Result<(), ClaimRefusal>
+{
+    return Decide_Under_Lock(ledger, holder, |document, now| {
+        if let Some(refusal) = Decline_Refusal(document, item, now)
+        {
+            return Err(refusal);
+        }
+
+        for candidate in &mut document.items
+        {
+            if &candidate.id == item
+            {
+                // `LedgerItem::Decline` and not two statements here, for the reason
+                // `Replace_Lapsed_Claim` is one call: a call site that wrote the state
+                // itself would be free to write it and not the declination, and the
+                // declination is the half this verb was added to keep.
+                candidate.Decline(reason, holder, now);
+            }
+        }
+
+        return Ok(());
+    });
+}
+
+/// The body of [`FileLedger::Take_Over`], which keeps the documentation and the signature.
+pub(super) fn Take_Over<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &mut FileLedger<F, C, L>,
+    item: &ItemId,
+    holder: &str,
+    lease: Duration,
+) -> Result<Reservation, ClaimRefusal>
+{
+    Check_Lease(lease)?;
+
+    return Decide_Under_Lock(ledger, holder, |document, now| {
+        let expires_at = now.Plus(lease);
+
+        if let Some(refusal) = Takeover_Refusal(document, item, now)
+        {
+            return Err(refusal);
+        }
+
+        let replacement = Claim {
+            holder: holder.to_owned(),
+            acquired_at: now,
+            lease_expires_at: expires_at,
+        };
+        Replace_Lapsed(document, item, &replacement, now)?;
+
+        return Ok(Reservation {
+            item: item.clone(),
+            holder: holder.to_owned(),
+            expires_at,
+        });
+    });
+}
