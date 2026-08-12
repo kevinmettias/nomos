@@ -6,7 +6,6 @@
 
 #![allow(dead_code)]
 
-use crate::register::V15;
 use nomos_spec_ingest::{Archive, Parse_Catalog};
 use std::path::Path;
 
@@ -22,6 +21,8 @@ pub(crate) fn Catalog_Entities(corpus: &Path) -> u32
 
 pub(crate) fn V15_Records(archives: &Path) -> u32
 {
+    use crate::register::V15;
+
     let archive =
         Archive::Open(&archives.join(V15)).unwrap_or_else(|error| panic!("{error}"));
     let matched = archive

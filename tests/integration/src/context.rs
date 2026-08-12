@@ -16,7 +16,6 @@
 
 use nomos_capability::Registry;
 use nomos_contracts::{ConfigurationId, Guarantee};
-use nomos_model::Content_Digest;
 use nomos_workspace::BuildVariant;
 
 /// The schema of the configuration rendering below.
@@ -123,6 +122,8 @@ fn Render_The_Offers(
 #[must_use]
 pub fn Resolved_Configuration(registry: &Registry) -> ConfigurationId
 {
+    use nomos_model::Content_Digest;
+
     return ConfigurationId::From_Digest(Content_Digest(
         Configuration_Rendering(registry).as_bytes(),
     ));

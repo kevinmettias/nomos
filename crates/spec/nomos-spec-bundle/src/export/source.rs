@@ -1,17 +1,10 @@
 //! Reading the source corpus out: the blobs, the documents, and everything addressed inside one.
 
 use crate::BundleError;
-use crate::Blob;
-use crate::BlobEncoding;
 use crate::DocumentRef;
-use crate::OrdinalRef;
 use crate::Record;
-use crate::SourceBlock;
-use crate::SourceDocument;
-use crate::SourceHeading;
 use crate::SourceTableRow;
 use base64::Engine as _;
-use base64::engine::general_purpose::STANDARD;
 use rusqlite::Connection;
 
 use super::{Collect, Columns, Decoded};
@@ -44,6 +37,10 @@ pub(super) fn Blobs(connection: &Connection, records: &mut Vec<Record>) -> Resul
 /// where it is not.
 fn A_Blob(sha256: String, byte_length: i64, content: Vec<u8>) -> Record
 {
+    use crate::Blob;
+    use crate::BlobEncoding;
+    use base64::engine::general_purpose::STANDARD;
+
     let (encoding, spelled) = match String::from_utf8(content)
     {
         Ok(text) => (BlobEncoding::Utf8, text),
@@ -60,6 +57,8 @@ fn A_Blob(sha256: String, byte_length: i64, content: Vec<u8>) -> Record
 
 pub(super) fn Source_Documents(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::SourceDocument;
+
     return Collect(
         connection,
         records,
@@ -79,6 +78,8 @@ pub(super) fn Source_Documents(connection: &Connection, records: &mut Vec<Record
 
 pub(super) fn Source_Headings(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::SourceHeading;
+
     return Collect(
         connection,
         records,
@@ -102,6 +103,8 @@ pub(super) fn Source_Headings(connection: &Connection, records: &mut Vec<Record>
 
 pub(super) fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::SourceBlock;
+
     return Collect(
         connection,
         records,
@@ -154,6 +157,8 @@ pub(super) fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Recor
 /// One row and the JSON cells column that travels beside it, still undecoded.
 fn Read_A_Table_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(SourceTableRow, String)>
 {
+    use crate::OrdinalRef;
+
     let mut columns = Columns::Of(row);
     let block = OrdinalRef {
         document: DocumentRef {

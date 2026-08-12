@@ -4,11 +4,8 @@
 //! store rebuilt identically every time cannot show whether anything in it is ordered by a
 //! surrogate.
 
-use nomos_spec_bundle::Export;
-use nomos_spec_model::Segment;
 use nomos_spec_project::{Build, Profile};
 use nomos_spec_store::SpecificationStore;
-use std::cell::Cell;
 
 /// A specification corpus small enough to read and rich enough to order wrongly.
 ///
@@ -46,6 +43,8 @@ pub(crate) enum Order
 
 fn Spec_Store(order: Order) -> SpecificationStore
 {
+    use nomos_spec_model::Segment;
+
     let mut store = SpecificationStore::In_Memory().expect("an in-memory store opens");
     let mut documents = vec![
         ("volumes/02-core.md", SPEC_CORE),
@@ -199,6 +198,8 @@ const SPEC_LINEAGE: &str =
 /// The bundle a store of the fixture corpus exports, as text.
 pub(crate) fn Bundle_Bytes(order: Order) -> Vec<u8>
 {
+    use nomos_spec_bundle::Export;
+
     let store = Spec_Store(order);
     let bundle = Export(&store).expect("the fixture exports");
 
@@ -278,6 +279,8 @@ pub(crate) fn Projection_Bytes(order: Order) -> Vec<u8>
 /// [`Verify`]: nomos_integration_tests::Verify
 pub(crate) fn Alternating(build: fn(Order) -> Vec<u8>) -> impl Fn() -> Vec<u8>
 {
+    use std::cell::Cell;
+
     let backwards = Cell::new(false);
 
     return move || {

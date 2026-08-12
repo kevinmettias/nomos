@@ -3,9 +3,7 @@
 //! A skipped entry is an assessment that quietly stops being one — `OD-SPEC-005`'s defect
 //! in this registry's clothes — so the reader has no lenient path at all.
 
-use crate::assessment::REGISTRY;
 use crate::registry::{Entries, Is_Requirement_Id, Parse};
-use nomos_contract_tests::Workspace;
 
 /// Every refusal, asserted as an `Err` rather than as a short `Ok`.
 #[test]
@@ -112,6 +110,9 @@ fn Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number()
 #[test]
 fn Test_The_Reader_Should_Enumerate_The_Directory_It_Is_Given()
 {
+    use crate::assessment::REGISTRY;
+    use nomos_contract_tests::Workspace;
+
     let root = Workspace::Workspace_Root();
     // Non-empty rather than at the floor. How many entries there are is
     // `Test_The_Assessed_Set_Should_Not_Shrink`'s fact, and asserting it here as well would

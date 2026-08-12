@@ -1,7 +1,6 @@
 //! Step three: the edit, read and accepted, not yet inspected.
 
 use nomos_spec_model::Record;
-use nomos_spec_model::Segment;
 
 use crate::authoring::{Block_Changes, Identity_Changes, Relation_Changes};
 use crate::ClaimedRecord;
@@ -28,6 +27,8 @@ impl StagedEdit
     /// Returns [`EditError`] if the store cannot be read.
     pub fn Preview(self, store: &SpecificationStore) -> Result<EditPreview, EditError>
     {
+        use nomos_spec_model::Segment;
+
         let before = store.Stored_Blocks(self.claimed.document_uid)?;
         let after = Segment(&self.record.body);
         let blocks = Block_Changes(&before, &after);

@@ -6,11 +6,12 @@
 
 use crate::store::{For_Building, Populated, Shipped};
 use nomos_spec_project::{Build, Content, Format};
-use std::collections::BTreeSet;
 
 #[test]
 fn Test_Every_Shipped_Profile_Should_Parse_And_Be_Distinct()
 {
+    use std::collections::BTreeSet;
+
     let catalogue = Shipped();
 
     assert_eq!(

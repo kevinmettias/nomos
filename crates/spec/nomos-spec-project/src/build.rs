@@ -9,7 +9,6 @@ use crate::Profile;
 use crate::Input;
 use crate::Projection;
 use crate::Render;
-use crate::Select;
 use crate::ProjectError;
 use nomos_spec_model::ContentHash;
 use nomos_spec_store::SpecificationStore;
@@ -51,6 +50,8 @@ impl Stamp
 
 pub fn Build(store: &SpecificationStore, profile: &Profile) -> Result<Output, ProjectError>
 {
+    use crate::Select;
+
     profile.Validate()?;
     Refuse_Unresolved(profile)?;
 

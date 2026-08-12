@@ -1,6 +1,5 @@
 //! Derivation, not duplication.
 
-use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
 
 /// The test that fails if somebody writes the clippy line into `nomos-ledger` as a
 /// constant. A derived step follows the workflow; a copied one silently disagrees with it
@@ -8,6 +7,8 @@ use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
 #[test]
 fn Test_Changing_The_Workflow_Should_Change_What_Finish_Runs()
 {
+    use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
+
     let altered = WORKFLOW.replace("--all-targets", "--lib");
     let scripted = Scripted::New(0, 0);
     let Bench {

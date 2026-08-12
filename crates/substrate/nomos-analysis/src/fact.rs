@@ -20,7 +20,6 @@ pub use store::FactStore;
 pub(crate) use store::sealed;
 
 use nomos_contracts::{Digest128, SchemaId};
-use nomos_model::Content_Digest;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct FactPayload
@@ -40,6 +39,8 @@ impl FactPayload
     #[must_use]
     pub fn Digest(&self) -> Digest128
     {
+        use nomos_model::Content_Digest;
+
         return Content_Digest(&self.bytes);
     }
 }

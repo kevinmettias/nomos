@@ -6,7 +6,6 @@
 //! both directions matter, and neither can be seen from inside the harness, which is why
 //! the observer reads it from outside.
 
-use crate::reading::source_files::Source_Files;
 use crate::Workspace;
 use std::collections::BTreeSet;
 
@@ -20,6 +19,8 @@ use std::collections::BTreeSet;
 #[must_use]
 pub fn Harnessed_Strategies() -> BTreeSet<String>
 {
+    use crate::reading::source_files::Source_Files;
+
     let workspace = Workspace::Load();
     let mut found = BTreeSet::new();
     let Some(harness) = workspace.Get("nomos-integration-tests")

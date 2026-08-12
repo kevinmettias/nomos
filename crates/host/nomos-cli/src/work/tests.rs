@@ -1,7 +1,5 @@
 //! What the work verbs promise, exercised.
 
-use std::time::Duration;
-
 use super::*;
 use super::parse::{Parse_Duration, Usage_Text};
 use nomos_ledger::{DEFAULT_LEASE, ItemState, LedgerDocument};
@@ -64,6 +62,8 @@ fn Test_Takeover_Should_Not_Parse_As_A_Claim()
 #[test]
 fn Test_Lease_Units_Should_Parse()
 {
+    use std::time::Duration;
+
     assert_eq!(Parse_Duration("2h").unwrap(), Duration::from_secs(7_200));
     assert_eq!(Parse_Duration("30m").unwrap(), Duration::from_secs(1_800));
     assert_eq!(Parse_Duration("45s").unwrap(), Duration::from_secs(45));

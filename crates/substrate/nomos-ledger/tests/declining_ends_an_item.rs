@@ -11,7 +11,7 @@
 
 use nomos_ledger::{
     ClaimRefusal, ExclusionLedger, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem,
-    ReleaseOutcome, SCHEMA_VERSION, Territory as ItemTerritory, VerificationRecord,
+    ReleaseOutcome, SCHEMA_VERSION, VerificationRecord,
 };
 use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem};
@@ -41,6 +41,8 @@ fn At(seconds: i64) -> Timestamp
 
 fn Item(id: &str, files: &[&str]) -> LedgerItem
 {
+    use nomos_ledger::Territory as ItemTerritory;
+
     return LedgerItem {
         id: ItemId::New(id),
         title: format!("work item {id}"),

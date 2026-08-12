@@ -8,7 +8,6 @@
 
 use crate::corpus::{Alpha_One, Loose, Precision_Corpus};
 use nomos_analysis::{FactStore, MaterializedFact};
-use nomos_cap_syntax as syntax;
 use nomos_contracts::{Applicability, CapabilityId};
 use nomos_integration_tests::{
     Approximate_Floor, Decode_Surface, Registered, Resolved, RunReport, Slice, SourceFile
@@ -211,6 +210,8 @@ fn Test_The_Two_Providers_Should_Disagree_About_A_File_Both_Can_Read()
 #[test]
 fn Test_Both_Providers_Should_Offer_Against_A_Contract_Neither_Declares()
 {
+    use nomos_cap_syntax as syntax;
+
     let registry = Registered();
     let capability = CapabilityId::New(syntax::CAPABILITY);
     let contract = registry

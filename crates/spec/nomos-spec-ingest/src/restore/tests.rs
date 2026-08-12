@@ -1,7 +1,6 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::Ingest_Source_Document;
 use super::extract::{Milestone, Numbering};
 
 const CORE: &str = "# Core\n\n## 5. Canonical domain model\n\n\
@@ -33,6 +32,8 @@ struct Built
 
 fn Corpus(documents: &[(&str, &str)]) -> Built
 {
+    use crate::Ingest_Source_Document;
+
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let mut set = BTreeMap::new();
 

@@ -11,8 +11,6 @@
 //! this item exists to remove: an identity component nobody derived from anything, which is
 //! wrong on every machine but the one it was authored on and cannot be seen to be wrong.
 
-use std::collections::BTreeSet;
-
 fn main()
 {
     // Cargo sets both for every build script. A missing one means the contract with cargo
@@ -45,6 +43,8 @@ fn Toolchain() -> String
 /// order they are read in cannot reach the variant's identity.
 fn Features() -> String
 {
+    use std::collections::BTreeSet;
+
     let named: BTreeSet<String> = std::env::vars()
         .filter_map(|(name, _)| {
             return name

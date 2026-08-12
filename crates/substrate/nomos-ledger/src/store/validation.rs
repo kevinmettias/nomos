@@ -1,6 +1,5 @@
 //! Every rule the ledger must satisfy, checked over a whole document.
 
-use nomos_model::Intersection;
 use nomos_platform::Timestamp;
 
 use crate::LedgerItem;
@@ -178,6 +177,8 @@ fn Overlapping_Claims(document: &LedgerDocument, now: Timestamp) -> Vec<String>
 /// not shown it.
 fn Not_Provably_Disjoint(item: &LedgerItem, other: &LedgerItem) -> Option<String>
 {
+    use nomos_model::Intersection;
+
     let holder = Holder_Of(item);
     let other_holder = Holder_Of(other);
 

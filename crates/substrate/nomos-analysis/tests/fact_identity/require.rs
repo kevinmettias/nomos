@@ -2,7 +2,6 @@
 
 use crate::key::{Base, Context_At, Needing, Offering, SYNTAX, Stored, Subject, Syntactic};
 use nomos_analysis::{FactReader, InputDigest, MemoryFactStore, ReadOutcome, Reader};
-use nomos_capability::Registry;
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, GenerationId, Guarantee,
     IncrementalGranularity,
@@ -29,6 +28,8 @@ fn Test_Require_Should_Answer_When_The_Registry_Resolves_And_The_Fact_Exists()
 #[test]
 fn Test_Require_Should_Return_MissingCapability_When_Nothing_Declares_It()
 {
+    use nomos_capability::Registry;
+
     let store = Stored(&Base());
     let registry = Registry::New();
     let mut reader = Reader::On(&store, &registry, Context_At(GenerationId::INITIAL));

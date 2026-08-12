@@ -7,7 +7,6 @@
 
 use crate::reading::declaration::items::{Filing, Source, Walk};
 use crate::reading::masks::{Scan, Without_Comments};
-use crate::reading::source_files::Without_Test_Modules;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
@@ -73,6 +72,8 @@ pub(crate) fn Load_Module(file: &Path, path: &[String], into: &mut BTreeMap<Vec<
 /// Panics if the file cannot be read.
 fn Readable(file: &Path) -> String
 {
+    use crate::reading::source_files::Without_Test_Modules;
+
     let text = std::fs::read_to_string(file)
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", file.display()));
     let without_tests = Without_Test_Modules(&text);

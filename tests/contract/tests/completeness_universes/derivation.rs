@@ -1,6 +1,5 @@
 //! The table and the source must agree, in both directions.
 
-use crate::table::UNIVERSES;
 use nomos_contract_tests::{Declared_Universes, UniverseKind};
 use std::collections::BTreeSet;
 
@@ -53,6 +52,8 @@ fn Derived_Identities() -> BTreeSet<Identity>
 /// The identities this table declares.
 fn Declared_Identities() -> BTreeSet<Identity>
 {
+    use crate::table::UNIVERSES;
+
     return UNIVERSES
         .iter()
         .map(|universe| {

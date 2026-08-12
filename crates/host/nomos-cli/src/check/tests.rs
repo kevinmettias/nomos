@@ -3,7 +3,6 @@
 use super::*;
 use nomos_contracts::{Applicability, GateCategory};
 use super::parsing::USAGE;
-use super::facts::Ingested;
 
 /// The composition this command really ships, over sources a test wrote by hand.
 ///
@@ -21,6 +20,8 @@ impl Composed
 {
     fn Over(sources: &[SourceFile]) -> Self
     {
+        use super::facts::Ingested;
+
         let registry = Registered().expect("the fixture composition is this binary's own");
         let mut refused = Vec::new();
         let context = Ingested(sources, Path::new("."), &registry, &mut refused)

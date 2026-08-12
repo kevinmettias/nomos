@@ -2,7 +2,6 @@
 
 use nomos_spec_model::Segment;
 use nomos_spec_store::{Disposition, Latest_Version, SpecificationStore, StoreError, Table};
-use rusqlite::params;
 
 fn Temp_Db(name: &str) -> std::path::PathBuf
 {
@@ -249,6 +248,8 @@ fn Test_Two_Revisions_Of_One_Path_Should_Be_Distinct()
 #[test]
 fn Test_Block_Hashes_Should_Survive_Storage()
 {
+    use rusqlite::params;
+
     let mut store = SpecificationStore::In_Memory().expect("opens");
     let blocks = Segment(DOCUMENT);
     let uid = store.Put_Source_Document("a.md", "v14.36", DOCUMENT).expect("writes");

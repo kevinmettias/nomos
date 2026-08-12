@@ -6,8 +6,6 @@ use rusqlite::{Connection, OptionalExtension, params};
 use crate::NodeRow;
 use crate::StoreError;
 
-use super::EXTERNAL;
-
 /// Writes blocks and their typed rows through a caller's transaction.
 ///
 /// Free rather than a method, and taking a [`Connection`] rather than the store, because
@@ -280,6 +278,8 @@ pub(crate) fn Write_Source_Document(
 /// Returns [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Node(connection: &Connection, node: NodeRow<'_>) -> Result<i64, StoreError>
 {
+    use super::EXTERNAL;
+
     let NodeRow {
         node_id,
         kind,

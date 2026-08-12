@@ -1,8 +1,4 @@
 use crate::offending::{Traced, Undisposed, Undisposed_Statement};
-use nomos_spec_store::Table;
-use crate::rule::EveryStatementTracesToSource;
-use crate::rule::ChangedWordingIsJustified;
-use crate::rule::EveryBlockHasADisposition;
 use crate::Rule;
 use crate::RuleOutcome;
 use nomos_spec_store::SpecificationStore;
@@ -23,6 +19,8 @@ impl Rule for EveryHeadingHasADisposition
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
+        use nomos_spec_store::Table;
+
         return Undisposed(
             store,
             &Traced {
@@ -41,6 +39,10 @@ impl Rule for EveryHeadingHasADisposition
 #[must_use]
 pub fn Registered() -> Vec<Box<dyn Rule>>
 {
+    use crate::rule::EveryStatementTracesToSource;
+    use crate::rule::ChangedWordingIsJustified;
+    use crate::rule::EveryBlockHasADisposition;
+
     return vec![
         Box::new(EveryHeadingHasADisposition),
         Box::new(EveryBlockHasADisposition),

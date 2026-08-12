@@ -26,7 +26,6 @@
 //! governing record that quietly stops governing, which is `OD-SPEC-005`'s defect wearing a
 //! build script's clothes.
 
-use std::collections::BTreeMap;
 use std::path::Path;
 
 /// The only directory, relative to the repository root, a registration may name.
@@ -306,6 +305,8 @@ fn Read_Registration(file: &Path, root: &Path) -> Result<Registration, Registrat
 /// length, so the second one is refused rather than taken.
 fn Assert_One_Identity_Per_Record(found: &[Registration]) -> Result<(), RegistrationError>
 {
+    use std::collections::BTreeMap;
+
     let mut by_record: BTreeMap<String, String> = BTreeMap::new();
 
     for registration in found

@@ -1,5 +1,4 @@
 use nomos_contracts::SchemaId;
-use nomos_model::Digest_Of_Parts;
 use serde::{Deserialize, Serialize};
 
 // A document's identity and its kind are parts of a document, not peers of one.
@@ -34,6 +33,8 @@ impl Document
     #[must_use]
     pub fn Id(&self) -> DocumentId
     {
+        use nomos_model::Digest_Of_Parts;
+
         return DocumentId::From_Digest(Digest_Of_Parts(&[
             self.kind.Label().as_bytes(),
             self.schema.As_Str().as_bytes(),

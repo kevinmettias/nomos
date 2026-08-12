@@ -1,9 +1,6 @@
 use crate::readers::{
     Board, Declared_Skill_Name, Imports, Missing_Paths, Named_Items, Restated_Rows,
 };
-use crate::CONTRACT;
-use nomos_contract_tests::Workspace;
-use std::collections::BTreeSet;
 
 /// Every check above passes over a file that says nothing, so each is shown failing.
 ///
@@ -22,6 +19,8 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
 /// Shown reporting a link to nowhere, and shown not reporting a command or a real path.
 pub(crate) fn Assert_The_Route_Check_Reports_A_Broken_Link()
 {
+    use nomos_contract_tests::Workspace;
+
     let root = Workspace::Workspace_Root();
 
     assert!(
@@ -38,6 +37,8 @@ pub(crate) fn Assert_The_Route_Check_Reports_A_Broken_Link()
 /// Shown reporting a pasted row, and shown not reporting prose that names a crate.
 pub(crate) fn Assert_The_Band_Check_Reports_A_Pasted_Row()
 {
+    use std::collections::BTreeSet;
+
     let members: BTreeSet<String> = ["nomos-rules".to_owned()].into_iter().collect();
 
     assert!(
@@ -53,6 +54,8 @@ pub(crate) fn Assert_The_Band_Check_Reports_A_Pasted_Row()
 /// Shown refusing an adapter that carries its own contract instead of importing one.
 pub(crate) fn Assert_The_Import_Check_Reports_An_Adapter_That_Imports_Nothing()
 {
+    use crate::CONTRACT;
+
     assert!(
         !Imports("# Claude Code\n\nThe bands are as follows.", CONTRACT),
         "an adapter with no import was accepted, so it could carry its own contract"

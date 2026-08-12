@@ -4,7 +4,6 @@ use crate::DocumentId;
 use crate::DocumentKind;
 use crate::StoreError;
 use nomos_contracts::{Digest128, SnapshotId};
-use nomos_model::Digest_Of_Parts;
 use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
@@ -138,6 +137,8 @@ impl Index
     #[must_use]
     pub fn Digest(&self) -> Digest128
     {
+        use nomos_model::Digest_Of_Parts;
+
         let mut parts: Vec<Vec<u8>> = Vec::new();
 
         for (kind, ids) in &self.kinds

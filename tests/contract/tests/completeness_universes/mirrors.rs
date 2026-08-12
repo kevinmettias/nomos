@@ -1,7 +1,6 @@
 //! A named mirror has to exist.
 
 use crate::table::{Standing, UNIVERSES};
-use nomos_contract_tests::Workspace;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
@@ -37,6 +36,8 @@ fn Test_Every_Named_Mirror_Should_Exist_In_The_Source()
 /// Every function name declared anywhere in the workspace's own sources.
 fn Function_Names() -> BTreeSet<String>
 {
+    use nomos_contract_tests::Workspace;
+
     let workspace = Workspace::Load();
     let mut names = BTreeSet::new();
 

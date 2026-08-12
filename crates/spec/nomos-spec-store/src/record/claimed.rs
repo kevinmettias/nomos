@@ -1,11 +1,8 @@
 //! Step one: the record, read out and held for editing.
 
-use nomos_spec_model::Parse_Record;
 use nomos_spec_model::Record;
 use nomos_spec_model::RecordFrontMatter;
-use nomos_spec_model::Round_Trips;
 
-use crate::authoring::Why_Not_Canonical;
 use crate::EditError;
 use crate::RecordProjection;
 use crate::StagedEdit;
@@ -70,6 +67,10 @@ impl ClaimedRecord
     /// The staged text as a record, or why this surface will not take those bytes.
     fn Accepted(&self, markdown: &str) -> Result<Record, EditError>
     {
+        use crate::authoring::Why_Not_Canonical;
+        use nomos_spec_model::Parse_Record;
+        use nomos_spec_model::Round_Trips;
+
         let record = Parse_Record(markdown)
             .map_err(|error| return EditError::Unreadable { cause: error.to_string() })?;
 

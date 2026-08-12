@@ -6,13 +6,9 @@
 //! at scale and is therefore in [`crate::scale`].
 
 use crate::corpus::{Over_The_Precision_Corpus, Surface_Of};
-use nomos_cap_syntax as syntax;
-use nomos_capability::Requirement;
 use nomos_contracts::{
     Applicability, Assurance, CapabilityId, FactVariant, Guarantee, IncrementalGranularity
 };
-use nomos_integration_tests::Slice;
-use nomos_lang_rust as rust;
 
 /// A hole in the corpus stays visible.
 ///
@@ -76,6 +72,11 @@ fn Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims()
 #[test]
 fn Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt()
 {
+    use nomos_cap_syntax as syntax;
+    use nomos_capability::Requirement;
+    use nomos_integration_tests::Slice;
+    use nomos_lang_rust as rust;
+
     let slice = Slice::Composed();
     let guarantee = Guarantee::New(
         FactVariant::SemanticallyResolved,

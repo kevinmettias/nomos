@@ -1,7 +1,6 @@
 //! What a fact is about, before anything has been said about it.
 
 use nomos_contracts::GenerationId;
-use nomos_model::Digest_Of_Parts;
 use nomos_contracts::Digest128;
 use nomos_contracts::ConfigurationId;
 use nomos_contracts::BuildVariantId;
@@ -47,6 +46,8 @@ impl FactKey
     #[must_use]
     pub fn Digest(&self) -> Digest128
     {
+        use nomos_model::Digest_Of_Parts;
+
         let parts = self.Parts();
         let borrowed: Vec<&[u8]> = parts.iter().map(Vec::as_slice).collect();
 

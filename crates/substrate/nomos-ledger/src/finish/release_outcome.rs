@@ -1,7 +1,5 @@
 //! What became of a claim that was let go.
 
-use crate::Abandonment;
-use crate::ItemState;
 use nomos_platform::Timestamp;
 use crate::LedgerItem;
 use crate::VerificationRecord;
@@ -46,6 +44,9 @@ impl ReleaseOutcome
     /// would be a worse defect than the one this fixes.
     pub fn Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
     {
+        use crate::Abandonment;
+        use crate::ItemState;
+
         item.claim = None;
 
         match self

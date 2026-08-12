@@ -7,13 +7,11 @@ mod resolve;
 mod source;
 mod submission;
 
-use disjoint::Assert_Disjoint;
 use graph::{
     Insert_Lineage, Insert_Node_Aliases, Insert_Node_History, Insert_Nodes, Insert_Normative_Statements,
     Insert_Omissions, Insert_Record_Front_Matter, Insert_Record_Relations, Insert_Relation_Types,
     Insert_Relations, Insert_Suites,
 };
-use resolve::Assert_Self_Contained;
 use source::{
     Insert_Blobs, Insert_Source_Blocks, Insert_Source_Documents, Insert_Source_Headings,
     Insert_Source_Table_Rows,
@@ -54,6 +52,9 @@ pub struct ImportReport
 /// bundle declared.
 pub fn Import(store: &mut SpecificationStore, bundle: &Bundle) -> Result<ImportReport, BundleError>
 {
+    use disjoint::Assert_Disjoint;
+    use resolve::Assert_Self_Contained;
+
     bundle.Verify_Counts()?;
     Assert_Same_Schema(store, bundle)?;
 

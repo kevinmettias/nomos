@@ -22,7 +22,6 @@ mod verbs;
 
 use claiming::{Install_Claim, With_Own_Claim};
 use file::{Decide_Under_Lock, Load, Save};
-use reservation::RecordDeclaration;
 use verbs::{Add, Decline, Take_Over, Validate_Current};
 
 pub use refusal::Claim_Refusal;
@@ -392,6 +391,8 @@ impl<F: FileSystem, C: Clock, L: CrossProcessLock> FileLedger<F, C, L>
         amending: &Territory,
     ) -> Result<(), AddRefusal>
     {
+        use reservation::RecordDeclaration;
+
         return Add(
             self,
             item,

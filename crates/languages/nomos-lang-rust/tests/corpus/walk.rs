@@ -4,7 +4,6 @@
 //! skips. Shared deliberately, so a directory exclusion cannot apply to one of them and not
 //! the other.
 
-use nomos_lang_rust::Recognition;
 use std::path::{Path, PathBuf};
 
 /// Directories that are not somebody's source.
@@ -63,6 +62,8 @@ fn Visit(
 /// two machines and a report of "the first ten failures" is the same ten.
 pub(crate) fn Rust_Files(root: &Path) -> Vec<PathBuf>
 {
+    use nomos_lang_rust::Recognition;
+
     let mut found = Vec::new();
 
     // Recognition decides, rather than a second extension check written here. Two answers

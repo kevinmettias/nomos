@@ -20,7 +20,6 @@
 //! rather than letting this file imply more than it does.
 
 use std::path::PathBuf;
-use std::process::Command;
 
 const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 
@@ -61,6 +60,8 @@ impl Board
     /// Runs `nomos work <arguments>`, returning what it exited with and what it said.
     fn Work(&self, arguments: &[&str]) -> Ran
     {
+        use std::process::Command;
+
         let output = Command::new(NOMOS)
             .arg("work")
             .args(arguments)

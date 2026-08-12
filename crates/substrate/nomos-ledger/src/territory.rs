@@ -26,7 +26,6 @@ mod tests;
 
 pub use spelling::Normalize_Path;
 pub(crate) use spelling::Subject_Of;
-use overlap::Shared_Subjects;
 
 // The one place this crate names band 0, and check-dependency-placement reports the edge
 // for it. A SubjectId is the shared identity a territory is a territory *of*; it is
@@ -168,6 +167,8 @@ impl Territory
     #[must_use]
     pub fn Intersect(&self, other: &Self) -> Intersection
     {
+        use overlap::Shared_Subjects;
+
         if let Some(pattern) = self.patterns.first().or_else(|| other.patterns.first())
         {
             return Intersection::Unknown(UnknownReason::UnexpandedPattern {

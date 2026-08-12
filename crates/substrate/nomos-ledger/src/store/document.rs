@@ -2,7 +2,6 @@
 
 use std::path::Path;
 
-use crate::store::VersionProbe;
 use crate::LedgerError;
 
 use super::SCHEMA_VERSION;
@@ -18,6 +17,8 @@ use super::SCHEMA_VERSION;
 /// It cannot cost a field.
 pub(super) fn Explain(path: &Path, text: &str, error: &serde_json::Error) -> LedgerError
 {
+    use crate::store::VersionProbe;
+
     if let Ok(probe) = serde_json::from_str::<VersionProbe>(text)
         && probe.schema_version > SCHEMA_VERSION
     {

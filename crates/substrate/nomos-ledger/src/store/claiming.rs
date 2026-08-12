@@ -6,12 +6,13 @@ use crate::Claim;
 use crate::ClaimRefusal;
 use crate::LedgerItem;
 use crate::ItemId;
-use crate::ItemState;
 use crate::LedgerDocument;
 
 /// Marks an item claimed and records the grant.
 pub(super) fn Install_Claim(document: &mut LedgerDocument, item: &ItemId, granted: &Claim)
 {
+    use crate::ItemState;
+
     for candidate in &mut document.items
     {
         if &candidate.id == item

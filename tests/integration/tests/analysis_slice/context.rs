@@ -10,11 +10,9 @@ use crate::corpus::{
     Advanced, Alpha_One, Over_The_Precision_Corpus, Precision_Corpus, Reached, Source_Of,
 };
 use nomos_analysis::InvalidationReport;
-use nomos_contracts::IncrementalGranularity;
 use nomos_integration_tests::{
     Corpus, Edited, Host_Variant, Resolved_Configuration, RunReport, Slice
 };
-use nomos_workspace::ChangeSource;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
@@ -187,6 +185,8 @@ fn Kept_What_The_Checkout_Did_Not_Touch(second: &RunReport)
 /// replacement that names its members is a statement about files rather than about the tree.
 fn Reached_Exactly_The_Two_Members(corpus: &Corpus, invalidated: &InvalidationReport)
 {
+    use nomos_contracts::IncrementalGranularity;
+
     assert_eq!(
         Reached(corpus, invalidated),
         (
@@ -217,6 +217,8 @@ fn Reached_Exactly_The_Two_Members(corpus: &Corpus, invalidated: &InvalidationRe
 #[test]
 fn Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing()
 {
+    use nomos_workspace::ChangeSource;
+
     let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     let first = slice.Run(&corpus);
     let before = (slice.Generation(), slice.Workspace().Id());

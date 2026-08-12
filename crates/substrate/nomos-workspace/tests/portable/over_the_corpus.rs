@@ -8,9 +8,7 @@
 //! `tests/contract/tests/corpus_gates.rs` would drop without any assertion being removed.
 
 use crate::arrival::{Configuration, Fresh, Ingest, Variant, Workspace};
-use crate::permutation::{Snapshot_Of_One_Order, Taken};
 use crate::walk::{Assert_This_Is_That_Corpus, Corpus};
-use nomos_contracts::GenerationId;
 use nomos_store::{Authority, DocumentKind, DocumentStore};
 use nomos_workspace::{Applied, WorkspaceSnapshot};
 use std::path::{Path, PathBuf};
@@ -268,6 +266,8 @@ fn Assert_The_Index_Still_Derives(store: &mut DocumentStore, workspace: &Workspa
 #[test]
 fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
 {
+    use crate::permutation::{Snapshot_Of_One_Order, Taken};
+
     let Some((_, members)) = Scale_Corpus_Or_Skip()
     else
     {
@@ -304,6 +304,8 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
 #[test]
 fn Test_Re_Ingesting_The_Corpus_Should_Advance_Nothing()
 {
+    use nomos_contracts::GenerationId;
+
     let Some((_, members)) = Scale_Corpus_Or_Skip()
     else
     {

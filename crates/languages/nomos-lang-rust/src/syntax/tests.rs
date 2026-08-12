@@ -1,7 +1,6 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::SyntaxItem;
 use crate::Reading;
 
 fn Parsed(source: &str) -> SyntaxFacts
@@ -15,6 +14,8 @@ fn Parsed(source: &str) -> SyntaxFacts
 
 fn Names(source: &str) -> Vec<String>
 {
+    use crate::SyntaxItem;
+
     return Parsed(source)
         .items
         .iter()

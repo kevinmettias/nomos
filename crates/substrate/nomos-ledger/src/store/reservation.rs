@@ -4,7 +4,6 @@ use nomos_model::Intersection;
 
 use crate::AddRefusal;
 use crate::LedgerItem;
-use crate::ItemState;
 use crate::LedgerDocument;
 use crate::{Normalize_Path, Territory};
 
@@ -131,6 +130,8 @@ fn Refuse_If_Reserved(
     document: &LedgerDocument,
 ) -> Result<(), AddRefusal>
 {
+    use crate::ItemState;
+
     for other in &document.items
     {
         if !matches!(other.state, ItemState::Ready | ItemState::Claimed)

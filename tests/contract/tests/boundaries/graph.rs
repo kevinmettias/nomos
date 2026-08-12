@@ -2,7 +2,6 @@
 
 use crate::bands::{Declared_Band, BANDS};
 use nomos_contract_tests::Workspace;
-use std::collections::BTreeSet;
 
 /// Everything `nomos-contracts` is permitted to reach, transitively.
 ///
@@ -62,6 +61,8 @@ fn Test_The_Workspace_Should_Not_Appear_Empty()
 #[test]
 fn Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else()
 {
+    use std::collections::BTreeSet;
+
     let workspace = Workspace::Load();
     let allowed: BTreeSet<String> = CONTRACTS_ALLOWLIST
         .iter()

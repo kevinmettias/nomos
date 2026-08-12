@@ -33,7 +33,6 @@ mod tests;
 pub use refusal::FinishRefusal;
 use refusal::Tail_Of;
 use running::{Commanded, Ran, Ran_To_Completion, Refuse_Nonzero, Runnable_Predicate, Runner};
-use gate_step::Run_Gate_Step;
 
 use crate::ClaimRefusal;
 use crate::ExclusionLedger;
@@ -69,6 +68,8 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
     working_directory: Option<&Path>,
 ) -> Result<VerificationRecord, FinishRefusal>
 {
+    use gate_step::Run_Gate_Step;
+
     let item = finishing.item;
     let document = Loaded(ledger)?;
     let predicate = Runnable_Predicate(&document, item)?;

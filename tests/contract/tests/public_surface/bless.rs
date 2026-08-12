@@ -7,7 +7,6 @@
 
 use crate::reading::{Rendered, Snapshot_Path, Surfaces, BLESS};
 use nomos_contract_tests::Surface;
-use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 /// A directory of this suite's own to bless into.
@@ -164,6 +163,8 @@ fn Assert_A_Name_Matching_Nothing_Is_Refused(surfaces: &[Surface])
 /// wired up.
 fn Requested(value: &str, surfaces: &[Surface]) -> Result<Vec<String>, String>
 {
+    use std::collections::BTreeSet;
+
     let known: BTreeSet<&str> =
         surfaces.iter().map(|surface| return surface.package.as_str()).collect();
     let names: BTreeSet<&str> = value

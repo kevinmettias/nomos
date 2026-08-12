@@ -1,7 +1,6 @@
 //! The rule: no open item reserves the directory every record lives in.
 
 use crate::board::{Is_Open, RECORD_DIRECTORY, Real_Ledger, Reserved_Records};
-use nomos_ledger::Normalize_Path;
 
 /// The straggler guard, and the reason this file reads the real ledger.
 ///
@@ -11,6 +10,8 @@ use nomos_ledger::Normalize_Path;
 #[test]
 fn Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory()
 {
+    use nomos_ledger::Normalize_Path;
+
     let document = Real_Ledger();
 
     let offenders: Vec<String> = document

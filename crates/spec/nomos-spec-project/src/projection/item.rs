@@ -1,6 +1,5 @@
 //! One row of a rendered projection.
 
-use nomos_spec_model::ContentHash;
 use serde::Serialize;
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize)]
 pub struct Item
@@ -53,6 +52,8 @@ impl Item
     #[must_use]
     pub fn Digest(&self) -> String
     {
+        use nomos_spec_model::ContentHash;
+
         let mut material = self.identity.clone();
         for (name, value) in &self.fields
         {

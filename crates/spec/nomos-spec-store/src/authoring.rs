@@ -30,9 +30,6 @@ mod write;
 pub(crate) use difference::{Block_Changes, Identity_Changes, Relation_Changes, Why_Not_Canonical};
 pub(crate) use write::Write_Record;
 
-use commit::Apply;
-use difference::Located;
-
 use nomos_spec_model::{
     BlockKind, ContentHash, Parse_Record, RecordFrontMatter, RecordRelation,
     Render_Record, SourceBlock,
@@ -46,7 +43,6 @@ use crate::DocumentSource;
 use crate::EditError;
 use crate::EditPreview;
 use crate::NormativeMovement;
-use crate::record::Kind_Of;
 use crate::RecordProjection;
 use crate::RecordWrite;
 use crate::store::{
@@ -159,6 +155,8 @@ impl SpecificationStore
     /// on any SQL failure. Nothing is written if anything fails.
     pub fn Commit_Edit(&mut self, preview: &EditPreview) -> Result<CommitReport, EditError>
     {
+        use commit::Apply;
+
         return self.In_Transaction(|transaction| return Apply(transaction, preview));
     }
 
@@ -169,6 +167,8 @@ impl SpecificationStore
     /// Returns [`StoreError`] on any SQL failure.
     pub fn Stored_Blocks(&self, document_uid: i64) -> Result<Vec<SourceBlock>, StoreError>
     {
+        use crate::record::Kind_Of;
+
         let mut statement = self.Connection().prepare(
             "SELECT ordinal, kind, heading_path, text FROM source_blocks
              WHERE document_uid = ?1 ORDER BY ordinal",
@@ -322,6 +322,8 @@ impl SpecificationStore
         after: &[SourceBlock],
     ) -> Result<Vec<NormativeMovement>, StoreError>
     {
+        use difference::Located;
+
         let mut movements = Vec::new();
         for (statement_id, canonical_text, canonical_hash) in self.Recorded_Statements(node_id)?
         {

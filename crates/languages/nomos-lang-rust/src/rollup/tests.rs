@@ -3,10 +3,11 @@
 use super::*;
 use nomos_capability::Registry;
 use nomos_capability::{Requirement, Resolution, Unmet};
-use nomos_model::Content_Digest;
 
 fn Subject(path: &str) -> SubjectId
 {
+    use nomos_model::Content_Digest;
+
     return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
 }
 

@@ -1,6 +1,5 @@
 //! How much of the corpus a change touched.
 
-use crate::DOMAIN_VOLUMES;
 /// What a census counted over.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Scope
@@ -30,6 +29,8 @@ impl Scope
     /// means.
     pub(crate) fn Covers(self, path: &str) -> bool
     {
+        use crate::DOMAIN_VOLUMES;
+
         return match self
         {
             Self::DomainVolumes => path.contains(DOMAIN_VOLUMES),

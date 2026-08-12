@@ -1,7 +1,6 @@
 //! The scan and the table must claim the same mirror, universe by universe.
 
 use crate::table::{Standing, UNIVERSES};
-use nomos_contract_tests::Declared_Universes;
 use std::collections::BTreeMap;
 
 /// `nomos check` reads a universe's mirror off its doc comment at the site; this table
@@ -49,6 +48,8 @@ type Claims = BTreeMap<(String, String), Option<String>>;
 /// What each universe claims at its own site, which is what `nomos check` resolves.
 fn Scanned_Claims() -> Claims
 {
+    use nomos_contract_tests::Declared_Universes;
+
     return Declared_Universes()
         .into_iter()
         .map(|universe| return ((universe.path, universe.name), universe.claimed_mirror))

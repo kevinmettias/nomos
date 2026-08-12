@@ -10,7 +10,6 @@
 //! numbers are fetched and not in what they mean: `non_separator` is still counted, never
 //! derived from `lines` and `separator`, which is the property this module exists to keep.
 
-use crate::read::columns::Columns;
 use crate::RowCensus;
 use crate::RowScope;
 use crate::StoreError;
@@ -21,6 +20,8 @@ use rusqlite::Connection;
 /// Returns [`StoreError`] on any SQL failure.
 pub fn Census(connection: &Connection, scope: RowScope) -> Result<RowCensus, StoreError>
 {
+    use crate::read::columns::Columns;
+
     return Ok(connection.query_row(
         scope.Statement(),
         rusqlite::params_from_iter(scope.Arguments()),

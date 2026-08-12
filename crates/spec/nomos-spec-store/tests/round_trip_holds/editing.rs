@@ -3,7 +3,6 @@
 use crate::seeded::{
     Block_Uids, Commit, Only_Document, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic,
 };
-use nomos_spec_store::EditError;
 
 /// The round trip, closed: an edit goes in as markdown and comes back out of the store as the
 /// same bytes.
@@ -69,6 +68,8 @@ fn Test_A_Rename_Should_Be_An_Ordinary_Edit()
 #[test]
 fn Test_A_Rename_Onto_A_Path_Another_Record_Holds_Should_Be_Refused()
 {
+    use nomos_spec_store::EditError;
+
     let mut store = With_Synthetic();
     let taken = "docs/records/D-132-the-plan-is-a-game-plan.md";
 

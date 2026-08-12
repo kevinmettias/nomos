@@ -6,7 +6,6 @@
 //! report where neither names anything in particular.
 
 use crate::store::{Populated, Profile_Named};
-use nomos_spec_model::ContentHash;
 use nomos_spec_project::{Build, Check, Freshness, Profile, Stamp, SIDECAR_SUFFIX};
 use nomos_spec_store::SpecificationStore;
 
@@ -112,6 +111,8 @@ fn Test_An_Edited_Output_Should_Be_Reported_As_Edited()
 #[test]
 fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
 {
+    use nomos_spec_model::ContentHash;
+
     let store = Populated();
     let profile = Profile_Named("mcp-resource");
     let built = Build(&store, &profile).expect("builds");

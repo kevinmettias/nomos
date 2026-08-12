@@ -1,7 +1,6 @@
 //! The README's band table, parsed back out of the file a reader edits.
 
 use crate::bands::{Declared_Band, Repository_Root, BANDS};
-use std::collections::BTreeSet;
 
 /// The band table the README shows a reader, parsed back out of the file they edit.
 ///
@@ -91,6 +90,8 @@ fn Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band()
 /// Two rows for one crate can disagree with each other, so there is only ever one.
 fn Assert_No_Crate_Is_Listed_Twice(listed: &[(String, u32)])
 {
+    use std::collections::BTreeSet;
+
     let mut seen: BTreeSet<&str> = BTreeSet::new();
     for (name, _) in listed
     {

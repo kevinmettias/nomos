@@ -8,7 +8,6 @@ use rusqlite::{Connection, OptionalExtension, params};
 use crate::CommitReport;
 use crate::EditError;
 use crate::EditPreview;
-use crate::NodeRow;
 use crate::store::{
     EXTERNAL, Inverse_Of, Write_Blob, Write_Node, Write_Relation,
     Write_Source_Blocks,
@@ -254,6 +253,8 @@ fn Update_Graph(
 fn Add_Relation(connection: &Connection, node_id: &str, relation: &RecordRelation)
     -> Result<(), StoreError>
 {
+    use crate::NodeRow;
+
     if Optional_Node_Uid(connection, &relation.target)?.is_none()
     {
         Write_Node(connection, NodeRow {

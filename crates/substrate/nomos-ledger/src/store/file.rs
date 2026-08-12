@@ -12,9 +12,6 @@ use nomos_platform::Timestamp;
 use crate::LedgerDocument;
 use crate::LedgerError;
 
-use super::document::Explain;
-use super::rendering::Rendered;
-use super::validation::Validate;
 use super::{FileLedger, SCHEMA_VERSION};
 
 /// The body of [`FileLedger::Save`], which keeps the documentation and the signature.
@@ -23,6 +20,9 @@ pub(super) fn Save<F: FileSystem, C: Clock, L: CrossProcessLock>(
     document: &LedgerDocument,
 ) -> Result<(), LedgerError>
 {
+    use super::rendering::Rendered;
+    use super::validation::Validate;
+
     let violations = Validate(document, ledger.clock.Now());
     if !violations.is_empty()
     {
@@ -99,6 +99,8 @@ pub(super) fn Load<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &FileLedger<F, C, L>,
 ) -> Result<LedgerDocument, LedgerError>
 {
+    use super::document::Explain;
+
     if !ledger.filesystem.Exists(&ledger.path)
     {
         return Ok(LedgerDocument {

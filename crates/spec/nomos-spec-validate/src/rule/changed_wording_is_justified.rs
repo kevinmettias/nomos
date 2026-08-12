@@ -1,7 +1,5 @@
 //! Wording that changed says why.
 
-use crate::offending::Offending;
-use crate::Violation;
 use crate::RuleOutcome;
 use crate::Rule;
 use nomos_spec_store::{SpecificationStore, Table};
@@ -32,6 +30,9 @@ impl Rule for ChangedWordingIsJustified
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
+        use crate::offending::Offending;
+        use crate::Violation;
+
         return Offending(store, Table::NormativeStatements, UNJUSTIFIED, |row| {
             let id: String = row.get(0)?;
             return Ok(Violation {

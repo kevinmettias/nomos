@@ -12,7 +12,6 @@
 //! already holds, and a reference the bundle makes to a row only the store holds.
 
 use nomos_spec_bundle::{Bundle, BundleError, Export, Import, Record, Relation};
-use nomos_spec_model::Segment;
 use nomos_spec_store::{Seed_Governing_Records, SpecificationStore, Table};
 use std::collections::BTreeMap;
 
@@ -36,6 +35,8 @@ fn Seeded() -> SpecificationStore
 /// A bundle of content the seed does not hold, and which resolves entirely within itself.
 fn Foreign_Bundle() -> Bundle
 {
+    use nomos_spec_model::Segment;
+
     let mut source = SpecificationStore::In_Memory().expect("opens");
     let document = source
         .Put_Source_Document(FOREIGN_PATH, FOREIGN_REVISION, FOREIGN)

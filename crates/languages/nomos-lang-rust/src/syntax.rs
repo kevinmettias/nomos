@@ -18,12 +18,10 @@ mod documentation;
 #[cfg(test)]
 mod tests;
 
-use walk::Walk;
 pub(crate) use shape::Path_As_Written;
 use shape::{Bound_By, Function_Shape, Impl_Shape, Type_Head, Type_Shape};
 use documentation::Documentation;
 
-use crate::ParseFailure;
 use crate::Reading;
 use syn::visit::Visit;
 
@@ -36,6 +34,9 @@ use syn::visit::Visit;
 #[must_use]
 pub fn Read_Source(source: &str) -> Reading
 {
+    use crate::ParseFailure;
+    use walk::Walk;
+
     let file = match syn::parse_file(source)
     {
         Ok(file) => file,

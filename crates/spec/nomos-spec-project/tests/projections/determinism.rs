@@ -8,7 +8,6 @@
 use crate::store::{For_Building, Order, Populated, Populated_In_Order, Shipped};
 use nomos_spec_bundle::{Bundle, Export, Import};
 use nomos_spec_project::{Build, DO_NOT_EDIT};
-use nomos_spec_store::SpecificationStore;
 
 /// P3, first half.
 #[test]
@@ -31,6 +30,8 @@ fn Test_A_Rebuild_Should_Be_Byte_Identical()
 #[test]
 fn Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original()
 {
+    use nomos_spec_store::SpecificationStore;
+
     let source = Populated();
     let bundle = Export(&source).expect("exports").Write().expect("writes");
     let mut rebuilt = SpecificationStore::In_Memory().expect("opens");

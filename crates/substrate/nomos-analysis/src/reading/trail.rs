@@ -3,7 +3,6 @@
 use crate::Dependency;
 use crate::FactKey;
 use crate::ReadOutcome;
-use nomos_contracts::Applicability;
 
 /// What one reader has read, kept apart from what it reads *through*.
 ///
@@ -44,6 +43,8 @@ impl Trail
     /// Records a miss at the applicability every unanswered candidate is recorded at.
     pub(crate) fn Note_Miss(&mut self, key: &FactKey)
     {
+        use nomos_contracts::Applicability;
+
         self.Note(
             key,
             ReadOutcome::Degraded(Applicability::DependencyUnavailable),

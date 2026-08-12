@@ -83,7 +83,6 @@ use index::{CheckIndex, Check_Index_Of};
 use reach::Reach_Of;
 use shortfall::Shortfall;
 use unread::{Unread, Unread_Subject, Unreadable};
-use verdict::Judge;
 
 use crate::facts::Check_Names_In;
 use crate::DeclaredUniverse;
@@ -148,6 +147,8 @@ pub fn Check_Completeness_Mirrors(
 /// findings about it would double-count the same defect.
 fn Judged(index: &CheckIndex<'_>) -> Vec<Finding>
 {
+    use verdict::Judge;
+
     let mut universes: Vec<DeclaredUniverse> = index.universes.clone();
     universes.sort();
     universes.dedup();

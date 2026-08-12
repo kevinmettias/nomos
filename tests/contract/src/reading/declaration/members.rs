@@ -6,7 +6,6 @@
 //! inside a generic argument.
 
 use crate::reading::masks::{Identifier_After, Is_Code, Matching_Delimiter};
-use crate::reading::recogniser::KEYWORDS;
 use crate::reading::text::{Collapsed, Line_End, Next_Line};
 
 /// Which of the two bodies is being read.
@@ -103,6 +102,8 @@ pub(crate) struct NamedMember
 /// in front of them.
 pub(crate) fn Named_Member(text: &str, line: (usize, usize), reading: Reading) -> Option<NamedMember>
 {
+    use crate::reading::recogniser::KEYWORDS;
+
     let (cursor, line_end) = line;
     let raw = text.get(cursor..line_end).unwrap_or_default();
     let trimmed = raw.trim_start();

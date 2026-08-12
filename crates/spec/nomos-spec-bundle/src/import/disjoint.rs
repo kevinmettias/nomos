@@ -7,8 +7,6 @@ use crate::BundleError;
 use crate::Bundle;
 use crate::Record;
 
-use super::resolve::Document_Key_Of;
-
 /// The store holds nothing this bundle also carries.
 pub(super) fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Result<(), BundleError>
 {
@@ -66,6 +64,8 @@ struct Stated<'a>
 /// deliberately not asked about a second time under its own table.
 fn Stated_Identity(record: &Record) -> Option<Stated<'_>>
 {
+    use super::resolve::Document_Key_Of;
+
     return match record
     {
         Record::Blob(blob) => Some(By_One("SELECT 1 FROM blobs WHERE sha256 = ?1", &blob.sha256)),

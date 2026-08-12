@@ -1,9 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
-use super::roots::STATEMENTS;
 use super::roots::DOMAIN_VOLUMES;
-use super::roots::CATALOG;
 
 /// A name for the variable, invented here. The composition root owns the real one;
 /// naming it in this file would make every test below look like a test that reads a
@@ -35,6 +33,9 @@ fn Test_With_No_Corpus_The_Governing_Records_Should_Still_Be_There()
 #[test]
 fn Test_An_Unset_Corpus_Should_Be_An_Absence_That_Names_What_Was_Expected()
 {
+    use super::roots::CATALOG;
+    use super::roots::STATEMENTS;
+
     let assembly = Assemble(&Request(None)).expect("assembles");
 
     assert!(!assembly.Is_Complete());

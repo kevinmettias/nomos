@@ -9,7 +9,6 @@ use nomos_contracts::GenerationId;
 use crate::Supersession;
 use crate::FactIdentity;
 use crate::FactStore;
-use crate::Broadening;
 use crate::InvalidationReport;
 use crate::GenerationCause;
 use crate::FactError;
@@ -311,6 +310,8 @@ impl MemoryFactStore
         report: &mut InvalidationReport,
     )
     {
+        use crate::Broadening;
+
         for digest in seen
         {
             let (Some(key), Some(entry)) = (self.keys.get(digest), self.Latest(*digest))

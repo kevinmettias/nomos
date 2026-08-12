@@ -14,20 +14,20 @@
 
 use nomos_analysis::{FactStore, GenerationCause, MemoryFactStore, ReadOutcome};
 use nomos_capability::{Registry, Requirement};
-use nomos_cap_syntax::PUBLIC;
 use nomos_contracts::{
     Assurance, BuildVariantId, ConfigurationId, Digest128, EvidenceClass, FactVariant,
     GenerationId, Guarantee, IncrementalGranularity, SnapshotId, SubjectId,
 };
 use nomos_lang_rust::rollup::{self, Against, Module, ModuleMember, Outcome, Rolled};
 use nomos_lang_rust::{FactContext, Materialization};
-use nomos_model::Content_Digest;
 
 const ALPHA: &str = "pub fn Alpha() {}\nfn hidden() {}\n";
 const BETA: &str = "pub struct Beta;\npub mod inner { pub fn Deep() {} }\n";
 
 fn Subject(path: &str) -> SubjectId
 {
+    use nomos_model::Content_Digest;
+
     return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
 }
 
@@ -298,6 +298,8 @@ fn A_Module_With_One_Missing_Member() -> Module
 #[test]
 fn Test_Every_Entry_Should_Name_The_Member_That_Declared_It()
 {
+    use nomos_cap_syntax::PUBLIC;
+
     let rolled = Roll_Up_Two_Files();
     let index = &rolled.rolled.index;
     let alpha_entries = Names_Declared_By(index, "alpha.rs");

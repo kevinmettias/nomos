@@ -2,19 +2,9 @@
 
 use crate::BundleError;
 use crate::DocumentRef;
-use crate::Lineage;
-use crate::Node;
-use crate::NodeAlias;
-use crate::NodeHistory;
-use crate::NormativeStatement;
-use crate::Omission;
 use crate::OrdinalRef;
 use crate::Record;
 use crate::RecordFrontMatter;
-use crate::RecordRelation;
-use crate::Relation;
-use crate::RelationType;
-use crate::Suite;
 use crate::TableRowRef;
 use rusqlite::Connection;
 
@@ -22,6 +12,8 @@ use super::{Collect, Columns, Decoded};
 
 pub(super) fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::Suite;
+
     return Collect(
         connection,
         records,
@@ -43,6 +35,8 @@ pub(super) fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Resu
 
 pub(super) fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::Node;
+
     return Collect(
         connection,
         records,
@@ -67,6 +61,8 @@ pub(super) fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Resul
 
 pub(super) fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::NodeAlias;
+
     return Collect(
         connection,
         records,
@@ -85,6 +81,8 @@ pub(super) fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -
 
 pub(super) fn Node_Histories(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::NodeHistory;
+
     return Collect(
         connection,
         records,
@@ -109,6 +107,8 @@ pub(super) fn Node_Histories(connection: &Connection, records: &mut Vec<Record>)
 
 pub(super) fn Relation_Types(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::RelationType;
+
     return Collect(
         connection,
         records,
@@ -126,6 +126,8 @@ pub(super) fn Relation_Types(connection: &Connection, records: &mut Vec<Record>)
 
 pub(super) fn Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::Relation;
+
     return Collect(
         connection,
         records,
@@ -150,6 +152,8 @@ pub(super) fn Normative_Statements(
     records: &mut Vec<Record>,
 ) -> Result<(), BundleError>
 {
+    use crate::NormativeStatement;
+
     return Collect(
         connection,
         records,
@@ -176,6 +180,8 @@ pub(super) fn Normative_Statements(
 /// the same silent-loss shape this crate exists to make impossible.
 pub(super) fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::Lineage;
+
     return Collect(
         connection,
         records,
@@ -214,6 +220,8 @@ pub(super) fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Re
 
 pub(super) fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::Omission;
+
     let mut statement = connection.prepare(
         "SELECT bd.path, bd.revision, b.ordinal,
                 hd.path, hd.revision, h.ordinal,
@@ -322,6 +330,8 @@ fn Read_Front_Matter(row: &rusqlite::Row<'_>) -> rusqlite::Result<(RecordFrontMa
 /// The declared relations, in the order the record declared them.
 pub(super) fn Record_Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::RecordRelation;
+
     let mut statement = connection.prepare(
         "SELECT d.path, d.revision, r.ordinal, r.target, r.relation
          FROM record_relations r

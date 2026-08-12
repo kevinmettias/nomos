@@ -6,13 +6,14 @@
 
 #![allow(dead_code)]
 
-use crate::register::VOLUMES;
 use nomos_spec_model::{BlockKind, Segment, SourceBlock};
 use nomos_spec_store::{RowScope, SpecificationStore};
 use std::path::{Path, PathBuf};
 
 pub(crate) fn Volume(corpus: &Path, stem: &str) -> String
 {
+    use crate::register::VOLUMES;
+
     let directory = corpus.join(VOLUMES);
 
     for path in Markdown_Files(&directory)

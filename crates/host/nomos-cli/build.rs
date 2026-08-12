@@ -15,8 +15,6 @@
 //! captures the same four values for the same reason and this file is deliberately its
 //! twin — a build script may not depend on a crate, so the two cannot be one.
 
-use std::collections::BTreeSet;
-
 fn main() -> Result<(), String>
 {
     // Cargo sets both for every build script. A missing one means the contract with cargo
@@ -65,6 +63,8 @@ fn Cargo_Variable(name: &str) -> Result<String, String>
 /// order they happen to be read in cannot reach the variant's identity.
 fn Enabled_Features() -> String
 {
+    use std::collections::BTreeSet;
+
     let features: BTreeSet<String> = std::env::vars()
         .filter_map(|(name, _)| {
             return name

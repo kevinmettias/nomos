@@ -1,12 +1,13 @@
 //! The accept function, exercised.
 
 use super::*;
-use crate::Seed_Governing_Records;
 use crate::Table;
 use nomos_spec_model::{DecisionGap, FieldValue, Severity, SubmissionKind};
 
 fn Store() -> SpecificationStore
 {
+    use crate::Seed_Governing_Records;
+
     let mut store = SpecificationStore::In_Memory().expect("a store");
     Seed_Governing_Records(&mut store).expect("a seeded store");
     return store;

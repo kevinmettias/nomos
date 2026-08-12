@@ -1,6 +1,5 @@
 //! How widely a declaration is visible, as written.
 
-use crate::syntax::Path_As_Written;
 /// The visibility an item declares.
 ///
 /// Four values, not a `bool`. A trait method and a private function are both "not
@@ -40,6 +39,8 @@ impl Visibility
 
     pub(crate) fn Of(visibility: &syn::Visibility) -> Self
     {
+        use crate::syntax::Path_As_Written;
+
         return match visibility
         {
             syn::Visibility::Public(_) => Self::Public,

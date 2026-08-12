@@ -5,7 +5,6 @@ use crate::archive::artifact::ArtifactFrontMatter;
 use crate::Overlaid;
 use crate::FillerBlock;
 use crate::Disposition;
-use crate::IdentifierOutcome;
 use crate::ReconciliationReport;
 use crate::Artifact;
 use crate::Family;
@@ -144,6 +143,8 @@ fn Is_Anchor_Id(id: &str) -> bool
 #[must_use]
 pub fn Reconcile(v14: &[Artifact], v15: &BTreeMap<String, String>) -> ReconciliationReport
 {
+    use crate::IdentifierOutcome;
+
     let mut outcomes: Vec<IdentifierOutcome> = Vec::new();
 
     for artifact in v14

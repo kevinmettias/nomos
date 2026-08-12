@@ -18,7 +18,6 @@
 #![allow(dead_code)]
 
 use std::path::PathBuf;
-use std::process::Command;
 
 /// The binary under test, as cargo built it for this suite.
 ///
@@ -65,6 +64,8 @@ impl Board
     /// with.
     pub(crate) fn Work(&self, arguments: &[&str]) -> Ran
     {
+        use std::process::Command;
+
         let output = Command::new(NOMOS)
             .arg("work")
             .args(arguments)

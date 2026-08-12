@@ -7,8 +7,6 @@ mod source_file;
 pub use key_names::Name_Keys;
 pub use source_file::SourceFile;
 
-use nomos_lang_rust::Recognition;
-use nomos_model::Normalize_Path;
 use std::path::{Path, PathBuf};
 
 /// The identity of the subject a corpus-relative path denotes.
@@ -141,6 +139,8 @@ fn Recognized_Files_Under(root: &Path) -> Vec<PathBuf>
 /// answers to "does this provider read this file" is one answer too many.
 fn Sort_One_Entry(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathBuf>)
 {
+    use nomos_lang_rust::Recognition;
+
     let Some(name) = path.file_name()
     else
     {
@@ -161,6 +161,8 @@ fn Sort_One_Entry(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathB
 /// One file as a subject, or nothing where this machine cannot read it.
 fn Read_One(root: &Path, path: &Path) -> Option<SourceFile>
 {
+    use nomos_model::Normalize_Path;
+
     let relative = path.strip_prefix(root).unwrap_or(path).to_string_lossy();
     let relative = Normalize_Path(&relative);
     let group = relative

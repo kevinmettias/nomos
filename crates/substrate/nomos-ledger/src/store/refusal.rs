@@ -3,7 +3,6 @@
 use nomos_platform::Timestamp;
 
 use crate::ClaimRefusal;
-use crate::exclusion::Refusal_From;
 use crate::LedgerItem;
 use crate::ItemId;
 use crate::ItemState;
@@ -224,6 +223,8 @@ fn Held_Ground(
 /// What `other`'s live claim does to `target`, if anything.
 fn Refused_By(target: &LedgerItem, other: &LedgerItem) -> Option<ClaimRefusal>
 {
+    use crate::exclusion::Refusal_From;
+
     let claim = other.claim.as_ref()?;
     let overlap = target.territory.Intersect(&other.territory);
 

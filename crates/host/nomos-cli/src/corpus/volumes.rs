@@ -1,10 +1,11 @@
 //! Reading the domain volumes off disk and putting them in.
 
 use super::{Assembly, Path, BTreeMap, Absence, Ingest_Source_Document, Refused};
-use super::roots::DOMAIN_VOLUMES;
 
 pub(super) fn Ingest_Volumes(assembly: &mut Assembly, root: &Path, revision: &str)
 {
+    use super::roots::DOMAIN_VOLUMES;
+
     let directory = root.join(DOMAIN_VOLUMES);
     let Some(documents) = Volumes_Under(assembly, &directory)
     else

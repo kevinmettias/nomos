@@ -15,7 +15,6 @@
 //! question stays with the subsystem that asks it.
 
 use nomos_contracts::SubjectId;
-use crate::Content_Digest;
 
 /// The identity of the subject a repository-relative path denotes.
 ///
@@ -24,6 +23,8 @@ use crate::Content_Digest;
 #[must_use]
 pub fn Subject_Of_Path(path: &str) -> SubjectId
 {
+    use crate::Content_Digest;
+
     return SubjectId::From_Digest(Content_Digest(Normalize_Path(path).as_bytes()));
 }
 

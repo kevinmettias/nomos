@@ -2,7 +2,6 @@
 //! `mod` declarations.
 
 use crate::bands::{Declared_Modules, Source_Files};
-use nomos_contract_tests::Workspace;
 use std::collections::BTreeSet;
 use std::path::Path;
 
@@ -18,6 +17,8 @@ use std::path::Path;
 #[test]
 fn Test_Every_Source_File_Should_Be_Reachable()
 {
+    use nomos_contract_tests::Workspace;
+
     let workspace = Workspace::Load();
     let mut orphans = Vec::new();
     for member in workspace.Members()

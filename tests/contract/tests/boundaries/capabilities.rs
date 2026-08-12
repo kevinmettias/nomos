@@ -1,7 +1,5 @@
 //! A capability id is written in one crate's library source and nowhere else.
 
-use crate::bands::Source_Files;
-use nomos_contract_tests::Workspace;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
@@ -55,6 +53,9 @@ fn Test_A_Capability_Id_Should_Be_Written_In_One_Crate()
 /// Every capability id written in library source, and the crates that write it.
 fn Capability_Ids_By_Crate() -> BTreeMap<String, BTreeSet<String>>
 {
+    use crate::bands::Source_Files;
+    use nomos_contract_tests::Workspace;
+
     let workspace = Workspace::Load();
     let mut spelled_by: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
     for member in workspace.Members()

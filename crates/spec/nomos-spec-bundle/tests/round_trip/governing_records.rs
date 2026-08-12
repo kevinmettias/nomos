@@ -1,15 +1,15 @@
 //! The records that say what the store is are content like any other.
 
-use crate::populated::Reimported;
-use nomos_spec_bundle::Export;
-use nomos_spec_store::SpecificationStore;
-
 /// The governing records are content like any other, so they must survive the bundle.
 /// If they did not, the store committed to git would be missing the records that say
 /// what the store is.
 #[test]
 fn Test_The_Governing_Records_Should_Survive_The_Bundle()
 {
+    use crate::populated::Reimported;
+    use nomos_spec_bundle::Export;
+    use nomos_spec_store::SpecificationStore;
+
     let mut seeded = SpecificationStore::In_Memory().expect("opens");
     nomos_spec_store::Seed_Governing_Records(&mut seeded).expect("seeds");
 

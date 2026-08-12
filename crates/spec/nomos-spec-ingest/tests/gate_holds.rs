@@ -6,12 +6,12 @@
 //! recorded data: the hashes below were produced by v14's Python toolchain, not by us.
 
 use nomos_spec_ingest::{Check_Against_Manifest, Ingest_Statements, Parse_Block_Lineage, Parse_Statements};
-use nomos_spec_store::SpecificationStore;
 use std::collections::BTreeMap;
-use std::path::Path;
 
 fn Fixture(name: &str) -> String
 {
+    use std::path::Path;
+
     let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/corpus").join(name);
     return std::fs::read_to_string(&path)
         .unwrap_or_else(|error| panic!("the gate needs {}: {error}", path.display()));
@@ -117,6 +117,8 @@ fn Test_Front_Matter_Should_Be_Outside_The_Gate()
 #[test]
 fn Test_Real_Statements_Should_Ingest_Without_Divergence()
 {
+    use nomos_spec_store::SpecificationStore;
+
     let file = Parse_Statements(&Fixture("statements-slice.yaml")).expect("parses");
     let mut store = SpecificationStore::In_Memory().expect("opens");
 

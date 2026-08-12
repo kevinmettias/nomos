@@ -1,4 +1,3 @@
-use crate::Format;
 use crate::Item;
 use crate::Projection;
 use crate::Section;
@@ -20,6 +19,8 @@ struct Generated<'a>
 
 pub fn Render(projection: &Projection) -> Result<String, ProjectError>
 {
+    use crate::Format;
+
     return match projection.format
     {
         Format::Markdown => Ok(Markdown(projection)),

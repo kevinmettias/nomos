@@ -1,5 +1,4 @@
 use crate::VARIABLES;
-use nomos_contract_tests::Workspace;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
@@ -32,6 +31,8 @@ pub(crate) fn Variables_Read_By(text: &str) -> Vec<&'static str>
 /// cargo metadata will enumerate for us, and the question here is about files on disk.
 pub(crate) fn Files_Naming_A_Corpus(root: &Path) -> BTreeSet<String>
 {
+    use nomos_contract_tests::Workspace;
+
     let workspace = Workspace::Load();
     let mut found = BTreeSet::new();
     for member in workspace.Members()

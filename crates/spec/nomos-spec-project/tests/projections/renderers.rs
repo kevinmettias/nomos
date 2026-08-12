@@ -5,9 +5,7 @@
 //! is visible from the selection — they are all properties of the writing.
 
 use crate::store::{Populated, Profile_Named, Rendered};
-use nomos_spec_model::Segment;
 use nomos_spec_project::Build;
-use nomos_spec_store::SpecificationStore;
 
 #[test]
 fn Test_A_Markdown_Table_Cell_Should_Not_Break_The_Table()
@@ -74,6 +72,8 @@ fn Test_A_Yaml_Projection_Should_Parse_As_Yaml()
 #[test]
 fn Test_An_Html_Projection_Should_Escape_What_It_Renders()
 {
+    use nomos_spec_model::Segment;
+
     let mut store = Populated();
     let document = store
         .Put_Source_Document("volumes/04-escapes.md", "v14.36", "# Escapes\n\n<script>x</script>\n")
@@ -91,6 +91,8 @@ fn Test_An_Html_Projection_Should_Escape_What_It_Renders()
 #[test]
 fn Test_The_Governing_Records_Should_Project_As_A_Document_Suite()
 {
+    use nomos_spec_store::SpecificationStore;
+
     let mut store = SpecificationStore::In_Memory().expect("opens");
     nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
 

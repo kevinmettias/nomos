@@ -2,7 +2,6 @@
 
 use crate::Declared_Guarantee;
 use crate::PROVIDER;
-use crate::Scan;
 use crate::ScannedFile;
 use crate::ScannedItem;
 // check-dependency-placement reports two of this crate's edges as this file's alone. That
@@ -41,6 +40,8 @@ pub struct FactContext
 #[must_use]
 pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> MaterializedFact
 {
+    use crate::Scan;
+
     let scanned = Scan(source);
     let guarantee = Declared_Guarantee();
     let key = Keyed(subject, source, guarantee, context);

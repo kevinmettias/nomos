@@ -1,8 +1,6 @@
 //! One optional corpus file, read, parsed and ingested, or accounted for.
 
 use super::{PathBuf, Assembly, Absence, IngestError, SpecificationStore, Path, Parse_Statements, Ingest_Statements, Parse_Catalog, Ingest_Catalog};
-use super::roots::STATEMENTS;
-use super::roots::CATALOG;
 
 /// One optional corpus file, and what its absence costs.
 ///
@@ -95,6 +93,8 @@ pub(super) fn Note(assembly: &mut Assembly, input: &Layered<'_>, count: u32, nou
 
 pub(super) fn Ingest_Statement_File(assembly: &mut Assembly, root: &Path)
 {
+    use super::roots::STATEMENTS;
+
     let input = Layered {
         subject: "the normative statements",
         path: root.join(STATEMENTS),
@@ -113,6 +113,8 @@ pub(super) fn Ingest_Statement_File(assembly: &mut Assembly, root: &Path)
 
 pub(super) fn Ingest_Catalog_File(assembly: &mut Assembly, root: &Path)
 {
+    use super::roots::CATALOG;
+
     let input = Layered {
         subject: "the node catalog",
         path: root.join(CATALOG),

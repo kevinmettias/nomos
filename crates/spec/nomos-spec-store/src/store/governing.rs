@@ -1,6 +1,5 @@
 use crate::{AUTHORED, SpecificationStore};
 use crate::StoreError;
-use nomos_spec_model::Parse_Record;
 
 /// The records that govern this system, embedded so they travel with the binary.
 ///
@@ -228,6 +227,8 @@ fn Put_The_Relations_Of(
     report: &mut SeedReport,
 ) -> Result<(), StoreError>
 {
+    use nomos_spec_model::Parse_Record;
+
     let record = Parse_Record(text).map_err(|error| StoreError::Record {
         path: (*path).to_owned(),
         cause: error.to_string(),

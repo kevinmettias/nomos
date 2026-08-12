@@ -1,5 +1,4 @@
 use nomos_contracts::Digest128;
-use nomos_model::Digest_Of_Parts;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct InputDigest(Digest128);
@@ -9,6 +8,8 @@ impl InputDigest
     #[must_use]
     pub fn Of(parts: &[&[u8]]) -> Self
     {
+        use nomos_model::Digest_Of_Parts;
+
         return Self(Digest_Of_Parts(parts));
     }
 

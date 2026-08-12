@@ -26,8 +26,6 @@ mod state;
 pub use kind::SubmissionKind;
 pub use state::SubmissionState;
 
-use std::collections::BTreeSet;
-
 use crate::DecisionGap;
 use crate::Failure;
 use crate::Severity;
@@ -327,6 +325,8 @@ fn Check_Nothing_Required_Was_Inferred(submission: &Submission, failures: &mut V
 /// question was answered.
 fn Check_No_Blocking_Gap_Is_Open(submission: &Submission, failures: &mut Vec<Failure>)
 {
+    use std::collections::BTreeSet;
+
     let open: BTreeSet<&str> = submission
         .gaps
         .iter()

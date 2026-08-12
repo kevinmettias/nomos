@@ -5,7 +5,6 @@
 //! same store against each other, so a fixture restated per module would let two of them
 //! drift apart and the comparison would still pass.
 
-use nomos_spec_model::Segment;
 use nomos_spec_project::{Build, Catalogue, Profile};
 use nomos_spec_store::SpecificationStore;
 
@@ -58,6 +57,8 @@ pub(crate) fn Populated_In_Order(order: Order) -> SpecificationStore
 /// One document and the blocks it segments into, which the store holds separately.
 fn Put_Document(store: &mut SpecificationStore, path: &str, text: &str)
 {
+    use nomos_spec_model::Segment;
+
     let document = store
         .Put_Source_Document(path, "v14.36", text)
         .expect("stores the document");

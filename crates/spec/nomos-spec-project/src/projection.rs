@@ -18,7 +18,6 @@ pub use item::Item;
 pub use output::Output;
 
 use crate::Section;
-use nomos_spec_model::ContentHash;
 use serde::Serialize;
 
 pub const DO_NOT_EDIT: &str =
@@ -47,6 +46,8 @@ impl Projection
     #[must_use]
     pub fn Inputs_Digest(&self) -> String
     {
+        use nomos_spec_model::ContentHash;
+
         let mut material = String::new();
         for input in &self.inputs
         {

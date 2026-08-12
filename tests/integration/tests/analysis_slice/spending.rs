@@ -8,7 +8,6 @@
 use crate::corpus::{Precision_Corpus, Surface_Of};
 use nomos_analysis::FactStore;
 use nomos_integration_tests::{Approximate_Floor, RunReport, Slice, SourceFile};
-use nomos_lang_rust as rust;
 use nomos_lang_rust_scan as scan;
 
 /// The floor, spent.
@@ -25,6 +24,8 @@ use nomos_lang_rust_scan as scan;
 #[test]
 fn Test_A_Lowered_Floor_Should_Be_Spent_On_The_Subjects_The_Parser_Refuses()
 {
+    use nomos_lang_rust as rust;
+
     let corpus = Precision_Corpus();
     let run = Slice::Over(&corpus).Accepting(Approximate_Floor()).Run(&corpus);
 

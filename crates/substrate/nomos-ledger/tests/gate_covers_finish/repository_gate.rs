@@ -1,8 +1,5 @@
 //! The repository's own gate is still derivable.
 
-use nomos_ledger::VerificationPredicate;
-use std::path::Path;
-use std::time::Duration;
 
 /// A guard on the real workflow rather than a fixture. If the repository's gate is
 /// renamed or rewritten as a script, finishing anything stops working — and this test is
@@ -10,6 +7,8 @@ use std::time::Duration;
 #[test]
 fn Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step()
 {
+    use std::path::Path;
+
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
     let workflow = std::fs::read_to_string(nomos_ledger::Workflow_Path(&root))
         .expect("this repository has a gate workflow");
@@ -30,6 +29,9 @@ fn Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step()
 #[test]
 fn Test_A_Predicate_Should_Carry_A_Timeout()
 {
+    use nomos_ledger::VerificationPredicate;
+    use std::time::Duration;
+
     let predicate = VerificationPredicate::New(vec!["cargo".to_owned()]);
 
     assert!(Duration::from_secs(predicate.timeout_seconds) > Duration::ZERO);

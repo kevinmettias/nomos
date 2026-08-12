@@ -4,7 +4,6 @@
 //! and `pub(in …)` all begin with the same three bytes and none of them is public.
 
 use crate::reading::declaration::items::{Filing, Source, Walk};
-use crate::reading::masks::Identifier_After;
 use std::collections::BTreeMap;
 use crate::reading::module_tree::Module;
 
@@ -75,6 +74,8 @@ pub(crate) fn Load_Inline(
 /// The name a declaration gives, taken from just after its keyword.
 pub(crate) fn Named(declaration: &str, keyword: &str) -> Option<String>
 {
+    use crate::reading::masks::Identifier_After;
+
     let at = Keyword_At(declaration, keyword)?;
     let from = at.checked_add(keyword.len())?;
     let (name, _) = Identifier_After(declaration.as_bytes(), from)?;

@@ -6,11 +6,9 @@
 //!
 //! [`domains`]: crate::domains
 
-use crate::goldens::BUNDLE_GOLDEN;
 use crate::spec_productions::{Bundle_Bytes, Order};
 use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_integration_tests::{Production, Verify};
-use std::cell::Cell;
 
 /// A declaration with the bundle row's triple, over a domain that does not hold it.
 ///
@@ -41,6 +39,8 @@ impl Strategy for Wobbly
 #[test]
 fn Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness()
 {
+    use std::cell::Cell;
+
     let call = Cell::new(0_u32);
     let wobbles = || {
         let seen = call.get();
@@ -75,6 +75,8 @@ fn Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness()
 #[test]
 fn Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins()
 {
+    use crate::goldens::BUNDLE_GOLDEN;
+
     let honest = Production {
         trace: Bundle_Bytes(Order::Forwards),
     };

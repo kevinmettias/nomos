@@ -2,7 +2,6 @@
 
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 use std::io::Read;
-use std::process::Stdio;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
@@ -168,6 +167,8 @@ impl ProcessLauncher for StdProcessLauncher
 /// terminal nobody is at would hang until the timeout and report as slow work.
 fn Spawned(command: &Command, program: &str) -> Result<std::process::Child, String>
 {
+    use std::process::Stdio;
+
     let arguments = command.argv.get(1..).unwrap_or_default();
     let mut builder = std::process::Command::new(program);
     builder

@@ -12,7 +12,6 @@
 //! [`ReleaseOutcome::Abandoned`]: nomos_ledger::ReleaseOutcome::Abandoned
 
 use std::path::PathBuf;
-use std::process::Command;
 
 const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 
@@ -62,6 +61,8 @@ impl Board
     /// Runs `nomos work …`, returning what it said and what it exited with.
     fn Work(&self, arguments: &[&str]) -> Ran
     {
+        use std::process::Command;
+
         let output = Command::new(NOMOS)
             .arg("work")
             .args(arguments)

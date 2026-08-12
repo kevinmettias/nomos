@@ -2,9 +2,6 @@
 
 use crate::BundleError;
 use crate::Record;
-use crate::row::submission::Submission;
-use crate::row::submission::gap::SubmissionGap;
-use crate::row::submission::value::SubmissionValue;
 use rusqlite::Connection;
 
 use super::{Collect, Columns};
@@ -12,6 +9,8 @@ use super::{Collect, Columns};
 /// The submissions, ordered by the node they are.
 pub(super) fn Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::row::submission::Submission;
+
     return Collect(
         connection,
         records,
@@ -38,6 +37,8 @@ pub(super) fn Submissions(connection: &Connection, records: &mut Vec<Record>) ->
 pub(super) fn Submission_Values(connection: &Connection, records: &mut Vec<Record>)
 -> Result<(), BundleError>
 {
+    use crate::row::submission::value::SubmissionValue;
+
     let mut statement = connection.prepare(
         "SELECT n.node_id, v.field, v.ordinal, v.origin, v.value, v.value_hash,
                 v.supersedes_hash, v.recorded_at
@@ -72,6 +73,8 @@ pub(super) fn Submission_Values(connection: &Connection, records: &mut Vec<Recor
 /// a bundle that dropped them would lose the record that a question was ever asked.
 pub(super) fn Submission_Gaps(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
+    use crate::row::submission::gap::SubmissionGap;
+
     return Collect(
         connection,
         records,

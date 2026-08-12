@@ -20,7 +20,6 @@ use crate::FactError;
 use crate::FactIdentity;
 use crate::FactReader;
 use crate::MaterializedFact;
-use crate::GuaranteeDigest;
 use crate::InputDigest;
 use crate::ReadOutcome;
 use crate::FactKey;
@@ -87,6 +86,8 @@ impl<'store, 'registry> Reader<'store, 'registry>
         offer: &ProviderOffer,
     ) -> FactKey
     {
+        use crate::GuaranteeDigest;
+
         return FactKey {
             contract: capability.clone(),
             contract_version: offer.version,

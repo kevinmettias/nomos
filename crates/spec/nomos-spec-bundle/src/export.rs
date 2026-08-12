@@ -13,7 +13,6 @@ use submission::{Submission_Gaps, Submission_Values, Submissions};
 
 use crate::BundleError;
 use crate::Bundle;
-use crate::columns::Assert_Columns_Covered;
 use crate::Record;
 use nomos_spec_store::{SpecificationStore, Table};
 use rusqlite::Connection;
@@ -35,6 +34,8 @@ use rusqlite::Connection;
 /// not carry, and [`BundleError::Sql`] on any query failure.
 pub fn Export(store: &SpecificationStore) -> Result<Bundle, BundleError>
 {
+    use crate::columns::Assert_Columns_Covered;
+
     let connection = store.Connection();
     let records = Every_Record(connection)?;
 

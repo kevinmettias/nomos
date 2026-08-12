@@ -17,8 +17,6 @@
 //! stop the wide sentence being restated somewhere nothing reads back, which is how the
 //! defect arrived in the first place.
 
-use crate::bands::Repository_Root;
-
 /// The claim that was made three times and chosen once.
 const OWNERSHIP: &str = "authoritative statement of Nomos";
 
@@ -57,6 +55,8 @@ fn Test_Band_Zero_Should_Be_Described_In_One_Place()
 /// text rather than two questions asked separately.
 fn Read_The_Three() -> (Vec<&'static str>, Vec<&'static str>)
 {
+    use crate::bands::Repository_Root;
+
     let root = Repository_Root();
     let mut claiming = Vec::new();
     let mut silent = Vec::new();

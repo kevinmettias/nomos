@@ -18,7 +18,6 @@ mod document;
 mod tests;
 
 use prose::{Declared, Sourced, Ingest_Prose};
-use machine::Ingest_Machine;
 pub use commentary::{Prepare_Commentary_View, Statements_Sourced_Only_From_Commentary};
 use document::{Suite, Text, Ingest_Document, Qualified, Stem, Claim, Sql, Slug, Dispose};
 
@@ -105,6 +104,8 @@ pub fn Ingest_Sibling_Suite(
     sibling: Sibling,
 ) -> Result<SuiteReport, IngestError>
 {
+    use machine::Ingest_Machine;
+
     let suite = Suite {
         sibling,
         uid: store.Put_Suite(sibling.Suite_Id(), sibling.Title(), SuiteAuthority::Sibling)?,

@@ -11,7 +11,6 @@
 //! and a stale inventory understates the hole, which is the direction that flatters.
 
 use crate::reading::functions::{Function, Functions};
-use crate::reading::source_files::Source_Files;
 use crate::Workspace;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
@@ -89,6 +88,8 @@ fn Gates_In_Member(member_root: &Path, root: &Path) -> Vec<CorpusGate>
 /// Every gate the files under one source root declare.
 fn Gates_Under(source_root: &Path, root: &Path) -> Vec<CorpusGate>
 {
+    use crate::reading::source_files::Source_Files;
+
     let mut gates = Vec::new();
 
     for file in Source_Files(source_root)

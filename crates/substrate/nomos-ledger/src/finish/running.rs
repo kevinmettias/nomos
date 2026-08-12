@@ -1,7 +1,6 @@
 //! Running a command to a verdict, and refusing one that did not reach one.
 
 use super::{ItemId, FinishRefusal, Path, LedgerDocument, VerificationPredicate, ClaimRefusal, ProcessLauncher, Command, Tail_Of, ExitOutcome};
-use super::refusal::OUTPUT_TAIL_LIMIT;
 
 /// A predicate that ran and said no.
 ///
@@ -99,6 +98,8 @@ pub(super) fn Ran_To_Completion(
     item: &ItemId,
 ) -> Result<Ran, FinishRefusal>
 {
+    use super::refusal::OUTPUT_TAIL_LIMIT;
+
     let output = launcher
         .Run(command)
         .map_err(|cause| FinishRefusal::CouldNotRun {

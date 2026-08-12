@@ -3,8 +3,6 @@
 use nomos_ledger::{Claim_Refusal, ClaimRefusal, ItemState, LedgerDocument, LedgerItem};
 use nomos_platform::Timestamp;
 
-use super::report::Refusal_Label;
-
 /// The label this item lists under, or nothing when the filter excludes it.
 pub(super) fn Listed_As(
     document: &LedgerDocument,
@@ -165,6 +163,8 @@ fn Print_Verification(found: &LedgerItem, output: &mut impl std::io::Write)
 /// every input; what changed is that one function decides.
 pub(super) fn Listing_Label(document: &LedgerDocument, item: &LedgerItem, now: Timestamp) -> &'static str
 {
+    use super::report::Refusal_Label;
+
     return match Claim_Refusal(document, &item.id, now)
     {
         // Nothing refuses it, or nothing is meant to: the state word is the honest answer in

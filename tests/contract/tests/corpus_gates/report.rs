@@ -1,5 +1,4 @@
 use crate::{GATED_TOTAL, GATES, VARIABLES};
-use std::path::PathBuf;
 
 /// Says how much of this suite did not run, whatever the answer is.
 ///
@@ -32,6 +31,8 @@ fn Test_A_Run_Should_Report_What_It_Did_Not_Check()
 /// One line per corpus variable, and how many assertions the unset ones carry.
 pub(crate) fn Per_Variable_Report() -> (usize, Vec<String>)
 {
+    use std::path::PathBuf;
+
     let mut skipped = 0_usize;
     let mut lines = Vec::new();
     for variable in VARIABLES

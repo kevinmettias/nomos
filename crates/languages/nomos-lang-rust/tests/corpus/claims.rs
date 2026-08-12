@@ -5,11 +5,9 @@
 //! names `NOMOS_RUST_CORPUS`; each reaches it through [`Corpus_Or_Skip`], so moving one to a
 //! sibling module would leave it gated in fact and counted by nobody.
 
-use crate::soundness::Names_Checked;
 use crate::walk::{Each_File, Rust_Files};
 use crate::walked::{Report_The_Walk, Walk};
 use nomos_lang_rust::{Read_Source, Recognition};
-use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
 /// The corpus this provider was built to survive.
@@ -196,6 +194,8 @@ fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
 #[test]
 fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
 {
+    use crate::soundness::Names_Checked;
+
     let Some(corpus) = Corpus_Or_Skip()
     else
     {
@@ -317,6 +317,8 @@ fn Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown()
 #[test]
 fn Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed()
 {
+    use std::collections::BTreeMap;
+
     let Some(corpus) = Corpus_Or_Skip()
     else
     {

@@ -1,7 +1,5 @@
 //! The workflow was read at all.
 
-use crate::workflow::Workflow;
-
 /// The vacuity guard for this suite.
 ///
 /// Every assertion beside it reads the workflow as text, and an empty string contains no
@@ -13,6 +11,8 @@ use crate::workflow::Workflow;
 #[test]
 fn Test_The_Workflow_Should_Not_Appear_Empty()
 {
+    use crate::workflow::Workflow;
+
     let workflow = Workflow();
 
     let steps = workflow

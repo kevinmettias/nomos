@@ -5,7 +5,6 @@ use nomos_spec_model::RecordRelation;
 use crate::BlockChange;
 use crate::IdentityChange;
 use crate::NormativeMovement;
-use crate::NormativeOutcome;
 use crate::StagedEdit;
 
 /// What committing an edit would change.
@@ -94,6 +93,8 @@ impl EditPreview
     #[must_use]
     pub fn Wording_Moved(&self) -> bool
     {
+        use crate::NormativeOutcome;
+
         return self.blocks.iter().any(BlockChange::Disturbs_Wording)
             || self.statements.iter().any(|movement| {
                 return matches!(

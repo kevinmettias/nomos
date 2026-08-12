@@ -5,7 +5,6 @@ use crate::DocumentKind;
 use crate::Index;
 use crate::{Commit, COMMIT_SCHEMA};
 use crate::StoreError;
-use nomos_contracts::SchemaId;
 use std::collections::BTreeMap;
 
 pub struct DocumentStore
@@ -59,6 +58,8 @@ impl DocumentStore
     /// commit whose records were lost.
     fn Admitted(&self, commit: &Commit) -> Result<Document, StoreError>
     {
+        use nomos_contracts::SchemaId;
+
         if commit.records.is_empty()
         {
             return Err(StoreError::Vacuous {

@@ -9,14 +9,14 @@ use nomos_analysis::InvalidationReport;
 use nomos_integration_tests::{
     Approximate_Floor, Corpus, Decode_Surface, Edited, Name_Keys, Slice, SourceFile, Surface, Walk
 };
-use nomos_lang_rust_scan as scan;
 use nomos_workspace::ChangeSource;
-use std::path::Path;
 
 /// The corpus small enough to know entirely.
 pub(crate) const PRECISION_CORPUS: &str = "../corpus/analysis";
 pub(crate) fn Precision_Corpus() -> Corpus
 {
+    use std::path::Path;
+
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join(PRECISION_CORPUS);
     let corpus = Walk(&root);
 
@@ -132,6 +132,8 @@ pub(crate) fn Alpha_One(corpus: &Corpus) -> &SourceFile
 /// naming the preference without lowering the floor gets the parser back.
 pub(crate) fn Loose(corpus: &Corpus) -> Slice
 {
+    use nomos_lang_rust_scan as scan;
+
     return Slice::Over(corpus)
         .Accepting(Approximate_Floor())
         .Preferring(scan::PROVIDER);

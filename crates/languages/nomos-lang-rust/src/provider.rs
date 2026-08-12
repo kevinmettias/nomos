@@ -8,8 +8,6 @@
 
 use crate::Materialization;
 use crate::{Declared_Guarantee, PROVIDER};
-use crate::Reading;
-use crate::Read_Source;
 use crate::SyntaxFacts;
 use crate::SyntaxItem;
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
@@ -56,6 +54,9 @@ pub(crate) fn Syntax_Inputs(source: &str) -> InputDigest
 #[must_use]
 pub fn Materialize(subject: SubjectId, source: &str, context: FactContext) -> Materialization
 {
+    use crate::Read_Source;
+    use crate::Reading;
+
     let facts = match Read_Source(source)
     {
         Reading::Parsed(facts) => facts,

@@ -9,7 +9,6 @@
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
 use crate::SpecificationStore;
-use crate::NodeRow;
 use crate::StoreError;
 use nomos_spec_model::{
     ContentHash, Failure, FieldValue, Origin, Refusal, Submission, SubmissionState, Validate,
@@ -76,6 +75,8 @@ pub fn Accept_Submission(
     submission: &Submission,
 ) -> Result<i64, AcceptError>
 {
+    use crate::NodeRow;
+
     let failures = Refusals(store, submission)?;
     if !failures.is_empty()
     {

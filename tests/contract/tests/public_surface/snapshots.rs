@@ -4,7 +4,6 @@
 //! and a member that produces no surface and never said it would not — the first is the
 //! assertion this suite exists for and the other two are the ways it could go quiet.
 
-use crate::bless::Bless;
 use crate::reading::{
     Rendered, Snapshot_Directory, Snapshot_Path, Snapshotted_Packages, Surfaces, BLESS,
 };
@@ -22,6 +21,8 @@ const WITHOUT_A_LIBRARY: &[&str] = &["nomos-cli"];
 #[test]
 fn Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot()
 {
+    use crate::bless::Bless;
+
     let surfaces = Surfaces();
 
     assert!(

@@ -16,12 +16,7 @@ use crate::productions::{
     Snapshot_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
-use nomos_analysis::FactReuse;
 use nomos_lang_rust::SyntaxFactProduction;
-use nomos_lang_rust_scan::ScanFactProduction;
-use nomos_spec_bundle::BundleSerialization;
-use nomos_spec_project::ProjectionOutput;
-use nomos_workspace::SnapshotSerialization;
 
 #[test]
 fn Test_The_Parser_Should_Meet_Its_Declared_Strategy()
@@ -49,12 +44,16 @@ fn Test_The_Rollup_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_The_Scanner_Should_Meet_Its_Declared_Strategy()
 {
+    use nomos_lang_rust_scan::ScanFactProduction;
+
     Check::<ScanFactProduction>("scan-fact-production", &Scanned_Production, SCANNED_GOLDEN);
 }
 
 #[test]
 fn Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy()
 {
+    use nomos_analysis::FactReuse;
+
     // No golden. `FactReuse` declares `CrossRun`, and `Cross_Environment_Owed` therefore
     // never reaches for one — passing a real digest here would be a check the declaration
     // did not ask for, which is the same defect as a missing one pointed the other way.
@@ -64,6 +63,8 @@ fn Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy()
 {
+    use nomos_workspace::SnapshotSerialization;
+
     Check::<SnapshotSerialization>(
         "snapshot-serialization",
         &Snapshot_Production,
@@ -74,6 +75,8 @@ fn Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy()
 {
+    use nomos_spec_bundle::BundleSerialization;
+
     Check::<BundleSerialization>(
         "bundle-serialization",
         &Alternating(Bundle_Bytes),
@@ -84,6 +87,8 @@ fn Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy()
 #[test]
 fn Test_Projection_Output_Should_Meet_Its_Declared_Strategy()
 {
+    use nomos_spec_project::ProjectionOutput;
+
     Check::<ProjectionOutput>(
         "projection-output",
         &Alternating(Projection_Bytes),

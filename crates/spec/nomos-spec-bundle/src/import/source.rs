@@ -1,13 +1,10 @@
 //! Inserting the source corpus: the blobs, the documents, and everything addressed inside one.
 
 use base64::Engine as _;
-use base64::engine::general_purpose::STANDARD;
-use nomos_spec_model::ContentHash;
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
 use crate::Blob;
-use crate::BlobEncoding;
 use crate::Bundle;
 use crate::Record;
 
@@ -40,6 +37,9 @@ pub(super) fn Insert_Blobs(transaction: &Transaction<'_>, bundle: &Bundle) -> Re
 /// A blob's bytes, in whichever form the bundle carried them.
 fn Decoded(blob: &Blob) -> Result<Vec<u8>, BundleError>
 {
+    use crate::BlobEncoding;
+    use base64::engine::general_purpose::STANDARD;
+
     return match blob.encoding
     {
         BlobEncoding::Utf8 => Ok(blob.content.clone().into_bytes()),
@@ -56,6 +56,8 @@ fn Decoded(blob: &Blob) -> Result<Vec<u8>, BundleError>
 /// bundle that miscounted what it was carrying.
 fn Assert_Declared(blob: &Blob, bytes: &[u8]) -> Result<(), BundleError>
 {
+    use nomos_spec_model::ContentHash;
+
     let digest = ContentHash::Of_Bytes(bytes);
 
     if digest.As_Str() != blob.sha256

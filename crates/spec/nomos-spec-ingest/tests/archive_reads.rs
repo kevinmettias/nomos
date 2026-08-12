@@ -10,7 +10,6 @@
 //! the same answer, and one of them is a silent loss of a whole revision.
 
 use nomos_spec_ingest::{Archive, ArchiveErrorKind, Archives_In};
-use std::io::Write as _;
 use std::path::PathBuf;
 
 fn Archives() -> Option<PathBuf>
@@ -30,6 +29,8 @@ fn Archives() -> Option<PathBuf>
 /// reading a file another was still writing.
 fn Fixture(name: &str) -> PathBuf
 {
+    use std::io::Write as _;
+
     let path = std::env::temp_dir().join(format!("nomos-p3-archive-{name}.zip"));
     let file = std::fs::File::create(&path).expect("creates the fixture");
     let mut writer = zip::ZipWriter::new(file);

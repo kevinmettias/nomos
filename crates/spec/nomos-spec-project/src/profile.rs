@@ -5,7 +5,6 @@ pub use section::ProfileSection;
 
 use crate::Format;
 use crate::ProjectError;
-use nomos_spec_model::ContentHash;
 use serde::{Deserialize, Serialize};
 
 /// Whether a field says nothing once its surrounding space is discounted.
@@ -90,6 +89,8 @@ impl Profile
     #[must_use]
     pub fn Digest(&self) -> String
     {
+        use nomos_spec_model::ContentHash;
+
         let canonical = serde_json::to_string(self).unwrap_or_default();
 
         return ContentHash::Of(&canonical).As_Str().to_owned();

@@ -9,7 +9,6 @@
 use crate::store::{Populated, Profile_Named};
 use nomos_spec_project::{Build, Format, Profile};
 use nomos_spec_store::SpecificationStore;
-use std::collections::BTreeSet;
 
 /// A store holding two nodes whose identifiers share a prefix.
 fn With_Overlapping_Identifiers() -> SpecificationStore
@@ -116,6 +115,8 @@ fn Test_A_Subject_Should_See_The_Relations_At_Either_End()
 #[test]
 fn Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format()
 {
+    use std::collections::BTreeSet;
+
     let store = Populated();
     let expected = [
         ("subject-dossier", Format::Markdown, "subjects/AGT-EXEC-001/dossier.md"),

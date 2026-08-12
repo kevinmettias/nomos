@@ -11,19 +11,15 @@ use std::time::Duration;
 use nomos_platform::{Clock, CrossProcessLock, FileSystem};
 
 use crate::AddRefusal;
-use crate::Claim;
 use crate::ClaimRefusal;
-use crate::exclusion::Check_Lease;
 use crate::LedgerItem;
 use crate::ItemId;
 use crate::LedgerError;
 use crate::Reservation;
 
-use super::claiming::Replace_Lapsed;
 use super::file::Decide_Under_Lock;
 use super::refusal::{Decline_Refusal, Takeover_Refusal};
 use super::reservation::{RecordDeclaration, Refuse_A_Spent_Record};
-use super::validation::Validate;
 use super::FileLedger;
 
 /// The body of [`FileLedger::Validate_Current`], which keeps the documentation and the signature.
@@ -31,6 +27,8 @@ pub(super) fn Validate_Current<F: FileSystem, C: Clock, L: CrossProcessLock>(
     ledger: &FileLedger<F, C, L>,
 ) -> Result<(), LedgerError>
 {
+    use super::validation::Validate;
+
     let violations = Validate(&ledger.Load()?, ledger.clock.Now());
 
     return if violations.is_empty()
@@ -108,6 +106,10 @@ pub(super) fn Take_Over<F: FileSystem, C: Clock, L: CrossProcessLock>(
     lease: Duration,
 ) -> Result<Reservation, ClaimRefusal>
 {
+    use crate::Claim;
+    use crate::exclusion::Check_Lease;
+    use super::claiming::Replace_Lapsed;
+
     Check_Lease(lease)?;
 
     return Decide_Under_Lock(ledger, holder, |document, now| {

@@ -1,7 +1,5 @@
 //! Every normative statement names where it came from.
 
-use crate::offending::Offending;
-use crate::Violation;
 use crate::RuleOutcome;
 use crate::Rule;
 use nomos_spec_store::{SpecificationStore, Table};
@@ -39,6 +37,9 @@ impl Rule for EveryStatementTracesToSource
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
     {
+        use crate::offending::Offending;
+        use crate::Violation;
+
         return Offending(store, Table::NormativeStatements, UNTRACED, |row| {
             let id: String = row.get(0)?;
             return Ok(Violation {

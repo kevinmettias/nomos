@@ -7,8 +7,6 @@
 //! agree with the wrong numbers.
 
 use crate::rows::{Count, Counts, Entry, Family, Register};
-use nomos_spec_ingest::Restored;
-use std::collections::BTreeSet;
 
 const PLAN_HEADLINE: &[&str] = &[
     "282 table_row",
@@ -42,6 +40,8 @@ fn Test_Every_Headline_Clause_Should_Be_Answered_Once()
 #[test]
 fn Test_Every_Restored_Family_Should_Carry_A_Fate()
 {
+    use nomos_spec_ingest::Restored;
+
     let entries = Register();
     let named: Vec<&str> = entries.iter().filter_map(|entry| return entry.family.as_deref()).collect();
 
@@ -92,6 +92,8 @@ fn Test_A_Family_Should_Sum_To_The_Size_The_Counts_Register_Measured()
 #[test]
 fn Test_Every_Entry_Should_Say_What_The_Clause_Resolved_To()
 {
+    use std::collections::BTreeSet;
+
     let mut seen: BTreeSet<&str> = BTreeSet::new();
 
     for entry in &Register()

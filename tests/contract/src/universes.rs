@@ -26,7 +26,6 @@
 //! nothing about this crate; this crate sits at band 100 and observes it, along with
 //! everything else in the workspace.
 
-use crate::Workspace;
 use std::path::{Path, PathBuf};
 
 // check-dependency-placement reports three of this crate's edges -- nomos_rules,
@@ -44,6 +43,8 @@ pub use nomos_rules::{DeclaredUniverse, UniverseKind};
 #[must_use]
 pub fn Declared_Universes() -> Vec<DeclaredUniverse>
 {
+    use crate::Workspace;
+
     let workspace = Workspace::Load();
     let root = Workspace::Workspace_Root();
     let mut universes = Vec::new();

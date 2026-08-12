@@ -10,9 +10,7 @@
 //! So two of the four are here on loan from the module that owns their subject, and each says
 //! so where it is defined.
 
-use crate::corpus::Loose;
 use nomos_integration_tests::{Corpus, Decode_Surface, RunReport, Slice, Walk};
-use std::path::PathBuf;
 
 /// The corpus large enough to be a test.
 const SCALE_CORPUS: &str = "F:/repos/xvpe";
@@ -25,6 +23,8 @@ const SCALE_CORPUS: &str = "F:/repos/xvpe";
 /// nothing and said so.
 fn Scale_Corpus_Or_Skip() -> Option<Corpus>
 {
+    use std::path::PathBuf;
+
     let configured = std::env::var_os("NOMOS_RUST_CORPUS");
     let root = configured
         .clone()
@@ -182,6 +182,8 @@ fn Recognized_Rather_Than_Skipped(second: &RunReport, first: &RunReport)
 #[test]
 fn Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus()
 {
+    use crate::corpus::Loose;
+
     let Some(corpus) = Scale_Corpus_Or_Skip()
     else
     {

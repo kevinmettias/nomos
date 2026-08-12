@@ -1,7 +1,5 @@
 //! One declaration in a syntax payload.
 
-use crate::NOT_APPLICABLE;
-use crate::PUBLIC;
 use crate::Observation;
 /// One `item` record.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -41,6 +39,8 @@ impl PayloadItem
     #[must_use]
     pub fn Is_Public(&self) -> bool
     {
+        use crate::PUBLIC;
+
         return self.visibility == PUBLIC;
     }
 
@@ -50,6 +50,8 @@ impl PayloadItem
     #[must_use]
     pub fn Declares_No_Visibility(&self) -> bool
     {
+        use crate::NOT_APPLICABLE;
+
         return self.visibility == NOT_APPLICABLE;
     }
 }

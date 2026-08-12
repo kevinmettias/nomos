@@ -5,11 +5,7 @@
 //! registry, or a registry with nothing composed around it yet, has to be able to ask for
 //! it without holding the thing it is meant to compose.
 
-use nomos_cap_syntax as syntax;
 use nomos_capability::Registry;
-use nomos_lang_rust as rust;
-use nomos_lang_rust_scan as scan;
-use crate::surface;
 
 /// Declares both capabilities and registers both providers.
 ///
@@ -22,6 +18,11 @@ use crate::surface;
 #[must_use]
 pub fn Registered() -> Registry
 {
+    use nomos_cap_syntax as syntax;
+    use nomos_lang_rust as rust;
+    use nomos_lang_rust_scan as scan;
+    use crate::surface;
+
     let mut registry = Registry::New();
 
     registry

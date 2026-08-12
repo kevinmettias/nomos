@@ -4,7 +4,6 @@
 use crate::FileLockGuard;
 
 use nomos_platform::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
-use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -59,6 +58,8 @@ impl FileLock
     /// Attempts to create the lock file exclusively.
     fn Try_Create(&self, holder: &str) -> Result<bool, LockError>
     {
+        use std::fs::OpenOptions;
+
         return match OpenOptions::new()
             .write(true)
             .create_new(true)

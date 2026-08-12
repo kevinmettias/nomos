@@ -2,7 +2,6 @@
 
 use nomos_contracts::CapabilityId;
 
-use crate::OfferRefusal;
 use super::RegistryErrorKind;
 
 /// Why a declaration or an offer was refused, always naming the capability it was about.
@@ -22,6 +21,8 @@ impl core::fmt::Display for RegistryError
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
+        use crate::OfferRefusal;
+
         let capability = &self.capability;
 
         return match self.kind

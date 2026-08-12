@@ -1,14 +1,7 @@
 //! The declarations themselves: every domain in the tree, against the row of the contracts
 //! table it occupies.
 
-use crate::harness::Test_Name_For;
-use nomos_analysis::FactReuse;
 use nomos_contracts::{DeterminismStrength, Strategy};
-use nomos_lang_rust::SyntaxFactProduction;
-use nomos_lang_rust_scan::ScanFactProduction;
-use nomos_spec_bundle::BundleSerialization;
-use nomos_spec_project::ProjectionOutput;
-use nomos_workspace::SnapshotSerialization;
 
 /// Every domain this workspace has, with the row of the contracts table it occupies.
 ///
@@ -32,6 +25,14 @@ use nomos_workspace::SnapshotSerialization;
 #[test]
 fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 {
+    use crate::harness::Test_Name_For;
+    use nomos_analysis::FactReuse;
+    use nomos_lang_rust::SyntaxFactProduction;
+    use nomos_lang_rust_scan::ScanFactProduction;
+    use nomos_spec_bundle::BundleSerialization;
+    use nomos_spec_project::ProjectionOutput;
+    use nomos_workspace::SnapshotSerialization;
+
     let declared = [
         ("syntax-fact-production", SyntaxFactProduction::STRENGTH),
         // The same declaration, discharged over the other thing it covers. Two entries and

@@ -1,11 +1,9 @@
 //! The three things `OD-TRACE-001` said the guard asserts, against the entries this
 //! repository has really committed.
 
-use crate::assessment::Verdict;
 use crate::predicates::{Divergences_With_No_Record, Unresolved_Records, Unresolved_Sites};
 use crate::registry::Committed;
 use nomos_contract_tests::Workspace;
-use std::collections::BTreeSet;
 
 /// How few assessments this repository may hold.
 ///
@@ -114,6 +112,8 @@ fn Test_Every_Divergence_Should_Name_A_Governing_Record()
 #[test]
 fn Test_The_Assessed_Set_Should_Not_Shrink()
 {
+    use std::collections::BTreeSet;
+
     let root = Workspace::Workspace_Root();
     let assessments = Committed(&root);
 
@@ -147,6 +147,8 @@ fn Test_The_Assessed_Set_Should_Not_Shrink()
 #[test]
 fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
 {
+    use crate::assessment::Verdict;
+
     let root = Workspace::Workspace_Root();
     let assessments = Committed(&root);
     let entry = assessments

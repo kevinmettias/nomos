@@ -24,8 +24,6 @@ mod layer;
 mod tests;
 
 pub use roots::DEFAULT_REVISION;
-use roots::Corpus_Root;
-use volumes::Ingest_Volumes;
 use layer::{Ingest_Catalog_File, Ingest_Statement_File, Refused};
 
 mod absence;
@@ -57,6 +55,9 @@ use std::path::{Path, PathBuf};
 /// commands over this store still have a true answer to give without it.
 pub(crate) fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
 {
+    use roots::Corpus_Root;
+    use volumes::Ingest_Volumes;
+
     let mut assembly = Seeded()?;
 
     let Some(root) = Corpus_Root(&mut assembly, request)

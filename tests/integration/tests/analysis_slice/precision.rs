@@ -6,7 +6,6 @@
 //! little fails as loudly as too much.
 
 use crate::corpus::{Broadenings, Over_The_Precision_Corpus, Reached, Rewrite, Rewritten};
-use nomos_contracts::IncrementalGranularity;
 use nomos_integration_tests::{
     Corpus, Decode_Surface, Name_Keys, RunReport, Slice, SURFACE_CAPABILITY
 };
@@ -163,6 +162,8 @@ fn Rollup_Over(slice: &Slice, corpus: &Corpus, group: &str) -> (u32, u32)
 #[test]
 fn Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So()
 {
+    use nomos_contracts::IncrementalGranularity;
+
     let (mut corpus, mut slice) = Over_The_Precision_Corpus();
     slice.Run(&corpus);
 

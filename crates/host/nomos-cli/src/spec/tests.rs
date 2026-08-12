@@ -1,7 +1,6 @@
 //! What this module promises, exercised.
 
 use super::*;
-use super::parsing::Usage_Text;
 
 fn Arguments(text: &str) -> Vec<String>
 {
@@ -177,6 +176,8 @@ fn Test_Exit_Codes_Should_Be_Stable_And_Not_Collide_With_Works()
 #[test]
 fn Test_The_Usage_Text_Should_Name_Every_Command()
 {
+    use super::parsing::Usage_Text;
+
     let usage = Usage_Text();
 
     for command in [

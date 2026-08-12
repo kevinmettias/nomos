@@ -3,8 +3,6 @@
 use super::*;
 use crate::PayloadRefusal;
 use crate::PayloadRefusalKind;
-use crate::PayloadItem;
-use crate::SyntaxPayload;
 
 const SAMPLE: &str = "unexpanded\t2\n\
                       item\t0\tModule\tPrivate\ttests\t.\t.\n\
@@ -88,6 +86,9 @@ fn Test_A_Function_Shape_Should_Carry_Its_Arity()
 #[test]
 fn Test_Documentation_Should_Survive_The_Field_It_Travels_In()
 {
+    use crate::PayloadItem;
+    use crate::SyntaxPayload;
+
     let prose = "Mirrored by `Test_X`.\n\nA second\tparagraph with a \\ in it.";
     let payload = SyntaxPayload {
         unexpanded: 0,
