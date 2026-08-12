@@ -109,28 +109,26 @@ fn Fixture_Corpus(name: &str) -> PathBuf
     let volumes = root.join("01_authoring/domain_volumes");
     let lineage = root.join("01_authoring/source_lineage");
     let catalog = root.join("02_machine/catalog");
-
     for directory in [&volumes, &lineage, &catalog]
     {
         std::fs::create_dir_all(directory).expect("creates a corpus directory");
     }
 
-    std::fs::write(
-        volumes.join("05_domain_model.md"),
-        "# Canonical domain model\n\
-         \n\
-         | Model | Responsibility |\n\
-         | --- | --- |\n\
-         | WorkspaceContext | Repository, branch, snapshot, trust context. |\n\
-         | Capability | A named operation with guarantees and a provider. |\n",
-    )
-    .expect("writes a volume");
+    std::fs::write(volumes.join("05_domain_model.md"), THE_VOLUME).expect("writes a volume");
     std::fs::write(lineage.join("normative-source-statements.yaml"), "statements: []\n")
         .expect("writes the statement file");
     std::fs::write(catalog.join("catalog.json"), "[]\n").expect("writes the catalog");
 
     return root;
 }
+
+/// The one volume this fixture carries, and the rows the table tests read back out of it.
+const THE_VOLUME: &str = "# Canonical domain model\n\
+                          \n\
+                          | Model | Responsibility |\n\
+                          | --- | --- |\n\
+                          | WorkspaceContext | Repository, branch, snapshot, trust context. |\n\
+                          | Capability | A named operation with guarantees and a provider. |\n";
 
 /// Phase 2's payoff, from a terminal: what did this record say?
 ///
@@ -181,14 +179,7 @@ fn Test_A_Table_Should_Come_Out_As_The_Rows_That_Were_Authored()
 {
     let corpus = Fixture_Corpus("table-rows");
 
-    let output = Nomos(&[
-        "spec",
-        "table",
-        "--document",
-        "05_domain_model.md",
-        "--corpus",
-        &corpus.display().to_string(),
-    ]);
+    let output = Table_Of(&corpus, "05_domain_model.md");
 
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
     assert_eq!(
@@ -203,6 +194,19 @@ fn Test_A_Table_Should_Come_Out_As_The_Rows_That_Were_Authored()
         "the census belongs beside the rows: {}",
         Err_Text(&output)
     );
+}
+
+/// The table one document carries, read out of a corpus by the command line.
+fn Table_Of(corpus: &Path, document: &str) -> Output
+{
+    return Nomos(&[
+        "spec",
+        "table",
+        "--document",
+        document,
+        "--corpus",
+        &corpus.display().to_string(),
+    ]);
 }
 
 /// A corpus that is not there is an absence naming what was expected — never an empty

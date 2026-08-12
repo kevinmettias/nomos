@@ -37,63 +37,69 @@ const CORPUS_VARIABLE: &str = "NOMOS_V14_CORPUS";
 fn main() -> std::process::ExitCode
 {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
-    let mut stdout = std::io::stdout();
-    let mut stderr = std::io::stderr();
-
     let code = match arguments.split_first()
     {
-        Some((group, rest)) if group == "work" =>
-        {
-            match work::Parse(rest)
-            {
-                Ok(command) => work::Run(&command, &Work_Directory(), &mut stdout).Value(),
-                Err(message) =>
-                {
-                    eprintln!("{message}");
-                    work::ExitCode::Usage.Value()
-                }
-            }
-        }
-        Some((group, rest)) if group == "spec" =>
-        {
-            match spec::Parse(rest)
-            {
-                Ok(command) =>
-                {
-                    spec::Run(&command, &Corpus_Request(rest), &mut stdout, &mut stderr).Value()
-                }
-                Err(message) =>
-                {
-                    eprintln!("{message}");
-                    spec::ExitCode::Usage.Value()
-                }
-            }
-        }
-        Some((group, rest)) if group == "check" =>
-        {
-            match check::Parse(rest)
-            {
-                Ok(command) => check::Run(&command, &mut stdout, &mut stderr).Value(),
-                Err(message) =>
-                {
-                    eprintln!("{message}");
-                    check::ExitCode::Usage.Value()
-                }
-            }
-        }
-        _ =>
-        {
-            eprintln!(
-                "usage: nomos <group> <command>\n\n  \
-                 work   coordinate concurrent work over this repository\n  \
-                 spec   read the specification store and render its projections\n  \
-                 check  run the rules over a tree and report what they find"
-            );
-            work::ExitCode::Usage.Value()
-        }
+        Some((group, rest)) if group == "work" => Work(rest),
+        Some((group, rest)) if group == "spec" => Spec(rest),
+        Some((group, rest)) if group == "check" => Check(rest),
+        _ => Usage(),
     };
 
     return std::process::ExitCode::from(u8::try_from(code).unwrap_or(1));
+}
+
+/// The work group: the ledger verbs, over this repository's board.
+fn Work(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let Ok(command) = work::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return work::ExitCode::Usage.Value();
+    };
+
+    return work::Run(&command, &Work_Directory(), &mut stdout).Value();
+}
+
+/// The spec group: reading the specification store and rendering its projections.
+fn Spec(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = spec::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return spec::ExitCode::Usage.Value();
+    };
+
+    return spec::Run(&command, &Corpus_Request(rest), &mut stdout, &mut stderr).Value();
+}
+
+/// The check group: running the rules over a tree and reporting what they find.
+fn Check(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = check::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return check::ExitCode::Usage.Value();
+    };
+
+    return check::Run(&command, &mut stdout, &mut stderr).Value();
+}
+
+/// What the binary answers when it was not told which group it is being asked for.
+fn Usage() -> i32
+{
+    eprintln!(
+        "usage: nomos <group> <command>\n\n  \
+         work   coordinate concurrent work over this repository\n  \
+         spec   read the specification store and render its projections\n  \
+         check  run the rules over a tree and report what they find"
+    );
+
+    return work::ExitCode::Usage.Value();
 }
 
 /// Where the ledger lives.

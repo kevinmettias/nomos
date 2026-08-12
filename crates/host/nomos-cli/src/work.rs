@@ -150,11 +150,7 @@ pub fn Parse(arguments: &[String]) -> Result<WorkCommand, String>
     {
         return Err(Usage_Text());
     };
-
-    let Split {
-        named,
-        predicate_argv,
-    } = Split_At_Separator(arguments);
+    let Split { named, predicate_argv } = Split_At_Separator(arguments);
 
     return match verb.as_str()
     {

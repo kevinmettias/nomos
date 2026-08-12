@@ -334,22 +334,12 @@ fn Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build()
 {
     let root = Repository_Root();
     let Ran { code, said: output } = Run(&["check", "--root", &root.display().to_string()]);
-
     assert!(
         output.contains("file(s) examined"),
         "the run did not reach its own report, so nothing below is about this workspace: \
          {output}"
     );
-
-    let examined: usize = output
-        .split_once(" file(s) examined")
-        .and_then(|(before, _)| {
-            return before
-                .split_whitespace()
-                .next_back()
-                .and_then(|count| return count.parse().ok());
-        })
-        .unwrap_or_else(|| panic!("the report must carry a file count: {output}"));
+    let examined = Files_Examined(&output);
 
     assert!(
         examined >= FEWEST_FILES_IN_THIS_WORKSPACE,
@@ -364,6 +354,21 @@ fn Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build()
          {output}"
     );
     assert_eq!(code, 0, "{output}");
+}
+
+/// The count the report opens with, which is how a run over the wrong tree is told from a run
+/// over this one.
+fn Files_Examined(output: &str) -> usize
+{
+    return output
+        .split_once(" file(s) examined")
+        .and_then(|(before, _)| {
+            return before
+                .split_whitespace()
+                .next_back()
+                .and_then(|count| return count.parse().ok());
+        })
+        .unwrap_or_else(|| panic!("the report must carry a file count: {output}"));
 }
 
 /// The group has to be discoverable, or a command nobody can find is a command nobody

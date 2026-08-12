@@ -83,22 +83,14 @@ fn Test_An_Empty_Corpus_Root_Should_Account_For_Each_Input_Separately()
 #[test]
 fn Test_A_Readable_Volume_Should_Reach_The_Store_And_Not_Be_Reported_Absent()
 {
-    let root = std::env::temp_dir().join("nomos-cli-one-volume-corpus");
-    let volumes = root.join(DOMAIN_VOLUMES);
-    std::fs::create_dir_all(&volumes).expect("creates");
-    std::fs::write(
-        volumes.join("05_domain_model.md"),
-        "# Canonical domain model\n\n| Concept | Meaning |\n| --- | --- |\n| Ledger | a claim |\n",
-    )
-    .expect("writes");
-
+    let root = A_Corpus_With_One_Volume();
     let assembly = Assemble(&Request(Some(root))).expect("assembles");
-
     let (found, _) = assembly
         .store
         .Documents_Named("05_domain_model.md", None)
         .expect("queries");
     let uid = *found.first().expect("the volume is in the store");
+
     assert_eq!(assembly.store.Table_Lines(uid, None, None).expect("queries").len(), 3);
     assert!(
         assembly
@@ -108,4 +100,19 @@ fn Test_A_Readable_Volume_Should_Reach_The_Store_And_Not_Be_Reported_Absent()
         "{}",
         assembly.Describe_Absences()
     );
+}
+
+/// One readable domain volume, carrying a table so the store has rows to hold.
+fn A_Corpus_With_One_Volume() -> std::path::PathBuf
+{
+    let root = std::env::temp_dir().join("nomos-cli-one-volume-corpus");
+    let volumes = root.join(DOMAIN_VOLUMES);
+    std::fs::create_dir_all(&volumes).expect("creates");
+    std::fs::write(
+        volumes.join("05_domain_model.md"),
+        "# Canonical domain model\n\n| Concept | Meaning |\n| --- | --- |\n| Ledger | a claim |\n",
+    )
+    .expect("writes");
+
+    return root;
 }

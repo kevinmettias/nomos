@@ -225,7 +225,21 @@ fn Test_A_Satisfied_Dependency_Should_Leave_An_Item_Ready()
 #[test]
 fn Test_Filtering_For_Ready_Should_Not_Return_An_Item_Nothing_Can_Claim()
 {
-    let board = Board::New(
+    let board = A_Ready_Item_Behind_An_Unfinished_One();
+
+    let ready = board.List(Some("ready"));
+
+    assert!(ready.contains("T-1"), "T-1 is claimable:\n{ready}");
+    assert!(
+        !ready.contains("T-2"),
+        "T-2 cannot be claimed, so it must not answer a request for ready work:\n{ready}"
+    );
+}
+
+/// Two `Ready` items, the second of which depends on the first and so cannot be taken.
+fn A_Ready_Item_Behind_An_Unfinished_One() -> Board
+{
+    return Board::New(
         "filter-ready",
         &format!(
             "{},{}",
@@ -240,14 +254,6 @@ fn Test_Filtering_For_Ready_Should_Not_Return_An_Item_Nothing_Can_Claim()
                 tail: NO_CLAIM,
             })
         ),
-    );
-
-    let ready = board.List(Some("ready"));
-
-    assert!(ready.contains("T-1"), "T-1 is claimable:\n{ready}");
-    assert!(
-        !ready.contains("T-2"),
-        "T-2 cannot be claimed, so it must not answer a request for ready work:\n{ready}"
     );
 }
 
@@ -388,23 +394,7 @@ fn Test_Audit_Should_Report_Every_Live_Refusal_And_Only_Those()
 
     let audit = board.Audit();
 
-    let held = Audit_Line(&audit, "T-2")
-        .unwrap_or_else(|| panic!("T-2 is on ground agent-a holds:\n{audit}"));
-    assert!(
-        held.contains("held") && held.contains("T-1") && held.contains("agent-a"),
-        "the territory refusal must name what holds the ground and who:\n{held}"
-    );
-
-    let waiting = Audit_Line(&audit, "T-3").unwrap_or_else(|| {
-        panic!(
-            "T-3 is refused for an unfinished dependency, which the audit used to be \
-             silent about:\n{audit}"
-        )
-    });
-    assert!(
-        waiting.contains("waiting") && waiting.contains("T-4"),
-        "the dependency refusal must name the dependency:\n{waiting}"
-    );
+    Assert_Both_Live_Refusals_Are_Reported(&audit);
 
     assert!(
         Audit_Line(&audit, "T-5").is_none(),
@@ -418,6 +408,29 @@ fn Test_Audit_Should_Report_Every_Live_Refusal_And_Only_Those()
     assert!(
         Audit_Line(&audit, "T-1").is_none(),
         "T-1 is the holder, not a blocked item:\n{audit}"
+    );
+}
+
+/// Territory and dependency are two refusals the board has simultaneously, and either one
+/// alone is the defect returning.
+fn Assert_Both_Live_Refusals_Are_Reported(audit: &str)
+{
+    let held = Audit_Line(audit, "T-2")
+        .unwrap_or_else(|| panic!("T-2 is on ground agent-a holds:\n{audit}"));
+    let waiting = Audit_Line(audit, "T-3").unwrap_or_else(|| {
+        panic!(
+            "T-3 is refused for an unfinished dependency, which the audit used to be \
+             silent about:\n{audit}"
+        )
+    });
+
+    assert!(
+        held.contains("held") && held.contains("T-1") && held.contains("agent-a"),
+        "the territory refusal must name what holds the ground and who:\n{held}"
+    );
+    assert!(
+        waiting.contains("waiting") && waiting.contains("T-4"),
+        "the dependency refusal must name the dependency:\n{waiting}"
     );
 }
 
@@ -437,19 +450,8 @@ fn Test_Audit_Should_Agree_With_The_Listing_Item_For_Item()
     let mut checked = 0_u32;
     for line in audit.lines()
     {
-        let mut fields = line.split_whitespace();
-        let (Some(item), Some(label)) = (fields.next(), fields.next())
-        else
-        {
-            continue;
-        };
-
-        assert_eq!(
-            board.Label_Of(item),
-            label,
-            "`audit` and `list` disagree about {item}:\n{audit}"
-        );
-        checked = checked.saturating_add(1);
+        let named = Assert_The_Listing_Agrees(&board, line, &audit);
+        checked = checked.saturating_add(named);
     }
 
     assert_eq!(
@@ -457,6 +459,26 @@ fn Test_Audit_Should_Agree_With_The_Listing_Item_For_Item()
         "the board has exactly two blocked items; a different count means the audit is \
          answering for something else:\n{audit}"
     );
+}
+
+/// One audit line against what the listing calls the same item. Answers 1 where a line named
+/// an item at all, which is what the count above measures.
+fn Assert_The_Listing_Agrees(board: &Board, line: &str, audit: &str) -> u32
+{
+    let mut fields = line.split_whitespace();
+    let (Some(item), Some(label)) = (fields.next(), fields.next())
+    else
+    {
+        return 0;
+    };
+
+    assert_eq!(
+        board.Label_Of(item),
+        label,
+        "`audit` and `list` disagree about {item}:\n{audit}"
+    );
+
+    return 1;
 }
 
 /// The control against a repair that simply prints less.
@@ -468,7 +490,25 @@ fn Test_Audit_Should_Agree_With_The_Listing_Item_For_Item()
 #[test]
 fn Test_Audit_Should_Say_So_When_Nothing_Is_Blocked()
 {
-    let board = Board::New(
+    let board = A_Board_Where_Nothing_Refuses();
+
+    let audit = board.Audit();
+
+    assert!(
+        Audit_Line(&audit, "T-2").is_none() && Audit_Line(&audit, "T-3").is_none(),
+        "nothing on this board refuses a claim:\n{audit}"
+    );
+    assert!(
+        audit.contains("nothing"),
+        "an empty report must say it found nothing rather than print nothing:\n{audit}"
+    );
+}
+
+/// The same four items as the mixed board, with the ground moved apart and the dependency
+/// finished, so that nothing on it refuses a claim.
+fn A_Board_Where_Nothing_Refuses() -> Board
+{
+    return Board::New(
         "audit-clear",
         &format!(
             "{},{},{},{}",
@@ -493,16 +533,5 @@ fn Test_Audit_Should_Say_So_When_Nothing_Is_Blocked()
                 tail: FINISHED,
             })
         ),
-    );
-
-    let audit = board.Audit();
-
-    assert!(
-        Audit_Line(&audit, "T-2").is_none() && Audit_Line(&audit, "T-3").is_none(),
-        "nothing on this board refuses a claim:\n{audit}"
-    );
-    assert!(
-        audit.contains("nothing"),
-        "an empty report must say it found nothing rather than print nothing:\n{audit}"
     );
 }

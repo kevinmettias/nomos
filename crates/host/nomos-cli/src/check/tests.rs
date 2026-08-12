@@ -135,18 +135,8 @@ fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
     let (_, spelled) = USAGE
         .split_once("exit codes:")
         .expect("the usage text documents the exit codes");
-
-    let mut documented: Vec<i32> = spelled
-        .split_whitespace()
-        .filter_map(|word| return word.parse::<i32>().ok())
-        .collect();
-    documented.sort_unstable();
-
-    let mut implemented: Vec<i32> = Every_Exit_Code()
-        .iter()
-        .map(|code| return code.Value())
-        .collect();
-    implemented.sort_unstable();
+    let documented = Sorted(spelled.split_whitespace().filter_map(|word| word.parse().ok()));
+    let implemented = Sorted(Every_Exit_Code().iter().map(|code| code.Value()));
 
     assert!(
         !documented.is_empty(),
@@ -271,21 +261,29 @@ fn Test_The_Composed_Command_Should_Resolve_A_Mirror_Through_A_Real_Fact()
         "#[cfg(test)]\nmod tests\n{\n    #[test]\n    fn Test_The_Real_Provider_Found_This()\n    {\n    }\n}\n",
     );
     let whole = vec![declaring.clone(), checking.clone()];
-
     let resolved = Composed::Over(&whole).Findings(&whole);
+    // The store is told about the declaring file only; the rule is handed both.
+    let short = Composed::Over(&[declaring]).Findings(&whole);
+
     assert!(
         resolved.is_empty(),
         "the registered parser must find the check in b.rs: {resolved:?}"
     );
-
-    // The store is told about the declaring file only; the rule is handed both.
-    let short = Composed::Over(&[declaring]).Findings(&whole);
     assert!(
         short
             .iter()
             .any(|finding| return finding.subject_name == "T"),
         "with b.rs's fact withheld the claim must not resolve: {short:?}"
     );
+}
+
+/// A list of codes in ascending order, so that two of them can be compared as sets.
+fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
+{
+    let mut sorted: Vec<i32> = codes.collect();
+    sorted.sort_unstable();
+
+    return sorted;
 }
 
 /// A run that materialized nothing must not print a clean tree.
@@ -359,21 +357,11 @@ fn Test_A_Run_That_Materialized_Facts_Should_Judge_Rather_Than_Refuse()
 #[test]
 fn Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses()
 {
-    let root = std::env::temp_dir().join("nomos-check-phantom-beside-broken");
-    let _ignored = std::fs::remove_dir_all(&root);
-    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-    std::fs::write(
-        root.join("a.rs"),
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
-    )
-    .expect("writable");
-    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
-
+    let root = A_Tree_With_A_Phantom_Beside_A_Refusal();
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
     let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
     let rendered = String::from_utf8_lossy(&stdout).into_owned();
-
     let _ignored = std::fs::remove_dir_all(&root);
 
     assert_eq!(code, ExitCode::Violations, "{rendered}");
@@ -390,6 +378,22 @@ fn Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses()
         rendered.contains("[Blocking]") && rendered.contains("Test_Renamed_Away"),
         "{rendered}"
     );
+}
+
+/// One file claiming a mirror nothing declares, beside one the parser genuinely refuses.
+fn A_Tree_With_A_Phantom_Beside_A_Refusal() -> PathBuf
+{
+    let root = std::env::temp_dir().join("nomos-check-phantom-beside-broken");
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    std::fs::write(
+        root.join("a.rs"),
+        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+    )
+    .expect("writable");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
+
+    return root;
 }
 
 /// The floor is the rule's, and the run this command composes meets it.

@@ -173,7 +173,21 @@ fn Test_Commit_Should_Preview_Then_Write_The_Record()
     let into = Scratch("commit-writes-tree");
     let before = On_Disk();
 
-    let output = Nomos(&[
+    let output = Commit(&staged, &into);
+
+    assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
+    Assert_It_Printed_Its_Preview(&output);
+    assert_eq!(
+        std::fs::read_to_string(into.join(RECORD_PATH)).expect("the record was written"),
+        text
+    );
+    assert_eq!(On_Disk(), before, "the commit wrote into the tree it was not given");
+}
+
+/// A commit of the staged record into a tree, which is what every test here runs.
+fn Commit(staged: &Path, into: &Path) -> Output
+{
+    return Nomos(&[
         "spec",
         "commit",
         "--id",
@@ -183,24 +197,40 @@ fn Test_Commit_Should_Preview_Then_Write_The_Record()
         "--into",
         &into.display().to_string(),
     ]);
+}
 
-    assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
+/// The same, renaming the record on the way.
+fn Commit_Renaming(staged: &Path, into: &Path, moved: &str) -> Output
+{
+    return Nomos(&[
+        "spec",
+        "commit",
+        "--id",
+        RECORD,
+        "--from",
+        &staged.display().to_string(),
+        "--rename",
+        moved,
+        "--into",
+        &into.display().to_string(),
+    ]);
+}
+
+/// The preview is the point: a commit that wrote without first showing what it would change
+/// is the surface this command exists not to be.
+fn Assert_It_Printed_Its_Preview(output: &Output)
+{
     assert!(
-        Out_Text(&output).contains("normative wording"),
+        Out_Text(output).contains("normative wording"),
         "the commit did not print its preview: {}",
-        Out_Text(&output)
+        Out_Text(output)
     );
-    assert!(Out_Text(&output).contains("committed D-131"), "{}", Out_Text(&output));
+    assert!(Out_Text(output).contains("committed D-131"), "{}", Out_Text(output));
     assert!(
-        Out_Text(&output).contains("renders it back as the same bytes"),
+        Out_Text(output).contains("renders it back as the same bytes"),
         "{}",
-        Out_Text(&output)
+        Out_Text(output)
     );
-    assert_eq!(
-        std::fs::read_to_string(into.join(RECORD_PATH)).expect("the record was written"),
-        text
-    );
-    assert_eq!(On_Disk(), before, "the commit wrote into the tree it was not given");
 }
 
 /// A rename is an ordinary edit, and it leaves one file rather than two.
@@ -215,18 +245,7 @@ fn Test_Commit_Should_Move_A_Renamed_Record_And_Vacate_Its_Old_Path()
     std::fs::create_dir_all(into.join("docs/records")).expect("creates the record directory");
     std::fs::write(into.join(RECORD_PATH), On_Disk()).expect("plants the record");
 
-    let output = Nomos(&[
-        "spec",
-        "commit",
-        "--id",
-        RECORD,
-        "--from",
-        &staged.display().to_string(),
-        "--rename",
-        moved,
-        "--into",
-        &into.display().to_string(),
-    ]);
+    let output = Commit_Renaming(&staged, &into, moved);
 
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
     assert!(Out_Text(&output).contains("renamed"), "{}", Out_Text(&output));
@@ -247,16 +266,7 @@ fn Test_An_Edit_This_Surface_Would_Not_Write_Should_Exit_Refused()
     });
     let into = Scratch("commit-refuses-tree");
 
-    let output = Nomos(&[
-        "spec",
-        "commit",
-        "--id",
-        RECORD,
-        "--from",
-        &staged.display().to_string(),
-        "--into",
-        &into.display().to_string(),
-    ]);
+    let output = Commit(&staged, &into);
 
     assert_eq!(Code(&output), 9, "{}", Err_Text(&output));
     assert!(

@@ -188,20 +188,16 @@ fn With_A_Scripted_Rules_Step(workflow: &str) -> String
 {
     let mut rewritten = String::new();
     let mut inside = false;
-
     for line in workflow.lines()
     {
         let trimmed = line.trim();
-
         if let Some(name) = trimmed.strip_prefix("- name:")
         {
             inside = name.trim() == RULES_STEP;
         }
         else if inside && let Some(run) = trimmed.strip_prefix("run:")
         {
-            rewritten.push_str("        run: |\n          ");
-            rewritten.push_str(run.trim());
-            rewritten.push('\n');
+            Rewrite_As_A_Block(&mut rewritten, run);
             inside = false;
             continue;
         }
@@ -211,6 +207,15 @@ fn With_A_Scripted_Rules_Step(workflow: &str) -> String
     }
 
     return rewritten;
+}
+
+/// The same command, written as a YAML block scalar so that the deriver must read past the
+/// `|` rather than off the line itself.
+fn Rewrite_As_A_Block(rewritten: &mut String, run: &str)
+{
+    rewritten.push_str("        run: |\n          ");
+    rewritten.push_str(run.trim());
+    rewritten.push('\n');
 }
 
 /// The same workflow with the `Rules` step excused from failing.
@@ -535,6 +540,20 @@ fn Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version()
         "the install must still lock the tool's own dependency graph, got {argv:?}"
     );
 
+    let pinned = Version_Pinned_In(&argv);
+
+    assert!(
+        pinned
+            .chars()
+            .next()
+            .is_some_and(|character| return character.is_ascii_digit()),
+        "`--version {pinned}` is not a version"
+    );
+}
+
+/// The value `--version` names, which must be there and must be a version.
+fn Version_Pinned_In(argv: &[String]) -> &str
+{
     let flag = argv
         .iter()
         .position(|argument| return argument == "--version")
@@ -545,17 +564,9 @@ fn Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version()
             )
         });
 
-    let pinned = argv
+    return argv
         .get(flag.saturating_add(1))
         .unwrap_or_else(|| panic!("`--version` names no version: {argv:?}"));
-
-    assert!(
-        pinned
-            .chars()
-            .next()
-            .is_some_and(|character| return character.is_ascii_digit()),
-        "`--version {pinned}` is not a version"
-    );
 }
 
 /// The job declares the token it runs with, rather than inheriting it.

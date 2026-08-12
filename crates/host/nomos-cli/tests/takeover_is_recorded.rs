@@ -133,10 +133,21 @@ fn Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced()
 
     let Ran { said, code } = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
 
+    let written = board.Written();
+
     assert_eq!(code, 0, "a lapsed item must be takeable: {said}");
     assert!(said.contains("agent-b"), "{said}");
+    Assert_The_Displaced_Claim_Survived(&written);
+}
 
-    let written = board.Written();
+/// Who was displaced and when their lease ran out both have to survive the takeover, or
+/// nothing says whose work this was.
+///
+/// The field is written on every item, empty or not. That is what makes `grep -c
+/// '"displaced"'` against the item count a usable check that no stale writer has been through
+/// the file, and a field that appeared only when populated could not be counted.
+fn Assert_The_Displaced_Claim_Survived(written: &str)
+{
     assert!(
         written.contains("dead-agent"),
         "the displaced holder is not in the file, so nothing says whose work this was:\n{written}"
@@ -145,10 +156,6 @@ fn Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced()
         written.contains(&format!("\"lease_expires_at\": {LAPSED_AT}")),
         "when the lease ran out must survive the takeover:\n{written}"
     );
-
-    // The field is written on every item, empty or not. That is what makes `grep -c
-    // '"displaced"'` against the item count a usable check that no stale writer has been
-    // through the file, and a field that appeared only when populated could not be counted.
     assert_eq!(
         written.matches("\"displaced\"").count(),
         3,

@@ -35,7 +35,6 @@ pub(super) fn Volumes_Under(assembly: &mut Assembly, directory: &Path) -> Option
 
         return None;
     };
-
     let Volumes {
         documents,
         unreadable,

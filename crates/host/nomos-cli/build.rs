@@ -24,14 +24,7 @@ fn main() -> Result<(), String>
     // never happened.
     let target = Cargo_Variable("TARGET")?;
     let profile = Cargo_Variable("PROFILE")?;
-
-    // Absent outside rustup — a direct rustc invocation, a distribution toolchain, a
-    // vendored compiler. Named as unstated rather than defaulted to a version, because a
-    // variant claiming `1.85` on a toolchain nobody identified is a false statement about
-    // which compiler produced the facts.
-    let toolchain =
-        std::env::var("RUSTUP_TOOLCHAIN").unwrap_or_else(|_| return "unstated".to_owned());
-
+    let toolchain = Toolchain();
     let features = Enabled_Features();
 
     println!("cargo::rustc-env=NOMOS_TARGET={target}");
@@ -43,6 +36,15 @@ fn main() -> Result<(), String>
     println!("cargo::rerun-if-env-changed=RUSTUP_TOOLCHAIN");
 
     return Ok(());
+}
+
+/// Absent outside rustup — a direct rustc invocation, a distribution toolchain, a vendored
+/// compiler. Named as unstated rather than defaulted to a version, because a variant claiming
+/// `1.85` on a toolchain nobody identified is a false statement about which compiler produced
+/// the facts.
+fn Toolchain() -> String
+{
+    return std::env::var("RUSTUP_TOOLCHAIN").unwrap_or_else(|_| return "unstated".to_owned());
 }
 
 /// One variable cargo sets for every build script.
