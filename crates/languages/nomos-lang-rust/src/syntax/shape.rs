@@ -1,6 +1,5 @@
 //! Describing the form of a declaration in the words the payload uses.
 
-
 /// Whether an `impl` block serves a trait or is inherent.
 ///
 /// It is the only thing that tells two `impl` blocks for one type apart. A member of

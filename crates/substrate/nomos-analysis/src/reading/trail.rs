@@ -1,8 +1,8 @@
 //! Every fact a read depended on, in the order it was read.
 
-use crate::reading::Dependency;
-use crate::fact::FactKey;
-use crate::reader::ReadOutcome;
+use crate::Dependency;
+use crate::FactKey;
+use crate::ReadOutcome;
 use nomos_contracts::Applicability;
 
 /// What one reader has read, kept apart from what it reads *through*.

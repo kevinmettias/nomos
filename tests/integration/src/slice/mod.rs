@@ -1,8 +1,8 @@
 //! The run: syntax facts per file, a rollup per directory, and what a change costs.
 
-use crate::context::{Host_Variant, Resolved_Configuration};
-use crate::corpus::{Corpus, Subject_Of_Path};
-use crate::verification::Parsed_Floor;
+use crate::{Host_Variant, Resolved_Configuration};
+use crate::{Corpus, Subject_Of_Path};
+use crate::Parsed_Floor;
 use crate::surface::{self, Surface};
 use crate::{Edited, Recompute, Resolved, RunReport, SourceFile};
 use nomos_analysis::{

@@ -1,15 +1,13 @@
 //! Refusing a bundle that would land on content the store already holds.
 
-
 use nomos_spec_store::SpecificationStore;
 use rusqlite::{Connection, OptionalExtension};
 
 use crate::BundleError;
-use crate::bundle::Bundle;
-use crate::row::record::Record;
+use crate::Bundle;
+use crate::Record;
 
 use super::resolve::Document_Key_Of;
-
 
 /// The store holds nothing this bundle also carries.
 pub(super) fn Assert_Disjoint(store: &SpecificationStore, bundle: &Bundle) -> Result<(), BundleError>

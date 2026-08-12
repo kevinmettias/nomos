@@ -4,9 +4,9 @@ use nomos_contracts::GenerationId;
 use nomos_contracts::Guarantee;
 use nomos_contracts::EvidenceClass;
 use nomos_contracts::SnapshotId;
-use crate::fact::FactKey;
-use crate::fact::FactPayload;
-use crate::fact::FactIdentity;
+use crate::FactKey;
+use crate::FactPayload;
+use crate::FactIdentity;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct MaterializedFact
 {

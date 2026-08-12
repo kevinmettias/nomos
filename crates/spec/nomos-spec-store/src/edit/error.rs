@@ -2,7 +2,7 @@
 
 use nomos_spec_model::RenderError;
 
-use crate::store::error::StoreError;
+use crate::StoreError;
 
 /// Why an authoring step refused.
 #[derive(Debug)]

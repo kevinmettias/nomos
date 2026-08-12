@@ -2,7 +2,7 @@
 
 use std::time::Duration;
 use nomos_model::UnknownReason;
-use crate::item::ItemId;
+use crate::ItemId;
 use nomos_platform::Timestamp;
 /// Why a claim was refused.
 ///

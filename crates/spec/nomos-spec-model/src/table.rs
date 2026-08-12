@@ -9,7 +9,7 @@ pub use defect::TableDefect;
 pub use row::TableRow;
 pub use row_kind::RowKind;
 
-use crate::block::SourceBlock;
+use crate::SourceBlock;
 
 /// Splits a block into the table rows it carries.
 ///
@@ -221,7 +221,7 @@ fn Is_Dashes(cell: &str) -> bool
 mod tests
 {
     use super::*;
-    use crate::block::Segment;
+    use crate::Segment;
 
     fn Rows(markdown: &str) -> Vec<TableRow>
     {

@@ -9,13 +9,13 @@ pub(crate) use write::{
     Write_Source_Document,
 };
 
-use crate::read::node_row::NodeRow;
-use crate::table::row_census::RowCensus;
-use crate::table::row_scope::RowScope;
-use crate::store::error::StoreError;
-use crate::table::suite_authority::SuiteAuthority;
-use crate::table::Table;
-use crate::schema::{Latest_Version, MIGRATIONS, Migration};
+use crate::NodeRow;
+use crate::RowCensus;
+use crate::RowScope;
+use crate::StoreError;
+use crate::SuiteAuthority;
+use crate::Table;
+use crate::{Latest_Version, MIGRATIONS, Migration};
 use nomos_spec_model::SourceBlock;
 use rusqlite::{Connection, OptionalExtension, params};
 use std::path::Path;

@@ -7,9 +7,9 @@ pub(crate) mod listing;
 pub(crate) mod member;
 pub(crate) mod template;
 
-use crate::archive::error::ArchiveError;
-use crate::archive::error_kind::ArchiveErrorKind;
-use crate::archive::listing::Listing;
+use crate::ArchiveError;
+use crate::ArchiveErrorKind;
+use crate::Listing;
 use std::io::Read as _;
 use std::path::{Path, PathBuf};
 

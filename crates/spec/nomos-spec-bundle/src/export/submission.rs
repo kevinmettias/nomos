@@ -1,7 +1,7 @@
 //! Reading the submissions out, with their values and their open decision gaps.
 
 use crate::BundleError;
-use crate::row::record::Record;
+use crate::Record;
 use crate::row::submission::Submission;
 use crate::row::submission::gap::SubmissionGap;
 use crate::row::submission::value::SubmissionValue;

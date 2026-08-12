@@ -6,9 +6,9 @@ use nomos_spec_model::RecordFrontMatter;
 use nomos_spec_model::Round_Trips;
 
 use crate::authoring::Why_Not_Canonical;
-use crate::edit::error::EditError;
-use crate::record::projection::RecordProjection;
-use crate::edit::staged::StagedEdit;
+use crate::EditError;
+use crate::RecordProjection;
+use crate::StagedEdit;
 
 /// Step one: the record, read out and held for editing.
 ///

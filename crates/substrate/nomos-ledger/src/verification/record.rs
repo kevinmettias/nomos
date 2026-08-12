@@ -2,7 +2,7 @@
 
 use serde::Deserialize;
 use serde::Serialize;
-use crate::gate::GateOutcome;
+use crate::GateOutcome;
 use nomos_platform::Timestamp;
 /// What happened when the predicate was run.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

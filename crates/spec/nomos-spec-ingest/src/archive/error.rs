@@ -1,6 +1,6 @@
 //! Every way an archive refuses to be opened or read.
 
-use crate::archive::error_kind::ArchiveErrorKind;
+use crate::ArchiveErrorKind;
 
 use std::path::PathBuf;
 

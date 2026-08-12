@@ -1,6 +1,6 @@
 //! One store row a projection was built from.
 
-use crate::projection::Content;
+use crate::Content;
 use serde::Serialize;
 use serde::Deserialize;
 #[derive(Clone, Debug, Deserialize, PartialEq, Eq, Serialize)]

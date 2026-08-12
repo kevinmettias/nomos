@@ -17,12 +17,12 @@ pub(crate) mod document_source;
 pub(crate) mod path_match;
 
 use crate::read::columns::Columns;
-use crate::read::document_source::DocumentSource;
-use crate::read::node_summary::NodeSummary;
-use crate::read::path_match::PathMatch;
-use crate::table::line::TableLine;
+use crate::DocumentSource;
+use crate::NodeSummary;
+use crate::PathMatch;
+use crate::TableLine;
 use crate::store::{Collected, SpecificationStore};
-use crate::store::error::StoreError;
+use crate::StoreError;
 use rusqlite::{OptionalExtension, params};
 
 /// The stored bytes as text, or why this document cannot be read out as one.
@@ -289,7 +289,7 @@ fn Matches(path: &str, needle: &str, tier: PathMatch) -> bool
 mod tests
 {
     use super::*;
-    use crate::governing::Seed_Governing_Records;
+    use crate::Seed_Governing_Records;
 
     fn Seeded() -> SpecificationStore
     {

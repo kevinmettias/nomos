@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::document::DocumentRef;
+use crate::DocumentRef;
 
 /// The front matter one record declared, as it declared it.
 ///

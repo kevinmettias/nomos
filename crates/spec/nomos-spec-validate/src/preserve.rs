@@ -3,8 +3,8 @@ use nomos_spec_store::Table;
 use crate::rule::EveryStatementTracesToSource;
 use crate::rule::ChangedWordingIsJustified;
 use crate::rule::EveryBlockHasADisposition;
-use crate::rule::Rule;
-use crate::rule::RuleOutcome;
+use crate::Rule;
+use crate::RuleOutcome;
 use nomos_spec_store::SpecificationStore;
 
 pub(crate) struct EveryHeadingHasADisposition;
@@ -37,8 +37,6 @@ impl Rule for EveryHeadingHasADisposition
         );
     }
 }
-
-
 
 #[must_use]
 pub fn Registered() -> Vec<Box<dyn Rule>>

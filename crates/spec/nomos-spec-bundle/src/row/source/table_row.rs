@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::ordinal::OrdinalRef;
+use crate::OrdinalRef;
 
 /// One pipe line of a table, addressed by the block that carries it.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

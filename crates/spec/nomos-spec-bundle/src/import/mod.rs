@@ -26,8 +26,8 @@ use nomos_spec_store::{SpecificationStore, Table};
 use rusqlite::Transaction;
 
 use crate::BundleError;
-use crate::bundle::Bundle;
-use crate::row::record::Record;
+use crate::Bundle;
+use crate::Record;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ImportReport

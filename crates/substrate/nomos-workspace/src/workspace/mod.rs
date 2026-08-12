@@ -13,12 +13,12 @@ mod tests;
 
 use naming::{Normalize, Normalized};
 
-use crate::effect::Effect;
-use crate::effect::EffectKind;
-use crate::applied::Applied;
-use crate::change::Change;
-use crate::snapshot::WorkspaceSnapshot;
-use crate::variant::BuildVariant;
+use crate::Effect;
+use crate::EffectKind;
+use crate::Applied;
+use crate::Change;
+use crate::WorkspaceSnapshot;
+use crate::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
 use nomos_store::{Authority, Commit, DocumentKind, DocumentStore, Recorded};
 

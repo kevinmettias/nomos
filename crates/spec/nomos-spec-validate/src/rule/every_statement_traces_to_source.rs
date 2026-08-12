@@ -1,9 +1,9 @@
 //! Every normative statement names where it came from.
 
 use crate::offending::Offending;
-use crate::violation::Violation;
-use crate::rule::RuleOutcome;
-use crate::rule::Rule;
+use crate::Violation;
+use crate::RuleOutcome;
+use crate::Rule;
 use nomos_spec_store::{SpecificationStore, Table};
 /// Statements with no preserved lineage row reaching any source block.
 ///

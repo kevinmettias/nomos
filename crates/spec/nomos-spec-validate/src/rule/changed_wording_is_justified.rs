@@ -1,9 +1,9 @@
 //! Wording that changed says why.
 
 use crate::offending::Offending;
-use crate::violation::Violation;
-use crate::rule::RuleOutcome;
-use crate::rule::Rule;
+use crate::Violation;
+use crate::RuleOutcome;
+use crate::Rule;
 use nomos_spec_store::{SpecificationStore, Table};
 /// Statements that claim to supersede a hash with no history event saying they changed.
 const UNJUSTIFIED: &str = "SELECT s.statement_id

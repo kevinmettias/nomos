@@ -1,6 +1,6 @@
 //! What ingesting the statements found.
 
-use crate::content::statement::divergence::StatementDivergence;
+use crate::StatementDivergence;
 #[derive(Debug, Default)]
 pub struct StatementReport
 {

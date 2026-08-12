@@ -5,7 +5,6 @@ mod kind;
 
 pub use kind::EffectKind;
 
-
 /// What one change actually did, and to what.
 ///
 /// Reported rather than assumed, because the submitter did not know. A checkout does not

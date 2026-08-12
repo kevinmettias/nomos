@@ -10,7 +10,7 @@ pub use selection::Selection;
 pub use standing::Standing;
 pub use unmet::Unmet;
 
-use crate::provider_offer::ProviderOffer;
+use crate::ProviderOffer;
 use nomos_contracts::CapabilityId;
 use nomos_contracts::Applicability;
 /// The answer to a requirement.

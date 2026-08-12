@@ -7,10 +7,10 @@ mod reservation;
 pub use blocker::Blocker;
 pub use reservation::Reservation;
 
-use crate::finish::ReleaseOutcome;
-use crate::claim::ClaimRefusal;
-use crate::item::ItemId;
-use crate::item::MAXIMUM_LEASE;
+use crate::ReleaseOutcome;
+use crate::ClaimRefusal;
+use crate::ItemId;
+use crate::MAXIMUM_LEASE;
 use nomos_model::Intersection;
 use nomos_platform::Timestamp;
 use std::time::Duration;

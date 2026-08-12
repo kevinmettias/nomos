@@ -1,7 +1,7 @@
 //! One declaration, as the parse saw it.
 
-use crate::syntax::Visibility;
-use crate::syntax::ItemKind;
+use crate::Visibility;
+use crate::ItemKind;
 /// One declaration, as the file spells it.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SyntaxItem

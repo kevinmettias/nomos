@@ -1,6 +1,6 @@
 //! One value of one field, and where it came from.
 
-use crate::origin::Origin;
+use crate::Origin;
 
 /// One value of one field, and where it came from.
 ///

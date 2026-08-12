@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::document::DocumentRef;
+use crate::DocumentRef;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SourceHeading

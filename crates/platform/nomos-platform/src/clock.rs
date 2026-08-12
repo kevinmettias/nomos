@@ -4,7 +4,6 @@ mod timestamp;
 
 pub use timestamp::Timestamp;
 
-
 /// The source of the current time.
 ///
 /// A dependency rather than a call to [`std::time::SystemTime::now`], for two reasons

@@ -1,6 +1,6 @@
 //! What became of one document.
 
-use crate::reconciliation::lineage::relocation::Relocation;
+use crate::Relocation;
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct DocumentFate
 {

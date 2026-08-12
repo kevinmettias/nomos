@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::ordinal::OrdinalRef;
+use crate::OrdinalRef;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Omission

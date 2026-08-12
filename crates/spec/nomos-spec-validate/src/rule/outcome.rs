@@ -1,6 +1,6 @@
 //! What became of one rule against one store.
 
-use crate::violation::Violation;
+use crate::Violation;
 /// What a rule concluded.
 ///
 /// `Satisfied` carries what it looked at. A rule that examined nothing and concluded

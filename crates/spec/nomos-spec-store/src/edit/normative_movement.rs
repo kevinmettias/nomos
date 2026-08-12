@@ -1,6 +1,6 @@
 //! What became of a normative statement recorded against this record.
 
-use crate::edit::normative_outcome::NormativeOutcome;
+use crate::NormativeOutcome;
 
 /// What became of a normative statement recorded against this record.
 #[derive(Clone, Debug, PartialEq, Eq)]

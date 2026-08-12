@@ -9,9 +9,9 @@ use nomos_contracts::ProviderId;
 use nomos_contracts::SubjectId;
 use nomos_contracts::ContractVersion;
 use nomos_contracts::CapabilityId;
-use crate::fact::FactIdentity;
-use crate::fact::GuaranteeDigest;
-use crate::identity::InputDigest;
+use crate::FactIdentity;
+use crate::GuaranteeDigest;
+use crate::InputDigest;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct FactKey
 {

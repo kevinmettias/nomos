@@ -12,9 +12,9 @@ use source::{Blobs, Source_Blocks, Source_Documents, Source_Headings, Source_Tab
 use submission::{Submission_Gaps, Submission_Values, Submissions};
 
 use crate::BundleError;
-use crate::bundle::Bundle;
+use crate::Bundle;
 use crate::columns::Assert_Columns_Covered;
-use crate::row::record::Record;
+use crate::Record;
 use nomos_spec_store::{SpecificationStore, Table};
 use rusqlite::Connection;
 

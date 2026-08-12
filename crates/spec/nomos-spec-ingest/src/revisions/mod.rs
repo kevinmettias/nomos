@@ -20,11 +20,11 @@ pub(crate) use fingerprint::Fingerprint_Of;
 pub use fingerprint::Fingerprint;
 pub use walk::Walk;
 
-use crate::reconciliation::report::kind_census::KindCensus;
-use crate::reconciliation::scope::Scope;
-use crate::reconciliation::overlay::pair_change::PairChange;
-use crate::archive::Archive;
-use crate::phases::IngestError;
+use crate::KindCensus;
+use crate::Scope;
+use crate::PairChange;
+use crate::Archive;
+use crate::IngestError;
 use nomos_spec_model::{BlockKind, ContentHash, RowKind, Segment, SourceBlock, Table_Rows};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};

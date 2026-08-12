@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::document::DocumentKind;
+use crate::DocumentKind;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum Authority

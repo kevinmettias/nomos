@@ -1,15 +1,14 @@
 //! Why a claim, a takeover or a decline is refused, decided before anything is written.
 
-
 use nomos_platform::Timestamp;
 
-use crate::claim::ClaimRefusal;
+use crate::ClaimRefusal;
 use crate::exclusion::Refusal_From;
-use crate::item::LedgerItem;
-use crate::item::ItemId;
-use crate::item::ItemState;
-use crate::ledger_document::LedgerDocument;
-use crate::ledger_error::LedgerError;
+use crate::LedgerItem;
+use crate::ItemId;
+use crate::ItemState;
+use crate::LedgerDocument;
+use crate::LedgerError;
 
 /// What would refuse a claim on `item` as of `now`, if anything.
 ///

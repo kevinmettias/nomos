@@ -11,9 +11,9 @@ use nomos_spec_model::ContentHash;
 use serde::{Deserialize, Serialize};
 
 use crate::BundleError;
-use crate::bundle::header::{FORMAT, Header};
-use crate::bundle::manifest::Manifest;
-use crate::row::record::Record;
+use crate::{FORMAT, Header};
+use crate::Manifest;
+use crate::Record;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "line", rename_all = "snake_case")]
@@ -324,8 +324,8 @@ impl Bundle
 mod tests
 {
     use super::*;
-    use crate::row::blob::Blob;
-    use crate::row::blob::encoding::BlobEncoding;
+    use crate::Blob;
+    use crate::BlobEncoding;
 
     fn One_Blob() -> Vec<Record>
     {

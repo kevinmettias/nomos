@@ -1,7 +1,7 @@
 //! Every way a fact refuses to be stored or read.
 
 use nomos_contracts::GenerationId;
-use crate::fact::FactIdentity;
+use crate::FactIdentity;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum FactError
 {

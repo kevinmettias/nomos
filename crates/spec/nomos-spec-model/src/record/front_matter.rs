@@ -2,7 +2,7 @@
 
 use serde::Deserialize;
 
-use crate::record::RecordRelation;
+use crate::RecordRelation;
 
 /// The declared identity of a record.
 ///

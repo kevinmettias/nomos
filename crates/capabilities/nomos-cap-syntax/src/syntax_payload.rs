@@ -1,6 +1,6 @@
 //! The shared shape every syntax provider emits.
 
-use crate::payload_item::PayloadItem;
+use crate::PayloadItem;
 /// A decoded `nomos.syntax.items.v2` payload.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SyntaxPayload

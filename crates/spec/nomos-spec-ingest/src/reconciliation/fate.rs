@@ -3,7 +3,7 @@
 pub(crate) mod document;
 pub(crate) mod member;
 
-use crate::reconciliation::hollow::Hollow;
+use crate::Hollow;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Fate
 {

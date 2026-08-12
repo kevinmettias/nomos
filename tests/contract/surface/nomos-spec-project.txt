@@ -103,7 +103,7 @@ pub struct field nomos_spec_project::Output::stamp: Stamp
 pub struct field nomos_spec_project::Profile::format: Format
 pub struct field nomos_spec_project::Profile::id: String
 pub struct field nomos_spec_project::Profile::output: String
-pub struct field nomos_spec_project::Profile::sections: Vec<Section>
+pub struct field nomos_spec_project::Profile::sections: Vec<ProfileSection>
 pub struct field nomos_spec_project::Profile::title: String
 pub struct field nomos_spec_project::ProfileSection::content: Content
 pub struct field nomos_spec_project::ProfileSection::filter: Filter

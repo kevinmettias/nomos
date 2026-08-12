@@ -1,6 +1,6 @@
 //! Where a section came from.
 
-use crate::content::section::recorded::RecordedSection;
+use crate::RecordedSection;
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct SectionLineage

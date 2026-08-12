@@ -1,11 +1,10 @@
 //! Inserting the graph: the nodes, what joins them, and what they were restored from.
 
-
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
-use crate::bundle::Bundle;
-use crate::row::record::Record;
+use crate::Bundle;
+use crate::Record;
 
 use super::reference::{
     Document_Uid, Node_Uid, Optional_Block_Uid, Optional_Heading_Uid, Optional_Node_Uid,

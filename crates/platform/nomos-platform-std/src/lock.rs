@@ -1,7 +1,7 @@
 //! A cross-process lock built from the one filesystem primitive that is atomic
 //! everywhere.
 
-use crate::file_lock_guard::FileLockGuard;
+use crate::FileLockGuard;
 
 use nomos_platform::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
 use std::fs::OpenOptions;

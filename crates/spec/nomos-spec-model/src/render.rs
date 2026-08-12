@@ -21,9 +21,9 @@
 //! caller finds out before an edit rather than after, and the authoring transaction refuses
 //! such a document rather than silently rewriting it into this shape.
 
-use crate::block::{Segment, SourceBlock};
-use crate::record::Parse_Record;
-use crate::record::RecordFrontMatter;
+use crate::{Segment, SourceBlock};
+use crate::Parse_Record;
+use crate::RecordFrontMatter;
 
 /// A value the canonical layout cannot represent.
 ///

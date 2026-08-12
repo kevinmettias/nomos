@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::document::DocumentRef;
+use crate::DocumentRef;
 
 /// A block or a heading, addressed by its position inside a document.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

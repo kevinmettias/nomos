@@ -2,7 +2,7 @@
 
 use core::fmt;
 
-use crate::failure::Failure;
+use crate::Failure;
 
 /// Why a submission was not accepted.
 ///

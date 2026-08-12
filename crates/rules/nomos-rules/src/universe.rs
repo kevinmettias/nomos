@@ -48,8 +48,8 @@
 //! So a payload whose fields were not observed produces [`Reading::Unobserved`] and never
 //! an empty list of universes. `OD-SYNTAX-002` records the schema half of this.
 
-use crate::declared_universe::DeclaredUniverse;
-use crate::reading::Reading;
+use crate::DeclaredUniverse;
+use crate::Reading;
 use nomos_cap_syntax::{FUNCTION, Function_Arity, IMPLEMENTATION, INHERENT, PayloadItem, SLICE, SyntaxPayload};
 
 /// How a universe is written down.

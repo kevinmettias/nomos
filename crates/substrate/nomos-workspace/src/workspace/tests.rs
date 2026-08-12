@@ -1,7 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::change::ChangeSource;
+use crate::ChangeSource;
 
 fn Variant() -> BuildVariant
 {

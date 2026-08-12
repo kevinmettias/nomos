@@ -3,13 +3,13 @@ mod freshness;
 
 pub use freshness::Freshness;
 
-use crate::projection::Output;
-use crate::format::Format;
-use crate::profile::Profile;
-use crate::projection::Input;
-use crate::projection::Projection;
-use crate::render::Render;
-use crate::select::Select;
+use crate::Output;
+use crate::Format;
+use crate::Profile;
+use crate::Input;
+use crate::Projection;
+use crate::Render;
+use crate::Select;
 use crate::ProjectError;
 use nomos_spec_model::ContentHash;
 use nomos_spec_store::SpecificationStore;

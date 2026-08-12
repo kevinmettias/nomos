@@ -1,6 +1,6 @@
 //! Everything one file was scanned into.
 
-use crate::scan::ScannedItem;
+use crate::ScannedItem;
 /// What one file looks like to a line-reader.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct ScannedFile

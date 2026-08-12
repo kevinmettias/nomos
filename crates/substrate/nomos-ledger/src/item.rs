@@ -28,15 +28,13 @@ pub use state::ItemState;
 #[cfg(test)]
 mod tests;
 
-
-
-use crate::finish::Declination;
-use crate::finish::Abandonment;
-use crate::verification::VerificationRecord;
-use crate::verification::VerificationPredicate;
-use crate::claim::Claim;
-use crate::exclusion::Blocker;
-use crate::territory::Territory;
+use crate::Declination;
+use crate::Abandonment;
+use crate::VerificationRecord;
+use crate::VerificationPredicate;
+use crate::Claim;
+use crate::Blocker;
+use crate::Territory;
 use nomos_platform::Timestamp;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;

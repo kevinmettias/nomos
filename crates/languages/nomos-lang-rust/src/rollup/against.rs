@@ -1,6 +1,6 @@
 //! What a rollup is computed against: who may answer, how good the answer has to be, and the build its facts are filed under.
 
-use crate::provider::FactContext;
+use crate::FactContext;
 use nomos_capability::Requirement;
 use nomos_capability::Registry;
 /// What a rollup is computed against: who may answer, how good the answer has to be, and

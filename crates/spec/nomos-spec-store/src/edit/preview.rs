@@ -2,11 +2,11 @@
 
 use nomos_spec_model::RecordRelation;
 
-use crate::edit::block_change::BlockChange;
-use crate::edit::identity_change::IdentityChange;
-use crate::edit::normative_movement::NormativeMovement;
-use crate::edit::normative_outcome::NormativeOutcome;
-use crate::edit::staged::StagedEdit;
+use crate::BlockChange;
+use crate::IdentityChange;
+use crate::NormativeMovement;
+use crate::NormativeOutcome;
+use crate::StagedEdit;
 
 /// What committing an edit would change.
 ///

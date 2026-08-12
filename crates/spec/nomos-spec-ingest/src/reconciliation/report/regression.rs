@@ -1,7 +1,7 @@
 //! What one revision lost against the one before it.
 
 use core::fmt::Write as _;
-use crate::reconciliation::fate::Fate;
+use crate::Fate;
 
 /// How many losses a summary line names before it falls back to the count alone.
 const NAMED_IN_A_SUMMARY: usize = 3;
@@ -10,11 +10,11 @@ const NAMED_IN_A_SUMMARY: usize = 3;
 /// boilerplate on sight, short enough that the line stays one line.
 const EXCERPT_CHARACTERS: usize = 72;
 
-use crate::reconciliation::report::tally::Tally;
-use crate::reconciliation::restored::Restored;
-use crate::reconciliation::report::filler_census::FillerCensus;
-use crate::reconciliation::fate::member::MemberFate;
-use crate::reconciliation::fate::document::DocumentFate;
+use crate::Tally;
+use crate::Restored;
+use crate::FillerCensus;
+use crate::MemberFate;
+use crate::DocumentFate;
 #[derive(Clone, Debug, Default)]
 pub struct RegressionReport
 {

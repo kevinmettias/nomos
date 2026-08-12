@@ -37,7 +37,7 @@ impl core::fmt::Display for EntityId
 mod tests
 {
     use super::*;
-    use crate::digest::Content_Digest;
+    use crate::Content_Digest;
 
     #[test]
     fn Test_Entity_Id_Should_Render_As_Its_Digest()

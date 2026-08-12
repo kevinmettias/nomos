@@ -2,7 +2,7 @@
 
 use serde::Deserialize;
 use serde::Serialize;
-use crate::item::ItemId;
+use crate::ItemId;
 /// Why an item cannot be worked on.
 ///
 /// A typed reason rather than free prose, so a query can answer "what is blocked on a

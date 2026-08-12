@@ -4,7 +4,7 @@ pub(crate) mod encoding;
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::blob::encoding::BlobEncoding;
+use crate::BlobEncoding;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Blob

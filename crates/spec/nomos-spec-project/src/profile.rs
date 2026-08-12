@@ -1,9 +1,9 @@
 // A section as a profile declares it, beneath the profile that declares it.
 mod section;
 
-pub use section::Section;
+pub use section::ProfileSection;
 
-use crate::format::Format;
+use crate::Format;
 use crate::ProjectError;
 use nomos_spec_model::ContentHash;
 use serde::{Deserialize, Serialize};
@@ -22,7 +22,7 @@ pub struct Profile
     pub title: String,
     pub format: Format,
     pub output: String,
-    pub sections: Vec<Section>,
+    pub sections: Vec<ProfileSection>,
 }
 
 impl Profile
@@ -184,7 +184,7 @@ fn Path_Is_Relative(profile: &str, output: &str) -> Result<(), ProjectError>
 mod tests
 {
     use super::*;
-    use crate::projection::Content;
+    use crate::Content;
 
     const MINIMAL: &str = r#"{
         "id": "one", "title": "One", "format": "markdown", "output": "one.md",

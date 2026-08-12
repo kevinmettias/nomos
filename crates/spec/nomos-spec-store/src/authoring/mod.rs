@@ -39,20 +39,20 @@ use nomos_spec_model::{
 };
 use rusqlite::{OptionalExtension, params};
 
-use crate::record::claimed::ClaimedRecord;
+use crate::ClaimedRecord;
 use crate::read::columns::Columns;
-use crate::edit::commit_report::CommitReport;
-use crate::read::document_source::DocumentSource;
-use crate::edit::error::EditError;
-use crate::edit::preview::EditPreview;
-use crate::edit::normative_movement::NormativeMovement;
+use crate::CommitReport;
+use crate::DocumentSource;
+use crate::EditError;
+use crate::EditPreview;
+use crate::NormativeMovement;
 use crate::record::Kind_Of;
-use crate::record::projection::RecordProjection;
-use crate::record::write::RecordWrite;
+use crate::RecordProjection;
+use crate::RecordWrite;
 use crate::store::{
     Collected, SpecificationStore,
 };
-use crate::store::error::StoreError;
+use crate::StoreError;
 
 /// Which relations the edit adds and which it removes.
 ///

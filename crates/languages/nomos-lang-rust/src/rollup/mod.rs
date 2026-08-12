@@ -92,7 +92,7 @@ pub use module::{IndexEntry, MemberReading, Module, ModuleIndex, ModuleMember};
 pub use outcome::Outcome;
 pub use rolled::Rolled;
 
-use crate::provider::FactContext;
+use crate::FactContext;
 use nomos_analysis::{
     Context, Dependency, FactError, FactKey, FactPayload, FactReader, GuaranteeDigest, InputDigest, MaterializedFact,
     MemoryFactStore, Reader,

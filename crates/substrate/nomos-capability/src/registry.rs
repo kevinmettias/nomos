@@ -6,11 +6,11 @@ mod error_kind;
 pub use error::RegistryError;
 pub use error_kind::RegistryErrorKind;
 
-use crate::contract::CapabilityContract;
-use crate::offer_refusal::OfferRefusal;
-use crate::provider_offer::ProviderOffer;
-use crate::requirement::Requirement;
-use crate::resolution::{Resolution, Selection, Unmet};
+use crate::CapabilityContract;
+use crate::OfferRefusal;
+use crate::ProviderOffer;
+use crate::Requirement;
+use crate::{Resolution, Selection, Unmet};
 use nomos_contracts::{Applicability, CapabilityId, ProviderId};
 use std::collections::BTreeMap;
 
@@ -321,7 +321,7 @@ mod tests
     use super::*;
     use nomos_contracts::ProviderId;
     use nomos_contracts::ContractVersion;
-    use crate::requirement::Requirement;
+    use crate::Requirement;
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 
     const CAPABILITY: &str = "nomos.cap.test.knowledge";

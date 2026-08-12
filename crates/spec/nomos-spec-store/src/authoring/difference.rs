@@ -5,10 +5,10 @@ use nomos_spec_model::{
     Render_Record, Segment, SourceBlock,
 };
 
-use crate::edit::block_change::BlockChange;
-use crate::edit::identity_change::IdentityChange;
-use crate::edit::normative_outcome::NormativeOutcome;
-use crate::record::Kind_Label;
+use crate::BlockChange;
+use crate::IdentityChange;
+use crate::NormativeOutcome;
+use crate::Kind_Label;
 
 use super::RelationChanges;
 

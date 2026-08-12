@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::ordinal::OrdinalRef;
+use crate::OrdinalRef;
 
 /// A table row, addressed by the block that carries it and its position within.
 ///

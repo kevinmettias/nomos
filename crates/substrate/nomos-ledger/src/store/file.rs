@@ -9,8 +9,8 @@ use nomos_platform::{Clock, CrossProcessLock, FileSystem};
 
 use nomos_platform::Timestamp;
 
-use crate::ledger_document::LedgerDocument;
-use crate::ledger_error::LedgerError;
+use crate::LedgerDocument;
+use crate::LedgerError;
 
 use super::document::Explain;
 use super::rendering::Rendered;

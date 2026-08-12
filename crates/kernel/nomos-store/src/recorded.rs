@@ -3,8 +3,8 @@
 use nomos_contracts::SchemaId;
 use serde::{Deserialize, Serialize};
 
-use crate::document::Document;
-use crate::document::DocumentKind;
+use crate::Document;
+use crate::DocumentKind;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Recorded

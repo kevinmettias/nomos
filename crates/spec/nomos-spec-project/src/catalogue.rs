@@ -1,4 +1,4 @@
-use crate::profile::Profile;
+use crate::Profile;
 use crate::ProjectError;
 use std::collections::{BTreeMap, BTreeSet};
 

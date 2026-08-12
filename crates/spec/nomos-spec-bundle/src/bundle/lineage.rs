@@ -2,8 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::ordinal::OrdinalRef;
-use crate::row::reference::table_row::TableRowRef;
+use crate::OrdinalRef;
+use crate::TableRowRef;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Lineage

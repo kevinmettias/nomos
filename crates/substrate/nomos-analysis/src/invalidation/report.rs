@@ -1,9 +1,9 @@
 //! What an invalidation reached, and where it had to widen.
 
 use nomos_contracts::GenerationId;
-use crate::invalidation::Broadening;
-use crate::fact::FactKey;
-use crate::store::GenerationCause;
+use crate::Broadening;
+use crate::FactKey;
+use crate::GenerationCause;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct InvalidationReport
 {

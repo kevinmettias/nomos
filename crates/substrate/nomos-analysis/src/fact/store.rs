@@ -1,12 +1,12 @@
 //! The store contract, sealed so its invariants stay this crate's to keep.
 
 use nomos_contracts::GenerationId;
-use crate::invalidation::InvalidationReport;
-use crate::store::GenerationCause;
-use crate::invalidation::Supersession;
-use crate::fact::FactKey;
-use crate::fact::MaterializedFact;
-use crate::fact::FactIdentity;
+use crate::InvalidationReport;
+use crate::GenerationCause;
+use crate::Supersession;
+use crate::FactKey;
+use crate::MaterializedFact;
+use crate::FactIdentity;
 
 pub(crate) mod sealed
 {

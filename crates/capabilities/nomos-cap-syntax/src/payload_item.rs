@@ -1,8 +1,8 @@
 //! One declaration in a syntax payload.
 
-use crate::payload::NOT_APPLICABLE;
-use crate::payload::PUBLIC;
-use crate::payload::Observation;
+use crate::NOT_APPLICABLE;
+use crate::PUBLIC;
+use crate::Observation;
 /// One `item` record.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PayloadItem

@@ -1,16 +1,15 @@
 //! Inserting the source corpus: the blobs, the documents, and everything addressed inside one.
 
-
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use nomos_spec_model::ContentHash;
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
-use crate::row::blob::Blob;
-use crate::row::blob::encoding::BlobEncoding;
-use crate::bundle::Bundle;
-use crate::row::record::Record;
+use crate::Blob;
+use crate::BlobEncoding;
+use crate::Bundle;
+use crate::Record;
 
 use super::Insert_Each;
 use super::reference::{

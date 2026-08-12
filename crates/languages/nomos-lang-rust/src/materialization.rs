@@ -1,6 +1,6 @@
 //! What became of materializing one fact.
 
-use crate::parse_failure::ParseFailure;
+use crate::ParseFailure;
 use nomos_analysis::MaterializedFact;
 /// The outcome of asking this provider for a fact about one file.
 ///

@@ -2,7 +2,7 @@
 
 use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
-use crate::fact::FactKey;
+use crate::FactKey;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct FactIdentity
 {

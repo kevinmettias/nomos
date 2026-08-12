@@ -1,7 +1,7 @@
 //! The document as it goes to disk, stamped with the schema this build writes.
 
-use crate::ledger_document::LedgerDocument;
-use crate::ledger_error::LedgerError;
+use crate::LedgerDocument;
+use crate::LedgerError;
 
 use super::SCHEMA_VERSION;
 

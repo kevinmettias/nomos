@@ -1,7 +1,7 @@
 //! One section of a rendered projection.
 
-use crate::projection::Item;
-use crate::projection::Content;
+use crate::Item;
+use crate::Content;
 use serde::Serialize;
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Section

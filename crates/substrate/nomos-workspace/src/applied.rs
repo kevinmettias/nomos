@@ -1,6 +1,6 @@
 //! What became of a change set that was applied.
 
-use crate::effect::Effect;
+use crate::Effect;
 use nomos_contracts::SnapshotId;
 use nomos_contracts::GenerationId;
 /// The outcome of submitting a change set.

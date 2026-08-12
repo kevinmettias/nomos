@@ -4,13 +4,13 @@ mod sections;
 use query::{Columns, Gather, Narrow_To_Nodes, Query};
 use sections::{Blocks, Documents, Headings, Lineage, Nodes, Omissions, Relations, Rows, Statements, Suites};
 
-use crate::projection::Content;
-use crate::filter::Filter;
-use crate::profile::{Profile, SUBJECT};
-use crate::projection::Input;
-use crate::projection::Item;
-use crate::projection::Projection;
-use crate::section::Section;
+use crate::Content;
+use crate::Filter;
+use crate::{Profile, SUBJECT};
+use crate::Input;
+use crate::Item;
+use crate::Projection;
+use crate::Section;
 use crate::ProjectError;
 use nomos_spec_store::SpecificationStore;
 use rusqlite::{Connection, params_from_iter, Row};
@@ -131,7 +131,7 @@ pub fn Select(store: &SpecificationStore, profile: &Profile) -> Result<Projectio
 fn Selected(
     connection: &Connection,
     profile: &Profile,
-    declared: &crate::profile::Section,
+    declared: &crate::ProfileSection,
 ) -> Result<Section, ProjectError>
 {
     Refuse_Unhonoured(profile, declared.content, &declared.filter)?;
@@ -171,7 +171,7 @@ fn Inputs_Of(content: Content, items: &[Item]) -> Vec<Input>
 /// is indistinguishable from one whose subject genuinely has nothing to say.
 fn Refuse_Empty(
     profile: &Profile,
-    declared: &crate::profile::Section,
+    declared: &crate::ProfileSection,
     items: &[Item],
 ) -> Result<(), ProjectError>
 {

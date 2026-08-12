@@ -1,7 +1,7 @@
 //! What one held item takes out of circulation.
 
 use nomos_platform::Timestamp;
-use crate::item::ItemId;
+use crate::ItemId;
 /// A granted claim.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Reservation

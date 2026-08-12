@@ -1,15 +1,15 @@
 //! What one family reconciliation found.
 
 use core::fmt::Write as _;
-use crate::family::Family;
+use crate::Family;
 
 /// How many absent identifiers a summary line names before it falls back to the count alone.
 /// Naming a few is what makes a count checkable by eye; naming all of them makes the summary
 /// into the report it is supposed to introduce.
 const NAMED_IN_A_SUMMARY: usize = 5;
 
-use crate::reconciliation::disposition::Disposition;
-use crate::reconciliation::identifier_outcome::IdentifierOutcome;
+use crate::Disposition;
+use crate::IdentifierOutcome;
 /// One row per v14 identifier, never a count.
 ///
 /// The plan requires differences reported per identifier and never summarised, so the

@@ -1,6 +1,6 @@
 //! Every way a stored block disagrees with its source.
 
-use crate::content::block::mismatch_kind::BlockMismatchKind;
+use crate::BlockMismatchKind;
 
 /// Why a recomputed block disagreed with the manifest, always naming the document.
 ///

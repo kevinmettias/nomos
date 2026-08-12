@@ -1,6 +1,6 @@
 //! A v15 artifact document, as its front matter declares it.
 
-use crate::family::Family;
+use crate::Family;
 use serde::Deserialize;
 /// One authored v14 artifact, reduced to what reconciliation compares.
 #[derive(Clone, Debug, PartialEq, Eq)]

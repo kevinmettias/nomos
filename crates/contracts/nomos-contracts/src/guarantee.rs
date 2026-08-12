@@ -12,7 +12,6 @@ pub use incremental_granularity::IncrementalGranularity;
 
 use serde::{Deserialize, Serialize};
 
-
 /// What a provider promises about the facts it produces for one capability.
 ///
 /// Note what this type is *not*: it is not a reproducibility claim. That is the

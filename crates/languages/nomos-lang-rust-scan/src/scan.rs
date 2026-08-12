@@ -21,9 +21,9 @@
 //! lines. Seven files in the scale corpus carry a stray byte order mark that `syn` refuses
 //! outright, and one in the precision corpus does. This reads them.
 
-use crate::scanned_file::ScannedFile;
-use crate::visibility::Visibility;
-use crate::item_kind::ItemKind;
+use crate::ScannedFile;
+use crate::Visibility;
+use crate::ItemKind;
 /// One declaration, as a line-reader can see it.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ScannedItem
@@ -206,7 +206,7 @@ fn Name_In(rest: &str) -> String
 mod tests
 {
     use super::*;
-    use crate::item_kind::ItemKind;
+    use crate::ItemKind;
 
     fn Kinds(source: &str) -> Vec<(ItemKind, String, String)>
     {

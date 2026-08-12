@@ -1,7 +1,7 @@
 //! One fact a read depended on.
 
-use crate::reader::ReadOutcome;
-use crate::fact::FactKey;
+use crate::ReadOutcome;
+use crate::FactKey;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Dependency
 {

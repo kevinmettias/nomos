@@ -1,7 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::phases::Ingest_Source_Document;
+use crate::Ingest_Source_Document;
 use super::extract::{Milestone, Numbering};
 
 const CORE: &str = "# Core\n\n## 5. Canonical domain model\n\n\

@@ -1,7 +1,7 @@
 //! One rendered file and the stamp beside it.
 
 use crate::ProjectError;
-use crate::build::Stamp;
+use crate::Stamp;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Output
 {

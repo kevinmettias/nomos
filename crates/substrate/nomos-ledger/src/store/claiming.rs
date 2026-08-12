@@ -2,12 +2,12 @@
 
 use nomos_platform::Timestamp;
 
-use crate::claim::Claim;
-use crate::claim::ClaimRefusal;
-use crate::item::LedgerItem;
-use crate::item::ItemId;
-use crate::item::ItemState;
-use crate::ledger_document::LedgerDocument;
+use crate::Claim;
+use crate::ClaimRefusal;
+use crate::LedgerItem;
+use crate::ItemId;
+use crate::ItemState;
+use crate::LedgerDocument;
 
 /// Marks an item claimed and records the grant.
 pub(super) fn Install_Claim(document: &mut LedgerDocument, item: &ItemId, granted: &Claim)

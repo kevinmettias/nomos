@@ -56,6 +56,21 @@
 //! is a type rather than a formatted line because every one of them is destroyed by
 //! printing: prose cannot be asked whether the rule reached its subject, how the claim
 //! was come by, or whether anything would actually have failed a build over it.
+//!
+//! # Why `check-crate-split` reports this crate, and why it stays one
+//!
+//! That check clusters a crate's files by which of them reference which, and reports a
+//! crate whose files fall into groups that never speak to each other. This crate is five
+//! such groups: applicability, determinism, guarantee, authority and peer never mention
+//! one another, and they never will, because a shared vocabulary's terms are independent
+//! by construction. The check's own standard names that case -- a boundary may exist to
+//! seal a subsystem, and no reference graph can see intent.
+//!
+//! The intent here is the band. `OD-CONTRACTS-001` admits a type when peers on both sides
+//! of a boundary need one stable representation of it, and `contracts_names_nothing`
+//! asserts this crate depends on serde and nothing else. Five crates would make every
+//! consumer name five, and would give five places for the answer to "is this vocabulary
+//! authoritative" to drift apart.
 
 #![forbid(unsafe_code)]
 

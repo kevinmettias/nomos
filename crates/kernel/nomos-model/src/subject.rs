@@ -38,8 +38,8 @@ impl Subject
 mod tests
 {
     use super::*;
-    use crate::entity::EntityId;
-    use crate::digest::Content_Digest;
+    use crate::EntityId;
+    use crate::Content_Digest;
 
     #[test]
     fn Test_Target_Kind_Should_Follow_The_Variant()

@@ -8,7 +8,6 @@ pub use command::Command;
 pub use exit_outcome::ExitOutcome;
 pub use process_output::ProcessOutput;
 
-
 /// Runs a program directly, without shell mediation.
 pub trait ProcessLauncher
 {

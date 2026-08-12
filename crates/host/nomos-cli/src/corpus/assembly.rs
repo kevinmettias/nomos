@@ -1,6 +1,6 @@
 //! A store assembled from a corpus, and what it is missing.
 
-use crate::corpus::absence::Absence;
+use crate::corpus::Absence;
 use nomos_spec_store::SpecificationStore;
 /// A store, what went into it, and what did not.
 pub(crate) struct Assembly

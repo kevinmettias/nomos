@@ -15,9 +15,9 @@
 use nomos_contracts::SubjectId;
 use serde::{Deserialize, Serialize};
 
-use crate::intersection::Intersection;
-use crate::set_resolution::SetResolution;
-use crate::unknown_reason::UnknownReason;
+use crate::Intersection;
+use crate::SetResolution;
+use crate::UnknownReason;
 use std::collections::BTreeSet;
 
 /// A set of subjects some piece of work reads or writes.
@@ -163,7 +163,7 @@ impl SubjectSet
 mod tests
 {
     use super::*;
-    use crate::digest::Content_Digest;
+    use crate::Content_Digest;
 
     fn Subject(name: &str) -> SubjectId
     {

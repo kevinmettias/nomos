@@ -15,7 +15,7 @@
 //! question stays with the subsystem that asks it.
 
 use nomos_contracts::SubjectId;
-use crate::digest::Content_Digest;
+use crate::Content_Digest;
 
 /// The identity of the subject a repository-relative path denotes.
 ///

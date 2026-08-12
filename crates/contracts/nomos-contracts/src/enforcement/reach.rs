@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use super::{EnforcementBreach, EnforcerRef, GateCategory};
-use crate::identity::RuleId;
+use crate::RuleId;
 
 /// What a rule claims about its enforcement, and what is actually true.
 ///

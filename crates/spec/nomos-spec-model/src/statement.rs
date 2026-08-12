@@ -7,7 +7,7 @@ mod kind;
 pub use id::StatementId;
 pub use kind::StatementKind;
 
-use crate::normalize::{ContentHash, Is_Normalized, Normalize};
+use crate::{ContentHash, Is_Normalized, Normalize};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct NormativeStatement

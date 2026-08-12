@@ -1,8 +1,8 @@
 //! The accept function, exercised.
 
 use super::*;
-use crate::governing::Seed_Governing_Records;
-use crate::table::Table;
+use crate::Seed_Governing_Records;
+use crate::Table;
 use nomos_spec_model::{DecisionGap, FieldValue, Severity, SubmissionKind};
 
 fn Store() -> SpecificationStore

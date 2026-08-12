@@ -4,11 +4,11 @@ use nomos_contracts::Applicability;
 use nomos_capability::Requirement;
 use nomos_contracts::SubjectId;
 use nomos_contracts::CapabilityId;
-use crate::reading::Dependency;
-use crate::identity::InputDigest;
-use crate::fact::FactError;
-use crate::fact::MaterializedFact;
-use crate::fact::FactIdentity;
+use crate::Dependency;
+use crate::InputDigest;
+use crate::FactError;
+use crate::MaterializedFact;
+use crate::FactIdentity;
 pub trait FactReader
 {
     fn Get(&mut self, identity: &FactIdentity) -> Result<&MaterializedFact, FactError>;

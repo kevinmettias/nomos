@@ -9,7 +9,6 @@ pub use error::RecordError;
 pub use front_matter::RecordFrontMatter;
 pub use relation::RecordRelation;
 
-
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Record
 {

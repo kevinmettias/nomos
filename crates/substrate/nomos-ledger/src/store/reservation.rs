@@ -1,15 +1,12 @@
 //! What refuses an item before it can join the board, decided over its territory.
 
-
 use nomos_model::Intersection;
 
-use crate::add_refusal::AddRefusal;
-use crate::item::LedgerItem;
-use crate::item::ItemState;
-use crate::ledger_document::LedgerDocument;
-use crate::territory::{Normalize_Path, Territory};
-
-
+use crate::AddRefusal;
+use crate::LedgerItem;
+use crate::ItemState;
+use crate::LedgerDocument;
+use crate::{Normalize_Path, Territory};
 
 /// What an item declares about record identifiers, as one value.
 ///

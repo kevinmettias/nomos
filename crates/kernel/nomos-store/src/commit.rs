@@ -1,6 +1,6 @@
-use crate::manifest::Manifest;
-use crate::recorded::Recorded;
-use crate::reference::Reference;
+use crate::Manifest;
+use crate::Recorded;
+use crate::Reference;
 use crate::StoreError;
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, GenerationId, SnapshotId,

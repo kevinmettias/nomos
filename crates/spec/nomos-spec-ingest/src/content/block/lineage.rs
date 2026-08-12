@@ -1,6 +1,6 @@
 //! Where a block came from.
 
-use crate::content::block::recorded::RecordedBlock;
+use crate::RecordedBlock;
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct BlockLineage

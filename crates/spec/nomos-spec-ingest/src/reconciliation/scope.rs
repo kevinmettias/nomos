@@ -1,6 +1,6 @@
 //! How much of the corpus a change touched.
 
-use crate::revisions::DOMAIN_VOLUMES;
+use crate::DOMAIN_VOLUMES;
 /// What a census counted over.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Scope

@@ -3,7 +3,7 @@
 use nomos_contracts::SubjectId;
 use serde::{Deserialize, Serialize};
 
-use crate::unknown_reason::UnknownReason;
+use crate::UnknownReason;
 
 /// The result of asking whether two subject sets overlap.
 ///

@@ -1,6 +1,6 @@
 //! What became of reading one file for declared universes.
 
-use crate::declared_universe::DeclaredUniverse;
+use crate::DeclaredUniverse;
 /// What reading one file's syntax fact produced.
 ///
 /// Two variants, and the second is not "the file was empty". A provider that could not

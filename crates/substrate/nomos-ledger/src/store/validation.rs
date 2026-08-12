@@ -1,13 +1,12 @@
 //! Every rule the ledger must satisfy, checked over a whole document.
 
-
 use nomos_model::Intersection;
 use nomos_platform::Timestamp;
 
-use crate::item::LedgerItem;
-use crate::item::ItemId;
-use crate::item::ItemState;
-use crate::ledger_document::LedgerDocument;
+use crate::LedgerItem;
+use crate::ItemId;
+use crate::ItemState;
+use crate::LedgerDocument;
 
 /// Every way a ledger can be internally inconsistent.
 ///

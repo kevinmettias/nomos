@@ -1,10 +1,10 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::payload_refusal::PayloadRefusal;
-use crate::payload_refusal_kind::PayloadRefusalKind;
-use crate::payload_item::PayloadItem;
-use crate::syntax_payload::SyntaxPayload;
+use crate::PayloadRefusal;
+use crate::PayloadRefusalKind;
+use crate::PayloadItem;
+use crate::SyntaxPayload;
 
 const SAMPLE: &str = "unexpanded\t2\n\
                       item\t0\tModule\tPrivate\ttests\t.\t.\n\

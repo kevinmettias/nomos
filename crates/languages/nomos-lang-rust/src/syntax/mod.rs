@@ -23,8 +23,8 @@ pub(crate) use shape::Path_As_Written;
 use shape::{Bound_By, Function_Shape, Impl_Shape, Type_Head, Type_Shape};
 use documentation::Documentation;
 
-use crate::parse_failure::ParseFailure;
-use crate::reading::Reading;
+use crate::ParseFailure;
+use crate::Reading;
 use syn::visit::Visit;
 
 /// Reads Rust source.

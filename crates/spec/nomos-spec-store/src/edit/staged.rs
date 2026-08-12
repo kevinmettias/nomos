@@ -4,10 +4,10 @@ use nomos_spec_model::Record;
 use nomos_spec_model::Segment;
 
 use crate::authoring::{Block_Changes, Identity_Changes, Relation_Changes};
-use crate::record::claimed::ClaimedRecord;
-use crate::edit::error::EditError;
-use crate::edit::preview::EditPreview;
-use crate::store::SpecificationStore;
+use crate::ClaimedRecord;
+use crate::EditError;
+use crate::EditPreview;
+use crate::SpecificationStore;
 
 /// Step three: the edit, read and accepted, not yet inspected.
 #[derive(Debug)]

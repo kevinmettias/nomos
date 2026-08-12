@@ -9,7 +9,7 @@ mod kind;
 pub use id::DocumentId;
 pub use kind::DocumentKind;
 
-use crate::authority::Authority;
+use crate::Authority;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Document

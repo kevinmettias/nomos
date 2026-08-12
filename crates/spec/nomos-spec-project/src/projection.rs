@@ -10,8 +10,8 @@ pub use input::Input;
 pub use item::Item;
 pub use output::Output;
 
-use crate::section::Section;
-use crate::format::Format;
+use crate::Section;
+use crate::Format;
 use nomos_spec_model::ContentHash;
 use serde::Serialize;
 

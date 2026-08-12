@@ -3,7 +3,7 @@
 use nomos_contracts::{BuildVariantId, ConfigurationId, SnapshotEntityId, SnapshotId};
 use serde::{Deserialize, Serialize};
 
-use crate::entity::EntityId;
+use crate::EntityId;
 
 /// One canonical entity as it appears under one snapshot, build variant and
 /// configuration.

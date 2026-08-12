@@ -5,7 +5,7 @@ use nomos_contracts::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::reference::Reference;
+use crate::Reference;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Manifest

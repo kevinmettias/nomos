@@ -7,7 +7,7 @@ mod key;
 mod materialized;
 mod memory_store;
 mod reader;
-pub(crate) mod store;
+mod store;
 
 pub use error::FactError;
 pub use guarantee_digest::GuaranteeDigest;
@@ -17,6 +17,7 @@ pub use materialized::MaterializedFact;
 pub use memory_store::MemoryFactStore;
 pub use reader::FactReader;
 pub use store::FactStore;
+pub(crate) use store::sealed;
 
 use nomos_contracts::{Digest128, SchemaId};
 use nomos_model::Content_Digest;

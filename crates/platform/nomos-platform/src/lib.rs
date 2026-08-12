@@ -25,6 +25,14 @@
 //! capability discovery are named in the architecture and are deliberately absent until
 //! something needs them — a trait nothing implements and nothing calls is a claim about
 //! the future, and this workspace has a rule against those.
+//!
+//! # Why `check-crate-split` reports this crate, and why it stays one
+//!
+//! The four ports never reference each other -- a clock has nothing to say to a lock --
+//! so that check reads four groups sharing a manifest. The sealing is the point and it is
+//! stated above: exactly one crate in this workspace names a platform dependency, and a
+//! `tests/contract` assertion holds every crate below the host band to it. Four port
+//! crates would be four places that rule has to be restated and checked.
 
 #![forbid(unsafe_code)]
 

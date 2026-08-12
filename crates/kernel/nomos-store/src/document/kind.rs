@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::authority::Authority;
+use crate::Authority;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum DocumentKind

@@ -1,7 +1,7 @@
 //! One member of a restored family.
 
-use crate::reconciliation::lineage::origin::Origin;
-use crate::reconciliation::restored::Restored;
+use crate::Origin;
+use crate::Restored;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Member
 {

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::reference::document::DocumentRef;
+use crate::DocumentRef;
 
 /// One relation a record declared, in the position it declared it.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

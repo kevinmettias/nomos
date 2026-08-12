@@ -6,6 +6,20 @@
 //!
 //! The algorithm was recovered from the v14 corpus, not chosen. See
 //! `tests/normalizer_gate.rs`.
+//!
+//! # Why `check-crate-split` reports this crate, and why it stays one for now
+//!
+//! Its files fall into two groups that never reference each other: the content model --
+//! blocks, statements, records, tables and how they render -- and the submission
+//! vocabulary, which is a submission's state and kind together with the failures,
+//! refusals, severities and field values it carries. The reading is correct. A submission
+//! is *about* specification content and today names none of it, because the typed layer
+//! it will be written through does not exist yet.
+//!
+//! That layer is open work rather than an omission, and a crate boundary drawn before the
+//! writer exists would be drawn around a shape nothing has yet had to hold. Splitting is
+//! also a band and ownership decision, which this repository settles in a record and not
+//! in a commit that happened to be tidying the tree.
 
 #![forbid(unsafe_code)]
 

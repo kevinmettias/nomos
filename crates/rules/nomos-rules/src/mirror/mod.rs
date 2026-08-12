@@ -86,10 +86,10 @@ use unread::{Unread, Unread_Subject, Unreadable};
 use verdict::Judge;
 
 use crate::facts::Check_Names_In;
-use crate::declared_universe::DeclaredUniverse;
-use crate::reading::Reading;
+use crate::DeclaredUniverse;
+use crate::Reading;
 use crate::universe::Read_Universes;
-use crate::universe::UniverseKind;
+use crate::UniverseKind;
 use crate::{SourceFile, Syntax_Requirement};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_contracts::{

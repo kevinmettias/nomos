@@ -75,7 +75,7 @@ mod tests
     use nomos_contracts::{Applicability, SubjectId};
 
     use super::*;
-    use crate::digest::Content_Digest;
+    use crate::Content_Digest;
 
     fn Subject(name: &str) -> SubjectId
     {

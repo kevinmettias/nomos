@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::set_resolution::SetResolution;
+use crate::SetResolution;
 
 /// Why an overlap question could not be answered.
 ///

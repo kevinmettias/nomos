@@ -1,9 +1,9 @@
 pub(crate) mod origin;
 pub(crate) mod relocation;
 
-use crate::content::section::recorded::RecordedSection;
-use crate::content::section::lineage::SectionLineage;
-use crate::phases::IngestError;
+use crate::RecordedSection;
+use crate::SectionLineage;
+use crate::IngestError;
 use nomos_spec_store::{SpecificationStore, StoreError};
 
 #[derive(Debug, Default)]
@@ -222,7 +222,7 @@ fn Sql<T>(result: rusqlite::Result<T>) -> Result<T, IngestError>
 mod tests
 {
     use super::*;
-    use crate::phases::Ingest_Source_Document;
+    use crate::Ingest_Source_Document;
 
     fn Prepared() -> SpecificationStore
     {

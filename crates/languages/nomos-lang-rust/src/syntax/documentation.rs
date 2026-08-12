@@ -1,6 +1,5 @@
 //! The doc comment a declaration carries, if it carries one.
 
-
 /// The item's documentation, as one string, or `None` when it has none.
 ///
 /// `///` is `#[doc]` after parsing, so both spellings are read and neither has to be

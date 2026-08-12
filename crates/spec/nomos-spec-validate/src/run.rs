@@ -1,7 +1,7 @@
-use crate::rule::Rule;
-use crate::violation::Violation;
-use crate::rule::RuleOutcome;
-use crate::rule::RuleResult;
+use crate::Rule;
+use crate::Violation;
+use crate::RuleOutcome;
+use crate::RuleResult;
 use nomos_spec_model::ContentHash;
 use nomos_spec_store::SpecificationStore;
 

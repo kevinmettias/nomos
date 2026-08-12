@@ -1,7 +1,7 @@
 //! Every change observed in one pass, as one thing to reason about.
 
-use crate::change::Change;
-use crate::change::ChangeSource;
+use crate::Change;
+use crate::ChangeSource;
 /// A batch of changes from one source, applied as one step.
 ///
 /// A batch rather than a change, because a checkout that moved four hundred files is one

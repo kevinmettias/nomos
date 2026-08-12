@@ -1,9 +1,9 @@
-use crate::authority::Authority;
-use crate::document::Document;
-use crate::document::DocumentId;
-use crate::document::DocumentKind;
-use crate::index::Index;
-use crate::commit::{Commit, COMMIT_SCHEMA};
+use crate::Authority;
+use crate::Document;
+use crate::DocumentId;
+use crate::DocumentKind;
+use crate::Index;
+use crate::{Commit, COMMIT_SCHEMA};
 use crate::StoreError;
 use nomos_contracts::SchemaId;
 use std::collections::BTreeMap;

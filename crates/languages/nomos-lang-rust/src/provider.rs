@@ -6,12 +6,12 @@
 //! any of them wrong would be invalidated at the wrong time rather than merely labelled
 //! badly.
 
-use crate::materialization::Materialization;
-use crate::guarantee::{Declared_Guarantee, PROVIDER};
-use crate::reading::Reading;
-use crate::syntax::Read_Source;
-use crate::syntax::SyntaxFacts;
-use crate::syntax::SyntaxItem;
+use crate::Materialization;
+use crate::{Declared_Guarantee, PROVIDER};
+use crate::Reading;
+use crate::Read_Source;
+use crate::SyntaxFacts;
+use crate::SyntaxItem;
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, CONTRACT_VERSION, Payload_Schema};
 use nomos_contracts::{
@@ -190,7 +190,7 @@ fn Observed(value: Option<&str>) -> String
 mod tests
 {
     use super::*;
-    use crate::materialization::Materialization;
+    use crate::Materialization;
     use nomos_contracts::Digest128;
     use nomos_model::Content_Digest;
 

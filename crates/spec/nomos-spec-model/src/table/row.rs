@@ -1,7 +1,7 @@
 //! One line of a markdown table, held as a child of the block that carries it.
 
-use crate::normalize::ContentHash;
-use crate::table::RowKind;
+use crate::ContentHash;
+use crate::RowKind;
 
 /// One line of a markdown table, held as a child of the block that carries it.
 ///

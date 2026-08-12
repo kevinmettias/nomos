@@ -24,11 +24,11 @@ pub(crate) use extract::Extract;
 pub use extract::Models_In;
 pub use record::{Resolve, Restore};
 
-use crate::reconciliation::lineage::origin::Origin;
+use crate::Origin;
 use crate::reconciliation::collision::Collision;
-use crate::reconciliation::restored::Restored;
-use crate::archive::member::Member;
-use crate::phases::IngestError;
+use crate::Restored;
+use crate::Member;
+use crate::IngestError;
 use nomos_spec_model::{BlockKind, RowKind, Segment, SourceBlock, Table_Rows, TableRow};
 use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
 use core::fmt::Write as _;

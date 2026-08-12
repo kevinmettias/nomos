@@ -16,16 +16,16 @@ use nomos_capability::Resolution;
 use nomos_contracts::SubjectId;
 use nomos_contracts::CapabilityId;
 use nomos_capability::Registry;
-use crate::fact::FactError;
-use crate::fact::FactIdentity;
-use crate::fact::FactReader;
-use crate::fact::MaterializedFact;
-use crate::fact::GuaranteeDigest;
-use crate::identity::InputDigest;
-use crate::reader::ReadOutcome;
-use crate::fact::FactKey;
-use crate::context::Context;
-use crate::fact::MemoryFactStore;
+use crate::FactError;
+use crate::FactIdentity;
+use crate::FactReader;
+use crate::MaterializedFact;
+use crate::GuaranteeDigest;
+use crate::InputDigest;
+use crate::ReadOutcome;
+use crate::FactKey;
+use crate::Context;
+use crate::MemoryFactStore;
 pub struct Reader<'store, 'registry>
 {
     store: &'store MemoryFactStore,

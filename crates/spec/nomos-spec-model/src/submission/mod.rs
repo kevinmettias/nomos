@@ -21,10 +21,10 @@ pub use state::SubmissionState;
 
 use std::collections::BTreeSet;
 
-use crate::failure::DecisionGap;
-use crate::failure::Failure;
-use crate::field_value::FieldValue;
-use crate::failure::Severity;
+use crate::DecisionGap;
+use crate::Failure;
+use crate::FieldValue;
+use crate::Severity;
 
 /// What a transport hands to the accept function.
 ///

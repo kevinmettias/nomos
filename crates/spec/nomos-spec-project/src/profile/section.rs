@@ -1,12 +1,12 @@
 //! One section of a profile, named apart from a projection's section.
 
-use crate::filter::Filter;
-use crate::projection::Content;
+use crate::Filter;
+use crate::Content;
 use serde::Serialize;
 use serde::Deserialize;
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
-pub struct Section
+pub struct ProfileSection
 {
     pub title: String,
     pub content: Content,

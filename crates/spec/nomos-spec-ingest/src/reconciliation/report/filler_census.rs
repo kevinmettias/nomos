@@ -1,6 +1,6 @@
 //! How much of a revision says nothing.
 
-use crate::archive::template::Template;
+use crate::Template;
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct FillerCensus
 {

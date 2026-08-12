@@ -1,6 +1,6 @@
 //! One list a guard quantifies over.
 
-use crate::universe::UniverseKind;
+use crate::UniverseKind;
 /// One list that some completeness guard quantifies over.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct DeclaredUniverse

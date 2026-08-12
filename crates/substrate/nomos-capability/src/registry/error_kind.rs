@@ -2,7 +2,7 @@
 
 use nomos_contracts::ProviderId;
 
-use crate::offer_refusal::OfferRefusal;
+use crate::OfferRefusal;
 
 /// Which of the two things being refused was refused.
 ///

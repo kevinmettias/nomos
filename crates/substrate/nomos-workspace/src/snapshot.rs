@@ -1,7 +1,7 @@
 //! What the workspace is, in bytes somebody else can read.
 
-use crate::member::Member;
-use crate::variant::BuildVariant;
+use crate::Member;
+use crate::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, SnapshotId};
 use nomos_model::Content_Digest;
 use nomos_store::StoreError;

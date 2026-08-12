@@ -31,7 +31,7 @@
 //! needs determinism can check.
 
 use super::Standing;
-use crate::provider_offer::ProviderOffer;
+use crate::ProviderOffer;
 use nomos_contracts::ProviderId;
 
 /// Which usable offer answers, and every usable offer it was chosen over.

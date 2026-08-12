@@ -25,7 +25,7 @@ pub struct Artifact
 mod tests
 {
     use super::*;
-    use crate::digest::Content_Digest;
+    use crate::Content_Digest;
 
     /// A generated artifact must be distinguishable from a hand-written one, because a
     /// correction that edits generated output is overwritten the next time the

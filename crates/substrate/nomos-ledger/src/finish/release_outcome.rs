@@ -1,10 +1,10 @@
 //! What became of a claim that was let go.
 
-use crate::finish::Abandonment;
-use crate::item::ItemState;
+use crate::Abandonment;
+use crate::ItemState;
 use nomos_platform::Timestamp;
-use crate::item::LedgerItem;
-use crate::verification::VerificationRecord;
+use crate::LedgerItem;
+use crate::VerificationRecord;
 /// How a release ended.
 ///
 /// The finished arm carries the [`VerificationRecord`], which is what makes a finished

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use crate::confidence::Confidence;
+use crate::Confidence;
 
 /// A typed, evidenced change of state.
 ///
@@ -51,8 +51,8 @@ impl<K> Transition<K>
 mod tests
 {
     use super::*;
-    use crate::identity::IdentityTransition;
-    use crate::identity::IdentityTransitionKind;
+    use crate::IdentityTransition;
+    use crate::IdentityTransitionKind;
 
     /// An unevidenced inference must be visibly unevidenced. This is the field a review
     /// looks at when asking why the system thinks two declarations are the same one.

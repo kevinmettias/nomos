@@ -1,6 +1,6 @@
 //! A parsed file of normative statements.
 
-use crate::content::statement::recorded::RecordedStatement;
+use crate::RecordedStatement;
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct StatementFile

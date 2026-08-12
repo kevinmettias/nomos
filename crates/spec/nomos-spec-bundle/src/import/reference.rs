@@ -1,13 +1,11 @@
 //! Resolving a bundle's natural keys against the surrogates the schema assigned them.
 
-
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
-use crate::row::reference::document::DocumentRef;
-use crate::row::reference::ordinal::OrdinalRef;
-use crate::row::reference::table_row::TableRowRef;
-
+use crate::DocumentRef;
+use crate::OrdinalRef;
+use crate::TableRowRef;
 
 pub(super) fn Optional_Suite_Uid(
     transaction: &Transaction<'_>,

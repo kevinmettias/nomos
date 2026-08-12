@@ -5,25 +5,25 @@ pub(crate) mod relation;
 
 use serde::{Deserialize, Serialize};
 
-use crate::row::blob::Blob;
-use crate::bundle::lineage::Lineage;
-use crate::row::node::Node;
-use crate::row::node::alias::NodeAlias;
-use crate::row::node::history::NodeHistory;
-use crate::row::normative_statement::NormativeStatement;
-use crate::bundle::omission::Omission;
-use crate::row::record::front_matter::RecordFrontMatter;
-use crate::row::record::relation::RecordRelation;
-use crate::row::relation::Relation;
-use crate::row::relation::kind::RelationType;
-use crate::row::source::block::SourceBlock;
-use crate::row::source::document::SourceDocument;
-use crate::row::source::heading::SourceHeading;
-use crate::row::source::table_row::SourceTableRow;
+use crate::Blob;
+use crate::Lineage;
+use crate::Node;
+use crate::NodeAlias;
+use crate::NodeHistory;
+use crate::NormativeStatement;
+use crate::Omission;
+use crate::RecordFrontMatter;
+use crate::RecordRelation;
+use crate::Relation;
+use crate::RelationType;
+use crate::SourceBlock;
+use crate::SourceDocument;
+use crate::SourceHeading;
+use crate::SourceTableRow;
 use crate::row::submission::Submission;
 use crate::row::submission::gap::SubmissionGap;
 use crate::row::submission::value::SubmissionValue;
-use crate::row::suite::Suite;
+use crate::Suite;
 
 /// One row, carrying its own table name and only natural keys.
 ///

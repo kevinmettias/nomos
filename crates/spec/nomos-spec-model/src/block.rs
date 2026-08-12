@@ -3,7 +3,7 @@ mod kind;
 
 pub use kind::BlockKind;
 
-use crate::normalize::ContentHash;
+use crate::ContentHash;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SourceBlock

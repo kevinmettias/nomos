@@ -10,7 +10,6 @@ pub use edited::Edited;
 pub use recompute::Recompute;
 pub use resolved::Resolved;
 
-
 /// What one pass over a corpus did.
 ///
 /// Every field is a count with a named denominator somewhere in this struct. The

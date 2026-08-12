@@ -1,6 +1,6 @@
 //! Which of the three disagreements it was.
 
-use crate::content::block::field::BlockField;
+use crate::BlockField;
 
 /// Which of the three disagreements it was.
 ///

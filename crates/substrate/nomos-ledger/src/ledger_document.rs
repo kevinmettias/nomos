@@ -2,7 +2,7 @@
 
 use serde::Deserialize;
 use serde::Serialize;
-use crate::item::LedgerItem;
+use crate::LedgerItem;
 /// The on-disk form.
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 // The outermost of the strict containers. Reasoned once in `item.rs`'s module documentation and

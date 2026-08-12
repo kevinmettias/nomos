@@ -1,6 +1,6 @@
 //! A decision the submission needs that nobody has taken yet.
 
-use crate::failure::Severity;
+use crate::Severity;
 
 /// A decision the submission needs that nobody has taken yet.
 ///

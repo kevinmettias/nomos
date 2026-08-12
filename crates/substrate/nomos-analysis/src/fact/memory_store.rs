@@ -1,21 +1,21 @@
 //! The in-memory store, and the walk an invalidation spreads through.
 
-use crate::fact::store::sealed;
+use crate::fact::sealed;
 use std::collections::BTreeSet;
 use std::collections::BTreeMap;
 use nomos_contracts::IncrementalGranularity;
 use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
-use crate::invalidation::Supersession;
-use crate::fact::FactIdentity;
-use crate::fact::FactStore;
-use crate::invalidation::Broadening;
-use crate::invalidation::InvalidationReport;
-use crate::store::GenerationCause;
-use crate::fact::FactError;
-use crate::fact::FactKey;
-use crate::reading::Dependency;
-use crate::fact::MaterializedFact;
+use crate::Supersession;
+use crate::FactIdentity;
+use crate::FactStore;
+use crate::Broadening;
+use crate::InvalidationReport;
+use crate::GenerationCause;
+use crate::FactError;
+use crate::FactKey;
+use crate::Dependency;
+use crate::MaterializedFact;
 #[derive(Clone, Debug)]
 struct Entry
 {

@@ -18,7 +18,11 @@ pub use determinism::ProjectionOutput;
 pub use filter::Filter;
 pub use format::Format;
 pub use profile::{Profile, SUBJECT};
-pub use profile::Section as ProfileSection;
+// Named for the boundary rather than for its module, because two different types here are
+// a Section and both are exported: `section::Section` is a section of a rendered projection,
+// and this one is a section as a profile declares it. Aliasing at the facade would have made
+// the exported name a thing no declaration says, so the declaration says it.
+pub use profile::ProfileSection;
 pub use projection::{Content, DO_NOT_EDIT, Input, Item, Output, Projection};
 pub use section::Section;
 pub use render::Render;

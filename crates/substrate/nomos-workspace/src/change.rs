@@ -70,8 +70,8 @@ impl Change
 mod tests
 {
     use super::*;
-    use crate::change::ChangeSource;
-    use crate::workspace::WorkspaceChangeSet;
+
+    use crate::WorkspaceChangeSet;
 
     #[test]
     fn Test_A_Change_Set_Should_Carry_Its_Source_And_Its_Changes()

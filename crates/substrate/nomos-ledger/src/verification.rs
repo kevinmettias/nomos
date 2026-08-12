@@ -5,7 +5,6 @@
 //! carrying a record no predicate declared are both incoherent -- so they are one module
 //! rather than two files that happened to share a name prefix.
 
-
 mod predicate;
 mod record;
 

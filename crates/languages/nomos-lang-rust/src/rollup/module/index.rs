@@ -2,7 +2,7 @@
 
 use crate::rollup::module::IndexEntry;
 use crate::rollup::module::MemberReading;
-use crate::rollup::outcome::Outcome;
+use crate::rollup::Outcome;
 use nomos_contracts::SubjectId;
 /// What a module declares.
 #[derive(Clone, Debug, PartialEq, Eq)]

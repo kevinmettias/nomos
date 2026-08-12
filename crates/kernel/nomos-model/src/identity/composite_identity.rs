@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 use super::{IdentityPolicy, SourceProvenance, StructuralFingerprint};
-use crate::digest::Digest_Of_Parts;
-use crate::entity::EntityId;
+use crate::Digest_Of_Parts;
+use crate::EntityId;
 
 /// Everything that decides whether two observations denote the same declaration.
 ///
@@ -76,7 +76,7 @@ impl CompositeIdentity
 mod tests
 {
     use super::*;
-    use crate::digest::Content_Digest;
+    use crate::Content_Digest;
 
     fn Identity(qualified: &str, signature: &str) -> CompositeIdentity
     {

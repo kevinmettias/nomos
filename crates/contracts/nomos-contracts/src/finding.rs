@@ -17,10 +17,10 @@
 //! system — nothing is identified by its path and line, ever — and a finding is the
 //! type most likely to break it, because a location is the field a human wants first.
 
-use crate::applicability::Applicability;
-use crate::enforcement::GateCategory;
-use crate::evidence::EvidenceClass;
-use crate::identity::{RuleId, SubjectId};
+use crate::Applicability;
+use crate::GateCategory;
+use crate::EvidenceClass;
+use crate::{RuleId, SubjectId};
 use serde::{Deserialize, Serialize};
 
 /// One rule's judgment about one subject.
@@ -127,7 +127,7 @@ impl Finding
 mod tests
 {
     use super::*;
-    use crate::identity::Digest128;
+    use crate::Digest128;
 
     fn Example(applicability: Applicability, gate: GateCategory) -> Finding
     {

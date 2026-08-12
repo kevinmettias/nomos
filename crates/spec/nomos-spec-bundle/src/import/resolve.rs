@@ -2,13 +2,11 @@
 
 use std::collections::BTreeSet;
 
-
 use crate::BundleError;
-use crate::bundle::Bundle;
-use crate::row::reference::document::DocumentRef;
-use crate::row::reference::ordinal::OrdinalRef;
-use crate::row::record::Record;
-
+use crate::Bundle;
+use crate::DocumentRef;
+use crate::OrdinalRef;
+use crate::Record;
 
 /// Every reference the bundle makes is to something the bundle itself carries.
 ///

@@ -1,7 +1,7 @@
 //! The rule set, exercised against submissions that pass and submissions that do not.
 
 use super::*;
-use crate::origin::Origin;
+use crate::Origin;
 
 /// The first failure, named rather than indexed.
 fn First(failures: &[Failure]) -> &Failure

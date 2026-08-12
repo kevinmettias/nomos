@@ -1,11 +1,10 @@
 //! Inserting the submissions, with their values and their open decision gaps.
 
-
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
-use crate::bundle::Bundle;
-use crate::row::record::Record;
+use crate::Bundle;
+use crate::Record;
 
 use super::reference::Submission_Uid;
 use super::Insert_Each;

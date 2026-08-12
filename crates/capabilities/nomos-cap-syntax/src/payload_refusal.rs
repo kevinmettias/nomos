@@ -1,6 +1,6 @@
 //! Every way a payload refuses to be read.
 
-use crate::payload_refusal_kind::PayloadRefusalKind;
+use crate::PayloadRefusalKind;
 
 /// Why a payload could not be read, and where.
 ///
