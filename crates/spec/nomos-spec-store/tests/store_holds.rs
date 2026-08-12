@@ -48,8 +48,26 @@ fn Test_Every_Declared_Table_Should_Exist()
 fn Test_Every_Table_In_The_Schema_Should_Be_Declared()
 {
     let store = SpecificationStore::In_Memory().expect("opens");
+    let present = Tables_In_The_Schema(&store);
+    let declared: Vec<&str> = Table::All().iter().map(|table| return table.Name()).collect();
+    let undeclared: Vec<&String> = present
+        .iter()
+        .filter(|name| return !declared.contains(&name.as_str()))
+        .collect();
 
-    let present: Vec<String> = store
+    assert!(present.len() > 5, "the schema reported almost nothing, so this checked nothing");
+    assert!(
+        undeclared.is_empty(),
+        "in the schema and absent from Table::All(), so every guard built on it is blind \
+         to them: {undeclared:?}"
+    );
+}
+
+/// Every table sqlite says the store has, asked of the database rather than of the code that
+/// built it.
+fn Tables_In_The_Schema(store: &SpecificationStore) -> Vec<String>
+{
+    return store
         .Connection()
         .prepare(
             "SELECT name FROM sqlite_master
@@ -61,20 +79,6 @@ fn Test_Every_Table_In_The_Schema_Should_Be_Declared()
                 .and_then(std::iter::Iterator::collect);
         })
         .expect("reads the schema");
-
-    assert!(present.len() > 5, "the schema reported almost nothing, so this checked nothing");
-
-    let declared: Vec<&str> = Table::All().iter().map(|table| return table.Name()).collect();
-    let undeclared: Vec<&String> = present
-        .iter()
-        .filter(|name| return !declared.contains(&name.as_str()))
-        .collect();
-
-    assert!(
-        undeclared.is_empty(),
-        "in the schema and absent from Table::All(), so every guard built on it is blind \
-         to them: {undeclared:?}"
-    );
 }
 
 /// Migration must be idempotent across process restarts, or a second open destroys or

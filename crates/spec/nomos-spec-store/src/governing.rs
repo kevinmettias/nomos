@@ -157,6 +157,24 @@ pub fn Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedRepo
         references: Vec::new(),
     };
 
+    Declare_The_Relation_Types(store)?;
+    for (path, text) in RECORDS
+    {
+        Put_The_Record(store, path, text, &mut report)?;
+    }
+    // A second pass, because a relation may name a record later in the list and an edge
+    // to a node that does not exist yet would become a placeholder that never resolves.
+    for (path, text) in RECORDS
+    {
+        Put_The_Relations_Of(store, path, text, &mut report)?;
+    }
+
+    return Ok(report);
+}
+
+/// Every relation type the seeded records use, and the inverse each is paired with.
+fn Declare_The_Relation_Types(store: &mut SpecificationStore) -> Result<(), StoreError>
+{
     for (name, _) in RELATION_TYPES
     {
         store.Put_Relation_Type(name, SEED_TIER)?;
@@ -166,45 +184,69 @@ pub fn Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedRepo
         store.Pair_Relation_Type(name, inverse)?;
     }
 
-    for (path, text) in RECORDS
+    return Ok(());
+}
+
+/// One record's blocks and headings, counted into the report.
+fn Put_The_Record(
+    store: &mut SpecificationStore,
+    path: &str,
+    text: &str,
+    report: &mut SeedReport,
+) -> Result<(), StoreError>
+{
+    let written = store.Put_Record(path, AUTHORED, text)?;
+
+    report.headings = report.headings.saturating_add(written.headings);
+    report.blocks = report.blocks.saturating_add(written.blocks);
+    report.records = report.records.saturating_add(1);
+
+    return Ok(());
+}
+
+/// Checked before anything is written, so a record with a bad term does not leave a
+/// placeholder node behind on its way out.
+fn Refuse_Unknown_Terms(path: &str, record: &nomos_spec_model::Record) -> Result<(), StoreError>
+{
+    for relation in &record.front_matter.relations
     {
-        let written = store.Put_Record(path, AUTHORED, text)?;
-
-        report.headings = report.headings.saturating_add(written.headings);
-        report.blocks = report.blocks.saturating_add(written.blocks);
-        report.records = report.records.saturating_add(1);
-    }
-
-    // A second pass, because a relation may name a record later in the list and an edge
-    // to a node that does not exist yet would become a placeholder that never resolves.
-    for (path, text) in RECORDS
-    {
-        let record = Parse_Record(text).map_err(|error| StoreError::Record {
-            path: (*path).to_owned(),
-            cause: error.to_string(),
-        })?;
-
-        for relation in &record.front_matter.relations
+        if let Some(refusal) = Refuse_Unknown_Relation(path, &relation.relation)
         {
-            // Before `Reference_Node`, so a record with a bad term does not leave a
-            // placeholder node behind on its way out.
-            if let Some(refusal) = Refuse_Unknown_Relation(path, &relation.relation)
-            {
-                return Err(refusal);
-            }
-
-            if store.Node_Uid(&relation.target)?.is_none()
-            {
-                store.Reference_Node(&relation.target)?;
-                report.references.push(relation.target.clone());
-            }
-
-            store.Put_Relation(&record.front_matter.id, &relation.relation, &relation.target)?;
-            report.relations = report.relations.saturating_add(1);
+            return Err(refusal);
         }
     }
 
-    return Ok(report);
+    return Ok(());
+}
+
+/// Every edge one record declares, and the placeholder nodes they needed.
+fn Put_The_Relations_Of(
+    store: &mut SpecificationStore,
+    path: &&str,
+    text: &str,
+    report: &mut SeedReport,
+) -> Result<(), StoreError>
+{
+    let record = Parse_Record(text).map_err(|error| StoreError::Record {
+        path: (*path).to_owned(),
+        cause: error.to_string(),
+    })?;
+
+    Refuse_Unknown_Terms(path, &record)?;
+
+    for relation in &record.front_matter.relations
+    {
+        if store.Node_Uid(&relation.target)?.is_none()
+        {
+            store.Reference_Node(&relation.target)?;
+            report.references.push(relation.target.clone());
+        }
+
+        store.Put_Relation(&record.front_matter.id, &relation.relation, &relation.target)?;
+        report.relations = report.relations.saturating_add(1);
+    }
+
+    return Ok(());
 }
 
 #[cfg(test)]

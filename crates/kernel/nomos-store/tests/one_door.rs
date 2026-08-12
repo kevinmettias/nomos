@@ -189,21 +189,8 @@ fn Test_The_Index_Should_Group_By_Kind_And_Schema()
 fn Test_Two_Commits_Under_One_Workspace_State_Should_Both_Be_Reachable()
 {
     let state = SnapshotId::From_Digest(Digest(1));
-    let first = Commit::Under(
-        state,
-        BuildVariantId::From_Digest(Digest(2)),
-        ConfigurationId::From_Digest(Digest(3)),
-        GenerationId::INITIAL,
-    )
-    .Recording(Fact("fn main() {}"));
-    let second = Commit::Under(
-        state,
-        BuildVariantId::From_Digest(Digest(2)),
-        ConfigurationId::From_Digest(Digest(3)),
-        GenerationId::INITIAL,
-    )
-    .Recording(Finding("unused import at nomos.rs"));
-
+    let first = Under(state, Fact("fn main() {}"));
+    let second = Under(state, Finding("unused import at nomos.rs"));
     let mut store = Observed();
     let one = store.Commit(&first).expect("commits");
     let other = store.Commit(&second).expect("commits");
@@ -223,6 +210,18 @@ fn Test_Two_Commits_Under_One_Workspace_State_Should_Both_Be_Reachable()
         store.Unreachable().expect("indexes").is_empty(),
         "a commit that fell out of the index takes its records with it"
     );
+}
+
+/// One commit under a named workspace state, recording one document.
+fn Under(state: SnapshotId, recorded: Recorded) -> Commit
+{
+    return Commit::Under(
+        state,
+        BuildVariantId::From_Digest(Digest(2)),
+        ConfigurationId::From_Digest(Digest(3)),
+        GenerationId::INITIAL,
+    )
+    .Recording(recorded);
 }
 
 #[test]
@@ -267,14 +266,7 @@ fn Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store()
         SchemaId::New("nomos.record.v1"),
         b"D-129".to_vec(),
     );
-
-    let authored = Commit::Under(
-        SnapshotId::From_Digest(Digest(1)),
-        BuildVariantId::From_Digest(Digest(2)),
-        ConfigurationId::From_Digest(Digest(3)),
-        GenerationId::INITIAL,
-    )
-    .Recording(recorded);
+    let authored = Under(SnapshotId::From_Digest(Digest(1)), recorded);
 
     let refusal = store.Commit(&authored).expect_err("must refuse");
 

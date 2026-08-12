@@ -127,6 +127,14 @@ fn Test_A_File_That_Declares_Nothing_Should_Decode_To_No_Items()
 #[test]
 fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
 {
+    Assert_The_Whole_Payload_Is_Refused();
+    Assert_An_Unreadable_Record_Is_Refused();
+    Assert_An_Unreadable_Field_Is_Refused();
+}
+
+/// Bytes that are not a payload at all, and a payload that never says what it is.
+fn Assert_The_Whole_Payload_Is_Refused()
+{
     assert_eq!(Parse_Payload(&[0xFF, 0xFE]), Err(PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8)));
     assert_eq!(Parse_Payload(b""), Err(PayloadRefusal::Whole(PayloadRefusalKind::NoHeader)));
     assert_eq!(
@@ -137,8 +145,17 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
         Parse_Payload(b"unexpanded\t0\nunexpanded\t1\n"),
         Err(PayloadRefusal::At(2, PayloadRefusalKind::RepeatedHeader))
     );
+}
 
+/// A record shaped like something this build does not read: an unknown tag, and the previous
+/// schema's item — five fields where seven are written, which is this schema's likeliest
+/// wrong input rather than a hypothetical one.
+fn Assert_An_Unreadable_Record_Is_Refused()
+{
     let unknown = Parse_Payload(b"unexpanded\t0\nregion\t0\t3\n").expect_err("unknown tag");
+    let previous = Parse_Payload(b"unexpanded\t0\nitem\t0\tFunction\tPublic\tOne\n")
+        .expect_err("the previous schema is not this one");
+
     assert!(
         matches!(
             unknown,
@@ -149,11 +166,6 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
         ),
         "{unknown:?}"
     );
-
-    // A v1 record, which is this schema's likeliest wrong input rather than a
-    // hypothetical one: five fields where seven are written.
-    let previous = Parse_Payload(b"unexpanded\t0\nitem\t0\tFunction\tPublic\tOne\n")
-        .expect_err("the previous schema is not this one");
     assert!(
         matches!(
             previous,
@@ -168,8 +180,16 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
         ),
         "{previous:?}"
     );
+}
 
+/// A record of the right shape carrying a field this build cannot read: a count that is not a
+/// number, and an observation with a fourth spelling.
+fn Assert_An_Unreadable_Field_Is_Refused()
+{
     let unnumbered = Parse_Payload(b"unexpanded\tmany\n").expect_err("a count is a number");
+    let unmarked = Parse_Payload(b"unexpanded\t0\nitem\t0\tConstant\tPublic\tA\tnone\t.\n")
+        .expect_err("an observation has three spellings and this is not one");
+
     assert!(
         matches!(
             unnumbered,
@@ -183,9 +203,6 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
         ),
         "{unnumbered:?}"
     );
-
-    let unmarked = Parse_Payload(b"unexpanded\t0\nitem\t0\tConstant\tPublic\tA\tnone\t.\n")
-        .expect_err("an observation has three spellings and this is not one");
     assert!(
         matches!(
             unmarked,

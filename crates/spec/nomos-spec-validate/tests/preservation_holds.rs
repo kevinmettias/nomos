@@ -100,15 +100,7 @@ fn Test_An_Omitted_Block_Should_Satisfy_Preserve_002()
 {
     let store = Ingested();
 
-    store
-        .Connection()
-        .execute(
-            "INSERT INTO omissions (source_block_uid, reason, justification, decision_record)
-             SELECT uid, 'superseded', 'replaced by the v15 records', 'D-129'
-             FROM source_blocks",
-            [],
-        )
-        .expect("records omissions");
+    Omit_Every_Block(&store);
 
     let run = Validate(&store, &Registered());
     let block_rule = run
@@ -124,14 +116,24 @@ fn Test_An_Omitted_Block_Should_Satisfy_Preserve_002()
     );
 }
 
-/// NSV-PRESERVE-006, the violation v15.0 shipped for all 363 requirements: statements
-/// that exist with nothing connecting them to the text they came from.
-#[test]
-fn Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006()
+/// Every block covered by an omission, which is the sanctioned exit from PRESERVE-002.
+fn Omit_Every_Block(store: &SpecificationStore)
 {
-    let mut store = Ingested();
-    Dispose_All(&mut store);
+    store
+        .Connection()
+        .execute(
+            "INSERT INTO omissions (source_block_uid, reason, justification, decision_record)
+             SELECT uid, 'superseded', 'replaced by the v15 records', 'D-129'
+             FROM source_blocks",
+            [],
+        )
+        .expect("records omissions");
+}
 
+/// A requirement and the statement it carries, with nothing yet connecting the statement to
+/// the text it came from.
+fn Put_An_Untraced_Statement(store: &SpecificationStore)
+{
     store
         .Connection()
         .execute(
@@ -150,6 +152,31 @@ fn Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006()
             [],
         )
         .expect("inserts statement");
+}
+
+/// The lineage row that connects that statement back to the block it was read out of.
+fn Trace_It_To_Its_Block(store: &SpecificationStore)
+{
+    store
+        .Connection()
+        .execute(
+            "INSERT INTO lineage (source_block_uid, disposition, target_statement)
+             SELECT b.uid, 'preserved-verbatim', s.uid
+             FROM source_blocks b, normative_statements s
+             WHERE b.ordinal = 2 AND s.statement_id = 'AGT-001'",
+            [],
+        )
+        .expect("links lineage");
+}
+
+/// NSV-PRESERVE-006, the violation v15.0 shipped for all 363 requirements: statements
+/// that exist with nothing connecting them to the text they came from.
+#[test]
+fn Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006()
+{
+    let mut store = Ingested();
+    Dispose_All(&mut store);
+    Put_An_Untraced_Statement(&store);
 
     let run = Validate(&store, &Registered());
 
@@ -168,35 +195,8 @@ fn Test_A_Traced_Statement_Should_Satisfy_Preserve_006()
 {
     let mut store = Ingested();
     Dispose_All(&mut store);
-
-    store
-        .Connection()
-        .execute(
-            "INSERT INTO nodes (node_id, kind, authority, representation, title)
-             VALUES ('AGT-001', 'requirement', 'canonical', 'record', 'a requirement')",
-            [],
-        )
-        .expect("inserts node");
-    store
-        .Connection()
-        .execute(
-            "INSERT INTO normative_statements
-             (node_uid, statement_id, kind, canonical_text, canonical_hash)
-             SELECT uid, 'AGT-001', 'Requirement', 'Nomos shall.', 'sha256:aa'
-             FROM nodes WHERE node_id = 'AGT-001'",
-            [],
-        )
-        .expect("inserts statement");
-    store
-        .Connection()
-        .execute(
-            "INSERT INTO lineage (source_block_uid, disposition, target_statement)
-             SELECT b.uid, 'preserved-verbatim', s.uid
-             FROM source_blocks b, normative_statements s
-             WHERE b.ordinal = 2 AND s.statement_id = 'AGT-001'",
-            [],
-        )
-        .expect("links lineage");
+    Put_An_Untraced_Statement(&store);
+    Trace_It_To_Its_Block(&store);
 
     let run = Validate(&store, &Registered());
 

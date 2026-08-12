@@ -98,18 +98,9 @@ mod tests
             evaluated: 3,
             excluded: 2,
             gaps: vec![
-                CoverageGap {
-                    subject: Subject("a.rs"),
-                    reason: Applicability::NotApplicable,
-                },
-                CoverageGap {
-                    subject: Subject("b.rs"),
-                    reason: Applicability::ConfigurationDisabled,
-                },
-                CoverageGap {
-                    subject: Subject("c.rs"),
-                    reason: Applicability::MissingCapability,
-                },
+                Gap("a.rs", Applicability::NotApplicable),
+                Gap("b.rs", Applicability::ConfigurationDisabled),
+                Gap("c.rs", Applicability::MissingCapability),
             ],
         };
 
@@ -121,6 +112,15 @@ mod tests
             Some(Applicability::MissingCapability)
         );
         assert!(!coverage.Is_Complete());
+    }
+
+    /// One subject the run did not evaluate, and why.
+    fn Gap(subject: &str, reason: Applicability) -> CoverageGap
+    {
+        return CoverageGap {
+            subject: Subject(subject),
+            reason,
+        };
     }
 
     /// A run with only deliberate absences really is complete — otherwise every honest

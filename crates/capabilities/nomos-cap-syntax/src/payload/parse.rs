@@ -76,7 +76,6 @@ pub(super) fn Read_Record(line: &str, at: usize, read: &mut Reading) -> Result<(
 {
     let fields: Vec<&str> = line.split('\t').collect();
     let tag = fields.first().copied().unwrap_or_default();
-
     match tag
     {
         "unexpanded" => read.unexpanded = Some(Header(&fields, at, read.unexpanded)?),
@@ -85,18 +84,22 @@ pub(super) fn Read_Record(line: &str, at: usize, read: &mut Reading) -> Result<(
             let item = Read_Item(&fields, at, read.unexpanded)?;
             read.items.push(item);
         }
-        other =>
-        {
-            return Err(PayloadRefusal::At(
-                at,
-                PayloadRefusalKind::UnknownRecord {
-                    tag: other.to_owned(),
-                },
-            ));
-        }
+        other => return Err(Unknown_Record(other, at)),
     }
 
     return Ok(());
+}
+
+/// A tag this build does not know is most likely a newer schema, so it is refused rather than
+/// skipped.
+fn Unknown_Record(tag: &str, at: usize) -> PayloadRefusal
+{
+    return PayloadRefusal::At(
+        at,
+        PayloadRefusalKind::UnknownRecord {
+            tag: tag.to_owned(),
+        },
+    );
 }
 
 /// One item record, refused if the header has not arrived yet.
