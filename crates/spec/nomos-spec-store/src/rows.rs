@@ -10,10 +10,11 @@
 //! numbers are fetched and not in what they mean: `non_separator` is still counted, never
 //! derived from `lines` and `separator`, which is the property this module exists to keep.
 
-use crate::columns::Columns;
-use crate::row_census::RowCensus;
-use crate::row_scope::RowScope;
-use crate::store_error::StoreError;
+
+use crate::read::columns::Columns;
+use crate::table::row_census::RowCensus;
+use crate::table::row_scope::RowScope;
+use crate::store::error::StoreError;
 use rusqlite::Connection;
 
 /// # Errors

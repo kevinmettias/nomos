@@ -1,5 +1,7 @@
 //! The specification store: one `SQLite` database, opened, migrated and queried.
 
+pub(crate) mod error;
+
 mod write;
 
 pub(crate) use write::{
@@ -7,11 +9,11 @@ pub(crate) use write::{
     Write_Source_Document,
 };
 
-use crate::node_row::NodeRow;
-use crate::row_census::RowCensus;
-use crate::row_scope::RowScope;
-use crate::store_error::StoreError;
-use crate::suite_authority::SuiteAuthority;
+use crate::read::node_row::NodeRow;
+use crate::table::row_census::RowCensus;
+use crate::table::row_scope::RowScope;
+use crate::store::error::StoreError;
+use crate::table::suite_authority::SuiteAuthority;
 use crate::table::Table;
 use crate::schema::{Latest_Version, MIGRATIONS, Migration};
 use nomos_spec_model::SourceBlock;

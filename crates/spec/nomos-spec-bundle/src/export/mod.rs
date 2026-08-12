@@ -14,7 +14,7 @@ use submission::{Submission_Gaps, Submission_Values, Submissions};
 use crate::BundleError;
 use crate::bundle::Bundle;
 use crate::columns::Assert_Columns_Covered;
-use crate::record::Record;
+use crate::row::record::Record;
 use nomos_spec_store::{SpecificationStore, Table};
 use rusqlite::Connection;
 

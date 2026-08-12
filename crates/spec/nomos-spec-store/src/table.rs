@@ -1,5 +1,11 @@
 //! The tables a caller may count, and the statement each one carries.
 
+pub(crate) mod row_census;
+pub(crate) mod row_scope;
+
+pub(crate) mod line;
+pub(crate) mod suite_authority;
+
 /// The counting statement each table carries.
 ///
 /// One constant per table rather than eighteen match arms each holding their own string:

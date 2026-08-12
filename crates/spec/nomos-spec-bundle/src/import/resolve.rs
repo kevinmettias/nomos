@@ -5,9 +5,9 @@ use std::collections::BTreeSet;
 
 use crate::BundleError;
 use crate::bundle::Bundle;
-use crate::document_ref::DocumentRef;
-use crate::ordinal_ref::OrdinalRef;
-use crate::record::Record;
+use crate::row::reference::document::DocumentRef;
+use crate::row::reference::ordinal::OrdinalRef;
+use crate::row::record::Record;
 
 
 /// Every reference the bundle makes is to something the bundle itself carries.
@@ -274,7 +274,7 @@ fn Assert_Declared_Resolves(record: &Record, carried: &Identities) -> Result<(),
 }
 
 fn Assert_Lineage_Resolves(
-    lineage: &crate::lineage::Lineage,
+    lineage: &crate::bundle::lineage::Lineage,
     carried: &Identities,
 ) -> Result<(), BundleError>
 {

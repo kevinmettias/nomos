@@ -5,15 +5,15 @@ use nomos_spec_model::{
 };
 use rusqlite::{Connection, OptionalExtension, params};
 
-use crate::commit_report::CommitReport;
-use crate::edit_error::EditError;
-use crate::edit_preview::EditPreview;
-use crate::node_row::NodeRow;
+use crate::edit::commit_report::CommitReport;
+use crate::edit::error::EditError;
+use crate::edit::preview::EditPreview;
+use crate::read::node_row::NodeRow;
 use crate::store::{
     EXTERNAL, Inverse_Of, Write_Blob, Write_Node, Write_Relation,
     Write_Source_Blocks,
 };
-use crate::store_error::StoreError;
+use crate::store::error::StoreError;
 
 
 use super::write::{

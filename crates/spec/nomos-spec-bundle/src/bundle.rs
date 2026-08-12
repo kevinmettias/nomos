@@ -1,14 +1,19 @@
 //! A specification corpus as text.
 
+pub(crate) mod header;
+pub(crate) mod lineage;
+pub(crate) mod manifest;
+pub(crate) mod omission;
+
 use std::collections::BTreeMap;
 
 use nomos_spec_model::ContentHash;
 use serde::{Deserialize, Serialize};
 
 use crate::BundleError;
-use crate::header::{FORMAT, Header};
-use crate::manifest::Manifest;
-use crate::record::Record;
+use crate::bundle::header::{FORMAT, Header};
+use crate::bundle::manifest::Manifest;
+use crate::row::record::Record;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "line", rename_all = "snake_case")]
@@ -319,8 +324,8 @@ impl Bundle
 mod tests
 {
     use super::*;
-    use crate::blob::Blob;
-    use crate::blob_encoding::BlobEncoding;
+    use crate::row::blob::Blob;
+    use crate::row::blob::encoding::BlobEncoding;
 
     fn One_Blob() -> Vec<Record>
     {

@@ -6,7 +6,7 @@ use rusqlite::{Connection, OptionalExtension};
 
 use crate::BundleError;
 use crate::bundle::Bundle;
-use crate::record::Record;
+use crate::row::record::Record;
 
 use super::resolve::Document_Key_Of;
 

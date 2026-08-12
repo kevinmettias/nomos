@@ -5,14 +5,14 @@ use nomos_spec_model::{
 };
 use rusqlite::{Connection, params};
 
-use crate::node_row::NodeRow;
+use crate::read::node_row::NodeRow;
 use crate::record::Disposition;
-use crate::record_write::RecordWrite;
+use crate::record::write::RecordWrite;
 use crate::store::{
     Write_Node,
     Write_Source_Blocks, Write_Source_Document,
 };
-use crate::store_error::StoreError;
+use crate::store::error::StoreError;
 
 use super::Authored;
 

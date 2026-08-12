@@ -1,3 +1,7 @@
+pub(crate) mod claimed;
+pub(crate) mod projection;
+pub(crate) mod write;
+
 use nomos_spec_model::BlockKind;
 
 #[must_use]

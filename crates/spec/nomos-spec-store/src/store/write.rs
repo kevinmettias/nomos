@@ -3,8 +3,8 @@
 use nomos_spec_model::{ContentHash, SourceBlock, TableRow, Table_Defects, Table_Rows};
 use rusqlite::{Connection, OptionalExtension, params};
 
-use crate::node_row::NodeRow;
-use crate::store_error::StoreError;
+use crate::read::node_row::NodeRow;
+use crate::store::error::StoreError;
 
 use super::EXTERNAL;
 

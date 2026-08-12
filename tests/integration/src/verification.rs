@@ -4,7 +4,16 @@
 //! the checks its own declaration implies rather than the checks its author remembered.
 //! `crate::determinism` carries the table of which triple obliges what.
 
-use crate::Production;
+// What a strength claim owes before it can be stood behind: a floor the provider must
+// clear, what the domain actually produced, and what the claim owes beyond one process.
+mod cross_environment;
+mod floors;
+mod production;
+
+pub use cross_environment::{CrossEnvironment, Cross_Environment_Owed};
+pub use floors::{Approximate_Floor, Parsed_Floor};
+pub use production::Production;
+
 use nomos_contracts::{
     Declaration_Is_Coherent, DeterminismStrength, Strategy, TraceEquivalence,
 };

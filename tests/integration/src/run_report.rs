@@ -1,6 +1,15 @@
 //! What one pass over a corpus did.
 
-use crate::Recompute;
+// What a pass did: which provider answered it, what an edit changed, and the facts it
+// wrote.
+mod edited;
+mod recompute;
+mod resolved;
+
+pub use edited::Edited;
+pub use recompute::Recompute;
+pub use resolved::Resolved;
+
 
 /// What one pass over a corpus did.
 ///

@@ -20,9 +20,9 @@ pub(crate) use fingerprint::Fingerprint_Of;
 pub use fingerprint::Fingerprint;
 pub use walk::Walk;
 
-use crate::kind_census::KindCensus;
-use crate::scope::Scope;
-use crate::pair_change::PairChange;
+use crate::reconciliation::report::kind_census::KindCensus;
+use crate::reconciliation::scope::Scope;
+use crate::reconciliation::overlay::pair_change::PairChange;
 use crate::archive::Archive;
 use crate::phases::IngestError;
 use nomos_spec_model::{BlockKind, ContentHash, RowKind, Segment, SourceBlock, Table_Rows};

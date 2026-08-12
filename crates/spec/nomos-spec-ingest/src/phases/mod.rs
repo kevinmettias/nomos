@@ -10,12 +10,12 @@ pub use source_document::Ingest_Source_Document;
 pub use statements::{Ingest_Statements, Parse_Statements};
 pub use catalog::{Ingest_Catalog, Parse_Catalog};
 
-use crate::catalog_report::CatalogReport;
-use crate::catalog_entity::CatalogEntity;
-use crate::statement_divergence::StatementDivergence;
-use crate::recorded_statement::RecordedStatement;
-use crate::statement_report::StatementReport;
-use crate::statement_file::StatementFile;
+use crate::archive::catalog_report::CatalogReport;
+use crate::archive::catalog_entity::CatalogEntity;
+use crate::content::statement::divergence::StatementDivergence;
+use crate::content::statement::recorded::RecordedStatement;
+use crate::content::statement::report::StatementReport;
+use crate::content::statement::file::StatementFile;
 use nomos_spec_model::{ContentHash, Is_Normalized, Segment};
 use nomos_spec_store::{NodeRow, SpecificationStore, StoreError};
 use source_document::Store_Text;

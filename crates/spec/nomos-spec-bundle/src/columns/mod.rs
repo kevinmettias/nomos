@@ -18,7 +18,7 @@ mod tests;
 use coverage::{COVERAGE, Carried};
 
 use crate::BundleError;
-use crate::record::Record;
+use crate::row::record::Record;
 use nomos_spec_store::Table;
 use rusqlite::Connection;
 use std::collections::BTreeSet;

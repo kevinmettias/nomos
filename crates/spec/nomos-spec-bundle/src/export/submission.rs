@@ -1,10 +1,10 @@
 //! Reading the submissions out, with their values and their open decision gaps.
 
 use crate::BundleError;
-use crate::record::Record;
-use crate::submission::Submission;
-use crate::submission_gap::SubmissionGap;
-use crate::submission_value::SubmissionValue;
+use crate::row::record::Record;
+use crate::row::submission::Submission;
+use crate::row::submission::gap::SubmissionGap;
+use crate::row::submission::value::SubmissionValue;
 use rusqlite::Connection;
 
 use super::{Collect, Columns};

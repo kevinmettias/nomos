@@ -27,7 +27,7 @@ use rusqlite::Transaction;
 
 use crate::BundleError;
 use crate::bundle::Bundle;
-use crate::record::Record;
+use crate::row::record::Record;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ImportReport

@@ -1,8 +1,8 @@
-use crate::recorded_block::RecordedBlock;
-use crate::block_lineage::BlockLineage;
-use crate::block_field::BlockField;
-use crate::block_mismatch::BlockMismatch;
-use crate::block_mismatch_kind::BlockMismatchKind;
+use crate::content::block::recorded::RecordedBlock;
+use crate::content::block::lineage::BlockLineage;
+use crate::content::block::field::BlockField;
+use crate::content::block::mismatch::BlockMismatch;
+use crate::content::block::mismatch_kind::BlockMismatchKind;
 use nomos_spec_model::{ContentHash, Segment, SourceBlock};
 use std::collections::BTreeMap;
 

@@ -7,10 +7,10 @@ use nomos_spec_model::ContentHash;
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
-use crate::blob::Blob;
-use crate::blob_encoding::BlobEncoding;
+use crate::row::blob::Blob;
+use crate::row::blob::encoding::BlobEncoding;
 use crate::bundle::Bundle;
-use crate::record::Record;
+use crate::row::record::Record;
 
 use super::Insert_Each;
 use super::reference::{

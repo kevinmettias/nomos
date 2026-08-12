@@ -4,9 +4,9 @@
 use rusqlite::{Transaction, params};
 
 use crate::BundleError;
-use crate::document_ref::DocumentRef;
-use crate::ordinal_ref::OrdinalRef;
-use crate::table_row_ref::TableRowRef;
+use crate::row::reference::document::DocumentRef;
+use crate::row::reference::ordinal::OrdinalRef;
+use crate::row::reference::table_row::TableRowRef;
 
 
 pub(super) fn Optional_Suite_Uid(

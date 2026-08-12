@@ -9,13 +9,20 @@
 //! `uid` is handed back only so a follow-up query can be scoped to the same document, and
 //! never printed.
 
-use crate::columns::Columns;
-use crate::document_source::DocumentSource;
-use crate::node_summary::NodeSummary;
-use crate::path_match::PathMatch;
-use crate::table_line::TableLine;
+pub(crate) mod node_row;
+pub(crate) mod node_summary;
+
+pub(crate) mod columns;
+pub(crate) mod document_source;
+pub(crate) mod path_match;
+
+use crate::read::columns::Columns;
+use crate::read::document_source::DocumentSource;
+use crate::read::node_summary::NodeSummary;
+use crate::read::path_match::PathMatch;
+use crate::table::line::TableLine;
 use crate::store::{Collected, SpecificationStore};
-use crate::store_error::StoreError;
+use crate::store::error::StoreError;
 use rusqlite::{OptionalExtension, params};
 
 /// The stored bytes as text, or why this document cannot be read out as one.

@@ -1,15 +1,15 @@
 //! Reading the source corpus out: the blobs, the documents, and everything addressed inside one.
 
 use crate::BundleError;
-use crate::blob::Blob;
-use crate::blob_encoding::BlobEncoding;
-use crate::document_ref::DocumentRef;
-use crate::ordinal_ref::OrdinalRef;
-use crate::record::Record;
-use crate::source_block::SourceBlock;
-use crate::source_document::SourceDocument;
-use crate::source_heading::SourceHeading;
-use crate::source_table_row::SourceTableRow;
+use crate::row::blob::Blob;
+use crate::row::blob::encoding::BlobEncoding;
+use crate::row::reference::document::DocumentRef;
+use crate::row::reference::ordinal::OrdinalRef;
+use crate::row::record::Record;
+use crate::row::source::block::SourceBlock;
+use crate::row::source::document::SourceDocument;
+use crate::row::source::heading::SourceHeading;
+use crate::row::source::table_row::SourceTableRow;
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use rusqlite::Connection;

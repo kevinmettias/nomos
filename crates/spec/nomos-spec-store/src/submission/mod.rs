@@ -9,8 +9,8 @@
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
 use crate::store::SpecificationStore;
-use crate::node_row::NodeRow;
-use crate::store_error::StoreError;
+use crate::read::node_row::NodeRow;
+use crate::store::error::StoreError;
 use nomos_spec_model::{
     ContentHash, Failure, FieldValue, Origin, Refusal, Submission, SubmissionState, Validate,
 };

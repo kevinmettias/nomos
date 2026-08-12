@@ -22,9 +22,9 @@ use machine::Ingest_Machine;
 pub use commentary::{Prepare_Commentary_View, Statements_Sourced_Only_From_Commentary};
 use document::{Suite, Text, Ingest_Document, Qualified, Stem, Claim, Sql, Slug, Dispose};
 
-use crate::suite_report::SuiteReport;
+use crate::reconciliation::report::suite::SuiteReport;
 use crate::archive::Archive;
-use crate::archive_error::ArchiveError;
+use crate::archive::error::ArchiveError;
 use crate::phases::IngestError;
 use nomos_spec_model::{Parse_Record, Segment};
 use nomos_spec_store::{NodeRow, SpecificationStore, StoreError, SuiteAuthority};

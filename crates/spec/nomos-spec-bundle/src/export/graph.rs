@@ -1,21 +1,21 @@
 //! Reading the graph out: the nodes, what joins them, and what they were restored from.
 
 use crate::BundleError;
-use crate::document_ref::DocumentRef;
-use crate::lineage::Lineage;
-use crate::node::Node;
-use crate::node_alias::NodeAlias;
-use crate::node_history::NodeHistory;
-use crate::normative_statement::NormativeStatement;
-use crate::omission::Omission;
-use crate::ordinal_ref::OrdinalRef;
-use crate::record::Record;
-use crate::record_front_matter::RecordFrontMatter;
-use crate::record_relation::RecordRelation;
-use crate::relation::Relation;
-use crate::relation_type::RelationType;
-use crate::suite::Suite;
-use crate::table_row_ref::TableRowRef;
+use crate::row::reference::document::DocumentRef;
+use crate::bundle::lineage::Lineage;
+use crate::row::node::Node;
+use crate::row::node::alias::NodeAlias;
+use crate::row::node::history::NodeHistory;
+use crate::row::normative_statement::NormativeStatement;
+use crate::bundle::omission::Omission;
+use crate::row::reference::ordinal::OrdinalRef;
+use crate::row::record::Record;
+use crate::row::record::front_matter::RecordFrontMatter;
+use crate::row::record::relation::RecordRelation;
+use crate::row::relation::Relation;
+use crate::row::relation::kind::RelationType;
+use crate::row::suite::Suite;
+use crate::row::reference::table_row::TableRowRef;
 use rusqlite::Connection;
 
 use super::{Collect, Columns, Decoded};

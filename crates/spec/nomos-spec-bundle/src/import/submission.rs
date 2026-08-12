@@ -5,7 +5,7 @@ use rusqlite::{Transaction, params};
 
 use crate::BundleError;
 use crate::bundle::Bundle;
-use crate::record::Record;
+use crate::row::record::Record;
 
 use super::reference::Submission_Uid;
 use super::Insert_Each;

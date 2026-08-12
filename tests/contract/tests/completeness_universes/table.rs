@@ -106,7 +106,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-ingest/src/overlay.rs",
+        path: "crates/spec/nomos-spec-ingest/src/reconciliation/overlay.rs",
         name: "FILLER_PATTERNS",
         kind: UniverseKind::Constant,
         standing: Standing::Unmirrored {
@@ -123,7 +123,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-ingest/src/restored.rs",
+        path: "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
         name: "Restored::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

@@ -1,6 +1,12 @@
 //! Turning a directory of files into subjects the analysis kernel can talk about.
 
-use crate::SourceFile;
+// What the slice reads a corpus as: one file, and how a fact key names it.
+mod key_names;
+mod source_file;
+
+pub use key_names::Name_Keys;
+pub use source_file::SourceFile;
+
 use nomos_lang_rust::Recognition;
 use nomos_model::Normalize_Path;
 use std::path::{Path, PathBuf};
