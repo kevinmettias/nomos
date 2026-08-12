@@ -140,26 +140,29 @@ fn Harness_Files() -> Vec<(String, String)>
         (CONTRACT.to_owned(), Read_Harness_File(CONTRACT)),
         (ADAPTER.to_owned(), Read_Harness_File(ADAPTER)),
     ];
-
     for directory in Skill_Directories()
     {
-        let Ok(text) = std::fs::read_to_string(directory.join("SKILL.md"))
-        else
-        {
-            continue;
-        };
+        let skill = Skill_File(&directory);
 
-        // Named relative to the root rather than by its absolute location, so that a
-        // declaration below and a failure message above spell one file one way.
-        let name = directory
-            .file_name()
-            .map(|name| return name.to_string_lossy().into_owned())
-            .unwrap_or_default();
-
-        files.push((format!("{SKILL_ROOT}/{name}/SKILL.md"), text));
+        files.extend(skill);
     }
 
     return files;
+}
+
+/// One skill's manifest, or nothing where the directory holds none.
+///
+/// Named relative to the root rather than by its absolute location, so that a declaration
+/// below and a failure message above spell one file one way.
+fn Skill_File(directory: &Path) -> Option<(String, String)>
+{
+    let text = std::fs::read_to_string(directory.join("SKILL.md")).ok()?;
+    let name = directory
+        .file_name()
+        .map(|name| return name.to_string_lossy().into_owned())
+        .unwrap_or_default();
+
+    return Some((format!("{SKILL_ROOT}/{name}/SKILL.md"), text));
 }
 
 /// The board as the ledger's own type reads it.
@@ -186,7 +189,6 @@ fn Board() -> LedgerDocument
 fn Is_Item_Id(token: &str) -> bool
 {
     let mut segments = token.split('-');
-
     let Some(phase) = segments.next().and_then(|first| return first.strip_prefix('P'))
     else
     {
@@ -197,18 +199,15 @@ fn Is_Item_Id(token: &str) -> bool
         return false;
     }
 
-    let mut words = 0_usize;
-    for segment in segments
-    {
-        if segment.is_empty()
-            || !segment.chars().all(|character| return character.is_ascii_uppercase())
-        {
-            return false;
-        }
-        words = words.saturating_add(1);
-    }
+    let words: Vec<&str> = segments.collect();
 
-    return words > 0;
+    return !words.is_empty() && words.iter().all(|word| return Is_Word(word));
+}
+
+/// A word in an identifier: not empty, and uppercase throughout.
+fn Is_Word(word: &str) -> bool
+{
+    return !word.is_empty() && word.chars().all(|character| return character.is_ascii_uppercase());
 }
 
 /// Every ledger item a text names.
@@ -259,37 +258,42 @@ fn Skill_Directories() -> Vec<PathBuf>
 fn Named_Paths(text: &str) -> Vec<String>
 {
     let mut paths = Vec::new();
-
     for (index, span) in text.split('`').enumerate()
     {
         // Splitting on the delimiter puts the spans at the odd positions: text, span,
         // text, span. An unbalanced backtick therefore reads the prose as a span, which
         // is loud rather than silent, and is what should happen.
-        if index % 2 == 0 || span.is_empty()
+        if index % 2 == 1
         {
-            continue;
-        }
+            let named = Named_Path(span);
 
-        if span.split_whitespace().count() != 1
-        {
-            continue;
-        }
-
-        let candidate = span.trim_end_matches('/');
-        let named = candidate.contains('/')
-            || [".md", ".rs", ".toml", ".json", ".yml"]
-                .iter()
-                .any(|extension| return candidate.ends_with(extension));
-
-        if named
-        {
-            paths.push(candidate.to_owned());
+            paths.extend(named);
         }
     }
 
     paths.sort();
     paths.dedup();
     return paths;
+}
+
+/// One code span, if it names a repository path.
+///
+/// It does when it carries no whitespace and either contains a separator or ends in an
+/// extension this workspace uses. That excludes the commands and the field names.
+fn Named_Path(span: &str) -> Option<String>
+{
+    if span.split_whitespace().count() != 1
+    {
+        return None;
+    }
+
+    let candidate = span.trim_end_matches('/');
+    let named = candidate.contains('/')
+        || [".md", ".rs", ".toml", ".json", ".yml"]
+            .iter()
+            .any(|extension| return candidate.ends_with(extension));
+
+    return named.then(|| return candidate.to_owned());
 }
 
 /// The paths a text names that are not in the tree rooted at `root`.
@@ -443,20 +447,28 @@ fn Test_The_Harness_Should_Not_Restate_The_Band_Table()
         "no workspace members were resolved, so this check would pass over any file at all"
     );
 
-    let mut restated = Vec::new();
-    for (name, text) in Harness_Files()
-    {
-        for row in Restated_Rows(&text, &members)
-        {
-            restated.push(format!("{name}: {row}"));
-        }
-    }
+    let restated = Restated_Anywhere(&members);
 
     assert!(
         restated.is_empty(),
         "the harness carries table rows naming workspace crates: {restated:#?}.\n\
          OD-AGENT-001 admits a link to README.md and refuses a copy of it."
     );
+}
+
+/// Every band row any harness file carries, labelled with the file that carries it.
+fn Restated_Anywhere(members: &BTreeSet<String>) -> Vec<String>
+{
+    let mut restated = Vec::new();
+    for (name, text) in Harness_Files()
+    {
+        for row in Restated_Rows(&text, members)
+        {
+            restated.push(format!("{name}: {row}"));
+        }
+    }
+
+    return restated;
 }
 
 /// Routing is the contract's whole job, so every authority it routes to is required.
@@ -496,28 +508,35 @@ fn Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open()
 
     for (file, item) in TEMPORARY_HAZARDS
     {
-        let text = Read_Harness_File(file);
-        assert!(
-            Named_Items(&text).iter().any(|named| return named == item),
-            "{file} is declared to carry the {item} hazard and no longer mentions it. \
-             Either the warning was removed while the defect is still open, or this \
-             declaration should have gone with it."
-        );
-
-        let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Str() == *item)
-        else
-        {
-            panic!("{file} names {item}, which is on no board. A hazard pointing at an \
-                    item nobody can look up cannot be retired by anybody.");
-        };
-
-        assert!(
-            !entry.state.Is_Finished(),
-            "{item} is finished, so the hazard {file} carries for it is over. Remove the \
-             warning and its entry here — OD-AGENT-001 admits a temporary hazard on \
-             exactly this condition."
-        );
+        Assert_The_Hazard_Is_Still_Live(&board, file, item);
     }
+}
+
+/// The sentence must still be there while the item is open, and the item must still be open
+/// while the sentence is there.
+fn Assert_The_Hazard_Is_Still_Live(board: &LedgerDocument, file: &str, item: &str)
+{
+    let text = Read_Harness_File(file);
+
+    assert!(
+        Named_Items(&text).iter().any(|named| return named == item),
+        "{file} is declared to carry the {item} hazard and no longer mentions it. \
+         Either the warning was removed while the defect is still open, or this \
+         declaration should have gone with it."
+    );
+
+    let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Str() == item)
+    else
+    {
+        panic!("{file} names {item}, which is on no board. A hazard pointing at an \
+                item nobody can look up cannot be retired by anybody.");
+    };
+    assert!(
+        !entry.state.Is_Finished(),
+        "{item} is finished, so the hazard {file} carries for it is over. Remove the \
+         warning and its entry here — OD-AGENT-001 admits a temporary hazard on \
+         exactly this condition."
+    );
 }
 
 /// A hazard cannot be added quietly, which is what makes the declaration above worth having.
@@ -527,24 +546,7 @@ fn Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open()
 #[test]
 fn Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard()
 {
-    let mut undeclared = Vec::new();
-
-    for (file, text) in Harness_Files()
-    {
-        for item in Named_Items(&text)
-        {
-            let declared = TEMPORARY_HAZARDS
-                .iter()
-                .any(|(declared_file, declared_item)| {
-                    return *declared_file == file && *declared_item == item;
-                });
-
-            if !declared
-            {
-                undeclared.push(format!("{file} names {item}"));
-            }
-        }
-    }
+    let undeclared = Items_Named_Without_A_Declaration();
 
     assert!(
         undeclared.is_empty(),
@@ -553,6 +555,34 @@ fn Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard()
          An item id in an instruction file is a promise that the sentence around it \
          expires; declaring it is how the expiry is noticed."
     );
+}
+
+/// Every item a harness file names that the table does not declare for that file.
+fn Items_Named_Without_A_Declaration() -> Vec<String>
+{
+    let mut undeclared = Vec::new();
+    for (file, text) in Harness_Files()
+    {
+        for item in Named_Items(&text)
+        {
+            if !Declared_Hazard(&file, &item)
+            {
+                undeclared.push(format!("{file} names {item}"));
+            }
+        }
+    }
+
+    return undeclared;
+}
+
+/// Whether the table declares this file as carrying this item's hazard.
+fn Declared_Hazard(file: &str, item: &str) -> bool
+{
+    return TEMPORARY_HAZARDS
+        .iter()
+        .any(|(declared_file, declared_item)| {
+            return *declared_file == file && *declared_item == item;
+        });
 }
 
 /// A skill is addressed by name, and the name it declares must be the one it is found at.
@@ -565,31 +595,36 @@ fn Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory()
 {
     for directory in Skill_Directories()
     {
-        let label = directory.display().to_string().replace('\\', "/");
-        let manifest = directory.join("SKILL.md");
-
-        assert!(
-            manifest.is_file(),
-            "{label} is a skill directory with no SKILL.md, so it is a directory the tool \
-             will not load and a reader will assume works"
-        );
-
-        let text = std::fs::read_to_string(&manifest)
-            .unwrap_or_else(|error| panic!("cannot read {label}/SKILL.md: {error}"));
-
-        let declared = Declared_Skill_Name(&text)
-            .unwrap_or_else(|| panic!("{label}/SKILL.md declares no name in its front matter"));
-
-        let expected = directory
-            .file_name()
-            .map(|name| return name.to_string_lossy().into_owned())
-            .unwrap_or_default();
-
-        assert_eq!(
-            declared, expected,
-            "{label}/SKILL.md calls itself {declared} while living at {expected}"
-        );
+        Assert_The_Skill_Is_Named_For_Its_Directory(&directory);
     }
+}
+
+/// The directory is how the tool finds a skill and the front matter is how the tool describes
+/// it, so the two disagreeing produces a skill invoked under one name and reported under
+/// another.
+fn Assert_The_Skill_Is_Named_For_Its_Directory(directory: &Path)
+{
+    let label = directory.display().to_string().replace('\\', "/");
+    let manifest = directory.join("SKILL.md");
+
+    assert!(
+        manifest.is_file(),
+        "{label} is a skill directory with no SKILL.md, so it is a directory the tool \
+         will not load and a reader will assume works"
+    );
+    let text = std::fs::read_to_string(&manifest)
+        .unwrap_or_else(|error| panic!("cannot read {label}/SKILL.md: {error}"));
+    let declared = Declared_Skill_Name(&text)
+        .unwrap_or_else(|| panic!("{label}/SKILL.md declares no name in its front matter"));
+    let expected = directory
+        .file_name()
+        .map(|name| return name.to_string_lossy().into_owned())
+        .unwrap_or_default();
+
+    assert_eq!(
+        declared, expected,
+        "{label}/SKILL.md calls itself {declared} while living at {expected}"
+    );
 }
 
 /// Every check above passes over a file that says nothing, so each is shown failing.
@@ -598,6 +633,16 @@ fn Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory()
 /// the repository to prove a point and leaves it edited when it fails partway.
 #[test]
 fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
+{
+    Assert_The_Route_Check_Reports_A_Broken_Link();
+    Assert_The_Band_Check_Reports_A_Pasted_Row();
+    Assert_The_Import_Check_Reports_An_Adapter_That_Imports_Nothing();
+    Assert_The_Skill_Name_Reader_Reports_A_Manifest_Without_Front_Matter();
+    Assert_The_Item_Reader_Reports_An_Id_And_Nothing_Else();
+}
+
+/// Shown reporting a link to nowhere, and shown not reporting a command or a real path.
+fn Assert_The_Route_Check_Reports_A_Broken_Link()
 {
     let root = Workspace::Workspace_Root();
 
@@ -610,8 +655,13 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
         Missing_Paths("run `cargo fmt` and read `README.md`", &root).is_empty(),
         "a command span or a real path was mistaken for a broken route"
     );
+}
 
+/// Shown reporting a pasted row, and shown not reporting prose that names a crate.
+fn Assert_The_Band_Check_Reports_A_Pasted_Row()
+{
     let members: BTreeSet<String> = ["nomos-rules".to_owned()].into_iter().collect();
+
     assert!(
         !Restated_Rows("| 30 | `nomos-rules` | A rule is a pure function. |", &members).is_empty(),
         "a pasted band row was not reported, so the band table could be copied here"
@@ -620,12 +670,20 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
         Restated_Rows("The rule crate is `nomos-rules`, in README.md.", &members).is_empty(),
         "prose naming a crate was reported as a restated row"
     );
+}
 
+/// Shown refusing an adapter that carries its own contract instead of importing one.
+fn Assert_The_Import_Check_Reports_An_Adapter_That_Imports_Nothing()
+{
     assert!(
         !Imports("# Claude Code\n\nThe bands are as follows.", CONTRACT),
         "an adapter with no import was accepted, so it could carry its own contract"
     );
+}
 
+/// Shown reading a declared name, and shown reporting none where there is no front matter.
+fn Assert_The_Skill_Name_Reader_Reports_A_Manifest_Without_Front_Matter()
+{
     assert_eq!(
         Declared_Skill_Name("---\nname: nomos-task\ndescription: x\n---\n").as_deref(),
         Some("nomos-task"),
@@ -637,7 +695,12 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
         "a manifest with no front matter reported a name, so the check would compare \
          nothing against the directory"
     );
+}
 
+/// Shown recognising an id, shown refusing three near misses, and shown that the board really
+/// does hold a finished item for the expiry check to have something to catch.
+fn Assert_The_Item_Reader_Reports_An_Id_And_Nothing_Else()
+{
     assert_eq!(
         Named_Items("until `P10-STALE-WRITER` closes, confirm the write survived"),
         vec!["P10-STALE-WRITER".to_owned()],

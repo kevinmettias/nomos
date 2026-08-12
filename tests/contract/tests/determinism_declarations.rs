@@ -40,7 +40,6 @@ use std::collections::BTreeSet;
 fn Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy()
 {
     let domains = Fact_Domains();
-
     let producers: Vec<&FactDomain> = domains
         .iter()
         .filter(|domain| return domain.produces)
@@ -59,7 +58,13 @@ fn Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy()
          holding nothing.",
         producers.len()
     );
+    Assert_Every_Producer_Declares(&producers);
+}
 
+/// A fact whose producer promises nothing about reproducing it cannot be cached, compared
+/// across machines, or used as a baseline.
+fn Assert_Every_Producer_Declares(producers: &[&FactDomain])
+{
     let undeclared: Vec<&str> = producers
         .iter()
         .filter(|domain| return domain.declarations.is_empty())
@@ -91,13 +96,43 @@ fn Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy()
 #[test]
 fn Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness()
 {
-    let declared: BTreeSet<String> = Fact_Domains()
+    let declared = Declared_Strategies();
+    let harnessed = Harnessed_Strategies();
+
+    Assert_Both_Scans_Found_Something(&declared, &harnessed);
+
+    let unchecked: Vec<&String> = declared.difference(&harnessed).collect();
+    let orphaned: Vec<&String> = harnessed.difference(&declared).collect();
+
+    assert!(
+        unchecked.is_empty(),
+        "these strategies are declared and nothing holds them to it: {unchecked:?}.\n\
+         A declaration with no test behind it is worse than no declaration, because a \
+         declaration is cited. Register it in tests/integration/tests/determinism.rs so \
+         that the obligations its own triple implies are discharged against its behaviour."
+    );
+    assert!(
+        orphaned.is_empty(),
+        "the harness measures these strategies and no crate declares one: {orphaned:?}.\n\
+         Either an `impl Strategy` was removed and the check left behind, in which case the \
+         domain now promises nothing while a test still reports on it, or the type was \
+         renamed and this is the rename nobody finished."
+    );
+}
+
+/// Every strategy any crate in the workspace declares.
+fn Declared_Strategies() -> BTreeSet<String>
+{
+    return Fact_Domains()
         .iter()
         .flat_map(|domain| return domain.declarations.iter())
         .map(|declaration| return declaration.strategy.clone())
         .collect();
-    let harnessed = Harnessed_Strategies();
+}
 
+/// Neither side of the comparison may be empty, or the comparison cannot fail.
+fn Assert_Both_Scans_Found_Something(declared: &BTreeSet<String>, harnessed: &BTreeSet<String>)
+{
     assert!(
         declared.len() >= 4,
         "only {} strategy declarations were found in the workspace; the scan found nothing \
@@ -109,24 +144,6 @@ fn Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness()
         "only {} strategies are registered with the integration harness; the scan found \
          nothing rather than the harness measuring nothing",
         harnessed.len()
-    );
-
-    let unchecked: Vec<&String> = declared.difference(&harnessed).collect();
-    assert!(
-        unchecked.is_empty(),
-        "these strategies are declared and nothing holds them to it: {unchecked:?}.\n\
-         A declaration with no test behind it is worse than no declaration, because a \
-         declaration is cited. Register it in tests/integration/tests/determinism.rs so \
-         that the obligations its own triple implies are discharged against its behaviour."
-    );
-
-    let orphaned: Vec<&String> = harnessed.difference(&declared).collect();
-    assert!(
-        orphaned.is_empty(),
-        "the harness measures these strategies and no crate declares one: {orphaned:?}.\n\
-         Either an `impl Strategy` was removed and the check left behind, in which case the \
-         domain now promises nothing while a test still reports on it, or the type was \
-         renamed and this is the rename nobody finished."
     );
 }
 
@@ -162,6 +179,10 @@ const UNOCCUPIED: &[(&str, &str)] = &[
 fn Test_The_Domain_Table_Should_Be_Read_From_The_Contracts_Crate()
 {
     let rows = Domain_Table();
+    let claiming = rows
+        .iter()
+        .filter(|row| return row.Claims_Reproducibility())
+        .count();
 
     assert!(
         rows.len() >= 6,
@@ -171,8 +192,18 @@ fn Test_The_Domain_Table_Should_Be_Read_From_The_Contracts_Crate()
          published claim lives.\nRead: {rows:#?}",
         rows.len()
     );
+    Assert_Every_Row_Parsed(&rows);
+    assert!(
+        claiming > 0,
+        "no row of the table claims reproducibility, which cannot be true of the table \
+         this workspace's determinism rests on"
+    );
+}
 
-    for row in &rows
+/// A row read with an empty cell means the parse is wrong rather than the table.
+fn Assert_Every_Row_Parsed(rows: &[DomainRow])
+{
+    for row in rows
     {
         assert!(
             !row.domain.is_empty() && !row.scope.is_empty() && !row.trace.is_empty(),
@@ -180,16 +211,6 @@ fn Test_The_Domain_Table_Should_Be_Read_From_The_Contracts_Crate()
              table: {row:#?}"
         );
     }
-
-    let claiming = rows
-        .iter()
-        .filter(|row| return row.Claims_Reproducibility())
-        .count();
-    assert!(
-        claiming > 0,
-        "no row of the table claims reproducibility, which cannot be true of the table \
-         this workspace's determinism rests on"
-    );
 }
 
 /// The check that would have caught the two rows `P9-DETERMINISM` could not reach.
@@ -201,28 +222,14 @@ fn Test_The_Domain_Table_Should_Be_Read_From_The_Contracts_Crate()
 fn Test_Every_Occupied_Row_Of_The_Domain_Table_Should_Be_Declared()
 {
     let rows = Domain_Table();
-    let declarations: Vec<Declaration> = Fact_Domains()
-        .iter()
-        .flat_map(|domain| return domain.declarations.iter())
-        .cloned()
-        .collect();
+    let declarations = All_Declarations();
 
     assert!(
         !rows.is_empty() && !declarations.is_empty(),
         "one side of this comparison is empty, so it cannot fail"
     );
 
-    let missing: Vec<&str> = rows
-        .iter()
-        .filter(|row| return row.Claims_Reproducibility())
-        .filter(|row| {
-            return !declarations
-                .iter()
-                .any(|declaration| return declaration.Occupies(row));
-        })
-        .filter(|row| return !Recorded_Unoccupied(row))
-        .map(|row| return row.domain.as_str())
-        .collect();
+    let missing = Rows_Nothing_Declares(&rows, &declarations);
 
     assert!(
         missing.is_empty(),
@@ -236,6 +243,33 @@ fn Test_Every_Occupied_Row_Of_The_Domain_Table_Should_Be_Declared()
     );
 }
 
+/// Every declaration in the workspace, from whichever crate makes it.
+fn All_Declarations() -> Vec<Declaration>
+{
+    return Fact_Domains()
+        .iter()
+        .flat_map(|domain| return domain.declarations.iter())
+        .cloned()
+        .collect();
+}
+
+/// Every row claiming reproducibility that no declaration occupies and UNOCCUPIED does not
+/// account for.
+fn Rows_Nothing_Declares<'a>(rows: &'a [DomainRow], declarations: &[Declaration]) -> Vec<&'a str>
+{
+    return rows
+        .iter()
+        .filter(|row| return row.Claims_Reproducibility())
+        .filter(|row| {
+            return !declarations
+                .iter()
+                .any(|declaration| return declaration.Occupies(row));
+        })
+        .filter(|row| return !Recorded_Unoccupied(row))
+        .map(|row| return row.domain.as_str())
+        .collect();
+}
+
 /// A declaration that occupies no row is a promise the published table does not make.
 ///
 /// The other direction, and the cheaper mistake: a crate that declares a triple the table
@@ -247,7 +281,21 @@ fn Test_Every_Declaration_Should_Occupy_A_Row_Of_The_Table()
     let rows = Domain_Table();
     assert!(!rows.is_empty(), "no rows were read, so this cannot fail");
 
-    let stray: Vec<String> = Fact_Domains()
+    let stray = Declarations_Matching_No_Row(&rows);
+
+    assert!(
+        stray.is_empty(),
+        "these declarations match no row of the contracts domain table: {stray:#?}.\n\
+         Either the declaration is wrong, or the table has grown a domain and nobody wrote \
+         the row — and the table is what every peer reads."
+    );
+}
+
+/// A crate declaring a triple the table does not have is claiming something no peer has
+/// agreed to, in a vocabulary they share.
+fn Declarations_Matching_No_Row(rows: &[DomainRow]) -> Vec<String>
+{
+    return Fact_Domains()
         .iter()
         .flat_map(|domain| {
             return domain.declarations.iter().map(move |declaration| {
@@ -264,13 +312,6 @@ fn Test_Every_Declaration_Should_Occupy_A_Row_Of_The_Table()
             );
         })
         .collect();
-
-    assert!(
-        stray.is_empty(),
-        "these declarations match no row of the contracts domain table: {stray:#?}.\n\
-         Either the declaration is wrong, or the table has grown a domain and nobody wrote \
-         the row — and the table is what every peer reads."
-    );
 }
 
 /// The mirror for [`UNOCCUPIED`], in the direction that flatters.
@@ -283,13 +324,8 @@ fn Test_Every_Unoccupied_Row_Should_Still_Be_A_Row_Of_The_Table()
     let rows = Domain_Table();
     assert!(!rows.is_empty(), "no rows were read, so this cannot fail");
 
-    let vanished: Vec<&str> = UNOCCUPIED
-        .iter()
-        .filter(|(domain, _)| {
-            return !rows.iter().any(|row| return row.domain == *domain);
-        })
-        .map(|(domain, _)| return *domain)
-        .collect();
+    let vanished = Excepted_Rows_The_Table_Lost(&rows);
+    let occupied_anyway = Excepted_Rows_Something_Declares(&rows);
 
     assert!(
         vanished.is_empty(),
@@ -297,8 +333,32 @@ fn Test_Every_Unoccupied_Row_Should_Still_Be_A_Row_Of_The_Table()
          An exception for a row that no longer exists excuses nothing and hides the row \
          that replaced it."
     );
+    assert!(
+        occupied_anyway.is_empty(),
+        "these rows are recorded as having no domain in this tree and something declares \
+         them: {occupied_anyway:?}.\n\
+         Remove the row from UNOCCUPIED — an exception that is no longer needed is an \
+         exception that will excuse the next gap."
+    );
+}
 
-    let occupied_anyway: Vec<&str> = UNOCCUPIED
+/// An exception naming a row the table no longer has would silence a real gap the moment the
+/// table was reworded.
+fn Excepted_Rows_The_Table_Lost(rows: &[DomainRow]) -> Vec<&'static str>
+{
+    return UNOCCUPIED
+        .iter()
+        .filter(|(domain, _)| {
+            return !rows.iter().any(|row| return row.domain == *domain);
+        })
+        .map(|(domain, _)| return *domain)
+        .collect();
+}
+
+/// An exception that is no longer needed is an exception that will excuse the next gap.
+fn Excepted_Rows_Something_Declares(rows: &[DomainRow]) -> Vec<&'static str>
+{
+    return UNOCCUPIED
         .iter()
         .filter(|(domain, _)| {
             return Fact_Domains().iter().any(|found| {
@@ -311,14 +371,6 @@ fn Test_Every_Unoccupied_Row_Should_Still_Be_A_Row_Of_The_Table()
         })
         .map(|(domain, _)| return *domain)
         .collect();
-
-    assert!(
-        occupied_anyway.is_empty(),
-        "these rows are recorded as having no domain in this tree and something declares \
-         them: {occupied_anyway:?}.\n\
-         Remove the row from UNOCCUPIED — an exception that is no longer needed is an \
-         exception that will excuse the next gap."
-    );
 }
 
 /// Whether a row is recorded as having no domain in this tree.
@@ -352,23 +404,26 @@ fn Test_The_Fact_Domain_Inventory_Should_Be_Reported()
             domain.crate_name, domain.produces, domain.declarations
         );
     }
-
     for row in Domain_Table()
     {
-        eprintln!(
-            "domain table row: {} — {}/{}/{}{}",
-            row.domain,
-            row.strength,
-            row.scope,
-            row.trace,
-            if Recorded_Unoccupied(&row)
-            {
-                " (no domain in this tree)"
-            }
-            else
-            {
-                ""
-            }
-        );
+        Report_One_Row(&row);
     }
+}
+
+/// One row of the published table, noted where nothing in this tree occupies it.
+fn Report_One_Row(row: &DomainRow)
+{
+    let note = if Recorded_Unoccupied(row)
+    {
+        " (no domain in this tree)"
+    }
+    else
+    {
+        ""
+    };
+
+    eprintln!(
+        "domain table row: {} — {}/{}/{}{}",
+        row.domain, row.strength, row.scope, row.trace, note
+    );
 }

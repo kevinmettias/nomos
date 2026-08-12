@@ -2,7 +2,7 @@
 //! checkable.
 
 use nomos_contract_tests::Workspace;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
 /// The declared band of every workspace member.
@@ -108,35 +108,43 @@ fn Readme_Bands() -> Vec<(String, u32)>
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 
     let mut rows = Vec::new();
-
     for line in text.lines()
     {
-        let mut cells = line.split('|').map(str::trim);
-        // A table row opens with the delimiter, so the first cell is the empty string
-        // before it. A line that merely contains a pipe does not.
-        if cells.next() != Some("")
-        {
-            continue;
-        }
+        let row = Band_Row(line);
 
-        let (Some(band), Some(name)) = (cells.next(), cells.next())
-        else
-        {
-            continue;
-        };
-        let (Ok(band), Some(name)) = (
-            band.parse::<u32>(),
-            name.strip_prefix('`').and_then(|rest| rest.strip_suffix('`')),
-        )
-        else
-        {
-            continue;
-        };
-
-        rows.push((name.to_owned(), band));
+        rows.extend(row);
     }
 
     return rows;
+}
+
+/// One row, or nothing if the line is not one.
+///
+/// A table row opens with the delimiter, so the first cell is the empty string before it. A
+/// line that merely contains a pipe does not.
+fn Band_Row(line: &str) -> Option<(String, u32)>
+{
+    let mut cells = line.split('|').map(str::trim);
+    if cells.next() != Some("")
+    {
+        return None;
+    }
+
+    let (Some(band), Some(name)) = (cells.next(), cells.next())
+    else
+    {
+        return None;
+    };
+    let (Ok(band), Some(name)) = (
+        band.parse::<u32>(),
+        name.strip_prefix('`').and_then(|rest| rest.strip_suffix('`')),
+    )
+    else
+    {
+        return None;
+    };
+
+    return Some((name.to_owned(), band));
 }
 
 /// The README describes this workspace, and nothing checked that it still did.
@@ -167,20 +175,33 @@ fn Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band()
          written as `| <band> | `<crate>` | … |`"
     );
 
+    Assert_No_Crate_Is_Listed_Twice(&listed);
+    Assert_Every_Member_Is_Listed(&listed);
+    Assert_Every_Listing_Is_A_Member(&listed);
+}
+
+/// Two rows for one crate can disagree with each other, so there is only ever one.
+fn Assert_No_Crate_Is_Listed_Twice(listed: &[(String, u32)])
+{
     let mut seen: BTreeSet<&str> = BTreeSet::new();
-    for (name, _) in &listed
+    for (name, _) in listed
     {
         assert!(
             seen.insert(name.as_str()),
             "{name} appears in more than one README band row, so the two can disagree"
         );
     }
+}
 
+/// Every crate `BANDS` declares appears in the table a reader is shown.
+fn Assert_Every_Member_Is_Listed(listed: &[(String, u32)])
+{
     let missing: Vec<&str> = BANDS
         .iter()
         .filter(|(name, _)| return !listed.iter().any(|(listed, _)| return listed == name))
         .map(|(name, _)| return *name)
         .collect();
+
     assert!(
         missing.is_empty(),
         "these crates are in the workspace and not in README.md's layout tables: \
@@ -188,16 +209,16 @@ fn Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band()
          OD-PROJECT-001 keeps this file hand-authored on the condition that the part of \
          it a machine can check is checked."
     );
+}
 
+/// The other direction, in both halves: a row naming no crate, and a row naming the wrong
+/// band for one that exists.
+fn Assert_Every_Listing_Is_A_Member(listed: &[(String, u32)])
+{
     let invented: Vec<&(String, u32)> = listed
         .iter()
         .filter(|(name, _)| return Declared_Band(name).is_none())
         .collect();
-    assert!(
-        invented.is_empty(),
-        "README.md lists crates this workspace does not have: {invented:?}"
-    );
-
     let disagreeing: Vec<String> = listed
         .iter()
         .filter_map(|(name, band)| {
@@ -207,6 +228,11 @@ fn Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band()
                 .then(|| return format!("{name}: README says {band}, BANDS says {declared}"));
         })
         .collect();
+
+    assert!(
+        invented.is_empty(),
+        "README.md lists crates this workspace does not have: {invented:?}"
+    );
     assert!(disagreeing.is_empty(), "{disagreeing:#?}");
 }
 
@@ -365,32 +391,7 @@ const CAPABILITY_PREFIX: &str = "nomos.cap.";
 #[test]
 fn Test_A_Capability_Id_Should_Be_Written_In_One_Crate()
 {
-    let workspace = Workspace::Load();
-    let mut spelled_by: std::collections::BTreeMap<String, BTreeSet<String>> =
-        std::collections::BTreeMap::new();
-
-    for member in workspace.Members()
-    {
-        let source_root = member.root.join("src");
-        if !source_root.is_dir()
-        {
-            continue;
-        }
-
-        for file in Source_Files(&source_root)
-        {
-            let Ok(text) = std::fs::read_to_string(&file)
-            else
-            {
-                continue;
-            };
-
-            for id in Capability_Ids_In(&text)
-            {
-                spelled_by.entry(id).or_default().insert(member.name.clone());
-            }
-        }
-    }
+    let spelled_by = Capability_Ids_By_Crate();
 
     assert!(
         !spelled_by.is_empty(),
@@ -411,6 +412,42 @@ fn Test_A_Capability_Id_Should_Be_Written_In_One_Crate()
          party to it. Move the id to a crate below everything that offers against it, and \
          let the parties import it."
     );
+}
+
+/// Every capability id written in library source, and the crates that write it.
+fn Capability_Ids_By_Crate() -> BTreeMap<String, BTreeSet<String>>
+{
+    let workspace = Workspace::Load();
+    let mut spelled_by: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
+    for member in workspace.Members()
+    {
+        let source_root = member.root.join("src");
+        if !source_root.is_dir()
+        {
+            continue;
+        }
+        for file in Source_Files(&source_root)
+        {
+            Note_The_Ids_In(&file, &member.name, &mut spelled_by);
+        }
+    }
+
+    return spelled_by;
+}
+
+/// The ids one file writes, filed under the crate that wrote them.
+fn Note_The_Ids_In(file: &Path, member: &str, spelled: &mut BTreeMap<String, BTreeSet<String>>)
+{
+    let Ok(text) = std::fs::read_to_string(file)
+    else
+    {
+        return;
+    };
+
+    for id in Capability_Ids_In(&text)
+    {
+        spelled.entry(id).or_default().insert(member.to_owned());
+    }
 }
 
 /// Every `nomos.cap.…` id a file declares, as written.
@@ -442,7 +479,6 @@ fn Capability_Ids(line: &str) -> Vec<String>
 {
     let mut found = Vec::new();
     let mut rest = line;
-
     while let Some(start) = rest.find(CAPABILITY_PREFIX)
     {
         let Some(after) = rest.get(start..)
@@ -450,14 +486,7 @@ fn Capability_Ids(line: &str) -> Vec<String>
         {
             break;
         };
-
-        let id: String = after
-            .chars()
-            .take_while(|character| {
-                return character.is_ascii_alphanumeric() || matches!(character, '.' | '_' | '-');
-            })
-            .collect();
-
+        let id = Id_At(after);
         let Some(remainder) = after.get(id.len()..)
         else
         {
@@ -469,6 +498,17 @@ fn Capability_Ids(line: &str) -> Vec<String>
     }
 
     return found;
+}
+
+/// The id that starts here: every character an id may be made of, up to the first that is not.
+fn Id_At(after: &str) -> String
+{
+    return after
+        .chars()
+        .take_while(|character| {
+            return character.is_ascii_alphanumeric() || matches!(character, '.' | '_' | '-');
+        })
+        .collect();
 }
 
 /// A crate cannot join the workspace without declaring where it sits.
@@ -509,42 +549,11 @@ fn Test_Every_Source_File_Should_Be_Reachable()
 {
     let workspace = Workspace::Load();
     let mut orphans = Vec::new();
-
     for member in workspace.Members()
     {
-        let source_root = member.root.join("src");
-        if !source_root.is_dir()
-        {
-            continue;
-        }
+        let found = Orphans_Under(&member.root);
 
-        let declared = Declared_Modules(&source_root);
-
-        for file in Source_Files(&source_root)
-        {
-            let Some(stem) = file.file_stem().and_then(|stem| stem.to_str())
-            else
-            {
-                continue;
-            };
-
-            // Crate roots and module roots are reached by cargo and by their parent
-            // directory's declaration respectively, not by a `mod` naming their stem.
-            if matches!(stem, "lib" | "main" | "mod")
-            {
-                continue;
-            }
-
-            if !declared.contains(stem)
-            {
-                orphans.push(
-                    file.strip_prefix(&member.root)
-                        .unwrap_or(&file)
-                        .display()
-                        .to_string(),
-                );
-            }
-        }
+        orphans.extend(found);
     }
 
     assert!(
@@ -553,6 +562,37 @@ fn Test_Every_Source_File_Should_Be_Reachable()
          rustc never parses an undeclared file, so its tests do not run and its lints do \
          not fire, while it reads as finished work. Declare it or delete it."
     );
+}
+
+/// Every file under one crate's `src/` that no `mod` declaration names.
+fn Orphans_Under(root: &Path) -> Vec<String>
+{
+    let source_root = root.join("src");
+    let declared = Declared_Modules(&source_root);
+    let mut orphans = Vec::new();
+    for file in Source_Files(&source_root)
+    {
+        let orphan = Orphan(&file, root, &declared);
+
+        orphans.extend(orphan);
+    }
+
+    return orphans;
+}
+
+/// The file's path relative to its crate, if nothing declares it.
+///
+/// Crate roots and module roots are reached by cargo and by their parent directory's
+/// declaration respectively, not by a `mod` naming their stem.
+fn Orphan(file: &Path, root: &Path, declared: &BTreeSet<String>) -> Option<String>
+{
+    let stem = file.file_stem().and_then(|stem| stem.to_str())?;
+    if matches!(stem, "lib" | "main" | "mod") || declared.contains(stem)
+    {
+        return None;
+    }
+
+    return Some(file.strip_prefix(root).unwrap_or(file).display().to_string());
 }
 
 /// Every `mod` name declared anywhere under a source root.
@@ -565,7 +605,6 @@ fn Test_Every_Source_File_Should_Be_Reachable()
 fn Declared_Modules(source_root: &Path) -> BTreeSet<String>
 {
     let mut declared = BTreeSet::new();
-
     for file in Source_Files(source_root)
     {
         let Ok(text) = std::fs::read_to_string(&file)
@@ -573,36 +612,36 @@ fn Declared_Modules(source_root: &Path) -> BTreeSet<String>
         {
             continue;
         };
-
         for line in text.lines()
         {
-            let trimmed = line.trim();
-            // A commented-out declaration is not a declaration. The sibling workspace
-            // names this specifically as a decoy that made an orphan look declared.
-            if trimmed.starts_with("//")
-            {
-                continue;
-            }
+            let named = Module_Declared_By(line);
 
-            let Some(rest) = trimmed
-                .strip_prefix("mod ")
-                .or_else(|| trimmed.strip_prefix("pub mod "))
-                .or_else(|| trimmed.strip_prefix("pub(crate) mod "))
-            else
-            {
-                continue;
-            };
-
-            // `mod foo;` is a declaration of a file. `mod foo {` is an inline module,
-            // which declares nothing on disk.
-            if let Some(name) = rest.strip_suffix(';')
-            {
-                declared.insert(name.trim().to_owned());
-            }
+            declared.extend(named);
         }
     }
 
     return declared;
+}
+
+/// The file name one `mod` line declares.
+///
+/// A commented-out declaration is not a declaration. The sibling workspace names this
+/// specifically as a decoy that made an orphan look declared. And `mod foo;` is a declaration
+/// of a file where `mod foo {` is an inline module, which declares nothing on disk.
+fn Module_Declared_By(line: &str) -> Option<String>
+{
+    let trimmed = line.trim();
+    if trimmed.starts_with("//")
+    {
+        return None;
+    }
+
+    let rest = trimmed
+        .strip_prefix("mod ")
+        .or_else(|| trimmed.strip_prefix("pub mod "))
+        .or_else(|| trimmed.strip_prefix("pub(crate) mod "))?;
+
+    return rest.strip_suffix(';').map(|name| return name.trim().to_owned());
 }
 
 /// Every `.rs` file under a directory, recursively.
@@ -610,7 +649,6 @@ fn Source_Files(root: &Path) -> Vec<PathBuf>
 {
     let mut found = Vec::new();
     let mut pending = vec![root.to_path_buf()];
-
     while let Some(directory) = pending.pop()
     {
         let Ok(entries) = std::fs::read_dir(&directory)
@@ -618,22 +656,26 @@ fn Source_Files(root: &Path) -> Vec<PathBuf>
         {
             continue;
         };
-
         for entry in entries.flatten()
         {
-            let path = entry.path();
-            if path.is_dir()
-            {
-                pending.push(path);
-            }
-            else if path.extension().is_some_and(|extension| extension == "rs")
-            {
-                found.push(path);
-            }
+            Sort_One_Entry(&entry.path(), &mut pending, &mut found);
         }
     }
 
     return found;
+}
+
+/// A directory to descend into later, a Rust file to keep, or neither.
+fn Sort_One_Entry(path: &Path, pending: &mut Vec<PathBuf>, found: &mut Vec<PathBuf>)
+{
+    if path.is_dir()
+    {
+        pending.push(path.to_path_buf());
+    }
+    else if path.extension().is_some_and(|extension| extension == "rs")
+    {
+        found.push(path.to_path_buf());
+    }
 }
 
 /// Band 0 is described in one place, and the two files that restated it now route to it.
@@ -654,37 +696,22 @@ fn Source_Files(root: &Path) -> Vec<PathBuf>
 /// belongs in band 0 — the criterion is for a person reviewing a change. What this can do is
 /// stop the wide sentence being restated somewhere nothing reads back, which is how the
 /// defect arrived in the first place.
+/// The claim that was made three times and chosen once.
+const OWNERSHIP: &str = "authoritative statement of Nomos";
+
+/// The record that now carries it.
+const RECORD: &str = "OD-CONTRACTS-001";
+
+/// The one file entitled to make the claim: where an author adding a module is reading.
+const HOME: &str = "crates/contracts/nomos-contracts/src/lib.rs";
+
+/// The three files that describe band 0 at all.
+const DESCRIBED: &[&str] = &["Cargo.toml", "README.md", HOME];
+
 #[test]
 fn Test_Band_Zero_Should_Be_Described_In_One_Place()
 {
-    /// The claim that was made three times and chosen once.
-    const OWNERSHIP: &str = "authoritative statement of Nomos";
-    /// The record that now carries it.
-    const RECORD: &str = "OD-CONTRACTS-001";
-    /// The one file entitled to make the claim: where an author adding a module is reading.
-    const HOME: &str = "crates/contracts/nomos-contracts/src/lib.rs";
-
-    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let described = ["Cargo.toml", "README.md", HOME];
-
-    let mut claiming = Vec::new();
-    let mut silent_about_the_record = Vec::new();
-
-    for relative in described
-    {
-        let path = root.join(relative);
-        let text = std::fs::read_to_string(&path)
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-
-        if text.contains(OWNERSHIP)
-        {
-            claiming.push(relative);
-        }
-        if !text.contains(RECORD)
-        {
-            silent_about_the_record.push(relative);
-        }
-    }
+    let (claiming, silent_about_the_record) = Read_The_Three();
 
     assert_eq!(
         claiming,
@@ -693,11 +720,37 @@ fn Test_Band_Zero_Should_Be_Described_In_One_Place()
          there and nowhere else: a second copy is a wider rule than the one that was decided, \
          sitting where no test reads it back. {RECORD} records why."
     );
-
     assert!(
         silent_about_the_record.is_empty(),
         "{silent_about_the_record:?} describe band 0 without naming {RECORD}. A file that \
          describes the band and does not route to the criterion is the restatement this \
          check exists to stop."
     );
+}
+
+/// Which of the three claim the ownership sentence, and which do not name the record.
+///
+/// Both answers come from one read of each file, because they are two readings of the same
+/// text rather than two questions asked separately.
+fn Read_The_Three() -> (Vec<&'static str>, Vec<&'static str>)
+{
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let mut claiming = Vec::new();
+    let mut silent = Vec::new();
+    for relative in DESCRIBED
+    {
+        let path = root.join(relative);
+        let text = std::fs::read_to_string(&path)
+            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+        if text.contains(OWNERSHIP)
+        {
+            claiming.push(*relative);
+        }
+        if !text.contains(RECORD)
+        {
+            silent.push(*relative);
+        }
+    }
+
+    return (claiming, silent);
 }

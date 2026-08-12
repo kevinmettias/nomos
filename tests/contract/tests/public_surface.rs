@@ -122,6 +122,36 @@ fn Surfaces() -> Vec<Surface>
     return found;
 }
 
+/// One workspace member's public surface, read from its own source.
+fn Surface_Named(package: &str) -> Surface
+{
+    let workspace = Workspace::Load();
+    let member = workspace
+        .Get(package)
+        .unwrap_or_else(|| panic!("{package} is a workspace member"));
+
+    return Public_Surface(&member.name, &member.root)
+        .unwrap_or_else(|| panic!("{package} has a library"));
+}
+
+/// Whether any declaration in a surface carries a needle.
+fn Says(surface: &Surface, needle: &str) -> bool
+{
+    return surface
+        .declarations
+        .iter()
+        .any(|declaration| return declaration.contains(needle));
+}
+
+/// Every package this reader produced a public surface for.
+fn Snapshotted_Packages() -> BTreeSet<String>
+{
+    return Surfaces()
+        .into_iter()
+        .map(|surface| return surface.package)
+        .collect();
+}
+
 /// The assertion.
 #[test]
 fn Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot()
@@ -133,31 +163,11 @@ fn Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot()
         "no workspace member yielded a public surface. Every comparison below iterates \
          over this list, so an empty one passes having read nothing"
     );
-
     if let Some(value) = std::env::var_os(BLESS)
     {
         Bless(&value.to_string_lossy(), &surfaces, &Snapshot_Directory());
     }
-
-    let mut wrong = Vec::new();
-
-    for surface in &surfaces
-    {
-        let path = Snapshot_Path(&Snapshot_Directory(), &surface.package);
-        let expected = std::fs::read_to_string(&path).unwrap_or_default();
-        let found = Rendered(surface);
-
-        if expected == found
-        {
-            continue;
-        }
-
-        wrong.push(format!(
-            "{}\n{}",
-            surface.package,
-            Difference(&expected, &found)
-        ));
-    }
+    let wrong = Disagreeing_With_Their_Snapshots(&surfaces, &Snapshot_Directory());
 
     assert!(
         wrong.is_empty(),
@@ -166,6 +176,24 @@ fn Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot()
          the crate you meant to change, and commit the diff with the change that caused it.",
         wrong.join("\n\n")
     );
+}
+
+/// Every crate whose source declares something other than what its snapshot says.
+fn Disagreeing_With_Their_Snapshots(surfaces: &[Surface], directory: &Path) -> Vec<String>
+{
+    let mut wrong = Vec::new();
+    for surface in surfaces
+    {
+        let path = Snapshot_Path(directory, &surface.package);
+        let expected = std::fs::read_to_string(&path).unwrap_or_default();
+        let found = Rendered(surface);
+        if expected != found
+        {
+            wrong.push(format!("{}\n{}", surface.package, Difference(&expected, &found)));
+        }
+    }
+
+    return wrong;
 }
 
 /// Every snapshot on disk belongs to a crate that still has a library.
@@ -177,44 +205,47 @@ fn Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot()
 fn Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One()
 {
     let directory = Snapshot_Directory();
-    let entries = std::fs::read_dir(&directory)
-        .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
-
-    let on_disk: BTreeSet<String> = entries
-        .flatten()
-        .filter_map(|entry| {
-            let path = entry.path();
-            if path.extension().is_none_or(|extension| return extension != "txt")
-            {
-                return None;
-            }
-
-            return path
-                .file_stem()
-                .and_then(std::ffi::OsStr::to_str)
-                .map(str::to_owned);
-        })
-        .collect();
-
-    let expected: BTreeSet<String> = Surfaces()
-        .into_iter()
-        .map(|surface| return surface.package)
-        .collect();
+    let on_disk = Snapshot_Stems(&directory);
+    let expected = Snapshotted_Packages();
+    let orphaned: Vec<&String> = on_disk.difference(&expected).collect();
+    let unsnapshotted: Vec<&String> = expected.difference(&on_disk).collect();
 
     assert!(!on_disk.is_empty(), "no snapshot is checked in under {}", directory.display());
-
-    let orphaned: Vec<&String> = on_disk.difference(&expected).collect();
     assert!(
         orphaned.is_empty(),
         "these snapshots name no workspace member with a library: {orphaned:?}"
     );
-
-    let unsnapshotted: Vec<&String> = expected.difference(&on_disk).collect();
     assert!(
         unsnapshotted.is_empty(),
         "these crates have a library and no snapshot: {unsnapshotted:?}.\n\
          Re-run with {BLESS} set to those names."
     );
+}
+
+/// The package name of every snapshot file in a directory.
+fn Snapshot_Stems(directory: &Path) -> BTreeSet<String>
+{
+    let entries = std::fs::read_dir(directory)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
+
+    return entries
+        .flatten()
+        .filter_map(|entry| return Snapshot_Stem(&entry.path()))
+        .collect();
+}
+
+/// A file's package name, or nothing if the file is not a snapshot.
+fn Snapshot_Stem(path: &Path) -> Option<String>
+{
+    if path.extension().is_none_or(|extension| return extension != "txt")
+    {
+        return None;
+    }
+
+    return path
+        .file_stem()
+        .and_then(std::ffi::OsStr::to_str)
+        .map(str::to_owned);
 }
 
 /// Every member is either snapshotted or declared to have no library.
@@ -225,18 +256,11 @@ fn Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One()
 #[test]
 fn Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less()
 {
-    let workspace = Workspace::Load();
-    let snapshotted: BTreeSet<String> = Surfaces()
-        .into_iter()
-        .map(|surface| return surface.package)
-        .collect();
-
-    let unaccounted: Vec<String> = workspace
-        .Members()
+    let snapshotted = Snapshotted_Packages();
+    let unaccounted = Members_With_Neither(&snapshotted);
+    let contradicted: Vec<&&str> = WITHOUT_A_LIBRARY
         .iter()
-        .map(|member| return member.name.clone())
-        .filter(|name| return !snapshotted.contains(name))
-        .filter(|name| return !WITHOUT_A_LIBRARY.contains(&name.as_str()))
+        .filter(|name| return snapshotted.contains(**name))
         .collect();
 
     assert!(
@@ -246,15 +270,24 @@ fn Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less()
          A crate that stops having a library stops being compared, and nothing else here \
          would say so."
     );
-
-    let contradicted: Vec<&&str> = WITHOUT_A_LIBRARY
-        .iter()
-        .filter(|name| return snapshotted.contains(**name))
-        .collect();
     assert!(
         contradicted.is_empty(),
         "these are declared library-less and have a library: {contradicted:?}"
     );
+}
+
+/// The members that produce no public surface and are not declared library-less either.
+fn Members_With_Neither(snapshotted: &BTreeSet<String>) -> Vec<String>
+{
+    let workspace = Workspace::Load();
+
+    return workspace
+        .Members()
+        .iter()
+        .map(|member| return member.name.clone())
+        .filter(|name| return !snapshotted.contains(name))
+        .filter(|name| return !WITHOUT_A_LIBRARY.contains(&name.as_str()))
+        .collect();
 }
 
 /// The negative control.
@@ -266,42 +299,25 @@ fn Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less()
 #[test]
 fn Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones()
 {
-    let workspace = Workspace::Load();
-    let member = workspace
-        .Get("nomos-spec-project")
-        .expect("nomos-spec-project is a workspace member");
-    let surface =
-        Public_Surface(&member.name, &member.root).expect("nomos-spec-project has a library");
-
-    let says = |needle: &str| {
-        return surface
-            .declarations
-            .iter()
-            .any(|declaration| return declaration.contains(needle));
-    };
+    let surface = Surface_Named("nomos-spec-project");
 
     // Declared in a private module and re-exported by the crate root. If the resolver
     // stopped at `pub mod`, this crate's entire API would be invisible.
-    assert!(says("Build("), "the re-exported Build function is not in the surface");
-    assert!(says("pub struct"), "no struct reached the surface");
-    assert!(says("pub enum"), "no enum reached the surface");
-
+    assert!(Says(&surface, "Build("), "the re-exported Build function is not in the surface");
+    assert!(Says(&surface, "pub struct"), "no struct reached the surface");
+    assert!(Says(&surface, "pub enum"), "no enum reached the surface");
     // `Without_Test_Modules` blanks unit-test bodies before the scan. A helper written
     // inside one is not an export, and counting it would make every crate's surface grow
     // with its test suite.
     assert!(
-        !says("::tests::"),
+        !Says(&surface, "::tests::"),
         "a unit test module reached the public surface: {:?}",
         surface.declarations
     );
-
     for restricted in ["pub(crate)", "pub(super)", "pub(in "]
     {
         assert!(
-            !surface
-                .declarations
-                .iter()
-                .any(|declaration| return declaration.contains(restricted)),
+            !Says(&surface, restricted),
             "{restricted} reached the surface, which is not public"
         );
     }
@@ -315,28 +331,18 @@ fn Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones()
 #[test]
 fn Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export()
 {
-    let workspace = Workspace::Load();
-    let member = workspace
-        .Get("nomos-contract-tests")
-        .expect("this crate is a workspace member");
-    let surface = Public_Surface(&member.name, &member.root).expect("it has a library");
+    let surface = Surface_Named("nomos-contract-tests");
 
     for hidden in ["Source_Files", "Without_Test_Modules", "Matching_Brace"]
     {
         assert!(
-            !surface
-                .declarations
-                .iter()
-                .any(|declaration| return declaration.contains(hidden)),
+            !Says(&surface, hidden),
             "{hidden} is pub(crate) and appears in the exported surface"
         );
     }
 
     assert!(
-        surface
-            .declarations
-            .iter()
-            .any(|declaration| return declaration.contains("Corpus_Gates")),
+        Says(&surface, "Corpus_Gates"),
         "the crate's real exports are missing, so the assertions above proved nothing"
     );
 }
@@ -362,13 +368,21 @@ fn Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export()
 #[test]
 fn Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve()
 {
-    let workspace = Workspace::Load();
-    let member = workspace
-        .Get("nomos-integration-tests")
-        .expect("nomos-integration-tests is a workspace member");
-    let surface =
-        Public_Surface(&member.name, &member.root).expect("nomos-integration-tests has a library");
+    let surface = Surface_Named("nomos-integration-tests");
 
+    Assert_The_Unfollowable_Name_Is_Reported(&surface);
+
+    // The negative control, and the whole reason the grain is per name rather than per
+    // declaration: its three siblings are declared in this crate and must still be found.
+    for resolved in ["Corpus", "SourceFile", "Walk"]
+    {
+        Assert_The_Sibling_Resolves(&surface, resolved);
+    }
+}
+
+/// Both halves of the surface, for the one name this per-crate reader cannot follow.
+fn Assert_The_Unfollowable_Name_Is_Reported(surface: &Surface)
+{
     assert!(
         surface
             .unresolved
@@ -379,36 +393,29 @@ fn Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve(
          declaration either, so the snapshot claims the crate does not export it: {:?}",
         surface.unresolved
     );
-
     assert!(
-        !surface
-            .declarations
-            .iter()
-            .any(|declaration| return declaration.contains("Subject_Of_Path")),
+        !Says(surface, "Subject_Of_Path"),
         "the name resolved to a declaration in this crate, which would make the assertion \
          above a claim about the wrong mechanism — `Subject_Of_Path` is declared in \
          nomos-model and this reader is recorded as reading one crate"
     );
+}
 
-    // The negative control, and the whole reason the grain is per name rather than per
-    // declaration: its three siblings are declared in this crate and must still be found.
-    for resolved in ["Corpus", "SourceFile", "Walk"]
-    {
-        let owned = format!("nomos_integration_tests::{resolved}");
-        assert!(
-            surface
-                .declarations
-                .iter()
-                .any(|declaration| return declaration.contains(&owned)),
-            "{resolved} shares a `pub use` list with the unfollowable name and is declared \
-             in this crate, so it must still resolve. A reader reporting every re-exported \
-             name as unresolved would pass the assertion above and export nothing."
-        );
-        assert!(
-            !surface.unresolved.iter().any(|line| return line.contains(resolved)),
-            "{resolved} is declared in this crate and was reported as unfollowable"
-        );
-    }
+/// A sibling in the same `pub use` list is declared here, so it must still resolve.
+fn Assert_The_Sibling_Resolves(surface: &Surface, resolved: &str)
+{
+    let owned = format!("nomos_integration_tests::{resolved}");
+
+    assert!(
+        Says(surface, &owned),
+        "{resolved} shares a `pub use` list with the unfollowable name and is declared \
+         in this crate, so it must still resolve. A reader reporting every re-exported \
+         name as unresolved would pass the assertion above and export nothing."
+    );
+    assert!(
+        !surface.unresolved.iter().any(|line| return line.contains(resolved)),
+        "{resolved} is declared in this crate and was reported as unfollowable"
+    );
 }
 
 /// A directory of this test's own to bless into.
@@ -446,30 +453,50 @@ fn Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical()
 {
     let surfaces = Surfaces();
     let directory = Scratch("leaves-another-alone");
-
     let named = "nomos-contract-tests";
     let foreign = "nomos-spec-project";
-
     let mid_edit = "# a deliberate, uncommitted change somebody else has not finished\n";
     let stale = "# whatever this crate used to export\n";
+    let foreign_now = Rendering_Of(&surfaces, foreign);
+    let named_now = Rendering_Of(&surfaces, named);
+    let foreign_path = Seeded(&directory, foreign, mid_edit);
+    let named_path = Seeded(&directory, named, stale);
+
     assert_ne!(
-        mid_edit,
-        Rendered(Surface_Of(&surfaces, foreign)),
+        mid_edit, foreign_now,
         "the foreign snapshot must disagree with the tree, or this test proves nothing"
     );
 
-    let foreign_path = Snapshot_Path(&directory, foreign);
-    let named_path = Snapshot_Path(&directory, named);
-    std::fs::write(&foreign_path, mid_edit).expect("seeds the foreign one");
-    std::fs::write(&named_path, stale).expect("seeds the named one");
-
     let written = Rewrite(&[named.to_owned()], &surfaces, &directory);
 
-    // The file on disk, before the returned list. What the writer *says* it wrote is a
-    // weaker claim than what is there afterwards, and it is the file that another session
-    // loses.
-    let after =
-        std::fs::read_to_string(&foreign_path).expect("the foreign snapshot still exists");
+    Assert_The_Foreign_Snapshot_Survived(&foreign_path, mid_edit, named, foreign);
+    Assert_The_Named_Snapshot_Was_Rewritten(&named_path, &named_now);
+    assert_eq!(written, [named], "the bless reported writing something it was not asked for");
+}
+
+/// What one crate's snapshot would say if it were blessed right now.
+fn Rendering_Of(surfaces: &[Surface], package: &str) -> String
+{
+    let surface = Surface_Of(surfaces, package);
+
+    return Rendered(surface);
+}
+
+/// A snapshot file seeded with text, so a bless has something to leave alone or overwrite.
+fn Seeded(directory: &Path, package: &str, text: &str) -> PathBuf
+{
+    let path = Snapshot_Path(directory, package);
+    std::fs::write(&path, text).expect("seeds a snapshot");
+
+    return path;
+}
+
+/// The file on disk, before the returned list. What the writer *says* it wrote is a weaker
+/// claim than what is there afterwards, and it is the file that another session loses.
+fn Assert_The_Foreign_Snapshot_Survived(path: &Path, mid_edit: &str, named: &str, foreign: &str)
+{
+    let after = std::fs::read_to_string(path).expect("the foreign snapshot still exists");
+
     assert_eq!(
         after, mid_edit,
         "blessing {named} rewrote {foreign}'s snapshot. That is a territory violation \
@@ -477,17 +504,16 @@ fn Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical()
          replaced with what a half-finished working tree exports, and the suite would go \
          green on it"
     );
+}
 
-    let rewritten =
-        std::fs::read_to_string(&named_path).expect("the named snapshot still exists");
+/// The crate that was named must have been rewritten.
+fn Assert_The_Named_Snapshot_Was_Rewritten(path: &Path, expected: &str)
+{
     assert_eq!(
-        rewritten,
-        Rendered(Surface_Of(&surfaces, named)),
-        "the crate that was actually named did not get rewritten, so the assertion above \
-         is satisfied by a writer that writes nothing at all"
+        std::fs::read_to_string(path).expect("the named snapshot still exists"),
+        expected,
+        "the crate that was actually named did not get rewritten, so the assertion above          is satisfied by a writer that writes nothing at all"
     );
-
-    assert_eq!(written, [named], "the bless reported writing something it was not asked for");
 }
 
 /// A value that names nothing rewrites nothing, and says so.
@@ -496,27 +522,8 @@ fn Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened()
 {
     let surfaces = Surfaces();
 
-    for empty in ["", "   ", ",", " , ,"]
-    {
-        let refusal = Requested(empty, &surfaces)
-            .expect_err("a value naming no crate is refused rather than taken as all of them");
-        assert!(
-            refusal.contains("names no crate") && refusal.contains("nomos-rules"),
-            "the refusal for {empty:?} does not tell the author how to name a crate: {refusal}"
-        );
-    }
-
-    // The old spelling. `set to anything` used to mean `rewrite everything`; it now means
-    // `you named a crate that does not exist`, which is the truth about what was typed.
-    for unmatched in ["1", "true", "nomos-rulez"]
-    {
-        let refusal = Requested(unmatched, &surfaces)
-            .expect_err("a name matching no crate is refused rather than silently skipped");
-        assert!(
-            refusal.contains("Nothing was rewritten"),
-            "the refusal for {unmatched:?} does not say that nothing happened: {refusal}"
-        );
-    }
+    Assert_A_Value_Naming_Nothing_Is_Refused(&surfaces);
+    Assert_A_Name_Matching_Nothing_Is_Refused(&surfaces);
 
     // And a real name still resolves, or the assertions above are satisfied by a function
     // that refuses everything.
@@ -525,6 +532,37 @@ fn Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened()
         ["nomos-ledger".to_owned(), "nomos-model".to_owned()],
         "a list of real crate names did not resolve"
     );
+}
+
+/// A value that names no crate at all, which used to mean every crate.
+fn Assert_A_Value_Naming_Nothing_Is_Refused(surfaces: &[Surface])
+{
+    for empty in ["", "   ", ",", " , ,"]
+    {
+        let refusal = Requested(empty, surfaces)
+            .expect_err("a value naming no crate is refused rather than taken as all of them");
+
+        assert!(
+            refusal.contains("names no crate") && refusal.contains("nomos-rules"),
+            "the refusal for {empty:?} does not tell the author how to name a crate: {refusal}"
+        );
+    }
+}
+
+/// The old spelling. `set to anything` used to mean `rewrite everything`; it now means `you
+/// named a crate that does not exist`, which is the truth about what was typed.
+fn Assert_A_Name_Matching_Nothing_Is_Refused(surfaces: &[Surface])
+{
+    for unmatched in ["1", "true", "nomos-rulez"]
+    {
+        let refusal = Requested(unmatched, surfaces)
+            .expect_err("a name matching no crate is refused rather than silently skipped");
+
+        assert!(
+            refusal.contains("Nothing was rewritten"),
+            "the refusal for {unmatched:?} does not say that nothing happened: {refusal}"
+        );
+    }
 }
 
 /// The crates a bless was asked for, or the reason the request is refused.
@@ -543,32 +581,42 @@ fn Requested(value: &str, surfaces: &[Surface]) -> Result<Vec<String>, String>
         .collect();
 
     let listed = known.iter().copied().collect::<Vec<&str>>().join(", ");
-
     if names.is_empty()
     {
-        return Err(format!(
-            "{BLESS} was set to {value:?}, which names no crate. It is a list of package \
-             names now, not a flag: set it to the crate whose snapshot you meant to \
-             change, such as {BLESS}=nomos-rules, or to several names separated by \
-             commas. There is deliberately no value meaning all of them, because \
-             rewriting a snapshot somebody else is mid-way through changing is how this \
-             restriction was earned.\nThe crates with snapshots are: {listed}"
-        ));
+        return Err(Names_No_Crate(value, &listed));
     }
-
     let unmatched: Vec<&str> =
         names.iter().copied().filter(|name| return !known.contains(name)).collect();
     if !unmatched.is_empty()
     {
-        return Err(format!(
-            "{BLESS} named {unmatched:?}, which is not a workspace member with a public \
-             surface. Nothing was rewritten: a misspelled name that quietly blessed \
-             nothing would look exactly like a bless that worked.\nThe crates with \
-             snapshots are: {listed}"
-        ));
+        return Err(Names_Nothing_Here(&unmatched, &listed));
     }
 
     return Ok(names.into_iter().map(str::to_owned).collect());
+}
+
+/// The refusal for a value that is a flag rather than a list of names.
+fn Names_No_Crate(value: &str, listed: &str) -> String
+{
+    return format!(
+        "{BLESS} was set to {value:?}, which names no crate. It is a list of package \
+         names now, not a flag: set it to the crate whose snapshot you meant to \
+         change, such as {BLESS}=nomos-rules, or to several names separated by \
+         commas. There is deliberately no value meaning all of them, because \
+         rewriting a snapshot somebody else is mid-way through changing is how this \
+         restriction was earned.\nThe crates with snapshots are: {listed}"
+    );
+}
+
+/// The refusal for a name that matches no workspace member with a public surface.
+fn Names_Nothing_Here(unmatched: &[&str], listed: &str) -> String
+{
+    return format!(
+        "{BLESS} named {unmatched:?}, which is not a workspace member with a public \
+         surface. Nothing was rewritten: a misspelled name that quietly blessed \
+         nothing would look exactly like a bless that worked.\nThe crates with \
+         snapshots are: {listed}"
+    );
 }
 
 /// Writes the named snapshots into a directory, and only those. Returns what it wrote.
