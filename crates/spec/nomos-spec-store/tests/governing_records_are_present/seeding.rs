@@ -1,6 +1,6 @@
 //! Seeding twice is seeding once, and what it seeds is content rather than identity alone.
 
-use crate::common::{Counted, Seeded};
+use crate::queries::{Counted, Seeded};
 use nomos_spec_store::{
     AUTHORED, GOVERNING_RECORD_IDS, Seed_Governing_Records, SpecificationStore, Table,
 };

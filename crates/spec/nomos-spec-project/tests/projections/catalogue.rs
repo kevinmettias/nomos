@@ -4,7 +4,7 @@
 //! identifier reused, a renderer nothing reaches, a content kind that is selectable and
 //! unselected.
 
-use crate::common::{For_Building, Populated, Shipped};
+use crate::store::{For_Building, Populated, Shipped};
 use nomos_spec_project::{Build, Content, Format};
 use std::collections::BTreeSet;
 

@@ -33,7 +33,7 @@
 //! measure. Two of the four belong to [`providers`] and [`lessons`] by subject, and each says
 //! where it came from at its own definition.
 
-mod common;
+mod corpus;
 mod context;
 mod lessons;
 mod precision;

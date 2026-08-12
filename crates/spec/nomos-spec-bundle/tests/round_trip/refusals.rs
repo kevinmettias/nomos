@@ -1,6 +1,6 @@
 //! The four things a bundle refuses rather than carries quietly.
 
-use crate::common::Populated;
+use crate::populated::Populated;
 use nomos_spec_bundle::{Bundle, BundleError, Export, Import, Record};
 use nomos_spec_store::{SpecificationStore, Table};
 

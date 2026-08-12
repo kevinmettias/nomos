@@ -21,7 +21,7 @@
 //! [`catalog`] for the two figures taken over something other than the volumes.
 
 mod catalog;
-mod common;
+mod register;
 mod headings;
 mod measurement;
 mod structure;

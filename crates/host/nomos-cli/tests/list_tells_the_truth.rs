@@ -22,10 +22,10 @@
 
 #[path = "list_tells_the_truth/audit.rs"]
 mod audit;
+#[path = "list_tells_the_truth/authored.rs"]
+mod authored;
 #[path = "scratch_ledger/board.rs"]
 mod board;
-#[path = "list_tells_the_truth/common.rs"]
-mod common;
 #[path = "list_tells_the_truth/dependencies.rs"]
 mod dependencies;
 #[path = "list_tells_the_truth/territory.rs"]

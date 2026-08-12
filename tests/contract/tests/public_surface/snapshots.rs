@@ -5,7 +5,7 @@
 //! assertion this suite exists for and the other two are the ways it could go quiet.
 
 use crate::bless::Bless;
-use crate::common::{
+use crate::reading::{
     Rendered, Snapshot_Directory, Snapshot_Path, Snapshotted_Packages, Surfaces, BLESS,
 };
 use nomos_contract_tests::{Surface, Workspace};

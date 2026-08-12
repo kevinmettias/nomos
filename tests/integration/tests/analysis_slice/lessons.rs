@@ -5,7 +5,7 @@
 //! The first lesson — that a signal firing on everything is not a signal — is measurable only
 //! at scale and is therefore in [`crate::scale`].
 
-use crate::common::{Over_The_Precision_Corpus, Surface_Of};
+use crate::corpus::{Over_The_Precision_Corpus, Surface_Of};
 use nomos_cap_syntax as syntax;
 use nomos_capability::Requirement;
 use nomos_contracts::{

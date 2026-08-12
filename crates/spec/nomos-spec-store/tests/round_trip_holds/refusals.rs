@@ -1,6 +1,6 @@
 //! What the door refuses, and the transaction that leaves nothing behind when it does.
 
-use crate::common::{Previewed, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic};
+use crate::seeded::{Previewed, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic};
 use nomos_spec_store::{EditError, Table};
 
 #[test]

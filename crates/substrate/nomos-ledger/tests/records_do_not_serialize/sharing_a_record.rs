@@ -1,6 +1,6 @@
 //! The negative control: sharing a record still excludes.
 
-use crate::common::{Contested, RECORD_DIRECTORY, Two_Record_Writers};
+use crate::board::{Contested, RECORD_DIRECTORY, Two_Record_Writers};
 use nomos_ledger::{ClaimRefusal, Territory};
 
 /// The control that keeps the repair from being a blanket exemption.

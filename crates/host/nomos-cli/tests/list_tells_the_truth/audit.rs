@@ -9,7 +9,7 @@
 //! territory-blocked item at once, which is the only shape in which both halves of the
 //! disagreement are visible in a single command.
 
-use crate::common::{Audit_Line, Board, FINISHED, Held_By, Item, NO_CLAIM, Standing};
+use crate::authored::{Audit_Line, Board, FINISHED, Held_By, Item, NO_CLAIM, Standing};
 
 /// The board both halves of the defect are visible on.
 ///

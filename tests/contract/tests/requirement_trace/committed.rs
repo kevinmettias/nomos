@@ -1,7 +1,7 @@
 //! The three things `OD-TRACE-001` said the guard asserts, against the entries this
 //! repository has really committed.
 
-use crate::common::Verdict;
+use crate::assessment::Verdict;
 use crate::predicates::{Divergences_With_No_Record, Unresolved_Records, Unresolved_Sites};
 use crate::registry::Committed;
 use nomos_contract_tests::Workspace;

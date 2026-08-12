@@ -1,6 +1,6 @@
 //! What the dependency graph is allowed to do, and the vacuity guard in front of it.
 
-use crate::common::{Declared_Band, BANDS};
+use crate::bands::{Declared_Band, BANDS};
 use nomos_contract_tests::Workspace;
 use std::collections::BTreeSet;
 

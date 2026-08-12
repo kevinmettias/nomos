@@ -8,7 +8,7 @@
 
 mod band_zero;
 mod capabilities;
-mod common;
+mod bands;
 mod graph;
 mod readme;
 mod reachability;

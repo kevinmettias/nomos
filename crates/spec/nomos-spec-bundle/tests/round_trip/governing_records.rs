@@ -1,6 +1,6 @@
 //! The records that say what the store is are content like any other.
 
-use crate::common::Reimported;
+use crate::populated::Reimported;
 use nomos_spec_bundle::Export;
 use nomos_spec_store::SpecificationStore;
 

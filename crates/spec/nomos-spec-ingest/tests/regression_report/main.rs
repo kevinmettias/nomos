@@ -16,6 +16,6 @@
 //! `tests/contract/tests/corpus_gates.rs` exists to measure.
 
 mod archives;
-mod common;
+mod rows;
 mod measure;
 mod register;

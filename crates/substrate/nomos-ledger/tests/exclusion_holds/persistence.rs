@@ -4,7 +4,7 @@
 //! be the same answer, because the first is a board nobody has started and the second is a
 //! board whose contents were lost.
 
-use crate::common::*;
+use crate::board::*;
 
 /// A missing ledger is a repository that has not started tracking work. A *corrupt*
 /// ledger is somebody's roadmap that got damaged, and treating it as empty would let

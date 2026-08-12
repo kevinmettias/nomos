@@ -13,14 +13,14 @@ mod exit_code;
 mod listing;
 mod parse;
 mod report;
-mod work_command;
+mod command;
 #[cfg(test)]
 mod tests;
 
 pub use parse::Parse;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use work_command::WorkCommand;
+pub(crate) use command::WorkCommand;
 
 use claim_request::ClaimRequest;
 use ending_request::EndingRequest;

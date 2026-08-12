@@ -4,7 +4,7 @@
 //! projection that says nothing while looking like an answer, so emptiness is a refusal
 //! unless a profile declares it expected.
 
-use crate::common::{Populated, Profile_Named, Rendered};
+use crate::store::{Populated, Profile_Named, Rendered};
 use nomos_spec_project::{Build, Catalogue, Profile, Select};
 
 #[test]

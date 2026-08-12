@@ -10,7 +10,7 @@
 //! of the register: a definition written only in prose is a definition nothing checks.
 
 use crate::catalog::{Catalog_Entities, V15_Records};
-use crate::common::{Register, VOLUMES};
+use crate::register::{Register, VOLUMES};
 use crate::headings::{
     Appendix, End_To_End, Headings_Matching, Lettered, Prefixed, Section_Six, Under_Path,
 };

@@ -29,11 +29,11 @@ use volumes::Ingest_Volumes;
 use layer::{Ingest_Catalog_File, Ingest_Statement_File, Refused};
 
 mod absence;
-mod corpus_request;
+mod request;
 mod assembly;
 
 pub(crate) use absence::Absence;
-pub(crate) use corpus_request::CorpusRequest;
+pub(crate) use request::CorpusRequest;
 pub(crate) use assembly::Assembly;
 
 use nomos_spec_ingest::{

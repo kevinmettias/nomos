@@ -1,6 +1,6 @@
 //! What `Require` answers, and the four different ways it declines to.
 
-use crate::common::{Base, Context_At, Needing, Offering, SYNTAX, Stored, Subject, Syntactic};
+use crate::key::{Base, Context_At, Needing, Offering, SYNTAX, Stored, Subject, Syntactic};
 use nomos_analysis::{FactReader, InputDigest, MemoryFactStore, ReadOutcome, Reader};
 use nomos_capability::Registry;
 use nomos_contracts::{

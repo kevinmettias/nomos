@@ -3,7 +3,7 @@
 //! Written against the interleaving harness rather than against timing, so a failure here is
 //! the defect and not the machine.
 
-use crate::common::*;
+use crate::board::*;
 use crate::interleaving::*;
 
 /// The defect `P10-LOCK-BYPASS` is open for, at the verb that starts every piece of work.

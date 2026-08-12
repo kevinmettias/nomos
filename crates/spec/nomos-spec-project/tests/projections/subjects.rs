@@ -6,7 +6,7 @@
 //! authorities. The placeholder is the whole of the mechanism: it appears in the output path
 //! and in the filters, and a run supplies what it stands for.
 
-use crate::common::{Populated, Profile_Named};
+use crate::store::{Populated, Profile_Named};
 use nomos_spec_project::{Build, Format, Profile};
 use nomos_spec_store::SpecificationStore;
 use std::collections::BTreeSet;

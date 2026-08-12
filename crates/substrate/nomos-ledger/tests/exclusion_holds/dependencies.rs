@@ -1,6 +1,6 @@
 //! An item that cannot start until another finishes.
 
-use crate::common::*;
+use crate::board::*;
 
 /// A dependency edge that only `validate` reads is a comment. Claiming has to refuse an
 /// item whose prerequisite is unfinished, or the ordering is advice.

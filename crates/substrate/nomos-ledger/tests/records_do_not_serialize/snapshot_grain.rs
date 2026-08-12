@@ -1,6 +1,6 @@
 //! The second acceptance criterion: the snapshot is an artefact, not a directory.
 
-use crate::common::{
+use crate::board::{
     Claimed, Contested, Covers, Record_Writers, Saved, Unclaimed_Copy,
 };
 use nomos_ledger::{ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};

@@ -1,6 +1,6 @@
 //! The same word was lying about territory too.
 
-use crate::common::{Board, Held_By, Item, NO_CLAIM, Standing};
+use crate::authored::{Board, Held_By, Item, NO_CLAIM, Standing};
 
 /// Held ground is the other way `ready` was false, and it is the one that was measured
 /// widest: eight items, one claim. It costs nothing extra to report, because it comes from

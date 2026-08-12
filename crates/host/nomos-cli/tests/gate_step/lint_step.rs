@@ -1,6 +1,6 @@
 //! Editing this workflow did not change what `work finish` runs.
 
-use crate::common::{RULES_STEP, Workflow};
+use crate::workflow::{RULES_STEP, Workflow};
 
 /// The lint step `work finish` derives is still clippy, after a step was added beside it.
 ///

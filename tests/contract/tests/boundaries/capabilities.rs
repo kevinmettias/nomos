@@ -1,6 +1,6 @@
 //! A capability id is written in one crate's library source and nowhere else.
 
-use crate::common::Source_Files;
+use crate::bands::Source_Files;
 use nomos_contract_tests::Workspace;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;

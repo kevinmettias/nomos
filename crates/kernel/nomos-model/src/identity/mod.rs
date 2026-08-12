@@ -14,11 +14,11 @@ pub use transition::IdentityTransition;
 pub use transition_kind::IdentityTransitionKind;
 
 mod composite_identity;
-mod identity_policy;
+mod policy;
 mod source_provenance;
 mod structural_fingerprint;
 
 pub use composite_identity::CompositeIdentity;
-pub use identity_policy::IdentityPolicy;
+pub use policy::IdentityPolicy;
 pub use source_provenance::SourceProvenance;
 pub use structural_fingerprint::StructuralFingerprint;

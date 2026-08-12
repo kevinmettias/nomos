@@ -102,10 +102,10 @@ use facts::{Materialize_Syntax, Nothing_Materialized, Prepare};
 use report::{Examined, Report};
 
 mod exit_code;
-mod check_command;
+mod command;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use check_command::CheckCommand;
+pub(crate) use command::CheckCommand;
 
 use crate::arguments::Named_Value;
 use nomos_analysis::{Context, MemoryFactStore, Reader};

@@ -3,7 +3,7 @@
 //! A skipped entry is an assessment that quietly stops being one — `OD-SPEC-005`'s defect
 //! in this registry's clothes — so the reader has no lenient path at all.
 
-use crate::common::REGISTRY;
+use crate::assessment::REGISTRY;
 use crate::registry::{Entries, Is_Requirement_Id, Parse};
 use nomos_contract_tests::Workspace;
 

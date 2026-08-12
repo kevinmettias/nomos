@@ -5,7 +5,7 @@
 //! *not* get as well as the one it must. A report where two verdicts claim one case is a
 //! report where neither names anything in particular.
 
-use crate::common::{Populated, Profile_Named};
+use crate::store::{Populated, Profile_Named};
 use nomos_spec_model::ContentHash;
 use nomos_spec_project::{Build, Check, Freshness, Profile, Stamp, SIDECAR_SUFFIX};
 use nomos_spec_store::SpecificationStore;

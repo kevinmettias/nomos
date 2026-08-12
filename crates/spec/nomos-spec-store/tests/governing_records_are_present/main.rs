@@ -2,7 +2,7 @@
 //! govern is trusted.
 
 
-mod common;
+mod queries;
 mod registration;
 mod seeding;
 mod siblings;

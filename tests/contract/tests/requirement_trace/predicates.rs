@@ -3,7 +3,7 @@
 //! Held apart from both so the control and the assertion run the same code. A control that
 //! re-implemented the comparison would prove the copy right and say nothing about the guard.
 
-use crate::common::{Assessment, Site};
+use crate::assessment::{Assessment, Site};
 use std::path::Path;
 
 /// Every site that is not where its entry says it is.

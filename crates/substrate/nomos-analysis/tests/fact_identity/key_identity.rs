@@ -1,13 +1,13 @@
 //! What a fact is addressed by: every component reaches the digest, and nothing else does.
 
-use crate::common::{Base, Configuration, Snapshot, Stored, Subject, Varied};
+use crate::key::{Base, Configuration, Snapshot, Stored, Subject, Varied};
 use nomos_analysis::{Component, FactKey, FactStore, MaterializedFact, MemoryFactStore};
 use nomos_contracts::{GenerationId, SnapshotId};
 
 /// The same fact, read from a named tree.
 fn Fact_From(key: &FactKey, snapshot: SnapshotId) -> MaterializedFact
 {
-    let mut fact = crate::common::Fact(key, GenerationId::INITIAL);
+    let mut fact = crate::key::Fact(key, GenerationId::INITIAL);
     fact.snapshot = snapshot;
 
     return fact;

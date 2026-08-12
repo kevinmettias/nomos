@@ -1,6 +1,6 @@
 //! D-129 supersedes ADR-DOC-001, and the placeholder that stands for it stays visible.
 
-use crate::common::{Column, Counted, Seeded, Title};
+use crate::queries::{Column, Counted, Seeded, Title};
 use nomos_spec_store::{EXTERNAL, NodeRow};
 
 /// D-129 supersedes ADR-DOC-001. The edge has to be in the store, not only in the prose,

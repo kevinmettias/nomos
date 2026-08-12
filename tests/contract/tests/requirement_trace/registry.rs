@@ -4,7 +4,7 @@
 //! counted, and the floor would then measure a set nobody chose. So every shape that is not
 //! an entry comes back as an `Err` naming what is wrong with it.
 
-use crate::common::{Assessment, Site, Verdict, REGISTRY};
+use crate::assessment::{Assessment, Site, Verdict, REGISTRY};
 use std::path::Path;
 
 /// The extension one entry carries.

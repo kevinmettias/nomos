@@ -5,7 +5,7 @@
 //! separator cannot show `lines` and `non_separator` apart, and a suite whose fixtures
 //! cannot separate two numbers is asserting they are equal.
 
-use crate::common::{Census, RowScope, Stored, TABLE, Two};
+use crate::stored::{Census, RowScope, Stored, TABLE, Two};
 use nomos_spec_store::Table;
 
 #[test]

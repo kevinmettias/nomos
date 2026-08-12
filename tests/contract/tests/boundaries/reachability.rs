@@ -1,7 +1,7 @@
 //! Every `.rs` file under a crate's `src/` must be reachable from its root by following
 //! `mod` declarations.
 
-use crate::common::{Declared_Modules, Source_Files};
+use crate::bands::{Declared_Modules, Source_Files};
 use nomos_contract_tests::Workspace;
 use std::collections::BTreeSet;
 use std::path::Path;

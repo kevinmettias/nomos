@@ -5,7 +5,7 @@
 //! whole catalogue rather than over one profile, because a renderer that leaks one of them
 //! leaks it in exactly one format.
 
-use crate::common::{For_Building, Order, Populated, Populated_In_Order, Shipped};
+use crate::store::{For_Building, Order, Populated, Populated_In_Order, Shipped};
 use nomos_spec_bundle::{Bundle, Export, Import};
 use nomos_spec_project::{Build, DO_NOT_EDIT};
 use nomos_spec_store::SpecificationStore;

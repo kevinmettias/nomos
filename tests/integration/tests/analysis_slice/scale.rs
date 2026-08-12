@@ -10,7 +10,7 @@
 //! So two of the four are here on loan from the module that owns their subject, and each says
 //! so where it is defined.
 
-use crate::common::Loose;
+use crate::corpus::Loose;
 use nomos_integration_tests::{Corpus, Decode_Surface, RunReport, Slice, Walk};
 use std::path::PathBuf;
 

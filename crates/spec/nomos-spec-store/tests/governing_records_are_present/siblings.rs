@@ -1,6 +1,6 @@
 //! An edge across the seam arrives as a reported placeholder, and the sibling suite claims it.
 
-use crate::common::{Column, Counted, Seeded, Title};
+use crate::queries::{Column, Counted, Seeded, Title};
 use nomos_spec_store::{EXTERNAL, NodeRow, SeedReport, Seed_Governing_Records, SpecificationStore, SuiteAuthority};
 
 /// The sibling records `ARC-ECOSYSTEM-001` cites, named here rather than counted.

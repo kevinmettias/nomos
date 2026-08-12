@@ -5,7 +5,7 @@
 //! recomputing the wrong things — and it is stated as set equality, so recomputing too
 //! little fails as loudly as too much.
 
-use crate::common::{Broadenings, Over_The_Precision_Corpus, Reached, Rewrite, Rewritten};
+use crate::corpus::{Broadenings, Over_The_Precision_Corpus, Reached, Rewrite, Rewritten};
 use nomos_contracts::IncrementalGranularity;
 use nomos_integration_tests::{
     Corpus, Decode_Surface, Name_Keys, RunReport, Slice, SURFACE_CAPABILITY

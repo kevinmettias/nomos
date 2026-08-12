@@ -5,7 +5,7 @@
 //! having checked that nothing equals nothing. These assert the scanner finds real exports,
 //! stops where the language stops, and reports the one kind of name it cannot follow.
 
-use crate::common::{Says, Surface_Named};
+use crate::reading::{Says, Surface_Named};
 use nomos_contract_tests::Surface;
 
 /// The negative control.

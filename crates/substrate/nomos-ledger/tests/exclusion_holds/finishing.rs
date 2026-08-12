@@ -4,7 +4,7 @@
 //! that actually ran, an abandonment records who stopped and why, and a lapse invents no
 //! reason at all — nobody was there to give one.
 
-use crate::common::*;
+use crate::board::*;
 
 /// The Phase 0 acceptance criterion: a completion whose predicate exits non-zero is
 /// refused, and the item does not become done.

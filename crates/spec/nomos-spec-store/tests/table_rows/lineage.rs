@@ -4,7 +4,7 @@
 //! That only holds if a row's `uid` survives re-ingestion, so the renumbering test belongs
 //! beside the lineage it would silently break.
 
-use crate::common::{AUTHORED, Segment, SpecificationStore, Stored, TABLE, Two};
+use crate::stored::{AUTHORED, Segment, SpecificationStore, Stored, TABLE, Two};
 use nomos_spec_store::{NodeRow, Table};
 
 /// One column of one row, from a query that binds nothing.

@@ -5,7 +5,7 @@
 //! fact is filed under whichever provider actually produced it. What a run that fell back
 //! must not do is report the corpus clean.
 
-use crate::common::{Precision_Corpus, Surface_Of};
+use crate::corpus::{Precision_Corpus, Surface_Of};
 use nomos_analysis::FactStore;
 use nomos_integration_tests::{Approximate_Floor, RunReport, Slice, SourceFile};
 use nomos_lang_rust as rust;

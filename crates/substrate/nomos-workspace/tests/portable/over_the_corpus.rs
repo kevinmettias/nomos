@@ -7,7 +7,7 @@
 //! would stop being counted, and the declared size of the hole in
 //! `tests/contract/tests/corpus_gates.rs` would drop without any assertion being removed.
 
-use crate::common::{Configuration, Fresh, Ingest, Variant, Workspace};
+use crate::arrival::{Configuration, Fresh, Ingest, Variant, Workspace};
 use crate::permutation::{Snapshot_Of_One_Order, Taken};
 use crate::walk::{Assert_This_Is_That_Corpus, Corpus};
 use nomos_contracts::GenerationId;
@@ -350,7 +350,7 @@ fn Re_Ingest(workspace: &mut Workspace, members: &[(String, String)]) -> usize
 /// One batch of what is already there, which must land as `Applied::Unchanged`.
 fn Apply_Again(workspace: &mut Workspace, batch: &[(String, String)]) -> usize
 {
-    let set = crate::common::Change_Set(batch);
+    let set = crate::arrival::Change_Set(batch);
     let applied = workspace.Apply(&set).expect("applies");
 
     assert!(

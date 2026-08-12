@@ -4,9 +4,9 @@
 //! the child process is selected by `--exact` and a name that drifted would run no test at
 //! all.
 //!
-//! [`Test_Name_For`]: crate::common::Test_Name_For
+//! [`Test_Name_For`]: crate::harness::Test_Name_For
 
-use crate::common::Check;
+use crate::harness::Check;
 use crate::goldens::{
     BUNDLE_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, ROLLED_GOLDEN, SCANNED_GOLDEN,
     SNAPSHOT_GOLDEN,

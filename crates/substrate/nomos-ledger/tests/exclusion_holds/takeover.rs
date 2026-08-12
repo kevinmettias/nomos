@@ -4,7 +4,7 @@
 //! who held the item before. An item nobody holds has nothing to take over, and that
 //! refusal is a different one from the item that is merely unusable.
 
-use crate::common::*;
+use crate::board::*;
 
 /// A live claim is not a lapse, and `takeover` is not a way to steal work in progress.
 ///

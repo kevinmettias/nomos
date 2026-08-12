@@ -5,7 +5,7 @@
 //! [`fixpoint::Test_Every_Table_Should_Be_Exercised`] fails if one of them is ever empty.
 
 
-mod common;
+mod populated;
 mod fixpoint;
 mod governing_records;
 mod refusals;

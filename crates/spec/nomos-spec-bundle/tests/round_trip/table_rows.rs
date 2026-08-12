@@ -1,6 +1,6 @@
 //! A table row keeps its kind, and a concept keeps the row it came from.
 
-use crate::common::{Populated, Rebuilt_From, Records_In};
+use crate::populated::{Populated, Rebuilt_From, Records_In};
 use nomos_spec_bundle::{Export, Record};
 use nomos_spec_store::{SpecificationStore, Table};
 

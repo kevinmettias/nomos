@@ -8,7 +8,7 @@
 //! hole it is cited for, and leave the table in `tests/contract/tests/corpus_gates.rs`
 //! agreeing with itself.
 
-use crate::common::{Census, RowCensus, RowScope, SpecificationStore, Two};
+use crate::stored::{Census, RowCensus, RowScope, SpecificationStore, Two};
 use nomos_spec_model::{Segment, Table_Rows};
 use std::path::{Path, PathBuf};
 

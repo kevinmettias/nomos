@@ -19,7 +19,7 @@
 //! hole would quietly drop. The sixth test needs no corpus and lives with the permutation it
 //! is about.
 
-mod common;
+mod arrival;
 mod over_the_corpus;
 mod permutation;
 mod walk;

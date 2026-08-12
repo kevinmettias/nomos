@@ -1,6 +1,6 @@
 //! What the store will answer, what it refuses to overwrite, and what it keeps as history.
 
-use crate::common::{Base, Fact, Stored};
+use crate::key::{Base, Fact, Stored};
 use nomos_analysis::{FactStore, GenerationCause, MemoryFactStore};
 use nomos_contracts::GenerationId;
 

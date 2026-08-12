@@ -13,7 +13,7 @@
 //! comparison below, so it lives with the comparison. `OD-PROJECT-002` states the rule for a
 //! reader.
 
-use crate::common::{Profile_Named, Shipped};
+use crate::store::{Profile_Named, Shipped};
 use nomos_spec_project::{Build, Content, Format, Profile, Select};
 use nomos_spec_store::SpecificationStore;
 use std::collections::BTreeSet;

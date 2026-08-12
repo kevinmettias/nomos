@@ -2,7 +2,7 @@
 
 
 mod broadening;
-mod common;
+mod key;
 mod invalidation;
 mod key_identity;
 mod reader;

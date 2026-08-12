@@ -1,6 +1,6 @@
 //! The rule: no open item reserves the directory every record lives in.
 
-use crate::common::{Is_Open, RECORD_DIRECTORY, Real_Ledger, Reserved_Records};
+use crate::board::{Is_Open, RECORD_DIRECTORY, Real_Ledger, Reserved_Records};
 use nomos_ledger::Normalize_Path;
 
 /// The straggler guard, and the reason this file reads the real ledger.

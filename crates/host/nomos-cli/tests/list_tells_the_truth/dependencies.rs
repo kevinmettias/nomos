@@ -1,6 +1,6 @@
 //! The defect: an unfinished dependency is not readiness.
 
-use crate::common::{Board, FINISHED, Item, NO_CLAIM, Standing};
+use crate::authored::{Board, FINISHED, Item, NO_CLAIM, Standing};
 
 #[test]
 fn Test_An_Item_With_An_Unfinished_Dependency_Should_Not_Be_Listed_Ready()

@@ -1,6 +1,6 @@
 //! The README's band table, parsed back out of the file a reader edits.
 
-use crate::common::{Declared_Band, Repository_Root, BANDS};
+use crate::bands::{Declared_Band, Repository_Root, BANDS};
 use std::collections::BTreeSet;
 
 /// The band table the README shows a reader, parsed back out of the file they edit.

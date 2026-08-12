@@ -5,7 +5,7 @@
 //! direction — that the predicate stays quiet over a sound entry — so it cannot be
 //! satisfied by one that reports everything.
 
-use crate::common::{Assessment, Site, Verdict};
+use crate::assessment::{Assessment, Site, Verdict};
 use crate::predicates::{Divergences_With_No_Record, Unresolved_Records, Unresolved_Sites};
 use nomos_contract_tests::Workspace;
 

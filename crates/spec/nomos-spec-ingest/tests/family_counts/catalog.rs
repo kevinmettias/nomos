@@ -6,7 +6,7 @@
 
 #![allow(dead_code)]
 
-use crate::common::V15;
+use crate::register::V15;
 use nomos_spec_ingest::{Archive, Parse_Catalog};
 use std::path::Path;
 

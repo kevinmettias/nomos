@@ -1,6 +1,6 @@
 //! What still serializes them, named rather than assumed.
 
-use crate::common::{
+use crate::board::{
     Is_Open, Only_Records, Paths_Collide, RECORD_DIRECTORY, Record_Writers, Unclaimed_Copy,
     Writer_Ids, Covers,
 };

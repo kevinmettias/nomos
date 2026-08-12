@@ -5,7 +5,7 @@
 //! wait. Collapsing them would tell an author to wait for an item that will never release
 //! what it is holding.
 
-use crate::common::*;
+use crate::board::*;
 
 /// An item the board cannot hold is the caller's to correct, not a broken store.
 ///

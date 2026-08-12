@@ -6,7 +6,7 @@
 
 #![allow(dead_code)]
 
-use crate::common::VOLUMES;
+use crate::register::VOLUMES;
 use nomos_spec_model::{BlockKind, Segment, SourceBlock};
 use nomos_spec_store::{RowScope, SpecificationStore};
 use std::path::{Path, PathBuf};

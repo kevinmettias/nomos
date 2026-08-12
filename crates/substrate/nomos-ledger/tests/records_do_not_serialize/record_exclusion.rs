@@ -1,6 +1,6 @@
 //! The acceptance criterion: a record excludes nobody but its own writer.
 
-use crate::common::{Claimed, Project_Onto_Records, Saved, Unclaimed_Copy, Writer_Ids};
+use crate::board::{Claimed, Project_Onto_Records, Saved, Unclaimed_Copy, Writer_Ids};
 
 /// What `P10-RECORD-LOCK` actually bought, stated so that it can hold.
 ///

@@ -1,7 +1,7 @@
 //! Reading a record out: from the rows, not from the blob, and not at all where nothing
 //! was authored.
 
-use crate::common::{Edge_Count, Only_Document, Seeded};
+use crate::seeded::{Edge_Count, Only_Document, Seeded};
 use nomos_spec_store::{EditError, GOVERNING_RECORD_IDS, NodeRow, SpecificationStore};
 
 /// The claim this whole item rests on. Rendering happens from the declared front matter and

@@ -33,7 +33,7 @@
 //! [`Cross_Environment_Owed`]: nomos_integration_tests::Cross_Environment_Owed
 
 
-mod common;
+mod harness;
 mod controls;
 mod declarations;
 mod domains;

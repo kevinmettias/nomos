@@ -1,6 +1,6 @@
 //! The instance. A passing predicate and a red gate must not finish an item.
 
-use crate::common::{Bench, Bench_At, Finish_In, Scripted, Standing, State_Of, WORKFLOW};
+use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, Standing, State_Of, WORKFLOW};
 use nomos_ledger::{FinishRefusal, ItemState, VerificationRecord};
 
 #[test]

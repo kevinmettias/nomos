@@ -6,7 +6,7 @@
 //! the weaker provider's coverage is worth what it costs — is in [`crate::scale`], because
 //! it needs a corpus.
 
-use crate::common::{Alpha_One, Loose, Precision_Corpus};
+use crate::corpus::{Alpha_One, Loose, Precision_Corpus};
 use nomos_analysis::{FactStore, MaterializedFact};
 use nomos_cap_syntax as syntax;
 use nomos_contracts::{Applicability, CapabilityId};

@@ -21,7 +21,7 @@
 //! from `Corpus_Root` stops being counted and the declared size of the hole silently drops.
 
 mod census;
-mod common;
+mod stored;
 mod corpus;
 mod hashing;
 mod lineage;

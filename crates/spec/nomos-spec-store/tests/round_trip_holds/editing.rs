@@ -1,6 +1,6 @@
 //! An edit goes in as markdown and comes back out as the same bytes, and identity survives.
 
-use crate::common::{
+use crate::seeded::{
     Block_Uids, Commit, Only_Document, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic,
 };
 use nomos_spec_store::EditError;

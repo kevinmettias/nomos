@@ -6,7 +6,7 @@
 
 #![allow(dead_code)]
 
-use crate::common::{Fresh, Ingest, Workspace};
+use crate::arrival::{Fresh, Ingest, Workspace};
 
 /// What one arrival order produced, and the stride it arrived under.
 pub(crate) struct Taken

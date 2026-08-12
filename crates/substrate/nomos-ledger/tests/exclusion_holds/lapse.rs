@@ -4,7 +4,7 @@
 //! ordinary case, and a board that stops until somebody intervenes has turned a routine
 //! failure into an outage.
 
-use crate::common::*;
+use crate::board::*;
 
 /// The defect, and the reason it needed an experiment rather than a reading.
 ///

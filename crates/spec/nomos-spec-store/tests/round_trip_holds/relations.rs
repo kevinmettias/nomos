@@ -1,6 +1,6 @@
 //! A relation an author adds or removes moves the graph in both directions.
 
-use crate::common::{Commit, Edge_Count, SYNTHETIC, With_Synthetic};
+use crate::seeded::{Commit, Edge_Count, SYNTHETIC, With_Synthetic};
 
 /// A relation the author adds reaches the graph, and one they remove leaves it — including its
 /// inverse, or half the fact stays behind.

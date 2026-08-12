@@ -3,7 +3,7 @@
 //! Every violation at once rather than the first one found: an author fixing a board wants
 //! the list, and a validator that stops at the first fault turns one edit into several.
 
-use crate::common::*;
+use crate::board::*;
 
 #[test]
 fn Test_Validate_Should_Refuse_Two_Active_Claims_On_Overlapping_Territory()

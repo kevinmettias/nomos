@@ -5,7 +5,7 @@
 //! a bless names the crates it rewrites, leaves every other file byte for byte as it was,
 //! and refuses a value that names nothing rather than reading it as all of them.
 
-use crate::common::{Rendered, Snapshot_Path, Surfaces, BLESS};
+use crate::reading::{Rendered, Snapshot_Path, Surfaces, BLESS};
 use nomos_contract_tests::Surface;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};

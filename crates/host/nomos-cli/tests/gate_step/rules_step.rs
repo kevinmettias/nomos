@@ -1,6 +1,6 @@
 //! The step exists, and it is one command.
 
-use crate::common::{RULES_STEP, With_A_Scripted_Rules_Step, Workflow};
+use crate::workflow::{RULES_STEP, With_A_Scripted_Rules_Step, Workflow};
 
 /// The gate still runs the rule layer.
 ///

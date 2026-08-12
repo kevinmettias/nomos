@@ -17,7 +17,7 @@
 //! stop the wide sentence being restated somewhere nothing reads back, which is how the
 //! defect arrived in the first place.
 
-use crate::common::Repository_Root;
+use crate::bands::Repository_Root;
 
 /// The claim that was made three times and chosen once.
 const OWNERSHIP: &str = "authoritative statement of Nomos";

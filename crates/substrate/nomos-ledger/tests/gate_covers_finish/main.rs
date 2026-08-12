@@ -16,7 +16,7 @@
 //! is not a guard.
 
 
-mod common;
+mod launcher;
 mod derivation;
 mod ordering;
 mod red_gate;

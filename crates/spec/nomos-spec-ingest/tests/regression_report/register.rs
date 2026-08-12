@@ -6,7 +6,7 @@
 //! machine with no corpus. A register that contradicted itself would make the archive half
 //! agree with the wrong numbers.
 
-use crate::common::{Count, Counts, Entry, Family, Register};
+use crate::rows::{Count, Counts, Entry, Family, Register};
 use nomos_spec_ingest::Restored;
 use std::collections::BTreeSet;
 

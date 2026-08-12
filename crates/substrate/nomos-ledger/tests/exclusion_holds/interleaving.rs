@@ -7,7 +7,7 @@
 //!
 //! The harness is read by `concurrency.rs`, which is where the claims it supports are made.
 
-use crate::common::*;
+use crate::board::*;
 
 /// How long the harness lets the second writer run before it releases the first one.
 ///

@@ -1,7 +1,7 @@
 //! The declarations themselves: every domain in the tree, against the row of the contracts
 //! table it occupies.
 
-use crate::common::Test_Name_For;
+use crate::harness::Test_Name_For;
 use nomos_analysis::FactReuse;
 use nomos_contracts::{DeterminismStrength, Strategy};
 use nomos_lang_rust::SyntaxFactProduction;

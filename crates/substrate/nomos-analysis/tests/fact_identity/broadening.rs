@@ -1,6 +1,6 @@
 //! A provider that cannot refresh at the grain the cause names, and one that can.
 
-use crate::common::{Base, Coarse, Fact, Stored};
+use crate::key::{Base, Coarse, Fact, Stored};
 use nomos_analysis::{FactStore, GenerationCause, MemoryFactStore};
 use nomos_contracts::{GenerationId, IncrementalGranularity};
 

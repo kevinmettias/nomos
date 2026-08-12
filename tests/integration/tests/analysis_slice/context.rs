@@ -6,7 +6,7 @@
 //! under it, and the disagreement they should have had is the one the fact key exists to
 //! detect.
 
-use crate::common::{
+use crate::corpus::{
     Advanced, Alpha_One, Over_The_Precision_Corpus, Precision_Corpus, Reached, Source_Of,
 };
 use nomos_analysis::InvalidationReport;

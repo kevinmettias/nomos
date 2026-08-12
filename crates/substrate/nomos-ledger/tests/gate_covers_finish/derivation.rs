@@ -1,6 +1,6 @@
 //! Derivation, not duplication.
 
-use crate::common::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
+use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
 
 /// The test that fails if somebody writes the clippy line into `nomos-ledger` as a
 /// constant. A derived step follows the workflow; a copied one silently disagrees with it

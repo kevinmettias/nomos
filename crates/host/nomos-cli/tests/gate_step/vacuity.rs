@@ -1,6 +1,6 @@
 //! The workflow was read at all.
 
-use crate::common::Workflow;
+use crate::workflow::Workflow;
 
 /// The vacuity guard for this suite.
 ///

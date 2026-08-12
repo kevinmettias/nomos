@@ -23,7 +23,7 @@
 //! containing the right words.
 
 
-mod common;
+mod workflow;
 mod excuses;
 mod lint_step;
 mod pinning;

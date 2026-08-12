@@ -1,6 +1,6 @@
 //! The round trip is a fixpoint, and it is one for reasons other than luck.
 
-use crate::common::{BINARY, Populated, Populated_In_Reverse};
+use crate::populated::{BINARY, Populated, Populated_In_Reverse};
 use nomos_spec_bundle::{Bundle, Export, Import};
 use nomos_spec_store::{SpecificationStore, Table};
 

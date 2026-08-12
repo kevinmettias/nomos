@@ -1,6 +1,6 @@
 //! What the gate runs is pinned, and so is what it runs as.
 
-use crate::common::{Executable_Part, Unpinned_Actions_In, With_A_Tagged_Action, Workflow};
+use crate::workflow::{Executable_Part, Unpinned_Actions_In, With_A_Tagged_Action, Workflow};
 
 /// The step that puts the supply-chain tool on the runner.
 ///

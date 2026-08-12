@@ -11,7 +11,7 @@
 //! runs, and a suite with side effects on the thing it measures is not a suite.
 
 
-mod common;
+mod board;
 mod identifier_and_file;
 mod record_directory;
 mod record_exclusion;

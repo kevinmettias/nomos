@@ -1,6 +1,6 @@
 //! Every read leaves an edge behind, including the reads that found nothing.
 
-use crate::common::{
+use crate::key::{
     Base, Context_At, Needing, Offering, SYNTAX, Stored, Subject, Syntactic, Varied,
 };
 use nomos_analysis::{
@@ -85,7 +85,7 @@ fn Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies()
         let _ = reader.Get(&read.clone().At(GenerationId::INITIAL));
         reader.Into_Dependencies()
     };
-    let fact = crate::common::Fact(&derived, GenerationId::INITIAL);
+    let fact = crate::key::Fact(&derived, GenerationId::INITIAL);
     store.Materialize(fact, &dependencies).expect("materializes");
 
     assert_eq!(store.Dependencies_Of(&derived).len(), 1);

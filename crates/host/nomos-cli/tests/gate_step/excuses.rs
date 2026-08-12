@@ -1,6 +1,6 @@
 //! No step is excused from failing.
 
-use crate::common::{Excuses_In, With_An_Excused_Rules_Step, Workflow};
+use crate::workflow::{Excuses_In, With_An_Excused_Rules_Step, Workflow};
 
 /// A red gate becomes a decorative one one `continue-on-error` at a time.
 ///

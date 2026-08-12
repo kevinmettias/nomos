@@ -36,13 +36,13 @@ use verb::{
 
 mod exit_code;
 mod request;
-mod spec_command;
+mod command;
 
 pub(crate) use exit_code::ExitCode;
 pub(crate) use request::{
     CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest,
 };
-pub(crate) use spec_command::SpecCommand;
+pub(crate) use command::SpecCommand;
 
 use crate::arguments::{Named_Value, Named_Values, Required};
 use crate::corpus::{Assemble, Assembly, CorpusRequest};

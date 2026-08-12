@@ -1,6 +1,6 @@
 //! The mandatory sentence: whether normative wording moved, and what the answer rests on.
 
-use crate::common::{Previewed, SYNTHETIC, Swapped, With_Synthetic};
+use crate::seeded::{Previewed, SYNTHETIC, Swapped, With_Synthetic};
 use nomos_spec_store::{BlockChange, EditPreview, NormativeOutcome};
 
 /// The mandatory sentence, in the three cases that are not the same answer.

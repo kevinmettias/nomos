@@ -5,8 +5,8 @@
 //! authority than making one. [`MutationClass::Required_Authority`] is the only place the
 //! two meet, and it is a default rather than a definition.
 
-mod authority_class;
+mod class;
 mod mutation_class;
 
-pub use authority_class::AuthorityClass;
+pub use class::AuthorityClass;
 pub use mutation_class::MutationClass;

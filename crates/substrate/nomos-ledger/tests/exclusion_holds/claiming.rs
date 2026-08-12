@@ -4,7 +4,7 @@
 //! reserves its subtree, and a refusal names what it collided with rather than who holds
 //! it — because a board is shared and a refusal is not an accusation.
 
-use crate::common::*;
+use crate::board::*;
 
 #[test]
 fn Test_Claiming_Overlapping_Territory_Should_Be_Refused()

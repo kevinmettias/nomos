@@ -3,7 +3,7 @@
 //! Typing a row must not become a way out of NSV-PRESERVE-002's view that does not involve
 //! leaving the table, so a table without a delimiter is refused rather than stored as prose.
 
-use crate::common::{AUTHORED, Segment, SpecificationStore, StoreError, Stored};
+use crate::stored::{AUTHORED, Segment, SpecificationStore, StoreError, Stored};
 use nomos_spec_store::Table;
 
 /// Discards the store so a refusal can be asserted on: the store is not `Debug`, and

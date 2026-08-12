@@ -4,7 +4,7 @@
 //! YAML have to parse as themselves, and HTML has to escape what it is handed. None of these
 //! is visible from the selection — they are all properties of the writing.
 
-use crate::common::{Populated, Profile_Named, Rendered};
+use crate::store::{Populated, Profile_Named, Rendered};
 use nomos_spec_model::Segment;
 use nomos_spec_project::Build;
 use nomos_spec_store::SpecificationStore;

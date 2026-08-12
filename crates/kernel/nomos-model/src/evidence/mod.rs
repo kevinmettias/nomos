@@ -8,10 +8,10 @@
 
 mod coverage;
 mod coverage_gap;
-mod evidence_claim;
-mod evidence_ref;
+mod claim;
+mod reference;
 
 pub use coverage::Coverage;
 pub use coverage_gap::CoverageGap;
-pub use evidence_claim::Evidence;
-pub use evidence_ref::EvidenceRef;
+pub use claim::Evidence;
+pub use reference::EvidenceRef;

@@ -1,6 +1,6 @@
 //! Ordering. The gate runs first and short-circuits.
 
-use crate::common::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
+use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
 
 #[test]
 fn Test_The_Gate_Should_Run_Before_The_Predicate_And_Short_Circuit()

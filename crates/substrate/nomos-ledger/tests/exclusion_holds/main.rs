@@ -11,8 +11,8 @@
 // nothing decides — and the reader who wants to know what this suite covers reads exactly
 // this list.
 
+mod board;
 mod claiming;
-mod common;
 mod concurrency;
 mod dependencies;
 mod finishing;

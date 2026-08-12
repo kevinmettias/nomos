@@ -1,6 +1,6 @@
 //! OD-LEDGER-016: the identifier and the file it names are one record.
 
-use crate::common::{
+use crate::board::{
     Contested, Paths_Collide, RECORD_DIRECTORY, Repository_Root, Two_Record_Writers,
 };
 use nomos_ledger::{ClaimRefusal, Territory};

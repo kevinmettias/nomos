@@ -1,6 +1,6 @@
 //! What a change discards, what it keeps, and how far along the edges it travels.
 
-use crate::common::{Base, Fact, SEMANTIC, Snapshot, Stored, Subject};
+use crate::key::{Base, Fact, SEMANTIC, Snapshot, Stored, Subject};
 use nomos_analysis::{
     Dependency, FactKey, FactStore, GenerationCause, InvalidationReport, MemoryFactStore,
     ReadOutcome,

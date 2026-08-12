@@ -6,7 +6,7 @@
 //! sibling module would be counted by nobody and the declared size of the hole would drop
 //! without an assertion being removed.
 
-use crate::common::{Entry, Family, Fates, Register, V14_LAST, V14_PREVIOUS, V15};
+use crate::rows::{Entry, Family, Fates, Register, V14_LAST, V14_PREVIOUS, V15};
 use crate::measure::{Is_Record, Measure};
 use nomos_spec_ingest::{
     Archive, Fate, Regression, RegressionReport, Restored, Revision, Revisions_In, Tally,

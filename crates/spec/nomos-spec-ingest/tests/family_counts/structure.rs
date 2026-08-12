@@ -6,7 +6,7 @@
 //! register that contradicted itself would let the measured half agree with the wrong
 //! numbers.
 
-use crate::common::{Entry, PlanFigure, Register};
+use crate::register::{Entry, PlanFigure, Register};
 use std::collections::BTreeSet;
 
 /// The families the plan's I5 names. A register that stops carrying one of them fails,

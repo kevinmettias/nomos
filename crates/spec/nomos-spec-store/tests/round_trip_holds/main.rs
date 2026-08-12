@@ -8,7 +8,7 @@
 //! than only for the corpus-ingested ones a statement table covers.
 
 
-mod common;
+mod seeded;
 mod editing;
 mod preview;
 mod projection;

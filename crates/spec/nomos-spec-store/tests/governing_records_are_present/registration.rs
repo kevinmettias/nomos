@@ -1,7 +1,7 @@
 //! Two independently authored sets — the records on disk and the registrations that name
 //! them — compared in both directions, with the controls that keep the comparison honest.
 
-use crate::common::Seeded;
+use crate::queries::Seeded;
 use nomos_spec_store::{GOVERNING_RECORD_IDS, SpecificationStore};
 use std::path::Path;
 

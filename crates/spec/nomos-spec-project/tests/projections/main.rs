@@ -6,7 +6,7 @@
 
 
 mod catalogue;
-mod common;
+mod store;
 mod determinism;
 mod freshness;
 mod rebuildability;
