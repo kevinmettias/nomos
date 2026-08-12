@@ -47,8 +47,6 @@ fn Names(facts: &SyntaxFacts) -> Vec<String>
 #[test]
 fn Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved()
 {
-    assert_eq!(Declared_Guarantee().variant, FactVariant::Syntactic);
-
     let facts = Parsed(
         "use std::fmt::Display;\n\
          use std::collections::HashMap as Map;\n\
@@ -57,16 +55,22 @@ fn Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved()
              fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { Ok(()) }\n\
          }\n",
     );
-
     let names = Names(&facts);
 
+    assert_eq!(Declared_Guarantee().variant, FactVariant::Syntactic);
     assert_eq!(
         names,
         vec!["Display", "Map", "Foo", "Foo", "Foo::fmt"],
         "every name is the identifier introduced or written at that site"
     );
+    Assert_Nothing_Was_Expanded(&names);
+}
 
-    for name in &names
+/// A syntactic provider records what the file spells; expanding `Display` to
+/// `std::fmt::Display` is resolution, and this provider has no basis for it.
+fn Assert_Nothing_Was_Expanded(names: &[String])
+{
+    for name in names
     {
         assert!(
             !name.contains("std") && !name.contains("fmt::"),
@@ -117,8 +121,6 @@ fn Test_The_Reading_Should_Not_Depend_On_What_Was_Read_Before()
 #[test]
 fn Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source()
 {
-    assert_eq!(Declared_Guarantee().soundness, Assurance::Sound);
-
     let source = "pub mod outer {\n\
                       pub(crate) struct Held { field: u8 }\n\
                       pub enum Choice { One, Two }\n\
@@ -127,11 +129,10 @@ fn Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source()
                   }\n\
                   pub type Alias = u32;\n\
                   static COUNT: u8 = 0;\n";
-
     let facts = Parsed(source);
 
+    assert_eq!(Declared_Guarantee().soundness, Assurance::Sound);
     assert!(!facts.items.is_empty(), "the sample declares items");
-
     for item in &facts.items
     {
         assert!(
@@ -324,8 +325,6 @@ fn Test_A_Failure_And_An_Empty_File_Should_Never_Be_The_Same_Answer()
         "not rust",
         "pub pub fn twice() {}",
     ];
-    let empty_but_valid = ["", "\n", "// a comment\n", "#![allow(dead_code)]\n"];
-
     for source in broken
     {
         assert!(
@@ -333,19 +332,24 @@ fn Test_A_Failure_And_An_Empty_File_Should_Never_Be_The_Same_Answer()
             "`{source}` must refuse rather than read as empty"
         );
     }
-
-    for source in empty_but_valid
+    for source in ["", "\n", "// a comment\n", "#![allow(dead_code)]\n"]
     {
-        match Read_Source(source)
+        Assert_It_Parses_And_Declares_Nothing(source);
+    }
+}
+
+/// Valid Rust that declares nothing is a reading, never a refusal.
+fn Assert_It_Parses_And_Declares_Nothing(source: &str)
+{
+    match Read_Source(source)
+    {
+        Reading::Parsed(facts) => assert!(
+            facts.Declares_Nothing(),
+            "`{source:?}` declares nothing and parses"
+        ),
+        Reading::Unparseable(failure) =>
         {
-            Reading::Parsed(facts) => assert!(
-                facts.Declares_Nothing(),
-                "`{source:?}` declares nothing and parses"
-            ),
-            Reading::Unparseable(failure) =>
-            {
-                panic!("`{source:?}` is valid Rust: {failure}")
-            }
+            panic!("`{source:?}` is valid Rust: {failure}")
         }
     }
 }
@@ -379,41 +383,11 @@ fn Test_A_Refusal_Should_Name_Where_It_Refused()
 #[test]
 fn Test_Every_Item_Form_Should_Reach_Its_Own_Kind()
 {
-    let facts = Parsed(
-        "extern crate alloc;\n\
-         use std::fmt;\n\
-         pub mod inner {}\n\
-         pub const LIMIT: u8 = 1;\n\
-         pub static NAME: u8 = 2;\n\
-         pub type Alias = u8;\n\
-         pub struct Shape;\n\
-         pub enum Choice { One }\n\
-         pub union Overlap { left: u8 }\n\
-         pub trait Contract {}\n\
-         impl Shape {}\n\
-         macro_rules! declared { () => {}; }\n\
-         extern \"C\" { pub fn external(); }\n",
-    );
-
+    let facts = Parsed(ONE_OF_EVERY_FORM);
     let kinds: std::collections::BTreeSet<ItemKind> =
         facts.items.iter().map(|item| return item.kind).collect();
 
-    for expected in [
-        ItemKind::Constant,
-        ItemKind::Enum,
-        ItemKind::ExternCrate,
-        ItemKind::ForeignModule,
-        ItemKind::Function,
-        ItemKind::Implementation,
-        ItemKind::MacroDefinition,
-        ItemKind::Module,
-        ItemKind::Static,
-        ItemKind::Struct,
-        ItemKind::Trait,
-        ItemKind::TypeAlias,
-        ItemKind::Union,
-        ItemKind::Use,
-    ]
+    for expected in EVERY_KIND
     {
         assert!(
             kinds.contains(&expected),
@@ -421,4 +395,38 @@ fn Test_Every_Item_Form_Should_Reach_Its_Own_Kind()
         );
     }
 }
+
+/// One declaration of every item form the language has, in one file.
+const ONE_OF_EVERY_FORM: &str = "extern crate alloc;\n\
+                                 use std::fmt;\n\
+                                 pub mod inner {}\n\
+                                 pub const LIMIT: u8 = 1;\n\
+                                 pub static NAME: u8 = 2;\n\
+                                 pub type Alias = u8;\n\
+                                 pub struct Shape;\n\
+                                 pub enum Choice { One }\n\
+                                 pub union Overlap { left: u8 }\n\
+                                 pub trait Contract {}\n\
+                                 impl Shape {}\n\
+                                 macro_rules! declared { () => {}; }\n\
+                                 extern \"C\" { pub fn external(); }\n";
+
+/// The kinds that sample must reach. A form the reader drops is a declaration nobody would
+/// notice.
+const EVERY_KIND: [ItemKind; 14] = [
+    ItemKind::Constant,
+    ItemKind::Enum,
+    ItemKind::ExternCrate,
+    ItemKind::ForeignModule,
+    ItemKind::Function,
+    ItemKind::Implementation,
+    ItemKind::MacroDefinition,
+    ItemKind::Module,
+    ItemKind::Static,
+    ItemKind::Struct,
+    ItemKind::Trait,
+    ItemKind::TypeAlias,
+    ItemKind::Union,
+    ItemKind::Use,
+];
 

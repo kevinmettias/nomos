@@ -64,7 +64,6 @@ fn Test_Visibility_Should_Be_Recorded_As_Declared()
          pub(in some::place) fn nested() {}\n\
          trait Contract { fn required(&self); }\n",
     );
-
     let visibilities: Vec<String> = facts
         .items
         .iter()

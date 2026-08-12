@@ -113,6 +113,14 @@ fn Test_An_Approximated_Member_Should_Not_Encode_Like_An_Exact_One()
 #[test]
 fn Test_Bytes_That_Are_Not_An_Index_Should_Be_Refused()
 {
+    Assert_No_Header_Is_Not_An_Index();
+    Assert_A_Malformed_Body_Is_Not_An_Index();
+}
+
+/// A payload that never names its module names no subject, and neither does one that names it
+/// with something that is not a digest.
+fn Assert_No_Header_Is_Not_An_Index()
+{
     assert!(
         Parse_Index(b"").is_err(),
         "the empty payload is not a module with no members"
@@ -129,8 +137,13 @@ fn Test_Bytes_That_Are_Not_An_Index_Should_Be_Refused()
         Parse_Index(b"module\t0000000000000000000000000000000g\n").is_err(),
         "the right length and the wrong alphabet is still not a digest"
     );
+}
 
+/// A well-formed header followed by a record this build cannot read whole.
+fn Assert_A_Malformed_Body_Is_Not_An_Index()
+{
     let module = format!("module\t{}\n", Subject("the/module").Digest());
+
     assert!(
         Parse_Index(format!("{module}{module}").as_bytes()).is_err(),
         "a second `module` record would leave two answers to which module this is"
@@ -254,12 +267,9 @@ fn Test_The_Ceiling_Should_Refuse_A_Claim_Of_Resolution()
 #[test]
 fn Test_The_Ceiling_Should_Leave_Room_Above_This_Provider()
 {
-    assert_ne!(Ceiling(), Declared_Guarantee());
-
     let mut registry = Registry::New();
     registry.Declare(Capability_Contract()).expect("declared once");
     registry.Offer(Provider_Offer()).expect("within the ceiling");
-
     let finer_refresh = Guarantee::New(
         FactVariant::Syntactic,
         Assurance::Sound,
@@ -268,6 +278,7 @@ fn Test_The_Ceiling_Should_Leave_Room_Above_This_Provider()
     );
     let needs_a_finer_refresh = Requirement::New(Capability(), CONTRACT_VERSION, finer_refresh);
 
+    assert_ne!(Ceiling(), Declared_Guarantee());
     assert!(
         matches!(
             registry.Resolve(&needs_a_finer_refresh),

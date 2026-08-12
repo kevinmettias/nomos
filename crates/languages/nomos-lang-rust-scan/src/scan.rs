@@ -117,31 +117,32 @@ fn Visibility_Of(line: &str) -> Declared<'_>
     let Some(rest) = line.strip_prefix("pub")
     else
     {
-        return Declared {
-            visibility: Visibility::Private,
-            rest: line,
-        };
+        return Undeclared(line);
     };
-
     if let Some(restricted) = Restriction_On(rest)
     {
         return restricted;
     }
-
     // `pub` must be a whole word. Without this, `pubfn` and `public_thing` would both look
     // like public declarations of something.
     let Some(after) = rest.strip_prefix(' ')
     else
     {
-        return Declared {
-            visibility: Visibility::Private,
-            rest: line,
-        };
+        return Undeclared(line);
     };
 
     return Declared {
         visibility: Visibility::Public,
         rest: after.trim_start(),
+    };
+}
+
+/// A line that declares no visibility at all, which is private and keeps every byte it had.
+fn Undeclared(line: &str) -> Declared<'_>
+{
+    return Declared {
+        visibility: Visibility::Private,
+        rest: line,
     };
 }
 

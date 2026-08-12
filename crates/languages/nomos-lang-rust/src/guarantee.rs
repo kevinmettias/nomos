@@ -112,18 +112,10 @@ mod tests
             .Declare(Capability_Contract())
             .expect("the contract is the first declaration in a fresh registry");
 
-        let overreaching = ProviderOffer {
-            guarantee: Guarantee::New(
-                FactVariant::SemanticallyResolved,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            ),
-            ..Provider_Offer()
-        };
+        let refused = registry.Offer(Claiming_Resolution());
 
         assert_eq!(
-            registry.Offer(overreaching),
+            refused,
             Err(RegistryError {
                 capability: Capability(),
                 kind: RegistryErrorKind::Offer {
@@ -132,6 +124,20 @@ mod tests
                 },
             })
         );
+    }
+
+    /// This provider's offer, with the variant raised past what its parse can support.
+    fn Claiming_Resolution() -> ProviderOffer
+    {
+        return ProviderOffer {
+            guarantee: Guarantee::New(
+                FactVariant::SemanticallyResolved,
+                Assurance::Sound,
+                Assurance::Sound,
+                IncrementalGranularity::File,
+            ),
+            ..Provider_Offer()
+        };
     }
 
     /// The consequence of `Unknown` completeness, made visible at the resolution site
