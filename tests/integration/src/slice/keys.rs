@@ -4,24 +4,12 @@
 //! digest inputs are gathered in one place rather than at each call site that needs one.
 
 use super::{
-    CapabilityId, Context, Digest128, Digest_Of_Parts, FactIdentity, FactKey, FactStore,
+    CapabilityId, Digest128, Digest_Of_Parts, FactIdentity, FactKey, FactStore,
     GuaranteeDigest, InputDigest, ProviderId, Slice, SourceFile, SubjectId, surface,
 };
 
 impl Slice
 {
-    pub(super) fn Context(&self) -> Context
-    {
-        return Context {
-            // The workspace as it is now. Not a key component — see OD-ANALYSIS-001 — so
-            // it moves freely with the workspace without re-addressing a single fact.
-            snapshot: self.snapshot,
-            variant: self.variant,
-            configuration: self.configuration,
-            generation: self.generation,
-        };
-    }
-
     /// The semantic inputs of a syntax fact.
     ///
     /// Recomputed here rather than obtained from `nomos-lang-rust`, deliberately. If the

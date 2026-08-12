@@ -437,4 +437,21 @@ impl Slice
         };
     }
 
+    /// The four context fields, read as the one thing they are.
+    ///
+    /// Here rather than beside the key builders, although every caller is one. A context is
+    /// not a key component — `snapshot` moves with the workspace and re-addresses nothing,
+    /// which is what OD-ANALYSIS-001 settled — so `keys.rs` was the wrong home for the only
+    /// method that reads all four of these fields together. Beside the fields it reads, the
+    /// file shows what the type shares: the state the run advances and the context a fact is
+    /// keyed against are the same four values, held once.
+    pub(super) fn Context(&self) -> Context
+    {
+        return Context {
+            snapshot: self.snapshot,
+            variant: self.variant,
+            configuration: self.configuration,
+            generation: self.generation,
+        };
+    }
 }

@@ -9223,10 +9223,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-decompose-tests-b4",
+        "acquired_at": 1786523363,
+        "lease_expires_at": 1786530563
+      },
       "verification": {
         "argv": [
           "cargo",
