@@ -8,6 +8,17 @@
 //! writes the result into the item, so `Done` is a state the ledger arrives at by
 //! observation.
 
+// The three ways an item stops being held without being finished. They sit beside the
+// finish they are the alternatives to, rather than in a `finishing` of their own that a
+// reader would have had to tell apart from this one by opening both.
+mod abandonment;
+mod declination;
+mod release_outcome;
+
+pub use abandonment::Abandonment;
+pub use declination::Declination;
+pub use release_outcome::ReleaseOutcome;
+
 mod refusal;
 mod running;
 mod gate_step;
@@ -20,17 +31,16 @@ use running::{Commanded, Ran, Ran_To_Completion, Refuse_Nonzero, Runnable_Predic
 use gate_step::Run_Gate_Step;
 
 use crate::finishing::Finishing;
-use crate::claim_refusal::ClaimRefusal;
+use crate::claim::ClaimRefusal;
 use crate::exclusion::ExclusionLedger;
-use crate::release_outcome::ReleaseOutcome;
 use crate::gate::Derive_Step;
 use crate::gate::GateUnknown;
 use crate::gate::LINT_STEP;
 use crate::gate::Workflow_Path;
-use crate::gate_outcome::GateOutcome;
-use crate::item_id::ItemId;
-use crate::verification_predicate::VerificationPredicate;
-use crate::verification_record::VerificationRecord;
+use crate::gate::GateOutcome;
+use crate::item::ItemId;
+use crate::verification::VerificationPredicate;
+use crate::verification::VerificationRecord;
 use crate::store::FileLedger;
 use crate::ledger_document::LedgerDocument;
 use nomos_platform::{

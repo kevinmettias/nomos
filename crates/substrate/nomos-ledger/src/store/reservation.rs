@@ -5,7 +5,7 @@ use nomos_model::Intersection;
 
 use crate::add_refusal::AddRefusal;
 use crate::item::LedgerItem;
-use crate::item_state::ItemState;
+use crate::item::ItemState;
 use crate::ledger_document::LedgerDocument;
 use crate::territory::{Normalize_Path, Territory};
 

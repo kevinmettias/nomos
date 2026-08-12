@@ -1,4 +1,8 @@
-use crate::block_kind::BlockKind;
+// What kind of block this is, beneath the block it describes.
+mod kind;
+
+pub use kind::BlockKind;
+
 use crate::normalize::ContentHash;
 
 #[derive(Clone, Debug, PartialEq, Eq)]

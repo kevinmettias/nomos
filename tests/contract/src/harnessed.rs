@@ -6,7 +6,7 @@
 //! both directions matter, and neither can be seen from inside the harness, which is why
 //! the observer reads it from outside.
 
-use crate::source_files::Source_Files;
+use crate::reading::source_files::Source_Files;
 use crate::Workspace;
 use std::collections::BTreeSet;
 

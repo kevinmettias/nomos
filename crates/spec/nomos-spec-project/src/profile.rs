@@ -1,4 +1,8 @@
-use crate::profile_section::Section;
+// A section as a profile declares it, beneath the profile that declares it.
+mod section;
+
+pub use section::Section;
+
 use crate::format::Format;
 use crate::ProjectError;
 use nomos_spec_model::ContentHash;
@@ -180,7 +184,7 @@ fn Path_Is_Relative(profile: &str, output: &str) -> Result<(), ProjectError>
 mod tests
 {
     use super::*;
-    use crate::content::Content;
+    use crate::projection::Content;
 
     const MINIMAL: &str = r#"{
         "id": "one", "title": "One", "format": "markdown", "output": "one.md",

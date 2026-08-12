@@ -139,7 +139,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-model/src/row_kind.rs",
+        path: "crates/spec/nomos-spec-model/src/table/row_kind.rs",
         name: "RowKind::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
@@ -157,7 +157,7 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-project/src/content.rs",
+        path: "crates/spec/nomos-spec-project/src/projection/content.rs",
         name: "Content::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

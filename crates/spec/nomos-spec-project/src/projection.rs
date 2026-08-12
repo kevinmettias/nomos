@@ -1,4 +1,15 @@
-use crate::input::Input;
+// What a projection is made of: what goes in, the items it selects, the content it
+// carries, and what comes out.
+mod content;
+mod input;
+mod item;
+mod output;
+
+pub use content::Content;
+pub use input::Input;
+pub use item::Item;
+pub use output::Output;
+
 use crate::section::Section;
 use crate::format::Format;
 use nomos_spec_model::ContentHash;

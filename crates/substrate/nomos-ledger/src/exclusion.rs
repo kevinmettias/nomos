@@ -1,9 +1,15 @@
 //! Taking and holding territory.
 
-use crate::release_outcome::ReleaseOutcome;
-use crate::claim_refusal::ClaimRefusal;
-use crate::reservation::Reservation;
-use crate::item_id::ItemId;
+// What one item reserves, and what stands between another item and claiming it.
+mod blocker;
+mod reservation;
+
+pub use blocker::Blocker;
+pub use reservation::Reservation;
+
+use crate::finish::ReleaseOutcome;
+use crate::claim::ClaimRefusal;
+use crate::item::ItemId;
 use crate::item::MAXIMUM_LEASE;
 use nomos_model::Intersection;
 use nomos_platform::Timestamp;

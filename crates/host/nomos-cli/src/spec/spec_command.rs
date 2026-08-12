@@ -1,11 +1,11 @@
 //! Every verb `nomos spec` answers.
 
-use crate::spec::commit_request::CommitRequest;
-use crate::spec::edit_request::EditRequest;
-use crate::spec::freshness_request::FreshnessRequest;
-use crate::spec::render_request::RenderRequest;
-use crate::spec::table_request::TableRequest;
-use crate::spec::record_request::RecordRequest;
+use crate::spec::request::CommitRequest;
+use crate::spec::request::EditRequest;
+use crate::spec::request::FreshnessRequest;
+use crate::spec::request::RenderRequest;
+use crate::spec::request::TableRequest;
+use crate::spec::request::RecordRequest;
 /// What to read.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) enum SpecCommand

@@ -10,6 +10,11 @@
 //! second source of truth that goes stale the day the workflow changes, and two guards
 //! for one rule is how they come to disagree. This module reads the workflow.
 
+// What running the gate produced.
+mod outcome;
+
+pub use outcome::GateOutcome;
+
 use std::path::Path;
 
 /// Where the gate is defined, relative to the tree the predicate runs in.

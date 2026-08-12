@@ -1,6 +1,6 @@
 //! Who is finishing what.
 
-use crate::item_id::ItemId;
+use crate::item::ItemId;
 /// Who is finishing what.
 ///
 /// The two are consulted together at every step — the item to find the predicate, the holder

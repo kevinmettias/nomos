@@ -3,10 +3,10 @@
 use nomos_platform::Timestamp;
 
 use crate::claim::Claim;
-use crate::claim_refusal::ClaimRefusal;
+use crate::claim::ClaimRefusal;
 use crate::item::LedgerItem;
-use crate::item_id::ItemId;
-use crate::item_state::ItemState;
+use crate::item::ItemId;
+use crate::item::ItemState;
 use crate::ledger_document::LedgerDocument;
 
 /// Marks an item claimed and records the grant.

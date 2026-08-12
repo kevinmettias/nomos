@@ -18,19 +18,24 @@
 //! `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`, which walks a fully
 //! populated document and probes every object node it finds.
 
+// An item's identity and the state it is in.
+mod id;
+mod state;
+
+pub use id::ItemId;
+pub use state::ItemState;
+
 #[cfg(test)]
 mod tests;
 
 
 
-use crate::declination::Declination;
-use crate::abandonment::Abandonment;
-use crate::verification_record::VerificationRecord;
-use crate::verification_predicate::VerificationPredicate;
+use crate::finish::Declination;
+use crate::finish::Abandonment;
+use crate::verification::VerificationRecord;
+use crate::verification::VerificationPredicate;
 use crate::claim::Claim;
-use crate::blocker::Blocker;
-use crate::item_state::ItemState;
-use crate::item_id::ItemId;
+use crate::exclusion::Blocker;
 use crate::territory::Territory;
 use nomos_platform::Timestamp;
 use serde::{Deserialize, Serialize};

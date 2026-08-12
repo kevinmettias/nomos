@@ -1,8 +1,13 @@
 //! One normative statement, as the specification store holds it.
 
+// A normative statement's identity and its kind.
+mod id;
+mod kind;
+
+pub use id::StatementId;
+pub use kind::StatementKind;
+
 use crate::normalize::{ContentHash, Is_Normalized, Normalize};
-use crate::statement_id::StatementId;
-use crate::statement_kind::StatementKind;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct NormativeStatement

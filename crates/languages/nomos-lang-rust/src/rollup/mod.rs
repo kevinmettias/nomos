@@ -83,20 +83,12 @@ pub use encode::Encode_Index;
 pub use parse::Parse_Index;
 
 mod against;
-mod index_entry;
-mod member_reading;
 mod module;
-mod module_index;
-mod module_member;
 mod outcome;
 mod rolled;
 
 pub use against::Against;
-pub use index_entry::IndexEntry;
-pub use member_reading::MemberReading;
-pub use module::Module;
-pub use module_index::ModuleIndex;
-pub use module_member::ModuleMember;
+pub use module::{IndexEntry, MemberReading, Module, ModuleIndex, ModuleMember};
 pub use outcome::Outcome;
 pub use rolled::Rolled;
 

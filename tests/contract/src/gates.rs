@@ -10,8 +10,8 @@
 //! it was written and wrong the first time somebody added a gate without updating it —
 //! and a stale inventory understates the hole, which is the direction that flatters.
 
-use crate::functions::{Function, Functions};
-use crate::source_files::Source_Files;
+use crate::reading::functions::{Function, Functions};
+use crate::reading::source_files::Source_Files;
 use crate::Workspace;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;

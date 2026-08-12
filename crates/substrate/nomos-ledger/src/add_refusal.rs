@@ -1,7 +1,7 @@
 //! Every way adding an item is refused before it reaches the board.
 
 use crate::ledger_error::LedgerError;
-use crate::item_id::ItemId;
+use crate::item::ItemId;
 /// Why an item could not be put on the board.
 ///
 /// Its own vocabulary and not a borrowed [`ClaimRefusal`] arm. Adding an item is not

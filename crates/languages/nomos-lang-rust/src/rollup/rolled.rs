@@ -1,6 +1,6 @@
 //! A rolled-up module index and how it was come by.
 
-use crate::rollup::module_index::ModuleIndex;
+use crate::rollup::module::ModuleIndex;
 use nomos_analysis::Dependency;
 use nomos_analysis::FactKey;
 /// A rollup that has been written to the store.

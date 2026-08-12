@@ -8,27 +8,17 @@
 
 #![forbid(unsafe_code)]
 
-mod declaration;
 mod domain_row;
-mod exported;
+mod reading;
 mod fact_domain;
-mod functions;
 mod gates;
 mod harnessed;
-mod items;
-mod masks;
-mod members;
-mod module_tree;
 mod package;
-mod recogniser;
-mod routes;
-mod source_files;
 mod surface;
-mod text;
 mod universes;
 mod workspace;
 
-pub use declaration::Declaration;
+pub use reading::declaration::Declaration;
 pub use domain_row::{Domain_Table, DomainRow};
 pub use fact_domain::{Fact_Domains, FactDomain};
 pub use gates::{Corpus_Gates, CorpusGate, CORPUS_VARIABLES};

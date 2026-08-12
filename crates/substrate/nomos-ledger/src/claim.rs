@@ -1,5 +1,10 @@
 //! Somebody holding an item, until when.
 
+// Why a claim was refused, beneath the claim it would have been.
+mod refusal;
+
+pub use refusal::ClaimRefusal;
+
 use serde::Deserialize;
 use serde::Serialize;
 use nomos_platform::Timestamp;

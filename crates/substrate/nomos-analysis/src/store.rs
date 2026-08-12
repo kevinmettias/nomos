@@ -1,4 +1,4 @@
-use crate::fact_key::FactKey;
+use crate::fact::FactKey;
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, IncrementalGranularity, ProviderId,
     SnapshotId, SubjectId,

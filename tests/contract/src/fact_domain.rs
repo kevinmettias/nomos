@@ -20,7 +20,7 @@
 //! than reflection over types. That is the same trade `gates.rs` makes, for the same reason —
 //! an observer that linked the thing it observes would be a participant.
 
-use crate::source_files::{Source_Files, Without_Test_Modules};
+use crate::reading::source_files::{Source_Files, Without_Test_Modules};
 use crate::{Declaration, Workspace};
 use std::collections::BTreeSet;
 use std::path::Path;

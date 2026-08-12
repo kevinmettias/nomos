@@ -22,44 +22,27 @@
 //! [`ExitCode::Absent`] rather than printing nothing and succeeding. See [`crate::corpus`].
 
 mod parsing;
-mod markdown;
-mod editing;
-mod record;
-mod table;
-mod render;
-mod freshness;
-mod listing;
 mod reporting;
+mod verb;
 #[cfg(test)]
 mod tests;
 
 pub use parsing::Parse;
-use markdown::Markdown;
-use editing::{Commit, Placed, Preview, Report_Edit_Error};
-use record::Record;
-use table::Table;
-use render::{Render, Report_Build_Error};
-use freshness::{Freshness_Of, Resolved};
-use listing::{Empty_Section, EmptySection, Profiles, Sources};
 use reporting::{Absent_Or, Report_Project_Error, Report_Store_Error, Vanished};
+use verb::{
+    Commit, Empty_Section, EmptySection, Freshness_Of, Markdown, Placed, Preview, Profiles,
+    Record, Render, Report_Build_Error, Report_Edit_Error, Resolved, Sources, Table,
+};
 
 mod exit_code;
+mod request;
 mod spec_command;
-mod record_request;
-mod table_request;
-mod render_request;
-mod freshness_request;
-mod edit_request;
-mod commit_request;
 
 pub(crate) use exit_code::ExitCode;
+pub(crate) use request::{
+    CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest,
+};
 pub(crate) use spec_command::SpecCommand;
-pub(crate) use record_request::RecordRequest;
-pub(crate) use table_request::TableRequest;
-pub(crate) use render_request::RenderRequest;
-pub(crate) use freshness_request::FreshnessRequest;
-pub(crate) use edit_request::EditRequest;
-pub(crate) use commit_request::CommitRequest;
 
 use crate::arguments::{Named_Value, Named_Values, Required};
 use crate::corpus::{Assemble, Assembly, CorpusRequest};

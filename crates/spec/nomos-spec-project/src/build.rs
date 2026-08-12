@@ -1,8 +1,12 @@
-use crate::freshness::Freshness;
-use crate::output::Output;
+// Whether what was built is still current, which only a build can answer.
+mod freshness;
+
+pub use freshness::Freshness;
+
+use crate::projection::Output;
 use crate::format::Format;
 use crate::profile::Profile;
-use crate::input::Input;
+use crate::projection::Input;
 use crate::projection::Projection;
 use crate::render::Render;
 use crate::select::Select;

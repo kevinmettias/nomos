@@ -1,5 +1,12 @@
 //! Walking a capability's admitted offers until one of them answers.
 
+// What a read depended on: the ordered trail, and one entry of it.
+mod dependency;
+mod trail;
+
+pub use dependency::Dependency;
+pub(crate) use trail::Trail;
+
 use nomos_capability::Requirement;
 use nomos_capability::Selection;
 use nomos_contracts::GenerationId;
@@ -9,18 +16,16 @@ use nomos_capability::Resolution;
 use nomos_contracts::SubjectId;
 use nomos_contracts::CapabilityId;
 use nomos_capability::Registry;
-use crate::fact_error::FactError;
-use crate::fact_identity::FactIdentity;
-use crate::fact_reader::FactReader;
-use crate::materialized_fact::MaterializedFact;
-use crate::guarantee_digest::GuaranteeDigest;
+use crate::fact::FactError;
+use crate::fact::FactIdentity;
+use crate::fact::FactReader;
+use crate::fact::MaterializedFact;
+use crate::fact::GuaranteeDigest;
 use crate::identity::InputDigest;
 use crate::reader::ReadOutcome;
-use crate::fact_key::FactKey;
-use crate::dependency::Dependency;
+use crate::fact::FactKey;
 use crate::context::Context;
-use crate::memory_fact_store::MemoryFactStore;
-use crate::trail::Trail;
+use crate::fact::MemoryFactStore;
 pub struct Reader<'store, 'registry>
 {
     store: &'store MemoryFactStore,

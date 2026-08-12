@@ -5,8 +5,8 @@ use nomos_model::Intersection;
 use nomos_platform::Timestamp;
 
 use crate::item::LedgerItem;
-use crate::item_id::ItemId;
-use crate::item_state::ItemState;
+use crate::item::ItemId;
+use crate::item::ItemState;
 use crate::ledger_document::LedgerDocument;
 
 /// Every way a ledger can be internally inconsistent.

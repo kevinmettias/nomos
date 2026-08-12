@@ -1,9 +1,15 @@
 //! Reading the table rows a block carries.
 
+// A table's rows, what kind each row is, and the defects a table carries.
+mod defect;
+mod row;
+mod row_kind;
+
+pub use defect::TableDefect;
+pub use row::TableRow;
+pub use row_kind::RowKind;
+
 use crate::block::SourceBlock;
-use crate::row_kind::RowKind;
-use crate::table_defect::TableDefect;
-use crate::table_row::TableRow;
 
 /// Splits a block into the table rows it carries.
 ///
@@ -285,7 +291,7 @@ mod tests
     {
         let block = SourceBlock {
             ordinal: 1,
-            kind: crate::block_kind::BlockKind::Prose,
+            kind: crate::block::BlockKind::Prose,
             heading_path: Vec::new(),
             text: "| a |\n| --- |\n| 1 |\nbetween\n| b |\n| --- |\n| 2 |".to_owned(),
         };
@@ -379,7 +385,7 @@ mod tests
     {
         let block = SourceBlock {
             ordinal: 1,
-            kind: crate::block_kind::BlockKind::Prose,
+            kind: crate::block::BlockKind::Prose,
             heading_path: Vec::new(),
             text: "| a |\n| --- |\nbetween\n| b |\n| --- |".to_owned(),
         };

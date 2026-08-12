@@ -24,14 +24,14 @@ use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timesta
 
 use crate::add_refusal::AddRefusal;
 use crate::claim::Claim;
-use crate::claim_refusal::ClaimRefusal;
+use crate::claim::ClaimRefusal;
 use crate::exclusion::{Check_Lease, ExclusionLedger};
 use crate::item::LedgerItem;
-use crate::item_id::ItemId;
+use crate::item::ItemId;
 use crate::ledger_document::LedgerDocument;
 use crate::ledger_error::LedgerError;
-use crate::release_outcome::ReleaseOutcome;
-use crate::reservation::Reservation;
+use crate::finish::ReleaseOutcome;
+use crate::exclusion::Reservation;
 use crate::territory::Territory;
 
 /// How long to wait for the ledger lock before giving up.

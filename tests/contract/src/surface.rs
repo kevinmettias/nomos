@@ -25,8 +25,8 @@
 //! rather than dropped, because a re-export nobody could follow is the one place a leak
 //! would hide. One line per *name*, not per `pub use`: a list whose other names resolve is
 //! exactly where a dropped one hides best — `OD-GATE-002` version 2.
-use crate::module_tree::Load_Module;
-use crate::routes::{Emit, Emit_Re_Export, Emitting, Prefixed, Tree};
+use crate::reading::module_tree::Load_Module;
+use crate::reading::routes::{Emit, Emit_Re_Export, Emitting, Prefixed, Tree};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 

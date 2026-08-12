@@ -12,14 +12,19 @@
 //! other rows; a rule that reads the store cannot be a pure function of one submission, and
 //! it runs where the store is.
 
+// What a submission is of, and where it stands.
+mod kind;
+mod state;
+
+pub use kind::SubmissionKind;
+pub use state::SubmissionState;
+
 use std::collections::BTreeSet;
 
-use crate::decision_gap::DecisionGap;
+use crate::failure::DecisionGap;
 use crate::failure::Failure;
 use crate::field_value::FieldValue;
-use crate::severity::Severity;
-use crate::submission_kind::SubmissionKind;
-use crate::submission_state::SubmissionState;
+use crate::failure::Severity;
 
 /// What a transport hands to the accept function.
 ///

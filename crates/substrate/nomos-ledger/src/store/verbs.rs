@@ -12,12 +12,12 @@ use nomos_platform::{Clock, CrossProcessLock, FileSystem};
 
 use crate::add_refusal::AddRefusal;
 use crate::claim::Claim;
-use crate::claim_refusal::ClaimRefusal;
+use crate::claim::ClaimRefusal;
 use crate::exclusion::Check_Lease;
 use crate::item::LedgerItem;
-use crate::item_id::ItemId;
+use crate::item::ItemId;
 use crate::ledger_error::LedgerError;
-use crate::reservation::Reservation;
+use crate::exclusion::Reservation;
 
 use super::claiming::Replace_Lapsed;
 use super::file::Decide_Under_Lock;

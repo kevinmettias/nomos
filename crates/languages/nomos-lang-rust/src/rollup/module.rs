@@ -1,6 +1,17 @@
 //! A module as the rollup addresses it.
 
-use crate::rollup::module_member::ModuleMember;
+// What a rolled module is made of: the index over it, the members in it, an entry of that
+// index, and how one member was read.
+mod index;
+mod index_entry;
+mod member;
+mod member_reading;
+
+pub use index::ModuleIndex;
+pub use index_entry::IndexEntry;
+pub use member::ModuleMember;
+pub use member_reading::MemberReading;
+
 use nomos_contracts::SubjectId;
 /// The subject a rollup is about, and the files it is over.
 ///

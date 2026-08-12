@@ -4,6 +4,12 @@
 //! failing is not a guard — it is a test that would pass just as happily if the thing it
 //! checks were deleted.
 
+// folder-organization: coherent: one module per thing the ledger has to exclude, and the
+// list is the acceptance criteria rather than a grouping chosen here. Every module is a
+// sibling claim about the same guard, each with its own negative control, so a subsystem
+// folder over any subset of them would assert a relationship between those claims that
+// nothing decides — and the reader who wants to know what this suite covers reads exactly
+// this list.
 
 mod claiming;
 mod common;
