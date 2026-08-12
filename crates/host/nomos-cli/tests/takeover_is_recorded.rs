@@ -14,11 +14,11 @@
 //! unix seconds is the only way to hold the condition still — and a suite that slept two hours
 //! to reach it would be a suite nobody runs.
 
-use nomos_ledger::SCHEMA_VERSION;
-use std::path::PathBuf;
-use std::process::Command;
+#[path = "scratch_ledger/board.rs"]
+mod board;
 
-const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
+use board::{Board, Ran};
+use nomos_ledger::SCHEMA_VERSION;
 
 /// Well before any wall clock this will run against, so `T-1`'s lease has run out.
 const HELD_FROM: i64 = 1_000_000;
@@ -27,98 +27,48 @@ const LAPSED_AT: i64 = 1_003_600;
 /// Far enough ahead that `T-3`'s claim is live whenever this suite runs. Unix seconds in 2096.
 const STILL_LIVE: i64 = 4_000_000_000;
 
-/// What one `nomos work` run said, and what it exited with.
+/// A scratch board with one lapsed item, one free item and one somebody is still holding.
 ///
-/// Named rather than a pair. The same two values were spelled `(String, i32)` in one of
-/// these files and `(i32, String)` in the next, which is exactly the swap a name makes
-/// impossible and a type does not.
-struct Ran
+/// Written as JSON rather than built with `work add` and `work claim`, because the claim
+/// this needs is one no honest `claim` would ever write: its lease ran out hours ago.
+///
+/// No `.github/workflows/gate.yml` beside it. `finish` derives the gate's lint step from
+/// that file and refuses when it cannot, and nothing here finishes anything.
+///
+/// The three items are what this suite is about and stay here; the directory they are
+/// written into is `scratch_ledger/board.rs`, shared with the two suites beside this one.
+fn A_Board(name: &str) -> Board
 {
-    said: String,
-    code: i32,
-}
-
-struct Board
-{
-    root: PathBuf,
-}
-
-impl Board
-{
-    /// A scratch board with one lapsed item, one free item and one somebody is still holding.
-    ///
-    /// Written as JSON rather than built with `work add` and `work claim`, because the claim
-    /// this needs is one no honest `claim` would ever write: its lease ran out hours ago.
-    ///
-    /// No `.github/workflows/gate.yml` beside it. `finish` derives the gate's lint step from
-    /// that file and refuses when it cannot, and nothing here finishes anything.
-    fn New(name: &str) -> Self
-    {
-        let root = std::env::temp_dir().join(format!("nomos-takeover-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch directory");
-        std::fs::write(
-            root.join("ledger.json"),
-            format!(
-                "{{\n  \"schema_version\": {SCHEMA_VERSION},\n  \"items\": [\
-                 {{\"id\":\"T-1\",\"title\":\"the item its holder died on\",\
-                 \"why\":\"because\",\"done_when\":\"the tests pass\",\
-                 \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
-                 \"patterns\":[]}},\
-                 \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\
-                 \"claim\":{{\"holder\":\"dead-agent\",\"acquired_at\":{HELD_FROM},\
-                 \"lease_expires_at\":{LAPSED_AT}}},\
-                 \"verification\":null,\"verified\":null,\"abandoned\":[]}},\
-                 {{\"id\":\"T-2\",\"title\":\"an item nobody has taken\",\
-                 \"why\":\"because\",\"done_when\":\"the tests pass\",\
-                 \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/b.rs\"],\
-                 \"patterns\":[]}},\
-                 \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
-                 \"verification\":null,\"verified\":null,\"abandoned\":[]}},\
-                 {{\"id\":\"T-3\",\"title\":\"an item somebody is still working\",\
-                 \"why\":\"because\",\"done_when\":\"the tests pass\",\
-                 \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/c.rs\"],\
-                 \"patterns\":[]}},\
-                 \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\
-                 \"claim\":{{\"holder\":\"agent-a\",\"acquired_at\":{HELD_FROM},\
-                 \"lease_expires_at\":{STILL_LIVE}}},\
-                 \"verification\":null,\"verified\":null,\"abandoned\":[]}}\
-                 ]\n}}\n"
-            ),
-        )
-        .expect("a scratch ledger");
-        return Self { root };
-    }
-
-    /// Runs `nomos work …`, returning what it said and what it exited with.
-    fn Work(&self, arguments: &[&str]) -> Ran
-    {
-        let output = Command::new(NOMOS)
-            .arg("work")
-            .args(arguments)
-            .env("NOMOS_WORK_DIR", &self.root)
-            .output()
-            .expect("the binary runs");
-
-        return Ran {
-            said: String::from_utf8_lossy(&output.stdout).into_owned(),
-            code: output.status.code().unwrap_or(-1),
-        };
-    }
-
-    /// The ledger file as text, for asserting on what was written rather than on what was said.
-    fn Written(&self) -> String
-    {
-        return std::fs::read_to_string(self.root.join("ledger.json")).expect("readable");
-    }
-}
-
-impl Drop for Board
-{
-    fn drop(&mut self)
-    {
-        let _ignored = std::fs::remove_dir_all(&self.root);
-    }
+    return Board::New(
+        "takeover",
+        name,
+        &format!(
+            "{{\n  \"schema_version\": {SCHEMA_VERSION},\n  \"items\": [\
+             {{\"id\":\"T-1\",\"title\":\"the item its holder died on\",\
+             \"why\":\"because\",\"done_when\":\"the tests pass\",\
+             \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
+             \"patterns\":[]}},\
+             \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\
+             \"claim\":{{\"holder\":\"dead-agent\",\"acquired_at\":{HELD_FROM},\
+             \"lease_expires_at\":{LAPSED_AT}}},\
+             \"verification\":null,\"verified\":null,\"abandoned\":[]}},\
+             {{\"id\":\"T-2\",\"title\":\"an item nobody has taken\",\
+             \"why\":\"because\",\"done_when\":\"the tests pass\",\
+             \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/b.rs\"],\
+             \"patterns\":[]}},\
+             \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
+             \"verification\":null,\"verified\":null,\"abandoned\":[]}},\
+             {{\"id\":\"T-3\",\"title\":\"an item somebody is still working\",\
+             \"why\":\"because\",\"done_when\":\"the tests pass\",\
+             \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/c.rs\"],\
+             \"patterns\":[]}},\
+             \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\
+             \"claim\":{{\"holder\":\"agent-a\",\"acquired_at\":{HELD_FROM},\
+             \"lease_expires_at\":{STILL_LIVE}}},\
+             \"verification\":null,\"verified\":null,\"abandoned\":[]}}\
+             ]\n}}\n"
+        ),
+    );
 }
 
 /// The subject, end to end: the verb takes the item and the file says whom it displaced.
@@ -129,7 +79,7 @@ impl Drop for Board
 #[test]
 fn Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced()
 {
-    let board = Board::New("records-what-it-displaced");
+    let board = A_Board("records-what-it-displaced");
 
     let Ran { said, code } = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
 
@@ -172,7 +122,7 @@ fn Assert_The_Displaced_Claim_Survived(written: &str)
 #[test]
 fn Test_Show_Should_Report_The_Claim_A_Takeover_Displaced()
 {
-    let board = Board::New("show-reports-it");
+    let board = A_Board("show-reports-it");
 
     let Ran { code, .. } = board.Work(&["takeover", "--item", "T-1", "--holder", "agent-b"]);
     assert_eq!(code, 0);
@@ -201,7 +151,7 @@ fn Test_Show_Should_Report_The_Claim_A_Takeover_Displaced()
 #[test]
 fn Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable()
 {
-    let board = Board::New("lists-lapsed-and-takes");
+    let board = A_Board("lists-lapsed-and-takes");
 
     let Ran { said: listed, code } = board.Work(&["list", "--state", "lapsed"]);
 
@@ -231,7 +181,7 @@ fn Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable()
 #[test]
 fn Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover()
 {
-    let board = Board::New("claim-refuses-lapsed");
+    let board = A_Board("claim-refuses-lapsed");
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
 
@@ -260,7 +210,7 @@ fn Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover()
 #[test]
 fn Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held()
 {
-    let board = Board::New("exit-codes");
+    let board = A_Board("exit-codes");
 
     let Ran { said: live, code } = board.Work(&["takeover", "--item", "T-3", "--holder", "agent-b"]);
     assert_eq!(

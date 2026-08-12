@@ -1,48 +1,41 @@
-//! A scratch board on disk, the two commands read off it, and the item shapes they are
-//! authored from.
-
-use std::path::PathBuf;
-use std::process::Command;
-
-const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
+//! The two commands read off a scratch board, and the item shapes they are authored from.
+//!
+//! The board itself is `scratch_ledger/board.rs`, shared with the two suites beside this
+//! one. What stays here is what is specific to `list` and `audit`: the item text this
+//! suite authors, and the two readings it takes.
 
 /// Far enough ahead that a lease written here is live whenever the suite runs.
 const FOREVER: i64 = 4_102_444_800;
 
 pub(crate) struct Board
 {
-    root: PathBuf,
+    scratch: crate::board::Board,
 }
 
 impl Board
 {
     pub(crate) fn New(name: &str, items: &str) -> Self
     {
-        let root = std::env::temp_dir().join(format!("nomos-list-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch directory");
-        std::fs::write(
-            root.join("ledger.json"),
-            format!("{{\n  \"schema_version\": 1,\n  \"items\": [{items}]\n}}\n"),
-        )
-        .expect("a scratch ledger");
-        return Self { root };
+        return Self {
+            scratch: crate::board::Board::New(
+                "list",
+                name,
+                &format!("{{\n  \"schema_version\": 1,\n  \"items\": [{items}]\n}}\n"),
+            ),
+        };
     }
 
     /// Runs `nomos work list`, returning stdout.
     pub(crate) fn List(&self, filter: Option<&str>) -> String
     {
-        let mut command = Command::new(NOMOS);
-        command.arg("work").arg("list");
+        let mut arguments = vec!["list"];
         if let Some(state) = filter
         {
-            command.arg("--state").arg(state);
+            arguments.push("--state");
+            arguments.push(state);
         }
-        let output = command
-            .env("NOMOS_WORK_DIR", &self.root)
-            .output()
-            .expect("the binary runs");
-        return String::from_utf8_lossy(&output.stdout).into_owned();
+
+        return self.scratch.Said(&arguments);
     }
 
     /// The label `work list` prints for one item.
@@ -63,13 +56,7 @@ impl Board
     /// Runs `nomos work audit`, returning stdout.
     pub(crate) fn Audit(&self) -> String
     {
-        let output = Command::new(NOMOS)
-            .arg("work")
-            .arg("audit")
-            .env("NOMOS_WORK_DIR", &self.root)
-            .output()
-            .expect("the binary runs");
-        return String::from_utf8_lossy(&output.stdout).into_owned();
+        return self.scratch.Said(&["audit"]);
     }
 }
 
@@ -79,14 +66,6 @@ pub(crate) fn Audit_Line<'a>(audit: &'a str, item: &str) -> Option<&'a str>
     return audit
         .lines()
         .find(|line| line.split_whitespace().next() == Some(item));
-}
-
-impl Drop for Board
-{
-    fn drop(&mut self)
-    {
-        let _ignored = std::fs::remove_dir_all(&self.root);
-    }
 }
 
 /// Where an item stands: what state it is in, what it waits on, and the claim and

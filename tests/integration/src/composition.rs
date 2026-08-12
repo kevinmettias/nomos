@@ -25,23 +25,18 @@ pub fn Registered() -> Registry
     let mut registry = Registry::New();
 
     registry
-        .Declare(syntax::Capability_Contract())
-        .expect("the syntax capability is declared once");
-    registry
-        .Offer(rust::Provider_Offer())
-        .expect("the Rust provider's offer is within its capability's ceiling");
-    // The second offer against the same contract. It is accepted because the ceiling
-    // bounds what may be *claimed*, not how weak an offer may be — a provider that
-    // promises less than the ceiling is exactly what a ceiling is for.
+        .Declare_And_Offer(syntax::Capability_Contract(), rust::Provider_Offer())
+        .expect("the syntax capability is declared once, and the Rust provider is within it");
+    // The second offer against the same contract, and the reason this one is not a
+    // `Declare_And_Offer`. It is accepted because the ceiling bounds what may be *claimed*,
+    // not how weak an offer may be — a provider that promises less than the ceiling is
+    // exactly what a ceiling is for.
     registry
         .Offer(scan::Provider_Offer())
         .expect("the scanner's offer is within the same ceiling");
     registry
-        .Declare(surface::Capability_Contract())
-        .expect("the surface capability is declared once");
-    registry
-        .Offer(surface::Provider_Offer())
-        .expect("the rollup's offer is within its capability's ceiling");
+        .Declare_And_Offer(surface::Capability_Contract(), surface::Provider_Offer())
+        .expect("the surface capability is declared once, and the rollup is within it");
 
     return registry;
 }

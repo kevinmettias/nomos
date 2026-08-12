@@ -12,11 +12,11 @@
 //! one binary. The end-to-end experiment for that was run by hand and its observed result is
 //! recorded in `OD-LEDGER-008`.
 
-use nomos_ledger::SCHEMA_VERSION;
-use std::path::PathBuf;
-use std::process::Command;
+#[path = "scratch_ledger/board.rs"]
+mod board;
 
-const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
+use board::{Board, Ran};
+use nomos_ledger::SCHEMA_VERSION;
 
 /// A key no build of this crate declares, spliced onto an item.
 ///
@@ -24,76 +24,26 @@ const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 /// stop being the case it was written for by the schema catching up with it.
 const UNDECLARED: &str = ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}";
 
-/// What one `nomos work` run said, and what it exited with.
+/// A scratch board holding one claimable item, with `extra` spliced into that item.
 ///
-/// Named rather than a pair. The same two values were spelled `(String, i32)` in one of
-/// these files and `(i32, String)` in the next, which is exactly the swap a name makes
-/// impossible and a type does not.
-struct Ran
+/// The item text is what this suite is about and stays here; the directory it is written
+/// into is `scratch_ledger/board.rs`, shared with the two suites beside this one.
+fn A_Board(name: &str, extra: &str) -> Board
 {
-    said: String,
-    code: i32,
-}
-
-struct Board
-{
-    root: PathBuf,
-}
-
-impl Board
-{
-    /// A scratch board holding one claimable item, with `extra` spliced into that item.
-    fn New(name: &str, extra: &str) -> Self
-    {
-        let root = std::env::temp_dir().join(format!("nomos-stale-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch directory");
-        std::fs::write(
-            root.join("ledger.json"),
-            format!(
-                "{{\n  \"schema_version\": 1,\n  \"items\": [\
-                 {{\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
-                 \"done_when\":\"the tests pass\",\
-                 \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
-                 \"patterns\":[]}},\
-                 \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
-                 \"verification\":null,\"verified\":null,\"abandoned\":[]{extra}}}\
-                 ]\n}}\n"
-            ),
-        )
-        .expect("a scratch ledger");
-        return Self { root };
-    }
-
-    /// Runs `nomos work …`, returning what it said and what it exited with.
-    fn Work(&self, arguments: &[&str]) -> Ran
-    {
-        let output = Command::new(NOMOS)
-            .arg("work")
-            .args(arguments)
-            .env("NOMOS_WORK_DIR", &self.root)
-            .output()
-            .expect("the binary runs");
-
-        return Ran {
-            said: String::from_utf8_lossy(&output.stdout).into_owned(),
-            code: output.status.code().unwrap_or(-1),
-        };
-    }
-
-    /// The ledger file exactly as it stands, bytes and all.
-    fn Bytes(&self) -> Vec<u8>
-    {
-        return std::fs::read(self.root.join("ledger.json")).expect("the ledger is readable");
-    }
-}
-
-impl Drop for Board
-{
-    fn drop(&mut self)
-    {
-        let _ignored = std::fs::remove_dir_all(&self.root);
-    }
+    return Board::New(
+        "stale",
+        name,
+        &format!(
+            "{{\n  \"schema_version\": 1,\n  \"items\": [\
+             {{\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
+             \"done_when\":\"the tests pass\",\
+             \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
+             \"patterns\":[]}},\
+             \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
+             \"verification\":null,\"verified\":null,\"abandoned\":[]{extra}}}\
+             ]\n}}\n"
+        ),
+    );
 }
 
 /// The assertion the item exists for, made on the file rather than on a type.
@@ -104,7 +54,7 @@ impl Drop for Board
 #[test]
 fn Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It()
 {
-    let board = Board::New("refuses-to-rewrite", UNDECLARED);
+    let board = A_Board("refuses-to-rewrite", UNDECLARED);
     let before = board.Bytes();
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
@@ -129,7 +79,7 @@ fn Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It()
 #[test]
 fn Test_Listing_A_Ledger_This_Build_Cannot_Account_For_Should_Refuse()
 {
-    let board = Board::New("refuses-to-list", UNDECLARED);
+    let board = A_Board("refuses-to-list", UNDECLARED);
 
     let Ran { said, code } = board.Work(&["list"]);
 
@@ -148,7 +98,7 @@ fn Test_Listing_A_Ledger_This_Build_Cannot_Account_For_Should_Refuse()
 #[test]
 fn Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It()
 {
-    let board = Board::New("still-writes", "");
+    let board = A_Board("still-writes", "");
     let before = board.Bytes();
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
@@ -169,7 +119,7 @@ fn Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It()
 #[test]
 fn Test_Validate_Should_Report_The_Files_Schema_And_The_Builds()
 {
-    let board = Board::New("validate-reports-both", "");
+    let board = A_Board("validate-reports-both", "");
 
     let Ran { said, code } = board.Work(&["validate"]);
 

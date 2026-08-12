@@ -48,18 +48,14 @@ fn Registry_With_Both() -> Registry
     let mut registry = Registry::New();
 
     registry
-        .Declare(nomos_cap_syntax::Capability_Contract())
-        .expect("the syntax contract is declared once");
+        .Declare_And_Offer(
+            nomos_cap_syntax::Capability_Contract(),
+            nomos_lang_rust::Provider_Offer(),
+        )
+        .expect("the syntax contract is declared once, and the parser is within its ceiling");
     registry
-        .Offer(nomos_lang_rust::Provider_Offer())
-        .expect("the parser's offer is within the syntax ceiling");
-
-    registry
-        .Declare(rollup::Capability_Contract())
-        .expect("the module-index contract is declared once");
-    registry
-        .Offer(rollup::Provider_Offer())
-        .expect("the rollup's offer is within its own ceiling");
+        .Declare_And_Offer(rollup::Capability_Contract(), rollup::Provider_Offer())
+        .expect("the module-index contract is declared once, and the rollup is within it");
 
     return registry;
 }

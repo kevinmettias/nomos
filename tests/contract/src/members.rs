@@ -5,7 +5,7 @@
 //! rather than splitting on lines, because a tuple variant's payload can carry a comma
 //! inside a generic argument.
 
-use crate::masks::{Identifier_After, Is_Code, Matching_Brace};
+use crate::masks::{Identifier_After, Is_Code, Matching_Delimiter};
 use crate::recogniser::KEYWORDS;
 use crate::text::{Collapsed, Line_End, Next_Line};
 
@@ -179,8 +179,8 @@ fn Bracketed(
     let bytes = text.as_bytes();
     let matched = match opener
     {
-        Some(b'{') => Matching_Brace(bytes, &masks.code, cursor),
-        Some(b'(') => Matching_Parenthesis(bytes, &masks.code, cursor),
+        Some(b'{') => Matching_Delimiter(bytes, &masks.code, cursor, b'{', b'}'),
+        Some(b'(') => Matching_Delimiter(bytes, &masks.code, cursor, b'(', b')'),
         _ =>
         {
             return Carried {
@@ -231,35 +231,3 @@ fn Comma_At_Depth(bytes: &[u8], mask: &[bool], from: usize, end: usize) -> usize
     return end;
 }
 
-/// The offset of the parenthesis closing the one at `open`.
-fn Matching_Parenthesis(bytes: &[u8], mask: &[bool], open: usize) -> Option<usize>
-{
-    let mut depth = 0_u32;
-    let mut cursor = open;
-    while cursor < bytes.len()
-    {
-        if !Is_Code(mask, cursor)
-        {
-            cursor = cursor.saturating_add(1);
-            continue;
-        }
-
-        match bytes.get(cursor).copied()
-        {
-            Some(b'(') => depth = depth.saturating_add(1),
-            Some(b')') =>
-            {
-                depth = depth.saturating_sub(1);
-                if depth == 0
-                {
-                    return Some(cursor);
-                }
-            }
-            _ =>
-            {}
-        }
-        cursor = cursor.saturating_add(1);
-    }
-
-    return None;
-}

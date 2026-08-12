@@ -74,6 +74,34 @@ impl Registry
         return Ok(());
     }
 
+    /// Declares `contract` and registers `offer` against it, in that order.
+    ///
+    /// The pairing rather than a convenience. A contract nothing offers against resolves to
+    /// nothing, so every composition in this workspace declares and then immediately offers;
+    /// written out, that pair was the same two statements repeated at every composition
+    /// root and in every test that builds one. The order is the whole reason it cannot be
+    /// two calls a caller might transpose: [`Offer`](Self::Offer) refuses an undeclared
+    /// capability.
+    ///
+    /// A second provider against the same contract is still [`Offer`](Self::Offer). This
+    /// declares, so calling it twice for one capability is `AlreadyDeclared` and says so.
+    ///
+    /// # Errors
+    ///
+    /// Whatever [`Declare`](Self::Declare) or [`Offer`](Self::Offer) returns, unchanged: the
+    /// contract is left declared if the offer is the half that is refused, because a partial
+    /// registration a caller can inspect is more use than one this rolled back silently.
+    pub fn Declare_And_Offer(
+        &mut self,
+        contract: CapabilityContract,
+        offer: ProviderOffer,
+    ) -> Result<(), RegistryError>
+    {
+        self.Declare(contract)?;
+
+        return self.Offer(offer);
+    }
+
     /// One provider's offer, refused for a named reason.
     fn Refused(
         capability: &CapabilityId,

@@ -24,6 +24,7 @@ pub enum variant nomos_capability::Unmet::NoProvider
 pub enum variant nomos_capability::Unmet::Undeclared
 pub enum variant nomos_capability::Unmet::VersionMismatch { offered: ContractVersion, }
 pub fn nomos_capability::Registry::Declare(&mut self, contract: CapabilityContract) -> Result<(), RegistryError>
+pub fn nomos_capability::Registry::Declare_And_Offer( &mut self, contract: CapabilityContract, offer: ProviderOffer, ) -> Result<(), RegistryError>
 pub fn nomos_capability::Registry::Declared(&self) -> impl Iterator<Item = &CapabilityContract>
 pub fn nomos_capability::Registry::New() -> Self
 pub fn nomos_capability::Registry::Offer(&mut self, offer: ProviderOffer) -> Result<(), RegistryError>
