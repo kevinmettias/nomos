@@ -1,14 +1,5 @@
+use crate::block_kind::BlockKind;
 use crate::normalize::ContentHash;
-use serde::{Deserialize, Serialize};
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum BlockKind
-{
-    Heading,
-    Prose,
-    Code,
-}
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SourceBlock

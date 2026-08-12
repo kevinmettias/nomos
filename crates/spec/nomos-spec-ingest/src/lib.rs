@@ -8,9 +8,12 @@
 mod archaeology;
 mod archive;
 mod archive_error;
+mod archive_error_kind;
 mod artifact;
 mod block_lineage;
+mod block_field;
 mod block_mismatch;
+mod block_mismatch_kind;
 mod catalog_entity;
 mod catalog_report;
 mod collision;
@@ -54,10 +57,13 @@ mod template;
 
 pub use archaeology::{Regression, Revision, SHARED_BY};
 pub use archive::{Archive, Archives_In};
-pub use archive_error::{ArchiveError, ArchiveErrorKind};
+pub use archive_error::ArchiveError;
+pub use archive_error_kind::ArchiveErrorKind;
 pub use artifact::Artifact;
 pub use block_lineage::BlockLineage;
-pub use block_mismatch::{BlockField, BlockMismatch, BlockMismatchKind};
+pub use block_field::BlockField;
+pub use block_mismatch::BlockMismatch;
+pub use block_mismatch_kind::BlockMismatchKind;
 pub use catalog_entity::CatalogEntity;
 pub use catalog_report::CatalogReport;
 pub use disposition::Disposition;

@@ -1,4 +1,5 @@
-use crate::archive_error::{ArchiveError, ArchiveErrorKind};
+use crate::archive_error::ArchiveError;
+use crate::archive_error_kind::ArchiveErrorKind;
 use crate::listing::Listing;
 use std::io::Read as _;
 use std::path::{Path, PathBuf};

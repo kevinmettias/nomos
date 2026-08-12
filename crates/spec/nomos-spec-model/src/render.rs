@@ -22,7 +22,8 @@
 //! such a document rather than silently rewriting it into this shape.
 
 use crate::block::{Segment, SourceBlock};
-use crate::record::{Parse_Record, RecordFrontMatter};
+use crate::record::Parse_Record;
+use crate::record_front_matter::RecordFrontMatter;
 
 /// A value the canonical layout cannot represent.
 ///

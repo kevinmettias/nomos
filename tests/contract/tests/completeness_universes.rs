@@ -79,7 +79,7 @@ const UNMIRRORED_TOTAL: usize = 12;
 const UNIVERSES: &[Universe] = &[
     // ---- the three instances, now mirrored ----
     Universe {
-        path: "crates/spec/nomos-spec-store/src/store.rs",
+        path: "crates/spec/nomos-spec-store/src/table.rs",
         name: "Table::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Mirrored {
@@ -159,7 +159,7 @@ const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/spec/nomos-spec-model/src/table.rs",
+        path: "crates/spec/nomos-spec-model/src/row_kind.rs",
         name: "RowKind::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {

@@ -1,29 +1,14 @@
-use crate::BundleError;
-use crate::model::Record;
-use nomos_spec_model::ContentHash;
-use serde::{Deserialize, Serialize};
+//! A specification corpus as text.
+
 use std::collections::BTreeMap;
 
-/// The bundle format this build writes and is willing to read.
-pub const FORMAT: u32 = 1;
+use nomos_spec_model::ContentHash;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Header
-{
-    pub format: u32,
-    pub schema_version: u32,
-}
-
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Manifest
-{
-    pub records: u32,
-    /// Rows per table. A `BTreeMap` because a `HashMap` would order the bundle by
-    /// whatever the hasher felt like, and the bundle's whole value is that it diffs.
-    pub counts: BTreeMap<String, u32>,
-    /// Over the header and every record line, each terminated by a newline.
-    pub digest: String,
-}
+use crate::BundleError;
+use crate::header::{FORMAT, Header};
+use crate::manifest::Manifest;
+use crate::record::Record;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "line", rename_all = "snake_case")]
@@ -334,7 +319,8 @@ impl Bundle
 mod tests
 {
     use super::*;
-    use crate::model::{Blob, BlobEncoding};
+    use crate::blob::Blob;
+    use crate::blob_encoding::BlobEncoding;
 
     fn One_Blob() -> Vec<Record>
     {

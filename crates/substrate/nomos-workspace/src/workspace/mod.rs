@@ -6,7 +6,8 @@ mod tests;
 
 use naming::{Normalize, Normalized};
 
-use crate::effect::{Effect, EffectKind};
+use crate::effect::Effect;
+use crate::effect_kind::EffectKind;
 use crate::workspace_error::WorkspaceError;
 use crate::applied::Applied;
 use crate::change::Change;

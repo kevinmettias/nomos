@@ -1,7 +1,8 @@
 //! What this module promises, exercised.
 
 use super::*;
-use crate::payload_refusal::{PayloadRefusal, PayloadRefusalKind};
+use crate::payload_refusal::PayloadRefusal;
+use crate::payload_refusal_kind::PayloadRefusalKind;
 use crate::payload_item::PayloadItem;
 use crate::syntax_payload::SyntaxPayload;
 

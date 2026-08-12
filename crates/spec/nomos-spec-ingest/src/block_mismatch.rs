@@ -1,5 +1,7 @@
 //! Every way a stored block disagrees with its source.
 
+use crate::block_mismatch_kind::BlockMismatchKind;
+
 /// Why a recomputed block disagreed with the manifest, always naming the document.
 ///
 /// Named per block rather than summed. A count tells you the segmenter is wrong; the
@@ -42,61 +44,6 @@ impl BlockMismatch
                 "{document}#{ordinal}: {} {recorded} recomputed as {recomputed}",
                 field.Label()
             ),
-        };
-    }
-}
-
-/// Which of the three disagreements it was.
-///
-/// The three per-block comparisons are one variant carrying a [`BlockField`] rather than
-/// three variants, because they differ only in which field disagreed. Each of them read
-/// the same ordinal and the same recorded-against-recomputed pair, and the ordinal is what
-/// a reader needs first from every one of them.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum BlockMismatchKind
-{
-    /// A document the manifest records and the source tree does not have.
-    DocumentMissing,
-    /// A document whose block count moved, so no ordinal is comparable past the shorter.
-    CountDiffers
-    {
-        recorded: usize,
-        recomputed: usize,
-    },
-    /// One block at one ordinal, disagreeing in one field.
-    Block
-    {
-        ordinal: u32,
-        field: BlockField,
-        recorded: String,
-        recomputed: String,
-    },
-}
-
-/// Which field of a block disagreed.
-///
-/// The two hashes are separate answers rather than one, because the two disagreeing is
-/// the whole signal: a block whose content moved but whose normalization did not is a
-/// reformatting, and one where both moved is an edit.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum BlockField
-{
-    Kind,
-    ContentHash,
-    NormalizedHash,
-}
-
-impl BlockField
-{
-    /// The field's name as the manifest spells it.
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Kind => "kind",
-            Self::ContentHash => "content_hash",
-            Self::NormalizedHash => "normalized_hash",
         };
     }
 }

@@ -10,7 +10,12 @@
 //! never printed.
 
 use crate::columns::Columns;
-use crate::store::{Collected, SpecificationStore, StoreError};
+use crate::document_source::DocumentSource;
+use crate::node_summary::NodeSummary;
+use crate::path_match::PathMatch;
+use crate::table_line::TableLine;
+use crate::store::{Collected, SpecificationStore};
+use crate::store_error::StoreError;
 use rusqlite::{OptionalExtension, params};
 
 /// The stored bytes as text, or why this document cannot be read out as one.
@@ -25,83 +30,6 @@ fn Readable_Text(path: &str, bytes: Vec<u8>) -> Result<String, StoreError>
             ),
         };
     });
-}
-
-/// A node as the graph holds it, with no content behind it.
-///
-/// Separate from [`RecordSource`] because a node with no source document is a real and
-/// common answer — the catalog mints thousands of them — and reporting that as "not
-/// found" would tell a reader the identifier is unknown when the store knows it well.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct NodeSummary
-{
-    pub node_id: String,
-    pub kind: String,
-    pub authority: String,
-    pub representation: String,
-    pub title: String,
-}
-
-/// One source document, and the bytes it was ingested from.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct DocumentSource
-{
-    /// The join surrogate, so a caller can scope a second query to this document without
-    /// resolving the path again. Never exported and never printed.
-    pub uid: i64,
-    pub path: String,
-    pub revision: String,
-    /// The document's content address.
-    pub content_hash: String,
-    /// The document exactly as it was ingested, byte for byte.
-    pub text: String,
-}
-
-/// One line of a table, as stored.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct TableLine
-{
-    /// Which block of the document carries it.
-    pub block_ordinal: u32,
-    /// Which table within that block. A block may carry more than one.
-    pub table_ordinal: u32,
-    /// Which line within the block, 1-based.
-    pub row_ordinal: u32,
-    /// `header`, `content` or `separator`.
-    pub kind: String,
-    pub cells: Vec<String>,
-    /// The line as authored.
-    pub text: String,
-    pub content_hash: String,
-}
-
-/// How a document path was matched.
-///
-/// Reported rather than swallowed, so a caller who typed a fragment and got one document
-/// can see it was a fragment that matched.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum PathMatch
-{
-    /// The path was given in full.
-    Exact,
-    /// The last segment of the path was given.
-    FileName,
-    /// The text appears somewhere in the path.
-    Fragment,
-}
-
-impl PathMatch
-{
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Exact => "exact path",
-            Self::FileName => "file name",
-            Self::Fragment => "path fragment",
-        };
-    }
 }
 
 impl SpecificationStore

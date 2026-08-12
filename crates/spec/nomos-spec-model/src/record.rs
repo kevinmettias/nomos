@@ -1,39 +1,7 @@
-use serde::Deserialize;
+//! An authored record: its declared identity and its body.
 
-/// A typed edge declared in a record's front matter.
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize)]
-pub struct RecordRelation
-{
-    pub target: String,
-    /// v14 and most of v15 spell this `type`; v15's `spec-governance` records spell it
-    /// `relation`. `validate_bundle.py` reads either (`relation.get('type') or
-    /// relation.get('relation')`), so one reader has to as well — accepting only the
-    /// first spelling would make a whole governance suite unreadable.
-    #[serde(rename = "type", alias = "relation")]
-    pub relation: String,
-}
-
-/// The declared identity of a record.
-///
-/// The field names are the v14 corpus's, so the same reader serves this repository's own
-/// records and the records restored from the archives. Two readers for one format is how
-/// the two disagree.
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize)]
-pub struct RecordFrontMatter
-{
-    pub id: String,
-    #[serde(rename = "type")]
-    pub kind: String,
-    pub title: String,
-    pub status: String,
-    pub authority: String,
-    #[serde(default)]
-    pub version: u32,
-    #[serde(default)]
-    pub tags: Vec<String>,
-    #[serde(default)]
-    pub relations: Vec<RecordRelation>,
-}
+use crate::record_error::RecordError;
+use crate::record_front_matter::RecordFrontMatter;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Record
@@ -42,60 +10,6 @@ pub struct Record
     /// Everything after the front matter, including the first heading.
     pub body: String,
 }
-
-#[derive(Debug, PartialEq, Eq)]
-pub enum RecordError
-{
-    NoFrontMatter,
-    UnterminatedFrontMatter,
-    Yaml(String),
-    NoHeading
-    {
-        id: String,
-    },
-    /// The front matter and the first heading name the record differently.
-    ///
-    /// Refused rather than reconciled: two titles for one record is two homes for one
-    /// concept, and picking a winner here would decide silently which one people read.
-    TitleDiverges
-    {
-        id: String,
-        declared: String,
-        heading: String,
-    },
-}
-
-impl core::fmt::Display for RecordError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::NoFrontMatter => write!(
-                formatter,
-                "a record begins with a `---` front matter block; this one does not"
-            ),
-            Self::UnterminatedFrontMatter => {
-                write!(formatter, "the front matter block is never closed")
-            }
-            Self::Yaml(cause) => write!(formatter, "front matter is not readable: {cause}"),
-            Self::NoHeading { id } => {
-                write!(formatter, "{id} has no heading, so its title cannot be corroborated")
-            }
-            Self::TitleDiverges {
-                id,
-                declared,
-                heading,
-            } => write!(
-                formatter,
-                "{id} declares the title {declared:?} and its heading says {heading:?}"
-            ),
-        };
-    }
-}
-
-impl std::error::Error for RecordError
-{}
 
 /// Reads a record and refuses one that names itself two different things.
 ///

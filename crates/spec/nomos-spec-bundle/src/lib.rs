@@ -6,22 +6,65 @@
 
 #![forbid(unsafe_code)]
 
+mod blob;
+mod blob_encoding;
 mod bundle;
 mod columns;
 mod determinism;
+mod document_ref;
 mod export;
+mod header;
 mod import;
-mod model;
+mod lineage;
+mod manifest;
+mod node;
+mod node_alias;
+mod node_history;
+mod normative_statement;
+mod omission;
+mod ordinal_ref;
+mod record;
+mod record_front_matter;
+mod record_relation;
+mod relation;
+mod relation_type;
+mod source_block;
+mod source_document;
+mod source_heading;
+mod source_table_row;
+mod submission;
+mod submission_gap;
+mod submission_value;
+mod suite;
+mod table_row_ref;
 
-pub use bundle::{Bundle, FORMAT, Header, Manifest};
+pub use blob::Blob;
+pub use blob_encoding::BlobEncoding;
+pub use bundle::Bundle;
 pub use determinism::BundleSerialization;
+pub use document_ref::DocumentRef;
 pub use export::Export;
+pub use header::{FORMAT, Header};
 pub use import::{Import, ImportReport};
-pub use model::{
-    Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement, Omission, OrdinalRef,
-    Record, RecordFrontMatter, RecordRelation, Relation, RelationType, SourceBlock, SourceDocument, SourceHeading,
-    SourceTableRow, Suite, TableRowRef,
-};
+pub use lineage::Lineage;
+pub use manifest::Manifest;
+pub use node::Node;
+pub use node_alias::NodeAlias;
+pub use node_history::NodeHistory;
+pub use normative_statement::NormativeStatement;
+pub use omission::Omission;
+pub use ordinal_ref::OrdinalRef;
+pub use record::Record;
+pub use record_front_matter::RecordFrontMatter;
+pub use record_relation::RecordRelation;
+pub use relation::Relation;
+pub use relation_type::RelationType;
+pub use source_block::SourceBlock;
+pub use source_document::SourceDocument;
+pub use source_heading::SourceHeading;
+pub use source_table_row::SourceTableRow;
+pub use suite::Suite;
+pub use table_row_ref::TableRowRef;
 
 /// Everything that stops a bundle from being written, read or trusted.
 #[derive(Debug)]

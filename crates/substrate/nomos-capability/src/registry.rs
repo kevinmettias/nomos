@@ -1,6 +1,8 @@
 use crate::resolution::Resolution;
 use crate::unmet::Unmet;
-use crate::registry_error::{OfferRefusal, RegistryError, RegistryErrorKind};
+use crate::offer_refusal::OfferRefusal;
+use crate::registry_error::RegistryError;
+use crate::registry_error_kind::RegistryErrorKind;
 use crate::contract::CapabilityContract;
 use crate::provider_offer::ProviderOffer;
 use crate::requirement::Requirement;

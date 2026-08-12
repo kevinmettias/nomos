@@ -1,4 +1,9 @@
-use crate::rows::{RowCensus, RowScope};
+use crate::node_row::NodeRow;
+use crate::row_census::RowCensus;
+use crate::row_scope::RowScope;
+use crate::store_error::StoreError;
+use crate::suite_authority::SuiteAuthority;
+use crate::table::Table;
 use crate::schema::{Latest_Version, MIGRATIONS, Migration};
 use nomos_spec_model::{ContentHash, SourceBlock, TableRow, Table_Defects, Table_Rows};
 use rusqlite::{Connection, OptionalExtension, params};
@@ -12,108 +17,6 @@ pub const AUTHORED: &str = "authored";
 
 /// The authority of a node that exists only because something points at it.
 pub const EXTERNAL: &str = "external";
-
-/// Whether a suite is this repository's own specification or one it merely references.
-///
-/// Named rather than a bool. `Put_Suite(suite_id, title, true)` said nothing at the call
-/// site about what was true, and the distinction it carries is the one the store exists to
-/// keep: a sibling's statement is quoted, not governed.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum SuiteAuthority
-{
-    /// This repository's own specification, whose records govern here.
-    Root,
-    /// A suite read in from elsewhere, present so its nodes can be pointed at.
-    Sibling,
-}
-
-impl SuiteAuthority
-{
-    /// How the `authority_root` column spells this.
-    const fn Stored(self) -> i64
-    {
-        return match self
-        {
-            Self::Root => 1,
-            Self::Sibling => 0,
-        };
-    }
-
-    /// What the `authority_root` column meant.
-    const fn Read(stored: i64) -> Self
-    {
-        return if stored == 0 { Self::Sibling } else { Self::Root };
-    }
-}
-
-#[derive(Debug)]
-pub enum StoreError
-{
-    Sql(String),
-    Migration
-    {
-        from: u32,
-        cause: String,
-    },
-    /// The database was written by a newer build than this one.
-    TooNew
-    {
-        found: u32,
-        supported: u32,
-    },
-    /// A document does not read: an authored record this build embeds that will not
-    /// parse, or stored bytes that are not text. Both name the document and say what
-    /// went wrong with it, because in either case the caller's next question is which
-    /// file.
-    Record
-    {
-        path: String,
-        cause: String,
-    },
-    /// A block carries something shaped like a table that cannot be read as one.
-    Table
-    {
-        document_uid: i64,
-        ordinal: u32,
-        cause: String,
-    },
-}
-
-impl core::fmt::Display for StoreError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::Sql(cause) => write!(formatter, "store error: {cause}"),
-            Self::Migration { from, cause } => {
-                write!(formatter, "migration from version {from} failed: {cause}")
-            }
-            Self::TooNew { found, supported } => write!(
-                formatter,
-                "the store is at schema version {found}; this build understands {supported}. \
-                 Refusing to open it rather than reading tables whose meaning may have changed"
-            ),
-            Self::Record { path, cause } => write!(formatter, "{path}: {cause}"),
-            Self::Table {
-                document_uid,
-                ordinal,
-                cause,
-            } => write!(formatter, "document {document_uid} block {ordinal}: {cause}"),
-        };
-    }
-}
-
-impl std::error::Error for StoreError
-{}
-
-impl From<rusqlite::Error> for StoreError
-{
-    fn from(error: rusqlite::Error) -> Self
-    {
-        return Self::Sql(error.to_string());
-    }
-}
 
 pub struct SpecificationStore
 {
@@ -457,49 +360,6 @@ fn Insert_Rows_Under(
     return Ok(());
 }
 
-/// Writes bytes, addressed by content, through a caller's transaction.
-///
-/// # Errors
-///
-/// Returns [`StoreError`] on any SQL failure.
-/// The counting statement each table carries.
-///
-/// One constant per table rather than eighteen match arms each holding their own string:
-/// the arms then say only which statement belongs to which variant, and the statements read
-/// as the table of literals they are. Written out rather than interpolated from
-/// [`Table::Name`] for the reason [`Table::Tally_Sql`] gives.
-const TALLY_BLOBS: &str = "SELECT 'blobs' AS which, count(*) AS tally FROM blobs";
-const TALLY_SOURCE_DOCUMENTS: &str =
-    "SELECT 'source_documents' AS which, count(*) AS tally FROM source_documents";
-const TALLY_SOURCE_HEADINGS: &str =
-    "SELECT 'source_headings' AS which, count(*) AS tally FROM source_headings";
-const TALLY_SOURCE_BLOCKS: &str =
-    "SELECT 'source_blocks' AS which, count(*) AS tally FROM source_blocks";
-const TALLY_SOURCE_TABLE_ROWS: &str =
-    "SELECT 'source_table_rows' AS which, count(*) AS tally FROM source_table_rows";
-const TALLY_SUITES: &str = "SELECT 'suites' AS which, count(*) AS tally FROM suites";
-const TALLY_NODES: &str = "SELECT 'nodes' AS which, count(*) AS tally FROM nodes";
-const TALLY_NODE_ALIASES: &str =
-    "SELECT 'node_aliases' AS which, count(*) AS tally FROM node_aliases";
-const TALLY_NODE_HISTORY: &str =
-    "SELECT 'node_history' AS which, count(*) AS tally FROM node_history";
-const TALLY_RELATIONS: &str = "SELECT 'relations' AS which, count(*) AS tally FROM relations";
-const TALLY_RELATION_TYPES: &str =
-    "SELECT 'relation_types' AS which, count(*) AS tally FROM relation_types";
-const TALLY_NORMATIVE_STATEMENTS: &str =
-    "SELECT 'normative_statements' AS which, count(*) AS tally FROM normative_statements";
-const TALLY_LINEAGE: &str = "SELECT 'lineage' AS which, count(*) AS tally FROM lineage";
-const TALLY_OMISSIONS: &str = "SELECT 'omissions' AS which, count(*) AS tally FROM omissions";
-const TALLY_RECORD_FRONT_MATTER: &str =
-    "SELECT 'record_front_matter' AS which, count(*) AS tally FROM record_front_matter";
-const TALLY_RECORD_RELATIONS: &str =
-    "SELECT 'record_relations' AS which, count(*) AS tally FROM record_relations";
-const TALLY_SUBMISSIONS: &str = "SELECT 'submissions' AS which, count(*) AS tally FROM submissions";
-const TALLY_SUBMISSION_VALUES: &str =
-    "SELECT 'submission_values' AS which, count(*) AS tally FROM submission_values";
-const TALLY_SUBMISSION_GAPS: &str =
-    "SELECT 'submission_gaps' AS which, count(*) AS tally FROM submission_gaps";
-
 /// Every row a mapped query produced, or the first failure it hit.
 pub(crate) fn Collected<T>(
     rows: impl Iterator<Item = rusqlite::Result<T>>,
@@ -514,6 +374,11 @@ pub(crate) fn Collected<T>(
     return Ok(collected);
 }
 
+/// Writes bytes, addressed by content, through a caller's transaction.
+///
+/// # Errors
+///
+/// Returns [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Blob(connection: &Connection, content: &[u8]) -> Result<i64, StoreError>
 {
     let digest = ContentHash::Of_Bytes(content);
@@ -564,21 +429,6 @@ pub(crate) fn Write_Source_Document(
         params![path, revision],
         |row| row.get(0),
     )?);
-}
-
-/// The columns a node carries, as one value.
-///
-/// Grouped because they only mean anything together: an identifier without the authority
-/// that speaks for it says nothing about whether a later writer may overwrite it, and five
-/// bare strings in a fixed order is a shape a caller gets wrong silently.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct NodeRow<'a>
-{
-    pub node_id: &'a str,
-    pub kind: &'a str,
-    pub authority: &'a str,
-    pub representation: &'a str,
-    pub title: &'a str,
 }
 
 /// Writes a node, upgrading a placeholder but never overwriting a real one, through a
@@ -912,128 +762,5 @@ impl SpecificationStore
     pub fn Connection(&self) -> &Connection
     {
         return &self.connection;
-    }
-}
-
-/// The tables a caller may count.
-///
-/// An enum rather than a string, so `Count` cannot become a hole through which
-/// arbitrary SQL reaches the database.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Table
-{
-    Blobs,
-    SourceDocuments,
-    SourceHeadings,
-    SourceBlocks,
-    SourceTableRows,
-    Suites,
-    Nodes,
-    NodeAliases,
-    NodeHistory,
-    Relations,
-    RelationTypes,
-    NormativeStatements,
-    Lineage,
-    Omissions,
-    RecordFrontMatter,
-    RecordRelations,
-    Submissions,
-    SubmissionValues,
-    SubmissionGaps,
-}
-
-impl Table
-{
-    #[must_use]
-    pub const fn Name(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Blobs => "blobs",
-            Self::SourceDocuments => "source_documents",
-            Self::SourceHeadings => "source_headings",
-            Self::SourceBlocks => "source_blocks",
-            Self::SourceTableRows => "source_table_rows",
-            Self::Suites => "suites",
-            Self::Nodes => "nodes",
-            Self::NodeAliases => "node_aliases",
-            Self::NodeHistory => "node_history",
-            Self::Relations => "relations",
-            Self::RelationTypes => "relation_types",
-            Self::NormativeStatements => "normative_statements",
-            Self::Lineage => "lineage",
-            Self::Omissions => "omissions",
-            Self::RecordFrontMatter => "record_front_matter",
-            Self::RecordRelations => "record_relations",
-            Self::Submissions => "submissions",
-            Self::SubmissionValues => "submission_values",
-            Self::SubmissionGaps => "submission_gaps",
-        };
-    }
-
-    /// The statement counting this table's rows, labelled with the table's own name.
-    ///
-    /// Written out per variant rather than interpolated from [`Table::Name`] at the call
-    /// site. A table identifier occupies no value position, so no driver can bind one and
-    /// there is no parameterized form to prefer; the only way to keep the statement out of
-    /// runtime string building is for each variant to carry its own. The label is selected
-    /// rather than assumed from row order, because a compound `SELECT` without `ORDER BY`
-    /// is not promised to come back in the order its arms were written.
-    #[must_use]
-    pub const fn Tally_Sql(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Blobs => TALLY_BLOBS,
-            Self::SourceDocuments => TALLY_SOURCE_DOCUMENTS,
-            Self::SourceHeadings => TALLY_SOURCE_HEADINGS,
-            Self::SourceBlocks => TALLY_SOURCE_BLOCKS,
-            Self::SourceTableRows => TALLY_SOURCE_TABLE_ROWS,
-            Self::Suites => TALLY_SUITES,
-            Self::Nodes => TALLY_NODES,
-            Self::NodeAliases => TALLY_NODE_ALIASES,
-            Self::NodeHistory => TALLY_NODE_HISTORY,
-            Self::Relations => TALLY_RELATIONS,
-            Self::RelationTypes => TALLY_RELATION_TYPES,
-            Self::NormativeStatements => TALLY_NORMATIVE_STATEMENTS,
-            Self::Lineage => TALLY_LINEAGE,
-            Self::Omissions => TALLY_OMISSIONS,
-            Self::RecordFrontMatter => TALLY_RECORD_FRONT_MATTER,
-            Self::RecordRelations => TALLY_RECORD_RELATIONS,
-            Self::Submissions => TALLY_SUBMISSIONS,
-            Self::SubmissionValues => TALLY_SUBMISSION_VALUES,
-            Self::SubmissionGaps => TALLY_SUBMISSION_GAPS,
-        };
-    }
-
-    /// Every table in the schema — a list kept beside the enum, which the compiler does
-    /// not check against the schema it claims to enumerate.
-    ///
-    /// Mirrored by `Test_Every_Table_In_The_Schema_Should_Be_Declared`.
-    #[must_use]
-    pub const fn All() -> &'static [Self]
-    {
-        return &[
-            Self::Blobs,
-            Self::SourceDocuments,
-            Self::SourceHeadings,
-            Self::SourceBlocks,
-            Self::SourceTableRows,
-            Self::Suites,
-            Self::Nodes,
-            Self::NodeAliases,
-            Self::NodeHistory,
-            Self::Relations,
-            Self::RelationTypes,
-            Self::NormativeStatements,
-            Self::Lineage,
-            Self::Omissions,
-            Self::RecordFrontMatter,
-            Self::RecordRelations,
-            Self::Submissions,
-            Self::SubmissionValues,
-            Self::SubmissionGaps,
-        ];
     }
 }

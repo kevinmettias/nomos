@@ -1,4 +1,5 @@
-use crate::store::{AUTHORED, SpecificationStore, StoreError};
+use crate::store::{AUTHORED, SpecificationStore};
+use crate::store_error::StoreError;
 use nomos_spec_model::Parse_Record;
 
 /// The records that govern this system, embedded so they travel with the binary.

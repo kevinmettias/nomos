@@ -1,6 +1,11 @@
 use crate::BundleError;
 use crate::bundle::Bundle;
-use crate::model::{Blob, BlobEncoding, DocumentRef, OrdinalRef, Record, TableRowRef};
+use crate::blob::Blob;
+use crate::blob_encoding::BlobEncoding;
+use crate::document_ref::DocumentRef;
+use crate::ordinal_ref::OrdinalRef;
+use crate::record::Record;
+use crate::table_row_ref::TableRowRef;
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use nomos_spec_model::ContentHash;
@@ -539,7 +544,7 @@ fn Assert_Declared_Resolves(record: &Record, carried: &Identities) -> Result<(),
 }
 
 fn Assert_Lineage_Resolves(
-    lineage: &crate::model::Lineage,
+    lineage: &crate::lineage::Lineage,
     carried: &Identities,
 ) -> Result<(), BundleError>
 {

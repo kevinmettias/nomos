@@ -1,134 +1,9 @@
+//! Reading the table rows a block carries.
+
 use crate::block::SourceBlock;
-use crate::normalize::ContentHash;
-use serde::{Deserialize, Serialize};
-
-/// What a line inside a table is.
-///
-/// A separator carries no authored content — it is the delimiter telling a reader where
-/// the header stops. A header names the columns; it is authored text, but it is not a
-/// datum. Typing all three rather than discarding any of them keeps the line count, the
-/// non-separator count and the data count as three queries over one table, so no number
-/// has to be bent to match another.
-///
-/// Restoration is what forces the header to be its own kind. Minting a node per data row
-/// of the canonical domain model, over a table whose header cannot be told from its data,
-/// mints a concept named after the column titles.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum RowKind
-{
-    Header,
-    Content,
-    Separator,
-}
-
-impl RowKind
-{
-    #[must_use]
-    pub const fn Label(self) -> &'static str
-    {
-        return match self
-        {
-            Self::Header => "header",
-            Self::Content => "content",
-            Self::Separator => "separator",
-        };
-    }
-
-    #[must_use]
-    pub fn Parse(label: &str) -> Option<Self>
-    {
-        return match label
-        {
-            "header" => Some(Self::Header),
-            "content" => Some(Self::Content),
-            "separator" => Some(Self::Separator),
-            _ => None,
-        };
-    }
-
-    /// Every kind, so a census cannot quietly omit one.
-    #[must_use]
-    pub const fn All() -> &'static [Self]
-    {
-        return &[Self::Header, Self::Content, Self::Separator];
-    }
-}
-
-/// One line of a markdown table, held as a child of the block that carries it.
-///
-/// The block remains the preservation authority: it stores the verbatim text and both
-/// v14 hashes, so byte completeness never depends on rows. Rows exist so a loss report
-/// can name what went missing by identity rather than by count.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct TableRow
-{
-    /// 1-based within the block.
-    pub ordinal: u32,
-    /// 1-based within the block. A block may carry more than one table.
-    pub table_ordinal: u32,
-    pub kind: RowKind,
-    pub cells: Vec<String>,
-    /// The line as authored.
-    pub text: String,
-}
-
-impl TableRow
-{
-    #[must_use]
-    pub fn Content_Hash(&self) -> ContentHash
-    {
-        return ContentHash::Of(&self.text);
-    }
-
-    #[must_use]
-    pub fn Normalized_Hash(&self) -> ContentHash
-    {
-        return ContentHash::Of_Normalized(&self.text);
-    }
-}
-
-/// A table that cannot be read as one.
-///
-/// Reported rather than repaired. A run of pipe lines with no delimiter is not a table,
-/// and one with two delimiters has a second header nothing names — either way, guessing
-/// which rows carry content is how a content row gets typed out of the preservation
-/// rule's view without leaving the document.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum TableDefect
-{
-    NoSeparator
-    {
-        table_ordinal: u32,
-        rows: u32,
-    },
-    ManySeparators
-    {
-        table_ordinal: u32,
-        separators: u32,
-    },
-}
-
-impl core::fmt::Display for TableDefect
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::NoSeparator { table_ordinal, rows } => write!(
-                formatter,
-                "table {table_ordinal} has {rows} row(s) and no delimiter, so no row is a header"
-            ),
-            Self::ManySeparators {
-                table_ordinal,
-                separators,
-            } => write!(
-                formatter,
-                "table {table_ordinal} has {separators} delimiters, so where its header stops is undecided"
-            ),
-        };
-    }
-}
+use crate::row_kind::RowKind;
+use crate::table_defect::TableDefect;
+use crate::table_row::TableRow;
 
 /// Splits a block into the table rows it carries.
 ///
@@ -410,7 +285,7 @@ mod tests
     {
         let block = SourceBlock {
             ordinal: 1,
-            kind: crate::block::BlockKind::Prose,
+            kind: crate::block_kind::BlockKind::Prose,
             heading_path: Vec::new(),
             text: "| a |\n| --- |\n| 1 |\nbetween\n| b |\n| --- |\n| 2 |".to_owned(),
         };
@@ -504,7 +379,7 @@ mod tests
     {
         let block = SourceBlock {
             ordinal: 1,
-            kind: crate::block::BlockKind::Prose,
+            kind: crate::block_kind::BlockKind::Prose,
             heading_path: Vec::new(),
             text: "| a |\n| --- |\nbetween\n| b |\n| --- |".to_owned(),
         };

@@ -1,5 +1,7 @@
 //! One consequence of applying a change.
 
+use crate::effect_kind::EffectKind;
+
 /// What one change actually did, and to what.
 ///
 /// Reported rather than assumed, because the submitter did not know. A checkout does not
@@ -15,6 +17,8 @@
 /// order effects were applied in is not a fact about the workspace — it is a fact about
 /// how the change set was iterated — and sorting by outcome would group by exactly the
 /// thing the caller is usually reading past.
+///
+/// [`Change::Present`]: crate::Change::Present
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Effect
 {
@@ -35,37 +39,5 @@ impl Effect
     pub const fn Altered(&self) -> bool
     {
         return self.kind.Altered();
-    }
-}
-
-/// Which of the five things a change turned out to be.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum EffectKind
-{
-    Added,
-    Modified,
-    Removed,
-    /// The change said what the workspace already said.
-    ///
-    /// Not an error and not silence. An editor saving an unmodified file and a checkout
-    /// landing where you already were both arrive here, and a workspace that treated them
-    /// as changes would advance a generation and invalidate every fact in the store to
-    /// reach the answer it already had.
-    Redundant,
-    /// A removal of something that was not there.
-    ///
-    /// Distinct from `Redundant` because it is worth seeing: a submitter deleting files
-    /// the workspace never had is usually a submitter working from a different idea of
-    /// what the workspace contains.
-    AlreadyAbsent,
-}
-
-impl EffectKind
-{
-    /// Whether an outcome of this kind changed what the workspace is.
-    #[must_use]
-    pub const fn Altered(self) -> bool
-    {
-        return matches!(self, Self::Added | Self::Modified | Self::Removed);
     }
 }

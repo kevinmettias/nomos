@@ -8,7 +8,9 @@
 //! `OD-SPEC-013` decided what it writes: a submission is a node, a field is a sequence of
 //! attributed rows in `submission_values`, and a decision gap is a row in `submission_gaps`.
 
-use crate::store::{NodeRow, SpecificationStore, StoreError};
+use crate::store::SpecificationStore;
+use crate::node_row::NodeRow;
+use crate::store_error::StoreError;
 use nomos_spec_model::{
     ContentHash, Failure, FieldValue, Origin, Refusal, Submission, SubmissionState, Validate,
 };
@@ -409,7 +411,7 @@ mod tests
 {
     use super::*;
     use crate::governing::Seed_Governing_Records;
-    use crate::store::Table;
+    use crate::table::Table;
     use nomos_spec_model::{DecisionGap, FieldValue, Severity, SubmissionKind};
 
     fn Store() -> SpecificationStore

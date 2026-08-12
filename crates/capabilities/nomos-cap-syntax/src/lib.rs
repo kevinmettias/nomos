@@ -56,6 +56,7 @@ mod contract;
 mod payload;
 mod payload_item;
 mod payload_refusal;
+mod payload_refusal_kind;
 mod syntax_payload;
 
 pub use contract::{CAPABILITY, Capability, Capability_Contract, Ceiling, CONTRACT_VERSION, Payload_Schema, SCHEMA};
@@ -64,5 +65,6 @@ pub use payload::{
     Parse_Payload, PUBLIC, Render_Payload, SLICE, TRAIT, VALUE,
 };
 pub use payload_item::PayloadItem;
-pub use payload_refusal::{PayloadRefusal, PayloadRefusalKind};
+pub use payload_refusal::PayloadRefusal;
+pub use payload_refusal_kind::PayloadRefusalKind;
 pub use syntax_payload::SyntaxPayload;

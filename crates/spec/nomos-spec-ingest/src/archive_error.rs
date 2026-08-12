@@ -1,5 +1,7 @@
 //! Every way an archive refuses to be opened or read.
 
+use crate::archive_error_kind::ArchiveErrorKind;
+
 use std::path::PathBuf;
 
 /// Why an archive could not be read, always naming which one.
@@ -49,28 +51,3 @@ impl core::fmt::Display for ArchiveError
 
 impl std::error::Error for ArchiveError
 {}
-
-/// Which of the four refusals it was.
-#[derive(Debug)]
-pub enum ArchiveErrorKind
-{
-    Unreadable
-    {
-        cause: String,
-    },
-    /// An archive holding no files at all.
-    ///
-    /// Refused rather than returned, because at every later call site an archive that
-    /// lists nothing is indistinguishable from one that was never read. This is §C8.8 —
-    /// a missing path is not an empty repository — applied to the archives.
-    Empty,
-    NoSuchEntry
-    {
-        entry: String,
-    },
-    NotText
-    {
-        entry: String,
-        cause: String,
-    },
-}

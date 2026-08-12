@@ -1,7 +1,9 @@
 //! Every way a composition is refused before anything is resolved.
 
-use nomos_contracts::ProviderId;
 use nomos_contracts::CapabilityId;
+
+use crate::offer_refusal::OfferRefusal;
+use crate::registry_error_kind::RegistryErrorKind;
 
 /// Why a declaration or an offer was refused, always naming the capability it was about.
 ///
@@ -55,33 +57,3 @@ impl core::fmt::Display for RegistryError
 
 impl std::error::Error for RegistryError
 {}
-
-/// Which of the two things being refused was refused.
-///
-/// The three offer refusals are one variant carrying an [`OfferRefusal`] rather than
-/// three, because all three are about an offer and an offer has a provider. Declaring a
-/// contract has none, which is the whole distinction this level draws.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum RegistryErrorKind
-{
-    /// A second contract for a capability that already has one.
-    AlreadyDeclared,
-    /// An offer that will not stand, and who made it.
-    Offer
-    {
-        provider: ProviderId,
-        refusal: OfferRefusal,
-    },
-}
-
-/// Why one provider's offer will not stand.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum OfferRefusal
-{
-    /// An offer against a capability no contract declares.
-    ForUndeclared,
-    /// A provider claimed more than its contract permits.
-    ExceedsCeiling,
-    /// A second offer from a provider that already offers this capability.
-    Duplicate,
-}

@@ -12,7 +12,7 @@
 //! name into a list.
 
 use crate::BundleError;
-use crate::model::Record;
+use crate::record::Record;
 use nomos_spec_store::Table;
 use rusqlite::Connection;
 use std::collections::BTreeSet;
@@ -470,10 +470,10 @@ mod tests
     #[test]
     fn Test_A_Declared_Field_The_Record_Lacks_Should_Be_Refused()
     {
-        let record = Record::Blob(crate::model::Blob {
+        let record = Record::Blob(crate::blob::Blob {
             sha256: "sha256:aa".to_owned(),
             byte_length: 2,
-            encoding: crate::model::BlobEncoding::Utf8,
+            encoding: crate::blob_encoding::BlobEncoding::Utf8,
             content: "hi".to_owned(),
         });
         let declared = &[("sha256", Carried::Field("digest"))];

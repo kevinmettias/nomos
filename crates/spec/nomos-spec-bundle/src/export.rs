@@ -1,12 +1,30 @@
 use crate::BundleError;
 use crate::bundle::Bundle;
 use crate::columns::Assert_Columns_Covered;
-use crate::model::{
-    Blob, BlobEncoding, DocumentRef, Lineage, Node, NodeAlias, NodeHistory, NormativeStatement,
-    Omission, OrdinalRef, Record, RecordFrontMatter, RecordRelation, Relation, RelationType,
-    SourceBlock, SourceDocument, SourceHeading, SourceTableRow, Submission, SubmissionGap,
-    SubmissionValue, Suite, TableRowRef,
-};
+use crate::blob::Blob;
+use crate::blob_encoding::BlobEncoding;
+use crate::document_ref::DocumentRef;
+use crate::lineage::Lineage;
+use crate::node::Node;
+use crate::node_alias::NodeAlias;
+use crate::node_history::NodeHistory;
+use crate::normative_statement::NormativeStatement;
+use crate::omission::Omission;
+use crate::ordinal_ref::OrdinalRef;
+use crate::record::Record;
+use crate::record_front_matter::RecordFrontMatter;
+use crate::record_relation::RecordRelation;
+use crate::relation::Relation;
+use crate::relation_type::RelationType;
+use crate::source_block::SourceBlock;
+use crate::source_document::SourceDocument;
+use crate::source_heading::SourceHeading;
+use crate::source_table_row::SourceTableRow;
+use crate::submission::Submission;
+use crate::submission_gap::SubmissionGap;
+use crate::submission_value::SubmissionValue;
+use crate::suite::Suite;
+use crate::table_row_ref::TableRowRef;
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD;
 use nomos_spec_store::{SpecificationStore, Table};
