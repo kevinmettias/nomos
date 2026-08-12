@@ -139,7 +139,6 @@ pub fn Table_Rows(block: &SourceBlock) -> Vec<TableRow>
     let mut rows: Vec<TableRow> = Vec::new();
     let mut table_ordinal = 0_u32;
     let mut in_table = false;
-
     for line in block.text.split('\n')
     {
         let trimmed = line.trim();
@@ -148,28 +147,35 @@ pub fn Table_Rows(block: &SourceBlock) -> Vec<TableRow>
             in_table = false;
             continue;
         }
-
         if !in_table
         {
             in_table = true;
             table_ordinal = table_ordinal.saturating_add(1);
         }
-
-        let cells = Split_Cells(trimmed);
-        let kind = if Is_Separator(&cells) { RowKind::Separator } else { RowKind::Content };
-
-        rows.push(TableRow {
-            ordinal: u32::try_from(rows.len()).unwrap_or(u32::MAX).saturating_add(1),
-            table_ordinal,
-            kind,
-            cells,
-            text: line.to_owned(),
-        });
+        let row = One_Row(line, trimmed, table_ordinal, rows.len());
+        rows.push(row);
     }
 
     Retype_Headers(&mut rows);
-
     return rows;
+}
+
+/// One pipe line as a row, typed by whether its cells are a delimiter.
+///
+/// A header cannot be told from content here, because a line is not known to precede the
+/// delimiter until the delimiter has been seen. [`Retype_Headers`] is that second pass.
+fn One_Row(line: &str, trimmed: &str, table_ordinal: u32, already: usize) -> TableRow
+{
+    let cells = Split_Cells(trimmed);
+    let kind = if Is_Separator(&cells) { RowKind::Separator } else { RowKind::Content };
+
+    return TableRow {
+        ordinal: u32::try_from(already).unwrap_or(u32::MAX).saturating_add(1),
+        table_ordinal,
+        kind,
+        cells,
+        text: line.to_owned(),
+    };
 }
 
 /// Everything a table places before its delimiter is header.
@@ -211,38 +217,42 @@ pub fn Table_Defects(rows: &[TableRow]) -> Vec<TableDefect>
 {
     let mut defects = Vec::new();
     let tables = rows.iter().map(|row| row.table_ordinal).max().unwrap_or(0);
-
     for table_ordinal in 1..=tables
     {
-        let members = rows.iter().filter(|row| row.table_ordinal == table_ordinal);
-        let mut total = 0_u32;
-        let mut separators = 0_u32;
-        for row in members
-        {
-            total = total.saturating_add(1);
-            if row.kind == RowKind::Separator
-            {
-                separators = separators.saturating_add(1);
-            }
-        }
+        let defect = Defect_Of(rows, table_ordinal);
 
-        if separators == 0
-        {
-            defects.push(TableDefect::NoSeparator {
-                table_ordinal,
-                rows: total,
-            });
-        }
-        else if separators > 1
-        {
-            defects.push(TableDefect::ManySeparators {
-                table_ordinal,
-                separators,
-            });
-        }
+        defects.extend(defect);
     }
 
     return defects;
+}
+
+/// One table's delimiter count, and what is wrong with it if anything is.
+fn Defect_Of(rows: &[TableRow], table_ordinal: u32) -> Option<TableDefect>
+{
+    let mut total = 0_u32;
+    let mut separators = 0_u32;
+    for row in rows.iter().filter(|row| row.table_ordinal == table_ordinal)
+    {
+        total = total.saturating_add(1);
+        separators = separators.saturating_add(u32::from(row.kind == RowKind::Separator));
+    }
+    if separators == 0
+    {
+        return Some(TableDefect::NoSeparator {
+            table_ordinal,
+            rows: total,
+        });
+    }
+    if separators == 1
+    {
+        return None;
+    }
+
+    return Some(TableDefect::ManySeparators {
+        table_ordinal,
+        separators,
+    });
 }
 
 fn Is_Pipe_Line(trimmed: &str) -> bool
@@ -257,33 +267,40 @@ fn Split_Cells(trimmed: &str) -> Vec<String>
     let mut cells = Vec::new();
     let mut current = String::new();
     let mut escaped = false;
-
     for character in inner.chars()
     {
-        if escaped
-        {
-            current.push(character);
-            escaped = false;
-            continue;
-        }
-        match character
-        {
-            '\\' =>
-            {
-                escaped = true;
-                current.push(character);
-            }
-            '|' =>
-            {
-                cells.push(current.trim().to_owned());
-                current = String::new();
-            }
-            _ => current.push(character),
-        }
+        escaped = Take_One_Character(character, escaped, &mut cells, &mut current);
     }
     cells.push(current.trim().to_owned());
 
     return cells;
+}
+
+/// One character folded into the cell being read, answering whether the next one is escaped.
+fn Take_One_Character(
+    character: char,
+    escaped: bool,
+    cells: &mut Vec<String>,
+    current: &mut String,
+) -> bool
+{
+    if escaped
+    {
+        current.push(character);
+
+        return false;
+    }
+    if character == '|'
+    {
+        cells.push(current.trim().to_owned());
+        current.clear();
+
+        return false;
+    }
+
+    current.push(character);
+
+    return character == '\\';
 }
 
 fn Is_Separator(cells: &[String]) -> bool

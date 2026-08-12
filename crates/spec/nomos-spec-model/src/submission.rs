@@ -444,25 +444,14 @@ fn Check_Alternatives(submission: &Submission, failures: &mut Vec<Failure>)
     {
         return;
     }
-
     let Some(alternatives) = submission.Current("alternatives")
     else
     {
         return;
     };
-
     let entries: Vec<&str> = Entries(&alternatives.value);
 
-    if entries.len() < 2
-    {
-        failures.push(Failure {
-            field: "alternatives".to_owned(),
-            rule: "at-least-two-alternatives".to_owned(),
-            remedy: "give at least two entries, one per line; a design with one alternative \
-                     did not choose, it recorded. `do nothing` is an admissible entry"
-                .to_owned(),
-        });
-    }
+    Check_At_Least_Two_Were_Weighed(&entries, failures);
 
     let Some(selected) = submission.Current("selected")
     else
@@ -470,21 +459,45 @@ fn Check_Alternatives(submission: &Submission, failures: &mut Vec<Failure>)
         return;
     };
 
-    if !entries
-        .iter()
-        .any(|entry| return entry.trim() == selected.value.trim())
+    Check_The_Selection_Was_Considered(&entries, &selected.value, failures);
+}
+
+/// A design with one alternative did not choose, it recorded.
+fn Check_At_Least_Two_Were_Weighed(entries: &[&str], failures: &mut Vec<Failure>)
+{
+    if entries.len() >= 2
     {
-        failures.push(Failure {
-            field: "selected".to_owned(),
-            rule: "selected-names-an-alternative".to_owned(),
-            remedy: format!(
-                "make `selected` one of the {} entry(ies) in `alternatives` exactly; a chosen \
-                 option absent from the options considered means one of the two is false, and \
-                 a reader cannot tell which",
-                entries.len()
-            ),
-        });
+        return;
     }
+
+    failures.push(Failure {
+        field: "alternatives".to_owned(),
+        rule: "at-least-two-alternatives".to_owned(),
+        remedy: "give at least two entries, one per line; a design with one alternative \
+                 did not choose, it recorded. `do nothing` is an admissible entry"
+            .to_owned(),
+    });
+}
+
+/// A chosen option absent from the options considered means one of the two is false, and a
+/// reader cannot tell which.
+fn Check_The_Selection_Was_Considered(entries: &[&str], selected: &str, failures: &mut Vec<Failure>)
+{
+    if entries.iter().any(|entry| return entry.trim() == selected.trim())
+    {
+        return;
+    }
+
+    failures.push(Failure {
+        field: "selected".to_owned(),
+        rule: "selected-names-an-alternative".to_owned(),
+        remedy: format!(
+            "make `selected` one of the {} entry(ies) in `alternatives` exactly; a chosen \
+             option absent from the options considered means one of the two is false, and \
+             a reader cannot tell which",
+            entries.len()
+        ),
+    });
 }
 
 /// Each entry in `deviations` names the design clause it departs from.
@@ -506,24 +519,31 @@ fn Check_Deviations(submission: &Submission, failures: &mut Vec<Failure>)
 
     for (index, entry) in Entries(&deviations.value).iter().enumerate()
     {
-        let names_a_clause = entry
-            .split_once(':')
-            .is_some_and(|(clause, _)| return !clause.trim().is_empty());
-
-        if !names_a_clause
-        {
-            failures.push(Failure {
-                field: "deviations".to_owned(),
-                rule: "deviation-names-its-clause".to_owned(),
-                remedy: format!(
-                    "entry {} reads `{entry}`; write it as `<design clause>: <what departed>`, \
-                     because a deviation from nothing in particular cannot be reviewed or \
-                     closed",
-                    index.saturating_add(1)
-                ),
-            });
-        }
+        Check_One_Deviation(entry, index, failures);
     }
+}
+
+/// An entry names its clause by carrying a `:` — the clause, then what departed from it.
+fn Check_One_Deviation(entry: &str, index: usize, failures: &mut Vec<Failure>)
+{
+    let names_a_clause = entry
+        .split_once(':')
+        .is_some_and(|(clause, _)| return !clause.trim().is_empty());
+    if names_a_clause
+    {
+        return;
+    }
+
+    failures.push(Failure {
+        field: "deviations".to_owned(),
+        rule: "deviation-names-its-clause".to_owned(),
+        remedy: format!(
+            "entry {} reads `{entry}`; write it as `<design clause>: <what departed>`, \
+             because a deviation from nothing in particular cannot be reviewed or \
+             closed",
+            index.saturating_add(1)
+        ),
+    });
 }
 
 /// The rules that apply only to an accepted submission.
@@ -544,6 +564,13 @@ fn Check_Acceptance(submission: &Submission, failures: &mut Vec<Failure>)
         });
     }
 
+    Check_Nothing_Required_Was_Inferred(submission, failures);
+    Check_No_Blocking_Gap_Is_Open(submission, failures);
+}
+
+/// A system that accepts its own inferences accepts them as what somebody wanted.
+fn Check_Nothing_Required_Was_Inferred(submission: &Submission, failures: &mut Vec<Failure>)
+{
     for field in submission.Required_Fields()
     {
         let Some(current) = submission.Current(field)
@@ -551,22 +578,28 @@ fn Check_Acceptance(submission: &Submission, failures: &mut Vec<Failure>)
         {
             continue;
         };
-
-        if !current.origin.Satisfies_Acceptance()
+        if current.origin.Satisfies_Acceptance()
         {
-            failures.push(Failure {
-                field: field.to_owned(),
-                rule: "accepted-values-are-not-inferred".to_owned(),
-                remedy: format!(
-                    "the current value of {field} has origin `{}`, which is machinery's guess; \
-                     acceptance needs it submitted, clarified or decided, because a system that \
-                     accepts its own inferences accepts them as what somebody wanted",
-                    current.origin.Label()
-                ),
-            });
+            continue;
         }
-    }
 
+        failures.push(Failure {
+            field: field.to_owned(),
+            rule: "accepted-values-are-not-inferred".to_owned(),
+            remedy: format!(
+                "the current value of {field} has origin `{}`, which is machinery's guess; \
+                 acceptance needs it submitted, clarified or decided, because a system that \
+                 accepts its own inferences accepts them as what somebody wanted",
+                current.origin.Label()
+            ),
+        });
+    }
+}
+
+/// Supplying the value a gap blocks does not close it, because nothing would record that the
+/// question was answered.
+fn Check_No_Blocking_Gap_Is_Open(submission: &Submission, failures: &mut Vec<Failure>)
+{
     let open: BTreeSet<&str> = submission
         .gaps
         .iter()
@@ -859,7 +892,6 @@ mod tests
             Value("deviations", deviations, Origin::Submitted),
             Value("owed", "none", Origin::Submitted),
         ];
-
         if let Some(evidence) = evidence
         {
             let value = Value("evidence", evidence, Origin::Submitted);
@@ -913,25 +945,23 @@ mod tests
     #[test]
     fn Test_Every_Label_Should_Round_Trip_Through_Parse()
     {
-        for kind in [
+        let kinds = [
             SubmissionKind::FeatureRequest,
             SubmissionKind::DesignSpec,
             SubmissionKind::FeatureResult,
-        ]
+        ];
+        for kind in kinds
         {
             assert_eq!(SubmissionKind::Parse(kind.Label()), Some(kind));
         }
-
         for origin in [Origin::Submitted, Origin::Clarified, Origin::Inferred, Origin::Decided]
         {
             assert_eq!(Origin::Parse(origin.Label()), Some(origin));
         }
-
         for severity in [Severity::Blocking, Severity::NonBlocking]
         {
             assert_eq!(Severity::Parse(severity.Label()), Some(severity));
         }
-
         for state in [SubmissionState::Draft, SubmissionState::Accepted]
         {
             assert_eq!(SubmissionState::Parse(state.Label()), Some(state));

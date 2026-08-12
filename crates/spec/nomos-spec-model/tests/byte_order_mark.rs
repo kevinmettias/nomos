@@ -15,7 +15,7 @@
 //! produced those hashes does not ship. The evidence here is the readers' agreement, not
 //! a manifest, and the residual is stated rather than closed.
 
-use nomos_spec_model::{BlockKind, Segment};
+use nomos_spec_model::{BlockKind, Segment, SourceBlock};
 use std::path::{Path, PathBuf};
 
 const BYTE_ORDER_MARK: char = '\u{feff}';
@@ -57,8 +57,13 @@ fn Test_A_Marked_Record_Should_Have_Its_Front_Matter_Skipped()
         blocks.first().map(|block| block.text.as_str()),
         Some("# Runtime capture boundary")
     );
+    Assert_No_Block_Carries_The_Front_Matter(&blocks);
+}
 
-    for block in &blocks
+/// Neither the mark itself nor the fence it opened may survive into a block.
+fn Assert_No_Block_Carries_The_Front_Matter(blocks: &[SourceBlock])
+{
+    for block in blocks
     {
         assert!(
             !block.text.contains(BYTE_ORDER_MARK),
@@ -91,57 +96,17 @@ fn Test_The_Mark_Should_Not_Change_A_Single_Block()
 #[test]
 fn Test_Every_Authored_Document_Should_Segment_Past_Its_Front_Matter()
 {
-    let Some(root) = std::env::var_os("NOMOS_V14_CORPUS")
+    let Some(root) = Corpus_Root()
     else
     {
         return;
     };
-
-    let root = PathBuf::from(root);
-    assert!(
-        root.is_dir(),
-        "NOMOS_V14_CORPUS is set to {}, which is not a directory",
-        root.display()
-    );
-
-    let authoring = root.join("01_authoring");
     let mut documents = Vec::new();
-    Collect(&authoring, &mut documents);
-
+    Collect(&root.join("01_authoring"), &mut documents);
     let mut marked = 0_u32;
     for path in &documents
     {
-        let text = std::fs::read_to_string(path)
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-        let blocks = Segment(&text);
-
-        assert_eq!(
-            blocks.first().map(|block| block.kind),
-            Some(BlockKind::Heading),
-            "{} does not open with a heading, so its front matter became content",
-            path.display()
-        );
-
-        if let Some(unmarked) = text.strip_prefix(BYTE_ORDER_MARK)
-        {
-            marked = marked.saturating_add(1);
-            assert_eq!(
-                blocks,
-                Segment(unmarked),
-                "{} reads differently with its mark",
-                path.display()
-            );
-        }
-
-        for block in &blocks
-        {
-            assert!(
-                !block.text.contains(BYTE_ORDER_MARK),
-                "{} block {} carries the mark",
-                path.display(),
-                block.ordinal
-            );
-        }
+        marked = marked.saturating_add(Assert_One_Document(path));
     }
 
     assert!(
@@ -153,6 +118,75 @@ fn Test_Every_Authored_Document_Should_Segment_Past_Its_Front_Matter()
         marked >= 1600,
         "only {marked} marked documents: this no longer measures the case it exists for"
     );
+}
+
+/// Opt-in by path, and loud rather than silent: a configured corpus that cannot be read fails,
+/// because a gate that quietly skips its own subject is worse than one that fails.
+fn Corpus_Root() -> Option<PathBuf>
+{
+    let named = std::env::var_os("NOMOS_V14_CORPUS")?;
+    let root = PathBuf::from(named);
+
+    assert!(
+        root.is_dir(),
+        "NOMOS_V14_CORPUS is set to {}, which is not a directory",
+        root.display()
+    );
+
+    return Some(root);
+}
+
+/// One authored document: it opens with a heading, no block carries the mark, and it reads
+/// the same with or without one. Answers 1 where the document was marked.
+fn Assert_One_Document(path: &Path) -> u32
+{
+    let text = std::fs::read_to_string(path)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+    let blocks = Segment(&text);
+
+    assert_eq!(
+        blocks.first().map(|block| block.kind),
+        Some(BlockKind::Heading),
+        "{} does not open with a heading, so its front matter became content",
+        path.display()
+    );
+    Assert_No_Block_Carries_The_Mark(&blocks, path);
+
+    return Assert_The_Mark_Changed_Nothing(&text, &blocks, path);
+}
+
+/// The mark must reach no block of any document.
+fn Assert_No_Block_Carries_The_Mark(blocks: &[SourceBlock], path: &Path)
+{
+    for block in blocks
+    {
+        assert!(
+            !block.text.contains(BYTE_ORDER_MARK),
+            "{} block {} carries the mark",
+            path.display(),
+            block.ordinal
+        );
+    }
+}
+
+/// A marked document must segment to exactly what its unmarked self does. Answers 1 where the
+/// document was marked, which is what the count above measures.
+fn Assert_The_Mark_Changed_Nothing(text: &str, blocks: &[SourceBlock], path: &Path) -> u32
+{
+    let Some(unmarked) = text.strip_prefix(BYTE_ORDER_MARK)
+    else
+    {
+        return 0;
+    };
+
+    assert_eq!(
+        blocks,
+        Segment(unmarked),
+        "{} reads differently with its mark",
+        path.display()
+    );
+
+    return 1;
 }
 
 fn Collect(directory: &Path, into: &mut Vec<PathBuf>)

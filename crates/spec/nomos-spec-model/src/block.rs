@@ -64,35 +64,20 @@ pub fn Segment(markdown: &str) -> Vec<SourceBlock>
 {
     let lines: Vec<&str> = markdown.split('\n').map(|line| line.trim_end_matches('\r')).collect();
     let mut index = Skip_Front_Matter(&lines);
-
     let mut blocks: Vec<SourceBlock> = Vec::new();
     let mut paragraph: Vec<&str> = Vec::new();
     let mut heading_path: Vec<String> = Vec::new();
-
     while let Some(line) = lines.get(index)
     {
         if line.starts_with('#')
         {
             Flush(&mut blocks, &mut paragraph, &heading_path);
-            Push_Heading_Path(&mut heading_path, line);
-            blocks.push(SourceBlock {
-                ordinal: Next_Ordinal(&blocks),
-                kind: BlockKind::Heading,
-                heading_path: heading_path.clone(),
-                text: (*line).to_owned(),
-            });
+            Push_A_Heading(&mut blocks, &mut heading_path, line);
         }
         else if line.starts_with("```")
         {
             Flush(&mut blocks, &mut paragraph, &heading_path);
-            let (fence, closing) = Fence(&lines, index);
-            index = closing;
-            blocks.push(SourceBlock {
-                ordinal: Next_Ordinal(&blocks),
-                kind: BlockKind::Code,
-                heading_path: heading_path.clone(),
-                text: fence.join("\n"),
-            });
+            index = Push_A_Fence(&mut blocks, &heading_path, &lines, index);
         }
         else if line.trim().is_empty()
         {
@@ -108,6 +93,53 @@ pub fn Segment(markdown: &str) -> Vec<SourceBlock>
 
     Flush(&mut blocks, &mut paragraph, &heading_path);
     return blocks;
+}
+
+/// A heading extends the path it will then be filed under.
+fn Push_A_Heading(blocks: &mut Vec<SourceBlock>, heading_path: &mut Vec<String>, line: &str)
+{
+    Push_Heading_Path(heading_path, line);
+
+    let block = A_Heading(blocks, heading_path, line);
+    blocks.push(block);
+}
+
+/// A fenced block, answering with the index of its closing fence.
+fn Push_A_Fence(
+    blocks: &mut Vec<SourceBlock>,
+    heading_path: &[String],
+    lines: &[&str],
+    index: usize,
+) -> usize
+{
+    let (fence, closing) = Fence(lines, index);
+    let block = A_Fence(blocks, heading_path, &fence);
+
+    blocks.push(block);
+
+    return closing;
+}
+
+/// One heading line as a block, under the path it has just extended.
+fn A_Heading(blocks: &[SourceBlock], heading_path: &[String], line: &str) -> SourceBlock
+{
+    return SourceBlock {
+        ordinal: Next_Ordinal(blocks),
+        kind: BlockKind::Heading,
+        heading_path: heading_path.to_vec(),
+        text: line.to_owned(),
+    };
+}
+
+/// A fenced block, from its opening fence to its closing one.
+fn A_Fence(blocks: &[SourceBlock], heading_path: &[String], fence: &[&str]) -> SourceBlock
+{
+    return SourceBlock {
+        ordinal: Next_Ordinal(blocks),
+        kind: BlockKind::Code,
+        heading_path: heading_path.to_vec(),
+        text: fence.join("\n"),
+    };
 }
 
 /// v14's readers consume this as part of the opening front matter fence.

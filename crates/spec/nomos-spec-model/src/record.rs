@@ -105,42 +105,49 @@ impl std::error::Error for RecordError
 pub fn Parse_Record(markdown: &str) -> Result<Record, RecordError>
 {
     let text = markdown.strip_prefix('\u{feff}').unwrap_or(markdown);
-
     let Some(after_opening) = text.strip_prefix("---\n").or_else(|| text.strip_prefix("---\r\n"))
     else
     {
         return Err(RecordError::NoFrontMatter);
     };
-
     let Some((yaml, body)) = Split_At_Closing_Fence(after_opening)
     else
     {
         return Err(RecordError::UnterminatedFrontMatter);
     };
-
     let front_matter: RecordFrontMatter =
         serde_yaml_ng::from_str(yaml).map_err(|error| RecordError::Yaml(error.to_string()))?;
 
-    let Some(heading) = First_Heading(body)
-    else
-    {
-        return Err(RecordError::NoHeading {
-            id: front_matter.id,
-        });
-    };
-
-    if !Corroborates(&heading, &front_matter.id, &front_matter.title)
-    {
-        return Err(RecordError::TitleDiverges {
-            id: front_matter.id,
-            declared: front_matter.title,
-            heading,
-        });
-    }
+    Assert_The_Heading_Corroborates(&front_matter, body)?;
 
     return Ok(Record {
         front_matter,
         body: body.to_owned(),
+    });
+}
+
+/// A record that names itself two different things is refused rather than reconciled.
+fn Assert_The_Heading_Corroborates(
+    front_matter: &RecordFrontMatter,
+    body: &str,
+) -> Result<(), RecordError>
+{
+    let Some(heading) = First_Heading(body)
+    else
+    {
+        return Err(RecordError::NoHeading {
+            id: front_matter.id.clone(),
+        });
+    };
+    if Corroborates(&heading, &front_matter.id, &front_matter.title)
+    {
+        return Ok(());
+    }
+
+    return Err(RecordError::TitleDiverges {
+        id: front_matter.id.clone(),
+        declared: front_matter.title.clone(),
+        heading,
     });
 }
 

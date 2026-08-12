@@ -77,6 +77,18 @@ pub fn Render_Record(
 {
     let mut text = String::from("---\n");
 
+    Render_Identity(&mut text, front_matter)?;
+    Render_Tags(&mut text, &front_matter.tags)?;
+    Render_Relations(&mut text, &front_matter.relations)?;
+    text.push_str("---\n\n");
+    Render_Blocks(&mut text, blocks);
+
+    return Ok(text);
+}
+
+/// The scalar fields, in the order the canonical layout writes them.
+fn Render_Identity(text: &mut String, front_matter: &RecordFrontMatter) -> Result<(), RenderError>
+{
     for (field, value) in [
         ("id", &front_matter.id),
         ("type", &front_matter.kind),
@@ -91,38 +103,59 @@ pub fn Render_Record(
     text.push_str("version: ");
     text.push_str(&front_matter.version.to_string());
     text.push('\n');
+
     let authority = Scalar("authority", &front_matter.authority)?;
     text.push_str(&authority);
 
-    if !front_matter.tags.is_empty()
+    return Ok(());
+}
+
+/// The tag sequence, omitted entirely when there is none.
+fn Render_Tags(text: &mut String, tags: &[String]) -> Result<(), RenderError>
+{
+    if tags.is_empty()
     {
-        text.push_str("tags:\n");
-        for tag in &front_matter.tags
-        {
-            let plain = Plain("tags", tag)?;
-            text.push_str("  - ");
-            text.push_str(plain);
-            text.push('\n');
-        }
+        return Ok(());
     }
 
-    if !front_matter.relations.is_empty()
+    text.push_str("tags:\n");
+    for tag in tags
     {
-        text.push_str("relations:\n");
-        for relation in &front_matter.relations
-        {
-            let target = Plain("relations.target", &relation.target)?;
-            let kind = Plain("relations.type", &relation.relation)?;
-            text.push_str("  - target: ");
-            text.push_str(target);
-            text.push_str("\n    type: ");
-            text.push_str(kind);
-            text.push('\n');
-        }
+        let plain = Plain("tags", tag)?;
+        text.push_str("  - ");
+        text.push_str(plain);
+        text.push('\n');
     }
 
-    text.push_str("---\n\n");
+    return Ok(());
+}
 
+/// The relation sequence, in the order the record declares them.
+fn Render_Relations(text: &mut String, relations: &[crate::RecordRelation]) -> Result<(), RenderError>
+{
+    if relations.is_empty()
+    {
+        return Ok(());
+    }
+
+    text.push_str("relations:\n");
+    for relation in relations
+    {
+        let target = Plain("relations.target", &relation.target)?;
+        let kind = Plain("relations.type", &relation.relation)?;
+        text.push_str("  - target: ");
+        text.push_str(target);
+        text.push_str("\n    type: ");
+        text.push_str(kind);
+        text.push('\n');
+    }
+
+    return Ok(());
+}
+
+/// The body, one blank line between blocks and a newline after each.
+fn Render_Blocks(text: &mut String, blocks: &[SourceBlock])
+{
     for (index, block) in blocks.iter().enumerate()
     {
         if index > 0
@@ -132,8 +165,6 @@ pub fn Render_Record(
         text.push_str(&block.text);
         text.push('\n');
     }
-
-    return Ok(text);
 }
 
 /// Whether this document is exactly what the canonical layout would produce for it.
@@ -166,56 +197,78 @@ fn Scalar(field: &str, value: &str) -> Result<String, RenderError>
 /// changed on the way out, which is the failure the preservation ledger exists to prevent.
 fn Plain<'value>(field: &str, value: &'value str) -> Result<&'value str, RenderError>
 {
-    let refuse = |cause: &'static str| {
-        return Err(RenderError::Unrepresentable {
-            field: field.to_owned(),
-            value: value.to_owned(),
-            cause,
-        });
+    let Some(cause) = Why_It_Cannot_Be_Plain(value)
+    else
+    {
+        return Ok(value);
     };
 
+    return Err(RenderError::Unrepresentable {
+        field: field.to_owned(),
+        value: value.to_owned(),
+        cause,
+    });
+}
+
+/// Why a value would not read back as itself, or nothing if it would.
+fn Why_It_Cannot_Be_Plain(value: &str) -> Option<&'static str>
+{
     if value.is_empty()
     {
-        return refuse("it is empty, and an empty plain scalar reads back as null");
+        return Some("it is empty, and an empty plain scalar reads back as null");
     }
     if value.trim() != value
     {
-        return refuse("it begins or ends with whitespace, which a plain scalar loses");
+        return Some("it begins or ends with whitespace, which a plain scalar loses");
     }
     if value.contains('\n')
     {
-        return refuse("it spans lines");
+        return Some("it spans lines");
     }
-    // A leading indicator turns the value into a different YAML node: `- x` a sequence,
-    // `*x` an alias, `#x` a comment. `?`, `:` and `,` are indicators only in flow context
-    // but are refused too, because a reader that has to know the context to know what a
-    // record says is the ambiguity this format exists without.
-    if value.starts_with([
+    if Opens_With_An_Indicator(value)
+    {
+        return Some("it opens with a YAML indicator");
+    }
+
+    return Why_It_Reads_Back_As_Something_Else(value);
+}
+
+/// A leading indicator turns the value into a different YAML node: `- x` a sequence, `*x` an
+/// alias, `#x` a comment.
+///
+/// `?`, `:` and `,` are indicators only in flow context but are refused too, because a reader
+/// that has to know the context to know what a record says is the ambiguity this format exists
+/// without.
+fn Opens_With_An_Indicator(value: &str) -> bool
+{
+    return value.starts_with([
         '-', '?', ':', ',', '[', ']', '{', '}', '#', '&', '*', '!', '|', '>', '\'', '"', '%',
         '@', '`',
-    ])
-    {
-        return refuse("it opens with a YAML indicator");
-    }
+    ]);
+}
+
+/// The values a plain scalar reads back as some other kind of node entirely.
+fn Why_It_Reads_Back_As_Something_Else(value: &str) -> Option<&'static str>
+{
     if value.contains(": ") || value.ends_with(':')
     {
-        return refuse("a colon followed by space or ending the line makes it a mapping");
+        return Some("a colon followed by space or ending the line makes it a mapping");
     }
     if value.contains(" #")
     {
-        return refuse("a space before a hash starts a comment");
+        return Some("a space before a hash starts a comment");
     }
     if ["true", "false", "null", "yes", "no", "on", "off", "~"]
         .contains(&value.to_ascii_lowercase().as_str())
     {
-        return refuse("it reads back as a boolean or null rather than as text");
+        return Some("it reads back as a boolean or null rather than as text");
     }
     if value.parse::<f64>().is_ok()
     {
-        return refuse("it reads back as a number rather than as text");
+        return Some("it reads back as a number rather than as text");
     }
 
-    return Ok(value);
+    return None;
 }
 
 #[cfg(test)]
