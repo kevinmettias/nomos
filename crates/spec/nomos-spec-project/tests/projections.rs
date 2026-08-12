@@ -1,7 +1,8 @@
 use nomos_spec_bundle::{Bundle, Export, Import};
 use nomos_spec_model::{ContentHash, Segment};
 use nomos_spec_project::{
-    Build, Catalogue, Check, Content, Format, Profile, Select, Stamp, DO_NOT_EDIT, SIDECAR_SUFFIX,
+    Build, Catalogue, Check, Content, Format, Freshness, Profile, Select, Stamp, DO_NOT_EDIT,
+    SIDECAR_SUFFIX,
 };
 use nomos_spec_store::SpecificationStore;
 use std::collections::BTreeSet;
@@ -45,80 +46,139 @@ fn Populated_In_Order(order: Order) -> SpecificationStore
 
     for (path, text) in documents
     {
-        let document = store
-            .Put_Source_Document(path, "v14.36", text)
-            .expect("stores the document");
-        store
-            .Put_Source_Blocks(document, &Segment(text))
-            .expect("stores the blocks");
+        Put_Document(&mut store, path, text);
     }
-
     Populate_Graph(&store, order);
 
     return store;
 }
 
+/// One document and the blocks it segments into, which the store holds separately.
+fn Put_Document(store: &mut SpecificationStore, path: &str, text: &str)
+{
+    let document = store
+        .Put_Source_Document(path, "v14.36", text)
+        .expect("stores the document");
+
+    store
+        .Put_Source_Blocks(document, &Segment(text))
+        .expect("stores the blocks");
+}
+
+/// The suites the fixture's two documents belong to, and the headings inside them.
+const SUITES_AND_HEADINGS: &str =
+    "INSERT INTO suites (suite_id, title, authority_root)
+     VALUES ('nomos', 'The Nomos specification', 1),
+            ('xvpe-seed', 'XVPE specification seed', 0);
+
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 1, 1, 'Core architecture' FROM source_documents
+     WHERE path = 'volumes/02-core.md';
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 2, 2, 'Domain model' FROM source_documents
+     WHERE path = 'volumes/02-core.md';
+     INSERT INTO source_headings (document_uid, ordinal, depth, title)
+     SELECT uid, 1, 1, 'Conformance' FROM source_documents
+     WHERE path = 'volumes/03-conformance.md';";
+
+/// Every node the fixture projects, one statement per node so the set can be reversed.
+const NODES: &str =
+    "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'CDM-WORKSPACECONTEXT', 'concept', 'canonical', 'record',
+            'WorkspaceContext', NULL, uid FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record',
+            'Agent execution ancestry', NULL, uid FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'D-129', 'decision', 'canonical', 'record',
+            'The store is the identity substrate', NULL, uid
+     FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'SVC-COUNTERFACTUAL', 'service', 'canonical', 'record',
+            'Counterfactual Analysis Service', NULL, uid
+     FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'RMAP-R-1', 'release', 'canonical', 'record',
+            'Release 1 \u{2014} deterministic check platform', NULL, uid
+     FROM suites WHERE suite_id = 'nomos';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     SELECT 'SCEN-G-2', 'scenario', 'canonical', 'record',
+            'End-to-end scenario: add a strategy', NULL, uid
+     FROM suites WHERE suite_id = 'xvpe-seed';
+     INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
+            suite_uid)
+     VALUES ('REQ-RETIRED-009', 'requirement', 'superseded', 'record', 'Retired',
+             '2026-01-14T00:00:00Z', NULL);";
+
+/// The aliases, relations, statements, lineage and omissions that hang off those nodes.
+const GRAPH_EDGES: &str =
+    "INSERT INTO node_aliases (alias, node_uid)
+     SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
+
+     INSERT INTO relation_types (name, tier, inverse_of)
+     VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies'),
+            ('affects', 'extended', NULL);
+
+     INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+     SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
+     WHERE f.node_id = 'CDM-WORKSPACECONTEXT' AND t.node_id = 'AGT-EXEC-001';
+     INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+     SELECT f.uid, 'affects', t.uid FROM nodes f, nodes t
+     WHERE f.node_id = 'D-129' AND t.node_id = 'SVC-COUNTERFACTUAL';
+
+     INSERT INTO normative_statements
+     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+     SELECT uid, 'AGT-EXEC-001', 'requirement', 'Nomos shall record ancestry.',
+            'sha256:aa', 'sha256:99' FROM nodes WHERE node_id = 'AGT-EXEC-001';
+     INSERT INTO normative_statements
+     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+     SELECT uid, 'D-129-01', 'principle', 'The store is the identity substrate.',
+            'sha256:bb', NULL FROM nodes WHERE node_id = 'D-129';
+
+     INSERT INTO lineage
+     (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
+     SELECT b.uid, NULL, 'preserved-verbatim', NULL, s.uid
+     FROM source_blocks b, normative_statements s, source_documents d
+     WHERE d.path = 'volumes/02-core.md' AND b.document_uid = d.uid AND b.ordinal = 2
+       AND s.statement_id = 'AGT-EXEC-001';
+     INSERT INTO lineage
+     (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
+     SELECT NULL, h.uid, 'preserved-normalized', n.uid, NULL
+     FROM source_headings h, nodes n, source_documents d
+     WHERE d.path = 'volumes/02-core.md' AND h.document_uid = d.uid AND h.ordinal = 1
+       AND n.node_id = 'CDM-WORKSPACECONTEXT';
+     INSERT INTO lineage (source_table_row_uid, disposition, target_node_uid)
+     SELECT r.uid, 'preserved-verbatim', n.uid
+     FROM source_table_rows r, nodes n
+     WHERE r.cells_json LIKE '%WorkspaceContext%'
+       AND n.node_id = 'CDM-WORKSPACECONTEXT';
+
+     INSERT INTO omissions
+     (source_block_uid, source_heading_uid, reason, justification, decision_record)
+     SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
+     FROM source_blocks b, source_documents d
+     WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
+       AND b.ordinal = 1;";
+
 fn Populate_Graph(store: &SpecificationStore, order: Order)
 {
-    let nodes = "INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'CDM-WORKSPACECONTEXT', 'concept', 'canonical', 'record',
-                        'WorkspaceContext', NULL, uid FROM suites WHERE suite_id = 'nomos';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'AGT-EXEC-001', 'requirement', 'canonical', 'record',
-                        'Agent execution ancestry', NULL, uid FROM suites WHERE suite_id = 'nomos';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'D-129', 'decision', 'canonical', 'record',
-                        'The store is the identity substrate', NULL, uid
-                 FROM suites WHERE suite_id = 'nomos';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'SVC-COUNTERFACTUAL', 'service', 'canonical', 'record',
-                        'Counterfactual Analysis Service', NULL, uid
-                 FROM suites WHERE suite_id = 'nomos';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'RMAP-R-1', 'release', 'canonical', 'record',
-                        'Release 1 \u{2014} deterministic check platform', NULL, uid
-                 FROM suites WHERE suite_id = 'nomos';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 SELECT 'SCEN-G-2', 'scenario', 'canonical', 'record',
-                        'End-to-end scenario: add a strategy', NULL, uid
-                 FROM suites WHERE suite_id = 'xvpe-seed';
-                 INSERT INTO nodes (node_id, kind, authority, representation, title, deleted_at,
-                        suite_uid)
-                 VALUES ('REQ-RETIRED-009', 'requirement', 'superseded', 'record', 'Retired',
-                         '2026-01-14T00:00:00Z', NULL);";
-
-    let mut statements: Vec<&str> = nodes.split(";\n").collect();
+    let mut statements: Vec<&str> = NODES.split(";\n").collect();
     statements.reverse();
-    let reversed_nodes = statements.join(";\n");
+    let reversed = statements.join(";\n");
 
     store
         .Connection()
-        .execute_batch(
-            "INSERT INTO suites (suite_id, title, authority_root)
-             VALUES ('nomos', 'The Nomos specification', 1),
-                    ('xvpe-seed', 'XVPE specification seed', 0);
-
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 1, 1, 'Core architecture' FROM source_documents
-             WHERE path = 'volumes/02-core.md';
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 2, 2, 'Domain model' FROM source_documents
-             WHERE path = 'volumes/02-core.md';
-             INSERT INTO source_headings (document_uid, ordinal, depth, title)
-             SELECT uid, 1, 1, 'Conformance' FROM source_documents
-             WHERE path = 'volumes/03-conformance.md';",
-        )
+        .execute_batch(SUITES_AND_HEADINGS)
         .expect("populates the suites and headings");
-
     store
         .Connection()
-        .execute_batch(if order == Order::Backwards { &reversed_nodes } else { nodes })
+        .execute_batch(if order == Order::Backwards { &reversed } else { NODES })
         .expect("populates the nodes");
 
     Populate_Graph_Edges(store);
@@ -128,55 +188,7 @@ fn Populate_Graph_Edges(store: &SpecificationStore)
 {
     store
         .Connection()
-        .execute_batch(
-            "INSERT INTO node_aliases (alias, node_uid)
-             SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
-
-             INSERT INTO relation_types (name, tier, inverse_of)
-             VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies'),
-                    ('affects', 'extended', NULL);
-
-             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-             SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t
-             WHERE f.node_id = 'CDM-WORKSPACECONTEXT' AND t.node_id = 'AGT-EXEC-001';
-             INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-             SELECT f.uid, 'affects', t.uid FROM nodes f, nodes t
-             WHERE f.node_id = 'D-129' AND t.node_id = 'SVC-COUNTERFACTUAL';
-
-             INSERT INTO normative_statements
-             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-             SELECT uid, 'AGT-EXEC-001', 'requirement', 'Nomos shall record ancestry.',
-                    'sha256:aa', 'sha256:99' FROM nodes WHERE node_id = 'AGT-EXEC-001';
-             INSERT INTO normative_statements
-             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-             SELECT uid, 'D-129-01', 'principle', 'The store is the identity substrate.',
-                    'sha256:bb', NULL FROM nodes WHERE node_id = 'D-129';
-
-             INSERT INTO lineage
-             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
-             SELECT b.uid, NULL, 'preserved-verbatim', NULL, s.uid
-             FROM source_blocks b, normative_statements s, source_documents d
-             WHERE d.path = 'volumes/02-core.md' AND b.document_uid = d.uid AND b.ordinal = 2
-               AND s.statement_id = 'AGT-EXEC-001';
-             INSERT INTO lineage
-             (source_block_uid, source_heading_uid, disposition, target_node_uid, target_statement)
-             SELECT NULL, h.uid, 'preserved-normalized', n.uid, NULL
-             FROM source_headings h, nodes n, source_documents d
-             WHERE d.path = 'volumes/02-core.md' AND h.document_uid = d.uid AND h.ordinal = 1
-               AND n.node_id = 'CDM-WORKSPACECONTEXT';
-             INSERT INTO lineage (source_table_row_uid, disposition, target_node_uid)
-             SELECT r.uid, 'preserved-verbatim', n.uid
-             FROM source_table_rows r, nodes n
-             WHERE r.cells_json LIKE '%WorkspaceContext%'
-               AND n.node_id = 'CDM-WORKSPACECONTEXT';
-
-             INSERT INTO omissions
-             (source_block_uid, source_heading_uid, reason, justification, decision_record)
-             SELECT b.uid, NULL, 'superseded', 'replaced by the v15 records', 'D-129'
-             FROM source_blocks b, source_documents d
-             WHERE d.path = 'volumes/03-conformance.md' AND b.document_uid = d.uid
-               AND b.ordinal = 1;",
-        )
+        .execute_batch(GRAPH_EDGES)
         .expect("populates the graph");
 }
 
@@ -391,23 +403,27 @@ fn Test_Every_Body_Should_Declare_Itself_Generated()
     {
         let output = Build(&store, &For_Building(profile)).expect("builds");
 
-        assert!(
-            output.body.contains("nomos_generated") || output.body.contains("nomos-generated"),
-            "{} does not say it is generated",
-            profile.id
-        );
-        assert!(
-            output.body.contains("do_not_edit") || output.body.contains("do-not-edit"),
-            "{} does not say it must not be edited",
-            profile.id
-        );
-        assert!(
-            output.body.contains(DO_NOT_EDIT.get(..40).unwrap_or(DO_NOT_EDIT))
-                || output.body.contains("Generated by nomos"),
-            "{} carries the marker without the sentence that explains it",
-            profile.id
-        );
+        Assert_Declares_Itself_Generated(&output.body, &profile.id);
     }
+}
+
+/// A body has to say it is generated, say it must not be edited, and carry the sentence that
+/// explains the marker rather than the marker on its own.
+fn Assert_Declares_Itself_Generated(body: &str, id: &str)
+{
+    assert!(
+        body.contains("nomos_generated") || body.contains("nomos-generated"),
+        "{id} does not say it is generated"
+    );
+    assert!(
+        body.contains("do_not_edit") || body.contains("do-not-edit"),
+        "{id} does not say it must not be edited"
+    );
+    assert!(
+        body.contains(DO_NOT_EDIT.get(..40).unwrap_or(DO_NOT_EDIT))
+            || body.contains("Generated by nomos"),
+        "{id} carries the marker without the sentence that explains it"
+    );
 }
 
 /// The done-when, checked against the environment this build actually runs in rather than
@@ -570,6 +586,12 @@ fn Test_The_Sidecar_Should_Round_Trip()
     assert_eq!(output.sidecar_path, format!("{}{SIDECAR_SUFFIX}", output.path));
 }
 
+/// The freshness of a body and the stamp beside it, against the store they came from.
+fn Checked(store: &SpecificationStore, profile: &Profile, body: &str, sidecar: &str) -> Freshness
+{
+    return Check(store, profile, Some(body), Some(sidecar)).expect("checks");
+}
+
 #[test]
 fn Test_An_Unchanged_Store_Should_Be_Fresh()
 {
@@ -577,13 +599,7 @@ fn Test_An_Unchanged_Store_Should_Be_Fresh()
     let profile = Profile_Named("mcp-resource");
     let built = Build(&store, &profile).expect("builds");
 
-    let freshness = Check(
-        &store,
-        &profile,
-        Some(&built.body),
-        Some(&built.Sidecar().expect("stamps")),
-    )
-    .expect("checks");
+    let freshness = Checked(&store, &profile, &built.body, &built.Sidecar().expect("stamps"));
 
     assert!(freshness.Is_Fresh(), "{}", freshness.Report(&built.path));
 }
@@ -597,23 +613,12 @@ fn Test_A_Changed_Store_Should_Be_Stale()
 
     store
         .Connection()
-        .execute(
-            "UPDATE nodes SET title = 'Renamed' WHERE node_id = 'AGT-EXEC-001'",
-            [],
-        )
+        .execute("UPDATE nodes SET title = 'Renamed' WHERE node_id = 'AGT-EXEC-001'", [])
         .expect("changes the store");
-
-    let freshness = Check(
-        &store,
-        &profile,
-        Some(&built.body),
-        Some(&built.Sidecar().expect("stamps")),
-    )
-    .expect("checks");
+    let freshness = Checked(&store, &profile, &built.body, &built.Sidecar().expect("stamps"));
 
     assert!(freshness.stale.is_some(), "a changed store reads as current");
     assert!(freshness.Report(&built.path).contains("stale"));
-
     // The store moving is not the file being written by hand, and the third verdict must not
     // swallow the first. This body does differ from what the store now renders, so a
     // divergence check asked unconditionally would report both and `diverged` would stop
@@ -634,13 +639,7 @@ fn Test_A_Changed_Profile_Should_Be_Stale()
     let mut retitled = profile.clone();
     retitled.title = "Renamed resource".to_owned();
 
-    let freshness = Check(
-        &store,
-        &retitled,
-        Some(&built.body),
-        Some(&built.Sidecar().expect("stamps")),
-    )
-    .expect("checks");
+    let freshness = Checked(&store, &retitled, &built.body, &built.Sidecar().expect("stamps"));
 
     assert!(freshness.stale.is_some(), "a rewritten profile reads as current");
 }
@@ -653,13 +652,7 @@ fn Test_An_Edited_Output_Should_Be_Reported_As_Edited()
     let built = Build(&store, &profile).expect("builds");
     let tampered = format!("{}\nhand written\n", built.body);
 
-    let freshness = Check(
-        &store,
-        &profile,
-        Some(&tampered),
-        Some(&built.Sidecar().expect("stamps")),
-    )
-    .expect("checks");
+    let freshness = Checked(&store, &profile, &tampered, &built.Sidecar().expect("stamps"));
 
     assert!(freshness.edited.is_some(), "a hand-edited output reads as generated");
     assert!(freshness.stale.is_none(), "the store did not change");
@@ -686,18 +679,10 @@ fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
     let store = Populated();
     let profile = Profile_Named("mcp-resource");
     let built = Build(&store, &profile).expect("builds");
-
     let tampered = format!("{}\nhand written\n", built.body);
     let mut agreeing = built.stamp.clone();
     agreeing.content_digest = ContentHash::Of(&tampered).As_Str().to_owned();
-
-    let freshness = Check(
-        &store,
-        &profile,
-        Some(&tampered),
-        Some(&agreeing.Render().expect("stamps")),
-    )
-    .expect("checks");
+    let freshness = Checked(&store, &profile, &tampered, &agreeing.Render().expect("stamps"));
 
     assert!(
         !freshness.Is_Fresh(),
@@ -708,14 +693,19 @@ fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
         freshness.diverged.is_some(),
         "the refusal did not come from the comparison against what the store renders"
     );
+    Assert_Divergence_Is_The_Only_Verdict(&freshness, &built.path);
+}
 
-    // Neither of the old two may claim it. The stamp is internally consistent, so saying
-    // "the stamp declares X and the file hashes to Y" would be false — they are the same
-    // value — and the store never moved.
+/// Neither of the old two verdicts may claim the rewritten-stamp case. The stamp is internally
+/// consistent, so saying "the stamp declares X and the file hashes to Y" would be false — they
+/// are the same value — and the store never moved. The report needs words of its own too.
+fn Assert_Divergence_Is_The_Only_Verdict(freshness: &Freshness, path: &str)
+{
     assert!(freshness.edited.is_none(), "the stamp agrees with the file it describes");
     assert!(freshness.stale.is_none(), "the store did not change");
 
-    let said = freshness.Report(&built.path);
+    let said = freshness.Report(path);
+
     assert!(said.contains("diverged"), "the new case has no words of its own: {said}");
     assert!(!said.contains("edited"), "the new case reuses the edited sentence: {said}");
 }
@@ -961,15 +951,8 @@ fn Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format()
     let mut inputs = BTreeSet::new();
     for (id, format, path) in expected
     {
-        let declared = Profile_Named(id);
-        assert_eq!(declared.format, format, "{id}");
-
-        let built =
-            Build(&store, &declared.For(Some("AGT-EXEC-001")).expect("resolves")).expect("builds");
-
-        assert_eq!(built.path, path, "{id}");
-        assert!(built.body.contains("AGT-EXEC-001"), "{id} lost its subject");
-        inputs.insert(built.stamp.inputs_digest.clone());
+        let digest = Subject_Digest(&store, id, format, path);
+        inputs.insert(digest);
     }
 
     assert_eq!(
@@ -977,6 +960,21 @@ fn Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format()
         1,
         "the four formats disagree about what they read, so they are not one selection"
     );
+}
+
+/// Builds one subject profile, asserts it declared and landed where it said, and returns the
+/// digest of what it read.
+fn Subject_Digest(store: &SpecificationStore, id: &str, format: Format, path: &str) -> String
+{
+    let declared = Profile_Named(id);
+    let built =
+        Build(store, &declared.For(Some("AGT-EXEC-001")).expect("resolves")).expect("builds");
+
+    assert_eq!(declared.format, format, "{id}");
+    assert_eq!(built.path, path, "{id}");
+    assert!(built.body.contains("AGT-EXEC-001"), "{id} lost its subject");
+
+    return built.stamp.inputs_digest;
 }
 
 /// A profile that names a subject, run without one.
@@ -1177,6 +1175,18 @@ fn Named(ids: &[&str]) -> BTreeSet<String>
     return ids.iter().map(|id| return (*id).to_owned()).collect();
 }
 
+/// How many items a `may_be_empty` probe for one content kind came back with.
+fn Answered_Items(store: &SpecificationStore, content: Content) -> usize
+{
+    let probe = Probe(content);
+    let projection = Select(store, &probe).expect("a may_be_empty probe never refuses");
+
+    return projection
+        .sections
+        .first()
+        .map_or(0, |section| return section.items.len());
+}
+
 /// The declaration against a store that was really seeded, in both directions.
 ///
 /// One direction alone is the failure a completeness check runs into every time it is written
@@ -1188,22 +1198,13 @@ fn Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds()
 {
     let store = Seeded();
     let mut answered: BTreeSet<&str> = BTreeSet::new();
-
     for content in Content::All()
     {
-        let probe = Probe(*content);
-        let projection = Select(&store, &probe).expect("a may_be_empty probe never refuses");
-        let items = projection
-            .sections
-            .first()
-            .map_or(0, |section| return section.items.len());
-
-        if items > 0
+        if Answered_Items(&store, *content) > 0
         {
             answered.insert(content.Label());
         }
     }
-
     let declared: BTreeSet<&str> = SEEDED_BY_RECORDS
         .iter()
         .map(|content| return content.Label())
@@ -1216,6 +1217,60 @@ fn Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds()
          corpus-backed; a kind the list claims but the store cannot answer for would make a \
          profile requirable that refuses on every runner."
     );
+}
+
+/// What one pass over the shipped profiles found each of them doing over a seeded store.
+#[derive(Default)]
+struct Outcomes
+{
+    renders: BTreeSet<String>,
+    screened_but_refuses: BTreeSet<String>,
+    skipped: BTreeSet<String>,
+}
+
+/// One pass over the shipped profiles, sorting each into what it did.
+fn Screen_The_Shipped_Profiles(store: &SpecificationStore) -> Outcomes
+{
+    let mut screened = Outcomes::default();
+    for profile in Shipped().Profiles()
+    {
+        // A subject profile refuses for a reason that is not about the corpus, so it would
+        // report a false disagreement. Excluded, and the exclusion is asserted below so it
+        // cannot quietly grow.
+        if profile.Names_A_Subject()
+        {
+            screened.skipped.insert(profile.id.clone());
+        }
+        else
+        {
+            Sort_One_Profile(store, profile, &mut screened);
+        }
+    }
+
+    return screened;
+}
+
+/// Whether one profile renders, and whether the screen said it would.
+fn Sort_One_Profile(store: &SpecificationStore, profile: &Profile, screened: &mut Outcomes)
+{
+    let reaches = Reaches_Only_Seeded_Content(profile);
+    let rendered = Build(store, profile).is_ok();
+
+    assert!(
+        !rendered || reaches,
+        "{} renders over a seeded store while reaching a kind SEEDED_BY_RECORDS does not \
+         admit, so the declaration is missing a kind that is really seeded",
+        profile.id
+    );
+
+    if rendered
+    {
+        screened.renders.insert(profile.id.clone());
+    }
+    else if reaches
+    {
+        screened.screened_but_refuses.insert(profile.id.clone());
+    }
 }
 
 /// The screen against the behaviour, in the one direction that holds — and the witnesses to
@@ -1234,56 +1289,23 @@ fn Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds()
 fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content()
 {
     let store = Seeded();
-    let mut renders: BTreeSet<String> = BTreeSet::new();
-    let mut screened_but_refuses: BTreeSet<String> = BTreeSet::new();
-    let mut skipped: BTreeSet<String> = BTreeSet::new();
-
-    for profile in Shipped().Profiles()
-    {
-        // A subject profile refuses for a reason that is not about the corpus, so it would
-        // report a false disagreement. Excluded, and the exclusion is asserted below so it
-        // cannot quietly grow.
-        if profile.Names_A_Subject()
-        {
-            skipped.insert(profile.id.clone());
-            continue;
-        }
-
-        let reaches = Reaches_Only_Seeded_Content(profile);
-        let rendered = Build(&store, profile).is_ok();
-
-        assert!(
-            !rendered || reaches,
-            "{} renders over a seeded store while reaching a kind SEEDED_BY_RECORDS does not \
-             admit, so the declaration is missing a kind that is really seeded",
-            profile.id
-        );
-
-        if rendered
-        {
-            renders.insert(profile.id.clone());
-        }
-        else if reaches
-        {
-            screened_but_refuses.insert(profile.id.clone());
-        }
-    }
+    let screened = Screen_The_Shipped_Profiles(&store);
 
     assert_eq!(
-        renders,
+        screened.renders,
         Named(&["diagram-set", "domain-specification", "html-site", "traceability-matrix"]),
         "the set of profiles that render without a corpus moved. This is the set the Required \
          projections step may draw from, so a change here changes what the gate can ask for."
     );
     assert_eq!(
-        screened_but_refuses,
+        screened.screened_but_refuses,
         Named(&["feature-design", "release-specification"]),
         "the witnesses to Reaches_Only_Seeded_Content being insufficient moved. Each reaches \
          only seeded kinds and still refuses, because it filters nodes on a kind only a corpus \
          has. An empty set here would mean the screen had silently become the answer."
     );
     assert_eq!(
-        skipped,
+        screened.skipped,
         Named(&["subject-contract", "subject-dossier", "subject-model", "subject-report"]),
         "the set of profiles excluded from this comparison moved. A profile excluded here is a \
          profile this test says nothing about."
