@@ -108,6 +108,11 @@ pub(crate) use exit_code::ExitCode;
 pub(crate) use command::CheckCommand;
 
 use crate::arguments::Named_Value;
+// check-dependency-placement reports three of this crate's edges as this file's alone, and
+// says the same about corpus.rs for a fourth. Both readings are right and neither is a
+// misplacement: this is a composition root, so one verb per module and one module per set
+// of crates it composes is the shape, and an edge that belonged to more than one verb would
+// mean two verbs were doing the same thing.
 use nomos_analysis::{Context, MemoryFactStore, Reader};
 use nomos_capability::Registry;
 use nomos_contracts::{CapabilityId, ConfigurationId, Finding, Guarantee};

@@ -29,6 +29,12 @@
 use crate::Workspace;
 use std::path::{Path, PathBuf};
 
+// check-dependency-placement reports three of this crate's edges -- nomos_rules,
+// nomos_lang_rust and nomos_cap_syntax -- as existing for this file alone, and keeping it
+// that way is deliberate. This crate watches the workspace from outside and compiles
+// against almost nothing; the three are named here because a declared universe has to be
+// read out of the crate that declares it, through the provider that parses it. Spreading
+// them over more files would widen the only place the observer is also a participant.
 pub use nomos_rules::{DeclaredUniverse, UniverseKind};
 
 /// Every declared universe in the workspace, derived from the source.

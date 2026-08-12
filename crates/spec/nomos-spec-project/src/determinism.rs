@@ -8,6 +8,9 @@
 //!
 //! Verified in `tests/integration/tests/determinism.rs`.
 
+// One file per crate, naming a row of the domain table in band 0's vocabulary -- see the
+// same note in nomos-spec-bundle. check-dependency-placement is right that the edge exists
+// for this file alone and that is the shape of the declaration, not a misplacement.
 use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 
 /// Rendering a [`crate::Projection`] into the bytes of a generated document.

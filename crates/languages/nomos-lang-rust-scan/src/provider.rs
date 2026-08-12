@@ -5,6 +5,10 @@ use crate::PROVIDER;
 use crate::Scan;
 use crate::ScannedFile;
 use crate::ScannedItem;
+// check-dependency-placement reports two of this crate's edges as this file's alone. That
+// is what a provider file is: the one place a language crate meets the analysis kernel and
+// the model it materializes facts in. The rest of the crate reads Rust and knows about
+// neither, which is the separation rather than a misplacement.
 use nomos_analysis::{FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_cap_syntax::{Capability, Payload_Schema, CONTRACT_VERSION};
 use nomos_contracts::{

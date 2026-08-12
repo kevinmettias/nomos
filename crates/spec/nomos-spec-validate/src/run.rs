@@ -2,6 +2,10 @@ use crate::Rule;
 use crate::Violation;
 use crate::RuleOutcome;
 use crate::RuleResult;
+// check-dependency-placement reports this crate's `nomos_spec_model` edge as this file's
+// alone. ContentHash is the model's own name for what a preserved block hashes to, and a
+// validation run that spelled its own would be a second authority on when two blocks are
+// the same text.
 use nomos_spec_model::ContentHash;
 use nomos_spec_store::SpecificationStore;
 

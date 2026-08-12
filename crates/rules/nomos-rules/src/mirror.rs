@@ -96,6 +96,9 @@ use nomos_contracts::{
     Applicability, EnforcementBreach, EnforcementReach, EnforcerRef, EvidenceClass, Finding,
     GateCategory, RuleId, SubjectId,
 };
+// check-dependency-placement reports this crate's `nomos_model` edge as this file's alone.
+// It is one function, and it is the canonical digest -- OD-MODEL-001 converged three copies
+// of it onto that home precisely so a caller names it rather than carrying its own.
 use nomos_model::Content_Digest;
 use std::collections::BTreeSet;
 

@@ -28,6 +28,10 @@ pub use spelling::Normalize_Path;
 pub(crate) use spelling::Subject_Of;
 use overlap::Shared_Subjects;
 
+// The one place this crate names band 0, and check-dependency-placement reports the edge
+// for it. A SubjectId is the shared identity a territory is a territory *of*; it is
+// published for peers outside this repository and is not this crate's to redefine, so
+// naming it once here is the edge working rather than a file in the wrong crate.
 use nomos_contracts::SubjectId;
 use nomos_model::{Content_Digest, Intersection, SetResolution, SubjectSet, UnknownReason};
 use serde::{Deserialize, Serialize};
