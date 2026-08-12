@@ -181,13 +181,17 @@ const GATES: &[Gate] = &[
         tests: 5,
     },
     Gate {
-        path: "tests/integration/tests/analysis_slice.rs",
-        variables: &[RUST],
         // Unchanged by P9-FALLBACK, deliberately. The five assertions it added are about
         // spending the selection per subject and are written against the precision corpus,
         // which is in this repository — so the hole this table measures did not grow.
+        //
+        // The suite is `tests/analysis_slice/`, and this is the only module of it that reaches
+        // a corpus. Two of its four tests belong to the providers and lessons modules by
+        // subject and are here because the derivation below follows calls within one file.
+        path: "tests/integration/tests/analysis_slice/scale.rs",
+        variables: &[RUST],
         gated: 4,
-        tests: 29,
+        tests: 4,
     },
 ];
 
@@ -203,14 +207,16 @@ const GATED_TOTAL: usize = 68;
 /// reads a corpus. [`GATED_TOTAL`] is unchanged, and that is the point of keeping the two
 /// numbers apart: a gated file growing is not the hole growing.
 ///
-/// Fell to 106 as the test crates were decomposed for `check-file-size`: twenty-four of the
+/// Fell to 81 as the test crates were decomposed for `check-file-size`: forty-nine of the
 /// tests inside gated files never read a corpus — fourteen of `table_rows.rs`'s sixteen, one
 /// of `portable.rs`'s six, five of `regression_report.rs`'s fourteen, four of
-/// `family_counts.rs`'s six — and each now lives in a sibling module rather than inflating
-/// this denominator. That is the same move in the other direction. [`GATED_TOTAL`] is
-/// unchanged through every one of those splits, which is the check that they moved tests
-/// rather than silence.
-const TESTS_IN_GATED_FILES: usize = 106;
+/// `family_counts.rs`'s six, twenty-five of `analysis_slice.rs`'s twenty-nine — and each now
+/// lives in a sibling module rather than inflating this denominator. That is the same move in
+/// the other direction, and it is why the ratio to read is no longer 68 of 130: the
+/// denominator was measuring file boundaries as much as it was measuring gated code.
+/// [`GATED_TOTAL`] is unchanged through every one of those splits, which is the check that
+/// they moved tests rather than silence.
+const TESTS_IN_GATED_FILES: usize = 81;
 
 /// The table accounts for every file that reaches a corpus.
 ///
