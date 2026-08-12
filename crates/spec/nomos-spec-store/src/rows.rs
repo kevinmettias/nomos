@@ -10,6 +10,7 @@
 //! numbers are fetched and not in what they mean: `non_separator` is still counted, never
 //! derived from `lines` and `separator`, which is the property this module exists to keep.
 
+use crate::columns::Columns;
 use crate::store::StoreError;
 use rusqlite::Connection;
 
@@ -109,12 +110,13 @@ pub fn Census(connection: &Connection, scope: RowScope) -> Result<RowCensus, Sto
         scope.Statement(),
         rusqlite::params_from_iter(scope.Arguments()),
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(RowCensus {
-                lines: row.get(0)?,
-                header: row.get(1)?,
-                content: row.get(2)?,
-                separator: row.get(3)?,
-                non_separator: row.get(4)?,
+                lines: columns.Next()?,
+                header: columns.Next()?,
+                content: columns.Next()?,
+                separator: columns.Next()?,
+                non_separator: columns.Next()?,
             });
         },
     )?);

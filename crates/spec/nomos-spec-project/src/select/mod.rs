@@ -1,7 +1,7 @@
 mod query;
 mod sections;
 
-use query::{Gather, Narrow_To_Nodes, Query, Text};
+use query::{Columns, Gather, Narrow_To_Nodes, Query};
 use sections::{Blocks, Documents, Headings, Lineage, Nodes, Omissions, Relations, Rows, Statements, Suites};
 
 use crate::content::Content;

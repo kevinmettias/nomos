@@ -427,6 +427,10 @@ fn Required(value: Option<&String>, name: &str) -> Result<String, String>
 /// # Errors
 ///
 /// Returns a message when the text is not a recognized duration.
+const SECONDS_PER_MINUTE: u64 = 60;
+const MINUTES_PER_HOUR: u64 = 60;
+const SECONDS_PER_HOUR: u64 = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
+
 fn Parse_Duration(text: &str) -> Result<Duration, String>
 {
     let (number, unit) = text.split_at(text.len().saturating_sub(1));
@@ -436,8 +440,8 @@ fn Parse_Duration(text: &str) -> Result<Duration, String>
 
     return match unit
     {
-        "h" => Ok(Duration::from_secs(amount.saturating_mul(3_600))),
-        "m" => Ok(Duration::from_secs(amount.saturating_mul(60))),
+        "h" => Ok(Duration::from_secs(amount.saturating_mul(SECONDS_PER_HOUR))),
+        "m" => Ok(Duration::from_secs(amount.saturating_mul(SECONDS_PER_MINUTE))),
         "s" => Ok(Duration::from_secs(amount)),
         _ => Err(format!("`{text}` has no unit; try 2h, 30m or 45s")),
     };

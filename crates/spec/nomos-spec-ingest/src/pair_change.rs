@@ -1,6 +1,11 @@
 //! What changed between two adjacent revisions.
 
 use core::fmt::Write as _;
+
+/// How many members a summary line names before it falls back to the count alone. Naming a
+/// few is what makes a count checkable by eye; naming all of them makes the summary into the
+/// report it is supposed to introduce.
+const NAMED_IN_A_SUMMARY: usize = 3;
 /// What became of every path between two adjacent revisions.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct PairChange
@@ -35,7 +40,7 @@ impl PairChange
             {
                 continue;
             }
-            let named: Vec<&str> = set.iter().take(3).map(String::as_str).collect();
+            let named: Vec<&str> = set.iter().take(NAMED_IN_A_SUMMARY).map(String::as_str).collect();
             let _ = write!(
                 line,
                 "\n  {label}: {} ({}{})",

@@ -9,6 +9,7 @@
 //! `uid` is handed back only so a follow-up query can be scoped to the same document, and
 //! never printed.
 
+use crate::columns::Columns;
 use crate::store::{Collected, SpecificationStore, StoreError};
 use rusqlite::{OptionalExtension, params};
 
@@ -119,12 +120,13 @@ impl SpecificationStore
                  FROM nodes WHERE node_id = ?1 AND deleted_at IS NULL",
                 params![node_id],
                 |row| {
+                    let mut columns = Columns::Of(row);
                     return Ok(NodeSummary {
-                        node_id: row.get(0)?,
-                        kind: row.get(1)?,
-                        authority: row.get(2)?,
-                        representation: row.get(3)?,
-                        title: row.get(4)?,
+                        node_id: columns.Next()?,
+                        kind: columns.Next()?,
+                        authority: columns.Next()?,
+                        representation: columns.Next()?,
+                        title: columns.Next()?,
                     });
                 },
             )
@@ -197,7 +199,15 @@ impl SpecificationStore
                  JOIN blobs blob ON blob.uid = document.blob_uid
                  WHERE document.uid = ?1",
                 params![uid],
-                |row| return Ok((row.get(0)?, row.get(1)?, row.get(2)?, row.get(3)?)),
+                |row| {
+                    let mut columns = Columns::Of(row);
+                    return Ok((
+                        columns.Next()?,
+                        columns.Next()?,
+                        columns.Next()?,
+                        columns.Next()?,
+                    ));
+                },
             )
             .optional()?;
         let Some((path, revision, content_hash, bytes)) = found
@@ -256,13 +266,7 @@ impl SpecificationStore
         let mut statement = self
             .Connection()
             .prepare("SELECT uid, path, revision FROM source_documents ORDER BY revision, path")?;
-        let rows = statement.query_map([], |row| {
-            let uid: i64 = row.get(0)?;
-            let path: String = row.get(1)?;
-            let found: String = row.get(2)?;
-
-            return Ok((uid, path, found));
-        })?;
+        let rows = statement.query_map([], A_Path)?;
         let mut candidates = Vec::new();
 
         for row in rows
@@ -303,21 +307,37 @@ impl SpecificationStore
              ORDER BY block.ordinal, line.table_ordinal, line.ordinal",
         )?;
         let rows = statement.query_map(params![document_uid, block, table], |row| {
-            let cells: String = row.get(4)?;
+            let mut columns = Columns::Of(row);
+            let block_ordinal = columns.Next()?;
+            let table_ordinal = columns.Next()?;
+            let row_ordinal = columns.Next()?;
+            let kind = columns.Next()?;
+            let cells: String = columns.Next()?;
 
             return Ok(TableLine {
-                block_ordinal: row.get(0)?,
-                table_ordinal: row.get(1)?,
-                row_ordinal: row.get(2)?,
-                kind: row.get(3)?,
+                block_ordinal,
+                table_ordinal,
+                row_ordinal,
+                kind,
                 cells: serde_json::from_str(&cells).unwrap_or_default(),
-                text: row.get(5)?,
-                content_hash: row.get(6)?,
+                text: columns.Next()?,
+                content_hash: columns.Next()?,
             });
         })?;
 
         return Collected(rows);
     }
+}
+
+/// One document's surrogate, path and revision, in the order the query names them.
+fn A_Path(row: &rusqlite::Row<'_>) -> rusqlite::Result<(i64, String, String)>
+{
+    let mut columns = Columns::Of(row);
+    let uid: i64 = columns.Next()?;
+    let path: String = columns.Next()?;
+    let found: String = columns.Next()?;
+
+    return Ok((uid, path, found));
 }
 
 fn Matches(path: &str, needle: &str, tier: PathMatch) -> bool

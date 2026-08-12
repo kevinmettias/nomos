@@ -23,6 +23,7 @@
 //! agree; `Test_Every_Governing_Record_Should_Project_To_Its_Own_Bytes` asserts they do,
 //! for all of them.
 
+use crate::columns::Columns;
 use crate::read::DocumentSource;
 use crate::record::{Disposition, Kind_Label, Kind_Of};
 use crate::store::{
@@ -778,14 +779,16 @@ impl SpecificationStore
              WHERE document_uid = ?1 ORDER BY ordinal",
         )?;
         let rows = statement.query_map(params![document_uid], |row| {
-            let path: String = row.get(2)?;
-            let kind: String = row.get(1)?;
+            let mut columns = Columns::Of(row);
+            let ordinal = columns.Next()?;
+            let kind: String = columns.Next()?;
+            let path: String = columns.Next()?;
 
             return Ok(SourceBlock {
-                ordinal: row.get(0)?,
+                ordinal,
                 kind: Kind_Of(&kind).unwrap_or(BlockKind::Prose),
                 heading_path: Heading_Path(&path),
-                text: row.get(3)?,
+                text: columns.Next()?,
             });
         })?;
 
@@ -949,7 +952,8 @@ impl SpecificationStore
              ORDER BY s.statement_id",
         )?;
         let rows = statement.query_map(params![node_id], |row| {
-            return Ok((row.get(0)?, row.get(1)?, row.get(2)?));
+            let mut columns = Columns::Of(row);
+            return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
         })?;
 
         return Collected(rows);
@@ -1761,14 +1765,16 @@ struct DeclaredRow
 
 fn Declared_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<DeclaredRow>
 {
+    let mut columns = Columns::Of(row);
+
     return Ok(DeclaredRow {
-        id: row.get(0)?,
-        kind: row.get(1)?,
-        title: row.get(2)?,
-        authority: row.get(3)?,
-        status: row.get(4)?,
-        version: row.get(5)?,
-        tags: row.get(6)?,
+        id: columns.Next()?,
+        kind: columns.Next()?,
+        title: columns.Next()?,
+        authority: columns.Next()?,
+        status: columns.Next()?,
+        version: columns.Next()?,
+        tags: columns.Next()?,
     });
 }
 

@@ -287,6 +287,12 @@ fn Decode_Variant(rendered: &str) -> Result<BuildVariant, StoreError>
     ));
 }
 
+/// The base a digest is spelled in.
+const HEXADECIMAL: u32 = 16;
+
+/// How many characters of that spelling one byte occupies.
+const PER_BYTE: usize = 2;
+
 fn Decode_Digest(hex: &str) -> Result<Digest128, StoreError>
 {
     if hex.len() != Digest128::HEX_LENGTH
@@ -301,11 +307,11 @@ fn Decode_Digest(hex: &str) -> Result<Digest128, StoreError>
 
     for (index, slot) in bytes.iter_mut().enumerate()
     {
-        let at = index.saturating_mul(2);
+        let at = index.saturating_mul(PER_BYTE);
         let pair = hex
-            .get(at..at.saturating_add(2))
+            .get(at..at.saturating_add(PER_BYTE))
             .ok_or_else(|| return StoreError::Malformed(format!("`{hex}` ended early")))?;
-        *slot = u8::from_str_radix(pair, 16)
+        *slot = u8::from_str_radix(pair, HEXADECIMAL)
             .map_err(|cause| return StoreError::Malformed(format!("`{pair}` is not hex: {cause}")))?;
     }
 

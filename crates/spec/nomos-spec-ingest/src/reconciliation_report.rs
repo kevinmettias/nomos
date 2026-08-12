@@ -2,6 +2,12 @@
 
 use core::fmt::Write as _;
 use crate::family::Family;
+
+/// How many absent identifiers a summary line names before it falls back to the count alone.
+/// Naming a few is what makes a count checkable by eye; naming all of them makes the summary
+/// into the report it is supposed to introduce.
+const NAMED_IN_A_SUMMARY: usize = 5;
+
 use crate::disposition::Disposition;
 use crate::identifier_outcome::IdentifierOutcome;
 /// One row per v14 identifier, never a count.
@@ -92,7 +98,7 @@ impl ReconciliationReport
         );
         if !absent.is_empty()
         {
-            let named: Vec<&str> = absent.iter().take(5).copied().collect();
+            let named: Vec<&str> = absent.iter().take(NAMED_IN_A_SUMMARY).copied().collect();
             let _ = write!(
                 line,
                 ", {} absent ({}{})",

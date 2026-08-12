@@ -35,6 +35,9 @@ use core::fmt::Write as _;
 use std::collections::BTreeMap;
 use extract::Refuse_Collisions;
 
+/// How many members a family line names before it falls back to the count alone.
+const NAMED_IN_A_SUMMARY: usize = 3;
+
 /// The heading whose leaves are the service descriptions.
 const SERVICES: &str = "6. Systems and subsystem responsibilities";
 
@@ -106,7 +109,7 @@ impl RestorationReport
         let members = self.In(family);
         let named: Vec<&str> = members
             .iter()
-            .take(3)
+            .take(NAMED_IN_A_SUMMARY)
             .map(|member| return member.name.as_str())
             .collect();
         let mut line = format!("{}: {} restored", family.Label(), members.len());

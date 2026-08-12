@@ -8975,6 +8975,66 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P12-NAMED-LITERALS",
+      "title": "The numbers in this workspace say what they are and not what they mean",
+      "why": "A number written into an expression says what the value is and never what it means, and the second place the same number is typed is the place that will not be updated when it changes. The clean-file phase of the code-standards suite reads 187 of them in this workspace's production code: SQL column ordinals threaded from a SELECT list to a row reader lines away, exit codes spelled as bare discriminants, and real thresholds -- an hour in seconds, a digest's hexadecimal length, an excerpt width -- that no reader can recognize on sight.",
+      "done_when": "check-literals from the code-standards suite reports no finding in this workspace's production code, and the other five checks of its rust clean-file phase -- nested-call, nesting-depth, function-size, parameter-count, intrafile-duplication -- stay at no findings. Every positional column access reads through a named ordinal that sits beside the query it indexes, so the SELECT list and its reader can no longer drift apart silently. cargo test --workspace stays green and the gate's lint step stays clean.\n\nFindings inside inline #[cfg(test)] modules are out of scope: the check's own --include-tests flag is off by default and only governs tests/ directories, so it cannot see that an inline module is test code.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/src/export.rs",
+          "crates/spec/nomos-spec-project/src/select/sections.rs",
+          "crates/spec/nomos-spec-store/src/read.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/parse.rs",
+          "crates/spec/nomos-spec-store/src/authoring.rs",
+          "crates/host/nomos-cli/src/spec/exit_code.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload/parse.rs",
+          "crates/host/nomos-cli/src/check/exit_code.rs",
+          "crates/spec/nomos-spec-ingest/src/restore/extract.rs",
+          "crates/spec/nomos-spec-store/src/rows.rs",
+          "crates/substrate/nomos-workspace/src/snapshot.rs",
+          "crates/spec/nomos-spec-ingest/src/regression_report.rs",
+          "crates/spec/nomos-spec-model/src/table.rs",
+          "crates/contracts/nomos-contracts/src/identity.rs",
+          "crates/host/nomos-cli/src/arguments.rs",
+          "crates/spec/nomos-spec-ingest/src/pair_change.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation_report.rs",
+          "crates/spec/nomos-spec-ingest/src/restore/mod.rs",
+          "crates/spec/nomos-spec-ingest/src/revisions/labels.rs",
+          "crates/spec/nomos-spec-ingest/src/revisions/walk.rs",
+          "crates/spec/nomos-spec-model/src/normalize.rs",
+          "crates/spec/nomos-spec-model/src/statement.rs",
+          "crates/spec/nomos-spec-model/src/submission.rs",
+          "crates/spec/nomos-spec-store/build.rs",
+          "crates/spec/nomos-spec-validate/src/offending.rs",
+          "crates/substrate/nomos-analysis/src/fact_key.rs",
+          "crates/substrate/nomos-ledger/src/verification_predicate.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-named-literals-s1",
+        "acquired_at": 1786500720,
+        "lease_expires_at": 1786515120
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

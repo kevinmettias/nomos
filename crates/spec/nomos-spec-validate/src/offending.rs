@@ -109,6 +109,13 @@ pub(crate) struct Traced
     pub(crate) label: &'static str,
 }
 
+/// The three columns every `Traced` offender query selects, in the order it selects them.
+/// They are named here rather than at the reader because the queries live in `Traced` and
+/// this closure is the only thing that has to agree with them.
+const UID: usize = 0;
+const DOCUMENT: usize = 1;
+const ORDINAL: usize = 2;
+
 /// Rows that have no disposition and no omission.
 ///
 /// Both are checked, because either one accounts for a row: a disposition says what became
@@ -122,9 +129,9 @@ pub(crate) fn Undisposed(store: &SpecificationStore, traced: &Traced) -> RuleOut
     } = *traced;
 
     return Offending(store, table, offenders, |row| {
-        let uid: i64 = row.get(0)?;
-        let document: String = row.get(1)?;
-        let ordinal: i64 = row.get(2)?;
+        let uid: i64 = row.get(UID)?;
+        let document: String = row.get(DOCUMENT)?;
+        let ordinal: i64 = row.get(ORDINAL)?;
         return Ok(Violation {
             subject: format!("{document}#{ordinal}"),
             detail: format!("{label} {uid} has neither a lineage disposition nor an omission"),

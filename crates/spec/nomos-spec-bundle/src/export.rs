@@ -147,15 +147,47 @@ where
     return Ok(());
 }
 
+/// A row read left to right, so a column's place is the order it is asked for rather than a
+/// number typed beside the SELECT that chose it.
+///
+/// The number and the query drift apart in silence. A column inserted into a SELECT renumbers
+/// every column after it, and nothing in the language ties `row.get(7)` to the eighth name in a
+/// string literal twenty lines up — the reader keeps compiling and starts filling the wrong
+/// fields. Asking in order leaves the SELECT as the only place the order is stated, which is
+/// where a reader was going to look anyway.
+struct Columns<'row, 'statement>
+{
+    row: &'row rusqlite::Row<'statement>,
+    next: usize,
+}
+
+impl<'row, 'statement> Columns<'row, 'statement>
+{
+    fn Of(row: &'row rusqlite::Row<'statement>) -> Self
+    {
+        return Self { row, next: 0 };
+    }
+
+    /// The next column the query names, as whatever type receives it.
+    fn Next<Value: rusqlite::types::FromSql>(&mut self) -> rusqlite::Result<Value>
+    {
+        let at = self.next;
+
+        self.next = at.saturating_add(1);
+        return self.row.get(at);
+    }
+}
+
 fn Blobs(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>
 {
     let mut statement =
         connection.prepare("SELECT sha256, byte_length, content FROM blobs ORDER BY sha256")?;
     let rows = statement
         .query_map([], |row| {
-            let sha256: String = row.get(0)?;
-            let byte_length: i64 = row.get(1)?;
-            let content: Vec<u8> = row.get(2)?;
+            let mut columns = Columns::Of(row);
+            let sha256: String = columns.Next()?;
+            let byte_length: i64 = columns.Next()?;
+            let content: Vec<u8> = columns.Next()?;
             return Ok((sha256, byte_length, content));
         })?
         .collect::<Result<Vec<_>, _>>()?;
@@ -203,10 +235,11 @@ fn Source_Documents(connection: &Connection, records: &mut Vec<Record>) -> Resul
          FROM source_documents d JOIN blobs b ON b.uid = d.blob_uid
          ORDER BY d.path, d.revision",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::SourceDocument(SourceDocument {
-                path: row.get(0)?,
-                revision: row.get(1)?,
-                blob_sha256: row.get(2)?,
+                path: columns.Next()?,
+                revision: columns.Next()?,
+                blob_sha256: columns.Next()?,
             }));
         },
     );
@@ -221,14 +254,15 @@ fn Source_Headings(connection: &Connection, records: &mut Vec<Record>) -> Result
          FROM source_headings h JOIN source_documents d ON d.uid = h.document_uid
          ORDER BY d.path, d.revision, h.ordinal",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::SourceHeading(SourceHeading {
                 document: DocumentRef {
-                    path: row.get(0)?,
-                    revision: row.get(1)?,
+                    path: columns.Next()?,
+                    revision: columns.Next()?,
                 },
-                ordinal: row.get(2)?,
-                depth: row.get(3)?,
-                title: row.get(4)?,
+                ordinal: columns.Next()?,
+                depth: columns.Next()?,
+                title: columns.Next()?,
             }));
         },
     );
@@ -244,17 +278,18 @@ fn Source_Blocks(connection: &Connection, records: &mut Vec<Record>) -> Result<(
          FROM source_blocks b JOIN source_documents d ON d.uid = b.document_uid
          ORDER BY d.path, d.revision, b.ordinal",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::SourceBlock(SourceBlock {
                 document: DocumentRef {
-                    path: row.get(0)?,
-                    revision: row.get(1)?,
+                    path: columns.Next()?,
+                    revision: columns.Next()?,
                 },
-                ordinal: row.get(2)?,
-                kind: row.get(3)?,
-                heading_path: row.get(4)?,
-                text: row.get(5)?,
-                content_hash: row.get(6)?,
-                normalized_hash: row.get(7)?,
+                ordinal: columns.Next()?,
+                kind: columns.Next()?,
+                heading_path: columns.Next()?,
+                text: columns.Next()?,
+                content_hash: columns.Next()?,
+                normalized_hash: columns.Next()?,
             }));
         },
     );
@@ -287,24 +322,29 @@ fn Source_Table_Rows(connection: &Connection, records: &mut Vec<Record>)
 /// One row and the JSON cells column that travels beside it, still undecoded.
 fn Read_A_Table_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(SourceTableRow, String)>
 {
-    let cells: String = row.get(6)?;
+    let mut columns = Columns::Of(row);
+    let block = OrdinalRef {
+        document: DocumentRef {
+            path: columns.Next()?,
+            revision: columns.Next()?,
+        },
+        ordinal: columns.Next()?,
+    };
+    let ordinal = columns.Next()?;
+    let table_ordinal = columns.Next()?;
+    let kind = columns.Next()?;
+    let cells: String = columns.Next()?;
 
     return Ok((
         SourceTableRow {
-            block: OrdinalRef {
-                document: DocumentRef {
-                    path: row.get(0)?,
-                    revision: row.get(1)?,
-                },
-                ordinal: row.get(2)?,
-            },
-            ordinal: row.get(3)?,
-            table_ordinal: row.get(4)?,
-            kind: row.get(5)?,
+            block,
+            ordinal,
+            table_ordinal,
+            kind,
             cells: Vec::new(),
-            text: row.get(7)?,
-            content_hash: row.get(8)?,
-            normalized_hash: row.get(9)?,
+            text: columns.Next()?,
+            content_hash: columns.Next()?,
+            normalized_hash: columns.Next()?,
         },
         cells,
     ));
@@ -317,10 +357,14 @@ fn Suites(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bund
         records,
         "SELECT suite_id, title, authority_root FROM suites ORDER BY suite_id",
         |row| {
-            let root: i64 = row.get(2)?;
+            let mut columns = Columns::Of(row);
+            let suite_id = columns.Next()?;
+            let title = columns.Next()?;
+            let root: i64 = columns.Next()?;
+
             return Ok(Record::Suite(Suite {
-                suite_id: row.get(0)?,
-                title: row.get(1)?,
+                suite_id,
+                title,
                 authority_root: root != 0,
             }));
         },
@@ -337,14 +381,15 @@ fn Nodes(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bundl
          FROM nodes n LEFT JOIN suites s ON s.uid = n.suite_uid
          ORDER BY n.node_id",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::Node(Node {
-                node_id: row.get(0)?,
-                kind: row.get(1)?,
-                authority: row.get(2)?,
-                representation: row.get(3)?,
-                title: row.get(4)?,
-                deleted_at: row.get(5)?,
-                suite_id: row.get(6)?,
+                node_id: columns.Next()?,
+                kind: columns.Next()?,
+                authority: columns.Next()?,
+                representation: columns.Next()?,
+                title: columns.Next()?,
+                deleted_at: columns.Next()?,
+                suite_id: columns.Next()?,
             }));
         },
     );
@@ -359,9 +404,10 @@ fn Node_Aliases(connection: &Connection, records: &mut Vec<Record>) -> Result<()
          FROM node_aliases a JOIN nodes n ON n.uid = a.node_uid
          ORDER BY a.alias",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::NodeAlias(NodeAlias {
-                alias: row.get(0)?,
-                node_id: row.get(1)?,
+                alias: columns.Next()?,
+                node_id: columns.Next()?,
             }));
         },
     );
@@ -377,14 +423,15 @@ fn Node_Histories(connection: &Connection, records: &mut Vec<Record>) -> Result<
          FROM node_history h JOIN nodes n ON n.uid = h.node_uid
          ORDER BY n.node_id, h.ordinal",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::NodeHistory(NodeHistory {
-                node_id: row.get(0)?,
-                ordinal: row.get(1)?,
-                event: row.get(2)?,
-                reason: row.get(3)?,
-                previous_event_hash: row.get(4)?,
-                event_hash: row.get(5)?,
-                recorded_at: row.get(6)?,
+                node_id: columns.Next()?,
+                ordinal: columns.Next()?,
+                event: columns.Next()?,
+                reason: columns.Next()?,
+                previous_event_hash: columns.Next()?,
+                event_hash: columns.Next()?,
+                recorded_at: columns.Next()?,
             }));
         },
     );
@@ -397,10 +444,11 @@ fn Relation_Types(connection: &Connection, records: &mut Vec<Record>) -> Result<
         records,
         "SELECT name, tier, inverse_of FROM relation_types ORDER BY name",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::RelationType(RelationType {
-                name: row.get(0)?,
-                tier: row.get(1)?,
-                inverse_of: row.get(2)?,
+                name: columns.Next()?,
+                tier: columns.Next()?,
+                inverse_of: columns.Next()?,
             }));
         },
     );
@@ -417,10 +465,11 @@ fn Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), B
          JOIN nodes t ON t.uid = r.to_node_uid
          ORDER BY f.node_id, r.relation_type, t.node_id",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::Relation(Relation {
-                from_node_id: row.get(0)?,
-                relation_type: row.get(1)?,
-                to_node_id: row.get(2)?,
+                from_node_id: columns.Next()?,
+                relation_type: columns.Next()?,
+                to_node_id: columns.Next()?,
             }));
         },
     );
@@ -439,13 +488,14 @@ fn Normative_Statements(
          FROM normative_statements s JOIN nodes n ON n.uid = s.node_uid
          ORDER BY s.statement_id",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::NormativeStatement(NormativeStatement {
-                statement_id: row.get(0)?,
-                node_id: row.get(1)?,
-                kind: row.get(2)?,
-                canonical_text: row.get(3)?,
-                canonical_hash: row.get(4)?,
-                supersedes_hash: row.get(5)?,
+                statement_id: columns.Next()?,
+                node_id: columns.Next()?,
+                kind: columns.Next()?,
+                canonical_text: columns.Next()?,
+                canonical_hash: columns.Next()?,
+                supersedes_hash: columns.Next()?,
             }));
         },
     );
@@ -479,18 +529,14 @@ fn Lineages(connection: &Connection, records: &mut Vec<Record>) -> Result<(), Bu
                   coalesce(r.ordinal, -1),
                   l.disposition, coalesce(n.node_id, ''), coalesce(s.statement_id, '')",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::Lineage(Lineage {
-                source_block: Ordinal_Reference(row, 0, 1, 2)?,
-                source_heading: Ordinal_Reference(row, 3, 4, 5)?,
-                source_table_row: Table_Row_Reference(row, RowColumns {
-                    path: 6,
-                    revision: 7,
-                    block_ordinal: 8,
-                    row_ordinal: 9,
-                })?,
-                disposition: row.get(10)?,
-                target_node_id: row.get(11)?,
-                target_statement_id: row.get(12)?,
+                source_block: Ordinal_Reference(&mut columns)?,
+                source_heading: Ordinal_Reference(&mut columns)?,
+                source_table_row: Table_Row_Reference(&mut columns)?,
+                disposition: columns.Next()?,
+                target_node_id: columns.Next()?,
+                target_statement_id: columns.Next()?,
             }));
         },
     );
@@ -513,12 +559,13 @@ fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), B
     )?;
     let rows = statement
         .query_map([], |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Omission {
-                source_block: Ordinal_Reference(row, 0, 1, 2)?,
-                source_heading: Ordinal_Reference(row, 3, 4, 5)?,
-                reason: row.get(6)?,
-                justification: row.get(7)?,
-                decision_record: row.get(8)?,
+                source_block: Ordinal_Reference(&mut columns)?,
+                source_heading: Ordinal_Reference(&mut columns)?,
+                reason: columns.Next()?,
+                justification: columns.Next()?,
+                decision_record: columns.Next()?,
             });
         })?
         .collect::<Result<Vec<_>, _>>()?;
@@ -527,23 +574,11 @@ fn Omissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(), B
     return Ok(());
 }
 
-/// Where in a query's columns a table-row reference is spelled.
-#[derive(Clone, Copy)]
-struct RowColumns
+/// The four columns a table-row reference spans, taken in the order a query names them.
+fn Table_Row_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option<TableRowRef>>
 {
-    path: usize,
-    revision: usize,
-    block_ordinal: usize,
-    row_ordinal: usize,
-}
-
-fn Table_Row_Reference(
-    row: &rusqlite::Row<'_>,
-    columns: RowColumns,
-) -> rusqlite::Result<Option<TableRowRef>>
-{
-    let block = Ordinal_Reference(row, columns.path, columns.revision, columns.block_ordinal)?;
-    let ordinal: Option<i64> = row.get(columns.row_ordinal)?;
+    let block = Ordinal_Reference(columns)?;
+    let ordinal: Option<i64> = columns.Next()?;
 
     return Ok(match (block, ordinal)
     {
@@ -552,16 +587,12 @@ fn Table_Row_Reference(
     });
 }
 
-fn Ordinal_Reference(
-    row: &rusqlite::Row<'_>,
-    path: usize,
-    revision: usize,
-    ordinal: usize,
-) -> rusqlite::Result<Option<OrdinalRef>>
+/// The three columns an ordinal reference spans, taken in the order a query names them.
+fn Ordinal_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option<OrdinalRef>>
 {
-    let path: Option<String> = row.get(path)?;
-    let revision: Option<String> = row.get(revision)?;
-    let ordinal: Option<i64> = row.get(ordinal)?;
+    let path: Option<String> = columns.Next()?;
+    let revision: Option<String> = columns.Next()?;
+    let ordinal: Option<i64> = columns.Next()?;
 
     return Ok(match (path, revision, ordinal)
     {
@@ -602,21 +633,20 @@ fn Record_Front_Matter(
 /// One row and the JSON tags column that travels beside it, still undecoded.
 fn Read_Front_Matter(row: &rusqlite::Row<'_>) -> rusqlite::Result<(RecordFrontMatter, String)>
 {
-    let tags: String = row.get(5)?;
-
-    return Ok((
-        RecordFrontMatter {
-            document: DocumentRef {
-                path: row.get(0)?,
-                revision: row.get(1)?,
-            },
-            node_id: row.get(2)?,
-            status: row.get(3)?,
-            version: row.get(4)?,
-            tags: Vec::new(),
+    let mut columns = Columns::Of(row);
+    let record = RecordFrontMatter {
+        document: DocumentRef {
+            path: columns.Next()?,
+            revision: columns.Next()?,
         },
-        tags,
-    ));
+        node_id: columns.Next()?,
+        status: columns.Next()?,
+        version: columns.Next()?,
+        tags: Vec::new(),
+    };
+    let tags: String = columns.Next()?;
+
+    return Ok((record, tags));
 }
 
 /// The declared relations, in the order the record declared them.
@@ -630,14 +660,15 @@ fn Record_Relations(connection: &Connection, records: &mut Vec<Record>) -> Resul
     )?;
     let rows = statement
         .query_map([], |row| {
+            let mut columns = Columns::Of(row);
             return Ok(RecordRelation {
                 document: DocumentRef {
-                    path: row.get(0)?,
-                    revision: row.get(1)?,
+                    path: columns.Next()?,
+                    revision: columns.Next()?,
                 },
-                ordinal: row.get(2)?,
-                target: row.get(3)?,
-                relation: row.get(4)?,
+                ordinal: columns.Next()?,
+                target: columns.Next()?,
+                relation: columns.Next()?,
             });
         })?
         .collect::<Result<Vec<_>, _>>()?;
@@ -658,13 +689,14 @@ fn Submissions(connection: &Connection, records: &mut Vec<Record>) -> Result<(),
          JOIN nodes n ON n.uid = s.node_uid
          ORDER BY n.node_id",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::Submission(Submission {
-                node_id: row.get(0)?,
-                kind: row.get(1)?,
-                form_contract_version: row.get(2)?,
-                state: row.get(3)?,
-                submitted_by: row.get(4)?,
-                submitted_through: row.get(5)?,
+                node_id: columns.Next()?,
+                kind: columns.Next()?,
+                form_contract_version: columns.Next()?,
+                state: columns.Next()?,
+                submitted_by: columns.Next()?,
+                submitted_through: columns.Next()?,
             }));
         },
     );
@@ -684,15 +716,16 @@ fn Submission_Values(connection: &Connection, records: &mut Vec<Record>)
     )?;
     let rows = statement
         .query_map([], |row| {
+            let mut columns = Columns::Of(row);
             return Ok(SubmissionValue {
-                node_id: row.get(0)?,
-                field: row.get(1)?,
-                ordinal: row.get(2)?,
-                origin: row.get(3)?,
-                value: row.get(4)?,
-                value_hash: row.get(5)?,
-                supersedes_hash: row.get(6)?,
-                recorded_at: row.get(7)?,
+                node_id: columns.Next()?,
+                field: columns.Next()?,
+                ordinal: columns.Next()?,
+                origin: columns.Next()?,
+                value: columns.Next()?,
+                value_hash: columns.Next()?,
+                supersedes_hash: columns.Next()?,
+                recorded_at: columns.Next()?,
             });
         })?
         .collect::<Result<Vec<_>, _>>()?;
@@ -716,14 +749,15 @@ fn Submission_Gaps(connection: &Connection, records: &mut Vec<Record>) -> Result
          JOIN nodes n ON n.uid = s.node_uid
          ORDER BY n.node_id, g.ordinal",
         |row| {
+            let mut columns = Columns::Of(row);
             return Ok(Record::SubmissionGap(SubmissionGap {
-                node_id: row.get(0)?,
-                ordinal: row.get(1)?,
-                question: row.get(2)?,
-                blocks: row.get(3)?,
-                severity: row.get(4)?,
-                closed_by: row.get(5)?,
-        }));
-    },
-);
+                node_id: columns.Next()?,
+                ordinal: columns.Next()?,
+                question: columns.Next()?,
+                blocks: columns.Next()?,
+                severity: columns.Next()?,
+                closed_by: columns.Next()?,
+            }));
+        },
+    );
 }

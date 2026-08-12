@@ -462,10 +462,13 @@ fn Check_Alternatives(submission: &Submission, failures: &mut Vec<Failure>)
     Check_The_Selection_Was_Considered(&entries, &selected.value, failures);
 }
 
+/// The fewest alternatives that make a choice a choice.
+const WEIGHED: usize = 2;
+
 /// A design with one alternative did not choose, it recorded.
 fn Check_At_Least_Two_Were_Weighed(entries: &[&str], failures: &mut Vec<Failure>)
 {
-    if entries.len() >= 2
+    if entries.len() >= WEIGHED
     {
         return;
     }

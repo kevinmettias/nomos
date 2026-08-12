@@ -255,9 +255,12 @@ fn Defect_Of(rows: &[TableRow], table_ordinal: u32) -> Option<TableDefect>
     });
 }
 
+/// The opening and closing pipes, which a line cannot be shorter than and still carry both.
+const BOTH_PIPES: usize = 2;
+
 fn Is_Pipe_Line(trimmed: &str) -> bool
 {
-    return trimmed.len() >= 2 && trimmed.starts_with('|') && trimmed.ends_with('|');
+    return trimmed.len() >= BOTH_PIPES && trimmed.starts_with('|') && trimmed.ends_with('|');
 }
 
 /// Splits on unescaped pipes, so a cell may contain a literal `\|`.
@@ -322,12 +325,15 @@ fn Is_Separator(cells: &[String]) -> bool
     return saw_one;
 }
 
+/// The shortest run of dashes a separator cell is spelled with; one dash is a cell of prose.
+const SHORTEST_DASH_RUN: usize = 2;
+
 fn Is_Dashes(cell: &str) -> bool
 {
     let body = cell.strip_prefix(':').unwrap_or(cell);
     let body = body.strip_suffix(':').unwrap_or(body);
 
-    return body.len() >= 2 && body.bytes().all(|byte| byte == b'-');
+    return body.len() >= SHORTEST_DASH_RUN && body.bytes().all(|byte| byte == b'-');
 }
 
 #[cfg(test)]

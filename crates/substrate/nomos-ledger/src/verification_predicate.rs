@@ -21,6 +21,10 @@ pub struct VerificationPredicate
     pub timeout_seconds: u64,
 }
 
+/// Ten minutes: long enough for a workspace `cargo test`, short enough that a predicate which
+/// hangs gives the lease back rather than holding an item until it lapses.
+const DEFAULT_TIMEOUT_SECONDS: u64 = 600;
+
 impl VerificationPredicate
 {
     /// A predicate running the given argument vector.
@@ -29,7 +33,7 @@ impl VerificationPredicate
     {
         return Self {
             argv,
-            timeout_seconds: 600,
+            timeout_seconds: DEFAULT_TIMEOUT_SECONDS,
         };
     }
 

@@ -18,6 +18,9 @@ pub(crate) fn Named_Value(arguments: &[String], name: &str) -> Option<String>
 ///
 /// Repeating rather than comma-splitting, because a path may contain a comma and a
 /// separator character invents a quoting problem the argument vector already solved.
+/// A named value spends two arguments: the name, and the value standing after it.
+const NAME_AND_VALUE: usize = 2;
+
 #[must_use]
 pub(crate) fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
 {
@@ -30,7 +33,7 @@ pub(crate) fn Named_Values(arguments: &[String], name: &str) -> Vec<String>
             && let Some(value) = arguments.get(index.saturating_add(1))
         {
             values.push(value.clone());
-            index = index.saturating_add(2);
+            index = index.saturating_add(NAME_AND_VALUE);
             continue;
         }
         index = index.saturating_add(1);

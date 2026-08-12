@@ -63,7 +63,10 @@ impl FactKey
     }
 }
 
-const fn Version_Bytes(version: ContractVersion) -> [u8; 4]
+/// A contract version is two 16-bit numbers, so four bytes carry it whole.
+const VERSION_BYTES: usize = 4;
+
+const fn Version_Bytes(version: ContractVersion) -> [u8; VERSION_BYTES]
 {
     let major = version.major.to_be_bytes();
     let minor = version.minor.to_be_bytes();

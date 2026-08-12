@@ -2,6 +2,14 @@
 
 use core::fmt::Write as _;
 use crate::fate::Fate;
+
+/// How many losses a summary line names before it falls back to the count alone.
+const NAMED_IN_A_SUMMARY: usize = 3;
+
+/// How much of the widest undeclared text the filler line quotes. Enough to recognise the
+/// boilerplate on sight, short enough that the line stays one line.
+const EXCERPT_CHARACTERS: usize = 72;
+
 use crate::tally::Tally;
 use crate::restored::Restored;
 use crate::filler_census::FillerCensus;
@@ -129,7 +137,7 @@ impl RegressionReport
             .In(family)
             .iter()
             .filter(|member| return !matches!(member.fate, Fate::Preserved { .. }))
-            .take(3)
+            .take(NAMED_IN_A_SUMMARY)
             .map(|member| return member.name.as_str())
             .collect();
     }
@@ -149,7 +157,7 @@ impl RegressionReport
                 "\n  undeclared: {} sections across {} documents stand on \"{}\"",
                 widest.sections,
                 widest.documents.len(),
-                widest.text.chars().take(72).collect::<String>()
+                widest.text.chars().take(EXCERPT_CHARACTERS).collect::<String>()
             );
         }
 

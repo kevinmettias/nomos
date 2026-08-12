@@ -80,11 +80,14 @@ fn Written(path: &Path, table: &str) -> Result<(), String>
 /// Used only to check that a named record is on disk and to spell the `include_str!`
 /// argument; nothing under it is enumerated, which is the whole of why this arrangement is
 /// not vacuous.
+/// `crates/spec/nomos-spec-store` is three directories below the root this walks up to.
+const DEPTH_BELOW_THE_ROOT: usize = 3;
+
 fn Repository_Root(manifest: &Path) -> Result<PathBuf, String>
 {
     return manifest
         .ancestors()
-        .nth(3)
+        .nth(DEPTH_BELOW_THE_ROOT)
         .map(Path::to_path_buf)
         .ok_or_else(|| {
             return format!(

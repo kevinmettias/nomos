@@ -2,6 +2,9 @@
 
 use super::{RevisionFingerprint, PairChange, BTreeSet, Between_Revisions};
 
+/// A window over two neighbours, which is what "adjacent" means to a sequence.
+const ADJACENT_PAIR: usize = 2;
+
 /// The four sets for every adjacent pair.
 ///
 /// `reappeared` is computed against every revision before `from`, which is why this takes
@@ -12,7 +15,7 @@ pub fn Walk(revisions: &[RevisionFingerprint]) -> Vec<PairChange>
     let mut pairs = Vec::new();
     let mut seen_before: BTreeSet<&str> = BTreeSet::new();
 
-    for window in revisions.windows(2)
+    for window in revisions.windows(ADJACENT_PAIR)
     {
         let (Some(from), Some(to)) = (window.first(), window.get(1))
         else

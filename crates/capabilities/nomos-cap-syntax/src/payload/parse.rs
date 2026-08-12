@@ -8,6 +8,40 @@ const ITEM_FIELDS: usize = 7;
 /// Fields in the `unexpanded` header, tag included.
 const HEADER_FIELDS: usize = 2;
 
+/// A record read left to right, so a field's place is the order it is asked for rather than a
+/// number typed beside a grammar written elsewhere.
+///
+/// The number and the encoder drift apart in silence. A field inserted into the record
+/// renumbers every field after it, and nothing in the language ties `fields.get(4)` to the
+/// fifth thing the encoder writes — the reader keeps compiling and starts filling the wrong
+/// fields. Asking in order leaves the grammar as the only place the order is stated.
+struct Fields<'record, 'text>
+{
+    fields: &'record [&'text str],
+    next: usize,
+}
+
+impl<'record, 'text> Fields<'record, 'text>
+{
+    /// The fields after the tag, which every record spends its first column on.
+    fn After_The_Tag(fields: &'record [&'text str]) -> Self
+    {
+        return Self { fields, next: 1 };
+    }
+
+    /// The next field the grammar names, empty where the record is short.
+    ///
+    /// `Expect_Fields` has already refused a record of the wrong length by the time any
+    /// reader asks, so the empty string here is unreachable rather than a quiet default.
+    fn Next(&mut self) -> &'text str
+    {
+        let at = self.next;
+
+        self.next = at.saturating_add(1);
+        return self.fields.get(at).copied().unwrap_or_default();
+    }
+}
+
 /// Reads a payload, or refuses it.
 ///
 /// Never a partial answer. A payload half of which decodes is an index that is silently
@@ -133,23 +167,23 @@ pub(super) fn Header(fields: &[&str], at: usize, already: Option<u32>) -> Result
     }
     Expect_Fields("unexpanded", fields, HEADER_FIELDS, at)?;
 
-    return Number(fields.get(1).copied().unwrap_or_default(), "unexpanded", at);
+    let mut record = Fields::After_The_Tag(fields);
+
+    return Number(record.Next(), "unexpanded", at);
 }
 
 /// One item record, with both observation-bearing fields read as observations.
 pub(super) fn Item(fields: &[&str], at: usize) -> Result<PayloadItem, PayloadRefusal>
 {
+    let mut record = Fields::After_The_Tag(fields);
+
     return Ok(PayloadItem {
-        ordinal: Number(fields.get(1).copied().unwrap_or_default(), "ordinal", at)?,
-        kind: fields.get(2).copied().unwrap_or_default().to_owned(),
-        visibility: fields.get(3).copied().unwrap_or_default().to_owned(),
-        qualified_name: fields.get(4).copied().unwrap_or_default().to_owned(),
-        documentation: Observed(
-            fields.get(5).copied().unwrap_or_default(),
-            "documentation",
-            at,
-        )?,
-        shape: Observed(fields.get(6).copied().unwrap_or_default(), "shape", at)?,
+        ordinal: Number(record.Next(), "ordinal", at)?,
+        kind: record.Next().to_owned(),
+        visibility: record.Next().to_owned(),
+        qualified_name: record.Next().to_owned(),
+        documentation: Observed(record.Next(), "documentation", at)?,
+        shape: Observed(record.Next(), "shape", at)?,
     });
 }
 

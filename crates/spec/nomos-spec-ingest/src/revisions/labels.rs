@@ -2,6 +2,9 @@
 
 use super::{Path, PathBuf, IngestError};
 
+/// A window over two neighbours, which is what "adjacent" means to a sequence.
+const ADJACENT_PAIR: usize = 2;
+
 /// The revision archives, in version order.
 ///
 /// Only the full-suite archives. The topic zips beside them (`nomos_v14_31_ocaml_...`)
@@ -102,7 +105,7 @@ pub fn Gaps(labels: &[String]) -> Vec<String>
     let numbered: Vec<Numbered> = labels.iter().filter_map(|label| return Version(label)).collect();
     let mut missing = Vec::new();
 
-    for pair in numbered.windows(2)
+    for pair in numbered.windows(ADJACENT_PAIR)
     {
         let (Some(before), Some(after)) = (pair.first(), pair.get(1))
         else

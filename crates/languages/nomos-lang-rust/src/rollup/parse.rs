@@ -32,6 +32,40 @@ pub fn Parse_Index(payload: &[u8]) -> Result<ModuleIndex, String>
     return Ok(index);
 }
 
+/// A record read left to right, so a field's place is the order it is asked for rather than a
+/// number typed beside a schema that lives in another file.
+///
+/// The number and the encoder drift apart in silence. A field inserted into `Encode_Entry`
+/// renumbers every field after it, and nothing in the language ties `fields.get(4)` to the
+/// fifth thing that encoder writes — the reader keeps compiling and starts filling the wrong
+/// fields. Asking in order leaves the encoder as the only place the order is stated.
+struct Fields<'record, 'text>
+{
+    fields: &'record [&'text str],
+    next: usize,
+}
+
+impl<'record, 'text> Fields<'record, 'text>
+{
+    /// The fields after the tag, which every record spends its first column on.
+    fn After_The_Tag(fields: &'record [&'text str]) -> Self
+    {
+        return Self { fields, next: 1 };
+    }
+
+    /// The next field the schema names, empty where the record is short.
+    ///
+    /// `Expect_Fields` has already refused a record of the wrong length by the time any
+    /// reader asks, so the empty string here is unreachable rather than a quiet default.
+    fn Next(&mut self) -> &'text str
+    {
+        let at = self.next;
+
+        self.next = at.saturating_add(1);
+        return self.fields.get(at).copied().unwrap_or_default();
+    }
+}
+
 /// The `module` record, and the empty index it opens.
 ///
 /// It appears exactly once and first. That is what makes an index over a module with no
@@ -54,8 +88,10 @@ pub(super) fn Opened(lines: &mut core::iter::Enumerate<core::str::Lines<'_>>) ->
     }
     Expect_Fields("module", &fields, MODULE_FIELDS, 1)?;
 
+    let mut record = Fields::After_The_Tag(&fields);
+
     return Ok(ModuleIndex {
-        module: Subject_From(fields.get(1).copied().unwrap_or_default(), 1)?,
+        module: Subject_From(record.Next(), 1)?,
         members: Vec::new(),
         items: Vec::new(),
     });
@@ -110,7 +146,9 @@ pub(super) fn Member_Record(fields: &[&str], line: usize) -> Result<MemberReadin
 {
     Expect_Fields("member", fields, MEMBER_FIELDS, line)?;
 
-    let outcome = match fields.get(2).copied().unwrap_or_default()
+    let mut record = Fields::After_The_Tag(fields);
+    let subject = record.Next();
+    let outcome = match record.Next()
     {
         READ => Outcome::Read,
         APPROXIMATE => Outcome::Approximate,
@@ -119,7 +157,7 @@ pub(super) fn Member_Record(fields: &[&str], line: usize) -> Result<MemberReadin
     };
 
     return Ok(MemberReading {
-        subject: Subject_From(fields.get(1).copied().unwrap_or_default(), line)?,
+        subject: Subject_From(subject, line)?,
         outcome,
     });
 }
@@ -128,17 +166,19 @@ pub(super) fn Item_Record(fields: &[&str], line: usize) -> Result<IndexEntry, St
 {
     Expect_Fields("item", fields, ITEM_FIELDS, line)?;
 
-    let ordinal = fields.get(2).copied().unwrap_or_default();
+    let mut record = Fields::After_The_Tag(fields);
+    let member = record.Next();
+    let ordinal = record.Next();
     let ordinal: u32 = ordinal
         .parse()
         .map_err(|cause| return format!("`{ordinal}` on line {line} is not an ordinal: {cause}"))?;
 
     return Ok(IndexEntry {
-        member: Subject_From(fields.get(1).copied().unwrap_or_default(), line)?,
+        member: Subject_From(member, line)?,
         ordinal,
-        kind: fields.get(3).copied().unwrap_or_default().to_owned(),
-        visibility: fields.get(4).copied().unwrap_or_default().to_owned(),
-        qualified_name: fields.get(5).copied().unwrap_or_default().to_owned(),
+        kind: record.Next().to_owned(),
+        visibility: record.Next().to_owned(),
+        qualified_name: record.Next().to_owned(),
     });
 }
 
@@ -190,17 +230,23 @@ pub(super) fn Subject_From(hexadecimal: &str, line: usize) -> Result<SubjectId, 
     let mut bytes = [0_u8; Digest128::BYTE_LENGTH];
     for (slot, pair) in bytes.iter_mut().zip(Pairs(hexadecimal))
     {
-        *slot = u8::from_str_radix(pair, 16)
+        *slot = u8::from_str_radix(pair, HEXADECIMAL)
             .map_err(|cause| return format!("`{pair}` on line {line} is not hexadecimal: {cause}"))?;
     }
 
     return Ok(SubjectId::From_Digest(Digest128::From_Bytes(bytes)));
 }
 
+/// The base the encoder wrote a digest in.
+const HEXADECIMAL: u32 = 16;
+
+/// How many characters of that encoding one byte occupies.
+const PER_BYTE: usize = 2;
+
 /// The two-character slices of an even-length ASCII hexadecimal string.
 pub(super) fn Pairs(hexadecimal: &str) -> impl Iterator<Item = &str>
 {
     return (0..hexadecimal.len())
-        .step_by(2)
-        .filter_map(|start| return hexadecimal.get(start..start.saturating_add(2)));
+        .step_by(PER_BYTE)
+        .filter_map(|start| return hexadecimal.get(start..start.saturating_add(PER_BYTE)));
 }

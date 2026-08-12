@@ -1,6 +1,6 @@
 //! One reader per kind of section a profile can ask for.
 
-use super::{Connection, Filter, Item, ProjectError, Query, Text, Narrow_To_Nodes, Row};
+use super::{Columns, Connection, Filter, Item, ProjectError, Query, Narrow_To_Nodes, Row};
 
 pub(super) fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
@@ -10,9 +10,10 @@ pub(super) fn Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Ite
     query.Prefix("suite_id", filter.identifier_prefix.as_ref());
 
     return query.Ordered_By("suite_id").Run(connection, |row| {
-        let root: i64 = row.get(2)?;
-        let suite = Text(row, 0)?;
-        let title = Text(row, 1)?;
+        let mut columns = Columns::Of(row);
+        let suite = columns.Text()?;
+        let title = columns.Text()?;
+        let root: i64 = columns.Next()?;
 
         return Ok(Item::Of(&suite)
             .With("title", &title)
@@ -33,11 +34,12 @@ pub(super) fn Documents(connection: &Connection, filter: &Filter) -> Result<Vec<
     query.Equal("d.revision", filter.revision.as_ref());
 
     return query.Ordered_By("d.revision, d.path").Run(connection, |row| {
-        let blocks: i64 = row.get(3)?;
-        let headings: i64 = row.get(4)?;
-        let path = Text(row, 0)?;
-        let revision = Text(row, 1)?;
-        let hash = Text(row, 2)?;
+        let mut columns = Columns::Of(row);
+        let path = columns.Text()?;
+        let revision = columns.Text()?;
+        let hash = columns.Text()?;
+        let blocks: i64 = columns.Next()?;
+        let headings: i64 = columns.Next()?;
 
         return Ok(Item::Of(&format!("{path}@{revision}"))
             .With("path", &path)
@@ -61,11 +63,12 @@ pub(super) fn Headings(connection: &Connection, filter: &Filter) -> Result<Vec<I
     return query
         .Ordered_By("d.revision, d.path, h.ordinal")
         .Run(connection, |row| {
-            let ordinal: i64 = row.get(2)?;
-            let depth: i64 = row.get(3)?;
-            let path = Text(row, 0)?;
-            let revision = Text(row, 1)?;
-            let title = Text(row, 4)?;
+            let mut columns = Columns::Of(row);
+            let path = columns.Text()?;
+            let revision = columns.Text()?;
+            let ordinal: i64 = columns.Next()?;
+            let depth: i64 = columns.Next()?;
+            let title = columns.Text()?;
 
             return Ok(Item::Of(&format!("{path}#{ordinal}"))
                 .With("revision", &revision)
@@ -88,13 +91,14 @@ pub(super) fn Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Ite
     return query
         .Ordered_By("d.revision, d.path, b.ordinal")
         .Run(connection, |row| {
-            let ordinal: i64 = row.get(2)?;
-            let path = Text(row, 0)?;
-            let revision = Text(row, 1)?;
-            let kind = Text(row, 3)?;
-            let heading = Text(row, 4)?;
-            let text = Text(row, 5)?;
-            let hash = Text(row, 6)?;
+            let mut columns = Columns::Of(row);
+            let path = columns.Text()?;
+            let revision = columns.Text()?;
+            let ordinal: i64 = columns.Next()?;
+            let kind = columns.Text()?;
+            let heading = columns.Text()?;
+            let text = columns.Text()?;
+            let hash = columns.Text()?;
 
             return Ok(Item::Of(&format!("{path}#{ordinal}"))
                 .With("revision", &revision)
@@ -122,16 +126,17 @@ pub(super) fn Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>
     return query
         .Ordered_By("d.revision, d.path, b.ordinal, r.ordinal")
         .Run(connection, |row| {
-            let block: i64 = row.get(2)?;
-            let ordinal: i64 = row.get(3)?;
-            let table: i64 = row.get(4)?;
-            let cells_json = Text(row, 6)?;
+            let mut columns = Columns::Of(row);
+            let path = columns.Text()?;
+            let revision = columns.Text()?;
+            let block: i64 = columns.Next()?;
+            let ordinal: i64 = columns.Next()?;
+            let table: i64 = columns.Next()?;
+            let kind = columns.Text()?;
+            let cells_json = columns.Text()?;
             let cells: Vec<String> = serde_json::from_str(&cells_json).unwrap_or_default();
-            let path = Text(row, 0)?;
-            let revision = Text(row, 1)?;
-            let kind = Text(row, 5)?;
-            let text = Text(row, 7)?;
-            let hash = Text(row, 8)?;
+            let text = columns.Text()?;
+            let hash = columns.Text()?;
 
             return Ok(Item::Of(&format!("{path}#{block}:{ordinal}"))
                 .With("revision", &revision)
@@ -153,12 +158,13 @@ pub(super) fn Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item
     Narrow_To_Nodes(&mut query, filter);
 
     return query.Ordered_By("n.node_id").Run(connection, |row| {
-        let node = Text(row, 0)?;
-        let kind = Text(row, 1)?;
-        let authority = Text(row, 2)?;
-        let representation = Text(row, 3)?;
-        let title = Text(row, 4)?;
-        let suite = Text(row, 5)?;
+        let mut columns = Columns::Of(row);
+        let node = columns.Text()?;
+        let kind = columns.Text()?;
+        let authority = columns.Text()?;
+        let representation = columns.Text()?;
+        let title = columns.Text()?;
+        let suite = columns.Text()?;
 
         return Ok(Item::Of(&node)
             .With("kind", &kind)
@@ -182,12 +188,13 @@ pub(super) fn Statements(connection: &Connection, filter: &Filter) -> Result<Vec
     query.Equal("n.node_id", filter.node_id.as_ref());
 
     return query.Ordered_By("s.statement_id").Run(connection, |row| {
-        let statement = Text(row, 0)?;
-        let kind = Text(row, 1)?;
-        let node = Text(row, 2)?;
-        let text = Text(row, 3)?;
-        let hash = Text(row, 4)?;
-        let supersedes = Text(row, 5)?;
+        let mut columns = Columns::Of(row);
+        let statement = columns.Text()?;
+        let kind = columns.Text()?;
+        let node = columns.Text()?;
+        let text = columns.Text()?;
+        let hash = columns.Text()?;
+        let supersedes = columns.Text()?;
 
         return Ok(Item::Of(&statement)
             .With("kind", &kind)
@@ -217,10 +224,11 @@ pub(super) fn Relations(connection: &Connection, filter: &Filter) -> Result<Vec<
     return query
         .Ordered_By("f.node_id, r.relation_type, t.node_id")
         .Run(connection, |row| {
-            let from = Text(row, 0)?;
-            let relation = Text(row, 1)?;
-            let to = Text(row, 2)?;
-            let tier = Text(row, 3)?;
+            let mut columns = Columns::Of(row);
+            let from = columns.Text()?;
+            let relation = columns.Text()?;
+            let to = columns.Text()?;
+            let tier = columns.Text()?;
 
             return Ok(Item::Of(&format!("{from} {relation} {to}"))
                 .With("from", &from)
@@ -270,10 +278,11 @@ pub(super) fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<It
     return query
         .Ordered_By(LINEAGE_ORDER)
         .Run(connection, |row| {
-            let disposition = Text(row, 0)?;
-            let source = Cited(row)?;
-            let node = Text(row, 5)?;
-            let statement = Text(row, 6)?;
+            let mut columns = Columns::Of(row);
+            let disposition = columns.Text()?;
+            let source = Cited(&mut columns)?;
+            let node = columns.Text()?;
+            let statement = columns.Text()?;
             // A statement is the more specific of the two and wins where both are present:
             // saying which node a block preserved is true but answers a coarser question
             // than the one the lineage was recorded to answer.
@@ -291,12 +300,12 @@ pub(super) fn Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<It
 /// A row addresses a table row, a block, or a heading, and `-1` is the sentinel each join
 /// leaves behind when it matched nothing. Citing the block for a row-level disposition
 /// would make thirty rows of one table cite the same place.
-pub(super) fn Cited(row: &Row<'_>) -> rusqlite::Result<String>
+pub(super) fn Cited(columns: &mut Columns<'_, '_>) -> rusqlite::Result<String>
 {
-    let block: i64 = row.get(2)?;
-    let ordinal: i64 = row.get(3)?;
-    let path = Text(row, 1)?;
-    let heading = Text(row, 4)?;
+    let path = columns.Text()?;
+    let block: i64 = columns.Next()?;
+    let ordinal: i64 = columns.Next()?;
+    let heading = columns.Text()?;
 
     return Ok(match (block, ordinal)
     {
@@ -306,44 +315,54 @@ pub(super) fn Cited(row: &Row<'_>) -> rusqlite::Result<String>
     });
 }
 
+/// Every omission with both of its source kinds joined.
+///
+/// `-1` is what the unmatched join leaves behind, and is read back as "this omission is not
+/// addressed at that grain".
+const OMISSION_ROWS: &str = "SELECT coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1),
+            coalesce(h.title, ''), o.reason, o.justification, o.decision_record
+     FROM omissions o
+     LEFT JOIN source_blocks b ON b.uid = o.source_block_uid
+     LEFT JOIN source_documents d ON d.uid = b.document_uid
+     LEFT JOIN source_headings h ON h.uid = o.source_heading_uid
+     LEFT JOIN source_documents hd ON hd.uid = h.document_uid
+     WHERE 1 = 1";
+
+/// Decision record, then document, then position, then reason — every column named, so two
+/// omissions on one block cannot come back in whatever order the join produced them.
+const OMISSION_ORDER: &str =
+    "o.decision_record, coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1), o.reason";
+
 pub(super) fn Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
 {
-    let mut query = Query::On(
-        "SELECT coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1),
-                coalesce(h.title, ''), o.reason, o.justification, o.decision_record
-         FROM omissions o
-         LEFT JOIN source_blocks b ON b.uid = o.source_block_uid
-         LEFT JOIN source_documents d ON d.uid = b.document_uid
-         LEFT JOIN source_headings h ON h.uid = o.source_heading_uid
-         LEFT JOIN source_documents hd ON hd.uid = h.document_uid
-         WHERE 1 = 1",
-    );
+    let mut query = Query::On(OMISSION_ROWS);
     query.Equal("coalesce(d.path, hd.path, '')", filter.document.as_ref());
 
-    return query
-        .Ordered_By(
-            "o.decision_record, coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1), o.reason",
-        )
-        .Run(connection, |row| {
-            let block: i64 = row.get(1)?;
-            let path = Text(row, 0)?;
-            let heading = Text(row, 2)?;
-            let reason = Text(row, 3)?;
-            let justification = Text(row, 4)?;
-            let decision = Text(row, 5)?;
-            let source = if block == -1
-            {
-                format!("{path}#{heading}")
-            }
-            else
-            {
-                format!("{path}#{block}")
-            };
+    return query.Ordered_By(OMISSION_ORDER).Run(connection, An_Omission);
+}
 
-            return Ok(Item::Of(&format!("{source} -> {decision}"))
-                .With("source", &source)
-                .With("reason", &reason)
-                .With("justification", &justification)
-                .With("decision", &decision));
-        });
+/// One omission, cited at the finest grain its row carries.
+fn An_Omission(row: &Row<'_>) -> rusqlite::Result<Item>
+{
+    let mut columns = Columns::Of(row);
+    let path = columns.Text()?;
+    let block: i64 = columns.Next()?;
+    let heading = columns.Text()?;
+    let reason = columns.Text()?;
+    let justification = columns.Text()?;
+    let decision = columns.Text()?;
+    let source = if block == -1
+    {
+        format!("{path}#{heading}")
+    }
+    else
+    {
+        format!("{path}#{block}")
+    };
+
+    return Ok(Item::Of(&format!("{source} -> {decision}"))
+        .With("source", &source)
+        .With("reason", &reason)
+        .With("justification", &justification)
+        .With("decision", &decision));
 }

@@ -7,6 +7,7 @@
 #![forbid(unsafe_code)]
 
 mod authoring;
+mod columns;
 mod governing;
 mod read;
 mod record;

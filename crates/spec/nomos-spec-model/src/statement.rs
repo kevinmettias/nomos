@@ -48,12 +48,13 @@ impl StatementId
     }
 }
 
-/// Whether a trailing segment is the number a statement identifier ends in.
-///
 /// Three digits at least, because two would let a section number read as a statement.
+const SHORTEST_SUFFIX: usize = 3;
+
+/// Whether a trailing segment is the number a statement identifier ends in.
 fn Is_A_Suffix(number: &str) -> bool
 {
-    return number.len() >= 3 && All_Digits(number);
+    return number.len() >= SHORTEST_SUFFIX && All_Digits(number);
 }
 
 /// A non-empty run of ASCII digits and nothing else.

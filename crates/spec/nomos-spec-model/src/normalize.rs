@@ -29,11 +29,14 @@ impl ContentHash
         return Self::Of(&Normalize(text));
     }
 
+    /// A SHA-256 digest spelled in lowercase hexadecimal.
+    const DIGEST_HEX_LENGTH: usize = 64;
+
     #[must_use]
     pub fn Parse(text: &str) -> Option<Self>
     {
         let digest = text.strip_prefix(HASH_PREFIX)?;
-        if digest.len() == 64 && Is_Lowercase_Hex(digest)
+        if digest.len() == Self::DIGEST_HEX_LENGTH && Is_Lowercase_Hex(digest)
         {
             return Some(Self(text.to_owned()));
         }

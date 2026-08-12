@@ -95,11 +95,19 @@ pub(super) fn Recognized(block: &SourceBlock, title: &str) -> Vec<Recognition>
 
     return match depth
     {
-        3 => At_Depth_3(title),
-        4 => At_Depth_4(title, &block.heading_path),
+        LEVEL_3 => At_Depth_3(title),
+        LEVEL_4 => At_Depth_4(title, &block.heading_path),
         _ => Vec::new(),
     };
 }
+
+/// The two heading levels a family member can sit at. Anything shallower is a volume and
+/// anything deeper is a subsection of a member rather than a member.
+const LEVEL_3: usize = 3;
+const LEVEL_4: usize = 4;
+
+/// A level-4 heading's numbering carries two parts, `D.1.2`, where a level-3 one carries one.
+const PARTS_AT_DEPTH_4: usize = 2;
 
 /// The level-3 numbered series, and the family each one restores.
 const DEPTH_3: &[(char, Restored)] = &[('D', Restored::AppendixD), ('H', Restored::AppendixH)];
@@ -157,7 +165,7 @@ pub(super) fn At_Depth_3(title: &str) -> Vec<Recognition>
 /// service from any other level-4 heading in the same volume.
 pub(super) fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
 {
-    let mut found = Numbered(title, 2, DEPTH_4);
+    let mut found = Numbered(title, PARTS_AT_DEPTH_4, DEPTH_4);
 
     if Under(path, SERVICES) && Names_A_Service(title)
     {
