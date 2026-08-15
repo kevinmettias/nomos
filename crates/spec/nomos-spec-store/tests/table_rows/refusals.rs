@@ -12,6 +12,10 @@ fn Refusal(markdown: &str) -> StoreError
 {
     return match Stored(markdown)
     {
+        // Unreachable while the store refuses a malformed table: every caller hands this
+        // markdown whose delimiter row is missing or doubled on purpose. An `Ok` is the store
+        // having accepted one, which is the escape from NSV-PRESERVE-002's view this module
+        // exists to close. It is a panic and not `expect_err` for the reason given above.
         Ok(_) => panic!("expected a refusal, got a store"),
         Err(error) => error,
     };

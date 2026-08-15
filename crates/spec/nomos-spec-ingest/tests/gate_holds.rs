@@ -14,6 +14,9 @@ fn Fixture(name: &str) -> String
 
     let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/corpus").join(name);
     return std::fs::read_to_string(&path)
+        // These fixtures are vendored into the repository so this gate always runs. A missing
+        // one has to fail rather than skip: `nomos work finish` reads a skipped test as the
+        // gate having passed, which is the failure mode this whole file exists to close.
         .unwrap_or_else(|error| panic!("the gate needs {}: {error}", path.display()));
 }
 

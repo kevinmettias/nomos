@@ -88,8 +88,16 @@ fn Test_Audit_Should_Report_Every_Live_Refusal_And_Only_Those()
 fn Assert_Both_Live_Refusals_Are_Reported(audit: &str)
 {
     let held = Audit_Line(audit, "T-2")
+        // Silence is the defect, so this lookup cannot degrade into a skipped assertion.
+        // `Audit_Line` returns `None` for "the audit said nothing about this item", and the
+        // `contains` checks below would then have nothing to run against — the regression
+        // this helper is named for would read as an absence of evidence. The whole audit is
+        // printed, because what it said instead is the diagnosis.
         .unwrap_or_else(|| panic!("T-2 is on ground agent-a holds:\n{audit}"));
     let waiting = Audit_Line(audit, "T-3").unwrap_or_else(|| {
+        // The dependency half, stopped separately: territory and dependency are two refusals
+        // this fixture holds at once, and either one reported alone is the defect coming
+        // back. A run that gave up on T-2 must not be readable as having judged T-3 too.
         panic!(
             "T-3 is refused for an unfinished dependency, which the audit used to be \
              silent about:\n{audit}"

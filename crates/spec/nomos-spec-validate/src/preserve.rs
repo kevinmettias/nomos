@@ -37,6 +37,10 @@ impl Rule for EveryHeadingHasADisposition
 }
 
 #[must_use]
+// Four unrelated types in one vector, and the set is meant to stay open: `DECLARED_RULES`
+// closes it at run time, in both directions, so that a rule implemented and never listed here
+// is a value `Validate` can be handed and report. Making the ruleset a tuple of types would
+// put that disagreement beyond expressing.
 pub fn Registered() -> Vec<Box<dyn Rule>>
 {
     use crate::rule::EveryStatementTracesToSource;

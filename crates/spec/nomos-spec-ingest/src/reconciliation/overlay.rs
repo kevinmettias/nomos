@@ -438,6 +438,10 @@ mod tests
         let Some(outcome) = reworded.first()
         else
         {
+            // v15 was given MODEL-001 with different text, so an empty `Reworded()` means the
+            // change went unreported entirely — a worse failure than the disposition being
+            // wrong, and one the `matches!` below cannot reach. The summary is printed
+            // because an empty list says nothing about what the statement was reported as.
             panic!("a changed statement must be reported: {}", report.Summary());
         };
         assert!(matches!(outcome.disposition, Disposition::Reworded { .. }));

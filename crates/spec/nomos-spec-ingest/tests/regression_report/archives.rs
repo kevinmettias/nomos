@@ -27,13 +27,24 @@ fn Archives() -> Option<PathBuf>
 
 fn Read(root: &Path, label: &str) -> Revision
 {
+    // NOMOS_SPEC_ARCHIVES was asserted to be a directory, so a root that yields no revisions
+    // at all is the wrong directory rather than an empty one. Every test below asks for two
+    // labels that would then both be reported absent, which reads as a corpus that lost them.
     let revisions = Revisions_In(root).unwrap_or_else(|error| panic!("{error}"));
     let (_, path) = revisions
         .iter()
         .find(|(found, _)| return found == label)
+        // The label is one of the three revisions this suite pins by constant. One of them
+        // missing means the pair under test is not the pair the register was measured over,
+        // so every fate it goes on to compare would be a comparison of something else.
         .unwrap_or_else(|| panic!("{label} is not among the revision archives"));
+    // The listing named this path, so a zip that will not open is a damaged archive rather
+    // than a revision this suite does not have.
     let mut archive = Archive::Open(path).unwrap_or_else(|error| panic!("{error}"));
 
+    // `Revision::Read` refuses an archive carrying no markdown, and that refusal exists
+    // precisely so an unread revision cannot be reported as one where every family is gone.
+    // Recovering from it here would put back the reading it refuses to make.
     return Revision::Read(&mut archive, label).unwrap_or_else(|error| panic!("{error}"));
 }
 
@@ -42,6 +53,10 @@ fn Headline(root: &Path) -> RegressionReport
     let before = Read(root, V14_LAST);
     let after = Read(root, V15);
 
+    // `Regression` refuses a pair whose earlier revision carries no domain volumes, and
+    // `Test_A_Revision_Without_The_Volumes_Should_Be_Refused` asserts that refusal on
+    // purpose. Reaching it from the headline pair means v14.36 is not the v14.36 the
+    // register was measured over, so every figure taken from this report would be wrong.
     return Regression(&before, &after).unwrap_or_else(|error| panic!("{error}"));
 }
 
@@ -148,6 +163,9 @@ fn Test_The_Content_That_Really_Went_Should_Be_Named()
     let Some(lost) = report.Named("ModelUsageObservation")
     else
     {
+        // This test's claim is that the lost content is *named*, and the three assertions
+        // below are about this member's id, its former document and its family. If it does
+        // not resolve by the spelling the corpus uses, there is nothing left to assert.
         panic!("the member does not resolve by the name the corpus gives it");
     };
 
@@ -220,6 +238,10 @@ fn Test_The_Filler_The_Blocklist_Does_Not_See_Should_Be_Named()
     let Some(widest) = report.filler.Widest_Undeclared()
     else
     {
+        // The test exists to name filler the blocklist does not match. No undeclared template
+        // means its subject does not exist, and the four assertions below would then hold
+        // over nothing — a pass reporting that the blocklist is complete when it was never
+        // measured against anything it missed.
         panic!("no undeclared template, so the blocklist saw everything");
     };
 

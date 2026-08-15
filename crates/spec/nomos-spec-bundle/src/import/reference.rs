@@ -44,6 +44,10 @@ pub(super) struct Referenced<'a>
 pub(super) fn Resolve(
     transaction: &Transaction<'_>,
     sql: &'static str,
+    // The lookups differ in both the number and the type of their keys — a path and a revision
+    // arrive as `&String`, an ordinal as `&i64` — and a slice holds one type. Erasing each key
+    // to `ToSql` is what lets one resolver serve all nine call sites; a generic parameter would
+    // fix the key tuple and force a separate resolver per shape.
     arguments: &[&dyn rusqlite::ToSql],
     referenced: Referenced<'_>,
 ) -> Result<i64, BundleError>

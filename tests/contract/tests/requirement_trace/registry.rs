@@ -14,6 +14,10 @@ const EXTENSION: &str = "assessment";
 pub(crate) fn Committed(root: &Path) -> Vec<Assessment>
 {
     return Entries(&root.join(REGISTRY))
+        // `Entries` is fallible so a control can hand it a bad directory and read the refusal
+        // back. The committed registry has no such caller: an entry that will not read is an
+        // assessment that stopped being counted, and the floor would measure a set nobody
+        // chose while still reporting a number.
         .unwrap_or_else(|refusal| panic!("the committed registry must read: {refusal}"));
 }
 

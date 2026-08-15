@@ -98,6 +98,9 @@ fn Assert_The_Declaration_Is_Coherent<S: Strategy>(domain: &str)
 fn Assert_Repeats_Agree<S: Strategy>(
     domain: &str,
     first: &Production,
+    // Already erased at `Verify`'s boundary, so there is no concrete closure type left to
+    // name here. A type parameter would be instantiated at `dyn Fn` and buy nothing, and the
+    // one indirect call it would remove sits in front of a whole production.
     produce: &dyn Fn() -> Vec<u8>,
 )
 {

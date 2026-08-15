@@ -47,6 +47,9 @@ fn Assert_It_Would_Have_Failed(name: &'static str, mirror: &'static str)
     let row = UNIVERSES
         .iter()
         .find(|universe| return universe.name == name)
+        // The three names are the recorded instances of P9-ONE-DIRECTION. One of them no
+        // longer classified in UNIVERSES means the reconstruction below cannot be performed
+        // at all, and skipping it would leave this control claiming three and checking two.
         .unwrap_or_else(|| panic!("{name} must be classified"));
 
     assert_eq!(

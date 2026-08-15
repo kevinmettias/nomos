@@ -99,6 +99,9 @@ fn Test_The_Governing_Records_Should_Project_As_A_Document_Suite()
     for id in ["domain-specification", "html-site"]
     {
         let profile = Profile_Named(id);
+        // Unreachable while both profiles project the governing records. The id has to be in
+        // the message because the loop builds two of them and `second` below is a plain
+        // `expect`: this is the only arm that can say which profile refused its first build.
         let first = Build(&store, &profile).unwrap_or_else(|error| panic!("{id}: {error}"));
         let second = Build(&store, &profile).expect("rebuilds");
 

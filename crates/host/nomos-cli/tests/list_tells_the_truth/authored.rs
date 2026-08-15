@@ -45,6 +45,11 @@ impl Board
         let line = listing
             .lines()
             .find(|line| line.starts_with(item))
+            // This function's whole job is to say which label `work list` printed, and the
+            // return type is a `String` — so an item missing from the listing would come back
+            // as `""`, which is also what an item printed with no label looks like. Those are
+            // the two failures this suite has to keep apart, and only stopping here does it.
+            // The listing is printed because "which items did appear" is the next question.
             .unwrap_or_else(|| panic!("{item} must appear in the listing:\n{listing}"));
         return line
             .split_whitespace()

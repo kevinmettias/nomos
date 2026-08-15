@@ -66,6 +66,10 @@ fn Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag()
 fn Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version()
 {
     let argv = nomos_ledger::Derive_Step(&Workflow(), SUPPLY_CHAIN_TOOL_STEP)
+        // Deriving by step name is what makes this assertion survive the install being
+        // rewritten into a shell script — but only if the refusal that rewrite produces stops
+        // the run. Swallowed, it would leave `Version_Pinned_In` an empty argv and the pin
+        // unexamined, which is the same unversioned install this test was written against.
         .unwrap_or_else(|refusal| panic!("{}", refusal.Describe()));
 
     assert!(
@@ -91,6 +95,10 @@ fn Version_Pinned_In(argv: &[String]) -> &str
         .iter()
         .position(|argument| return argument == "--version")
         .unwrap_or_else(|| {
+            // The absent flag is precisely the condition this file exists to fail on, so it
+            // cannot be reported by returning something the caller then has to interpret —
+            // the caller's own check is "does it start with a digit", and any placeholder
+            // either passes that check or fails it for the wrong reason.
             panic!(
                 "the supply-chain tool is installed at whatever version crates.io serves \
                  today: {argv:?}"
@@ -99,6 +107,10 @@ fn Version_Pinned_In(argv: &[String]) -> &str
 
     return argv
         .get(flag.saturating_add(1))
+        // A `--version` sitting last in the argv is a different defect from a `--version`
+        // that is absent, and both must be told apart from a version that is merely odd. The
+        // signature returns a borrowed `&str` with no vocabulary for "there was no next
+        // argument", so the distinction is drawn here or nowhere.
         .unwrap_or_else(|| panic!("`--version` names no version: {argv:?}"));
 }
 

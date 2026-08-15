@@ -212,6 +212,9 @@ mod tests
     {
         return match Archive::Open(Path::new(path))
         {
+            // Every caller hands this a path built to be unopenable, so the `Ok` arm is
+            // unreachable while `Archive::Open` still refuses what it should. Reaching it is
+            // the assertion failing, and there is no `ArchiveError` to return in its place.
             Ok(_) => panic!("{path} should have been refused"),
             Err(error) => error,
         };

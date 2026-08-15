@@ -162,6 +162,11 @@ fn Board_With_A_Declined_Item() -> LedgerDocument
     .unwrap()
     {
         WorkCommand::Add { item, .. } => *item,
+        // The argument is a literal written two lines up, so another variant here is the
+        // parser having started routing `add` somewhere else rather than a caller's mistake.
+        // Nothing below could carry on from it: the two declined-item tests need an item to
+        // decline, and a fixture that silently produced none would leave them asserting
+        // about a board they never built.
         other => panic!("expected an add, got {other:?}"),
     };
 
@@ -213,6 +218,10 @@ fn Added(text: &str) -> LedgerItem
     return match Parse(&Arguments(text)).unwrap()
     {
         WorkCommand::Add { item, .. } => *item,
+        // Every call site hands this an `add` line, so the variant is fixed by construction
+        // and the only thing a fallible signature would buy is an `unwrap` at each of them.
+        // The other variant is printed because the useful failure is which command the
+        // parser chose instead — that names the flag it started reading differently.
         other => panic!("expected an add, got {other:?}"),
     };
 }
@@ -245,6 +254,10 @@ fn Add_Of(text: &str) -> AddedItem
             item: *item,
             amending,
         },
+        // `amending` exists only on this variant, so there is no degraded `AddedItem` to
+        // return from any other one — a caller would have nothing to inspect. That matters
+        // here because the assertion below is that `--amends` reserved a path, and a helper
+        // that fell back to an empty declaration would report the guard as working.
         other => panic!("expected an add, got {other:?}"),
     };
 }

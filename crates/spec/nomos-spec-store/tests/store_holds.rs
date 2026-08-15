@@ -30,6 +30,10 @@ fn Test_Every_Declared_Table_Should_Exist()
     for table in Table::All()
     {
         assert_eq!(
+            // A `Count` over a declared table errors when the schema has no such table, which
+            // is exactly what this loop is looking for. The name has to be in the message:
+            // comparing the `Result` itself would report a rusqlite error without saying
+            // which of the declared tables the migrations never created.
             store.Count(*table).unwrap_or_else(|error| panic!("{}: {error}", table.Name())),
             0
         );

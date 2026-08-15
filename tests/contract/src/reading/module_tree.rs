@@ -75,6 +75,10 @@ fn Readable(file: &Path) -> String
     use crate::reading::source_files::Without_Test_Modules;
 
     let text = std::fs::read_to_string(file)
+        // This path was produced by resolving a `mod` declaration the walk already read, so a
+        // file that will not open means the module tree and the tree on disk disagree. Falling
+        // back to empty text would drop a whole module out of every surface snapshot below,
+        // and a snapshot missing a module compares equal to one nobody removed anything from.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", file.display()));
     let without_tests = Without_Test_Modules(&text);
 

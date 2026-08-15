@@ -259,6 +259,11 @@ fn Restamp(sidecar: &Path, field: &str, replacement: &str)
         .lines()
         .find_map(|line| return line.trim().strip_prefix(field))
         .and_then(|rest| return rest.strip_suffix("\","))
+        // The rewrite below is `stamp.replace(digest, replacement)`, so an absent field would
+        // leave the sidecar untouched and every staleness test downstream would pass against a
+        // stamp that still agrees with its file — the tests would go green for the reason they
+        // are written to catch. There is no caller to hand a `None` to that could tell those
+        // two situations apart, so the field name is named and the run stops here.
         .unwrap_or_else(|| panic!("the sidecar declares no {field}"));
 
     let rewritten = stamp.replace(digest, replacement);

@@ -67,6 +67,9 @@ fn Declared(id: &str) -> u32
     return entries
         .iter()
         .find(|entry| return entry.id == id)
+        // A membership id with no register entry means the count it asserts was never measured.
+        // Any fallback would compare the restoration against a number this file minted, which is
+        // the confusion D-132 and the register exist to end.
         .map_or_else(|| panic!("{id} is not in the register"), |entry| return entry.measured);
 }
 
@@ -81,6 +84,9 @@ fn Read(root: &Path, relative: &str) -> String
 {
     let path = root.join(relative);
     return std::fs::read_to_string(&path)
+        // Every caller names a file the corpus is supposed to carry — a volume, a section lineage,
+        // a block manifest — so a failure here is the corpus not being the one this restores from.
+        // Which path was tried is the whole of the answer.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
@@ -88,6 +94,9 @@ fn Volumes(root: &Path) -> BTreeMap<String, String>
 {
     let directory = root.join("01_authoring/domain_volumes");
     let entries = std::fs::read_dir(&directory)
+        // The count at the end of this function would report a directory that will not read as the
+        // corpus holding the wrong number of volumes, and send the reader to the corpus rather
+        // than to the path.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     let mut documents = BTreeMap::new();
@@ -143,6 +152,9 @@ fn Restored_Store(root: &Path) -> RestoredStore
     }
 
     let report =
+        // Every test in this file reads the report this call returns — the family counts, the
+        // resolutions, the preservation run. A restoration that refused leaves nothing to examine,
+        // and the restorer's own words about why are the only thing left worth printing.
         Restore(&mut store, REVISION, &documents).unwrap_or_else(|error| panic!("{error}"));
 
     Assert_The_Restoration_Owns_Its_Names(&report);
@@ -274,6 +286,9 @@ fn Assert_Resolves_By_Its_Own_Name(
 {
     let member = report
         .Named(name)
+        // NAMED_MODELS are the plan's own worked examples, so one of them missing means this is
+        // not the restoration the plan asked for. The summary rides along because "was not
+        // restored" is only answerable beside what was.
         .unwrap_or_else(|| panic!("{name} was not restored\n{}", report.Summary()));
 
     assert_eq!(member.family, Restored::CanonicalDomainModel, "{name}");
@@ -393,6 +408,9 @@ fn Ingest_The_Lineage(store: &mut SpecificationStore, root: &Path)
     for (document, dispositions) in Per_Document(&manifest)
     {
         Ingest_Block_Dispositions(store, &document, REVISION, &dispositions)
+            // A document whose dispositions never landed is one the preservation rules then report
+            // as content silently dropped, so the ledger would take the blame for a manifest that
+            // would not ingest. The document name is which one.
             .unwrap_or_else(|error| panic!("{document}: {error}"));
     }
 }

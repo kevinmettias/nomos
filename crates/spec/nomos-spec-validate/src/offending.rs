@@ -74,6 +74,9 @@ pub(crate) fn Found(
 /// joins string literals into a constant, which is what keeps the SQL from ever being a
 /// value the program assembled: the three names are fixed where the rule is written, not
 /// woven in when it runs.
+// A function could not do this. `concat!` takes literals, so the three names have to be joined
+// where the rule writes them; a `fn(&str, &str, &str) -> String` would produce the statement at
+// run time, and `Traced::offenders` — a `&'static str` — could not hold the result.
 macro_rules! Undisposed_Statement
 {
     ($table:literal, $lineage:literal, $omission:literal) =>

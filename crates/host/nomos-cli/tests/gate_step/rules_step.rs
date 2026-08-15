@@ -11,6 +11,12 @@ use crate::workflow::{RULES_STEP, With_A_Scripted_Rules_Step, Workflow};
 fn Test_This_Repository_Gate_Should_Run_The_Rules()
 {
     let argv = nomos_ledger::Derive_Step(&Workflow(), RULES_STEP)
+        // Deleting or renaming the step is the most likely way the rule layer stops running,
+        // and it arrives here as a refusal rather than as a wrong argv — so this is the site
+        // that has to be loud. Note that the very next test takes the opposite side: it calls
+        // `expect_err` because a refusal is the correct answer there. The two are the same
+        // outcome read against different workflows, which is why neither may be softened into
+        // a tolerant `unwrap_or_default`.
         .unwrap_or_else(|refusal| panic!("{}", refusal.Describe()));
 
     assert_eq!(argv.first().map(String::as_str), Some("cargo"));
@@ -61,11 +67,19 @@ fn Test_The_Rules_Step_Should_Judge_The_Whole_Workspace()
 {
     let workflow = Workflow();
     let argv = nomos_ledger::Derive_Step(&workflow, RULES_STEP)
+        // This test's claim is about one argument inside the argv, so it has nothing to say
+        // about a workflow that yields no argv at all — that claim belongs to the first test
+        // in this file. Stopping here keeps the two separable: a reader of a red run sees the
+        // step-exists failure fire there and the scope failure fire here, instead of one
+        // vacuous pass hiding behind the other.
         .unwrap_or_else(|refusal| panic!("{}", refusal.Describe()));
 
     let root = argv
         .iter()
         .position(|argument| return argument == "--root")
+        // No index can stand in for a missing flag. Defaulting to zero would make the
+        // assertion below read `argv[1]` — the word `check` — and report the step as judging
+        // a tree it never named, which is the `OD-GATE-001` defect wearing this test's badge.
         .unwrap_or_else(|| panic!("the Rules step must name the tree it judges: {argv:?}"));
 
     assert_eq!(

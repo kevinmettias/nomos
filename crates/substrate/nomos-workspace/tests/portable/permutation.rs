@@ -4,7 +4,8 @@
 //! corpus — it builds five hundred synthetic members, because the claim is about the walk
 //! rather than about any particular tree. It lives beside the walk it checks.
 
-#![allow(dead_code)]
+// PROBE
+
 
 use crate::arrival::{Fresh, Ingest, Workspace};
 

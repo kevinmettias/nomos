@@ -1,4 +1,9 @@
 #![forbid(unsafe_code)]
+// Every fallible function in this crate returns `ProjectError` and nothing else. Each of its
+// variants already carries the failure and the remedy — in a doc comment above the variant and
+// in the `Display` arm below, which are what a caller actually reads. An `# Errors` section per
+// function would be a second, unchecked copy of that one enumeration, so the lint is declined
+// for the whole crate rather than answered file by file.
 #![allow(clippy::missing_errors_doc)]
 
 mod build;

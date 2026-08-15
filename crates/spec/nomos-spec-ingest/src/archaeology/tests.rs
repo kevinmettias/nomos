@@ -48,6 +48,9 @@ fn Fate_Of(report: &RegressionReport, name: &str) -> Fate
 {
     return report
         .Named(name)
+        // Callers name a member the `Earlier()` fixture puts in the corpus, so the lookup
+        // failing means extraction stopped recognising it — a different failure from the
+        // fate being wrong, and one the `assert_eq!` on a fate could not tell apart.
         .unwrap_or_else(|| panic!("{name} is not a member"))
         .fate
         .clone();

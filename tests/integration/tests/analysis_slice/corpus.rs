@@ -55,6 +55,9 @@ pub(crate) fn Advanced(edited: Edited) -> InvalidationReport
     let Edited::Advanced { invalidated, .. } = edited
     else
     {
+        // `Edited::Unchanged` carries no report, so the only thing to return instead is an
+        // empty one — and every caller's assertion is about what the invalidation reached.
+        // All of them hold over nothing, so the edit that never landed would go unnoticed.
         panic!("this was supposed to be a change to the workspace: {edited:?}")
     };
 
@@ -113,6 +116,9 @@ pub(crate) fn Source_Of(corpus: &Corpus, path: &str) -> String
         .files
         .iter()
         .find(|file| return file.path == path)
+        // Callers name corpus paths as literals. A path the corpus does not hold is a test
+        // editing a file no provider reads, and an empty string in its place would turn that
+        // into an edit which correctly invalidated nothing.
         .map_or_else(|| panic!("the precision corpus contains {path}"), |file| return file.source.clone());
 }
 
@@ -143,6 +149,9 @@ pub(crate) fn Loose(corpus: &Corpus) -> Slice
 pub(crate) fn Surface_Of(slice: &Slice, corpus: &Corpus, group: &str) -> Surface
 {
     let members = corpus.In_Group(group);
+    // No rollup means the run produced no fact for this group at all. Every coverage claim
+    // downstream is decoded out of this payload, so the alternative is not a weaker answer —
+    // it is no answer, arriving at the assertions as a group whose surface is simply empty.
     let fact = slice.Surface_Of(&members).unwrap_or_else(|| panic!("{group} has a rollup"));
 
     return Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");

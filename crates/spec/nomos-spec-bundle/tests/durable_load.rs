@@ -125,6 +125,10 @@ fn Test_A_Bundle_Naming_Content_The_Store_Already_Holds_Should_Be_Refused_By_Nam
     let BundleError::Occupied { table, identity } = refusal
     else
     {
+        // Unreachable while a bundle re-imported into the store it was exported from is
+        // refused as a collision. Any other variant would mean the import stopped for some
+        // reason of its own before reaching the occupied row, and the two assertions below
+        // would have no table and no identity to check.
         panic!("expected a collision naming what it found, got {refusal}");
     };
     assert!(!table.is_empty(), "the refusal must name the table");

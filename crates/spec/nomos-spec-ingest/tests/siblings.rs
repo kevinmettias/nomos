@@ -78,6 +78,9 @@ fn Ecosystem() -> Option<SpecificationStore>
         let text = Plan_Text(&archives, name);
 
         Ingest_Game_Plan(&mut store, suite, name, &text)
+            // I8 asserts only "the plans did not land" over a block count, and there are two
+            // plans under two different authorities. Naming this one and the ingest's own error
+            // is the difference between that count and a repair.
             .unwrap_or_else(|error| panic!("{name}: {error}"));
     }
 
@@ -88,8 +91,12 @@ fn Ecosystem() -> Option<SpecificationStore>
 fn Ingest_One_Sibling(store: &mut SpecificationStore, archives: &Path, sibling: Sibling)
 {
     let mut archive = Archive::Open(&archives.join(sibling.Archive()))
+        // A seed that will not open leaves its suite absent, and the suite count then reads as
+        // this repository having minted the wrong number of them rather than as a missing zip.
         .unwrap_or_else(|error| panic!("{error}"));
     let report = Ingest_Sibling_Suite(store, &mut archive, sibling)
+        // The two assertions below catch a suite that arrived empty. A refused ingest is the third
+        // way, and the only one that can say why — named by suite, since three run through here.
         .unwrap_or_else(|error| panic!("{}: {error}", sibling.Suite_Id()));
 
     assert!(
@@ -122,6 +129,8 @@ fn Plan_Text(archives: &Path, name: &str) -> String
     let path = archives.join(name);
 
     return std::fs::read_to_string(&path)
+        // The plans sit beside the archives rather than in this repository, so which path was
+        // tried is the whole of the answer when one of them is not there.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
@@ -232,6 +241,9 @@ fn Test_A_Sibling_Record_Should_Resolve_By_Its_Own_Identifier()
         let held = store
             .Suite_Of(id)
             .expect("queries")
+            // "Resolves to no suite" and "resolves to the wrong suite" are different failures, and
+            // the two assertions below can only speak about the second. This is where the first
+            // gets said.
             .unwrap_or_else(|| panic!("{id} resolves to no suite"));
 
         assert_eq!(held.0, suite, "{id}");

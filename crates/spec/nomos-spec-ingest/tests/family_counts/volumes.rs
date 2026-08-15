@@ -22,16 +22,25 @@ pub(crate) fn Volume(corpus: &Path, stem: &str) -> String
         if name.starts_with(stem)
         {
             return std::fs::read_to_string(&path)
+                // The listing named this path a moment ago, so a read that fails now is the
+                // corpus moving under the suite. Every figure defined over this volume would
+                // otherwise be taken against an empty document and come out low.
                 .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
         }
     }
 
+    // Falling out of the loop means the volume an extractor addresses by stem has been
+    // renamed. A stem that matches nothing is the definition going stale, and the register
+    // entry it feeds would otherwise be checked against a number nothing produced.
     panic!("no volume beginning {stem} in {}", directory.display());
 }
 
 fn Markdown_Files(directory: &Path) -> Vec<PathBuf>
 {
     let entries = std::fs::read_dir(directory)
+        // Every extractor reaches the corpus through this one listing. An unreadable
+        // directory answered with an empty vector would turn all of them into zeroes at
+        // once, so it is named here rather than once per caller.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     let mut paths: Vec<PathBuf> = entries
@@ -54,6 +63,9 @@ pub(crate) fn Volume_Census(volumes: &Path) -> nomos_spec_store::RowCensus
     for path in Markdown_Files(volumes)
     {
         let markdown = std::fs::read_to_string(&path)
+            // Skipping an unreadable volume would drop its rows from the census, and a short
+            // census reads as the corpus holding fewer table rows rather than as a file this
+            // run could not open.
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
         let name = path.file_name().and_then(std::ffi::OsStr::to_str).unwrap_or("?");
         let document = store
@@ -61,6 +73,9 @@ pub(crate) fn Volume_Census(volumes: &Path) -> nomos_spec_store::RowCensus
             .expect("stores the document");
         store
             .Put_Source_Blocks(document, &Segment(&markdown))
+            // The census is the store's own count of what it was given, so a volume whose
+            // blocks the store refused must not go on to be counted as holding none. The
+            // document name is in the message because the census itself has no place for it.
             .unwrap_or_else(|error| panic!("{name}: {error}"));
     }
 
@@ -74,6 +89,8 @@ pub(crate) fn Tables(volumes: &Path) -> u32
     for path in Markdown_Files(volumes)
     {
         let markdown = std::fs::read_to_string(&path)
+            // `table.tables` is a sum across all ten volumes, so a volume that failed to read
+            // contributes nothing and is indistinguishable from a volume holding no tables.
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
         for block in Segment(&markdown)
         {
@@ -96,6 +113,8 @@ pub(crate) fn Fence_Lines(volumes: &Path) -> u32
     for path in Markdown_Files(volumes)
     {
         let markdown = std::fs::read_to_string(&path)
+            // The same silent subtraction, this time from `code.fence_lines`: a volume nobody
+            // could open would be counted as a volume carrying no fences at all.
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
         for line in markdown.lines()
         {
@@ -116,6 +135,8 @@ pub(crate) fn Code_Blocks(volumes: &Path) -> u32
     for path in Markdown_Files(volumes)
     {
         let markdown = std::fs::read_to_string(&path)
+            // And again for `code.blocks`. The figure only means anything taken over all ten
+            // volumes, so nine of them is a wrong answer rather than a partial one.
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
         for block in Segment(&markdown)
         {

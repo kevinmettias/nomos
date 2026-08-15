@@ -119,6 +119,9 @@ impl Slice
         }
 
         let applied = slice.workspace.Apply(&checkout).unwrap_or_else(|error| {
+            // A slice built over a workspace that refused the corpus holds no members, so
+            // every provider below materializes nothing and the run reports a clean corpus it
+            // never read. That is the exact shape of failure this crate exists to rule out.
             panic!(
                 "the corpus at {} could not be ingested: {error}",
                 corpus.root.display()
@@ -230,6 +233,9 @@ impl Slice
         } = resolution
         else
         {
+            // Nothing satisfies the floor, so there is no provider to ask and no weaker answer
+            // to give: the caller wants a `Selection`, and a made-up one would send the run on
+            // to file facts under a provider that never offered them.
             panic!("no provider offers {} at this run's floor: {resolution:?}", syntax::CAPABILITY)
         };
 
@@ -379,6 +385,9 @@ impl Slice
         let applied = self
             .workspace
             .Apply(&presented)
+            // A refused edit absorbed here would leave the caller asserting that changing
+            // nothing invalidated nothing: every invalidation test downstream would pass over
+            // a workspace that never moved, and read that as the engine being conservative.
             .unwrap_or_else(|error| panic!("`{path}` could not be edited: {error}"));
 
         Self::Assert_The_Corpus_Holds(corpus, path, content);

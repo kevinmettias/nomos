@@ -16,6 +16,9 @@ pub(crate) fn Measure(key: &str, report: &RegressionReport) -> u32
         .or_else(|| return Members_Figure(key, report));
 
     return measured.unwrap_or_else(|| {
+        // All four figures answered None, so the headline register quotes a key no reading
+        // here produces. Letting it pass would leave a register entry carried by a figure
+        // nobody takes, which is the one thing the split into four figures cannot hide.
         panic!("{key} is in the register and nothing measures it");
     });
 }
@@ -69,6 +72,9 @@ fn Filler_Figure(key: &str, report: &RegressionReport) -> Option<u32>
         return report
             .filler
             .Widest_Undeclared()
+            // Two register keys are defined as properties of the widest undeclared template.
+            // With none there is no such template to have a width, and answering zero would
+            // state those two figures as measured against a template that does not exist.
             .unwrap_or_else(|| panic!("v15.0 carries no undeclared template"));
     };
 

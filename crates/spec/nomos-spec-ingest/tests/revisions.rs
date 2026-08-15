@@ -29,12 +29,19 @@ fn Archives() -> Option<PathBuf>
 
 fn Fingerprints(root: &Path) -> Vec<RevisionFingerprint>
 {
+    // The whole walk is built from this list, and an empty one makes every per-pair assertion in
+    // this file pass over nothing — the silent no-op the coverage test at the bottom exists to
+    // name, arrived at from the directory rather than from the archives.
     let revisions = Revisions_In(root).unwrap_or_else(|error| panic!("{error}"));
 
     return revisions
         .iter()
         .map(|(label, path)| {
+            // One revision dropped here is indistinguishable from the thinned history the negative
+            // control at the bottom constructs on purpose, so it must not happen by accident.
             let mut archive = Archive::Open(path).unwrap_or_else(|error| panic!("{error}"));
+            // There is no empty fingerprint to stand in for a refused one: a revision carrying no
+            // documents reads as a revision that lost all of them, which is this file's headline.
             return Fingerprint(&mut archive, label).unwrap_or_else(|error| panic!("{error}"));
         })
         .collect();
@@ -42,12 +49,19 @@ fn Fingerprints(root: &Path) -> Vec<RevisionFingerprint>
 
 fn Opened(root: &Path, label: &str) -> Archive
 {
+    // A listing that refused here would surface below as "v15.0 is not among the revision
+    // archives", sending the reader to look for a missing zip rather than for the directory that
+    // would not read.
     let revisions = Revisions_In(root).unwrap_or_else(|error| panic!("{error}"));
     let (_, path) = revisions
         .iter()
         .find(|(found, _)| return found == label)
+        // Only V14_LAST and V15 are ever asked for, so a label with no archive means the set no
+        // longer holds a revision every census count in this file was measured against.
         .unwrap_or_else(|| panic!("{label} is not among the revision archives"));
 
+    // Found by label but unopenable is not the scope refusal the census tests assert. Handing back
+    // something empty would make "the directory is gone" and "the zip is broken" print alike.
     return Archive::Open(path).unwrap_or_else(|error| panic!("{error}"));
 }
 
@@ -147,6 +161,8 @@ fn Test_The_Last_Pair_Should_Carry_Its_Measured_Sizes()
     let Some(pair) = walk.last()
     else
     {
+        // An empty walk has no last pair to size, and returning instead would leave this test
+        // green having compared no revision to any other.
         panic!("no pairs");
     };
 
@@ -167,6 +183,8 @@ fn Test_The_Last_Pair_Should_Show_The_Whole_Narrative_Tree_Disappearing()
     let Some(pair) = walk.last()
     else
     {
+        // The same absence again, and without a last pair the ten-volume loss goes unasserted —
+        // leaving a green test that reads as the loss still being exactly where this says it is.
         panic!("no pairs");
     };
     let volumes: Vec<&String> = pair
@@ -298,6 +316,8 @@ fn Test_A_Pair_Summary_Should_Name_What_It_Counted()
     let Some(pair) = walk.last()
     else
     {
+        // And here an empty walk would leave the summary unread, so a report that counted without
+        // naming a single path would go on passing.
         panic!("no pairs");
     };
     let summary = pair.Summary();

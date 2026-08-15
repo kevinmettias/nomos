@@ -115,6 +115,9 @@ pub(crate) fn Text_Of(root: &Path, relative: &str) -> String
     let path = root.join(relative);
 
     return std::fs::read_to_string(&path)
+        // The path comes from the GATES table, so a file that will not open means the table
+        // names a gate file that is no longer there. Read as empty text it would surface as
+        // "declares N tests, has 0" — a count mismatch reported where the path is the defect.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 

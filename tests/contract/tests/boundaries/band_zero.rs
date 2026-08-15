@@ -64,6 +64,9 @@ fn Read_The_Three() -> (Vec<&'static str>, Vec<&'static str>)
     {
         let path = root.join(relative);
         let text = std::fs::read_to_string(&path)
+            // A file that will not open drops out of both vectors below, and both assertions
+            // over them are emptiness checks. A missing member of DESCRIBED would therefore
+            // report band 0 as correctly claimed by having read one file fewer than named.
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
         if text.contains(OWNERSHIP)
         {

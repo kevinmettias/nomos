@@ -87,6 +87,10 @@ fn Test_An_Incomplete_Submission_Should_Be_Refused_And_Stored_Nowhere()
             assert_eq!(refusal.failures.len(), 1);
             assert_eq!(First(&refusal.failures).field, "goal");
         }
+        // A `Store` variant would mean the write was attempted and the database objected. The
+        // three assertions below — no submission row, no value rows, no node — would then be
+        // measuring what a failed write happened to leave behind rather than a submission
+        // that was refused before anything was written.
         AcceptError::Store(error) => panic!("refused for the wrong reason: {error}"),
     }
     assert_eq!(store.Count(Table::Submissions).expect("a count"), 0);
@@ -109,6 +113,9 @@ fn Test_A_Refusal_Should_Name_Every_Failure_Rather_Than_The_First()
     let AcceptError::Refused(refusal) = error
     else
     {
+        // Only `Refused` carries a list of failures, and the length of that list is the whole
+        // claim here: four missing fields must be reported as four, not as the first one. A
+        // `Store` variant has nothing to count.
         panic!("refused for the wrong reason");
     };
 
@@ -175,6 +182,10 @@ fn Test_An_Open_Blocking_Gap_Should_Be_A_Row_And_Should_Refuse_Acceptance()
     let AcceptError::Refused(refusal) = error
     else
     {
+        // The same submission was accepted as a draft four lines up, so the only thing that
+        // changed is its state. A `Store` variant would mean the second write failed for a
+        // database reason and the gap rule was never consulted — which is the reading the
+        // assertion below would otherwise be unable to distinguish from a passing test.
         panic!("refused for the wrong reason");
     };
     assert_eq!(First(&refusal.failures).rule, "no-open-blocking-gap");
@@ -199,6 +210,10 @@ fn Test_A_Gap_Should_Not_Be_Closed_By_Supplying_The_Value_It_Blocks()
     let AcceptError::Refused(refusal) = error
     else
     {
+        // The submission supplies `behaviour`, the very field the gap blocks, so the question
+        // is whether that value closed the gap. Only `Refused` carries the rule name the
+        // assertion below reads, and it is the rule name — not the fact of a refusal — that
+        // says the gap was still open rather than some other check firing.
         panic!("refused for the wrong reason");
     };
     assert_eq!(First(&refusal.failures).rule, "no-open-blocking-gap");
@@ -239,6 +254,9 @@ fn Test_A_Citation_Naming_Nothing_Should_Be_Refused()
     let AcceptError::Refused(refusal) = error
     else
     {
+        // `FR-404` was never filed, so the refusal must come from the citation rule. A `Store`
+        // variant would mean the design reached the database before its citation was checked,
+        // and neither the rule name nor the remedy asserted below would exist to read.
         panic!("refused for the wrong reason");
     };
     assert_eq!(
@@ -261,6 +279,10 @@ fn Test_A_Citation_Naming_A_Draft_Should_Be_Refused_Until_It_Is_Accepted()
     let AcceptError::Refused(refusal) = error
     else
     {
+        // Unlike the case above, `FR-007` exists — it is merely a draft — so this refusal has
+        // to be the citation rule declining an unaccepted target rather than a lookup that
+        // found nothing. Only `Refused` carries the remedy that tells those two apart, and
+        // the test goes on to accept the same design once the request is promoted.
         panic!("refused for the wrong reason");
     };
     assert!(First(&refusal.failures).remedy.contains("accept it first"));

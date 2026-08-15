@@ -70,6 +70,10 @@ fn Compare_Against_Child(domain: &str, verification: &Verification)
         String::from_utf8_lossy(&output.stderr)
     );
     let reported = Digest_In(&printed, domain).unwrap_or_else(|| {
+        // A child selected by `--exact` under a name that matches no test exits zero and
+        // prints nothing, so a missing digest line is the only evidence that it ran nothing.
+        // Falling back to the parent's own digest would compare a value against itself and
+        // discharge the CrossRun claim without a second process ever having produced bytes.
         panic!("the child running {domain} printed no digest line; it printed: {printed}")
     });
 
@@ -108,6 +112,10 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
             "domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy"
         }
         "projection-output" => "domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy",
+        // The domain arrives as a string, so this arm is the only thing checking the mapping
+        // is complete. Any fallback name would spawn a child that selected no test, exited
+        // zero and printed nothing — the silent-child failure the doc above describes, then
+        // reported at the missing digest line under a cause that is not the real one.
         other => panic!("no test is registered for the domain {other}"),
     };
 }
@@ -119,6 +127,9 @@ fn Child_For(domain: &str) -> bool
 }
 
 /// The whole of one domain's obligation, discharged.
+// `produce` is erased because `Verify` takes it erased. A type parameter here would be
+// coerced to the same trait object one line into the body, and would monomorphize this whole
+// function — child branch, golden comparison and all — once per domain closure to get there.
 pub(crate) fn Check<S: Strategy>(domain: &str, produce: &dyn Fn() -> Vec<u8>, golden: &str)
 {
     // A child reports and returns. It must not spawn a child of its own, which would

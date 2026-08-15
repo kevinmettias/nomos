@@ -79,9 +79,15 @@ pub(crate) fn Surface_Named(package: &str) -> Surface
     let workspace = Workspace::Load();
     let member = workspace
         .Get(package)
+        // Callers name their package as a literal. A name that is no longer a member is a
+        // test written against a membership that has since changed, and an empty surface in
+        // its place would let every assertion about that crate's exports hold vacuously.
         .unwrap_or_else(|| panic!("{package} is a workspace member"));
 
     return Public_Surface(&member.name, &member.root)
+        // The assertions reached from here are mostly of the form "this name does not appear
+        // in the surface", and all of them hold over a surface with nothing in it. A member
+        // that has lost its library has to stop the test rather than satisfy it.
         .unwrap_or_else(|| panic!("{package} has a library"));
 }
 

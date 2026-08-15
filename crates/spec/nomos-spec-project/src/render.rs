@@ -8,6 +8,12 @@ use serde::Serialize;
 use std::collections::BTreeMap;
 
 #[derive(Serialize)]
+// `clippy::struct_field_names` objects to `nomos_generated` repeating the type's own name. The
+// field names here are the serialized keys, not internal names: `nomos_generated: true` is the
+// marker every generated artifact opens with — `spec/domain-specification.md` and
+// `diagrams/relations.mmd` both carry it, and it is asserted by that exact spelling in
+// `read_surface.rs` and `renderers.rs`. Renaming the field to satisfy the lint would rewrite
+// every projection this workspace ships.
 #[allow(clippy::struct_field_names)]
 struct Generated<'a>
 {

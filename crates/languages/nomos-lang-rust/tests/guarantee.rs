@@ -23,6 +23,11 @@ fn Parsed(source: &str) -> SyntaxFacts
     return match Read_Source(source)
     {
         Reading::Parsed(facts) => facts,
+        // Each fixture here is written to demonstrate one axis of the declared guarantee, so
+        // a refusal means the demonstration never ran. That has to be loud: the assertions
+        // built on this helper are mostly of the form "the output does *not* contain X", and
+        // an empty reading satisfies every one of them — a provider that had started refusing
+        // valid Rust would look like a provider whose modesty had been proved.
         Reading::Unparseable(failure) => panic!("expected a parse: {failure}"),
     };
 }
@@ -186,6 +191,9 @@ fn Test_Completeness_Should_Be_Unknown_Because_Macros_Hide_Items()
     assert_eq!(Declared_Guarantee().completeness, Assurance::Unknown);
 
     let facts = Parsed(
+        // This text is a fixture handed to the provider, not a macro this suite defines, and
+        // it has to be a real `macro_rules!` because the weakness being demonstrated is
+        // exactly that `syn` sees the definition and never the body it would expand to.
         "macro_rules! declare {\n\
              () => { pub fn generated() {} };\n\
          }\n\
@@ -297,6 +305,11 @@ fn Test_The_Granularity_Should_Not_Be_Symbol_Because_A_Failure_Costs_The_Whole_F
     {
         Reading::Unparseable(_) =>
         {}
+        // Reaching this arm means the provider recovered items from a file with a broken
+        // function in it, which is the one observation that would make `File` an understated
+        // granularity. The declaration would then have to be revisited rather than the test
+        // relaxed, so the names that survived are printed: they are the evidence of how far
+        // the reader actually got.
         Reading::Parsed(facts) => panic!(
             "a symbol-granular provider would have kept `fine` and `also_fine`; this one \
              cannot, which is why it declares File: {:?}",
@@ -349,6 +362,10 @@ fn Assert_It_Parses_And_Declares_Nothing(source: &str)
         ),
         Reading::Unparseable(failure) =>
         {
+            // The empty file, the lone newline, the comment and the inner attribute all
+            // compile, so a refusal here is the provider calling sound source damaged — the
+            // mirror image of the defect the enclosing test guards, and the direction that
+            // would make a corpus walk report files as broken that CI builds every day.
             panic!("`{source:?}` is valid Rust: {failure}")
         }
     }
@@ -363,6 +380,9 @@ fn Test_A_Refusal_Should_Name_Where_It_Refused()
         Read_Source("pub fn fine() {}\n\npub fn broken( {\n")
     else
     {
+        // A let-else has to diverge, so no error can be returned from here. The binding is
+        // what the assertions below read `failure.line` out of, and this test is about the
+        // refusal naming line 3 — with nothing to name, there is no test left to run.
         panic!("this source does not parse")
     };
 

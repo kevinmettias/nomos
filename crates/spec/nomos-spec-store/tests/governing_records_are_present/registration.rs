@@ -51,6 +51,10 @@ fn Canonical_Records() -> Vec<String>
 {
     let directory = Record_Directory();
     let entries = std::fs::read_dir(&directory)
+        // `docs/records` is committed in this repository, so an unreadable directory is a
+        // broken checkout and not an empty record set. The emptiness assertion at the call
+        // site would catch it too, but it would report "no canonical record was found" and
+        // send the reader hunting for a deleted record instead of a missing directory.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
     let mut canonical = Vec::new();
 
@@ -89,6 +93,11 @@ fn Canonical_Id(path: &Path) -> Option<String>
     let Some(id) = text.lines().find_map(|line| return line.strip_prefix("id: "))
     else
     {
+        // Returning `None` is the tempting alternative and it is the one that hides the
+        // defect: the file would drop out of side A, and the comparison would then agree in
+        // both directions about a record it never saw. A file claiming canonical authority
+        // with no `id:` is unnameable by any registration, which is the state this whole
+        // module exists to surface.
         panic!("{} claims canonical authority and declares no id", path.display());
     };
 
@@ -212,6 +221,11 @@ fn Test_A_Record_Whose_Registration_Is_Missing_Should_Be_Unseeded()
     let Some(dropped) = GOVERNING_RECORD_IDS.first()
     else
     {
+        // Unreachable while anything at all governs this build — `FEWEST_GOVERNING_RECORDS`
+        // holds the floor at 32. It is a panic rather than an early return because this test
+        // is the control that proves the guard still sees a missing registration: with no id
+        // to drop there is nothing to control for, and a silent skip would leave the suite
+        // reporting that the guard had been exercised.
         panic!("nothing governs this build, so this control has nothing to remove")
     };
 
@@ -288,6 +302,10 @@ fn Test_The_Governing_List_Should_Be_The_Registration_Directory()
 fn Registered_Stems(directory: &Path) -> Vec<String>
 {
     let entries = std::fs::read_dir(directory)
+        // This directory is what `GOVERNING_RECORD_IDS` is generated from, so a read failure
+        // means side B of the comparison could not be built at all. An empty vector instead
+        // would report every governing id as undeclared and blame the build script for
+        // reading a different directory — the one conclusion this test is here to draw.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
     let mut stems = Vec::new();
 
@@ -372,6 +390,10 @@ fn Test_The_Build_Script_Should_Not_Enumerate_The_Record_Directory()
     {
         let path = crate_root.join(file);
         let text = std::fs::read_to_string(&path)
+            // Both files are committed in this crate. This check is textual, so an unreadable
+            // one means it scanned no text — and a scan of no text finds no `read_dir` applied
+            // to `docs/records` and passes. Silently checking nothing is precisely the failure
+            // this test watches for in the build script.
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 
         for (ordinal, after) in text.split("read_dir(").enumerate().skip(1)

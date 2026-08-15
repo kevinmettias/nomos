@@ -123,6 +123,10 @@ fn Rendered_Fact(path: &str, source: &str, context: nomos_lang_rust::FactContext
         nomos_lang_rust::Materialization::Materialized(fact) => fact,
         nomos_lang_rust::Materialization::Unparseable(failure) =>
         {
+            // The fixture is a constant in this file, chosen for the constructs it carries. A
+            // refusal means the production below is rendered over fewer files than the
+            // fixture names, and a shorter production repeats itself just as identically —
+            // the domain would discharge its strength claim having read less than it says.
             panic!("the fixture must parse; {path} did not: {failure}");
         }
     };
@@ -232,6 +236,10 @@ fn Fill_With_Fixture(
             nomos_lang_rust::Materialize(Subject_Of(path), source, context)
         else
         {
+            // The keys returned from here are what the fact-reuse domain replays against the
+            // store. A file that did not materialize leaves the store short one fact and the
+            // key list short the matching one, so the replay and the store would still agree
+            // with each other perfectly — about a fixture neither of them holds.
             panic!("the fixture must parse");
         };
 

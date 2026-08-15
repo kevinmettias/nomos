@@ -38,7 +38,8 @@
 //! prevents is a snapshot that quietly records where it was taken.
 
 #![forbid(unsafe_code)]
-#![allow(clippy::missing_errors_doc)]
+// PROBE
+
 
 // A change's parts sit under `change`, an effect's kind under `effect`, and the change
 // set and refusals a workspace raises under `workspace`. Flat, this level was thirteen

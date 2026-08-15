@@ -204,6 +204,10 @@ pub(crate) fn Profile_Named(id: &str) -> Profile
 {
     return Shipped()
         .Named(id)
+        // Every caller names a profile out of the shipped catalogue, so `None` means a profile
+        // was renamed or dropped and a test is still asking for it. The id is the whole
+        // message because this helper is reached from every module in the suite and the
+        // backtrace is the only other thing that would say which one.
         .unwrap_or_else(|| panic!("{id} is not a shipped profile"))
         .clone();
 }
@@ -211,6 +215,9 @@ pub(crate) fn Profile_Named(id: &str) -> Profile
 pub(crate) fn Rendered(store: &SpecificationStore, id: &str) -> String
 {
     return Build(store, &For_Building(&Profile_Named(id)))
+        // Callers take the body and run `contains` over it, several of them negated — and a
+        // negated `contains` passes over an empty string. A refusal turned into an empty body
+        // would read as "the renderer emitted no raw markup". The id says which profile.
         .unwrap_or_else(|error| panic!("{id}: {error}"))
         .body;
 }
@@ -232,5 +239,9 @@ pub(crate) fn For_Building(profile: &Profile) -> Profile
 {
     return profile
         .For(profile.Names_A_Subject().then_some(SUBJECT_IN_FIXTURE))
+        // `For` refuses a subject a whole-store profile has nowhere to put and refuses a
+        // template given none, and the line above is what decides which of the two this
+        // profile is. A refusal means that decision was wrong — and the doc above says why
+        // returning the profile unchanged instead would drop it from every assertion here.
         .unwrap_or_else(|error| panic!("{}: {error}", profile.id));
 }

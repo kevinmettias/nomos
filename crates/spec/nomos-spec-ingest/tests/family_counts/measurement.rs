@@ -78,6 +78,9 @@ fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
         .or_else(|| return Whole_Corpus_Figure(id, corpus, archives));
 
     return measured.unwrap_or_else(|| {
+        // Every extractor above answered None, so the register names a figure this file holds
+        // no definition for. Skipping the entry would leave a count in the register measured
+        // by nothing, which is the exact shape the register exists to make impossible.
         panic!("{id} is in the register and nothing measures it");
     });
 }
@@ -226,6 +229,9 @@ fn Test_The_Register_Should_Agree_With_The_Store_Census()
         return register
             .iter()
             .find(|entry| return entry.id == id)
+            // The five assertions below name their register ids literally. An id that has
+            // left the register would otherwise resolve to a default, and the census would
+            // look like it agreed with a figure nobody states any more.
             .map_or_else(|| panic!("{id} left the register"), |entry| return entry.measured);
     };
     assert_eq!(census.lines, value("table.pipe_lines"));

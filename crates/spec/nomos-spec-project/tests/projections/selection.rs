@@ -88,6 +88,10 @@ fn Test_Two_Profiles_Writing_One_Output_Should_Be_Refused()
     let Err(refusal) = Catalogue::Of(vec![one, two])
     else
     {
+        // Unreachable while `Catalogue::Of` refuses two profiles that write one path. An `Ok`
+        // here is the collision being accepted — the defect this test exists for — and the
+        // assertion below could not report it, because there would be no refusal to read
+        // `shared.md` out of.
         panic!("two profiles writing one output were accepted");
     };
 

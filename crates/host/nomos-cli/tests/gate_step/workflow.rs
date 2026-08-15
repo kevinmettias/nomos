@@ -36,6 +36,11 @@ pub(crate) fn Workflow() -> String
     let path = nomos_ledger::Workflow_Path(&Repository_Root());
 
     return std::fs::read_to_string(&path)
+        // Every assertion in this suite is a claim about this one file, so an empty string
+        // handed back on failure would make all of them true of nothing — the suite would go
+        // green in exactly the situation where the gate had stopped existing. The path is
+        // printed because the interesting failure is `Workflow_Path` having moved rather than
+        // the file being unreadable, and only the resolved path tells those apart.
         .unwrap_or_else(|error| panic!("this repository has a gate workflow at {}: {error}", path.display()));
 }
 

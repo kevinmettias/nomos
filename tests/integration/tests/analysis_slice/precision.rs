@@ -147,6 +147,9 @@ fn Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale()
 fn Rollup_Over(slice: &Slice, corpus: &Corpus, group: &str) -> (u32, u32)
 {
     let members = corpus.In_Group(group);
+    // A group with no rollup would otherwise arrive as the pair (0, 0), which is a
+    // legal-looking answer: the tests here compare these counts before and after an edit, and
+    // would read a missing fact as a rollup that had been recomputed down to nothing.
     let fact = slice.Surface_Of(&members).unwrap_or_else(|| panic!("{group} has a rollup"));
     let surface = Decode_Surface(&fact.payload.bytes).expect("the rollup wrote this");
 

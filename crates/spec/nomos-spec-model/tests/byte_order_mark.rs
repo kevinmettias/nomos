@@ -29,6 +29,10 @@ fn Fixture() -> String
 {
     let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/corpus/bom-decision-record.md");
     let bytes = std::fs::read(&path)
+        // The fixture is committed beside this test, so an unreadable one is this gate having
+        // lost its only marked document — not a machine without the corpus, which the
+        // corpus-gated tests answer separately by returning early. Every test in this file
+        // reads it, so there is nothing left to check and the path is what says so.
         .unwrap_or_else(|error| panic!("the gate needs {}: {error}", path.display()));
 
     assert_eq!(
@@ -141,6 +145,10 @@ fn Corpus_Root() -> Option<PathBuf>
 fn Assert_One_Document(path: &Path) -> u32
 {
     let text = std::fs::read_to_string(path)
+        // `Collect` enumerated this path moments ago, so a read failure is the corpus changing
+        // underneath the run rather than a machine that has none. Skipping the document would
+        // lower both floors the caller asserts — 2000 documents and 1600 marked ones — while
+        // leaving them reading as though the whole tree had been walked.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
     let blocks = Segment(&text);
 
@@ -192,6 +200,9 @@ fn Assert_The_Mark_Changed_Nothing(text: &str, blocks: &[SourceBlock], path: &Pa
 fn Collect(directory: &Path, into: &mut Vec<PathBuf>)
 {
     let entries = std::fs::read_dir(directory)
+        // This walk recurses, so a directory it cannot open is a whole subtree dropped from
+        // the collection. The caller counts what comes back, and a short count is
+        // indistinguishable from a smaller corpus unless the failure is loud here.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     for entry in entries.flatten()

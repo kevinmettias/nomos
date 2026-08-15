@@ -27,6 +27,10 @@ fn Read(root: &Path, relative: &str) -> String
 {
     let path = root.join(relative);
     return std::fs::read_to_string(&path)
+        // Every caller names a file the v14 corpus is defined to carry: the block manifest,
+        // the statement file, the catalog. Missing one means NOMOS_V14_CORPUS points at
+        // something that is not that corpus, and this file is loud rather than silent by
+        // design — a gate that quietly skips its own subject is worse than one that fails.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
@@ -34,6 +38,9 @@ fn Domain_Volumes(root: &Path) -> BTreeMap<String, String>
 {
     let directory = root.join("01_authoring/domain_volumes");
     let entries = std::fs::read_dir(&directory)
+        // The gate is defined over every recorded block, so it cannot run against whatever
+        // subset of volumes happened to list. An empty listing would bring `blocks_checked`
+        // in low against a manifest that still records 2533 and read as a hash mismatch.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     let mut documents = BTreeMap::new();
@@ -63,6 +70,10 @@ fn Volume_At(path: &Path) -> Option<(String, String)>
     }
     let name = path.file_name().and_then(std::ffi::OsStr::to_str)?.to_owned();
     let text = std::fs::read_to_string(path)
+        // The extension and the name have already been accepted, so this entry is a volume.
+        // Returning `None` here is the one case the function's `None` must not cover: it
+        // would drop a document the manifest still holds blocks for, and the gate would
+        // report those blocks as changed rather than as a file it never opened.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 
     return Some((name, text));

@@ -30,6 +30,12 @@ use crate::workflow::{RULES_STEP, Workflow};
 fn Test_The_Derived_Lint_Step_Should_Still_Be_Clippy()
 {
     let argv = nomos_ledger::Derive_Step(&Workflow(), nomos_ledger::LINT_STEP)
+        // A refusal is not this test failing to set itself up — it is the finding. `work
+        // finish` calls the same function over the same file, so a workflow this cannot
+        // derive is a workflow whose lint step stops running before every item's predicate.
+        // Handling it any more gently than a stop would turn the answer into a skip.
+        // `Describe` is used rather than the debug form because the refusal already says
+        // which of the derivation's rules the workflow broke.
         .unwrap_or_else(|refusal| panic!("{}", refusal.Describe()));
 
     assert!(

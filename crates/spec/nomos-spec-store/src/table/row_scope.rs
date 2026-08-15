@@ -23,6 +23,10 @@ pub enum RowScope
 /// rather than a predicate woven into a template at runtime — there is no point at which
 /// this SQL is a value the program built. The shared select list is written once here
 /// instead of once per scope.
+// A function could not do this. `concat!` takes literals, so each scope's predicate has to be
+// joined to the shared select list where the scope is written; a `fn(&str) -> String` would
+// build the statement at run time and `Statement` below could then be neither `const fn` nor a
+// return of `&'static str`.
 macro_rules! Census_Statement
 {
     ($predicate:literal) =>

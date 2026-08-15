@@ -73,6 +73,10 @@ fn Test_Every_Shipped_Profile_Should_Render_Content_From_The_Store()
     for profile in Shipped().Profiles()
     {
         let output = Build(&store, &For_Building(profile))
+            // Unreachable while every shipped profile renders over the populated fixture,
+            // which is exactly the claim this loop makes. A refusal has to stop the run
+            // rather than skip the profile: the three assertions below are what say the
+            // catalogue was covered, and a skipped profile leaves them saying it anyway.
             .unwrap_or_else(|error| panic!("{error}"));
 
         assert!(!output.body.trim().is_empty(), "{} rendered nothing", profile.id);

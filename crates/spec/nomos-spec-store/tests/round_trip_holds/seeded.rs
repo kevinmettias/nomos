@@ -17,6 +17,10 @@ pub(crate) fn Only_Document(store: &SpecificationStore, id: &str) -> DocumentSou
         .expect("queries")
         .first()
         .cloned()
+        // A seeded record with no document behind it stored identity and not bytes, so every
+        // caller's round trip would then have nothing to compare a projection against. There
+        // is no weaker answer available: any stand-in document would turn the comparison into
+        // one this helper invented rather than one the seed made.
         .unwrap_or_else(|| panic!("{id} has no document behind it"));
 }
 

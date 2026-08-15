@@ -134,6 +134,10 @@ impl ValidationRun
 
 /// Runs every registered rule and reconciles the registry against the manifest.
 #[must_use]
+// The ruleset is a run-time list rather than a fixed set of types, because the reconciliation
+// below exists so the registered rules may disagree with `DECLARED_RULES` and be reported
+// saying how. A generic parameter would make the ruleset part of this function's signature,
+// and then "a declared rule nobody registered" could not be a value it is handed.
 pub fn Validate(store: &SpecificationStore, rules: &[Box<dyn Rule>]) -> ValidationRun
 {
     let registered: Vec<&'static str> = rules.iter().map(|rule| rule.Id()).collect();
@@ -236,6 +240,9 @@ mod tests
         return SpecificationStore::In_Memory().expect("opens");
     }
 
+    // Erased to the same `Box<dyn Rule>` the production caller passes, so these tests exercise
+    // `Validate`'s real parameter. A helper returning `Vec<Fake>` would prove nothing about the
+    // signature `Registered()` feeds.
     fn All_Declared(outcome: &RuleOutcome) -> Vec<Box<dyn Rule>>
     {
         return DECLARED_RULES
@@ -243,6 +250,10 @@ mod tests
             .map(|id| {
                 let rule = Fake(id, outcome.clone());
 
+                // The cast is load-bearing: without it the closure returns `Box<Fake>` and
+                // `collect` builds a `Vec<Box<Fake>>`, which is not the declared return type.
+                // Erasure happens here rather than at the `return` because `collect` is what
+                // has to be told which element type it is accumulating.
                 return Box::new(rule) as Box<dyn Rule>;
             })
             .collect();

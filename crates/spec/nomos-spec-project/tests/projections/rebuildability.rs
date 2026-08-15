@@ -249,6 +249,10 @@ fn Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store()
             "{id} is required by the gate and reaches a content kind no runner can answer for"
         );
         Build(&store, &profile)
+            // This panic is the test. Both profiles are named in `.github/workflows/gate.yml`,
+            // so a refusal here is a gate that will go red on the next commit, and the point
+            // of saying so with the id and the cause is that it fails for the person who
+            // caused it rather than for whoever pushes next.
             .unwrap_or_else(|error| panic!("{id} is required by the gate and refused: {error}"));
     }
 }

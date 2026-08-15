@@ -48,6 +48,9 @@ fn Both() -> Option<(PathBuf, Archive)>
         return None;
     };
 
+    // `None` from here means the deliberate no-corpus case and nothing else. Turning a v15.0 that
+    // will not open into that same `None` is the half comparison this function's doc refuses,
+    // arriving by another route and looking like a skip.
     let archive = Archive::Open(&archives.join(V15)).unwrap_or_else(|error| panic!("{error}"));
     return Some((corpus, archive));
 }
@@ -60,6 +63,9 @@ fn V14_Artifacts(corpus: &std::path::Path) -> Vec<nomos_spec_ingest::Artifact>
     {
         let directory = corpus.join("01_authoring/artifacts").join(family.Directory());
         let entries = std::fs::read_dir(&directory)
+            // A family directory that will not read contributes no artifacts, and the reconciler
+            // then reports that whole family as absent in v15 — the loss this file exists to
+            // measure, manufactured by the reader instead of found in the archive.
             .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
         for entry in entries.flatten()
@@ -82,10 +88,15 @@ fn Artifact_At(path: &std::path::Path, family: Family) -> Option<nomos_spec_inge
         return None;
     }
     let text = std::fs::read_to_string(path)
+        // One unreadable file is one v14 identifier missing from the comparison, and the 689
+        // count would report that as the artifact count having changed.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 
     return Some(
         Parse_Artifact(&text, family)
+            // `None` from this function already means "not an artifact file", so returning it on
+            // a parse failure would file malformed front matter under nothing-to-see. The path is
+            // the only part that makes it fixable.
             .unwrap_or_else(|error| panic!("{}: {error}", path.display())),
     );
 }
@@ -96,6 +107,9 @@ fn V15_Statements(archive: &mut Archive) -> BTreeMap<String, String> {
     {
         let text = archive
             .Read_Text(&entry)
+            // The entry came out of this archive's own listing, so a failed read means the two
+            // disagree. Skipping it would delete v15 statements, and the reconciler would then
+            // report every identifier they carry as lost.
             .unwrap_or_else(|error| panic!("{error}"));
         found.extend(Statements_In(&text));
     }
@@ -225,6 +239,8 @@ fn Overlay_One(
 )
 {
     let (headings, report) = against;
+    // A document that will not read is one the overlay never sees, and `report.documents` would
+    // present the shortfall as v15's non-record document count having changed.
     let text = archive.Read_Text(entry).unwrap_or_else(|error| panic!("{error}"));
     let document = Overlaid {
         path: entry,
@@ -232,6 +248,9 @@ fn Overlay_One(
     };
 
     Ingest_Overlay_Document(store, &document, headings, report)
+        // An ingest that refused wrote neither the filler judgement nor its lineage row, so the
+        // two would still agree in count while this document went unexamined. The entry says
+        // which of the 206 it was.
         .unwrap_or_else(|error| panic!("{entry}: {error}"));
 }
 
@@ -263,8 +282,12 @@ fn Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes()
     {
         if entry.contains("/records/")
         {
+            // A record that will not read is a node the store never receives, and the count below
+            // would call that the v15 record set having changed size.
             let text = archive.Read_Text(&entry).unwrap_or_else(|error| panic!("{error}"));
             let record = Ingest_v15_Record(&mut store, &entry, &text)
+                // Named per entry, because the check at the end of this test can only say that a
+                // governing record is not in the store — never that its ingest refused.
                 .unwrap_or_else(|error| panic!("{entry}: {error}"));
 
             ingested.push(record);
@@ -293,6 +316,9 @@ fn Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes()
 fn V14_Headings(corpus: &std::path::Path) -> BTreeMap<String, i64> {
     let directory = corpus.join("01_authoring/domain_volumes");
     let entries = std::fs::read_dir(&directory)
+        // The assertion at the end of this function catches an empty heading set, but it would
+        // blame the corpus for holding no headings when the directory simply would not read.
+        // Those are two different repairs.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     let mut headings = BTreeMap::new();
@@ -313,6 +339,8 @@ fn Note_Headings_In(path: &std::path::Path, headings: &mut BTreeMap<String, i64>
         return;
     }
     let text = std::fs::read_to_string(path)
+        // One volume's headings quietly absent still leaves `displaced > 0` true on the other
+        // nine, so every filler block that displaced this volume would read as displacing nothing.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 
     for line in text.split('\n')

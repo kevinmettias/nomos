@@ -8,6 +8,11 @@ fn Parsed(source: &str) -> SyntaxFacts
     return match Read_Source(source)
     {
         Reading::Parsed(facts) => facts,
+        // Callers of this helper go straight on to read `.items`, so an empty `SyntaxFacts`
+        // handed back instead of a panic would be indistinguishable from a file that parsed
+        // and declared nothing — which is the one confusion this module exists to rule out.
+        // The failure carries the line it stopped on, and that is the only thing that tells
+        // an author which of their fixture's lines they mistyped.
         Reading::Unparseable(failure) => panic!("expected a parse: {failure}"),
     };
 }
@@ -144,6 +149,11 @@ fn Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty()
             }
             Reading::Parsed(facts) =>
             {
+                // The arm that must never be taken: each of these four sources is broken and
+                // a reading of one is the provider claiming to have understood text rustc
+                // rejects. The item count is printed rather than a bare failure because it
+                // separates a reader that salvaged part of the file from one that read it as
+                // empty, and only the second could be mistaken for `Declares_Nothing`.
                 panic!("`{source}` parsed to {} items", facts.items.len())
             }
         }
@@ -181,6 +191,9 @@ fn Test_A_Byte_Order_Mark_Should_Be_Leading_Or_Refused()
             failure.line, 3,
             "the refusal names the line the mark is on: {failure}"
         ),
+        // The half of the byte-order-mark rule that has to be red: a stray mark reported as
+        // items is this provider disagreeing with rustc about whether the file compiles, and
+        // the seven files under `F:/repos/xvpe` named above are where that would be believed.
         Reading::Parsed(facts) => panic!(
             "a mark in the middle of a file is not whitespace and this does not \
              compile; reading it as {} items would report a broken file as sound",

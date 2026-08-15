@@ -191,6 +191,10 @@ mod tests
             assert_ne!(prefixed, RECORD, "the {separator:?} case changed nothing");
 
             let record =
+                // Unreachable while a heading may name the record before its title, for all
+                // four separators the v15.0 archives use. It is a panic rather than `expect`
+                // because the loop covers four spellings and only the separator says which
+                // one stopped being accepted.
                 Parse_Record(&prefixed).unwrap_or_else(|error| panic!("{separator:?}: {error}"));
             assert_eq!(record.front_matter.title, "A title");
         }

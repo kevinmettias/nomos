@@ -63,6 +63,10 @@ fn Test_The_Domain_Volumes_Should_Answer_282_258_And_234()
 fn Store_Volume(store: &mut SpecificationStore, path: &Path) -> bool
 {
     let markdown = std::fs::read_to_string(path)
+        // `Volumes` enumerated this path moments ago, so a read failure is the corpus changing
+        // underneath the run rather than a machine without one — `Corpus_Root` already
+        // answered that by returning `None`. Skipping the volume would leave 282, 258 and 234
+        // measured over nine volumes and blame the counts.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
     let name = path.file_name().and_then(std::ffi::OsStr::to_str).unwrap_or("?");
     let blocks = Segment(&markdown);
@@ -72,6 +76,9 @@ fn Store_Volume(store: &mut SpecificationStore, path: &Path) -> bool
 
     store
         .Put_Source_Blocks(document, &blocks)
+        // The census counts rows the store holds, so blocks that did not land lower 282, 258
+        // and 234 without anything else noticing — the volume was read, counted as one of the
+        // ten, and contributed nothing. The file name is what says which one was lost.
         .unwrap_or_else(|error| panic!("{name}: {error}"));
 
     return blocks.iter().any(|block| return !Table_Rows(block).is_empty());
@@ -149,6 +156,9 @@ fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
 fn Volumes(directory: &Path) -> Vec<PathBuf>
 {
     let entries = std::fs::read_dir(directory)
+        // A `domain_volumes` that cannot be opened would otherwise yield no paths, and the
+        // caller's ten-volume assertion would report "found 0" as though the corpus held no
+        // volumes rather than as though the directory was never read.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     let mut paths: Vec<PathBuf> = entries

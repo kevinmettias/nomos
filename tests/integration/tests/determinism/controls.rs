@@ -41,6 +41,10 @@ fn Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness()
 {
     use std::cell::Cell;
 
+    // `Verify` takes its producer as a shared `Fn`, so the counter cannot be captured by
+    // mutable reference. The count is not incidental bookkeeping: the last assertion in this
+    // test reads it back to prove the control reached a second repetition at all, rather than
+    // failing on the first one for some reason that has nothing to do with variation.
     let call = Cell::new(0_u32);
     let wobbles = || {
         let seen = call.get();

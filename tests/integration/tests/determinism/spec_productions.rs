@@ -248,6 +248,9 @@ pub(crate) fn Projection_Bytes(order: Order) -> Vec<u8>
     {
         let profile = Profile::Parse(text).expect("the fixture profile parses");
         let output = Build(&store, &profile)
+            // This production is the two profiles concatenated. Dropping a failed build would
+            // shorten it, and the repetition that discharges the strength claim agrees over
+            // the shortened bytes exactly as readily as over the whole of them.
             .unwrap_or_else(|error| panic!("{}: {error}", profile.id));
 
         rendered.extend_from_slice(format!("profile\t{}\n", output.path).as_bytes());
@@ -281,6 +284,10 @@ pub(crate) fn Alternating(build: fn(Order) -> Vec<u8>) -> impl Fn() -> Vec<u8>
 {
     use std::cell::Cell;
 
+    // The returned closure has to be `Fn`, because that is what `Verify` accepts, and it has
+    // to remember which order the previous call used. A `Cell` over one `bool` is the whole of
+    // that state: `get` and `set` of a `Copy` value, with no borrow that could fail at runtime
+    // and nothing a second caller could be holding when this one writes.
     let backwards = Cell::new(false);
 
     return move || {

@@ -4,7 +4,8 @@
 //! workspace: what counts as a source file, what a workspace-relative path is, and the guard
 //! against a walk that found a directory and almost nothing in it.
 
-#![allow(dead_code)]
+// PROBE
+
 
 use std::path::{Path, PathBuf};
 

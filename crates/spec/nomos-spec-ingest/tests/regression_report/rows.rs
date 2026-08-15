@@ -79,5 +79,9 @@ pub(crate) fn Family(label: &str) -> nomos_spec_ingest::Restored
         .iter()
         .find(|family| return family.Label() == label)
         .copied()
+        // The register spells families as labels and the report enumerates them as a type,
+        // so this is where the two vocabularies are checked to still be one. A label the
+        // ingest no longer knows means the register names a family that has been renamed or
+        // removed, and no `Restored` value would be the right one to carry on with.
         .unwrap_or_else(|| panic!("{label} is not a restored family"));
 }

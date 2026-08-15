@@ -67,6 +67,11 @@ fn Text_The_Parser_Refuses() -> String
     let path = Repository_Root().join("tests/corpus/analysis/gamma/broken.rs");
 
     return std::fs::read_to_string(&path).unwrap_or_else(|error| {
+        // Falling back to a hand-written approximation is the failure this fixture exists to
+        // prevent, and a `Result` here invites exactly that at the call site. If the committed
+        // file has moved or been repaired, the tests below are no longer about the tree CI
+        // walks and must stop rather than quietly test a substitute; the path is printed
+        // because a moved fixture and an unreadable one need different fixes.
         panic!(
             "this workspace's own unparseable fixture must be readable at {}: {error}",
             path.display()
@@ -368,6 +373,11 @@ fn Files_Examined(output: &str) -> usize
                 .next_back()
                 .and_then(|count| return count.parse().ok());
         })
+        // A missing count cannot be reported as zero: zero is a meaningful answer here — it is
+        // what a run over the wrong tree prints — and the callers of this function compare the
+        // number to decide exactly that. Refusing to invent one keeps "the report changed
+        // shape" from being read as "the run examined nothing". The whole report is printed
+        // because the count's absence is only diagnosable next to what was printed instead.
         .unwrap_or_else(|| panic!("the report must carry a file count: {output}"));
 }
 

@@ -48,6 +48,9 @@ impl Slice
         return self
             .workspace
             .Apply(&checkout)
+            // Every landing test reads its answer out of the `Applied` this returns. A refusal
+            // turned into the previous state would leave them asserting over a workspace that
+            // never took the files, and agreeing with themselves about it.
             .unwrap_or_else(|error| panic!("the checkout was refused: {error}"));
     }
 

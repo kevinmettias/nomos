@@ -5,6 +5,12 @@
 //! module — `Refusal` with the refusals, `One` with the lineage — because a shared helper
 //! is a coupling and four lines of it is not worth one.
 
+// Scoped to this module, not to the whole test binary — an inner attribute on a `mod` file
+// reaches no sibling. Whether a fixture here is live is a property of which siblings happen to
+// call it, and `main.rs` decides that: `Two` is reached from three modules, `TABLE` from two,
+// and dropping a test would make an untouched helper here fail the build in a file nobody
+// edited. The repair for that failure is to delete the fixture, which is how a shared fixture
+// erodes back into one setup per test — the arrangement this module exists to replace.
 #![allow(dead_code)]
 
 pub(crate) use nomos_spec_model::Segment;

@@ -271,6 +271,10 @@ mod tests
         let StoreError::Record { path, cause } = refusal
         else
         {
+            // Unreachable while an unknown relation term is reported as a defect in the
+            // record that used it. Any other variant would mean the refusal blamed something
+            // else, and the three assertions below — the path, the term, and every admissible
+            // term — would have no message to read.
             panic!("an unknown relation type is a defect in a record: {refusal:?}");
         };
 

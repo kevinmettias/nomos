@@ -341,6 +341,9 @@ fn Scan_This_Crate(root: &Path) -> Scanned
 fn Judge_One(found: &mut Scanned, root: &Path, file: &Path, banned: &str)
 {
     let text = std::fs::read_to_string(file)
+        // A file skipped on a read error leaves both counters short: it never enters
+        // `found.read`, and it can never enter `offending`. The ban would then be reported as
+        // holding over a file nobody opened, which is the scanner passing by not looking.
         .unwrap_or_else(|error| panic!("{} is this crate's own source: {error}", file.display()));
     let named = file.strip_prefix(root).unwrap_or(file).display().to_string();
 

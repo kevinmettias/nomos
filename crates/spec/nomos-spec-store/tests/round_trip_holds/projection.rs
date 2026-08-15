@@ -32,6 +32,10 @@ fn Assert_Projects_To_Its_Own_Bytes(store: &SpecificationStore, id: &str)
 {
     let projection = store
         .Record_Markdown(id, None)
+        // Every id reaching here comes from `GOVERNING_RECORD_IDS` over a seeded store, so a
+        // refusal is a seeded record that will not render back at all — a stronger failure
+        // than the byte comparison below. The id is in the message because the caller loops
+        // over the whole governing set and counts the iterations.
         .unwrap_or_else(|error| panic!("{id}: {error}"));
     let source = Only_Document(store, id);
 

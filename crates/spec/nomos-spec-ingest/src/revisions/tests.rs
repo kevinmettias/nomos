@@ -63,6 +63,9 @@ fn Test_An_Unchanged_Path_Should_Be_In_No_Set()
     let Some(pair) = walk.first()
     else
     {
+        // Two revisions must walk to exactly one pair. With none, the four emptiness
+        // assertions below would all hold over nothing and the test would pass while
+        // reporting that an unchanged path is in no set — which it never checked.
         panic!("no pair");
     };
 

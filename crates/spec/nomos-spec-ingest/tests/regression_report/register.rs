@@ -136,11 +136,18 @@ pub(crate) fn Measured_Size(entry: &Entry, counts: &[Count]) -> u32
     let quoted = entry
         .quoted
         .as_deref()
+        // Only entries that state fates reach here, and fates are four numbers that have to
+        // add up to a size somebody measured. An entry stating them without naming a counts
+        // entry has no total to be checked against, so its four numbers answer to nothing.
         .unwrap_or_else(|| panic!("{}: states fates and quotes no measured size", entry.id));
 
     return counts
         .iter()
         .find(|count| return count.id == quoted)
+        // The quoted id is the link between the two checked-in registers.
+        // `Test_Every_Quoted_Count_Should_Exist_In_The_Counts_Register` asserts the link
+        // holds; reaching this from a caller means the two registers were edited apart, and
+        // a default size would let the fates be compared against a total nobody measured.
         .unwrap_or_else(|| panic!("{}: {quoted} is not in the counts register", entry.id))
         .measured;
 }

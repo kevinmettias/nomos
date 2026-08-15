@@ -127,6 +127,9 @@ fn Test_An_Archive_Holding_Nothing_Should_Be_Refused_Not_Reported_Empty()
     let Err(refusal) = Archive::Open(&path)
     else
     {
+        // This arm is reachable only when `Open` accepted a zip holding nothing, which is the one
+        // confusion this file exists to stop. There is no refusal left to assert against, so
+        // arriving here is itself the assertion failing.
         panic!("an empty archive must be refused, not opened");
     };
 
@@ -152,6 +155,9 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
     {
         return;
     };
+    // `Archives()` has already established that the root is a directory, so a listing that refuses
+    // is a fact about this machine and not about the archive set. The counts below would spell it
+    // "the archive count changed" and send the reader to the archives instead of to the disk.
     let archives = Archives_In(&root).unwrap_or_else(|error| panic!("{error}"));
     let mut counted = Series::default();
     for path in &archives
@@ -187,6 +193,9 @@ struct Series
 /// One archive: it opens, it lists something, and it is one of the two series or neither.
 fn Count_One_Archive(path: &std::path::Path, counted: &mut Series)
 {
+    // An archive that will not open belongs to neither series, and counting it as neither leaves
+    // both totals short — which the caller reads as "the DOCX delivery series changed length"
+    // rather than as one file on disk that would not open.
     let archive = Archive::Open(path).unwrap_or_else(|error| panic!("{error}"));
     let name = path
         .file_name()
@@ -233,6 +242,8 @@ fn Test_The_v15_Archive_Should_Yield_Its_Records()
         return;
     };
     let path = root.join("nomos-spec-v15.0.zip");
+    // v15.0 is the single archive P3-OVERLAY reads, so there is no reduced version of this test to
+    // run without it — every assertion below would be about an archive that was never opened.
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));
     let records = archive
         .Listing()
@@ -262,9 +273,13 @@ fn Test_Reading_Should_Not_Unpack()
     };
     let before = Listing(&root);
     let path = root.join("nomos-spec-v15.0.zip");
+    // An open that failed quietly would leave the two listings identical because nothing was ever
+    // read, and the assertion below would report "reading did not unpack" having never read.
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));
     for entry in archive.Listing().Ending_With(".md").iter().take(20)
     {
+        // The same vacuity one entry at a time: a read that errored cannot have put anything on
+        // disk, so swallowing it buys the comparison below for free.
         archive.Read(entry).unwrap_or_else(|error| panic!("{error}"));
     }
 

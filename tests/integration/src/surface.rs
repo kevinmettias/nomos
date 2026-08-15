@@ -222,6 +222,9 @@ mod tests
         let Reading::Parsed(facts) = Read_Source(source)
         else
         {
+            // The sample is a literal in the test just below. If the parser refuses it there
+            // is no payload to hand the second crate, and the cross-crate agreement under
+            // test would be asserted over zero items — which any decoder satisfies.
             panic!("the sample parses")
         };
 

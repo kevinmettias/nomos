@@ -197,6 +197,9 @@ pub(crate) fn Assert_The_Hazard_Is_Still_Live(board: &LedgerDocument, file: &str
     let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Str() == item)
     else
     {
+        // With no entry there is nothing for the finished-state assertion below to run
+        // against. Returning quietly instead would let a hazard declaration cite an id that
+        // is on no board and still pass, which is the one arrangement nobody can retire.
         panic!("{file} names {item}, which is on no board. A hazard pointing at an \
                 item nobody can look up cannot be retired by anybody.");
     };
@@ -282,8 +285,14 @@ pub(crate) fn Assert_The_Skill_Is_Named_For_Its_Directory(directory: &Path)
          will not load and a reader will assume works"
     );
     let text = std::fs::read_to_string(&manifest)
+        // The assertion above already established this manifest is a file, so a read that
+        // fails here is a SKILL.md the tool would fail to load too. There is no name left to
+        // compare and no weaker comparison to fall back to.
         .unwrap_or_else(|error| panic!("cannot read {label}/SKILL.md: {error}"));
     let declared = Declared_Skill_Name(&text)
+        // Front matter with no name is worse than front matter with the wrong one: the tool
+        // then has nothing to report the skill under at all. Reading the absence as "nothing
+        // to compare" would pass it through the check that exists to pin the name down.
         .unwrap_or_else(|| panic!("{label}/SKILL.md declares no name in its front matter"));
     let expected = directory
         .file_name()

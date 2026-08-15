@@ -89,6 +89,11 @@ fn Materialize_Leaf(
     let Materialization::Materialized(fact) = nomos_lang_rust::Materialize(Subject(path), source, context)
     else
     {
+        // The leaf is the thing this file rolls up, and the function's whole job is to hand
+        // back the key it was filed under — there is no key to return when nothing was
+        // materialized, and a let-else cannot return in any case. A missing leaf would leave
+        // the rollup covering fewer inputs than the test believes and still agreeing with
+        // itself, which is the one way these assertions could go green over nothing.
         panic!("`{path}` parses");
     };
 

@@ -15,6 +15,11 @@
 //! test target; a directory holding no `main.rs` is not one cargo scans. `OD-GATE-002` and
 //! the split at `2cad614` are the precedent.
 
+// Scoped to this file, and this file is the shared scaffolding three test binaries pull in
+// through `#[path]`. Each of them uses a different subset of it, so a helper that only one
+// root calls is genuinely unreachable when the other two are compiled and the lint fires
+// there for code that is neither dead nor theirs. Nothing else lives in this file, so the
+// blanket form allows only the helpers — the suites that include it keep their own lints.
 #![allow(dead_code)]
 
 use std::path::PathBuf;

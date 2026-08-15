@@ -10,6 +10,10 @@ pub(crate) fn Read_Harness_File(relative: &str) -> String
 
     return std::fs::read_to_string(&path).unwrap_or_else(|error| {
         let location = path.display();
+        // Every check in this suite is a statement about this text, so a file returned as an
+        // empty string would satisfy all of them at once: no route to contradict, no item
+        // named, no hazard left to expire. The suite would go green for the one tree where
+        // the front door had gone missing.
         panic!(
             "cannot read {location}: {error}.\n\
              OD-AGENT-001 makes this file the repository's agent front door, and an agent \
@@ -64,9 +68,15 @@ pub(crate) fn Board() -> LedgerDocument
 {
     let path = Workspace::Workspace_Root().join(BOARD);
     let text = std::fs::read_to_string(&path)
+        // `BOARD` is a committed path. A board that will not open means the layout this suite
+        // is written against has moved, and every caller below would otherwise report that as
+        // "the item is not on the board" — the right failure attributed to the wrong file.
         .unwrap_or_else(|error| panic!("cannot read the board at {}: {error}", path.display()));
 
     return serde_json::from_str(&text).unwrap_or_else(|error| {
+        // The ledger's own type refusing the file that is meant to be its serialization is a
+        // defect in the board itself, not an answer to the caller's question. Substituting an
+        // empty document would answer "no such item" for every hazard the harness declares.
         panic!("the board at {} did not parse: {error}", path.display())
     });
 }

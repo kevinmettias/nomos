@@ -93,6 +93,9 @@ fn Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One()
 fn Snapshot_Stems(directory: &Path) -> BTreeSet<String>
 {
     let entries = std::fs::read_dir(directory)
+        // A directory that cannot be opened is not a directory holding no snapshots, and the
+        // test above distinguishes those two. Folding the error into an empty set would
+        // report "no snapshot is checked in" over a tree where every one of them is.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     return entries

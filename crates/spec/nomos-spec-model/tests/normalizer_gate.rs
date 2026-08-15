@@ -45,6 +45,10 @@ fn Read(name: &str) -> String
 {
     let path = Corpus(name);
     return std::fs::read_to_string(&path)
+        // These fixtures are committed under `tests/corpus` and carry the recorded hashes this
+        // gate reproduces. A missing one leaves nothing to reproduce against, and `Load` would
+        // otherwise have to hand back an empty vector — over which every assertion in this
+        // file iterates and therefore passes.
         .unwrap_or_else(|error| panic!("the gate needs {}: {error}", path.display()));
 }
 
@@ -222,6 +226,10 @@ fn Test_The_Whole_Corpus_Should_Reproduce_When_Available()
     };
     let volumes = root.join("01_authoring/domain_volumes");
     let entries = std::fs::read_dir(&volumes)
+        // `Corpus_Root` has already established that the configured root is a directory, so a
+        // failure here is a corpus whose `01_authoring/domain_volumes` is gone. Treating that
+        // as no entries would leave the ten-volume assertion below to report "found 0" and
+        // send the reader looking for volumes rather than for the directory.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", volumes.display()));
 
     let mut documents = 0_u32;
@@ -258,6 +266,9 @@ fn Assert_It_Segments(path: &Path) -> u32
     }
 
     let text = std::fs::read_to_string(path)
+        // The extension check two lines up has already accepted this entry as a volume, so an
+        // unreadable one is a file that moved mid-run. Answering 0 instead would quietly drop
+        // it from the count and make the ten-volume assertion blame the corpus.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 
     assert!(

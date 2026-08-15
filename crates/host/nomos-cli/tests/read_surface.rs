@@ -284,8 +284,15 @@ fn Test_A_Profile_Should_Render_To_A_File()
     let body = into.join("spec/domain-specification.md");
     let sidecar = into.join("spec/domain-specification.md.nomos-projection.json");
     let rendered = std::fs::read_to_string(&body)
+        // The command already exited 0 above, so an unreadable file here means it reported
+        // success without producing the projection — the exact failure this test was added
+        // for. A defaulted empty string would turn that into `starts_with` and `contains`
+        // assertions that merely do not hold, blaming the content instead of the absence.
         .unwrap_or_else(|error| panic!("{} was not written: {error}", body.display()));
     let stamp = std::fs::read_to_string(&sidecar)
+        // Stopped separately from the body, because a render that wrote the document and
+        // skipped its sidecar leaves a projection nothing downstream can judge stale — a
+        // different repair from a render that wrote nothing at all.
         .unwrap_or_else(|error| panic!("{} was not written: {error}", sidecar.display()));
 
     assert!(rendered.starts_with("---\nnomos_generated: true\n"), "{:?}", rendered.get(..60));

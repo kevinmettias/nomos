@@ -27,6 +27,9 @@ fn Surface_Of<'a>(surfaces: &'a [Surface], package: &str) -> &'a Surface
     return surfaces
         .iter()
         .find(|surface| return surface.package == package)
+        // The bless tests are written around two crates named as literals. Either one ceasing
+        // to be a member with a library would leave them blessing nothing and comparing
+        // nothing — a green run asserting the opposite of what its name claims.
         .unwrap_or_else(|| panic!("{package} is a workspace member with a public surface"));
 }
 
@@ -244,11 +247,17 @@ pub(crate) fn Bless(value: &str, surfaces: &[Surface], directory: &Path)
     let targets = match Requested(value, surfaces)
     {
         Ok(targets) => targets,
+        // A refusal must not fall through to the comparison. An author who typed a crate name
+        // wrong would otherwise get a green run and read it as their snapshot having been
+        // rewritten, when nothing was written at all.
         Err(refusal) => panic!("{refusal}"),
     };
 
     let written = Rewrite(&targets, surfaces, directory);
 
+    // An honoured bless has just rewritten the snapshots the comparison would have used, so a
+    // pass here would be the run certifying its own output. Failing is what forces the second
+    // run — the one without the variable set — that actually compares.
     panic!(
         "{BLESS} was set, so these snapshots were rewritten and nothing was compared: \
          {written:?}. Every other snapshot was left untouched. Re-run without it."

@@ -11,6 +11,9 @@ fn Readme_Bands() -> Vec<(String, u32)>
 {
     let path = Repository_Root().join("README.md");
     let text = std::fs::read_to_string(&path)
+        // The README is the one document this table is parsed back out of. Unreadable, it
+        // yields no rows, and a comparison against no rows finds no disagreement — the band
+        // table would be checked against nothing and report itself intact.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 
     let mut rows = Vec::new();

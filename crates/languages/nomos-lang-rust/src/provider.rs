@@ -215,6 +215,12 @@ mod tests
         return match Materialize(Subject("a.rs"), source, Context())
         {
             Materialization::Materialized(fact) => *fact,
+            // Every source passed to this helper is Rust its author wrote to be parseable, so
+            // a refusal is a broken fixture and not a reading worth handing back. Returning an
+            // error instead would be worse in the one direction this module is written to
+            // catch: the tests below compare two facts to each other, and a provider that had
+            // begun refusing everything would make both sides equally absent and pass. The
+            // parser's own message is printed because it names which literal it stopped on.
             Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
         };
     }
@@ -273,6 +279,11 @@ mod tests
         )
         else
         {
+            // A let-else must diverge, so returning an error is not available here even in
+            // principle. Reaching this arm would mean `pub fn shared() {}` had stopped
+            // parsing, which leaves the three assertions below with no pair to compare —
+            // and a fixture that stopped setting up the case would otherwise read as the
+            // case having held.
             panic!("both subjects parse");
         };
 
