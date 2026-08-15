@@ -11,9 +11,10 @@
 //!
 //! [`ReleaseOutcome::Abandoned`]: nomos_ledger::ReleaseOutcome::Abandoned
 
-use std::path::PathBuf;
+#[path = "scratch_ledger/board.rs"]
+mod board;
 
-const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
+use board::{Board, Ran};
 
 /// The reason these tests assert on, as text.
 ///
@@ -21,88 +22,46 @@ const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 /// the defect would come back as.
 const REASON: &str = "the corpus this needs is on no runner here; stopped before inventing one";
 
-/// What one `nomos work` run said, and what it exited with.
+/// A scratch board holding one claimable item.
 ///
-/// Named rather than a pair. The same two values were spelled `(String, i32)` in one of
-/// these files and `(i32, String)` in the next, which is exactly the swap a name makes
-/// impossible and a type does not.
-struct Ran
+/// The item text is what this suite is about and stays here; the directory it is written
+/// into is `scratch_ledger/board.rs`, shared with the suites beside this one.
+fn A_Board(name: &str) -> Board
 {
-    said: String,
-    code: i32,
+    return Board::New(
+        "abandon",
+        name,
+        "{\n  \"schema_version\": 1,\n  \"items\": [\
+         {\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
+         \"done_when\":\"the tests pass\",\
+         \"territory\":{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\"patterns\":[]},\
+         \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\
+         \"claim\":null,\"verification\":null,\"verified\":null}\
+         ]\n}\n",
+    );
 }
 
-struct Board
+/// Claims and then gives up, which is the cycle every test here needs.
+///
+/// A free function rather than a method, because the board is shared scaffolding and this
+/// cycle is what only this suite is about.
+fn Claim_Then_Abandon(board: &Board, holder: &str, reason: &str)
 {
-    root: PathBuf,
-}
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", holder]);
+    assert_eq!(code, 0, "the claim must be granted: {said}");
 
-impl Board
-{
-    fn New(name: &str) -> Self
-    {
-        let root = std::env::temp_dir().join(format!("nomos-abandon-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("a scratch directory");
-        std::fs::write(
-            root.join("ledger.json"),
-            "{\n  \"schema_version\": 1,\n  \"items\": [\
-             {\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
-             \"done_when\":\"the tests pass\",\
-             \"territory\":{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\"patterns\":[]},\
-             \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\
-             \"claim\":null,\"verification\":null,\"verified\":null}\
-             ]\n}\n",
-        )
-        .expect("a scratch ledger");
-        return Self { root };
-    }
-
-    /// Runs `nomos work …`, returning what it said and what it exited with.
-    fn Work(&self, arguments: &[&str]) -> Ran
-    {
-        use std::process::Command;
-
-        let output = Command::new(NOMOS)
-            .arg("work")
-            .args(arguments)
-            .env("NOMOS_WORK_DIR", &self.root)
-            .output()
-            .expect("the binary runs");
-
-        return Ran {
-            said: String::from_utf8_lossy(&output.stdout).into_owned(),
-            code: output.status.code().unwrap_or(-1),
-        };
-    }
-
-    /// Claims and then gives up, which is the cycle every test here needs.
-    fn Claim_Then_Abandon(&self, holder: &str, reason: &str)
-    {
-        let Ran { said, code } = self.Work(&["claim", "--item", "T-1", "--holder", holder]);
-        assert_eq!(code, 0, "the claim must be granted: {said}");
-
-        let Ran { said, code } = self.Work(&[
-            "abandon", "--item", "T-1", "--holder", holder, "--reason", reason,
-        ]);
-        assert_eq!(code, 0, "a holder may give up its own claim: {said}");
-    }
-}
-
-impl Drop for Board
-{
-    fn drop(&mut self)
-    {
-        let _ignored = std::fs::remove_dir_all(&self.root);
-    }
+    let Ran { said, code } = board.Work(&[
+        "abandon", "--item", "T-1", "--holder", holder, "--reason", reason,
+    ]);
+    assert_eq!(code, 0, "a holder may give up its own claim: {said}");
 }
 
 /// The assertion the item exists for, made where a person would actually read it.
 #[test]
 fn Test_An_Abandoned_Item_Should_Report_Who_Stopped_And_Why()
 {
-    let board = Board::New("reports-reason");
-    board.Claim_Then_Abandon("agent-a", REASON);
+    let board = A_Board("reports-reason");
+    Claim_Then_Abandon(&board, "agent-a", REASON);
 
     let Ran { said: shown, code } = board.Work(&["show", "--item", "T-1"]);
 
@@ -125,8 +84,8 @@ fn Test_An_Abandoned_Item_Should_Report_Who_Stopped_And_Why()
 #[test]
 fn Test_An_Abandoned_Item_Should_Be_Claimable_By_Somebody_Else()
 {
-    let board = Board::New("still-claimable");
-    board.Claim_Then_Abandon("agent-a", REASON);
+    let board = A_Board("still-claimable");
+    Claim_Then_Abandon(&board, "agent-a", REASON);
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
     assert_eq!(code, 0, "an abandoned item must be takeable: {said}");
@@ -142,9 +101,9 @@ fn Test_An_Abandoned_Item_Should_Be_Claimable_By_Somebody_Else()
 #[test]
 fn Test_Every_Abandonment_Should_Be_Reported_And_Not_Only_The_Last()
 {
-    let board = Board::New("reports-both");
-    board.Claim_Then_Abandon("agent-a", "went to look at something else");
-    board.Claim_Then_Abandon("agent-b", REASON);
+    let board = A_Board("reports-both");
+    Claim_Then_Abandon(&board, "agent-a", "went to look at something else");
+    Claim_Then_Abandon(&board, "agent-b", REASON);
 
     let Ran { said: shown, .. } = board.Work(&["show", "--item", "T-1"]);
 
@@ -164,7 +123,7 @@ fn Test_Every_Abandonment_Should_Be_Reported_And_Not_Only_The_Last()
 #[test]
 fn Test_An_Item_Nobody_Abandoned_Should_Report_None()
 {
-    let board = Board::New("nothing-to-report");
+    let board = A_Board("nothing-to-report");
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-a"]);
     assert_eq!(code, 0, "{said}");
@@ -187,7 +146,7 @@ fn Test_An_Item_Nobody_Abandoned_Should_Report_None()
 #[test]
 fn Test_Showing_An_Item_That_Is_Not_There_Should_Refuse()
 {
-    let board = Board::New("no-such-item");
+    let board = A_Board("no-such-item");
 
     let Ran { said: shown, code } = board.Work(&["show", "--item", "T-9"]);
 

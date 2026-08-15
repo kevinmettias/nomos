@@ -36,7 +36,7 @@ const STILL_LIVE: i64 = 4_000_000_000;
 /// that file and refuses when it cannot, and nothing here finishes anything.
 ///
 /// The three items are what this suite is about and stay here; the directory they are
-/// written into is `scratch_ledger/board.rs`, shared with the two suites beside this one.
+/// written into is `scratch_ledger/board.rs`, shared with the suites beside this one.
 fn A_Board(name: &str) -> Board
 {
     return Board::New(

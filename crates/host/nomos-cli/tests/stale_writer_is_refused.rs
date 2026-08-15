@@ -27,7 +27,7 @@ const UNDECLARED: &str = ",\"a_field_this_build_does_not_know\":{\"holder\":\"ag
 /// A scratch board holding one claimable item, with `extra` spliced into that item.
 ///
 /// The item text is what this suite is about and stays here; the directory it is written
-/// into is `scratch_ledger/board.rs`, shared with the two suites beside this one.
+/// into is `scratch_ledger/board.rs`, shared with the suites beside this one.
 fn A_Board(name: &str, extra: &str) -> Board
 {
     return Board::New(
