@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:43f85926da1088c6d6b744136b529a9c87a315721f486bf2826ffc7ce9ed2bde",
-  "inputs_digest": "sha256:f5693f40d67d3e05fcfb38e1c3842b006ce493a792515e2ca10e2157b26df8d2",
+  "content_digest": "sha256:7b9c9e1c8c2cc9f74cbb601ee6ea3f43ca5a4fe23df9038554c514779357082f",
+  "inputs_digest": "sha256:6f9dda52779bf40714c7721c7bb3b1d0b7ae8fe4a5ce5449555d142c0d92ea82",
   "sections": [
     [
       "Relations",
-      514
+      522
     ],
     [
       "Decisions",
-      71
+      73
     ]
   ],
   "inputs": [
@@ -60,6 +60,16 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to D-130",
       "hash": "sha256:b9c25724673ee5c861ee59d881db537c0c5bc22af634732640505f252851187e"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to D-135",
+      "hash": "sha256:978d2ff4f645502da96f78176fb49064f45df2596e8ef1e1e57f68a254d303d4"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to D-136",
+      "hash": "sha256:76ff6e2b2846028e1a14fdf5ed68c97be68652b5ce65893831b3e2f241d85c8e"
     },
     {
       "content": "relations",
@@ -363,6 +373,11 @@
     },
     {
       "content": "relations",
+      "identity": "D-130 relates-to D-135",
+      "hash": "sha256:85b307eb80bbb1da0d0069e32b39c7042745f02038d568691f21d132f98e7bd5"
+    },
+    {
+      "content": "relations",
       "identity": "D-130 relates-to OD-PLATFORM-001",
       "hash": "sha256:4ec9c0a647888b21f06c37b733afc7a9316dfeb185b07a3b54cdc226c55155e0"
     },
@@ -480,6 +495,31 @@
       "content": "relations",
       "identity": "D-134 relates-to OD-TRACE-001",
       "hash": "sha256:59a1fe1ee79c556ad6fa4b6ba9e9453b95d8e9aadad864165c8af8835e411767"
+    },
+    {
+      "content": "relations",
+      "identity": "D-135 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:30d15349d03d38dfc85875afbab2ee8600ae8590070d71bb46d49174d40bcb52"
+    },
+    {
+      "content": "relations",
+      "identity": "D-135 relates-to D-130",
+      "hash": "sha256:9615cd318900b5bb440b7411eb0af64abf2ffdd81c1c195b20b8ca2d3b350ae5"
+    },
+    {
+      "content": "relations",
+      "identity": "D-135 relates-to D-136",
+      "hash": "sha256:b9c4ab75b95e5a5683bcc5def0761e172659cfed2a2cbb0bdadfa204559fcb15"
+    },
+    {
+      "content": "relations",
+      "identity": "D-136 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:57f9b677e4e95236c9992eee56aaf4a5a0a3055075c7c65895fb94029c17c184"
+    },
+    {
+      "content": "relations",
+      "identity": "D-136 relates-to D-135",
+      "hash": "sha256:2134d9c1d4d9338579dc0a2c083641ef40cc87d2cd0c502a3d1544260e2d9f3a"
     },
     {
       "content": "relations",
@@ -2615,6 +2655,16 @@
       "content": "nodes",
       "identity": "D-134",
       "hash": "sha256:4571da63fe7bf4ba3f79b2e57d255f77354752252ecfa133d02b6233b399deee"
+    },
+    {
+      "content": "nodes",
+      "identity": "D-135",
+      "hash": "sha256:798b0e6fd960e314dee5a2c12a93164791713de384fcda83d9f881df18b5005b"
+    },
+    {
+      "content": "nodes",
+      "identity": "D-136",
+      "hash": "sha256:bed7931d12a5012375cec4b36e7d54ca391a3fb339cb4e64323849ce03502905"
     },
     {
       "content": "nodes",

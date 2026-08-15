@@ -20,6 +20,8 @@ profile: domain-specification
 | docs/records/D-132-the-plan-is-a-game-plan.md@authored | docs/records/D-132-the-plan-is-a-game-plan.md | authored | 18 | 5 | sha256:2792ff01e2e1a01aa2dec6f047ebc1bae3ceee8a124b2c1e31c53c190f4f8c2c |
 | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md@authored | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md | authored | 22 | 6 | sha256:c213c15cd3c026704b1c20907af9e1689b203b1e60d94e222cdcef97e02ea552 |
 | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md@authored | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md | authored | 36 | 5 | sha256:3a749fa2720e1ec104110b73ca5f2f65a934b7ee60e5a85ab4683f3548dc3db0 |
+| docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md@authored | docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md | authored | 9 | 5 | sha256:08035d67c34a83d2524169257bb1bc13ce70da58c72cac990ad3303a679ec2b7 |
+| docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md@authored | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md | authored | 12 | 5 | sha256:02cb6b1358273b389414b171c1b06ed6aa623ab54affaa823aad98e0c5bb1422 |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
@@ -159,6 +161,16 @@ profile: domain-specification
 | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md#9 | authored | 2 | Decision |
 | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md#21 | authored | 2 | Amendment, Version 2 |
 | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md#28 | authored | 2 | Consequences |
+| docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#1 | authored | 1 | Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific |
+| docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#2 | authored | 2 | Decision |
+| docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#4 | authored | 2 | Rationale |
+| docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#6 | authored | 2 | Consequences |
+| docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#8 | authored | 2 | Alternatives Considered |
+| docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#1 | authored | 1 | KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype |
+| docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#2 | authored | 2 | Decision |
+| docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#4 | authored | 2 | Rationale |
+| docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#7 | authored | 2 | Consequences |
+| docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#10 | authored | 2 | Alternatives Considered |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#1 | authored | 1 | An agent instruction file routes to authority rather than restating it |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#2 | authored | 2 | Question |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#6 | authored | 2 | The Restatement Is The Defect |
@@ -3114,6 +3126,205 @@ more than they hold:
 - `nomos check` is not wired into the gate. The command exists and is honest; making the
   gate run it is a separate decision about what the workspace is prepared to block on, and
   claiming it here would be the overclaim this record is partly about.
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#1
+
+*revision: authored · kind: heading · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific · hash: sha256:05d3123f376e9373445278b20c97963f3be1dc2af2f959943e764895e417d7b6*
+
+# Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#2
+
+*revision: authored · kind: heading · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#3
+
+*revision: authored · kind: prose · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Decision · hash: sha256:78154214f4c07ad18a717116b9fc3304bac7500810ffeb89fd4671081fb24011*
+
+A subsystem with no software-engineering or knowledge-domain semantics — one whose
+definition would be equally correct under a product that had nothing to do with either — is
+proposed in XVPE the first time it is written, not after two products have separately
+reinvented it. `D-122` (adopted into `ARC-ECOSYSTEM-001`) continues to govern the other
+direction unchanged: code that began product-specific and is later suspected of being
+generic still needs that proof — two products demonstrating materially identical
+domain-neutral semantics — before it moves, because "both products would use it" is the
+reuse argument `ARC-ECOSYSTEM-001` already refuses. This decision changes only where
+new, deliberately domain-neutral code is authored the first time; it does not weaken the
+proof requirement for code moving after the fact.
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#4
+
+*revision: authored · kind: heading · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Rationale · hash: sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db*
+
+## Rationale
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#5
+
+*revision: authored · kind: prose · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Rationale · hash: sha256:b609db59d9d762f434cf02f89fe1401cdb3f005b40bedc6a670d6ffd12496231*
+
+Nomos and a forthcoming Rust rewrite of KnowledgeWorkbench (`D-136`) are being designed with
+each other in mind from the start, which changes the argument `D-122` was answering. `D-122`
+guards against inferring genericity from a wish — a mechanism proposed for XVPE because two
+products *would* find it convenient, without either having built it. It was never meant to
+require two products to independently construct the same execution, storage, or scheduling
+substrate on purpose merely to manufacture the proof its gate asks for. Where a subsystem's
+definition never mentions a crate, a rule, a finding, a claim, or a concept — content-addressed
+storage, task scheduling, serialization, process and telemetry primitives are the concrete
+cases motivating this record — writing it twice against two products before naming it XVPE
+produces the evidence `D-122` wants by paying the cost `D-122` exists to avoid.
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#6
+
+*revision: authored · kind: heading · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#7
+
+*revision: authored · kind: prose · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Consequences · hash: sha256:9c7b0bfe928c4d85bc4a2df15cae73528dee466b15883bba272d468a522c8137*
+
+Starting a new subsystem, the question asked first is not "which product owns this" but
+"does this subsystem's definition mention Nomos or KWB domain vocabulary." If it does not,
+it is proposed in XVPE and consumed by adaptation, per `ARC-ECOSYSTEM-001`'s existing rule
+that generic capability is consumed by adaptation and never by extending the generic thing
+with product semantics. `D-130`'s constraints on *when* Nomos may actually depend on
+anything XVPE holds are unchanged by this decision: no path dependency, a pinned commit SHA
+into the quarantined `nomos-platform-xvpe` adapter crate, and no dependency at all before
+Phase 5. This record changes only where code is authored; `D-130` still governs when it may
+be linked.
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#8
+
+*revision: authored · kind: heading · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#9
+
+*revision: authored · kind: prose · heading: Generic code designed for shared use defaults to XVPE; D-122's proof gate governs only code that started product-specific / Alternatives Considered · hash: sha256:fe3eef95f962a1e37f1f28a17c9eb32df35f55a944f306737a7088850d319465*
+
+Leaving `D-122` as the sole gate for every case was rejected: applying a
+converged-by-accident proof standard to code deliberately co-designed for two products from
+the outset treats intentional shared design as though it were opportunistic reuse, which is
+a different situation than the one `D-122` was written to police, and the difference is
+worth a decision rather than a strained reading of the existing one.
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#1
+
+*revision: authored · kind: heading · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype · hash: sha256:15914f16ed63f7e6f65bc8a4b9f5dc239d454226e80a65708c9d83f50b9adb8f*
+
+# KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#2
+
+*revision: authored · kind: heading · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#3
+
+*revision: authored · kind: prose · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Decision · hash: sha256:f9af9599b29cc33dac4393b7f54718ac42822d0c122515b9dfd615c863e53db1*
+
+KnowledgeWorkbench (KWB) is rebuilt from scratch as a new Rust repository, sibling to this
+one and to XVPE. The existing .NET repository is not ported. It becomes the new
+repository's prototype corpus, in the same relationship this repository already has to
+`code-standards`: read for its domain model, its documented data-loss incidents, and its
+own accepted decisions, and answered requirement by requirement — met, diverges, deferred,
+or declined — as the new repository is built, rather than carried over by default.
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#4
+
+*revision: authored · kind: heading · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Rationale · hash: sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db*
+
+## Rationale
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#5
+
+*revision: authored · kind: prose · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Rationale · hash: sha256:6f8bf34a5fcb5e07eb60e19b143f5db52d4d41a4ab78a8913b49fa3b9d24744f*
+
+KWB's own governing decision, `docs/adr/0001-implementation-language.md` in the .NET
+repository, rejected Rust "for now": most of its code was judged to be EF Core and
+expression-tree schema mapping, migrations, and dependency injection that does not survive
+translation, with the choice explicitly named revisitable "if the domain's invariant
+density grows faster than its plumbing." That decision was made without the context this
+repository now supplies — a working records-driven governance skeleton, a territory-based
+work ledger, a content-addressed store, and a fact-oriented shared-analysis substrate,
+proven across a domain just as provenance-heavy and invariant-dense as KWB's own epistemic
+kernel already is. Building KWB in Rust from the outset, on Nomos's bootstrap pattern and
+toward XVPE's platform substrate, fits the ecosystem shape `ARC-ECOSYSTEM-001` already
+adopted better than continuing an implementation that cannot consume either.
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#6
+
+*revision: authored · kind: prose · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Rationale · hash: sha256:8c822e100c8c42493f5dcfca5d1e71d190e6a63493c5c89eeb44656fa8e3a417*
+
+This repository's own relationship to `code-standards` is the direct precedent for how to
+do this without carrying the old codebase's structure over wholesale: `code-standards` was
+never ported, only read and reconciled for content loss, with generic scaffolding rebuilt
+from first principles once its shape was understood. The same applies here. The .NET
+repository's Postgres/pgvector storage, EF Core migrations, and C# domain classes are not
+translated. Its domain model is read: the universal epistemic kernel that domain-specific
+packs specialize, the content-derived claim and concept identity that is the actual dedup
+mechanism across sources, the `CoverageOutcome` and derivation-ledger primitives that
+distinguish "ran and found nothing" from "never ran," and the five recorded data-loss
+incidents (`D17`-`D21` in the .NET repository's own `AGENTS.md`) that name the specific
+failure classes the new repository's types must make unrepresentable rather than merely
+avoided by convention.
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#7
+
+*revision: authored · kind: heading · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#8
+
+*revision: authored · kind: prose · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Consequences · hash: sha256:c24b0494547b925eb1e16db61db0c2491996aa0808cde742c8910c1762252e2a*
+
+The new KWB repository is not built inside this one; it is a new sibling repository under
+its own governance, and this record does not create it — it fixes the relationship between
+the two. From this point, the .NET repository is read-only prototype material: its own
+`docs/adr/0001-implementation-language.md` is superseded for the new repository's own
+records to state formally when that repository exists, and a future claim that KWB "is a
+.NET product" cites a repository this decision has already deprecated.
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#9
+
+*revision: authored · kind: prose · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Consequences · hash: sha256:c0ed183afa27cbdd0446079b116b847c5b55fb16736e6243e11ee695bc51afd7*
+
+Per `D-135`, subsystems in the new KWB repository that carry no knowledge-domain semantics
+are proposed in XVPE rather than reimplemented a third time. Subsystems that are KWB's own
+reasoning surface — claims, concepts, argumentation, evidence, the epistemic kernel — remain
+KWB's, exactly as `ARC-ECOSYSTEM-001` already states.
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#10
+
+*revision: authored · kind: heading · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#11
+
+*revision: authored · kind: prose · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Alternatives Considered · hash: sha256:e4781abacdd1578229e017fba6ef4d0bf1fd39ba424f469c6c414482241f9d53*
+
+Continuing the .NET implementation and integrating it with Nomos and XVPE through
+inter-process contracts was rejected: it would leave KWB permanently unable to consume
+XVPE's Rust platform substrate or Nomos's store and ledger patterns except across a language
+boundary, for a domain whose own governing decision already named increasing invariant
+density as the trigger for revisiting the language choice.
+
+### docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#12
+
+*revision: authored · kind: prose · heading: KnowledgeWorkbench is rebuilt as a new Rust repository, and the existing .NET repository becomes its prototype / Alternatives Considered · hash: sha256:6245a5321dd576135d36d1fa37bbe0bb816d39ae1bb5750370fd36b4aed9547f*
+
+Porting the .NET codebase mechanically — translating classes rather than redesigning around
+the domain model — was rejected for the same reason `code-standards` was read rather than
+ported: a mechanical translation carries an old shape's assumptions into a language whose
+type system can make the old failures structurally impossible only if the design starts
+from the invariants the old system learned by losing data, not from the old classes that
+allowed the loss.
 
 ### docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#1
 

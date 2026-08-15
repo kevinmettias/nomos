@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:28733e5c3d5f17703339ffd828760ee0580e363fec4abbf30bd918e4f3cbfe2f",
-  "inputs_digest": "sha256:329a54c489f1b864ccec9b4c4880a91504640dc0aba3f4ca1776a112372496cf",
+  "content_digest": "sha256:94853e80df0cb176c973f87975610f635f7c9dabdd5bb9dfa86c567763e3e91c",
+  "inputs_digest": "sha256:40f1dcf79e01541327710de70195d2c52222cfc41d9a02bcc430bd2714419143",
   "sections": [
     [
       "Documents",
-      75
+      77
     ],
     [
       "Sections",
-      710
+      720
     ],
     [
       "Source blocks",
-      2799
+      2820
     ]
   ],
   "inputs": [
@@ -69,6 +69,16 @@
       "content": "documents",
       "identity": "docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md@authored",
       "hash": "sha256:3a749fa2720e1ec104110b73ca5f2f65a934b7ee60e5a85ab4683f3548dc3db0"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md@authored",
+      "hash": "sha256:08035d67c34a83d2524169257bb1bc13ce70da58c72cac990ad3303a679ec2b7"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md@authored",
+      "hash": "sha256:02cb6b1358273b389414b171c1b06ed6aa623ab54affaa823aad98e0c5bb1422"
     },
     {
       "content": "documents",
@@ -739,6 +749,56 @@
       "content": "headings",
       "identity": "docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md#28",
       "hash": "sha256:fd70c3f3fae7c3a31e9e269fe552c155f3d2e6569178b00ba727b2b34b8ae9e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#1",
+      "hash": "sha256:349e3741e2f4b95ebf5d57f0110bb8138f8f88846d1ff046353f7501e24a522d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#2",
+      "hash": "sha256:09a912626cb5427f7d71cecb2a0450dad351fd792e8f58ab3222a34577ab93f9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#4",
+      "hash": "sha256:337e6ece87764063db907e506a1a907c5bf18fb79df532d191f83d26eecd5a12"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#6",
+      "hash": "sha256:d7110d3bec0e95f4a9c10136fa6ecbd6db639ea3c792ca3bfb812ff23804f480"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#8",
+      "hash": "sha256:b51cbdb11ab52affc8f2fa577ea9478bfbd0f485c503084f4c6a52ecde588d00"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#1",
+      "hash": "sha256:5a482aa74886e742fd7575b178fee99fe4dc5c43cd80b8168e9dbafec1386f51"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#2",
+      "hash": "sha256:d420069a61a642c1b5ee154c76d5a51f09abde5cb147adb1db311efa1fb959f0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#4",
+      "hash": "sha256:3d7b7e6e82cc975409ac0c5aa0ace56b8efdf6e69ca6758f22805d08eaf7fc0a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#7",
+      "hash": "sha256:ae96a81e5de046539f58135b417c1468f77533f77fd040ce1ef9aaf7c0799a81"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#10",
+      "hash": "sha256:76b026d22e44d55bdb56264f3c050f04178253ddd5c14e2a6d3a226433674868"
     },
     {
       "content": "headings",
@@ -5329,6 +5389,111 @@
       "content": "blocks",
       "identity": "docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md#36",
       "hash": "sha256:19f7ba4a4bd6e2ac4308c4b499b745d7f7cf9a43a9a157ccc9d6a084714c7ac8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#1",
+      "hash": "sha256:05d3123f376e9373445278b20c97963f3be1dc2af2f959943e764895e417d7b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#2",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#3",
+      "hash": "sha256:78154214f4c07ad18a717116b9fc3304bac7500810ffeb89fd4671081fb24011"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#4",
+      "hash": "sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#5",
+      "hash": "sha256:b609db59d9d762f434cf02f89fe1401cdb3f005b40bedc6a670d6ffd12496231"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#6",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#7",
+      "hash": "sha256:9c7b0bfe928c4d85bc4a2df15cae73528dee466b15883bba272d468a522c8137"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#8",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md#9",
+      "hash": "sha256:fe3eef95f962a1e37f1f28a17c9eb32df35f55a944f306737a7088850d319465"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#1",
+      "hash": "sha256:15914f16ed63f7e6f65bc8a4b9f5dc239d454226e80a65708c9d83f50b9adb8f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#2",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#3",
+      "hash": "sha256:f9af9599b29cc33dac4393b7f54718ac42822d0c122515b9dfd615c863e53db1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#4",
+      "hash": "sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#5",
+      "hash": "sha256:6f8bf34a5fcb5e07eb60e19b143f5db52d4d41a4ab78a8913b49fa3b9d24744f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#6",
+      "hash": "sha256:8c822e100c8c42493f5dcfca5d1e71d190e6a63493c5c89eeb44656fa8e3a417"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#7",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#8",
+      "hash": "sha256:c24b0494547b925eb1e16db61db0c2491996aa0808cde742c8910c1762252e2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#9",
+      "hash": "sha256:c0ed183afa27cbdd0446079b116b847c5b55fb16736e6243e11ee695bc51afd7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#10",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#11",
+      "hash": "sha256:e4781abacdd1578229e017fba6ef4d0bf1fd39ba424f469c6c414482241f9d53"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#12",
+      "hash": "sha256:6245a5321dd576135d36d1fa37bbe0bb816d39ae1bb5750370fd36b4aed9547f"
     },
     {
       "content": "blocks",
