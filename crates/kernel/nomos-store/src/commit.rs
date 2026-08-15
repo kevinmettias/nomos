@@ -59,6 +59,9 @@ impl Commit
         return self;
     }
 
+    /// # Errors
+    ///
+    /// Returns [`StoreError::Malformed`] if the manifest fails to serialize.
     pub fn Encode(&self) -> Result<Vec<u8>, StoreError>
     {
         let manifest = Manifest {
@@ -77,6 +80,10 @@ impl Commit
         return Ok(encoded);
     }
 
+    /// # Errors
+    ///
+    /// Returns [`StoreError::Malformed`] if `bytes` does not parse as a manifest, or parses as
+    /// one whose schema is not [`COMMIT_SCHEMA`].
     pub fn Decode(bytes: &[u8]) -> Result<Manifest, StoreError>
     {
         let manifest: Manifest = serde_json::from_slice(bytes)

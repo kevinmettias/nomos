@@ -27,6 +27,10 @@ pub struct Index
 
 impl Index
 {
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] if a commit document among `documents` fails to decode as a
+    /// manifest.
     pub fn Derive(documents: &BTreeMap<DocumentId, Document>) -> Result<Self, StoreError>
     {
         let mut index = Self::default();

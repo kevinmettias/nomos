@@ -9282,6 +9282,85 @@
       ],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-KWB-XVPE-SEAM",
+      "title": "Nomos and a forthcoming KWB are co-designed on purpose, and D-122's accidental-convergence proof gate does not answer that",
+      "why": "Nomos and a Rust rewrite of KnowledgeWorkbench are now being built with each other in mind, and D-122 only answers code that converges on shared needs by accident, not code designed for shared use from the start. Left unaddressed, that gap reads as license to either ignore D-122 for everything or to build the same substrate twice just to satisfy its proof. KWB itself is also no longer five incidental mentions; a new Rust repository is starting for it, and nothing records what that repository is or how it relates to the .NET one it replaces. ARC-ECOSYSTEM-001 already has an open, unclaimed amendment item (P11-ECOSYSTEM-UPWARD) for a different seam, so this item adds D-135 and D-136 as standalone records relating to it rather than contending for the same territory.",
+      "done_when": "D-135 states that generic code with no Nomos or KWB semantics defaults to XVPE the first time it is written, and that D-122 continues to govern only code that started product-specific. D-136 states that KWB is rebuilt as a new Rust repository, that the .NET repository becomes read-only prototype material in the same relationship code-standards already has to this repository, and that neither is ported wholesale. Both relate to ARC-ECOSYSTEM-001 without amending it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/D-135.record",
+          "crates/spec/nomos-spec-store/records/D-136.record",
+          "docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md",
+          "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code-session",
+          "reason": "D-135 and D-136 are authored, registered, round-trip verified, and nomos-spec-store's own test suite is green. The item cannot Finish because the gate's workspace-wide clippy lint is red for the unrelated missing_errors_doc gap P11-STORE-ERRORS-DOC documents. Re-claim once that gate is clear; the records and rendered projections are already committed.",
+          "abandoned_at": 1786836714
+        }
+      ],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-STORE-ERRORS-DOC",
+      "title": "nomos-store's public Result-returning functions have no # Errors section, and the gate is red on it",
+      "why": "cargo clippy --workspace --all-targets -- -D warnings fails at clean HEAD (verified with no other changes present) on seven pub fn across commit.rs, index.rs and store.rs in nomos-store, each missing clippy::missing_errors_doc's required # Errors section. The gate lint runs before any item's own predicate, so every item in this workspace is currently blocked on a defect none of them own.",
+      "done_when": "Every public function in nomos-store returning Result documents an # Errors section naming when it returns Err. cargo clippy -p nomos-store --all-targets -- -D warnings exits 0, and the crate's own tests still pass.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-store/src/commit.rs",
+          "crates/kernel/nomos-store/src/index.rs",
+          "crates/kernel/nomos-store/src/store.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code-session",
+          "reason": "nomos-store's own three files are fixed, clippy-clean and tested, and are committed. The item cannot Finish because cargo clippy --workspace --all-targets -- -D warnings is red elsewhere too (nomos-analysis, nomos-workspace, and possibly more once those clear) on the identical missing_errors_doc lint — a workspace-wide compliance gap this item's territory does not cover. Left open for whoever takes on the rest, or for a follow-up claim of this same item once the broader gate is separately addressed.",
+          "abandoned_at": 1786836714
+        }
+      ],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

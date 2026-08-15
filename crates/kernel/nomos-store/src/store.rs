@@ -82,6 +82,12 @@ impl DocumentStore
         return Ok(manifest);
     }
 
+    /// Writes every record in `commit`, then a manifest naming them, as one document each.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] if this store's authority does not admit a record's kind or the
+    /// commit's own manifest kind, or if `commit` records nothing.
     pub fn Commit(&mut self, commit: &Commit) -> Result<DocumentId, StoreError>
     {
         let manifest = self.Admitted(commit)?;
@@ -99,6 +105,9 @@ impl DocumentStore
         return Ok(id);
     }
 
+    /// # Errors
+    ///
+    /// Returns [`StoreError::NoSuchDocument`] if `id` names nothing this store holds.
     pub fn Read(&self, id: DocumentId) -> Result<&Document, StoreError>
     {
         return self
@@ -119,6 +128,11 @@ impl DocumentStore
         return self.documents.len();
     }
 
+    /// The store's index, deriving it first if a mutation has dropped the cached one.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] if deriving the index fails.
     pub fn Index(&mut self) -> Result<&Index, StoreError>
     {
         if self.index.is_none()
@@ -143,6 +157,11 @@ impl DocumentStore
         return self.index.is_some();
     }
 
+    /// Every document this store holds that no commit's manifest reaches from any snapshot.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError`] if the index cannot be derived.
     pub fn Unreachable(&mut self) -> Result<Vec<DocumentId>, StoreError>
     {
         let reachable: Vec<DocumentId> = {
