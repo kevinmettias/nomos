@@ -91,6 +91,6 @@ pub use determinism::{Declaration_Is_Coherent, DeterminismStrength, Reproducibil
 pub use enforcement::{EnforcementBreach, EnforcementReach, EnforcerRef, GateCategory};
 pub use finding::{Applicability, DisplayLabel, EvidenceClass, Finding};
 pub use guarantee::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
-pub use identity::{BuildVariantId, CapabilityId, ConfigurationId, Digest128, GenerationId, OperationName, PackageId, ProviderId, RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId, SubjectId};
+pub use identity::{BuildVariantId, CapabilityId, ConfigurationId, Digest128, GenerationId, KnowledgeReferenceId, OperationName, PackageId, ProviderId, RuleId, RunId, SchemaId, SnapshotEntityId, SnapshotId, SubjectId};
 pub use package::PackageKind;
 pub use peer::{PeerAvailability, SynchronizationState};

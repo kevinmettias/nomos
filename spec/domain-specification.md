@@ -22,6 +22,7 @@ profile: domain-specification
 | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md@authored | docs/records/D-134-a-rule-is-a-pure-function-and-a-universe-declares-its-own-mirror.md | authored | 36 | 5 | sha256:3a749fa2720e1ec104110b73ca5f2f65a934b7ee60e5a85ab4683f3548dc3db0 |
 | docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md@authored | docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md | authored | 9 | 5 | sha256:08035d67c34a83d2524169257bb1bc13ce70da58c72cac990ad3303a679ec2b7 |
 | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md@authored | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md | authored | 12 | 5 | sha256:02cb6b1358273b389414b171c1b06ed6aa623ab54affaa823aad98e0c5bb1422 |
+| docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md@authored | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md | authored | 12 | 5 | sha256:afa015c0b7cbf5be9095e859fa378842b580438bde4859776f8ff26f21172220 |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
@@ -171,6 +172,11 @@ profile: domain-specification
 | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#4 | authored | 2 | Rationale |
 | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#7 | authored | 2 | Consequences |
 | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#10 | authored | 2 | Alternatives Considered |
+| docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#1 | authored | 1 | KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one |
+| docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#2 | authored | 2 | Decision |
+| docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#5 | authored | 2 | Rationale |
+| docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#8 | authored | 2 | Consequences |
+| docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#10 | authored | 2 | Alternatives Considered |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#1 | authored | 1 | An agent instruction file routes to authority rather than restating it |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#2 | authored | 2 | Question |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#6 | authored | 2 | The Restatement Is The Defect |
@@ -3325,6 +3331,112 @@ ported: a mechanical translation carries an old shape's assumptions into a langu
 type system can make the old failures structurally impossible only if the design starts
 from the invariants the old system learned by losing data, not from the old classes that
 allowed the loss.
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#1
+
+*revision: authored · kind: heading · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one · hash: sha256:270c87668b3ec021b874522f73371dae33f71ab5f155586cd41f573ed30e6d8a*
+
+# KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#2
+
+*revision: authored · kind: heading · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#3
+
+*revision: authored · kind: prose · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Decision · hash: sha256:85caac3a8f4b273cf6167e89da734af53c631b8ae8010709c7a8648d1e695db4*
+
+A new identity type, `KnowledgeReferenceId`, is admitted to `nomos-contracts` (band 0): an
+opaque, authored identifier minted by an external knowledge system for one claim,
+rationale, or decision, carried by Nomos as a citation without Nomos computing, verifying,
+or interpreting it. It is a `Named_Identity`, not a `Digest_Identity`: Nomos does not
+compute this value from bytes it holds, so treating it as one of Nomos's own content
+digests would claim a verification Nomos cannot perform.
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#4
+
+*revision: authored · kind: prose · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Decision · hash: sha256:f6f896b1a9d71be3518ce0c0904ec4875d2ae702d5d23e57b67faeb4c6a8f684*
+
+This decision adds the identity type only. No existing type — `Finding`, `EvidenceClass`,
+or any rule or correction record — is changed to carry one yet, because nothing in this
+workspace currently produces or consumes a citation, and adding an unused field to a
+widely-consumed type ahead of a producer is the speculative extension `OD-CONTRACTS-001`
+exists to keep out of this crate.
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#5
+
+*revision: authored · kind: heading · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Rationale · hash: sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db*
+
+## Rationale
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#6
+
+*revision: authored · kind: prose · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Rationale · hash: sha256:2a9ca98b5e03064b8f335d0032202baf9c46844c89e518f524aab1cbe66eeedb*
+
+`ARC-ECOSYSTEM-001` states the KWB-to-Nomos boundary as a governed projection: "a
+rationale is not enforceable; a contract derived from it is," and the derivation "must be
+a recorded step rather than an inference somebody made once." Recording that step requires
+naming, at minimum, which KWB-side thing was projected — and that name is the one piece of
+vocabulary a peer that never compiles this crate must still agree with Nomos about, which
+is exactly `OD-CONTRACTS-001`'s admission test: would a peer be unable to agree with us
+without this type? Everything else about a projection — who approved it, what Nomos rule
+resulted, when it happened — is Nomos-internal bookkeeping nobody outside Nomos needs to
+agree on the shape of, and does not belong in this crate.
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#7
+
+*revision: authored · kind: prose · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Rationale · hash: sha256:f97ead60b4683c1565fc9cc26fd7b44a0753839104fec56485a393848f544b60*
+
+`D-135` and `D-136` motivate doing this now rather than waiting for a concrete producer:
+Nomos and the forthcoming KWB Rust repository are being designed with each other in mind,
+and the projection boundary is exactly the seam vocabulary both sides should agree on
+before either builds around a private guess at its shape.
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#8
+
+*revision: authored · kind: heading · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#9
+
+*revision: authored · kind: prose · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Consequences · hash: sha256:3756f7175e4decb405775c0a3aa2c8338579ac11010ef3198abca6056b7602df*
+
+`KnowledgeReferenceId` exists in `nomos-contracts::identity` and is exported from the crate
+root, following the same `Named_Identity!` pattern as `RuleId`, `PackageId`, and
+`SchemaId`. `tests/contract`'s assertion that this crate depends on `serde` and nothing
+else is unaffected, since the new type introduces no dependency. When a concrete producer
+exists — a rule authored from a governed projection, or a finding whose evidence traces to
+one — the type that carries a `KnowledgeReferenceId` is added to whatever record needs it,
+in a separate, later decision, scoped to that actual need.
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#10
+
+*revision: authored · kind: heading · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#11
+
+*revision: authored · kind: prose · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Alternatives Considered · hash: sha256:e43a0c17d2af2bbb223cab9d71776b0c74f59296c10f33235fcacb262b50eccd*
+
+Waiting until a concrete Nomos-side consumer exists before naming anything was rejected:
+the whole reason this type crosses a product boundary is that both Nomos and the new KWB
+repository need to agree on its shape independently, and KWB's own bootstrap (`D-136`) is
+happening now — a peer starting its own repository around a private guess at this shape is
+a worse outcome than naming the shape one version early.
+
+### docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#12
+
+*revision: authored · kind: prose · heading: KnowledgeReferenceId is admitted to nomos-contracts as the one shape a KWB citation needs, and nothing yet produces or consumes one / Alternatives Considered · hash: sha256:8892ec48b207d34f3d8ab6e482a7fa29bec6cbf86f7bda9dbe427de08b702705*
+
+Reusing an existing identity (`SchemaId`, or a bare `String`) was rejected: a bare `String`
+gives a KWB citation and, say, a schema name the same type, so passing one where the other
+is expected compiles — exactly the `Waiver { Check: path, Path: check }` failure
+`nomos-contracts`'s own `identity.rs` documents as the reason its identities are distinct
+newtypes rather than aliases.
 
 ### docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#1
 

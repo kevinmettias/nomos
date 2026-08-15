@@ -9361,6 +9361,94 @@
       ],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-KWB-CITATION-SHAPE",
+      "title": "nomos-contracts names no shape for a KWB citation, and D-136 is starting a repository that will need to agree on one",
+      "why": "ARC-ECOSYSTEM-001 requires the KWB-to-Nomos boundary to be a governed projection, recorded rather than inferred, and recording it requires naming at minimum which KWB-side thing was projected. nomos-contracts is band 0, the only authoritative statement of vocabulary a peer that never compiles this crate must still agree with Nomos about, and it currently names nothing for this. D-136's new KWB repository will otherwise start around a private guess at this shape.",
+      "done_when": "KnowledgeReferenceId exists in nomos-contracts::identity as a Named_Identity, exported from the crate root, documented as opaque and peer-minted. No existing type is changed to carry one. contracts_names_nothing still holds. A record explains the admission and what is deliberately not built yet.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/identity.rs",
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "crates/spec/nomos-spec-store/records/D-137.record",
+          "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-KWB-CITATION-SHAPE-2, authored with the surface snapshot correctly in territory."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code-session",
+          "reason": "Territory declared for this item omitted tests/contract/surface/nomos-contracts.txt, which the new public export requires blessing. Re-authoring with the correct territory before any commit.",
+          "abandoned_at": 1786837141
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-code-session",
+        "declined_at": 1786837160
+      }
+    },
+    {
+      "id": "P11-KWB-CITATION-SHAPE-2",
+      "title": "nomos-contracts names no shape for a KWB citation, and D-136 is starting a repository that will need to agree on one",
+      "why": "ARC-ECOSYSTEM-001 requires the KWB-to-Nomos boundary to be a governed projection, recorded rather than inferred, and recording it requires naming at minimum which KWB-side thing was projected. nomos-contracts is band 0, the only authoritative statement of vocabulary a peer that never compiles this crate must still agree with Nomos about, and it currently names nothing for this. D-136's new KWB repository will otherwise start around a private guess at this shape. Supersedes P11-KWB-CITATION-SHAPE, declined for missing the surface snapshot from its territory.",
+      "done_when": "KnowledgeReferenceId exists in nomos-contracts::identity as a Named_Identity, exported from the crate root, documented as opaque and peer-minted. No existing type is changed to carry one. The crate's public-surface snapshot is blessed to match. A record explains the admission and what is deliberately not built yet.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/identity.rs",
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "crates/spec/nomos-spec-store/records/D-137.record",
+          "tests/contract/surface/nomos-contracts.txt",
+          "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code-session",
+          "reason": "KnowledgeReferenceId is added, tested, surface-blessed and nomos-contracts is clippy-clean; committed. Cannot Finish because cargo clippy --workspace -D warnings is still red in nomos-analysis on the same missing_errors_doc gap P11-STORE-ERRORS-DOC already logged for nomos-store. Re-claim once the workspace-wide gate is clear.",
+          "abandoned_at": 1786837245
+        }
+      ],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

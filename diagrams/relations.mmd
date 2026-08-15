@@ -14,6 +14,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| d_130["D-130"]
     arc_ecosystem_001 -->|"relates-to"| d_135["D-135"]
     arc_ecosystem_001 -->|"relates-to"| d_136["D-136"]
+    arc_ecosystem_001 -->|"relates-to"| d_137["D-137"]
     arc_ecosystem_001 -->|"relates-to"| od_agent_001["OD-AGENT-001"]
     arc_ecosystem_001 -->|"relates-to"| od_capability_004["OD-CAPABILITY-004"]
     arc_ecosystem_001 -->|"relates-to"| od_contracts_001["OD-CONTRACTS-001"]
@@ -102,8 +103,13 @@ graph LR
     d_135 -->|"relates-to"| arc_ecosystem_001
     d_135 -->|"relates-to"| d_130
     d_135 -->|"relates-to"| d_136
+    d_135 -->|"relates-to"| d_137
     d_136 -->|"relates-to"| arc_ecosystem_001
     d_136 -->|"relates-to"| d_135
+    d_136 -->|"relates-to"| d_137
+    d_137 -->|"relates-to"| arc_ecosystem_001
+    d_137 -->|"relates-to"| d_135
+    d_137 -->|"relates-to"| d_136
     od_agent_001 -->|"relates-to"| arc_ecosystem_001
     od_agent_001 -->|"relates-to"| arc_harness_001
     od_agent_001 -->|"relates-to"| od_contracts_001
@@ -535,6 +541,7 @@ graph LR
     d_134
     d_135
     d_136
+    d_137
     od_agent_001
     od_analysis_001
     od_analysis_002

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:94853e80df0cb176c973f87975610f635f7c9dabdd5bb9dfa86c567763e3e91c",
-  "inputs_digest": "sha256:40f1dcf79e01541327710de70195d2c52222cfc41d9a02bcc430bd2714419143",
+  "content_digest": "sha256:ea04144bc2d8b1332fbf6a59dba7208cfb41783eb36fc5d1e90649f093cbf324",
+  "inputs_digest": "sha256:76b0e726982b794186cdf766b6f3c2bc4c9baee97dad85af71bad9d8f5a48f49",
   "sections": [
     [
       "Documents",
-      77
+      78
     ],
     [
       "Sections",
-      720
+      725
     ],
     [
       "Source blocks",
-      2820
+      2832
     ]
   ],
   "inputs": [
@@ -79,6 +79,11 @@
       "content": "documents",
       "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md@authored",
       "hash": "sha256:02cb6b1358273b389414b171c1b06ed6aa623ab54affaa823aad98e0c5bb1422"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md@authored",
+      "hash": "sha256:afa015c0b7cbf5be9095e859fa378842b580438bde4859776f8ff26f21172220"
     },
     {
       "content": "documents",
@@ -799,6 +804,31 @@
       "content": "headings",
       "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#10",
       "hash": "sha256:76b026d22e44d55bdb56264f3c050f04178253ddd5c14e2a6d3a226433674868"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#1",
+      "hash": "sha256:40507871df4fc2672a5122f7c714268579abccede5f98c4c8a666e5be2a9c0d6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#2",
+      "hash": "sha256:b6e65d8d820d3beac82f29c7675a76b765da4a9bb643b8e2d1043a9aa76147d9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#5",
+      "hash": "sha256:67d95916e0ab983be7b44058799598787e9290850af9f21561fb2e9e13e0a186"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#8",
+      "hash": "sha256:cbf7ee1d0d7f2f2ae25b09adf3deec0853867afc806a8dc389fb5a437612db23"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#10",
+      "hash": "sha256:76920f136ba2b7df066cb47f9e8c45d9a6d2118e2195121aab1f907b331e12f0"
     },
     {
       "content": "headings",
@@ -5494,6 +5524,66 @@
       "content": "blocks",
       "identity": "docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md#12",
       "hash": "sha256:6245a5321dd576135d36d1fa37bbe0bb816d39ae1bb5750370fd36b4aed9547f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#1",
+      "hash": "sha256:270c87668b3ec021b874522f73371dae33f71ab5f155586cd41f573ed30e6d8a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#2",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#3",
+      "hash": "sha256:85caac3a8f4b273cf6167e89da734af53c631b8ae8010709c7a8648d1e695db4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#4",
+      "hash": "sha256:f6f896b1a9d71be3518ce0c0904ec4875d2ae702d5d23e57b67faeb4c6a8f684"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#5",
+      "hash": "sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#6",
+      "hash": "sha256:2a9ca98b5e03064b8f335d0032202baf9c46844c89e518f524aab1cbe66eeedb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#7",
+      "hash": "sha256:f97ead60b4683c1565fc9cc26fd7b44a0753839104fec56485a393848f544b60"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#8",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#9",
+      "hash": "sha256:3756f7175e4decb405775c0a3aa2c8338579ac11010ef3198abca6056b7602df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#10",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#11",
+      "hash": "sha256:e43a0c17d2af2bbb223cab9d71776b0c74f59296c10f33235fcacb262b50eccd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#12",
+      "hash": "sha256:8892ec48b207d34f3d8ab6e482a7fa29bec6cbf86f7bda9dbe427de08b702705"
     },
     {
       "content": "blocks",

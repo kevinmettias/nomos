@@ -233,6 +233,19 @@ Named_Identity!
     OperationName
 }
 
+Named_Identity!
+{
+    /// Identity of one claim, rationale, or decision minted by an external knowledge
+    /// system, carried by Nomos as a citation.
+    ///
+    /// Deliberately a [`Named_Identity`] and not a [`Digest_Identity`]: Nomos does not
+    /// compute this value from bytes it holds, so wrapping it as one of Nomos's own
+    /// content digests would claim a verification Nomos cannot perform. The identity is
+    /// opaque here on purpose — this crate names the shape a citation takes, not what
+    /// the referenced thing means, which stays the citing system's business.
+    KnowledgeReferenceId
+}
+
 #[cfg(test)]
 mod tests
 {

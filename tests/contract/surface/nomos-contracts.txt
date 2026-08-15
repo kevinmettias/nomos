@@ -239,6 +239,7 @@ pub trait nomos_contracts::Strategy
 pub use identity::BuildVariantId
 pub use identity::CapabilityId
 pub use identity::ConfigurationId
+pub use identity::KnowledgeReferenceId
 pub use identity::OperationName
 pub use identity::PackageId
 pub use identity::ProviderId
