@@ -70,6 +70,7 @@ profile: domain-specification
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 37 | 9 | sha256:61d21890285c5239b6ea93d3039af6ecca654c2ba22822041ae17c272e5221a0 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 27 | 8 | sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -650,6 +651,15 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md#45 | authored | 2 | The Decision — Accepted |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md#52 | authored | 2 | What Holds It |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md#58 | authored | 2 | What This Is Not |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#1 | authored | 1 | An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#2 | authored | 2 | The Question |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#5 | authored | 2 | What The Corpus Says An IntegrationPackage Is |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#15 | authored | 2 | This Repository Is The Worked Example |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#20 | authored | 2 | What An IntegrationPackage Materializes |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#23 | authored | 2 | Ownership, Routed Through `ARC-ECOSYSTEM-001` |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#27 | authored | 2 | What An IntegrationPackage Is Not |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#31 | authored | 2 | What This Costs If Left As Read Today |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#33 | authored | 2 | What This Is Not |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -18849,6 +18859,372 @@ lost is recorded rather than assumed.
 readable manifests and nothing in this workspace reads one. When something does, it will pin
 these sixteen labels, and that is the item where a wrong one would first cost something — which
 is why this was the last moment it was free.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#1
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it · hash: sha256:46c65dbac0fd8499787c5134d3b5014f644fc08686f13f387beb4e4c5f1f7edc*
+
+# An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#2
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / The Question · hash: sha256:c1eb95eb9b10acfccba761c0ac45d67a2e90e20d9524ae0e000f09ec923c4403*
+
+## The Question
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#3
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / The Question · hash: sha256:557aee97a60fde65d2387201a761706f325487b01306e3a7234268d41fa49ae3*
+
+`PackageKind` in `crates/contracts/nomos-contracts/src/package.rs` declares
+`IntegrationPackage` as one of sixteen kinds, with the one-line doc comment "A connection to
+a peer system." Nothing else in this workspace says what one contains. `OD-PACKAGE-001`
+measured the same enum and found the deeper gap beneath that silence — no package manifest
+exists on disk, nothing installs or resolves one, and `PackageKind` has no consumer at all.
+That is `OD-PACKAGE-001`'s subject and it stays open there; this record does not reopen it,
+does not propose a reader, and changes nothing about when `PackageKind` gains a consumer.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#4
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / The Question · hash: sha256:d63834312eccf0abb6502f1aba7a87671142d200db40b5378033ecdd9b29dfa4*
+
+The question here is narrower and does not wait on a manifest reader to be answerable: when
+a repository adopts Nomos, what does an `IntegrationPackage` put into that repository? This
+repository is the case in hand, because it is itself a repository under Nomos's own
+engineering process, and every surface a peer needs to work here — an agent contract file,
+a per-agent adapter, procedural skills, a CI gate — already exists, hand-placed, without a
+package or an installer having produced any of them.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#5
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:0a20b43f7c6661237a010a319a066c8e7afacdae81347be29f0af3cc4ad96724*
+
+## What The Corpus Says An IntegrationPackage Is
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#6
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:8d2a565726c9a1a67d388dcd77aade62c392dbeed1e973a33cdc32640acc8c3a*
+
+Volume 02 of the v14 corpus, `03 August 2026` edition
+(`C:/Users/kmett/source/repos/kevinmettias/code-standards/docs/new docs/02_Core_Architecture_Identity_and_Configuration.md`,
+header line 7: `Domain-owned edition v14.20 • 7 August 2026`), line 159, introducing the
+subsystem-ownership table:
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#7
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:7fe3625be0ddc945300dd88183fb5c6c47cd1379acaf7d005b2db8b574c64875*
+
+> Recommended distribution taxonomy: KernelModule for foundational runtime contracts;
+> ServiceModule for independently hostable application services; FeatureModule for optional
+> product capabilities; ClientPackage for CLI/desktop/web/mobile/IDE surfaces;
+> **IntegrationPackage for peers and external systems**; SdkPackage for embedding/authoring;
+> provider package families for languages/tools/models/runtimes; and FeaturePack for
+> curated dependency manifests.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#8
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:d63ed4452a7a925e69eb1b70481b8916e1852f16f33c68898ce32f8146881753*
+
+That sentence has no numbered requirement artifact of its own — like the package-taxonomy
+sentence `OD-PACKAGE-002` weighed, it is volume prose rather than a `canonical-normative-record`
+requirement — but it draws the boundary this record needs cleanly: `ClientPackage` is a
+Nomos-facing surface (a CLI, a desktop app, an IDE panel), `IntegrationPackage` is the
+*peer's* side of a connection, and the provider families (`ToolProvider`, `RepositoryProvider`,
+`RuntimeProvider`, `ModelBackendPackage`) are the capability implementations standing behind
+one, distinct from the connection itself.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#9
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:563ebf0e63e163d99c55fc1f8180c1f714584a0733bd05aea2773d7b444cdd61*
+
+Volume 07, same edition
+(`C:/Users/kmett/source/repos/kevinmettias/code-standards/docs/new docs/07_Clients_Interfaces_Deployment_and_Administration_cross_system_protocol_addressed.md`),
+line 463, gives the one worked example the corpus itself provides, describing the
+KnowledgeWorkbench composition operations:
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#10
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:9839826e23370a1d744975e712a2eec73b53c0d4de68cf5e259e1500491da670*
+
+> These operations retrieve or publish through the optional KWB IntegrationPackage. They are
+> not a document-authoring API for Nomos. KWB owns narrative/design publishing; Nomos exposes
+> only policy import/export, source references, context retrieval, and evidence handoff
+> required by Nomos workflows.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#11
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:8779795e5158044324d6b058547f5a1757e7b9da64d9fc9482beda19d2a96b68*
+
+Narrative tier again, but load-bearing: the corpus's own instance of an `IntegrationPackage`
+is the seam to KWB, and it is explicit that the package carries the *handoff* — import/export,
+references, retrieval, evidence — and not KWB's own content. That is the same shape this
+record finds by reading the repository directly, for a different peer.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#12
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:548baaef07a92f4c1b6caea7bb4c4e3f9b03c02c1b64bdf8457652e56345ba78*
+
+`ARCH-006`, quoted in full from
+`C:/Users/kmett/source/repos/kevinmettias/code-standards/docs/nomos-spec-internal-artifacts/01_authoring/artifacts/requirements/ARCH-006.md`
+(`status: normative`, `authority: canonical-normative-record`, `maturity: accepted`), restated
+verbatim at line 41 of volume 03:
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#13
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:87508f42e210975795a601c76e0ed4ebcc3bb210d2e12544bb165f6504338ea2*
+
+> ARCH-006 Generated docs, support matrices, task-context fragments, skill fragments, and MCP
+> metadata are projections of canonical packages, not separate policy sources.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#14
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What The Corpus Says An IntegrationPackage Is · hash: sha256:c88cce4ecdfd7885e46da49630ab4c4d29beda9458498b42038acb6ae6c3dce7*
+
+This is the one normative sentence that names the concrete surfaces the item asks about —
+skill fragments and MCP metadata among them — and it settles their authorship question before
+this record has to invent one: they are *projections*, generated from canonical package
+content, not content an installing mechanism authors on its own. `ARCH-005`, same file and
+tier, restated at line 39 — "IDE clients remain thin. Analysis and product logic live in the
+daemon/application services, not in Lua, TypeScript, Kotlin, or C# plugin code" — states the
+same discipline one surface over: the peer-side artifact stays thin, and the substance stays
+where it was authored. A narrative-tier companion, line 43 of the same volume (`ARCH-006A`,
+which has no requirement artifact of its own under `01_authoring/` and is therefore volume
+prose rather than a numbered requirement, the same tier `OD-PACKAGE-002` found the taxonomy
+sentence to be), makes the same point about ownership rather than mechanism: "Human-authored
+product, feature, architecture, rationale, alternative, research, and historical design
+documents are KnowledgeWorkbench publishing artifacts or external repository documents and
+shall not be promoted into Nomos package truth."
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#15
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / This Repository Is The Worked Example · hash: sha256:9f8ac0c44b8f8cc7bf89a07d3a1b7a3dffe2a43475673529fe5fc3a9f0f7d745*
+
+## This Repository Is The Worked Example
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#16
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / This Repository Is The Worked Example · hash: sha256:aeaf16b1c52488eba4fa830c06281611e6ea5593bce93c1e5526b1149371d20f*
+
+Measured at HEAD, before this item's own change:
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#17
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / This Repository Is The Worked Example · hash: sha256:aade6f2ed6235f71c2134dee6db1a4ca313f0f54ef2b875f932b8867170b682c*
+
+| Surface | Present here | Where |
+|---|---|---|
+| Agent contract file | Yes | `AGENTS.md` |
+| Per-agent adapter | Yes, one, for Claude Code | `CLAUDE.md` |
+| Procedural skills | Yes, two | `.claude/skills/nomos-task/`, `.claude/skills/nomos-spec-change/` |
+| CI gate projection | Yes | `.github/workflows/gate.yml` |
+| Subagent definitions | No | — |
+| Hooks | No (`.claude/settings.local.json` carries only `permissions`, and is itself personal and untracked per `CLAUDE.md`) | — |
+| MCP server registration | No | — |
+| Connector configuration | No dedicated surface; the closest analogue is `--corpus` / `NOMOS_V14_CORPUS`, which configures *this repository's own development* rather than a consuming repository's peer connections | `README.md:182` |
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#18
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / This Repository Is The Worked Example · hash: sha256:c9fd5dc26ebe968703999bae16d4d3d371e26b5aa4259b2b9db39adec06248a6*
+
+The absence of the last three is itself evidence, not a gap in the reading. Nothing installed
+them and nothing is missing them: they are optional surfaces this particular adoption does not
+need, which is exactly what "optional" has to mean for a materialization list to be honest
+about a real repository rather than an idealized one.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#19
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / This Repository Is The Worked Example · hash: sha256:a2b97fab5e57136e943a6b2aa1eb077fafadb8931f105ad934779e5a1f406ed7*
+
+Every surface that *is* present was placed by a person, once, and is maintained by hand. None
+of the four carries a rendered-projection sidecar the way `spec/domain-specification.md` and
+`diagrams/relations.mmd` do — there is no `AGENTS.md.nomos-projection.json`. That is consistent
+with `OD-PACKAGE-001`: the same absence of an installer or a reader that record found for the
+manifest is true here for every one of these files. `ARCH-006` says what they are supposed to
+be — projections of canonical package content — and this repository is not yet built to that
+target; it hand-authors what a mature `IntegrationPackage`, rendered through a `ProjectionPackage`,
+would generate. That gap is named because it bears on the boundary below, not because closing
+it is this record's job.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#20
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Materializes · hash: sha256:15bf45b7c64f1bf00b0a2b5e0c0958fca846d615b28eade2222b4d120fe51ea9*
+
+## What An IntegrationPackage Materializes
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#21
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Materializes · hash: sha256:1258ec557fbed5e174a4658499310019c3762d241ed9fb74c81ba4727881bbfc*
+
+| Surface | Placed / merged / declared-only | Owner |
+|---|---|---|
+| Agent contract file (`AGENTS.md`-shaped) | Placed — one file, Nomos-authored content, generic across peers | Nomos. Software-engineering process and how to act on it safely is exactly `ARC-ECOSYSTEM-001`'s "software-specific reality and the engineering of change." |
+| Per-agent adapter (`CLAUDE.md`-shaped) | Placed — one file per peer harness present, thin, routing to the agent contract file rather than restating it | Nomos authors the content; `OD-AGENT-001` is why it stays thin. Which adapters exist is dictated by which peer harnesses are installed, which is the `IntegrationPackage`'s own subject. |
+| Procedural skills / task-context / skill fragments | Placed — whole files, at the peer's own directory convention (`.claude/skills/` for Claude Code) | Nomos authors the procedure; `ARCH-006` names skill fragments and task-context fragments as canonical-package projections, so the mature form is a `ProjectionPackage` output that the `IntegrationPackage` places at the peer's path. Hand-authored today for the reason above. |
+| Subagent definitions | Declared-only unless the peer harness's own extension model calls for one; then placed the same way as a skill | Same routing as skills. |
+| Hooks | Declared-only unless the peer harness's own hook mechanism is present; then merged into that mechanism's own configuration file, carrying only the trigger a Nomos policy names (for example, "run the gate before the harness stops") | The trigger's *content* is Nomos policy; the hook *mechanism* — the engine that fires it — belongs to the peer harness product itself, which is outside all four of `ARC-ECOSYSTEM-001`'s owners. An `IntegrationPackage` places into somebody else's format; it does not become that format's owner. |
+| MCP server registration | Declared-only unless an MCP host is present; then placed as the peer-side pointer at a Nomos-hosted gateway | The gateway is Nomos's own — volume 02's ownership table names an `API/CLI/MCP/LSP Gateway` subsystem that exposes "the same application services through versioned structured interfaces." `ARCH-006` names MCP metadata as a projection of canonical packages. The `IntegrationPackage` places the registration; it does not implement the gateway and does not carry the protocol, which belongs to neither Nomos, XVPE, nor KWB — MCP is a peer transport this ecosystem adopts, not one it owns. |
+| CI projections (`gate.yml`-shaped) | Placed at the peer CI system's conventional path, wired to run; the artifact's *content* comes from `nomos spec render` profiles, which is `ProjectionPackage`'s mechanism, not the `IntegrationPackage`'s | `ProjectionPackage` renders; `IntegrationPackage` places the rendered result where the peer CI product expects it and triggers it in that product's own idiom. Neither product is the CI system, which sits outside the four the same way an MCP host or a hook engine does. |
+| Connector configuration | Declared-only — names which already-existing `RepositoryProvider`, `ToolProvider`, `RuntimeProvider` or `ModelBackendPackage` instances back a given peer connection | The providers implement the capability and are already separate kinds in the taxonomy at line 159 of volume 02 (`"provider package families for languages/tools/models/runtimes"`, distinct from `IntegrationPackage` in the same sentence). The `IntegrationPackage` only wires a peer to a provider it does not itself define. |
+| Rules / providers (optional) | Declared-only — may name a `RulePackage` or provider a given peer integration depends on | Content ownership stays with `RulePackage` / the relevant provider kind; naming a dependency is not carrying it. |
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#22
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Materializes · hash: sha256:5fdd6100bf3bdf5f5827326a3b635e96eff92764908eb06335d2ae51324f98d7*
+
+The pattern across every row: an `IntegrationPackage` **places or wires**, and where content is
+involved, the content was authored or rendered by something else — Nomos's own engineering
+process, a `ProjectionPackage`'s render, or a `RulePackage`'s contract. Nothing in this table
+has the `IntegrationPackage` originate policy, a rule, a rendering mechanism, or a peer's own
+execution semantics. Where none of that applies and the surface is genuinely absent from the
+target repository, the correct answer is declared-only: the package records that the surface
+exists and what it would carry, without placing a file that has no reader.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#23
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:282432c4d87f66b8ed7f7f81fac146082f46eb22ce19e8a74cb0b35db87e11bc*
+
+## Ownership, Routed Through `ARC-ECOSYSTEM-001`
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#24
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:b2e350ac9970429a0ea4d3a83a042784d0f9daccd2236896cde74bdded26bd77*
+
+`ARC-ECOSYSTEM-001` decides ownership by semantics, not by which repository a file sits in,
+and gives two governed crossings that this table is an instance of rather than a departure
+from:
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#25
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:9f5e700289f1c1ab88b28da7a7f369e85bb2c627ea96c0e3c0e36fd2ed974330*
+
+- **KWB semantic intent → governed projection → Nomos executable contract.** The KWB
+  `IntegrationPackage` volume 07 names is exactly this crossing materialized: KWB owns the
+  rationale and narrative on its side, and what an `IntegrationPackage` carries across is
+  "policy import/export, source references, context retrieval, and evidence handoff" — the
+  governed projection, never the rationale itself. That the corpus's own worked example lines
+  up with `ARC-ECOSYSTEM-001`'s diagram independently, rather than by this record's
+  construction, is evidence for the crossing rather than an application of it.
+- **XVPE generic execution primitive ← adapted by ← Nomos-specific service.** A hook engine,
+  an MCP host, and a CI runner are generic execution primitives of whatever product hosts
+  them — most of the time, a peer entirely outside this ecosystem's four owners, such as a
+  particular agent harness or a CI vendor. Where such a primitive is itself XVPE's (a task
+  scheduler, a process substrate), the same rule applies: `IntegrationPackage` never teaches
+  the generic primitive what a crate, a rule, a gate, or a finding is. It adapts to the
+  primitive's own shape and carries Nomos-specific content across that adapter, exactly as
+  `D-130`'s single named adapter already does for linking.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#26
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:624525723e8fcd3af6b0f06bf8a60799d0a030cebf237deadf7c17cdeafc21b2*
+
+The agent contract file and per-agent adapter fall under Nomos's ownership row directly —
+"what does the software actually do" and "does an implementation satisfy an executable rule"
+are Nomos's questions, and the harness-facing files exist to let an agent act on Nomos's own
+authorities correctly, which is `AGENTS.md`'s and `CLAUDE.md`'s entire content today. Nothing
+in this record moves either file or claims a different owner for them; it names the owner
+they already have.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#27
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:af97c8ad946aeeff0e3a75b0a61748f72e0e16ad4cb77c24c4d8ce176330a89c*
+
+## What An IntegrationPackage Is Not
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#28
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:8ebe9618f556d225e1e1a2c0f15f8d537f6d8adc959c08c39d724d515de9c389*
+
+**Not a `LanguagePackage`.** A `LanguagePackage` recognizes and canonically maps one language
+ecosystem — `ARCH-001`, quoted in `OD-PACKAGE-001`, lists identity, recognition, canonical
+mappings, provider registrations. None of that is about a peer harness, a CI system, or an
+MCP host; a repository needs a `LanguagePackage` for the languages it is written in and an
+`IntegrationPackage` for the peers that work on it, independently and without either
+subsuming the other. A Rust repository worked by two different agent harnesses needs one
+`LanguagePackage` and two `IntegrationPackage`s.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#29
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:8be838302a29fa20fe0ab1016fc111e6b9b1f4f94bcad1f2847ee60b7439c309*
+
+**Not a `RulePackage`.** `ARCH-002` gives a `RulePackage` a normative contract, judgments,
+corrections, fixtures, an evaluation corpus. An `IntegrationPackage` carries none of that: the
+"declared-only" rows above name a dependency on a `RulePackage` at most, and never a judgment.
+An `IntegrationPackage` that started carrying its own correction logic or its own normative
+statements would be exactly the undifferentiated bucket `PackageKind`'s own doc comment warns
+against — a `Plugin` in substance, wearing a more specific label.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#30
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:c13bf4c10c535e63435de7282152218cdcec14ce48e4f5b7b620af332a6d9cd9*
+
+**Not a `ProjectionPackage`.** This is the boundary the corpus states most directly, in
+`ARCH-006`: generated docs, support matrices, task-context fragments, skill fragments, and MCP
+metadata are projections of canonical packages, and an `IntegrationPackage` is where several of
+those land, not where they are produced. A `ProjectionPackage` answers "what does this
+canonical record become"; an `IntegrationPackage` answers "which peer receives it, in what
+shape, at what path." Collapsing the two would mean every peer connection re-derives its own
+rendering logic instead of sharing one, which is the many-installers outcome the item's own
+`why` names as the cost of leaving this undecided.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#31
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Costs If Left As Read Today · hash: sha256:527c7cf177701085ea18c0c957f24ff7fc3834514a8c5475cd5e18c0b7cba766*
+
+## What This Costs If Left As Read Today
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#32
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Costs If Left As Read Today · hash: sha256:2c6ddd5be6e192653fe55a439de266e341da65da61a32e0728d0268b97dfbcd2*
+
+Nothing changes at HEAD. `AGENTS.md`, `CLAUDE.md`, `.claude/skills/`, and `.github/workflows/gate.yml`
+stay exactly what they are: hand-placed files with no installer, no manifest, and no
+`IntegrationPackage` behind them, the same condition `OD-PACKAGE-001` found for the whole
+package seam. What changes is that a later reader — or a later item building the first
+`IntegrationPackage` manifest — has a place-or-decline table to build against instead of
+inventing surfaces one at a time, and an ownership routing that does not have to be re-argued
+per surface.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#33
+
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:8c096e9ff713a2d91679182618fcba53119b00032e6e47e091a14b7e89a7235f*
+
+## What This Is Not
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#34
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:ec6c6f59419f12d25b9c8bbd032f24682d109670b6133b996ee71039e1429c61*
+
+**Not a settlement of `OD-PACKAGE-001`'s question.** No manifest reader exists after this
+record, `PackageKind` gains no consumer, and `PackageId` is still constructed nowhere. This
+record answers what an `IntegrationPackage` would contain if one existed; it does not make one
+exist, and it does not touch the four-step path `OD-PACKAGE-001` laid out for the seam's first
+consumer.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#35
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:b9e66e22b0f6e45fe9045f17580945a2247a5836f9ddf29df6a581b95d9e24e1*
+
+**Not a rename or a repair of `AGENTS.md`, `CLAUDE.md`, or any file this repository already
+carries.** Nothing under those paths changes. This record documents their existing ownership
+and shape; it does not edit them.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#36
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:f96bafc034752eb7d69d55c4a5e8d177ba2fe54d825feef236ceca313ff3e63d*
+
+**Not a decision about hooks, MCP hosts, or CI vendors this repository does not use.** Their
+rows above are declared-only because the surfaces are declared-only here; adopting one is a
+separate, later measurement against whichever peer is actually present, not a conclusion this
+record reaches in advance of it.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#37
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:7d621b7291dc221d3a92a1bf0628da3f39096393d77c788e6ee64fcf649cc2ac*
+
+**Not a claim that XVPE, KWB, or repository tooling must implement anything.** `ARC-ECOSYSTEM-001`
+is routed to rather than re-decided, and nothing here schedules a crossing, a crate move, or a
+new dependency. The routing states which product's semantics a future surface would answer to
+if built, not that it will be built.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

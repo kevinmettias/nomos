@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:06263b232983921cc3ba9ccdd1f5614ff1cadc454a50d77e141f42eeded3761e",
-  "inputs_digest": "sha256:ddf8cee137224bbef70a161e2b2bcd718b023152679032a30f302bb7a8eadeb1",
+  "content_digest": "sha256:fba59e9271a77d4e22e1e09390bb10a11fc80afac6ecbdf49f25e28479fcff57",
+  "inputs_digest": "sha256:ce69dde72985c0f4825c927f06e379ca96f67d367aad709ee24ed71ec1ad98e0",
   "sections": [
     [
       "Relations",
-      560
+      566
     ],
     [
       "Decisions",
-      77
+      78
     ]
   ],
   "inputs": [
@@ -285,6 +285,11 @@
       "content": "relations",
       "identity": "ARC-SPECDB-002 relates-to ARC-SPECDB-001",
       "hash": "sha256:002cfb69f6a04e3ad133065711e8b8a68ca0b9d5bc619dcd7ac3699c58b565ef"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-SPECDB-002 relates-to OD-MODEL-002",
+      "hash": "sha256:7e14b546115288d979528f7021d9acc1b1d23a6fd90d9a9a92fad5ee9f1d7ef2"
     },
     {
       "content": "relations",
@@ -620,6 +625,11 @@
       "content": "relations",
       "identity": "D-137 relates-to D-136",
       "hash": "sha256:6e1b49e57fb5ea06ff8c891a955f08ecdd6707f43fb1409d4f276450fbc8e429"
+    },
+    {
+      "content": "relations",
+      "identity": "D-137 relates-to OD-MODEL-002",
+      "hash": "sha256:353e78fa05a06e12052e42f31634b3aadae505a45089dce2740fa17c7ca21d63"
     },
     {
       "content": "relations",
@@ -2073,6 +2083,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-MODEL-001 relates-to OD-MODEL-002",
+      "hash": "sha256:141142156fdebd425b932c3fe5e5aa483fa43dc7738ea23d99dde5caa2ce93f5"
+    },
+    {
+      "content": "relations",
       "identity": "OD-MODEL-001 relates-to OD-RULES-001",
       "hash": "sha256:88d4ef77637f40636892a2cbdfe7735e0819a7f0fcd3e3d73c9208b8e810baa7"
     },
@@ -2080,6 +2095,21 @@
       "content": "relations",
       "identity": "OD-MODEL-001 relates-to OD-SPEC-006",
       "hash": "sha256:903149acf59906855536ed34fc0a62f60364206355c490f04d2e35d31730a9fc"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-MODEL-002 relates-to ARC-SPECDB-002",
+      "hash": "sha256:e8aa1657b18f60dc7e163120f3e296a2a29ab78bdf6f6fbfa09776de15c045a6"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-MODEL-002 relates-to D-137",
+      "hash": "sha256:9b4823ec4d06f400ef40e68e5612c8235e419002b2806b7915b54761d8b7762b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-MODEL-002 relates-to OD-MODEL-001",
+      "hash": "sha256:bfe896caa261dcb8a26d74c236bf979998f4feb1a7993da15298f579e6ecf305"
     },
     {
       "content": "relations",
@@ -3070,6 +3100,11 @@
       "content": "nodes",
       "identity": "OD-MODEL-001",
       "hash": "sha256:9a5adf486f60df04116625761ec35f94af0871c8bf6054993af27050dbcfca64"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-MODEL-002",
+      "hash": "sha256:1364f13c44b603a3bd986882be66f0a201fecc860e46f523feee0daf8214c33f"
     },
     {
       "content": "nodes",
