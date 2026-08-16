@@ -34,7 +34,6 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -72,6 +71,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 37 | 9 | sha256:61d21890285c5239b6ea93d3039af6ecca654c2ba22822041ae17c272e5221a0 |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 26 | 9 | sha256:fee950b9db060e8766b37c6077f80933864691179bb39060352ff4526d95a6ed |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 27 | 8 | sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -283,16 +283,6 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#44 | authored | 2 | Coordination — One Method, Not Two |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#50 | authored | 2 | What This Does Not Do |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53 | authored | 2 | Status |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1 | authored | 1 | An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2 | authored | 2 | Question |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5 | authored | 2 | Decision |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9 | authored | 2 | Scope |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11 | authored | 2 | What This Binds |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14 | authored | 2 | What This Does Not Bind |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18 | authored | 2 | Controls |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20 | authored | 2 | Conflicts With Existing Decisions |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25 | authored | 2 | Status |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1 | authored | 1 | Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2 | authored | 2 | Question |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5 | authored | 2 | What Was Measured |
@@ -671,6 +661,15 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#27 | authored | 2 | What An IntegrationPackage Is Not |
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#31 | authored | 2 | What This Costs If Left As Read Today |
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#33 | authored | 2 | What This Is Not |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#1 | authored | 1 | An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#8 | authored | 2 | The Three Classes |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#10 | authored | 2 | Where The Classification Lives |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#15 | authored | 2 | The Four Assets This Repository Already Carries |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#17 | authored | 2 | What This Costs If Left As Read Today |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#19 | authored | 2 | What This Is Not |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#23 | authored | 2 | Controls |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -6504,261 +6503,6 @@ Stated plainly, because `OD-GATE-001` is about checks that imply more than they 
 Accepted, closed by `P10-MIRROR-DISAGREEMENT`. Sixteen declared universes; four mirrored, each
 claiming its mirror at its own site; twelve declared holes with the number checked; and the
 two guards that disagreed now hold a per-universe equality that names what moved.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check · hash: sha256:5027fb23a076a3b9681f4580cc79baae3369c8d116db706a83fdcf918d0abb91*
-
-# An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
-
-## Question
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#3
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:9fe50512bc6e310f1a8631a15c920f2f72ae34b2f14eb8e5b89d89ffa73304c6*
-
-`ARC-CONNECTOR-001`'s fourth invariant already says a write capability is omitted from a
-connector's interface rather than present and permission-checked, and says why: a
-deny-checked write method is still a write method, reachable by whoever next changes the
-check. What it does not spell out is the structural mechanism that makes omission possible
-at all, where that mechanism reaches its own limit, or whether the rule is a fact about
-connectors specifically or a shape this workspace already applies elsewhere and simply had
-not named for this seam.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#4
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:786fa4af0f625d9cd26491626aaebfdfea00b1e0092ff9931b4df7382b27d294*
-
-The risk is concrete. A vendor SDK hands a connector one client object with read and write
-methods sitting side by side — `issue.comment()` next to `issue.get()` on the same value.
-The shortest correct-looking way to reflect a Nomos verdict back to a tracker is to call the
-write method that is already sitting there in the imported type. Nothing about "omit the
-write method" tells an implementer what to write instead, or what happens when the object
-that carries both methods is not one this workspace defined and cannot edit.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
-
-## Decision
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#6
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:aee603773546e0afdfc9276871b9bf97373952f41d9964f18b5e4f1b97e9e5de*
-
-**An outward mutation is a command handed to one canonical service, and a connector never
-performs it directly.** This is `OD-SPEC-009`'s shape applied to the opposite direction of
-the same seam. `OD-SPEC-009` decided that a submission enters the store through exactly one
-accept function and that a form, a CLI verb, an HTTP endpoint or an MCP tool is a transport
-onto that door, never a second door of its own — and it did so for the same reason
-`nomos-store` already carries one write door per authority (`README.md`, row 12): the number
-of doors is a property of the authority being written to, not of how many callers want to
-reach it. An outward write onto an external system of record is the same shape mirrored
-outward: the canonical service is the one place that constructs the vendor request,
-evaluates whether the mutation is sound to send, and executes it; a connector's translation
-layer constructs the *content* of a command — the comment text, the target issue, the new
-status — and hands it to that service, exactly as a CLI verb constructs a submission and
-hands it to `OD-SPEC-009`'s accept function. A connector that calls a vendor's write method
-on its own behalf is a second door, in the same sense a transport that persists on its own
-behalf is a second door under `OD-SPEC-009` — a defect, not a variant, and this record cites
-that decision as the one it is applying rather than restating it.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#7
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:896da8e30d1a173c30dae56d16858ae4353f1e291005204a8692db494cc1e631*
-
-**The structural rule holds in the strong form: a component receives an interface carrying
-only the operations it may perform.** A capability a component may not exercise is not
-present on the type it is given, so calling it is not a runtime refusal but a compile
-error — there is no method to name. Runtime authorization — a permission check, a role
-gate, a scope token evaluated when a call is attempted — is an additional layer on top of
-this, never the mechanism itself, for the reason `ARC-CONNECTOR-001` already gives for its
-own fourth invariant: a check can be weakened, bypassed, or forgotten by whoever next
-touches it, and a method that exists to be checked is a method that exists. This is not a
-principle invented for connectors. `crates/substrate/nomos-analysis/src/fact/reader.rs`
-already ships it: `FactReader` gives a caller `Get`, `Require`, `Require_Any` and
-`Dependencies` — every way to ask the store a question — and no method that writes a fact
-back. A caller holding a `FactReader` cannot mutate a materialized fact through it, not
-because an attempt is checked and refused, but because the type it was handed has nothing
-on it that would perform one. `OD-CONNECTOR-001` names what `FactReader` was already doing
-and requires it of a connector's interface too: the observation interface
-`ARC-CONNECTOR-001`'s invariant 4 requires is a `FactReader`-shaped trait, not a full
-vendor client with a policy wrapped around it.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#8
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:e69ad3d8c10861694ff7b8b4d2407e695e8a96bb9f8b3a27334e610cbda8ef91*
-
-**Structural absence is achievable wherever this workspace defines the type the caller
-holds, and it is not achievable on a type this workspace does not define.** A vendor SDK's
-client object is the case that breaks the mechanism: its write methods exist before any
-Nomos code runs, sitting on the same object as its read methods, and no trait this
-workspace writes can delete a method from a type it does not own. Where the capability
-arrives already bundled on a foreign type, the mechanism is not omission but containment,
-and it is a weaker guarantee: `ARC-CONNECTOR-001`'s second invariant already requires that
-no vendor schema, field name or authentication scheme cross above the translation layer,
-and this record extends that same containment to the vendor client object itself — the raw,
-write-capable SDK type may not be named, returned, stored or passed above the translation
-layer under any circumstance, so that nothing outside it ever holds a value with a write
-method reachable through it. What a caller above the seam holds instead is the
-`FactReader`-shaped observation interface this workspace defines over that translation
-layer, which is where omission becomes possible again because the type is now this
-workspace's own. The difference is not stylistic: a Rust method omitted from a trait this
-workspace owns cannot be called from outside that trait under any edition of the language,
-by construction; a vendor type kept out of every signature above one module is confinement
-that a single import statement inside that module's own boundary can still violate, and
-which nothing but review, a lint, or a future architectural test catches. Confinement is
-what stands in where omission cannot reach, and it is strictly weaker than omission — which
-is exactly why the translation layer, and not the connector interface above it, is where
-`ARC-CONNECTOR-001` already places the only code permitted to hold the vendor object at
-all.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Scope · hash: sha256:06f13eceae24bd0eb87002e30400999346da1ac5f0f9e44ba02101ab01d1f6a3*
-
-## Scope
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#10
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Scope · hash: sha256:7575f732e9e88eba48e6f79c6a8522711f122df7cfdcca936e15248aac6685b1*
-
-This record's scope is connectors. It does not decide whether an executor invoking a
-subprocess, a plugin loaded into this workspace, an agent given tool access, or a transport
-under `OD-SPEC-009` carries the same write-omission requirement, and it deliberately declines
-to extend the rule to any of them here. Each is a different boundary with its own shape — a
-subprocess is not a vendor SDK object with methods bundled by a client library, a plugin's
-ABI is not a translation layer between a foreign schema and a canonical one, an MCP transport
-already answers to `OD-SPEC-009` on the inbound side and has not been asked an outbound
-question — and deciding all four by extension from the connector case would repeat the
-mistake `ARC-CONNECTOR-001` already named and refused to make for connector addressing:
-settling a scheme for a case that is not in front of anyone yet. Whichever of those boundaries
-is built first is where that boundary's own record decides whether this rule reaches it,
-citing this one as the precedent it is applying, the same way this record cites
-`ARC-CONNECTOR-001`'s fourth invariant rather than restating it.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044*
-
-## What This Binds
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#12
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:7f88858ac67e433364987bd5feb186f68b72bf9a386b7e477b567697e4b76846*
-
-Every connector's observation interface — the generic connector substrate and the
-vendor-to-canonical translation layer together, as `ARC-CONNECTOR-001` scopes them — carries
-only the operations a caller above the seam may perform. An outward mutation is never one of
-them; it is a command constructed by the translation layer and handed to the one canonical
-service that performs it, in the same relationship a transport under `OD-SPEC-009` has to
-the accept function.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#13
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:cc13b20dae638d18d85ff8b590e9b3a1942f00fde08b9c03efcebe3ee75f3d6e*
-
-The vendor's own client object, and any type carrying its write methods, may not be named,
-returned or held by anything above the translation layer that defines it.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:ebcd7ad21b8eb9821a30da3137d2f116568873f3d4d718ec0d464b1a86062e08*
-
-## What This Does Not Bind
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#15
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:41af6ebd7159b01bb5b60f43785fbc2228fe0562b9b97215092ecd13e29a3e17*
-
-It does not name the canonical service, define its interface, or say which crate holds it.
-That is implementation the first connector's translation layer is checked against, the same
-way `ARC-CONNECTOR-001` left the quarantine crate's name to whoever adopts one.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#16
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:b323a8be3edcbc42c53952567abe34e874e6924e68b3ae7bc63e5f4dd9b09407*
-
-It does not decide whether an executor, a plugin, an agent or a transport carries the same
-rule. See Scope, above.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#17
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:e92a49e420ae1a232a781ba50246bff2e014df6cbe5b17e7650e8b3cef849aa8*
-
-It does not touch `ARC-CONNECTOR-001`'s first three invariants, or reopen the crossings
-`ARC-ECOSYSTEM-001` governs. Both are unchanged.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
-
-## Controls
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#19
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Controls · hash: sha256:1f7327279bb3d6f76f909d49e55321194f16498bba6a7518795e2064a0e16014*
-
-| Weakening | What it produces |
-|---|---|
-| the connector calls the vendor's write method directly, behind a permission check | a write method that exists to be checked, reachable by whoever next weakens the check — exactly what `ARC-CONNECTOR-001`'s fourth invariant already refuses |
-| the connector's interface exposes the raw vendor client above the translation layer | confinement is skipped, and the write method the interface omitted is reachable anyway through the object that carries it |
-| the canonical service is treated as a convenience the connector may bypass for "simple" mutations | the second door `OD-SPEC-009` already named the failure mode for, mirrored outward |
-| the write-omission rule is assumed to already cover executors, plugins, agents or transports | a boundary with its own shape is governed by an analogy instead of by its own record |
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
-
-## Conflicts With Existing Decisions
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#21
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:55fa19c73026136603b3fdf68bd79d486bc0409947c8618caad5e0a1af6da463*
-
-`ARC-CONNECTOR-001` is untouched. Its fourth invariant is applied in its strong form and
-grounded in a mechanism and a precedent it did not name; the invariant itself is not
-reopened or reinterpreted.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#22
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:8fe74cd9b0c9d0ef28db15095bb583b5b148a7ba3515fb79fe283ed25ce8720a*
-
-`OD-SPEC-009` is untouched. Its one-door-many-transports shape is applied to the outward
-direction of the same third crossing `ARC-CONNECTOR-001` names; the intake seam it governs
-is unchanged.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
-
-## What This Record Does Not Do
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#24
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Record Does Not Do · hash: sha256:4b7c661d6c475b581e0c3b10dcf57558e12c51ec8b05f536a3449505047efc5d*
-
-No canonical service is built, and no connector interface is defined. No executor, plugin,
-agent or transport question is answered. This record does not claim the write-omission rule
-is enforced mechanically anywhere yet — only that it is now a rule a connector's interface
-and its translation layer are checked against, with a named mechanism, a named limit, and a
-named precedent, rather than a discouragement without a structural reason.
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25
-
-*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
-
-## Status
-
-### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26
-
-*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
-
-Accepted.
 
 ### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1
 
@@ -19491,6 +19235,243 @@ record reaches in advance of it.
 is routed to rather than re-decided, and nothing here schedules a crossing, a crate move, or a
 new dependency. The routing states which product's semantics a future surface would answer to
 if built, not that it will be built.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#1
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned · hash: sha256:9e241c2b54a18aee8e9f2cacce25d436aed2c06c62b3dcafc815bc3dc23cd25e*
+
+# An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#2
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#3
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Question · hash: sha256:4017b410ddb48f6ae2eeb963a14259f496f98e0522566e747fb66bef386f51a4*
+
+This repository already generates files into itself and already has three different
+relationships to the results, and nothing names the difference between them.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#4
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Question · hash: sha256:89e61d5c2a486d02ef46e3f39dc8e7d29c94ccd01ce0a9b6bb80172874c5ac62*
+
+`diagrams/relations.mmd` and `spec/domain-specification.md` are rendered from the record set
+and belong to the renderer outright. `AGENTS.md` states the obligation directly: "Changing a
+governing record leaves every committed projection stale, and the gate fails on them
+[...] a commit touching `docs/records/` changes both whether or not it meant to." `OD-GATE-005`
+settles who may write them — nobody's territory, rendered from a tree constructed to hold
+exactly the record set the commit publishes — and `OD-PROJECT-002` is why these two and not a
+third: `diagram-set` and `domain-specification` are the required set, each for a reason argued
+and priced there.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#5
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Question · hash: sha256:fc226d52e6f2466614fc75e964068b1b47edc463feeed557ead117ba06e7b087*
+
+`README.md` looks the same at a glance and is not. `OD-PROJECT-001` found it hand-authored
+where `D-128` expected a projection, and the discovery was drift: eleven crates listed against
+twenty-two in the workspace, and a paragraph claiming no analysis engine existed while five of
+its crates were already members. The repair did not turn `README.md` into a projection —
+`D-128`'s actual documents were renamed to `README.projection.md` and `spec/architecture.md`,
+both `GeneratedOwned` in this record's terms — it left `README.md` as a single file carrying
+two different kinds of content at once: a band/crate table now checked by
+`tests/contract/tests/boundaries.rs` in both directions, and prose that carries no check at
+all.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#6
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Question · hash: sha256:445b62c49325c1db9912361fc64f3a1402faaad5df36965a236b0fef700cbcc8*
+
+`.claude/settings.local.json` is the third kind, and it is protected rather than generated.
+`CLAUDE.md` states it plainly: "The file .claude/settings.local.json is personal and stays out
+of git." Nothing in this workspace writes it, and `OD-PACKAGE-003`, measuring the same
+directory, records that it "carries only `permissions`, and is itself personal and untracked
+per `CLAUDE.md`."
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#7
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Question · hash: sha256:373e7f9fe6181ee6f85f43b24b0385b54b6c25e05aef25cd0a8d1dc9435516c4*
+
+Three relationships, one convention distinguishing them today — which prose file a reader
+happened to open — and that stops being survivable the moment a package materializes files it
+did not write into a repository it has never seen, which is exactly the shape
+`OD-PACKAGE-003` names for a future `IntegrationPackage` and a future `ProjectionPackage`. The
+failure is asymmetric: refusing to regenerate a file that only the renderer owns costs a stale
+projection, and the gate already catches that. Regenerating a file that is not the renderer's
+costs the user's own work, with no diff to recover it from, on every machine the mistake runs
+on.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#8
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / The Three Classes · hash: sha256:c4b8e2964ee18f568422b963925b9fa7baf21d4ebf6b73fcc9caa1c13440162e*
+
+## The Three Classes
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#9
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / The Three Classes · hash: sha256:3060be185d48c426c885c800119892ada889ad0e99cf3c4e99877ade3cb892c6*
+
+| Class | What regeneration does | What a conflict does |
+|---|---|---|
+| `GeneratedOwned` | Overwrites the file unconditionally. The renderer is the sole author of every byte in it, so there is no partial write and nothing to merge. | `nomos spec freshness` reports the conflict before any overwrite happens, and keeps apart two causes that share exit code 8: `stale` (the store moved under an unchanged body) and `edited` (something changed the body itself, so its digest no longer matches its sidecar). Both resolve the same way — re-render and take the renderer's bytes. A hand edit is not preserved, because the instant it landed it was already a defect, not a competing claim this record has to arbitrate. `OD-GATE-005`'s controls table states the same rule for the diagram specifically: "hand-edit `relations.mmd` to add the missing edges" leaves `freshness` reporting `edited` rather than `stale`, and the fix in both cases is the same render. |
+| `Composed` | Regeneration is scoped to the region tied to a declared source of truth, and never touches the region that is not. Where a renderer exists, it writes only the owned region and leaves the rest byte-for-byte untouched. Where no renderer exists yet for the owned region — this repository's own case for `README.md` — the equivalent obligation is a bidirectional check against the declared source, and a person reconciles a failure by hand; the check substitutes for a render, it does not excuse one. | A conflict in the owned region fails loudly — a test failure, a gate step gone red — rather than being silently overwritten or silently passed. The fix is always to correct the region against its declared source, never to blank the file or accept the drift. There is no such thing as a conflict in the free region, because nothing but its human author ever writes there, and no check watches it. |
+| `UserOwned` | Never happens, under any circumstance. No package, no installer, no renderer, no profile writes this path. | Undefined, because nothing else ever holds a competing claim on the bytes to conflict with. A mechanism about to write a path it cannot place in `GeneratedOwned` or `Composed` must treat it as this class and refuse the write outright. |
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#10
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Where The Classification Lives · hash: sha256:e1c89bb08797bd877bc4468172b411ae5f47bcf4236b342da0b7f24426387a13*
+
+## Where The Classification Lives
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#11
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Where The Classification Lives · hash: sha256:e213e9963bb2e364721217c1cbd852529b54dabea894b5b735d40dfe7c363573*
+
+**The asset does not declare its own class.** A generator that writes the wrong thing is the
+exact failure this record exists to prevent, and a tag living inside the very bytes that
+generator is about to overwrite is authored by the same actor whose mistake it would need to
+catch. Self-attestation checks nothing here; it only adds a second sentence for the same
+mistake to get wrong.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#12
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Where The Classification Lives · hash: sha256:5473f6d1c9bd8a84542dfe9f5cbee323d4e77cd7594d61526b4810cddcf746dd*
+
+**The class is declared by whatever places the asset — the package, or a manifest once one
+exists — not by the target file.** `OD-PACKAGE-003`'s placement table already carries the
+shape this needs: each surface an `IntegrationPackage` or `ProjectionPackage` touches is
+recorded there as placed, merged, or declared-only, together with its owner. Ownership class is
+one more fact of that same kind, recorded once, next to the path it governs, by the thing doing
+the writing — not discoverable by reading the target file in isolation.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#13
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Where The Classification Lives · hash: sha256:94fb4affb6e0a229c890b881bb2a1e7c6354ea5a958218bf6f66dde5903875a0*
+
+This repository builds neither package nor manifest today. `OD-PACKAGE-001` found `PackageKind`
+with no consumer and no package on disk anywhere in this workspace, and `OD-PACKAGE-003`
+confirmed the same absence for every integration surface this repository already carries: every
+one of them is "hand-placed, without a package or an installer having produced any of them."
+So nothing here is classified by a manifest yet, and this record's own table below is, for now,
+the only place the four real assets' classes are written down. That is consistent with both
+records this one routes through rather than a gap introduced here.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#14
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Where The Classification Lives · hash: sha256:b4a7707acd793dc605e61be7b3a5a0e9f15e916c8fd8ec22526ca8e7b1398dbe*
+
+**An asset with no recorded class defaults to `UserOwned`, and the write is refused.** The
+default has to point one direction, and the direction is fixed by the asymmetry the question
+section states: a `GeneratedOwned` file wrongly left alone is a stale projection the gate
+already catches on the next commit that touches it. A `UserOwned` file wrongly overwritten is
+gone, with nothing to diff it against, and an installer that gets this wrong gets it wrong
+identically on every machine it runs on. Refusing costs a rerun; overwriting costs work that
+cannot be recovered. The safe direction is the one whose mistake is cheap, and that is refusal.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#15
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / The Four Assets This Repository Already Carries · hash: sha256:ea4caf90e7e298b356e2a3b2d2cd51e73bd8a223067dd8eb297ffd8bbab874a7*
+
+## The Four Assets This Repository Already Carries
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#16
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / The Four Assets This Repository Already Carries · hash: sha256:c61db2234a40a57bd2c92e63e4577d05d262d19cbf8a47e88c0efb28b2537893*
+
+| Asset | Class | Basis |
+|---|---|---|
+| `diagrams/relations.mmd` | `GeneratedOwned` | Rendered by `nomos spec render --profile diagram-set`, one of the two profiles `OD-PROJECT-002` requires. `OD-GATE-005` decision 1: "owned by nobody" — no item's territory, and a hand edit is caught as `edited` and lost on the next render. |
+| `spec/domain-specification.md` | `GeneratedOwned` | Rendered by `nomos spec render --profile domain-specification`, added to the required set by `OD-PROJECT-002` for the same reasons and under the same regeneration/conflict contract as the diagram; both are committed as a body plus a `.nomos-projection.json` sidecar. |
+| `README.md` | `Composed` | `OD-PROJECT-001`: hand-authored workspace description carrying one owned region — the band/crate table, checked bidirectionally against `tests/contract/tests/boundaries.rs` — and one free region, the prose, that carries no check. Discovered exactly because it was believed to be `D-128`'s projection output and had silently drifted while nobody watched either region; the actual `D-128` documents were split out as `README.projection.md` (`github-markdown` profile) and `spec/architecture.md` (`architecture-document` profile), both `GeneratedOwned` and outside this table only because `done_when` names the four assets already generated or protected, not every projection this repository ships. |
+| `.claude/settings.local.json` | `UserOwned` | `CLAUDE.md`: "The file .claude/settings.local.json is personal and stays out of git." Nothing in this workspace writes it today; `OD-PACKAGE-003` measured the same file and found it carrying only `permissions`. A package or installer that writes it is wrong regardless of what it would have written. |
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#17
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / What This Costs If Left As Read Today · hash: sha256:527c7cf177701085ea18c0c957f24ff7fc3834514a8c5475cd5e18c0b7cba766*
+
+## What This Costs If Left As Read Today
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#18
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / What This Costs If Left As Read Today · hash: sha256:720da4ab9acf7d6af48523accbf212a62a14d6d3be1f4c8e37ad5c3c2b13fd52*
+
+Nothing changes at HEAD for any of the four assets: the diagram and the specification render
+exactly as `OD-GATE-005` and `OD-PROJECT-002` already require, `README.md` keeps the checked
+table and free prose `OD-PROJECT-001` left it with, and `.claude/settings.local.json` stays
+untracked and unwritten. What changes is that a future package or installer — the
+materialization `OD-PACKAGE-003` describes and this repository does not yet build — has three
+named behaviors to implement and a stated default for the fourth case, an asset it does not
+recognize, instead of inventing regeneration and conflict handling per asset the way three
+different conventions already exist here by accident.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#19
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / What This Is Not · hash: sha256:8c096e9ff713a2d91679182618fcba53119b00032e6e47e091a14b7e89a7235f*
+
+## What This Is Not
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#20
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / What This Is Not · hash: sha256:cf4ba8678b1a6e9d2ee22f022a155af6e56de0271d17871a4f5d7358fd08921e*
+
+**Not a manifest, and not the first consumer of one.** `OD-PACKAGE-001`'s four-step path to a
+first manifest reader is untouched; this record states what a class would mean and where it
+would be declared, and does not build the declaration mechanism, a `PackageKind` consumer, or a
+`ProjectionPackage` that writes a `Composed` file's owned region automatically.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#21
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / What This Is Not · hash: sha256:40b774901970bcde2db89b9b88c3e10f544a3fb4f75143eec97fd060b3117964*
+
+**Not a change to any of the four assets or the checks over them.** `tests/contract/tests/boundaries.rs`,
+`nomos spec freshness`, and the render commands are unchanged. This record documents the
+ownership each asset already has and states the class model that generalizes it; it does not
+rename a file, move a check, or add one.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#22
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / What This Is Not · hash: sha256:10f8257b293404b86e088ba415190bad234b22716a9598703a87093ccc4540a3*
+
+**Not a claim that every future generated asset fits exactly one of three classes forever.**
+The three named here are the classes this repository's own four assets exhibit, per
+`done_when`. A class this repository has not yet produced an instance of is a question for
+whichever record adds the instance, not one this record forecloses.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#23
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#24
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Controls · hash: sha256:8afe395054a211f55c8503e5b0876efde0b1099f9ac03b944400d25af07f17c4*
+
+| Weakening | What it produces |
+|---|---|
+| let an asset declare its own class | a generator that writes the wrong thing also gets to say it was right to, which protects nothing |
+| default an undeclared asset to `GeneratedOwned` | the first installer bug overwrites a user's personal file with no diff to recover it from, on every machine it runs on |
+| treat `Composed`'s free region as `GeneratedOwned` | prose a person is expected to edit gets silently overwritten the next time anything regenerates the file |
+| treat `Composed`'s owned region as `UserOwned` | the drift `OD-PROJECT-001` found in `README.md`'s tables recurs, uncaught, because nothing compares it to its source again |
+| collapse `stale` and `edited` into one conflict outcome for `GeneratedOwned` | a correct file rendered over a moving store and a file someone typed into report identically, which is the confusion `OD-GATE-005` already separated and this record must not re-merge |
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:f9625c1c7810e79bf425364e06ad8b0912edee3978d6de1d4648ac5b452c022e*
+
+Accepted. Four real assets are classified against the model; a fifth kind of generated file, if
+this repository grows one, is measured against this table rather than invented against a blank
+page.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

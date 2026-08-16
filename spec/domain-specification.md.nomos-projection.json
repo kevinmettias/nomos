@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2803b3781818e8088d9a46cbbb4401a0ffd0c8989a11391933ac119a7b015529",
-  "inputs_digest": "sha256:af568967e4a54930e595dc78f07ec15690ab50edbad8fe8af898ca7dc47f84ab",
+  "content_digest": "sha256:59b791671d31a384d096d8853205c1c1a15e83710dee6a504b5578871d342f22",
+  "inputs_digest": "sha256:c86e3b059d1eda4264220e286eb3085944f71651b85ea535a5b6c428b413061b",
   "sections": [
     [
       "Documents",
@@ -12,7 +12,7 @@
     ],
     [
       "Sections",
-      784
+      783
     ],
     [
       "Source blocks",
@@ -139,11 +139,6 @@
       "content": "documents",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored",
       "hash": "sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b"
-    },
-    {
-      "content": "documents",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored",
-      "hash": "sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8"
     },
     {
       "content": "documents",
@@ -329,6 +324,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored",
       "hash": "sha256:61d21890285c5239b6ea93d3039af6ecca654c2ba22822041ae17c272e5221a0"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored",
+      "hash": "sha256:fee950b9db060e8766b37c6077f80933864691179bb39060352ff4526d95a6ed"
     },
     {
       "content": "documents",
@@ -1359,56 +1359,6 @@
       "content": "headings",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53",
       "hash": "sha256:c005779c78b345dbfe7fa036a225aa2632408131e67e12c96dc639986d66e604"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1",
-      "hash": "sha256:df0a6f285c92f5bc82ae48f2a12e69fb37125178f09b60129eaf0716e2af30c2"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2",
-      "hash": "sha256:f9de874a746b1cfad8bf16e0939ecbf9b3048ee0a8f9f9f927c6ab4715a113fe"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5",
-      "hash": "sha256:12a131c54f28154e8b6617aa6cfd49c8ed538ef26adf215da492fcdd2564d6d9"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9",
-      "hash": "sha256:3bb91dd18099d7489076d97188479d295c842ec430a6f49f3d2abcfed668d29e"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11",
-      "hash": "sha256:624c3924dca3734d1dc6b9cd5b8ccb4d690e5c893985a3ca62838a17aec5e091"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14",
-      "hash": "sha256:972da7347353322bcc2bd2c5f1663d201bb963c41a6fcb00c61dd623b2e7af1c"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18",
-      "hash": "sha256:a97da01c8ecb84360473628c2b2749fa4997415dc8dc869b5c8c2d3673d940a2"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20",
-      "hash": "sha256:2ff4371ee38db9059f2600d213814ae312c4485d6eef408bd25ed3b4ebc219d1"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23",
-      "hash": "sha256:5e40f1044dd966296f51caf771b055d5477896e91988568c5fb484a144d84139"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25",
-      "hash": "sha256:ec48e7d77ce96c237f57698f09acf516d35f5fd1c75966401e00e3996d3ee519"
     },
     {
       "content": "headings",
@@ -3299,6 +3249,51 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#33",
       "hash": "sha256:03a6fb74963b93fbe2897a545dd1be30deead8bd1b1abf2ca03d4b6256d6f27d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#1",
+      "hash": "sha256:340a1afc4346737c990fff2aaea43b385e6563d4eb7636b39a1e891fcce29681"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#2",
+      "hash": "sha256:e70f69c2c72592cae213b336767c1efdb3d4a4699cbc2d0daedcf8c0fe35fdca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#8",
+      "hash": "sha256:f44adca3fabe5a8f36fc48209004e436193831491f9c6604807d829619e31ad3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#10",
+      "hash": "sha256:8d48a88dfe6939dc86790636129b8babb55edf13da990e7d6f0fe95aed4cc256"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#15",
+      "hash": "sha256:63ea8e2f8174e2510c9bd71f8e9dc613d5a99ca46230a548edfef3ddb939aff5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#17",
+      "hash": "sha256:aadc47939533a48a214d953e78ee7a3e5d013173527b50c7cda517a40b7ac368"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#19",
+      "hash": "sha256:97c1702e0a7c1f6ae2ef900bfab626ab1a47c517d3ebc4a63c521a3496af94e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#23",
+      "hash": "sha256:1ff9bb6b000cb09031976a5ff8af6171205a7c87d6530e96fa9005842a8738ae"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25",
+      "hash": "sha256:26ad90221591c9bac76a1f0c009786d5b9c2ecd30030849de443ab2e13dfd8dc"
     },
     {
       "content": "headings",
@@ -7664,136 +7659,6 @@
       "content": "blocks",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#54",
       "hash": "sha256:e6f493d397e38f4ef317f0ef227f46c2d522aa6ca17fe5a198eaa84a4785b6c1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1",
-      "hash": "sha256:5027fb23a076a3b9681f4580cc79baae3369c8d116db706a83fdcf918d0abb91"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2",
-      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#3",
-      "hash": "sha256:9fe50512bc6e310f1a8631a15c920f2f72ae34b2f14eb8e5b89d89ffa73304c6"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#4",
-      "hash": "sha256:786fa4af0f625d9cd26491626aaebfdfea00b1e0092ff9931b4df7382b27d294"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5",
-      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#6",
-      "hash": "sha256:aee603773546e0afdfc9276871b9bf97373952f41d9964f18b5e4f1b97e9e5de"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#7",
-      "hash": "sha256:896da8e30d1a173c30dae56d16858ae4353f1e291005204a8692db494cc1e631"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#8",
-      "hash": "sha256:e69ad3d8c10861694ff7b8b4d2407e695e8a96bb9f8b3a27334e610cbda8ef91"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9",
-      "hash": "sha256:06f13eceae24bd0eb87002e30400999346da1ac5f0f9e44ba02101ab01d1f6a3"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#10",
-      "hash": "sha256:7575f732e9e88eba48e6f79c6a8522711f122df7cfdcca936e15248aac6685b1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11",
-      "hash": "sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#12",
-      "hash": "sha256:7f88858ac67e433364987bd5feb186f68b72bf9a386b7e477b567697e4b76846"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#13",
-      "hash": "sha256:cc13b20dae638d18d85ff8b590e9b3a1942f00fde08b9c03efcebe3ee75f3d6e"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14",
-      "hash": "sha256:ebcd7ad21b8eb9821a30da3137d2f116568873f3d4d718ec0d464b1a86062e08"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#15",
-      "hash": "sha256:41af6ebd7159b01bb5b60f43785fbc2228fe0562b9b97215092ecd13e29a3e17"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#16",
-      "hash": "sha256:b323a8be3edcbc42c53952567abe34e874e6924e68b3ae7bc63e5f4dd9b09407"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#17",
-      "hash": "sha256:e92a49e420ae1a232a781ba50246bff2e014df6cbe5b17e7650e8b3cef849aa8"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18",
-      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#19",
-      "hash": "sha256:1f7327279bb3d6f76f909d49e55321194f16498bba6a7518795e2064a0e16014"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20",
-      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#21",
-      "hash": "sha256:55fa19c73026136603b3fdf68bd79d486bc0409947c8618caad5e0a1af6da463"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#22",
-      "hash": "sha256:8fe74cd9b0c9d0ef28db15095bb583b5b148a7ba3515fb79fe283ed25ce8720a"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23",
-      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#24",
-      "hash": "sha256:4b7c661d6c475b581e0c3b10dcf57558e12c51ec8b05f536a3449505047efc5d"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26",
-      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",
@@ -15339,6 +15204,136 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#37",
       "hash": "sha256:7d621b7291dc221d3a92a1bf0628da3f39096393d77c788e6ee64fcf649cc2ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#1",
+      "hash": "sha256:9e241c2b54a18aee8e9f2cacce25d436aed2c06c62b3dcafc815bc3dc23cd25e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#3",
+      "hash": "sha256:4017b410ddb48f6ae2eeb963a14259f496f98e0522566e747fb66bef386f51a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#4",
+      "hash": "sha256:89e61d5c2a486d02ef46e3f39dc8e7d29c94ccd01ce0a9b6bb80172874c5ac62"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#5",
+      "hash": "sha256:fc226d52e6f2466614fc75e964068b1b47edc463feeed557ead117ba06e7b087"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#6",
+      "hash": "sha256:445b62c49325c1db9912361fc64f3a1402faaad5df36965a236b0fef700cbcc8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#7",
+      "hash": "sha256:373e7f9fe6181ee6f85f43b24b0385b54b6c25e05aef25cd0a8d1dc9435516c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#8",
+      "hash": "sha256:c4b8e2964ee18f568422b963925b9fa7baf21d4ebf6b73fcc9caa1c13440162e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#9",
+      "hash": "sha256:3060be185d48c426c885c800119892ada889ad0e99cf3c4e99877ade3cb892c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#10",
+      "hash": "sha256:e1c89bb08797bd877bc4468172b411ae5f47bcf4236b342da0b7f24426387a13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#11",
+      "hash": "sha256:e213e9963bb2e364721217c1cbd852529b54dabea894b5b735d40dfe7c363573"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#12",
+      "hash": "sha256:5473f6d1c9bd8a84542dfe9f5cbee323d4e77cd7594d61526b4810cddcf746dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#13",
+      "hash": "sha256:94fb4affb6e0a229c890b881bb2a1e7c6354ea5a958218bf6f66dde5903875a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#14",
+      "hash": "sha256:b4a7707acd793dc605e61be7b3a5a0e9f15e916c8fd8ec22526ca8e7b1398dbe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#15",
+      "hash": "sha256:ea4caf90e7e298b356e2a3b2d2cd51e73bd8a223067dd8eb297ffd8bbab874a7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#16",
+      "hash": "sha256:c61db2234a40a57bd2c92e63e4577d05d262d19cbf8a47e88c0efb28b2537893"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#17",
+      "hash": "sha256:527c7cf177701085ea18c0c957f24ff7fc3834514a8c5475cd5e18c0b7cba766"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#18",
+      "hash": "sha256:720da4ab9acf7d6af48523accbf212a62a14d6d3be1f4c8e37ad5c3c2b13fd52"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#19",
+      "hash": "sha256:8c096e9ff713a2d91679182618fcba53119b00032e6e47e091a14b7e89a7235f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#20",
+      "hash": "sha256:cf4ba8678b1a6e9d2ee22f022a155af6e56de0271d17871a4f5d7358fd08921e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#21",
+      "hash": "sha256:40b774901970bcde2db89b9b88c3e10f544a3fb4f75143eec97fd060b3117964"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#22",
+      "hash": "sha256:10f8257b293404b86e088ba415190bad234b22716a9598703a87093ccc4540a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#23",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#24",
+      "hash": "sha256:8afe395054a211f55c8503e5b0876efde0b1099f9ac03b944400d25af07f17c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26",
+      "hash": "sha256:f9625c1c7810e79bf425364e06ad8b0912edee3978d6de1d4648ac5b452c022e"
     },
     {
       "content": "blocks",
