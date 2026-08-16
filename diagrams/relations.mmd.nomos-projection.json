@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:fba59e9271a77d4e22e1e09390bb10a11fc80afac6ecbdf49f25e28479fcff57",
-  "inputs_digest": "sha256:ce69dde72985c0f4825c927f06e379ca96f67d367aad709ee24ed71ec1ad98e0",
+  "content_digest": "sha256:2c7dfd8a5c6bbaafdb34b3bf7174f3a5ea04d500352ad2995be1eed0841475f9",
+  "inputs_digest": "sha256:0febf6970ec451f6ddb4f3da01efa94ea3419df3fcddbf7cd91f9f5e544000d7",
   "sections": [
     [
       "Relations",
-      566
+      570
     ],
     [
       "Decisions",
-      78
+      79
     ]
   ],
   "inputs": [
@@ -30,6 +30,11 @@
       "content": "relations",
       "identity": "ARC-CONNECTOR-001 relates-to D-130",
       "hash": "sha256:347b5dae83146c2239d4e14347db3706a581055e756e9752411e87e6ff24d0ed"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONNECTOR-001 relates-to OD-CONNECTOR-001",
+      "hash": "sha256:7ca3ad62f4b627735164ef01661cc6a6d6654905c24b446ff8b77ca949af2eae"
     },
     {
       "content": "relations",
@@ -915,6 +920,16 @@
       "content": "relations",
       "identity": "OD-COMPLETENESS-002 relates-to OD-SPEC-007",
       "hash": "sha256:1efab4763aeda572f23f5fe6168b0e8f2938caabbe795bd00529552a0c0820e5"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-001 relates-to ARC-CONNECTOR-001",
+      "hash": "sha256:55f763f43547cabec448310ad60f59ad5aeebbd83530452e546b1d7324f5cfe3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-001 relates-to OD-SPEC-009",
+      "hash": "sha256:53f009b2b86d95f72077ea67f62ba02912b5190e57ccfa8b9369fea978bee5f0"
     },
     {
       "content": "relations",
@@ -2588,6 +2603,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-009 relates-to OD-CONNECTOR-001",
+      "hash": "sha256:7416b735d4158bee6bbd881887748e9a3a37cca3003def46df0e65a8b73b40d7"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SPEC-009 relates-to OD-PLATFORM-001",
       "hash": "sha256:8a9e2f89810136a4f35b030c8b95fc6d6b0aa9906e705f6e9cb5429fcdcd0bea"
     },
@@ -2935,6 +2955,11 @@
       "content": "nodes",
       "identity": "OD-COMPLETENESS-002",
       "hash": "sha256:e21540ac5d140d5555c2aa8939b6acddf140b4e6241f548b11aff600dff4367e"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CONNECTOR-001",
+      "hash": "sha256:069ecd2f3b2a42260aab191b3fe875c4cc0db9fdb06acf6b71651c919a5e0f67"
     },
     {
       "content": "nodes",

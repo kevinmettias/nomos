@@ -6,6 +6,7 @@ graph LR
     adr_doc_001["ADR-DOC-001"] -->|"superseded_by"| d_129["D-129"]
     arc_connector_001["ARC-CONNECTOR-001"] -->|"relates-to"| arc_ecosystem_001["ARC-ECOSYSTEM-001"]
     arc_connector_001 -->|"relates-to"| d_130["D-130"]
+    arc_connector_001 -->|"relates-to"| od_connector_001["OD-CONNECTOR-001"]
     arc_ecosystem_001 -->|"affected_by"| arc_harness_001["ARC-HARNESS-001"]
     arc_ecosystem_001 -->|"affected_by"| od_spec_014["OD-SPEC-014"]
     arc_ecosystem_001 -->|"relates-to"| arc_connector_001
@@ -183,6 +184,8 @@ graph LR
     od_completeness_002 -->|"relates-to"| od_gate_001
     od_completeness_002 -->|"relates-to"| od_ledger_007["OD-LEDGER-007"]
     od_completeness_002 -->|"relates-to"| od_spec_007
+    od_connector_001 -->|"relates-to"| arc_connector_001
+    od_connector_001 -->|"relates-to"| od_spec_009
     od_contracts_001 -->|"relates-to"| arc_ecosystem_001
     od_contracts_001 -->|"relates-to"| od_agent_001
     od_contracts_001 -->|"relates-to"| od_contracts_002
@@ -517,6 +520,7 @@ graph LR
     od_spec_008 -->|"relates-to"| od_spec_010
     od_spec_008 -->|"relates-to"| od_spec_013
     od_spec_009 -->|"relates-to"| arc_specdb_002
+    od_spec_009 -->|"relates-to"| od_connector_001
     od_spec_009 -->|"relates-to"| od_platform_001
     od_spec_009 -->|"relates-to"| od_spec_008
     od_spec_009 -->|"relates-to"| od_spec_010
@@ -589,6 +593,7 @@ graph LR
     od_capability_004
     od_completeness_001
     od_completeness_002
+    od_connector_001
     od_contracts_001
     od_contracts_002
     od_determinism_001

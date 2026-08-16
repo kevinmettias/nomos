@@ -34,6 +34,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -282,6 +283,16 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#44 | authored | 2 | Coordination — One Method, Not Two |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#50 | authored | 2 | What This Does Not Do |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53 | authored | 2 | Status |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1 | authored | 1 | An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2 | authored | 2 | Question |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5 | authored | 2 | Decision |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9 | authored | 2 | Scope |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11 | authored | 2 | What This Binds |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14 | authored | 2 | What This Does Not Bind |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18 | authored | 2 | Controls |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25 | authored | 2 | Status |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1 | authored | 1 | Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2 | authored | 2 | Question |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5 | authored | 2 | What Was Measured |
@@ -6493,6 +6504,261 @@ Stated plainly, because `OD-GATE-001` is about checks that imply more than they 
 Accepted, closed by `P10-MIRROR-DISAGREEMENT`. Sixteen declared universes; four mirrored, each
 claiming its mirror at its own site; twelve declared holes with the number checked; and the
 two guards that disagreed now hold a per-universe equality that names what moved.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check · hash: sha256:5027fb23a076a3b9681f4580cc79baae3369c8d116db706a83fdcf918d0abb91*
+
+# An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#3
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:9fe50512bc6e310f1a8631a15c920f2f72ae34b2f14eb8e5b89d89ffa73304c6*
+
+`ARC-CONNECTOR-001`'s fourth invariant already says a write capability is omitted from a
+connector's interface rather than present and permission-checked, and says why: a
+deny-checked write method is still a write method, reachable by whoever next changes the
+check. What it does not spell out is the structural mechanism that makes omission possible
+at all, where that mechanism reaches its own limit, or whether the rule is a fact about
+connectors specifically or a shape this workspace already applies elsewhere and simply had
+not named for this seam.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#4
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:786fa4af0f625d9cd26491626aaebfdfea00b1e0092ff9931b4df7382b27d294*
+
+The risk is concrete. A vendor SDK hands a connector one client object with read and write
+methods sitting side by side — `issue.comment()` next to `issue.get()` on the same value.
+The shortest correct-looking way to reflect a Nomos verdict back to a tracker is to call the
+write method that is already sitting there in the imported type. Nothing about "omit the
+write method" tells an implementer what to write instead, or what happens when the object
+that carries both methods is not one this workspace defined and cannot edit.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#6
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:aee603773546e0afdfc9276871b9bf97373952f41d9964f18b5e4f1b97e9e5de*
+
+**An outward mutation is a command handed to one canonical service, and a connector never
+performs it directly.** This is `OD-SPEC-009`'s shape applied to the opposite direction of
+the same seam. `OD-SPEC-009` decided that a submission enters the store through exactly one
+accept function and that a form, a CLI verb, an HTTP endpoint or an MCP tool is a transport
+onto that door, never a second door of its own — and it did so for the same reason
+`nomos-store` already carries one write door per authority (`README.md`, row 12): the number
+of doors is a property of the authority being written to, not of how many callers want to
+reach it. An outward write onto an external system of record is the same shape mirrored
+outward: the canonical service is the one place that constructs the vendor request,
+evaluates whether the mutation is sound to send, and executes it; a connector's translation
+layer constructs the *content* of a command — the comment text, the target issue, the new
+status — and hands it to that service, exactly as a CLI verb constructs a submission and
+hands it to `OD-SPEC-009`'s accept function. A connector that calls a vendor's write method
+on its own behalf is a second door, in the same sense a transport that persists on its own
+behalf is a second door under `OD-SPEC-009` — a defect, not a variant, and this record cites
+that decision as the one it is applying rather than restating it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#7
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:896da8e30d1a173c30dae56d16858ae4353f1e291005204a8692db494cc1e631*
+
+**The structural rule holds in the strong form: a component receives an interface carrying
+only the operations it may perform.** A capability a component may not exercise is not
+present on the type it is given, so calling it is not a runtime refusal but a compile
+error — there is no method to name. Runtime authorization — a permission check, a role
+gate, a scope token evaluated when a call is attempted — is an additional layer on top of
+this, never the mechanism itself, for the reason `ARC-CONNECTOR-001` already gives for its
+own fourth invariant: a check can be weakened, bypassed, or forgotten by whoever next
+touches it, and a method that exists to be checked is a method that exists. This is not a
+principle invented for connectors. `crates/substrate/nomos-analysis/src/fact/reader.rs`
+already ships it: `FactReader` gives a caller `Get`, `Require`, `Require_Any` and
+`Dependencies` — every way to ask the store a question — and no method that writes a fact
+back. A caller holding a `FactReader` cannot mutate a materialized fact through it, not
+because an attempt is checked and refused, but because the type it was handed has nothing
+on it that would perform one. `OD-CONNECTOR-001` names what `FactReader` was already doing
+and requires it of a connector's interface too: the observation interface
+`ARC-CONNECTOR-001`'s invariant 4 requires is a `FactReader`-shaped trait, not a full
+vendor client with a policy wrapped around it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#8
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:e69ad3d8c10861694ff7b8b4d2407e695e8a96bb9f8b3a27334e610cbda8ef91*
+
+**Structural absence is achievable wherever this workspace defines the type the caller
+holds, and it is not achievable on a type this workspace does not define.** A vendor SDK's
+client object is the case that breaks the mechanism: its write methods exist before any
+Nomos code runs, sitting on the same object as its read methods, and no trait this
+workspace writes can delete a method from a type it does not own. Where the capability
+arrives already bundled on a foreign type, the mechanism is not omission but containment,
+and it is a weaker guarantee: `ARC-CONNECTOR-001`'s second invariant already requires that
+no vendor schema, field name or authentication scheme cross above the translation layer,
+and this record extends that same containment to the vendor client object itself — the raw,
+write-capable SDK type may not be named, returned, stored or passed above the translation
+layer under any circumstance, so that nothing outside it ever holds a value with a write
+method reachable through it. What a caller above the seam holds instead is the
+`FactReader`-shaped observation interface this workspace defines over that translation
+layer, which is where omission becomes possible again because the type is now this
+workspace's own. The difference is not stylistic: a Rust method omitted from a trait this
+workspace owns cannot be called from outside that trait under any edition of the language,
+by construction; a vendor type kept out of every signature above one module is confinement
+that a single import statement inside that module's own boundary can still violate, and
+which nothing but review, a lint, or a future architectural test catches. Confinement is
+what stands in where omission cannot reach, and it is strictly weaker than omission — which
+is exactly why the translation layer, and not the connector interface above it, is where
+`ARC-CONNECTOR-001` already places the only code permitted to hold the vendor object at
+all.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Scope · hash: sha256:06f13eceae24bd0eb87002e30400999346da1ac5f0f9e44ba02101ab01d1f6a3*
+
+## Scope
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#10
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Scope · hash: sha256:7575f732e9e88eba48e6f79c6a8522711f122df7cfdcca936e15248aac6685b1*
+
+This record's scope is connectors. It does not decide whether an executor invoking a
+subprocess, a plugin loaded into this workspace, an agent given tool access, or a transport
+under `OD-SPEC-009` carries the same write-omission requirement, and it deliberately declines
+to extend the rule to any of them here. Each is a different boundary with its own shape — a
+subprocess is not a vendor SDK object with methods bundled by a client library, a plugin's
+ABI is not a translation layer between a foreign schema and a canonical one, an MCP transport
+already answers to `OD-SPEC-009` on the inbound side and has not been asked an outbound
+question — and deciding all four by extension from the connector case would repeat the
+mistake `ARC-CONNECTOR-001` already named and refused to make for connector addressing:
+settling a scheme for a case that is not in front of anyone yet. Whichever of those boundaries
+is built first is where that boundary's own record decides whether this rule reaches it,
+citing this one as the precedent it is applying, the same way this record cites
+`ARC-CONNECTOR-001`'s fourth invariant rather than restating it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044*
+
+## What This Binds
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#12
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:7f88858ac67e433364987bd5feb186f68b72bf9a386b7e477b567697e4b76846*
+
+Every connector's observation interface — the generic connector substrate and the
+vendor-to-canonical translation layer together, as `ARC-CONNECTOR-001` scopes them — carries
+only the operations a caller above the seam may perform. An outward mutation is never one of
+them; it is a command constructed by the translation layer and handed to the one canonical
+service that performs it, in the same relationship a transport under `OD-SPEC-009` has to
+the accept function.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#13
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:cc13b20dae638d18d85ff8b590e9b3a1942f00fde08b9c03efcebe3ee75f3d6e*
+
+The vendor's own client object, and any type carrying its write methods, may not be named,
+returned or held by anything above the translation layer that defines it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:ebcd7ad21b8eb9821a30da3137d2f116568873f3d4d718ec0d464b1a86062e08*
+
+## What This Does Not Bind
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#15
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:41af6ebd7159b01bb5b60f43785fbc2228fe0562b9b97215092ecd13e29a3e17*
+
+It does not name the canonical service, define its interface, or say which crate holds it.
+That is implementation the first connector's translation layer is checked against, the same
+way `ARC-CONNECTOR-001` left the quarantine crate's name to whoever adopts one.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#16
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:b323a8be3edcbc42c53952567abe34e874e6924e68b3ae7bc63e5f4dd9b09407*
+
+It does not decide whether an executor, a plugin, an agent or a transport carries the same
+rule. See Scope, above.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#17
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:e92a49e420ae1a232a781ba50246bff2e014df6cbe5b17e7650e8b3cef849aa8*
+
+It does not touch `ARC-CONNECTOR-001`'s first three invariants, or reopen the crossings
+`ARC-ECOSYSTEM-001` governs. Both are unchanged.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#19
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Controls · hash: sha256:1f7327279bb3d6f76f909d49e55321194f16498bba6a7518795e2064a0e16014*
+
+| Weakening | What it produces |
+|---|---|
+| the connector calls the vendor's write method directly, behind a permission check | a write method that exists to be checked, reachable by whoever next weakens the check — exactly what `ARC-CONNECTOR-001`'s fourth invariant already refuses |
+| the connector's interface exposes the raw vendor client above the translation layer | confinement is skipped, and the write method the interface omitted is reachable anyway through the object that carries it |
+| the canonical service is treated as a convenience the connector may bypass for "simple" mutations | the second door `OD-SPEC-009` already named the failure mode for, mirrored outward |
+| the write-omission rule is assumed to already cover executors, plugins, agents or transports | a boundary with its own shape is governed by an analogy instead of by its own record |
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
+
+## Conflicts With Existing Decisions
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#21
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:55fa19c73026136603b3fdf68bd79d486bc0409947c8618caad5e0a1af6da463*
+
+`ARC-CONNECTOR-001` is untouched. Its fourth invariant is applied in its strong form and
+grounded in a mechanism and a precedent it did not name; the invariant itself is not
+reopened or reinterpreted.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#22
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:8fe74cd9b0c9d0ef28db15095bb583b5b148a7ba3515fb79fe283ed25ce8720a*
+
+`OD-SPEC-009` is untouched. Its one-door-many-transports shape is applied to the outward
+direction of the same third crossing `ARC-CONNECTOR-001` names; the intake seam it governs
+is unchanged.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#24
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Record Does Not Do · hash: sha256:4b7c661d6c475b581e0c3b10dcf57558e12c51ec8b05f536a3449505047efc5d*
+
+No canonical service is built, and no connector interface is defined. No executor, plugin,
+agent or transport question is answered. This record does not claim the write-omission rule
+is enforced mechanically anywhere yet — only that it is now a rule a connector's interface
+and its translation layer are checked against, with a named mechanism, a named limit, and a
+named precedent, rather than a discouragement without a structural reason.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1
 
