@@ -10046,13 +10046,71 @@
         ],
         "patterns": []
       },
+      "state": {
+        "Declined": {
+          "reason": "Territory short of the work, one layer deeper than the first reissue. Full account in the abandonment reason on this item. Successor is P13-CORRECTIONS-3 with tests/integration/tests/determinism/{domains,declarations,harness,productions}.rs and tests/integration/Cargo.toml added to territory."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-corrections",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-corrections-s1",
+          "reason": "Territory short of the work again, one layer deeper than the first reissue caught. Occupying the domain table row requires Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness (tests/contract/tests/determinism_declarations.rs:97, run inside -p nomos-contract-tests, this item's own predicate) to find a matching Check::<Strategy> registration under tests/integration/tests/, scanned textually by Harnessed_Strategies (tests/contract/src/harnessed.rs:20). That registration has to actually compile and pass clippy -D warnings across the whole workspace, since work finish's derived Lint step (crates/substrate/nomos-ledger/src/gate.rs, cargo clippy --workspace --all-targets -- -D warnings) runs before the item predicate and is not scoped to this item's territory. Confirmed by reading the row's SCOPE (CrossRun): Cross_Environment_Owed maps CrossRun to CrossEnvironment::SecondProcess (tests/integration/src/verification/cross_environment.rs:29), not SecondProcessAndGolden, so no committed golden digest is needed (goldens.rs stays untouched) -- but a real production closure, a test in domains.rs, a match arm in harness.rs's Test_Name_For, an updated count and entry in declarations.rs's hand-maintained table (currently asserts exactly 7), and nomos-corrections added as a dependency of tests/integration/Cargo.toml are all still required and none of the five files are in this item's territory. Nothing was written to the tree under this claim; verified by reading only, holding it. Successor is P13-CORRECTIONS-3 with those five files added.",
+          "abandoned_at": 1786863990
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-corrections-s1",
+        "declined_at": 1786863995
+      }
+    },
+    {
+      "id": "P13-CORRECTIONS-3",
+      "title": "nomos-corrections: CorrectionCandidate, CorrectionPlan, and the deterministic stage-preview-commit-rollback door the domain table already prices",
+      "why": "P13-CORRECTIONS and P13-CORRECTIONS-2 carried this why and were both declined only for territory, measured and recorded on those items. The determinism domain table in nomos-contracts already prices a Correction planning and staging row as StateTemporal/CrossRun/BitIdentical, and tests/contract/tests/determinism_declarations.rs records it UNOCCUPIED on purpose. No nomos-corrections crate, no CorrectionCandidate/CorrectionPlan/ChangeSet type exists anywhere in the tree. This reissue adds two more layers the first two reissues found: the workspace-membership files (tests/contract/tests/boundaries/bands.rs, README.md) that P13-CORRECTIONS-2 added, plus the harness-registration files P13-CORRECTIONS-2 itself was missing -- Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness, which also runs inside -p nomos-contract-tests, requires a real Check::<Strategy> registration under tests/integration/tests/determinism/ that compiles clean under the workspace-wide Lint step work finish runs before any item predicate. The row's CrossRun scope needs a second-process comparison but no committed golden (Cross_Environment_Owed maps CrossRun to SecondProcess, not SecondProcessAndGolden), so goldens.rs stays out of territory deliberately.",
+      "done_when": "A nomos-corrections crate occupies the Correction planning and staging row of the domain table: it exposes CorrectionCandidate, CorrectionPlan and ChangeSet types and a deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change, with no dependency on an agent executor or model backend. The UNOCCUPIED entry naming that row is removed from tests/contract/tests/determinism_declarations.rs, the crate's own tests pass, its public surface is snapshotted at tests/contract/surface/nomos-corrections.txt, it is added to BANDS in tests/contract/tests/boundaries/bands.rs at a band consistent with its dependencies, README.md's layout table lists it at the same band, and it is registered with the integration harness: a Check::<Strategy> call in tests/integration/tests/determinism/domains.rs, a matching entry in declarations.rs's declared table and Test_Name_For in harness.rs, and nomos-corrections added as a dependency of tests/integration/Cargo.toml. cargo test -p nomos-integration-tests passes for the new registration, run directly even though it is outside this item's own predicate.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections",
+          "Cargo.toml",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/contract/surface/nomos-corrections.txt",
+          "tests/contract/tests/boundaries/bands.rs",
+          "README.md",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/declarations.rs",
+          "tests/integration/tests/determinism/harness.rs",
+          "tests/integration/tests/determinism/productions.rs",
+          "tests/integration/Cargo.toml"
+        ],
+        "patterns": []
+      },
       "state": "Claimed",
       "depends_on": [],
       "blocked": null,
       "claim": {
         "holder": "claude-corrections-s1",
-        "acquired_at": 1786863522,
-        "lease_expires_at": 1786870722
+        "acquired_at": 1786864014,
+        "lease_expires_at": 1786871214
       },
       "verification": {
         "argv": [
