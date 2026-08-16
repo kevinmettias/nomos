@@ -24,6 +24,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| od_capability_004["OD-CAPABILITY-004"]
     arc_ecosystem_001 -->|"relates-to"| od_contracts_001["OD-CONTRACTS-001"]
     arc_ecosystem_001 -->|"relates-to"| od_ledger_001["OD-LEDGER-001"]
+    arc_ecosystem_001 -->|"relates-to"| od_package_003["OD-PACKAGE-003"]
     arc_ecosystem_002 -->|"relates-to"| arc_ecosystem_001
     arc_ecosystem_002 -->|"relates-to"| d_136
     arc_harness_001 -->|"affects"| arc_ecosystem_001
@@ -93,6 +94,7 @@ graph LR
     d_132 -->|"affects"| od_ledger_017["OD-LEDGER-017"]
     d_132 -->|"affects"| od_package_001
     d_132 -->|"affects"| od_package_002["OD-PACKAGE-002"]
+    d_132 -->|"affects"| od_package_003
     d_132 -->|"affects"| od_spec_002
     d_132 -->|"relates-to"| od_ledger_002["OD-LEDGER-002"]
     d_132 -->|"relates-to"| od_trace_001
@@ -128,6 +130,7 @@ graph LR
     od_agent_001 -->|"relates-to"| od_contracts_001
     od_agent_001 -->|"relates-to"| od_gate_001
     od_agent_001 -->|"relates-to"| od_ledger_001
+    od_agent_001 -->|"relates-to"| od_package_003
     od_agent_001 -->|"relates-to"| od_project_001
     od_analysis_001 -->|"affects"| d_129
     od_analysis_001 -->|"relates-to"| od_analysis_002["OD-ANALYSIS-002"]
@@ -418,12 +421,19 @@ graph LR
     od_package_001 -->|"relates-to"| d_134
     od_package_001 -->|"relates-to"| od_ledger_017
     od_package_001 -->|"relates-to"| od_package_002
+    od_package_001 -->|"relates-to"| od_package_003
     od_package_001 -->|"relates-to"| od_rules_001
     od_package_001 -->|"relates-to"| od_trace_001
     od_package_002 -->|"affected_by"| d_132
     od_package_002 -->|"relates-to"| od_gate_002
     od_package_002 -->|"relates-to"| od_ledger_017
     od_package_002 -->|"relates-to"| od_package_001
+    od_package_002 -->|"relates-to"| od_package_003
+    od_package_003 -->|"affected_by"| d_132
+    od_package_003 -->|"relates-to"| arc_ecosystem_001
+    od_package_003 -->|"relates-to"| od_agent_001
+    od_package_003 -->|"relates-to"| od_package_001
+    od_package_003 -->|"relates-to"| od_package_002
     od_platform_001 -->|"relates-to"| arc_harness_001
     od_platform_001 -->|"relates-to"| d_130
     od_platform_001 -->|"relates-to"| od_gate_001
@@ -608,6 +618,7 @@ graph LR
     od_model_001
     od_package_001
     od_package_002
+    od_package_003
     od_platform_001
     od_project_001
     od_project_002

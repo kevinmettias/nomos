@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:dad6203d7f96298f4ac22c01ef1eab8391a8bde5b796b340f2f8b5d1ed7c0694",
-  "inputs_digest": "sha256:1968907a2c1cf4d54c9e15c5930f6935a2fb6fbe746cff22fe311f7cea33a127",
+  "content_digest": "sha256:8b01c64ac16dcf5835d63274759f83717367a489f9f17081641cf49bec9e1806",
+  "inputs_digest": "sha256:bf7f51871c89cfe45940150220d61b1e0c23516f16f0806400ba4935aab53be7",
   "sections": [
     [
       "Documents",
-      82
+      83
     ],
     [
       "Sections",
-      758
+      765
     ],
     [
       "Source blocks",
-      2924
+      2948
     ]
   ],
   "inputs": [
@@ -304,6 +304,11 @@
       "content": "documents",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored",
       "hash": "sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored",
+      "hash": "sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7"
     },
     {
       "content": "documents",
@@ -3054,6 +3059,41 @@
       "content": "headings",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#28",
       "hash": "sha256:7189ad0e47450086e8bc10f148ca8875db6c4a41782b86d517097a65b3d432bf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#1",
+      "hash": "sha256:647b6d481df42a364ebe3c7bf349f8c4ac5c7bc10f2a78c886e2e22cdf41587a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#2",
+      "hash": "sha256:feeb949f134a4d2f39cef729061f6fc243ad441c8b8bc4ce06bd25489f9024d3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#7",
+      "hash": "sha256:9dd6ec6c2f04488398616b79c261882a4eeb0a3adcbe70b74d931214028b65a6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#10",
+      "hash": "sha256:c75d86c4cea6bb66aaa7f7b1d48786164172c2a16ad95c3b5fcc474ea3088339"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#16",
+      "hash": "sha256:b50c9db758ca2325f59edb12757f30450ab0fcab115d8164dda5c53d05b4306d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#19",
+      "hash": "sha256:8553c9542b22ad40ecdf5d9f40e15564d7f0c95a0fc242e08585910d1f360e80"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#23",
+      "hash": "sha256:571891a6ab8784dbb919db1f586a4a5e06a60b1f6cd36d0262b832c38582bd29"
     },
     {
       "content": "headings",
@@ -14179,6 +14219,126 @@
       "content": "blocks",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#29",
       "hash": "sha256:ef3ddef0a29b76548386e2b05b0c2f490b51a0bef50791b6fa5a889a7540e236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#1",
+      "hash": "sha256:2fd5ae241154a35bcae896dd16909665ddd4f185a78b5e90d4d2c8a5fe896ad8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#3",
+      "hash": "sha256:082ac23c5c4aac0d0909aa77d2198143dae7aea93b22b45cb4af95b1175172e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#4",
+      "hash": "sha256:db1056eea49c0d344dc93051f9ba061d9638f04a782bec3e929e162d37b4d31b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#5",
+      "hash": "sha256:1efa1c4a35b3ea8debee718e3e91c0857bd97ff2e822208af0a9bf82a0d74f36"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#6",
+      "hash": "sha256:8abb8e6419a9b251b66976ca7a9cc41ba307fb247adc9142367730d4a1455ddf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#7",
+      "hash": "sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#8",
+      "hash": "sha256:84e45feb8c702ab1bdebb845f295563742a92036101fe1121199e55faf8811da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#9",
+      "hash": "sha256:f67b220c0a756f4ee3f905de677d18fd6053286ccc63c7f15e078ee5f360ef76"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#10",
+      "hash": "sha256:9ecd1eddb031d6493d377f38f5a387e5d0cdb31db5843e3baec628cf480e2e59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#11",
+      "hash": "sha256:518bcda5831b6942bbba3b67b07e796dbf5ef8b7809be2f8c887d0b8eaa32da5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#12",
+      "hash": "sha256:29c49c5e73f23e27ab3192051f5f568b05bc62e964987ab08363020ca90dedbe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#13",
+      "hash": "sha256:605fca3f5af33536ee9fddb8d6f0dfb160a29e59cbb040d66f08ea9e9fa3211f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#14",
+      "hash": "sha256:8a311d8743470c278c23db103663a09dcf10d1e17d214027d1331058a0807bf4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#15",
+      "hash": "sha256:d1cd36010cc98d03be9366ce871ad59cebd989dfdeedd6489f926aae520ac5ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#16",
+      "hash": "sha256:06f13eceae24bd0eb87002e30400999346da1ac5f0f9e44ba02101ab01d1f6a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#17",
+      "hash": "sha256:992de1c8f1fc89f36e5bed397b53331261fa5c773bc82eb30ac3eae1eac75d1c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#18",
+      "hash": "sha256:2575f43948b0441a0ff248ec483f4df1da0bcc7919189785f4373f778c1ce392"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#19",
+      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#20",
+      "hash": "sha256:1aeaf5561c135ecca87ffd7537e0179bd33d74daf5a140148bf441a511bdefd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#21",
+      "hash": "sha256:56d5d9228c5308780d741a254a83821be3a5490f9b6ddd0688cdd6fecfbf87c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#22",
+      "hash": "sha256:9d8551f99588f01216b7c94717085b71b3942168f9f8d91a6a26b2343d68a692"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#23",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#24",
+      "hash": "sha256:f8defa525b423fa47ea460754b503292cd73a3e547bd22087c867a51b2451b0d"
     },
     {
       "content": "blocks",

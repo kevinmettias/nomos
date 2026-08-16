@@ -67,6 +67,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 27 | 8 | sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b |
@@ -622,6 +623,13 @@ profile: domain-specification
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#22 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#26 | authored | 2 | What Holds It |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#28 | authored | 2 | Status |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#1 | authored | 1 | An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#2 | authored | 2 | Question |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#7 | authored | 2 | The Rule |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#10 | authored | 2 | What Semantic Addressing Means |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#16 | authored | 2 | Scope |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#19 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#23 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#1 | authored | 1 | Independently versioned is a property of a package, and this build has no package |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#2 | authored | 2 | The Question |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#6 | authored | 2 | What The Corpus Actually Says |
@@ -17605,6 +17613,233 @@ Closed by P10-SUBJECT-HOME. A fourth longhand copy exists in
 `tests/integration/tests/determinism.rs`, outside this item's territory and inside
 `P10-ROLLUP-DETERMINISM`'s; it addresses fixture text rather than repository paths, and
 converging it is that item's to weigh.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#1
+
+*revision: authored · kind: heading · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason · hash: sha256:2fd5ae241154a35bcae896dd16909665ddd4f185a78b5e90d4d2c8a5fe896ad8*
+
+# An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#2
+
+*revision: authored · kind: heading · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#3
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Question · hash: sha256:082ac23c5c4aac0d0909aa77d2198143dae7aea93b22b45cb4af95b1175172e8*
+
+`crates/contracts/nomos-contracts/src/identity.rs` decides what an identifier looks like:
+every identity in Nomos is one of two shapes, a content digest or a human-authored string
+with a stable spelling, and neither is ever a path and a line. That module doc is settled
+and this record does not restate it, let alone amend it.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#4
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Question · hash: sha256:db1056eea49c0d344dc93051f9ba061d9638f04a782bec3e929e162d37b4d31b*
+
+It does not settle what goes into a digest, or what a human-authored spelling is composed
+from, and those two constructions fail differently. A digest taken over the semantic
+address of the thing it names is reproducible: the same subject, addressed the same way on
+a different machine or a different run over the same corpus state, produces the same
+bytes. A digest taken over whatever the constructing code happened to be holding at the
+time is not — it has the right shape, it compiles, it passes every type check the newtype
+gives it, and it produces a different value the next time the same subject is addressed.
+That is the join-with-no-key failure `identity.rs`'s own module doc names as the
+prototype's defining mistake, recurring under a `Digest128` that looks like a fix for it.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#5
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Question · hash: sha256:1efa1c4a35b3ea8debee718e3e91c0857bd97ff2e822208af0a9bf82a0d74f36*
+
+Nothing in the crate distinguishes the two constructions. There is no rule that an
+identifier is derived where derivation is possible, no statement of what counts as a
+semantic address, and no obligation on a caller that mints an opaque one instead to say why
+derivation was unavailable for that subject.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#6
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Question · hash: sha256:8abb8e6419a9b251b66976ca7a9cc41ba307fb247adc9142367730d4a1455ddf*
+
+`P10-CANONICITY-DECISION` is not this question, and `ARC-SPECDB-002` is the record that
+answers what it actually asked: whether an object's *content* is canonical as a structured
+record or as a document, decided by whether a schema for it could be written before the
+object existed. That is a question about where a thing's bytes live. This record is about
+a different axis entirely — once a thing's bytes exist, on either side of that line, what
+bytes may go into the identifier computed over it. The two questions share no evidence and
+settling one says nothing about the other.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#7
+
+*revision: authored · kind: heading · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / The Rule · hash: sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5*
+
+## The Rule
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#8
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / The Rule · hash: sha256:84e45feb8c702ab1bdebb845f295563742a92036101fe1121199e55faf8811da*
+
+> An identifier is **derived** wherever a semantic address exists for the thing it names.
+> Its bytes are computed from that address, and computing them again over the same address
+> produces the same identifier, on any machine, on any run, from any clone of the same
+> corpus state.
+>
+> **Minting** an identifier — assigning it a value not computed from the thing's own
+> semantic address — is the exception, not an equally available second choice. A caller
+> that mints one owes, at the site of the mint, a stated reason that the subject was not
+> derivable: what about it resists a semantic address, not merely that deriving one was
+> inconvenient at the time.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#9
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / The Rule · hash: sha256:f67b220c0a756f4ee3f905de677d18fd6053286ccc63c7f15e078ee5f360ef76*
+
+The obligation is a sentence at the construction site, not a new field on the identity
+type. `identity.rs` names two shapes and this record does not add a third; it constrains
+how a caller of either shape is allowed to arrive at a value. A `Digest_Identity` computed
+by hashing a semantic address is derived; one computed by hashing anything else is a mint
+wearing a digest's clothes and owes the same reason a mint of a `Named_Identity` does.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#10
+
+*revision: authored · kind: heading · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What Semantic Addressing Means · hash: sha256:9ecd1eddb031d6493d377f38f5a387e5d0cdb31db5843e3baec628cf480e2e59*
+
+## What Semantic Addressing Means
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#11
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What Semantic Addressing Means · hash: sha256:518bcda5831b6942bbba3b67b07e796dbf5ef8b7809be2f8c887d0b8eaa32da5*
+
+**Included.** A semantic address is bytes drawn from what the subject *is*, not from when,
+where, or by what process it was addressed. Concretely, in this workspace, a derived digest
+is built from: a normalized, repository-relative path and nothing else
+(`nomos_model::Subject_Of_Path`, over `Normalize_Path`'s output); a declaration's language,
+fully qualified name, signature, structural shape hash and declaring repository
+(`CompositeIdentity::Entity_Id`, `crates/kernel/nomos-model/src/identity/composite_identity.rs`);
+or a workspace state's build variant, resolved configuration digest, and the sorted content
+digests of its members (`WorkspaceSnapshot::Id`, over `WorkspaceSnapshot::Encode`). Each of
+these is a function of the corpus and nothing else — run it twice over an unchanged corpus
+and the bytes fed to the hash do not move.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#12
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What Semantic Addressing Means · hash: sha256:29c49c5e73f23e27ab3192051f5f568b05bc62e964987ab08363020ca90dedbe*
+
+**Excluded**, because each one differs between two machines or two runs over the identical
+corpus state, and including any of them turns a derived digest into a mint that still
+carries a digest's shape:
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#13
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What Semantic Addressing Means · hash: sha256:605fca3f5af33536ee9fddb8d6f0dfb160a29e59cbb040d66f08ea9e9fa3211f*
+
+- **machine-local inputs** — a hostname, a process id, an absolute filesystem path outside
+  the corpus root, an environment variable, a user or account identifier, anything read
+  from the executing machine rather than the subject;
+- **run-local inputs** — a wall-clock timestamp, a randomly generated value (a `UUID v4` or
+  any other RNG output), an in-memory address, a sequence number issued by the running
+  process rather than recovered from the subject's own content.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#14
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What Semantic Addressing Means · hash: sha256:8a311d8743470c278c23db103663a09dcf10d1e17d214027d1331058a0807bf4*
+
+`WorkspaceSnapshot::Encode` already states the general form of this exclusion for one case:
+its own doc comment says the generation a state was reached in is deliberately absent from
+the encoded bytes, because including it would make one file edited and edited back into a
+third, distinct state. `GenerationId` (`identity.rs`'s own `generation_id` module) is not
+one of the two identity shapes for the same reason — it counts a workspace's history and
+is never itself hashed into an identifier. That exclusion, so far implicit at one call
+site, is the general rule this record names: an identifier answers "which thing", never
+"when was it looked at" or "on what machine".
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#15
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What Semantic Addressing Means · hash: sha256:d1cd36010cc98d03be9366ce871ad59cebd989dfdeedd6489f926aae520ac5ac*
+
+**For a `Named_Identity`, the same test in its own vocabulary.** A spelling is derived when
+it is composed from the subject's own domain vocabulary — a capability's namespaced name, a
+schema's declared name, an operation's canonical name, a rule's identifier as its author
+assigned it in the rule's own definition. It is minted when the value was assigned by an
+authority other than the subject's own semantic address: chosen by a person with no naming
+rule behind the choice, or handed over whole by an external system Nomos does not compute
+from bytes it holds. `D-137`'s `KnowledgeReferenceId` is the accepted instance of the
+latter, and it already states the reason this record asks every mint site to state:
+"Nomos does not compute this value from bytes it holds, so wrapping it as one of Nomos's
+own content digests would claim a verification Nomos cannot perform." That sentence is the
+shape the obligation takes; this record generalizes the obligation, not the sentence.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#16
+
+*revision: authored · kind: heading · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Scope · hash: sha256:06f13eceae24bd0eb87002e30400999346da1ac5f0f9e44ba02101ab01d1f6a3*
+
+## Scope
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#17
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Scope · hash: sha256:992de1c8f1fc89f36e5bed397b53331261fa5c773bc82eb30ac3eae1eac75d1c*
+
+The rule covers every entity family whose identity is or will be a `Digest128` or a
+`Named_Identity` in `identity.rs`'s sense — the identity module states the two shapes this
+record binds, and is cited rather than repeated here. Concretely, at minimum: work items,
+requirements, decisions, runs, packages, projections, and external artifacts, alongside the
+families `identity.rs` already names — analysis subjects, pinned workspace states,
+canonical entities under a snapshot, build variants, and resolved configurations. Deciding
+the question once per crossing, instead of once here, is how it would end up answered
+differently for each of these; that is the failure this record exists to close off before
+a second family reopens it.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#18
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Scope · hash: sha256:2575f43948b0441a0ff248ec483f4df1da0bcc7919189785f4373f778c1ce392*
+
+It does not extend to `GenerationId`, which is not one of the two shapes to begin with, and
+it does not relitigate `KnowledgeReferenceId`, whose mint is already justified by `D-137`
+in exactly the form this record asks for generally.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#19
+
+*revision: authored · kind: heading · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#20
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What This Does Not Decide · hash: sha256:1aeaf5561c135ecca87ffd7537e0179bd33d74daf5a140148bf441a511bdefd4*
+
+Not which substrate is canonical for an object's content — `ARC-SPECDB-002` answers that,
+on a different axis, and this record leaves it untouched.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#21
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What This Does Not Decide · hash: sha256:56d5d9228c5308780d741a254a83821be3a5490f9b6ddd0688cdd6fecfbf87c3*
+
+Not a third identity shape, and not a change to any accessor or derive on `Digest128`,
+`Digest_Identity`, or `Named_Identity`. `identity.rs` is unchanged by this record.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#22
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / What This Does Not Decide · hash: sha256:9d8551f99588f01216b7c94717085b71b3942168f9f8d91a6a26b2343d68a692*
+
+Not a retroactive audit of every current mint site. `RunId` and `PackageId` are declared in
+`identity.rs` and constructed nowhere in the workspace today; this record binds whoever
+constructs one next, and does not by itself require anyone to revisit a site that predates
+it.
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#23
+
+*revision: authored · kind: heading · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md#24
+
+*revision: authored · kind: prose · heading: An identifier is derived from semantic addressing wherever possible, and minting one is an exception with a stated reason / Status · hash: sha256:f8defa525b423fa47ea460754b503292cd73a3e547bd22087c867a51b2451b0d*
+
+Accepted. It states the rule, what counts as a semantic address on both identity shapes,
+and the scope of entity families it binds. It decides no particular caller's construction
+site; the obligation lands on each one as it is written.
 
 ### docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md#1
 

@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:a37b6a0f84b9816f5da64dcd4eca1ae8ea96189bee68e8176b12110d5998aef2",
-  "inputs_digest": "sha256:f831b42ba99ca1e1c21578b4b127abbd226e525019a5fb5c78c935462cafd78e",
+  "content_digest": "sha256:06263b232983921cc3ba9ccdd1f5614ff1cadc454a50d77e141f42eeded3761e",
+  "inputs_digest": "sha256:ddf8cee137224bbef70a161e2b2bcd718b023152679032a30f302bb7a8eadeb1",
   "sections": [
     [
       "Relations",
-      550
+      560
     ],
     [
       "Decisions",
-      76
+      77
     ]
   ],
   "inputs": [
@@ -120,6 +120,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-LEDGER-001",
       "hash": "sha256:8ed0ae34289d169eacb61a39ca62426b9c88dd67d77ffd0538fc19847a1a7237"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to OD-PACKAGE-003",
+      "hash": "sha256:59a10a02eee8d7dc57553ceeefd30ac2fd650f863acc01e847d0689f8981d8e6"
     },
     {
       "content": "relations",
@@ -468,6 +473,11 @@
     },
     {
       "content": "relations",
+      "identity": "D-132 affects OD-PACKAGE-003",
+      "hash": "sha256:4f62b82c65e2226dc4510f2b40595a3a042ae945e2f182b7eac5a2026b1c2063"
+    },
+    {
+      "content": "relations",
       "identity": "D-132 affects OD-SPEC-002",
       "hash": "sha256:ad6f9d08f54f456941f3f9084e7ffef282c55251681d6d695138d98bd50450c4"
     },
@@ -640,6 +650,11 @@
       "content": "relations",
       "identity": "OD-AGENT-001 relates-to OD-LEDGER-001",
       "hash": "sha256:e12493331f5bf58f6c840010a4354f31b520a50f6d998a1316a260acb306fef3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-AGENT-001 relates-to OD-PACKAGE-003",
+      "hash": "sha256:6e9c11d9f306f2f4fbf7145cb9f9c37476211af62dab2caa46a3d5e265d8a16c"
     },
     {
       "content": "relations",
@@ -2093,6 +2108,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-001 relates-to OD-PACKAGE-003",
+      "hash": "sha256:86949ee395b439cd8907b8e29e195f92cd35f4ae061856d85224a3d0568c106c"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-001 relates-to OD-RULES-001",
       "hash": "sha256:ccddbe7278fe21121bcb1ec9d6b94e2efc93c6ef40c8aa3e0d0270a118675571"
     },
@@ -2120,6 +2140,36 @@
       "content": "relations",
       "identity": "OD-PACKAGE-002 relates-to OD-PACKAGE-001",
       "hash": "sha256:a380f57e6e891eea9d70fc77f6cf34900a13fe9d773e44e57ed4168998cf10c9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-002 relates-to OD-PACKAGE-003",
+      "hash": "sha256:dd611953eeeeb5a39977cfa7a6a8026b60b956ac8c28a72274aa7b5daba2bbd9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-003 affected_by D-132",
+      "hash": "sha256:e95b6cf018d248d611e72f638ce7a3859c2547b37999d3c5620ea779597d7082"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-003 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:a5a654d55252efb13a08820bafe2fcd593c06bb54ed6016bf116d51803ce080d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-003 relates-to OD-AGENT-001",
+      "hash": "sha256:dd83682539fb9b5ba29227ede3ac73a26ebd27bce7f7bb719d4e35c6c43a3123"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-003 relates-to OD-PACKAGE-001",
+      "hash": "sha256:0044788c72bdd93fd02d460451f24340ea83301c0c3dfc06a1fb6b30dc14d0ce"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-003 relates-to OD-PACKAGE-002",
+      "hash": "sha256:705ee88ace9dc5dccc229ffffa004fe473b45872fed7879a3ac1a75c067c71ac"
     },
     {
       "content": "relations",
@@ -3030,6 +3080,11 @@
       "content": "nodes",
       "identity": "OD-PACKAGE-002",
       "hash": "sha256:8ca2b51f2b410af1c61bfd21eb170187df5bf6da72ce00a6ce85205ba764f683"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-PACKAGE-003",
+      "hash": "sha256:f4238febe99219064b0f4e8ee8e1bf0a0ac584823ed4b0e7bca9036cb9c05d89"
     },
     {
       "content": "nodes",
