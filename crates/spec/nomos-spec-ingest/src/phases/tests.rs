@@ -88,6 +88,22 @@ fn Test_Ingest_Should_Be_Idempotent()
     );
 }
 
+/// A statement's node must answer to the catalog's own kind vocabulary — lowercase,
+/// underscore-separated — or a project section filtering on `kind: "requirement"` selects
+/// nothing from a store that has 324 of them, spelled `Requirement`.
+#[test]
+fn Test_A_Statements_Node_Kind_Should_Match_The_Catalogs_Vocabulary()
+{
+    let mut store = Store();
+    let text = "Nomos shall do the thing.";
+    let file = Statements(text, ContentHash::Of(text).As_Str());
+
+    Ingest_Statements(&mut store, &file).expect("ingests");
+
+    let summary = store.Node_Summary("AGT-001").expect("reads").expect("node exists");
+    assert_eq!(summary.kind, "requirement");
+}
+
 #[test]
 fn Test_Catalog_Entities_Should_Become_Nodes_With_Aliases()
 {

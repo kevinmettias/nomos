@@ -9734,6 +9734,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P12-STATEMENT-KIND-CASE",
+      "title": "A normative statement's node kind is stored in its own casing, so a project section filtering on the catalog's kind vocabulary finds none of them",
+      "why": "Discovered rendering requirement-catalog and api-documentation against the real v14 corpus: catalog nodes carry kind lowercase and underscore-separated (requirement, user_story, 363/169 of them); statements carry kind verbatim from the authoring YAML (Requirement, User Story, 324/169 of them). A project section's filter is an exact SQL match, so kind: \"requirement\" against a statement's node selects nothing, and requirement-catalog's Statements section (and api-documentation's Obligations) refuse as empty even though the requirement statements exist.",
+      "done_when": "Store_Statement normalizes a statement's kind to the catalog's vocabulary before writing the node row, and a test proves a statement authored as Requirement reads back with node kind requirement.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/phases/statements.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Its_Gaps ... ok\ntest Test_No_Document_Should_Have_Disappeared_And_Come_Back ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 9 tests\ntest Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row ... ok\ntest Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught ... ok\ntest Test_A_Sibling_Record_Should_Resolve_By_Its_Own_Identifier ... ok\ntest Test_Every_Game_Plan_Block_Should_Be_Commentary ... ok\ntest Test_Every_Sibling_Schema_Should_Resolve_As_A_Node_In_Its_Own_Suite ... ok\ntest Test_Every_Sibling_Suite_Should_Be_Non_Root ... ok\ntest Test_No_Statement_Should_Rest_On_A_Game_Plan_Alone ... ok\ntest Test_Re_Ingesting_The_Suites_Should_Change_Nothing ... ok\ntest Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-f1e365bdbda69d73.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-20c0dd71fbf860b1.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-34c9b48def762dc2.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-f81de57092b1782f.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-3167911979a00ab1.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-ae007b7e1ca5f495.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-437badd6affeedf6.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-97376e0f996b1e3a.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-db6329cb5c288f8f.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-389f459d8d4641cb.exe)\n   Doc-tests nomos_spec_ingest\n",
+        "verified_at": 1786854339,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
