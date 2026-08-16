@@ -9,6 +9,7 @@ use nomos_analysis::{
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, GenerationId, SnapshotId, SubjectId,
 };
+use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionPlan, Edit};
 use nomos_lang_rust::rollup;
 use nomos_model::Content_Digest;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
@@ -407,4 +408,69 @@ pub(crate) fn Snapshot_Production() -> Vec<u8>
         .expect("the fixture is a valid change set");
 
     return workspace.Snapshot().Encode();
+}
+
+/// A correction's whole lifecycle over a fresh workspace: previewed, staged, validated,
+/// committed and rolled back.
+///
+/// Every stage's own identity is rendered rather than only the final state, because a
+/// correction's promise is about the sequence — preview agreeing with what staging finds,
+/// staging agreeing with what commit applies, and rollback exactly reversing it — not only
+/// about where the workspace ends up. Ending back at the base snapshot is asserted directly
+/// rather than only rendered, for the same reason `Assert_The_Rollup_Read_Its_Members`
+/// asserts rather than trusts the bytes: a production that silently exercised less than it
+/// claims would still repeat itself identically.
+pub(crate) fn Correction_Production() -> Vec<u8>
+{
+    let variant = BuildVariant::New("x86_64-unknown-none", "determinism", "fixed", ["one", "two"]);
+    let configuration =
+        ConfigurationId::From_Digest(Content_Digest(b"nomos.determinism.corrections"));
+    let mut workspace = Workspace::Empty(variant, configuration);
+
+    workspace
+        .Apply(&WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("src/lib.rs", "pub fn a() {}"))
+        .expect("a fresh present is always accepted");
+
+    let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
+        "state the return type a takes for granted",
+        ChangeSet::Empty().With(Edit::New(
+            "src/lib.rs",
+            Some("pub fn a() {}".to_owned()),
+            Some("pub fn a() -> () {}".to_owned()),
+        )),
+    )])
+    .expect("one candidate on one path is a valid plan");
+
+    let base = workspace.Id();
+    let mut rendered = Vec::new();
+
+    rendered.extend_from_slice(b"preview\n");
+    rendered.extend_from_slice(plan.Preview().Rendered());
+
+    let staged = plan
+        .Stage(&workspace)
+        .expect("the candidate's declared prior content matches the fixture");
+    rendered.extend_from_slice(format!("staged-base\t{}\n", staged.Base()).as_bytes());
+
+    let validated = staged
+        .Validate(&workspace)
+        .expect("nothing has moved the workspace since staging");
+
+    let committed = validated
+        .Commit(&mut workspace)
+        .expect("the workspace door accepts the forward change");
+    rendered.extend_from_slice(format!("committed-base\t{}\n", committed.Base()).as_bytes());
+    rendered.extend_from_slice(format!("committed-after\t{}\n", committed.After()).as_bytes());
+    assert_ne!(committed.After(), base, "the commit must have changed the workspace");
+
+    let rolled_back_to = committed
+        .Rollback(&mut workspace)
+        .expect("the workspace door accepts the reverse change");
+    rendered.extend_from_slice(format!("rolled-back-to\t{rolled_back_to}\n").as_bytes());
+    assert_eq!(
+        rolled_back_to, base,
+        "rolling back a commit must return to exactly the snapshot it started from"
+    );
+
+    return rendered;
 }

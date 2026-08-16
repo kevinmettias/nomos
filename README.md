@@ -46,6 +46,7 @@ band, and `tests/contract` asserts it.
 | 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`, and the module rollup derived from them — the one fact in this workspace computed from other facts. |
 | 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |
 | 30 | `nomos-rules` | A rule as a pure function whose subject is an argument: source it is handed, and facts it reads through a `FactReader`. |
+| 35 | `nomos-corrections` | `CorrectionCandidate`, `CorrectionPlan`, and the deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change. No agent, no model backend. |
 | 90 | `nomos-cli` | The `nomos` binary. |
 | 100 | `nomos-contract-tests` | The assertions in `tests/contract`. Observes the workspace; nothing observes it. |
 | 100 | `nomos-integration-tests` | The vertical slice, driving the product through its seams. Its peer, not its layer. |

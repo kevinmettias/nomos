@@ -65,6 +65,10 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // vendor a second parser — and a band below them would have forbidden that edge and
     // made the second parser the easy answer.
     ("nomos-rules", 30),
+    // The step that applies what a rule found. Above rules deliberately, with room
+    // between: a correction candidate may one day need to name a finding a rule
+    // produced, and a band below rules would have forbidden that edge.
+    ("nomos-corrections", 35),
     ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.

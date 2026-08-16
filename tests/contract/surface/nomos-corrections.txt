@@ -1,0 +1,55 @@
+pub const fn nomos_corrections::CommittedPlan::After(&self) -> SnapshotId
+pub const fn nomos_corrections::CommittedPlan::Base(&self) -> SnapshotId
+pub const fn nomos_corrections::CorrectionCandidate::Change(&self) -> &ChangeSet
+pub const fn nomos_corrections::CorrectionCandidate::Id(&self) -> CorrectionId
+pub const fn nomos_corrections::CorrectionId::Digest(&self) -> Digest128
+pub const fn nomos_corrections::CorrectionId::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_corrections::StagedPlan::Base(&self) -> SnapshotId
+pub const nomos_corrections::CorrectionStaging::SCOPE: ReproducibilityScope
+pub const nomos_corrections::CorrectionStaging::STRENGTH: DeterminismStrength
+pub const nomos_corrections::CorrectionStaging::TRACE: TraceEquivalence
+pub enum nomos_corrections::CorrectionError
+pub enum variant nomos_corrections::CorrectionError::Conflicting { paths: Vec<String>, }
+pub enum variant nomos_corrections::CorrectionError::Moved { expected: SnapshotId, found: SnapshotId, }
+pub enum variant nomos_corrections::CorrectionError::StaleCandidate { path: String, expected: Option<Digest128>, found: Option<Digest128>, }
+pub enum variant nomos_corrections::CorrectionError::Vacuous
+pub enum variant nomos_corrections::CorrectionError::Workspace(WorkspaceError)
+pub fn nomos_corrections::ChangeSet::Edits(&self) -> &[Edit]
+pub fn nomos_corrections::ChangeSet::Empty() -> Self
+pub fn nomos_corrections::ChangeSet::Is_Empty(&self) -> bool
+pub fn nomos_corrections::ChangeSet::Touched(&self) -> BTreeSet<&str>
+pub fn nomos_corrections::ChangeSet::With(mut self, edit: Edit) -> Self
+pub fn nomos_corrections::CommittedPlan::Rollback(self, live: &mut Workspace) -> Result<SnapshotId, CorrectionError>
+pub fn nomos_corrections::CorrectionCandidate::Description(&self) -> &str
+pub fn nomos_corrections::CorrectionCandidate::New(description: impl Into<String>, change: ChangeSet) -> Self
+pub fn nomos_corrections::CorrectionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::CorrectionError::from(error: WorkspaceError) -> Self
+pub fn nomos_corrections::CorrectionId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::CorrectionPlan::Candidates(&self) -> &[CorrectionCandidate]
+pub fn nomos_corrections::CorrectionPlan::New(candidates: Vec<CorrectionCandidate>) -> Result<Self, CorrectionError>
+pub fn nomos_corrections::CorrectionPlan::Preview(&self) -> Preview
+pub fn nomos_corrections::CorrectionPlan::Stage(&self, base: &Workspace) -> Result<StagedPlan, CorrectionError>
+pub fn nomos_corrections::Edit::After(&self) -> Option<&str>
+pub fn nomos_corrections::Edit::Before(&self) -> Option<&str>
+pub fn nomos_corrections::Edit::Forward(&self) -> Change
+pub fn nomos_corrections::Edit::New(path: impl Into<String>, before: Option<String>, after: Option<String>) -> Self
+pub fn nomos_corrections::Edit::Path(&self) -> &str
+pub fn nomos_corrections::Edit::Reverse(&self) -> Change
+pub fn nomos_corrections::Preview::Rendered(&self) -> &[u8]
+pub fn nomos_corrections::StagedPlan::Validate(&self, live: &Workspace) -> Result<ValidatedPlan, CorrectionError>
+pub fn nomos_corrections::ValidatedPlan::Commit(self, live: &mut Workspace) -> Result<CommittedPlan, CorrectionError>
+pub impl nomos_corrections::CorrectionError implements From<WorkspaceError>
+pub impl nomos_corrections::CorrectionError implements core::fmt::Display
+pub impl nomos_corrections::CorrectionError implements std::error::Error
+pub impl nomos_corrections::CorrectionId implements core::fmt::Display
+pub impl nomos_corrections::CorrectionStaging implements Strategy
+pub struct nomos_corrections::ChangeSet
+pub struct nomos_corrections::CommittedPlan
+pub struct nomos_corrections::CorrectionCandidate
+pub struct nomos_corrections::CorrectionId(Digest128)
+pub struct nomos_corrections::CorrectionPlan
+pub struct nomos_corrections::CorrectionStaging
+pub struct nomos_corrections::Edit
+pub struct nomos_corrections::Preview
+pub struct nomos_corrections::StagedPlan
+pub struct nomos_corrections::ValidatedPlan

@@ -12,8 +12,8 @@ use crate::goldens::{
     SNAPSHOT_GOLDEN,
 };
 use crate::productions::{
-    Parsed_Production, Reuse_Production, Rolled_Production, Scanned_Production,
-    Snapshot_Production,
+    Correction_Production, Parsed_Production, Reuse_Production, Rolled_Production,
+    Scanned_Production, Snapshot_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
 use nomos_lang_rust::SyntaxFactProduction;
@@ -94,4 +94,16 @@ fn Test_Projection_Output_Should_Meet_Its_Declared_Strategy()
         &Alternating(Projection_Bytes),
         PROJECTION_GOLDEN,
     );
+}
+
+#[test]
+fn Test_Corrections_Should_Meet_Their_Declared_Strategy()
+{
+    use nomos_corrections::CorrectionStaging;
+
+    // No golden. `CorrectionStaging` declares `CrossRun`, and `Cross_Environment_Owed`
+    // therefore never reaches for one — passing a real digest here would be a check the
+    // declaration did not ask for, which is the same defect as a missing one pointed the
+    // other way.
+    Check::<CorrectionStaging>("correction-staging", &Correction_Production, "");
 }

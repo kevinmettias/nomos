@@ -39,6 +39,11 @@ members = [
     # test can hand it code that no longer exists anywhere.
     "crates/rules/nomos-rules",
 
+    # Band 35 — corrections. The step that applies what a rule found. Above rules
+    # deliberately, with room between: a correction candidate may one day need to name
+    # a finding a rule produced, and a band below rules would have forbidden that edge.
+    "crates/corrections/nomos-corrections",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -84,6 +89,7 @@ nomos-cap-syntax = { path = "crates/capabilities/nomos-cap-syntax" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
+nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

@@ -1,0 +1,84 @@
+//! What a plan would do, rendered without touching any workspace.
+
+use crate::CorrectionPlan;
+
+/// A deterministic rendering of a plan's candidates and their edits.
+///
+/// Pure over the plan alone. Previewing never touches a [`nomos_workspace::Workspace`],
+/// so it carries no [`crate::CorrectionError`] and cannot go stale — a live check of
+/// whether the plan still applies is what [`crate::CorrectionPlan::Stage`] is for.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Preview
+{
+    rendered: Vec<u8>,
+}
+
+impl Preview
+{
+    #[must_use]
+    pub(crate) fn Of(plan: &CorrectionPlan) -> Self
+    {
+        let mut rendered = Vec::new();
+
+        for candidate in plan.Candidates()
+        {
+            rendered.extend_from_slice(format!("candidate\t{}\n", candidate.Id()).as_bytes());
+            rendered
+                .extend_from_slice(format!("description\t{}\n", candidate.Description()).as_bytes());
+
+            for edit in candidate.Change().Edits()
+            {
+                rendered.extend_from_slice(
+                    format!(
+                        "edit\t{}\t{}\t{}\n",
+                        edit.Path(),
+                        edit.Before().unwrap_or("-"),
+                        edit.After().unwrap_or("-")
+                    )
+                    .as_bytes(),
+                );
+            }
+        }
+
+        return Self { rendered };
+    }
+
+    #[must_use]
+    pub fn Rendered(&self) -> &[u8]
+    {
+        return &self.rendered;
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use crate::{ChangeSet, CorrectionCandidate, CorrectionPlan, Edit};
+
+    #[test]
+    fn Test_A_Preview_Names_Every_Candidate_And_Edit()
+    {
+        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
+            "fix a",
+            ChangeSet::Empty().With(Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()))),
+        )])
+        .expect("one candidate is a valid plan");
+
+        let rendered = String::from_utf8(plan.Preview().Rendered().to_vec()).expect("utf8");
+
+        assert!(rendered.contains("description\tfix a\n"));
+        assert!(rendered.contains("edit\ta.rs\told\tnew\n"));
+    }
+
+    #[test]
+    fn Test_Previewing_The_Same_Plan_Twice_Should_Agree()
+    {
+        let plan = CorrectionPlan::New(vec![CorrectionCandidate::New(
+            "fix a",
+            ChangeSet::Empty().With(Edit::New("a.rs", None, Some("new".to_owned()))),
+        )])
+        .expect("one candidate is a valid plan");
+
+        assert_eq!(plan.Preview(), plan.Preview());
+    }
+}

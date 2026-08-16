@@ -161,12 +161,6 @@ fn Assert_Both_Scans_Found_Something(declared: &BTreeSet<String>, harnessed: &BT
 /// `OD-COMPLETENESS-001` is about.
 const UNOCCUPIED: &[(&str, &str)] = &[
     (
-        "Correction planning and staging",
-        "nothing in this tree plans or stages a correction. `nomos-rules` judges and \
-         reports; the step that would apply a fix does not exist, so there is no domain to \
-         declare and a declaration would be a promise about code nobody has written.",
-    ),
-    (
         "Progress UI, logs, telemetry, agent execution",
         "the `None` row, and the one that keeps determinism affordable. The CLI prints, \
          and nothing about what it prints is a fact. A domain here would be declaring that \

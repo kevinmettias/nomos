@@ -1,0 +1,16 @@
+[package]
+name = "nomos-corrections"
+version = "0.1.0"
+description = "Band 35. CorrectionCandidate, CorrectionPlan and the deterministic stage/validate/commit/rollback door over a workspace change."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-workspace = { workspace = true }
+
+[lints]
+workspace = true

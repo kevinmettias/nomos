@@ -1,0 +1,138 @@
+//! A group of candidates, checked against each other before it is checked against anything
+//! live.
+
+use crate::{CorrectionCandidate, CorrectionError, Preview, StagedPlan};
+use nomos_workspace::Workspace;
+use std::collections::BTreeSet;
+
+/// One or more candidates meant to be staged, validated, committed and rolled back
+/// together.
+///
+/// Constructing a plan is the first refusal a correction can hit, and the cheapest: two
+/// candidates that touch the same path disagree with each other regardless of what
+/// workspace either was built against, so that is caught here rather than carried forward
+/// to [`CorrectionPlan::Stage`].
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CorrectionPlan
+{
+    candidates: Vec<CorrectionCandidate>,
+}
+
+impl CorrectionPlan
+{
+    /// # Errors
+    ///
+    /// Returns [`CorrectionError::Vacuous`] if `candidates` is empty, or
+    /// [`CorrectionError::Conflicting`] if two candidates touch the same path.
+    pub fn New(candidates: Vec<CorrectionCandidate>) -> Result<Self, CorrectionError>
+    {
+        if candidates.is_empty()
+        {
+            return Err(CorrectionError::Vacuous);
+        }
+
+        let overlapping = Overlapping_Paths(&candidates);
+        if !overlapping.is_empty()
+        {
+            return Err(CorrectionError::Conflicting {
+                paths: overlapping,
+            });
+        }
+
+        return Ok(Self { candidates });
+    }
+
+    #[must_use]
+    pub fn Candidates(&self) -> &[CorrectionCandidate]
+    {
+        return &self.candidates;
+    }
+
+    /// What this plan would do, rendered without touching `base`.
+    #[must_use]
+    pub fn Preview(&self) -> Preview
+    {
+        return Preview::Of(self);
+    }
+
+    /// Checks every candidate's declared prior content against `base`, and carries the
+    /// combined forward and reverse changes forward for [`StagedPlan::Validate`].
+    ///
+    /// # Errors
+    ///
+    /// Returns [`CorrectionError::StaleCandidate`] if a candidate's declared prior content
+    /// at a path does not match what `base` currently holds there.
+    pub fn Stage(&self, base: &Workspace) -> Result<StagedPlan, CorrectionError>
+    {
+        return StagedPlan::Of(self, base);
+    }
+}
+
+/// Every path touched by more than one candidate, in a stable order.
+fn Overlapping_Paths(candidates: &[CorrectionCandidate]) -> Vec<String>
+{
+    let mut seen: BTreeSet<&str> = BTreeSet::new();
+    let mut overlapping: BTreeSet<&str> = BTreeSet::new();
+
+    for candidate in candidates
+    {
+        for path in candidate.Change().Touched()
+        {
+            if !seen.insert(path)
+            {
+                overlapping.insert(path);
+            }
+        }
+    }
+
+    return overlapping.into_iter().map(str::to_owned).collect();
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::{ChangeSet, Edit};
+
+    fn Candidate(description: &str, path: &str) -> CorrectionCandidate
+    {
+        return CorrectionCandidate::New(
+            description,
+            ChangeSet::Empty().With(Edit::New(path, None, Some("x".to_owned()))),
+        );
+    }
+
+    #[test]
+    fn Test_An_Empty_Plan_Should_Be_Refused()
+    {
+        let refusal = CorrectionPlan::New(Vec::new()).expect_err("no candidates is vacuous");
+
+        assert_eq!(refusal, CorrectionError::Vacuous);
+    }
+
+    #[test]
+    fn Test_Two_Candidates_Touching_The_Same_Path_Should_Be_Refused()
+    {
+        let refusal = CorrectionPlan::New(vec![
+            Candidate("first", "a.rs"),
+            Candidate("second", "a.rs"),
+        ])
+        .expect_err("two candidates on one path conflict");
+
+        assert_eq!(
+            refusal,
+            CorrectionError::Conflicting {
+                paths: vec!["a.rs".to_owned()]
+            }
+        );
+    }
+
+    #[test]
+    fn Test_Candidates_Touching_Different_Paths_Should_Be_Accepted()
+    {
+        let plan = CorrectionPlan::New(vec![Candidate("first", "a.rs"), Candidate("second", "b.rs")])
+            .expect("disjoint candidates form a plan");
+
+        assert_eq!(plan.Candidates().len(), 2);
+    }
+}

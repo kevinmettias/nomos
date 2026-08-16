@@ -112,6 +112,7 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
             "domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy"
         }
         "projection-output" => "domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy",
+        "correction-staging" => "domains::Test_Corrections_Should_Meet_Their_Declared_Strategy",
         // The domain arrives as a string, so this arm is the only thing checking the mapping
         // is complete. Any fallback name would spawn a child that selected no test, exited
         // zero and printed nothing — the silent-child failure the doc above describes, then

@@ -348,6 +348,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-corrections"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-model",
+ "nomos-workspace",
+]
+
+[[package]]
 name = "nomos-integration-tests"
 version = "0.1.0"
 dependencies = [
@@ -355,6 +364,7 @@ dependencies = [
  "nomos-cap-syntax",
  "nomos-capability",
  "nomos-contracts",
+ "nomos-corrections",
  "nomos-lang-rust",
  "nomos-lang-rust-scan",
  "nomos-model",

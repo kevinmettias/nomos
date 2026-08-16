@@ -16,17 +16,18 @@ use nomos_contracts::{DeterminismStrength, Strategy};
 ///
 /// # What is still not covered, and why that is not a gap
 ///
-/// Two of the table's six rows have no domain in this tree. "Correction planning and
-/// staging" describes work that applies fixes, and nothing here applies one. "Progress UI,
-/// logs, telemetry, agent execution" is the `None` row — the CLI prints, and nothing about
-/// what it prints is a fact. Neither is an omission that a declaration would repair;
-/// `tests/contract/tests/determinism_declarations.rs` is where they are accounted for, so
-/// that a crate arriving to occupy either row cannot do so silently.
+/// One of the table's six rows has no domain in this tree: "Progress UI, logs, telemetry,
+/// agent execution", the `None` row — the CLI prints, and nothing about what it prints is
+/// a fact. "Correction planning and staging" was the other; `nomos-corrections` occupies it
+/// now, below. That is not an omission a declaration would repair;
+/// `tests/contract/tests/determinism_declarations.rs` is where the remaining row is
+/// accounted for, so that a crate arriving to occupy it cannot do so silently.
 #[test]
 fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
 {
     use crate::harness::Test_Name_For;
     use nomos_analysis::FactReuse;
+    use nomos_corrections::CorrectionStaging;
     use nomos_lang_rust::SyntaxFactProduction;
     use nomos_lang_rust_scan::ScanFactProduction;
     use nomos_spec_bundle::BundleSerialization;
@@ -46,11 +47,12 @@ fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
         ("snapshot-serialization", SnapshotSerialization::STRENGTH),
         ("bundle-serialization", BundleSerialization::STRENGTH),
         ("projection-output", ProjectionOutput::STRENGTH),
+        ("correction-staging", CorrectionStaging::STRENGTH),
     ];
     assert_eq!(
         declared.len(),
-        7,
-        "seven productions are covered by six declarations; a new producer needs a row in \
+        8,
+        "eight productions are covered by seven declarations; a new producer needs a row in \
          this table and a test of its own, whether or not it also needs a declaration of \
          its own"
     );
