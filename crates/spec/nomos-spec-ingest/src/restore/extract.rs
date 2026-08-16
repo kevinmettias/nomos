@@ -148,11 +148,9 @@ pub(super) fn At_Depth_3(title: &str) -> Vec<Recognition>
         found.push((Restored::RoadmapMilestone, numbering, None));
     }
     if let Some(numbering) = Numbering(title, 'G', 1)
+        && title.contains("End-to-end scenario:")
     {
-        if title.contains("End-to-end scenario:")
-        {
-            found.push((Restored::Scenario, numbering, None));
-        }
+        found.push((Restored::Scenario, numbering, None));
     }
 
     return found;

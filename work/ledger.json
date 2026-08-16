@@ -8879,7 +8879,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -8895,7 +8895,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-561a88ff4bc732e0.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-f65566f9f804790f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-ae78a8a92bf9e664.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-666affc9d8a6107a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-faf089d7b56b1dc8.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-7b57485033de3722.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-94d244b10387d231.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4671dbfc788e1386.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-e6a808699dd7df9b.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-1f967c005abb2c09.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-ab55529451235691.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-ebbdcf7b45b19849.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-811d013be0297b1f.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-3b8290c0a7ae6e6c.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-4cb1e3d9bdcb0404.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-276eabde6de44d17.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-efccc9cf2fe630a5.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-a816996f8f9c77ae.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_ingest\n",
+        "verified_at": 1786855989,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
