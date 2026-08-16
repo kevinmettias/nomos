@@ -4,8 +4,11 @@
 graph LR
   subgraph "Relations"
     adr_doc_001["ADR-DOC-001"] -->|"superseded_by"| d_129["D-129"]
-    arc_ecosystem_001["ARC-ECOSYSTEM-001"] -->|"affected_by"| arc_harness_001["ARC-HARNESS-001"]
+    arc_connector_001["ARC-CONNECTOR-001"] -->|"relates-to"| arc_ecosystem_001["ARC-ECOSYSTEM-001"]
+    arc_connector_001 -->|"relates-to"| d_130["D-130"]
+    arc_ecosystem_001 -->|"affected_by"| arc_harness_001["ARC-HARNESS-001"]
     arc_ecosystem_001 -->|"affected_by"| od_spec_014["OD-SPEC-014"]
+    arc_ecosystem_001 -->|"relates-to"| arc_connector_001
     arc_ecosystem_001 -->|"relates-to"| arc_ecosystem_002["ARC-ECOSYSTEM-002"]
     arc_ecosystem_001 -->|"relates-to"| arc_specdb_001["ARC-SPECDB-001"]
     arc_ecosystem_001 -->|"relates-to"| d_085["D-085"]
@@ -13,7 +16,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| d_090["D-090"]
     arc_ecosystem_001 -->|"relates-to"| d_096["D-096"]
     arc_ecosystem_001 -->|"relates-to"| d_122["D-122"]
-    arc_ecosystem_001 -->|"relates-to"| d_130["D-130"]
+    arc_ecosystem_001 -->|"relates-to"| d_130
     arc_ecosystem_001 -->|"relates-to"| d_135["D-135"]
     arc_ecosystem_001 -->|"relates-to"| d_136["D-136"]
     arc_ecosystem_001 -->|"relates-to"| d_137["D-137"]
@@ -78,6 +81,7 @@ graph LR
     d_129 -->|"supersedes"| adr_doc_001
     d_130 -->|"affected_by"| od_gate_006["OD-GATE-006"]
     d_130 -->|"affects"| arc_specdb_001
+    d_130 -->|"relates-to"| arc_connector_001
     d_130 -->|"relates-to"| arc_ecosystem_001
     d_130 -->|"relates-to"| d_135
     d_130 -->|"relates-to"| od_platform_001

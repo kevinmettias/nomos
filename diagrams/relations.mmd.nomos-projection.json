@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:d1588dff4d867d3c2594c441170cb1d07ed8bda865cf190ae475c6094488b08c",
-  "inputs_digest": "sha256:6bf787e137f2912dd5ed16327162a658ec514edb0dfe90f70743d3c98ffa9890",
+  "content_digest": "sha256:a37b6a0f84b9816f5da64dcd4eca1ae8ea96189bee68e8176b12110d5998aef2",
+  "inputs_digest": "sha256:f831b42ba99ca1e1c21578b4b127abbd226e525019a5fb5c78c935462cafd78e",
   "sections": [
     [
       "Relations",
-      546
+      550
     ],
     [
       "Decisions",
@@ -23,6 +23,16 @@
     },
     {
       "content": "relations",
+      "identity": "ARC-CONNECTOR-001 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:1dec3e63f7182248b20fa057192811a2ed4da480fb0e833fdabc89cee7636cef"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONNECTOR-001 relates-to D-130",
+      "hash": "sha256:347b5dae83146c2239d4e14347db3706a581055e756e9752411e87e6ff24d0ed"
+    },
+    {
+      "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 affected_by ARC-HARNESS-001",
       "hash": "sha256:9d63347c11ff10d6de094da161e5acb25a3cbfcd6695b494ede5119e2253c11a"
     },
@@ -30,6 +40,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 affected_by OD-SPEC-014",
       "hash": "sha256:b1b4945768d7bcfaa138ce61335f57a50f85c412f7973132cdde9dd59c390eff"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to ARC-CONNECTOR-001",
+      "hash": "sha256:4d2a8a805552df4f620d39e34487c37b8b92010fb81cc7112f8f58f54e9666c0"
     },
     {
       "content": "relations",
@@ -390,6 +405,11 @@
       "content": "relations",
       "identity": "D-130 affects ARC-SPECDB-001",
       "hash": "sha256:e151f9dc5551297bd6281e9c5a4be37a7e7eddd3048fe4f460b7956ae08d10a5"
+    },
+    {
+      "content": "relations",
+      "identity": "D-130 relates-to ARC-CONNECTOR-001",
+      "hash": "sha256:2467c7228c76838b58b64b5d4637ca93fbd5d11f399edc560eed8530ab88b6c9"
     },
     {
       "content": "relations",

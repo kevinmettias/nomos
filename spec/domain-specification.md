@@ -10,6 +10,7 @@ profile: domain-specification
 
 | identity | path | revision | blocks | headings | hash |
 | --- | --- | --- | --- | --- | --- |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md | authored | 36 | 12 | sha256:adc1a21b6db345c299218e596bb0f50a4a705be3f8ec5ca460888e641540aebb |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 58 | 14 | sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
@@ -96,6 +97,18 @@ profile: domain-specification
 
 | identity | revision | depth | title |
 | --- | --- | --- | --- |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#1 | authored | 1 | External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#2 | authored | 2 | Question |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#7 | authored | 2 | The Third Crossing, And Its Layers |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#14 | authored | 2 | The Four Invariants |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#15 | authored | 3 | 1. External identity is derived from semantic addressing, not minted from a vendor key |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#18 | authored | 3 | 2. Vendor schemas and authentication stay below the seam |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#21 | authored | 3 | 3. External state enters as Observed and never as authority |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#24 | authored | 3 | 4. A write capability is omitted from the interface, not present and permission-checked |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#27 | authored | 2 | Why This Is An Ecosystem Record And Not A Connector-Specific One |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#29 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#33 | authored | 2 | What This Record Does Not Do |
+| docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#35 | authored | 2 | Status |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#1 | authored | 1 | Four products share one seam, and ownership is decided by semantics rather than by location |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#2 | authored | 2 | Question |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#6 | authored | 2 | Why This Is Recorded Now Rather Than Later |
@@ -844,6 +857,345 @@ profile: domain-specification
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#40 | authored | 2 | Status |
 
 ## Source blocks
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#1
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default · hash: sha256:de4d7dd6f51594e46b3e23e18b6bfc4ccff3a89a95dc219c24547b7dde8f334d*
+
+# External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#2
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#3
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Question · hash: sha256:750b9ea051986d243983af736c9c31eda118617733537113cf793a4f171121c2*
+
+`ARC-ECOSYSTEM-001` draws and governs two crossings: KWB semantic intent projects down into
+a Nomos executable contract, and an XVPE generic primitive is consumed upward by adaptation.
+An external system of record — an issue tracker, a wiki, a document store — is neither. It
+is not knowledge, and it is not a generic runtime primitive; it is a system this workspace
+does not run, whose facts arrive from outside every crossing that record already named.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#4
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Question · hash: sha256:204020fde78ca458b61b8021961b4bcd35d759672e2781956c8364ea1c70820f*
+
+Nothing in this workspace names one. A search for `connector`, `external system`, `GitHub`,
+`Jira`, `Confluence` or `SharePoint` across every `.rs` file in the tree returns three files
+— `crates/host/nomos-cli/tests/gate_step/workflow.rs`,
+`crates/host/nomos-cli/tests/gate_step/main.rs` and
+`crates/substrate/nomos-ledger/src/gate.rs` — and all three are this repository's own gate
+step, not an external service. There is no crate, no trait, no `EvidenceClass` assignment
+and no identity rule for state that originates outside the workspace, and the first
+connector written would decide all four by being the only thing that has.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#5
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Question · hash: sha256:d8cbfdc195f3568c46e1aaecdd24edd134f28d41ce17ac0763acde0d327eca2f*
+
+That is the same shape `OD-AGENT-001` recorded for the KWB boundary before
+`ARC-ECOSYSTEM-001` answered it: not a missing feature, a missing decision that the first
+implementation would make silently. The specific risk here is authority. An external
+tracker's status field is a fact about that tracker, not about this codebase, and a
+connector that returns it as an ordinary value hands a vendor's workflow the standing of a
+Nomos verdict. `EvidenceClass` already exists to keep those apart, and nothing today routes
+an external read through it.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#6
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Question · hash: sha256:8152453f48aa542cf76f1590787f5433ffa85147d961fec745251c1eec1303e8*
+
+This record names the crossing and settles what can be settled about it now, the same way
+`ARC-ECOSYSTEM-002` settled the landing spot for an extraction before anyone opened the old
+KWB tree. It cites `ARC-ECOSYSTEM-001` rather than restating it: a seam decided in two
+record sets where neither names the other is the duplication a seam record exists to
+prevent, which is exactly what `ARC-ECOSYSTEM-001` itself needed a citation pass to
+correct once already, over the sibling suites that had reached parts of it first.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#7
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Third Crossing, And Its Layers · hash: sha256:7c11a0618280c0990e721573f6a77701c90e51e4b66a4ee0a7d09108f42b1eaf*
+
+## The Third Crossing, And Its Layers
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#8
+
+*revision: authored · kind: code · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Third Crossing, And Its Layers · hash: sha256:61bbe87c73740807869dc8ca55522bad50214d0d66dd95686d6d37ad8620654e*
+
+```
+External system of record  (GitHub, Jira, Confluence, SharePoint, ...)
+        |
+        |  generic connector substrate — protocol, auth transport, retry, rate limit
+        v
+Vendor schema and vendor authentication
+        |
+        |  vendor-to-canonical translation — a governed projection
+        v
+Nomos canonical fact, entering as Observed evidence
+        |
+        |  unchanged: the two crossings ARC-ECOSYSTEM-001 already governs
+        v
+KWB semantic intent <-> Nomos executable contract
+XVPE generic primitive <-> Nomos-specific service (by adaptation)
+```
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#9
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Third Crossing, And Its Layers · hash: sha256:1ee22cfc39efc2951731187c70e1f12772e384dfe6f31e889e5686c68fd497e2*
+
+Four layers, and ownership follows `ARC-ECOSYSTEM-001`'s existing vocabulary rather than a
+new one:
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#10
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Third Crossing, And Its Layers · hash: sha256:8661e8362bb03ba931d49c2b04181234c2d0bd8d29f559b9f3e22f4ec62d7a6f*
+
+**The external system of record** is outside the workspace and outside this ecosystem
+entirely. Nomos does not own it, does not own its schema, and does not own its workflow
+semantics. It stands to a connector the way the old C# KWB tree stands to the KWB rewrite
+in `ARC-ECOSYSTEM-002`: a source a connector reads, never a system this repository is
+responsible for being correct.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#11
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Third Crossing, And Its Layers · hash: sha256:dbb4b319ee9e9eb22a91aee58a2ad825529a23145465be9a01f673d00d608948*
+
+**The generic connector substrate** — the protocol client, the auth transport, retry and
+backoff, rate limiting: the mechanics of talking to *any* external API-shaped system, with
+no software-engineering or Nomos semantics attached — is XVPE's, on the same criterion
+`ARC-ECOSYSTEM-001` already states for that product: "the primitives that are reusable
+without any Nomos semantics attached." It is reached on the same terms `D-130` already sets
+for anything XVPE, before or after Phase 5: never a `path` dependency, and only through a
+single named, quarantined adapter crate if adopted early. This record does not mint that
+crate's name; naming an empty one now would be exactly the mistake
+`ARC-ECOSYSTEM-001`'s "Current Placement Does Not Prove Permanent Ownership" clause warns
+against — deciding an address before anything needs one.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#12
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Third Crossing, And Its Layers · hash: sha256:3f911bf3b111650809de1211651c257d91ba67908ebc5c499b74161b6f39c10d*
+
+**The vendor-to-canonical translation** is Nomos's, and it is a governed projection in the
+sense `ARC-ECOSYSTEM-001` already uses for the other two crossings: authority changes hands
+here, so the translation must be a recorded, inspectable step rather than an inference made
+once and trusted afterward. It is the only layer permitted to know a specific vendor's
+field names, status enumerations, or API shape.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#13
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Third Crossing, And Its Layers · hash: sha256:172d52d2ec7e9e90ad72aa4208f7170d6878353713360c085745ab114cfb93c9*
+
+**The two crossings `ARC-ECOSYSTEM-001` already governs** are untouched by this record. Once
+a fact is translated into canonical form it is ordinary Nomos evidence, subject to the same
+downward (KWB rationale into a Nomos contract) and upward (XVPE primitive adapted into a
+Nomos service) crossings as any other fact this workspace produces. This record adds a floor
+beneath both. It does not touch either, and in particular it does not open the
+observations-to-knowledge crossing `P11-ECOSYSTEM-UPWARD` governs — an external fact
+translated to canonical form is Nomos evidence like any other, and whether *that* may
+generalize into KWB knowledge is that item's question, not this one's, exactly as
+`ARC-ECOSYSTEM-002` already declined to open it for an extracted KWB finding.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#14
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants · hash: sha256:aa3a4ac82ae2f52b921850d7077729b78172739c63e6a44054273e44279639b6*
+
+## The Four Invariants
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#15
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 1. External identity is derived from semantic addressing, not minted from a vendor key · hash: sha256:6292fbd23efbae7276392b620a8956391b39f4202a1085f94f2b390139e483fa*
+
+### 1. External identity is derived from semantic addressing, not minted from a vendor key
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#16
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 1. External identity is derived from semantic addressing, not minted from a vendor key · hash: sha256:d3eb43fa1147f0f4b8dcd16516236a1dce3b4b4df0bc125f03e8231bac61732d*
+
+**The rule.** An external item's identity in this workspace must be derived from what the
+item is *about*, not copied from the tracker's own primary key. This is not a new
+principle invented for connectors — it is the same one `crates/substrate/nomos-analysis`
+already applies to a fact (`FactIdentity`/`FactKey`, keyed on what is measured rather than
+on an incidental label) and the same one `D-136`/`ARC-ECOSYSTEM-002` already state for a
+claim and a concept: identity is content-derived. A vendor's issue number is exactly the
+incidental label that pattern already refuses to key on, because it identifies a database
+row in a system this workspace does not own, not the thing the row is about.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#17
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 1. External identity is derived from semantic addressing, not minted from a vendor key · hash: sha256:ca79c436f4bc833ac6a39a027aa2ba3d11d849c67658a60b22b58fcd7339dd47*
+
+**What it is waiting on.** The concrete addressing scheme is connector-specific — a GitHub
+issue's semantic address is not shaped like a Jira ticket's or a SharePoint document's — so
+this record settles the principle and leaves the scheme itself to the first connector that
+needs one. That connector's addressing is checked against this rule; it does not get to
+establish the rule by being first.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#18
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 2. Vendor schemas and authentication stay below the seam · hash: sha256:600ef3e88561265a938f6b5542679444d0524a44f487e8d6ac7e36a0479f17b6*
+
+### 2. Vendor schemas and authentication stay below the seam
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#19
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 2. Vendor schemas and authentication stay below the seam · hash: sha256:0c19fee068416983bbe9165d2d5ceb401b03188142fa0020906b3a2323b5cbe2*
+
+**The rule.** No canonical Nomos type may name a vendor. The vendor-to-canonical translation
+layer is the only place a vendor's field names, status enumerations, authentication scheme,
+or API shape may appear in source at all; nothing above that layer may import or reference
+them, directly or in a type name. A `Finding`, an `EvidenceClass` assignment, or any other
+canonical value that mentions "GitHub" or "Jira" in its type has let the translation leak
+past its own layer.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#20
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 2. Vendor schemas and authentication stay below the seam · hash: sha256:6a3e08f7dbc430ee599a04dbfca09b2feff251b671ab7c3f266bc32a233a5c09*
+
+**What it is waiting on.** Nothing normative — this is fully decidable now, as a shape
+constraint the first connector's translation layer is checked against. What is not yet
+decided is the container: whether the quarantine is one crate per vendor or one crate per
+connector family is an implementation choice for whoever writes the first one, the same way
+`nomos-platform-xvpe` in `D-130` was named only when something needed to be adopted through
+it.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#21
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 3. External state enters as Observed and never as authority · hash: sha256:09868649f3b3572620a24ccfc6d8b6e14adb9edbe4d00054575bf04bac4addb3*
+
+### 3. External state enters as Observed and never as authority
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#22
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 3. External state enters as Observed and never as authority · hash: sha256:de107c4dc25edc01a77ccce6806922d7ef88037242b979c824b08e8f33dc4055*
+
+**The rule.** `EvidenceClass::Observed` — "directly observed at runtime," per
+`crates/contracts/nomos-contracts/src/finding/evidence.rs` — already fits an external read
+exactly: state read from a system Nomos does not control and did not check. A fact produced
+by the vendor-to-canonical translation layer must carry `Observed` and never
+`Verified` or `Authoritative`, because nothing in this crossing checked the claim or defined
+it to be true by this system's own authority; it only read what another system currently
+says. This also settles the negative case directly: a connector's return value is not
+permitted to skip `EvidenceClass` and be treated as an ordinary, unclassed value, because an
+unclassed value is indistinguishable from one nobody thought to weaken.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#23
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 3. External state enters as Observed and never as authority · hash: sha256:82a0abe430c6ff5782c982d52a64c07da1cc273c9efe18735b31021e83f46907*
+
+**What it is waiting on.** Nothing. This is the invariant closest to already being code —
+`EvidenceClass` exists, is ordered, and its floor-and-ceiling behavior (`Weaker_Of`,
+`Is_Mechanical`) already does the right thing with an `Observed` value without needing to
+know it came from a connector.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#24
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 4. A write capability is omitted from the interface, not present and permission-checked · hash: sha256:dae30d07ce5c2a0a326769a97a1c3eae36348a8a3c9cc86597cdc751a1756ffe*
+
+### 4. A write capability is omitted from the interface, not present and permission-checked
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#25
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 4. A write capability is omitted from the interface, not present and permission-checked · hash: sha256:b3fc4a74bfbd6dd38b216550bb45247aabe60eb554c20a80861fa0b856fdea1f*
+
+**The rule.** The generic connector substrate and the vendor-to-canonical translation
+together define only an observation interface. No method named `write`, `update`, `post`,
+`close`, or any vendor-specific equivalent may exist in the type signature at all. The
+enforcement is the absence of the capability, not a permission check performed when a write
+is attempted — a deny-checked write method is still a write method, reachable by whoever
+next changes the check, in the same way `EvidenceClass::AgentJudged` is the floor precisely
+because promotion is not offered rather than offered-and-refused (`Is_Mechanical` on
+`AgentJudged` and `HumanAsserted` returns `false`; there is no path that overrides it).
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#26
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / The Four Invariants / 4. A write capability is omitted from the interface, not present and permission-checked · hash: sha256:97dcf2e11cb38fe1565aeac45e1de647652314f17b0664e5bef5989e8bd2ee58*
+
+**What it is waiting on.** Nothing. This is fully decidable now as a shape constraint on any
+connector's trait or interface, and it is checked the same way any missing method is
+checked: by the interface not compiling code that calls one.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#27
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Why This Is An Ecosystem Record And Not A Connector-Specific One · hash: sha256:5b2fe5a17fabe6243268cfc99b48b86638c2722733682152fd2489930dc33311*
+
+## Why This Is An Ecosystem Record And Not A Connector-Specific One
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#28
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Why This Is An Ecosystem Record And Not A Connector-Specific One · hash: sha256:c679e5f5a458380b3a2b75f0cfc02f289d08784ef5cc651b4fbbe0d9bbb5c3e3*
+
+No connector exists yet, so this record is deliberately not about any one vendor. The
+interesting part is not GitHub or Jira; it is that a system outside the workspace is a
+distinct case from either crossing `ARC-ECOSYSTEM-001` already governs, and needs its own
+answer for the same reason `ARC-ECOSYSTEM-002` needed one for a legacy codebase: both are
+shapes this repository will meet more than once, and deciding the shape once, in advance,
+is cheaper than re-litigating it per instance. `ARC-ECOSYSTEM-001` is cited as the boundary
+this record extends rather than restated, for the reason its own version-2 citation pass
+already established: restating it here would be the second-authority mistake `AGENTS.md`
+warns against, and a seam decided in two places that do not name each other is the
+duplication a seam record exists to prevent.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#29
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
+
+## Conflicts With Existing Decisions
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#30
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Conflicts With Existing Decisions · hash: sha256:93a43a1a0febc57fc27596da73cc83a141fb64ac731df6678acfb81ac476e8bc*
+
+`ARC-ECOSYSTEM-001` is untouched. This record names a third crossing beside the two it
+already governs and applies its existing vocabulary and ownership criteria to it; the seam
+itself, and the two crossings it already draws, are unchanged.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#31
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Conflicts With Existing Decisions · hash: sha256:b96b3f68bc972788634a1ab4ab22466201a59989078beabea362b1febf0f0ef5*
+
+`D-130` is untouched. This record applies its adapter-crate shape one layer down, to a
+connector substrate that does not exist yet; it does not weaken or reinterpret the dependency
+rule itself.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#32
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Conflicts With Existing Decisions · hash: sha256:205299ba4cc57af7e20eb2641216715b91594f71a76cf9e9a0a5a06bc4caf449*
+
+`P11-ECOSYSTEM-UPWARD` is untouched and unclosed. This record explicitly declines to open
+the observations-to-knowledge crossing that item governs — translated external state is
+ordinary Nomos evidence, and whether it may generalize into KWB knowledge is a question this
+record leaves exactly where it found it.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#33
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#34
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / What This Record Does Not Do · hash: sha256:2d224d790a5112a25d277eb03ca077555fa069a327386a0d56d443e838e7dfea*
+
+No connector is built. No crate is created, and no trait is defined. No vendor is named as a
+target. Nothing here is implemented, and this record does not claim any of the four
+invariants above is enforced mechanically today — only that each is now a rule to be checked
+against, rather than a decision the first connector would otherwise make by default.
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#35
+
+*revision: authored · kind: heading · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#36
+
+*revision: authored · kind: prose · heading: External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default / Status · hash: sha256:88e24baf41db7103119af423a43106a6e951e9aefc703e5db7747d0238e39da1*
+
+Closed by `P12-CONNECTOR-SEAM`.
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#1
 
