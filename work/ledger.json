@@ -9870,6 +9870,44 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CORRECTIONS",
+      "title": "nomos-corrections: CorrectionCandidate, CorrectionPlan, and the deterministic stage-preview-commit-rollback door the domain table already prices",
+      "why": "The determinism domain table in nomos-contracts (crates/contracts/nomos-contracts/src/determinism.rs line 38) already prices a Correction planning and staging row as StateTemporal / CrossRun / BitIdentical, and tests/contract/tests/determinism_declarations.rs records it UNOCCUPIED on purpose: nothing in this tree plans or stages a correction. nomos-rules judges and reports; the step that would apply a fix does not exist, so there is no domain to declare and a declaration would be a promise about code nobody has written. A repository-wide search confirms it: no nomos-corrections crate, no CorrectionCandidate, CorrectionPlan or ChangeSet type anywhere, and the word correction appears only in two doc comments describing future intent (nomos-contracts finding display_label, and nomos-model artifact_kind GeneratedOutput). The project's own planning document (advisory only, per D-132) puts this capability directly after gate semantics and states plainly: start deterministic, and do not add an agent executor until the mutation and validation contract is solid. The ledger already carries P11 items that build an agent-coordination harness for sessions working this repository; that is a different concern from an AgentExecutor that would apply a correction inside an end user's repository, and building the second before the first deterministic contract exists would be building on an unproven mutation path.",
+      "done_when": "A nomos-corrections crate occupies the Correction planning and staging row of the domain table: it exposes CorrectionCandidate, CorrectionPlan and ChangeSet types and a deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change, with no dependency on an agent executor or model backend. The UNOCCUPIED entry naming that row is removed from tests/contract/tests/determinism_declarations.rs, the crate's own tests pass, and its public surface is snapshotted at tests/contract/surface/nomos-corrections.txt.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections",
+          "Cargo.toml",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/contract/surface/nomos-corrections.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-corrections",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
