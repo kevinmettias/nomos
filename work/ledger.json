@@ -9886,14 +9886,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory short of the work, measured while holding the claim; full account in the abandonment reason on this item. Successor is P13-CORRECTIONS-2 with tests/contract/tests/boundaries/bands.rs and README.md added to territory."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-corrections-s1",
-        "acquired_at": 1786863325,
-        "lease_expires_at": 1786870525
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -9909,9 +9909,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-corrections-s1",
+          "reason": "Territory is short of the work. done_when requires a nomos-corrections crate to occupy the\nCorrection planning and staging row, which requires it to be a real cargo workspace member so\n`-p nomos-corrections` in this item's own predicate resolves — Cargo.toml is reserved and\ncovers that step.\n\nMeasured against the tree at ce05196, holding the claim, nothing written. Adding the member\nmakes tests/contract's Workspace::Load() (crates/spec... tests/contract/src/workspace.rs:31,\nrunning `cargo metadata`) see it, and two assertions in -p nomos-contract-tests then fail:\nTest_Every_Member_Should_Declare_A_Band (tests/contract/tests/boundaries/graph.rs:155, needs\nan entry in BANDS, tests/contract/tests/boundaries/bands.rs:20) and\nTest_The_Readme_Should_List_Every_Member_At_Its_Declared_Band\n(tests/contract/tests/boundaries/readme.rs:77, needs a matching row in README.md's band\ntable). Neither bands.rs nor README.md is in this item's territory, and both are checked by\nthis item's own predicate, so the item cannot pass its own gate from inside its reservation.\nThe public-surface half is fine as authored: tests/contract/surface/nomos-corrections.txt is\nreserved and Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot derives its file list\nfrom the snapshot directory rather than from a second hand-maintained registry, so no third\ngap exists there.\n\nSuccessor is P13-CORRECTIONS-2, this done_when with tests/contract/tests/boundaries/bands.rs\nand README.md added to territory. Nothing was written to the tree under this claim.",
+          "abandoned_at": 1786863502
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-corrections-s1",
+        "declined_at": 1786863506
+      }
     },
     {
       "id": "P13-KWB-ENGINE-QUESTION",
@@ -10016,6 +10025,50 @@
           "exit_code": 0
         }
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CORRECTIONS-2",
+      "title": "nomos-corrections: CorrectionCandidate, CorrectionPlan, and the deterministic stage-preview-commit-rollback door the domain table already prices",
+      "why": "P13-CORRECTIONS carried this why and was declined only for territory, measured and recorded on that item: the determinism domain table in nomos-contracts already prices a Correction planning and staging row as StateTemporal/CrossRun/BitIdentical, and tests/contract/tests/determinism_declarations.rs records it UNOCCUPIED on purpose. No nomos-corrections crate, no CorrectionCandidate/CorrectionPlan/ChangeSet type exists anywhere in the tree. The project's own planning document sequences this directly after gate semantics and before any agent executor. This reissue adds the two files a new workspace member must also touch: tests/contract/tests/boundaries/bands.rs, which Test_Every_Member_Should_Declare_A_Band checks a new member against, and README.md, whose band table Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band compares to it -- both run inside this item's own predicate via -p nomos-contract-tests, so the item could not have passed its own gate without them.",
+      "done_when": "A nomos-corrections crate occupies the Correction planning and staging row of the domain table: it exposes CorrectionCandidate, CorrectionPlan and ChangeSet types and a deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change, with no dependency on an agent executor or model backend. The UNOCCUPIED entry naming that row is removed from tests/contract/tests/determinism_declarations.rs, the crate's own tests pass, its public surface is snapshotted at tests/contract/surface/nomos-corrections.txt, it is added to BANDS in tests/contract/tests/boundaries/bands.rs at a band consistent with its dependencies, and README.md's layout table lists it at the same band.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections",
+          "Cargo.toml",
+          "tests/contract/tests/determinism_declarations.rs",
+          "tests/contract/surface/nomos-corrections.txt",
+          "tests/contract/tests/boundaries/bands.rs",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-corrections-s1",
+        "acquired_at": 1786863522,
+        "lease_expires_at": 1786870722
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-corrections",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
