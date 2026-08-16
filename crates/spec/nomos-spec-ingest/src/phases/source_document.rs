@@ -29,6 +29,7 @@ pub fn Ingest_Source_Document(
 pub(super) fn Store_Text(
     store: &mut SpecificationStore,
     statement: &RecordedStatement,
+    kind: &str,
     node_uid: i64,
 ) -> Result<(), IngestError>
 {
@@ -41,7 +42,7 @@ pub(super) fn Store_Text(
             rusqlite::params![
                 node_uid,
                 statement.id,
-                statement.kind,
+                kind,
                 statement.canonical_text,
                 statement.canonical_hash,
             ],

@@ -102,6 +102,16 @@ fn Test_A_Statements_Node_Kind_Should_Match_The_Catalogs_Vocabulary()
 
     let summary = store.Node_Summary("AGT-001").expect("reads").expect("node exists");
     assert_eq!(summary.kind, "requirement");
+
+    let stored_kind: String = store
+        .Connection()
+        .query_row(
+            "SELECT kind FROM normative_statements WHERE statement_id = 'AGT-001'",
+            [],
+            |row| row.get(0),
+        )
+        .expect("reads the row a project section actually filters on");
+    assert_eq!(stored_kind, "requirement");
 }
 
 #[test]

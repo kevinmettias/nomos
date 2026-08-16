@@ -80,13 +80,14 @@ pub(super) fn Store_Statement(
     statement: &RecordedStatement,
 ) -> Result<(), IngestError>
 {
+    let kind = Normalized_Kind(&statement.kind);
     let node_uid = store.Upsert_Node(NodeRow {
         node_id: &statement.id,
-        kind: &Normalized_Kind(&statement.kind),
+        kind: &kind,
         authority: "canonical",
         representation: "record",
         title: &statement.source_document,
     })?;
 
-    return Store_Text(store, statement, node_uid);
+    return Store_Text(store, statement, &kind, node_uid);
 }

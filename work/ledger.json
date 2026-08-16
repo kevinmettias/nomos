@@ -9789,6 +9789,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P12-STATEMENT-KIND-CASE-2",
+      "title": "The Statements section still filtered raw casing: normative_statements.kind, not just nodes.kind, needed the same fix",
+      "why": "P12-STATEMENT-KIND-CASE normalized the node row's kind but Store_Text wrote normative_statements.kind from statement.kind verbatim, which is the column a project section's Statements/Obligations filter actually reads (select/sections.rs Statements(): s.kind). Verified against the real corpus after the first fix: requirement-catalog still refused. Rendering it again after this fix: 363 requirement nodes, 324 statements.",
+      "done_when": "Store_Text writes the same normalized kind Upsert_Node does, and a test reads normative_statements.kind back as requirement for a statement authored Requirement.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/phases/source_document.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/statements.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-ingest",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": " ... ok\ntest Test_The_Headline_Counts_Should_Name_Their_Unit_And_Their_Scope ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 9 tests\ntest Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row ... ok\ntest Test_A_Sibling_Record_Should_Resolve_By_Its_Own_Identifier ... ok\ntest Test_Every_Sibling_Schema_Should_Resolve_As_A_Node_In_Its_Own_Suite ... ok\ntest Test_Every_Game_Plan_Block_Should_Be_Commentary ... ok\ntest Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught ... ok\ntest Test_No_Statement_Should_Rest_On_A_Game_Plan_Alone ... ok\ntest Test_Re_Ingesting_The_Suites_Should_Change_Nothing ... ok\ntest Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors ... ok\ntest Test_Every_Sibling_Suite_Should_Be_Non_Root ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-f1e365bdbda69d73.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-20c0dd71fbf860b1.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-34c9b48def762dc2.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-f81de57092b1782f.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-3167911979a00ab1.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-ae007b7e1ca5f495.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-437badd6affeedf6.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-97376e0f996b1e3a.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-db6329cb5c288f8f.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-389f459d8d4641cb.exe)\n   Doc-tests nomos_spec_ingest\n",
+        "verified_at": 1786854490,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
