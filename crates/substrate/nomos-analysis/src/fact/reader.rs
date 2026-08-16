@@ -11,8 +11,17 @@ use crate::MaterializedFact;
 use crate::FactIdentity;
 pub trait FactReader
 {
+    /// # Errors
+    ///
+    /// Returns [`FactError::Absent`] if nothing is materialized under `identity`, or
+    /// [`FactError::Superseded`] if it was but a newer generation invalidated it.
     fn Get(&mut self, identity: &FactIdentity) -> Result<&MaterializedFact, FactError>;
 
+    /// # Errors
+    ///
+    /// Returns the resolved [`Applicability`] when the chosen provider has no answer —
+    /// [`Applicability::DependencyUnavailable`] and its siblings name why, in the same
+    /// vocabulary [`FactReader::Require_Any`] returns on total failure.
     fn Require(
         &mut self,
         capability: &CapabilityId,

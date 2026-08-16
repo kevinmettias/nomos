@@ -138,6 +138,11 @@ impl WorkspaceSnapshot
     /// directory or an environment variable, which is what makes "interpretable by a
     /// process with no access to that tree" a property of the type rather than a hope
     /// about the caller.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`StoreError::Malformed`] if `bytes` is not UTF-8, its schema line does not
+    /// match, or a later line does not parse.
     pub fn Decode(bytes: &[u8]) -> Result<Self, StoreError>
     {
         let text = core::str::from_utf8(bytes)

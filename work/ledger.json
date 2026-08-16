@@ -9449,6 +9449,115 @@
       ],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-ANALYSIS-WORKSPACE-ERRORS-DOC",
+      "title": "nomos-analysis and nomos-workspace have the same missing_errors_doc gate defect P11-STORE-ERRORS-DOC found in nomos-store",
+      "why": "cargo clippy --workspace --all-targets -- -D warnings is red on FactReader::Get, FactReader::Require, MemoryFactStore::Materialize, Workspace::Apply and Workspace::Record, all missing the # Errors section clippy::missing_errors_doc requires. Every ledger item's work finish runs this same workspace-wide lint first, so this blocks every claim on the board regardless of territory until it is fixed.",
+      "done_when": "Every listed function documents an # Errors section naming its real error variants. cargo clippy --workspace --all-targets -- -D warnings exits 0, or names only violations outside this item's territory.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/fact/reader.rs",
+          "crates/substrate/nomos-analysis/src/fact/memory_store.rs",
+          "crates/substrate/nomos-workspace/src/workspace.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-ANALYSIS-WORKSPACE-ERRORS-DOC-2, authored with snapshot.rs correctly in territory."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-workspace",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code-session",
+          "reason": "Territory omitted crates/substrate/nomos-workspace/src/snapshot.rs, which also has the missing_errors_doc defect. Re-authoring before any commit.",
+          "abandoned_at": 1786838588
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-code-session",
+        "declined_at": 1786838599
+      }
+    },
+    {
+      "id": "P11-ANALYSIS-WORKSPACE-ERRORS-DOC-2",
+      "title": "nomos-analysis and nomos-workspace have the same missing_errors_doc gate defect P11-STORE-ERRORS-DOC found in nomos-store",
+      "why": "cargo clippy --workspace --all-targets -- -D warnings is red on FactReader::Get, FactReader::Require, MemoryFactStore::Materialize, Workspace::Apply, Workspace::Record and Snapshot::Decode, all missing the # Errors section clippy::missing_errors_doc requires. Every ledger item's work finish runs this same workspace-wide lint first, so this blocks every claim on the board regardless of territory until it is fixed. Supersedes P11-ANALYSIS-WORKSPACE-ERRORS-DOC, declined for missing snapshot.rs from its territory.",
+      "done_when": "Every listed function documents an # Errors section naming its real error variants. cargo clippy --workspace --all-targets -- -D warnings exits 0.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/fact/reader.rs",
+          "crates/substrate/nomos-analysis/src/fact/memory_store.rs",
+          "crates/substrate/nomos-workspace/src/workspace.rs",
+          "crates/substrate/nomos-workspace/src/snapshot.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-workspace",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-workspace",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Not ... ok\ntest workspace::tests::Test_An_Absolute_Path_Should_Be_Refused ... ok\ntest workspace::tests::Test_A_Change_That_Says_Something_New_Should_Advance ... ok\ntest workspace::tests::Test_One_Path_Changed_Twice_Should_Be_Refused ... ok\ntest workspace::tests::Test_The_Source_Should_Not_Reach_The_Workspace_Identity ... ok\ntest workspace::tests::Test_An_Empty_Change_Set_Should_Be_Refused ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest permutation::Test_The_Permutation_Should_Reorder_Without_Losing_Anything ... ok\ntest over_the_corpus::Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself ... ok\ntest over_the_corpus::Test_A_Snapshot_Should_Be_Interpretable_Without_The_Tree ... ok\ntest over_the_corpus::Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone ... ok\ntest over_the_corpus::Test_Re_Ingesting_The_Corpus_Should_Advance_Nothing ... ok\ntest over_the_corpus::Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries has been running for over 60 seconds\ntest over_the_corpus::Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 86.66s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-2c894aa384b420f3.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-4fafc4db49dd9245.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workspace-cc694333f2e59cd8.exe)\n     Running tests\\portable\\main.rs (target\\debug\\deps\\portable-b88e97eb199c01c9.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_workspace\n",
+        "verified_at": 1786838811,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

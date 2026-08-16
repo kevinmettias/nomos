@@ -41,6 +41,10 @@ impl MemoryFactStore
         return Self::default();
     }
 
+    /// # Errors
+    ///
+    /// Returns [`FactError::Backdated`] if a fact is already materialized under this
+    /// identity at a newer generation than `fact` carries.
     pub fn Materialize(
         &mut self,
         fact: MaterializedFact,

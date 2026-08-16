@@ -86,6 +86,12 @@ impl Workspace
     /// generation. The whole set is validated before any of it is applied, so a set that
     /// is refused leaves the workspace exactly as it was — a half-applied checkout is not
     /// a state anybody should be able to ask questions about.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`WorkspaceError::Vacuous`] if `changes` is empty, [`WorkspaceError::Unnamed`]
+    /// if a path does not name a workspace-relative file, or [`WorkspaceError::Conflicting`]
+    /// if one path is changed twice in the same set.
     pub fn Apply(&mut self, changes: &WorkspaceChangeSet) -> Result<Applied, WorkspaceError>
     {
         if changes.Is_Empty()
@@ -209,6 +215,10 @@ impl Workspace
     /// meant a commit, and the collision with a workspace state was the confusion this
     /// comment used to describe as unavoidable. It is now `DocumentKind::Commit`, and the
     /// two concepts no longer share a word.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`WorkspaceError::Store`] if `store` refuses the commit.
     pub fn Record(&self, store: &mut DocumentStore) -> Result<(), WorkspaceError>
     {
         let recorded = Recorded::New(
