@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:4cb58874ace78a15b66f1bfb5a026c1bd5fe69dda416381d1c9c3be836d66f4f",
-  "inputs_digest": "sha256:c24c9ee6607cc7d94d4d3b714c73ef0103817240e91074e352450466438c5a77",
+  "content_digest": "sha256:144c916261c95a227882c5fe545cdb23aae1b1867a351d38f4e3a0a01a6a0ca0",
+  "inputs_digest": "sha256:00eeeda9ee308024e754487be612cdfd50a940fe413e692a64636fb0d4ef766f",
   "sections": [
     [
       "Relations",
-      532
+      542
     ],
     [
       "Decisions",
-      75
+      76
     ]
   ],
   "inputs": [
@@ -25,6 +25,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 affected_by ARC-HARNESS-001",
       "hash": "sha256:9d63347c11ff10d6de094da161e5acb25a3cbfcd6695b494ede5119e2253c11a"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 affected_by OD-SPEC-014",
+      "hash": "sha256:b1b4945768d7bcfaa138ce61335f57a50f85c412f7973132cdde9dd59c390eff"
     },
     {
       "content": "relations",
@@ -388,6 +393,11 @@
     },
     {
       "content": "relations",
+      "identity": "D-130 relates-to OD-SPEC-014",
+      "hash": "sha256:3ad043f5b9a3f762fa9b4d76faf9daf68390bfa64058762fc91415fb8a4ab08f"
+    },
+    {
+      "content": "relations",
       "identity": "D-131 affects ARC-SPECDB-001",
       "hash": "sha256:5c66927ab323b9fb60ce6a335633a0631921a9a743fdbca0d1d0eaa740f8e536"
     },
@@ -523,6 +533,11 @@
     },
     {
       "content": "relations",
+      "identity": "D-135 relates-to OD-SPEC-014",
+      "hash": "sha256:6d445c338304ad3b491055773626e1eb851aa4c790f8532c319f225d6883de72"
+    },
+    {
+      "content": "relations",
       "identity": "D-136 relates-to ARC-ECOSYSTEM-001",
       "hash": "sha256:57f9b677e4e95236c9992eee56aaf4a5a0a3055075c7c65895fb94029c17c184"
     },
@@ -538,6 +553,11 @@
     },
     {
       "content": "relations",
+      "identity": "D-136 relates-to OD-SPEC-014",
+      "hash": "sha256:09497c40dc648edc20bb9ba1d02619350c7da148a9f75bf8ff6e51b23838b68f"
+    },
+    {
+      "content": "relations",
       "identity": "D-137 relates-to ARC-ECOSYSTEM-001",
       "hash": "sha256:9d8271432fb69d06f65edae373b908d7d7d73902f79f64c19a36bce399a3d096"
     },
@@ -550,6 +570,11 @@
       "content": "relations",
       "identity": "D-137 relates-to D-136",
       "hash": "sha256:6e1b49e57fb5ea06ff8c891a955f08ecdd6707f43fb1409d4f276450fbc8e429"
+    },
+    {
+      "content": "relations",
+      "identity": "D-137 relates-to OD-SPEC-014",
+      "hash": "sha256:9fc77413a634363ec65ef76c6dda1b9fe03e70551829ea891fa544562d53bf7d"
     },
     {
       "content": "relations",
@@ -2538,6 +2563,31 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-014 affects ARC-ECOSYSTEM-001",
+      "hash": "sha256:45a9a369f9c8c923d1879155f2a0d60faeca2c508c6c4e6d6578ec2214f430bb"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-014 relates-to D-130",
+      "hash": "sha256:0623cfbbd348db26125ea9351d0ff7b2313b1d2678b64f1013bfe1d7641add00"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-014 relates-to D-135",
+      "hash": "sha256:dbcc8ad32a302da419c3ab0081a776e375a998ae32a6cf68b32ad9d2db337493"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-014 relates-to D-136",
+      "hash": "sha256:c5c230bc901008b5cd21cb489b92c79d0d327ed749e547b8d6ccae0285f5aa4d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-014 relates-to D-137",
+      "hash": "sha256:114273a3e28d8afb4697ae84995be478ffca386aa33d1de2f70a203e25d80c45"
+    },
+    {
+      "content": "relations",
       "identity": "OD-STORE-001 affects D-129",
       "hash": "sha256:abfbedf117d375985acfa803edb19041c53a587c3ca79e399314250e2db7c3d3"
     },
@@ -3025,6 +3075,11 @@
       "content": "nodes",
       "identity": "OD-SPEC-013",
       "hash": "sha256:75178795ec6d970ea8838bb2e453d2c854ed5889e65a2db991a872097378f565"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-SPEC-014",
+      "hash": "sha256:19949e669dc5236ff140a94c780e73bce6fa5094694478f5f08323dce0cdc31a"
     },
     {
       "content": "nodes",

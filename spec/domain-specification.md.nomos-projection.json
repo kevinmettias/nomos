@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:0f8a8e4d9f18e9576d45acc601ab67df2856fb9e20022241c7ad2d774b32ef3e",
-  "inputs_digest": "sha256:59c9ac330578c4e22dbd7a68b7da0e5ca8803fbe75897387715cd910513fa7de",
+  "content_digest": "sha256:ec1a74924604a31c4c966f8b07ab80d0987d1d73eac7254ff7b20f48d6b5f7e3",
+  "inputs_digest": "sha256:8c9cfed1bc815dd3fd6651ede8a608bf7d8bf5265e1576017ee45c02a5001669",
   "sections": [
     [
       "Documents",
-      79
+      80
     ],
     [
       "Sections",
-      732
+      737
     ],
     [
       "Source blocks",
-      2852
+      2866
     ]
   ],
   "inputs": [
@@ -389,6 +389,11 @@
       "content": "documents",
       "identity": "docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored",
       "hash": "sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored",
+      "hash": "sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247"
     },
     {
       "content": "documents",
@@ -3844,6 +3849,31 @@
       "content": "headings",
       "identity": "docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#40",
       "hash": "sha256:5b92428f4fb1972790bf165b09fe39e1529ee4914d4e93edca721f13d8c9e08d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#1",
+      "hash": "sha256:c19e5303c7a99892cf407a7449eeabd06d647d96742449b0e76d9753eeab3e69"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#2",
+      "hash": "sha256:1f22e12f82453a42f16b4c37015c4b40ad696dff4722986561c139eb3326d42f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#6",
+      "hash": "sha256:ed3861436119832e3869ead889722402eeeeaab4eb99af40de7f5a82cd52eb77"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#9",
+      "hash": "sha256:156138115f0cd5601c91f41f4eb05c916586396759fb740f09e107ac6ab2ec2f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13",
+      "hash": "sha256:dfea26804ed4b8a63e6bd971a9bdb218ac1fc2635bbdfe5ad8935e554a657f01"
     },
     {
       "content": "headings",
@@ -17489,6 +17519,76 @@
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#41",
       "hash": "sha256:49d8f7f9414407c648f4e1dc66230d33057a4652ced59aa6fb617c279ef5bf65"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#1",
+      "hash": "sha256:b6e5cb5f46b10c032bc5f6c11307b935ec00d130ec4cc21a476893d055af1f58"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#3",
+      "hash": "sha256:2065606add0272a00b9efc5f3003a25f0b5214897b3b201ddce541d509b94dce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#4",
+      "hash": "sha256:af2914a1d0726bde23dac9f3108be73d843e9e0d512cb4e76a5b8806244af46f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#5",
+      "hash": "sha256:b908092d6dd75419a96eb7310fecbf28040e250d1c31eeb5b6654c7fa89c44bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#6",
+      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#7",
+      "hash": "sha256:e32160cee5f898ee3d10187e28828881b85bc99d55a30f4be85a7a09c2915dfe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#8",
+      "hash": "sha256:d3a430d53043beae95503bfd0fe8c01719229024d1d5f5bd91a5915f66694b10"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#9",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#10",
+      "hash": "sha256:4b9529a0a101d7eb354748703cde14af4b8dd31198871cc5bef3fc50403d7168"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#11",
+      "hash": "sha256:2a33604f37375f562dac139001893fb4b4a4cd96d8512d2c6859bac6a4bfce0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#12",
+      "hash": "sha256:12983ba32729930e0cb8ad4e01a8807cd9418157f1ed5abd81c9963db446710a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#14",
+      "hash": "sha256:c17636245cf090184f38cd5f2d563abdd48ac59c5f0a9976bbe7e4a94fb7e411"
     },
     {
       "content": "blocks",

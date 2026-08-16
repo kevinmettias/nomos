@@ -9886,10 +9886,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-corrections-s1",
+        "acquired_at": 1786863325,
+        "lease_expires_at": 1786870525
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -9905,6 +9909,113 @@
         "timeout_seconds": 600
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-KWB-ENGINE-QUESTION",
+      "title": "Log the KWB/nomos-spec-engine sharing question as open intent, gated by D-130 and D-122",
+      "why": "The projection-system audit surfaced that nomos-spec-store/nomos-spec-project is domain-neutral graph+projection machinery structurally close to what KWB's Rust rewrite (D-136) will need, and D-137's KnowledgeReferenceId is an unconsumed seam waiting for it. Neither D-130 (no XVPE dependency before Phase 5) nor D-122 (sibling-suite bar needs two products, and KWB does not exist in Rust yet) lets this be decided now. User chose to log it as open intent rather than force a decision.",
+      "done_when": "OD-SPEC-014 is registered and governing, and diagrams/relations.mmd + spec/domain-specification.md are re-rendered fresh over it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-SPEC-014.record",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "superseded by P13-KWB-ENGINE-QUESTION-2, which carries the predicate this one omitted"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": null,
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code",
+          "reason": "authored without a verification predicate; re-authoring as P13-KWB-ENGINE-QUESTION-2 with one",
+          "abandoned_at": 1786863421
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-code",
+        "declined_at": 1786863421
+      }
+    },
+    {
+      "id": "P13-KWB-ENGINE-QUESTION-2",
+      "title": "Log the KWB/nomos-spec-engine sharing question as open intent, gated by D-130 and D-122",
+      "why": "The projection-system audit surfaced that nomos-spec-store/nomos-spec-project is domain-neutral graph+projection machinery structurally close to what KWB's Rust rewrite (D-136) will need, and D-137's KnowledgeReferenceId is an unconsumed seam waiting for it. Neither D-130 (no XVPE dependency before Phase 5) nor D-122 (sibling-suite bar needs two products, and KWB does not exist in Rust yet) lets this be decided now. User chose to log it as open intent rather than force a decision.",
+      "done_when": "OD-SPEC-014 is registered and governing, and diagrams/relations.mmd + spec/domain-specification.md are re-rendered fresh over it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-SPEC-014.record",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "exit_code": 0,
+        "output_tail": "domain-specification: spec/domain-specification.md is current\ndiagram-set: diagrams/relations.mmd is current\nchecked 2 of 18 governed output(s) under .\nnot built here: subject-dossier, subject-contract, subject-model, subject-report, architecture-document, feature-design, api-documentation, requirement-catalog, traceability-matrix, release-specification, implementation-context-pack, mcp-resource, github-markdown, html-site, contract-yaml, offline-bundle\nrequired and current: diagram-set, domain-specification\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\n",
+        "verified_at": 1786863433,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

@@ -84,6 +84,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md | authored | 80 | 16 | sha256:268e9c1f06f11ba051c138e1af00d30954cf0ae874b93b324f917cdaa0cadf2f |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md | authored | 31 | 11 | sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
+| docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md@authored | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md | authored | 29 | 8 | sha256:1c14ec80ab265a141f114e04b9391559cf6eda8cba021361e8dd4ee10aee41cf |
 | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md@authored | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md | authored | 36 | 9 | sha256:d709970235889a73988a8da5d86b42a1ba5e503826adba05f843be4b1fdce369 |
@@ -780,6 +781,11 @@ profile: domain-specification
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#34 | authored | 2 | What This Does Not Decide |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#38 | authored | 2 | Controls |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#40 | authored | 2 | Status |
+| docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#1 | authored | 1 | Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it |
+| docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#2 | authored | 2 | Question |
+| docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#6 | authored | 2 | Current Position |
+| docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#9 | authored | 2 | What Would Decide It |
+| docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13 | authored | 2 | Status |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1 | authored | 1 | A document kind is a behaviour, not a label — and one of them was misnamed |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#2 | authored | 2 | Question |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#5 | authored | 2 | The Criterion |
@@ -23344,6 +23350,118 @@ per `OD-SPEC-008`, and these three tables travel in it like every other.
 Accepted. The tables, the field shape, the gap shape, the identity and the two vocabulary
 terms are decided. Relation constraints, the intake surface and the rule set are not, and are
 `P10-EDGE-CONSTRAINTS`, `OD-SPEC-009` and `OD-SPEC-010` respectively.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#1
+
+*revision: authored · kind: heading · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it · hash: sha256:b6e5cb5f46b10c032bc5f6c11307b935ec00d130ec4cc21a476893d055af1f58*
+
+# Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#2
+
+*revision: authored · kind: heading · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#3
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Question · hash: sha256:2065606add0272a00b9efc5f3003a25f0b5214897b3b201ddce541d509b94dce*
+
+`nomos-spec-store` holds a graph of nodes tagged by kind, authority and representation,
+normative statements with recorded and recomputed hashes, relations, lineage and source
+provenance. `nomos-spec-project` projects that graph through eighteen declared profiles into
+markdown, YAML, JSON, HTML and mermaid. Both are domain-neutral machinery today — they know
+about `kind`/`authority`/`representation` tags and section filters, not about architecture
+decisions specifically.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#4
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Question · hash: sha256:af2914a1d0726bde23dac9f3108be73d843e9e0d512cb4e76a5b8806244af46f*
+
+`D-136` rebuilds KnowledgeWorkbench in Rust. Its own declared domain — per `AGT-005`, already
+a normative statement in this store — is provenance-preserving claims, decisions and
+contradictions, which is the same shape this engine already stores and projects. `D-137`
+reserved `KnowledgeReferenceId` in `nomos-contracts` as the seam a KWB citation would use, and
+its own text says nothing yet produces or consumes one.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#5
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Question · hash: sha256:b908092d6dd75419a96eb7310fecbf28040e250d1c31eeb5b6654c7fa89c44bd*
+
+Whether that shape genuinely generalizes past Nomos's own use of it, and whether KWB should be
+built on the same store-and-projection core rather than its own, is undecided.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#6
+
+*revision: authored · kind: heading · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#7
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Current Position · hash: sha256:e32160cee5f898ee3d10187e28828881b85bc99d55a30f4be85a7a09c2915dfe*
+
+Nothing is extracted and nothing depends on anything. `nomos-spec-store` stays exactly what it
+is today: a store seeded by this repository's own governing records and, optionally, the v14
+corpus — self-referential to Nomos. `KnowledgeReferenceId` sits in `nomos-contracts` reserved
+and unconsumed, exactly as `D-137` left it.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#8
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Current Position · hash: sha256:d3a430d53043beae95503bfd0fe8c01719229024d1d5f5bd91a5915f66694b10*
+
+The one real tension, noted when this was first discussed: Nomos's `authority` column means
+"canonical per Nomos's own governance," singular and self-referential. KWB's domain is
+multi-source provenance — possibly-disagreeing claims from sources Nomos never governs — which
+is closer to the divergence-detection `nomos-spec-ingest` already does between a statement's
+recorded hash and its recomputed one than to a single canonical authority. Reusing the engine
+as-is would not be reuse; it would need its authority and kind vocabulary generalized first,
+which is design work nobody has scoped.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#9
+
+*revision: authored · kind: heading · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#10
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / What Would Decide It · hash: sha256:4b9529a0a101d7eb354748703cde14af4b8dd31198871cc5bef3fc50403d7168*
+
+Two independent gates, either of which currently blocks acting on this regardless of the
+merits:
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#11
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / What Would Decide It · hash: sha256:2a33604f37375f562dac139001893fb4b4a4cd96d8512d2c6859bac6a4bfce0a*
+
+`D-130` refuses any Nomos dependency on XVPE before Phase 5, by any path. This repository
+cannot take the dependency even if the design question were already settled.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#12
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / What Would Decide It · hash: sha256:12983ba32729930e0cb8ad4e01a8807cd9418157f1ed5abd81c9963db446710a*
+
+`D-122`'s sibling-suite bar requires two products demonstrating identical domain-neutral
+semantics before code moves to XVPE — one product's shape is never sufficient. Nomos is the
+only product using this engine today; KWB does not exist yet in Rust. The comparison this
+record would need cannot be run until KWB's rewrite reaches the point of actually needing a
+knowledge-graph store and a multi-format projection layer of its own, and its shape can be
+measured against this one rather than assumed from it.
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#13
+
+*revision: authored · kind: heading · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md#14
+
+*revision: authored · kind: prose · heading: Whether the spec store's graph-and-projection engine becomes shared infrastructure KWB depends on, and what would decide it / Status · hash: sha256:c17636245cf090184f38cd5f2d563abdd48ac59c5f0a9976bbe7e4a94fb7e411*
+
+Open. Revisit when KWB's Rust rewrite reaches the point of needing its own graph-and-lineage
+storage, or at Phase 5 when `D-130`'s gate lifts — whichever comes first. Recorded here so the
+intent is legible rather than lost between sessions, not because either gate has moved.
 
 ### docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#1
 

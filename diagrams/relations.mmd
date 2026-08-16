@@ -5,6 +5,7 @@ graph LR
   subgraph "Relations"
     adr_doc_001["ADR-DOC-001"] -->|"superseded_by"| d_129["D-129"]
     arc_ecosystem_001["ARC-ECOSYSTEM-001"] -->|"affected_by"| arc_harness_001["ARC-HARNESS-001"]
+    arc_ecosystem_001 -->|"affected_by"| od_spec_014["OD-SPEC-014"]
     arc_ecosystem_001 -->|"relates-to"| arc_specdb_001["ARC-SPECDB-001"]
     arc_ecosystem_001 -->|"relates-to"| d_085["D-085"]
     arc_ecosystem_001 -->|"relates-to"| d_086["D-086"]
@@ -77,6 +78,7 @@ graph LR
     d_130 -->|"relates-to"| arc_ecosystem_001
     d_130 -->|"relates-to"| d_135
     d_130 -->|"relates-to"| od_platform_001
+    d_130 -->|"relates-to"| od_spec_014
     d_131 -->|"affects"| arc_specdb_001
     d_131 -->|"affects"| d_129
     d_132 -->|"affects"| arc_specdb_001
@@ -104,12 +106,15 @@ graph LR
     d_135 -->|"relates-to"| d_130
     d_135 -->|"relates-to"| d_136
     d_135 -->|"relates-to"| d_137
+    d_135 -->|"relates-to"| od_spec_014
     d_136 -->|"relates-to"| arc_ecosystem_001
     d_136 -->|"relates-to"| d_135
     d_136 -->|"relates-to"| d_137
+    d_136 -->|"relates-to"| od_spec_014
     d_137 -->|"relates-to"| arc_ecosystem_001
     d_137 -->|"relates-to"| d_135
     d_137 -->|"relates-to"| d_136
+    d_137 -->|"relates-to"| od_spec_014
     od_agent_001 -->|"relates-to"| arc_ecosystem_001
     od_agent_001 -->|"relates-to"| arc_harness_001
     od_agent_001 -->|"relates-to"| od_contracts_001
@@ -507,6 +512,11 @@ graph LR
     od_spec_013 -->|"relates-to"| od_spec_009
     od_spec_013 -->|"relates-to"| od_spec_010
     od_spec_013 -->|"relates-to"| od_spec_011
+    od_spec_014 -->|"affects"| arc_ecosystem_001
+    od_spec_014 -->|"relates-to"| d_130
+    od_spec_014 -->|"relates-to"| d_135
+    od_spec_014 -->|"relates-to"| d_136
+    od_spec_014 -->|"relates-to"| d_137
     od_store_001 -->|"affects"| d_129
     od_store_001 -->|"relates-to"| od_capability_002
     od_store_001 -->|"relates-to"| od_capability_003
@@ -607,6 +617,7 @@ graph LR
     od_spec_010
     od_spec_011
     od_spec_013
+    od_spec_014
     od_store_001
     od_syntax_001
     od_syntax_002
