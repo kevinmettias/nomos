@@ -11,6 +11,7 @@ profile: domain-specification
 | identity | path | revision | blocks | headings | hash |
 | --- | --- | --- | --- | --- | --- |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 58 | 14 | sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4 |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
@@ -109,6 +110,15 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49 | authored | 2 | Conflicts With Existing Decisions |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54 | authored | 2 | What This Record Does Not Do |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57 | authored | 2 | Status |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1 | authored | 1 | The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#2 | authored | 2 | Question |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#5 | authored | 2 | Decision |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#7 | authored | 3 | What is extracted |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#9 | authored | 3 | Where an extraction lands |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#12 | authored | 3 | What would change the answer |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#15 | authored | 2 | Why This Is An Ecosystem Record And Not Only A KWB One |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#17 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#21 | authored | 2 | Status |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#1 | authored | 1 | An autonomous harness is owned per component, and the seam falls between what should run and whether it can run now |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#2 | authored | 2 | Question |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#6 | authored | 2 | The Sentence That Decides It |
@@ -1324,6 +1334,194 @@ enough to enforce exists, has a criterion to be derived from.
 Closed by `P10-ECOSYSTEM-BOUNDARY`. Amended to version 2 by `P10-SEAM-CITATION`, which found
 the seam already recorded in the sibling suites this build ingests, declared the edges to it,
 and adopted `D-122`.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind · hash: sha256:4b111b1a1d117f2f5ff60c46fa424fcec0b26a3cb21f61bfeef11761b4506838*
+
+# The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#2
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#3
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Question · hash: sha256:fa387edaa7ba825498bf8bad412ab28c12efb832385a7ab43f740f5980b852fc*
+
+`D-136` already decided that KnowledgeWorkbench is rebuilt from scratch in Rust rather than
+ported, and named, at a domain-model grain, what survives the rewrite: the universal
+epistemic kernel, content-derived claim and concept identity, the `CoverageOutcome` and
+derivation-ledger primitives, and the five recorded data-loss incidents. What it does not
+say is where what is extracted goes once somebody has it, or what would ever change the
+call — and both questions are load-bearing the moment a person or an agent actually opens
+the .NET tree and finds something worth keeping.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#4
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Question · hash: sha256:e8491586d23e9d61bd7e9595f52d8425c2dd68459c63a792519b370c57f3b6d7*
+
+Absent an answer, the default behavior for a codebase that does roughly the right thing is
+to port it, structure and all. That is the wrong answer here for the same reason
+`ARC-ECOSYSTEM-001` already gives for any subsystem: the C# implementation's class layout
+was decided by a boundary that predates `ARC-ECOSYSTEM-001`'s own boundary, so importing
+that layout imports an old boundary and then argues about the new one from inside it. What
+must survive is not the shape of the code; it is the findings the code paid to learn.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#5
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#6
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision · hash: sha256:05baf8f4dbd551318ee1b046fa0564519bfef2703729cb058797b0a19ba9dd10*
+
+The existing C# KWB (`C:/Users/kmett/source/repos/KnowledgeWorkbench`) is an evidence
+source, never a port target. This is not a fresh call — `D-136` already made it, and the
+new `f:/repos/kwb` repository has already recorded its own acknowledgement of it (`D-001`
+there, which states plainly that where the two disagree, `D-136` is the one that was
+actually deliberated). This record is the piece neither of those states: what an extracted
+finding becomes, and what would reopen the question.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#7
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / What is extracted · hash: sha256:20c2b6d32e9e844a4ec5337a50780b01923b511fc9d040f44a75fad801d2ac2a*
+
+### What is extracted
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#8
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / What is extracted · hash: sha256:4d78b81e63ca0958a0e3a6814b1eba656e6c1499a2dab61947e5351a149caa37*
+
+At the grain `D-136` already uses: proven invariants, the failure cases the prototype
+actually hit — its five recorded data-loss incidents, not hypothetical ones — semantic
+models that survived contact with real data, replay mechanisms, project-integration
+lessons, authentication and connector mistakes, and other operational experience. What is
+not extracted is anything about how the C# code is organized: namespaces, class hierarchy,
+dependency injection, EF Core mapping. Organization is precisely the boundary question
+`ARC-ECOSYSTEM-001` answers, and the old codebase answered it before that boundary existed.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#9
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / Where an extraction lands · hash: sha256:4424141848825ff0d0382fed111dbef4f7e55aab21b7cc4473542b327172a038*
+
+### Where an extraction lands
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#10
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / Where an extraction lands · hash: sha256:1f4b9ebc93354f6858f1cd06cd9d7dcf4c8a66ff86ec23eb5ea04869ec8a2511*
+
+An extracted finding is not one kind of artifact; which kind depends on what was found, and
+the rule `ARC-ECOSYSTEM-001` already states for a crossing applies here too — the direction
+is what is governed, not just the destination:
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#11
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / Where an extraction lands · hash: sha256:8f5c1219bee36ce04a596d4579f51e9169b7821db6563bd4937d8333c1dc4197*
+
+- A failure mode or an invariant load-bearing for this repository's own build — the
+  specification store, the ledger, or another Nomos subsystem whose current address is
+  bootstrap-shaped, per `ARC-ECOSYSTEM-001`'s "Current Placement Does Not Prove Permanent
+  Ownership" — lands as a governing record here, the same way `D-136` itself did.
+- A domain fact about the corpus this repository ingests lands as a corpus artifact or a
+  `nomos-spec-*` fixture, not a record, because it is evidence about content rather than a
+  decision about architecture.
+- Work implied but not yet done lands as a ledger item, exactly as any other gap does.
+- A finding whose subject is KWB's own domain — rationale, semantic intent, requirements
+  elicitation — is KWB knowledge, and does **not** land here at all. It crosses from this
+  repository's extraction work into KWB the same way any generalization would, which is the
+  crossing `P11-ECOSYSTEM-UPWARD` is about. Until that crossing is governed, a finding of
+  this kind is written down where it was found rather than asserted as KWB knowledge on its
+  own authority. This record does not open that crossing; it only says that this is the kind
+  of thing that would use it once it exists.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#12
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / What would change the answer · hash: sha256:4222f21d3314327c4b98701c15512636f5aad4eeea0a24d017c1bcf5b32f21ff*
+
+### What would change the answer
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#13
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / What would change the answer · hash: sha256:129c73686ac6c8366adc3cd0e5d3af1d997ea93a1b79b29c1a87b31c56f08b89*
+
+Not a blanket never. The call is reopened if either becomes true:
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#14
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Decision / What would change the answer · hash: sha256:4089a1f7a448d211231b7a83b75b3a0d12679520bb0c87029296f35838fde040*
+
+- `f:/repos/kwb`'s own governing decision reverses course and calls for the .NET tree to be
+  ported rather than read — at which point this record is wrong about the destination and
+  should be corrected to match KWB's own decision, the same relationship `D-001` already
+  states toward `D-136`.
+- A specific piece of the .NET implementation is shown to be substantially unrecoverable
+  from its behavior alone — recoverable only by reading its exact code shape rather than
+  what it does — in which case porting that piece is a narrower, evidenced exception, not a
+  reversal of the general rule.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#15
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Why This Is An Ecosystem Record And Not Only A KWB One · hash: sha256:7e6a660f1c5db66f128b07d96d9c95bb647d70cb2c1b700ecffa2dfeb2a3e22c*
+
+## Why This Is An Ecosystem Record And Not Only A KWB One
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#16
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Why This Is An Ecosystem Record And Not Only A KWB One · hash: sha256:39bb3ca93ed61b357e2d8402ed79e53052404ba8541d15f5fca74039c8672338*
+
+The interesting part is not whether KWB ports its prototype — that is `D-136`'s question and
+it is closed. The interesting part is what happens to something learned while extracting
+from a legacy system that predates the current boundary, which is a shape this repository
+will meet again: `code-standards` is this repository's own version of exactly this
+relationship, and a lesson learned reading it has the same landing-spot question this record
+answers for KWB's prototype. `ARC-ECOSYSTEM-001` is cited as the boundary this decision
+targets rather than restated, because restating it here would be the second-authority
+mistake `AGENTS.md` warns against.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#17
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
+
+## Conflicts With Existing Decisions
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#18
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Conflicts With Existing Decisions · hash: sha256:8de7e6c8ec02f2e893f36933ccdf3e92c359758810e01b22ed3d80b640037202*
+
+`D-136` is untouched. This record adds a landing-spot and a revisability clause to a
+decision `D-136` already made; it does not reopen or restate the rewrite call itself.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#19
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Conflicts With Existing Decisions · hash: sha256:6deb3707981ca2a2dacb26ba2e95dd9e27ad595ba03d89b4e5a401fe27bb8e47*
+
+`ARC-ECOSYSTEM-001` is untouched. This record cites it and applies it to one artifact; the
+seam itself is unchanged.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#20
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Conflicts With Existing Decisions · hash: sha256:4da0197305c21d0cfc6f23bfd29ff1f0d5fe42b92df88d9d49397e2397ded388*
+
+`P11-ECOSYSTEM-UPWARD` is untouched and unclosed. This record explicitly declines to open
+the observations-to-knowledge crossing that item governs — it only names that a KWB-domain
+finding would use it once opened.
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#21
+
+*revision: authored · kind: heading · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#22
+
+*revision: authored · kind: prose · heading: The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind / Status · hash: sha256:b68e64584beb83fb9d48bde2ecfd41559f75a08a1e7d539dd9d515a8fa641435*
+
+Closed by `P12-KWB-EVIDENCE`.
 
 ### docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md#1
 

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:ec1a74924604a31c4c966f8b07ab80d0987d1d73eac7254ff7b20f48d6b5f7e3",
-  "inputs_digest": "sha256:8c9cfed1bc815dd3fd6651ede8a608bf7d8bf5265e1576017ee45c02a5001669",
+  "content_digest": "sha256:9d83baee6a885dd7f9c6825d567ace3617ff6a9b1ec9b03ece317bdaacf01f5c",
+  "inputs_digest": "sha256:9930c13542870659018322632c1c0b9eee276fbde4d7724bedd6b474c4a2ba7b",
   "sections": [
     [
       "Documents",
-      80
+      81
     ],
     [
       "Sections",
-      737
+      746
     ],
     [
       "Source blocks",
-      2866
+      2888
     ]
   ],
   "inputs": [
@@ -24,6 +24,11 @@
       "content": "documents",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored",
       "hash": "sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored",
+      "hash": "sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e"
     },
     {
       "content": "documents",
@@ -489,6 +494,51 @@
       "content": "headings",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57",
       "hash": "sha256:1d39f84ea80004933a0e437d0063286348516124238c3f2daaa9465e43c157fd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1",
+      "hash": "sha256:967df54c439fd7efdb4472f859f6179789f45e05e9a4ca66a3310b054aa3b839"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#2",
+      "hash": "sha256:e9595d7af5f140aa4c08ae29b9a2f4add2524b05cb12f820261bb0d9f4b6d83e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#5",
+      "hash": "sha256:c3cdab5f028564e0418bcab8bd195bc0ae34119d8f7a64c59c82076594d48bea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#7",
+      "hash": "sha256:edd9fae743a4464ccadc9c9228fd6f8acb9d72c016799effd314658b3e320887"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#9",
+      "hash": "sha256:58c4e557be20a147cbc6f5f0865e97275185d7d0fd93d41f6f908c63cd4357cd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#12",
+      "hash": "sha256:c617065dccb19e0a466611d4b8ad57c5d16cfd5c17f6e948c3510c2752ff2284"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#15",
+      "hash": "sha256:aa0f37616776d27899792ec4333ed092fb3b4828a6c700a0e6fc9d2a9c887bff"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#17",
+      "hash": "sha256:976dfd9e05a0dfbe012cc222aebd156188ef50c592710ac4a5366721bce76626"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#21",
+      "hash": "sha256:472ee9555c50c75d8677c7b6ee1e23098da213f449acf4ec528c219b6cde697e"
     },
     {
       "content": "headings",
@@ -4394,6 +4444,116 @@
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#58",
       "hash": "sha256:fd2661e7493ebad2777a2d7fbb5bb66670c0ee20b7fd671efa9c722595bcf869"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1",
+      "hash": "sha256:4b111b1a1d117f2f5ff60c46fa424fcec0b26a3cb21f61bfeef11761b4506838"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#3",
+      "hash": "sha256:fa387edaa7ba825498bf8bad412ab28c12efb832385a7ab43f740f5980b852fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#4",
+      "hash": "sha256:e8491586d23e9d61bd7e9595f52d8425c2dd68459c63a792519b370c57f3b6d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#5",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#6",
+      "hash": "sha256:05baf8f4dbd551318ee1b046fa0564519bfef2703729cb058797b0a19ba9dd10"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#7",
+      "hash": "sha256:20c2b6d32e9e844a4ec5337a50780b01923b511fc9d040f44a75fad801d2ac2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#8",
+      "hash": "sha256:4d78b81e63ca0958a0e3a6814b1eba656e6c1499a2dab61947e5351a149caa37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#9",
+      "hash": "sha256:4424141848825ff0d0382fed111dbef4f7e55aab21b7cc4473542b327172a038"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#10",
+      "hash": "sha256:1f4b9ebc93354f6858f1cd06cd9d7dcf4c8a66ff86ec23eb5ea04869ec8a2511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#11",
+      "hash": "sha256:8f5c1219bee36ce04a596d4579f51e9169b7821db6563bd4937d8333c1dc4197"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#12",
+      "hash": "sha256:4222f21d3314327c4b98701c15512636f5aad4eeea0a24d017c1bcf5b32f21ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#13",
+      "hash": "sha256:129c73686ac6c8366adc3cd0e5d3af1d997ea93a1b79b29c1a87b31c56f08b89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#14",
+      "hash": "sha256:4089a1f7a448d211231b7a83b75b3a0d12679520bb0c87029296f35838fde040"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#15",
+      "hash": "sha256:7e6a660f1c5db66f128b07d96d9c95bb647d70cb2c1b700ecffa2dfeb2a3e22c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#16",
+      "hash": "sha256:39bb3ca93ed61b357e2d8402ed79e53052404ba8541d15f5fca74039c8672338"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#17",
+      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#18",
+      "hash": "sha256:8de7e6c8ec02f2e893f36933ccdf3e92c359758810e01b22ed3d80b640037202"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#19",
+      "hash": "sha256:6deb3707981ca2a2dacb26ba2e95dd9e27ad595ba03d89b4e5a401fe27bb8e47"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#20",
+      "hash": "sha256:4da0197305c21d0cfc6f23bfd29ff1f0d5fe42b92df88d9d49397e2397ded388"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#22",
+      "hash": "sha256:b68e64584beb83fb9d48bde2ecfd41559f75a08a1e7d539dd9d515a8fa641435"
     },
     {
       "content": "blocks",
