@@ -10,6 +10,7 @@ profile: domain-specification
 
 | identity | path | revision | blocks | headings | hash |
 | --- | --- | --- | --- | --- | --- |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md | authored | 25 | 8 | sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md | authored | 36 | 12 | sha256:adc1a21b6db345c299218e596bb0f50a4a705be3f8ec5ca460888e641540aebb |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 58 | 14 | sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
@@ -34,6 +35,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -100,6 +102,14 @@ profile: domain-specification
 
 | identity | revision | depth | title |
 | --- | --- | --- | --- |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#1 | authored | 1 | A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#2 | authored | 2 | Question |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#5 | authored | 2 | What A Conformance Claim Is |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#10 | authored | 2 | The Negative Half |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#15 | authored | 2 | Where KWB Fits |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#18 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#22 | authored | 2 | What This Record Does Not Do |
+| docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#24 | authored | 2 | Status |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#1 | authored | 1 | External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#2 | authored | 2 | Question |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#7 | authored | 2 | The Third Crossing, And Its Layers |
@@ -283,6 +293,16 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#44 | authored | 2 | Coordination — One Method, Not Two |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#50 | authored | 2 | What This Does Not Do |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53 | authored | 2 | Status |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1 | authored | 1 | An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2 | authored | 2 | Question |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5 | authored | 2 | Decision |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9 | authored | 2 | Scope |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11 | authored | 2 | What This Binds |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14 | authored | 2 | What This Does Not Bind |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18 | authored | 2 | Controls |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25 | authored | 2 | Status |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1 | authored | 1 | Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2 | authored | 2 | Question |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5 | authored | 2 | What Was Measured |
@@ -885,6 +905,264 @@ profile: domain-specification
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#40 | authored | 2 | Status |
 
 ## Source blocks
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#1
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact · hash: sha256:e95aebf63bcf4f7ab05988e1efb14808e26ad3154e8af4ab3974b72159300674*
+
+# A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#2
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#3
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Question · hash: sha256:1f4b37a0d4aa95815af58b970bcecb3aa4c66d1dfdaea4504284ee94bed00599*
+
+Nomos has a check surface — `nomos check`, `nomos-rules`, `Finding`, `EnforcementReach`,
+`GateCategory` — and nothing states what kind of claim it makes that an existing analyzer
+does not. Without that, every capability argument is decided case by case, and the
+case-by-case answer trends one way: toward restating what `rustc`, Clippy or
+`rust-analyzer` already said, because that is the work whose value is obvious and whose
+provider is already written. A check surface that cannot say what it is for will keep
+being filled with what is easiest to justify rather than with what only it can supply.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#4
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Question · hash: sha256:c331f1e6fb7311001fd7d5f844e3249c6240ca0c73693a9fcae7a9d6c21e583e*
+
+The distinction is stateable, and this repository has already built four things that state
+it without ever writing it down: `tests/contract/tests/boundaries/readme.rs` asserts the
+README's band table against the real workspace, in both directions, by parsing the table
+back out of the file a reader edits and comparing it to `BANDS`; `graph.rs`'s
+`Test_Dependencies_Should_Run_Strictly_Downward` asserts a dependency ordering no compiler
+enforces, because a band is a design decision authored in `bands.rs` rather than inferred
+from `Cargo.toml`; `tests/contract/tests/requirement_trace/committed.rs`'s
+`Test_Every_Assessment_Should_Name_A_Site_That_Exists` asserts that a corpus requirement's
+committed site still exists in the tree it was assessed against; and `nomos spec
+freshness` asserts that a rendered projection still matches the record set it was rendered
+from. None of those four is a language question, and none has a provider — a compiler, a
+linter, a language server — that could be asked to answer it instead.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#5
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / What A Conformance Claim Is · hash: sha256:5991709db9dd595b7293f234f41209f2abe3b6012007ed286ab97d923b61ee72*
+
+## What A Conformance Claim Is
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#6
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / What A Conformance Claim Is · hash: sha256:0515a66ade6fc3f242ad72dedb367ccec326f6c3ea192c0d11d3f10e13a0a5f4*
+
+A Nomos conformance claim is not a diagnostic about source text. A diagnostic answers a
+question language semantics alone can settle — does this parse, does this type-check, does
+this borrow, is this idiomatic — and the answer is complete once the language and its
+standard library are known. A conformance claim answers a different kind of question: does
+*this system*, built the way its own records say it should be built, still hold the shape
+and the history its own architecture, requirements and policy commit it to. That question
+cannot be settled by the language, because the language has no notion of a band, a
+requirement's site, a governing record, or which projection was rendered from which commit.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#7
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / What A Conformance Claim Is · hash: sha256:23c3a2af650bcdcd95f1b61b5685c551ca58bcece746576fdc526684dec73066*
+
+The four worked examples above are the evidence the distinction is real. Each composes
+inputs no compiler carries:
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#8
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / What A Conformance Claim Is · hash: sha256:2656566364862e3d501bd964353685a9389fcf9288fdd2b4d2c98b303749efda*
+
+- **Architecture** — `Test_Dependencies_Should_Run_Strictly_Downward` judges the edges the
+  workspace actually has against `BANDS`, a table authored because "a band is a design
+  decision and there is nothing in the source to infer it from" (`bands.rs`). The claim is
+  about a dependency *ordering* this repository decided to hold itself to, not about
+  whether any one edge compiles.
+- **Requirements, and their history** — `Test_Every_Assessment_Should_Name_A_Site_That_Exists`
+  judges a committed assessment against the corpus requirement it was written against and
+  the place in the tree it named. The claim is that a specific prior judgment about a
+  specific requirement still points at something real, which is a question about this
+  repository's own record of itself, not about the code the site happens to be written in.
+- **Runtime evidence and policy, composed together** — `readme.rs`'s band-table check is a
+  runtime read of the actual workspace (the member list, its declared bands) checked
+  against a policy document (the README a reader edits), in both directions, so that
+  either one drifting from the other is caught regardless of which one moved.
+- **A projection's own history** — `nomos spec freshness` judges a rendered file against
+  the sidecar stamping what record set and what profile produced it, which is a claim about
+  *this repository's own prior act of rendering*, not about the rendered text in isolation.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#9
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / What A Conformance Claim Is · hash: sha256:4b3cb51180eb774f9eb6fcaea24124a441e2d6eafcd6e2e0c9d98c4cc621387c*
+
+So the general shape: **a Nomos conformance claim is composed from architecture (what
+depends on what, and what band it must sit at), requirements (what a corpus site is
+supposed to satisfy, and what was already assessed about it), history (what this
+repository's own prior commits, renders and assessments said), runtime evidence (what the
+workspace actually is right now), and policy (what a governing record or a maintained
+document commits this repository to) — checked against each other rather than against a
+language's grammar or type system.** A finding lands only once that composition has run;
+listing the four checks above is illustration, not the definition, because a fifth check
+built the same way would be another instance of the same claim, and one built by parsing
+source text for a language-level property would not be, however useful.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#10
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / The Negative Half · hash: sha256:7a1307ada78392c2bf352cf68cecacda192d41df3d90d805c4224773ea4db254*
+
+## The Negative Half
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#11
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / The Negative Half · hash: sha256:af34d1b77615afc17c90415da36e9c8c6da1317aafd85344f9559e53bd325ac5*
+
+A record that only says what Nomos does will be read as licence to do all of it, so the
+boundary is stated as plainly as the claim.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#12
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / The Negative Half · hash: sha256:79783b1ef197ac5b1d26bdecf16e2a59559b7dc8adcb4ee07ebf73e43f03cd6c*
+
+**This does not compete with a language tool on a question the language tool already
+answers.** Nomos does not reparse Rust to find what `rustc` already parsed, does not
+re-derive a type Roslyn or `rustc`'s own type checker already resolved, and does not chase
+`rust-analyzer`'s responsiveness on a question of live editor feedback. Parsing, type
+resolution and edit-time responsiveness are language-tool territory in full, and a
+capability argument that amounts to "we could check this too" is not a reason to build a
+second implementation of a question already answered.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#13
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / The Negative Half · hash: sha256:b49242bdac094b886ace708b48297d86a0404d90faf68217c8f552c8a0998bb6*
+
+**Compiler and language-server facts are evidence Nomos composes with, not facts Nomos
+re-derives.** They flow in at the resolution level `FactVariant` already names —
+`Syntactic`, `SemanticallyResolved`, `RuntimeObserved`, and the weaker `Approximate` and
+`Predicted` — which exists precisely so that a rule needing a resolved name can refuse a
+syntactic answer instead of silently accepting a weaker fact than it needs
+(`crates/contracts/nomos-contracts/src/guarantee/fact_variant.rs`). A provider establishes
+the fact; Nomos's part starts at composing it with the architecture, requirement, history
+and policy inputs above into a claim the provider was never asked and has no vocabulary to
+make.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#14
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / The Negative Half · hash: sha256:e78595d5b196a3d1379c5a43cbf72f62d9af213e7fee6c4438a69a8113cefcb8*
+
+**The test for native analysis is that no provider exposes the fact, never that writing it
+natively would be convenient.** Nomos writes native analysis only where the fact a claim
+needs is not obtainable from any existing provider at all — because the fact is about this
+repository's own architecture, its own requirement corpus, its own record set or its own
+render history, none of which any external tool has a model of. The four worked examples
+qualify on exactly this test: no compiler has a notion of a declared band, no linter reads
+`tests/contract/requirements`, and no language server knows what record a projection was
+last rendered from. A capability whose fact *is* obtainable from `rustc`, Clippy or
+`rust-analyzer` fails the test regardless of how easy it would be to write a native check
+for it instead — ease of implementation is not the criterion, and deciding capability
+questions on it is the drift this record exists to stop.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#15
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Where KWB Fits · hash: sha256:2a1f29c017e627aa6dbeaa094cf4d1d6082a5beae318d7eb8d8254e252edefb0*
+
+## Where KWB Fits
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#16
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Where KWB Fits · hash: sha256:97909d6ced2d99b86b283fb57e9759a510869692cfdffb56db9fc1a86b1a0a34*
+
+`ARC-ECOSYSTEM-001` already draws this crossing and this record cites it rather than
+re-deciding it: "KWB semantic intent / rationale" projects down into a "Nomos executable
+software contract" only through a "governed projection," because "a rationale is not
+enforceable; a contract derived from it is." KWB supplies intent — why a design was chosen,
+what a decision claimed, what somebody meant — that no static analysis, native or
+provider-sourced, can derive from source text or from this workspace's own architecture,
+because intent is not a property the tree holds. `ARC-ECOSYSTEM-002` gives the concrete
+form of that boundary for the one KWB source this repository currently reads: the existing
+C# prototype is "an evidence source, never a port target," and what survives extraction
+from it lands as a governing record, a corpus artifact, or a ledger item depending on what
+kind of thing was found — never as a Nomos conformance claim asserted on KWB's authority
+alone.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#17
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Where KWB Fits · hash: sha256:031fc6e8ebefca88ca2a9e62eef60e6605906a872e5c35be7e4b81ac3fe57cf8*
+
+So the boundary a conformance claim observes toward KWB is the one this repository's
+`EvidenceClass` vocabulary already gives a name to elsewhere: KWB provides evidence, and
+Nomos decides the engineering claim. A KWB source can tell a rule what a design intended;
+it cannot make the rule true. Whether an implementation actually satisfies that intent is
+settled the way every other conformance claim above is settled — by composing the intent
+(once it has crossed `ARC-ECOSYSTEM-001`'s governed projection into an executable
+contract) with this workspace's own architecture, requirements, history and runtime
+evidence. A capability that reads a KWB source and reports its content directly as a
+Nomos verdict, skipping the governed projection, is not a conformance claim; it is KWB's
+evidence wearing a Nomos finding's shape.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#18
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
+
+## Conflicts With Existing Decisions
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#19
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Conflicts With Existing Decisions · hash: sha256:31755006e45dd83b3bc5bd3fe698519431d566c8fc797f48a447c783bf521f7f*
+
+`ARC-ECOSYSTEM-001` is untouched. This record does not redraw the KWB/Nomos crossing; it
+states how a conformance claim behaves on the Nomos side of a boundary that record already
+governs.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#20
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Conflicts With Existing Decisions · hash: sha256:426b89d15f66cdd10ae2d1895c7e1bf3c3b2dd31b4cb47d466b3cc38a0f237f8*
+
+`ARC-ECOSYSTEM-002` is untouched. This record does not reopen what an extraction from the
+C# KWB becomes; it cites the evidence-not-authority shape that record already settled.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#21
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Conflicts With Existing Decisions · hash: sha256:c2a08c8b67d12cf60f6ddbf17cb013d20c08b6b8c989aa0fe9e3eabb67d7780a*
+
+No existing check is reclassified as non-conforming by this record. The four worked
+examples are cited as evidence the distinction already existed in what got built; none of
+them changes behavior here.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#22
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#23
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / What This Record Does Not Do · hash: sha256:ddcea1b2a822881f4a6ceaf5adeb96342b96adcf3d97d3362c7e82eb6e7c51e8*
+
+It does not name a fifth check to build, and it does not change `nomos check`,
+`nomos-rules`, `Finding`, `EnforcementReach` or `GateCategory`. It does not define a
+mechanical gate that rejects a capability argument automatically — the test above ("no
+provider exposes this fact") is a criterion for a reviewer to apply, not a type this
+workspace has built a checker for. It does not open or narrow `P11-ECOSYSTEM-UPWARD`; a
+KWB-derived fact's path into a Nomos claim still runs through `ARC-ECOSYSTEM-001`'s
+governed projection exactly as before. It does not reduce a language tool's remit: nothing
+here claims Nomos should or will replace `rustc`, Clippy or `rust-analyzer` on any question
+they already answer.
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#24
+
+*revision: authored · kind: heading · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#25
+
+*revision: authored · kind: prose · heading: A Nomos conformance claim composes system-level evidence, and native analysis is owed only where no provider exposes the fact / Status · hash: sha256:2d3706bb718adeb1de2082573eb6e583002fb4d6ecc22d719c4db4dea6e44bfb*
+
+Closed by `P12-CONFORMANCE-SEAM`.
 
 ### docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#1
 
@@ -6503,6 +6781,261 @@ Stated plainly, because `OD-GATE-001` is about checks that imply more than they 
 Accepted, closed by `P10-MIRROR-DISAGREEMENT`. Sixteen declared universes; four mirrored, each
 claiming its mirror at its own site; twelve declared holes with the number checked; and the
 two guards that disagreed now hold a per-universe equality that names what moved.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check · hash: sha256:5027fb23a076a3b9681f4580cc79baae3369c8d116db706a83fdcf918d0abb91*
+
+# An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#3
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:9fe50512bc6e310f1a8631a15c920f2f72ae34b2f14eb8e5b89d89ffa73304c6*
+
+`ARC-CONNECTOR-001`'s fourth invariant already says a write capability is omitted from a
+connector's interface rather than present and permission-checked, and says why: a
+deny-checked write method is still a write method, reachable by whoever next changes the
+check. What it does not spell out is the structural mechanism that makes omission possible
+at all, where that mechanism reaches its own limit, or whether the rule is a fact about
+connectors specifically or a shape this workspace already applies elsewhere and simply had
+not named for this seam.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#4
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Question · hash: sha256:786fa4af0f625d9cd26491626aaebfdfea00b1e0092ff9931b4df7382b27d294*
+
+The risk is concrete. A vendor SDK hands a connector one client object with read and write
+methods sitting side by side — `issue.comment()` next to `issue.get()` on the same value.
+The shortest correct-looking way to reflect a Nomos verdict back to a tracker is to call the
+write method that is already sitting there in the imported type. Nothing about "omit the
+write method" tells an implementer what to write instead, or what happens when the object
+that carries both methods is not one this workspace defined and cannot edit.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#6
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:aee603773546e0afdfc9276871b9bf97373952f41d9964f18b5e4f1b97e9e5de*
+
+**An outward mutation is a command handed to one canonical service, and a connector never
+performs it directly.** This is `OD-SPEC-009`'s shape applied to the opposite direction of
+the same seam. `OD-SPEC-009` decided that a submission enters the store through exactly one
+accept function and that a form, a CLI verb, an HTTP endpoint or an MCP tool is a transport
+onto that door, never a second door of its own — and it did so for the same reason
+`nomos-store` already carries one write door per authority (`README.md`, row 12): the number
+of doors is a property of the authority being written to, not of how many callers want to
+reach it. An outward write onto an external system of record is the same shape mirrored
+outward: the canonical service is the one place that constructs the vendor request,
+evaluates whether the mutation is sound to send, and executes it; a connector's translation
+layer constructs the *content* of a command — the comment text, the target issue, the new
+status — and hands it to that service, exactly as a CLI verb constructs a submission and
+hands it to `OD-SPEC-009`'s accept function. A connector that calls a vendor's write method
+on its own behalf is a second door, in the same sense a transport that persists on its own
+behalf is a second door under `OD-SPEC-009` — a defect, not a variant, and this record cites
+that decision as the one it is applying rather than restating it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#7
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:896da8e30d1a173c30dae56d16858ae4353f1e291005204a8692db494cc1e631*
+
+**The structural rule holds in the strong form: a component receives an interface carrying
+only the operations it may perform.** A capability a component may not exercise is not
+present on the type it is given, so calling it is not a runtime refusal but a compile
+error — there is no method to name. Runtime authorization — a permission check, a role
+gate, a scope token evaluated when a call is attempted — is an additional layer on top of
+this, never the mechanism itself, for the reason `ARC-CONNECTOR-001` already gives for its
+own fourth invariant: a check can be weakened, bypassed, or forgotten by whoever next
+touches it, and a method that exists to be checked is a method that exists. This is not a
+principle invented for connectors. `crates/substrate/nomos-analysis/src/fact/reader.rs`
+already ships it: `FactReader` gives a caller `Get`, `Require`, `Require_Any` and
+`Dependencies` — every way to ask the store a question — and no method that writes a fact
+back. A caller holding a `FactReader` cannot mutate a materialized fact through it, not
+because an attempt is checked and refused, but because the type it was handed has nothing
+on it that would perform one. `OD-CONNECTOR-001` names what `FactReader` was already doing
+and requires it of a connector's interface too: the observation interface
+`ARC-CONNECTOR-001`'s invariant 4 requires is a `FactReader`-shaped trait, not a full
+vendor client with a policy wrapped around it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#8
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Decision · hash: sha256:e69ad3d8c10861694ff7b8b4d2407e695e8a96bb9f8b3a27334e610cbda8ef91*
+
+**Structural absence is achievable wherever this workspace defines the type the caller
+holds, and it is not achievable on a type this workspace does not define.** A vendor SDK's
+client object is the case that breaks the mechanism: its write methods exist before any
+Nomos code runs, sitting on the same object as its read methods, and no trait this
+workspace writes can delete a method from a type it does not own. Where the capability
+arrives already bundled on a foreign type, the mechanism is not omission but containment,
+and it is a weaker guarantee: `ARC-CONNECTOR-001`'s second invariant already requires that
+no vendor schema, field name or authentication scheme cross above the translation layer,
+and this record extends that same containment to the vendor client object itself — the raw,
+write-capable SDK type may not be named, returned, stored or passed above the translation
+layer under any circumstance, so that nothing outside it ever holds a value with a write
+method reachable through it. What a caller above the seam holds instead is the
+`FactReader`-shaped observation interface this workspace defines over that translation
+layer, which is where omission becomes possible again because the type is now this
+workspace's own. The difference is not stylistic: a Rust method omitted from a trait this
+workspace owns cannot be called from outside that trait under any edition of the language,
+by construction; a vendor type kept out of every signature above one module is confinement
+that a single import statement inside that module's own boundary can still violate, and
+which nothing but review, a lint, or a future architectural test catches. Confinement is
+what stands in where omission cannot reach, and it is strictly weaker than omission — which
+is exactly why the translation layer, and not the connector interface above it, is where
+`ARC-CONNECTOR-001` already places the only code permitted to hold the vendor object at
+all.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Scope · hash: sha256:06f13eceae24bd0eb87002e30400999346da1ac5f0f9e44ba02101ab01d1f6a3*
+
+## Scope
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#10
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Scope · hash: sha256:7575f732e9e88eba48e6f79c6a8522711f122df7cfdcca936e15248aac6685b1*
+
+This record's scope is connectors. It does not decide whether an executor invoking a
+subprocess, a plugin loaded into this workspace, an agent given tool access, or a transport
+under `OD-SPEC-009` carries the same write-omission requirement, and it deliberately declines
+to extend the rule to any of them here. Each is a different boundary with its own shape — a
+subprocess is not a vendor SDK object with methods bundled by a client library, a plugin's
+ABI is not a translation layer between a foreign schema and a canonical one, an MCP transport
+already answers to `OD-SPEC-009` on the inbound side and has not been asked an outbound
+question — and deciding all four by extension from the connector case would repeat the
+mistake `ARC-CONNECTOR-001` already named and refused to make for connector addressing:
+settling a scheme for a case that is not in front of anyone yet. Whichever of those boundaries
+is built first is where that boundary's own record decides whether this rule reaches it,
+citing this one as the precedent it is applying, the same way this record cites
+`ARC-CONNECTOR-001`'s fourth invariant rather than restating it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044*
+
+## What This Binds
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#12
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:7f88858ac67e433364987bd5feb186f68b72bf9a386b7e477b567697e4b76846*
+
+Every connector's observation interface — the generic connector substrate and the
+vendor-to-canonical translation layer together, as `ARC-CONNECTOR-001` scopes them — carries
+only the operations a caller above the seam may perform. An outward mutation is never one of
+them; it is a command constructed by the translation layer and handed to the one canonical
+service that performs it, in the same relationship a transport under `OD-SPEC-009` has to
+the accept function.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#13
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Binds · hash: sha256:cc13b20dae638d18d85ff8b590e9b3a1942f00fde08b9c03efcebe3ee75f3d6e*
+
+The vendor's own client object, and any type carrying its write methods, may not be named,
+returned or held by anything above the translation layer that defines it.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:ebcd7ad21b8eb9821a30da3137d2f116568873f3d4d718ec0d464b1a86062e08*
+
+## What This Does Not Bind
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#15
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:41af6ebd7159b01bb5b60f43785fbc2228fe0562b9b97215092ecd13e29a3e17*
+
+It does not name the canonical service, define its interface, or say which crate holds it.
+That is implementation the first connector's translation layer is checked against, the same
+way `ARC-CONNECTOR-001` left the quarantine crate's name to whoever adopts one.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#16
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:b323a8be3edcbc42c53952567abe34e874e6924e68b3ae7bc63e5f4dd9b09407*
+
+It does not decide whether an executor, a plugin, an agent or a transport carries the same
+rule. See Scope, above.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#17
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Does Not Bind · hash: sha256:e92a49e420ae1a232a781ba50246bff2e014df6cbe5b17e7650e8b3cef849aa8*
+
+It does not touch `ARC-CONNECTOR-001`'s first three invariants, or reopen the crossings
+`ARC-ECOSYSTEM-001` governs. Both are unchanged.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#19
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Controls · hash: sha256:1f7327279bb3d6f76f909d49e55321194f16498bba6a7518795e2064a0e16014*
+
+| Weakening | What it produces |
+|---|---|
+| the connector calls the vendor's write method directly, behind a permission check | a write method that exists to be checked, reachable by whoever next weakens the check — exactly what `ARC-CONNECTOR-001`'s fourth invariant already refuses |
+| the connector's interface exposes the raw vendor client above the translation layer | confinement is skipped, and the write method the interface omitted is reachable anyway through the object that carries it |
+| the canonical service is treated as a convenience the connector may bypass for "simple" mutations | the second door `OD-SPEC-009` already named the failure mode for, mirrored outward |
+| the write-omission rule is assumed to already cover executors, plugins, agents or transports | a boundary with its own shape is governed by an analogy instead of by its own record |
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
+
+## Conflicts With Existing Decisions
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#21
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:55fa19c73026136603b3fdf68bd79d486bc0409947c8618caad5e0a1af6da463*
+
+`ARC-CONNECTOR-001` is untouched. Its fourth invariant is applied in its strong form and
+grounded in a mechanism and a precedent it did not name; the invariant itself is not
+reopened or reinterpreted.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#22
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Conflicts With Existing Decisions · hash: sha256:8fe74cd9b0c9d0ef28db15095bb583b5b148a7ba3515fb79fe283ed25ce8720a*
+
+`OD-SPEC-009` is untouched. Its one-door-many-transports shape is applied to the outward
+direction of the same third crossing `ARC-CONNECTOR-001` names; the intake seam it governs
+is unchanged.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#24
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / What This Record Does Not Do · hash: sha256:4b7c661d6c475b581e0c3b10dcf57558e12c51ec8b05f536a3449505047efc5d*
+
+No canonical service is built, and no connector interface is defined. No executor, plugin,
+agent or transport question is answered. This record does not claim the write-omission rule
+is enforced mechanically anywhere yet — only that it is now a rule a connector's interface
+and its translation layer are checked against, with a named mechanism, a named limit, and a
+named precedent, rather than a discouragement without a structural reason.
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25
+
+*revision: authored · kind: heading · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26
+
+*revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1
 

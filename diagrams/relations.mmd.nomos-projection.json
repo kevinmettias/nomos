@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:0707e0b22b7babc5eb951408306d17bd058c5627304cf290197dd5322f9947b9",
-  "inputs_digest": "sha256:b13e10d343ead6123eaf8d5a28b521552dd7a537b64b19d4b41636e9b2c793dc",
+  "content_digest": "sha256:a4b7846883cacd37f6eb1975b87ee3ab0494c4e8e0207be24f92b9ef3ebb9402",
+  "inputs_digest": "sha256:93bee09691e2dd48c68c84937c55e718330527d5746d1ac1d017ac9d5afaeb74",
   "sections": [
     [
       "Relations",
-      578
+      586
     ],
     [
       "Decisions",
-      79
+      80
     ]
   ],
   "inputs": [
@@ -20,6 +20,16 @@
       "content": "relations",
       "identity": "ADR-DOC-001 superseded_by D-129",
       "hash": "sha256:095772f5c25cd27b5afaf37856d922b39a00f31318acfd43d0e3af1dd8d4e547"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-001 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:018174d2f95fa86691fda0a6279fd33c7cd88aa347c3f52025d33dc231532a76"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-001 relates-to ARC-ECOSYSTEM-002",
+      "hash": "sha256:525ae1e6e8302dcd057ddd8fa08cffe4d40c5e8b38f7d1e6a9351c3b1845dd85"
     },
     {
       "content": "relations",
@@ -33,6 +43,11 @@
     },
     {
       "content": "relations",
+      "identity": "ARC-CONNECTOR-001 relates-to OD-CONNECTOR-001",
+      "hash": "sha256:7ca3ad62f4b627735164ef01661cc6a6d6654905c24b446ff8b77ca949af2eae"
+    },
+    {
+      "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 affected_by ARC-HARNESS-001",
       "hash": "sha256:9d63347c11ff10d6de094da161e5acb25a3cbfcd6695b494ede5119e2253c11a"
     },
@@ -40,6 +55,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 affected_by OD-SPEC-014",
       "hash": "sha256:b1b4945768d7bcfaa138ce61335f57a50f85c412f7973132cdde9dd59c390eff"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to ARC-CONFORMANCE-001",
+      "hash": "sha256:d6b729284a105da53d4b744e88e3892d0d30b7acaf2358141352857a77605104"
     },
     {
       "content": "relations",
@@ -130,6 +150,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to OD-PACKAGE-004",
       "hash": "sha256:7d4db3923176002d43946eb4edadfd77af7ab2ab4839d6cddf22c9752ef17b6a"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-002 relates-to ARC-CONFORMANCE-001",
+      "hash": "sha256:f0eefcac70822ed6a80e101d44dad792713d6092f9a384ecda7061962f0bfcee"
     },
     {
       "content": "relations",
@@ -920,6 +945,16 @@
       "content": "relations",
       "identity": "OD-COMPLETENESS-002 relates-to OD-SPEC-007",
       "hash": "sha256:1efab4763aeda572f23f5fe6168b0e8f2938caabbe795bd00529552a0c0820e5"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-001 relates-to ARC-CONNECTOR-001",
+      "hash": "sha256:55f763f43547cabec448310ad60f59ad5aeebbd83530452e546b1d7324f5cfe3"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-001 relates-to OD-SPEC-009",
+      "hash": "sha256:53f009b2b86d95f72077ea67f62ba02912b5190e57ccfa8b9369fea978bee5f0"
     },
     {
       "content": "relations",
@@ -2648,6 +2683,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-SPEC-009 relates-to OD-CONNECTOR-001",
+      "hash": "sha256:7416b735d4158bee6bbd881887748e9a3a37cca3003def46df0e65a8b73b40d7"
+    },
+    {
+      "content": "relations",
       "identity": "OD-SPEC-009 relates-to OD-PLATFORM-001",
       "hash": "sha256:8a9e2f89810136a4f35b030c8b95fc6d6b0aa9906e705f6e9cb5429fcdcd0bea"
     },
@@ -2995,6 +3035,11 @@
       "content": "nodes",
       "identity": "OD-COMPLETENESS-002",
       "hash": "sha256:e21540ac5d140d5555c2aa8939b6acddf140b4e6241f548b11aff600dff4367e"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CONNECTOR-001",
+      "hash": "sha256:069ecd2f3b2a42260aab191b3fe875c4cc0db9fdb06acf6b71651c919a5e0f67"
     },
     {
       "content": "nodes",

@@ -3,23 +3,28 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:59b791671d31a384d096d8853205c1c1a15e83710dee6a504b5578871d342f22",
-  "inputs_digest": "sha256:c86e3b059d1eda4264220e286eb3085944f71651b85ea535a5b6c428b413061b",
+  "content_digest": "sha256:11df2ed396721bfe61c3df48f4ae6242530c1472598f26616a18b4bd45484776",
+  "inputs_digest": "sha256:811b54af889726cd1fae2b57aaaa34776503e8d127e5fbbbaace537c1075a639",
   "sections": [
     [
       "Documents",
-      85
+      87
     ],
     [
       "Sections",
-      783
+      801
     ],
     [
       "Source blocks",
-      3011
+      3062
     ]
   ],
   "inputs": [
+    {
+      "content": "documents",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored",
+      "hash": "sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf"
+    },
     {
       "content": "documents",
       "identity": "docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored",
@@ -139,6 +144,11 @@
       "content": "documents",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored",
       "hash": "sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored",
+      "hash": "sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8"
     },
     {
       "content": "documents",
@@ -444,6 +454,46 @@
       "content": "documents",
       "identity": "docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md@authored",
       "hash": "sha256:87459b711a6b464f7a80e7614562caef27fd16ba4f904315b529e4aed04c9ff3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#1",
+      "hash": "sha256:c00a2da9b92e883ea42bf637d9120b841885b29528bffd456e0719c78874cb65"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#2",
+      "hash": "sha256:7b9116d5a70337d0d4c50e1ba4951a959c298a761183a5e4ca7ec376e1757ce9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#5",
+      "hash": "sha256:4a792fcd3a139eb3166aa657966eea0d3bf2d63639f8e386fc13c3c89a0251cc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#10",
+      "hash": "sha256:3989dc9dd01a32329d2e86b8593bfbe2338b01eb1e6a1177c7f061fb31b3256a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#15",
+      "hash": "sha256:28638c834025dfd3a41fcc2bf5f6d136839bc78a5d7316816df3774ea71fac3f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#18",
+      "hash": "sha256:af8fcd4e31eecec82b352b7c1e4575d0d3ce3e9a1baf009143b9711a66221fc9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#22",
+      "hash": "sha256:4a9fe9ed4254d3eafb0bde07fef11772aaef433bc01cf824b4f7204b2089e50b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#24",
+      "hash": "sha256:27dc49523c3f53b67d91c939c70e4e2b35719f673d5859b20064b78f3e246a92"
     },
     {
       "content": "headings",
@@ -1359,6 +1409,56 @@
       "content": "headings",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53",
       "hash": "sha256:c005779c78b345dbfe7fa036a225aa2632408131e67e12c96dc639986d66e604"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1",
+      "hash": "sha256:df0a6f285c92f5bc82ae48f2a12e69fb37125178f09b60129eaf0716e2af30c2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2",
+      "hash": "sha256:f9de874a746b1cfad8bf16e0939ecbf9b3048ee0a8f9f9f927c6ab4715a113fe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5",
+      "hash": "sha256:12a131c54f28154e8b6617aa6cfd49c8ed538ef26adf215da492fcdd2564d6d9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9",
+      "hash": "sha256:3bb91dd18099d7489076d97188479d295c842ec430a6f49f3d2abcfed668d29e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11",
+      "hash": "sha256:624c3924dca3734d1dc6b9cd5b8ccb4d690e5c893985a3ca62838a17aec5e091"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14",
+      "hash": "sha256:972da7347353322bcc2bd2c5f1663d201bb963c41a6fcb00c61dd623b2e7af1c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18",
+      "hash": "sha256:a97da01c8ecb84360473628c2b2749fa4997415dc8dc869b5c8c2d3673d940a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20",
+      "hash": "sha256:2ff4371ee38db9059f2600d213814ae312c4485d6eef408bd25ed3b4ebc219d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23",
+      "hash": "sha256:5e40f1044dd966296f51caf771b055d5477896e91988568c5fb484a144d84139"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25",
+      "hash": "sha256:ec48e7d77ce96c237f57698f09acf516d35f5fd1c75966401e00e3996d3ee519"
     },
     {
       "content": "headings",
@@ -4359,6 +4459,131 @@
       "content": "headings",
       "identity": "docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#40",
       "hash": "sha256:992f6a764b1a44d3553f37a3860e85f0c8ca1909da718e6274f67d577b8cf8db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#1",
+      "hash": "sha256:e95aebf63bcf4f7ab05988e1efb14808e26ad3154e8af4ab3974b72159300674"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#3",
+      "hash": "sha256:1f4b37a0d4aa95815af58b970bcecb3aa4c66d1dfdaea4504284ee94bed00599"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#4",
+      "hash": "sha256:c331f1e6fb7311001fd7d5f844e3249c6240ca0c73693a9fcae7a9d6c21e583e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#5",
+      "hash": "sha256:5991709db9dd595b7293f234f41209f2abe3b6012007ed286ab97d923b61ee72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#6",
+      "hash": "sha256:0515a66ade6fc3f242ad72dedb367ccec326f6c3ea192c0d11d3f10e13a0a5f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#7",
+      "hash": "sha256:23c3a2af650bcdcd95f1b61b5685c551ca58bcece746576fdc526684dec73066"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#8",
+      "hash": "sha256:2656566364862e3d501bd964353685a9389fcf9288fdd2b4d2c98b303749efda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#9",
+      "hash": "sha256:4b3cb51180eb774f9eb6fcaea24124a441e2d6eafcd6e2e0c9d98c4cc621387c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#10",
+      "hash": "sha256:7a1307ada78392c2bf352cf68cecacda192d41df3d90d805c4224773ea4db254"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#11",
+      "hash": "sha256:af34d1b77615afc17c90415da36e9c8c6da1317aafd85344f9559e53bd325ac5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#12",
+      "hash": "sha256:79783b1ef197ac5b1d26bdecf16e2a59559b7dc8adcb4ee07ebf73e43f03cd6c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#13",
+      "hash": "sha256:b49242bdac094b886ace708b48297d86a0404d90faf68217c8f552c8a0998bb6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#14",
+      "hash": "sha256:e78595d5b196a3d1379c5a43cbf72f62d9af213e7fee6c4438a69a8113cefcb8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#15",
+      "hash": "sha256:2a1f29c017e627aa6dbeaa094cf4d1d6082a5beae318d7eb8d8254e252edefb0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#16",
+      "hash": "sha256:97909d6ced2d99b86b283fb57e9759a510869692cfdffb56db9fc1a86b1a0a34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#17",
+      "hash": "sha256:031fc6e8ebefca88ca2a9e62eef60e6605906a872e5c35be7e4b81ac3fe57cf8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#18",
+      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#19",
+      "hash": "sha256:31755006e45dd83b3bc5bd3fe698519431d566c8fc797f48a447c783bf521f7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#20",
+      "hash": "sha256:426b89d15f66cdd10ae2d1895c7e1bf3c3b2dd31b4cb47d466b3cc38a0f237f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#21",
+      "hash": "sha256:c2a08c8b67d12cf60f6ddbf17cb013d20c08b6b8c989aa0fe9e3eabb67d7780a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#22",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#23",
+      "hash": "sha256:ddcea1b2a822881f4a6ceaf5adeb96342b96adcf3d97d3362c7e82eb6e7c51e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#24",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md#25",
+      "hash": "sha256:2d3706bb718adeb1de2082573eb6e583002fb4d6ecc22d719c4db4dea6e44bfb"
     },
     {
       "content": "blocks",
@@ -7659,6 +7884,136 @@
       "content": "blocks",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#54",
       "hash": "sha256:e6f493d397e38f4ef317f0ef227f46c2d522aa6ca17fe5a198eaa84a4785b6c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1",
+      "hash": "sha256:5027fb23a076a3b9681f4580cc79baae3369c8d116db706a83fdcf918d0abb91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#3",
+      "hash": "sha256:9fe50512bc6e310f1a8631a15c920f2f72ae34b2f14eb8e5b89d89ffa73304c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#4",
+      "hash": "sha256:786fa4af0f625d9cd26491626aaebfdfea00b1e0092ff9931b4df7382b27d294"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#6",
+      "hash": "sha256:aee603773546e0afdfc9276871b9bf97373952f41d9964f18b5e4f1b97e9e5de"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#7",
+      "hash": "sha256:896da8e30d1a173c30dae56d16858ae4353f1e291005204a8692db494cc1e631"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#8",
+      "hash": "sha256:e69ad3d8c10861694ff7b8b4d2407e695e8a96bb9f8b3a27334e610cbda8ef91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#9",
+      "hash": "sha256:06f13eceae24bd0eb87002e30400999346da1ac5f0f9e44ba02101ab01d1f6a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#10",
+      "hash": "sha256:7575f732e9e88eba48e6f79c6a8522711f122df7cfdcca936e15248aac6685b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#11",
+      "hash": "sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#12",
+      "hash": "sha256:7f88858ac67e433364987bd5feb186f68b72bf9a386b7e477b567697e4b76846"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#13",
+      "hash": "sha256:cc13b20dae638d18d85ff8b590e9b3a1942f00fde08b9c03efcebe3ee75f3d6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#14",
+      "hash": "sha256:ebcd7ad21b8eb9821a30da3137d2f116568873f3d4d718ec0d464b1a86062e08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#15",
+      "hash": "sha256:41af6ebd7159b01bb5b60f43785fbc2228fe0562b9b97215092ecd13e29a3e17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#16",
+      "hash": "sha256:b323a8be3edcbc42c53952567abe34e874e6924e68b3ae7bc63e5f4dd9b09407"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#17",
+      "hash": "sha256:e92a49e420ae1a232a781ba50246bff2e014df6cbe5b17e7650e8b3cef849aa8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#18",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#19",
+      "hash": "sha256:1f7327279bb3d6f76f909d49e55321194f16498bba6a7518795e2064a0e16014"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20",
+      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#21",
+      "hash": "sha256:55fa19c73026136603b3fdf68bd79d486bc0409947c8618caad5e0a1af6da463"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#22",
+      "hash": "sha256:8fe74cd9b0c9d0ef28db15095bb583b5b148a7ba3515fb79fe283ed25ce8720a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#24",
+      "hash": "sha256:4b7c661d6c475b581e0c3b10dcf57558e12c51ec8b05f536a3449505047efc5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",
