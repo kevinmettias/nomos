@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:ea04144bc2d8b1332fbf6a59dba7208cfb41783eb36fc5d1e90649f093cbf324",
-  "inputs_digest": "sha256:76b0e726982b794186cdf766b6f3c2bc4c9baee97dad85af71bad9d8f5a48f49",
+  "content_digest": "sha256:0f8a8e4d9f18e9576d45acc601ab67df2856fb9e20022241c7ad2d774b32ef3e",
+  "inputs_digest": "sha256:59c9ac330578c4e22dbd7a68b7da0e5ca8803fbe75897387715cd910513fa7de",
   "sections": [
     [
       "Documents",
-      78
+      79
     ],
     [
       "Sections",
-      725
+      732
     ],
     [
       "Source blocks",
-      2832
+      2852
     ]
   ],
   "inputs": [
@@ -319,6 +319,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored",
       "hash": "sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored",
+      "hash": "sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd"
     },
     {
       "content": "documents",
@@ -3154,6 +3159,41 @@
       "content": "headings",
       "identity": "docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md#44",
       "hash": "sha256:07c69a8a53e2edef9c1214ac3f52d1e94e1e4360d15b21eae4ed13f898c433e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#1",
+      "hash": "sha256:5c7d1e4ff6d173d9e11e33b03ef7e0590a4b0df223dff226be4df876dc737397"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#2",
+      "hash": "sha256:985442d9c2c1f53ca5ab19e63bf19579786ee74802cdac781c851b6dece0d04a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#5",
+      "hash": "sha256:971d8a948f4fb06e67d0bf33336dd1cd3bce74c143ef34ba0be2af909b047407"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#9",
+      "hash": "sha256:8d5913c1eca5f394dfd75f17318ee362c7430e010485deee388fe98f186530a4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#14",
+      "hash": "sha256:814f53b27b88c1a9810835a433eebf9ad7805c5e25e8ad84c46ca32620c33d95"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#17",
+      "hash": "sha256:38cd5f2d7eb6888cc493767353b31e455c5547ff18468c1545c89039de116bfc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19",
+      "hash": "sha256:0c15becafecf9dfc14bcd8f9f1efd465d4a0cd6591f55067d8e0d33a6931200d"
     },
     {
       "content": "headings",
@@ -14784,6 +14824,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md#45",
       "hash": "sha256:e59c85326e72229bdf0aca199a64a7f0c569d9366bcd5d5df1b1ac11c80ed84c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#1",
+      "hash": "sha256:18ad58894082045df7a018e4125b7be5b3a4ef824f07fdb94d0ee9bbbbd0b477"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#3",
+      "hash": "sha256:3449f1688031d0c83425724496d3644c3bc19082ca1a57fda192b15c1bac15c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#4",
+      "hash": "sha256:77816ac6197aa607849ec990cf36cb1e13df1be6031c963a2567d3be4e37e429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#6",
+      "hash": "sha256:3de4f530ddd0be0d636c31a523bcdef0ea3c47f844094c88cc5b2791d0c39e50"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#7",
+      "hash": "sha256:12d250d3f627bc0fe62aa3aeb0a13f38bfc762cafdbb26ed5f7d66299ee23754"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#8",
+      "hash": "sha256:9df92412b3f0a38af8af0cdb06c77ef09aa4c13017415c5e850c641bc19420e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#9",
+      "hash": "sha256:f266b73cb818a8063926384adf84a135edf4588447ec6892817cf6d2496a0191"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#10",
+      "hash": "sha256:6115d2a91bcd8c911e3a276661ce83322d4b4b0226cf784c1263102f692c64f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#11",
+      "hash": "sha256:96640ec54ef4a2d5f3edb60f6566ef3b0276dd218ba7d7ab25454c3cbbeccad8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#12",
+      "hash": "sha256:2b40dd88f7a328646af45ac33031856f73996e2169c75db0760d601fc083c51e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#13",
+      "hash": "sha256:cd5c6b1b33da9a94e1a03416b9907343f02da07d3bbe86e3b036bc0908de6243"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#14",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#15",
+      "hash": "sha256:b6479281e0d10cea70c4593193f7144853837e45704d191373cba513ceee5aef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#16",
+      "hash": "sha256:c9d444e514ea2dda7d9911b78e9720f0c6b72c3e6fbcb594d71bdb9af0d416cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#17",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#18",
+      "hash": "sha256:af8f71ef86576619c04977da501c1b7bcdaf33db63146567bd0a0d6834669648"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#20",
+      "hash": "sha256:2cb3594275cf5ca2fa68984d266641af0139aeb888caf6649eca8a73c73fdc55"
     },
     {
       "content": "blocks",

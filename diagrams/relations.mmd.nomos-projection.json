@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:a62c801ee3d471995fefbf3b368d3e1d1db9e7d364a236c2a74a55436ed96cc3",
-  "inputs_digest": "sha256:73463d55eb50bb8b56cd37b72ec86c29a980e9fabc2adfa8b84296cb4b05e422",
+  "content_digest": "sha256:4cb58874ace78a15b66f1bfb5a026c1bd5fe69dda416381d1c9c3be836d66f4f",
+  "inputs_digest": "sha256:c24c9ee6607cc7d94d4d3b714c73ef0103817240e91074e352450466438c5a77",
   "sections": [
     [
       "Relations",
-      528
+      532
     ],
     [
       "Decisions",
-      74
+      75
     ]
   ],
   "inputs": [
@@ -1148,6 +1148,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-005 relates-to OD-PROJECT-003",
+      "hash": "sha256:9b850c0bc962579f8c604d7d0c2968692cc382808a32f453fd6bf5c1e42ac4aa"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-006 affects D-130",
       "hash": "sha256:963f377bbc970ac477d3f8315938ee32de8f217d454a27f1c755d216807858e9"
     },
@@ -2128,8 +2133,23 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PROJECT-002 relates-to OD-PROJECT-003",
+      "hash": "sha256:1de46990aa0fd2d17df08faf105bf5eca3604ef9a5052eb70fe60aeb79a08b96"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PROJECT-002 relates-to OD-SPEC-005",
       "hash": "sha256:ebd39aea17ffb4ee2ed7176b4fa9a9b9c45cd41467ac09d890c8fdb8db3a15ae"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-003 relates-to OD-GATE-005",
+      "hash": "sha256:87241b0074e871906e8bbc84f4b349b93a2194297f6f0416662a630e1c07e2cb"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-003 relates-to OD-PROJECT-002",
+      "hash": "sha256:e9cd25e00337e0b47dd2eacd2e722cb8c3fe698a63cedae4c0c9a82319c19ff1"
     },
     {
       "content": "relations",
@@ -2935,6 +2955,11 @@
       "content": "nodes",
       "identity": "OD-PROJECT-002",
       "hash": "sha256:787284392884de1f481fa39bdc6cd9f637fc40949036a43a9f545550be93e83a"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-PROJECT-003",
+      "hash": "sha256:45e38d8e8a3c290797ca69dcea5e81c99e87e4e9e991ba30b6b8126cd92b5b9b"
     },
     {
       "content": "nodes",

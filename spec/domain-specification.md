@@ -70,6 +70,7 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 27 | 8 | sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
@@ -642,6 +643,13 @@ profile: domain-specification
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md#37 | authored | 2 | What This Does Not Do |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md#42 | authored | 2 | Controls |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md#44 | authored | 2 | Status |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#1 | authored | 1 | Any committed projection carries the re-render tax, not only a required one |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#2 | authored | 2 | Question |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#9 | authored | 2 | The Consequence |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#14 | authored | 2 | The Decision |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#17 | authored | 2 | Controls |
+| docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -18853,6 +18861,161 @@ priced it as a full build in a private target directory per finish.
 Accepted. Two profiles are required, two more could be and are not, and the reason each way is
 recorded. Whether a third should join is a question this record can be argued against rather
 than a silence somebody fills.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#1
+
+*revision: authored · kind: heading · heading: Any committed projection carries the re-render tax, not only a required one · hash: sha256:18ad58894082045df7a018e4125b7be5b3a4ef824f07fdb94d0ee9bbbbd0b477*
+
+# Any committed projection carries the re-render tax, not only a required one
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#2
+
+*revision: authored · kind: heading · heading: Any committed projection carries the re-render tax, not only a required one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#3
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / Question · hash: sha256:3449f1688031d0c83425724496d3644c3bc19082ca1a57fda192b15c1bac15c6*
+
+`OD-PROJECT-002` requires `diagram-set` and `domain-specification`, and declines to require
+`html-site` and `traceability-matrix` because a third and fourth required projection would put
+a re-render obligation on every future record author. That reasoning is stated in terms of
+`--require`. It leaves open whether an *unrequired* projection, rendered once and committed
+anyway, would be free of the same obligation.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#4
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / Question · hash: sha256:77816ac6197aa607849ec990cf36cb1e13df1be6031c963a2567d3be4e37e429*
+
+It was measured rather than assumed, because the two are not the same question:
+`freshness --into .` is what `.github/workflows/gate.yml` runs, and it is not scoped to
+`--require`. It reports on every projection output it finds on disk, required or not.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#5
+
+*revision: authored · kind: heading · heading: Any committed projection carries the re-render tax, not only a required one / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#6
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / What Was Measured · hash: sha256:3de4f530ddd0be0d636c31a523bcdef0ea3c47f844094c88cc5b2791d0c39e50*
+
+`html-site` renders without a corpus, is one of the two `OD-PROJECT-002` names as cheap and
+deliberately unrequired, and was the test case.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#7
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / What Was Measured · hash: sha256:12d250d3f627bc0fe62aa3aeb0a13f38bfc762cafdbb26ed5f7d66299ee23754*
+
+Rendered once against a seeded-only store (no corpus — CI's condition) and left untouched,
+`nomos spec freshness --into .` reports it `current` and exits `0`. Edited by one byte and
+checked again, it reports `edited: the stamp declares … and the file hashes to …` and exits
+`8` — with no `--require html-site` anywhere in the invocation.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#8
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / What Was Measured · hash: sha256:9df92412b3f0a38af8af0cdb06c77ef09aa4c13017415c5e850c641bc19420e9*
+
+`mcp-resource`, a corpus-backed profile, was rendered once against a store seeded with the real
+v14 corpus, then checked with the corpus absent (CI's actual condition on every run). It
+reports `this store is not whole` and exits `6`. Absence of `mcp/specification.json` would have
+been silent under `OD-PROJECT-002`'s own rule — `freshness` treats a build root holding a
+subset as normal. **Presence** of a corpus-backed output on a corpus-less runner is not treated
+the same way as absence; it is treated as drift, and drift always fails.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#9
+
+*revision: authored · kind: heading · heading: Any committed projection carries the re-render tax, not only a required one / The Consequence · hash: sha256:f266b73cb818a8063926384adf84a135edf4588447ec6892817cf6d2496a0191*
+
+## The Consequence
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#10
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / The Consequence · hash: sha256:6115d2a91bcd8c911e3a276661ce83322d4b4b0226cf784c1263102f692c64f3*
+
+`OD-PROJECT-002`'s stated cost of requiring a third projection —
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#11
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / The Consequence · hash: sha256:96640ec54ef4a2d5f3edb60f6566ef3b0276dd218ba7d7ab25454c3cbbeccad8*
+
+> an author who renders three of five, commits, and reddens the gate for everybody behind them
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#12
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / The Consequence · hash: sha256:2b40dd88f7a328646af45ac33031856f73996e2169c75db0760d601fc083c51e*
+
+— is paid the moment a projection is **committed**, not the moment it is **required**.
+`--require` only changes what happens when an output is *absent*. It has no effect on what
+happens when a committed output is *present and stale*, and staleness is unconditional: the
+gate's `freshness` step checks whatever is on disk, and a stale or unrebuildable output fails
+it regardless of whether that output's name was ever typed after `--require`.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#13
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / The Consequence · hash: sha256:cd5c6b1b33da9a94e1a03416b9907343f02da07d3bbe86e3b036bc0908de6243*
+
+A corpus-backed profile makes this worse than an ordinary stale file: CI can never rebuild it
+(no corpus is ever set there), so committing one is not a re-render obligation somebody might
+occasionally forget — it is a permanent, unrecoverable drift the moment any governing record
+this repository's part of the store contributes to changes under it.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#14
+
+*revision: authored · kind: heading · heading: Any committed projection carries the re-render tax, not only a required one / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#15
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / The Decision · hash: sha256:b6479281e0d10cea70c4593193f7144853837e45704d191373cba513ceee5aef*
+
+**No profile beyond the two `OD-PROJECT-002` already requires is committed to this repository,
+including the two it names as renderable-but-not-required.** `html-site` and
+`traceability-matrix` remain buildable on demand and stay out of the tree; the fourteen
+corpus-backed profiles remain local, on-demand renders against a corpus set by `--corpus` or the
+three environment variables, exactly as `nomos spec sources` already reports them.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#16
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / The Decision · hash: sha256:c9d444e514ea2dda7d9911b78e9720f0c6b72c3e6fbcb594d71bdb9af0d416cd*
+
+This does not amend `OD-PROJECT-002`'s required set. It closes the gap that record left open:
+whether the *unrequired* two were a cheaper, safe alternative to committing. They are not
+cheaper — committing either one reopens the same obligation `OD-PROJECT-002` priced and
+declined to pay, by a mechanism that record did not name.
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#17
+
+*revision: authored · kind: heading · heading: Any committed projection carries the re-render tax, not only a required one / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#18
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / Controls · hash: sha256:af8f71ef86576619c04977da501c1b7bcdaf33db63146567bd0a0d6834669648*
+
+| Weakening | What it produces |
+|---|---|
+| commit `html-site` or `traceability-matrix` as a convenience artifact | a re-render obligation on every governing-record commit, with no `--require` line naming it as the cause of a red gate |
+| commit a corpus-backed profile's output because it rendered cleanly once, locally | a permanently stale committed file, since CI never has a corpus to rebuild it with |
+| read `OD-PROJECT-002`'s two-profile required set as the full list of what is safe to commit | this record, which found the third case that set never covered |
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#19
+
+*revision: authored · kind: heading · heading: Any committed projection carries the re-render tax, not only a required one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md#20
+
+*revision: authored · kind: prose · heading: Any committed projection carries the re-render tax, not only a required one / Status · hash: sha256:2cb3594275cf5ca2fa68984d266641af0139aeb888caf6649eca8a73c73fdc55*
+
+Accepted. The full eighteen-profile catalogue remains available through `nomos spec render`
+and `nomos spec sources`; this record is why only two of the eighteen outputs are ever
+checked in.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 
