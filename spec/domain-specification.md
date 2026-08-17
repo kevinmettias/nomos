@@ -63,6 +63,7 @@ profile: domain-specification
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:ea5edc948dd0c5b537c969b4942f827bf989e7fe2732c5aef3b08585f6b39ef0 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -567,6 +568,11 @@ profile: domain-specification
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#12 | authored | 2 | What this costs |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#15 | authored | 2 | What would make this wrong |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1 | authored | 1 | A surface holds no state its canonical services cannot reconstruct |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4 | authored | 2 | The decision |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9 | authored | 2 | The state families this applies to |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20 | authored | 2 | What is not privileged state |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25 | authored | 2 | What this constrains |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -14995,6 +15001,265 @@ a rendering decision leaking into `WorkOutcome`'s shape (a variant that exists t
 printed rather than to report what happened), or a platform-specific type leaking into its
 signature (an `impl` bound that only `nomos-platform-std` satisfies). Either would be the
 same defect this record fixed, one layer up.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct · hash: sha256:ff96854272e6fbdd3589108df8cac6977db4f8054761d6152cdb0341047b380c*
+
+# A surface holds no state its canonical services cannot reconstruct
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#2
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct · hash: sha256:468ffd90f859d8995ad147e2cec4f854a1822800cce19d6cbe867376d73a137d*
+
+`OD-HOST-001` gave `nomos-work-orchestration` a seam so a second adapter could call the
+work group without duplicating platform choice, verb execution or rendering. It settled
+the duplication. It did not settle what a second adapter is allowed to keep once it has
+called through that seam, and the gap is invisible today only because `nomos-cli` is a
+CLI that exits after every verb — nothing has ever had a process lifetime long enough to
+accumulate anything.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#3
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct · hash: sha256:2abb47de4bced2d2fc4ea1a1dc6912820b784283c499783dbc29bcf240c4515f*
+
+An editor session, a long-lived service, or a web view does not exit between calls, and a
+process that does not exit is cheap to let accumulate things that are expensive to ask
+for again: a resolved provider selection, an in-memory work graph, a connector session, a
+computed trace. Each is individually reasonable and collectively becomes a second copy of
+the system's state that no other client can read and no test can address. The failure
+mode is not corruption; it is that the official surface quietly becomes the only complete
+one, and every other client — a script, a peer implementation, a CI step, an agent —
+sees a subset.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#5
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The decision · hash: sha256:880d9e7905c00d93268e0f438898991316d7a85b44d440700af2996f18aa9873*
+
+**No surface holds state that a canonical service cannot reconstruct.** A canonical
+service here means a library crate any client can call directly — `nomos-ledger`,
+`nomos-work-orchestration`, `nomos-capability`, `nomos-analysis`, `nomos-contracts`,
+`nomos-spec-store`, and their kind — not a rendering one particular client already
+produced. Operationally:
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#6
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The decision · hash: sha256:3ad47db204014a41c150622847e3759175c546e9e42d97164f5fc23d652df256*
+
+- every piece of state a surface displays must be obtainable, by any client, by calling a
+  canonical service — not only by asking the surface that first computed it;
+- every action a surface can take must be issued as a command through a canonical
+  service, not executed by logic that lives only inside the surface.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#7
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The decision · hash: sha256:5164e8948486e5f67943389e6ca7e0af74781c8e50152979c4c7601d2b411bd7*
+
+A surface that cannot name which service it would call to reconstruct a fact it is
+currently showing is holding privileged state, whether or not that state happens to be
+correct today.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#8
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The decision · hash: sha256:47a7fd0c61abd5a9bf8cb38c4e25f61c57c6e6535606ea0040e888052daa3404*
+
+This does not forbid a surface from remembering anything — see "What is not privileged
+state" below.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:bd00c6b44f47e2fb102607afdff1e49d4ca03b5c8749cb6b7a505220f268da5f*
+
+## The state families this applies to
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#10
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:0b5142a69d3fa4b4030a8ef70272337e1495f3f898d84aa8fba27951a92cb53f*
+
+Verified against the current codebase, not assumed from vocabulary. Each is real
+independent of whether a seam exists for it yet; where none exists, this record names the
+gap rather than closing it.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#11
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:2f144c6aad851db97055ddbef4e40ce39dd8468b484ec048b9a9b22569faba3b*
+
+1. **Work / board state — the one family with a working seam.** `nomos_ledger::
+   LedgerDocument` (`crates/substrate/nomos-ledger/src/store/ledger_document.rs:12`) is
+   the on-disk board; `nomos_work_orchestration::WorkOutcome`, `BoardView`, `ShowView`
+   (`crates/orchestration/nomos-work-orchestration/src/outcome.rs:19,31,45`) are the
+   reconstructable shape `OD-HOST-001` built the seam for. `nomos-cli::work::Run`
+   (`crates/host/nomos-cli/src/work.rs:39`) holds nothing of its own: it calls `Run`
+   fresh, renders the returned `WorkOutcome`, and exits. This is the demonstration the
+   other families are held to.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#12
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:8868951ab69e2ace7b6f76f7b427fb346fd9f0d5d2c02fcaf80363372ee8275b*
+
+2. **Capability / provider resolution — no seam yet.** `nomos_capability::Registry`,
+   `Requirement`, `ProviderOffer`, `Resolution` (`crates/substrate/nomos-capability/src/
+   registry.rs`, `requirement.rs`, `provider_offer.rs`, `resolution.rs`) decide which
+   provider satisfies which capability. Today only `nomos-cli::check::composition::
+   Registered` and `Resolved_Configuration`
+   (`crates/host/nomos-cli/src/check/composition.rs:15,59`) build this registry and hash
+   it into a `ConfigurationId`; no crate outside `nomos-cli` can obtain the same resolved
+   registry. A second surface has two options — reimplement `composition.rs`, or accept
+   whatever `nomos-cli` computed as fact — and both are the failure this record forbids.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#13
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:3432f2ec1347c66678a41eaa22ac94fc0e3471d0e7a4a011eeca6602a6342d74*
+
+3. **Fact / analysis state — per-invocation only today, and only because the CLI
+   exits.** `nomos_analysis::Context`, `MemoryFactStore`, and the fact-invalidation
+   machinery (`Condensation_Of`, `RematerializationGroup` in
+   `crates/substrate/nomos-analysis/src/store.rs:136,171`) hold the facts a check run
+   reasons over. `nomos-cli::check::facts::Prepare`
+   (`crates/host/nomos-cli/src/check/facts.rs`) builds this fresh per call and drops it
+   when `check::Run` returns. It is stateless across invocations only because `nomos-cli`
+   happens to exit; a long-lived surface running this same code path in place, rather
+   than through a callable service, reaches the identical failure with a longer
+   lifetime.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#14
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:4687f626a4ee3ad195a56b1a1525543d044bd7685bbc88cfbc9551e5b0c2ddd9*
+
+4. **Finding / requirement state.** `nomos_contracts::Finding`, `Applicability`,
+   `EvidenceClass`, `Guarantee` (`crates/contracts/nomos-contracts/src/finding.rs:56`,
+   `finding/applicability.rs:33`, `finding/evidence.rs:24`, `guarantee.rs:23`) are what
+   `nomos check` produces about a requirement. They are consumed only inside
+   `nomos-cli::check::report` and `vacuity.rs` today; no other crate can ask "what does
+   this repository's rule engine currently say about this subject" without running
+   `nomos check` itself.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#15
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:0579198b14af112a28d3d17493ae310e9277729eefded7cb802d0869960a980e*
+
+5. **Evidence — two vocabularies at two layers.** `EvidenceClass` above is the
+   contracts-layer provenance strength attached to a `Finding`. `nomos_model::EvidenceRef`
+   and the evidence-claim vocabulary (`crates/kernel/nomos-model/src/evidence/
+   reference.rs:5`, `evidence/claim.rs`) are a separate, kernel-layer pointer to
+   supporting evidence. A surface reconstructs each through the canonical crate that owns
+   its layer; neither is memoized in place of calling that crate.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#16
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:8a249cf53bae47649cf841ff9b6ded670ff3516f8b3f49aa631c180da30cea25*
+
+6. **Package state.** `nomos_contracts::PackageKind`
+   (`crates/contracts/nomos-contracts/src/package.rs:82`) is declared and deliberately
+   unconsumed — no manifest reader exists yet, by the type's own documentation. Named
+   here so that when a reader is built, package state is reconstructed through it rather
+   than accumulated inside whichever surface happens to implement resolution first.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#17
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:5e7ca4e1c9aa72f1333d36af08b0d244e70c652d8aa6bc09b558e84afa92bace*
+
+7. **External / connector state — anticipated, not yet real.** No `Connector` type
+   exists anywhere in this workspace's code. `ARC-CONNECTOR-001`, `OD-CONNECTOR-001` and
+   `OD-CONNECTOR-002` describe the intended external-system substrate, and
+   `PackageKind::IntegrationPackage` reserves its packaging slot. Recorded here, ahead of
+   the first connector, so its session state is decided by the substrate that will own
+   it rather than by whichever surface implements the first connector against a live
+   external system.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#18
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:5f813c00722ea8b963b76f743524faccf720487ed973fa963234e93fe2bdacad*
+
+8. **Decision / record state.** No `DecisionTrace` type exists. The actual decision
+   trail is the governing-record corpus itself — records under `docs/records/` carrying
+   `type: decision`, read through `nomos-spec-store` and `nomos-spec-project`.
+   `DecisionGap` (`crates/spec/nomos-spec-model/src/failure/decision_gap.rs:10`) is the
+   adjacent but different concept: an open question blocking a submission, not a history
+   of decisions already taken. A surface showing "why was this decided" reads the store
+   again; it does not cache a rendered history of records it has shown once.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#19
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:7dc8560575fb7fad8e329a554ceddf8465eb147433e61f7525ee1a0e52ebd7e5*
+
+9. **Control commands.** `WorkCommand`
+   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`) is the one command
+   vocabulary that already routes through a seam. `SpecCommand`
+   (`crates/host/nomos-cli/src/spec/command.rs:11`), `CheckCommand`
+   (`crates/host/nomos-cli/src/check/command.rs:6`) and `request::Command`
+   (`crates/host/nomos-cli/src/request.rs:65`) are parsed and executed directly inside
+   `nomos-cli` today, with no equivalent orchestration crate. Until each has one, this
+   record's second clause — every action is a command through a canonical service — is
+   unmet for three of the four command groups. Naming that gap is what makes the rule
+   checkable rather than already true by assumption.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / What is not privileged state · hash: sha256:1ac960b5c175248ac37db11af03e7b7e94ab34a7c685875d77029982fee14d32*
+
+## What is not privileged state
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#21
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What is not privileged state · hash: sha256:399116b115ebfff57ca0330aed53eb2ce1f712cb26d7bd27be354b03346bac0a*
+
+Caches, view state and selections are not privileged state, and the difference is
+reconstructibility, not memory.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#22
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What is not privileged state · hash: sha256:443f66e41315d003b2e2f1d8aa70af92383fbc03b65cfebb2d09ca79050b2251*
+
+A **cache** holds an answer a canonical service already gave and can give again.
+Dropping it costs latency, not information: the surface asks the service again and gets
+the same answer, because the service — not the cache — is still the source of truth.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#23
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What is not privileged state · hash: sha256:7b10324726d8b859e74951ca104e440c7ecb5235946af681a148c9a6c3db693d*
+
+**View state** — which panel is open, a scroll position, an expand/collapse toggle — and
+**selection** — a cursor position, a highlighted item, an unsent draft command — are not
+answers to a domain question at all. No canonical service could hold them, because they
+describe the surface's own presentation rather than the system's state, and no other
+client would ever need them to answer the question this surface is answering.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#24
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What is not privileged state · hash: sha256:00c0d69f2d2ed86a4366ab1955811fae66ce265be77489d021e980986fdb0c80*
+
+The test that separates the two: *if this surface exits right now, is any fact lost that
+no other client — a script, a CI step, a peer implementation — could get back by calling
+the same canonical service?* Cache, view state and selection all answer no. A resolved
+provider registry kept only in memory instead of recomputed, a work graph edited in place
+instead of re-read through the seam, a connector session whose negotiated state exists
+nowhere else — these answer yes, and are exactly the privileged state this record
+forbids.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / What this constrains · hash: sha256:b5f79d891a9fb21c298fc008d9e8bbb56ab5a18827ed8735f6028523d2017b4a*
+
+## What this constrains
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#26
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What this constrains · hash: sha256:fcc11415a8acd6058ea9f8cbadabc61184557a70b6787683846d91f7824aab6e*
+
+This record adds no seam and reopens none. `OD-HOST-001` decided that
+`nomos-work-orchestration` is the seam for the work group; this record states what any
+seam — that one, or one not yet built for capability resolution, fact state, findings,
+evidence, packages, connectors, or the record store — must guarantee once it exists: a
+surface calling through it holds nothing the seam itself cannot regenerate. Building the
+seams still missing for families 2–4 and 6–9 above is future work this record makes
+checkable, not work it does.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

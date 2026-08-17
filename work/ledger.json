@@ -9428,7 +9428,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Depends on P10-SERVICE-SEAM, which was declined and superseded by P10-SERVICE-SEAM-2 (now Done) -- OD-LEDGER-020's dead end. Re-authoring as P12-NO-PRIVILEGED-SURFACE-2 against the actual successor that finished, P10-SERVICE-SEAM-2, so the dependency can resolve. The OD-HOST-001 citation in this item's why/done_when text still resolves correctly since P10-SERVICE-SEAM-2 registered that same record id."
+        }
+      },
       "depends_on": [
         "P10-SERVICE-SEAM"
       ],
@@ -9451,7 +9455,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-strand-cleanup",
+        "declined_at": 1786999704
+      }
     },
     {
       "id": "P12-KWB-EVIDENCE",
@@ -9719,7 +9726,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Depends on P11-LINT-AUTHORITY, which was declined and superseded by P11-LINT-AUTHORITY-2 then P11-LINT-AUTHORITY-3 (now Done) -- OD-LEDGER-020's dead end. Re-authoring as P12-DUPLICATE-AUTHORITY-2 against the actual successor that finished, P11-LINT-AUTHORITY-3, so the dependency can resolve."
+        }
+      },
       "depends_on": [
         "P11-LINT-AUTHORITY"
       ],
@@ -9742,7 +9753,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-strand-cleanup",
+        "declined_at": 1786999675
+      }
     },
     {
       "id": "P12-PROVENANCE-FLOOR",
@@ -10199,7 +10213,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Depends on P10-SERVICE-SEAM (declined, superseded by Done P10-SERVICE-SEAM-2) and P12-NO-PRIVILEGED-SURFACE (declined for the same reason, superseded by P12-NO-PRIVILEGED-SURFACE-2). Re-authoring as P12-EDITOR-PROJECTION-2 against both actual successors so the dependency chain can resolve once P12-NO-PRIVILEGED-SURFACE-2 finishes."
+        }
+      },
       "depends_on": [
         "P10-SERVICE-SEAM",
         "P12-NO-PRIVILEGED-SURFACE"
@@ -10223,7 +10241,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-strand-cleanup",
+        "declined_at": 1786999730
+      }
     },
     {
       "id": "P11-COLLAPSIBLE-UNMASKED",
@@ -12747,6 +12768,162 @@
           "exit_code": 0
         },
         "revision": "6c8d8a5a6d104de1ed1a8b8afb2cec22a3ac02db"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-DUPLICATE-AUTHORITY-2",
+      "title": "Two artifacts encoding one decision agree until somebody edits one, and this tree has closed five of them",
+      "why": "This is P12-DUPLICATE-AUTHORITY, re-authored: its dependency P11-LINT-AUTHORITY was declined and superseded by P11-LINT-AUTHORITY-2, itself declined and superseded by P11-LINT-AUTHORITY-3, now Done -- OD-LEDGER-020's remedy for a stranded dependent. The subject and argument are unchanged.\n\nP11-LINT-AUTHORITY-3 is one instance: the gate's -D warnings and the workspace lint table were two authorities for one severity policy, closed by OD-GATE-007. It is not the first and the pattern is dense enough here to be worth naming.\n\nP10-MIRROR-DISAGREEMENT closed two guards that disagreed about whether DECLARED_RULES is mirrored. P10-BAND0-ADMISSION closed two authorities describing band 0 differently, and the wider one was the copy no test read. P10-AUDIT-STATE closed a second guard that disagreed with the first. P10-SUBJECT-HOME closed three normalizations of a path into a subject. AGENTS.md opens by explaining that a summary of a checked file is an unchecked copy of it and that this repository has already paid for one.\n\nFive closed items and a contract file's opening paragraph, all the same defect. It is not duplicate code - the two encodings usually look nothing alike, which is exactly why review misses them. A severity in a manifest and a flag in a workflow, a rule mirrored in a guard and in a table, a default in a CLI and in a service, a schema written once in Rust and once in JSON, a timeout in an executor and in a workflow config, a requirement paraphrased in two documents. What makes each a defect is not the repetition, it is that both are authoritative and nothing decides which wins when they diverge.\n\nThey diverge silently and asymmetrically. While the two agree there is no signal at all, so the clock starts at the moment somebody edits one - and the edit that causes the damage looks complete, because the author changed the authority they knew about.\n\nAGENTS.md already states the resolution rule for this repository: when two authorities disagree, the mechanical one wins and the disagreement is a defect worth an item. What is missing is anything that finds the disagreement.",
+      "done_when": "A check reports two artifacts that independently encode one decision, and reports the pair rather than either half - a finding naming only one side is not actionable, since the reader cannot tell which is the copy.\n\nIt is validated against the instances this repository has already closed, which are the corpus that proves it detects the real shape rather than a shape invented for it. Missing all five (or six, counting P11-LINT-AUTHORITY-3's own OD-GATE-007) means it is measuring something else.\n\nIt states what it treats as one decision. This is the hard part and the record says how it is decided, because a check that flags every value appearing twice is noise and a check that requires them to be textually identical finds nothing - the closed instances above were all textually dissimilar.\n\nIt says what a legitimate second encoding is - a protocol commitment restated for a peer implementation is one, and PackageKind's labels are the worked example - and how such a case is declared so it is not reported forever.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-011",
+          "crates/spec/nomos-spec-store/records/OD-GATE-011.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authored with no verification predicate (verification: null); finish refuses unconditionally on that and there is no work verb to set one on an existing item. OD-GATE-011 is written, registered, and its projections re-rendered, satisfying done_when's content -- re-authoring as P12-DUPLICATE-AUTHORITY-3 with a real predicate so the item can actually be finished."
+        }
+      },
+      "depends_on": [
+        "P11-LINT-AUTHORITY-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": null,
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-orch-dup-authority-2",
+          "reason": "Authored with verification: null; finish refuses unconditionally and there is no verb to set a predicate on an existing item. Releasing so it can be declined and re-authored with a real predicate.",
+          "abandoned_at": 1787000264
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-orch-dup-authority-2",
+        "declined_at": 1787000269
+      }
+    },
+    {
+      "id": "P12-NO-PRIVILEGED-SURFACE-2",
+      "title": "Nothing says the official surface holds no state the canonical services cannot rebuild, and one surface makes it invisible",
+      "why": "This is P12-NO-PRIVILEGED-SURFACE, re-authored: its dependency P10-SERVICE-SEAM was declined and superseded by P10-SERVICE-SEAM-2, now Done -- OD-LEDGER-020's remedy for a stranded dependent. The subject and argument are unchanged; the seam this item constrains is the one OD-HOST-001 records, which P10-SERVICE-SEAM-2 registered under the same identifier.\n\nOD-HOST-001 records that one crate chose the platform, ran the verb and rendered the answer, and that a second adapter would duplicate all three -- and now a seam (nomos-work-orchestration) exists so a second adapter can call the middle without taking the other two. It is about the duplication. The property that has to survive the fix is different and is not written anywhere: that no surface holds state the canonical services cannot reconstruct.\n\nToday the question is nearly invisible because there is one surface and it is a CLI that exits. It becomes load-bearing the moment a second one exists - an editor session, a long-lived service, a web view - because that surface has a process lifetime and will accumulate things that are cheap to keep and expensive to ask for. Resolved provider selections, an in-memory work graph, connector session state, computed traces. Each is individually reasonable and collectively they are a second copy of the system's state that no other client can read and no test can address.\n\nThe failure mode is not corruption, it is that the official surface quietly becomes the only complete one. Every other client - a script, a peer implementation, a CI step, an agent - then sees a subset, and the gap is discovered by somebody trying to reproduce in the API something the UI already shows.\n\nThis repository has the vocabulary to state the rule and the list to state it over: work graph, analysis graphs, provider resolution, connector state, requirement traces, package state, external references, evidence, decision traces and control commands.",
+      "done_when": "A registered governing record states that the official surface holds no privileged state, and says what that means operationally: every state a surface can display is reconstructable through a canonical service by any client, and every action it can take is a command through one.\n\nIt enumerates the state families this applies to rather than stating the principle abstractly, because a principle with no list is checkable against nothing.\n\nIt says what a surface may legitimately hold that is not privileged state - caches, view state, selections - and what makes the difference, since the rule is unusable if it reads as forbidding a surface from remembering anything.\n\nIt cites OD-HOST-001 as the seam it constrains rather than re-deciding the seam.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-002",
+          "crates/spec/nomos-spec-store/records/OD-HOST-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [
+        "P10-SERVICE-SEAM-2"
+      ],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-orch-no-privileged-surface",
+        "acquired_at": 1786999789,
+        "lease_expires_at": 1787010589
+      },
+      "verification": null,
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-EDITOR-PROJECTION-2",
+      "title": "The editor surface is the second adapter and the first that does not exit, and the easy version makes rendered text a protocol",
+      "why": "This is P12-EDITOR-PROJECTION, re-authored: its dependencies P10-SERVICE-SEAM and P12-NO-PRIVILEGED-SURFACE were each declined and superseded (by P10-SERVICE-SEAM-2, now Done, and by P12-NO-PRIVILEGED-SURFACE-2, respectively) -- OD-LEDGER-020's remedy for a stranded dependent. The subject and argument are unchanged.\n\nAn editor surface is the second adapter OD-HOST-001 (via P10-SERVICE-SEAM-2) is about, and it is the worst-case one on both counts that record raises. It duplicates platform choice, verb execution and rendering if the seam is not used, and unlike the CLI it does not exit - so it is also the first surface that can accumulate the privileged state P12-NO-PRIVILEGED-SURFACE-2 exists to forbid.\n\nIt is worth deciding rather than deferring because the interesting content is already built and is currently unreachable. Finding, EvidenceClass, Guarantee, Applicability, the requirement registry, the record set, the work ledger and the projection profiles all exist. What none of them has is a way to be looked at from inside the code they are about. Hovering a symbol and being told the architecture component, the governing requirement, the record that decided it, the evidence behind it and the open item that touches it is not new analysis - it is a projection of state this repository already holds, onto a subject the editor already knows.\n\nThe same is true of the actions. Moving a dependency behind a canonical capability, creating a missing trace entry, replacing a leaked vendor type, opening a correction item - each is an engineering refactoring rather than a syntactic one, and each is an existing command with a subject the editor can supply.\n\nThe failure to avoid is the obvious first implementation: an adapter that shells out to the CLI and parses its rendered output. That makes the CLI's presentation a protocol, which is the third duplication in OD-HOST-001's list arriving as an integration rather than as a copy, and it is very hard to undo once an editor depends on the text.",
+      "done_when": "A registered governing record states what an editor surface is in this architecture: which canonical services it consumes, that it consumes them as services rather than by invoking and parsing a rendered surface, and that it holds no state the services cannot rebuild.\n\nIt states what a diagnostic carries beyond a message and a span - the finding, the rule, the governing requirement or record, the evidence class and guarantee, and the correction if one exists - since a diagnostic that carries only text is a linter's diagnostic and gives up everything this repository has that a linter does not.\n\nIt says which navigations and actions are in scope and which are explicitly not, with the negative half stated: this does not reimplement completion, type information or responsiveness that a language server already provides, and it composes with one rather than replacing it.\n\nIt cites OD-HOST-001 for the seam and OD-HOST-002 (via P12-NO-PRIVILEGED-SURFACE-2) for the state rule rather than re-deciding either.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-003",
+          "crates/spec/nomos-spec-store/records/OD-HOST-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-SERVICE-SEAM-2",
+        "P12-NO-PRIVILEGED-SURFACE-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": null,
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-DUPLICATE-AUTHORITY-3",
+      "title": "Two artifacts encoding one decision agree until somebody edits one, and this tree has closed five of them",
+      "why": "This is P12-DUPLICATE-AUTHORITY-2, re-authored: verification was null and finish refuses unconditionally on that, and there is no work verb to set a predicate on an existing item. The subject and argument are unchanged, and OD-GATE-011 is already written and registered.\n\nP11-LINT-AUTHORITY-3 is one instance: the gate's -D warnings and the workspace lint table were two authorities for one severity policy, closed by OD-GATE-007. It is not the first and the pattern is dense enough here to be worth naming.\n\nP10-MIRROR-DISAGREEMENT closed two guards that disagreed about whether DECLARED_RULES is mirrored. P10-BAND0-ADMISSION closed two authorities describing band 0 differently, and the wider one was the copy no test read. P10-AUDIT-STATE closed a second guard that disagreed with the first. P10-SUBJECT-HOME closed three normalizations of a path into a subject. AGENTS.md opens by explaining that a summary of a checked file is an unchecked copy of it and that this repository has already paid for one.\n\nFive closed items and a contract file's opening paragraph, all the same defect. It is not duplicate code - the two encodings usually look nothing alike, which is exactly why review misses them. What makes each a defect is not the repetition, it is that both are authoritative and nothing decides which wins when they diverge, and they diverge silently until somebody edits one.\n\nAGENTS.md already states the resolution rule for this repository: when two authorities disagree, the mechanical one wins and the disagreement is a defect worth an item. What is missing is anything that finds the disagreement.",
+      "done_when": "OD-GATE-011 exists under docs/records/ and is registered under crates/spec/nomos-spec-store/records/OD-GATE-011.record, both ways of the registration-consistency test passing.\n\nIt names the defect class precisely -- two artifacts each independently readable as the authoritative answer to one question, where editing one without the other changes the answer with neither artifact saying so -- narrower than mere value repetition.\n\nIt validates the definition against the five closed instances (P10-MIRROR-DISAGREEMENT, P10-BAND0-ADMISSION, P10-AUDIT-STATE, P10-SUBJECT-HOME, P11-LINT-AUTHORITY-3/OD-GATE-007) by citation, so a reader can check the definition against real history rather than a shape invented for it.\n\nIt states what a legitimate second encoding is -- PackageKind's labels are the worked example -- and the three conditions that distinguish it: independent derivation from a named external authority, the reason stated at the site, and a test pinning the two sides together.\n\nIt states, in What Holds It and What This Record Does Not Decide, that no mechanical check exists yet and that building one is a later item's territory -- this item decides the definition and corpus a check would be built against, not the check itself.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-GATE-011.record",
+          "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "P11-LINT-AUTHORITY-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.30s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787000357,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6aabe76bc81cc2ea55e2664242b108f95ee2776e"
       },
       "abandoned": [],
       "displaced": [],

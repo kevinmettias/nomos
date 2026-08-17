@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:30eb2f97e67d9f3b72797fb0e8f4744c7deaa6797ed61eeaa9c025dfc3a53417",
-  "inputs_digest": "sha256:06b39e82dd9ed0027df2b612f34ee8748c3b9f6b9f5ec331e6977100e43fa0c4",
+  "content_digest": "sha256:b90228c2c045e0b31d0e92e931a5c34eaf8d7d224acbb4af50c941d28aa63f1c",
+  "inputs_digest": "sha256:7c8b7c4ff3ef0b2d492e54200f4d1ca9b6849a2a75ca8157933dd4539f86c620",
   "sections": [
     [
       "Documents",
-      119
+      120
     ],
     [
       "Sections",
-      1077
+      1082
     ],
     [
       "Source blocks",
-      3913
+      3939
     ]
   ],
   "inputs": [
@@ -284,6 +284,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored",
       "hash": "sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored",
+      "hash": "sha256:ea5edc948dd0c5b537c969b4942f827bf989e7fe2732c5aef3b08585f6b39ef0"
     },
     {
       "content": "documents",
@@ -2779,6 +2784,31 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#15",
       "hash": "sha256:a8ffdf312f6b691185e204251f1e6389146deeb055aa7952f97d39c526e24894"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1",
+      "hash": "sha256:d812f1f24d28e399110f5076c869c99a9f9cce1e2a77fb762c8b1879a023e57b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4",
+      "hash": "sha256:32b5928ddd8863867413f8479711c89f3fce5ed2691aee3a9be42665e6cf0411"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9",
+      "hash": "sha256:d43da5a13a6ec3dfe87ec2f48afbfe45cfdd26f17f4e3d92d41bcf5dc83e8ac6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20",
+      "hash": "sha256:6aa50e7c8b122ce878c83d7480cb88af14389e2ab0777b71459a392a9d288959"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25",
+      "hash": "sha256:d657a91b2e11213fe2bafeace787baf4e6d7ca481c41762d9cd87467affb6f8e"
     },
     {
       "content": "headings",
@@ -13699,6 +13729,136 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#16",
       "hash": "sha256:088a34065a1008c2c541f79b4162427af0f64a9e477c8cb65c1e9a515a17490e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1",
+      "hash": "sha256:ff96854272e6fbdd3589108df8cac6977db4f8054761d6152cdb0341047b380c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#2",
+      "hash": "sha256:468ffd90f859d8995ad147e2cec4f854a1822800cce19d6cbe867376d73a137d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#3",
+      "hash": "sha256:2abb47de4bced2d2fc4ea1a1dc6912820b784283c499783dbc29bcf240c4515f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#5",
+      "hash": "sha256:880d9e7905c00d93268e0f438898991316d7a85b44d440700af2996f18aa9873"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#6",
+      "hash": "sha256:3ad47db204014a41c150622847e3759175c546e9e42d97164f5fc23d652df256"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#7",
+      "hash": "sha256:5164e8948486e5f67943389e6ca7e0af74781c8e50152979c4c7601d2b411bd7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#8",
+      "hash": "sha256:47a7fd0c61abd5a9bf8cb38c4e25f61c57c6e6535606ea0040e888052daa3404"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9",
+      "hash": "sha256:bd00c6b44f47e2fb102607afdff1e49d4ca03b5c8749cb6b7a505220f268da5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#10",
+      "hash": "sha256:0b5142a69d3fa4b4030a8ef70272337e1495f3f898d84aa8fba27951a92cb53f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#11",
+      "hash": "sha256:2f144c6aad851db97055ddbef4e40ce39dd8468b484ec048b9a9b22569faba3b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#12",
+      "hash": "sha256:8868951ab69e2ace7b6f76f7b427fb346fd9f0d5d2c02fcaf80363372ee8275b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#13",
+      "hash": "sha256:3432f2ec1347c66678a41eaa22ac94fc0e3471d0e7a4a011eeca6602a6342d74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#14",
+      "hash": "sha256:4687f626a4ee3ad195a56b1a1525543d044bd7685bbc88cfbc9551e5b0c2ddd9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#15",
+      "hash": "sha256:0579198b14af112a28d3d17493ae310e9277729eefded7cb802d0869960a980e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#16",
+      "hash": "sha256:8a249cf53bae47649cf841ff9b6ded670ff3516f8b3f49aa631c180da30cea25"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#17",
+      "hash": "sha256:5e7ca4e1c9aa72f1333d36af08b0d244e70c652d8aa6bc09b558e84afa92bace"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#18",
+      "hash": "sha256:5f813c00722ea8b963b76f743524faccf720487ed973fa963234e93fe2bdacad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#19",
+      "hash": "sha256:7dc8560575fb7fad8e329a554ceddf8465eb147433e61f7525ee1a0e52ebd7e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20",
+      "hash": "sha256:1ac960b5c175248ac37db11af03e7b7e94ab34a7c685875d77029982fee14d32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#21",
+      "hash": "sha256:399116b115ebfff57ca0330aed53eb2ce1f712cb26d7bd27be354b03346bac0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#22",
+      "hash": "sha256:443f66e41315d003b2e2f1d8aa70af92383fbc03b65cfebb2d09ca79050b2251"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#23",
+      "hash": "sha256:7b10324726d8b859e74951ca104e440c7ecb5235946af681a148c9a6c3db693d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#24",
+      "hash": "sha256:00c0d69f2d2ed86a4366ab1955811fae66ce265be77489d021e980986fdb0c80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25",
+      "hash": "sha256:b5f79d891a9fb21c298fc008d9e8bbb56ab5a18827ed8735f6028523d2017b4a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#26",
+      "hash": "sha256:fcc11415a8acd6058ea9f8cbadabc61184557a70b6787683846d91f7824aab6e"
     },
     {
       "content": "blocks",
