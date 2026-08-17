@@ -381,6 +381,61 @@ fn Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses()
     );
 }
 
+/// ---- `OD-COMPLETENESS-004`'s negative control ----
+///
+/// A tree where the real parser refuses one file and no universe claims anything, so the
+/// run exits `Ok` — nothing blocks. Before `OD-COMPLETENESS-004` that exit code was the
+/// whole story, and it is the same code a tree with no unreadable file at all would exit
+/// with. This is the case `done_when` names: a subject the run could not judge must not
+/// render the same as a subject that was judged clean, even though neither one fails the
+/// build.
+#[test]
+fn Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run()
+{
+    let root = std::env::temp_dir().join("nomos-check-coverage-debt-beside-clean");
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    std::fs::write(root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
+
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    let clean_root = std::env::temp_dir().join("nomos-check-clean-only");
+    let _ignored = std::fs::remove_dir_all(&clean_root);
+    std::fs::create_dir_all(&clean_root).expect("the temporary root is creatable");
+    std::fs::write(clean_root.join("a.rs"), "pub fn ok() {}\n").expect("writable");
+
+    let mut clean_stdout = Vec::new();
+    let mut clean_stderr = Vec::new();
+    let clean_code = Run(&CheckCommand { root: clean_root.clone() }, &mut clean_stdout, &mut clean_stderr);
+    let clean_rendered = String::from_utf8_lossy(&clean_stdout).into_owned();
+
+    let _ignored = std::fs::remove_dir_all(&clean_root);
+
+    // Neither run fails the build: nothing declares a mirror, so there is nothing to be a
+    // phantom about, and the refusal is advisory. That is exactly why the exit code alone
+    // cannot be the thing that tells these two runs apart.
+    assert_eq!(code, ExitCode::Ok, "{rendered}");
+    assert_eq!(clean_code, ExitCode::Ok, "{clean_rendered}");
+    assert_eq!(code, clean_code, "the exit code is not where this distinction lives");
+
+    assert_ne!(
+        rendered, clean_rendered,
+        "a run carrying a real provider refusal rendered identically to a clean run"
+    );
+    assert!(rendered.contains("claim: incomplete"), "{rendered}");
+    assert!(clean_rendered.contains("claim: complete"), "{clean_rendered}");
+    assert!(
+        !clean_rendered.contains("DependencyUnavailable") && !clean_rendered.contains("Unparseable"),
+        "{clean_rendered}"
+    );
+}
+
 /// One file claiming a mirror nothing declares, beside one the parser genuinely refuses.
 fn A_Tree_With_A_Phantom_Beside_A_Refusal() -> PathBuf
 {

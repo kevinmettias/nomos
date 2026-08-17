@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:bf25088daf6a18cfde3ff1bc2d09cb13aa8c803d9fa0a98880f205671508a5d4",
-  "inputs_digest": "sha256:ce73635f8e1af1f10124657b74027a340b0ac5369a6264672820c8d518573649",
+  "content_digest": "sha256:0b83abfc40cccf5a5ef2401fa28a302091760a18cc4d3b01eb6e41b438706beb",
+  "inputs_digest": "sha256:bb9e93d0c6b29d542134cbce9eb181c479df5356cabe88590d610bfd88594f5f",
   "sections": [
     [
       "Documents",
-      102
+      101
     ],
     [
       "Sections",
-      935
+      927
     ],
     [
       "Source blocks",
-      3518
+      3493
     ]
   ],
   "inputs": [
@@ -179,11 +179,6 @@
       "content": "documents",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored",
       "hash": "sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b"
-    },
-    {
-      "content": "documents",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored",
-      "hash": "sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a"
     },
     {
       "content": "documents",
@@ -473,12 +468,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md@authored",
-      "hash": "sha256:21513774b8df46cc65fb4e4e677e715729d1a9fcf9e8b9b6d7801b34ea67f837"
+      "hash": "sha256:8c3810110e3cfcd4a0ad8e6ade3171c5be53047c3af3fd5bd314060db7d07ee6"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored",
-      "hash": "sha256:268e9c1f06f11ba051c138e1af00d30954cf0ae874b93b324f917cdaa0cadf2f"
+      "hash": "sha256:19e7d0ce84e849c9187904e55e68435fdfd3ab83704119b7660f5bd71ffafdf0"
     },
     {
       "content": "documents",
@@ -1759,46 +1754,6 @@
       "content": "headings",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53",
       "hash": "sha256:c005779c78b345dbfe7fa036a225aa2632408131e67e12c96dc639986d66e604"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1",
-      "hash": "sha256:ab299c9236ffae7d245ef46fbb9fd4b45802ca58c2a5707c988927e9f44c10ed"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2",
-      "hash": "sha256:0852149336ff17c2eebe5f77c95f785400eb0080928ed38f8657b0b409cc67b3"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4",
-      "hash": "sha256:9bee31897a69108ec7544d03ccbd082ac8d1839c79e53f44810723fcf6740b94"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8",
-      "hash": "sha256:8502fb6c830568bc7f1137d243064622994edbf1495cbc418e43f0c0858c6b57"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13",
-      "hash": "sha256:9fcbd1132c245024e113deb32254acd8d69d1c44838d7fac1189ab8ac4081487"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21",
-      "hash": "sha256:f3e41a87b5ab09da3baf96be061fb3b83543187e3d159fe6981a84b52535cc6e"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24",
-      "hash": "sha256:142d8854146b9a7f099eff4bad46ea535852782dc506ef21b75dc66c47de302e"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26",
-      "hash": "sha256:ddb90f1cc64ce865dbce6bb9cfe283d20217c67995386f2481a98ccd2eb19dbf"
     },
     {
       "content": "headings",
@@ -4637,18 +4592,18 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#28",
-      "hash": "sha256:2f90dc4583572e776610605952790381ff06e299c0da290a52bbd683f3d06cb9"
+      "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#29",
+      "hash": "sha256:6c96bd581fd902fa0585d8d0ff758f707353ef2385839e6739f3a7b0dc6c8941"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#30",
-      "hash": "sha256:45193e22dc9746224cfdbf73d2a1379a0d402c4f56263256bc8bc040e10a803d"
+      "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#31",
+      "hash": "sha256:5ff03dbdc616fd3bad83994555bda28c9375da970c33c811086ba95fb0a7f736"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#34",
-      "hash": "sha256:2f64a7b9932011682a40bb48306689dfc593d942cfb7c03a709fe2f97550024d"
+      "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#35",
+      "hash": "sha256:c19b72520f8215564b65ef44cfcf8105d4c8d444272b90f777ffbe8255b0d830"
     },
     {
       "content": "headings",
@@ -4662,73 +4617,73 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#7",
-      "hash": "sha256:b083fb7a08ce9404f699b2d0a4f52c18f9aea468525ca2fe1e9dccffeb16f80f"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#8",
+      "hash": "sha256:a733e05ff5db4a8d3fee05f093684aedf599d367de08959a5838860803daeeaa"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#12",
-      "hash": "sha256:99903333eb2ed0b99cf0a88a07bf3738c9519088e2dea6fd37829f0801e0010a"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#13",
+      "hash": "sha256:6610065d63f13af4af051a8c8c2ffcad1a230f353e5a0afeb68e35adac2042f3"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#17",
-      "hash": "sha256:fdcb4d279703044280f897215a526ea9817d87e38312d2327bca92776d29aa2f"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#18",
+      "hash": "sha256:f83d8c0d5b495841fb0cf65ae635868f106a099e3140ff7162bb4a390b1517bb"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#24",
-      "hash": "sha256:e43f94bdfce9ffb99a1c4763ff893c28b95f638dc68a498bae36899d20b9b63a"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#25",
+      "hash": "sha256:be42b5cc89f4897ef11684eb4436f66cd5afb0fd034254f620568c2e02766079"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#28",
-      "hash": "sha256:5676858398adbd2923a4912549d29cd4019b2388a4af84449a320b3dc4a84aee"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#29",
+      "hash": "sha256:7b20a81969a75e3008d417581c93fb79156d69ddff59e264aedc37f6202c4455"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#32",
-      "hash": "sha256:293da4e9b2ea8bec0f4d8bd20ee0568f21bac01cda4baefeea6dabab354e1c7e"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#33",
+      "hash": "sha256:fa38762716b365e4faca0b8b6d63788c010c0b6b5996ebe6f33bac37793ed15f"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#39",
-      "hash": "sha256:693c200353b82ce656f6bedde7f06cd81d4c383bf5b194d6412014b251b3fee6"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#40",
+      "hash": "sha256:bf98120f6386e4a58703e29b1890367df91bccd6a695aa6a0cbd0f151c131ba3"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#47",
-      "hash": "sha256:97e19eacdac12acf21e337de9c9ec399519fe27b98903e09b7111f9e5a5dd13f"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#48",
+      "hash": "sha256:eae198e474f87e4351f63878b799bf83a3834a8667f7be5115c15d31b31d9451"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#58",
-      "hash": "sha256:679e6d8be4eb3eb84f4449546083413ef20c2081ef84e9b8fbb8f4540dca107d"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#59",
+      "hash": "sha256:9f5d22b22a0345f6c756fbabd6236a4c0697a1077ad6c3ca09b33707845edeb7"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#64",
-      "hash": "sha256:3cd028489df085a969d4187b5644bd7365aa165bf20b31a932b5ae02cb4f61f6"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#65",
+      "hash": "sha256:7d5da255124256a71278d4dfad4789ab29efc529564987c590a1e6ecd6b9cd5b"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#68",
-      "hash": "sha256:1f3bdcde906e8f74dcabc930d356f2cfa7af1a060aca3db8a8991e3e8f18c546"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#69",
+      "hash": "sha256:7256c29923ef1e1b0544a716b7644a9b77bedd98fc23982e7bed792dd0b68486"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#73",
-      "hash": "sha256:9e54d7d43fbcc449c9442ddcc71a217a4382dfde4aba80368cbf37b779fdc20c"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#74",
+      "hash": "sha256:1c5fb90853ab9e1504c229a0edbe7f1733dde4a80bda601441a35d2f29164c08"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#77",
-      "hash": "sha256:189a86d243bc35bd19d4cac8cefcec9a1316a724f25196a06806d0ac2aa2a56e"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#78",
+      "hash": "sha256:935cc8f5cfcf0be295e9a427bfc9c3b307ced84192ef69ffe0e000ad6682b4cf"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#79",
-      "hash": "sha256:9a9e2fee1f1fcbc10c58f1622a91c071d88e6a1c010f8bae34227566896ed978"
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#80",
+      "hash": "sha256:cf6ecea168f7272f061b536645ce6282073010fc3129df5453e1e016e05f3a86"
     },
     {
       "content": "headings",
@@ -9634,141 +9589,6 @@
       "content": "blocks",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#54",
       "hash": "sha256:e6f493d397e38f4ef317f0ef227f46c2d522aa6ca17fe5a198eaa84a4785b6c1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1",
-      "hash": "sha256:5efcaf221cad4a8b50fe1e32dc9765dae874126b60946239d80dde39409eb840"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2",
-      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#3",
-      "hash": "sha256:ed8437089e8b8237908e4b0aa7d4bde5f3a8ac1e50ed9da62069f568a2642bf5"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4",
-      "hash": "sha256:5f892b0c104a2e8565aba463b257f643ca05314356e58c508bb8da0cbd3d4132"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#5",
-      "hash": "sha256:93369c9860c411247524e8a900fc466594730e5122f732e6ad524ac94ef02494"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#6",
-      "hash": "sha256:ec12dabc4a8e46eb63180c07c92b0112fa7a9ae276259dab28330b07b167fdc7"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#7",
-      "hash": "sha256:4fb287e6f984f4ff11f482ee56501a4a719880a58cb209da0febc1cacaf40394"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8",
-      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#9",
-      "hash": "sha256:705601b31464502259a27ccde2ffa5bddd37d829cedd47f3ce48d570a8e9f1c6"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#10",
-      "hash": "sha256:251782b9c5d10402361bff6eb2b4bb009818407a3ca965fcbc3f6166148c58ab"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#11",
-      "hash": "sha256:67ff56ae7ea9795b9251b58dcf3ae26b40a2ca691cef7f749d8163d893552f93"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#12",
-      "hash": "sha256:7df422de639b10856394e9202f562acbea1126f9cc1666f8d6dca4197faec353"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13",
-      "hash": "sha256:ed50f9ac398c450a35c4745ff3a27a89a5508d1d376353718f2647e638ddb433"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#14",
-      "hash": "sha256:6d706b72c785a66d34a135831f0ba48d4377c3742e50dd4c6e911b767c1593ce"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#15",
-      "hash": "sha256:a5edd6b030aa6d05548266add322c5aed9ec3b892d82be118ef3f372fb931a80"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#16",
-      "hash": "sha256:c627bccc9f0fcbe68a036913b3e7ad4d76d37bda9573af8e6529035e1a6bacec"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#17",
-      "hash": "sha256:4ccfa31475f52464284ffc7d6b103e0f6c3841a0bbdd9b2ac4daec93b3c57de8"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#18",
-      "hash": "sha256:235840ba60ec8f6f21c3df47439463e5c3654e2a0a00a464e41d5d98d2eb3804"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#19",
-      "hash": "sha256:0ea9a47f5e284ccc441787f100aaf709def0816c4c41ded65b7077930b01f090"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#20",
-      "hash": "sha256:7aeb40584e15d26d6ee46e78229967359980e0906d0b5802d76a28975ca6d631"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21",
-      "hash": "sha256:840eff5ad9138aa365f9c6a2a424eec315a80a0ca0c378a479c41ee058830a02"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#22",
-      "hash": "sha256:e9575d6507a712d2bc7cd8d107f4d831214fa2f1182b6fe93c85595b49184738"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#23",
-      "hash": "sha256:3a83c2e3a94d885f677fc1ca01bf561b6111c6e9687d11557e9d0c3a20fc1853"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24",
-      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#25",
-      "hash": "sha256:7c983dad4869c2847e11c6d55ba1cb7dbf2cc3361bdf5944be85a81686870dbf"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#27",
-      "hash": "sha256:537e2d99fb9ed1d931452a739341fad6fe0367500820f9bc3c40a5c1ef9c7276"
     },
     {
       "content": "blocks",
@@ -20778,57 +20598,62 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#25",
-      "hash": "sha256:2e5c100dfa516bc43fb4858a9b19c66d0c469198ba97fd12d690c59a288cde20"
+      "hash": "sha256:5d1d8f80c7998fa3c32dd547e0265ecac7df9b03af2fe7085a0e9cc0ebb7b338"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#26",
-      "hash": "sha256:81ee7968eb5428d1e911bb0bb507f883bed1fb1d9aa2c2b552cf9850a8e80619"
+      "hash": "sha256:7f94ec70d23322f49632341b957562c49aab5a4377626413c6081a89098253f7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#27",
-      "hash": "sha256:771d35195a2de574e4ede3f9bbfb63828020b7c8edb1def3fcae2905467a45e0"
+      "hash": "sha256:81ee7968eb5428d1e911bb0bb507f883bed1fb1d9aa2c2b552cf9850a8e80619"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#28",
-      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+      "hash": "sha256:771d35195a2de574e4ede3f9bbfb63828020b7c8edb1def3fcae2905467a45e0"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#29",
-      "hash": "sha256:b570e25198c8af9236c50eff72f5cb15dd5c26c67e3ff765c2ad3424f0bb9701"
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#30",
-      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+      "hash": "sha256:b570e25198c8af9236c50eff72f5cb15dd5c26c67e3ff765c2ad3424f0bb9701"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#31",
-      "hash": "sha256:3705a62a555a3d0a6fdebcca78bec52bb6fc580b6a70afb816e08b9b7b36fecd"
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#32",
-      "hash": "sha256:a153c9b0e65db6f19a8dc14a050ea4a97538f4f1fbd1b8046602efca43621bc3"
+      "hash": "sha256:4b6f4dbf0bc55165325123bf7a6e07bcfba7cbb58408d18c51741366293ed054"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#33",
-      "hash": "sha256:1d5893c16e1f79d1a9486afaced07a4198362310d6526c884642ab7e552733c3"
+      "hash": "sha256:a153c9b0e65db6f19a8dc14a050ea4a97538f4f1fbd1b8046602efca43621bc3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#34",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:1d5893c16e1f79d1a9486afaced07a4198362310d6526c884642ab7e552733c3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#35",
-      "hash": "sha256:33fc9e14948c89e978b4ca96fec84a3c880efd947f53fae3ac4739fee31dfed9"
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#36",
+      "hash": "sha256:e5380b01f4b5e4c9e335463ffa3f2a43f8ff35e00c3238390ff13a2291d864fe"
     },
     {
       "content": "blocks",
@@ -20853,381 +20678,386 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#5",
-      "hash": "sha256:76c9999e5dfaeaa67e29eba024ba50a92e6fbc0001a827a2bcb676ad4776e95d"
+      "hash": "sha256:b00bfe8b707f62428fa68e88abbc8cc165fd86a5b2333dd189a080a2e3b71d4e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#6",
-      "hash": "sha256:0bf5b5a4877a3955311ad89ae46e0cd4885952ae5f8a6d6413333b4fe404a824"
+      "hash": "sha256:d5b273a63acfa998dd660491b5b656977b8a75b995933392070c7d3d53a66112"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#7",
-      "hash": "sha256:9711882972d6bde1a10c6434ded702b404bea44b8ea9c6e054b76733a75721d8"
+      "hash": "sha256:0bf5b5a4877a3955311ad89ae46e0cd4885952ae5f8a6d6413333b4fe404a824"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#8",
-      "hash": "sha256:9f1c938d485288140795279028f6d078951815e40421c4992c19c7d0502ef000"
+      "hash": "sha256:9711882972d6bde1a10c6434ded702b404bea44b8ea9c6e054b76733a75721d8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#9",
-      "hash": "sha256:d2bd4a81fab377da18a1fc367c1398feb7b3cd17b5de858272b1adba88f9980e"
+      "hash": "sha256:9f1c938d485288140795279028f6d078951815e40421c4992c19c7d0502ef000"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#10",
-      "hash": "sha256:5eb69f288252a68d8d7f0add4072336d9279aff4aba22b8b7747e171018f6985"
+      "hash": "sha256:d2bd4a81fab377da18a1fc367c1398feb7b3cd17b5de858272b1adba88f9980e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#11",
-      "hash": "sha256:4d3e91aabf29948cf34ed7dbb04ccb2c7dc8df7b03be9d46ed614f02ca47933f"
+      "hash": "sha256:5eb69f288252a68d8d7f0add4072336d9279aff4aba22b8b7747e171018f6985"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#12",
-      "hash": "sha256:035812c98053c4cac127fd44846a7c10c255be87a4986eb2bae9954868e02c5e"
+      "hash": "sha256:4d3e91aabf29948cf34ed7dbb04ccb2c7dc8df7b03be9d46ed614f02ca47933f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#13",
-      "hash": "sha256:e29c26b42e6dd450b6d55abe2a3764e418ec4c5f9188721fa4be9b40786555ca"
+      "hash": "sha256:035812c98053c4cac127fd44846a7c10c255be87a4986eb2bae9954868e02c5e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#14",
-      "hash": "sha256:630db236047c747a6cb88e4462f9d2e340920d1fd4dc2832a18299c9df06e9b9"
+      "hash": "sha256:e29c26b42e6dd450b6d55abe2a3764e418ec4c5f9188721fa4be9b40786555ca"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#15",
-      "hash": "sha256:3d197af85aee3d788cac4f716941f5a5eaa41e845e4afc57fa8d7990d9ba3d53"
+      "hash": "sha256:630db236047c747a6cb88e4462f9d2e340920d1fd4dc2832a18299c9df06e9b9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#16",
-      "hash": "sha256:c86771b0f562baf5fd713ff555c38783e6dbc9f69c303a8cbd3745a8de56d633"
+      "hash": "sha256:3d197af85aee3d788cac4f716941f5a5eaa41e845e4afc57fa8d7990d9ba3d53"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#17",
-      "hash": "sha256:4782b1ffe6c613721de4b31ecbef14aa7cc1ba628a4cee41fb8fbce7414854ac"
+      "hash": "sha256:c86771b0f562baf5fd713ff555c38783e6dbc9f69c303a8cbd3745a8de56d633"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#18",
-      "hash": "sha256:78b579042c96081b9a68f5da72dba4c43d827cb1b2950bb77299c6590e919fe7"
+      "hash": "sha256:4782b1ffe6c613721de4b31ecbef14aa7cc1ba628a4cee41fb8fbce7414854ac"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#19",
-      "hash": "sha256:507f25943a5f784de46a78184b6b1cfac803951452e7e7ee567a2daa18223c04"
+      "hash": "sha256:78b579042c96081b9a68f5da72dba4c43d827cb1b2950bb77299c6590e919fe7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#20",
-      "hash": "sha256:a74abc4cf3538e80f876c9fab88cf104af45c495f86edc309481f56a7df621b3"
+      "hash": "sha256:507f25943a5f784de46a78184b6b1cfac803951452e7e7ee567a2daa18223c04"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#21",
-      "hash": "sha256:f0149e058c42e501df3264321ee9f4d423dea82c64f1a92110d50139fae6fe73"
+      "hash": "sha256:a74abc4cf3538e80f876c9fab88cf104af45c495f86edc309481f56a7df621b3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#22",
-      "hash": "sha256:7f797b25a63b58a31eb50a12e51eb7446cafeca84aac6f6e0705c6e4725b879e"
+      "hash": "sha256:f0149e058c42e501df3264321ee9f4d423dea82c64f1a92110d50139fae6fe73"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#23",
-      "hash": "sha256:0ebe22a7139492983aedce53a240d79d3a239f036972f252301f0911e94cce8e"
+      "hash": "sha256:7f797b25a63b58a31eb50a12e51eb7446cafeca84aac6f6e0705c6e4725b879e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#24",
-      "hash": "sha256:60f8a373b9fb3d0f08798d1bfb566dd653155b5359d8142b44f9479e1c91374f"
+      "hash": "sha256:0ebe22a7139492983aedce53a240d79d3a239f036972f252301f0911e94cce8e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#25",
-      "hash": "sha256:9839953dcff95d36b27cf9d9debca985b0fd9a43f10ccf78b5d392e68e6ea7e7"
+      "hash": "sha256:60f8a373b9fb3d0f08798d1bfb566dd653155b5359d8142b44f9479e1c91374f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#26",
-      "hash": "sha256:f19d37c6175ead7e8c997891b2c619eaf7211c07aa293a5f01d3b264dfbd563c"
+      "hash": "sha256:9839953dcff95d36b27cf9d9debca985b0fd9a43f10ccf78b5d392e68e6ea7e7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#27",
-      "hash": "sha256:72af3fa8009b59044061aea3e1a57b14861a9eebe9adda955e787b05b4d553ad"
+      "hash": "sha256:f19d37c6175ead7e8c997891b2c619eaf7211c07aa293a5f01d3b264dfbd563c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#28",
-      "hash": "sha256:5e22eb5b3c590bbfdb9ddc204b5e9482cfaf470b09bdd4fee0326900d0f547f8"
+      "hash": "sha256:72af3fa8009b59044061aea3e1a57b14861a9eebe9adda955e787b05b4d553ad"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#29",
-      "hash": "sha256:c9dca9015fd8a38370f7026aff858e523a1a347e013c4887e73a14add3ff180e"
+      "hash": "sha256:5e22eb5b3c590bbfdb9ddc204b5e9482cfaf470b09bdd4fee0326900d0f547f8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#30",
-      "hash": "sha256:316e384c3cfc47bfd98a01903fba22cf116ec36b740f7a5c0e29f554d7c85839"
+      "hash": "sha256:c9dca9015fd8a38370f7026aff858e523a1a347e013c4887e73a14add3ff180e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#31",
-      "hash": "sha256:8477e28016df360687b687e692666017c28dc6a5d15bcfe4190598313be3636f"
+      "hash": "sha256:316e384c3cfc47bfd98a01903fba22cf116ec36b740f7a5c0e29f554d7c85839"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#32",
-      "hash": "sha256:7286ca5e257fdd9b5a55fa9e99a63ea4697c0c12cc1f9f710d9cd207059952e6"
+      "hash": "sha256:8477e28016df360687b687e692666017c28dc6a5d15bcfe4190598313be3636f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#33",
-      "hash": "sha256:196ca6eabff062196e7fc3d4130d7b613e166323b8542bbfe830943d5df0f367"
+      "hash": "sha256:7286ca5e257fdd9b5a55fa9e99a63ea4697c0c12cc1f9f710d9cd207059952e6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#34",
-      "hash": "sha256:f780c9fce40ac3c667c720317cf4d64b2d6b5e0ecbb24d8af1c6303fc5dd60c0"
+      "hash": "sha256:196ca6eabff062196e7fc3d4130d7b613e166323b8542bbfe830943d5df0f367"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#35",
-      "hash": "sha256:3e9c92e487a9a3d3299e56677de0dee46d10ab09582779f9e57fde04b3292064"
+      "hash": "sha256:f780c9fce40ac3c667c720317cf4d64b2d6b5e0ecbb24d8af1c6303fc5dd60c0"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#36",
-      "hash": "sha256:1f57de47eb356ed3eaff2896d90285fd566a015debf7651add8ab01bba103fa2"
+      "hash": "sha256:3e9c92e487a9a3d3299e56677de0dee46d10ab09582779f9e57fde04b3292064"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#37",
-      "hash": "sha256:f0a7728221790f7d40c37ebf0c0cd6682220a21a736ed09043eff46720401890"
+      "hash": "sha256:1f57de47eb356ed3eaff2896d90285fd566a015debf7651add8ab01bba103fa2"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#38",
-      "hash": "sha256:b62b540843a45dfe3464c4e5d47dccfe872dd33c8f1b0a29bdd49d53aa029c24"
+      "hash": "sha256:f0a7728221790f7d40c37ebf0c0cd6682220a21a736ed09043eff46720401890"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#39",
-      "hash": "sha256:62ee821c1b4dbca5fb3c4959665f51db9af3864d3ab54a7d6906ea6a87475d97"
+      "hash": "sha256:b62b540843a45dfe3464c4e5d47dccfe872dd33c8f1b0a29bdd49d53aa029c24"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#40",
-      "hash": "sha256:fbf27353277d5413bb68cbe18c54fa5f0019c9dd68be6cc7b361272084209e58"
+      "hash": "sha256:62ee821c1b4dbca5fb3c4959665f51db9af3864d3ab54a7d6906ea6a87475d97"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#41",
-      "hash": "sha256:c1f2f84d190691f7737756665118317613e422afd51a2abcc277aaf9f8c577d1"
+      "hash": "sha256:fbf27353277d5413bb68cbe18c54fa5f0019c9dd68be6cc7b361272084209e58"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#42",
-      "hash": "sha256:5f49e18f5b03ee3a82ed0f0ad84aeb964111020ade24b85fc353e6c993c0abb6"
+      "hash": "sha256:c1f2f84d190691f7737756665118317613e422afd51a2abcc277aaf9f8c577d1"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#43",
-      "hash": "sha256:512801a31d2562803dacc2388c810984eafe1e31315919e229fd13130e0445f0"
+      "hash": "sha256:5f49e18f5b03ee3a82ed0f0ad84aeb964111020ade24b85fc353e6c993c0abb6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#44",
-      "hash": "sha256:f4768fc51444e31ebff0b5077a20bebff34dcd95ac4ce5729f11762244f27e86"
+      "hash": "sha256:512801a31d2562803dacc2388c810984eafe1e31315919e229fd13130e0445f0"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#45",
-      "hash": "sha256:3913e2fbf25cad95c1c9cf6496a85c0edafac1e3b4dce6e14ff5cccf9753007e"
+      "hash": "sha256:f4768fc51444e31ebff0b5077a20bebff34dcd95ac4ce5729f11762244f27e86"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#46",
-      "hash": "sha256:2f3789f38b12b4959cfc34e3550f305e83c5ce68264e47532a7751a45ad12224"
+      "hash": "sha256:3913e2fbf25cad95c1c9cf6496a85c0edafac1e3b4dce6e14ff5cccf9753007e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#47",
-      "hash": "sha256:83e728f40ee2977ea3670a681da2286137cff653ec4bde31f944bbdb62e8fce6"
+      "hash": "sha256:2f3789f38b12b4959cfc34e3550f305e83c5ce68264e47532a7751a45ad12224"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#48",
-      "hash": "sha256:f99edc5e3a2d0815afba3730d11415b3e79f03011d2a42db50efa936162a89da"
+      "hash": "sha256:83e728f40ee2977ea3670a681da2286137cff653ec4bde31f944bbdb62e8fce6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#49",
-      "hash": "sha256:2eb3cdaa7b4a95624c6eb821c4aeec4fff90aed252df891751578f7adfe9a298"
+      "hash": "sha256:f99edc5e3a2d0815afba3730d11415b3e79f03011d2a42db50efa936162a89da"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#50",
-      "hash": "sha256:fb75aad3353ffa4c9a38188a9f242257951608d69ecfb6f59178cb583bcf2d42"
+      "hash": "sha256:2eb3cdaa7b4a95624c6eb821c4aeec4fff90aed252df891751578f7adfe9a298"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#51",
-      "hash": "sha256:aa25d81ee9be6771f14d68903c4d1aad14ab6eee09bd54a049bdc3782bd01616"
+      "hash": "sha256:fb75aad3353ffa4c9a38188a9f242257951608d69ecfb6f59178cb583bcf2d42"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#52",
-      "hash": "sha256:f2567fd2b69533875fe31801938cddf892761349e5489cdd5aa0d7282a972104"
+      "hash": "sha256:aa25d81ee9be6771f14d68903c4d1aad14ab6eee09bd54a049bdc3782bd01616"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#53",
-      "hash": "sha256:01246ab681be8edf690e14cc3c6365a35c1729914356ec216bbc531eb9e3ec52"
+      "hash": "sha256:f2567fd2b69533875fe31801938cddf892761349e5489cdd5aa0d7282a972104"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#54",
-      "hash": "sha256:a37f44b9c6649f372bb06ca1494ebb1c0cf2b59f02e10c6d1fca57b59672293e"
+      "hash": "sha256:01246ab681be8edf690e14cc3c6365a35c1729914356ec216bbc531eb9e3ec52"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#55",
-      "hash": "sha256:d1db4d5b239d3c5cf775662175cbcb5f57b4f0d371b33988568f2ef1ff973013"
+      "hash": "sha256:a37f44b9c6649f372bb06ca1494ebb1c0cf2b59f02e10c6d1fca57b59672293e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#56",
-      "hash": "sha256:616fbdf66190ace2c41f86f8e64192ab661c0a4f05568cd562744086af477323"
+      "hash": "sha256:d1db4d5b239d3c5cf775662175cbcb5f57b4f0d371b33988568f2ef1ff973013"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#57",
-      "hash": "sha256:4375c1604ba20c650bfa63cdf339090a004edfb06981de29da6509be203092ee"
+      "hash": "sha256:616fbdf66190ace2c41f86f8e64192ab661c0a4f05568cd562744086af477323"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#58",
-      "hash": "sha256:136a7c48379954e24e22f0ff58c4921410b71a8f9f74e93c66abb6bb960937c6"
+      "hash": "sha256:4375c1604ba20c650bfa63cdf339090a004edfb06981de29da6509be203092ee"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#59",
-      "hash": "sha256:372b6f8016f459b20e86b3e651f2b4bd0372aea9d05e226c56b38ca89138fdee"
+      "hash": "sha256:136a7c48379954e24e22f0ff58c4921410b71a8f9f74e93c66abb6bb960937c6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#60",
-      "hash": "sha256:9fafbddeb9c021a58a9f7752da1bd830b762377f5c14339fdba342ec626d8b23"
+      "hash": "sha256:372b6f8016f459b20e86b3e651f2b4bd0372aea9d05e226c56b38ca89138fdee"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#61",
-      "hash": "sha256:7ca01d1f5d5fbfe5257a2bf64b5484d6bea2e0e04c0d19f8f7fb7c148c56e80a"
+      "hash": "sha256:9fafbddeb9c021a58a9f7752da1bd830b762377f5c14339fdba342ec626d8b23"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#62",
-      "hash": "sha256:31e70a3d497193b58cc928952a208d2676c2590a870d89c11e49164becb06112"
+      "hash": "sha256:7ca01d1f5d5fbfe5257a2bf64b5484d6bea2e0e04c0d19f8f7fb7c148c56e80a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#63",
-      "hash": "sha256:881d38dead43d0679dbf76df2d75fba04a01613010bcd38ffd5b82ebb34dff93"
+      "hash": "sha256:31e70a3d497193b58cc928952a208d2676c2590a870d89c11e49164becb06112"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#64",
-      "hash": "sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044"
+      "hash": "sha256:881d38dead43d0679dbf76df2d75fba04a01613010bcd38ffd5b82ebb34dff93"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#65",
-      "hash": "sha256:34b13fe558239a8c875603cd804b97ee27a147a2ed008fd39a401416b305da22"
+      "hash": "sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#66",
-      "hash": "sha256:f74fa9657e8fc7a0fdef92858d095e3fd007923687529610910234128d76b184"
+      "hash": "sha256:34b13fe558239a8c875603cd804b97ee27a147a2ed008fd39a401416b305da22"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#67",
-      "hash": "sha256:f8a811e24900a2ee57096de66276bbba0fe7044cc17e0d62a7457703166789d6"
+      "hash": "sha256:f74fa9657e8fc7a0fdef92858d095e3fd007923687529610910234128d76b184"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#68",
-      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+      "hash": "sha256:e2fa507b0d423710e744ba2ad8fade0da321e8fa99cae4d59fc5223615e1518f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#69",
-      "hash": "sha256:30f83a5dfe312a15ca55cf3bc5ff754820cbbaffc0b218c2b60a32ecee2dc8a7"
+      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#70",
-      "hash": "sha256:e45b61e0d2c0cedf19145dda181610d8cf6b744001bffa10fd1a3bd2b9f49440"
+      "hash": "sha256:cffa46a32e6e64bf242dda866eae32f5afe22551bb97913bdcd94008af50028a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#71",
-      "hash": "sha256:961f4b44a6a5bf5d307a38fd8ec486f453165c68c5a916e1620a4f1cdc7c00fa"
+      "hash": "sha256:e45b61e0d2c0cedf19145dda181610d8cf6b744001bffa10fd1a3bd2b9f49440"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#72",
-      "hash": "sha256:bdc7a502cfefb739bd7508eb1019c40d7edfb212556ad0cecf84594fff017d1b"
+      "hash": "sha256:961f4b44a6a5bf5d307a38fd8ec486f453165c68c5a916e1620a4f1cdc7c00fa"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#73",
-      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+      "hash": "sha256:bdc7a502cfefb739bd7508eb1019c40d7edfb212556ad0cecf84594fff017d1b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#74",
-      "hash": "sha256:8719aaaa8f44c7ac8dcbfaa40843c1069ac2d3c7c1277404bf6b907e2b44d08e"
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#75",
-      "hash": "sha256:56923ab3ea1c78e556f4e056c0329d8e37449c3f4dc98e22b2de1abcbbe6241b"
+      "hash": "sha256:8719aaaa8f44c7ac8dcbfaa40843c1069ac2d3c7c1277404bf6b907e2b44d08e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#76",
-      "hash": "sha256:abba356a8a928892885374d8829a75cfb6e0d75dbdb65fbdec49c47f07efa223"
+      "hash": "sha256:56923ab3ea1c78e556f4e056c0329d8e37449c3f4dc98e22b2de1abcbbe6241b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#77",
-      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+      "hash": "sha256:abba356a8a928892885374d8829a75cfb6e0d75dbdb65fbdec49c47f07efa223"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#78",
-      "hash": "sha256:6a56f3f2e03b4f04be7c7251ac280936887a4c43ed61ce3a5f4bc3145bb483de"
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#79",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:6a56f3f2e03b4f04be7c7251ac280936887a4c43ed61ce3a5f4bc3145bb483de"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#80",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#81",
       "hash": "sha256:7ef5b33a084cddd7688d3a1452630159a8f404702a4aaf3be3e9d233f7b15052"
     },
     {

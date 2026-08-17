@@ -42,7 +42,6 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:2de6c66157c81460c04202fa550d57a830560e25befd9d6087223a67d6ab5cba |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
@@ -100,8 +99,8 @@ profile: domain-specification
 | docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md@authored | docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md | authored | 23 | 7 | sha256:b6a159ab369e778c8c6123d527c1f9b0b4fc9e225aa50f8d2be62e00cbeb6a9a |
 | docs/records/OD-SPEC-007-a-record-is-registered-by-its-own-file-and-the-count-becomes-a-floor.md@authored | docs/records/OD-SPEC-007-a-record-is-registered-by-its-own-file-and-the-count-becomes-a-floor.md | authored | 48 | 9 | sha256:1e3f777ae3755f96c67fb37a80de3a4ac6e1fc5f5418bf2554da5f938cd19d71 |
 | docs/records/OD-SPEC-008-feature-requests-designs-and-results-are-born-structured-and-their-documents-are-projections.md@authored | docs/records/OD-SPEC-008-feature-requests-designs-and-results-are-born-structured-and-their-documents-are-projections.md | authored | 45 | 11 | sha256:9e8a8fe250f468cb42ec4f2cda4aa14270d5d53418d2785a8d3f85e744828e5a |
-| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md@authored | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md | authored | 35 | 10 | sha256:21513774b8df46cc65fb4e4e677e715729d1a9fcf9e8b9b6d7801b34ea67f837 |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md | authored | 80 | 16 | sha256:268e9c1f06f11ba051c138e1af00d30954cf0ae874b93b324f917cdaa0cadf2f |
+| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md@authored | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md | authored | 36 | 10 | sha256:8c3810110e3cfcd4a0ad8e6ade3171c5be53047c3af3fd5bd314060db7d07ee6 |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md | authored | 81 | 16 | sha256:19e7d0ce84e849c9187904e55e68435fdfd3ab83704119b7660f5bd71ffafdf0 |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md | authored | 31 | 11 | sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
@@ -363,14 +362,6 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#44 | authored | 2 | Coordination — One Method, Not Two |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#50 | authored | 2 | What This Does Not Do |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53 | authored | 2 | Status |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1 | authored | 1 | A report that cannot render eleven reasons renders silence instead, and silence reads as clean |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2 | authored | 2 | Question |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4 | authored | 2 | What Was Already True And Is Kept |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8 | authored | 2 | The Decision |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13 | authored | 2 | Whether The Exit Code Should Stop Sharing |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21 | authored | 2 | The Negative Control |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24 | authored | 2 | What This Does Not Do |
-| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26 | authored | 2 | Status |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1 | authored | 1 | An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2 | authored | 2 | Question |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5 | authored | 2 | Decision |
@@ -938,25 +929,25 @@ profile: domain-specification
 | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#15 | authored | 2 | What Crosses The Seam |
 | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#18 | authored | 2 | What This Binds |
 | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#22 | authored | 2 | What This Does Not Bind |
-| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#28 | authored | 2 | Controls |
-| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#30 | authored | 2 | Consequences |
-| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#34 | authored | 2 | Status |
+| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#29 | authored | 2 | Controls |
+| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#31 | authored | 2 | Consequences |
+| docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#35 | authored | 2 | Status |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#1 | authored | 1 | Validation refuses what cannot be repaired later, and no later value overwrites what was submitted |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#2 | authored | 2 | Question |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#7 | authored | 2 | The Test For Requiredness |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#12 | authored | 2 | What Every Submission Carries |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#17 | authored | 2 | What Each Kind Carries |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#24 | authored | 2 | An Absence And A Claim Of Absence Are Different Facts |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#28 | authored | 2 | Conditional Rules |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#32 | authored | 2 | What A Refusal Names |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#39 | authored | 2 | Draft And Accepted |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#47 | authored | 2 | Submitted, Clarified, Inferred, Decided |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#58 | authored | 2 | Decision Gaps |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#64 | authored | 2 | What This Binds |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#68 | authored | 2 | What This Does Not Decide |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#73 | authored | 2 | Consequences |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#77 | authored | 2 | Controls |
-| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#79 | authored | 2 | Status |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#8 | authored | 2 | The Test For Requiredness |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#13 | authored | 2 | What Every Submission Carries |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#18 | authored | 2 | What Each Kind Carries |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#25 | authored | 2 | An Absence And A Claim Of Absence Are Different Facts |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#29 | authored | 2 | Conditional Rules |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#33 | authored | 2 | What A Refusal Names |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#40 | authored | 2 | Draft And Accepted |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#48 | authored | 2 | Submitted, Clarified, Inferred, Decided |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#59 | authored | 2 | Decision Gaps |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#65 | authored | 2 | What This Binds |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#69 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#74 | authored | 2 | Consequences |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#78 | authored | 2 | Controls |
+| docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#80 | authored | 2 | Status |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#1 | authored | 1 | An unknown relation type is refused by name rather than by a foreign key |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#7 | authored | 2 | What Was Measured |
@@ -9004,268 +8995,6 @@ Stated plainly, because `OD-GATE-001` is about checks that imply more than they 
 Accepted, closed by `P10-MIRROR-DISAGREEMENT`. Sixteen declared universes; four mirrored, each
 claiming its mirror at its own site; twelve declared holes with the number checked; and the
 two guards that disagreed now hold a per-universe equality that names what moved.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean · hash: sha256:5efcaf221cad4a8b50fe1e32dc9765dae874126b60946239d80dde39409eb840*
-
-# A report that cannot render eleven reasons renders silence instead, and silence reads as clean
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
-
-## Question
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#3
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Question · hash: sha256:ed8437089e8b8237908e4b0aa7d4bde5f3a8ac1e50ed9da62069f568a2642bf5*
-
-`nomos_contracts::Applicability` opens by calling itself the load-bearing expression of the
-product's first principle — unknown is not pass — and every `Finding` this workspace produces
-already carries one. `crates/host/nomos-cli/src/check/report.rs`, the surface a person actually
-reads, consumed `Finding::Can_Fail_A_Build` (which reads applicability) and never the field
-itself. Its `Examined` struct carries two denominators on purpose, and its own doc comment
-already makes the argument this record extends: "0 findings over 400 files" and "0 findings
-over 400 files none of which produced a fact" are different claims. That argument stops one
-step short of the eleven-way distinction `Applicability` exists to carry, and the gap is a
-silence with a specific shape — a subject whose provider is missing, whose toolchain is
-absent, whose parse failed, or which needs a model contributes nothing to either denominator
-and produces no distinguishing line in the rendered report.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:5f892b0c104a2e8565aba463b257f643ca05314356e58c508bb8da0cbd3d4132*
-
-## What Was Already True And Is Kept
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#5
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:93369c9860c411247524e8a900fc466594730e5122f732e6ad524ac94ef02494*
-
-Two things this workspace had already got right, named so the remedy below does not quietly
-re-decide them.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#6
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:ec12dabc4a8e46eb63180c07c92b0112fa7a9ae276259dab28330b07b167fdc7*
-
-`nomos-rules` already puts an `Applicability` on every finding it produces, including the
-debt states. `mirror/unread.rs` emits one finding per subject whose syntax fact could not be
-read, before any universe is judged — `Check_Completeness_Mirrors` extends its findings with
-`index.unread.iter().map(Unread_Subject)` unconditionally. So a subject is never dropped
-*silently* at the rule layer today; what was missing sat one layer up, in the surface that
-renders the findings into something a person reads.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#7
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:4fb287e6f984f4ff11f482ee56501a4a719880a58cb209da0febc1cacaf40394*
-
-`Examined`'s two denominators are a property of the walk — decided before a single subject is
-judged — and are orthogonal to what judgment each subject received. That reasoning is
-unchanged and the type is unchanged: `files` and `facts` still answer "did the walk see a
-plausible amount of the world", which a per-subject breakdown cannot answer on its own (a
-tree the walk never entered has no subjects to break down).
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
-
-## The Decision
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#9
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:705601b31464502259a27ccde2ffa5bddd37d829cedd47f3ce48d570a8e9f1c6*
-
-**The report reads the enum.** `report.rs` gains `Coverage`, a counter per `Applicability`
-variant, built by a match with no wildcard arm — the same shape `Applicability` itself is
-built with, so a twelfth variant fails the build at this match rather than landing in
-whichever bucket happened to be there. `Coverage::Nonzero` is what `Counts` renders: one line
-per bucket the run actually put something in, labelled by `Applicability::Label`.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#10
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:251782b9c5d10402361bff6eb2b4bb009818407a3ca965fcbc3f6166148c58ab*
-
-**Grouping is by variant, not by capability or by language.** This binary registers one
-capability (`nomos_cap_syntax`) and one language (`nomos_lang_rust`); grouping by either
-collapses to a single bucket today and would hide exactly the distinction this record is
-about. `Finding::rule` is already a capability's proxy, so a second grouping remains
-composable when a second capability or language exists to make it informative — nothing here
-forecloses it, and adding one is not this record's subject.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#11
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:67ff56ae7ea9795b9251b58dcf3ae26b40a2ca691cef7f749d8163d893552f93*
-
-**`Examined` is not extended with an integer.** Adding a third `usize` — a bare debt count —
-is the shape this item was opened to stop: one number cannot tell a reader which of eleven
-reasons a subject was not judged for, only that some number of them weren't. `Coverage` is a
-sibling type, not a field, because the two answer different questions and forcing one into
-the other's shape is how a report ends up naive about the general problem while having
-already solved a special case of it (`Examined`'s own history).
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#12
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:7df422de639b10856394e9202f562acbea1126f9cc1666f8d6dca4197faec353*
-
-**The roll-up verdict is `Claim`, read off `Applicability`'s own predicates.**
-`Claim::Complete` when no finding's applicability answers `Is_Coverage_Debt` or
-`Requires_Agent`; `Claim::Incomplete` otherwise. It is computed by asking `Applicability` the
-question directly (`finding.applicability.Is_Coverage_Debt() || …Requires_Agent()`), not by
-re-deriving the same classification from `Coverage`'s counters — one classification, asked
-once, so a change to what counts as debt cannot drift between the verdict and the breakdown
-that explains it. `NotApplicable` and `ConfigurationDisabled` do not flip the verdict, for the
-same reason `Applicability::Is_Coverage_Debt` already excludes them: a rule that does not bind
-and a human's deliberate switch are decisions, not gaps.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:ed50f9ac398c450a35c4745ff3a27a89a5508d1d376353718f2647e638ddb433*
-
-## Whether The Exit Code Should Stop Sharing
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#14
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:6d706b72c785a66d34a135831f0ba48d4377c3742e50dd4c6e911b767c1593ce*
-
-`done_when` asks this directly: complete-and-clean and incomplete-and-nothing-found currently
-share `ExitCode::Ok`, and whether they should stop sharing it is this record's to settle.
-**They keep sharing it.** Measured, not assumed — the measurement is what the decision rests
-on.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#15
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:a5edd6b030aa6d05548266add322c5aed9ec3b892d82be118ef3f372fb931a80*
-
-`nomos check --root .` was run against this workspace both before and after this change.
-Before: 768 files examined, 767 with a syntax fact, 13 findings, 0 blocking, exit 0. After
-(counts moved slightly from unrelated concurrent work in the tree; the shape did not): 770
-files examined, 769 with a syntax fact, 13 findings, 0 blocking, exit 0, and now additionally:
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#16
-
-*revision: authored · kind: code · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:c627bccc9f0fcbe68a036913b3e7ad4d76d37bda9573af8e6529035e1a6bacec*
-
-```
-claim: incomplete
-  Supported: 12
-  DependencyUnavailable: 1
-```
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#17
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:4ccfa31475f52464284ffc7d6b103e0f6c3841a0bbdd9b2ac4daec93b3c57de8*
-
-Twelve of the thirteen findings are `Applicability::Supported` — `Admitted_Gap`, a real
-judgment that a universe declares no mirror, not debt. One is
-`Applicability::DependencyUnavailable`, for `tests/corpus/analysis/gamma/broken.rs`, a fixture
-this workspace keeps deliberately unparseable (`OD-COMPLETENESS-002` measured the same file
-under the same rule). That file is permanent, not incidental: `check.rs`'s own module
-documentation already describes it as printing "on every run".
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#18
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:235840ba60ec8f6f21c3df47439463e5c3654e2a0a00a464e41d5d98d2eb3804*
-
-A run over this actual, real workspace is therefore incomplete-and-nothing-found *today*, on
-every invocation, including the one `OD-GATE-004` wired into `.github/workflows/gate.yml` as
-the `Rules` step. `check.rs`'s own documentation states the policy this decision has to
-respect: "Zero is the only success... Actions fails a step on any non-zero exit... that
-default *is* the policy." A new exit code firing whenever `Claim::Incomplete` holds would
-therefore turn this repository's own gate permanently red, over a gap the workspace has
-already, explicitly chosen to admit rather than close — the same asymmetry
-`OD-COMPLETENESS-001` names about `UNMIRRORED_TOTAL`: a gate that can never be green is a gate
-everybody learns to bypass, and a gate that is red from the moment it is wired teaches the
-same lesson faster.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#19
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:0ea9a47f5e284ccc441787f100aaf709def0816c4c41ded65b7077930b01f090*
-
-`ExitCode::Vacuous` was considered and does not fit: it means the answer is empty because
-*nothing* was judged, and a run that judged twelve subjects and could not judge one is not
-that claim — it is a strictly more informative one, which is exactly why it needs a state of
-its own inside the successful exit rather than a code that already means something narrower.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#20
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:7aeb40584e15d26d6ee46e78229967359980e0906d0b5802d76a28975ca6d631*
-
-So the decision is: **`ExitCode::Ok` continues to mean "nothing found can fail a build",
-unchanged, and does not additionally promise "and nothing was left unjudged."** That second
-promise is now made in the text — `claim: incomplete` and the per-variant breakdown — where a
-reader who wants it can read it, and a future gate step that wants to fail a build over
-`Claim::Incomplete` specifically can be built by parsing that line, deliberately, rather than
-by this record silently repurposing an exit code the gate already treats as a hard boundary.
-Nothing about this decision closes off adding a stricter gate later; it declines to make that
-choice by side effect of a report change that was never asked to touch the gate.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:840eff5ad9138aa365f9c6a2a424eec315a80a0ca0c378a479c41ee058830a02*
-
-## The Negative Control
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#22
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:e9575d6507a712d2bc7cd8d107f4d831214fa2f1182b6fe93c85595b49184738*
-
-`done_when` asks for the test that matters most: a subject the run could not judge must not
-render the same as a subject that was judged clean.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#23
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:3a83c2e3a94d885f677fc1ca01bf561b6111c6e9687d11557e9d0c3a20fc1853*
-
-Two versions exist, both passing. `check::report::tests::Test_A_Coverage_Debt_Subject_Must_Not_Render_The_Same_As_A_Clean_Run`
-constructs a fabricated `Finding` carrying `Applicability::DependencyUnavailable` and asserts
-its rendered `Report` output differs from an empty, clean run's — `claim: incomplete` against
-`claim: complete`, and the variant's label present on one side and absent from the other.
-`check::tests::Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run` is the
-end-to-end version: a real tree with one clean file and one file the real, registered parser
-refuses, run through `Run` exactly as the shipped binary runs it, beside a tree with the clean
-file alone. Both trees exit `ExitCode::Ok` — the assertion `code == clean_code` is in the test
-on purpose, naming the fact this record's exit-code decision rests on — and the rendered text
-still differs, which is the only place left that it can.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
-
-## What This Does Not Do
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#25
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What This Does Not Do · hash: sha256:7c983dad4869c2847e11c6d55ba1cb7dbf2cc3361bdf5944be85a81686870dbf*
-
-- **It does not close the one admitted debt finding.** `broken.rs` stays unparseable by
-  design; this record is about that fact being visible, not about removing it.
-- **It does not add a rule.** `nomos-rules` is unchanged. Every `Applicability` value it was
-  already capable of producing was already reachable before this record; what changed is
-  whether the report downstream could say which one arrived.
-- **It does not change what makes a build fail.** `Finding::Can_Fail_A_Build` and
-  `ExitCode::Violations` are untouched. A debt finding still cannot fail a build, for the
-  reason `Can_Fail_A_Build`'s own doc comment gives — a rule that could not read its subject
-  has reported on the analysis, not on the code.
-- **It does not give the gate a stricter policy.** See above. That is a live, separate
-  decision this record declines to make by accident.
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26
-
-*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
-
-## Status
-
-### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#27
-
-*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Status · hash: sha256:537e2d99fb9ed1d931452a739341fad6fe0367500820f9bc3c40a5c1ef9c7276*
-
-Accepted, closed by `P12-COVERAGE-REPORT`. The report reads the enum: every subject that
-received no judgment appears by its `Applicability` variant, in a rendering distinguishable
-from a clean run by a test built for exactly that comparison, and the exit-code question the
-item asked to have settled is settled — not split, and measured against this workspace's own
-permanently-admitted case rather than assumed.
 
 ### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1
 
@@ -28117,33 +27846,44 @@ It does not decide the validation rule set, the refusal vocabulary, or the draft
 
 ### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#25
 
-*revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / What This Does Not Bind · hash: sha256:2e5c100dfa516bc43fb4858a9b19c66d0c469198ba97fd12d690c59a288cde20*
+*revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / What This Does Not Bind · hash: sha256:5d1d8f80c7998fa3c32dd547e0265ecac7df9b03af2fe7085a0e9cc0ebb7b338*
 
 It does not decide the physical layout, the table set, or what the accept function writes. That
-is `OD-SPEC-011`, which lands the layout together with the first writer because a table nothing
+is `OD-SPEC-013`, which lands the layout together with the first writer because a table nothing
 writes to may not exist.
 
 ### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#26
+
+*revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / What This Does Not Bind · hash: sha256:7f94ec70d23322f49632341b957562c49aab5a4377626413c6081a89098253f7*
+
+(This citation named `OD-SPEC-011` in version 1. That identifier was reserved for the layout
+decision by `P10-REQUEST-LAYOUT`, and was then published for an unrelated decision — an unknown
+relation type refused by name — by a second item that had reserved it independently; nothing
+checked that two items had reserved one identifier. `OD-SPEC-013` is the record the layout
+decision actually landed under. `OD-SPEC-013`'s own *Why This Record Is Not `OD-SPEC-011`*
+section carries the fuller account.)
+
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#27
 
 *revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / What This Does Not Bind · hash: sha256:81ee7968eb5428d1e911bb0bb507f883bed1fb1d9aa2c2b552cf9850a8e80619*
 
 It does not touch `work/ledger.json`. A submission is not an item, and `OD-SPEC-008` already
 said so.
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#27
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#28
 
 *revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / What This Does Not Bind · hash: sha256:771d35195a2de574e4ede3f9bbfb63828020b7c8edb1def3fcae2905467a45e0*
 
 It does not promise a form, an HTTP API or an MCP tool. It makes each of them a transport if it
 is ever built, which is the whole of what it owes them.
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#28
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#29
 
 *revision: authored · kind: heading · heading: A submission enters through one accept function, and every surface is a transport onto it / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
 
 ## Controls
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#29
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#30
 
 *revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / Controls · hash: sha256:b570e25198c8af9236c50eff72f5cb15dd5c26c67e3ff765c2ad3424f0bb9701*
 
@@ -28156,28 +27896,28 @@ is ever built, which is the whole of what it owes them.
 | a draft is stored as an incomplete submission | validation stops being a refusal and becomes a later reader's problem, which is what born-structured was supposed to buy out of |
 | the door is named as the CLI | the fifth surface reopens this decision, and the list decides it again |
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#30
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#31
 
 *revision: authored · kind: heading · heading: A submission enters through one accept function, and every surface is a transport onto it / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
 
 ## Consequences
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#31
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#32
 
-*revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / Consequences · hash: sha256:3705a62a555a3d0a6fdebcca78bec52bb6fc580b6a70afb816e08b9b7b36fecd*
+*revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / Consequences · hash: sha256:4b6f4dbf0bc55165325123bf7a6e07bcfba7cbb58408d18c51741366293ed054*
 
-`OD-SPEC-011` can be written against a fixed seam: one accept function, one submission type, one
+`OD-SPEC-013` can be written against a fixed seam: one accept function, one submission type, one
 form contract version travelling with it. That was the last thing the layout item was waiting on
 besides the rule set.
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#32
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#33
 
 *revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / Consequences · hash: sha256:a153c9b0e65db6f19a8dc14a050ea4a97538f4f1fbd1b8046602efca43621bc3*
 
 An intake surface added later is an adapter with a known obligation, and a surface that does
 anything more than adapt is a defect somebody can name.
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#33
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#34
 
 *revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / Consequences · hash: sha256:1d5893c16e1f79d1a9486afaced07a4198362310d6526c884642ab7e552733c3*
 
@@ -28185,17 +27925,17 @@ anything more than adapt is a defect somebody can name.
 lives given one adapter and the work verbs; intake arrives with the seam already required and no
 adapter to migrate, which is evidence for that item rather than a decision taken ahead of it.
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#34
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#35
 
 *revision: authored · kind: heading · heading: A submission enters through one accept function, and every surface is a transport onto it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#35
+### docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md#36
 
-*revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / Status · hash: sha256:33fc9e14948c89e978b4ca96fec84a3c880efd947f53fae3ac4739fee31dfed9*
+*revision: authored · kind: prose · heading: A submission enters through one accept function, and every surface is a transport onto it / Status · hash: sha256:e5380b01f4b5e4c9e335463ffa3f2a43f8ff35e00c3238390ff13a2291d864fe*
 
-Accepted. The rule set and the physical layout remain open as `OD-SPEC-010` and `OD-SPEC-011`,
+Accepted. The rule set and the physical layout remain open as `OD-SPEC-010` and `OD-SPEC-013`,
 and where the accept function lives remains open as `P10-SERVICE-SEAM`.
 
 ### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#1
@@ -28229,9 +27969,9 @@ writer cannot be read, cited or disagreed with. This record states them.
 
 ### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#5
 
-*revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Question · hash: sha256:76c9999e5dfaeaa67e29eba024ba50a92e6fbc0001a827a2bcb676ad4776e95d*
+*revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Question · hash: sha256:b00bfe8b707f62428fa68e88abbc8cc165fd86a5b2333dd189a080a2e3b71d4e*
 
-It decides no physical layout, which is `OD-SPEC-011`'s. The intake surface is already
+It decides no physical layout, which is `OD-SPEC-013`'s. The intake surface is already
 decided: `OD-SPEC-009` landed while this record was being written, and put every submission
 through one accept function, with transports forbidden from validating. That makes this record
 the content of the check that function performs, and the two fit without either being bent —
@@ -28240,6 +27980,17 @@ refusal vocabulary and the draft state to here.
 
 ### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#6
 
+*revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Question · hash: sha256:d5b273a63acfa998dd660491b5b656977b8a75b995933392070c7d3d53a66112*
+
+(This citation, and the two below, named `OD-SPEC-011` in version 1. That identifier was
+reserved for the layout decision by `P10-REQUEST-LAYOUT`, and was then published for an
+unrelated decision — an unknown relation type refused by name — by a second item that had
+reserved it independently; nothing checked that two items had reserved one identifier.
+`OD-SPEC-013` is the record the layout decision actually landed under. `OD-SPEC-013`'s own
+*Why This Record Is Not `OD-SPEC-011`* section carries the fuller account.)
+
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#7
+
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Question · hash: sha256:0bf5b5a4877a3955311ad89ae46e0cd4885952ae5f8a6d6413333b4fe404a824*
 
 The rules below are properties of a submission, not of a door. They are the same rules
@@ -28247,13 +27998,13 @@ whichever transport constructs it and whichever table it lands in. A rule set th
 re-argued per surface would be a rule set that lives in the surface, which is the failure
 `OD-SPEC-009` refused.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#7
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#8
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / The Test For Requiredness · hash: sha256:9711882972d6bde1a10c6434ded702b404bea44b8ea9c6e054b76733a75721d8*
 
 ## The Test For Requiredness
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#8
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#9
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / The Test For Requiredness · hash: sha256:9f1c938d485288140795279028f6d078951815e40421c4992c19c7d0502ef000*
 
@@ -28262,14 +28013,14 @@ next field, which is the failure `ARC-SPECDB-002` refuses on the substrate axis.
 refusal applies here, so requiredness is decided by a test rather than enumerated by
 preference:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#9
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#10
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / The Test For Requiredness · hash: sha256:d2bd4a81fab377da18a1fc367c1398feb7b3cd17b5de858272b1adba88f9980e*
 
 > A field is **required** when its absence cannot be repaired by a later reader without
 > asking the submitter again.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#10
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#11
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / The Test For Requiredness · hash: sha256:5eb69f288252a68d8d7f0add4072336d9279aff4aba22b8b7747e171018f6985*
 
@@ -28278,26 +28029,26 @@ recover why a thing was wanted from the thing itself. An estimate is not require
 later reader can produce one, and a wrong estimate is visible as an estimate. The test is
 answerable about a field nobody has proposed yet, which is the property it exists to have.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#11
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#12
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / The Test For Requiredness · hash: sha256:4d3e91aabf29948cf34ed7dbb04ccb2c7dc8df7b03be9d46ed614f02ca47933f*
 
 The field sets below are that test applied, not an independent authority. A field added later
 argues from the test; a field dropped later argues against it.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#12
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#13
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Every Submission Carries · hash: sha256:035812c98053c4cac127fd44846a7c10c255be87a4986eb2bae9954868e02c5e*
 
 ## What Every Submission Carries
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#13
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#14
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Every Submission Carries · hash: sha256:e29c26b42e6dd450b6d55abe2a3764e418ec4c5f9188721fa4be9b40786555ca*
 
 Applied to all three kinds `OD-SPEC-008` governs:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#14
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#15
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Every Submission Carries · hash: sha256:630db236047c747a6cb88e4462f9d2e340920d1fd4dc2832a18299c9df06e9b9*
 
@@ -28310,13 +28061,13 @@ Applied to all three kinds `OD-SPEC-008` governs:
 | `provenance` | who submitted it and through which surface — unrecoverable the moment the session ends |
 | `state` | `draft` or `accepted`, per the section below |
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#15
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#16
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Every Submission Carries · hash: sha256:3d197af85aee3d788cac4f716941f5a5eaa41e845e4afc57fa8d7990d9ba3d53*
 
 `provenance` names the transport; it does not decide what transports exist.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#16
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#17
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Every Submission Carries · hash: sha256:c86771b0f562baf5fd713ff555c38783e6dbc9f69c303a8cbd3745a8de56d633*
 
@@ -28329,19 +28080,19 @@ for one version, and the first submission whose two values disagreed would have 
 to say which was right. So the field is `form_contract_version`, and it discharges both
 obligations.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#17
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#18
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Each Kind Carries · hash: sha256:4782b1ffe6c613721de4b31ecbef14aa7cc1ba628a4cee41fb8fbce7414854ac*
 
 ## What Each Kind Carries
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#18
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#19
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Each Kind Carries · hash: sha256:78b579042c96081b9a68f5da72dba4c43d827cb1b2950bb77299c6590e919fe7*
 
 A **feature request**, from `OD-SPEC-008`'s definition of one:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#19
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#20
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Each Kind Carries · hash: sha256:507f25943a5f784de46a78184b6b1cfac803951452e7e7ee567a2daa18223c04*
 
@@ -28352,13 +28103,13 @@ A **feature request**, from `OD-SPEC-008`'s definition of one:
 | `acceptance` | how the asker will know it worked |
 | `invariants` | what must not break |
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#20
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#21
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Each Kind Carries · hash: sha256:a74abc4cf3538e80f876c9fab88cf104af45c495f86edc309481f56a7df621b3*
 
 A **design specification**:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#21
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#22
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Each Kind Carries · hash: sha256:f0149e058c42e501df3264321ee9f4d423dea82c64f1a92110d50139fae6fe73*
 
@@ -28370,13 +28121,13 @@ A **design specification**:
 | `architecture_delta` | what changes in the architecture, or that nothing does |
 | `acceptance` | what acceptance will require |
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#22
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#23
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Each Kind Carries · hash: sha256:7f797b25a63b58a31eb50a12e51eb7446cafeca84aac6f6e0705c6e4725b879e*
 
 A **feature result**:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#23
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#24
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What Each Kind Carries · hash: sha256:0ebe22a7139492983aedce53a240d79d3a239f036972f252301f0911e94cce8e*
 
@@ -28387,13 +28138,13 @@ A **feature result**:
 | `deviations` | where it departed from the design |
 | `owed` | what it left owed |
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#24
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#25
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / An Absence And A Claim Of Absence Are Different Facts · hash: sha256:60f8a373b9fb3d0f08798d1bfb566dd653155b5359d8142b44f9479e1c91374f*
 
 ## An Absence And A Claim Of Absence Are Different Facts
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#25
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#26
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / An Absence And A Claim Of Absence Are Different Facts · hash: sha256:9839953dcff95d36b27cf9d9debca985b0fd9a43f10ccf78b5d392e68e6ea7e7*
 
@@ -28401,14 +28152,14 @@ A **feature result**:
 truthful submission may have nothing to put in, and that is the case the rule has to get
 right.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#26
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#27
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / An Absence And A Claim Of Absence Are Different Facts · hash: sha256:f19d37c6175ead7e8c997891b2c619eaf7211c07aa293a5f01d3b264dfbd563c*
 
 > A required field is satisfied by content or by an explicit statement that there is none.
 > It is never satisfied by emptiness.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#27
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#28
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / An Absence And A Claim Of Absence Are Different Facts · hash: sha256:72af3fa8009b59044061aea3e1a57b14861a9eebe9adda955e787b05b4d553ad*
 
@@ -28417,20 +28168,20 @@ none, and is a claim the result can later be held to. Collapsing the two would m
 honest submission and the abandoned one identical rows, and the abandoned one is the common
 case.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#28
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#29
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Conditional Rules · hash: sha256:5e22eb5b3c590bbfdb9ddc204b5e9482cfaf470b09bdd4fee0326900d0f547f8*
 
 ## Conditional Rules
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#29
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#30
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Conditional Rules · hash: sha256:c9dca9015fd8a38370f7026aff858e523a1a347e013c4887e73a14add3ff180e*
 
 The rules that cannot be expressed as a required-field list, which is why `OD-SPEC-008` named
 them separately.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#30
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#31
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Conditional Rules · hash: sha256:316e384c3cfc47bfd98a01903fba22cf116ec36b740f7a5c0e29f554d7c85839*
 
@@ -28450,7 +28201,7 @@ them separately.
 6. **A submission with an open blocking decision gap cannot be `accepted`**, per the gaps
    section below.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#31
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#32
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Conditional Rules · hash: sha256:8477e28016df360687b687e692666017c28dc6a5d15bcfe4190598313be3636f*
 
@@ -28460,27 +28211,27 @@ rather than as a constraint on the edge. The store's `relation_types` table carr
 `implements` from joining a suite to a table row. That gap is real and is not closed here;
 it is named in *What This Does Not Decide*.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#32
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#33
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What A Refusal Names · hash: sha256:7286ca5e257fdd9b5a55fa9e99a63ea4697c0c12cc1f9f710d9cd207059952e6*
 
 ## What A Refusal Names
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#33
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#34
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What A Refusal Names · hash: sha256:196ca6eabff062196e7fc3d4130d7b613e166323b8542bbfe830943d5df0f367*
 
 A refusal that says `invalid submission` moves the work of finding out to the submitter, who
 has less information than the validator did.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#34
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#35
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What A Refusal Names · hash: sha256:f780c9fce40ac3c667c720317cf4d64b2d6b5e0ecbb24d8af1c6303fc5dd60c0*
 
 > A refusal names the submission, every field that failed, the rule each one failed, and what
 > would satisfy it. It names **all** failures, not the first.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#35
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#36
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What A Refusal Names · hash: sha256:3e9c92e487a9a3d3299e56677de0dee46d10ab09582779f9e57fde04b3292064*
 
@@ -28488,20 +28239,20 @@ Reporting the first failure only makes a form with six holes take six refusals, 
 submitter learns the rule set by exhaustion. This repository has paid for the same shape
 before: `OD-LEDGER-007`'s subject is the cost of a refusal that stops more than it needed to.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#36
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#37
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What A Refusal Names · hash: sha256:1f57de47eb356ed3eaff2896d90285fd566a015debf7651add8ab01bba103fa2*
 
 And the refusal is total:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#37
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#38
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What A Refusal Names · hash: sha256:f0a7728221790f7d40c37ebf0c0cd6682220a21a736ed09043eff46720401890*
 
 > A refused submission is stored nowhere. There is no partially written row, no `invalid`
 > state, and no quarantine table.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#38
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#39
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What A Refusal Names · hash: sha256:b62b540843a45dfe3464c4e5d47dccfe872dd33c8f1b0a29bdd49d53aa029c24*
 
@@ -28511,27 +28262,27 @@ validation exists to prevent. `OD-SPEC-008` already forbids the storage half of 
 other direction: only tables something writes to exist, and a quarantine table is a table
 whose writer is a bug.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#39
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#40
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:62ee821c1b4dbca5fb3c4959665f51db9af3864d3ab54a7d6906ea6a87475d97*
 
 ## Draft And Accepted
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#40
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#41
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:fbf27353277d5413bb68cbe18c54fa5f0019c9dd68be6cc7b361272084209e58*
 
 Two states, and the boundary between them is where this rule set could most easily become
 vacuous.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#41
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#42
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:c1f2f84d190691f7737756665118317613e422afd51a2abcc277aaf9f8c577d1*
 
 A **draft** carries every universal field, every field of its kind, and satisfies every
 conditional rule except 5. It is a complete submission that has not been accepted.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#42
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#43
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:5f49e18f5b03ee3a82ed0f0ad84aeb964111020ade24b85fc353e6c993c0abb6*
 
@@ -28539,20 +28290,20 @@ An **accepted** submission is a draft that additionally satisfies rule 5, has no
 blocking gap, and may be cited: only an accepted request may be the target of `answers`, and
 only an accepted design the target of `implements`.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#43
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#44
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:512801a31d2562803dacc2388c810984eafe1e31315919e229fd13130e0445f0*
 
 What `draft` explicitly is **not** is a home for incomplete submissions.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#44
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#45
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:f4768fc51444e31ebff0b5077a20bebff34dcd95ac4ce5729f11762244f27e86*
 
 > Incompleteness is refused in both states. `draft` weakens which rules apply; it never
 > weakens whether they are checked.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#45
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#46
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:3913e2fbf25cad95c1c9cf6496a85c0edafac1e3b4dce6e14ff5cccf9753007e*
 
@@ -28562,7 +28313,7 @@ schema and assert nothing. `P10-VACUITY-HOME` is an open item about a command th
 success without checking anything; the same shape installed in the substrate would be worse,
 because a command can be fixed and a corpus of half-written rows cannot.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#46
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#47
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Draft And Accepted · hash: sha256:2f3789f38b12b4959cfc34e3550f305e83c5ce68264e47532a7751a45ad12224*
 
@@ -28572,27 +28323,27 @@ its `reason` column is `NOT NULL` with a non-empty check, because a history entr
 not say why is a row that satisfies a schema. Acceptance with no reason is refused by the
 table.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#47
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#48
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:83e728f40ee2977ea3670a681da2286137cff653ec4bde31f944bbdb62e8fce6*
 
 ## Submitted, Clarified, Inferred, Decided
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#48
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#49
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:f99edc5e3a2d0815afba3730d11415b3e79f03011d2a42db50efa936162a89da*
 
 `ARC-SPECDB-002`'s third obligation is separation, and separation is a shape rather than a
 convention. The shape:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#49
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#50
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:2eb3cdaa7b4a95624c6eb821c4aeec4fff90aed252df891751578f7adfe9a298*
 
 > Every value carries an **origin**: `submitted`, `clarified`, `inferred` or `decided`. A
 > later value supersedes an earlier one for reading and never replaces it in storage.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#50
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#51
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:fb75aad3353ffa4c9a38188a9f242257951608d69ecfb6f59178cb583bcf2d42*
 
@@ -28602,7 +28353,7 @@ preserve. This is `normative_statements.supersedes_hash` applied to a second kin
 rather than a new mechanism, and reusing it is deliberate: two supersession models in one
 store would be two answers to what a superseded value is.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#51
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#52
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:aa25d81ee9be6771f14d68903c4d1aad14ab6eee09bd54a049bdc3782bd01616*
 
@@ -28611,14 +28362,14 @@ anything the transport itself supplied — a CLI default, a form's pre-populated
 an agent filled in. It requires the separation and does not say where the transport's own
 values land, because that is an origin and origins are here. They land in `inferred`:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#52
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#53
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:f2567fd2b69533875fe31801938cddf892761349e5489cdd5aa0d7282a972104*
 
 > A value a transport supplied rather than a submitter typed has origin `inferred`, whatever
 > made it up.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#53
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#54
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:01246ab681be8edf690e14cc3c6365a35c1729914356ec216bbc531eb9e3ec52*
 
@@ -28627,13 +28378,13 @@ what `inferred` is for, and it therefore cannot satisfy acceptance under the rul
 alternative — admitting transport defaults as `submitted` — would let a CLI's convenience
 become the asker's stated intent at the exact seam `OD-SPEC-009` built to prevent that.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#54
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#55
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:a37f44b9c6649f372bb06ca1494ebb1c0cf2b59f02e10c6d1fca57b59672293e*
 
 The origins are not interchangeable, and one rule keeps them from becoming so:
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#55
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#56
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:d1db4d5b239d3c5cf775662175cbcb5f57b4f0d371b33988568f2ef1ff973013*
 
@@ -28641,7 +28392,7 @@ The origins are not interchangeable, and one rule keeps them from becoming so:
 > `submitted`, `clarified` or `decided`. An `inferred` value is readable and is never
 > sufficient.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#56
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#57
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:616fbdf66190ace2c41f86f8e64192ab661c0a4f05568cd562744086af477323*
 
@@ -28651,41 +28402,41 @@ letting it satisfy acceptance would make the system accept its own inferences as
 somebody wanted. That failure is silent by construction, which is why the rule is stated
 rather than left to care.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#57
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#58
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Submitted, Clarified, Inferred, Decided · hash: sha256:4375c1604ba20c650bfa63cdf339090a004edfb06981de29da6509be203092ee*
 
 `decided` is the origin of a value a governing record or a recorded decision closed. It
 satisfies acceptance because a decision is answerable to something; an inference is not.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#58
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#59
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Decision Gaps · hash: sha256:136a7c48379954e24e22f0ff58c4921410b71a8f9f74e93c66abb6bb960937c6*
 
 ## Decision Gaps
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#59
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#60
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Decision Gaps · hash: sha256:372b6f8016f459b20e86b3e651f2b4bd0372aea9d05e226c56b38ca89138fdee*
 
 `OD-SPEC-008` says a feature request names the decisions it needs that nobody has taken yet.
 A gap is therefore a first-class row and not a note in prose.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#60
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#61
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Decision Gaps · hash: sha256:9fafbddeb9c021a58a9f7752da1bd830b762377f5c14339fdba342ec626d8b23*
 
 A gap carries the question, the fields it blocks, and a severity of `blocking` or
 `non-blocking`.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#61
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#62
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Decision Gaps · hash: sha256:7ca01d1f5d5fbfe5257a2bf64b5484d6bea2e0e04c0d19f8f7fb7c148c56e80a*
 
 > A gap is closed only by a citation — to a governing record, or to a recorded decision. It
 > is **never** closed by supplying the value it blocks.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#62
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#63
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Decision Gaps · hash: sha256:31e70a3d497193b58cc928952a208d2676c2590a870d89c11e49164becb06112*
 
@@ -28694,7 +28445,7 @@ exists to prevent: the field fills in, the gap disappears, and nothing anywhere 
 question was answered by whoever happened to be typing. Under this rule the value arrives
 with origin `decided` and the citation is what makes it so.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#63
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#64
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Decision Gaps · hash: sha256:881d38dead43d0679dbf76df2d75fba04a01613010bcd38ffd5b82ebb34dff93*
 
@@ -28702,13 +28453,13 @@ A `blocking` gap prevents acceptance. A `non-blocking` gap does not, and survive
 design and the result rather than being dropped at each hand-off — an open question that
 disappears at acceptance is an open question nobody will ask again.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#64
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#65
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Binds · hash: sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044*
 
 ## What This Binds
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#65
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#66
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Binds · hash: sha256:34b13fe558239a8c875603cd804b97ee27a147a2ed008fd39a401416b305da22*
 
@@ -28716,36 +28467,36 @@ It binds what a writer must check before persisting, and what it must say when i
 writer that persists something failing these rules is a defect against this record, not a
 lenient implementation.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#66
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#67
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Binds · hash: sha256:f74fa9657e8fc7a0fdef92858d095e3fd007923687529610910234128d76b184*
 
 It binds the shape of attribution and supersession for these three kinds, and it binds them to
 the mechanisms the store already has rather than to new ones.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#67
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#68
 
-*revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Binds · hash: sha256:f8a811e24900a2ee57096de66276bbba0fe7044cc17e0d62a7457703166789d6*
+*revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Binds · hash: sha256:e2fa507b0d423710e744ba2ad8fade0da321e8fa99cae4d59fc5223615e1518f*
 
-It binds `OD-SPEC-011` to a layout that can express an attributed sequence per field and a
+It binds `OD-SPEC-013` to a layout that can express an attributed sequence per field and a
 gap as a row. That is a real constraint on the layout and is stated here because the layout
 cannot be judged without it.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#68
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#69
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
 
 ## What This Does Not Decide
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#69
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#70
 
-*revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Does Not Decide · hash: sha256:30f83a5dfe312a15ca55cf3bc5ff754820cbbaffc0b218c2b60a32ecee2dc8a7*
+*revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Does Not Decide · hash: sha256:cffa46a32e6e64bf242dda866eae32f5afe22551bb97913bdcd94008af50028a*
 
 It does not decide the physical layout. Which of these are columns, rows or a payload is
-`OD-SPEC-011`'s, and that item lands the layout with its first writer so no table arrives
+`OD-SPEC-013`'s, and that record lands the layout with its first writer so no table arrives
 empty.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#70
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#71
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Does Not Decide · hash: sha256:e45b61e0d2c0cedf19145dda181610d8cf6b744001bffa10fd1a3bd2b9f49440*
 
@@ -28753,7 +28504,7 @@ It does not decide the intake surface. `OD-SPEC-009` decided it, and nothing abo
 transport: the accept function is where these rules run, and which transports exist is not a
 question this record can reopen.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#71
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#72
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Does Not Decide · hash: sha256:961f4b44a6a5bf5d307a38fd8ec486f453165c68c5a916e1620a4f1cdc7c00fa*
 
@@ -28765,34 +28516,34 @@ constrains the *submission* and cannot constrain the *graph*. Closing that is se
 reaching `crates/spec/nomos-spec-store/src`, which is `P10-REQUEST-LAYOUT`'s territory today,
 and it is named here so the next reader finds it stated rather than absent.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#72
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#73
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / What This Does Not Decide · hash: sha256:bdc7a502cfefb739bd7508eb1019c40d7edfb212556ad0cecf84594fff017d1b*
 
 It does not govern document-first objects. Governing records keep the preservation machinery
 `ARC-SPECDB-001` exists for, and none of the rules above applies to them.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#73
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#74
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
 
 ## Consequences
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#74
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#75
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Consequences · hash: sha256:8719aaaa8f44c7ac8dcbfaa40843c1069ac2d3c7c1277404bf6b907e2b44d08e*
 
 The first writer of the typed layer implements a rule set it can be measured against, instead
 of establishing one by being first.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#75
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#76
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Consequences · hash: sha256:56923ab3ea1c78e556f4e056c0329d8e37449c3f4dc98e22b2de1abcbbe6241b*
 
 A submission that is refused is refused for a named reason, and the refusal is a fact about
 the submission rather than about the writer's tolerance.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#76
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#77
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Consequences · hash: sha256:abba356a8a928892885374d8829a75cfb6e0d75dbdb65fbdec49c47f07efa223*
 
@@ -28800,13 +28551,13 @@ The store can be read without the rule set, because every row in it passed. That
 property that makes write-time validation worth more than read-time checking, and it is lost
 the moment one incomplete row is admitted for convenience.
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#77
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#78
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
 
 ## Controls
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#78
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#79
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Controls · hash: sha256:6a56f3f2e03b4f04be7c7251ac280936887a4c43ed61ce3a5f4bc3145bb483de*
 
@@ -28822,13 +28573,13 @@ the moment one incomplete row is admitted for convenience.
 | treat an empty field as "none" | the honest submission and the abandoned one become the same row |
 | validate in the reader rather than at write time | two readers of one rule set, which is how the two disagree |
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#79
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#80
 
 *revision: authored · kind: heading · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#80
+### docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md#81
 
 *revision: authored · kind: prose · heading: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted / Status · hash: sha256:7ef5b33a084cddd7688d3a1452630159a8f404702a4aaf3be3e9d233f7b15052*
 
