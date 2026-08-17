@@ -395,6 +395,7 @@ graph LR
     od_ledger_005 -->|"relates-to"| od_ledger_010
     od_ledger_005 -->|"relates-to"| od_ledger_012["OD-LEDGER-012"]
     od_ledger_005 -->|"relates-to"| od_ledger_014
+    od_ledger_005 -->|"relates-to"| od_ledger_020["OD-LEDGER-020"]
     od_ledger_006 -->|"affected_by"| od_ledger_012
     od_ledger_006 -->|"relates-to"| od_ledger_001
     od_ledger_006 -->|"relates-to"| od_ledger_008
@@ -454,6 +455,7 @@ graph LR
     od_ledger_014 -->|"relates-to"| od_ledger_005
     od_ledger_014 -->|"relates-to"| od_ledger_013
     od_ledger_014 -->|"relates-to"| od_ledger_019
+    od_ledger_014 -->|"relates-to"| od_ledger_020
     od_ledger_014 -->|"relates-to"| od_ledger_021
     od_ledger_014 -->|"relates-to"| od_ledger_025["OD-LEDGER-025"]
     od_ledger_014 -->|"relates-to"| od_ledger_026
@@ -491,6 +493,10 @@ graph LR
     od_ledger_019 -->|"relates-to"| od_ledger_008
     od_ledger_019 -->|"relates-to"| od_ledger_014
     od_ledger_019 -->|"relates-to"| od_ledger_018
+    od_ledger_019 -->|"relates-to"| od_ledger_020
+    od_ledger_020 -->|"relates-to"| od_ledger_005
+    od_ledger_020 -->|"relates-to"| od_ledger_014
+    od_ledger_020 -->|"relates-to"| od_ledger_019
     od_ledger_021 -->|"relates-to"| od_ledger_009
     od_ledger_021 -->|"relates-to"| od_ledger_010
     od_ledger_021 -->|"relates-to"| od_ledger_014
@@ -775,6 +781,7 @@ graph LR
     od_ledger_017
     od_ledger_018
     od_ledger_019
+    od_ledger_020
     od_ledger_021
     od_ledger_025
     od_ledger_026

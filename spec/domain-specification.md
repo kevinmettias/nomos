@@ -77,6 +77,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md@authored | docs/records/OD-LEDGER-017-six-work-ledger-requirements-bind-this-build-and-the-review-that-produced-them-prices-each-divergence.md | authored | 108 | 19 | sha256:37c30a7fb96b566768cb5b23df4bb92b037c769ce8f7eabc087b4dd91742d730 |
 | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md@authored | docs/records/OD-LEDGER-018-a-ledger-commit-publishes-the-board-and-a-transition-is-recorded-on-the-item.md | authored | 42 | 12 | sha256:d5a1d3de6e186ca16c378897f6ef1616cad1d1be134bc14c45a5ede1c62d6944 |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md@authored | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md | authored | 27 | 12 | sha256:3ebb2bcba88f6c72bbc391ea21070ee09c26d62ed613c9445085c22688fcb962 |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
@@ -717,6 +718,18 @@ profile: domain-specification
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#49 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#51 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53 | authored | 2 | Status |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#1 | authored | 1 | A declined dependency is a dead end, and a dependent may not be told to wait |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#9 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#10 | authored | 3 | 1. A declined dependency refuses through its own `ClaimRefusal` arm |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#12 | authored | 3 | 2. It is not retryable, and the label says so |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#14 | authored | 3 | 3. The refusal names the remedy, not just the dead end |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#16 | authored | 3 | 4. The dependency's state is rendered bounded, not with `Debug` |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#18 | authored | 3 | 5. `P10-EDGE-CONSTRAINTS` is re-pointed, not merely diagnosed |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#20 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#24 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#26 | authored | 2 | Status |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#1 | authored | 1 | A verb that changes the board is one the store owns, and add was outside the door |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#6 | authored | 2 | What Was Observed |
@@ -20551,6 +20564,231 @@ unusable for its own motivating case.
 *revision: authored · kind: prose · heading: Abandoning ends a claim and declining ends an item, so one verb cannot do both / Status · hash: sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5*
 
 Closed by `P10-DECLINE-VERB`.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#1
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait · hash: sha256:e5fb418ce46945f8bc41f627f7671d2484e0c7c1e3437c50f21e889892b73d89*
+
+# A declined dependency is a dead end, and a dependent may not be told to wait
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#2
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#3
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / Question · hash: sha256:dbf8eedfa90e97f1c707b00b84874c020df397ce82c419a81bc1b201e5e4f844*
+
+`nomos work list` and `claim` both refuse an item whose `depends_on` names an unfinished
+item with `ClaimRefusal::DependencyUnmet`, labelled `waiting` and reported retryable. The
+refusal and the label are correct for exactly the case they were built for: a dependency
+that has not finished yet, where finishing it is what resolves the refusal.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#4
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / Question · hash: sha256:ba1e9978ac3a564b0aeae2809a20861181a9513aac6337453fbe125345e05498*
+
+`ItemState::Declined` is a third possible state for that dependency — one `OD-LEDGER-019`
+made reachable — and it is not covered by that case. A declined item is terminal by
+`ItemState::Is_Finished`, and finishing it is not merely unlikely, it is precisely what will
+not happen: the item is not going to be done by anybody. `Unmet_Dependency` compared the
+dependency's state against `Done` and reported everything else identically, so a declined
+dependency and an in-progress one produced the same refusal, the same `waiting` label and
+the same `Is_Retryable() == true`.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#5
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#6
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Measured · hash: sha256:a0ef43e7d80192d677d4f049ac9a73d6fd085cf4ff5552972909bb1d209223cc*
+
+The board carries a live instance, not a hypothetical one. `P10-EDGE-CONSTRAINTS` depends on
+`P10-REQUEST-LAYOUT`, and `P10-REQUEST-LAYOUT` was declined — superseded by
+`P10-SUBMISSION-LAYOUT`, itself now `Done` — with its own declination reason naming the
+consequence directly:
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#7
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Measured · hash: sha256:64ca0ad47c9818b0881a350eefaba117cd66dd304386b740b8c45143c1195fd1*
+
+> One consequence is left behind deliberately rather than hidden: `P10-EDGE-CONSTRAINTS`
+> depends on this item and is now stranded, because a declined dependency is still reported
+> as `DependencyUnmet`, which `Is_Retryable` calls retryable. That is a dead end reported as
+> a queue, it is the first time a declined item has had a dependent, and it has its own item.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#8
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Measured · hash: sha256:eb467246612f537efc816cbd0b40d1ebcdf19aa19205427552e90fe9652d5030*
+
+`nomos work list` reads `P10-EDGE-CONSTRAINTS` as `waiting` today, on that dependency, and
+the advice the label carries — retry later, `P10-REQUEST-LAYOUT` will finish — is false. It
+will not finish; it is closed. The only way this resolves is a person or a session reading
+the dependency's own history and re-pointing the edge, and nothing on the board says so.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#9
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#10
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 1. A declined dependency refuses through its own `ClaimRefusal` arm · hash: sha256:fadc355ee7f7ce152d8c40fd2a64590efdfadfd2e165e11760d5e79dda2995f4*
+
+### 1. A declined dependency refuses through its own `ClaimRefusal` arm
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#11
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 1. A declined dependency refuses through its own `ClaimRefusal` arm · hash: sha256:ca11d9c2af2917c5eff438a7be8eab44a92815160284bcb3d7775c25de4bd93d*
+
+`ClaimRefusal::DependencyDeclined { item, dependency, state }` is added beside
+`DependencyUnmet`, carrying the same three fields for the same reason `OD-LEDGER-014` already
+settled for the sibling arm: the dependent, the dependency, and a bounded rendering of what
+stopped it. `store::refusal::Unmet_Dependency` checks `ItemState::Declined` before the
+generic not-`Done` comparison, so a declined dependency is caught before it reaches the arm
+built for a merely unfinished one.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#12
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 2. It is not retryable, and the label says so · hash: sha256:dc931a1dcd7722132d7d4f4933991d1d197547532ef783e56c2b191ddcdbf23b*
+
+### 2. It is not retryable, and the label says so
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#13
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 2. It is not retryable, and the label says so · hash: sha256:b6712bc447ff3c237a9222f950858548072528812ccbe10d41a73bcd913c57f3*
+
+`ClaimRefusal::Is_Retryable` reports `false` for the new arm, by omission from its `matches!`
+list rather than by a new negative case — the same shape the type already uses for every
+other non-retryable arm. `nomos work list` and `work audit` share one function,
+`Listing_Label`/`Refusal_Label`, per `OD-LEDGER-005`'s reason for there being only one
+implementation: `stranded` is the word, chosen because it is the word the measured instance's
+own declination reason already used to describe the fact, and because `waiting`, `held` and
+`snagged` are all already spoken for by refusals whose actual advice differs from this one's.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#14
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 3. The refusal names the remedy, not just the dead end · hash: sha256:d3e30a8ba8bd1d16659d0952acd608838bc23a94ef510cf782e423b1e4e2ed6f*
+
+### 3. The refusal names the remedy, not just the dead end
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#15
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 3. The refusal names the remedy, not just the dead end · hash: sha256:1b8e4410df411d769efb11aa581caaf9737fdfc406cdcc3f2e6a9231d3f8e69f*
+
+`OD-LEDGER-014`'s discipline — the refused item is never the grammatical subject, so the
+sentence composes under a caller that has already named its subject — is followed, and the
+sentence goes further than `DependencyUnmet`'s does: it states what the caller is to do next,
+because "not retryable" without a next step is a dead end the reader has to solve themselves.
+No verb re-points an existing `depends_on` edge, so the only remedy is `nomos work decline`
+on the dependent followed by re-authoring it against a dependency that can still finish. The
+sentence says exactly that.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#16
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 4. The dependency's state is rendered bounded, not with `Debug` · hash: sha256:be3952eea217eafb10b2c78afeba28123845ceae80970a9af5ffdc1a3b581dee*
+
+### 4. The dependency's state is rendered bounded, not with `Debug`
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#17
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 4. The dependency's state is rendered bounded, not with `Debug` · hash: sha256:12e931326ed08d30d6e84940e48e243fb1a820530b5a6ae322afbfae931c5fdf*
+
+`Unmet_Dependency` used to build its `state` string by formatting both the target and the
+comparison value with `{:?}` and comparing strings. `ItemState::Declined` carries its whole
+reason in the variant, and `Debug` prints all of it — `ItemState::Describe` already exists
+for exactly this, cut to the reason's first line, and this record's fix uses it for both
+arms rather than only the new one. A comparison by `PartialEq` replaces the string
+comparison it stood in for; the two were never anything but a roundabout way of asking the
+same question the derived trait already answers.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#18
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 5. `P10-EDGE-CONSTRAINTS` is re-pointed, not merely diagnosed · hash: sha256:05690278d28a773ebdb7501d0c8c43bea8e3d88884ab47a2117232979af76626*
+
+### 5. `P10-EDGE-CONSTRAINTS` is re-pointed, not merely diagnosed
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#19
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / The Decision / 5. `P10-EDGE-CONSTRAINTS` is re-pointed, not merely diagnosed · hash: sha256:e18f24175205a43ba70ec1ccb950a729dc985a2b1f21d92fbadd45ec46bd5aaa*
+
+The item that motivated this record is not left as a citation. `P10-SUBMISSION-LAYOUT`, the
+dependency `P10-REQUEST-LAYOUT`'s own declination named as its successor, is confirmed `Done`.
+`P10-EDGE-CONSTRAINTS` is declined and re-authored, depending on `P10-SUBMISSION-LAYOUT`
+instead of the declined `P10-REQUEST-LAYOUT`, with its territory, `why` and `done_when`
+otherwise unchanged — the work it describes was correctly scoped throughout; only the edge
+that stranded it was wrong.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#20
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#21
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Considered And Rejected · hash: sha256:803279d6a04f9e6f8b49f19bdb03e08cc9dfe54c86cfa9950b4a57601cf93943*
+
+**Routing a declined dependency through the existing `NotClaimable` variant.** Checked and
+found to reproduce the defect: `Listing_Label` only reads `NotClaimable` for the *refused
+item's own* state, and for every other subject it falls through to `Refusal_Label`, whose
+`NotClaimable` arm names a *different* item's state as its own — a declined dependency routed
+this way would print the dependent's own `Ready` state, restoring exactly the `waiting`-that-
+lies-by-omission failure this record exists to close, one layer further hidden.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#22
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Considered And Rejected · hash: sha256:6a24e98f87cd3e73568b9709c4fcd5652807de3765150aa9a8832a6a9b26d4f3*
+
+**Reusing `DependencyUnmet` with a `declined: bool` field instead of a new arm.** Rejected on
+the same grounds `OD-LEDGER-019` decided the analogous question for `abandon`/`decline`: the
+two facts answer different questions — one says wait, the other says stop waiting — and a
+single arm branching on a field is one refusal wearing two meanings, discoverable only by a
+caller that reads the field rather than matches the type.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#23
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / What Was Considered And Rejected · hash: sha256:0b6b6b6fcef6d41040f44607bcba09afe5da1bec55da20f62ec84df869b84163*
+
+**Adding a `work re-point` verb that edits `depends_on` in place.** Out of scope for the
+defect this record closes, which is that the refusal lies about retryability — not that the
+remedy takes two commands instead of one. Worth having on its own merits, not decided here.
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#24
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#25
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / Controls · hash: sha256:3e9f56ef36105f05606a14b41d881991c9162dda175cd3eee2e9378aaf246782*
+
+| Weakening | What it produces |
+|---|---|
+| leave `DependencyUnmet` covering both cases | the measured defect: a dead end reported as a retryable queue |
+| route through `NotClaimable` | the dependent's own state printed as the reason, reproducing the bug one layer hidden |
+| a `declined: bool` field on the existing arm | one refusal answering two different questions, `OD-LEDGER-019`'s shape recurring |
+| `Debug` instead of `ItemState::Describe` for the rendered state | a multi-paragraph decline reason as the body of a one-line refusal |
+| leave `P10-EDGE-CONSTRAINTS` pointed at the declined item | the record diagnosing the defect without closing the instance that motivated it |
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#26
+
+*revision: authored · kind: heading · heading: A declined dependency is a dead end, and a dependent may not be told to wait / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#27
+
+*revision: authored · kind: prose · heading: A declined dependency is a dead end, and a dependent may not be told to wait / Status · hash: sha256:d20f098ab715b033e8ef82cdd326cae127280f10bd3d00d742f1b67cd79d6811*
+
+Closed by `P10-DECLINED-DEPENDENCY-4`.
 
 ### docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#1
 

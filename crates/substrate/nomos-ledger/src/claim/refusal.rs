@@ -106,6 +106,28 @@ pub enum ClaimRefusal
         /// What state that dependency is in.
         state: String,
     },
+    /// Something this item depends on was declined, and will never be done.
+    ///
+    /// Distinct from [`ClaimRefusal::DependencyUnmet`], whose retryability is the whole point
+    /// of that arm: finishing the dependency resolves it, so waiting is the correct advice. A
+    /// declined dependency finishes nothing, so the identical advice is a queue with no head —
+    /// `OD-LEDGER-020` is the record of the live case this arm exists for, `P10-EDGE-CONSTRAINTS`
+    /// depending on the declined `P10-REQUEST-LAYOUT` and reading `waiting` regardless.
+    ///
+    /// Not retryable: no lease lapsing and no amount of time turns a declined item into a
+    /// finished one. The only remedy is the dependent's own — `nomos work decline` then
+    /// `nomos work add` against a dependency that can still finish — which is why the sentence
+    /// names it rather than leaving the caller to work out that `DependencyUnmet`'s advice does
+    /// not apply here.
+    DependencyDeclined
+    {
+        /// The item that was refused.
+        item: ItemId,
+        /// The dependency that was declined.
+        dependency: ItemId,
+        /// The declined dependency's state, bounded — see [`crate::ItemState::Describe`].
+        state: String,
+    },
     /// No such item.
     NoSuchItem
     {
@@ -183,6 +205,11 @@ impl ClaimRefusal
                 dependency,
                 state,
             } => format!("{item} depends on {dependency}, which is {state}"),
+            Self::DependencyDeclined {
+                item,
+                dependency,
+                state,
+            } => Dependency_Declined(item, dependency, state),
             Self::NoSuchItem { item } => format!("no item named {item}"),
             Self::LedgerUnusable { cause } =>
             {
@@ -194,7 +221,9 @@ impl ClaimRefusal
     /// Whether retrying later might succeed.
     ///
     /// Distinguishes a queue from a dead end, which is what lets an agent decide
-    /// between waiting and finding other work.
+    /// between waiting and finding other work. [`Self::DependencyDeclined`] is deliberately
+    /// absent from the retryable arms below — it is the dead end [`Self::DependencyUnmet`] is
+    /// not, and the two must not answer this the same way.
     #[must_use]
     pub const fn Is_Retryable(&self) -> bool
     {
@@ -211,6 +240,16 @@ fn Held_By(item: &ItemId, holder: &str, until: Timestamp) -> String
     return format!(
         "territory overlaps {item}, held by {holder} until unix {}",
         until.Unix_Seconds()
+    );
+}
+
+/// A dependency that will never finish, and the remedy that is not "wait".
+fn Dependency_Declined(item: &ItemId, dependency: &ItemId, state: &str) -> String
+{
+    return format!(
+        "{item} depends on {dependency}, which is {state}; a declined dependency never becomes \
+         Done, so retrying will not resolve this — {item} must be closed with `nomos work \
+         decline` and re-authored against a dependency that can still finish"
     );
 }
 

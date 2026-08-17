@@ -214,6 +214,17 @@ pub(crate) fn Finished(id: &str, files: &[&str]) -> LedgerItem
     return item;
 }
 
+/// An item that will never be done — declined, with the reason it carries.
+pub(crate) fn Declined(id: &str, files: &[&str], reason: &str) -> LedgerItem
+{
+    let mut item = Item(id, files);
+    item.state = ItemState::Declined {
+        reason: reason.to_owned(),
+    };
+
+    return item;
+}
+
 /// A holder releases its own claim as finished, carrying the evidence that made it so.
 ///
 /// The record is the fixture rather than the subject — what these tests assert is what the

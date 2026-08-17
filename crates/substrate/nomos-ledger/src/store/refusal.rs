@@ -171,24 +171,39 @@ fn Contested_By(
 }
 
 /// The first dependency of `target` that is not done, as a refusal.
+///
+/// A dependency that is `Declined` is reported through its own arm rather than
+/// [`ClaimRefusal::DependencyUnmet`] — `OD-LEDGER-020` is why: it will never become `Done`, so
+/// the two must not share a refusal whose retryability tells the caller to wait.
 fn Unmet_Dependency(document: &LedgerDocument, target: &LedgerItem) -> Option<ClaimRefusal>
 {
-    let done = format!("{:?}", ItemState::Done);
-
     for dependency in &target.depends_on
     {
-        let found = document.items.iter().find(|candidate| return &candidate.id == dependency);
-        let state = found.map_or_else(
-            || return "not in the ledger".to_owned(),
-            |found| return format!("{:?}", found.state),
-        );
-
-        if state != done
+        let Some(found) = document.items.iter().find(|candidate| return &candidate.id == dependency)
+        else
         {
             return Some(ClaimRefusal::DependencyUnmet {
                 item: target.id.clone(),
                 dependency: dependency.clone(),
-                state,
+                state: "not in the ledger".to_owned(),
+            });
+        };
+
+        if let ItemState::Declined { .. } = &found.state
+        {
+            return Some(ClaimRefusal::DependencyDeclined {
+                item: target.id.clone(),
+                dependency: dependency.clone(),
+                state: found.state.Describe(),
+            });
+        }
+
+        if found.state != ItemState::Done
+        {
+            return Some(ClaimRefusal::DependencyUnmet {
+                item: target.id.clone(),
+                dependency: dependency.clone(),
+                state: found.state.Describe(),
             });
         }
     }

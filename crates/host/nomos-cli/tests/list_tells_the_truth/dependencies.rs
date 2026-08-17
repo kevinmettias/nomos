@@ -1,6 +1,6 @@
 //! The defect: an unfinished dependency is not readiness.
 
-use crate::authored::{Board, FINISHED, Item, NO_CLAIM, Standing};
+use crate::authored::{Board, FINISHED, Item, Item_Declined, NO_CLAIM, Standing};
 
 #[test]
 fn Test_An_Item_With_An_Unfinished_Dependency_Should_Not_Be_Listed_Ready()
@@ -26,6 +26,33 @@ fn Test_An_Item_With_An_Unfinished_Dependency_Should_Not_Be_Listed_Ready()
         board.Label_Of("T-2"),
         "waiting",
         "T-2 depends on an unfinished T-1, so nothing can claim it:\n{}",
+        board.List(None)
+    );
+}
+
+/// A declined dependency is not a queue. `waiting` tells the reader that finishing T-1
+/// resolves this, and T-1 has already answered `declined` and will not answer again —
+/// `OD-LEDGER-020`.
+#[test]
+fn Test_An_Item_With_A_Declined_Dependency_Should_Be_Listed_Stranded_Not_Waiting()
+{
+    let board = Board::New(
+        "declined-dependency",
+        &format!(
+            "{},{}",
+            Item_Declined("T-1", "\"src/a.rs\"", "superseded by T-3"),
+            Item("T-2", "\"src/b.rs\"", Standing {
+                state: "Ready",
+                depends_on: "\"T-1\"",
+                tail: NO_CLAIM,
+            })
+        ),
+    );
+
+    assert_eq!(
+        board.Label_Of("T-2"),
+        "stranded",
+        "T-1 is declined and will never be done, so T-2 is a dead end rather than a queue:\n{}",
         board.List(None)
     );
 }

@@ -327,11 +327,11 @@ pub(super) fn Usage_Text() -> String
 }
 
 /// Every verb and what it takes.
-const VERBS: &str = "\x20 list     [--state ready|waiting|held|snagged|claimed|blocked|done|declined]\n\
+const VERBS: &str = "\x20 list     [--state ready|waiting|held|snagged|stranded|claimed|blocked|done|declined]\n\
      \x20          `ready` means claimable now. An item nothing can claim is reported as \
-     `waiting` (a dependency is unfinished), `held` (somebody holds overlapping territory) \
-     or `snagged` (independence cannot be established), from the same refusal `claim` would \
-     give.\n\
+     `waiting` (a dependency is unfinished), `held` (somebody holds overlapping territory), \
+     `snagged` (independence cannot be established) or `stranded` (a dependency was declined \
+     and will never finish), from the same refusal `claim` would give.\n\
      \x20 show     --item <id>\n\
      \x20          one item in full: its claim, every claim given up on it with the reason \
      given, and its verification. `list` is a column per item and cannot carry prose.\n\

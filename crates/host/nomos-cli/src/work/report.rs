@@ -140,6 +140,9 @@ pub(super) const fn Refusal_Label(refusal: &ClaimRefusal) -> &'static str
         // lapse first. `waiting` rather than `blocked`, because `blocked` is already a state
         // an author sets by hand and conflating them would lose that distinction.
         ClaimRefusal::DependencyUnmet { .. } => "waiting",
+        // Not retryable, and not `waiting`: nothing finishing resolves this, because the
+        // dependency it names already answered `Declined` and stays there. `OD-LEDGER-020`.
+        ClaimRefusal::DependencyDeclined { .. } => "stranded",
         ClaimRefusal::HeldBy { .. } => "held",
         // The one word here that names an operation rather than a wait. An item whose holder
         // is gone is not queued behind anybody and is not a dead end either: it is takeable by

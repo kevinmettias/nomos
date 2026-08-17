@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:452595e7358d182558c75d766269eeaddc8a39f425e205fe16af118becfbed8e",
-  "inputs_digest": "sha256:ff0c030b521bd59b2370591a54cdd678aeb669963e2989465d58eeab6381f5a4",
+  "content_digest": "sha256:3a54b7b449c7fee3f3519e4a8cef4d31658f1ba049919308ff47af27e1f40d2a",
+  "inputs_digest": "sha256:fff842a92d6ae17fa3b6a3d4f8eb965354536bf5917aafc546a48f673ed0b3b9",
   "sections": [
     [
       "Documents",
-      105
+      106
     ],
     [
       "Sections",
-      956
+      968
     ],
     [
       "Source blocks",
-      3575
+      3602
     ]
   ],
   "inputs": [
@@ -354,6 +354,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored",
       "hash": "sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md@authored",
+      "hash": "sha256:3ebb2bcba88f6c72bbc391ea21070ee09c26d62ed613c9445085c22688fcb962"
     },
     {
       "content": "documents",
@@ -3529,6 +3534,66 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#53",
       "hash": "sha256:9617271589e0ca04597ad3176dbb9afacaf716a4591b088a34c6f5e58ee55948"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#1",
+      "hash": "sha256:2c1b05afc4209db747cc620d80fdaf937d16009e816f974e7eba88676627b034"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#2",
+      "hash": "sha256:0ba8098c1de50dbf72d4579a5a496456ee463bc2bcc472f3d13d3bc7e30704c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#5",
+      "hash": "sha256:aa2059eb34af1600747c25c57847b97458fc8bf9c0d364e229c9b6ed7f228e98"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#9",
+      "hash": "sha256:6b2bd8484db355061a7909187542bf2b79c22428348e7e7b98f4ae08898ceb5c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#10",
+      "hash": "sha256:c0a3ed718aea756b6b4d801b8c3e94e9c07d9ac3b1f1567c36ccec434f546659"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#12",
+      "hash": "sha256:52dc28b0ae6968cf242c712945d00b049dcca290eee251a5f9e0aeea211839a5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#14",
+      "hash": "sha256:dd143a9a14b8f7e1856dfc7ccbe7fada8449ba1f88dc3733f25f011a280faabe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#16",
+      "hash": "sha256:87e41fa7063e66867c77de48123000b6b37ffdc348b1a3ebe4377b8bbfd4dabf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#18",
+      "hash": "sha256:de089c1f906971400bd4dd8088cf8649c3cf0db0081a3475e481473b213f3812"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#20",
+      "hash": "sha256:49a886b74c279b9e0836082a4e5fceb9dd0edd82e9c3ae3a64686d9b443f8683"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#24",
+      "hash": "sha256:0609bb9feae4608d8a4aebd42c9ed135aca9d25689879b3f43c7bbf967f67585"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#26",
+      "hash": "sha256:05abf5b77708af4bc097c9791541746dd24ef52b3061c5fd98baf7b97f707e6e"
     },
     {
       "content": "headings",
@@ -16534,6 +16599,141 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md#54",
       "hash": "sha256:3e043a9b1c487058d90146207db4cdc58fdd2cef415e7ca1810abbdba53094d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#1",
+      "hash": "sha256:e5fb418ce46945f8bc41f627f7671d2484e0c7c1e3437c50f21e889892b73d89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#3",
+      "hash": "sha256:dbf8eedfa90e97f1c707b00b84874c020df397ce82c419a81bc1b201e5e4f844"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#4",
+      "hash": "sha256:ba1e9978ac3a564b0aeae2809a20861181a9513aac6337453fbe125345e05498"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#6",
+      "hash": "sha256:a0ef43e7d80192d677d4f049ac9a73d6fd085cf4ff5552972909bb1d209223cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#7",
+      "hash": "sha256:64ca0ad47c9818b0881a350eefaba117cd66dd304386b740b8c45143c1195fd1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#8",
+      "hash": "sha256:eb467246612f537efc816cbd0b40d1ebcdf19aa19205427552e90fe9652d5030"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#10",
+      "hash": "sha256:fadc355ee7f7ce152d8c40fd2a64590efdfadfd2e165e11760d5e79dda2995f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#11",
+      "hash": "sha256:ca11d9c2af2917c5eff438a7be8eab44a92815160284bcb3d7775c25de4bd93d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#12",
+      "hash": "sha256:dc931a1dcd7722132d7d4f4933991d1d197547532ef783e56c2b191ddcdbf23b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#13",
+      "hash": "sha256:b6712bc447ff3c237a9222f950858548072528812ccbe10d41a73bcd913c57f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#14",
+      "hash": "sha256:d3e30a8ba8bd1d16659d0952acd608838bc23a94ef510cf782e423b1e4e2ed6f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#15",
+      "hash": "sha256:1b8e4410df411d769efb11aa581caaf9737fdfc406cdcc3f2e6a9231d3f8e69f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#16",
+      "hash": "sha256:be3952eea217eafb10b2c78afeba28123845ceae80970a9af5ffdc1a3b581dee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#17",
+      "hash": "sha256:12e931326ed08d30d6e84940e48e243fb1a820530b5a6ae322afbfae931c5fdf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#18",
+      "hash": "sha256:05690278d28a773ebdb7501d0c8c43bea8e3d88884ab47a2117232979af76626"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#19",
+      "hash": "sha256:e18f24175205a43ba70ec1ccb950a729dc985a2b1f21d92fbadd45ec46bd5aaa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#20",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#21",
+      "hash": "sha256:803279d6a04f9e6f8b49f19bdb03e08cc9dfe54c86cfa9950b4a57601cf93943"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#22",
+      "hash": "sha256:6a24e98f87cd3e73568b9709c4fcd5652807de3765150aa9a8832a6a9b26d4f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#23",
+      "hash": "sha256:0b6b6b6fcef6d41040f44607bcba09afe5da1bec55da20f62ec84df869b84163"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#24",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#25",
+      "hash": "sha256:3e9f56ef36105f05606a14b41d881991c9162dda175cd3eee2e9378aaf246782"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#26",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md#27",
+      "hash": "sha256:d20f098ab715b033e8ef82cdd326cae127280f10bd3d00d742f1b67cd79d6811"
     },
     {
       "content": "blocks",

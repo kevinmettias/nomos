@@ -29,6 +29,7 @@ pub enum variant nomos_ledger::Blocker::ExternalResource { resource: String, }
 pub enum variant nomos_ledger::Blocker::NeedsSplit
 pub enum variant nomos_ledger::Blocker::Other { detail: String, }
 pub enum variant nomos_ledger::Blocker::TerritoryMismatch { detail: String, }
+pub enum variant nomos_ledger::ClaimRefusal::DependencyDeclined { item: ItemId, dependency: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::DependencyUnmet { item: ItemId, dependency: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::HeldBy { holder: String, until: Timestamp, item: ItemId, }
 pub enum variant nomos_ledger::ClaimRefusal::Lapsed { item: ItemId, holder: String, since: Timestamp, }

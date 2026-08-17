@@ -98,6 +98,18 @@ pub(crate) fn Item(id: &str, paths: &str, standing: Standing<'_>) -> String
 
 pub(crate) const NO_CLAIM: &str = "\"claim\":null,\"verification\":null,\"verified\":null";
 
+/// A `Declined` item, whose state is a struct variant carrying a reason rather than the bare
+/// word [`Item`] inserts for every other state — `Standing::state` cannot express it.
+pub(crate) fn Item_Declined(id: &str, paths: &str, reason: &str) -> String
+{
+    return format!(
+        "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
+         \"done_when\":\"the tests pass\",\
+         \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
+         \"state\":{{\"Declined\":{{\"reason\":\"{reason}\"}}}},\"depends_on\":[],\"blocked\":null,{NO_CLAIM}}}"
+    );
+}
+
 /// A `Done` item must carry its verification or the ledger is invalid.
 pub(crate) const FINISHED: &str =
     "\"claim\":null,\"verification\":null,\"verified\":{\"argv\":[\"cargo\",\

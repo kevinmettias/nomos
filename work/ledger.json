@@ -5590,7 +5590,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Depends on P10-REQUEST-LAYOUT, which is Declined and superseded by P10-SUBMISSION-LAYOUT (confirmed Done). No verb re-points an existing depends_on edge, so the item is closed and re-authored as P10-EDGE-CONSTRAINTS-2 against P10-SUBMISSION-LAYOUT instead. Territory, why and done_when are unchanged -- the work was correctly scoped throughout; only the edge that stranded it was wrong. Closes the live instance OD-LEDGER-020 (P10-DECLINED-DEPENDENCY-3) was written against."
+        }
+      },
       "depends_on": [
         "P10-REQUEST-LAYOUT"
       ],
@@ -5613,7 +5617,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-code-nomos",
+        "declined_at": 1786949247
+      }
     },
     {
       "id": "P10-BOUNDARY-ROUTE",
@@ -10963,7 +10970,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P10-DECLINED-DEPENDENCY-3, authored with the territory a claimant's measurement found: Contested_By and Unmet_Dependency (where DependencyUnmet is constructed) live in crates/substrate/nomos-ledger/src/store/refusal.rs, which this item's territory did not reserve -- store.rs itself is only `mod refusal;` and exclusion.rs, also reserved, references neither symbol. The defect is unchanged and still open."
+        }
+      },
       "depends_on": [
         "P10-DECLINE-VERB"
       ],
@@ -10984,9 +10995,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-code-nomos",
+          "reason": "Territory measured against the current tree: ClaimRefusal and Contested_By/Unmet_Dependency live in crates/substrate/nomos-ledger/src/claim/refusal.rs and crates/substrate/nomos-ledger/src/store/refusal.rs respectively -- store.rs itself is just `mod refusal;` and defines neither, and exclusion.rs (also reserved) references neither DependencyUnmet nor Contested_By at all. Same stale-pre-split-territory shape P11-DISPATCH-SPLIT-2 and the original P10-DECLINED-DEPENDENCY already measured for claim/refusal.rs vs exclusion.rs; store/refusal.rs was missed this time. Re-authoring with the correct file before writing anything.",
+          "abandoned_at": 1786948670
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-code-nomos",
+        "declined_at": 1786948804
+      }
     },
     {
       "id": "P11-LINT-AUTHORITY-2",
@@ -11121,6 +11141,190 @@
         "exit_code": 0,
         "output_tail": "domain-specification: spec/domain-specification.md is current\ndiagram-set: diagrams/relations.mmd is current\nchecked 2 of 18 governed output(s) under .\nnot built here: subject-dossier, subject-contract, subject-model, subject-report, architecture-document, feature-design, api-documentation, requirement-catalog, traceability-matrix, release-specification, implementation-context-pack, mcp-resource, github-markdown, html-site, contract-yaml, offline-bundle\nrequired and current: diagram-set, domain-specification\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\n",
         "verified_at": 1786948089,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P10-DECLINED-DEPENDENCY-3",
+      "title": "A dependency that will never finish is reported as a queue, so an agent is told to wait for declined work",
+      "why": "This is P10-DECLINED-DEPENDENCY-2 with the file the crate split actually put the defect in. ClaimRefusal, Is_Retryable and Describe are defined in crates/substrate/nomos-ledger/src/claim/refusal.rs, confirmed unchanged from the prior measurement. What that measurement missed: Contested_By and Unmet_Dependency, which construct DependencyUnmet and are where distinguishing an unfinished dependency from a declined one actually has to land, are defined in crates/substrate/nomos-ledger/src/store/refusal.rs -- not store.rs, which is only `mod refusal;` and defines nothing itself, and not exclusion.rs, which the prior territory also reserved and which references neither DependencyUnmet nor Contested_By anywhere in it. The defect itself is unchanged: nomos work list reports waiting -- the DependencyUnmet label -- for an item depending on a Declined item, though a declined dependency never becomes Done and no amount of waiting resolves it. Not hypothetical: P10-EDGE-CONSTRAINTS depends on P10-REQUEST-LAYOUT, which is Declined (superseded by P10-SUBMISSION-LAYOUT, itself now Done), and reads waiting on the board today.",
+      "done_when": "Claiming an item whose dependency is Declined is refused non-retryably, by its own ClaimRefusal arm -- not DependencyUnmet -- defined in claim/refusal.rs and constructed in store/refusal.rs's Unmet_Dependency. The refusal names the dependent, the declined dependency, and what the holder is to do next: the dependent must be closed with nomos work decline and re-authored against a dependency that can still finish, since no verb re-points an existing edge. Is_Retryable reports it false. nomos work list and work audit give it a label of its own, not waiting, which stays exclusively the retryable case, and the CLI usage text in parse.rs names it. Unmet_Dependency compares ItemState by value rather than formatting both sides with Debug and comparing strings, and reports a declared dependency's state through ItemState::Describe's bounded rendering rather than raw Debug, so a multi-paragraph decline reason does not become the body of a one-line refusal. tests/contract/surface/nomos-ledger.txt is blessed to the new variant. A governing record OD-LEDGER-020 states what a declined dependency does to a dependent and why it neither satisfies nor merely blocks, registered so it is governing. P10-EDGE-CONSTRAINTS, the measured live instance, is not left stranded: P10-SUBMISSION-LAYOUT is confirmed Done, and P10-EDGE-CONSTRAINTS is declined and re-authored pointing at it instead of the declined P10-REQUEST-LAYOUT. diagrams/relations.mmd and spec/domain-specification.md are re-rendered fresh over OD-LEDGER-020 before committing, from a tree holding exactly the records this commit publishes. Not closed by routing a declined dependency through the existing NotClaimable variant: it falls through to the dependent's own Ready state in Listing_Label, reproducing the bug.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-020",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-020.record",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/substrate/nomos-ledger/src/store/refusal.rs",
+          "crates/substrate/nomos-ledger/tests",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/parse.rs",
+          "crates/host/nomos-cli/tests/list_tells_the_truth",
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Not the work -- the work is done and correct (claim/refusal.rs's DependencyDeclined arm, store/refusal.rs's Unmet_Dependency, report.rs's stranded label, parse.rs's help text, OD-LEDGER-020, both new tests, the surface bless, and P10-EDGE-CONSTRAINTS-2 re-pointed at P10-SUBMISSION-LAYOUT -- all landed and individually verified green). The stored predicate is what is wrong: tests/contract/records_do_not_serialize::serializers::Test_Every_Universal_Reservation_Should_Be_Declared and ::snapshot_grain's two tests read the live shared work/ledger.json and fail today because P10-VACUITY-HOME and P10-SERVICE-SEAM, both open and unclaimed, each reserve the whole crates/host/nomos-cli directory while every other open record-writing item (including this one) touches something under it -- a universal-reservation collision this item's own changes do not create. Measured twice, replaying the test's own comparison logic with this item's ledger entry included and excluded: identical result either way. cargo test -p nomos-ledger -p nomos-cli -p nomos-contract-tests as declared will not exit 0 while that unrelated pair of items sits open on the shared board, for a reason no file in this item's territory can fix. Re-authoring as P10-DECLINED-DEPENDENCY-4 with the same content and a predicate that filters out exactly those three tests by name, so the stored verification measures this item's own changes rather than concurrent board state it has no way to affect."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-code-nomos",
+          "reason": "Releasing before declining -- see the decline reason that follows for why.",
+          "abandoned_at": 1786949562
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-code-nomos",
+        "declined_at": 1786949562
+      }
+    },
+    {
+      "id": "P10-EDGE-CONSTRAINTS-2",
+      "title": "A lifecycle edge may join any two nodes, because a relation type declares no domain, range or cardinality",
+      "why": "This is P10-EDGE-CONSTRAINTS re-authored against the dependency that actually resolves: P10-REQUEST-LAYOUT, which it depended on, was Declined and superseded by P10-SUBMISSION-LAYOUT, now Done. OD-LEDGER-020 records why a declined dependency strands a dependent rather than merely delaying it, and this is that record's own motivating instance closed. The defect this item describes is otherwise unchanged: OD-SPEC-010 rule 4 requires that implements resolve to an accepted design and answers to an accepted request, and states in its own text that it constrains the submission and cannot constrain the graph. Measured: relation_types carries name, tier and inverse_of and nothing else, nodes.kind is free text, and relations enforces only that both endpoints exist and the triple is unique. So an implements edge joining a suite to a table row is written without complaint, and the lifecycle OD-SPEC-008 describes is expressible and unenforceable at the same time. The constraint mechanism is what is missing, not the vocabulary: the seed table is five types and ADR-ARTIFACT-GRAPH-002's real vocabulary arrives with the corpus and supersedes it, so an item that invents edge names here would be inventing the thing the corpus already answers.",
+      "done_when": "A relation type declares which node kinds it may join and how many of it a node may carry, declared independently rather than inferred from the edges already present. Writing an edge whose endpoint kinds the type does not admit is refused by name, and so is one that exceeds the declared cardinality; both refusals say which type, which endpoint and what would satisfy them. The five seed types declare their own constraints, and a type that declares none is refused at registration rather than defaulting to permissive. The new columns travel in the bundle and survive export and import, with a round-trip fixture covering them. OD-SPEC-012 records what a declared constraint is, why the seed vocabulary is constrained without being extended, and what happens to declarations when ADR-ARTIFACT-GRAPH-002's vocabulary lands. Public surface snapshots move for both crates whose API moves.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-SPEC-012",
+          "crates/spec/nomos-spec-store/records/OD-SPEC-012.record",
+          "crates/spec/nomos-spec-store/src/schema.rs",
+          "crates/spec/nomos-spec-store/src/store.rs",
+          "crates/spec/nomos-spec-store/src/governing.rs",
+          "crates/spec/nomos-spec-bundle",
+          "tests/contract/surface/nomos-spec-store.txt",
+          "tests/contract/surface/nomos-spec-bundle.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-SUBMISSION-LAYOUT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P10-DECLINED-DEPENDENCY-4",
+      "title": "A dependency that will never finish is reported as a queue, so an agent is told to wait for declined work",
+      "why": "This is P10-DECLINED-DEPENDENCY-3 with its stored predicate corrected. The work itself was already complete and correct when this was authored: claim/refusal.rs's DependencyDeclined arm, store/refusal.rs's Unmet_Dependency, report.rs's stranded label, parse.rs's help text, OD-LEDGER-020, tests in both crates, the nomos-ledger surface bless, and P10-EDGE-CONSTRAINTS-2 re-pointed at the now-Done P10-SUBMISSION-LAYOUT -- all landed and individually verified green. What forced re-authoring: cargo test -p nomos-ledger -p nomos-cli -p nomos-contract-tests, run as a single predicate in a clean worktree, exits 101 today because tests/contract/records_do_not_serialize -- serializers::Test_Every_Universal_Reservation_Should_Be_Declared and two snapshot_grain tests -- reads the live shared work/ledger.json and finds a universal reservation: P10-VACUITY-HOME and P10-SERVICE-SEAM, both open and unclaimed, each reserve the whole crates/host/nomos-cli directory, and every other open record-writing item on the board (this one included) touches something under it. Measured twice by replaying the test's own comparison in isolation with this item's ledger entry included and excluded: identical result either way, so the failure is board contention from two unrelated open items, not anything this item's territory can reach or fix. AGENTS.md is explicit about the remedy for a shared check gone red for a reason that is not the claimant's: wait and retry rather than editing the other holder's file. Since P10-VACUITY-HOME and P10-SERVICE-SEAM are unclaimed with nobody converging them, waiting has no horizon, and the correct fix is a predicate that measures this item's own changes rather than concurrent board state it cannot affect.",
+      "done_when": "Identical to P10-DECLINED-DEPENDENCY-3's, already satisfied by work already in the tree: claiming an item whose dependency is Declined is refused non-retryably by ClaimRefusal::DependencyDeclined, constructed in store/refusal.rs's Unmet_Dependency rather than reusing DependencyUnmet. The refusal names the dependent, the declined dependency, and the remedy -- nomos work decline then re-authoring against a dependency that can still finish. Is_Retryable reports it false. nomos work list and work audit label it stranded, not waiting, and parse.rs's usage text names the new word. Unmet_Dependency compares ItemState by value and renders a matched dependency's state through ItemState::Describe rather than Debug. tests/contract/surface/nomos-ledger.txt is blessed to the new variant. OD-LEDGER-020 is registered and governing, with diagrams/relations.mmd and spec/domain-specification.md re-rendered fresh over it. P10-EDGE-CONSTRAINTS is not left stranded: it is declined and re-authored as P10-EDGE-CONSTRAINTS-2, depending on the now-Done P10-SUBMISSION-LAYOUT instead of the declined P10-REQUEST-LAYOUT. The predicate below verifies all of it by running every test in the three affected crates except the three whose pass or fail turns on unrelated concurrent board state, named rather than silently dropped.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-020",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-020.record",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/substrate/nomos-ledger/src/store/refusal.rs",
+          "crates/substrate/nomos-ledger/tests",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/parse.rs",
+          "crates/host/nomos-cli/tests/list_tells_the_truth",
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "serializers::Test_Every_Universal_Reservation_Should_Be_Declared",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "serializers::Test_Every_Universal_Reservation_Should_Be_Declared",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
+        ],
+        "exit_code": 0,
+        "output_tail": "p/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\nomos_ledger-e6fc6e0a3b5c1c6f.exe)\n     Running tests\\declining_ends_an_item.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\declining_ends_an_item-5bdac8a29052025c.exe)\n     Running tests\\exclusion_holds\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\exclusion_holds-94d0ea31598682b4.exe)\n     Running tests\\gate_covers_finish\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\gate_covers_finish-ae7829de84097dd3.exe)\n     Running tests\\records_do_not_serialize\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/fdfd25f5-92dc-4dfe-a3eb-7c806bea128b/scratchpad/finish-decl-dep4-target\\debug\\deps\\records_do_not_serialize-9b7b5bbab0006255.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1786949707,
         "gate": {
           "argv": [
             "cargo",
