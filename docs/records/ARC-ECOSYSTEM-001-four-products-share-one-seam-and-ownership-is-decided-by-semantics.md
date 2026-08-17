@@ -3,7 +3,7 @@ id: ARC-ECOSYSTEM-001
 type: architecture
 title: Four products share one seam, and ownership is decided by semantics rather than by location
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - ecosystem
@@ -24,11 +24,15 @@ relations:
     type: relates-to
   - target: D-090
     type: relates-to
+  - target: D-091
+    type: relates-to
   - target: D-096
     type: relates-to
   - target: D-122
     type: relates-to
   - target: ARC-HARNESS-001
+    type: relates-to
+  - target: P10-PACKAGE-SEAM
     type: relates-to
 ---
 
@@ -290,6 +294,54 @@ Adopting it rather than citing it is this record's own projection rule applied t
 statement from another authority becomes enforceable here by a recorded step, not by being
 true and nearby. The edge to `D-122` says where it came from; the clause is why it binds.
 
+### `D-091` is adopted here, on the same footing as `D-122`
+
+The sibling suite states a second claim this record had left uncited: `D-091`, XVPE owns the
+generic package-management platform. Nothing above adopted it, so until now it sat exactly
+where `D-122` sat before version 3 — a sibling's unilateral position, true of XVPE's own
+product and non-binding here by the rule stated two sections up. This record's own projection
+rule applies to it the same way: a statement from another authority becomes enforceable here
+by a recorded step, not by standing nearby in an ingested suite.
+
+**It is adopted, as a clause of this record:**
+
+> XVPE owns the generic package-management platform: package envelope and manifest shape,
+> dependency and version resolution mechanics, registries, archive ingestion, artifact
+> ownership, transactional installation, rollback and recovery, profiles, integrity and
+> signature primitives, `TargetAdapter` mechanics, and disk accounting.
+
+This is the mechanism half of the crossing already drawn above —
+
+```
+XVPE generic execution primitive
+        ^
+        |  implemented / adapted by
+        |
+Nomos-specific service
+```
+
+— applied to packages rather than to execution. What that crossing already says still
+governs the boundary: generic capability is consumed by adaptation, and a primitive does not
+learn what a `RulePackage` or a `LanguagePackage` is in order to serve Nomos.
+
+**What the adoption does not reach.** `D-091` names package mechanism, not package meaning,
+and this record keeps the second on this side of the seam: `PackageKind`'s variant semantics
+— what a `RulePackage`, a `LanguagePackage`, a `ProviderPackage` and their kin actually mean —
+Nomos-specific compatibility rules, capability declarations, permission meanings, and package
+activation semantics remain Nomos's, the same way `D-122`'s adoption left rule and finding
+semantics on this side of the analysis-mechanism crossing. Nomos owns what a package means;
+XVPE, once this clause is implemented, owns the machinery that moves, verifies, and installs
+one.
+
+**What this settles and what it does not.** `nomos-contracts::PackageKind` is declared today
+and consumed by nothing, a gap `P10-PACKAGE-SEAM` already found, contradicted by the
+workspace's own `publish = false`. This clause does not close that gap — no crate moves by
+this record, the same as everywhere else in it — but it removes the ambiguity that gap was
+sitting in: the direction any implementation takes is now decided, not argued fresh the next
+time somebody reaches for a package registry. `D-091`'s own list — envelope, resolution,
+registries, ingestion, ownership, transactions, rollback, profiles, signatures, disk
+accounting — is the list of mechanism `PackageKind`'s eventual consumer must not reimplement.
+
 ## Conflicts With Existing Decisions
 
 Checked deliberately rather than assumed, because a record that quietly reinterprets an
@@ -314,12 +366,21 @@ that arrow. Nothing in `ARC-HARNESS-001`'s ownership table changes: the run hist
 to Nomos content is exactly the observation half of the crossing above, and what happens to it
 after a harness exists to produce it is this record's question, not that one's.
 
+`P10-PACKAGE-SEAM` is untouched. It found `PackageKind` declared and consumed by nothing,
+contradicted by `publish = false`, and left the remedy's direction open. This record does not
+implement a remedy — it decides the direction one would take, the mechanism half to XVPE, the
+meaning half staying here — and leaves the item itself exactly where it was, done and
+unrevised.
+
 ## What This Record Does Not Do
 
 No crate moves. No package is renamed. No dependency changes. No KWB or XVPE integration is
-implemented, and none is scheduled here. No harness that records a run's observations exists
-either — `ARC-HARNESS-001` proposes one and has not been built — so the third crossing above
-governs a step nothing yet takes. `AGENTS.md` and `CLAUDE.md` are not touched.
+implemented, and none is scheduled here. `PackageKind` is not touched, and neither is
+`nomos-contracts`: the adoption above states a direction, not a migration, the same as `D-122`
+stated a direction for shared analysis mechanisms without moving `nomos-analysis`. No harness
+that records a run's observations exists either — `ARC-HARNESS-001` proposes one and has not
+been built — so the third crossing above governs a step nothing yet takes. `AGENTS.md` and
+`CLAUDE.md` are not touched.
 
 Nothing mechanical enforces this boundary, and that is the honest state rather than an
 oversight. There is no test that can decide whether a subsystem's semantics are fully
@@ -335,4 +396,7 @@ the seam already recorded in the sibling suites this build ingests, declared the
 and adopted `D-122`. Amended to version 3 by `P11-ECOSYSTEM-UPWARD`, which drew the third
 crossing — a run's own observations becoming KWB knowledge — answering the arrow
 `ARC-HARNESS-001` named and left undrawn, with a provenance requirement on the crossing and a
-second-source requirement on the review that promotes a lesson into a rule.
+second-source requirement on the review that promotes a lesson into a rule. Amended to
+version 4 by `P13-XVPE-PACKAGE-ADOPT`, which adopted `D-091` on the same footing as `D-122`:
+the generic package-management platform moves toward XVPE, `PackageKind`'s semantics stay
+here, and `P10-PACKAGE-SEAM`'s open remedy now has a direction without being implemented.

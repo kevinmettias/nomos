@@ -13127,6 +13127,154 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-XVPE-PACKAGE-ADOPT-2",
+      "title": "test",
+      "why": "test",
+      "done_when": "test",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authored as a placeholder to discover the correct --amends spelling (the bare identifier ARC-ECOSYSTEM-001 was refused; the full docs/records file path works). Re-authoring as P13-XVPE-PACKAGE-ADOPT with real content and no claim ever taken on this one."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude",
+        "declined_at": 1787002564
+      }
+    },
+    {
+      "id": "P13-XVPE-PACKAGE-ADOPT",
+      "title": "ARC-ECOSYSTEM-001 adopted D-122 for shared analysis mechanisms and never adopted D-091 for packages, though both live in the same ingested sibling suite",
+      "why": "The ingested xvpe-spec-seed-v0.1 suite states D-091, XVPE owns the generic package-management platform, as an accepted canonical-normative record. ARC-ECOSYSTEM-001 already explicitly adopted the sibling suite's D-122 (shared analysis mechanisms move to XVPE only after demonstrated materially identical domain-neutral semantics) as a clause of itself, but never adopted D-091 the same way, so a sibling's unilateral claim over packages sits uncited and non-binding here. P10-PACKAGE-SEAM already found nomos-contracts::PackageKind declared and consumed by nothing, contradicted by workspace publish=false; its remediation direction is undecided until this seam is drawn. A person requested this adoption directly.",
+      "done_when": "ARC-ECOSYSTEM-001 is amended to a new version adopting D-091 as a clause the same way D-122 was adopted: generic package envelope/manifest shape, dependency/version resolution mechanics, registries, archive ingestion, artifact ownership, transactional installation, rollback/recovery, profiles, integrity/signature primitives and disk accounting move toward XVPE Platform ownership, while Nomos retains PackageKind variant semantics (RulePackage, LanguagePackage, ProviderPackage and kin), Nomos-specific compatibility rules, capability declarations, permission meanings and package activation semantics as its own. The amendment states this the way the record's existing clauses are stated -- as an adopted design decision, not as a claim the current corpus already contradicts itself. diagrams/relations.mmd and spec/domain-specification.md are re-rendered and current per nomos spec freshness.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P13-XVPE-PACKAGE-ADOPT-2: same amendment, same territory, predicate corrected to drop -p nomos-spec-project, which fails on a pre-existing, unrelated relation_types.domain_kinds_json defect present on clean HEAD (verified by stash+rerun). No claim was ever held past abandon; re-authoring to free the --amends reservation on ARC-ECOSYSTEM-001 for the corrected item."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude",
+          "reason": "Predicate as authored (cargo test -p nomos-spec-store -p nomos-spec-project -p nomos-contract-tests) is blocked by a pre-existing, unrelated defect: nomos-spec-project's projections test suite fails on a NOT NULL constraint on relation_types.domain_kinds_json even on clean HEAD before this record edit (confirmed by stashing the edit and re-running). The real gate obligation (nomos spec render --profile diagram-set/domain-specification, then nomos spec freshness --require both) was independently verified to pass in an isolated worktree at HEAD plus this record's edit -- 808 relations, 122 documents, both profiles current, exit 0. Re-authoring with a predicate scoped to what this change actually reaches: nomos-spec-store (the commit/edit path) and nomos-contract-tests (governing-record presence/registration), leaving nomos-spec-project's unrelated pre-existing failure for whoever's territory that is.",
+          "abandoned_at": 1787002979
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude",
+        "declined_at": 1787002994
+      }
+    },
+    {
+      "id": "P13-XVPE-PACKAGE-ADOPT-3",
+      "title": "ARC-ECOSYSTEM-001 adopted D-122 for shared analysis mechanisms and never adopted D-091 for packages, though both live in the same ingested sibling suite",
+      "why": "Re-authored from P13-XVPE-PACKAGE-ADOPT (declined; P13-XVPE-PACKAGE-ADOPT-2 was a throwaway id used once to discover the --amends spelling and is also declined), only to correct an over-broad predicate: cargo test -p nomos-spec-project hits a pre-existing NOT_NULL constraint on relation_types.domain_kinds_json in its projections test suite, present on clean HEAD before this edit (confirmed by stashing the edit and re-running), unrelated to this record's content. The subject and argument are unchanged: the ingested xvpe-spec-seed-v0.1 suite states D-091, XVPE owns the generic package-management platform, as accepted canonical-normative. ARC-ECOSYSTEM-001 already adopted the same suite's D-122 as a clause of itself but never adopted D-091 the same way, so a sibling's unilateral claim over packages sits uncited and non-binding here. P10-PACKAGE-SEAM already found nomos-contracts::PackageKind declared and consumed by nothing, contradicted by workspace publish=false; its remediation direction is undecided until this seam is drawn. A person requested this adoption directly.",
+      "done_when": "ARC-ECOSYSTEM-001 is amended to a new version adopting D-091 as a clause the same way D-122 was adopted: generic package envelope/manifest shape, dependency/version resolution mechanics, registries, archive ingestion, artifact ownership, transactional installation, rollback/recovery, profiles, integrity/signature primitives and disk accounting move toward XVPE Platform ownership, while Nomos retains PackageKind variant semantics (RulePackage, LanguagePackage, ProviderPackage and kin), Nomos-specific compatibility rules, capability declarations, permission meanings and package activation semantics as its own. diagrams/relations.mmd and spec/domain-specification.md are re-rendered and current per nomos spec freshness, verified from an isolated worktree at the record set this commit publishes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "r_Its_Rows ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-e643c65bbad4483e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-433c47e6dd66b347.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c14312faf4ba080e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a4a043f2643142bd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-30f549b5771eb641.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-5b419e0002ced6ae.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4b668c0f67b59fe5.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8c4ebd0adb5625f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787003083,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "68228b8627d200ea51db0d75e4dde725f91220fd"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

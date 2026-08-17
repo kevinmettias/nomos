@@ -12,7 +12,7 @@ profile: domain-specification
 | --- | --- | --- | --- | --- | --- |
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md | authored | 25 | 8 | sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md | authored | 36 | 12 | sha256:adc1a21b6db345c299218e596bb0f50a4a705be3f8ec5ca460888e641540aebb |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 63 | 14 | sha256:4b2cd085df0c3bb9a37455c0c3aa29419219e705722f9b6efb8afd5609600e8c |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 73 | 15 | sha256:9c180099cbe0676f26fbb605bcf1696c99b2ff6fb542c0d367a429cfeb236d87 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
@@ -168,9 +168,10 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#39 | authored | 2 | The Sibling Record Set Decided Most Of This First |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#44 | authored | 3 | The edges are declared, not described |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#47 | authored | 3 | `D-122` is adopted here, because a sibling's decision does not govern by itself |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#53 | authored | 2 | Conflicts With Existing Decisions |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#59 | authored | 2 | What This Record Does Not Do |
-| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#62 | authored | 2 | Status |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#53 | authored | 3 | `D-091` is adopted here, on the same footing as `D-122` |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#62 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#69 | authored | 2 | What This Record Does Not Do |
+| docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#72 | authored | 2 | Status |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1 | authored | 1 | The existing C# KWB is an evidence source and not a port target, and an extracted finding lands by its own kind |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#2 | authored | 2 | Question |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#5 | authored | 2 | Decision |
@@ -2300,18 +2301,102 @@ true and nearby. The edge to `D-122` says where it came from; the clause is why 
 
 ### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#53
 
+*revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:9706d74dc978aaba1879122f03683fdc2e219a7904767eea5df23eecd4bbae02*
+
+### `D-091` is adopted here, on the same footing as `D-122`
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:b91d379e6f8e5a04cccb1cef997c3a371591e8a39addc76d75558df83e7f147a*
+
+The sibling suite states a second claim this record had left uncited: `D-091`, XVPE owns the
+generic package-management platform. Nothing above adopted it, so until now it sat exactly
+where `D-122` sat before version 3 — a sibling's unilateral position, true of XVPE's own
+product and non-binding here by the rule stated two sections up. This record's own projection
+rule applies to it the same way: a statement from another authority becomes enforceable here
+by a recorded step, not by standing nearby in an ingested suite.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#55
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:3ba250df3ed54672fc137ba58542c14e7d3a3b2d2362aab080ddc1840455620f*
+
+**It is adopted, as a clause of this record:**
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#56
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:95d70f54a6221b4332ee1697d254208398e2c4180fb60ab287c44de6e1bed90c*
+
+> XVPE owns the generic package-management platform: package envelope and manifest shape,
+> dependency and version resolution mechanics, registries, archive ingestion, artifact
+> ownership, transactional installation, rollback and recovery, profiles, integrity and
+> signature primitives, `TargetAdapter` mechanics, and disk accounting.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:58e684b3898e1c43c71cb5e21b9fcc564f72fc241bfbbbcc78e9e8b18d146d83*
+
+This is the mechanism half of the crossing already drawn above —
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#58
+
+*revision: authored · kind: code · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:6fb731301ca95311ea62545b859f1f833e4f0b17e1199bff5c0c019a976e1243*
+
+```
+XVPE generic execution primitive
+        ^
+        |  implemented / adapted by
+        |
+Nomos-specific service
+```
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#59
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:3cc6ee22ec82aff6ce3b74446614c2f55adfce370abfa65e2e9267284cb3bb6d*
+
+— applied to packages rather than to execution. What that crossing already says still
+governs the boundary: generic capability is consumed by adaptation, and a primitive does not
+learn what a `RulePackage` or a `LanguagePackage` is in order to serve Nomos.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#60
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:db79fb8ccf0d1e7c8048d01454a5d05249b1d710cff095d3854860cc777f4e41*
+
+**What the adoption does not reach.** `D-091` names package mechanism, not package meaning,
+and this record keeps the second on this side of the seam: `PackageKind`'s variant semantics
+— what a `RulePackage`, a `LanguagePackage`, a `ProviderPackage` and their kin actually mean —
+Nomos-specific compatibility rules, capability declarations, permission meanings, and package
+activation semantics remain Nomos's, the same way `D-122`'s adoption left rule and finding
+semantics on this side of the analysis-mechanism crossing. Nomos owns what a package means;
+XVPE, once this clause is implemented, owns the machinery that moves, verifies, and installs
+one.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#61
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / The Sibling Record Set Decided Most Of This First / `D-091` is adopted here, on the same footing as `D-122` · hash: sha256:b4c51ce8ccbc9a378619119bc6c1a01b61092e8da9ca58fc4fc406a1c9d886e8*
+
+**What this settles and what it does not.** `nomos-contracts::PackageKind` is declared today
+and consumed by nothing, a gap `P10-PACKAGE-SEAM` already found, contradicted by the
+workspace's own `publish = false`. This clause does not close that gap — no crate moves by
+this record, the same as everywhere else in it — but it removes the ambiguity that gap was
+sitting in: the direction any implementation takes is now decided, not argued fresh the next
+time somebody reaches for a package registry. `D-091`'s own list — envelope, resolution,
+registries, ingestion, ownership, transactions, rollback, profiles, signatures, disk
+accounting — is the list of mechanism `PackageKind`'s eventual consumer must not reimplement.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#62
+
 *revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
 
 ## Conflicts With Existing Decisions
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#63
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:34b326efed4b95b229aa95b813cf32fad2e4b491000bde8ccad511024c1e4c34*
 
 Checked deliberately rather than assumed, because a record that quietly reinterprets an
 earlier one is worse than no record.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#55
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#64
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5*
 
@@ -2319,7 +2404,7 @@ earlier one is worse than no record.
 meet — the single adapter crate — they agree, and this record supplies the reason `D-130`
 recorded only as a rule.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#56
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#65
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:cb43fecfbeaebd1f64a65b9a52ec1d2907b9e4322555922b24518742b3ffd482*
 
@@ -2327,7 +2412,7 @@ recorded only as a rule.
 different mature home says nothing about whether the specification is a database, which it
 is and remains.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#66
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:8fec0132a90979f7822d19c7c5ad70b30c0cf98435ad4b4f3bcf64ea255bc299*
 
@@ -2335,7 +2420,7 @@ is and remains.
 `AGENTS.md` may gain a routing line to this record when there is a concrete routing question
 that needs one, and it gains no conclusions from it at any point. The harness stays thin.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#58
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#67
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:ff3a920cca2e07254a922bf5f4a0d9d190811fd9c47be38b7023c453dda67dcb*
 
@@ -2346,22 +2431,35 @@ that arrow. Nothing in `ARC-HARNESS-001`'s ownership table changes: the run hist
 to Nomos content is exactly the observation half of the crossing above, and what happens to it
 after a harness exists to produce it is this record's question, not that one's.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#59
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#68
+
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Conflicts With Existing Decisions · hash: sha256:1d8d70a9c8a1455ae2fd28c5fa329bdf9a117a33282906411b1a12b37cc35101*
+
+`P10-PACKAGE-SEAM` is untouched. It found `PackageKind` declared and consumed by nothing,
+contradicted by `publish = false`, and left the remedy's direction open. This record does not
+implement a remedy — it decides the direction one would take, the mechanism half to XVPE, the
+meaning half staying here — and leaves the item itself exactly where it was, done and
+unrevised.
+
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#69
 
 *revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
 
 ## What This Record Does Not Do
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#60
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#70
 
-*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / What This Record Does Not Do · hash: sha256:ceae94a24ee76a280b3fa45c6c274370c7dee9f05203d983bbc9ef737dfd8ea2*
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / What This Record Does Not Do · hash: sha256:e6642624bf947aad3e1d250ac6178d2f2fcae3b88ce5e58f825bfe6b0189ea19*
 
 No crate moves. No package is renamed. No dependency changes. No KWB or XVPE integration is
-implemented, and none is scheduled here. No harness that records a run's observations exists
-either — `ARC-HARNESS-001` proposes one and has not been built — so the third crossing above
-governs a step nothing yet takes. `AGENTS.md` and `CLAUDE.md` are not touched.
+implemented, and none is scheduled here. `PackageKind` is not touched, and neither is
+`nomos-contracts`: the adoption above states a direction, not a migration, the same as `D-122`
+stated a direction for shared analysis mechanisms without moving `nomos-analysis`. No harness
+that records a run's observations exists either — `ARC-HARNESS-001` proposes one and has not
+been built — so the third crossing above governs a step nothing yet takes. `AGENTS.md` and
+`CLAUDE.md` are not touched.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#61
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#71
 
 *revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / What This Record Does Not Do · hash: sha256:161dd288f5804fac5961f9a094edb4c58f088da03f840cd760db5bd737160fc8*
 
@@ -2372,22 +2470,25 @@ this record buys is that the next placement argument is settled by reading rathe
 whoever is most recently convinced, and that a future enforcement, when something concrete
 enough to enforce exists, has a criterion to be derived from.
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#62
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#72
 
 *revision: authored · kind: heading · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#63
+### docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#73
 
-*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Status · hash: sha256:165914b45c68f0ed1933a2957c580ce104a458bea574115c0e75b2f61ff92914*
+*revision: authored · kind: prose · heading: Four products share one seam, and ownership is decided by semantics rather than by location / Status · hash: sha256:13e3aaa695e638a6b24cb7a19b0bf9b0fcdbd4e7ce43ba708dc3d07ca731db41*
 
 Closed by `P10-ECOSYSTEM-BOUNDARY`. Amended to version 2 by `P10-SEAM-CITATION`, which found
 the seam already recorded in the sibling suites this build ingests, declared the edges to it,
 and adopted `D-122`. Amended to version 3 by `P11-ECOSYSTEM-UPWARD`, which drew the third
 crossing — a run's own observations becoming KWB knowledge — answering the arrow
 `ARC-HARNESS-001` named and left undrawn, with a provenance requirement on the crossing and a
-second-source requirement on the review that promotes a lesson into a rule.
+second-source requirement on the review that promotes a lesson into a rule. Amended to
+version 4 by `P13-XVPE-PACKAGE-ADOPT`, which adopted `D-091` on the same footing as `D-122`:
+the generic package-management platform moves toward XVPE, `PackageKind`'s semantics stay
+here, and `P10-PACKAGE-SEAM`'s open remedy now has a direction without being implemented.
 
 ### docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md#1
 
