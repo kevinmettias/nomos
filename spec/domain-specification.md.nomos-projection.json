@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a9de6508b724d5ad1c029f8c247cbef2e50d4e65a9357f9836f3cab064ec2205",
-  "inputs_digest": "sha256:2ad2e3dcc47caf4a5d5adc9169cd0b5bdccc3c890ae416cd9ea7800467621438",
+  "content_digest": "sha256:8cde9df4b24cb15029f5c3f3dd10d546df51c78af5bb6ac151890d6ca84f6772",
+  "inputs_digest": "sha256:f8c006c76a48d34f32d7e20f3cd60136e89e91acae9e5390b9898d8ca63c44e3",
   "sections": [
     [
       "Documents",
-      113
+      114
     ],
     [
       "Sections",
-      1033
+      1040
     ],
     [
       "Source blocks",
-      3796
+      3816
     ]
   ],
   "inputs": [
@@ -229,6 +229,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored",
       "hash": "sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored",
+      "hash": "sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81"
     },
     {
       "content": "documents",
@@ -2234,6 +2239,41 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31",
       "hash": "sha256:dd339ebc1e6a29fe951f390708c05b6860c8886cdec17319f10b754b338968dd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#1",
+      "hash": "sha256:12397a4602d0d80fb9d0810388922a6e6fbcc0b6039687352ffc7e746369ed7e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#2",
+      "hash": "sha256:672398df53a882179a817adac4cd30cc4e13e9e9ccac27564c6b8fb26c35a16b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#6",
+      "hash": "sha256:bab900990a7cb967d2b9e0dec8e634e15f8b099049d2aa163960d3fef397793b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#11",
+      "hash": "sha256:ae53a2ab8e9123e9cf798b22634bd299aca350d438dba9b7372163a3ff7aec23"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#15",
+      "hash": "sha256:f6acaf9ae5ad603e4143cc7b7e5b22e98f8715617266dca6823d619867d028b3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#17",
+      "hash": "sha256:92826f4c58ed5539f8e972dfd9ef264f37f8cd96b3b4302bb06fe9e24e829dd3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#19",
+      "hash": "sha256:f0f551e6c1d86805984bfa17c396f9b3926f29578161cebb56f46e1b0223ab53"
     },
     {
       "content": "headings",
@@ -11559,6 +11599,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#32",
       "hash": "sha256:4193ff51826b0528afc76c94a023749e9f5fb7267adc4f4bb9084e37f28f060e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#1",
+      "hash": "sha256:2612e5bd9fb27542e380117b74cba3a2eae60c243836524d3830e4dfe14d3db1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#3",
+      "hash": "sha256:63b0068a68d0e89856406668897a086c0319bac3466d089986a8e9463e37b388"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#4",
+      "hash": "sha256:2baf5dc5000b892aa0726c8cd296d4d9d84781e16f5c3e3d7bb27ee7e2754c3a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#5",
+      "hash": "sha256:d4ef09cd433307933cb2c5567c99c83924ef1d74b50b6acddd090aaee9e23902"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#6",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#7",
+      "hash": "sha256:c6905c8f8ef39626f90d52646133ff4fd8cb7722e72a3dac37aa03a3647283e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#8",
+      "hash": "sha256:02021cac2356c54b198ffe6a07d485e808c7e42c6cacd4779d27b5228776080d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#9",
+      "hash": "sha256:0b19cd4c3ef780d20fd0da78310ef0a556e83e085f142449e32ad2017774d24b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#10",
+      "hash": "sha256:0427f2e1a9c2893767653992b96419b09d878a59083933037bcfb21bea8426b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#11",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#12",
+      "hash": "sha256:1c7526e47fbf1dde101a367f30e272fff7dd14b3f754e43f6f0f7eca33f230f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#13",
+      "hash": "sha256:b7a5e0c1ae32f8f92caedce9f0fb901dbe5aba4e41c620106f4ac51a9cd33c40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#14",
+      "hash": "sha256:260d78c5bc842a095d54c47f02e212a102b29fadc783f8cfb7c5c9a698b0eeda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#15",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#16",
+      "hash": "sha256:c7fe1ab9f23177da37d12263ca294e54bf31cdf88d79e6237e0550757c63143f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#17",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#18",
+      "hash": "sha256:627bfe666543830fd2cbcdbb1458e486f7b9bbc63d70756148b220cf816be29d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#19",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#20",
+      "hash": "sha256:f107da9f6a255a35bdd61d80ac0136b619f5a65c539cd3691e8fafa972a4fd02"
     },
     {
       "content": "blocks",

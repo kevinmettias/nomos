@@ -22,6 +22,7 @@ mod check;
 mod corpus;
 mod request;
 mod spec;
+mod vacuity;
 mod work;
 
 use std::path::PathBuf;
@@ -38,13 +39,20 @@ const CORPUS_VARIABLE: &str = "NOMOS_V14_CORPUS";
 fn main() -> std::process::ExitCode
 {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
-    let code = match arguments.split_first()
+    // Routed through `vacuity::Named` rather than compared here: `vacuity::Group` is the
+    // closed set every group's no-vacuous-success stance is declared against
+    // (`vacuity.rs`, `OD-GATE-003`), and matching it with no wildcard arm means a group
+    // this binary does not yet know how to run cannot be added here without also being
+    // named there.
+    let code = match arguments.split_first().and_then(|(group, rest)| {
+        return vacuity::Named(group).map(|group| return (group, rest));
+    })
     {
-        Some((group, rest)) if group == "work" => Work(rest),
-        Some((group, rest)) if group == "spec" => Spec(rest),
-        Some((group, rest)) if group == "check" => Check(rest),
-        Some((group, rest)) if group == "request" => Request(rest),
-        _ => Usage(),
+        Some((vacuity::Group::Work, rest)) => Work(rest),
+        Some((vacuity::Group::Spec, rest)) => Spec(rest),
+        Some((vacuity::Group::Check, rest)) => Check(rest),
+        Some((vacuity::Group::Request, rest)) => Request(rest),
+        None => Usage(),
     };
 
     return std::process::ExitCode::from(u8::try_from(code).unwrap_or(1));

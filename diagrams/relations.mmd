@@ -246,6 +246,7 @@ graph LR
     od_completeness_002 -->|"relates-to"| od_ledger_007["OD-LEDGER-007"]
     od_completeness_002 -->|"relates-to"| od_spec_007
     od_completeness_004 -->|"affects"| od_completeness_001
+    od_completeness_004 -->|"relates-to"| od_gate_003["OD-GATE-003"]
     od_completeness_004 -->|"relates-to"| od_gate_004
     od_completeness_004 -->|"relates-to"| od_rules_001
     od_completeness_004 -->|"relates-to"| od_rules_002
@@ -259,6 +260,7 @@ graph LR
     od_contracts_001 -->|"relates-to"| od_agent_001
     od_contracts_001 -->|"relates-to"| od_analysis_004
     od_contracts_001 -->|"relates-to"| od_contracts_002
+    od_contracts_001 -->|"relates-to"| od_gate_003
     od_contracts_002 -->|"relates-to"| arc_harness_001
     od_contracts_002 -->|"relates-to"| od_analysis_006
     od_contracts_002 -->|"relates-to"| od_capability_001
@@ -290,6 +292,7 @@ graph LR
     od_gate_001 -->|"relates-to"| od_connector_002
     od_gate_001 -->|"relates-to"| od_determinism_002
     od_gate_001 -->|"relates-to"| od_gate_002
+    od_gate_001 -->|"relates-to"| od_gate_003
     od_gate_001 -->|"relates-to"| od_gate_004
     od_gate_001 -->|"relates-to"| od_gate_005
     od_gate_001 -->|"relates-to"| od_gate_006
@@ -305,16 +308,23 @@ graph LR
     od_gate_001 -->|"relates-to"| od_trace_005["OD-TRACE-005"]
     od_gate_002 -->|"relates-to"| od_analysis_003
     od_gate_002 -->|"relates-to"| od_gate_001
+    od_gate_002 -->|"relates-to"| od_gate_003
     od_gate_002 -->|"relates-to"| od_gate_004
     od_gate_002 -->|"relates-to"| od_ledger_003
     od_gate_002 -->|"relates-to"| od_ledger_007
     od_gate_002 -->|"relates-to"| od_package_002
     od_gate_002 -->|"relates-to"| od_store_002
+    od_gate_003 -->|"relates-to"| od_completeness_004
+    od_gate_003 -->|"relates-to"| od_contracts_001
+    od_gate_003 -->|"relates-to"| od_gate_001
+    od_gate_003 -->|"relates-to"| od_gate_002
+    od_gate_003 -->|"relates-to"| od_gate_004
     od_gate_004 -->|"relates-to"| d_134
     od_gate_004 -->|"relates-to"| od_completeness_001
     od_gate_004 -->|"relates-to"| od_completeness_004
     od_gate_004 -->|"relates-to"| od_gate_001
     od_gate_004 -->|"relates-to"| od_gate_002
+    od_gate_004 -->|"relates-to"| od_gate_003
     od_gate_004 -->|"relates-to"| od_gate_005
     od_gate_004 -->|"relates-to"| od_gate_006
     od_gate_004 -->|"relates-to"| od_gate_007["OD-GATE-007"]
@@ -800,6 +810,7 @@ graph LR
     od_determinism_002
     od_gate_001
     od_gate_002
+    od_gate_003
     od_gate_004
     od_gate_005
     od_gate_006

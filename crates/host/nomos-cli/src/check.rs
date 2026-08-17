@@ -41,9 +41,10 @@
 //! is empty because something expected was not there". No seventh code: an exit code means
 //! one thing per binary, and this is that thing.
 //!
-//! Where the vacuity guard *belongs* is a live question — `P10-VACUITY-HOME` holds it, and
-//! a rule that can now report "I could not run" is evidence for that item rather than an
-//! answer to it.
+//! Where the vacuity guard *belongs* was a live question; `OD-GATE-003` answers it. The
+//! guard stays here, decided by this caller, for the reason given above — but `vacuity.rs`
+//! is now the one place a reader finds that this module and `spec.rs` both made that
+//! decision, rather than discovering it twice by reading two doc comments.
 //!
 //! # This command is a gate step now, and that changes what an exit code costs
 //!

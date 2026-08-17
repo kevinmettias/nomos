@@ -52,6 +52,7 @@ profile: domain-specification
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md | authored | 47 | 10 | sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7 |
@@ -458,6 +459,13 @@ profile: domain-specification
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27 | authored | 2 | Blessing Is Not A Passing Run |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29 | authored | 2 | What Would Change This |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31 | authored | 2 | Status |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#1 | authored | 1 | A judging group's no-vacuous-success guarantee is declared once, not argued per module |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#6 | authored | 2 | The Decision |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#11 | authored | 2 | What This Costs |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#15 | authored | 2 | Consequences |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#17 | authored | 2 | What This Does Not Do |
+| docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#19 | authored | 2 | Controls |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#1 | authored | 1 | The rule layer becomes a gate step, and zero is the only exit code that passes it |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#2 | authored | 2 | Why This Identifier |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#4 | authored | 2 | Question |
@@ -11549,6 +11557,227 @@ independent readings that agree are worth more than one authoritative one.
 Version 1 closed by `P9-PUBLIC-API`. Version 2 closed by `P11-REEXPORT-GRAIN`, which
 re-authored `P11-REEXPORT-SURFACE` once the reading found the defect in three crates rather
 than the one it was opened for.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#1
+
+*revision: authored · kind: heading · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module · hash: sha256:2612e5bd9fb27542e380117b74cba3a2eae60c243836524d3830e4dfe14d3db1*
+
+# A judging group's no-vacuous-success guarantee is declared once, not argued per module
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#2
+
+*revision: authored · kind: heading · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#3
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Question · hash: sha256:63b0068a68d0e89856406668897a086c0319bac3466d089986a8e9463e37b388*
+
+`nomos check` cannot report a clean run over nothing. An empty walk exits
+`ExitCode::Vacuous`, `6`, and `check.rs`'s own doc comment names the sibling defect it exists
+against: `check-standards-tree /nonexistent` walked nothing, found nothing and reported
+CLEAN. `nomos spec` has the same shape under a different name — an identifier the store
+never got because a corpus was never configured exits `ExitCode::Absent` rather than reading
+as a plain "not found" — and `corpus.rs`'s own doc comment names the same defect one level up:
+"a read command that prints an empty table for a corpus it never had is the same defect
+wearing a different hat."
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#4
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Question · hash: sha256:2baf5dc5000b892aa0726c8cd296d4d9d84781e16f5c3e3d7bb27ee7e2754c3a*
+
+Both guards are real, both are tested, and both are entirely local. `check::ExitCode` is
+private to `check.rs`'s own module group; `spec::ExitCode` is private to `spec.rs`'s. Nothing
+in `nomos-contracts` — the crate every judging group already depends on — makes a success
+value unconstructible without evidence that something was examined, so nothing stops a third
+judging group from being wired up with an `Ok` that a caller can reach over an empty subject
+set, the same way `check` could before `OD-RULES-001` and `spec` could before `corpus.rs` was
+written. Each module argues its own placement well, in its own doc comment. A cross-command
+guarantee decided in one module's prose is a decision the next author does not encounter,
+because the next author reads their own module and not the sibling's.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#5
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Question · hash: sha256:d4ef09cd433307933cb2c5567c99c83924ef1d74b50b6acddd090aaee9e23902*
+
+Two shapes of answer were on the table. Either caller-side placement stands, and something
+makes the next judging group inherit the guard instead of re-deriving it from scratch — a
+shared entry point, a contract test over every group that can print a verdict, or a named,
+accepted cost if it stays purely per-command. Or the guarantee moves into a value in
+`nomos-contracts` that a judging command cannot construct an `Ok` from without having judged
+something.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#6
+
+*revision: authored · kind: heading · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#7
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / The Decision · hash: sha256:c6905c8f8ef39626f90d52646133ff4fd8cb7722e72a3dac37aa03a3647283e5*
+
+**Caller-side placement stands. `check::sources::Walked`, `check::facts::Nothing_Materialized`
+and `spec::reporting::Absent_Or` are unchanged — they still decide it, because `check.rs`'s
+own argument for that is correct and this record does not relitigate it: "did I see a
+plausible amount of the world" is a question only the caller that chose the tree, or the
+identifier, can answer. What changes is that the decision now lives in one place a third
+group cannot avoid finding.**
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#8
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / The Decision · hash: sha256:02021cac2356c54b198ffe6a07d485e808c7e42c6cacd4779d27b5228776080d*
+
+`crates/host/nomos-cli/src/vacuity.rs` is that place. It declares `Group`, the closed set of
+things `main.rs` dispatches to (`Work`, `Spec`, `Check`, `Request`), and `Stance_Of`, a match
+over `Group` with no wildcard arm that says, for each one, whether it is `Guarded` — walks or
+looks up a caller-chosen subject set and refuses `Ok` when it is empty, naming the function
+that does the refusing — or `NotApplicable`, with the reason named rather than left blank.
+`main.rs`'s own dispatch was rewired to route through this module's `Named` lookup rather
+than comparing strings inline, so a fifth group has to be spelled in `vacuity::NAMES` before
+`main.rs` can reach it at all, and a `Group` variant with no `Stance_Of` arm fails the build
+at that match. `#[cfg(test)]` tests in the same module do not stop at the declaration: for
+each `Guarded` group they drive the real `Run` function over a subject deliberately emptied —
+an empty directory for `check`, a record identifier the store never held with no corpus
+configured for `spec` — and assert the exit code is not that group's `Ok`.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#9
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / The Decision · hash: sha256:0b19cd4c3ef780d20fd0da78310ef0a556e83e085f142449e32ad2017774d24b*
+
+`work` and `request` are declared `NotApplicable`. `work` reports the ledger's own state; an
+empty board is a true empty board, not a broken read of one that has entries. `request`
+always names exactly one submission the caller wrote; there is no caller-chosen subject set
+for it to have walked and found empty the way a checked-out tree or a queried record can be.
+Neither claim is asserted by a test — there is no principled way to synthesize "an empty
+ledger-coordination request" the way an empty directory or a missing record can be
+synthesized — so both rest on the review a change to either group already gets, the same way
+`OD-GATE-013`'s per-enum exception rests on review rather than on a check.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#10
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / The Decision · hash: sha256:0427f2e1a9c2893767653992b96419b09d878a59083933037bcfb21bea8426b7*
+
+**The type-level alternative — a value in `nomos-contracts` a judging command cannot
+construct `Ok` from without evidence — was not taken, and the reason is `nomos-contracts`'
+own admission test.** `OD-CONTRACTS-001` admits a type to band 0 only when it crosses a
+subsystem, process or plugin boundary and the parties on both sides need one stable shared
+representation of it: *would a peer that never compiles this crate — a knowledge service in
+another language, a client in TypeScript, a platform in another Rust workspace — be unable to
+agree with us without it?* An exit code `nomos-cli`'s `main` produces is not part of that
+protocol. It is what happens at a process boundary — this binary talking to a shell, to CI —
+that none of band 0's other peers ever cross. Forcing every peer that compiles
+`nomos-contracts` to carry a "was something judged" type so that one binary's two command
+groups can share it would be exactly the kind of addition `OD-CONTRACTS-001` exists to
+refuse: important to this crate, general in shape, and not something the other side of the
+boundary needs to agree about.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#11
+
+*revision: authored · kind: heading · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#12
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / What This Costs · hash: sha256:1c7526e47fbf1dde101a367f30e272fff7dd14b3f754e43f6f0f7eca33f230f0*
+
+**The caller-side answer covers less than the type-level one would have.** A library
+consumer that calls `check::Run` or `spec::Run` directly, never going through `main`, gets
+exactly the guard each module's own code already gave it — nothing here adds a second
+refusal inside either `Run`. A type-level guarantee would have covered that caller too,
+because it would not be possible to *have* an `Ok` value anywhere, library call or process
+exit, without having gone through the construction that proves something was judged. This
+record does not buy that; it buys the guarantee at the one boundary `.github/workflows/gate.yml`
+can actually observe, which is `OD-GATE-004`'s boundary, and stops there.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#13
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / What This Costs · hash: sha256:b7a5e0c1ae32f8f92caedce9f0fb901dbe5aba4e41c620106f4ac51a9cd33c40*
+
+**The inheritance is compile-and-test enforced only for the step of adding a `Stance_Of` arm
+once a `Group` variant exists — not for the step of adding the `Group` variant in the first
+place.** A future author wiring a fifth `main.rs` group still has to remember to add it to
+`vacuity::Group` and `vacuity::NAMES` before the exhaustiveness check engages at all; nothing
+makes *that* step itself fail to compile. What fails is everything downstream of forgetting
+being caught early: a `Group` variant with no `Stance_Of` arm fails `cargo test` and the
+gate's `Lint` step (`cargo clippy --workspace --all-targets`, which compiles `#[cfg(test)]`
+code), and a `Stance::Guarded` claim the real `Run` does not honour fails the behavioural test
+next to it. That is a real narrowing from "argued in a doc comment nobody but that module's
+reader sees" to "caught the first time anyone runs the suite", but it is not a guarantee that
+survives a group added and never wired through this module's dispatch table at all.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#14
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / What This Costs · hash: sha256:260d78c5bc842a095d54c47f02e212a102b29fadc783f8cfb7c5c9a698b0eeda*
+
+**`Stance` and `Stance_Of` are `#[cfg(test)]`-only.** Nothing at runtime consults a group's
+declared stance; the exhaustiveness this module exists for is a static property, checked on
+every `cargo test` and every `Lint` step, and carrying it into the shipped binary would be
+dead code the compiler is right to flag. The consequence is that a plain
+`cargo build --release --bin nomos` — the build `AGENTS.md` asks an agent to run before using
+the binary for ledger verbs — does not exercise this check at all; only `--all-targets` and
+`test` invocations do.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#15
+
+*revision: authored · kind: heading · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#16
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Consequences · hash: sha256:c7fe1ab9f23177da37d12263ca294e54bf31cdf88d79e6237e0550757c63143f*
+
+`crates/host/nomos-cli/src/vacuity.rs` is now where a reader goes to find every group's
+stance in one place, and `check.rs`'s doc comment was trimmed to point there instead of
+re-arguing where the guard belongs. Neither `check.rs`'s guard code nor `spec.rs`'s changed
+shape or behaviour. `nomos-contracts` gained nothing: no new module, no new public type, no
+change to its surface snapshot.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#17
+
+*revision: authored · kind: heading · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#18
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / What This Does Not Do · hash: sha256:627bfe666543830fd2cbcdbb1458e486f7b9bbc63d70756148b220cf816be29d*
+
+- It does not build `nomos-gates`, `nomos-findings` or `nomos-applicability`. `OD-LEDGER-002`
+  already records that those crates do not exist; this record answers what replaced the
+  guarantee they were meant to carry in their absence, which is the gap that record left open.
+- It does not add a second judging command. The mechanism is exercised today by exactly the
+  two groups that already had a vacuity concept, `check` and `spec` — a third is not required
+  to close this, and the record does not invent one to demonstrate the pattern further than
+  the workspace currently needs it demonstrated.
+- It does not change any exit code's number or meaning. `check::ExitCode::Vacuous` is still
+  `6`; `spec::ExitCode::Absent` is still `6`; `work` and `request` still have no code in that
+  position.
+- It does not make `work` or `request`'s "not applicable" claim mechanically checked. That gap
+  is named above rather than closed, because no principled empty subject exists to drive their
+  `Run` functions against.
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#19
+
+*revision: authored · kind: heading · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#20
+
+*revision: authored · kind: prose · heading: A judging group's no-vacuous-success guarantee is declared once, not argued per module / Controls · hash: sha256:f107da9f6a255a35bdd61d80ac0136b619f5a65c539cd3691e8fafa972a4fd02*
+
+| Alternative | Why not |
+|---|---|
+| move the guard into a `Verdict`/`Judged` type in `nomos-contracts` | fails `OD-CONTRACTS-001`'s admission test — an exit-code-shaped concept is process-local, not something a peer that never compiles this crate needs to agree about |
+| leave the guarantee as two independent doc comments | the defect this record exists to close: the next author reads their own module and never encounters the sibling's argument |
+| a `Group` variant added to `vacuity.rs` with no `Stance_Of` arm | the compiler: `non-exhaustive patterns` at `Stance_Of`'s match |
+| a fifth `main.rs` group dispatched without a `vacuity::NAMES` entry | `main.rs` cannot route to it — `vacuity::Named` returns `None` and the group falls through to `Usage()` |
+| a `Stance::Guarded` claim the real `Run` does not honour | `Test_Check_Should_Refuse_Ok_Over_An_Empty_Tree` / `Test_Spec_Should_Refuse_Ok_Over_A_Record_The_Store_Never_Had` in `vacuity.rs` go red |
+| declare `work` or `request` `Guarded` | no empty subject exists to drive them over, so the declaration would be untested prose wearing a test file's name |
 
 ### docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md#1
 

@@ -3299,14 +3299,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orch-vacuity-home",
-        "acquired_at": 1786988588,
-        "lease_expires_at": 1786999388
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -3320,7 +3316,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "antees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-46ea7616fcd49db8.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-49cb7ec72362c505.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-13899000927e9d7b.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-f165a8e22d2667f4.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-aed9b159df400af8.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-71b266e859c1b18c.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-c896bf45d2e8f92b.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5afe2e89ab691669.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-692706af76ff13ec.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-2e8cb8fb92432b87.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-45bbb040c5e0264c.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1786989438,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f737ecc303d89005d12cdf971cbd5da4c438328f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
