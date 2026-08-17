@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:684963e9c98a4ce37c5a51e990097437147b7f4dd0d040aea80bf5c6b47d8dd5",
-  "inputs_digest": "sha256:61ab03bdc01e9298c5e8326d673d683dff645059304bf7f0ee29075dadecaf73",
+  "content_digest": "sha256:d7c4b2b5afe4d9f519d9a87d5d9cea09200237e7f9ece964bdcef1d25483daba",
+  "inputs_digest": "sha256:bef269d3537c4a21b7690fb35a97eb6473d807b9944bb4f57e0ed4fb9453b28b",
   "sections": [
     [
       "Documents",
-      88
+      89
     ],
     [
       "Sections",
-      810
+      820
     ],
     [
       "Source blocks",
-      3090
+      3121
     ]
   ],
   "inputs": [
@@ -344,6 +344,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored",
       "hash": "sha256:fee950b9db060e8766b37c6077f80933864691179bb39060352ff4526d95a6ed"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored",
+      "hash": "sha256:be88ed64620fcc6a28fa0203aaef4414abe8dce9bea22f70465eac520c923411"
     },
     {
       "content": "documents",
@@ -3444,6 +3449,56 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25",
       "hash": "sha256:26ad90221591c9bac76a1f0c009786d5b9c2ecd30030849de443ab2e13dfd8dc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#1",
+      "hash": "sha256:6df2898393bc5f2e69ddc5205ef05e18f605c38d6a211ff1a3f49ec1f6fee1a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#2",
+      "hash": "sha256:c232a7881934e176830d6f1b372f7c602d84181af1fe452a6d0492e7e2ca1624"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#7",
+      "hash": "sha256:07f32adda33628df12c08bb4207d6c952c9b2e6c272b101b67a1fe1a9ba9000c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#10",
+      "hash": "sha256:742763554a3f3e530c4acb831a4cbf3eebe90c2c6cf81cf2645db43c21d666d8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#14",
+      "hash": "sha256:91350d98f5d625900efbbe64163e271033266155df85d630e8f37948c73501ec"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#17",
+      "hash": "sha256:25044f08bf4caff8aa021cbddb6b6b769deb056d901393ad51183d086aaf1ee9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#21",
+      "hash": "sha256:c1692e1ab6fe4e48a87e0cea9fcab3f3bad569ebe073a7425975bc3dcf4340bf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#23",
+      "hash": "sha256:4ca61b0d685ca90962c4958c84f248ec3768ea63d74ba3f637811a40e1b75424"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#28",
+      "hash": "sha256:d05a8388529987285bbc65a2a204c315934181b9cada2671f383994d2da9612e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#30",
+      "hash": "sha256:f9867c71c8f08d0d0ea3b61f65f900b1df1aa043eae8143227c7521f46d45de8"
     },
     {
       "content": "headings",
@@ -15879,6 +15934,161 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26",
       "hash": "sha256:f9625c1c7810e79bf425364e06ad8b0912edee3978d6de1d4648ac5b452c022e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#1",
+      "hash": "sha256:569177888c13485b7cf90410a49e87ea1ba60d7b48b94d7413e15fd4de952cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#3",
+      "hash": "sha256:00eed397b456c55467b453aee3f5be7b07b6e7e10fcd42a9a75b9eab42aafad3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#4",
+      "hash": "sha256:a893d66bdc7554516fc5fc4d0eaa74539fa4b75358d0a09f0020fb217c8f8035"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#5",
+      "hash": "sha256:500790ff97c2a232727578c4803a30ad8a046a50a2ca1c18126943d8afa2b266"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#6",
+      "hash": "sha256:ce0c47b8b996a0ca0866de0324c5a0818d4667073dc56d7ec551967bd8748ea1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#7",
+      "hash": "sha256:929dea23d718c0fccbce0a64e6b7410339aeda581ab5bc95662c61731d423f2b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#8",
+      "hash": "sha256:9c03d903e058d92098f84e9c741c0114ce6ae259b7f78bc7dd7613080b58739a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#9",
+      "hash": "sha256:0893a9f7382b661f42502ce7ebaecfe2ce3c3aaf7095bf8fa93e2a2dfd7cbbfe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#10",
+      "hash": "sha256:fb75b3959c56cf44f42964f7933ddc2364d90ff3b71f5470415a322a73e022ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#11",
+      "hash": "sha256:ca56a825006d24bd5d3b8b97dfeabefa6536240cc0cfe126c900968de1a69a80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#12",
+      "hash": "sha256:56505ee4df98de4c3f14736c661dead0a8613c24549bf714e7002d8034491037"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#13",
+      "hash": "sha256:a2287f87de6629b7cb998f2115d6338568ba1dd0f835004fc7df19fdfebdcde4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#14",
+      "hash": "sha256:334b1c2c38462aacbec68e7fcebf27ca7a140efe97f77df42a5108e2af9af223"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#15",
+      "hash": "sha256:70f73dc2742f790ff7c3ef0629e8dbdf43ca2fc86d23eb011d9da38e1e2c0bf0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#16",
+      "hash": "sha256:5dd64981cc9ff8d7daa9794d34b77c3d73c6b13b8c5ff7ae0e6d7d14930e5f09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#17",
+      "hash": "sha256:f2204ce369ab155021958c3aa2ea7ff4bde433248c3fab3663e46d4d29caacde"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#18",
+      "hash": "sha256:b0ee636dc90b010e022bc950b07f71b3bb87f9c6387b5c922dc4a9bdfae25502"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#19",
+      "hash": "sha256:ddc8abdf9a6b276328f36d362ce297c946b547fe11932b321d09e249d9a8b19f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#20",
+      "hash": "sha256:8f3a452fc8f808a196d62ab3a0da862be2ae6704c3b2dffa3ba9a7a6caacf68c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#21",
+      "hash": "sha256:527c7cf177701085ea18c0c957f24ff7fc3834514a8c5475cd5e18c0b7cba766"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#22",
+      "hash": "sha256:e5c32300a31062f7bc689c39cc4d603313ca896101b036c5842e18c35531fb3f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#23",
+      "hash": "sha256:8c096e9ff713a2d91679182618fcba53119b00032e6e47e091a14b7e89a7235f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#24",
+      "hash": "sha256:95db5aa5b7daa2c8e0b72bf5ad52e60b3de9921d0b51c0dcfcb54ee86052b9e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#25",
+      "hash": "sha256:2cf183f58f98a82611ca7497dc2df87ad7751430bd83d3266641630e069da793"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#26",
+      "hash": "sha256:61aa7d1ed0fd0a448ee6629318580d78f7016049145f2cd06c7a35aee9e180e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#27",
+      "hash": "sha256:d952cb3a1b8654745e6952617fdef6f35461a0d380ee79e9d3bfd7def4011269"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#28",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#29",
+      "hash": "sha256:a4e97ff257ffc4ae4e274a68aa9ecfc2485eec21fad31cc213007e1a22102e91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#31",
+      "hash": "sha256:6e0906297e4115d1bac2e53d507a52de472df1d6ab097e12251c8fc29334c77e"
     },
     {
       "content": "blocks",
