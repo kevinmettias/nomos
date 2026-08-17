@@ -20,9 +20,9 @@ use std::collections::BTreeSet;
 /// and the intended direction of travel is that it empties — see `OD-LEDGER-007` for what
 /// each entry would take.
 ///
-/// # It is empty, and that is a state rather than an absence
+/// # Two entries closed, and a third arrived
 ///
-/// Both entries came out in `P10-SURFACE-GRAIN`, in the commit that earned each of them.
+/// The first two came out in `P10-SURFACE-GRAIN`, in the commit that earned each of them.
 /// `crates/spec/nomos-spec-store` was a code coupling until `OD-SPEC-007` dissolved it and
 /// a declared-territory coupling for as long as twelve items still reserved the whole
 /// crate to seed one record; `tests/contract` was the same shape one level up, an item
@@ -30,11 +30,25 @@ use std::collections::BTreeSet;
 /// both to the artefact — `records/<ID>.record` and `surface/<crate>.txt` — and the two
 /// tests below are what confirmed the entries were gone rather than merely deleted.
 ///
-/// An empty register does not make this file vacuous. The register is the *declared* half;
-/// [`Test_Every_Universal_Reservation_Should_Be_Declared`] is the derived half, and it is
-/// the one that fails when a third structural serializer arrives. The declaration is what
-/// makes growth a decision, and a decision has to be able to start from nothing.
-const KNOWN_SERIALIZERS: &[(&str, &str)] = &[];
+/// The register emptied and then did not stay empty. `crates/host/nomos-cli` is the third
+/// entry, and `OD-LEDGER-028` is why it is declared rather than narrowed: the two items
+/// forcing it are each deciding something about the crate's own shape, so neither can name
+/// a file inside it without guessing at an implementation it has not chosen. The
+/// declaration is what makes growth a decision either way — narrowing would be a decision
+/// too, made in somebody else's open territory rather than this one.
+const KNOWN_SERIALIZERS: &[(&str, &str)] = &[(
+    "crates/host/nomos-cli",
+    "P10-VACUITY-HOME and P10-SERVICE-SEAM, both open. Each is a whole-crate question by \
+     what it is deciding rather than by how it was scoped: P10-VACUITY-HOME asks where a \
+     guarantee that must hold for every judging command in this crate should live, and \
+     P10-SERVICE-SEAM asks whether the crate's own composition-root shape needs a seam \
+     between choosing a platform, running a verb and rendering its outcome, across all six \
+     of its modules. Neither has chosen an implementation, so neither can name a narrower \
+     file today without guessing at one. OD-LEDGER-028 records why this is declared rather \
+     than narrowed. It comes out the way the two entries above did: when one of the two \
+     reaches Done and the other no longer reserves the whole crate, or when a third open \
+     item shows the same forcing and the entry needs to name three rather than two.",
+)];
 
 /// The paths the register declares, without what forces each of them.
 fn Declared() -> Vec<&'static str>

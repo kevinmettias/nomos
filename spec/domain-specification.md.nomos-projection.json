@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3a54b7b449c7fee3f3519e4a8cef4d31658f1ba049919308ff47af27e1f40d2a",
-  "inputs_digest": "sha256:fff842a92d6ae17fa3b6a3d4f8eb965354536bf5917aafc546a48f673ed0b3b9",
+  "content_digest": "sha256:3584bf3c6eb14a0b3b21dc047ea432c65d3b731fbabc8454762f5240a3f02f79",
+  "inputs_digest": "sha256:18598a8c3e0393d3b49543fcfd366c98dddd1bf9148872bb1ebe12c3f5e8808a",
   "sections": [
     [
       "Documents",
-      106
+      107
     ],
     [
       "Sections",
-      968
+      982
     ],
     [
       "Source blocks",
-      3602
+      3638
     ]
   ],
   "inputs": [
@@ -494,6 +494,11 @@
       "content": "documents",
       "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored",
       "hash": "sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md@authored",
+      "hash": "sha256:9a0f5a872ff7f769ee63d68312e1af6fdbfbf7c6e18e69652864c6f030e15ffa"
     },
     {
       "content": "documents",
@@ -4889,6 +4894,76 @@
       "content": "headings",
       "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30",
       "hash": "sha256:f7bf589439e23ea627c2cb97f16d79eb1976fbd5afad001922fec13c3b9fbe1d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#1",
+      "hash": "sha256:9a9534979917ec28c2ab1ce0fc4f7545d6090abcdddd885a2b329d87aef868a9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#2",
+      "hash": "sha256:98c8276ca98484b97cdd89b5349fc72a346ab9405731d10d4a79a78aab0053f7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#5",
+      "hash": "sha256:85e26ce40265cc4e87ff961e77ffa18d8a957ffd35455fef430bb1385f8fdc6e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#7",
+      "hash": "sha256:014cb11241b63539c5af8b89f4cc58442a22c2636f7152f75b628990515bd815"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#8",
+      "hash": "sha256:c061c4258e630a90c4ac598b325065cf543a5a5e95b35e78d327cfd1e51af5dd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#11",
+      "hash": "sha256:c4aa7ef49cb5d096b1ba81f304b261641c9a35120df69335dfe71c4cab8429b6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#13",
+      "hash": "sha256:6eb857d77cf9c93e66340a770c9dad7bb6446e03a3c8107c926ba2ace04975d5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#17",
+      "hash": "sha256:35965cd7eb503b3f2fe49fb55598706fd3a71a60a928a3a934308c62b8098466"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#21",
+      "hash": "sha256:6484b9ecfba645afe53b9b9adaece48006d9e3ca484198413715fec32cc581c2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#24",
+      "hash": "sha256:3eaf4d4e0711a2fd8d81627fb169ae33ab8566b86d1cbdb3486c43787f20ae76"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#26",
+      "hash": "sha256:0d16d0b2513986d579baf1ac4c23393594eae8a1550f700285cb184893cbd9ba"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#28",
+      "hash": "sha256:e782d1ef50d168727f1b40ec72ec9f6aeae13a423b6e106b8b45b821d1ed38cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#33",
+      "hash": "sha256:4dc4b7c1572e2a22b0f4c5446d15d7a5cd920875c67406424cedc5cd94ed7a14"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#35",
+      "hash": "sha256:639fc62e0a18d263187c7768d2c8018362ff2d22fe6b34b8d71d6f3a4f8ba5e3"
     },
     {
       "content": "headings",
@@ -21789,6 +21864,186 @@
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#31",
       "hash": "sha256:4d14b23d154d4ff70ca5f31ab6f698d8819553c9f33a270c1e7e9ed2b5d4ec9a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#1",
+      "hash": "sha256:0c984ebd76509bc6b59c5ad13ba448918a4ebc456892235b6c54c1d371156e35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#3",
+      "hash": "sha256:7ec8e9916d1f531c823158f53b861b3e10714ef63113865fb485efb572a5de91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#4",
+      "hash": "sha256:71bda1eb0eea012d06607069925bd307f2f3ca3113a9cca1abdd130c41c55cb0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#6",
+      "hash": "sha256:08edd251260e6f5b9e51687fcfa52b90a054217f182d63597ca1f7fc03b4dfb1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#7",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#8",
+      "hash": "sha256:e4f4d80087e006eac3b898078f5b12ce369beb28c022f34a82e5460707db447a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#9",
+      "hash": "sha256:26adc908b9a9b74b77c04324c6eea353a31cb0b6a8239e6111290d5483362eef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#10",
+      "hash": "sha256:0092a16418b6f486e2e04bc41adf22c7c1af38cf3e4ab6efa82171450de143ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#11",
+      "hash": "sha256:60e8fcdf825ad250414f8055094fd0886d27bfb08befb2ef9592503bbb3066b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#12",
+      "hash": "sha256:c4c6ca8af40874de07d8cb5e332de993c8862dd3663ed107a861d47dd0885034"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#13",
+      "hash": "sha256:8c5ec69122fc425c2154d751f3c08dd323634ba07dcbe459c08656b2f2daeb7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#14",
+      "hash": "sha256:4604ca2e69e6f4a8c6505eb1e47cdbec5201ab119164505de4928da5b188e532"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#15",
+      "hash": "sha256:9fff7240590c91423919c93e2adf4652727dfe459cf988526fb46289bad40c2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#16",
+      "hash": "sha256:3fdb3eb7f0736b8f8ea7bb68ac04a3842c1dee0214e686640cb6c0ca2485ca29"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#17",
+      "hash": "sha256:0f8be2db93ec8413b5875f55dc86aec2804b1bc3d28a76812fca7d0595ebfab2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#18",
+      "hash": "sha256:35dfb77382298b6e819bdbc350530d2663dc735448b442c9b67a650bafcbd533"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#19",
+      "hash": "sha256:e47bb2002f127da52237c70dd71abcfa1db68955d3f6cdfa3c3559eb418353fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#20",
+      "hash": "sha256:f8c6fb97c0fde913a167f48f87b352532bc39ae22714e66ea8500e34257ebc7d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#21",
+      "hash": "sha256:4c70835bbe8c3dcbf473ab414032edb8550569e57d117f1e56da171ef8f01d4a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#22",
+      "hash": "sha256:f1ef349c1fa9f6ae37dc922774caa2507d0a3924c931c4e1f85d265f5507107e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#23",
+      "hash": "sha256:0b9e81b2b77ae09c7d8f1dc61d57bc087aaa1a09000da540f3afeb40e710f0bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#24",
+      "hash": "sha256:9b187da2c777a42d749ed6dfeb51ed863d8d38ad225c53d3545200a9ff22a154"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#25",
+      "hash": "sha256:1811c14bdd374606b7abe0130543a73f3f929eb41e4ed4db0ac7980adf20bfba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#26",
+      "hash": "sha256:99b8125bcff2357af6ec3116eae9de27f51ecaa6b1bb737677136c1130e84eb3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#27",
+      "hash": "sha256:29d048ace27bb64018b7c658c07ea150ab0e5fd4bab43c8e0d411c5705354e72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#28",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#29",
+      "hash": "sha256:163d9f67b374cd736fc6ac0552c7020e9be26614551db1eb2f24c999a4d453b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#30",
+      "hash": "sha256:f22fba21333af7902b25b355367e7d9b6e67350f70e10524ebe55fddcea16594"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#31",
+      "hash": "sha256:1f3ddf02da3ec50e6da463907decb9387f841bdce760c2b6334af0c162ecb534"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#32",
+      "hash": "sha256:29a1d1b7c51e96f8de40e1a2f0356511d7a098c89e4df7f88767a7bc8f5bcbbb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#33",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#34",
+      "hash": "sha256:a9880763be9061ee6ad965b1c34fa478adfc32f89958d8dd407187b99b71022b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#35",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#36",
+      "hash": "sha256:37fd442a8eedf54d8c51e2451291603a294c81dd4ec95fe17e94b92cea26200e"
     },
     {
       "content": "blocks",

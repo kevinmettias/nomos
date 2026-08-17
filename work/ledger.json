@@ -11026,14 +11026,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-LINT-AUTHORITY-3, same subject, territory and completed content, predicate rescoped away from the whole nomos-ledger crate to the two specific test targets this item's done_when names."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orch-lint-authority",
-        "acquired_at": 1786936788,
-        "lease_expires_at": 1786947588
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -11051,9 +11051,24 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
-      "displaced": [],
-      "declined": null
+      "abandoned": [
+        {
+          "holder": "claude-orch-lint-authority-s2",
+          "reason": "Content and territory are right and clippy is clean, but the predicate (cargo test -p nomos-cli -p nomos-ledger -p nomos-spec-store -p nomos-contract-tests) is authored too broad, inherited unchanged through this item's prior re-authorings: it also pulls in crates/substrate/nomos-ledger/tests/records_do_not_serialize/snapshot_grain.rs's Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once, a separate pre-existing defect (no two currently-open record writers with an empty depends_on independently widen two different crates' public APIs) confirmed unrelated to this item and unreachable from its territory. Re-authoring as P11-LINT-AUTHORITY-3 with the predicate scoped to the two test targets this item's own done_when names: nomos-cli's gate_step and nomos-ledger's gate_covers_finish.",
+          "abandoned_at": 1786984376
+        }
+      ],
+      "displaced": [
+        {
+          "holder": "claude-orch-lint-authority",
+          "acquired_at": 1786936788,
+          "lease_expires_at": 1786947588
+        }
+      ],
+      "declined": {
+        "holder": "claude-orch-lint-authority-s2",
+        "declined_at": 1786984376
+      }
     },
     {
       "id": "P11-DISPATCH-SPLIT-2",
@@ -11086,12 +11101,23 @@
           "-p",
           "nomos-cli",
           "-p",
-          "nomos-contract-tests"
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
         ],
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-orch-dispatch-split",
+          "reason": "Implementation, tests, record and rendered projections complete and verified by hand; releasing the claim to decline and reissue as P11-DISPATCH-SPLIT-3 with corrected territory (work.rs named the dispatcher, not crates/host/nomos-cli/src/work/report.rs where the CLI word-derivation actually lives) and a predicate that --skips the two records_do_not_serialize::snapshot_grain tests asserting live-board composition rather than anything this item reaches -- same fix P10-DECLINED-DEPENDENCY-4 applied to the identical hazard one commit prior.",
+          "abandoned_at": 1786984452
+        }
+      ],
       "displaced": [],
       "declined": null
     },
@@ -11233,12 +11259,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P10-SUBMISSION-LAYOUT"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orch-edge-constraints",
+        "acquired_at": 1786982866,
+        "lease_expires_at": 1786993666
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -11334,6 +11364,229 @@
             "--",
             "-D",
             "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-CRATE-SERIALIZER",
+      "title": "A whole crate is reserved by every open record writer, and the register that would say so is empty",
+      "why": "Test_Every_Universal_Reservation_Should_Be_Declared (crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs) currently fails: every open record-writing item's territory collides with crates/host/nomos-cli, and KNOWN_SERIALIZERS is empty. Confirmed against a fully committed HEAD with no uncommitted tree changes in the picture, so this is not caused by any single item's WIP -- P11-LINT-AUTHORITY-2 hit it finishing an unrelated gate change, and P12-NAMED-LITERALS's abandon note independently reports the same three tests red roughly twelve hours earlier, at the time attributing it to a different session's uncommitted work rather than to the board itself.\n\nThe forcing paths are P10-VACUITY-HOME and P10-SERVICE-SEAM, both open and both reserving crates/host/nomos-cli whole. Neither looks like the accident OD-LEDGER-011 closed two of. P10-VACUITY-HOME is asking where a guarantee that must hold for every judging command in this crate should live; P10-SERVICE-SEAM is asking whether the crate itself needs a seam between choosing a platform, running a verb and rendering an outcome, across all six of its modules. Both questions are about the crate's own shape and neither has chosen an implementation, so neither can name a narrower file today without guessing. OD-LEDGER-007 already refused to manufacture a pair by narrowing somebody else's open territory for the same reason, for the two entries that register closed.\n\nThat leaves the register's other path: name the coupling with what forces it, the way OD-LEDGER-007 did, rather than read it as an authoring accident and try to fix two items that are not this item's territory.",
+      "done_when": "KNOWN_SERIALIZERS in crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs carries an entry for crates/host/nomos-cli naming both P10-VACUITY-HOME and P10-SERVICE-SEAM and why each reserves the whole crate rather than a file in it, in the (&str, &str) shape the two prior entries used. OD-LEDGER-028 records the decision on the same grounds OD-LEDGER-007 recorded the first two: why declaring rather than narrowing, what narrowing would have cost, and what would make the entry stale -- one of the two items reaching Done, or losing the whole-crate shape of its own question. Test_Every_Universal_Reservation_Should_Be_Declared and Test_Every_Declared_Serializer_Should_Still_Serialize both pass over the board as it stands when this item finishes. Not closed by declaring the coupling without naming what forces it -- an entry with no reason is the same authoring accident it would be mistaken for, the failure mode OD-LEDGER-007's own register is written in prose specifically to avoid.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "docs/records/OD-LEDGER-028",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-028.record"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P11-CRATE-SERIALIZER-2, same subject and territory, with the predicate scoped to records_do_not_serialize::serializers rather than the whole nomos-ledger crate, which also carries an unrelated pre-existing failure in snapshot_grain.rs this item's territory cannot reach."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-orch-lint-authority-s2",
+          "reason": "Territory and done_when are right, but the predicate (cargo test -p nomos-ledger) is authored too broad: it also pulls in tests/records_do_not_serialize/snapshot_grain.rs, which asserts a disjoint pair of items independently widening two different crates' public APIs currently exists on the board. That is a separate, pre-existing defect (confirmed on clean HEAD before this item existed) unrelated to this item's territory (serializers.rs only) and this item cannot fix it. Re-authoring as P11-CRATE-SERIALIZER-2 with a predicate scoped to the test module this item's done_when actually governs.",
+          "abandoned_at": 1786983735
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-orch-lint-authority-s2",
+        "declined_at": 1786983740
+      }
+    },
+    {
+      "id": "P11-CRATE-SERIALIZER-2",
+      "title": "A whole crate is reserved by every open record writer, and the register that would say so is empty",
+      "why": "This is P11-CRATE-SERIALIZER with the predicate a prior claimant's measurement found. The defect is unchanged.\n\nTest_Every_Universal_Reservation_Should_Be_Declared (crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs) currently fails: every open record-writing item's territory collides with crates/host/nomos-cli, and KNOWN_SERIALIZERS is empty. Confirmed against a fully committed HEAD with no uncommitted tree changes in the picture, so this is not caused by any single item's WIP -- P11-LINT-AUTHORITY-2 hit it finishing an unrelated gate change, and P12-NAMED-LITERALS's abandon note independently reports the same three tests red roughly twelve hours earlier, at the time attributing it to a different session's uncommitted work rather than to the board itself.\n\nThe forcing paths are P10-VACUITY-HOME and P10-SERVICE-SEAM, both open and both reserving crates/host/nomos-cli whole. Neither looks like the accident OD-LEDGER-011 closed two of. P10-VACUITY-HOME is asking where a guarantee that must hold for every judging command in this crate should live; P10-SERVICE-SEAM is asking whether the crate itself needs a seam between choosing a platform, running a verb and rendering an outcome, across all six of its modules. Both questions are about the crate's own shape and neither has chosen an implementation, so neither can name a narrower file today without guessing. OD-LEDGER-007 already refused to manufacture a pair by narrowing somebody else's open territory for the same reason, for the two entries that register closed.\n\nThat leaves the register's other path: name the coupling with what forces it, the way OD-LEDGER-007 did, rather than read it as an authoring accident and try to fix two items that are not this item's territory.\n\nWhat changed since the item was first authored: a claimant (claude-orch-lint-authority-s2) measured that the item's predicate -- cargo test -p nomos-ledger -p nomos-spec-store -p nomos-contract-tests -- cannot pass within this item's own territory. crates/substrate/nomos-ledger/tests/records_do_not_serialize/snapshot_grain.rs's Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once separately fails, for a separate and also pre-existing reason: no two currently-open record writers with an empty depends_on independently widen two different crates' public APIs without colliding elsewhere. That is not this item's subject and not reachable from this item's territory (serializers.rs alone), so the predicate is narrowed to the module this item's done_when actually governs. The same claimant also drafted the OD-LEDGER-028 record and its registration to disk while diagnosing the predicate, before discovering the predicate itself needed re-authoring; both files are amended by, not newly written by, this re-authoring.",
+      "done_when": "KNOWN_SERIALIZERS in crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs carries an entry for crates/host/nomos-cli naming both P10-VACUITY-HOME and P10-SERVICE-SEAM and why each reserves the whole crate rather than a file in it, in the (&str, &str) shape the two prior entries used. OD-LEDGER-028 records the decision on the same grounds OD-LEDGER-007 recorded the first two: why declaring rather than narrowing, what narrowing would have cost, and what would make the entry stale -- one of the two items reaching Done, or losing the whole-crate shape of its own question. Test_Every_Universal_Reservation_Should_Be_Declared and Test_Every_Declared_Serializer_Should_Still_Serialize both pass over the board as it stands when this item finishes. Not closed by declaring the coupling without naming what forces it -- an entry with no reason is the same authoring accident it would be mistaken for, the failure mode OD-LEDGER-007's own register is written in prose specifically to avoid.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Authoring error: --amends reserves the docs/records file but not its spec-store registration, and this item also writes crates/spec/nomos-spec-store/records/OD-LEDGER-028.record. Re-authoring as P11-CRATE-SERIALIZER-3 with that path added to territory."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "serializers::"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-orch-lint-authority-s2",
+        "declined_at": 1786983825
+      }
+    },
+    {
+      "id": "P11-CRATE-SERIALIZER-3",
+      "title": "A whole crate is reserved by every open record writer, and the register that would say so is empty",
+      "why": "This is P11-CRATE-SERIALIZER-2 with the registration path a prior claimant's authoring missed. The defect is unchanged.\n\nTest_Every_Universal_Reservation_Should_Be_Declared (crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs) currently fails: every open record-writing item's territory collides with crates/host/nomos-cli, and KNOWN_SERIALIZERS is empty. Confirmed against a fully committed HEAD with no uncommitted tree changes in the picture, so this is not caused by any single item's WIP -- P11-LINT-AUTHORITY-2 hit it finishing an unrelated gate change, and P12-NAMED-LITERALS's abandon note independently reports the same three tests red roughly twelve hours earlier, at the time attributing it to a different session's uncommitted work rather than to the board itself.\n\nThe forcing paths are P10-VACUITY-HOME and P10-SERVICE-SEAM, both open and both reserving crates/host/nomos-cli whole. Neither looks like the accident OD-LEDGER-011 closed two of. P10-VACUITY-HOME is asking where a guarantee that must hold for every judging command in this crate should live; P10-SERVICE-SEAM is asking whether the crate itself needs a seam between choosing a platform, running a verb and rendering an outcome, across all six of its modules. Both questions are about the crate's own shape and neither has chosen an implementation, so neither can name a narrower file today without guessing. OD-LEDGER-007 already refused to manufacture a pair by narrowing somebody else's open territory for the same reason, for the two entries that register closed.\n\nThat leaves the register's other path: name the coupling with what forces it, the way OD-LEDGER-007 did, rather than read it as an authoring accident and try to fix two items that are not this item's territory.\n\nRe-authored twice from P11-CRATE-SERIALIZER. First to narrow the predicate away from crates/substrate/nomos-ledger/tests/records_do_not_serialize/snapshot_grain.rs's Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once, a separate and also pre-existing failure -- no two currently-open record writers with an empty depends_on independently widen two different crates' public APIs without colliding elsewhere -- that this item's territory (serializers.rs) cannot reach. Second because --amends reserves only the docs/records file it names, not the spec-store registration crates/spec/nomos-spec-store/records/OD-LEDGER-028.record also needs, which OD-LEDGER-016 makes the other half of one subject with the record it names. All three files -- serializers.rs, the record and its registration -- were already drafted to disk while diagnosing the first predicate; this re-authoring amends and reserves them rather than writing them new.",
+      "done_when": "KNOWN_SERIALIZERS in crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs carries an entry for crates/host/nomos-cli naming both P10-VACUITY-HOME and P10-SERVICE-SEAM and why each reserves the whole crate rather than a file in it, in the (&str, &str) shape the two prior entries used. OD-LEDGER-028 records the decision on the same grounds OD-LEDGER-007 recorded the first two: why declaring rather than narrowing, what narrowing would have cost, and what would make the entry stale -- one of the two items reaching Done, or losing the whole-crate shape of its own question. Test_Every_Universal_Reservation_Should_Be_Declared and Test_Every_Declared_Serializer_Should_Still_Serialize both pass over the board as it stands when this item finishes. Not closed by declaring the coupling without naming what forces it -- an entry with no reason is the same authoring accident it would be mistaken for, the failure mode OD-LEDGER-007's own register is written in prose specifically to avoid.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-028.record",
+          "docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "serializers::"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "serializers::"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest serializers::Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest serializers::Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.02s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n",
+        "verified_at": 1786984232,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-LINT-AUTHORITY-3",
+      "title": "The gate's -D warnings and the workspace lint table are two authorities for one severity policy",
+      "why": "This is P11-LINT-AUTHORITY-2 with the predicate a prior claimant's measurement found. The defect is unchanged.\n\nCargo.toml lines 111 to 133 declare the workspace lint policy, mirrored from XVPE. clippy::all and clippy::pedantic sit at warn with priority -1; float_cmp, unwrap_used, arithmetic_side_effects and indexing_slicing sit at deny. The severities are deliberate and the file says why: the four denials are there because a panic on the analysis path is a determinism defect rather than a bug, since a replay must reach the same panic at the same step.\n\n.github/workflows/gate.yml then runs cargo clippy --workspace --all-targets -- -D warnings, which promotes every one of those warnings to an error. So the distinction the table draws between warn and deny is real on a contributor's machine and erased in CI, and the effective policy is spelled in two files that disagree. An author who reads Cargo.toml to learn what is enforced learns something false, and the stricter of the two authorities is the one that is not written down as policy.\n\nThis is the shape OD-LEDGER-003 refuses for the lint command itself. That record derives the gate's argv from the workflow rather than retyping it into a crate, because a copy is a second source of truth that goes stale the day the workflow changes and two guards for one rule is how they come to disagree. The severities the argv carries are the same rule and got the opposite treatment.\n\nWhich way it collapses is a real choice and it is not behaviour-preserving in either direction. Dropping -D warnings makes CI accept pedantic findings it rejects today. Moving the strictness into [workspace.lints] makes every local cargo check deny what only CI denies now, which changes every contributor's inner loop and changes work finish too, because the derived argv runs on the author's machine before the item is recorded done.\n\nWhat changed across this item's re-authorings: first, a claimant (claude-lint-authority-s2) measured that the original four-path territory (Cargo.toml, gate.yml, OD-GATE-007, its registration) cannot satisfy done_when, because two tests assert -D specifically in the derived Lint argv -- nomos-cli's gate_step.rs and nomos-ledger's gate_covers_finish.rs -- both inside this item's own verification predicate, and README.md line 210 restates the same command as a third authority. Re-authored with all three added to territory. Second, a claimant (claude-orch-lint-authority-s2) measured that the predicate inherited unchanged through that re-authoring -- cargo test -p nomos-cli -p nomos-ledger -p nomos-spec-store -p nomos-contract-tests -- also pulls in crates/substrate/nomos-ledger/tests/records_do_not_serialize/snapshot_grain.rs's Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once, a separate pre-existing defect (confirmed on a fully committed, otherwise-clean tree: no two currently-open record writers with an empty depends_on independently widen two different crates' public APIs without colliding elsewhere) that this item's territory cannot reach. The predicate is rescoped to the two test targets done_when actually names: nomos-cli's gate_step and nomos-ledger's gate_covers_finish -- cargo clippy --workspace --all-targets itself is unaffected, since work finish already runs the gate's own lint step ahead of any item's predicate.",
+      "done_when": "One authority states the severity of every lint this workspace enforces, and the other place stops restating it. Which of the two survives is the decision, recorded on stated grounds rather than settled by whichever is cheaper to write, and the record says what the choice costs the side that loses: either CI stops rejecting something it rejects today, or every local cargo check starts rejecting something it accepts today. A record that only says the duplication is gone has not answered this. nomos_ledger::Derive_Step still yields a runnable argv from the step named Lint; it refuses any run: line containing a shell metacharacter, so the surviving line stays one bare command, and Test_The_Derived_Lint_Step_Should_Still_Be_Clippy (gate_step.rs) and Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step (gate_covers_finish.rs) are updated to assert the collapsed policy rather than -D warnings specifically, and still pass. README.md line 210 stops restating the gate's clippy command, routing to the one surviving authority instead. The workspace is measured under the collapsed policy before the item is finished rather than after: if the new arrangement reddens exactly what -D warnings was already failing, that is the same set and costs nothing; if it reddens more, the item says how many and where rather than discovering it on somebody else's claim. Not closed by deleting -D warnings and saying the table now governs, unless a clippy run under the new arrangement is shown to reject what the old one rejected.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          ".github/workflows/gate.yml",
+          "crates/host/nomos-cli/tests/gate_step.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish.rs",
+          "README.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-007.record",
+          "docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "gate_covers_finish"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_step",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "gate_covers_finish"
+        ],
+        "exit_code": 0,
+        "output_tail": "t_Step ... ok\ntest excuses::Test_No_Step_In_The_Gate_Should_Excuse_Itself ... ok\ntest pinning::Test_The_Supply_Chain_Tool_Should_Be_Installed_At_A_Chosen_Version ... ok\ntest pinning::Test_The_Gate_Should_Declare_The_Token_It_Runs_With ... ok\ntest rules_step::Test_This_Repository_Gate_Should_Run_The_Rules ... ok\ntest vacuity::Test_The_Workflow_Should_Not_Appear_Empty ... ok\ntest pinning::Test_Every_Action_Should_Be_Pinned_To_A_Commit ... ok\ntest rules_step::Test_The_Rules_Step_Should_Judge_The_Whole_Workspace ... ok\ntest rules_step::Test_A_Scripted_Rules_Step_Should_Not_Satisfy_That_Assertion ... ok\ntest excuses::Test_The_Excuse_Check_Should_Reject_An_Excused_Step ... ok\ntest pinning::Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 9 tests\ntest repository_gate::Test_A_Predicate_Should_Carry_A_Timeout ... ok\ntest repository_gate::Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step ... ok\ntest unknown::Test_A_Missing_Workflow_Should_Refuse_Rather_Than_Finish_On_The_Predicate_Alone ... ok\ntest unknown::Test_A_Scripted_Gate_Step_Should_Refuse_Rather_Than_Be_Guessed_At ... ok\ntest ordering::Test_The_Gate_Should_Run_Before_The_Predicate_And_Short_Circuit ... ok\ntest red_gate::Test_A_Passing_Predicate_Should_Not_Finish_An_Item_While_The_Gate_Is_Red ... ok\ntest ordering::Test_A_Green_Gate_Should_Still_Run_The_Predicate_Second ... ok\ntest derivation::Test_Changing_The_Workflow_Should_Change_What_Finish_Runs ... ok\ntest red_gate::Test_A_Green_Gate_And_A_Passing_Predicate_Should_Finish_The_Item ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.23s\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-aed9b159df400af8.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-ae7829de84097dd3.exe)\n",
+        "verified_at": 1786984424,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
           ],
           "exit_code": 0
         }

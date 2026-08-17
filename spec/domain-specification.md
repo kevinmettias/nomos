@@ -105,6 +105,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md@authored | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md | authored | 36 | 10 | sha256:8c3810110e3cfcd4a0ad8e6ade3171c5be53047c3af3fd5bd314060db7d07ee6 |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md | authored | 81 | 16 | sha256:19e7d0ce84e849c9187904e55e68435fdfd3ab83704119b7660f5bd71ffafdf0 |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md | authored | 31 | 11 | sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md@authored | docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md | authored | 36 | 14 | sha256:9a0f5a872ff7f769ee63d68312e1af6fdbfbf7c6e18e69652864c6f030e15ffa |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
@@ -989,6 +990,20 @@ profile: domain-specification
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#26 | authored | 2 | What This Does Not Do |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#28 | authored | 2 | Controls |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30 | authored | 2 | Status |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#1 | authored | 1 | A declared constraint says which node kinds a relation type joins, and how many a node may carry |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#2 | authored | 2 | Question |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#7 | authored | 2 | The Decision |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#8 | authored | 3 | 1. A relation type declares domain, range and cardinality together, or it is refused |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#11 | authored | 3 | 2. Domain, range and cardinality are per named direction, not per pair |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#13 | authored | 3 | 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#17 | authored | 3 | 4. The five seed types declare real constraints, not placeholders |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#21 | authored | 3 | 5. Domain and range travel as JSON columns, not as a second table |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#24 | authored | 3 | 6. The bundle carries the constraint, not just the row |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#26 | authored | 2 | What Happens When `ADR-ARTIFACT-GRAPH-002` Lands |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#28 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#33 | authored | 2 | Controls |
+| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#35 | authored | 2 | Status |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#1 | authored | 1 | A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#5 | authored | 2 | Why This Record Is Not `OD-SPEC-011` |
@@ -29487,6 +29502,341 @@ it says one record with one bad term must not read as eighteen failures.
 *revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Status · hash: sha256:4d14b23d154d4ff70ca5f31ab6f698d8819553c9f33a270c1e7e9ed2b5d4ec9a*
 
 Closed by `P10-VOCABULARY-REFUSAL`.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#1
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry · hash: sha256:0c984ebd76509bc6b59c5ad13ba448918a4ebc456892235b6c54c1d371156e35*
+
+# A declared constraint says which node kinds a relation type joins, and how many a node may carry
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#2
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#3
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Question · hash: sha256:7ec8e9916d1f531c823158f53b861b3e10714ef63113865fb485efb572a5de91*
+
+`relation_types` carried a name, a tier and the name of its inverse, and nothing else.
+`relations` enforced only that both endpoints already existed as nodes and that the triple
+was unique. `OD-SPEC-010` rule 4 requires that an `implements` edge resolve to an accepted
+design and an `answers` edge to an accepted request, and its own text says why that rule
+cannot be the whole answer: it constrains the submission that writes the edge, not the
+graph the edge lands in. Nothing stopped an `implements` edge joining a suite to a table
+row, because nothing in the schema said which kinds of node `implements` was ever about.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#4
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Question · hash: sha256:71bda1eb0eea012d06607069925bd307f2f3ca3113a9cca1abdd130c41c55cb0*
+
+`P10-EDGE-CONSTRAINTS`, twice re-authored, named the defect and stalled on what depended on
+it. `P10-SUBMISSION-LAYOUT` landing closed that dependency; this record is
+`P10-EDGE-CONSTRAINTS-2` closed.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#5
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#6
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Measured · hash: sha256:08edd251260e6f5b9e51687fcfa52b90a054217f182d63597ca1f7fc03b4dfb1*
+
+The seeded vocabulary is nine rows — five concepts, four of them paired with an inverse:
+`supersedes`/`superseded_by`, `affects`/`affected_by`, `relates-to` (its own inverse),
+`answers`/`answered_by`, `implements`/`implemented_by`. Every governing record this build
+seeds declares `type: decision` or `type: architecture` in its front matter and nothing
+else — a query over the seeded corpus found no third value. The busiest node's `relates-to`
+count, summed across both directions the self-paired type writes, was 21.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#7
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#8
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 1. A relation type declares domain, range and cardinality together, or it is refused · hash: sha256:e4f4d80087e006eac3b898078f5b12ce369beb28c022f34a82e5460707db447a*
+
+### 1. A relation type declares domain, range and cardinality together, or it is refused
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#9
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 1. A relation type declares domain, range and cardinality together, or it is refused · hash: sha256:26adc908b9a9b74b77c04324c6eea353a31cb0b6a8239e6111290d5483362eef*
+
+`SpecificationStore::Put_Relation_Type` now takes `domain: &[&str]`, `range: &[&str]` and
+`max_per_node: u32` as required arguments beside the name and tier it always took. An empty
+domain, an empty range or a zero cardinality is `StoreError::UnconstrainedRelationType`,
+raised before anything is written. A relation type that admits everything is not a
+constraint, so a caller that declares nothing is refused at registration rather than
+handed a row that would go on admitting everything downstream — the shape `OD-SPEC-011`
+already used for an unknown term, applied to an unconstrained one.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#10
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 1. A relation type declares domain, range and cardinality together, or it is refused · hash: sha256:0092a16418b6f486e2e04bc41adf22c7c1af38cf3e4ab6efa82171450de143ae*
+
+Domain and range are nullable in neither direction: a type joins a *set* of node kinds at
+each end, which is why they are declared as lists rather than as two more single-valued
+columns. `relations` stays a graph between kinds, not a graph between exact node identities
+— `answers` admits every `design-spec`, not one named design.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#11
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 2. Domain, range and cardinality are per named direction, not per pair · hash: sha256:60e8fcdf825ad250414f8055094fd0886d27bfb08befb2ef9592503bbb3066b6*
+
+### 2. Domain, range and cardinality are per named direction, not per pair
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#12
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 2. Domain, range and cardinality are per named direction, not per pair · hash: sha256:c4c6ca8af40874de07d8cb5e332de993c8862dd3663ed107a861d47dd0885034*
+
+`answers` and `answered_by` are two rows in `relation_types`, each with its own domain,
+range and cardinality, rather than one constraint read backwards. They are not
+symmetric — `answers` runs from a `design-spec` to the `feature-request` it answers, and
+`answered_by` runs the other way — so a single shared declaration would have to pick a
+direction and silently apply it to both. Stating each direction on its own row is the same
+choice `relation_types.inverse_of` already made for the vocabulary itself: two rows, paired,
+rather than one row asked to mean two things depending on which way it is read.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#13
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:8c5ec69122fc425c2154d751f3c08dd323634ba07dcbe459c08656b2f2daeb7b*
+
+### 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#14
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:4604ca2e69e6f4a8c6505eb1e47cdbec5201ab119164505de4928da5b188e532*
+
+`Write_Relation` resolves both endpoints, looks up the relation type's declared constraint,
+and refuses before inserting if an endpoint's kind is not admitted at its role or if the new
+edge would push the writing node's count of that type past its cap. Both refusals —
+[`StoreError::RelationEndpoint`] and [`StoreError::RelationCardinality`] — name the relation
+type, the endpoint or node involved, what it is, and what would have satisfied the check:
+`RelationEndpoint` carries the admitted kinds, `RelationCardinality` carries the declared
+cap.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#15
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:9fff7240590c91423919c93e2adf4652727dfe459cf988526fb46289bad40c2a*
+
+The one exemption is deliberate: an endpoint minted by `Reference_Node` (`nodes.authority =
+EXTERNAL`) carries the sentinel kind `unknown` because nothing has ingested it yet, and
+`unknown` is not a fact about the node — it is the absence of one. Checking a placeholder's
+kind against a declared domain or range would be checking a fact that does not exist yet,
+and admitting the sentinel into every type's domain and range as if it were a real kind
+would have made the constraint report success for a question it never actually asked. So
+the check on that endpoint is deferred, not weakened: `Seed_Governing_Records`'s own
+forward-reference mechanism (`SeedReport.references`, and `OD-SPEC-011`'s reporting of it)
+still marks the placeholder visibly, and a later commit that resolves it writes the real
+node and the real kind then arrives for the *next* edge that endpoint takes part in. The
+cardinality check is not exempted the same way, because it counts edges leaving the real
+`from` endpoint — which, by the time an edge can be written at all, already resolved to a
+concrete row — rather than judging the placeholder's kind.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#16
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:3fdb3eb7f0736b8f8ea7bb68ac04a3842c1dee0214e686640cb6c0ca2485ca29*
+
+An edge to an identifier no node holds at all still writes nothing silently, exactly as
+before this record: that contract belongs to `OD-SPEC-011` and the sibling-suite tests that
+depend on it, and this record does not touch it. Re-inserting an edge that already exists
+does not count a second time against the cap, the same idempotence `INSERT OR IGNORE`
+already gives every other edge in this store.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#17
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:0f8be2db93ec8413b5875f55dc86aec2804b1bc3d28a76812fca7d0595ebfab2*
+
+### 4. The five seed types declare real constraints, not placeholders
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#18
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:35dfb77382298b6e819bdbc350530d2663dc735448b442c9b67a650bafcbd533*
+
+| type | domain | range | max per node |
+|---|---|---|---|
+| `supersedes` / `superseded_by` | decision, architecture | decision, architecture | 16 |
+| `affects` / `affected_by` | decision, architecture | decision, architecture | 64 |
+| `relates-to` | decision, architecture | decision, architecture | 128 |
+| `answers` | design-spec | feature-request | 8 |
+| `answered_by` | feature-request | design-spec | 8 |
+| `implements` | feature-result | design-spec | 8 |
+| `implemented_by` | design-spec | feature-result | 8 |
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#19
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:e47bb2002f127da52237c70dd71abcfa1db68955d3f6cdfa3c3559eb418353fa*
+
+The record kinds (`decision`, `architecture`) are the two values this build's own governing
+records actually carry, not an invented wider set — the same restraint `OD-SPEC-011` already
+applied to the vocabulary itself applies here to what each term admits. The lifecycle
+kinds (`design-spec`, `feature-request`, `feature-result`) are `SubmissionKind`'s three
+labels, and the domain/range pairing on `answers`/`implements` is `OD-SPEC-010` rule 4's own
+statement of what those edges must resolve to — read here as a graph constraint rather than
+restated as a submission-time check, because it is now able to be one, and `submission.rs`'s
+rule 4 remains the separate guarantee it always was: that the *cited target* is not merely
+the right kind but an *accepted* submission of it. A relation type constraint cannot express
+acceptance state; it was never asked to.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#20
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:f8c6fb97c0fde913a167f48f87b352532bc39ae22714e66ea8500e34257ebc7d*
+
+The cardinalities are not predictions of a ceiling. `relates-to`'s cap of 128 sits well
+above the busiest measured node (21) with room for the corpus to grow; the lifecycle types'
+cap of 8 is generous against every resubmission scenario this build's own tests exercise.
+Each cap exists to catch a joined-the-wrong-node mistake becoming an unbounded pile of
+edges, not to assert where real usage will top out — `ADR-ARTIFACT-GRAPH-002`'s vocabulary
+is free to set its own numbers when it supersedes this table.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#21
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 5. Domain and range travel as JSON columns, not as a second table · hash: sha256:4c70835bbe8c3dcbf473ab414032edb8550569e57d117f1e56da171ef8f01d4a*
+
+### 5. Domain and range travel as JSON columns, not as a second table
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#22
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 5. Domain and range travel as JSON columns, not as a second table · hash: sha256:f1ef349c1fa9f6ae37dc922774caa2507d0a3924c931c4e1f85d265f5507107e*
+
+`relation_types` gained `domain_kinds_json`, `range_kinds_json` and `max_per_node`, rebuilt
+in migration 7 rather than widened by `ALTER TABLE ADD COLUMN`: SQLite only allows a
+`NOT NULL` column added that way to carry a caller-invented default, and a default here
+would hand every existing row a constraint nobody declared — the exact permissiveness this
+record exists to close off. There is nothing to carry across regardless: `relation_types` is
+populated by application code once the schema is in place, never by a migration, so the
+table always holds zero rows when its own migration runs.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#23
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 5. Domain and range travel as JSON columns, not as a second table · hash: sha256:0b9e81b2b77ae09c7d8f1dc61d57bc087aaa1a09000da540f3afeb40e710f0bb*
+
+A JSON column rather than a child table keyed on `(relation_type, role, node_kind)`: nothing
+else in this schema joins against a relation type's admitted kinds, so a table would exist
+to be scanned start to finish exactly once per check, in a size in the tens of node kinds at
+most. `nodes.kind` itself is free text with no table of its own for the same reason. Both
+lists are sorted before they are serialized, so the same set of kinds always writes the same
+bytes regardless of the order a caller listed them in — the bundle's byte-identical round
+trip depends on that the same way it depends on every other ordering in this store being by
+natural key rather than by insertion order.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#24
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 6. The bundle carries the constraint, not just the row · hash: sha256:9b187da2c777a42d749ed6dfeb51ed863d8d38ad225c53d3545200a9ff22a154*
+
+### 6. The bundle carries the constraint, not just the row
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#25
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 6. The bundle carries the constraint, not just the row · hash: sha256:1811c14bdd374606b7abe0130543a73f3f929eb41e4ed4db0ac7980adf20bfba*
+
+`nomos-spec-bundle`'s `RelationType` gained `domain: Vec<String>`, `range: Vec<String>` and
+`max_per_node: u32`. The exporter decodes the two JSON columns, the importer re-encodes them,
+and `columns::COVERAGE`'s `relation_types` entry names all three — the guard that would have
+caught a bundle quietly missing this the way `OD-SPEC-011`'s own motivating column-coverage
+mechanism was built to. `crates/spec/nomos-spec-bundle/tests/round_trip/populated.rs`'s fixed
+fixture now declares a non-trivial constraint on its own synthetic type (`verifies`, domain
+`concept`, range `requirement`, cap 4), so the whole existing round-trip suite exercises real
+values rather than only a row's presence, and
+`Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip` asserts those three values
+by name after a full export/import cycle.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#26
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Happens When `ADR-ARTIFACT-GRAPH-002` Lands · hash: sha256:99b8125bcff2357af6ec3116eae9de27f51ecaa6b1bb737677136c1130e84eb3*
+
+## What Happens When `ADR-ARTIFACT-GRAPH-002` Lands
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#27
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Happens When `ADR-ARTIFACT-GRAPH-002` Lands · hash: sha256:29d048ace27bb64018b7c658c07ea150ab0e5fd4bab43c8e0d411c5705354e72*
+
+The corpus's real relation vocabulary supersedes `RELATION_TYPES` in `governing.rs`, exactly
+as `OD-SPEC-011` already says it will. This record adds nothing that decision has to work
+around: every term the real vocabulary introduces registers through the same
+`Put_Relation_Type` this record requires, declaring its own domain, range and cardinality
+the same way the five seed types do here. Nothing about the mechanism is seed-specific — it
+is seed *content* that a wider vocabulary replaces, not a mechanism a wider vocabulary has to
+grow into.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#28
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#29
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:163d9f67b374cd736fc6ac0552c7020e9be26614551db1eb2f24c999a4d453b4*
+
+**Infer domain and range from the edges already present.** Rejected by `done_when` itself:
+an inferred constraint can only ever be as wide as what has already been written, so it
+could never refuse the *first* bad edge of a new kind — exactly the shape `implements`
+joining a suite to a table row would have taken if nobody had joined them yet.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#30
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:f22fba21333af7902b25b355367e7d9b6e67350f70e10524ebe55fddcea16594*
+
+**Leave the constraint on the submission, as `OD-SPEC-010` rule 4 already does.** That rule's
+own text says it cannot be the whole answer: it runs once, at acceptance, over the fields one
+submission cites. It says nothing about an edge written any other way — through
+`Seed_Governing_Records`, through a future authoring surface, or by hand against the store —
+and a constraint that only one caller obeys is not a constraint the graph holds.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#31
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:1f3ddf02da3ec50e6da463907decb9387f841bdce760c2b6334af0c162ecb534*
+
+**Admit the placeholder sentinel `unknown` into every type's declared range.** Rejected in
+decision 3: it would make the check pass by widening what every type admits rather than by
+deferring judgment on a fact that does not exist yet, and it would have to be removed from
+every declaration the day a real `unknown`-shaped kind was ever wanted for something else.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#32
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:29a1d1b7c51e96f8de40e1a2f0356511d7a098c89e4df7f88767a7bc8f5bcbbb*
+
+**A child table keyed on `(relation_type, role, node_kind)`.** Considered and set aside in
+decision 5 for the same proportionality `nodes.kind` already argues: nothing else in this
+schema needs to join against admitted kinds, so a table for it would be scanned wholesale on
+every check for no query a table earns its keep by answering.
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#33
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#34
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Controls · hash: sha256:a9880763be9061ee6ad965b1c34fa478adfc32f89958d8dd407187b99b71022b*
+
+| Weakening | What it produces |
+|---|---|
+| infer the constraint from edges already written | never refuses the first edge of a new, wrong kind |
+| leave it to `OD-SPEC-010` rule 4 alone | silent for every edge not written through `Accept_Submission` |
+| admit `unknown` into every domain and range | the check passes by definition on the one endpoint it most needs to defer judgment on |
+| a shared constraint per pair instead of per direction | `answers` and `answered_by` cannot both be stated correctly, because they join in opposite roles |
+| no cardinality cap, domain and range only | `relates-to` keeps the property this record closes for count while leaving it open for volume |
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#35
+
+*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#36
+
+*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Status · hash: sha256:37fd442a8eedf54d8c51e2451291603a294c81dd4ec95fe17e94b92cea26200e*
+
+Closed by `P10-EDGE-CONSTRAINTS-2`.
 
 ### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#1
 
