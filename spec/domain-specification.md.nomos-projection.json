@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:176fb51ed270176939b313c8036542793fa549dbe561ffa96ecc84e6268e80f6",
-  "inputs_digest": "sha256:d265790a7d883c665202e6c860acafc31ef50713015f07a5ac560822b05db28b",
+  "content_digest": "sha256:079eaeb0b5e7ded2720e98408f567cfc4ba1250a7afb8f4fd530b5b3e518c4fd",
+  "inputs_digest": "sha256:2e534b39f6ddbbb57b4a036e7435f869ed0d89f0ec80f6fc9fbe76b8e6df35b9",
   "sections": [
     [
       "Documents",
-      99
+      100
     ],
     [
       "Sections",
-      912
+      919
     ],
     [
       "Source blocks",
-      3440
+      3463
     ]
   ],
   "inputs": [
@@ -124,6 +124,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored",
       "hash": "sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored",
+      "hash": "sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be"
     },
     {
       "content": "documents",
@@ -1269,6 +1274,41 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29",
       "hash": "sha256:51f15651528ca6818d245f3077e313008c70f9bb419eba739de14ed6ac2d7610"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#1",
+      "hash": "sha256:88cf3619bd8e586bad5f9421cb49b60ac229358199c87403b2a39d5b6fd96efe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#2",
+      "hash": "sha256:f8f206169d94c57e5c161b668005593f56f0942d09f819a0b28450e138bc8628"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#6",
+      "hash": "sha256:116affb112192a89297b817b7ba8364cf41130a43c5870b9a8541b1a0028a4b8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#9",
+      "hash": "sha256:c4722d0d16f8302edc43ce0f1720ac17e2e3e3b58908c4cbeb292c5c18452c5f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#15",
+      "hash": "sha256:7ab787706b641dd22a33719e3d77fb69c88590273870edfeb2aadf0890e0e091"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#19",
+      "hash": "sha256:d7e50aac69ca267a660910727fbea63d501145ec1ac296e5f390d919503d2b83"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#22",
+      "hash": "sha256:ba76c0f0c86a5e749bc35fbc01d4da0b1283f9a67b66bff86656429c3039bc8e"
     },
     {
       "content": "headings",
@@ -7754,6 +7794,121 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#30",
       "hash": "sha256:63f31d4f4d714f01a7ac65f2710eb324179621821c9bebca2462d9526104911b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#1",
+      "hash": "sha256:7d224aa47b8efe66e6dd9533d426f2655d1f2218a313da59aead310436cb6e0c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#3",
+      "hash": "sha256:d900cffbdc9831ee47a3cd6319f6bdb8636491cc6c176cb0470069d8580352eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#4",
+      "hash": "sha256:993b3f9f357c044817421984951bb79c2bc080702d7f6b65ded8506ff37668b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#5",
+      "hash": "sha256:aeab44abd15235cd707777866db340f9e529aa4317ba46de1b420aeed737a3d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#6",
+      "hash": "sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#7",
+      "hash": "sha256:6a81120d53277ced0c119a30920f4fa6f52629ed28890e3e481f88ca8e0e5200"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#8",
+      "hash": "sha256:4bd6244fb7af500fbad73cb2d48aa3ed647290d8391f54a679c49c05e55329f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#9",
+      "hash": "sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#10",
+      "hash": "sha256:a8e326cc2a391ed875872d61caaecb4756b8be6bf344ebbfac410ec3373a9f92"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#11",
+      "hash": "sha256:76a5a02732cc7fe2da5373377ed34818ce20243a9e6a0a21aca0932a00d69ceb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#12",
+      "hash": "sha256:896cbf42a3708b4d94dc11f623d71f39ef6d65e78d7e18c25ab6d6c137b50194"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#13",
+      "hash": "sha256:2093fb90437b356cccc6245983d0e873ddfc90765660864122787cf57f48e9d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#14",
+      "hash": "sha256:770809ea90ea6643e5edad5c8aab542dc6591d70cb0568082e609244163275e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#15",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#16",
+      "hash": "sha256:b4de1c438737212a37a7c6ba500f2fb6c05d659c0f48d7e1c269a606abac230a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#17",
+      "hash": "sha256:8ba0aec695c7e81c722885e61c147457fb9177ca2a9d7a70d6b46ce1aecd4d2f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#18",
+      "hash": "sha256:24b00c5e0616612a4d22251f135514fa81c9b1016949cda808f6cd14b0f1bb49"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#19",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#20",
+      "hash": "sha256:5418ffa99de475cc8a11763e9f36f1c360a91523aae3f5d323cf346468dce887"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#21",
+      "hash": "sha256:f80a0d530619d81f27c835786a65ecce59fa5be6196c4abe8a97db03d35a9f33"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#23",
+      "hash": "sha256:160cb8876e0d118072ad783b2c7fb1eb2f42ac8f22be1bee9ce1dedec784b2b7"
     },
     {
       "content": "blocks",

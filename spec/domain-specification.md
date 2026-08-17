@@ -31,6 +31,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md | authored | 23 | 7 | sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227 |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
@@ -265,6 +266,13 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#18 | authored | 2 | What `FactVariant::SemanticallyResolved` Obliges |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#23 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#1 | authored | 1 | Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#6 | authored | 2 | What Was Actually Wrong |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#9 | authored | 2 | The Answer |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#15 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#19 | authored | 2 | What Holds It |
+| docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#22 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#1 | authored | 1 | A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#7 | authored | 2 | A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone |
@@ -5784,6 +5792,207 @@ what would meet it — the same deferred promotion `OD-ANALYSIS-002` already rec
 *revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Status · hash: sha256:63f31d4f4d714f01a7ac65f2710eb324179621821c9bebca2462d9526104911b*
 
 Closed by `P12-PROGRAM-SEMANTICS`.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#1
+
+*revision: authored · kind: heading · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator · hash: sha256:7d224aa47b8efe66e6dd9533d426f2655d1f2218a313da59aead310436cb6e0c*
+
+# Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#2
+
+*revision: authored · kind: heading · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#3
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / Question · hash: sha256:d900cffbdc9831ee47a3cd6319f6bdb8636491cc6c176cb0470069d8580352eb*
+
+`OD-ANALYSIS-003` names the predicate that matters once anything is actually rematerialized:
+recomputing according to `Condensation_Of`'s groups must produce the same current facts as a
+clean recomputation from nothing. It names the predicate and stops, deliberately —
+"there is no orchestrator to assert it against yet." `Condensation_Of` answers a structural
+question and does not decide how a stale fact gets recomputed; nothing in `nomos-analysis`
+rematerializes anything.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#4
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / Question · hash: sha256:993b3f9f357c044817421984951bb79c2bc080702d7f6b65ded8506ff37668b1*
+
+An under-invalidating dependency graph is the failure that predicate exists to catch, and it
+is silent under exactly the conditions a test suite runs: a stale fact reads as a correct
+answer computed earlier, not as an error. It surfaces only once a dependency edge exists and
+the recomputation order lets a stale read win — which is why writing the equivalence now,
+while `nomos.cap.module.index` (`OD-ANALYSIS-002`) is still the workspace's only derived
+fact, is cheap, and why leaving it unwritten until a second hop arrives is not.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#5
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / Question · hash: sha256:aeab44abd15235cd707777866db340f9e529aa4317ba46de1b420aeed737a3d7*
+
+Nothing in the shipped tree can call a rematerialization orchestrator, because none exists.
+Can the property still be asserted, or does it have to wait for one?
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#6
+
+*revision: authored · kind: heading · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Was Actually Wrong · hash: sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7*
+
+## What Was Actually Wrong
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#7
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Was Actually Wrong · hash: sha256:6a81120d53277ced0c119a30920f4fa6f52629ed28890e3e481f88ca8e0e5200*
+
+Nothing was wrong; nothing existed. `crates/substrate/nomos-analysis/tests/
+invalidation_order.rs` (`OD-ANALYSIS-003`) proves a caller can recover a valid
+rematerialization order from an `InvalidationReport`. No test anywhere follows that order and
+checks the answer it produces against a clean build. The gap `OD-ANALYSIS-003` named by
+deferring to a future orchestrator was still open.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#8
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Was Actually Wrong · hash: sha256:4bd6244fb7af500fbad73cb2d48aa3ed647290d8391f54a679c49c05e55329f4*
+
+The orchestrator `OD-ANALYSIS-003` deferred to is a shipped-product concern — something that
+would sit above `nomos-analysis` and decide how a real capability recomputes a real fact. It
+does not exist, and this record does not create it. What it establishes is narrower and does
+not need the orchestrator to exist first: `MemoryFactStore`'s own primitives —
+`Materialize`, `Invalidate`, `Current` — are sufficient by themselves to drive both an
+incremental recomputation and a clean one, and to compare their results. The property under
+test belongs to those primitives' interaction, not to any orchestrator built on top of them;
+an orchestrator that gets this wrong would be composing correct primitives incorrectly, and
+that is a different defect from the primitives disagreeing with themselves.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#9
+
+*revision: authored · kind: heading · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / The Answer · hash: sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d*
+
+## The Answer
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#10
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / The Answer · hash: sha256:a8e326cc2a391ed875872d61caaecb4756b8be6bf344ebbfac410ec3373a9f92*
+
+`crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs`, a two-fact graph with
+one real derived hop, driven against a real `MemoryFactStore`:
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#11
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / The Answer · hash: sha256:76a5a02732cc7fe2da5373377ed34818ce20243a9e6a0a21aca0932a00d69ceb*
+
+- an **upstream leaf fact**, addressed at its own subject, carrying arbitrary bytes;
+- a **downstream fact at a subject of its own** — not the upstream's, for the same reason
+  `OD-ANALYSIS-002`'s rollup is keyed on its module rather than a member: a downstream fact
+  keyed on its own input would be named `direct` by `SubjectChanged` rather than `dependent`,
+  and a test built on it would measure a path that was never in doubt — whose payload is a
+  real function of the upstream's payload (the bytes reversed), materialized with a
+  dependency edge recorded through `Materialize`'s own `&[Dependency]` parameter, the same
+  edge `Dependencies_Of` and `Follow_Edges` already use in shipped code.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#12
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / The Answer · hash: sha256:896cbf42a3708b4d94dc11f623d71f39ef6d65e78d7e18c25ab6d6c137b50194*
+
+One test builds this graph twice: once incrementally — materialize at `GenerationId::
+INITIAL`, invalidate the upstream subject, then rematerialize every fact `report.direct` and
+`report.dependent` name, trusting the store's own answer rather than the fixture's assumption
+of what needs it — and once from an empty store at the changed input directly. It asserts the
+two builds produce the same `MaterializedFact` for both keys: identity and payload together,
+not a count and not identity alone, either of which would pass on a stale value.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#13
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / The Answer · hash: sha256:2093fb90437b356cccc6245983d0e873ddfc90765660864122787cf57f48e9d8*
+
+A second test proves the first is not vacuous. It materializes the same graph with the
+dependency edge withheld — what an under-invalidating producer looks like from the store's
+side, since `Follow_Edges` walks exactly the edges `Materialize` was given and nothing else —
+and asserts the resulting downstream value disagrees with a clean rebuild. If a future change
+ever made this comparison agree, the first test would have stopped discriminating a correct
+invalidation from a broken one without failing.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#14
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / The Answer · hash: sha256:770809ea90ea6643e5edad5c8aab542dc6591d70cb0568082e609244163275e9*
+
+**Why this does not reach into `nomos-lang-rust` for the real rollup.** `nomos.cap.module.
+index` is the real shipping producer of a derived hop, but `nomos-lang-rust` depends on
+`nomos-analysis`, not the reverse — a test dependency the other way would be circular. The
+property under test is `MemoryFactStore`'s, not any one capability's business logic, so a
+fixture built directly on the store's own public API exercises the identical mechanics
+(`Materialize`'s dependency array, `Invalidate`'s `Follow_Edges`, `Current`'s generation and
+supersession checks) a real rollup would drive, without borrowing its crate.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#15
+
+*revision: authored · kind: heading · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#16
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Was Considered And Rejected · hash: sha256:b4de1c438737212a37a7c6ba500f2fb6c05d659c0f48d7e1c269a606abac230a*
+
+**A graph where the downstream fact's presence, but not its payload, depends on the
+upstream.** This is the shape `done_when` warns against by name: both computations would
+trivially agree, because there would be nothing in the downstream fact's value that a stale
+recompute could get wrong. The payload has to be a real function of the input for a stale
+answer to be observably different from a fresh one.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#17
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Was Considered And Rejected · hash: sha256:8ba0aec695c7e81c722885e61c147457fb9177ca2a9d7a70d6b46ce1aecd4d2f*
+
+**Asserting only that `report.dependent` names the downstream key**, as `OD-ANALYSIS-002`'s
+own held test already does. That is a claim about the report, already proven; this record is
+about what happens once the report is acted on, which the report alone cannot show.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#18
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Was Considered And Rejected · hash: sha256:24b00c5e0616612a4d22251f135514fa81c9b1016949cda808f6cd14b0f1bb49*
+
+**Stating the property as unreachable**, in the shape `OD-TRACE-001` and
+`requirement_trace.rs` use for a predicate with no producer to test against. That shape fits
+exactly the state `OD-ANALYSIS-002` closed: before it, every shipped fact was a leaf, and no
+fixture could have shown a stale value because no fact depended on another's payload. After
+it, a derived hop exists and the store's own API is enough to build a fixture against it, so
+stating the assertion as unreachable would have been true only against the tree's fact
+history, not its present shape.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#19
+
+*revision: authored · kind: heading · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#20
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Holds It · hash: sha256:5418ffa99de475cc8a11763e9f36f1c360a91523aae3f5d323cf346468dce887*
+
+`crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs`, two tests:
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#21
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / What Holds It · hash: sha256:f80a0d530619d81f27c835786a65ecce59fa5be6196c4abe8a97db03d35a9f33*
+
+- **incremental recomputation, driven by the store's own `InvalidationReport`, agrees with a
+  clean rebuild** on both the leaf and the derived fact, comparing identity and payload
+  together;
+- **withholding the dependency edge produces a disagreement**, proving the graph is capable
+  of showing a stale answer rather than one that happens to already be right.
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#22
+
+*revision: authored · kind: heading · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md#23
+
+*revision: authored · kind: prose · heading: Recompute equivalence is a property of the store's own primitives, and a fixture built directly on them proves it without waiting for an orchestrator / Status · hash: sha256:160cb8876e0d118072ad783b2c7fb1eb2f42ac8f22be1bee9ce1dedec784b2b7*
+
+Closed by P12-RECOMPUTE-EQUIVALENCE.
 
 ### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#1
 

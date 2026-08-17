@@ -6369,10 +6369,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orch-exec-idle",
+        "acquired_at": 1786933169,
+        "lease_expires_at": 1786943969
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -6408,10 +6412,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orch-agent-continuation",
+        "acquired_at": 1786933173,
+        "lease_expires_at": 1786943973
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -8586,7 +8594,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P11-INVALIDATION-ORDER"
       ],
@@ -8602,7 +8610,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis"
+        ],
+        "exit_code": 0,
+        "output_tail": "r_Below_The_Requirement ... ok\ntest require::Test_Require_Should_Return_MissingCapability_When_Nothing_Declares_It ... ok\ntest reader::Test_A_Read_That_Misses_Should_Record_Its_Miss ... ok\ntest store::Test_A_Fact_Should_Answer_Its_Own_Key ... ok\ntest store::Test_A_Later_Generation_Should_Still_Answer_The_Same_Key ... ok\ntest reader::Test_A_Superseded_Read_Should_Record_Its_Supersession ... ok\ntest store::Test_The_Same_Question_Twice_Should_Materialize_Once ... ok\ntest invalidation::Test_Invalidation_Should_Follow_Edges_Transitively ... ok\ntest store::Test_The_Store_Trait_Should_Be_Sealed ... ok\n\ntest result: ok. 30 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group ... ok\ntest Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four ... ok\ntest Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 2 tests\ntest Test_An_Unrecorded_Dependency_Edge_Leaves_A_Stale_Downstream_Value_That_Disagrees_With_A_Clean_Rebuild ... ok\ntest Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-8ed2b98a0abe7ca2.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-472de15e56a195d2.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-5c58ca88752defbc.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-8bcea38aeda441f4.exe)\n   Doc-tests nomos_analysis\n",
+        "verified_at": 1786933809,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
