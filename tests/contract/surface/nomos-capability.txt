@@ -5,6 +5,8 @@ pub const fn nomos_capability::Standing::Decided(self) -> bool
 pub const fn nomos_capability::Unmet::Applicability(&self) -> Applicability
 pub enum nomos_capability::OfferRefusal
 pub enum nomos_capability::RegistryErrorKind
+pub enum nomos_capability::RequiredResolution
+pub enum nomos_capability::RequiredUnmet
 pub enum nomos_capability::Resolution
 pub enum nomos_capability::Standing
 pub enum nomos_capability::Unmet
@@ -13,6 +15,10 @@ pub enum variant nomos_capability::OfferRefusal::ExceedsCeiling
 pub enum variant nomos_capability::OfferRefusal::ForUndeclared
 pub enum variant nomos_capability::RegistryErrorKind::AlreadyDeclared
 pub enum variant nomos_capability::RegistryErrorKind::Offer { provider: ProviderId, refusal: OfferRefusal, }
+pub enum variant nomos_capability::RequiredResolution::Satisfied { selection: Selection, }
+pub enum variant nomos_capability::RequiredResolution::Unsatisfied { capability: CapabilityId, reason: RequiredUnmet, }
+pub enum variant nomos_capability::RequiredUnmet::AnsweredByOther { required: ProviderId, answered: ProviderId, }
+pub enum variant nomos_capability::RequiredUnmet::Unavailable(Unmet)
 pub enum variant nomos_capability::Resolution::Satisfied { selection: Selection, applicability: Applicability, }
 pub enum variant nomos_capability::Resolution::Unsatisfied { capability: CapabilityId, reason: Unmet, }
 pub enum variant nomos_capability::Standing::Equivalent
@@ -30,6 +36,7 @@ pub fn nomos_capability::Registry::New() -> Self
 pub fn nomos_capability::Registry::Offer(&mut self, offer: ProviderOffer) -> Result<(), RegistryError>
 pub fn nomos_capability::Registry::Offers(&self, capability: &CapabilityId) -> &[ProviderOffer]
 pub fn nomos_capability::Registry::Resolve(&self, requirement: &Requirement) -> Resolution
+pub fn nomos_capability::Registry::Resolve_Requiring( &self, requirement: &Requirement, required: &ProviderId, ) -> RequiredResolution
 pub fn nomos_capability::RegistryError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_capability::Requirement::Preferring(mut self, provider: ProviderId) -> Self
 pub fn nomos_capability::Resolution::Applicability(&self) -> Applicability

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c7317e8089f4277657a279d392a489790bcfb1c3dbb81bc03f4b3c29555a3fbd",
-  "inputs_digest": "sha256:037bc5361b1bcbb816d12f16732f29c57b34e3bf567da3c00e0ec1980e9b9e4c",
+  "content_digest": "sha256:0561e6a93f6216e817d5e30e81f14bde23145ad00fccc864e9274fb4572cec3a",
+  "inputs_digest": "sha256:b397f4d9f6f30dde87595467614c1cfcafa1712724458950f98cc69dc6aa5362",
   "sections": [
     [
       "Documents",
-      97
+      98
     ],
     [
       "Sections",
-      894
+      904
     ],
     [
       "Source blocks",
-      3392
+      3414
     ]
   ],
   "inputs": [
@@ -144,6 +144,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored",
       "hash": "sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored",
+      "hash": "sha256:baac7713f8077db7fc36aeeebe1f7cbe8e1a59d1a743943e26e42df668b0b3cb"
     },
     {
       "content": "documents",
@@ -1439,6 +1444,56 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35",
       "hash": "sha256:2a7e7e580721e98cb7f0b4b1a2f27d8dcb5d8b005e66321daaa1bcb4d347f140"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#1",
+      "hash": "sha256:4a5aa7be6625b797ca03a53a4d699a27bab25e7a3a1ad33ec048e50b267ac4dd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#2",
+      "hash": "sha256:e0d46d8b8ffe454508ee3b9f24eea921913cad10c8d2e8864a70ea025216f227"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#5",
+      "hash": "sha256:9984ae18cd136be2e3213af3166ccaf8f074a42efe5011f62a181b81aac501f5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#7",
+      "hash": "sha256:1ed006d14a8db824fdb4b90ae608f4236d8eea7f23190da97a369e03c52cd5ca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#8",
+      "hash": "sha256:f8a6737d4c4746515eb850f7926a3ea7b51e8ec944df28c9a35b3423f6c50414"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#11",
+      "hash": "sha256:57627dbb35593b3e66d2ffc62c273003c034e823d2974c04c28e5c345a550ed0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#13",
+      "hash": "sha256:b8e6fe9a1555efce97916db619772df7689f9fd7b3139255e5249785a257ae28"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#15",
+      "hash": "sha256:9b50933282d5cb6beecf1c678157c343ca552a6dcb44e0da91ff07ab121152c1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#19",
+      "hash": "sha256:ee6610c653565804ab0fb0a23354126da6b0ef8c7731c1be9bb292acce4a01fa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#21",
+      "hash": "sha256:87f2db2076317d1fe4c61d60967d427e1a61d351b01930c2da6332c5a35b69b6"
     },
     {
       "content": "headings",
@@ -8329,6 +8384,116 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#36",
       "hash": "sha256:acc51edccf08377da1dfd01ce57b84118d31da6cda9b19ecc8c6bb13051327b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#1",
+      "hash": "sha256:c8ff339cd8d363f55ab28413894279be4d1fa186b86db069f2cd25124deb0496"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#3",
+      "hash": "sha256:47af596d813c0803937e20d717bdab27989e20a5525ba02ae5896bae05f978d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#4",
+      "hash": "sha256:e7fb9cb8ff1af7c4871cedacb4b0fd2711c8368da7b923fdf56f02c51b2a8a1e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#6",
+      "hash": "sha256:5cea2ef935b43a73ade75eb5443d9cef86413b1a8f6109ca936f5945f0fab1ba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#7",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#8",
+      "hash": "sha256:bfd34ae8543168dd2099da57fc16ed97273265b521c8982e3620931d3fa6bb1d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#9",
+      "hash": "sha256:2083e3c78a9084a1d255b3adc8ed42a20a9fcf7b330e8096e369b9d1296ba441"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#10",
+      "hash": "sha256:ff5f042bc202ff3c6fe89e10e1b4fddb0ddbd9ff54976f104c8837d63618ef4f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#11",
+      "hash": "sha256:4be7100515feec492d75ad41c41553a413021844507d7a785cce6ec7365e7e6c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#12",
+      "hash": "sha256:63b24c2da5653b10508aae45729fa9b1a3c45932b9c8ab5ab9299ea22d65988c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#13",
+      "hash": "sha256:521c53f5db341e65456886920c3f9749f02a687fa9bd14795d384cdb8e90d983"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#14",
+      "hash": "sha256:fe5171f202f6359a99530a3ee7f8900677ea61e6b70815b8b6607615ff4b6279"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#15",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#16",
+      "hash": "sha256:6b13b64ffeb0b5aac1f16166af7251b330ffe4205fb9f5a2742e183474da2851"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#17",
+      "hash": "sha256:a184700cca494ac43e89a503f92505a453b8577fc32431d0fbbd76aa6af0e35f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#18",
+      "hash": "sha256:7cd6da85d95642bca8ee3262cb342ccec000ca650e5a35093a02b827ba220ebb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#19",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#20",
+      "hash": "sha256:6510596e0c401183c746ccea0b5e0a2f527666b802e55f8b9af5b846d8b69b4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#22",
+      "hash": "sha256:fd901605ba26f220a023cf777f5ab3d948f4c40fdf14c4ff7a676cb6a5f7b8e2"
     },
     {
       "content": "blocks",

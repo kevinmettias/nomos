@@ -14,6 +14,56 @@ use crate::{Resolution, Selection, Unmet};
 use nomos_contracts::{Applicability, CapabilityId, ProviderId};
 use std::collections::BTreeMap;
 
+/// Why a *required* naming was not honoured.
+///
+/// [`Unmet`] already has the vocabulary for "nobody usable answered at all", and that half
+/// is reused unchanged — a required naming that nobody could have answered fails for the
+/// same reason a preferred one would have. The half `Unmet` cannot say is that somebody
+/// usable *did* answer and it was not who was named; [`Registry::Resolve`] calls that
+/// [`Applicability::SupportedWithFallback`] and returns [`Resolution::Satisfied`].
+/// [`Registry::Resolve_Requiring`] does not, because the caller said which provider, not
+/// merely which guarantee — `docs/records/OD-CAPABILITY-005` is why that difference is
+/// enough to refuse rather than merely to flag.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum RequiredUnmet
+{
+    /// No usable offer existed at all, whoever was required. Carries the same reason
+    /// [`Registry::Resolve`] would have reported.
+    Unavailable(Unmet),
+    /// A usable offer existed and it was not the required provider.
+    AnsweredByOther
+    {
+        required: ProviderId,
+        answered: ProviderId,
+    },
+}
+
+/// The answer to a requirement whose named provider is not negotiable.
+///
+/// Deliberately shaped like [`Resolution`] — satisfied or not, never a bare no — because it
+/// answers the same question at a different strength. It is a distinct type rather than a
+/// third [`Applicability`] or a flag beside one, because nothing short of a different return
+/// type stops a caller from reading `Applicability::SupportedWithFallback` as good enough
+/// when it required the naming rather than merely preferring it.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum RequiredResolution
+{
+    /// The required provider answered. There is exactly one way to reach this: nothing else
+    /// is reported, because a required naming that is honoured is indistinguishable from an
+    /// ordinary answer.
+    Satisfied
+    {
+        selection: Selection,
+    },
+    /// The required provider did not answer — whether because nobody could, or because
+    /// somebody else did.
+    Unsatisfied
+    {
+        capability: CapabilityId,
+        reason: RequiredUnmet,
+    },
+}
+
 /// Capability contracts and the offers against them.
 ///
 /// Ordered maps throughout. Resolution picks a provider, and a provider picked by hash
@@ -219,6 +269,57 @@ impl Registry
         return Resolution::Satisfied {
             selection,
             applicability,
+        };
+    }
+
+    /// Answers a requirement whose named provider is required rather than preferred.
+    ///
+    /// `Resolve` treats a name as a preference: an answer from anybody else still satisfies
+    /// the requirement, reported through `Applicability::SupportedWithFallback` so a caller
+    /// that reads that far can tell. This treats the same name as the whole point. An offer
+    /// from anybody but `required` is refused rather than substituted, and the refusal names
+    /// both `required` and, when somebody else was usable, who that was.
+    ///
+    /// This does not let the registry decide anything `OD-CAPABILITY-001` reserved to the
+    /// caller — the guarantee still ranks and a caller still spends. What changed is not who
+    /// ranks; it is that `required` forces the ranking's head the way a preference already
+    /// could, and a caller who cannot be answered by anyone else is told so instead of being
+    /// handed a fallback it did not ask for. `docs/records/OD-CAPABILITY-005` records why
+    /// refusing is right here though `OD-CAPABILITY-001` declined to let the registry refuse
+    /// on the caller's behalf: there, no caller had said which provider it would accept:
+    /// here, one has.
+    #[must_use]
+    pub fn Resolve_Requiring(
+        &self,
+        requirement: &Requirement,
+        required: &ProviderId,
+    ) -> RequiredResolution
+    {
+        let scoped = Requirement {
+            preferred: Some(required.clone()),
+            ..requirement.clone()
+        };
+
+        let selection = match self.Selected(&scoped)
+        {
+            Ok(selection) => selection,
+            Err(reason) => return RequiredResolution::Unsatisfied {
+                capability: requirement.capability.clone(),
+                reason: RequiredUnmet::Unavailable(reason),
+            },
+        };
+
+        if &selection.chosen.provider == required
+        {
+            return RequiredResolution::Satisfied { selection };
+        }
+
+        return RequiredResolution::Unsatisfied {
+            capability: requirement.capability.clone(),
+            reason: RequiredUnmet::AnsweredByOther {
+                required: required.clone(),
+                answered: selection.chosen.provider.clone(),
+            },
         };
     }
 
@@ -465,5 +566,58 @@ mod tests
                 "{reason:?} describes itself as nothing, so a caller has no report to make"
             );
         }
+    }
+
+    /// The same registry, the same unavailable provider, and two different resolutions —
+    /// not merely two applicabilities on the same `Satisfied`.
+    ///
+    /// `OD-CAPABILITY-005` is what draws this line: a preference the registry cannot honour
+    /// is still answered, because the guarantee is still met and the caller said "rather
+    /// than" not "only". A requirement the registry cannot honour is refused, because the
+    /// caller said "only" — `Resolve` and `Resolve_Requiring` must disagree here or the
+    /// second strength does not exist.
+    #[test]
+    fn Test_A_Required_Naming_Should_Refuse_What_A_Preferred_Naming_Falls_Back_To()
+    {
+        let mut registry = Registry::New();
+        registry.Declare(Contract()).expect("declared once");
+        registry.Offer(Offer()).expect("within the ceiling");
+
+        let absent = ProviderId::New("nomos.test.absent");
+        let answering = Offer().provider;
+
+        let via_preference = registry.Resolve(&Need().Preferring(absent.clone()));
+        let via_requirement = registry.Resolve_Requiring(&Need(), &absent);
+
+        assert!(
+            matches!(
+                via_preference,
+                Resolution::Satisfied {
+                    applicability: Applicability::SupportedWithFallback,
+                    ..
+                }
+            ),
+            "an unavailable preference is still answered by somebody else: {via_preference:?}"
+        );
+        assert!(
+            matches!(via_requirement, RequiredResolution::Unsatisfied { .. }),
+            "an unavailable requirement must not be answered by somebody else: \
+             {via_requirement:?}"
+        );
+
+        let RequiredResolution::Unsatisfied { reason, .. } = via_requirement
+        else
+        {
+            unreachable!("asserted Unsatisfied above");
+        };
+
+        assert_eq!(
+            reason,
+            RequiredUnmet::AnsweredByOther {
+                required: absent,
+                answered: answering,
+            },
+            "the refusal must name both who was required and who would have answered"
+        );
     }
 }

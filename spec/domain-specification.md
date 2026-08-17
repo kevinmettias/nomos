@@ -35,6 +35,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md@authored | docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md | authored | 22 | 10 | sha256:baac7713f8077db7fc36aeeebe1f7cbe8e1a59d1a743943e26e42df668b0b3cb |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
@@ -299,6 +300,16 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#26 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#31 | authored | 2 | What Holds It |
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#1 | authored | 1 | A required naming refuses rather than substitutes, because the caller said so |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#7 | authored | 2 | The Decision |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#8 | authored | 3 | Two functions, not one field and a convention |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#11 | authored | 3 | Why refusing is right here though `OD-CAPABILITY-001` declined to let the registry refuse on the caller's behalf |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#13 | authored | 3 | `RequiredUnmet` reuses `Unmet`, once |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#15 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#19 | authored | 2 | What Holds It |
+| docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#21 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#1 | authored | 1 | A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#5 | authored | 2 | What A Cross-Language Claim Is |
@@ -6954,6 +6965,216 @@ Closed by P11-KNOWLEDGE-ABSENT. No successor item is opened, because there is no
 builder to build and an item reserving work nobody has scheduled would be a placeholder on a
 board that refuses them. The obligation in decision 1 binds whichever item builds the first
 one.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#1
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so · hash: sha256:c8ff339cd8d363f55ab28413894279be4d1fa186b86db069f2cd25124deb0496*
+
+# A required naming refuses rather than substitutes, because the caller said so
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#2
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#3
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / Question · hash: sha256:47af596d813c0803937e20d717bdab27989e20a5525ba02ae5896bae05f978d3*
+
+`Requirement` carries `preferred: Option<ProviderId>` and one builder that sets it,
+`Preferring`. There is one strength of naming, and `registry.rs`'s own comment gives the
+reason the gap is not obvious: when the preference is not honoured, `Registry::Resolve`
+still answers, through `Resolution::Satisfied` and `Applicability::SupportedWithFallback`.
+The judgment still stands and its provenance is not what was asked for — refusing outright
+would deny a caller who would have accepted the fallback, which is the mistake
+`OD-CAPABILITY-001` avoided when it declined to let the registry decide how far down a
+caller spends.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#4
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / Question · hash: sha256:e7fb9cb8ff1af7c4871cedacb4b0fd2711c8368da7b923fdf56f02c51b2a8a1e*
+
+That reasoning is sound for a caller that named a provider because it would rather have it.
+It is not sound for a caller that named a provider because that provider *is* the policy —
+the strongest reader for a subject that matters, the one implementation whose output is
+admissible downstream. That caller is served a different provider, told so in a field
+(`Applicability::SupportedWithFallback`), and nothing makes it look: the field satisfies
+`Was_Evaluated`, so the run reports a judgment made by somebody other than the one required,
+and reports it as evaluated, which is true and is not what was asked. `OD-CAPABILITY-003`
+made this worse rather than better — per-subject fallback means a capability can be answered
+by two providers under two addresses within one run, and a caller that required one of them
+has more places to not notice, not fewer.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#5
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#6
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / What Was Measured · hash: sha256:5cea2ef935b43a73ade75eb5443d9cef86413b1a8f6109ca936f5945f0fab1ba*
+
+`registry.rs`'s `Honoured` function is the entire mechanism: if `requirement.preferred` is
+set and does not match the offer that answered, the result is `Satisfied` with
+`SupportedWithFallback`. There is no path from an unhonoured naming to `Unsatisfied`, and
+nothing on `Requirement` or `Resolution` lets a caller ask for one. A convention — "check
+`Applicability` after every `Resolve`" — is the only thing standing between a required
+naming and a silently substituted answer, and nothing enforces the convention.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#7
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#8
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision / Two functions, not one field and a convention · hash: sha256:bfd34ae8543168dd2099da57fc16ed97273265b521c8982e3620931d3fa6bb1d*
+
+### Two functions, not one field and a convention
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#9
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision / Two functions, not one field and a convention · hash: sha256:2083e3c78a9084a1d255b3adc8ed42a20a9fcf7b330e8096e369b9d1296ba441*
+
+`Registry` gains `Resolve_Requiring(&self, requirement: &Requirement, required: &ProviderId)
+-> RequiredResolution`, beside the unchanged `Resolve`. It does not add a second field to
+`Requirement` — a `required: Option<ProviderId>` beside `preferred: Option<ProviderId>` would
+be exactly the boolean-beside-a-field shape this item was opened to refuse: nothing stops a
+call site from setting one and not the other, and a reviewer has to read the value to know
+which strength a given call site meant. Two methods with two return types mean a call site's
+strength is legible at the call, not at the value.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#10
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision / Two functions, not one field and a convention · hash: sha256:ff5f042bc202ff3c6fe89e10e1b4fddb0ddbd9ff54976f104c8837d63618ef4f*
+
+`Resolve_Requiring` forces `required` into the ranking exactly the way `Preferring` already
+does — `Selection::Over` already picks a named provider over a stronger unnamed one, so
+nothing new is invented there — and then checks whether the offer that was forced to the
+head is actually the one that answered. If it is, the answer is
+`RequiredResolution::Satisfied`, indistinguishable in shape from what `Resolve` would have
+produced with `Applicability::Supported`, because an honoured requirement and an honoured
+preference are the same event. If it is not — because the required provider is absent,
+below the floor, or unreadable at this version — the answer is
+`RequiredResolution::Unsatisfied`, naming `required` (echoed back, since the caller already
+knows it) and, when somebody else was usable, `answered`: who would have answered, had this
+been a preference instead.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#11
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision / Why refusing is right here though `OD-CAPABILITY-001` declined to let the registry refuse on the caller's behalf · hash: sha256:4be7100515feec492d75ad41c41553a413021844507d7a785cce6ec7365e7e6c*
+
+### Why refusing is right here though `OD-CAPABILITY-001` declined to let the registry refuse on the caller's behalf
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#12
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision / Why refusing is right here though `OD-CAPABILITY-001` declined to let the registry refuse on the caller's behalf · hash: sha256:63b24c2da5653b10508aae45729fa9b1a3c45932b9c8ab5ab9299ea22d65988c*
+
+`OD-CAPABILITY-001` is about the same registry, the same fallback machinery, and it went the
+other way: a lowered floor bought reachable coverage, and refusing the weaker offer instead
+of serving it would have spent the caller's own widened floor against it. The difference is
+what the caller said. There, the caller said "I will accept as low as this floor" and named
+nobody — the registry choosing the strongest usable offer is applying the caller's own
+stated tolerance, not substituting its judgment for the caller's. Here, the caller says "only
+this provider", through `Resolve_Requiring` rather than `Resolve`, and an answer from anybody
+else is not what was tolerated — it is what `Resolve` already offers, one call away. Refusing
+under `Resolve_Requiring` does not deny a caller anything it did not already have access to;
+it makes the caller's naming mean what it says at the one call site the caller chose to
+invoke.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#13
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision / `RequiredUnmet` reuses `Unmet`, once · hash: sha256:521c53f5db341e65456886920c3f9749f02a687fa9bd14795d384cdb8e90d983*
+
+### `RequiredUnmet` reuses `Unmet`, once
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#14
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / The Decision / `RequiredUnmet` reuses `Unmet`, once · hash: sha256:fe5171f202f6359a99530a3ee7f8900677ea61e6b70815b8b6607615ff4b6279*
+
+`Unmet` already distinguishes "nobody declared this", "declared and nobody offers it",
+"offered at a version I cannot read", and "offered, and nothing reaches the floor" — none of
+those four is wrong when the required provider specifically is what is absent, unreadable, or
+below floor, because in every one of those cases nobody at all could have answered, required
+or not. `RequiredUnmet::Unavailable(Unmet)` reuses that vocabulary unchanged rather than
+inventing a parallel four-way split. The one thing `Unmet` cannot say — that somebody usable
+*did* answer and it was not who was required — is the only new variant,
+`RequiredUnmet::AnsweredByOther { required, answered }`, and it exists because that is
+exactly the case `Resolve` already answers and `Resolve_Requiring` must not.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#15
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#16
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / What Was Considered And Rejected · hash: sha256:6b13b64ffeb0b5aac1f16166af7251b330ffe4205fb9f5a2742e183474da2851*
+
+**A `required: bool` or `required: Option<ProviderId>` field beside `preferred`.** This is
+what `done_when` names directly: a flag beside a field is not enforced at any call site, and
+a caller — or a reviewer — has to read the value to know which strength was meant. The two
+strengths need to be visible in which function was called, not in which fields happen to be
+set.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#17
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / What Was Considered And Rejected · hash: sha256:a184700cca494ac43e89a503f92505a453b8577fc32431d0fbbd76aa6af0e35f*
+
+**Growing `Applicability` with a third state for "required and not honoured".**
+`OD-CONTRACTS-002` grew `Applicability` when a rule could not reach a judgment mechanically —
+a genuinely new thing a run needed to report about a subject. This is not that: it is a
+caller-side policy about how strictly to read an existing, correctly-reported
+`Applicability::SupportedWithFallback`. Growing the vocabulary every non-Rust peer
+reimplements to encode one caller's spending policy is the same category error
+`OD-CAPABILITY-001` avoided by keeping cost off `Guarantee`.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#18
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / What Was Considered And Rejected · hash: sha256:7cd6da85d95642bca8ee3262cb342ccec000ca650e5a35093a02b827ba220ebb*
+
+**Reusing an existing `Unmet` variant (`NoProvider` or `BelowRequirement`) for "answered by
+somebody else".** Both are false statements when somebody usable did answer: `NoProvider`
+says nothing offers the capability, `BelowRequirement` says nothing reaches the guarantee.
+Neither is true when the requirement was met by the wrong provider. Reusing either would
+report a fabricated guarantee or coverage shortfall in place of the real reason, which is an
+identity mismatch.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#19
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#20
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / What Holds It · hash: sha256:6510596e0c401183c746ccea0b5e0a2f527666b802e55f8b9af5b846d8b69b4b*
+
+`Test_A_Required_Naming_Should_Refuse_What_A_Preferred_Naming_Falls_Back_To` in
+`crates/substrate/nomos-capability/src/registry.rs` drives the same registry and the same
+unavailable provider through both `Resolve` and `Resolve_Requiring`, and asserts the first
+is `Resolution::Satisfied` with `Applicability::SupportedWithFallback` while the second is
+`RequiredResolution::Unsatisfied` naming both the required provider and who would have
+answered — not merely a different `Applicability` read off the same `Satisfied`.
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#21
+
+*revision: authored · kind: heading · heading: A required naming refuses rather than substitutes, because the caller said so / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-005-a-required-naming-refuses-rather-than-substitutes-because-the-caller-said-so.md#22
+
+*revision: authored · kind: prose · heading: A required naming refuses rather than substitutes, because the caller said so / Status · hash: sha256:fd901605ba26f220a023cf777f5ab3d948f4c40fdf14c4ff7a676cb6a5f7b8e2*
+
+Closed by `P11-PREFERENCE-STRENGTH`. `Resolve` is unchanged; every existing caller of it
+keeps today's fallback behaviour without touching a line. `Resolve_Requiring` is additive,
+and no caller of it exists yet in this workspace — like `OD-CAPABILITY-004`'s knowledge
+seam, the obligation is stated so the strength is right before a caller depends on it.
 
 ### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#1
 
