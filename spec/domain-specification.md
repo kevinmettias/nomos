@@ -83,6 +83,7 @@ profile: domain-specification
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 20 | 6 | sha256:421d04fd8bdf4cb6157a328b91317129f76e38d0a8a1a2e90f1c364fc72787f6 |
@@ -96,6 +97,7 @@ profile: domain-specification
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md@authored | docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md | authored | 29 | 9 | sha256:c6a7a7c0db9ecc42434859889d7851a22f1a4349bfc2b6b0855b281638738901 |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md@authored | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md | authored | 29 | 8 | sha256:1c14ec80ab265a141f114e04b9391559cf6eda8cba021361e8dd4ee10aee41cf |
 | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md@authored | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md | authored | 36 | 9 | sha256:d709970235889a73988a8da5d86b42a1ba5e503826adba05f843be4b1fdce369 |
 | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md@authored | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md | authored | 35 | 10 | sha256:5146b3097c4ce5a7bc2526186c0408aa8a723f180bb4ed78db335537cf53fde7 |
@@ -779,6 +781,17 @@ profile: domain-specification
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#55 | authored | 2 | Controls |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#64 | authored | 2 | Amendment, Version 2 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#68 | authored | 2 | Status |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1 | authored | 1 | A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6 | authored | 2 | The Decision |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7 | authored | 3 | A declared architecture is expressed as data, not as a bespoke Rust test |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10 | authored | 3 | The observed dependency graph is a fact a capability establishes |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13 | authored | 3 | Where the comparison lives |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15 | authored | 3 | What happens when a repository declares no architecture |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18 | authored | 3 | What becomes of `boundaries.rs` |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21 | authored | 2 | Why This Is A Nomos Claim |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -894,6 +907,15 @@ profile: domain-specification
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#18 | authored | 2 | The Defect The Name Was Hiding |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#24 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#27 | authored | 2 | Status |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#1 | authored | 1 | A derived identity already excludes revision, and that is the key a series across revisions needs |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#2 | authored | 2 | Question |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#5 | authored | 2 | What Is Already Decided, Read Correctly |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#10 | authored | 2 | The Rule |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#12 | authored | 2 | What A Temporal Claim Is Evidence Of, And What It Is Not |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#15 | authored | 2 | The Worked Case |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#20 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#24 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#28 | authored | 2 | Status |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md#1 | authored | 1 | The shape of an answer is part of the agreement, and one reader is where it lives |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md#2 | authored | 2 | Question |
 | docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md#5 | authored | 2 | What Five Implementations Cost |
@@ -23179,6 +23201,305 @@ next touches the relation vocabulary.
 Accepted, landed by `P10-PHANTOM-FLOOR`. Amended at version 2 while closing
 `P10-RULES-001-STALE`, in the record's own account of what it left owed.
 
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two · hash: sha256:bbf3c23a88a5bc5a44d3af040396392013ed9e323e264efa9d5ce4a9836f1211*
+
+# A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#3
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:f72e91e5454b9f270f7504ab2bef1f99666e94a13bc107a02c3990744ae42525*
+
+`P12-DRIFT-CAPABILITY` opened against a measurement about this repository's own strongest
+check. `tests/contract/tests/boundaries/bands.rs` authors `BANDS`, a table of every workspace
+member's band, with a doc comment giving the reason by hand: "a band is a design decision and
+there is nothing in the source to infer it from." `tests/contract/tests/boundaries/graph.rs`
+loads the real workspace through `Workspace::Load()` and asserts, among other things, that
+`Test_Dependencies_Should_Run_Strictly_Downward` — every edge in the observed graph runs to a
+strictly lower band than its source — and that `Test_Every_Member_Should_Declare_A_Band` — no
+crate joins the workspace outside the table.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#4
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:4a587775da2f581281c9a3f34ffeea75285944bd26ac87aacf1174ea88acbe5a*
+
+That is real architecture enforcement, and the class of finding it produces — a forbidden
+dependency direction, a same-band edge between two providers of one capability, a crate
+outside the declared ordering — is unavailable to any compiler or linter, because the
+declaration the finding is checked against is not written anywhere the language can read. But
+the check itself has no contract, no provider, no `Applicability`, no `Guarantee`. It knows
+this workspace's crate names by literal string, and `Workspace::Load()` reads `Cargo.toml`
+files directly from a hard-coded root. A second repository wanting the same property has
+nothing to point at; it would have to copy `bands.rs` and `graph.rs` and edit the table by
+hand for its own crates.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#5
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:b41ea0a9b0f2909146ed8e7bad2f49445c90b664ff8975724ba65340708710f1*
+
+The question this record answers is the seam `P12-DRIFT-CAPABILITY`'s own text names: where a
+declared architecture is stated, how the observed one is established as facts, and which of
+those two Nomos owns.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / A declared architecture is expressed as data, not as a bespoke Rust test · hash: sha256:3014194fd1ec78df21931a204c923924f4237ef312fb2078e550f98d56c4d864*
+
+### A declared architecture is expressed as data, not as a bespoke Rust test
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#8
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / A declared architecture is expressed as data, not as a bespoke Rust test · hash: sha256:70f91f07162e8ae9ff39285dc0cf889503804892990478ae1d4ef4a72a78224f*
+
+`bands.rs` already says what a declared architecture *is*, in its own doc comment, without
+meaning to state it generally: a design decision, authored because there is nothing in the
+source to derive it from. Stripped of being a Rust `const` table compiled into one crate's
+test binary, what `BANDS` holds is three things — a finite set of named components, a partial
+order over them expressed as a rank per component (the "scaled by ten" comment exists so the
+order can be edited without renumbering everything), and a finite set of named exceptions to
+the strict-downward rule that the order alone cannot express: `CONTRACTS_ALLOWLIST` (one
+component may reach a fixed external set and nothing else), `PLATFORM_ADAPTER` (exactly one
+named component may cross a boundary no other may), and the same-band prohibition
+`graph.rs`'s comments give a reason for twice — two providers of one capability must not be
+able to name each other, because a band forbids edges between its own members and that is
+what stops the second answer from being derivable from the first.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#9
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / A declared architecture is expressed as data, not as a bespoke Rust test · hash: sha256:695a8fa09b0e5d25cd231578f0c62cb2665923f13d441df04be5ef313f428972*
+
+None of that content is Rust-specific, and none of it needs to be discovered from source. A
+declared architecture, generally, is that triple — components, an order over them, and named
+exceptions to it — held as data a governing record or a maintained declaration states, the
+way this repository already holds other declarations (a capability's contract, a corpus
+requirement's site) as data rather than as logic embedded in the test that checks them. The
+seam is exactly the one `OD-CAPABILITY-002` drew for a capability's contract: an agreement
+does not belong to the party enforcing it, and while a declared architecture lives only inside
+the Rust test that reads it, no second party — a second repository, a second language, a
+second workspace — can hold the same agreement without a second copy of the file.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / The observed dependency graph is a fact a capability establishes · hash: sha256:c60210057e2daae1eac009c27fbe240fd81df404fd41ba68640aa482c194a1d5*
+
+### The observed dependency graph is a fact a capability establishes
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#11
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / The observed dependency graph is a fact a capability establishes · hash: sha256:a2c0caafc65ae9be8212cccad80131535738911b54e3fc2975d8fea1c3c47b02*
+
+`OD-RULES-001` already settled the general principle this claim is one instance of: **a rule
+states what it needs and is refused an answer beneath it**, and does not open the file itself.
+`graph.rs` today violates exactly that shape — `Workspace::Load()` parses `Cargo.toml` files
+directly inside the assertion that judges them, the same posture `OD-RULES-001` found and
+corrected for `nomos-rules` reading source text straight instead of through a `FactReader`.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#12
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / The observed dependency graph is a fact a capability establishes · hash: sha256:a830f76144922e4ecacdd2b31c49cae488261eede02615d66ef092cdcd124fcb*
+
+The observed dependency graph — which packages exist, and which package each one names as a
+direct dependency — is not a property a rule is entitled to establish by opening manifests
+itself. It is a fact a capability provider establishes, at a stated `Guarantee`, and a rule
+consumes it through a `FactReader` the way `Check_Completeness_Mirrors` consumes
+`nomos.cap.syntax.items`. The right resolution level is `FactVariant::SemanticallyResolved`,
+not `Syntactic`: a package's real dependency edges are the *resolved* set Cargo's own manifest
+and lockfile resolution produces — optional dependencies, target-`cfg`'d dependencies and
+dev-dependencies are not the same edge, and a provider that only scanned manifest text for
+`dependencies = {...}` blocks could not tell them apart, which is exactly the gap
+`OD-RULES-001` refused `nomos-lang-rust-scan` a semantic floor over for the analogous reason.
+A provider establishing this fact reads Cargo manifests and build metadata — what
+`Workspace::Load()` already does today — but does so behind a capability boundary a rule
+requests rather than as code embedded inside the assertion.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / Where the comparison lives · hash: sha256:f4bf1927cfed66a3c13b4f1c53d4be1dc1cb10fbb61b3c95a2c02ca151b151f5*
+
+### Where the comparison lives
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#14
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / Where the comparison lives · hash: sha256:7c7f960b90a9db6cbbb510112e62ee1f6f1d298a64eaa0aff2a415baaa885fb5*
+
+The comparison is a Nomos rule, not a capability and not a fact by itself. It composes two
+inputs of different kinds — the declared architecture (policy: data this repository or a peer
+commits itself to) and the observed dependency graph (a fact a capability provider
+establishes) — into findings, exactly the general shape `ARC-CONFORMANCE-001` already gives a
+name: a conformance claim, composed from architecture, requirements, history, runtime evidence
+and policy, checked against each other rather than against a language's grammar or type
+system. `ARC-CONFORMANCE-001` names this exact pair, `bands.rs` and `graph.rs`, as its first
+worked example of the shape. This record does not introduce a new kind of claim; it states
+what the two inputs to that already-named claim are, and that one of them must arrive as a
+fact rather than as a direct read.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What happens when a repository declares no architecture · hash: sha256:6ca4178c0a1ded7984ca2123f1770ea9ff97763159ffa82915f775fb9637ffef*
+
+### What happens when a repository declares no architecture
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#16
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What happens when a repository declares no architecture · hash: sha256:2350041688f56f64e0939a17f153a9322e0b4dd2b5d051890fc7b87befe50cfa*
+
+The answer must not be that everything passes, and the vocabulary for saying so already
+exists and is used exactly for this. `Applicability::NotApplicable` — "The rule does not bind
+this subject. This is the only variant that is a positive statement about the absence of a
+judgment" — is the value reported. A repository holding no declared-architecture data gives
+the rule nothing to compare the observed graph against; the rule does not bind that
+repository, and it says so positively rather than reporting `Supported` over a comparison it
+never ran. `Applicability::Display_Label` keeps `NotApplicable` distinct from
+`DisplayLabel::Native` at every consumer, so this can never render identically to a clean
+pass.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#17
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What happens when a repository declares no architecture · hash: sha256:d3b409bc27cc41fc5002f0e7016b2d0fc0b810576d41229e1cbeb9247402111d*
+
+It is deliberately not `MissingCapability`: that variant means no installed provider offers a
+capability the rule requires, and the capability establishing the observed graph can be fully
+present and correct while no architecture has been declared — the gap is in the policy input,
+not the fact input. It is deliberately not `ConfigurationDisabled` either: that variant is a
+deliberate human choice to switch a rule off for a subject that otherwise has one, and a
+repository that has never declared an architecture has not switched anything off. `NotApplicable`
+is the one variant built for a subject the rule was never going to bind in the first place,
+which is what an undeclared architecture is.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What becomes of `boundaries.rs` · hash: sha256:451dfc4f4864d45fb8e2acbc6b2e85a8bad483d610b9288eb7becf49ad69760f*
+
+### What becomes of `boundaries.rs`
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#19
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What becomes of `boundaries.rs` · hash: sha256:94996c4545239299d01636dbca45d9caff6b5aba4c60d9e3bcf64c922cfc422f*
+
+It stays a bespoke guard. `P12-DRIFT-CAPABILITY`'s own `done_when` text is explicit that this
+item does not widen or change `boundaries/bands.rs` or `boundaries/graph.rs` — `P10-SERVICE-SEAM`
+holds that file — and this record does not reach past that boundary. Beyond the territory
+line, the reason is substantive and not only procedural: migrating `bands.rs` and `graph.rs`
+into instances of the general mechanism this record describes needs three things that do not
+exist yet — a capability that establishes the observed dependency graph as a fact at a stated
+`Guarantee`, a place to author a declared architecture as data rather than as a Rust `const`
+table, and a rule that consumes both through the seam `OD-RULES-001` already established for
+every other judgment in this tree. None of those three is built by this record. Stating the
+seam and building the mechanism are different items of work, and building it without first
+stating where the two halves belong is the "widen `boundaries.rs` into a configurable table"
+move `P12-DRIFT-CAPABILITY`'s own `why` text names as the obvious wrong move — the general
+mechanism must not be this repository's own guard wearing a parameter.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#20
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What becomes of `boundaries.rs` · hash: sha256:54b0de1394a872fda11c56ff8007cfb7538bd2ead3360d44d6c52d97dbdffa66*
+
+When the mechanism exists, this repository's own `BANDS`, `CONTRACTS_ALLOWLIST` and
+`PLATFORM_ADAPTER` content is the natural first declaration to migrate into it — it is
+already exactly the triple the general form needs, authored as data in a table for the reason
+`bands.rs` already gives — and `graph.rs`'s five assertions become this repository's own
+instance of the general rule, run over its own declaration, rather than a bespoke one. That
+migration is not committed to here, has no owner and no schedule; it is left for whichever
+future item builds the mechanism and finds this repository the first and most convenient
+place to point it at.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Why This Is A Nomos Claim · hash: sha256:39fa6a7e05148859b1537d817e869a61df18fa38eeb978e6365146aae6c20462*
+
+## Why This Is A Nomos Claim
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#22
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Why This Is A Nomos Claim · hash: sha256:bac2df47d6182519ad452b3e1100cbf608f5c31bc42c597046d88565a71be779*
+
+`ARC-CONFORMANCE-001` draws the line this record's claim sits on the Nomos side of: a
+conformance claim answers whether *this system*, built the way its own records say it should
+be, still holds the shape its own architecture commits it to — a question no compiler,
+linter or language server has any notion of, because none of them models a declared band, a
+same-band prohibition, or a named exception to a strict-downward rule. `bands.rs` and
+`graph.rs` are that record's own first worked example, cited by name: "`graph.rs`'s
+`Test_Dependencies_Should_Run_Strictly_Downward` asserts a dependency ordering no compiler
+enforces, because a band is a design decision authored in `bands.rs` rather than inferred from
+`Cargo.toml`." The test `ARC-CONFORMANCE-001` states for native analysis — that no provider
+exposes the fact, never that writing it natively would be convenient — is satisfied here for
+the same reason it already gave: no compiler has a notion of a declared band, so the
+comparison this record describes is Nomos's to make and not a provider's to be asked for
+instead. This record does not reopen that test or that worked example; it takes the general
+claim `ARC-CONFORMANCE-001` already names and states what its two composed inputs are for this
+one instance of it.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#24
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:4ae2c0157fc1dfe60c754b501e8efb2addd1b079672708fba639f42392cd2b32*
+
+It does not touch `tests/contract/tests/boundaries/bands.rs` or
+`tests/contract/tests/boundaries/graph.rs`, and it does not widen either file into a
+configurable table. `P10-SERVICE-SEAM` holds that territory.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#25
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:f023583aa5266f6b1e74b4d362aabcf2c635bc5bd34e3421bb5bfe8098433a45*
+
+It does not build the capability that establishes the observed dependency graph as a fact, the
+data format a declared architecture would be authored in, or the rule that composes the two.
+It states where each belongs; building any of the three is separate work this record does not
+schedule.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#26
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:c60e7fc71cd6a726749f99b542b169cfe408b3b985c84422bbef1510d46a73e1*
+
+It does not commit this repository's own `BANDS` table to a migration date, or require one at
+all. It states only what that table already is, and what it could become once the general
+mechanism exists.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#27
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:4e1996eb31bafe76c8e28b392c7904520afea3ebff8da8c71e95101340a32126*
+
+It does not reopen `ARC-CONFORMANCE-001`, redraw its four worked examples, or change what a
+conformance claim means generally. It applies that record's already-general shape to the one
+claim `P12-DRIFT-CAPABILITY` asked about.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#28
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:0070eced63eddfb6a4742a8937ce607bcc3670c896f970c01ed1996e793d1253*
+
+It does not change `Applicability`, `Guarantee` or `FactVariant`. `NotApplicable` and
+`SemanticallyResolved` are used as they already exist.
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29
+
+*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#30
+
+*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Status · hash: sha256:5bdab350d419dee34ad39b8e8c11b0f24803b469bcd517bccf6b30c827b5b41d*
+
+Accepted, landed by `P12-DRIFT-CAPABILITY`.
+
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
 *revision: authored · kind: heading · heading: Whether the specification store gains a second backend, and what would decide it · hash: sha256:998e326f719f6d7c6f6b4542b8894e935df0a1c5f35713db507bd577dfb96d23*
@@ -26567,6 +26888,309 @@ defect with an indirection in front of it.
 
 Closed. The criterion — a kind earns its place by behaviour — is the part worth carrying
 forward; it is what the next request for a document kind should be answered against.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#1
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs · hash: sha256:db07ef7ddec32d0a62dbc872bd617e8a12d32774fe17c5be564f62ed9d81a7ab*
+
+# A derived identity already excludes revision, and that is the key a series across revisions needs
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#2
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#3
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / Question · hash: sha256:d4f89f6a77278a43389869118a604e337720ba870efd6da641f24a20c6789706*
+
+`crates/contracts/nomos-contracts/src/identity.rs`'s module doc names history as one of
+five comparative features that killed the prototype, all for the same reason: every one of
+them was a join with no key. Every check in this workspace inspects one tree, and nothing
+compares a run against the runs before it — including the one case where both sides of that
+comparison are already committed: `tests/contract/surface/<crate>.txt` holds a derived
+snapshot of every crate's exported declarations, `OD-GATE-002` made re-blessing it a
+deliberate act, and every public API change in this workspace's history is therefore sitting
+in git, unqueried, next to the question of whether it shipped with a governing record.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#4
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / Question · hash: sha256:d5ede0ec8a3e4be224326df7752beda67bb2013114a4a55a0291b09cf6321072*
+
+The reason that query has never been written is not effort. It is that the temporal subject
+was never decided. `OD-ANALYSIS-001` and `P8-PIN` removed a workspace state from `FactKey`
+deliberately, which settles what a fact's identity does *not* include, but settles nothing
+about what happens when the workspace state a fact was measured against is not the current
+one. Three things are undecided going in: whether a fact from an earlier revision is
+retained anywhere, what addresses one entity's story across many revisions, and what makes
+two facts from different revisions the *same* fact rather than two unrelated ones that
+happen to compare equal by accident.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#5
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Is Already Decided, Read Correctly · hash: sha256:630e69f444599ceae0e5e20a69c14a07beed77825a7643cca6e59d8377f00845*
+
+## What Is Already Decided, Read Correctly
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#6
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Is Already Decided, Read Correctly · hash: sha256:73b770e15f12f1ebb1ad18b425bc183d0314bb1d79553fe6a9ccd4529d4c0605*
+
+Nothing new is required to answer any of the three. The codebase already contains the
+answer, stated twice, independently, at two different layers, and this record's only work
+is to name the pattern and make it binding rather than incidental.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#7
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Is Already Decided, Read Correctly · hash: sha256:ea6c2afda120fc65085d85447d2c77b4da7574cf3081969406494c2c24daf528*
+
+**`crates/substrate/nomos-analysis/src/fact/materialized.rs`.** `MaterializedFact::snapshot`
+carries the `SnapshotId` a fact was measured against, and its own doc comment says why it is
+there and why it is not part of `FactKey`: "provenance, not identity… deliberately not
+restamped when a fact is reused: a reused fact is not a repeated observation." `FactKey`
+carries `subject: SubjectId` and `semantic_inputs: InputDigest` instead — bytes drawn from
+what the fact is about, not from which tree it was read from.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#8
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Is Already Decided, Read Correctly · hash: sha256:9fd2d7bcead373ece6777134aa80dba68292c32f7f9405b27fb04cfaade60c66*
+
+**`crates/kernel/nomos-model/src/identity/composite_identity.rs`.** `SourceProvenance`
+carries a `revision: String` field, documented as "the revision it was read at," and
+`CompositeIdentity::Entity_Id` does not hash it: the `Digest_Of_Parts` call feeds in
+`language`, `qualified_name`, `signature`, the structural fingerprint and
+`provenance.repository`, and stops there. `Test_Identity_Should_Not_Depend_On_Location`
+changes `provenance.revision` between two constructions and asserts the resulting
+`EntityId`s are equal. That assertion is not incidental; it is the same claim
+`OD-MODEL-002` makes generally — a derived identifier "is a function of the corpus and
+nothing else… run it twice over an unchanged corpus and the bytes fed to the hash do not
+move" — read one layer down, at the one entity family the crate ships a concrete
+construction for.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#9
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Is Already Decided, Read Correctly · hash: sha256:27f1095b3d76c5c7611fb2dc77b55e32a5d509205e48f2352d64974fb690fa01*
+
+Both layers carry the revision as data beside the identity and exclude it from the identity
+itself, for the same reason `identity.rs`'s own module doc gives for excluding machine- and
+run-local inputs generally: an identifier answers "which thing," never "when was it looked
+at." That is already the key `identity.rs` says history needs. A derived identity, taken as
+`OD-MODEL-002` defines it, is *already* invariant across a change of revision for an
+unchanged subject — not because this record adds that property, but because deriving rather
+than minting was always going to have that property, and nobody had connected it to the
+"join with no key" the module doc names as history's failure mode until this item asked the
+question directly.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#10
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / The Rule · hash: sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5*
+
+## The Rule
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#11
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / The Rule · hash: sha256:85e2723438c8e2f140186284485ef432b03295bb9791e6882b781e3458a5e990*
+
+> **Facts from a prior revision are not retained.** The live fact store
+> (`MemoryFactStore`) is in-process and generation-scoped: an entry is materialized,
+> optionally invalidated at a later generation within the same run, and nothing in it
+> survives past the process that built it or reaches back across a git revision boundary. A
+> claim about a prior revision is not served from a Nomos store. It is reconstructed —
+> today, by checking out that revision and rematerializing over it; for the worked case
+> below, directly from git, because the evidence committed there already *is* the
+> reconstruction.
+>
+> **A series across revisions is addressed by the same derived identity `OD-MODEL-002`
+> already assigns the entity family, not by a new construct.** Two observations of the same
+> semantic address, taken on two different revisions, already carry the same `SubjectId` or
+> `EntityId` today, because the derivation excludes revision by the rule stated above. That
+> identity is the series key. Nothing under this record computes a new one.
+>
+> **Two facts from different revisions are the same fact when their derived identity
+> agrees and their recorded revision differs — never on equal identity alone and never on
+> equal revision alone.** Equal identity with equal revision is one fact observed twice, not
+> a series. Equal revision with different identity is two different facts about the same
+> tree, which is what the fact store already handles.
+>
+> **A derived identity that bakes in the attribute a comparison exists to observe is the
+> wrong grain for that comparison's series key, and this is a decided tradeoff already
+> visible in the model that carries it, not a defect this record is finding.**
+> `CompositeIdentity::Entity_Id` folds `signature` into the same digest as `qualified_name`,
+> gated by `IdentityPolicy::distinguish_overloads` — and the policy's own test names the
+> cost: an identity that "churns whenever a parameter type is reformatted." A series meant to
+> observe *whether* a signature changed cannot use the identity that changes the instant it
+> does; it must use the coarser coordinate held fixed underneath — language, qualified name,
+> declaring repository — and treat the folded-in attribute as the value being tracked at
+> each point in the series, not as part of the key that addresses the series. This is the
+> same discipline `identity.rs` already applies once, generally; a series key applies it a
+> second time, locally, to whichever attribute the comparison is about.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#12
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What A Temporal Claim Is Evidence Of, And What It Is Not · hash: sha256:aaba4a256a5d943bd82ac5e5aa67545d1c918d744a774cadc7945ac6ed21b60c*
+
+## What A Temporal Claim Is Evidence Of, And What It Is Not
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#13
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What A Temporal Claim Is Evidence Of, And What It Is Not · hash: sha256:495587147c1fa488c7b42c64d2a5cb82e4f71671ff3619f6e60d9eaf899ad89e*
+
+A claim computed over accepted revisions — a trend, a recurrence, a "this kept happening" —
+is `EvidenceClass::Derived` at best: "computed from other facts by a deterministic rule. No
+stronger than its inputs," per `crates/contracts/nomos-contracts/src/finding/evidence.rs`.
+It is never `Verified` or `Observed`, both of which that same enum reserves for a claim about
+one tree checked by a mechanism that would have caught its negation. A history is a
+computation over a sequence of past `Verified` or `Observed` claims, and `Weaker_Of` already
+states the arithmetic: a derivation over its inputs is never stronger than the weakest of
+them, and a trend inherits nothing but what accepting each revision along the way already
+established.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#14
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What A Temporal Claim Is Evidence Of, And What It Is Not · hash: sha256:ff1e2b5c0ff1df393d72ac4c972b55b86e1584942bd2899ce8f7fc614198a57c*
+
+The distinction has one operational consequence, and it is the one `done_when` asked this
+record to state rather than leave implicit: **a temporal claim must never gate the change
+that produced the observation the trend depends on.** A live check on the current tree is
+evidence the tree is or is not in a state; a trend across ten accepted revisions is evidence
+about a pattern across those ten revisions, and treating it as if it were evidence about the
+eleventh — the one being proposed right now — lets a historical inference block a change on
+evidence about *other* changes, none of which is the one in front of the reviewer. A
+regression-across-revisions report, a co-change signal, a recurring finding: every one of
+these is a `Derived` claim to be read alongside a live check, never substituted for one, and
+never wired to a mechanism — a gate, a lint, an auto-block — that a `Verified` claim alone is
+entitled to drive.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#15
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / The Worked Case · hash: sha256:fd9b8692a645a6af0a02d41520217ac1ef204e5ad9a0d690c18a5f009a9d6494*
+
+## The Worked Case
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#16
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / The Worked Case · hash: sha256:e0d6116c9b3b249534347969fa4883f466d88a2bb539f04134f88e66d13a6608*
+
+`tests/contract/surface/<crate>.txt` is already, without any change this record makes, a
+committed time series. `Surface::package` (`tests/contract/src/surface.rs`) names the crate;
+that name is the series' address, human-authored and stable across every revision that does
+not rename the crate itself — the same shape `identity.rs` gives a `Named_Identity`, whether
+or not it is wrapped as one. `Surface::declarations` is the value at one point in that
+series, and `OD-GATE-002`'s re-blessing mechanism — `NOMOS_SURFACE_BLESS` rewrites the file
+and then fails — is what turns a change of that value into a commit somebody had to make on
+purpose.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#17
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / The Worked Case · hash: sha256:cf1612864594dce8372fecc71e51730bd2ba9636357a02a161f7d98061993de0*
+
+The comparison this item was opened to make possible is now expressible entirely in terms
+already committed:
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#18
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / The Worked Case · hash: sha256:062052b13c66376d41e59df8a7189052e466ca898254fa6e9b61abc900dca1a6*
+
+> For a crate `C` and a commit range, does the blob at `tests/contract/surface/C.txt` differ
+> between the range's endpoints, and does any commit in that same range touch
+> `docs/records/`? A `yes` to the first and `no` to the second is a public API change with no
+> accompanying record.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#19
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / The Worked Case · hash: sha256:9199152afaeed3334925395247b55c17a545b4263078f46b0374dbf2030e963b*
+
+Both sides of that join are git history and nothing else: `git log -p -- tests/contract/surface/C.txt`
+answers the first, `git log --name-only <range> -- docs/records/` answers the second, and
+the series key that makes "the same crate's surface" a well-formed subject across the range
+is `C` itself — the file's own name, exactly as this record's rule says a series key must
+be: the coordinate held fixed, not the value being watched for change. Writing the query
+that runs this join is not this record's territory; naming the key it needs, so that writing
+it is a query and not a research question, is.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#20
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#21
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Was Considered And Rejected · hash: sha256:4c108b47114a302d19e97b899318b5ec33cc1ff637266e1dc8f01779c4c710f7*
+
+**A third identity shape for "series identity," alongside `Digest128` and the
+authored-string shape `identity.rs` already names.** Rejected for the reason `OD-MODEL-002`
+gives generally: deciding an identity question once per family, instead of once here, is how
+it ends up answered differently for each one. The two existing shapes, read with revision
+excluded, already serve; a third shape would duplicate what they already do rather than add
+anything they cannot.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#22
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Was Considered And Rejected · hash: sha256:4955b2f5043be834f10f53e29e183fd8700def3754c59125e419378e3c793e7c*
+
+**Retaining facts from prior revisions in the live store, keyed by revision, so a series
+query reads from Nomos rather than from git.** Rejected because it duplicates a durable
+history git already is. `MemoryFactStore` is in-process by construction and nothing in this
+item's territory changes that; the worked case above is evidence that the duplication is not
+needed even for the concrete comparison this item exists to unlock.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#23
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What Was Considered And Rejected · hash: sha256:e5c62ed999c75ac5cfb9ba2c4ef742ec509188c8608dae73efbb59b615061aaf*
+
+**Treating a `Derived` temporal claim as equivalent to a live check once enough revisions
+agree.** Rejected in the section above. No number of accepted revisions promotes a trend to
+evidence about the revision that has not been accepted yet; `EvidenceClass` already has no
+path from `Derived` to `Verified` that does not go through checking the thing itself.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#24
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#25
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What This Does Not Decide · hash: sha256:1ef23417bf1a217c987988d98e75d294b91d21bfed53afc7cfbd81b0078b306b*
+
+Not the query implementation, the storage of its result, or which corpus-gated test would
+run it. This record names the key; building on it is further work, reachable now that the
+join has one.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#26
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What This Does Not Decide · hash: sha256:5a7f7c56d9e8d5fe03c55638de12e5d758f89f474e3262e561cc5ca2c6ecca02*
+
+Not a general history feature for every entity family in one motion. The rule above applies
+per family as it is reached, the same way `OD-MODEL-002`'s derivation obligation does — this
+record settles the shape the answer takes, not every family's answer at once.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#27
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / What This Does Not Decide · hash: sha256:e02f6f9d0ef3209b90077e49e4b5c23b8f8f546b3f2c87a14e9df7cc6d21c4b2*
+
+Not a change to `FactKey`, `MaterializedFact`, `CompositeIdentity`, `SourceProvenance`, or
+`IdentityPolicy`. Every one of them already has the shape this record describes; none of
+them is edited by it.
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#28
+
+*revision: authored · kind: heading · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#29
+
+*revision: authored · kind: prose · heading: A derived identity already excludes revision, and that is the key a series across revisions needs / Status · hash: sha256:824346f32bce2012488f34529064c1419e4545392da93a1e954b5c36e1481a78*
+
+Accepted. It states that prior-revision facts are not retained by the live store, that a
+series across revisions is addressed by the entity family's existing derived identity read
+at the coordinate that excludes the attribute under observation, that two such facts compare
+as the same fact on agreeing identity and differing revision, that a temporal claim is
+`Derived` evidence and never a substitute for a live check, and it works the public-API/
+no-record comparison through concretely as the case both sides of which are committed today.
 
 ### docs/records/OD-SYNTAX-001-the-shape-of-an-answer-is-part-of-the-agreement-and-the-reader-is-where-it-lives.md#1
 

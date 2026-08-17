@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5c388fc37c9a8ea1db1f710a1014fcb860eebc13b0a7963b8c3653ea15ade852",
-  "inputs_digest": "sha256:90a79404fe22dac64da0f3969a207cc03767327b91e5daf5200840b9bd70802b",
+  "content_digest": "sha256:3503f93388de1ad73aff0e5c6ad3805aa60400c643d7683b1f25f8615306c8db",
+  "inputs_digest": "sha256:1e00fe40ea3b5f5f87f6c83b08531484da362a1bf2b5b24f08c911628c4bcd11",
   "sections": [
     [
       "Documents",
-      90
+      92
     ],
     [
       "Sections",
-      827
+      847
     ],
     [
       "Source blocks",
-      3151
+      3210
     ]
   ],
   "inputs": [
@@ -387,6 +387,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored",
+      "hash": "sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-SPEC-001-the-storage-backend-question.md@authored",
       "hash": "sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae"
     },
@@ -449,6 +454,11 @@
       "content": "documents",
       "identity": "docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored",
       "hash": "sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md@authored",
+      "hash": "sha256:c6a7a7c0db9ecc42434859889d7851a22f1a4349bfc2b6b0855b281638738901"
     },
     {
       "content": "documents",
@@ -3842,6 +3852,61 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1",
+      "hash": "sha256:923eabfa5c5296e58c33d94ea3d1b7628e0a2a27bb35f9f9c374a24f12cd4a45"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2",
+      "hash": "sha256:b1e2246d1c8584430e56dafd7a1aeabee9327bc9604c47f9c1c435fb4ce80c0a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6",
+      "hash": "sha256:a2bee15921c57dcf992254a7b8da1d4a362ac8141a980c9649a5321fcf82719c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7",
+      "hash": "sha256:698d7f40bfe5a51a3772286ebed2412b675a839c50dec6a2e10a859b53539c24"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10",
+      "hash": "sha256:710a81e42a238e614350f1958ce480e38119afd498a6d44581e3e82fa5a1538e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13",
+      "hash": "sha256:bcdf640f97b90f1a35788c2492d13066bab8fa032652ce855c672e25d6046a56"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15",
+      "hash": "sha256:6a85f4cfc7b5f3e1a58987c9e62a3487b21055d926458b5c2fc9de157eb6c2bf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18",
+      "hash": "sha256:6f5e0ba4b64693f265612e793c4b7c228cb7ca488d2bc55c60d5fcafd09a5ce7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21",
+      "hash": "sha256:5a47e0c3b1819d7a79bc97a70721a1810230cedface086fe299fafb0bb6495dd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23",
+      "hash": "sha256:0304d6617a6fbe1e78808ebe15f750ed0584f363734d8029eddd540d86f7974a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29",
+      "hash": "sha256:7f42679f5f0bde00d0eba96272b48db54916a435b2368eea8ebfa5aa029ef27a"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-SPEC-001-the-storage-backend-question.md#1",
       "hash": "sha256:bfa8c7ace1953496b5b8e9519fb380a065386f26552bc46030402da1cc6c5971"
     },
@@ -4414,6 +4479,51 @@
       "content": "headings",
       "identity": "docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#27",
       "hash": "sha256:f9a16b4e854a83b2cc3a0cc39338f1346503d368123083f2f6dc699c30175067"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#1",
+      "hash": "sha256:eeec4ecbb5bb770c4a3ce237fd95233f45fc0cd4df8a03dbd5ffd664fa1683c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#2",
+      "hash": "sha256:5024cf3e63869aeda838256b982f572e53e605074b46dd49d8c556b848872cdf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#5",
+      "hash": "sha256:be95b4feedc409fa80e13285820e8cdd1ecff5386775dbc2079cca2b87629b2d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#10",
+      "hash": "sha256:39663edbb2a915aac7337f4e2d15f0cd0d8e842dd95568faffa61d0562622148"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#12",
+      "hash": "sha256:9b090076672d39be332c3cded00442adcde98af3356978d6ee3ed69c431e0990"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#15",
+      "hash": "sha256:76c4b0d9bccf9166b17926b4f24348184b9d1f01a7dd6e38253d3c64f9f50299"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#20",
+      "hash": "sha256:6ca0deb67fc6f5bb614c3009d8fc9a11153821da63071697ec86d4b7c2b5659a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#24",
+      "hash": "sha256:00e8edf42a7bf766810ec40fb25125f91645bc1ad4b3130e673f793aeb90dc20"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#28",
+      "hash": "sha256:8d74cfb4f9f19dae968b877e3d3658bf7ade44e98825ded8162bef0124557d46"
     },
     {
       "content": "headings",
@@ -17562,6 +17672,156 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1",
+      "hash": "sha256:bbf3c23a88a5bc5a44d3af040396392013ed9e323e264efa9d5ce4a9836f1211"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#3",
+      "hash": "sha256:f72e91e5454b9f270f7504ab2bef1f99666e94a13bc107a02c3990744ae42525"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#4",
+      "hash": "sha256:4a587775da2f581281c9a3f34ffeea75285944bd26ac87aacf1174ea88acbe5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#5",
+      "hash": "sha256:b41ea0a9b0f2909146ed8e7bad2f49445c90b664ff8975724ba65340708710f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7",
+      "hash": "sha256:3014194fd1ec78df21931a204c923924f4237ef312fb2078e550f98d56c4d864"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#8",
+      "hash": "sha256:70f91f07162e8ae9ff39285dc0cf889503804892990478ae1d4ef4a72a78224f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#9",
+      "hash": "sha256:695a8fa09b0e5d25cd231578f0c62cb2665923f13d441df04be5ef313f428972"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10",
+      "hash": "sha256:c60210057e2daae1eac009c27fbe240fd81df404fd41ba68640aa482c194a1d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#11",
+      "hash": "sha256:a2c0caafc65ae9be8212cccad80131535738911b54e3fc2975d8fea1c3c47b02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#12",
+      "hash": "sha256:a830f76144922e4ecacdd2b31c49cae488261eede02615d66ef092cdcd124fcb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13",
+      "hash": "sha256:f4bf1927cfed66a3c13b4f1c53d4be1dc1cb10fbb61b3c95a2c02ca151b151f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#14",
+      "hash": "sha256:7c7f960b90a9db6cbbb510112e62ee1f6f1d298a64eaa0aff2a415baaa885fb5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15",
+      "hash": "sha256:6ca4178c0a1ded7984ca2123f1770ea9ff97763159ffa82915f775fb9637ffef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#16",
+      "hash": "sha256:2350041688f56f64e0939a17f153a9322e0b4dd2b5d051890fc7b87befe50cfa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#17",
+      "hash": "sha256:d3b409bc27cc41fc5002f0e7016b2d0fc0b810576d41229e1cbeb9247402111d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18",
+      "hash": "sha256:451dfc4f4864d45fb8e2acbc6b2e85a8bad483d610b9288eb7becf49ad69760f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#19",
+      "hash": "sha256:94996c4545239299d01636dbca45d9caff6b5aba4c60d9e3bcf64c922cfc422f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#20",
+      "hash": "sha256:54b0de1394a872fda11c56ff8007cfb7538bd2ead3360d44d6c52d97dbdffa66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21",
+      "hash": "sha256:39fa6a7e05148859b1537d817e869a61df18fa38eeb978e6365146aae6c20462"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#22",
+      "hash": "sha256:bac2df47d6182519ad452b3e1100cbf608f5c31bc42c597046d88565a71be779"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#24",
+      "hash": "sha256:4ae2c0157fc1dfe60c754b501e8efb2addd1b079672708fba639f42392cd2b32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#25",
+      "hash": "sha256:f023583aa5266f6b1e74b4d362aabcf2c635bc5bd34e3421bb5bfe8098433a45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#26",
+      "hash": "sha256:c60e7fc71cd6a726749f99b542b169cfe408b3b985c84422bbef1510d46a73e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#27",
+      "hash": "sha256:4e1996eb31bafe76c8e28b392c7904520afea3ebff8da8c71e95101340a32126"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#28",
+      "hash": "sha256:0070eced63eddfb6a4742a8937ce607bcc3670c896f970c01ed1996e793d1253"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#30",
+      "hash": "sha256:5bdab350d419dee34ad39b8e8c11b0f24803b469bcd517bccf6b30c827b5b41d"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-SPEC-001-the-storage-backend-question.md#1",
       "hash": "sha256:998e326f719f6d7c6f6b4542b8894e935df0a1c5f35713db507bd577dfb96d23"
     },
@@ -19654,6 +19914,151 @@
       "content": "blocks",
       "identity": "docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md#28",
       "hash": "sha256:67108059927534dc517581f42f44c7dc365272b261451bea2815c5c21ca49369"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#1",
+      "hash": "sha256:db07ef7ddec32d0a62dbc872bd617e8a12d32774fe17c5be564f62ed9d81a7ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#3",
+      "hash": "sha256:d4f89f6a77278a43389869118a604e337720ba870efd6da641f24a20c6789706"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#4",
+      "hash": "sha256:d5ede0ec8a3e4be224326df7752beda67bb2013114a4a55a0291b09cf6321072"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#5",
+      "hash": "sha256:630e69f444599ceae0e5e20a69c14a07beed77825a7643cca6e59d8377f00845"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#6",
+      "hash": "sha256:73b770e15f12f1ebb1ad18b425bc183d0314bb1d79553fe6a9ccd4529d4c0605"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#7",
+      "hash": "sha256:ea6c2afda120fc65085d85447d2c77b4da7574cf3081969406494c2c24daf528"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#8",
+      "hash": "sha256:9fd2d7bcead373ece6777134aa80dba68292c32f7f9405b27fb04cfaade60c66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#9",
+      "hash": "sha256:27f1095b3d76c5c7611fb2dc77b55e32a5d509205e48f2352d64974fb690fa01"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#10",
+      "hash": "sha256:4865a77f8126915a6ad3e6a258f5af73eefc1b30baeb4938ea003d7b90eeeae5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#11",
+      "hash": "sha256:85e2723438c8e2f140186284485ef432b03295bb9791e6882b781e3458a5e990"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#12",
+      "hash": "sha256:aaba4a256a5d943bd82ac5e5aa67545d1c918d744a774cadc7945ac6ed21b60c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#13",
+      "hash": "sha256:495587147c1fa488c7b42c64d2a5cb82e4f71671ff3619f6e60d9eaf899ad89e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#14",
+      "hash": "sha256:ff1e2b5c0ff1df393d72ac4c972b55b86e1584942bd2899ce8f7fc614198a57c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#15",
+      "hash": "sha256:fd9b8692a645a6af0a02d41520217ac1ef204e5ad9a0d690c18a5f009a9d6494"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#16",
+      "hash": "sha256:e0d6116c9b3b249534347969fa4883f466d88a2bb539f04134f88e66d13a6608"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#17",
+      "hash": "sha256:cf1612864594dce8372fecc71e51730bd2ba9636357a02a161f7d98061993de0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#18",
+      "hash": "sha256:062052b13c66376d41e59df8a7189052e466ca898254fa6e9b61abc900dca1a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#19",
+      "hash": "sha256:9199152afaeed3334925395247b55c17a545b4263078f46b0374dbf2030e963b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#20",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#21",
+      "hash": "sha256:4c108b47114a302d19e97b899318b5ec33cc1ff637266e1dc8f01779c4c710f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#22",
+      "hash": "sha256:4955b2f5043be834f10f53e29e183fd8700def3754c59125e419378e3c793e7c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#23",
+      "hash": "sha256:e5c62ed999c75ac5cfb9ba2c4ef742ec509188c8608dae73efbb59b615061aaf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#24",
+      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#25",
+      "hash": "sha256:1ef23417bf1a217c987988d98e75d294b91d21bfed53afc7cfbd81b0078b306b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#26",
+      "hash": "sha256:5a7f7c56d9e8d5fe03c55638de12e5d758f89f474e3262e561cc5ca2c6ecca02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#27",
+      "hash": "sha256:e02f6f9d0ef3209b90077e49e4b5c23b8f8f546b3f2c87a14e9df7cc6d21c4b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-STORE-002-a-derived-identity-already-excludes-revision-and-that-is-the-key-a-series-needs.md#29",
+      "hash": "sha256:824346f32bce2012488f34529064c1419e4545392da93a1e954b5c36e1481a78"
     },
     {
       "content": "blocks",
