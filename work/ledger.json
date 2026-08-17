@@ -8420,10 +8420,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orchestrator-P12-PROGRAM-SEMANTICS",
+        "acquired_at": 1786925679,
+        "lease_expires_at": 1786932879
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -8718,12 +8722,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P12-CONFORMANCE-SEAM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orchestrator-P12-DRIFT-CAPABILITY",
+        "acquired_at": 1786925683,
+        "lease_expires_at": 1786932883
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -8843,7 +8851,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory cannot do the work. done_when is executable-check language in three of its four clauses: 'A check reports a claim whose provenance cannot be established, and a consumer that accepted evidence weaker than it required, as two distinct findings' (a check's output, not a record's prose); 'A consumer can state an evidence floor, and the comparison uses EvidenceClass's existing ordering' (an API for stating and comparing a floor, exercised at runtime); 'Self-referential provenance is reported... and it passes every check that only asks whether provenance is present' (requires an actual check run against a self-referential fixture, observed to wrongly pass, then fixed to not). Only the fourth clause (absent provenance means unexamined, not unsupported) is phrasable as pure prose. This is the same shape P12-UNENFORCED-DECLARATION was declined for (7eda6e5): 'a check reports ... as a finding' with a two-record-only territory and no Rust/test/fixture reach. Here that gap is concrete rather than hypothetical: EvidenceClass is already attached at runtime to Evidence (crates/kernel/nomos-model/src/evidence/claim.rs, field 'class') and to Finding in the existing rules crate (crates/rules/nomos-rules/src/mirror.rs, mirror/verdict.rs, mirror/unread.rs all set 'evidence: EvidenceClass::...' on emitted Finding values already). The check this item wants -- one that reads a claim's Evidence, compares it against a consumer-stated floor via EvidenceClass's Ord, and distinguishes 'provenance absent' from 'floor undershot' as separate Finding kinds, with the P10-STAMP-CONSISTENCY self-referential case as a fixture -- is an extension of that existing mirror/Finding mechanism, not a fresh invention, and it belongs in crates/rules/nomos-rules/src (a rule/universe alongside mirror.rs), wired into the nomos check composition root, plus fixture or corpus territory to exercise the self-referential case as a worked negative control. The reserved territory (docs/records/OD-COMPLETENESS-003 and crates/spec/nomos-spec-store/records/OD-COMPLETENESS-003.record) is spec-store record content only, with no reach into any of that. Corroborating signal: the two sibling items landing this session in the same family, P12-PROGRAM-SEMANTICS and P12-DRIFT-CAPABILITY, both carry an explicit 'It does not build a capability' / 'it does not widen ... and it does not change it' disclaimer marking them as pure decision records; this item's done_when carries no such disclaimer and instead describes check behavior directly. This item's own verification predicate (cargo test -p nomos-spec-store -p nomos-spec-project -p nomos-contract-tests) only proves a record is registered and projections are fresh -- it cannot exercise 'reports ... as two distinct findings' or 'passes every check' against a real fixture, so closing on it would claim a check that was never built or run. Reissue with territory widened to the check's actual home: the rules crate (a new rule/universe near mirror.rs), its nomos check CLI wiring, and fixture/corpus territory for the self-referential worked example, plus these two record files for the governing decision the check is built from."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -8862,9 +8874,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-orchestrator-P12-PROVENANCE-FLOOR",
+          "reason": "Territory gap, reissuing via decline. done_when requires an executable check (reports two distinct findings, a consumer-stated floor compared via EvidenceClass ordering, self-referential provenance detected against the P10-STAMP-CONSISTENCY shape) but territory is exactly two spec-store record files with no Rust source/test/fixture reach. See the decline reason for full detail.",
+          "abandoned_at": 1786925864
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orchestrator-P12-PROVENANCE-FLOOR",
+        "declined_at": 1786925864
+      }
     },
     {
       "id": "P11-FLOOR-AGREEMENT",
