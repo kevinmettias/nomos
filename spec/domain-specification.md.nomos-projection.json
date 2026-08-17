@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3503f93388de1ad73aff0e5c6ad3805aa60400c643d7683b1f25f8615306c8db",
-  "inputs_digest": "sha256:1e00fe40ea3b5f5f87f6c83b08531484da362a1bf2b5b24f08c911628c4bcd11",
+  "content_digest": "sha256:da6cd51e2bc1296b171f4ad81ffd41e254c5866c8dfda0c2799929245aa60d98",
+  "inputs_digest": "sha256:2a65cc4596c78f99aa6b8322e3933a13be4988ef59249d4b6c09f3efbc64d7b4",
   "sections": [
     [
       "Documents",
-      92
+      93
     ],
     [
       "Sections",
-      847
+      858
     ],
     [
       "Source blocks",
-      3210
+      3239
     ]
   ],
   "inputs": [
@@ -479,6 +479,11 @@
       "content": "documents",
       "identity": "docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md@authored",
       "hash": "sha256:87459b711a6b464f7a80e7614562caef27fd16ba4f904315b529e4aed04c9ff3"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored",
+      "hash": "sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685"
     },
     {
       "content": "headings",
@@ -4714,6 +4719,61 @@
       "content": "headings",
       "identity": "docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#40",
       "hash": "sha256:992f6a764b1a44d3553f37a3860e85f0c8ca1909da718e6274f67d577b8cf8db"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1",
+      "hash": "sha256:885708ee2bf76f3c42c0eb943cff5085739b1c42dd4e9cf33b4319875f3a3502"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#2",
+      "hash": "sha256:f905b1742440103d6d0980507bddcfbbbc87e2acafc99f50a241561dae9309e8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#6",
+      "hash": "sha256:73f6f00c61ccbd297f97d7a29fb3bd4e696a79cbba9e50a3150eb194ff55ebe5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#7",
+      "hash": "sha256:d35b01ddf5460f6912cab7c2882227ad7c5ba787535d4e167988f489a17e0e40"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#10",
+      "hash": "sha256:8d008cccc4947447326f7cbd61dc12079d0d0224470327c36898665297b899c7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#14",
+      "hash": "sha256:f37c28d1d461a68b8037631469e375e727996747eb3535fd8325eb14ebcde336"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#17",
+      "hash": "sha256:3ea8e22e125b8bb579cb5ecac096d52fecf538357885e377b5d85c87c2359c71"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#20",
+      "hash": "sha256:b21c2e551cfc4bfd0107647fa6f5f588575aa5d7bfd7f3d147698c362c54a9b9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#24",
+      "hash": "sha256:7803e92dae6e20fdbe4ac77ab258d8af46dd1ec06b0627455310a333c4de5f44"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#26",
+      "hash": "sha256:882b4d506bf2abd28f8f368bcdaab0e62fd863d7f121ea6d7bacfbe5461d70f9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#28",
+      "hash": "sha256:967c32fab81f2d0e2bbea4184636fd4cc5297ace4428fb7c3549fa8fae9a9f3d"
     },
     {
       "content": "blocks",
@@ -20764,6 +20824,151 @@
       "content": "blocks",
       "identity": "docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#41",
       "hash": "sha256:b4158ac73472d89ab6a70d8d5f349795103b2c140be5e66871a6aef06175adca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1",
+      "hash": "sha256:6791584c74b43374dac0e0bf43a6d8598aa6abfca12cb5e80b5537826e1d422b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#3",
+      "hash": "sha256:1a73d5b7f362598d6eb91b2846db49c77fe355ae4ee99ea690e454dc1b4a3e80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#4",
+      "hash": "sha256:4e4a451dc9030332a47ec5ee77a9c1ef58392f89f58c2e243f54ea5d67611e7e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#5",
+      "hash": "sha256:0f1135c092745f0508cc6b74fb3b4548bf51d080fcf0ac92ffa961ee018dcc36"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#6",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#7",
+      "hash": "sha256:5773517254ee279229cfc0ac2bc58b66e0ae400ccbf494b8a24416bf36d2de00"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#8",
+      "hash": "sha256:b339c1811ee1cb4ebc6f10eb1793d5d1dc59993a633902bab893de22a4bb1855"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#9",
+      "hash": "sha256:0799f89056cd3d0b4769ef1a230cec34126fbd9faad822ded35f7c2e2cfe4ef8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#10",
+      "hash": "sha256:df08302740629c20e73983c0df1c936c4140c9c7553097934bc1c98ba1cf1566"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#11",
+      "hash": "sha256:30d0e498048adfcee7717fb01e9c60c954a5ca012883e500213ed488d44d0d37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#12",
+      "hash": "sha256:973cf1c55303bdf7f1dfadb53cd5ef1f2d10fb22aa5ce978046eb32008bd1be8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#13",
+      "hash": "sha256:e3c4caf574d0dbb30536189909d6a89d196d2620cb462d0fdb62dee3b5e0d4b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#14",
+      "hash": "sha256:cc73d841464b16869234328c82993a2faa90c7700c03fa0f47563d45c1fdabee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#15",
+      "hash": "sha256:28e84d0e4c3a3387f5c638fe6ad28a30b56eb4f5a406c2d8162d46525d3ca5b9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#16",
+      "hash": "sha256:169747db0f4177bbb46f4a7b808a18dc2b135c590f15b05cea84ba6b1a522d11"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#17",
+      "hash": "sha256:d983e2199938a33df4ef9215f9fcca324946a7c6734664ca4372915ef9871f8a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#18",
+      "hash": "sha256:bb25d79bb3e6f629db321e576e9ca2432b458de6ea65ef676516fac02a39808b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#19",
+      "hash": "sha256:7fe7d4d95f7344bead12ff5bc26ecf6322b4deb71333b654215822885c245021"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#20",
+      "hash": "sha256:f3b34e0cff992ec785229d7398b3a68de9bac28e5f798d23877774d6ab13cc40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#21",
+      "hash": "sha256:770a2ec4c7c4d6f70239af7208f1f3df61d82494d45fe9634de0046c0a8d9780"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#22",
+      "hash": "sha256:9f1fd8494953d846bb0be6dee7763342502e2d40c4a32b95f1e56205f6b9f172"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#23",
+      "hash": "sha256:24abb06dc76bd18cba32030d32d6f0fab011cf9b7cea0476b18519288fc62ec7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#24",
+      "hash": "sha256:4ea6f631f4183b9185c20d757c9c4440ec178306bad93d997e2fa668f3fa9e83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#25",
+      "hash": "sha256:45069b1b2f2eda68e308c7b1a83ffed19763e9b53ecec301b35aeec4c16c7925"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#26",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#27",
+      "hash": "sha256:d9d3e249c661244f372c5cbe736c7007f804812562448faea925710624ff9398"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#29",
+      "hash": "sha256:b5c58d881255af085d5bd33e158024b4a85098b27a6562e5d2fc661907e84915"
     }
   ]
 }

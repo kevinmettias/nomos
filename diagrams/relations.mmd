@@ -249,6 +249,7 @@ graph LR
     od_gate_001 -->|"relates-to"| od_rules_002
     od_gate_001 -->|"relates-to"| od_trace_001
     od_gate_001 -->|"relates-to"| od_trace_002
+    od_gate_001 -->|"relates-to"| od_trace_005["OD-TRACE-005"]
     od_gate_002 -->|"relates-to"| od_gate_001
     od_gate_002 -->|"relates-to"| od_gate_004
     od_gate_002 -->|"relates-to"| od_ledger_003
@@ -620,6 +621,7 @@ graph LR
     od_trace_001 -->|"relates-to"| od_package_001
     od_trace_001 -->|"relates-to"| od_spec_007
     od_trace_001 -->|"relates-to"| od_trace_002
+    od_trace_001 -->|"relates-to"| od_trace_005
     od_trace_002 -->|"relates-to"| od_completeness_001
     od_trace_002 -->|"relates-to"| od_contracts_002
     od_trace_002 -->|"relates-to"| od_gate_001
@@ -627,6 +629,10 @@ graph LR
     od_trace_002 -->|"relates-to"| od_spec_005
     od_trace_002 -->|"relates-to"| od_spec_007
     od_trace_002 -->|"relates-to"| od_trace_001
+    od_trace_002 -->|"relates-to"| od_trace_005
+    od_trace_005 -->|"relates-to"| od_gate_001
+    od_trace_005 -->|"relates-to"| od_trace_001
+    od_trace_005 -->|"relates-to"| od_trace_002
   end
   subgraph "Decisions"
     d_129
@@ -714,4 +720,5 @@ graph LR
     od_syntax_002
     od_trace_001
     od_trace_002
+    od_trace_005
   end

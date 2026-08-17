@@ -102,6 +102,7 @@ profile: domain-specification
 | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md@authored | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md | authored | 36 | 9 | sha256:d709970235889a73988a8da5d86b42a1ba5e503826adba05f843be4b1fdce369 |
 | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md@authored | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md | authored | 35 | 10 | sha256:5146b3097c4ce5a7bc2526186c0408aa8a723f180bb4ed78db335537cf53fde7 |
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md@authored | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md | authored | 41 | 11 | sha256:87459b711a6b464f7a80e7614562caef27fd16ba4f904315b529e4aed04c9ff3 |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
 
 ## Sections
 
@@ -954,6 +955,17 @@ profile: domain-specification
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#33 | authored | 2 | What Is Assessed Today |
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#38 | authored | 2 | What This Does Not Do |
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#40 | authored | 2 | Status |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1 | authored | 1 | An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#2 | authored | 2 | Question |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#6 | authored | 2 | The Decision |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#7 | authored | 3 | 1. The comparison runs in `tests/integration`, corpus-gated and declared |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#10 | authored | 3 | 2. Two states, and neither of them is `pass` |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#14 | authored | 3 | 3. An assessment carries the canonical hash of the text it was made against |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#17 | authored | 3 | 4. The six committed entries predate the field, and stay `Unhashed` until backfilled |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#20 | authored | 3 | 5. A drifted `Met` is a finding for a person, not an automatic flip |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#24 | authored | 2 | Why This Is `OD-TRACE-002`'s Constraint Honored, Not Routed Around |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#26 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#28 | authored | 2 | Status |
 
 ## Source blocks
 
@@ -28357,3 +28369,296 @@ manner `OD-SPEC-005` and `OD-SPEC-007` recorded their controls.
 *revision: authored · kind: prose · heading: A requirement assessment is one file per requirement, and the corpus comparison does not live in the guard crate / Status · hash: sha256:b4158ac73472d89ab6a70d8d5f349795103b2c140be5e66871a6aef06175adca*
 
 Closed by `P10-TRACE-REGISTRY`.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip · hash: sha256:6791584c74b43374dac0e0bf43a6d8598aa6abfca12cb5e80b5537826e1d422b*
+
+# An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#2
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#3
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Question · hash: sha256:1a73d5b7f362598d6eb91b2846db49c77fe355ae4ee99ea690e454dc1b4a3e80*
+
+Six entries are committed under `tests/contract/requirements`. Every one of them names a
+verdict about a requirement's text — `EVID-001`, `CAP-002` and `CAP-003` as `Met`,
+`CHK-003` as `Met` by way of `OD-CONTRACTS-002`, and `WORK-LEDGER-001` and `WORK-LEDGER-005`
+as `Diverges`. All six were written by reading the v14 corpus once. Nothing has read it
+since, on their behalf, and nothing in the committed shape would notice if the text they
+were read against changed tomorrow.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#4
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Question · hash: sha256:4e4a451dc9030332a47ec5ee77a9c1ef58392f89f58c2e243f54ea5d67611e7e*
+
+`OD-TRACE-001` already named this cost and took it deliberately for one direction: the guard
+cannot see code drift out of satisfying a requirement while the site stays valid, because
+that is meaning and this workspace has no type for it. A changed requirement is not that
+case. The requirement's text is content the store already hashes — `normative_statements`
+carries a `canonical_hash` column
+(`crates/spec/nomos-spec-store/src/schema.rs`), and
+`nomos-spec-ingest` already recomputes it and reports a divergence when the recomputed hash
+disagrees with the recorded one
+(`crates/spec/nomos-spec-ingest/src/phases/statements.rs`). Comparing an assessed hash
+against a current one needs no reading of either text, so it is not the excluded case.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#5
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Question · hash: sha256:0f1135c092745f0508cc6b74fb3b4548bf51d080fcf0ac92ffa961ee018dcc36*
+
+What was actually blocking it, per this item's own framing, is not the comparison's
+mechanics but its address. `OD-TRACE-002` already answered where it cannot live and gave a
+reason stronger than scheduling: `nomos-contract-tests` is the crate that counts corpus
+gates, so a corpus-reading test placed inside it is invisible to both derivations that keep
+`corpus_gates.rs` honest at once, which is `OD-GATE-001`'s defect rebuilt inside the file
+written to prevent it. That leaves three things undecided, and this record answers them: the
+address itself, what an assessment must carry for the comparison to have an input, and what
+a mismatch does to the verdict already on file.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#6
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#7
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 1. The comparison runs in `tests/integration`, corpus-gated and declared · hash: sha256:5773517254ee279229cfc0ac2bc58b66e0ae400ccbf494b8a24416bf36d2de00*
+
+### 1. The comparison runs in `tests/integration`, corpus-gated and declared
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#8
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 1. The comparison runs in `tests/integration`, corpus-gated and declared · hash: sha256:b339c1811ee1cb4ebc6f10eb1793d5d1dc59993a633902bab893de22a4bb1855*
+
+`OD-TRACE-002` already named this address as "the obvious home" without adopting it; this
+record adopts it. A requirement-drift check is a corpus-backed test suite under
+`tests/integration`, reading `NOMOS_V14_CORPUS` the way `tests/integration/tests/determinism`
+and `tests/integration/tests/analysis_slice` already do, and it is declared as a row in
+`corpus_gates.rs` from that side. Both scanners that keep the gate table honest reach it
+there: `Files_Naming_A_Corpus` walks every workspace member's `tests/` directory and
+`tests/integration` is not the member `Corpus_Gates` skips — only `nomos-contract-tests` is,
+and for the stated reason that it is the crate doing the counting. So the declaration is
+visible to both derivations, which is exactly the property `OD-TRACE-002` measured
+`nomos-contract-tests` as unable to offer.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#9
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 1. The comparison runs in `tests/integration`, corpus-gated and declared · hash: sha256:0799f89056cd3d0b4769ef1a230cec34126fbd9faad822ded35f7c2e2cfe4ef8*
+
+`tests/contract/tests/requirement_trace/` keeps doing what it already does: read the
+committed entries, and check what is checkable without the corpus — that a named site still
+resolves, that a named record is registered, that every `Diverges` and `NotBinding` names
+one, that the assessed set has not shrunk. None of that moves. The corpus-backed half is
+additive, lives beside it in a different crate, and depends on nothing this record changes
+about the reader's grammar except the one field the next section adds.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#10
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 2. Two states, and neither of them is `pass` · hash: sha256:df08302740629c20e73983c0df1c936c4140c9c7553097934bc1c98ba1cf1566*
+
+### 2. Two states, and neither of them is `pass`
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#11
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 2. Two states, and neither of them is `pass` · hash: sha256:30d0e498048adfcee7717fb01e9c60c954a5ca012883e500213ed488d44d0d37*
+
+`OD-GATE-001`'s finding was that a test unable to look prints `ok` and is indistinguishable
+from one that looked at everything and agreed. A requirement-drift run has two ways of being
+unable to look, and both get a name that is not `pass`, `ok`, or silence — a report state the
+run prints about an entry, never a word an assessment file's `verdict:` line may hold:
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#12
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 2. Two states, and neither of them is `pass` · hash: sha256:973cf1c55303bdf7f1dfadb53cd5ef1f2d10fb22aa5ce978046eb32008bd1be8*
+
+- **`Unexamined`** — the run's own report when `NOMOS_V14_CORPUS` is not set. Nothing was
+  compared, the run says so as its result rather than returning quietly, and it is reported
+  the way `corpus_gates.rs` already reports its own hole: a number somebody can read, not an
+  absence nobody measured.
+- **`Unhashed`** — an entry's report when the corpus *is* mounted but the entry carries no
+  hash to compare. This is not folded into `Unexamined`, because the two causes are not the
+  same fact: one says nobody could look this run, the other says this particular entry gives
+  the tool nothing to look *at* even when it can. Collapsing them would make a corpus-mounted
+  run over an unhashed entry read exactly like a corpus-absent run, which is the same
+  same-shape-from-outside defect `OD-TRACE-001` opened by measuring that met and unmet have
+  the same shape from outside.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#13
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 2. Two states, and neither of them is `pass` · hash: sha256:e3c4caf574d0dbb30536189909d6a89d196d2620cb462d0fdb62dee3b5e0d4b3*
+
+An entry with a hash, compared against a mounted corpus, resolves to `Confirmed` (the hashes
+agree) or `Drifted` (they do not). Both are informational outputs of the run, not something
+this record makes an assessment file allowed to say about itself — `Verdict` stays exactly
+`Met`, `Diverges`, `NotBinding` per `OD-TRACE-002`, and `Unassessed` stays refused as a
+written word for the same reason it already is.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#14
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 3. An assessment carries the canonical hash of the text it was made against · hash: sha256:cc73d841464b16869234328c82993a2faa90c7700c03fa0f47563d45c1fdabee*
+
+### 3. An assessment carries the canonical hash of the text it was made against
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#15
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 3. An assessment carries the canonical hash of the text it was made against · hash: sha256:28e84d0e4c3a3387f5c638fe6ad28a30b56eb4f5a406c2d8162d46525d3ca5b9*
+
+Going forward, an entry names, beside its verdict and its sites, the canonical hash of the
+requirement text the verdict was reached against — the same hash the store already computes
+for that text once the corpus is mounted, not a second algorithm invented for this registry.
+An entry with a verdict and no hash is the state the six entries are in today, and section 4
+is what a reader does with that state; it is not proposed here as a shape a *new* entry may
+choose. The reader `OD-TRACE-002` built has no lenient path for a malformed entry — a missing
+verdict, a second record line, a site with no symbol are all refused rather than skipped —
+and an entry making a claim about text it does not identify belongs in that same refused
+set, because a hash field a writer may omit is a hash field nobody can rely on being there.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#16
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 3. An assessment carries the canonical hash of the text it was made against · hash: sha256:169747db0f4177bbb46f4a7b808a18dc2b135c590f15b05cea84ba6b1a522d11*
+
+Writing the field is not this record's act. It is the shape the next item that touches
+`tests/contract/tests/requirement_trace/reader.rs` must build toward, exactly as `OD-TRACE-002`
+decided the file grain and left the registry itself to the items that would carry it.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#17
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 4. The six committed entries predate the field, and stay `Unhashed` until backfilled · hash: sha256:d983e2199938a33df4ef9215f9fcca324946a7c6734664ca4372915ef9871f8a*
+
+### 4. The six committed entries predate the field, and stay `Unhashed` until backfilled
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#18
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 4. The six committed entries predate the field, and stay `Unhashed` until backfilled · hash: sha256:bb25d79bb3e6f629db321e576e9ca2432b458de6ea65ef676516fac02a39808b*
+
+`EVID-001`, `CAP-002`, `CAP-003`, `CHK-003`, `WORK-LEDGER-001` and `WORK-LEDGER-005` were
+each written by a hand audit against a mounted corpus, and none of them recorded the hash of
+the text they read, because no such field existed to record it into. This record does not
+invent one retroactively — a hash nobody actually compared at authoring time would be a
+fabricated fact wearing a real one's shape, which is worse than the gap it would appear to
+close.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#19
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 4. The six committed entries predate the field, and stay `Unhashed` until backfilled · hash: sha256:7fe7d4d95f7344bead12ff5bc26ecf6322b4deb71333b654215822885c245021*
+
+So all six are `Unhashed` under a requirement-drift run from the moment such a run exists,
+regardless of what their `verdict:` line says. Their `Met` and `Diverges` calls stand exactly
+as authored — this record does not touch the assessment files, which are outside its
+territory in any case — but the drift run has nothing to compare them against and must say
+so as `Unhashed`, not fold them into `Confirmed` by having nothing to disagree with. Bringing
+a given entry current is a re-audit against the mounted corpus that records the hash found
+there, the same act `OD-TRACE-001` already calls re-verification and already requires the
+corpus to perform. Nothing here obligates that six-entry backfill to happen in one item or on
+any schedule; `OD-TRACE-001` chose a floor over a count for the same reason a completion
+deadline was refused there.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#20
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 5. A drifted `Met` is a finding for a person, not an automatic flip · hash: sha256:f3b34e0cff992ec785229d7398b3a68de9bac28e5f798d23877774d6ab13cc40*
+
+### 5. A drifted `Met` is a finding for a person, not an automatic flip
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#21
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 5. A drifted `Met` is a finding for a person, not an automatic flip · hash: sha256:770a2ec4c7c4d6f70239af7208f1f3df61d82494d45fe9634de0046c0a8d9780*
+
+The alternative was real and is refused here by name: when a run finds `Drifted`, it does not
+rewrite the entry's `verdict:` line to something else and it does not delete the entry.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#22
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 5. A drifted `Met` is a finding for a person, not an automatic flip · hash: sha256:9f1fd8494953d846bb0be6dee7763342502e2d40c4a32b95f1e56205f6b9f172*
+
+The reason is the same sentence `OD-TRACE-001` already used to decide the registry's whole
+shape: **an assessment is a declared entry committed to this repository, and it is not
+derived from the corpus at check time.** A tool that reacts to a hash mismatch by rewriting
+`Met` to anything else is deriving committed content from the corpus at check time — the
+exact shape that decision excludes, applied to an edit instead of to an initial write. A hash
+mismatch also under-determines the right new verdict on its own: the text may have been
+reworded without changing what it requires, in which case the honest answer is still `Met`
+with an updated hash, or it may have changed the requirement in a way the site no longer
+satisfies, in which case the honest answer is `Diverges` or `Unassessed`-by-deletion with a
+record explaining which. Telling those apart is reading the two texts and judging whether the
+difference matters — the same act `OD-TRACE-001` already calls an audit and already refuses to
+let a mechanical guard perform on its own.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#23
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / The Decision / 5. A drifted `Met` is a finding for a person, not an automatic flip · hash: sha256:24abb06dc76bd18cba32030d32d6f0fab011cf9b7cea0476b18519288fc62ec7*
+
+So `Drifted` is a finding: the run's output names the entry, the hash it was authored
+against, and the hash the corpus holds now, and a person resolves it by re-auditing and
+re-committing the entry, the same authoring act that produced it the first time. Until that
+happens, the committed `verdict:` continues to read exactly as authored. This is a narrower
+promise than "the registry is always current" — it is the promise `OD-TRACE-001` already made
+and this record keeps rather than quietly widens: a stale `Met` is wrong about one
+requirement, and now that wrongness is a named, surfaced state instead of an invisible one,
+which is the entire distance this record moves the registry.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#24
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Why This Is `OD-TRACE-002`'s Constraint Honored, Not Routed Around · hash: sha256:4ea6f631f4183b9185c20d757c9c4440ec178306bad93d997e2fa668f3fa9e83*
+
+## Why This Is `OD-TRACE-002`'s Constraint Honored, Not Routed Around
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#25
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Why This Is `OD-TRACE-002`'s Constraint Honored, Not Routed Around · hash: sha256:45069b1b2f2eda68e308c7b1a83ffed19763e9b53ecec301b35aeec4c16c7925*
+
+`OD-TRACE-002` drew a line this record does not cross: the corpus comparison "lives outside
+`nomos-contract-tests`" and, if it exists, "it is declared in `corpus_gates.rs` from there,
+where both derivations can see it." This record does not add a test to
+`tests/contract/tests/requirement_trace.rs`, does not put a corpus read behind a helper that
+would make it invisible to either scanner, and does not ask the guard crate to hold anything
+it cannot compute without the corpus. Every corpus-reading act this record describes happens
+in `tests/integration`, exactly where `OD-TRACE-002` already pointed and declined to build.
+What this record adds beyond that pointer is the vocabulary the pointed-to check needs before
+it can be written at all: two non-`pass` states for a run that cannot look, the field an
+entry must carry for a comparison to have two hashes to compare, the fate of the six entries
+that predate that field, and the refusal to let a mismatch mutate committed content by itself.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#26
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#27
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / What This Record Does Not Do · hash: sha256:d9d3e249c661244f372c5cbe736c7007f804812562448faea925710624ff9398*
+
+- It writes no code. `reader.rs`'s grammar does not gain the `hash:` key here, no
+  `tests/integration` suite is created, and `corpus_gates.rs` gains no row. Those are a
+  future item's territory, the same relationship `OD-TRACE-001` had to `OD-TRACE-002` and
+  `OD-TRACE-002` had to the registry it left unbuilt.
+- It does not backfill the six entries or assess a 364th requirement.
+- It does not reopen semantic drift. Code drifting out of satisfying a requirement whose text
+  has not changed is still outside what any guard here can see, unchanged from `OD-TRACE-001`.
+- It does not make `Confirmed` or `Unexamined` or `Unhashed` a written word inside an
+  assessment file. All three describe a run's report about entries, never a fourth thing an
+  author may type into one — the same separation `OD-TRACE-002` already drew between what the
+  registry says and what a comparison, if it existed, would report.
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#28
+
+*revision: authored · kind: heading · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#29
+
+*revision: authored · kind: prose · heading: An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip / Status · hash: sha256:b5c58d881255af085d5bd33e158024b4a85098b27a6562e5d2fc661907e84915*
+
+Closed by `P12-TRACE-DRIFT`. No item has yet built the field, the `tests/integration` suite,
+or its `corpus_gates.rs` declaration; this record decides their shape so that whichever item
+does inherits it rather than reopening the address question `OD-TRACE-002` already
+half-answered — the same relationship `OD-TRACE-001` had to the registry `OD-TRACE-002` and
+`P10-LEDGER-CORPUS` still owe.
