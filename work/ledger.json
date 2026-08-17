@@ -6647,7 +6647,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory was authored before the 2026-08 crate-split ('Give every substrate type its own file') moved ClaimRefusal, Is_Retryable and Describe out of exclusion.rs and into crates/substrate/nomos-ledger/src/claim/refusal.rs. A claimant (claude-orch-declined-dependency) measured this directly and abandoned rather than write outside the declared contract: no in-territory workaround exists (NotClaimable falls through to the dependent's own Ready state, reproducing the bug). Re-authored as P10-DECLINED-DEPENDENCY-2 with claim/refusal.rs added to territory; same subject, same OD-LEDGER-020 reservation (never published)."
+        }
+      },
       "depends_on": [
         "P10-DECLINE-VERB"
       ],
@@ -6676,7 +6680,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-main",
+        "declined_at": 1786936645
+      }
     },
     {
       "id": "P11-SPENT-RECORD-ID",
@@ -7928,7 +7935,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory as authored (Cargo.toml, gate.yml, OD-GATE-007+registration) cannot satisfy done_when: a prior claimant (claude-lint-authority-s2, 2026-08-09) measured that the only collapse satisfying done_when needs crates/host/nomos-cli/tests/gate_step.rs (Test_The_Derived_Lint_Step_Should_Still_Be_Clippy) and crates/substrate/nomos-ledger/tests/gate_covers_finish.rs (Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step) reserved, both inside this item's own verification predicate, plus README.md line 210 which restates the same command as a third authority. README.md is free again now (P10-SUBMISSION-LAYOUT, its prior holder, is Done). Re-authored as P11-LINT-AUTHORITY-2 with all three added to territory; same subject, same OD-GATE-007 reservation (never published)."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -7957,7 +7968,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-main",
+        "declined_at": 1786936707
+      }
     },
     {
       "id": "P11-MSRV-UNCHECKED",
@@ -10914,6 +10928,93 @@
           "exit_code": 0
         }
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P10-DECLINED-DEPENDENCY-2",
+      "title": "A dependency that will never finish is reported as a queue, so an agent is told to wait for declined work",
+      "why": "This is P10-DECLINED-DEPENDENCY with the territory a claimant's measurement found. The defect is unchanged: nomos work list reports waiting for an item whose dependency is Declined, the same word it uses for a dependency that is merely unfinished, though a declined dependency will never become Done and no amount of waiting changes that.\n\nThe mechanism is one comparison. Contested_By in crates/substrate/nomos-ledger/src/store.rs compares each dependency against Done and reports anything else as ClaimRefusal::DependencyUnmet, which Is_Retryable reports as retryable and the CLI listing labels waiting. That is right while the dependency can still be finished and wrong the moment it is declined.\n\nWhat changed is that the item as previously authored could not be executed inside its own territory. ClaimRefusal, Is_Retryable and Describe are defined solely in crates/substrate/nomos-ledger/src/claim/refusal.rs (the claim module), not in exclusion.rs where the original item's why text placed them. That text predates the crate-split ('Give every substrate type its own file') that moved the type into its own module. exclusion.rs and work.rs only use and test ClaimRefusal/Is_Retryable; they do not define them. A claimant measured this directly: no ClaimRefusal variant can be added, and Is_Retryable/Describe cannot gain a case for it, without editing claim/refusal.rs. Routing a declined dependency through the existing NotClaimable variant instead was checked and rejected: Listing_Label falls through to the dependent's own State_Label (Ready) for that variant, reproducing exactly the bug this item exists to fix.\n\nThere is a second, smaller defect in the same path. The state carried into DependencyUnmet is format!(\"{:?}\", found.state), and ItemState::Declined carries its whole reason in the variant, so the refusal string for a declined dependency embeds the entire declination prose.",
+      "done_when": "Claiming an item whose dependency is Declined is refused non-retryably, by its own ClaimRefusal arm defined in crates/substrate/nomos-ledger/src/claim/refusal.rs rather than by DependencyUnmet, and the refusal names the dependent, the declined dependency and what the holder is to do next. Is_Retryable reports it false, and the listing gives it a word of its own rather than waiting, so a reader can tell a queue from a dead end without opening the JSON.\n\nThe refusal carries a bounded rendering of the dependency state rather than the Debug form of ItemState::Declined, so a declination reason does not become the body of a one-line refusal.\n\nWhat a holder is to do next is decided rather than implied. A dependency edge pointing at declined work can only be corrected by closing and re-authoring the dependent today, and this item either states that as the answer with its cost admitted, or records what would replace it; whichever it decides, it says so where the refusal sends the reader.\n\nP10-EDGE-CONSTRAINTS is the measured instance and is not left stranded: as of this item's authoring, P10-SUBMISSION-LAYOUT (the alternative dependency named in the original item) is Done, which this item's holder should verify is still true and account for when deciding whether P10-EDGE-CONSTRAINTS is re-pointed or closed and re-authored.\n\nA governing record OD-LEDGER-020 states what a declined dependency does to a dependent and why it neither satisfies nor merely blocks. It is governing only once its file under crates/spec/nomos-spec-store/records exists. Public surface snapshots move for nomos-ledger if its API moves, and the required projections are re-rendered from a tree whose registered records are exactly the ones the commit publishes.\n\nNot closed by routing a declined dependency through the existing NotClaimable variant: that was checked and found to reproduce the bug, since the listing falls through to the dependent's own state.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-LEDGER-020",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-020.record",
+          "crates/substrate/nomos-ledger/src/store.rs",
+          "crates/substrate/nomos-ledger/src/exclusion.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/substrate/nomos-ledger/tests",
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-DECLINE-VERB"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-LINT-AUTHORITY-2",
+      "title": "The gate's -D warnings and the workspace lint table are two authorities for one severity policy",
+      "why": "This is P11-LINT-AUTHORITY with the territory a prior claimant's measurement found. The defect is unchanged.\n\nCargo.toml lines 111 to 133 declare the workspace lint policy, mirrored from XVPE. clippy::all and clippy::pedantic sit at warn with priority -1; float_cmp, unwrap_used, arithmetic_side_effects and indexing_slicing sit at deny. The severities are deliberate and the file says why: the four denials are there because a panic on the analysis path is a determinism defect rather than a bug, since a replay must reach the same panic at the same step.\n\n.github/workflows/gate.yml then runs cargo clippy --workspace --all-targets -- -D warnings, which promotes every one of those warnings to an error. So the distinction the table draws between warn and deny is real on a contributor's machine and erased in CI, and the effective policy is spelled in two files that disagree. An author who reads Cargo.toml to learn what is enforced learns something false, and the stricter of the two authorities is the one that is not written down as policy.\n\nThis is the shape OD-LEDGER-003 refuses for the lint command itself. That record derives the gate's argv from the workflow rather than retyping it into a crate, because a copy is a second source of truth that goes stale the day the workflow changes and two guards for one rule is how they come to disagree. The severities the argv carries are the same rule and got the opposite treatment.\n\nWhich way it collapses is a real choice and it is not behaviour-preserving in either direction. Dropping -D warnings makes CI accept pedantic findings it rejects today. Moving the strictness into [workspace.lints] makes every local cargo check deny what only CI denies now, which changes every contributor's inner loop and changes work finish too, because the derived argv runs on the author's machine before the item is recorded done.\n\nWhat changed since the item was first authored: a claimant (claude-lint-authority-s2) measured that the item's original four-path territory (Cargo.toml, gate.yml, OD-GATE-007, its registration) cannot satisfy done_when. Two tests assert -D specifically in the derived Lint argv -- crates/host/nomos-cli/tests/gate_step.rs's Test_The_Derived_Lint_Step_Should_Still_Be_Clippy and crates/substrate/nomos-ledger/tests/gate_covers_finish.rs's Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step -- both inside this item's own verification predicate, so any collapse removing -D warnings from the derived argv fails one or both without editing them. README.md line 210 also restates the gate's clippy command, a third authority the item's own done_when (\"the other place stops restating it\") obligates closing.",
+      "done_when": "One authority states the severity of every lint this workspace enforces, and the other place stops restating it. Which of the two survives is the decision, recorded on stated grounds rather than settled by whichever is cheaper to write, and the record says what the choice costs the side that loses: either CI stops rejecting something it rejects today, or every local cargo check starts rejecting something it accepts today. A record that only says the duplication is gone has not answered this. nomos_ledger::Derive_Step still yields a runnable argv from the step named Lint; it refuses any run: line containing a shell metacharacter, so the surviving line stays one bare command, and Test_The_Derived_Lint_Step_Should_Still_Be_Clippy (gate_step.rs) and Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step (gate_covers_finish.rs) are updated to assert the collapsed policy rather than -D warnings specifically, and still pass. README.md line 210 stops restating the gate's clippy command, routing to the one surviving authority instead. The workspace is measured under the collapsed policy before the item is finished rather than after: if the new arrangement reddens exactly what -D warnings was already failing, that is the same set and costs nothing; if it reddens more, the item says how many and where rather than discovering it on somebody else's claim. Not closed by deleting -D warnings and saying the table now governs, unless a clippy run under the new arrangement is shown to reject what the old one rejected.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          ".github/workflows/gate.yml",
+          "crates/host/nomos-cli/tests/gate_step.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish.rs",
+          "README.md",
+          "docs/records/OD-GATE-007",
+          "crates/spec/nomos-spec-store/records/OD-GATE-007.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
