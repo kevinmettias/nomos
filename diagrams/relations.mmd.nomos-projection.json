@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:a4b7846883cacd37f6eb1975b87ee3ab0494c4e8e0207be24f92b9ef3ebb9402",
-  "inputs_digest": "sha256:93bee09691e2dd48c68c84937c55e718330527d5746d1ac1d017ac9d5afaeb74",
+  "content_digest": "sha256:e4a338ed9cade2130d4122f9f1fe7e82d3fc223c73f229e614773839341a13c2",
+  "inputs_digest": "sha256:91e6a92f215e89feb0f2a0d1c11da2abef86fbba92a9e3fcc4cd002049bc1157",
   "sections": [
     [
       "Relations",
-      586
+      592
     ],
     [
       "Decisions",
-      80
+      81
     ]
   ],
   "inputs": [
@@ -45,6 +45,11 @@
       "content": "relations",
       "identity": "ARC-CONNECTOR-001 relates-to OD-CONNECTOR-001",
       "hash": "sha256:7ca3ad62f4b627735164ef01661cc6a6d6654905c24b446ff8b77ca949af2eae"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONNECTOR-001 relates-to OD-CONNECTOR-002",
+      "hash": "sha256:c576715fd01eae12b6d382aaaed39cbd150b9ee2b6603d10adc272149b4486b9"
     },
     {
       "content": "relations",
@@ -953,8 +958,28 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONNECTOR-001 relates-to OD-CONNECTOR-002",
+      "hash": "sha256:b6353b9f6e8dc2108101d4a488129a685b8cc5cf6cdfe19d2dd90fecca6dd14f"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONNECTOR-001 relates-to OD-SPEC-009",
       "hash": "sha256:53f009b2b86d95f72077ea67f62ba02912b5190e57ccfa8b9369fea978bee5f0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-002 relates-to ARC-CONNECTOR-001",
+      "hash": "sha256:86a7558f458a48b5a6f02c775934cb85e3449a5b3ef148d9a49f8d93cd3d28da"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-002 relates-to OD-CONNECTOR-001",
+      "hash": "sha256:2fcb596c7ccfa7f2e8ec08878aef9a8f707e5c6ee25efba55833af934e3367f8"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CONNECTOR-002 relates-to OD-GATE-001",
+      "hash": "sha256:e7e4a8663d1384980aafab03fec307ca2ba58f73527801e41b4543edee668f91"
     },
     {
       "content": "relations",
@@ -1085,6 +1110,11 @@
       "content": "relations",
       "identity": "OD-GATE-001 relates-to OD-COMPLETENESS-002",
       "hash": "sha256:da31199de24f110372760e119db32d36b75acfaa24fccf05faa5a6c7ca39022f"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-001 relates-to OD-CONNECTOR-002",
+      "hash": "sha256:d5d09ddbd7c28d33dac336380a71008d71c47e00baf1d872e0610bd260d9b259"
     },
     {
       "content": "relations",
@@ -3040,6 +3070,11 @@
       "content": "nodes",
       "identity": "OD-CONNECTOR-001",
       "hash": "sha256:069ecd2f3b2a42260aab191b3fe875c4cc0db9fdb06acf6b71651c919a5e0f67"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-CONNECTOR-002",
+      "hash": "sha256:7ae878eebd9d52540d8284d6b79e12444a6a5a6345bda99a6c8ea9d5c92c15ad"
     },
     {
       "content": "nodes",

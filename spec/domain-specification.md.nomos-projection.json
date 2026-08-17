@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:11df2ed396721bfe61c3df48f4ae6242530c1472598f26616a18b4bd45484776",
-  "inputs_digest": "sha256:811b54af889726cd1fae2b57aaaa34776503e8d127e5fbbbaace537c1075a639",
+  "content_digest": "sha256:684963e9c98a4ce37c5a51e990097437147b7f4dd0d040aea80bf5c6b47d8dd5",
+  "inputs_digest": "sha256:61ab03bdc01e9298c5e8326d673d683dff645059304bf7f0ee29075dadecaf73",
   "sections": [
     [
       "Documents",
-      87
+      88
     ],
     [
       "Sections",
-      801
+      810
     ],
     [
       "Source blocks",
-      3062
+      3090
     ]
   ],
   "inputs": [
@@ -149,6 +149,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored",
       "hash": "sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored",
+      "hash": "sha256:2de6c66157c81460c04202fa550d57a830560e25befd9d6087223a67d6ab5cba"
     },
     {
       "content": "documents",
@@ -1459,6 +1464,51 @@
       "content": "headings",
       "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25",
       "hash": "sha256:ec48e7d77ce96c237f57698f09acf516d35f5fd1c75966401e00e3996d3ee519"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#1",
+      "hash": "sha256:547cdfd687b6fcab86bc151e19a85fe4f048c94b92ebae1fc13e1d81ca6756df"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#2",
+      "hash": "sha256:0ab3fcae5814f9971a818692cca9e504c13d66984195af3eb2fc736ea7a4c521"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#5",
+      "hash": "sha256:772f5e9cca0d6776b11c513331d6c28064458522aee9cfbe0e3c5a32f97c7b5e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#11",
+      "hash": "sha256:5f8ca24adf6fe9ed62297e8951779ef9900971784ca7d26cd993ea4151b65ae2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#15",
+      "hash": "sha256:de2cebddc62dcce1aefca28927392dc55ddadf30c9cd507bbcea367317a439bc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#19",
+      "hash": "sha256:0b00213a39c32a63a1bda75f02d16ff406b6d095481905473a247b2eb5e7d9ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#21",
+      "hash": "sha256:c9bd2efaa5c9e59591c67a96497c60bf7212637c0924a9eedf33d9009ceedaa6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#25",
+      "hash": "sha256:2a72cb44dc4cad6915f6d6d828d278fd93e106902b624860da59c9826393277b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#27",
+      "hash": "sha256:e463e158165c518d6c1c9b71cfff777ce1f2c1fdada4d0bbd22f8d39c105dbae"
     },
     {
       "content": "headings",
@@ -8013,6 +8063,146 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#1",
+      "hash": "sha256:4e6ac89c9528d67383950eec7d1c29bddaa812ccd27dc19087126265be755d99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#3",
+      "hash": "sha256:d573269618a99d5610be158bc7dcb29c8778cb2d9342fe3c797261afde308e8d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#4",
+      "hash": "sha256:920a05465b2dbc8cb340efb18b72f4faca537a7b5337ac7f05cd3839290037c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#5",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#6",
+      "hash": "sha256:81b8d90d681e44540135832ca4ed14a6c0927452bba87137631af09779dd9ae6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#7",
+      "hash": "sha256:34c4858a6aac9e1de5cfd92ed7e8976bd53bd42c611c6d53eda2d87ae4026b6a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#8",
+      "hash": "sha256:339d4d4a7cae972de2a1117f3698bb3edc009da1c529ea7ab4dacea138589308"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#9",
+      "hash": "sha256:8cebb3c75f825d3a638ad74c7e4f6ccd67cff4b4f39b7fd476b193984ee89a09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#10",
+      "hash": "sha256:0c6daf83e024823a0ec5ac4c77b5022f14a123a27d0dc993530b6c2455b8ea51"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#11",
+      "hash": "sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#12",
+      "hash": "sha256:9514aaf009afd8dc1ebb7a6d2592563051225fb2125f4c0ba3c9b238538c5dff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#13",
+      "hash": "sha256:626132ede2cb85e79e5c92c04748a9edf6ac5ddb4cb96e11f91e1843ed616ed4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#14",
+      "hash": "sha256:0ff1671132c392848cbaac990d0b810ae719fd2334c2bb9123eb9b50319a106b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#15",
+      "hash": "sha256:ebcd7ad21b8eb9821a30da3137d2f116568873f3d4d718ec0d464b1a86062e08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#16",
+      "hash": "sha256:09b58f0d51b5b0164398e537d198f66d7855f8437b61f688ff75497ba58e5993"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#17",
+      "hash": "sha256:046c31c8100b52b46cc7a60ccd5c9312620ab212ebaf418d8e8746f21bf283e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#18",
+      "hash": "sha256:a86424131978dad5696270e78f7f72d1b49b0faccf52c974e187127b01229cc0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#19",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#20",
+      "hash": "sha256:108dfc8bdd20f55de868c18857992c4d11948b8c754311b3daf496b6541b52d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#21",
+      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#22",
+      "hash": "sha256:d0d7369dfc00085de427181ae2d83af1a1aa6c0af0a4415417253a7a883e01e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#23",
+      "hash": "sha256:8578f7a6580dd78c002ee54bad107abec472be120e238aad5653e367f28fba9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#24",
+      "hash": "sha256:f8a9c9f42e87c04dc2fd1e766bd47561360cb563ec658cd027a618f5c87bca0b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#25",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#26",
+      "hash": "sha256:1eba912cc1d48a52a606e7ee74366e21b752a73a201c56861712bf2586aeb45e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#28",
       "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {

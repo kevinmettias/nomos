@@ -36,6 +36,7 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:2de6c66157c81460c04202fa550d57a830560e25befd9d6087223a67d6ab5cba |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:9f1c5229277415e49115502a643ecee1e889b80a83acb01e8695fe922761f0c2 |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -303,6 +304,15 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#20 | authored | 2 | Conflicts With Existing Decisions |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#23 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#25 | authored | 2 | Status |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#1 | authored | 1 | A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#2 | authored | 2 | Question |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#5 | authored | 2 | Decision |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#11 | authored | 2 | What This Binds |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#15 | authored | 2 | What This Does Not Bind |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#19 | authored | 2 | Controls |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#21 | authored | 2 | Conflicts With Existing Decisions |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#25 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#27 | authored | 2 | Status |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#1 | authored | 1 | Band 0 admits what crosses a boundary, and a domain-local concept stays in its domain |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#2 | authored | 2 | Question |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md#5 | authored | 2 | What Was Measured |
@@ -7034,6 +7044,273 @@ named precedent, rather than a discouragement without a structural reason.
 ### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#26
 
 *revision: authored · kind: prose · heading: An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#1
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus · hash: sha256:4e6ac89c9528d67383950eec7d1c29bddaa812ccd27dc19087126265be755d99*
+
+# A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#2
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#3
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Question · hash: sha256:d573269618a99d5610be158bc7dcb29c8778cb2d9342fe3c797261afde308e8d*
+
+`ARC-CONNECTOR-001` draws the third crossing and names four invariants a connector's
+interface must hold, but a connector is not only an interface; it is also the first thing in
+this workspace whose only way to be observed while developing or testing it is a live
+external endpoint, credentials, and whatever the vendor happens to return on the day the
+test runs. Nothing already governing says what a connector test is allowed to run against
+instead, where a recording is taken relative to the vendor-to-canonical translation
+`ARC-CONNECTOR-001` already places in the seam, what a replayed pass is entitled to claim in
+`EvidenceClass` terms, or what happens when a test wants a recording that is not there.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#4
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Question · hash: sha256:920a05465b2dbc8cb340efb18b72f4faca537a7b5337ac7f05cd3839290037c5*
+
+`OD-GATE-001` already answered the second and fourth questions once, for a different corpus:
+a test that cannot find its input must not report `ok`, because a check that cannot find its
+subject and a check that agrees with it are otherwise indistinguishable, and CI holds none of
+the three corpora that decision was written against. A connector test that cannot reach a
+live vendor, or cannot find a recording standing in for one, is the same shape a fourth time,
+and the wrong default — return early, print `ok` — is exactly as available here as it was
+there. Deciding this before the first connector exists is the same reasoning
+`ARC-CONNECTOR-001` gave for itself: the seam where a recording would be taken is the seam
+nobody has drawn yet, and the first connector written against a live endpoint would draw it
+by not needing to.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#5
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#6
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Decision · hash: sha256:81b8d90d681e44540135832ca4ed14a6c0927452bba87137631af09779dd9ae6*
+
+**A vendor interaction is recorded and replayed, and the recording is taken below the
+vendor-to-canonical translation** — on the vendor side of the seam `ARC-CONNECTOR-001`
+already draws, not the canonical side. Concretely: the recording is the vendor's own
+response, in vendor schema, exactly as the generic connector substrate received it before
+handing it to the translation layer — not the `Finding` or canonical fact the translation
+layer produces from it.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#7
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Decision · hash: sha256:34c4858a6aac9e1de5cfd92ed7e8976bd53bd42c611c6d53eda2d87ae4026b6a*
+
+The reason is the two-sided failure `ARC-CONNECTOR-001`'s layering already implies but does
+not have to say once record-and-replay is named. A fixture taken **above** the translation —
+a stored canonical fact, standing in for what the translation layer would have produced —
+cannot detect a defect in the translation itself, because replaying it never runs the
+translation at all; it only exercises whatever reads the canonical fact afterward, which
+`ARC-ECOSYSTEM-001` already governs and which is not what a connector test exists to check.
+A fixture taken **below** the translation — the vendor's own response — is read by the
+translation layer on every replay exactly as it would read a live response, so a defect
+introduced in that layer is caught the same way it would be caught against the live vendor,
+and a vendor API version migration is checked by re-recording the fixture and running the
+same translation over it, which is one of the reasons this record exists to name in advance.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#8
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Decision · hash: sha256:339d4d4a7cae972de2a1117f3698bb3edc009da1c529ea7ab4dacea138589308*
+
+Recording below the translation means the fixture is, unavoidably, in vendor wire format —
+the vendor's field names, status enumerations and response shape, exactly as
+`ARC-CONNECTOR-001`'s second invariant already says only the translation layer may know.
+This is not a new exposure. The fixture is data the translation layer's own tests hold, read
+only by that layer, in the same way `ARC-CONNECTOR-001` already permits that layer and no
+other to import the vendor's schema types; a recorded vendor response sitting in that
+layer's test fixtures is the same permission applied to a stored request instead of a live
+one. Nothing above the translation layer may hold, name, or branch on the fixture's vendor
+field names any more than it may hold the vendor's SDK object under `OD-CONNECTOR-001`; the
+fixture format is confined to exactly the code the vendor schema itself was already confined
+to.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#9
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Decision · hash: sha256:8cebb3c75f825d3a638ad74c7e4f6ccd67cff4b4f39b7fd476b193984ee89a09*
+
+**A replayed pass is `Verified` evidence that the translation layer maps this specific,
+previously-captured vendor response to the canonical fact the recording is paired with, and
+it is not `Observed` evidence, or any other evidence, about the live vendor system at the
+time the test ran.** `Verified`, per
+`crates/contracts/nomos-contracts/src/finding/evidence.rs`, is "checked by a mechanism that
+would have detected the negation" — replay is exactly that mechanism for the translation
+code: if the translation regressed, the same recorded input would produce a different
+canonical fact than the one the test expects, and the test would fail. That is the whole
+claim a green replay makes. It is not `Observed` — "directly observed at runtime" — because
+nothing about a replayed test observes the vendor at runtime; the vendor's response was
+observed once, when the recording was taken, and every replay since checks this build's
+translation code against a fixed, historical input, not the vendor's current behavior. A
+suite of green connector tests must never be read as a live-system health check, as
+confirmation that the vendor's API still answers the same way today, or as a substitute for
+the `Observed` evidence `ARC-CONNECTOR-001`'s third invariant already assigns to state
+produced by an actual live call. The two are different claims, and this record keeps them
+different so a passing replay is never later cited for the one it does not make.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#10
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Decision · hash: sha256:0c6daf83e024823a0ec5ac4c77b5022f14a123a27d0dc993530b6c2455b8ea51*
+
+**A connector test that cannot find its recording must fail, not report `ok`.** This is
+`OD-GATE-001`'s decision restated in this setting rather than assumed to carry into it: a
+test that returns early because its fixture is absent is indistinguishable, from its exit
+code alone, from a test that read the fixture and agreed with it, and CI will not have a
+live vendor endpoint, a token, or the fixture corpus by default any more than it has the
+three corpora `OD-GATE-001` was written against. Where `OD-GATE-001` chose not to fail the
+build for an absent v14, archive, or Rust corpus — because most machines will never have
+them, and a test that failed for their absence would make every gate red by default — a
+connector's fixture corpus is not that case: it ships inside this repository's own tree, the
+same way any other test fixture does, so its absence on a machine that should have it is a
+defect in that checkout or that commit, not an expected condition of an ordinary
+contributor's machine. A missing connector fixture is a hard failure, not a silent `ok` and
+not a declared, tolerated hole.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#11
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Binds · hash: sha256:e17d455c073196dc0b82fd16a4f214ba0a125e28874194381ebb7a13f9c38044*
+
+## What This Binds
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#12
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Binds · hash: sha256:9514aaf009afd8dc1ebb7a6d2592563051225fb2125f4c0ba3c9b238538c5dff*
+
+Every fixture a connector's tests replay is a captured vendor response, taken below the
+vendor-to-canonical translation layer `ARC-CONNECTOR-001` places in the seam, so that replay
+exercises the translation on every run.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#13
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Binds · hash: sha256:626132ede2cb85e79e5c92c04748a9edf6ac5ddb4cb96e11f91e1843ed616ed4*
+
+A replayed test's pass is `Verified` evidence about the translation layer against the
+fixture it replayed, and nothing stronger; it is never read, cited, or reported as `Observed`
+evidence about the live vendor system, and never as evidence that the vendor's current
+behavior matches the recording.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#14
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Binds · hash: sha256:0ff1671132c392848cbaac990d0b810ae719fd2334c2bb9123eb9b50319a106b*
+
+A connector test that cannot find the fixture it needs fails loudly. It does not return
+early, and it does not print `ok`.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#15
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Does Not Bind · hash: sha256:ebcd7ad21b8eb9821a30da3137d2f116568873f3d4d718ec0d464b1a86062e08*
+
+## What This Does Not Bind
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#16
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Does Not Bind · hash: sha256:09b58f0d51b5b0164398e537d198f66d7855f8437b61f688ff75497ba58e5993*
+
+It does not define a fixture file format, a recording tool, a corpus-gate table for
+connector fixtures, or where fixtures live in the tree. Those are implementation the first
+connector's tests are checked against, the same way `ARC-CONNECTOR-001` left its quarantine
+crate's name and `OD-CONNECTOR-001` left its canonical service's name to whoever builds one.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#17
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Does Not Bind · hash: sha256:046c31c8100b52b46cc7a60ccd5c9312620ab212ebaf418d8e8746f21bf283e8*
+
+It does not decide whether a live-endpoint integration test may exist alongside the replayed
+suite, opt-in and excluded from the default run. Nothing here forbids one; this record only
+says a replayed test's pass is not entitled to stand in for what a live test would show, and
+that the default suite must not silently skip.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#18
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Does Not Bind · hash: sha256:a86424131978dad5696270e78f7f72d1b49b0faccf52c974e187127b01229cc0*
+
+It does not touch `ARC-CONNECTOR-001`'s four invariants or `OD-CONNECTOR-001`'s
+write-omission rule. Both are unchanged; this record adds the recording seam and the
+evidence and absence rules beside them.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#19
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#20
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Controls · hash: sha256:108dfc8bdd20f55de868c18857992c4d11948b8c754311b3daf496b6541b52d3*
+
+| Weakening | What it produces |
+|---|---|
+| the fixture is a stored canonical fact rather than a vendor response | replay never runs the translation, and a translation defect passes every time |
+| a replayed pass is reported or read as `Observed` evidence about the vendor | a stale or synthetic fixture is cited as proof the live system currently behaves that way |
+| a connector test returns early and prints `ok` when its fixture is missing | the same silent hole `OD-GATE-001` measured at 68 tests, reopened for a fourth corpus this repository controls and has no excuse for losing |
+| the fixture format leaks vendor field names into a canonical type above the translation | the same leak `ARC-CONNECTOR-001`'s second invariant already refuses, reached through the fixture instead of the live response |
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#21
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Conflicts With Existing Decisions · hash: sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0*
+
+## Conflicts With Existing Decisions
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#22
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Conflicts With Existing Decisions · hash: sha256:d0d7369dfc00085de427181ae2d83af1a1aa6c0af0a4415417253a7a883e01e4*
+
+`ARC-CONNECTOR-001` is untouched. This record places the recording seam inside the layering
+it already draws and applies its second invariant to the fixture the same way that invariant
+already applies to a live response; the four invariants themselves are unchanged.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#23
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Conflicts With Existing Decisions · hash: sha256:8578f7a6580dd78c002ee54bad107abec472be120e238aad5653e367f28fba9f*
+
+`OD-CONNECTOR-001` is untouched. It governs the outward direction of this seam; this record
+governs the inward one, and neither reopens the other.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#24
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Conflicts With Existing Decisions · hash: sha256:f8a9c9f42e87c04dc2fd1e766bd47561360cb563ec658cd027a618f5c87bca0b*
+
+`OD-GATE-001` is untouched. Its decision — declare the size of a hole rather than fail a
+build that cannot reach a corpus outside this repository — is not reopened. This record
+draws the opposite conclusion for a fixture corpus that ships inside this repository's own
+tree, which is the distinction `OD-GATE-001`'s own reasoning already turns on: absence is
+loud precisely when the subject was supposed to be there.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#25
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#26
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / What This Record Does Not Do · hash: sha256:1eba912cc1d48a52a606e7ee74366e21b752a73a201c56861712bf2586aeb45e*
+
+No connector is built, no fixture is recorded, and no recording tool or format is written.
+This record does not claim any fixture exists today or that a corpus-gate table for one is
+in place; it only settles, before the first connector's tests are written, where the
+recording is taken, what a replayed pass may claim, and what an absent fixture must do, so
+that none of the three is decided by whichever test is first instead of by this record.
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#27
+
+*revision: authored · kind: heading · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md#28
+
+*revision: authored · kind: prose · heading: A connector fixture is recorded below its own translation, and an absent one fails as loud as a missing corpus / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
 
 Accepted.
 
