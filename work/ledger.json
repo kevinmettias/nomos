@@ -13275,6 +13275,41 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GRAPH-EDGES-FIXTURE",
+      "title": "A schema constraint that reached every real writer never reached one test's own hand-rolled SQL, and cargo test -p nomos-spec-project fails on clean HEAD",
+      "why": "cargo test --no-fail-fast -p nomos-spec-project --test projections fails 31 of 42 tests on a clean checkout with no other changes present, reproduced by stashing an unrelated edit and rerunning on 68228b8. Root cause is isolated: crates/spec/nomos-spec-project/tests/projections/store.rs's GRAPH_EDGES constant (its INSERT INTO relation_types statement, around line 127) writes name/tier/inverse_of only. OD-SPEC-012/P10-EDGE-CONSTRAINTS-2 later added a NOT NULL relation_types.domain_kinds_json column with no default, which every production writer supplies but this fixture's raw SQL never learned about. Every failure shares one panic: Populate_Graph_Edges at store.rs:195, 'populates the graph: SqliteFailure(Error { code: ConstraintViolation, extended_code: 1299 }, Some(\"NOT NULL constraint failed: relation_types.domain_kinds_json\"))'. Found and diagnosed while verifying an unrelated record edit (P13-XVPE-PACKAGE-ADOPT-3); recorded per person's request rather than fixed inline, so it does not disappear with this session's context and does not silently ride in on an unrelated item's commit.",
+      "done_when": "cargo test --no-fail-fast -p nomos-spec-project --test projections passes on a clean checkout (0 failed). GRAPH_EDGES's relation_types INSERT supplies a domain_kinds_json value consistent with OD-SPEC-012's declared-constraint shape for the 'verifies'/'affects' relation types the fixture already uses, or the fixture is otherwise brought current with the schema this repository's real writers already satisfy.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/tests/projections/store.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "--test",
+          "projections"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
