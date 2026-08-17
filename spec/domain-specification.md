@@ -30,6 +30,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227 |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -251,6 +252,14 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#18 | authored | 2 | What `FactVariant::SemanticallyResolved` Obliges |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#23 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#1 | authored | 1 | A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#7 | authored | 2 | A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#13 | authored | 2 | A Runtime Fact Composes With A Static Fact At The Weaker Of The Two |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#18 | authored | 2 | The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#24 | authored | 2 | What A Runtime-Informed Claim Means When No Observation Exists |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#30 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -5417,6 +5426,427 @@ what would meet it — the same deferred promotion `OD-ANALYSIS-002` already rec
 *revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Status · hash: sha256:63f31d4f4d714f01a7ac65f2710eb324179621821c9bebca2462d9526104911b*
 
 Closed by `P12-PROGRAM-SEMANTICS`.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#1
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it · hash: sha256:b3935aacb3f21143657cb555b830417cf5bd9bd71217f9b005aa4880a2ac77e0*
+
+# A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#2
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#3
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Question · hash: sha256:6ae234488d5ed2f4d140317a72f68fdb5cb54d0ea245e9aed0bf804c4b853bec*
+
+`FactVariant` (`crates/contracts/nomos-contracts/src/guarantee/fact_variant.rs`) orders
+`RuntimeObserved` as its strongest resolution level — "established by observing execution" —
+and `EvidenceClass` (`crates/contracts/nomos-contracts/src/finding/evidence.rs`) carries
+`Observed` ("directly observed at runtime") above every class but `Verified`. Neither has a
+producer anywhere in this workspace. `OD-ANALYSIS-004` settled the level beneath it,
+`SemanticallyResolved`, by fixing what a producer must have resolved before claiming it, and
+closed by naming exactly what it left open: static facts a resolved compiler model states
+without executing anything are `SemanticallyResolved`'s territory; "facts that can only be
+established by running the program and watching what it actually does... [are] the shape
+`RuntimeObserved` exists for." That is the boundary this record sits on the far side of.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#4
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Question · hash: sha256:c03f0d1baab2601a70aae53a8650987da59a2760e088e51848de345b05eac741*
+
+A runtime fact is not more of the same kind of thing the other four levels are. Every
+producer this workspace has — and every one `OD-ANALYSIS-004` described — is a function of
+its subject's own content: the same source, read by the same provider at the same guarantee,
+yields the same fact, which is exactly what lets `crates/substrate/nomos-analysis/src/fact/key.rs`
+key a fact by subject, provider, guarantee, build variant and configuration and treat two
+matches as the same fact. A runtime observation is a function of an *execution* — it carries a
+workload, a machine, a build variant and whatever the machine was doing at the time — and
+running the identical subject through the identical provider does not reproduce it, because
+nothing about "identical subject" pins down which path a workload takes or how long a lock is
+held while it runs. `tests/contract/tests/determinism_declarations.rs` and the `Strategy`
+trait it enforces (`crates/contracts/nomos-contracts/src/determinism/strategy.rs`) already
+hold every existing producer to a determinism triple written against exactly the case that
+does not hold here.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#5
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Question · hash: sha256:29346132811aa302cfaaac79ed9d0c9d181c81bbeb06097515e2fbedb0a50ca5*
+
+Three questions have to be settled before the first runtime producer is written, for the same
+reason `OD-ANALYSIS-004` settled its two before the first program-semantics producer was:
+both are cheap to decide now, with no capability crate yet shipping a private answer to
+either, and expensive to unwind afterward.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#6
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Question · hash: sha256:dce18910fd34f8105b069527e0b2f19e29910eb522c21497a9c57ed92b124678*
+
+1. What identifies a runtime observation as a fact, and what it carries beyond the value.
+2. How a runtime fact composes with a static fact into one claim.
+3. What a runtime-informed claim means when no runtime observation exists for its subject.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#7
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone · hash: sha256:6954d4a3553ee31c9aa59ebfc0e11c3ad75f6e0438e6244102b86a5ef2733976*
+
+## A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#8
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone · hash: sha256:c9d96a770c21b3dd514aa2dc0653764c1933e809327ceb69bb77343ff208891f*
+
+`FactKey` already carries nine parts: `contract`, `contract_version`, `subject`,
+`semantic_inputs`, `provider`, `provider_version`, `guarantee`, `variant` (`BuildVariantId` —
+"one configured program variant: target, features, profile, toolchain") and `configuration`
+(`ConfigurationId` — the digest of a fully resolved effective policy). That set is complete
+for every producer this workspace has today because each one's fact is fully determined by
+those nine parts: fix the subject's content, the provider, the guarantee and the build
+variant, and a `Syntactic` or `SemanticallyResolved` fact about it cannot come out differently
+between two runs.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#9
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone · hash: sha256:22ff090b119a22a84f14332cc96251dcfeab0a3c791536dfe4a959ff2017abfc*
+
+A runtime observation is not determined by those nine parts, and reusing the key as-is would
+let two different observations collide as though they were one fact, or let one observation
+be read back for a workload it was never taken under. Two dimensions are missing, and a
+runtime fact's identity carries both beyond the value, alongside what it already inherits from
+`FactKey`:
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#10
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone · hash: sha256:c18a140d776c0a7d90b9594bfb6bf9899b14d092cb627df5707dc4933daee746*
+
+- **The workload.** What was executed to produce the observation — the entry point exercised,
+  the inputs or scenario that selected which of the subject's paths actually ran, and any seed
+  or parameter that would change which paths those are. A runtime fact only says something
+  about the paths its workload actually took; an observation of an allocation-free claim taken
+  under a workload that never calls the allocating branch is not evidence the branch is
+  allocation-free, and an identity that dropped the workload could not tell the two apart. This
+  is a new dimension — nothing in `nomos-contracts::identity` names it today.
+- **The observation environment.** The machine and conditions the execution ran under — enough
+  to say whether a repeated observation is the same experiment or a different one: hardware
+  class, operating system, and anything about contention or load at the time that would give an
+  identical workload on an identical build a materially different measured result. This, too,
+  is a new dimension.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#11
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone · hash: sha256:8b95c17ed7c02da401305cd58a5f9398a05a647ad9433565e0b0f455111f2ab1*
+
+**The build variant is not a new dimension.** `BuildVariantId` already exists and already
+means what a runtime fact needs it to mean — which optimization level, target and feature set
+the executed binary carried — so a runtime producer reuses it exactly as every existing
+producer does, rather than growing a second identity for the same fact. The pattern `OD-ANALYSIS-004`
+already states for domain vocabulary applies here on the identity side too: a runtime capability
+is free to define its own payload shape, but is not free to reinvent an identity dimension this
+workspace already has a name for.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#12
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Observation Is Identified By Its Workload And Its Environment, Not By Its Subject Alone · hash: sha256:2e7b44f4f7725a8f7a5b89725cd5ac7ce120176568a953e24e4c2b11b48a5384*
+
+This record does not define the workload or environment identities as Rust types, for the same
+reason `OD-ANALYSIS-004` did not define a program-semantics payload: that is a capability's own
+territory, built and judged against this record rather than by it. What this record fixes is
+that a runtime fact's identity is incomplete without both, and a producer that keys its facts
+only by `FactKey`'s existing nine parts has under-identified them — two observations taken under
+different workloads, or on different machines, are not the same fact merely because their
+subject, provider and build variant agree.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#13
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Fact Composes With A Static Fact At The Weaker Of The Two · hash: sha256:a71526bcacc53b0dd9f15dfbe1cef84120546a39e2afc56771edfaa9adbe7f57*
+
+## A Runtime Fact Composes With A Static Fact At The Weaker Of The Two
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#14
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Fact Composes With A Static Fact At The Weaker Of The Two · hash: sha256:3b639dae2af0a369bc2ce5d43f50ea0b4d8c4e46dcdb1c0cca1d82bbe79a7dc1*
+
+`ARC-CONFORMANCE-001` already states the general shape a conformance claim takes: it is
+"composed from architecture..., requirements..., history..., runtime evidence..., and
+policy... checked against each other." A claim in this family is the concrete case that
+shape was written to cover, and the WHY that reserved this item names it exactly: whether an
+allocation site on a path declared allocation-free actually allocates, whether a lock that is
+statically permitted is contended past a declared latency budget, whether a code path that
+type-checks is ever taken. Each combines three things and is nothing without any one of them —
+a static fact (the site exists, the lock is statically permitted, the path type-checks), a
+runtime fact (the site was reached and allocated, the lock was held this long, the path never
+ran), and a declared constraint this repository's own architecture or policy states (this path
+must not allocate, this lock's contention has a budget, this branch must be reachable). Static
+alone says a thing is legal; runtime alone says it is slow, or that it happened, or that it did
+not; the constraint is what turns either into a finding, exactly as the WHY states.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#15
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Fact Composes With A Static Fact At The Weaker Of The Two · hash: sha256:7a3cd215b2e51a822189d6be4f5f729288307bd0f7f9151f79b6e21c2fd220ca*
+
+Composing a runtime fact with a static fact into one claim does not need a new mechanism. It
+needs the one this workspace already has for combining evidence of unlike strength, applied to
+a case that draws on two facts instead of one:
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#16
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Fact Composes With A Static Fact At The Weaker Of The Two · hash: sha256:dcb744895b3a38340236e915c1c2ea145b71274fa1838b4e99849c567ac30a35*
+
+- **`EvidenceClass::Weaker_Of`** already states the rule: "the class of a conclusion drawn from
+  evidence of both classes. Always the weaker." (`crates/contracts/nomos-contracts/src/finding/evidence.rs`).
+  A composed claim's evidence class is the weaker of its static fact's class and its runtime
+  fact's class — an `AgentJudged` reading of a lock site paired with a `Verified` runtime trace
+  of its contention does not average into something stronger than `AgentJudged`, for the same
+  reason `Test_Combining_Should_Never_Exceed_The_Weaker_Input` already holds every other
+  combination to.
+- **`Guarantee::Satisfies`** already refuses to average across axes: "every axis, not a score. A
+  provider that is sound but syntactic does not satisfy a requirement for semantic resolution
+  however sound it is." A composed claim's guarantee is bound by whichever of its constituent
+  facts is weaker on a given axis, the same way a single provider's guarantee is already checked
+  axis by axis rather than blended.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#17
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / A Runtime Fact Composes With A Static Fact At The Weaker Of The Two · hash: sha256:7b6cf7f7f14719ba786b12e5877c3532a79842d60c13e8dbffd6812668e67dbe*
+
+Nothing about `FactVariant`'s ordering changes to make this true — `SemanticallyResolved` and
+`RuntimeObserved` are not stacked levels of the same fact being progressively strengthened,
+they are two different facts about two different things (what the code permits, and what an
+execution did), cited beside each other in one finding rather than reduced to one scalar. What
+composes is the *evidence* backing the claim, on the two axes that already have a rule for
+combining unlike strengths — not the resolution levels themselves, which stay attached to the
+fact each was established at and are reported as what they are.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#18
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:6990a3d922f1317953bd9458d7d73c4a6ab251617b32b50acd8e8acd0f1c7f3e*
+
+## The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#19
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:f8707571d5d4d7fc58d15dac101a1e854310e8b0b122acc76006d9d739a87259*
+
+`Strategy` (`crates/contracts/nomos-contracts/src/determinism/strategy.rs`) obliges every
+execution domain in this workspace to declare `DeterminismStrength`, `ReproducibilityScope`
+and `TraceEquivalence`, and `tests/contract/tests/determinism_declarations.rs` holds every
+domain that claims reproducibility to a harness that checks it. Every domain the six-row table
+names today either claims `State` or `StateTemporal` — "the same inputs yield the same
+outputs" — or explicitly claims neither, and the one row that does not,
+`DeterminismStrength::None`, already carries the doc comment that decides this question before
+this record states it: "the honest declaration for anything reading a clock, sampling, or
+consuming a model backend."
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#20
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:96eb2710a424e0d76536b7c3fe420197d5d99e00d69f263a38cc9b11ec9b272d*
+
+A runtime observation reads a clock, or its moral equivalent — it observes what a workload's
+execution actually did, and repeating the identical workload on the identical build variant on
+the identical machine is not guaranteed to reproduce the identical observed value, because the
+value depends on scheduling, contention and timing the process does not fully control. **A
+runtime producer cannot honestly claim `DeterminismStrength::State` or `StateTemporal` for the
+observation itself**, and `Declaration_Is_Coherent` already forbids the failure mode the WHY
+names — a producer that claimed `State` while its trace could not actually be reproduced would
+be exactly the corruption the WHY describes, a producer quietly declaring itself deterministic
+when it is not, which is worse than an honest `None` because a declaration is what a peer reads
+and plans around rather than verifies for itself.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#21
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:447d84f2cee58142d222ea4b3d3c09d3edff3ac695332b80d48da09c6a806807*
+
+**They are not satisfiable as written, and what replaces them is not a new level.** It is the
+existing floor this workspace already has a name for and a worked example of:
+`DeterminismStrength::None`, `ReproducibilityScope::SingleRun`, `TraceEquivalence::NotApplicable`
+— the same triple `AgentHost` already declares in
+`crates/contracts/nomos-contracts/src/determinism/strategy.rs`'s own test module, for the
+parallel reason that a model backend's output is a function of an execution rather than of
+source alone. A runtime-observation domain occupies this triple honestly rather than omitting a
+declaration or reaching for a stronger one that reads better.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#22
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:8df238c5c134a7e45d41b0c663bd93b78c044118c2064739d68238961f940f2c*
+
+This exemption is narrower than it can be misread to be, and stating the boundary is why this
+section exists rather than a one-line pointer to the `None` row:
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#23
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / The Determinism Declarations Are Not Satisfiable As Written, And What Replaces Them Is Already Named · hash: sha256:7ae82c7d669dbf914907729fcd344ee86e30de4e5af779cfcb31dcd3069aa739*
+
+- **It is the observed value that is `None`, not everything a runtime producer does.** Once an
+  observation has been captured and written into a `Fact`, storing it, comparing it, serving it
+  from a cache, and composing it into a finding are exactly as reproducible as the equivalent
+  step for any other fact — the "Fact cache and incremental reuse" and "Analysis kernel" rows of
+  the domain table still govern that handling. What `None` disclaims is the claim that
+  re-running the workload reproduces the same observed value, not the claim that re-reading an
+  already-captured one does.
+- **`None` does not exempt a runtime producer from `Declaration_Is_Coherent`.** It must still
+  pair `None` with `TraceEquivalence::NotApplicable`, exactly as `AgentHost` does, and the
+  workspace's existing test already refuses the inverse — `None` paired with a trace claim — the
+  same way it refuses `State` paired with no trace claim at all.
+  `Test_No_Strength_Should_Refuse_A_Trace_Claim` covers this today; a runtime declaration adding
+  a fourth occupant to that same coherent pairing changes nothing about it.
+  `tests/contract/tests/determinism_declarations.rs`'s enforcement is likewise unchanged by a
+  `None`-declaring domain arriving: `Rows_Nothing_Declares` filters to rows that
+  `Claims_Reproducibility()`, so a domain declaring `None` owes a declaration and a coherent
+  pairing, but not a harness proof of reproducibility it never claimed — there is nothing to
+  verify about a promise that was never made.
+- **A new row of the domain table, not a reuse of the existing one's label.** The `None` row the
+  table already carries — "Progress UI, logs, telemetry, agent execution" — is diagnostic output
+  and agent judgment, neither of which is a fact this workspace's own rules hold a subject to. A
+  runtime observation is a fact, filed the way `nomos-cap-syntax`'s syntactic facts already are,
+  and a fact producer sharing a row with progress output would blur exactly the distinction
+  `EvidenceClass::Is_Mechanical` exists to keep separate — a runtime capability adds its own row
+  to the table, at the same triple, the way `OD-ANALYSIS-004` left its own capability's crate and
+  payload for later work rather than deciding them here.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#24
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:d8a1cbb016365fb41f623e1043d5ce20d6671d64255521882d76fe79a5dd515a*
+
+## What A Runtime-Informed Claim Means When No Observation Exists
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#25
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:bb0c572ff188c6bb7ff26b33dda5c9532f96a70aa66944bbd7c0154c22d6feea*
+
+`Applicability` and `Observation` already carry the reporting this needs, at two different
+grains, and a runtime-informed check must use both rather than collapsing them into one
+absence.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#26
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:b8278eae48e14d2cf1afd889787e981f456467af8bc480aa842d196d908847c9*
+
+**No runtime producer for the subject at all** is a capability question, answered the way
+`OD-ANALYSIS-004` already states for a missing `SemanticallyResolved` producer: "a rule that
+cannot get [the] fact for a subject reports `MissingCapability` or `ProviderUnavailable` exactly
+as a syntax rule does." A rule needing `RuntimeObserved` evidence with no runtime provider
+installed reports `Applicability::MissingCapability`; one where a runtime provider is installed
+but could not run for this subject reports `Applicability::ProviderUnavailable`. Neither reads
+as a pass, by the type's own design — `Applicability::Was_Evaluated` is false for both.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#27
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:75eb24f36b90560fb0c2a1f8941689f37567a5a585196cf8c2a8b2a715c0d08b*
+
+**A runtime producer ran, but the observed workload never took a given subject's path** is the
+finer-grained case, and it is the one the WHY's own examples turn on: an allocation site the
+workload never reached says nothing about whether the site allocates, and a check that reported
+it as compliant would be reporting silence as a finding. This is `Observation`'s three-state
+shape (`crates/capabilities/nomos-cap-syntax/src/payload/observation.rs`), generalized exactly
+the way `OD-ANALYSIS-004` already anticipated it would be — "the day a second capability needs
+the identical shape," judged against `OD-CONTRACTS-001`'s band-0 admission criterion — and this
+is that second capability. Per item a runtime payload records:
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#28
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:bb50c0571cfec791898b526d3fd1055e52da8cb9ff7e579f771756a9ac925fe5*
+
+- **`Observation::NotObserved`** — the observed workload never exercised this site. Nothing is
+  claimed either way; this is the "did not look" answer `OD-SYNTAX-002` already named
+  ("not observed is not absent") and the one the WHY requires a runtime-informed check be able
+  to give, rather than reporting the site clean because nothing was seen.
+  `Observation::Was_Observed` is false, exactly as for a syntax provider that could not look.
+- **`Observation::Absent`** — the workload reached the site and the fact in question did not
+  occur (the allocation did not happen, the lock was not contended past the budget). This is a
+  genuine finding of absence, not a stand-in for silence, and it is the one case a runtime
+  observation actually earns.
+- **`Observation::Present(value)`** — the workload reached the site and the fact occurred; the
+  value is what was measured.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#29
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What A Runtime-Informed Claim Means When No Observation Exists · hash: sha256:a34ae3f062dcfc5560f1e1294f9f62a8e89aca124bf3ddac7314573922573ecc*
+
+A rule whose subject is only partially covered by what the observed workload reached reports
+`Applicability::PartiallySupported` for the subject and states, in its own payload, which sites
+were `NotObserved` — the same discipline `OD-ANALYSIS-004` already states for partial semantic
+resolution: "what was not covered is recorded separately and is not implied to be clean." It
+does not fall back to a weaker `FactVariant` for the whole subject, since the sites the workload
+did reach were genuinely `RuntimeObserved`, and it does not report `Supported` for a subject
+whose coverage depends on which paths a workload happened to take, because `Supported` promises
+every capability was evaluated "at the guarantee it asked for," which a partially-exercised
+workload has not delivered.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#30
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#31
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What This Record Does Not Do · hash: sha256:7b554c332b001f68e1427681d30682c68102cadf224acfe5766b7d0095039448*
+
+It does not build a capability, a payload schema, or a crate under `crates/capabilities`. The
+first runtime-observation producer is separate work, reserving its own territory, and this
+record is what that work is measured against — the same relationship `OD-ANALYSIS-004` holds to
+the first program-semantics producer, and `ARC-CONFORMANCE-001` holds to every capability
+argument.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#32
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What This Record Does Not Do · hash: sha256:83a72e784bdd7024b3f274cb737d35136a25c6189e4267d463cfdb8d94a54f35*
+
+It does not add a workload identity or an environment identity as a Rust type, a field on
+`FactKey`, or a change to `crates/substrate/nomos-analysis`. It states that a runtime fact's
+identity is incomplete without both; defining their shape is the first runtime producer's own
+work, judged against this record.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#33
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What This Record Does Not Do · hash: sha256:040daa4b7fdbacff9205b43ba0f4ddbb24f9655321299d4da17a9bda2c1b66fc*
+
+It does not add a row to the domain table in `crates/contracts/nomos-contracts/src/determinism.rs`,
+or an `impl Strategy` anywhere. It states what triple a runtime-observation row must declare —
+`None` / `SingleRun` / `NotApplicable` — and that the row is distinct from the existing
+"Progress UI, logs, telemetry, agent execution" row; adding the row is the first runtime
+producer's obligation, discharged the way `tests/contract/tests/determinism_declarations.rs`
+already requires of every domain that arrives.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#34
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What This Record Does Not Do · hash: sha256:f5d82769a8ed381be3d365143621face0538e01429ed1f15e5902dab9e499f48*
+
+It does not promote `Observation` out of `nomos-cap-syntax`, change its three states, or change
+`Applicability`, `EvidenceClass`, `FactVariant` or `Guarantee` in any way. Every type this
+record names is unchanged by it, exactly as `OD-ANALYSIS-004` left them.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#35
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What This Record Does Not Do · hash: sha256:9bca7a1cf7dfbdc262c2cb821f160e1ffce27475fd300540ac4b87f6840be3b4*
+
+It does not enumerate every claim a runtime-informed capability may eventually make. The
+allocation, contention and reachability shapes named above are illustration of the composition
+rule, not a closed list, the same status `OD-ANALYSIS-004`'s own five worked shapes have.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#36
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / What This Record Does Not Do · hash: sha256:c799ff4e36141dc99410687dd4525f622e54c378f85a86cdc430e2c47f9a3a94*
+
+It does not decide which crate a runtime-observation capability lives in, whether it is one
+crate or several, or how a workload is actually driven or an environment actually sampled.
+`OD-CAPABILITY-002`'s criterion governs the first question unchanged; the second and third are
+implementation questions this record does not reach.
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37
+
+*revision: authored · kind: heading · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#38
+
+*revision: authored · kind: prose · heading: A runtime observation is a workload-scoped fact, and the determinism declarations exempt it rather than bind it / Status · hash: sha256:d16b36763d2df48dce1c5530f8d1048ff6bc8f5439c71282509185aa3fff1da1*
+
+Closed by `P12-RUNTIME-EVIDENCE`.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 

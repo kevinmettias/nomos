@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:da6cd51e2bc1296b171f4ad81ffd41e254c5866c8dfda0c2799929245aa60d98",
-  "inputs_digest": "sha256:2a65cc4596c78f99aa6b8322e3933a13be4988ef59249d4b6c09f3efbc64d7b4",
+  "content_digest": "sha256:1681494ee39d30dffb9ea8487faa40d29c780249d1e16ee023016e792992108f",
+  "inputs_digest": "sha256:39ab52115ce311307949a7f6267ceaf7b061c19a5959127c713d1ecf84eef5e7",
   "sections": [
     [
       "Documents",
-      93
+      94
     ],
     [
       "Sections",
-      858
+      866
     ],
     [
       "Source blocks",
-      3239
+      3277
     ]
   ],
   "inputs": [
@@ -119,6 +119,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored",
       "hash": "sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored",
+      "hash": "sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227"
     },
     {
       "content": "documents",
@@ -1199,6 +1204,46 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29",
       "hash": "sha256:51f15651528ca6818d245f3077e313008c70f9bb419eba739de14ed6ac2d7610"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#1",
+      "hash": "sha256:538dcbb7d39634ac9be74eacaf13127b7a532506cf4b5ee4aef41773d8798544"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#2",
+      "hash": "sha256:bcc7780502bcb7d043021926ce4aca18379e0e1df725b041d78b310b483eba7f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#7",
+      "hash": "sha256:50e595390baf9e4f009e0c387a63fc8d844395872b529bc092a61ad12275cc3b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#13",
+      "hash": "sha256:5c388985101189c9d4d6e0d721cefab334b8a76978b15bf08f34678aef26e53c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#18",
+      "hash": "sha256:7d783a9ab1a1d0dfae1a648e5e34d751e4c36c746abe85f72e8c64bd3069def7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#24",
+      "hash": "sha256:d3ea09ab4bdd0f2b78990845aa75fbf49e90f81def637a36281ae8a5b2cbf315"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#30",
+      "hash": "sha256:d343050f45a082dc705edc46d9848ef8506e77e8314f583e5a5aee5d17839353"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37",
+      "hash": "sha256:9e761b542fe4199a65a70aa55a85853b63b4dfc6267da0e6e0a5ecd522065d4d"
     },
     {
       "content": "headings",
@@ -7299,6 +7344,196 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#30",
       "hash": "sha256:63f31d4f4d714f01a7ac65f2710eb324179621821c9bebca2462d9526104911b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#1",
+      "hash": "sha256:b3935aacb3f21143657cb555b830417cf5bd9bd71217f9b005aa4880a2ac77e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#3",
+      "hash": "sha256:6ae234488d5ed2f4d140317a72f68fdb5cb54d0ea245e9aed0bf804c4b853bec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#4",
+      "hash": "sha256:c03f0d1baab2601a70aae53a8650987da59a2760e088e51848de345b05eac741"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#5",
+      "hash": "sha256:29346132811aa302cfaaac79ed9d0c9d181c81bbeb06097515e2fbedb0a50ca5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#6",
+      "hash": "sha256:dce18910fd34f8105b069527e0b2f19e29910eb522c21497a9c57ed92b124678"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#7",
+      "hash": "sha256:6954d4a3553ee31c9aa59ebfc0e11c3ad75f6e0438e6244102b86a5ef2733976"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#8",
+      "hash": "sha256:c9d96a770c21b3dd514aa2dc0653764c1933e809327ceb69bb77343ff208891f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#9",
+      "hash": "sha256:22ff090b119a22a84f14332cc96251dcfeab0a3c791536dfe4a959ff2017abfc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#10",
+      "hash": "sha256:c18a140d776c0a7d90b9594bfb6bf9899b14d092cb627df5707dc4933daee746"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#11",
+      "hash": "sha256:8b95c17ed7c02da401305cd58a5f9398a05a647ad9433565e0b0f455111f2ab1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#12",
+      "hash": "sha256:2e7b44f4f7725a8f7a5b89725cd5ac7ce120176568a953e24e4c2b11b48a5384"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#13",
+      "hash": "sha256:a71526bcacc53b0dd9f15dfbe1cef84120546a39e2afc56771edfaa9adbe7f57"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#14",
+      "hash": "sha256:3b639dae2af0a369bc2ce5d43f50ea0b4d8c4e46dcdb1c0cca1d82bbe79a7dc1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#15",
+      "hash": "sha256:7a3cd215b2e51a822189d6be4f5f729288307bd0f7f9151f79b6e21c2fd220ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#16",
+      "hash": "sha256:dcb744895b3a38340236e915c1c2ea145b71274fa1838b4e99849c567ac30a35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#17",
+      "hash": "sha256:7b6cf7f7f14719ba786b12e5877c3532a79842d60c13e8dbffd6812668e67dbe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#18",
+      "hash": "sha256:6990a3d922f1317953bd9458d7d73c4a6ab251617b32b50acd8e8acd0f1c7f3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#19",
+      "hash": "sha256:f8707571d5d4d7fc58d15dac101a1e854310e8b0b122acc76006d9d739a87259"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#20",
+      "hash": "sha256:96eb2710a424e0d76536b7c3fe420197d5d99e00d69f263a38cc9b11ec9b272d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#21",
+      "hash": "sha256:447d84f2cee58142d222ea4b3d3c09d3edff3ac695332b80d48da09c6a806807"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#22",
+      "hash": "sha256:8df238c5c134a7e45d41b0c663bd93b78c044118c2064739d68238961f940f2c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#23",
+      "hash": "sha256:7ae82c7d669dbf914907729fcd344ee86e30de4e5af779cfcb31dcd3069aa739"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#24",
+      "hash": "sha256:d8a1cbb016365fb41f623e1043d5ce20d6671d64255521882d76fe79a5dd515a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#25",
+      "hash": "sha256:bb0c572ff188c6bb7ff26b33dda5c9532f96a70aa66944bbd7c0154c22d6feea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#26",
+      "hash": "sha256:b8278eae48e14d2cf1afd889787e981f456467af8bc480aa842d196d908847c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#27",
+      "hash": "sha256:75eb24f36b90560fb0c2a1f8941689f37567a5a585196cf8c2a8b2a715c0d08b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#28",
+      "hash": "sha256:bb50c0571cfec791898b526d3fd1055e52da8cb9ff7e579f771756a9ac925fe5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#29",
+      "hash": "sha256:a34ae3f062dcfc5560f1e1294f9f62a8e89aca124bf3ddac7314573922573ecc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#30",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#31",
+      "hash": "sha256:7b554c332b001f68e1427681d30682c68102cadf224acfe5766b7d0095039448"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#32",
+      "hash": "sha256:83a72e784bdd7024b3f274cb737d35136a25c6189e4267d463cfdb8d94a54f35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#33",
+      "hash": "sha256:040daa4b7fdbacff9205b43ba0f4ddbb24f9655321299d4da17a9bda2c1b66fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#34",
+      "hash": "sha256:f5d82769a8ed381be3d365143621face0538e01429ed1f15e5902dab9e499f48"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#35",
+      "hash": "sha256:9bca7a1cf7dfbdc262c2cb821f160e1ffce27475fd300540ac4b87f6840be3b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#36",
+      "hash": "sha256:c799ff4e36141dc99410687dd4525f622e54c378f85a86cdc430e2c47f9a3a94"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#37",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md#38",
+      "hash": "sha256:d16b36763d2df48dce1c5530f8d1048ff6bc8f5439c71282509185aa3fff1da1"
     },
     {
       "content": "blocks",
