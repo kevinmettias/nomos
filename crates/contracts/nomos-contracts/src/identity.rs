@@ -21,7 +21,7 @@ use serde::{Deserialize, Serialize};
 /// collision margin at 128 bits is not the binding constraint for a workspace-scale
 /// corpus; legibility is.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct Digest128([u8; 16]);
+pub struct Digest128([u8; Digest128::BYTE_LENGTH]);
 
 impl Digest128
 {

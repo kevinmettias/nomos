@@ -228,7 +228,7 @@ pub struct field nomos_contracts::Guarantee::incremental: IncrementalGranularity
 pub struct field nomos_contracts::Guarantee::soundness: Assurance
 pub struct field nomos_contracts::Guarantee::variant: FactVariant
 pub struct nomos_contracts::ContractVersion
-pub struct nomos_contracts::Digest128([u8; 16])
+pub struct nomos_contracts::Digest128([u8; Digest128::BYTE_LENGTH])
 pub struct nomos_contracts::EnforcementReach
 pub struct nomos_contracts::Finding
 pub struct nomos_contracts::GenerationId(u64)
