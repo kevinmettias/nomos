@@ -1,13 +1,18 @@
-//! One `nomos work` command, as the arguments spelled it.
+//! One `nomos work` command, independent of how it was spelled.
+//!
+//! This is the request vocabulary a caller above the platform hands to [`crate::Run`]. An
+//! argument parser is one way to produce one; it is not the only way this crate expects one
+//! to arrive, which is the point of stating the vocabulary here rather than leaving it a
+//! shape only `nomos-cli`'s own parser produces.
 
 use nomos_ledger::{ItemId, LedgerItem, Territory};
 
-use crate::work::claim_request::ClaimRequest;
-use crate::work::ending_request::EndingRequest;
+use crate::claim_request::ClaimRequest;
+use crate::ending_request::EndingRequest;
 
 /// What to do.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) enum WorkCommand
+pub enum WorkCommand
 {
     /// Show items, optionally filtered by state.
     List

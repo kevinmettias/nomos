@@ -38,6 +38,11 @@ nomos-lang-rust = { workspace = true }
 # from four values invented at the call site — and so that an empty change set is refused
 # by the thing that owns the question. This is `nomos-workspace`'s second dependent.
 nomos-workspace = { workspace = true }
+# The seam between choosing a platform, running a `work` verb and rendering its outcome —
+# `work.rs` composes the platform and renders; this crate runs the verb, generic over the
+# platform traits, so a second adapter can depend on it without also depending on
+# `nomos-platform-std` or on how this crate prints an answer. `OD-HOST-001`.
+nomos-work-orchestration = { workspace = true }
 # The specification system. A composition root is the only place permitted to name
 # these: the spec crates sit beside the kernel rather than above it, and nothing in the
 # product may reach them directly.

@@ -44,6 +44,12 @@ members = [
     # a finding a rule produced, and a band below rules would have forbidden that edge.
     "crates/corrections/nomos-corrections",
 
+    # Band 40 — orchestration. Running a `nomos work` verb against a caller-chosen
+    # platform, apart from choosing that platform and apart from rendering the answer.
+    # Above the ledger it dispatches to and the platform port it is generic over, below
+    # every composition root that could call it. `OD-HOST-001`.
+    "crates/orchestration/nomos-work-orchestration",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -97,6 +103,7 @@ nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
+nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

@@ -1,0 +1,40 @@
+pub enum nomos_work_orchestration::WorkCommand
+pub enum nomos_work_orchestration::WorkOutcome
+pub enum variant nomos_work_orchestration::WorkCommand::Abandon(EndingRequest)
+pub enum variant nomos_work_orchestration::WorkCommand::Add { item: Box<LedgerItem>, amending: Territory, }
+pub enum variant nomos_work_orchestration::WorkCommand::Audit
+pub enum variant nomos_work_orchestration::WorkCommand::Claim(ClaimRequest)
+pub enum variant nomos_work_orchestration::WorkCommand::Decline(EndingRequest)
+pub enum variant nomos_work_orchestration::WorkCommand::Finish { item: ItemId, holder: String, }
+pub enum variant nomos_work_orchestration::WorkCommand::List { state: Option<String>, }
+pub enum variant nomos_work_orchestration::WorkCommand::Renew(ClaimRequest)
+pub enum variant nomos_work_orchestration::WorkCommand::Show { item: ItemId, }
+pub enum variant nomos_work_orchestration::WorkCommand::TakeOver(ClaimRequest)
+pub enum variant nomos_work_orchestration::WorkCommand::Validate
+pub enum variant nomos_work_orchestration::WorkOutcome::Abandon(Result<(), ClaimRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Add(Result<(), AddRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Audit(Result<BoardView, LedgerError>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Claim(Result<Reservation, ClaimRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Decline(Result<(), ClaimRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Finish(Result<VerificationRecord, FinishRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::List(Result<BoardView, LedgerError>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Renew(Result<Reservation, ClaimRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Show(Result<ShowView, LedgerError>)
+pub enum variant nomos_work_orchestration::WorkOutcome::TakeOver(Result<Reservation, ClaimRefusal>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Validate(Result<LedgerDocument, LedgerError>)
+pub fn nomos_work_orchestration::Run<F, C, L, P>( command: &WorkCommand, ledger: &mut FileLedger<F, C, L>, launcher: &P, published: impl FnOnce() -> Territory, ) -> WorkOutcome where F: FileSystem, C: Clock, L: CrossProcessLock, P: ProcessLauncher,
+pub struct field nomos_work_orchestration::BoardView::document: LedgerDocument
+pub struct field nomos_work_orchestration::BoardView::now: Timestamp
+pub struct field nomos_work_orchestration::ClaimRequest::holder: String
+pub struct field nomos_work_orchestration::ClaimRequest::item: ItemId
+pub struct field nomos_work_orchestration::ClaimRequest::lease: Duration
+pub struct field nomos_work_orchestration::EndingRequest::holder: String
+pub struct field nomos_work_orchestration::EndingRequest::item: ItemId
+pub struct field nomos_work_orchestration::EndingRequest::reason: String
+pub struct field nomos_work_orchestration::ShowView::current_revision: Option<String>
+pub struct field nomos_work_orchestration::ShowView::document: LedgerDocument
+pub struct field nomos_work_orchestration::ShowView::now: Timestamp
+pub struct nomos_work_orchestration::BoardView
+pub struct nomos_work_orchestration::ClaimRequest
+pub struct nomos_work_orchestration::EndingRequest
+pub struct nomos_work_orchestration::ShowView

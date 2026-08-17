@@ -62,6 +62,7 @@ profile: domain-specification
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -561,6 +562,11 @@ profile: domain-specification
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#12 | authored | 2 | Consequences |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#14 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#16 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#12 | authored | 2 | What this costs |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#15 | authored | 2 | What would make this wrong |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -14823,6 +14829,172 @@ case this record speaks to either way. It does not build a `suppressions.json` o
 tool itself — that tool is a separate repository this one depends on, and its `go test ./...`
 baseline is documented elsewhere as already red for unrelated reasons; a fix there is a change
 to that repository's own front end, not something this record's territory reaches.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one · hash: sha256:6925613f07a8adec8f661c0b63d21749b581b23a0ed5363cacefdc93401e3dfa*
+
+# Choosing a platform, running a verb and rendering its outcome are three crates, not one
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#2
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one · hash: sha256:590c08b0391642f153e38eac126610a71a4f01fc9e3e4e181da3639395b2da9f*
+
+`nomos-cli`'s `work.rs` imported `FileLock`, `StdFileSystem`, `StdProcessLauncher` and
+`SystemClock` from `nomos-platform-std` directly, and its dispatch functions took
+`&mut FileLedger<StdFileSystem, SystemClock, FileLock>` by name. Choosing a platform,
+running a `nomos work` verb and rendering its outcome were one body of code with no seam a
+second adapter could depend on without taking all three — the defect `P10-SERVICE-SEAM`
+named, from the README's own plan to put IPC, gRPC and MCP adapters around the same
+headless core the CLI already sits on.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#3
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one · hash: sha256:f8321dc9e65e55ffdfa14b8543cfbe20a78e48d5f2b97da35d7984e6cfd3aea9*
+
+Naming a concrete provider in a composition root was never the defect: `OD-RULES-001`
+already permits that for `nomos check`. The defect was that nothing separated composition
+from orchestration, so a second adapter wanting the work group's claim, lease and finish
+sequence would have had to re-derive it, and the two copies would drift with nothing able
+to notice.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#5
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:cf872b938b0f7c4e67157464b73db5ee920516c2a39239d0117bab09167e4844*
+
+A seam exists. `nomos-work-orchestration` (band 40, `crates/orchestration/nomos-work-
+orchestration`) is the middle of the three: it owns the request vocabulary
+(`WorkCommand`, `ClaimRequest`, `EndingRequest` — moved from `nomos-cli::work` verbatim)
+and one function, `Run`, generic over the four traits `nomos-platform` declares
+(`FileSystem`, `Clock`, `CrossProcessLock`, `ProcessLauncher`) rather than over
+`nomos-platform-std`'s implementations of them. `Run` takes a command and an
+already-constructed, caller-owned `FileLedger<F, C, L>` and process launcher, and hands
+back `WorkOutcome` — a typed value carrying exactly what `nomos-ledger`'s own API already
+returns (`Reservation`, `ClaimRefusal`, `VerificationRecord`, `FinishRefusal`,
+`AddRefusal`, `LedgerDocument`, `LedgerError`) or a small bundle of the board and the
+moment it was read (`BoardView`, `ShowView`). Nothing in `nomos-work-orchestration` writes
+a line of output, picks an exit code, or names a concrete platform type.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#6
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:299fe2a4e5e7b5e76f3aa2ed1799f0db53a7d4a792eea64740aa4d02840973cd*
+
+`nomos-cli`'s `work.rs` is now a composition root and a renderer and nothing else: it
+builds the platform (`StdFileSystem`, `SystemClock`, `FileLock`, `StdProcessLauncher`),
+calls `nomos_work_orchestration::Run` once, and matches the returned `WorkOutcome` against
+the `WorkCommand` it already had in hand to produce text and an `ExitCode` — the same
+`report.rs` and `listing.rs` functions the module already had, now fed pre-computed values
+instead of computing them inline. The work group is the demonstration `P10-SERVICE-SEAM`
+asked for: every verb (`list`, `show`, `add`, `finish`, `claim`, `renew`, `takeover`,
+`abandon`, `decline`, `validate`, `audit`) is dispatched through `Run`, and a second
+composition root gets the same guarantee by supplying its own `F`, `C`, `L` and `P` — or
+reusing `nomos-platform-std`'s — and rendering `WorkOutcome` however its own transport
+wants to (JSON over gRPC, a UI model over IPC), without vendoring the claim/lease/finish
+sequence a second time.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#7
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:336c82ce30a468cbf3cfbc7f148459ac1b7dd1f32a49cc94a4a87d03484ef144*
+
+This is not a module boundary. `nomos-work-orchestration` is a workspace member `nomos-cli`
+depends on; a second adapter crate depends on it exactly the same way, and neither of them
+is `nomos-cli`. The property `P10-SERVICE-SEAM`'s `done_when` asked for — a second adapter
+can call the middle one without taking the other two — holds because `nomos-work-
+orchestration` names neither `nomos-platform-std` (composition) nor any rendering type
+(`ExitCode` stayed in `nomos-cli`, and so did every `writeln!`).
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What stayed out, and why · hash: sha256:4738ded19153a96ed7f6e8bc5d986eca247957d3da5d0e5cdee5002b00700de5*
+
+## What stayed out, and why
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#9
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What stayed out, and why · hash: sha256:669d0caca3180330a7ed25437d7fa45dbac301b9747b70ed8ea0da60ab893c06*
+
+**Argument parsing** stayed in `nomos-cli::work::parse`. A second adapter is not expected
+to parse `argv`; it constructs a `WorkCommand` from whatever its own transport carries.
+Moving parsing into the orchestration crate would have made every future adapter's request
+format go through a CLI-shaped intermediate for no reason — the vocabulary `WorkCommand`
+already *is* the transport-independent shape.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#10
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What stayed out, and why · hash: sha256:e4a52eba364ef71672ab33b646eaab72c7d9e4ceb2c18d721fad0abac4e9119a*
+
+**The directory walk that finds this repository's already-published records** — what
+`WorkCommand::Add` needs to decide whether a declared amendment is honest — stayed in
+`nomos-cli::work::Published_Records`. `nomos_platform::FileSystem` is read,
+atomically-replace and exists; it has no directory-listing operation, so this cannot be
+expressed generically without widening a port that has exactly one other consumer for a
+question that is this repository's own convention rather than the platform's.
+`nomos_ledger::FileLedger::Add`'s own documentation already draws this line for the same
+reason. `Run`'s `published: impl FnOnce() -> Territory` parameter is where that value
+crosses from the composition root into the orchestration crate — lazily, so it is never
+walked for the ten verbs that are not `add`.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#11
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What stayed out, and why · hash: sha256:3ebdd89b48a2979664e519998b527076d55e917119f04c3babe6c202fcd59973*
+
+**Exit codes** stayed in `nomos-cli::work::ExitCode`. They are a process convention, not a
+verb outcome — a JSON adapter has no exit code to pick, and the mapping from a
+`ClaimRefusal` to a retryable-versus-fatal number is exactly the rendering step this record
+keeps out of the orchestration crate.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#12
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What this costs · hash: sha256:747a4997db33b638a4949cde021a5d560aab6fd370b0e24f19ffedb2142be0f3*
+
+## What this costs
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#13
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What this costs · hash: sha256:c684bb1301d2279414dc305ee78e459e51c7d1d914d55b1580f8c3c24bafa3e9*
+
+One more crate in the workspace, one more row in `README.md`'s band table and
+`tests/contract/tests/boundaries/bands.rs`'s `BANDS`, and one more public-surface snapshot
+under `tests/contract/surface/`. `nomos-cli::work`'s own module count went down by three
+files (`command.rs`, `claim_request.rs`, `ending_request.rs` moved out) and its two
+remaining ledger-facing functions (`Render`, `Published_Records`) are shorter than the
+`Run` they replaced, because they no longer also decide which ledger call a command means.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#14
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What this costs · hash: sha256:9f663b6cc0b841227a70c26f354bdfc5a556e5204084b1340b99b04d110ac275*
+
+The tuple match in `nomos-cli::work::Render` — `match (command, outcome) { ... _ =>
+unreachable!() }` — is the one place this record accepts a runtime invariant Rust's type
+system does not state on its own: `nomos_work_orchestration::Run` always returns the
+`WorkOutcome` variant naming the `WorkCommand` variant it was given, and nothing in either
+enum's shape lets the compiler see that without the unreachable arm. A future verb added to
+one enum and not the other is caught immediately — the match becomes non-exhaustive or the
+new arm falls into `unreachable!()` the first time it runs — rather than silently.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#15
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What would make this wrong · hash: sha256:fd1009d67c8d32fbc57bcff2f8986dd86cb7ac92053072b10480809c7a982240*
+
+## What would make this wrong
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#16
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / What would make this wrong · hash: sha256:088a34065a1008c2c541f79b4162427af0f64a9e477c8cb65c1e9a515a17490e*
+
+If a second adapter never arrives, this is a seam nobody crossed — a real cost, paid once,
+for an option this record cannot prove will be exercised. What would make the seam itself
+wrong, rather than merely unused, is `nomos-work-orchestration` growing a second concern:
+a rendering decision leaking into `WorkOutcome`'s shape (a variant that exists to be
+printed rather than to report what happened), or a platform-specific type leaking into its
+signature (an `impl` bound that only `nomos-platform-std` satisfies). Either would be the
+same defect this record fixed, one layer up.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

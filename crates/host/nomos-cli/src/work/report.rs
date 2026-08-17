@@ -1,11 +1,10 @@
 //! Saying what the ledger answered, and which exit code that is.
 
 use nomos_ledger::{
-    AddRefusal, Claim_Refusal, ClaimRefusal, FileLedger, FinishRefusal, ItemId, ItemState,
-    LedgerDocument, LedgerError, LedgerItem, RefusalLayer, SCHEMA_VERSION, Territory, Validate,
+    AddRefusal, Claim_Refusal, ClaimRefusal, FinishRefusal, ItemId, ItemState, LedgerDocument,
+    LedgerError, LedgerItem, RefusalLayer, SCHEMA_VERSION, Territory,
 };
 use nomos_platform::Timestamp;
-use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 
 use super::ExitCode;
 
@@ -276,25 +275,19 @@ const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
 /// silent data-loss channel until `OD-LEDGER-008`. It is loud now — every verb exits 5 — and this
 /// is where the two numbers can be read side by side without provoking a refusal first.
 ///
-/// `Load` and [`Validate`] rather than `Validate_Current`, which discards the document and so
-/// cannot report the file's own version. One read, not two, so both halves of the line describe
-/// the same file.
+/// `result` already carries a board known to satisfy its own invariants —
+/// `nomos_work_orchestration::Run` folded the violation check into the same read that used to
+/// happen here, so this function only says what the two numbers mean.
 pub(super) fn Report_Validation(
-    ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
+    result: Result<LedgerDocument, LedgerError>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    let document = match ledger.Load()
+    let document = match result
     {
         Ok(document) => document,
         Err(error) => return Report_Error(&error, output),
     };
-
-    let violations = Validate(&document, ledger.Now());
-    if !violations.is_empty()
-    {
-        return Report_Error(&LedgerError::Invalid { violations }, output);
-    }
 
     let _ = writeln!(
         output,

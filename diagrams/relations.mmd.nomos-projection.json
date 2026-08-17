@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:1701a1d4dc6b0f3c133ab6fdd5e57f820138a402ea29eb645005e15d239eb596",
-  "inputs_digest": "sha256:b4bff15112c81e8eea383f0c45f0b1472e6d54e615078d10487880bb1f57ec6b",
+  "content_digest": "sha256:a48c68632f82225ae7e9b1fedcca87f3cbe0783834e96569a42e17321a16ec66",
+  "inputs_digest": "sha256:d3e8f68644c0551b79f2ae360abcc5d0a736b0df148473cd2649f3bb45d16be8",
   "sections": [
     [
       "Relations",
-      792
+      794
     ],
     [
       "Decisions",
-      111
+      112
     ]
   ],
   "inputs": [
@@ -1858,6 +1858,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-HOST-001 relates-to OD-RULES-001",
+      "hash": "sha256:4a1f0f9e500391b0fdc6c3f6e6a4981e540eff178ebc935b7f704092878a3fed"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-001 affected_by OD-LEDGER-004",
       "hash": "sha256:9b9dc32b2d16711a9aa75c552595230f8773b686739cc205382710b5ec0c43f4"
     },
@@ -3273,6 +3278,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-001 relates-to OD-HOST-001",
+      "hash": "sha256:dd8bdfc561f855e04da73927be26149565635256408f67fef5680b52bfe544a4"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-001 relates-to OD-MODEL-001",
       "hash": "sha256:a4826dbeac8544aefd69d38fa81505c1e4ee5f66aebeede128872a7a075f6f6a"
     },
@@ -4200,6 +4210,11 @@
       "content": "nodes",
       "identity": "OD-GATE-013",
       "hash": "sha256:01d9537127939a023befafd8fac00907a73d76def2b5a52917f15c73adeb26b4"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-HOST-001",
+      "hash": "sha256:e0425961d00c90ae5c90235892e9715bd13d2f7545d2a34b01c8b43f6ee1dd00"
     },
     {
       "content": "nodes",

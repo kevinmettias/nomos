@@ -10,7 +10,7 @@ use nomos_ledger::ItemId;
 /// arguments and default the lease the same way. Three identical types would be three
 /// chances for them to drift apart in what they accept while being documented as identical.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct ClaimRequest
+pub struct ClaimRequest
 {
     /// Which item.
     pub item: ItemId,

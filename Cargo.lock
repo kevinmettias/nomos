@@ -327,6 +327,7 @@ dependencies = [
  "nomos-spec-model",
  "nomos-spec-project",
  "nomos-spec-store",
+ "nomos-work-orchestration",
  "nomos-workspace",
 ]
 
@@ -527,6 +528,15 @@ dependencies = [
  "nomos-model",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "nomos-work-orchestration"
+version = "0.1.0"
+dependencies = [
+ "nomos-ledger",
+ "nomos-platform",
+ "nomos-platform-std",
 ]
 
 [[package]]

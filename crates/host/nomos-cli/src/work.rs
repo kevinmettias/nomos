@@ -1,30 +1,29 @@
 //! `nomos work` — the ledger, from a terminal.
+//!
+//! This module is the composition root and the renderer, and nothing else. It chooses the
+//! platform — `nomos-platform-std`'s `StdFileSystem`, `SystemClock`, `FileLock` and
+//! `StdProcessLauncher` — and it turns a [`nomos_work_orchestration::WorkOutcome`] into
+//! text and an [`ExitCode`]. Running the verb itself, between those two steps, is
+//! `nomos_work_orchestration::Run`'s job: generic over the platform traits rather than
+//! these four concrete types, so a second adapter can call it with its own choices without
+//! also taking on how this module renders an answer. `OD-HOST-001`.
 
-use nomos_ledger::{
-    Eligible_Items, ExclusionLedger, FileLedger, Finish, Finishing, ItemId, LedgerItem,
-    ReleaseOutcome, Territory,
-};
-use nomos_platform::Clock;
+use nomos_ledger::{AddRefusal, FileLedger, ItemId, LedgerDocument, LedgerError, LedgerItem, Territory};
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
+use nomos_work_orchestration::{BoardView, ShowView, WorkOutcome};
 use std::path::Path;
 
-mod claim_request;
-mod ending_request;
 mod exit_code;
 mod listing;
 mod parse;
 mod report;
-mod command;
 #[cfg(test)]
 mod tests;
 
 pub use parse::Parse;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use command::WorkCommand;
-
-use claim_request::ClaimRequest;
-use ending_request::EndingRequest;
+pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, WorkCommand};
 
 use listing::{
     Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_History, Print_Listing,
@@ -50,121 +49,65 @@ pub fn Run(
         FileLock::At(directory.join("ledger.lock")),
     );
 
-    return match command
-    {
-        WorkCommand::List { state } => List(&ledger, state.as_deref(), output),
-        WorkCommand::Show { item } => Show(&ledger, item, output),
-        WorkCommand::Add { item, amending } =>
-        {
-            let published = Published_Records(directory);
+    let outcome = nomos_work_orchestration::Run(
+        command,
+        &mut ledger,
+        &StdProcessLauncher,
+        || Published_Records(directory),
+    );
 
-            Add(&mut ledger, item, Declared {
-                published: &published,
-                amending,
-            }, output)
-        }
-        WorkCommand::Finish { item, holder } => Finished(&mut ledger, item, holder, output),
-        WorkCommand::Claim(request) => Claimed(&mut ledger, request, output),
-        WorkCommand::Renew(request) => Renewed(&mut ledger, request, output),
-        WorkCommand::TakeOver(request) => Taken_Over(&mut ledger, request, output),
-        WorkCommand::Abandon(request) => Abandoned(&mut ledger, request, output),
-        WorkCommand::Decline(request) => Declined(&mut ledger, request, output),
-        WorkCommand::Validate => Report_Validation(&ledger, output),
-        WorkCommand::Audit => Audit(&ledger, output),
-    };
+    return Render(command, outcome, output);
 }
 
-/// Runs the item's predicate and reports what it said.
+/// Turns what [`nomos_work_orchestration::Run`] produced into text and an [`ExitCode`].
 ///
-/// No working directory: the predicate runs where the user invoked `nomos`, which for a
-/// repository tool run inside a repository is the repository. A predicate silently
-/// relocated into `work/` would fail in ways that look like the work being wrong.
-fn Finished(
-    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
-    item: &ItemId,
-    holder: &str,
-    output: &mut impl std::io::Write,
-) -> ExitCode
+/// One `match` over `(command, outcome)` rather than a second dispatch on `command` alone:
+/// `outcome`'s variant is already the answer to which arm this is, and matching both
+/// together is what lets the compiler check that every arm actually reads the outcome
+/// shape the command it is paired with produces. The `_ => unreachable!()` arm exists only
+/// because Rust cannot see that invariant from the two enums' shapes alone —
+/// `nomos_work_orchestration::Run` always returns the one `WorkOutcome` variant naming the
+/// `WorkCommand` variant it was given.
+fn Render(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl std::io::Write) -> ExitCode
 {
-    let finishing = Finishing { item, holder };
-    let outcome = Finish(ledger, &StdProcessLauncher, &finishing, None);
-
-    return Report_Finish(outcome, output);
-}
-
-/// One `Report_Claim` across the three reservation verbs, which is the point: one mapping
-/// from a refusal to an exit code, so `claim`, `renew` and `takeover` cannot come to
-/// disagree about what a refusal means, and the README's table does not move.
-fn Claimed(
-    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
-    request: &ClaimRequest,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let outcome = ledger.Claim(&request.item, &request.holder, request.lease);
-
-    return Report_Claim(outcome, output);
-}
-
-fn Renewed(
-    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
-    request: &ClaimRequest,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let outcome = ledger.Renew(&request.item, &request.holder, request.lease);
-
-    return Report_Claim(outcome, output);
-}
-
-fn Taken_Over(
-    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
-    request: &ClaimRequest,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let outcome = ledger.Take_Over(&request.item, &request.holder, request.lease);
-
-    return Report_Claim(outcome, output);
-}
-
-fn Abandoned(
-    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
-    request: &EndingRequest,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let abandoned = ReleaseOutcome::Abandoned {
-        reason: request.reason.clone(),
-    };
-    let outcome = ledger.Release(&request.item, &request.holder, abandoned);
-
-    return Report_Release(outcome, output);
-}
-
-fn Declined(
-    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
-    request: &EndingRequest,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let outcome = ledger.Decline(&request.item, &request.holder, &request.reason);
-
-    return Report_Decline(&request.item, outcome, output);
-}
-
-fn List(
-    ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
-    state: Option<&str>,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let document = match ledger.Load()
+    return match (command, outcome)
     {
-        Ok(document) => document,
+        (WorkCommand::List { state }, WorkOutcome::List(result)) =>
+        {
+            Render_List(state.as_deref(), result, output)
+        }
+        (WorkCommand::Show { item }, WorkOutcome::Show(result)) => Render_Show(item, result, output),
+        (WorkCommand::Add { item, amending }, WorkOutcome::Add(result)) =>
+        {
+            Render_Add(item, amending, result, output)
+        }
+        (WorkCommand::Finish { .. }, WorkOutcome::Finish(result)) => Report_Finish(result, output),
+        (WorkCommand::Claim(_), WorkOutcome::Claim(result))
+        | (WorkCommand::Renew(_), WorkOutcome::Renew(result))
+        | (WorkCommand::TakeOver(_), WorkOutcome::TakeOver(result)) => Report_Claim(result, output),
+        (WorkCommand::Abandon(_), WorkOutcome::Abandon(result)) => Report_Release(result, output),
+        (WorkCommand::Decline(request), WorkOutcome::Decline(result)) =>
+        {
+            Report_Decline(&request.item, result, output)
+        }
+        (WorkCommand::Validate, WorkOutcome::Validate(result)) => Report_Validation(result, output),
+        (WorkCommand::Audit, WorkOutcome::Audit(result)) => Render_Audit(result, output),
+        (_, _) => unreachable!("Run always pairs a command with its own outcome shape"),
+    };
+}
+
+fn Render_List(
+    state: Option<&str>,
+    result: Result<BoardView, LedgerError>,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    let BoardView { document, now } = match result
+    {
+        Ok(view) => view,
         Err(error) => return Report_Error(&error, output),
     };
-    let now = SystemClock.Now();
+
     let mut shown = 0_u32;
     for item in &document.items
     {
@@ -191,20 +134,16 @@ fn List(
     return ExitCode::Ok;
 }
 
-/// The one line that answers "which one": the first item [`Eligible_Items`] computes from
-/// the whole board.
+/// The one line that answers "which one": the first item [`nomos_ledger::Eligible_Items`]
+/// computes from the whole board.
 ///
 /// `OD-LEDGER-023` is why this is a line on `list` rather than a verb of its own —
 /// `WorkCommand` and its parser are outside this item's territory, and a real computed
 /// answer delivered through the one listing surface this item can reach beats a dedicated
 /// verb this item cannot wire up.
-fn Print_Next(
-    document: &nomos_ledger::LedgerDocument,
-    now: nomos_platform::Timestamp,
-    output: &mut impl std::io::Write,
-)
+fn Print_Next(document: &LedgerDocument, now: nomos_platform::Timestamp, output: &mut impl std::io::Write)
 {
-    let _ = match Eligible_Items(document, now).first()
+    let _ = match nomos_ledger::Eligible_Items(document, now).first()
     {
         Some(item) => writeln!(output, "next: {} {}", item.id, item.title),
         None => writeln!(output, "next: nothing is eligible"),
@@ -217,15 +156,15 @@ fn Print_Next(
 /// nowhere to be read even once the ledger began keeping one: a record no surface reports
 /// is a record only somebody willing to read the JSON can find, which is most of the way
 /// back to not keeping it.
-fn Show(
-    ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
+fn Render_Show(
     item: &ItemId,
+    result: Result<ShowView, LedgerError>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    let document = match ledger.Load()
+    let ShowView { document, now, current_revision } = match result
     {
-        Ok(document) => document,
+        Ok(view) => view,
         Err(error) => return Report_Error(&error, output),
     };
 
@@ -235,9 +174,7 @@ fn Show(
         let _ = writeln!(output, "no item named {item}");
         return ExitCode::Conflict;
     };
-    let now = SystemClock.Now();
     let label = Listing_Label(&document, found, now);
-    let current_revision = Current_Revision(ledger);
 
     let _ = writeln!(output, "{} {}", found.id, found.title);
     let _ = writeln!(output, "state: {label}");
@@ -248,74 +185,64 @@ fn Show(
     return ExitCode::Ok;
 }
 
-/// This tree's revision right now, read the same way `nomos_ledger::Finish` reads it when it
-/// stamps a [`nomos_ledger::VerificationRecord`] -- `.git/HEAD`, following one loose ref.
-///
-/// A second reading rather than a shared one: the resolution `nomos_ledger::Finish` uses to
-/// stamp a record is private to that crate's `finish` module, and exposing it would have
-/// meant widening this item's territory into `nomos-ledger`'s `lib.rs`, which nothing here
-/// needed edited otherwise. `docs/records/OD-LEDGER-027-...md` says so.
-///
-/// `None` on any failure -- no `.git` here, a packed ref this build does not chase, or any
-/// other read error. `work show`'s staleness line treats that as its own case rather than as
-/// agreement with a recorded revision.
-fn Current_Revision(ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>) -> Option<String>
+fn Render_Add(
+    item: &LedgerItem,
+    amending: &Territory,
+    result: Result<(), AddRefusal>,
+    output: &mut impl std::io::Write,
+) -> ExitCode
 {
-    let head = ledger.Read_File(Path::new(".git/HEAD")).ok()?;
-    let head = head.trim();
-
-    if let Some(ref_path) = head.strip_prefix("ref: ")
+    return match result
     {
-        return ledger
-            .Read_File(&Path::new(".git").join(ref_path))
-            .ok()
-            .map(|contents| return contents.trim().to_owned());
-    }
+        Ok(()) =>
+        {
+            let _ = writeln!(
+                output,
+                "added {} reserving {} path(s){}",
+                item.id,
+                item.territory.paths.len(),
+                Amendment_Note(amending)
+            );
+            ExitCode::Ok
+        }
+        Err(refusal) =>
+        {
+            let _ = writeln!(output, "{}", refusal.Describe());
 
-    return Some(head.to_owned());
+            Code_For_Refusal(&refusal)
+        }
+    };
 }
 
-/// Records a new item, refusing a duplicate identifier and a document that would not
-/// validate. It does **not** refuse an item whose territory somebody already holds.
-///
-/// The whole document is validated before the write, so an item that would break an
-/// invariant never lands. The alternative — write now, notice later — leaves every agent
-/// reading a ledger the system itself says is wrong.
-///
-/// # The control this used to claim
-///
-/// This comment said "refusing one whose territory is already spoken for" from the commit
-/// that wrote the command until `OD-LEDGER-010`, and nothing here ever did that.
-/// [`nomos_ledger::Validate`] compares territories only between items holding an *active
-/// claim*; an item arriving here holds none, so the comparison has nothing to say about it
-/// and never fires.
-///
-/// The behaviour is the one to keep and the sentence is what moved. Opening an item on
-/// ground somebody holds is how this board is used — `work/ledger.json` is in nobody's
-/// territory precisely so that `add` stays available when every item on the board is held,
-/// and a refusal here would shut the one door that is open when the board is fully
-/// claimed. Exclusion belongs to `claim`, which is where an agent is about to edit files.
-/// `add` writes a sentence about work that may not start for days.
-///
-/// What is guaranteed is therefore smaller than the old sentence promised, and it is
-/// stated exactly because the promise is what the next reader will act on: the identifier
-/// is unused, and the document that results still satisfies its own invariants. Nothing
-/// here says two agents may edit one file, and nothing here is what stops them.
-///
-/// # The exclusion this *does* need, and did not have
-///
-/// Both of those guarantees were until `OD-LEDGER-021` written outside the lock. This
-/// function read the whole document, decided against it and wrote the whole document back
-/// with nothing held in between — the shape `OD-LEDGER-015` removed from `Claim`, `Renew`
-/// and `Release`, left behind here because those three were fixed by name. An add that read
-/// the board before a concurrent verb's write put its own snapshot back over it, and the
-/// caller was told exit 0 either way.
-///
-/// So the read, the duplicate check and the write are now one [`FileLedger::Add`], and what
-/// is left here is reporting. The check in particular had to travel with them: outside the
-/// lock, two sessions adding one identifier both read a board without it, and the second
-/// write produced a document `Validate` calls invalid — a board that then refuses to load,
-/// for two callers who were each told they had succeeded.
+fn Render_Audit(result: Result<BoardView, LedgerError>, output: &mut impl std::io::Write) -> ExitCode
+{
+    let BoardView { document, now } = match result
+    {
+        Ok(view) => view,
+        Err(error) => return Report_Error(&error, output),
+    };
+
+    let mut reported = 0_u32;
+    for item in &document.items
+    {
+        let Some(refusal) = Blocking_Refusal(&document, item, now)
+        else
+        {
+            continue;
+        };
+        Print_Blocked(item, &refusal, output);
+        reported = reported.saturating_add(1);
+    }
+    if reported == 0
+    {
+        // Empty output used to mean either "nothing is blocked" or "the report cannot
+        // express what is blocking this", and only one of those is good news.
+        let _ = writeln!(output, "nothing claimable is blocked");
+    }
+
+    return ExitCode::Ok;
+}
+
 /// Every record this repository has already published, as repository-relative paths.
 ///
 /// Read here rather than in the store, and that division is the point rather than a
@@ -324,6 +251,12 @@ fn Current_Revision(ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>) -
 /// exclusion ledger that learned to walk a source tree would be answering a question about
 /// this repository's conventions, and `nomos-ledger` already stretches as far as it should
 /// by knowing what a record filename folds to.
+///
+/// The same reason this stayed here rather than moving into `nomos-work-orchestration` with
+/// everything else `WorkCommand::Add` needs: [`nomos_platform::FileSystem`] is read,
+/// atomically-replace and exists, not a directory listing, so a generic dispatch function
+/// has no port to reach this through. `nomos_work_orchestration::Run`'s `published`
+/// parameter is where this value is handed across that boundary.
 ///
 /// An unreadable or absent directory yields nothing rather than refusing. That is the one
 /// judgement here worth stating, because this repository's usual rule is the opposite: a
@@ -377,82 +310,3 @@ fn Record_Files(root: &Path) -> Vec<String>
 
 /// Where this repository authors its decision records, relative to the repository root.
 const RECORD_DIRECTORY: &str = "docs/records";
-
-/// The two territories an `add` declares beside the item's own: what the repository has
-/// already published, and what this item reserves in order to amend.
-#[derive(Clone, Copy)]
-struct Declared<'a>
-{
-    published: &'a Territory,
-    amending: &'a Territory,
-}
-
-fn Add(
-    ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>,
-    item: &LedgerItem,
-    declared: Declared<'_>,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    let Declared { published, amending } = declared;
-    // The lock's holder name is a courtesy for a stale-takeover report and never an
-    // identity that is checked, which is why `add` can name itself here while every other
-    // verb passes the agent that asked. `add` takes no `--holder` because it takes no
-    // claim: the item it writes is `Ready` and belongs to nobody yet.
-    return match ledger.Add(item, "nomos work add", published, amending)
-    {
-        Ok(()) =>
-        {
-            let _ = writeln!(
-                output,
-                "added {} reserving {} path(s){}",
-                item.id,
-                item.territory.paths.len(),
-                Amendment_Note(amending)
-            );
-            ExitCode::Ok
-        }
-        Err(refusal) =>
-        {
-            let _ = writeln!(output, "{}", refusal.Describe());
-
-            Code_For_Refusal(&refusal)
-        }
-    };
-}
-
-fn Audit(
-    ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>,
-    output: &mut impl std::io::Write,
-) -> ExitCode
-{
-    // Once, for the whole report. `Conflicts` loads and parses the ledger internally, so
-    // asking it per item read the file once per item — sixty opens to answer one question
-    // about sixty items, and sixty chances for the answer to be about a different board
-    // than the line above it.
-    let document = match ledger.Load()
-    {
-        Ok(document) => document,
-        Err(error) => return Report_Error(&error, output),
-    };
-    let now = SystemClock.Now();
-    let mut reported = 0_u32;
-    for item in &document.items
-    {
-        let Some(refusal) = Blocking_Refusal(&document, item, now)
-        else
-        {
-            continue;
-        };
-        Print_Blocked(item, &refusal, output);
-        reported = reported.saturating_add(1);
-    }
-    if reported == 0
-    {
-        // Empty output used to mean either "nothing is blocked" or "the report cannot
-        // express what is blocking this", and only one of those is good news.
-        let _ = writeln!(output, "nothing claimable is blocked");
-    }
-
-    return ExitCode::Ok;
-}

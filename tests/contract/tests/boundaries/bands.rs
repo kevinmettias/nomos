@@ -69,6 +69,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // between: a correction candidate may one day need to name a finding a rule
     // produced, and a band below rules would have forbidden that edge.
     ("nomos-corrections", 35),
+    // Runs a `nomos work` verb against a caller-chosen platform and hands back a typed
+    // outcome, generic over the traits `nomos-platform` declares rather than over the
+    // std implementation of them. Above the ledger it dispatches to; below every
+    // composition root that could call it — `nomos-cli` today, and whatever a second
+    // adapter is tomorrow. `OD-HOST-001`.
+    ("nomos-work-orchestration", 40),
     ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.
