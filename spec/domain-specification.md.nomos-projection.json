@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:b76ffdb1a58d808ca15a2a17ff3c359596f69b7bbf748f11ea657cbf2cb27f2a",
-  "inputs_digest": "sha256:d8ce0513427d689bde048f790b086673424d9b6406b2a60ee3d37099dd348488",
+  "content_digest": "sha256:c7317e8089f4277657a279d392a489790bcfb1c3dbb81bc03f4b3c29555a3fbd",
+  "inputs_digest": "sha256:037bc5361b1bcbb816d12f16732f29c57b34e3bf567da3c00e0ec1980e9b9e4c",
   "sections": [
     [
       "Documents",
@@ -16,7 +16,7 @@
     ],
     [
       "Source blocks",
-      3387
+      3392
     ]
   ],
   "inputs": [
@@ -33,7 +33,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored",
-      "hash": "sha256:99c650c3d9cdb5cc751c7036a7819e69a77000a58608a72fb44224b9c8167fc4"
+      "hash": "sha256:4b2cd085df0c3bb9a37455c0c3aa29419219e705722f9b6efb8afd5609600e8c"
     },
     {
       "content": "documents",
@@ -632,48 +632,48 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#20",
-      "hash": "sha256:796754adbffe66831dd32636c16748898ff07fb7beee0ca6aceadaaab8fadefe"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#24",
+      "hash": "sha256:bc44b2e8b0f11f0f1b50410c7440c8ee6df64fb323da34b75df12586f4bdb157"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#25",
-      "hash": "sha256:5f883868cbaf98bbde507fe9619983c021b5b95c0b13793a121b53ad5a8341b4"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#29",
+      "hash": "sha256:0701b75b7cf0fcc63d244ea08607107d3ecdd5f535143cf266d01a21d0480091"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#28",
-      "hash": "sha256:22b2bceab4ed1dbaf838d946668189ba58edfbd8d8780891e5ebb11d76368d79"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#32",
+      "hash": "sha256:db509c57971ece2199a1ab720d45e4cc104f28e74290fe2b674a122a375caa6f"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#35",
-      "hash": "sha256:aa3f6e4b8eb3c57cf1a0c2d3711aa06731d1ba1bcbae17764dedcb4071520c4d"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#39",
+      "hash": "sha256:aff7d66b8b0ad49f144c941695c39640e43b1294e8fbada634d4ae762442f39f"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40",
-      "hash": "sha256:6d98ca8c58099db9e421a85cbc8270c305f49dfc262b6f65bda7cc4f6dc071ae"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#44",
+      "hash": "sha256:9a679c26fdc6da503320eee2de5b08e1e44b94bd4298186ee8f0632c76975d39"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43",
-      "hash": "sha256:734c7fcf705d45a804fb343593d6ce3ef999fa6ad411e9c78176f56b98b545df"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#47",
+      "hash": "sha256:773d2a14f7ba490206fef1f0108b9be2a2e16927606d6812e990c403c87cb569"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49",
-      "hash": "sha256:2d9b591ee0a8801be37113fe4e36659944648644f71b8e84a357fb15488ec161"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#53",
+      "hash": "sha256:814e443030d06d5ab114e95e25adb6159fe9cfc310c077520896e8ab583b0bde"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54",
-      "hash": "sha256:78714b81f5a2a56ba3ce5a92dfab120c074d4529eb9a0fb9faee7e7f294a7988"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#59",
+      "hash": "sha256:d8c7d6cb3a7d9bfb2fca1a81d0fdbc805d1366a647433fb87cf285071fd66ae5"
     },
     {
       "content": "headings",
-      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57",
-      "hash": "sha256:1d39f84ea80004933a0e437d0063286348516124238c3f2daaa9465e43c157fd"
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#62",
+      "hash": "sha256:260a0d31f79cea18efb863277346e605707dc8ee5045a2d4c201fb4ba607704b"
     },
     {
       "content": "headings",
@@ -5353,7 +5353,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#15",
-      "hash": "sha256:0dc194d4805202195b3178f8645b2cc7999ad60c2bcf489e1a782ff741bdc76e"
+      "hash": "sha256:539f4767cd3c6927983762eaa792c54e6780ea26de09ab0ed4e1c6bf9b7bfd34"
     },
     {
       "content": "blocks",
@@ -5378,197 +5378,222 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#20",
-      "hash": "sha256:ea740b70ee1a2a4c4eb90c716a885133818760def1b6753b05172ccdc9704b3b"
+      "hash": "sha256:26c04ddd36d25eb1046266982c732b1f965c43d40155285f4015412904ea0186"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#21",
-      "hash": "sha256:8a408c8aa28743f1f4233ec08c57e2d256fedce161f512e99d748db5c6e6aa96"
+      "hash": "sha256:c8b477865a0ed13285296049f3b697072026aa9983009b398fb8b4491b144254"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#22",
-      "hash": "sha256:79326fdf2820235869167b2ad46021cf0f2d39bad109e5a3695066ed5e48d38f"
+      "hash": "sha256:606242ba870b9e36e24b182d57758d22bf4763d9dc87167bc444fa845004d8e9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#23",
-      "hash": "sha256:1ceca052f7dda3f0ca396a028f125478058cb837396e3fd0b8fca6aaa7ff4927"
+      "hash": "sha256:1b67c5729bba7ba857fe105a120ace2d30e001199f0509c7cc36b1aae9a4e88c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#24",
-      "hash": "sha256:58e449954c596f9fd61ffa41d26e90bf2f27c84a48ded26540946c8c07be67ec"
+      "hash": "sha256:ea740b70ee1a2a4c4eb90c716a885133818760def1b6753b05172ccdc9704b3b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#25",
-      "hash": "sha256:cd2117611379bbf7e3d15003659d0dcc3e561e6b5864894efc0c678ac9f820e7"
+      "hash": "sha256:8a408c8aa28743f1f4233ec08c57e2d256fedce161f512e99d748db5c6e6aa96"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#26",
-      "hash": "sha256:1ae0a285d3b6c1a69c7f747ecca45b6af372be14384b8e359419d52b0dbe2cac"
+      "hash": "sha256:79326fdf2820235869167b2ad46021cf0f2d39bad109e5a3695066ed5e48d38f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#27",
-      "hash": "sha256:c358acb38f7288ccf1e0a2ac97c0782f63fbd51a234841e66e6a441450269d69"
+      "hash": "sha256:1ceca052f7dda3f0ca396a028f125478058cb837396e3fd0b8fca6aaa7ff4927"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#28",
-      "hash": "sha256:809d0ea4f6c26d11551965ccbca574c24542281a657d57851a31b050dce0a8a7"
+      "hash": "sha256:58e449954c596f9fd61ffa41d26e90bf2f27c84a48ded26540946c8c07be67ec"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#29",
-      "hash": "sha256:4f586418eaae3e9fedbcf6e99eb91c1f2fa774fd077afbcc4dec5738af0fcfc9"
+      "hash": "sha256:cd2117611379bbf7e3d15003659d0dcc3e561e6b5864894efc0c678ac9f820e7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#30",
-      "hash": "sha256:f3178273adf8dc13c619e9e68313ebbf5907fa560d176e88eab79ef440011309"
+      "hash": "sha256:eb3b7b42552ed015aa62df6c64b579be0debf66a0dade26ff02410831512eb99"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#31",
-      "hash": "sha256:a0d0b81922448d1cba434e7b03566f0d09c2677ee51ded72af7ad3c248363495"
+      "hash": "sha256:c358acb38f7288ccf1e0a2ac97c0782f63fbd51a234841e66e6a441450269d69"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#32",
-      "hash": "sha256:7075831b7f3d6ee040f2233b71dc4b13d0e4d62674e2470b23b1a9e635d30d91"
+      "hash": "sha256:809d0ea4f6c26d11551965ccbca574c24542281a657d57851a31b050dce0a8a7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#33",
-      "hash": "sha256:83c51ee6e88d4faa3911a7c7265ba4d93de15132be2f4747fc6372e6dee27ca6"
+      "hash": "sha256:4f586418eaae3e9fedbcf6e99eb91c1f2fa774fd077afbcc4dec5738af0fcfc9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#34",
-      "hash": "sha256:4ebd5a1430ef7ed43b7fe0b470858b6eb15f9c6c88b036810a6d69dacd70e787"
+      "hash": "sha256:f3178273adf8dc13c619e9e68313ebbf5907fa560d176e88eab79ef440011309"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#35",
-      "hash": "sha256:2298d29ac218db42e715d943f5cc89948272a64714022894173561539a5a8d09"
+      "hash": "sha256:a0d0b81922448d1cba434e7b03566f0d09c2677ee51ded72af7ad3c248363495"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#36",
-      "hash": "sha256:e097b0bae3df8a0d37dee9e375592adc0267133cf701538f839f926334b82ea3"
+      "hash": "sha256:7075831b7f3d6ee040f2233b71dc4b13d0e4d62674e2470b23b1a9e635d30d91"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#37",
-      "hash": "sha256:520186b6b7005b82048539f953d6f216bad4d4b286aa4e73048adfd2119e329b"
+      "hash": "sha256:83c51ee6e88d4faa3911a7c7265ba4d93de15132be2f4747fc6372e6dee27ca6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#38",
-      "hash": "sha256:52b4635a235bf41342a93743a73b4729c280333ed20e1f57742ab621a008d725"
+      "hash": "sha256:4ebd5a1430ef7ed43b7fe0b470858b6eb15f9c6c88b036810a6d69dacd70e787"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#39",
-      "hash": "sha256:7b7832eeb33635dba4a84c4c73d67884c03eb0e8d3f8eb205e9dbbbbb7aecddc"
+      "hash": "sha256:2298d29ac218db42e715d943f5cc89948272a64714022894173561539a5a8d09"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#40",
-      "hash": "sha256:e521f88cd1733b4fc5c639988c04282de62a751e518b5a2d8965fcd102762f25"
+      "hash": "sha256:e097b0bae3df8a0d37dee9e375592adc0267133cf701538f839f926334b82ea3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#41",
-      "hash": "sha256:0f64bbc37cd4134c1aaa6512c079ff71419c521dbb595cf5b56a18266550868b"
+      "hash": "sha256:520186b6b7005b82048539f953d6f216bad4d4b286aa4e73048adfd2119e329b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#42",
-      "hash": "sha256:1b88f99759e1385fe6c8ada92bb8ead28076e0a2911140f5f3af8a8e5313bcaf"
+      "hash": "sha256:52b4635a235bf41342a93743a73b4729c280333ed20e1f57742ab621a008d725"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#43",
-      "hash": "sha256:a07fb409bf44b0edd46e745bf3e11c0bab257f8c6edb37bcf99ccc0de414e793"
+      "hash": "sha256:7b7832eeb33635dba4a84c4c73d67884c03eb0e8d3f8eb205e9dbbbbb7aecddc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#44",
-      "hash": "sha256:076b97d6145b8c86fecdf492bf6e25534370085dd6b22c311ce640074818091f"
+      "hash": "sha256:e521f88cd1733b4fc5c639988c04282de62a751e518b5a2d8965fcd102762f25"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#45",
-      "hash": "sha256:0d04e4c2fb14559b902ae9831b0d48cde439417e7a8d62a68428bc7d5edbaf1c"
+      "hash": "sha256:0f64bbc37cd4134c1aaa6512c079ff71419c521dbb595cf5b56a18266550868b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#46",
-      "hash": "sha256:3ba250df3ed54672fc137ba58542c14e7d3a3b2d2362aab080ddc1840455620f"
+      "hash": "sha256:1b88f99759e1385fe6c8ada92bb8ead28076e0a2911140f5f3af8a8e5313bcaf"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#47",
-      "hash": "sha256:c33cf118ae1abd3ae542b7c52209d3457d131d9b3fb4949ee93cd3c3811799f7"
+      "hash": "sha256:a07fb409bf44b0edd46e745bf3e11c0bab257f8c6edb37bcf99ccc0de414e793"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#48",
-      "hash": "sha256:4647a8b278b1202854164b63cf2f5b1109147029236d22a1e63f4b2271de3343"
+      "hash": "sha256:076b97d6145b8c86fecdf492bf6e25534370085dd6b22c311ce640074818091f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#49",
-      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
+      "hash": "sha256:0d04e4c2fb14559b902ae9831b0d48cde439417e7a8d62a68428bc7d5edbaf1c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#50",
-      "hash": "sha256:34b326efed4b95b229aa95b813cf32fad2e4b491000bde8ccad511024c1e4c34"
+      "hash": "sha256:3ba250df3ed54672fc137ba58542c14e7d3a3b2d2362aab080ddc1840455620f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#51",
-      "hash": "sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5"
+      "hash": "sha256:c33cf118ae1abd3ae542b7c52209d3457d131d9b3fb4949ee93cd3c3811799f7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#52",
-      "hash": "sha256:cb43fecfbeaebd1f64a65b9a52ec1d2907b9e4322555922b24518742b3ffd482"
+      "hash": "sha256:4647a8b278b1202854164b63cf2f5b1109147029236d22a1e63f4b2271de3343"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#53",
-      "hash": "sha256:8fec0132a90979f7822d19c7c5ad70b30c0cf98435ad4b4f3bcf64ea255bc299"
+      "hash": "sha256:d82b9873f61919b4eb0e1e02ebb95f0690a6acf2dc821f15af549219e10e38e0"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#54",
-      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+      "hash": "sha256:34b326efed4b95b229aa95b813cf32fad2e4b491000bde8ccad511024c1e4c34"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#55",
-      "hash": "sha256:724d027902f1e817b2f1b0f043217d3b935ebc14e4eb567d016bb1beb141ccf8"
+      "hash": "sha256:2a7709d7ac89110844dbcd69596c572af299e35e06caca1511d89b10090704f5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#56",
-      "hash": "sha256:161dd288f5804fac5961f9a094edb4c58f088da03f840cd760db5bd737160fc8"
+      "hash": "sha256:cb43fecfbeaebd1f64a65b9a52ec1d2907b9e4322555922b24518742b3ffd482"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#57",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:8fec0132a90979f7822d19c7c5ad70b30c0cf98435ad4b4f3bcf64ea255bc299"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#58",
-      "hash": "sha256:fd2661e7493ebad2777a2d7fbb5bb66670c0ee20b7fd671efa9c722595bcf869"
+      "hash": "sha256:ff3a920cca2e07254a922bf5f4a0d9d190811fd9c47be38b7023c453dda67dcb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#59",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#60",
+      "hash": "sha256:ceae94a24ee76a280b3fa45c6c274370c7dee9f05203d983bbc9ef737dfd8ea2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#61",
+      "hash": "sha256:161dd288f5804fac5961f9a094edb4c58f088da03f840cd760db5bd737160fc8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#62",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#63",
+      "hash": "sha256:165914b45c68f0ed1933a2957c580ce104a458bea574115c0e75b2f61ff92914"
     },
     {
       "content": "blocks",

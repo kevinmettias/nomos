@@ -3,7 +3,7 @@ id: ARC-ECOSYSTEM-001
 type: architecture
 title: Four products share one seam, and ownership is decided by semantics rather than by location
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - ecosystem
@@ -27,6 +27,8 @@ relations:
   - target: D-096
     type: relates-to
   - target: D-122
+    type: relates-to
+  - target: ARC-HARNESS-001
     type: relates-to
 ---
 
@@ -92,7 +94,7 @@ scaffold becomes a shipped surface nobody chose to ship.
 ## The Boundaries Are Projections, Not A Partition
 
 Stating four nouns and stopping would leave the interesting cases unanswered, because the
-hard ones are not *which box* but *which direction*. Two crossings are governed.
+hard ones are not *which box* but *which direction*. Three crossings are governed.
 
 ```
 KWB semantic intent / rationale
@@ -122,6 +124,40 @@ a finding is in order to serve Nomos, the primitive is not the thing that should
 the adapter is. `D-130` already fixes the mechanical form of this crossing — a single named
 adapter, no path dependency — and this record supplies the reason that rule was the right
 shape.
+
+```
+Nomos run observation
+        |
+        |  generalization across many runs,
+        |  carrying its runs as provenance
+        v
+KWB generalized lesson
+```
+
+A harness that records what a single run did — task class, model, attempts, verification
+outcome, review findings, cost, failure cause — is producing observations about a codebase.
+That is Nomos's own subject matter and crosses nothing, no matter how much of it
+accumulates. What crosses is the step after it: generalizing many runs into a lesson that
+outlives the runs it came from. Rationale and long-term epistemic memory are KWB's
+description of itself, word for word, and a generalization is exactly that — a claim about
+why, derived from what happened, meant to survive the runs that produced it.
+
+**Observations produced by a run may become KWB knowledge.** The crossing is governed, not
+forbidden, the same way the two above it are: a generalization may cross only carrying the
+runs it was derived from as provenance, never as a bare assertion. A lesson without its runs
+is not a governed crossing; it is a claim invented at the boundary, indistinguishable from
+one nobody ever checked.
+
+Provenance closes the first crossing and not the one after it. This record's own last table
+row already says a lesson becomes an enforceable rule only by "a governed decision, projected
+into Nomos" — and if that decision's evidence is the harness's own generalization about its
+own runs, the review is inspecting the machine the rule will govern while reading itself as
+independent of it. So the review step that promotes a lesson into a rule may not treat a
+generalization's provenance as its own corroboration: it needs a source the runs did not
+produce themselves — a person, or a signal the harness was not the author of — before a
+lesson may become a rule. Provenance is necessary so the review has something to check;
+a second source is what makes the check something other than the system grading its own
+homework.
 
 ## Current Placement Does Not Prove Permanent Ownership
 
@@ -159,7 +195,8 @@ ownership, because this record says in advance that the location was not the dec
 | What did a source or a decision claim? | KWB |
 | What generic task, runtime or storage primitive exists? | XVPE |
 | Is this repository's local coordination board valid? | repository tooling, as Nomos bootstrap |
-| Does a generalized lesson become an enforceable software rule? | a governed decision, projected into Nomos |
+| May a run's own recorded observations become KWB knowledge? | KWB, only carrying the runs as provenance |
+| Does a generalized lesson become an enforceable software rule? | a governed decision, projected into Nomos, and not on the provenance's own say-so |
 
 The last row is the one that does work. A lesson does not become a rule by being true and
 widely applicable. It becomes a rule by a decision that says so, and the decision is the
@@ -270,10 +307,19 @@ is and remains.
 `AGENTS.md` may gain a routing line to this record when there is a concrete routing question
 that needs one, and it gains no conclusions from it at any point. The harness stays thin.
 
+`ARC-HARNESS-001` is untouched and its table is unweakened. It decides who owns each harness
+component and names "run history" as Nomos content in an XVPE store; it explicitly declines to
+draw the arrow from a run's observations to KWB, naming this item instead. This record draws
+that arrow. Nothing in `ARC-HARNESS-001`'s ownership table changes: the run history it assigns
+to Nomos content is exactly the observation half of the crossing above, and what happens to it
+after a harness exists to produce it is this record's question, not that one's.
+
 ## What This Record Does Not Do
 
 No crate moves. No package is renamed. No dependency changes. No KWB or XVPE integration is
-implemented, and none is scheduled here. `AGENTS.md` and `CLAUDE.md` are not touched.
+implemented, and none is scheduled here. No harness that records a run's observations exists
+either — `ARC-HARNESS-001` proposes one and has not been built — so the third crossing above
+governs a step nothing yet takes. `AGENTS.md` and `CLAUDE.md` are not touched.
 
 Nothing mechanical enforces this boundary, and that is the honest state rather than an
 oversight. There is no test that can decide whether a subsystem's semantics are fully
@@ -286,4 +332,7 @@ enough to enforce exists, has a criterion to be derived from.
 
 Closed by `P10-ECOSYSTEM-BOUNDARY`. Amended to version 2 by `P10-SEAM-CITATION`, which found
 the seam already recorded in the sibling suites this build ingests, declared the edges to it,
-and adopted `D-122`.
+and adopted `D-122`. Amended to version 3 by `P11-ECOSYSTEM-UPWARD`, which drew the third
+crossing — a run's own observations becoming KWB knowledge — answering the arrow
+`ARC-HARNESS-001` named and left undrawn, with a provenance requirement on the crossing and a
+second-source requirement on the review that promotes a lesson into a rule.

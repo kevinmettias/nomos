@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:4111f360b1b19c816827802372ad0e5c0c129041322c39c5ea4ed7f8338fa22e",
-  "inputs_digest": "sha256:a9f0212981e253d069bc1c2b4907eecbe3a3df709a6a2eca351325a5154daa53",
+  "content_digest": "sha256:b6212cf6f39f95bbd8aea33eb4dfe76b67c4995d8fe26f600e695156159c98a5",
+  "inputs_digest": "sha256:0c60f384bc3960755fbc8951b38766b760c128db34bfd4cb77305c6c48f565b8",
   "sections": [
     [
       "Relations",
-      660
+      662
     ],
     [
       "Decisions",
@@ -95,6 +95,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to ARC-ECOSYSTEM-002",
       "hash": "sha256:fe868b7b4dc18b4e44a5ea2909359a405477e777aa13b698271f05654aa6f60d"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to ARC-HARNESS-001",
+      "hash": "sha256:41adc75149450bc5428315ceab3bce9343743d95db2563f3768e826bdd9dc70d"
     },
     {
       "content": "relations",
@@ -200,6 +205,11 @@
       "content": "relations",
       "identity": "ARC-HARNESS-001 affects ARC-ECOSYSTEM-001",
       "hash": "sha256:9c7fc70f9bc74394f2c0cb38502aee0369d6d044caf171ed5e5411a4ebfe2a7a"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:1acf4c7f1361bf1bb03af28f5bbd5b2c921ac0983eee5b4871b9cfdd5e018569"
     },
     {
       "content": "relations",
