@@ -34,6 +34,7 @@ fn A_Board(name: &str) -> Board
         "{\n  \"schema_version\": 1,\n  \"items\": [\
          {\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
+         \"kind\":\"Correction\",\"origin\":\"Proposed\",\
          \"territory\":{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\"patterns\":[]},\
          \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\
          \"claim\":null,\"verification\":null,\"verified\":null}\

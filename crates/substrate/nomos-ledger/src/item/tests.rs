@@ -9,6 +9,8 @@ fn Item(id: &str) -> LedgerItem
         title: "an item".to_owned(),
         why: "because".to_owned(),
         done_when: "when it is done".to_owned(),
+        kind: ItemKind::Correction,
+        origin: ItemOrigin::Proposed,
         territory: Territory::Empty(),
         state: ItemState::Ready,
         depends_on: Vec::new(),
@@ -351,7 +353,7 @@ fn Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version()
 
     assert_eq!(
         fields.len(),
-        14,
+        16,
         "a field was added to `LedgerItem`. Raise `SCHEMA_VERSION` in `store.rs` and this \
          count together, or a build that predates the field will be told the ledger is \
          malformed instead of being told it is old"
@@ -370,4 +372,40 @@ fn Test_Terminal_States_Should_Be_Recognized()
     );
     assert!(!ItemState::Ready.Is_Finished());
     assert!(!ItemState::Claimed.Is_Finished());
+}
+
+/// `OD-LEDGER-024`'s closed set: a kind or an origin outside the five and two named
+/// variants is refused rather than accepted and ignored, the same guarantee
+/// `#[serde(deny_unknown_fields)]` gives an unrecognized *key* — this is the same promise
+/// for an unrecognized *value*.
+#[test]
+fn Test_An_Unrecognized_Kind_Or_Origin_Should_Be_Refused()
+{
+    assert!(serde_json::from_value::<ItemKind>(serde_json::json!("Feature")).is_err());
+    assert!(serde_json::from_value::<ItemOrigin>(serde_json::json!("Discovered")).is_err());
+
+    // And every declared variant round-trips, or the refusal above would be trivially true
+    // of a type nothing can construct either.
+    for kind in [
+        ItemKind::Capability,
+        ItemKind::Decision,
+        ItemKind::Validation,
+        ItemKind::Correction,
+        ItemKind::Cleanup,
+    ]
+    {
+        let value = serde_json::to_value(kind).expect("a kind serializes");
+        assert_eq!(
+            serde_json::from_value::<ItemKind>(value).expect("a kind round-trips"),
+            kind
+        );
+    }
+    for origin in [ItemOrigin::Required, ItemOrigin::Proposed]
+    {
+        let value = serde_json::to_value(origin).expect("an origin serializes");
+        assert_eq!(
+            serde_json::from_value::<ItemOrigin>(value).expect("an origin round-trips"),
+            origin
+        );
+    }
 }

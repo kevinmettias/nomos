@@ -81,6 +81,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md@authored | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md | authored | 27 | 12 | sha256:3ebb2bcba88f6c72bbc391ea21070ee09c26d62ed613c9445085c22688fcb962 |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md | authored | 29 | 8 | sha256:b9fc15303e4b06b9d65008a1a854ce62942151af4b55cdd10c832ce057563cf5 |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md@authored | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md | authored | 42 | 11 | sha256:d34cb4980991f1dea453392a7c9146606771d68470cbb42fa3be7af96b5872c7 |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
 | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md@authored | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md | authored | 31 | 10 | sha256:0f75915bb0a6e047768f8b26509aa5e946b77f20b68f07298aacb082d7709cfa |
@@ -765,6 +766,17 @@ profile: domain-specification
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#18 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#23 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#26 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#1 | authored | 1 | An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#7 | authored | 2 | What Changed |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#13 | authored | 3 | Why these five kinds |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#16 | authored | 3 | What origin distinguishes, and why only two |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#18 | authored | 3 | Where the change actually landed, against what the item said |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#20 | authored | 3 | Mechanically necessary edits outside the item's declared territory |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#24 | authored | 2 | Migrating the board |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#33 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#35 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#39 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1 | authored | 1 | A record identifier is allocated once, and add refuses a spent one by naming what spent it |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#5 | authored | 2 | What Was Measured |
@@ -21661,6 +21673,451 @@ territory that belongs to work this item was not authored to also carry.
 this exact seam — "the scheduler decides what should run, coordination decides whether it can
 run now" — and a second pair of names for the same distinction is the kind of drift a reader
 five records later has to reconcile by hand.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#1
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted · hash: sha256:9556f781f1f99532a69aebba0df4998905500abb0489810caa35056e3f320089*
+
+# An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#2
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#3
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Question · hash: sha256:7102c66317aed2f7519982f8f57ea7d5e9e62ad3d5e73a4274c4a821af997a02*
+
+`LedgerItem` carried fourteen fields — id, title, why, done_when, territory, state,
+depends_on, blocked, claim, verification, verified, abandoned, displaced, declined — and
+none of them said what *kind* of work a row was, or where it came from. `work add` refused
+exactly one thing, an item that reserves nothing, and accepted any prose, from anybody, as
+any kind of item.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#4
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Question · hash: sha256:c8063df5026d2358755735b8a780aa21e3976fbf55116f568a8aa829559a328a*
+
+That was a reasonable board for a person to write by hand. It stops being one the moment
+work is proposed by the same kind of thing that executes it: a design in progress for this
+repository has an agent observe something, propose an item, and the system classify that
+proposal before it enters the graph. The classification step has nowhere to attach — no
+`kind` to classify into, no `origin` distinguishing a proposal from a requirement — so the
+guard against a session inventing its own next subject would have to be a convention, and
+`OD-LEDGER-006` already records that this ledger cannot enforce a convention.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#5
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Question · hash: sha256:53da9b0b73bc5e4dc9ae4a5f700a661014cbf1e2d6f6cdee31cfd8757946a521*
+
+It also left the board unreadable in the one direction that matters for ordering. `state`
+says where an item is; nothing said what it is. This item's own `why`, quoting the item
+that named this defect, put it in four words: "a validation obligation, an architectural
+decision, a correction and a cleanup are indistinguishable rows." Any priority over them had
+to be recovered from prose by whoever was reading.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#6
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Question · hash: sha256:c8071a10c0347602d1a2892c368899a2dd6ec50f03256cc8608efae6d9632764*
+
+This is `P11-ITEM-DISCRIMINANT`, itself a reissue of `P11-ITEM-KIND`, which was declined
+only because `P11-ITEM-KIND` and `P11-ADD-NOT-DURABLE` had both reserved
+`docs/records/OD-LEDGER-021` — an identifier collision, not a disagreement about the
+defect. The subject and the argument this record closes are unchanged from that first
+opening.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#7
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed · hash: sha256:cc5c047d35aa91a721f01d3630c5dfef6b2910c5a3b70c7e67f51282139b0569*
+
+## What Changed
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#8
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed · hash: sha256:dfbe453d8461d3eeaa2e45f21fd75e6310f525fbd7679eabf05b52d8b6b4eb13*
+
+Two new fields on `LedgerItem`, both in
+`crates/substrate/nomos-ledger/src/item.rs`, both new submodules of `item`:
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#9
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed · hash: sha256:74de1b992cac99c4dd98eb1a9f2f15f25f46f7d55af9274e811c7d5e1cac01be*
+
+- `kind: ItemKind` (`crates/substrate/nomos-ledger/src/item/kind.rs`) — a closed,
+  five-variant enum: `Capability`, `Decision`, `Validation`, `Correction`, `Cleanup`.
+- `origin: ItemOrigin` (`crates/substrate/nomos-ledger/src/item/origin.rs`) — a closed,
+  two-variant enum: `Required`, `Proposed`.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#10
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed · hash: sha256:26b3fb96440d2e18a01b1f88ceaf29de2f4dd4ec0de8bc23ec7580056439c2bf*
+
+Both follow `ItemState`'s existing shape: plain Rust enums, serialized by serde as bare
+strings. **Neither carries `#[serde(default)]`.** Every other optional field this ledger has
+added since its first commit — `displaced`, `declined`, `VerificationRecord::revision` — was
+given one, on the stated reasoning that "every item written before this field existed has
+none, and that is a fact about those items rather than something to backfill"
+(`LedgerItem::abandoned`'s own doc comment). `kind` and `origin` are the opposite case, on
+this record's own `done_when`: "a field empty on a hundred rows and set on the next is a
+field nothing can be asked about." A defaulted field would have let the two new keys arrive
+on new rows only, indistinguishable in the file from a row nobody got round to. Refusing to
+load a row missing either — the same mechanism `#[serde(deny_unknown_fields)]` already uses
+for an unrecognized *key* — is what forced every existing row to be migrated in the same
+commit that added the field, rather than left to happen eventually. That migration is
+recorded below.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#11
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed · hash: sha256:62c7d0d6d3564bdadb603635fb0ea5f738ba1457f7803379a0775f7c7a7e1f0e*
+
+`SCHEMA_VERSION` rises `4 -> 5` in this same commit, per `OD-LEDGER-008`'s ordering and the
+hazard this repository has already paid for once (`ea3c167`, which split a schema bump from
+its field and left `dev` unusable): a build older than this one that meets a ledger row
+missing `kind` or `origin` refuses the whole file, via `deny_unknown_fields` reached through
+a missing-field error rather than an unrecognized one, and the refusal names both version
+numbers.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#12
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed · hash: sha256:c98418ead38ee520dd9f9e14ae9f93afab85779c4ff20c32d39587356d0860e0*
+
+An unrecognized *value* for either field is refused the same way an unrecognized *key*
+already is: serde's default behaviour for a plain enum is to reject a string matching none
+of its variants, so `"kind": "Feature"` fails to parse rather than being silently accepted.
+`Test_An_Unrecognized_Kind_Or_Origin_Should_Be_Refused`
+(`crates/substrate/nomos-ledger/src/item/tests.rs`) asserts it directly, alongside a
+round-trip over every declared variant of both types.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#13
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Why these five kinds · hash: sha256:cc6e17ee68b43c555875f37ebe333134830f97c351c948f38b68b07bd359649e*
+
+### Why these five kinds
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#14
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Why these five kinds · hash: sha256:864638dd76dd319ec017d0ffc9c739cac790a16c5071cc966e3f5de623974049*
+
+Not a free-form tag list — this item's own `done_when` refuses that shape by name: "this is
+a discriminant, and a list of strings is the prose it was supposed to replace." Four of the
+five are a direct transcription of the item's own `why`: **Validation** (a check, gate step,
+snapshot or assertion, added or repaired), **Decision** (a seam, boundary, ownership rule or
+policy settled and recorded), **Correction** (something wrong — a defect, a gap, a stale
+statement — fixed), **Cleanup** (a rename, split, decomposition or named constant, reshaping
+working code without changing what it does).
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#15
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Why these five kinds · hash: sha256:1a2e687ca4d43b43cfc4b2006043dffdcabb4a69934bd861b3570d1d1eaa29e4*
+
+The fifth, **Capability**, is not in that list, because the four correction-era words have
+nowhere to put this ledger's own first half. `OD-LEDGER-002` measured that batches `P1`
+through `P8` built crates and commands that did not exist yet — `nomos-spec-model`,
+`nomos-spec-store`, `nomos-capability`, `nomos-workspace`, and their gates — and named `P9`
+onward "findings from an audit of the tree against what it claims." A defect taxonomy with
+nothing for the thing it corrects *against* has no fifth of the board to describe. Rejected
+alternatives: folding `Capability` into `Decision` (a new crate is not always a decision
+about anything — most of `P1`–`P8` decided nothing that was in question, they built what the
+plan already called for); leaving it out and forcing the earliest batches into `Correction`
+(false — nothing was wrong when `nomos-spec-model` did not exist, there was simply nothing
+there yet).
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#16
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / What origin distinguishes, and why only two · hash: sha256:5e192070bd885d4bf0554f82f1787b659dc1ee9190aecf2db4b8a733aa456444*
+
+### What origin distinguishes, and why only two
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#17
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / What origin distinguishes, and why only two · hash: sha256:1496fee7d08b06d05b9ba51d5af477f8b15ee6cc8574a240ca48e30dd92011e4*
+
+`origin: ItemOrigin` answers the minimum this item's `done_when` asks for: "work that was
+required from work a session proposed." `Required` is work a person specified — directly, or
+through the plan `OD-LEDGER-002` says `P1`–`P8` built out. `Proposed` is work a session
+opened because it observed the tree disagreeing with what it claims, with nobody having
+asked for that exact item by name — again `OD-LEDGER-002`'s own words for `P9` and after.
+No third value: the classification step a proposing agent would feed does not need a finer
+distinction than "did a person ask for this," and a third value invented now with no
+consumer is exactly the kind of speculative surface this ledger's other records
+(`OD-LEDGER-017`) have already priced.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#18
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Where the change actually landed, against what the item said · hash: sha256:ba6494f4727813660fd2d2a00a91c3a5ac88a866f0538a1caca04eb943c08513*
+
+### Where the change actually landed, against what the item said
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#19
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Where the change actually landed, against what the item said · hash: sha256:edcfd78d619cd23d13ce8946339639b906db5468e727b94988102161b169fbab*
+
+Two files in this item's assigned territory had already been split by the time it was
+claimed, matching the shape `OD-LEDGER-022` and `OD-LEDGER-027` each record:
+`crates/host/nomos-cli/src/work.rs` is the command dispatcher; the argument parser that
+builds a `LedgerItem` from `add`'s flags — where `--kind` and `--origin` had to be read —
+lives in its submodule `crates/host/nomos-cli/src/work/parse.rs`, reached by `mod parse;`.
+`work.rs` itself gained one line, in `Show`, printing the two new fields for `work show`.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#20
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Mechanically necessary edits outside the item's declared territory · hash: sha256:0b277d656f3889341f40a357c7f726943209b5ab0475c355927c23aec7797b99*
+
+### Mechanically necessary edits outside the item's declared territory
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#21
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Mechanically necessary edits outside the item's declared territory · hash: sha256:b01880879faf1d672e0700d2ec97ec2d9acf673d06c96d962add95d505eaa44c*
+
+Both new fields are required, with no `#[serde(default)]`. That is a Rust-level
+constraint independent of serde: every direct `LedgerItem { .. }` struct literal in this
+workspace has to name every field or the crate does not compile, and every hand-written JSON
+fixture standing in for a ledger row in a test has to carry both keys or that row fails to
+deserialize. Neither consequence is a choice this item made about scope; both are forced by
+the field addition `done_when` calls for. The exhaustive set, found by
+`grep -rn "LedgerItem {"` and `grep -rln '"done_when":'` across the workspace, and fixed
+alongside the declared territory:
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#22
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Mechanically necessary edits outside the item's declared territory · hash: sha256:a865ec7a365f25300489fa1bb920ceaac253eb715a5e02e8dc17363acd13871b*
+
+- `crates/substrate/nomos-ledger/src/lib.rs` — `ItemKind` and `ItemOrigin` added to the
+  crate's re-export list, the same one-line-per-new-public-item shape `OD-LEDGER-022`
+  recorded for `RefusalLayer`.
+- `crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs`,
+  `crates/substrate/nomos-ledger/tests/declining_ends_an_item.rs`,
+  `crates/substrate/nomos-ledger/tests/gate_covers_finish/launcher.rs` — each a `LedgerItem { .. }`
+  struct-literal fixture helper, given `kind: ItemKind::Correction, origin: ItemOrigin::Proposed`.
+- `crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs`,
+  `crates/substrate/nomos-ledger/tests/exclusion_holds/takeover.rs`,
+  `crates/host/nomos-cli/tests/stale_writer_is_refused.rs`,
+  `crates/host/nomos-cli/tests/takeover_is_recorded.rs`,
+  `crates/host/nomos-cli/tests/abandon_is_readable.rs`,
+  `crates/host/nomos-cli/tests/list_tells_the_truth/authored.rs`,
+  `crates/host/nomos-cli/tests/add_guarantees_what_it_says.rs` — each a hand-written JSON
+  ledger-row fixture, given `"kind":"Correction","origin":"Proposed"` beside `"done_when"`.
+- `crates/host/nomos-cli/tests/add_guarantees_what_it_says.rs`'s `Add_Arguments` — the shared
+  argument list every test in that file extends to run a real `nomos work add` — given
+  `--kind correction --origin proposed`, since both are now required flags.
+- `crates/host/nomos-cli/src/work/tests.rs` — in the item's own declared territory as
+  `work.rs`'s test submodule — seven `add` invocations that reach `New_Item` (as opposed to
+  three that are refused before reaching it, for missing or patterned territory, which stay
+  as they were) given `--kind correction --origin proposed`.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#23
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Changed / Mechanically necessary edits outside the item's declared territory · hash: sha256:3791a46207a761dc932cfbd174f0974810aa1e2d2c54a5f73b8b32af07e9f857*
+
+None of this is new logic. Every one of the eleven files above already existed to hold a
+`LedgerItem` shape or drive `work add`; each gained exactly the two fields the type now
+requires, in the value already used as this record's own migration default (see below), and
+nothing else about any of them changed.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#24
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:3a6ad0bab4a8b97e41bc893a5d94a3eb508557b1ae837abe4b22692a2cef92d3*
+
+## Migrating the board
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#25
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:ddd81b8938c3d9645a3c814bd7e1f629718fb4ad600588e2c783e9518b4ad26d*
+
+`work/ledger.json` held 200 items when this item was claimed, none carrying `kind` or
+`origin`. Hand-classifying 200 rows individually is not a task this item could do well by
+authoring judgment for each — `done_when` allows for that directly: "if that's infeasible to
+do well by hand for all of them, decide and document a principled default/inference rule."
+The rule used, run once as a migration script and not committed as code (it is not consulted
+again — the schema, not a script, is what enforces `kind`/`origin` from here on):
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#26
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:44cea8a6e7ade195c80a2dcba7e5cb7e07457890937bf269cd89d07a2e280896*
+
+1. **Origin** by id-prefix family, against `OD-LEDGER-002`'s own table: `P1`, `P2`, `P3`,
+   `P4`, `P7`, `P8` are `Required` (the plan's own batches); `P9`, `P10`, `P11`, `P12`,
+   `P13`, and the one `T-` item are `Proposed` (`OD-LEDGER-002`'s own words: "findings from
+   an audit of the tree against what it claims").
+2. **Kind**, checked against the item's title (lowercased), first match wins:
+   - **Cleanup** if the title contains any of: `decomposition`, `decompose`, `named liter`,
+     `grouped parameter`, `clippy`, `collapsible`, `taxonomy`, `simplif`, `rename`,
+     `file-decomposition`, `test-decomposition`.
+   - **Validation** if the title contains any of: `gate`, `predicate`, `determinism`,
+     `corpus-trace`, `trace`, `coverage`, `audit`, `lint`, `verif`, `unchecked`,
+     `skill-agreement`, `conformance`, `vacuity`, `msrv`, `public api`, `one direction`, or
+     the title ends in a reissue suffix `-2`, `-3`, `-4` (a reissue of a validation item is
+     itself a validation item — the check is what did not land the first time).
+   - **Decision** if the title contains any of: `seam`, `boundary`, `ownership`,
+     `authority`, `scope`, `canonicity`, `policy`, `route`, `citation shape`,
+     `staging name`, `evidence`, `floor`, `which product`, `undecided`, `no record`,
+     `canonical for`.
+   - Otherwise, **Capability** for a `Required`-origin item, **Correction** for a
+     `Proposed`-origin one.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#27
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:fc42d5c26b5fdbe0d16f101ab362f561b1494e34162d2d5b30accea973eafdcb*
+
+The rule is deliberately title-only, not `why`-text: the prose in `why` is long enough that
+a keyword lands there by coincidence far more often than in a title this ledger already
+writes as a one-line defect statement.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#28
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:12e2538b672d78809ee97a3d8d4076add1901e9ab16058ae07762aac7f0630ef*
+
+Result: 200 items classified, no absence.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#29
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:4e4b35d74409dbfb79cbc8262a5743bac6e82ab173f952da1160efc79caf7076*
+
+| Origin | Kind | Count |
+|---|---|---|
+| Required | Capability | 30 |
+| Required | Decision | 1 |
+| Proposed | Cleanup | 4 |
+| Proposed | Validation | 31 |
+| Proposed | Decision | 16 |
+| Proposed | Correction | 118 |
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#30
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:6551c1c2c958efce41b823b7d71067edbbdc26fdac97d7323cd0cf3524e327a9*
+
+`Correction` dominating the `Proposed` bucket is not a rule artifact to be suspicious of —
+it is this ledger's own history read back: past `P8`, the overwhelming majority of what this
+repository's sessions have opened is exactly a defect somebody found between what a record
+claims and what the tree does, which is what `Correction` names.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#31
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:86d9062f443cd5e50bb328e0a8e376dce69710ef96ab759827e19ba9b49d6b89*
+
+The one `Required`/`Decision` row is `P7-STORE` ("`nomos-store`: content-addressed documents
+with one write door per authority"), matched on `authority` — accepted rather than forced to
+`Capability`, because naming the one-write-door-per-authority rule was itself an
+architectural decision the item made while building the crate, not merely following a plan
+that had already decided it.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#32
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Migrating the board · hash: sha256:3da6e15f6f7405aa285819723ea084b412b5c0d9b5fd77a516ab83ea6db6c05c*
+
+This item's own row (`P11-ITEM-DISCRIMINANT`) falls out of the rule as `Proposed` /
+`Correction`, matching neither a title keyword above nor the `-2`/`-3`/`-4` reissue
+suffix — its own lineage carries the subject forward through a changed record identifier
+rather than a numbered suffix, so the rule does not read it as a reissue. Left as the rule
+produced it rather than hand-corrected to `Validation`, which its own content might argue
+for: a rule with a silent exception for the row that authored it is not the rule this record
+describes, and "the item that named a missing field was itself fixing a gap" is exactly what
+`Correction` already means.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#33
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#34
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Holds It · hash: sha256:b3f1f5bb249fecf7d19374d7a7b0253466082a1ab9bea8d5d681ccc50270424a*
+
+- `Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version`
+  (`crates/substrate/nomos-ledger/src/item/tests.rs`) — the field-count assertion moved
+  `14 -> 16`.
+- `Test_An_Unrecognized_Kind_Or_Origin_Should_Be_Refused`
+  (`crates/substrate/nomos-ledger/src/item/tests.rs`) — the closed-set guard, and a
+  round-trip over every declared variant of both types.
+- `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`
+  (`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs`) — unaffected in what
+  it walks, since both new fields serialize as bare strings rather than objects, but still
+  green over a document now carrying them.
+- `tests/contract/surface/nomos-ledger.txt`, reblessed from source
+  (`NOMOS_SURFACE_BLESS=nomos-ledger`): `ItemKind`, `ItemOrigin`, their variants, and
+  `LedgerItem::kind`/`LedgerItem::origin`.
+- `nomos work validate` against the migrated `work/ledger.json`, reporting schema 5.
+- `cargo test --no-fail-fast -p nomos-ledger -p nomos-cli -p nomos-contract-tests`, skipping
+  the two `records_do_not_serialize::snapshot_grain` tests that assert a property of the
+  live, currently-open board unrelated to this item's diff — confirmed failing identically
+  against an isolated worktree at this item's parent commit, the same mechanism
+  `P10-DECLINED-DEPENDENCY-4`, `P11-DISPATCH-SPLIT-3` and `P11-EVIDENCE-IDENTITY` each
+  recorded.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#35
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#36
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What This Record Does Not Decide · hash: sha256:1084f6c45cbeb8fc8d14c8665ed8b5e2450c96b8ba8d4ac92d6d237cd786e977*
+
+It does not build the classification step that would read a session's proposal and assign
+`kind`/`origin` before `work add` accepts it — the design `ARC-HARNESS-001` and this item's
+own `why` describe. It makes the two fields exist, typed and closed, for that step to write
+into; deciding what that step is remains `P11-NEXT-WORK`'s territory.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#37
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What This Record Does Not Decide · hash: sha256:af534f768f8024933396526a7d1490cd8b79bb9bf59e31b57863c50ddc5d3a2c*
+
+It does not add ordering over `kind` or `origin` to `work list` or `work audit` beyond what
+`work show` now prints. A reader wanting to prioritize `Decision` work over `Cleanup` work
+today still reads `show` per item; building that into a listing is follow-on, not this
+record's `done_when`.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#38
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What This Record Does Not Decide · hash: sha256:8dea0f294ac03ff0e6aaff8cb51c4d3970b8258bcbe1eb7a4d11affcfc31e136*
+
+It does not revisit the 200 migrated rows' classifications by hand. The rule is documented
+above precisely so a disagreement with one row's kind is checkable and correctable later,
+by anyone, without re-deciding the rule itself.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#39
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#40
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Was Considered And Rejected · hash: sha256:2d0829b6be3e08e6f6edd87e2a3518a12c05fa77ac6d5c9f32b725eb8a95057c*
+
+**A free-form `tags: Vec<String>` field instead of a closed `kind`.** Rejected on the
+item's own `done_when`, verbatim: "not closed by a free-form tag list. This is a
+discriminant, and a list of strings is the prose it was supposed to replace." A tag list
+answers the question this ledger already had a shape for — `why`, in prose — where the
+missing piece was a single, closed, filterable value.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#41
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Was Considered And Rejected · hash: sha256:0d87c7661598b6f7a290145632ea01b862e548093d060f8cf73bf9baa3999a98*
+
+**`#[serde(default)]` on both new fields, backfilling absent rows to some placeholder
+variant.** Rejected because it produces exactly the field `done_when` names as worthless: one
+"set correctly" on a hand-authored item and "defaulted, meaning nothing was decided" on the
+other hundred and ninety, indistinguishable in the file. The cost was a wider blast radius —
+every direct `LedgerItem` construction site and hand-written JSON fixture in this workspace
+needed the two keys added regardless, once the type stopped compiling without them — but that
+cost falls on the same commit that already had to migrate 200 real rows by hand; it did not
+buy back anything a default would have saved.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#42
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Was Considered And Rejected · hash: sha256:b68ff4ab69bfb56518b00fb23e93a832664b547fb6ba4fe4386175877d1e1b9c*
+
+**A single combined `kind` enum with ten variants, one per `(ItemKind, ItemOrigin)` pair,
+instead of two orthogonal fields.** Rejected: the two axes are independent in exactly the way
+`origin` says (a person can require a `Cleanup`; a session can propose a `Decision`), and
+collapsing them into one enum would either lose that independence or duplicate five variants
+across two prefixes for no comparison the flat form does not already give a caller matching
+on either field alone.
 
 ### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1
 

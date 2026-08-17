@@ -10,8 +10,8 @@
 //! checks were deleted.
 
 use nomos_ledger::{
-    ClaimRefusal, ExclusionLedger, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem,
-    ReleaseOutcome, SCHEMA_VERSION, VerificationRecord,
+    ClaimRefusal, ExclusionLedger, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState,
+    LedgerDocument, LedgerItem, ReleaseOutcome, SCHEMA_VERSION, VerificationRecord,
 };
 use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem};
@@ -48,6 +48,8 @@ fn Item(id: &str, files: &[&str]) -> LedgerItem
         title: format!("work item {id}"),
         why: "it needs doing".to_owned(),
         done_when: "the tests pass".to_owned(),
+        kind: ItemKind::Correction,
+        origin: ItemOrigin::Proposed,
         territory: ItemTerritory::Of_Files(files.iter().copied()),
         state: ItemState::Ready,
         depends_on: Vec::new(),

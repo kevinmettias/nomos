@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1189ab6c9d4a45f8570283fbc76251f208363b5983765c3e82bdc031bfbd32eb",
-  "inputs_digest": "sha256:874a1e2d2af6bd4832845ddd4defe331aa7b0c570a33bb28745a327f7ab80284",
+  "content_digest": "sha256:5655ec8c1593ee02f7f371e3b003f9b5dca7f2fff45b9c30d09cd12633552b4b",
+  "inputs_digest": "sha256:3f0db77ed8357dd076eeb3ea5abb956f0b09a1a1acf4c03d60125d64151205a9",
   "sections": [
     [
       "Documents",
-      111
+      112
     ],
     [
       "Sections",
-      1015
+      1026
     ],
     [
       "Source blocks",
-      3737
+      3779
     ]
   ],
   "inputs": [
@@ -374,6 +374,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored",
       "hash": "sha256:b9fc15303e4b06b9d65008a1a854ce62942151af4b55cdd10c832ce057563cf5"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md@authored",
+      "hash": "sha256:d34cb4980991f1dea453392a7c9146606771d68470cbb42fa3be7af96b5872c7"
     },
     {
       "content": "documents",
@@ -3769,6 +3774,61 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#26",
       "hash": "sha256:0fb56d7a21506c81ce0593d799dc24d677567aa77f9e30e0af0d24484d2c4d03"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#1",
+      "hash": "sha256:f40c545622b9519a64d66267c54c38225dbeaf82c3d8caef0b16b69e5072df7e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#2",
+      "hash": "sha256:6ab9ad89cdc42e1b6fa5596e919be455dbe2e728be6190e5dfba029be81daadc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#7",
+      "hash": "sha256:855022eac69ad567ef583e6a2e2b01af08b1869d53da46e9b69a26ad2d089c54"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#13",
+      "hash": "sha256:9958e170b6e2221f84925da213fabcd9584c938fb2f4738ee50013aad9494a2c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#16",
+      "hash": "sha256:7d710bdfc926f105221d0b74cea8e01254a160dbd8f590fc1b6c25c66e18bb19"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#18",
+      "hash": "sha256:4fb15ba83b229ca15d5da2a68ce2146e09289c2e0dcde05f10e93499c14352d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#20",
+      "hash": "sha256:79325a2b23a00397a8c673e9b6e92d4f44ce04153d8d3a810cc1d7695615d556"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#24",
+      "hash": "sha256:c98023b62c8e29574318630f3d0dfaff75d660a7f7c8d502c020d0a2bf70788f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#33",
+      "hash": "sha256:f340ed367d6dbdf4005084d006e1f7fd3c6f275aee67ddc218acdcbb21b70a4d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#35",
+      "hash": "sha256:2e699d3c3526d3770264001cb441cf397cdffb948ae9430e7cc205b2e3c60b23"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#39",
+      "hash": "sha256:ea74831987200a205f8792fd2c2c1c3b6ab069ae122fc2f5fffdc2b93e38829d"
     },
     {
       "content": "headings",
@@ -17469,6 +17529,216 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#29",
       "hash": "sha256:be84945e55617721f284560868f4864bb9b068647ce7800a1b3cf786186888b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#1",
+      "hash": "sha256:9556f781f1f99532a69aebba0df4998905500abb0489810caa35056e3f320089"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#3",
+      "hash": "sha256:7102c66317aed2f7519982f8f57ea7d5e9e62ad3d5e73a4274c4a821af997a02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#4",
+      "hash": "sha256:c8063df5026d2358755735b8a780aa21e3976fbf55116f568a8aa829559a328a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#5",
+      "hash": "sha256:53da9b0b73bc5e4dc9ae4a5f700a661014cbf1e2d6f6cdee31cfd8757946a521"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#6",
+      "hash": "sha256:c8071a10c0347602d1a2892c368899a2dd6ec50f03256cc8608efae6d9632764"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#7",
+      "hash": "sha256:cc5c047d35aa91a721f01d3630c5dfef6b2910c5a3b70c7e67f51282139b0569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#8",
+      "hash": "sha256:dfbe453d8461d3eeaa2e45f21fd75e6310f525fbd7679eabf05b52d8b6b4eb13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#9",
+      "hash": "sha256:74de1b992cac99c4dd98eb1a9f2f15f25f46f7d55af9274e811c7d5e1cac01be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#10",
+      "hash": "sha256:26b3fb96440d2e18a01b1f88ceaf29de2f4dd4ec0de8bc23ec7580056439c2bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#11",
+      "hash": "sha256:62c7d0d6d3564bdadb603635fb0ea5f738ba1457f7803379a0775f7c7a7e1f0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#12",
+      "hash": "sha256:c98418ead38ee520dd9f9e14ae9f93afab85779c4ff20c32d39587356d0860e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#13",
+      "hash": "sha256:cc6e17ee68b43c555875f37ebe333134830f97c351c948f38b68b07bd359649e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#14",
+      "hash": "sha256:864638dd76dd319ec017d0ffc9c739cac790a16c5071cc966e3f5de623974049"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#15",
+      "hash": "sha256:1a2e687ca4d43b43cfc4b2006043dffdcabb4a69934bd861b3570d1d1eaa29e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#16",
+      "hash": "sha256:5e192070bd885d4bf0554f82f1787b659dc1ee9190aecf2db4b8a733aa456444"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#17",
+      "hash": "sha256:1496fee7d08b06d05b9ba51d5af477f8b15ee6cc8574a240ca48e30dd92011e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#18",
+      "hash": "sha256:ba6494f4727813660fd2d2a00a91c3a5ac88a866f0538a1caca04eb943c08513"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#19",
+      "hash": "sha256:edcfd78d619cd23d13ce8946339639b906db5468e727b94988102161b169fbab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#20",
+      "hash": "sha256:0b277d656f3889341f40a357c7f726943209b5ab0475c355927c23aec7797b99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#21",
+      "hash": "sha256:b01880879faf1d672e0700d2ec97ec2d9acf673d06c96d962add95d505eaa44c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#22",
+      "hash": "sha256:a865ec7a365f25300489fa1bb920ceaac253eb715a5e02e8dc17363acd13871b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#23",
+      "hash": "sha256:3791a46207a761dc932cfbd174f0974810aa1e2d2c54a5f73b8b32af07e9f857"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#24",
+      "hash": "sha256:3a6ad0bab4a8b97e41bc893a5d94a3eb508557b1ae837abe4b22692a2cef92d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#25",
+      "hash": "sha256:ddd81b8938c3d9645a3c814bd7e1f629718fb4ad600588e2c783e9518b4ad26d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#26",
+      "hash": "sha256:44cea8a6e7ade195c80a2dcba7e5cb7e07457890937bf269cd89d07a2e280896"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#27",
+      "hash": "sha256:fc42d5c26b5fdbe0d16f101ab362f561b1494e34162d2d5b30accea973eafdcb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#28",
+      "hash": "sha256:12e2538b672d78809ee97a3d8d4076add1901e9ab16058ae07762aac7f0630ef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#29",
+      "hash": "sha256:4e4b35d74409dbfb79cbc8262a5743bac6e82ab173f952da1160efc79caf7076"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#30",
+      "hash": "sha256:6551c1c2c958efce41b823b7d71067edbbdc26fdac97d7323cd0cf3524e327a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#31",
+      "hash": "sha256:86d9062f443cd5e50bb328e0a8e376dce69710ef96ab759827e19ba9b49d6b89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#32",
+      "hash": "sha256:3da6e15f6f7405aa285819723ea084b412b5c0d9b5fd77a516ab83ea6db6c05c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#33",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#34",
+      "hash": "sha256:b3f1f5bb249fecf7d19374d7a7b0253466082a1ab9bea8d5d681ccc50270424a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#35",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#36",
+      "hash": "sha256:1084f6c45cbeb8fc8d14c8665ed8b5e2450c96b8ba8d4ac92d6d237cd786e977"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#37",
+      "hash": "sha256:af534f768f8024933396526a7d1490cd8b79bb9bf59e31b57863c50ddc5d3a2c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#38",
+      "hash": "sha256:8dea0f294ac03ff0e6aaff8cb51c4d3970b8258bcbe1eb7a4d11affcfc31e136"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#39",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#40",
+      "hash": "sha256:2d0829b6be3e08e6f6edd87e2a3518a12c05fa77ac6d5c9f32b725eb8a95057c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#41",
+      "hash": "sha256:0d87c7661598b6f7a290145632ea01b862e548093d060f8cf73bf9baa3999a98"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#42",
+      "hash": "sha256:b68ff4ab69bfb56518b00fb23e93a832664b547fb6ba4fe4386175877d1e1b9c"
     },
     {
       "content": "blocks",

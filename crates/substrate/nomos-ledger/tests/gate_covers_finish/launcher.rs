@@ -3,7 +3,7 @@
 
 use nomos_ledger::{
     Finishing,
-    Claim, FileLedger, Finish, FinishRefusal, ItemId, ItemState,
+    Claim, FileLedger, Finish, FinishRefusal, ItemId, ItemKind, ItemOrigin, ItemState,
     LedgerDocument, LedgerItem, Territory, VerificationPredicate, VerificationRecord,
 };
 use nomos_platform::{
@@ -133,6 +133,8 @@ fn A_Claimed_Item() -> LedgerItem
         title: "an item".to_owned(),
         why: "it needs doing".to_owned(),
         done_when: "the tests pass".to_owned(),
+        kind: ItemKind::Correction,
+        origin: ItemOrigin::Proposed,
         territory: Territory::Of_Files(["src/a.rs"]),
         state: ItemState::Claimed,
         depends_on: Vec::new(),

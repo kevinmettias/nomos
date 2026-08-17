@@ -157,7 +157,8 @@ fn Test_The_Usage_Text_Should_Name_Every_Verb_It_Accepts()
 fn Board_With_A_Declined_Item() -> LedgerDocument
 {
     let mut item = match Parse(&Arguments(
-        "add --item T-1 --title t --why w --done-when d --territory src/a.rs",
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs",
     ))
     .unwrap()
     {
@@ -230,7 +231,7 @@ fn Added(text: &str) -> LedgerItem
 fn Test_Add_Should_Collect_Repeated_Territory_Flags()
 {
     let item = Added(
-        "add --item T-1 --title t --why w --done-when d \
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
          --territory src/a.rs --territory src/b.rs",
     );
 
@@ -272,7 +273,7 @@ fn Add_Of(text: &str) -> AddedItem
 fn Test_Amends_Should_Reserve_The_Record_It_Declares()
 {
     let AddedItem { item, amending } = Add_Of(
-        "add --item T-1 --title t --why w --done-when d \
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
          --amends docs/records/ARC-HARNESS-001-a-slug.md",
     );
 
@@ -297,7 +298,7 @@ fn Test_An_Item_That_Only_Amends_Should_Not_Be_Refused_As_Reserving_Nothing()
 {
     assert!(
         Parse(&Arguments(
-            "add --item T-1 --title t --why w --done-when d \
+            "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
              --amends docs/records/ARC-HARNESS-001-a-slug.md",
         ))
         .is_ok(),
@@ -315,7 +316,8 @@ fn Test_An_Item_That_Only_Amends_Should_Not_Be_Refused_As_Reserving_Nothing()
 fn Test_Amends_Should_Declare_Only_What_It_Names()
 {
     let AddedItem { item, amending } = Add_Of(
-        "add --item T-1 --title t --why w --done-when d --territory src/a.rs \
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs \
          --amends docs/records/ARC-HARNESS-001-a-slug.md",
     );
 
@@ -336,7 +338,8 @@ fn Test_Amends_Should_Declare_Only_What_It_Names()
 fn Test_Add_Should_Take_The_Predicate_After_The_Separator()
 {
     let item = Added(
-        "add --item T-1 --title t --why w --done-when d --territory src/a.rs \
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs \
          -- cargo test -p nomos-spec-model --lib",
     );
 
@@ -359,7 +362,8 @@ fn Test_Add_Should_Take_The_Predicate_After_The_Separator()
 fn Test_Arguments_After_The_Separator_Should_Not_Be_Read_As_Options()
 {
     let item = Added(
-        "add --item T-1 --title t --why w --done-when d --territory src/a.rs \
+        "add --item T-1 --title t --why w --done-when d --kind correction --origin proposed \
+         --territory src/a.rs \
          -- prog --title stolen",
     );
 

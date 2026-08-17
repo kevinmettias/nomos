@@ -10,7 +10,7 @@
 pub(crate) use nomos_ledger::{
     Finishing,
     Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish,
-    FinishRefusal, GateOutcome, ItemId, ItemState, LedgerDocument, LedgerError, LedgerItem,
+    FinishRefusal, GateOutcome, ItemId, ItemKind, ItemOrigin, ItemState, LedgerDocument, LedgerError, LedgerItem,
     ReleaseOutcome, Reservation, SCHEMA_VERSION, Territory as ItemTerritory, Validate, VerificationPredicate,
     VerificationRecord,
 };
@@ -65,6 +65,8 @@ pub(crate) fn Item(id: &str, files: &[&str]) -> LedgerItem
         title: format!("work item {id}"),
         why: "it needs doing".to_owned(),
         done_when: "the tests pass".to_owned(),
+        kind: ItemKind::Correction,
+        origin: ItemOrigin::Proposed,
         territory: Territory(files),
         state: ItemState::Ready,
         depends_on: Vec::new(),

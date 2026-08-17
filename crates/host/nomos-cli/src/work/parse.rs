@@ -3,7 +3,8 @@
 use std::time::Duration;
 
 use nomos_ledger::{
-    DEFAULT_LEASE, ItemId, ItemState, LedgerItem, Territory, VerificationPredicate,
+    DEFAULT_LEASE, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, Territory,
+    VerificationPredicate,
 };
 
 use crate::arguments::{Named_Value, Named_Values};
@@ -209,6 +210,8 @@ fn New_Item(
         title: Required(value_of("--title").as_ref(), "--title")?,
         why: Required(value_of("--why").as_ref(), "--why")?,
         done_when: Required(value_of("--done-when").as_ref(), "--done-when")?,
+        kind: Kind_Of(named)?,
+        origin: Origin_Of(named)?,
         territory,
         state: ItemState::Ready,
         depends_on: depends_on.collect(),
@@ -220,6 +223,47 @@ fn New_Item(
         displaced: Vec::new(),
         declined: None,
     });
+}
+
+/// The kind an argument list names. `OD-LEDGER-024`.
+///
+/// Required, like `--title` and `--territory`: an item that does not say what kind of
+/// work it is is exactly the row that record exists to stop being written.
+fn Kind_Of(named: &[String]) -> Result<ItemKind, String>
+{
+    let text = Required(Named_Value(named, "--kind").as_ref(), "--kind")?;
+
+    return match text.as_str()
+    {
+        "capability" => Ok(ItemKind::Capability),
+        "decision" => Ok(ItemKind::Decision),
+        "validation" => Ok(ItemKind::Validation),
+        "correction" => Ok(ItemKind::Correction),
+        "cleanup" => Ok(ItemKind::Cleanup),
+        other => Err(format!(
+            "--kind {other:?} is not one of capability, decision, validation, correction, \
+             cleanup.\n\n{}",
+            Usage_Text()
+        )),
+    };
+}
+
+/// The origin an argument list names. `OD-LEDGER-024`.
+///
+/// Required, for the reason [`Kind_Of`] is.
+fn Origin_Of(named: &[String]) -> Result<ItemOrigin, String>
+{
+    let text = Required(Named_Value(named, "--origin").as_ref(), "--origin")?;
+
+    return match text.as_str()
+    {
+        "required" => Ok(ItemOrigin::Required),
+        "proposed" => Ok(ItemOrigin::Proposed),
+        other => Err(format!(
+            "--origin {other:?} is not one of required, proposed.\n\n{}",
+            Usage_Text()
+        )),
+    };
 }
 
 /// What the item reserves, or the message saying why what was given cannot reserve.
@@ -336,10 +380,15 @@ const VERBS: &str = "\x20 list     [--state ready|waiting|held|snagged|stranded|
      \x20          one item in full: its claim, every claim given up on it with the reason \
      given, and its verification. `list` is a column per item and cannot carry prose.\n\
      \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
+     \x20          --kind capability|decision|validation|correction|cleanup\n\
+     \x20          --origin required|proposed\n\
      \x20          --territory <path> [--territory <path> …]\n\
      \x20          [--amends <record> …]\n\
      \x20          [--depends-on <id> …]\n\
      \x20          [-- <program> <args…>]\n\
+     \x20          `--kind` says what sort of work this is; `--origin` says whether a person \
+     required it or a session proposed it. Both are required and both are closed sets: an \
+     unrecognized value is refused rather than stored. `OD-LEDGER-024`.\n\
      \x20          `--amends` reserves a record this repository has already published and \
      says the item edits it. Reserving a published record any other way is refused, because \
      an identifier is allocated once and the two acts are otherwise the same act. Either \

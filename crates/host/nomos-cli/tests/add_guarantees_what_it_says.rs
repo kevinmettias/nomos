@@ -112,6 +112,7 @@ fn Item(id: &str, paths: &str, state: &str, tail: &str) -> String
     return format!(
         "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
+         \"kind\":\"Correction\",\"origin\":\"Proposed\",\
          \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
          \"state\":\"{state}\",\"depends_on\":[],\"blocked\":null,{tail}}}"
     );
@@ -141,6 +142,10 @@ fn Add_Arguments(id: &str) -> Vec<String>
         "because".to_owned(),
         "--done-when".to_owned(),
         "the tests pass".to_owned(),
+        "--kind".to_owned(),
+        "correction".to_owned(),
+        "--origin".to_owned(),
+        "proposed".to_owned(),
     ];
 }
 

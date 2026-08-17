@@ -213,6 +213,7 @@ fn Show(
 
     let _ = writeln!(output, "{} {}", found.id, found.title);
     let _ = writeln!(output, "state: {label}");
+    let _ = writeln!(output, "kind: {:?}  origin: {:?}", found.kind, found.origin);
     Print_Claim(found, now, output);
     Print_History(found, current_revision.as_deref(), output);
 

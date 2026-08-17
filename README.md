@@ -80,6 +80,8 @@ claim rather than granting it.
 ```
 nomos work list [--state ready|claimed|blocked|done|declined]
 nomos work add     --item <id> --title <text> --why <text> --done-when <text>
+                   --kind capability|decision|validation|correction|cleanup
+                   --origin required|proposed
                    --territory <path> [--territory <path> …]
                    [--depends-on <id> …]
                    [-- <program> <args…>]
@@ -105,6 +107,13 @@ reserves everything beneath it, decided from the text with no filesystem access 
 unexpanded pattern compares as *unanswerable* against every other territory, which makes the
 item unclaimable by anyone including its author and refuses every other claim on the board
 with the code that means stop and fetch a person. `OD-LEDGER-013` records the trade.
+
+**`--kind` and `--origin` are required, and both are closed sets.** `--kind` says what sort
+of work the item is — `capability`, `decision`, `validation`, `correction` or `cleanup` —
+and `--origin` says whether a person required it or a session proposed it. An unrecognized
+value is refused the same way an unrecognized JSON key already is, rather than stored and
+ignored. `OD-LEDGER-024` records why these five and not a free-form tag list, and how every
+item already on the board was given both when the fields were added.
 
 **A claim is a lease, and a lease lapses.** An agent that dies holding one stops excluding
 everybody else the moment the lease runs out, which is what stops one crashed session holding

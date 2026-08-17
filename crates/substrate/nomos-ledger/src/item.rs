@@ -18,11 +18,15 @@
 //! `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`, which walks a fully
 //! populated document and probes every object node it finds.
 
-// An item's identity and the state it is in.
+// An item's identity, the state it is in, what kind of work it is, and where it came from.
 mod id;
+mod kind;
+mod origin;
 mod state;
 
 pub use id::ItemId;
+pub use kind::ItemKind;
+pub use origin::ItemOrigin;
 pub use state::ItemState;
 
 #[cfg(test)]
@@ -74,6 +78,19 @@ pub struct LedgerItem
     /// What "finished" means, in prose. Paired with — never a substitute for —
     /// [`LedgerItem::verification`].
     pub done_when: String,
+    /// What kind of work this is, from a closed set. `OD-LEDGER-024`.
+    ///
+    /// No `#[serde(default)]`, deliberately: every item written before this field existed
+    /// was migrated in the same commit that added it, because `OD-LEDGER-024`'s `done_when`
+    /// refuses "a field empty on a hundred rows and set on the next" — an absence a reader
+    /// could not tell apart from an oversight. A build that meets a row without one refuses
+    /// the document rather than guessing, the same way it already refuses an unrecognized
+    /// key.
+    pub kind: ItemKind,
+    /// Where this item came from: a person, or a session that proposed it. `OD-LEDGER-024`.
+    ///
+    /// No `#[serde(default)]`, for the reason [`LedgerItem::kind`] carries none.
+    pub origin: ItemOrigin,
     /// What the work touches. The basis for mutual exclusion.
     pub territory: Territory,
     /// Current state.

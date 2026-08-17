@@ -180,6 +180,7 @@ fn Write_A_Claimed_Item_With_No_Claim(directory: &Path) -> PathBuf
             "{{\n  \"schema_version\": {SCHEMA_VERSION},\n  \"items\": [\
              {{\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
              \"done_when\":\"the tests pass\",\
+             \"kind\":\"Correction\",\"origin\":\"Proposed\",\
              \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
              \"patterns\":[]}},\
              \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\

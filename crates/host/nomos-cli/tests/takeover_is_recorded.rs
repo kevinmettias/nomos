@@ -46,6 +46,7 @@ fn A_Board(name: &str) -> Board
             "{{\n  \"schema_version\": {SCHEMA_VERSION},\n  \"items\": [\
              {{\"id\":\"T-1\",\"title\":\"the item its holder died on\",\
              \"why\":\"because\",\"done_when\":\"the tests pass\",\
+             \"kind\":\"Correction\",\"origin\":\"Proposed\",\
              \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
              \"patterns\":[]}},\
              \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\
@@ -54,12 +55,14 @@ fn A_Board(name: &str) -> Board
              \"verification\":null,\"verified\":null,\"abandoned\":[]}},\
              {{\"id\":\"T-2\",\"title\":\"an item nobody has taken\",\
              \"why\":\"because\",\"done_when\":\"the tests pass\",\
+             \"kind\":\"Correction\",\"origin\":\"Proposed\",\
              \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/b.rs\"],\
              \"patterns\":[]}},\
              \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
              \"verification\":null,\"verified\":null,\"abandoned\":[]}},\
              {{\"id\":\"T-3\",\"title\":\"an item somebody is still working\",\
              \"why\":\"because\",\"done_when\":\"the tests pass\",\
+             \"kind\":\"Correction\",\"origin\":\"Proposed\",\
              \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/c.rs\"],\
              \"patterns\":[]}},\
              \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\

@@ -17,6 +17,8 @@ pub enum nomos_ledger::Blocker
 pub enum nomos_ledger::ClaimRefusal
 pub enum nomos_ledger::FinishRefusal
 pub enum nomos_ledger::GateUnknown
+pub enum nomos_ledger::ItemKind
+pub enum nomos_ledger::ItemOrigin
 pub enum nomos_ledger::ItemState
 pub enum nomos_ledger::LedgerError
 pub enum nomos_ledger::RefusalLayer
@@ -54,6 +56,13 @@ pub enum variant nomos_ledger::FinishRefusal::PredicateFailed { item: ItemId, ex
 pub enum variant nomos_ledger::GateUnknown::NoSuchStep { step: String, }
 pub enum variant nomos_ledger::GateUnknown::NotASingleCommand { step: String, run: String, }
 pub enum variant nomos_ledger::GateUnknown::Unreadable { path: String, cause: String, }
+pub enum variant nomos_ledger::ItemKind::Capability
+pub enum variant nomos_ledger::ItemKind::Cleanup
+pub enum variant nomos_ledger::ItemKind::Correction
+pub enum variant nomos_ledger::ItemKind::Decision
+pub enum variant nomos_ledger::ItemKind::Validation
+pub enum variant nomos_ledger::ItemOrigin::Proposed
+pub enum variant nomos_ledger::ItemOrigin::Required
 pub enum variant nomos_ledger::ItemState::Blocked
 pub enum variant nomos_ledger::ItemState::Claimed
 pub enum variant nomos_ledger::ItemState::Declined { reason: String, }
@@ -142,6 +151,8 @@ pub struct field nomos_ledger::LedgerItem::depends_on: Vec<ItemId>
 pub struct field nomos_ledger::LedgerItem::displaced: Vec<Claim>
 pub struct field nomos_ledger::LedgerItem::done_when: String
 pub struct field nomos_ledger::LedgerItem::id: ItemId
+pub struct field nomos_ledger::LedgerItem::kind: ItemKind
+pub struct field nomos_ledger::LedgerItem::origin: ItemOrigin
 pub struct field nomos_ledger::LedgerItem::state: ItemState
 pub struct field nomos_ledger::LedgerItem::territory: Territory
 pub struct field nomos_ledger::LedgerItem::title: String
