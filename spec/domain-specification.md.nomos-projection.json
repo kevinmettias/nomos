@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8ddbeddb7141f7c0b7b3009de9e687ade5be8466ff02a595f9dafe5338a86cec",
-  "inputs_digest": "sha256:02846784441289952a01ad2de723ec2dab9ed2c6cf07a0071ac333e8b16854bd",
+  "content_digest": "sha256:5c388fc37c9a8ea1db1f710a1014fcb860eebc13b0a7963b8c3653ea15ade852",
+  "inputs_digest": "sha256:90a79404fe22dac64da0f3969a207cc03767327b91e5daf5200840b9bd70802b",
   "sections": [
     [
       "Documents",
@@ -12,7 +12,7 @@
     ],
     [
       "Sections",
-      831
+      827
     ],
     [
       "Source blocks",
@@ -114,6 +114,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored",
       "hash": "sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored",
+      "hash": "sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9"
     },
     {
       "content": "documents",
@@ -379,11 +384,6 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored",
       "hash": "sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a"
-    },
-    {
-      "content": "documents",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored",
-      "hash": "sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f"
     },
     {
       "content": "documents",
@@ -1149,6 +1149,41 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28",
       "hash": "sha256:a2456d82e2a0c1aebd1838e1d538da506a0b1f1e6c7da195fd54c7d5ec249764"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#1",
+      "hash": "sha256:e4f35d4df0d6e616b4600c6591afae36e1e8a26dbf3022be8f24f4dee5034d11"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#2",
+      "hash": "sha256:4bca00e481b2e550558e42d6b0ef509487eed80a8acf5d646c7ff5be07929aff"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#7",
+      "hash": "sha256:ad0fb70e17df74a75825ddd41533c5fe283ea115dec3d9e3e0dab45f5d5a2fe9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#12",
+      "hash": "sha256:44cf04515804f209dca3fba09516135b481bc5bd1b9d0b1e933e2de65e58374b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#18",
+      "hash": "sha256:4ee6c4e33f3dfe916e7201960e5551bab1ca518c5ecc4d1d5de19b2796cc53c4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#23",
+      "hash": "sha256:ea927e1e4ed6afe883af1a0f1d199fd96249baf1d9c9e48dee4a440a6598f32d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29",
+      "hash": "sha256:51f15651528ca6818d245f3077e313008c70f9bb419eba739de14ed6ac2d7610"
     },
     {
       "content": "headings",
@@ -3804,61 +3839,6 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#68",
       "hash": "sha256:802bb9733fa697527b68ec3c57f70b4784729cc805a3041d40514d03c78a686e"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1",
-      "hash": "sha256:923eabfa5c5296e58c33d94ea3d1b7628e0a2a27bb35f9f9c374a24f12cd4a45"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2",
-      "hash": "sha256:b1e2246d1c8584430e56dafd7a1aeabee9327bc9604c47f9c1c435fb4ce80c0a"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6",
-      "hash": "sha256:a2bee15921c57dcf992254a7b8da1d4a362ac8141a980c9649a5321fcf82719c"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7",
-      "hash": "sha256:698d7f40bfe5a51a3772286ebed2412b675a839c50dec6a2e10a859b53539c24"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10",
-      "hash": "sha256:710a81e42a238e614350f1958ce480e38119afd498a6d44581e3e82fa5a1538e"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13",
-      "hash": "sha256:bcdf640f97b90f1a35788c2492d13066bab8fa032652ce855c672e25d6046a56"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15",
-      "hash": "sha256:6a85f4cfc7b5f3e1a58987c9e62a3487b21055d926458b5c2fc9de157eb6c2bf"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18",
-      "hash": "sha256:6f5e0ba4b64693f265612e793c4b7c228cb7ca488d2bc55c60d5fcafd09a5ce7"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21",
-      "hash": "sha256:5a47e0c3b1819d7a79bc97a70721a1810230cedface086fe299fafb0bb6495dd"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23",
-      "hash": "sha256:0304d6617a6fbe1e78808ebe15f750ed0584f363734d8029eddd540d86f7974a"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29",
-      "hash": "sha256:7f42679f5f0bde00d0eba96272b48db54916a435b2368eea8ebfa5aa029ef27a"
     },
     {
       "content": "headings",
@@ -6999,6 +6979,156 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#29",
       "hash": "sha256:521260881280279afae77be303f830b22af30ce982ad45c32979805aa8878ee8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#1",
+      "hash": "sha256:c15d109ee4a90635e22a2030542652dd815b8031633ac23d00f27299297b5689"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#3",
+      "hash": "sha256:09e83842f900627c1ff8d14edfe0b9ab12a9057d1cf740133758d2b24352185d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#4",
+      "hash": "sha256:ace8163d57c144d52bf5aa026e716d578b524b46ee3b8355893ee8c5226f2868"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#5",
+      "hash": "sha256:7be08c20280db88db13b794142bf24b31cf4561bb65cd2fe1fe01df566325ca0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#6",
+      "hash": "sha256:8655c09d4aaac811a68ac4f04d4be39ea1683d5a21721d45a11ba2ddf26511d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#7",
+      "hash": "sha256:07f3dd213a89f094d74511452eb250f38a977cbd0a926102f4f78689bf83b8df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#8",
+      "hash": "sha256:d116180abd30e22242d0a78369dd14d89050c9dabc44e33d3fc867d9ba89e41d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#9",
+      "hash": "sha256:0de37f71559cc77078d1bc6c79ddb5ab49d990249d03511b095c5b024d622a89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#10",
+      "hash": "sha256:61af27a8e45491a12fbe8a41494c15fee06d554524c280b25efe4af6a9aaac12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#11",
+      "hash": "sha256:876db28efe7be20eecb0b3c05ad64ae5d3a1198441aa4afa56ddd78e4bf83033"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#12",
+      "hash": "sha256:b49ed572418d703a85a55babf072656aed323c4ded5b9aa696e5c551d39bb02c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#13",
+      "hash": "sha256:4bddb1a18a9f01d2c662faf499806e428252dae0c7dbe87f84044174e3851634"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#14",
+      "hash": "sha256:41b4fb095a006886281b8ba2562e08291de4a56ce287fe7533b7cc297214c406"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#15",
+      "hash": "sha256:eaaf12ee29a1b9fa04f7b3a5811eef7c8e148bd3fcc23877ac896d013140202c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#16",
+      "hash": "sha256:4a94fe17e29e572bf2faa82c8c1fd139f8e9622b7d22aa6cd52715f3fe14b7b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#17",
+      "hash": "sha256:969f82255955b1191335294de41f89387519df8c7cd146907000f8361cd784f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#18",
+      "hash": "sha256:9b4945c21bd75c0f90aaa4899e1e70c024e3a0c16923d5a6bed237b9f6ef8cce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#19",
+      "hash": "sha256:cd1c2f5da0006688aa0e1c22599b8fafffe204093575b61ed80c0c29ab7440f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#20",
+      "hash": "sha256:a0edb102d05c8b0fc9b1dc72e3a3eecf2b345e07e221d73e0ff6939083e6671a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#21",
+      "hash": "sha256:d585e4b9913abb4c873fafa990e7ef795a0bee3eb3e8d374c74b2f90b19e6c32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#22",
+      "hash": "sha256:a4ee865af21253644b5838e42e34ec7ce1f1a8b809032a9bcd23e02865b24b18"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#23",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#24",
+      "hash": "sha256:5e2681dabfd2bd8ff55f0c7f5b11b75f9090591e31ac04cb36fda1a966f94fd8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#25",
+      "hash": "sha256:b25c6d3823ec2dae4033e67781ec896d087c401dbb0e59de1556b682abe8ad8a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#26",
+      "hash": "sha256:5c3ac71a73adf66f08d42fbbcd6271826867ef0dc56eb5f6348e996155f81090"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#27",
+      "hash": "sha256:c01b4d63e5aa320dc8af48ed8db0777a059417b669e74b85a61e09aec00d108d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#28",
+      "hash": "sha256:e59d53e4bb16f1edc3d76b77371a6bfb2ed89a6bfe642e0314981a9da6965026"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#30",
+      "hash": "sha256:63f31d4f4d714f01a7ac65f2710eb324179621821c9bebca2462d9526104911b"
     },
     {
       "content": "blocks",
@@ -17429,156 +17559,6 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#69",
       "hash": "sha256:1ddc55d550ce8f731af680d6a25bea856cce59c8e259d52b0e3b877a12476663"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1",
-      "hash": "sha256:bbf3c23a88a5bc5a44d3af040396392013ed9e323e264efa9d5ce4a9836f1211"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2",
-      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#3",
-      "hash": "sha256:f72e91e5454b9f270f7504ab2bef1f99666e94a13bc107a02c3990744ae42525"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#4",
-      "hash": "sha256:4a587775da2f581281c9a3f34ffeea75285944bd26ac87aacf1174ea88acbe5a"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#5",
-      "hash": "sha256:b41ea0a9b0f2909146ed8e7bad2f49445c90b664ff8975724ba65340708710f1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6",
-      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7",
-      "hash": "sha256:3014194fd1ec78df21931a204c923924f4237ef312fb2078e550f98d56c4d864"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#8",
-      "hash": "sha256:70f91f07162e8ae9ff39285dc0cf889503804892990478ae1d4ef4a72a78224f"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#9",
-      "hash": "sha256:695a8fa09b0e5d25cd231578f0c62cb2665923f13d441df04be5ef313f428972"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10",
-      "hash": "sha256:c60210057e2daae1eac009c27fbe240fd81df404fd41ba68640aa482c194a1d5"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#11",
-      "hash": "sha256:a2c0caafc65ae9be8212cccad80131535738911b54e3fc2975d8fea1c3c47b02"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#12",
-      "hash": "sha256:a830f76144922e4ecacdd2b31c49cae488261eede02615d66ef092cdcd124fcb"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13",
-      "hash": "sha256:f4bf1927cfed66a3c13b4f1c53d4be1dc1cb10fbb61b3c95a2c02ca151b151f5"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#14",
-      "hash": "sha256:7c7f960b90a9db6cbbb510112e62ee1f6f1d298a64eaa0aff2a415baaa885fb5"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15",
-      "hash": "sha256:6ca4178c0a1ded7984ca2123f1770ea9ff97763159ffa82915f775fb9637ffef"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#16",
-      "hash": "sha256:2350041688f56f64e0939a17f153a9322e0b4dd2b5d051890fc7b87befe50cfa"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#17",
-      "hash": "sha256:d3b409bc27cc41fc5002f0e7016b2d0fc0b810576d41229e1cbeb9247402111d"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18",
-      "hash": "sha256:451dfc4f4864d45fb8e2acbc6b2e85a8bad483d610b9288eb7becf49ad69760f"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#19",
-      "hash": "sha256:94996c4545239299d01636dbca45d9caff6b5aba4c60d9e3bcf64c922cfc422f"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#20",
-      "hash": "sha256:54b0de1394a872fda11c56ff8007cfb7538bd2ead3360d44d6c52d97dbdffa66"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21",
-      "hash": "sha256:39fa6a7e05148859b1537d817e869a61df18fa38eeb978e6365146aae6c20462"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#22",
-      "hash": "sha256:bac2df47d6182519ad452b3e1100cbf608f5c31bc42c597046d88565a71be779"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23",
-      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#24",
-      "hash": "sha256:4ae2c0157fc1dfe60c754b501e8efb2addd1b079672708fba639f42392cd2b32"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#25",
-      "hash": "sha256:f023583aa5266f6b1e74b4d362aabcf2c635bc5bd34e3421bb5bfe8098433a45"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#26",
-      "hash": "sha256:c60e7fc71cd6a726749f99b542b169cfe408b3b985c84422bbef1510d46a73e1"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#27",
-      "hash": "sha256:4e1996eb31bafe76c8e28b392c7904520afea3ebff8da8c71e95101340a32126"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#28",
-      "hash": "sha256:0070eced63eddfb6a4742a8937ce607bcc3670c896f970c01ed1996e793d1253"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#30",
-      "hash": "sha256:5bdab350d419dee34ad39b8e8c11b0f24803b469bcd517bccf6b30c827b5b41d"
     },
     {
       "content": "blocks",

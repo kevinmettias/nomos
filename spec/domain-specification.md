@@ -29,6 +29,7 @@ profile: domain-specification
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -82,7 +83,6 @@ profile: domain-specification
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 20 | 6 | sha256:421d04fd8bdf4cb6157a328b91317129f76e38d0a8a1a2e90f1c364fc72787f6 |
@@ -241,6 +241,13 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#19 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#24 | authored | 2 | What Holds It |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#1 | authored | 1 | Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#7 | authored | 2 | Program-Semantics Facts Are Nomos-Owned |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#12 | authored | 2 | What The Family Covers, And Where It Ends |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#18 | authored | 2 | What `FactVariant::SemanticallyResolved` Obliges |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#23 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -772,17 +779,6 @@ profile: domain-specification
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#55 | authored | 2 | Controls |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#64 | authored | 2 | Amendment, Version 2 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#68 | authored | 2 | Status |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1 | authored | 1 | A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2 | authored | 2 | Question |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6 | authored | 2 | The Decision |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7 | authored | 3 | A declared architecture is expressed as data, not as a bespoke Rust test |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10 | authored | 3 | The observed dependency graph is a fact a capability establishes |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13 | authored | 3 | Where the comparison lives |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15 | authored | 3 | What happens when a repository declares no architecture |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18 | authored | 3 | What becomes of `boundaries.rs` |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21 | authored | 2 | Why This Is A Nomos Claim |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -5038,6 +5034,355 @@ does.
 
 Closed by P10-DEPENDENT-EDGE. `P10-DERIVED-FACT` states the same defect and was released
 because its territory could not reach the fix; the measurement it recorded is unchanged.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#1
+
+*revision: authored · kind: heading · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types · hash: sha256:c15d109ee4a90635e22a2030542652dd815b8031633ac23d00f27299297b5689*
+
+# Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#2
+
+*revision: authored · kind: heading · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#3
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Question · hash: sha256:09e83842f900627c1ff8d14edfe0b9ab12a9057d1cf740133758d2b24352185d*
+
+`FactVariant` (`crates/contracts/nomos-contracts/src/guarantee/fact_variant.rs`) orders five
+resolution levels — `Predicted`, `Approximate`, `Syntactic`, `SemanticallyResolved`,
+`RuntimeObserved` — weakest first, so that a rule needing resolved names can refuse a
+syntactic answer instead of silently accepting a weaker fact than it needs. Two of the five,
+`SemanticallyResolved` and `RuntimeObserved`, have no producer anywhere in this workspace.
+`crates/capabilities` holds exactly one crate, `nomos-cap-syntax`, and `OD-ANALYSIS-002`
+already recorded why: the one capability this build ships, `nomos.cap.syntax.items`, is a
+per-file leaf by construction, and every fact filed under it is `Syntactic`. The ordering
+that is supposed to let a rule demand resolved names is currently an ordering over one value.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#4
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Question · hash: sha256:ace8163d57c144d52bf5aa026e716d578b524b46ee3b8355893ee8c5226f2868*
+
+Program semantics is named as the expansion that will exercise the other two levels:
+ownership, borrowing, lifetime, allocation, escape, async and concurrency structure,
+synchronization, and effects. Every one of those is a fact about a program that no syntactic
+reading establishes, and each is the kind of claim Nomos exists to make rather than a
+language server's private business to hold.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#5
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Question · hash: sha256:7be08c20280db88db13b794142bf24b31cf4561bb65cd2fe1fe01df566325ca0*
+
+Two things have to be settled before the first such capability is written, because both are
+cheap to get right now and expensive to unwind once a capability crate exists with its own
+vocabulary already shipped in it:
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#6
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Question · hash: sha256:8655c09d4aaac811a68ac4f04d4be39ea1683d5a21721d45a11ba2ddf26511d4*
+
+1. What vocabulary a program-semantics fact is stated in — whether it reuses the epistemic
+   types this workspace already has, or a new capability is free to arrive with its own.
+2. What `FactVariant::SemanticallyResolved` obliges a producer to have actually done, since
+   today the level is defined by nothing but a doc comment and no producer has ever had to
+   satisfy it.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#7
+
+*revision: authored · kind: heading · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Program-Semantics Facts Are Nomos-Owned · hash: sha256:07f3dd213a89f094d74511452eb250f38a977cbd0a926102f4f78689bf83b8df*
+
+## Program-Semantics Facts Are Nomos-Owned
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#8
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Program-Semantics Facts Are Nomos-Owned · hash: sha256:d116180abd30e22242d0a78369dd14d89050c9dabc44e33d3fc867d9ba89e41d*
+
+A program-semantics fact — that a value is moved rather than borrowed at some point, that a
+reference cannot outlive the frame that produced it, that a `Future` holds a lock across a
+suspension point — is a fact about a program's own behavior that this repository's own rules
+may need to hold a subject to, exactly as they already hold a subject to a fact about its
+syntax, its declared band, or its requirement history. `ARC-CONFORMANCE-001` states the
+general shape once: **a Nomos conformance claim composes architecture, requirements, history,
+runtime evidence and policy, checked against each other, and native analysis is owed only
+where no provider exposes the fact.** Program semantics does not sit outside that shape; it
+is one more evidence domain a claim may compose with the others, filed the same way syntax
+facts already are.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#9
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Program-Semantics Facts Are Nomos-Owned · hash: sha256:0de37f71559cc77078d1bc6c79ddb5ab49d990249d03511b095c5b024d622a89*
+
+So the answer to the first question is: **yes, Nomos owns the claim, and no, that ownership
+does not license a new vocabulary.** A program-semantics capability's payload — its own
+per-item record shape, the way `nomos-cap-syntax`'s `SyntaxPayload` is a per-item record shape
+— is free to be domain-local, exactly as `SyntaxPayload` is. What is not free to be
+domain-local is the five questions every capability in this workspace already answers about
+any fact it produces, because those five questions already have one vocabulary and a second
+one answering the same questions is a second authority for something already governed:
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#10
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Program-Semantics Facts Are Nomos-Owned · hash: sha256:61af27a8e45491a12fbe8a41494c15fee06d554524c280b25efe4af6a9aaac12*
+
+- **What was established, and how strongly ordered against every other resolution level** —
+  `FactVariant`. A program-semantics fact states its level exactly as a syntax fact does, and
+  `Guarantee::Satisfies` compares it against a requirement's the same way, on the same axis.
+- **What kind of sameness, across what environment, compared how** — the `Guarantee` triple
+  (`variant`, `soundness`, `completeness`, `incremental`) plus `DeterminismStrength`,
+  `ReproducibilityScope` and `TraceEquivalence` for the reproducibility question, which
+  `Guarantee`'s own module doc already states is orthogonal to resolution level and answered
+  by a different type for exactly that reason.
+- **How the claim was come by** — `EvidenceClass`. A program-semantics fact produced by
+  consuming a compiler's resolved model is `Derived` or `Verified` depending on whether the
+  method would have caught a wrong answer; one produced by an agent's reading of the code
+  is `AgentJudged`, and `EvidenceClass::Is_Mechanical` already refuses to let that report as a
+  machine having checked something. No new confidence enum states this more precisely than
+  the existing ordering already does.
+- **Whether a rule reached a judgment about this subject, and if not, why not** —
+  `Applicability`. A program-semantics rule that cannot get an ownership fact for a subject
+  reports `MissingCapability` or `ProviderUnavailable` exactly as a syntax rule does; it does
+  not invent its own "partial coverage" notion, because `Applicability::PartiallySupported`
+  and `Applicability::Is_Coverage_Debt` already state what partial and missing mean, and a
+  second notion of partial coverage is precisely the drift the item that reserved this record
+  was written to catch before the fact.
+- **What a provider saw when it looked, including that it could not look** — the
+  `Observation` three-state (`NotObserved` / `Absent` / `Present`, currently
+  `nomos-cap-syntax`'s `payload::observation` and generalized by `OD-SYNTAX-002` as "not
+  observed is not absent"). A program-semantics payload that records, per item, whether an
+  escape or a lock-acquisition was seen uses the same three-state shape rather than an
+  `Option`, for the reason `OD-SYNTAX-002` already gives: the two empty answers are not the
+  same answer, and one of them is a silent downgrade from admitted gap to phantom coverage.
+  `Observation` itself may be promoted out of `nomos-cap-syntax` the day a second capability
+  needs the identical shape — `OD-CONTRACTS-001`'s band-0 admission criterion is what that
+  promotion is judged against, the same test `SyntaxPayload` was judged against and did not
+  meet, because today only one provider needs it.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#11
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Program-Semantics Facts Are Nomos-Owned · hash: sha256:876db28efe7be20eecb0b3c05ad64ae5d3a1198441aa4afa56ddd78e4bf83033*
+
+`OD-CONTRACTS-001` is why the negative statement matters as much as the positive one. Its
+criterion for band 0 is that a type is admitted only when it crosses a subsystem, process or
+plugin boundary and the parties on both sides must agree about it in the same words; a
+domain-local concept stays in the domain that owns it. Ownership analysis, borrow-checking and
+async-structure analysis each carry vocabulary of their own — a move/borrow/copy tri-state, a
+lifetime-region model, a happens-before ordering — and every one of those is the natural thing
+for a first implementer to reach for, because it is the vocabulary the underlying analysis
+already speaks. None of it answers what was established, how strongly, by what, or over what;
+it answers what the analysis found, which is domain content and belongs in the capability's own
+payload the way `SyntaxPayload`'s `kind`, `shape` and `documentation` vocabulary belongs in
+`nomos-cap-syntax`. A capability that let its domain vocabulary migrate into the five questions
+above — a `MoveConfidence` enum standing in for `EvidenceClass`, a `PartialOwnershipCoverage`
+type standing in for `Applicability::PartiallySupported` — would be exactly the second
+authority `OD-CONTRACTS-001` and `ARC-CONFORMANCE-001` both already forbid, reached for the
+reasons `OD-CONTRACTS-001`'s Question section names: the domain vocabulary reads like it
+belongs in the fact type, and the module boundary that says otherwise is easy to not read.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#12
+
+*revision: authored · kind: heading · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What The Family Covers, And Where It Ends · hash: sha256:b49ed572418d703a85a55babf072656aed323c4ded5b9aa696e5c551d39bb02c*
+
+## What The Family Covers, And Where It Ends
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#13
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What The Family Covers, And Where It Ends · hash: sha256:4bddb1a18a9f01d2c662faf499806e428252dae0c7dbe87f84044174e3851634*
+
+The family is the eight questions the item that reserved this record named: ownership,
+borrowing, lifetime, allocation, escape, async and concurrency structure, synchronization, and
+effects. `ARC-CONFORMANCE-001`'s boundary test governs every one of them the same way it
+governs the four worked examples it already cites: **native analysis is owed only where no
+provider exposes the fact, never because writing it natively would be convenient.** Applied to
+this family specifically, the test separates two kinds of question that use the same words:
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#14
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What The Family Covers, And Where It Ends · hash: sha256:41b4fb095a006886281b8ba2562e08291de4a56ce287fe7533b7cc297214c406*
+
+- **A raw diagnostic a language provider already answers exhaustively is never re-derived.**
+  Whether code parses, whether it type-checks, whether it borrow-checks, what a reference's
+  inferred lifetime is, what a `Future`'s inferred `Send`/`Sync` bound is — `rustc` and
+  `rust-analyzer` already answer every one of these completely, and a program-semantics
+  capability that reimplemented borrow-checking or lifetime inference to restate one of these
+  answers would fail the test regardless of how easy it would be to write, exactly as
+  `ARC-CONFORMANCE-001` already forbids for parsing and type resolution.
+- **A claim this repository's own architecture, requirements, history or policy makes about a
+  program-semantics fact, that no provider states because no provider has a model of this
+  repository's own commitments, is what the family is for.** A provider's resolved model of
+  ownership, borrowing, lifetime, allocation, escape, concurrency structure, synchronization
+  or effects is the *evidence* such a claim composes with — brought in at `SemanticallyResolved`
+  or `RuntimeObserved` exactly as `ARC-CONFORMANCE-001` already states compiler and
+  language-server facts flow in at the level `FactVariant` names — never the claim itself.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#15
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What The Family Covers, And Where It Ends · hash: sha256:eaaf12ee29a1b9fa04f7b3a5811eef7c8e148bd3fcc23877ac896d013140202c*
+
+Concretely, and only illustratively — none of the examples below is a capability this record
+authorizes building, and each is a *shape* of claim rather than a specific one this workspace
+has committed to:
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#16
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What The Family Covers, And Where It Ends · hash: sha256:4a94fe17e29e572bf2faa82c8c1fd139f8e9622b7d22aa6cd52715f3fe14b7b3*
+
+- **Ownership / borrowing** — not "does this value's ownership satisfy Rust's rules" (settled
+  completely by `rustc` compiling or refusing to); a claim of this family's shape is that a
+  value's ownership, once resolved, crosses a boundary `bands.rs` declares closed, which is an
+  architecture fact no compiler has a model of.
+- **Lifetime / allocation** — not "what is this reference's inferred lifetime" or "does this
+  allocate" as raw facts a profiler or the compiler already state; a claim of this family's
+  shape is that a capability's own declared `IncrementalGranularity` or a workspace performance
+  policy is actually honored given the lifetimes or allocations a resolved model reports.
+- **Escape** — not "does this reference outlive its frame" as rustc's borrow checker already
+  settles; a claim of this family's shape is that a value provably escapes past a module
+  boundary this repository's own package or band table declares closed.
+- **Async / concurrency structure, synchronization** — not "is this future `Send`", which
+  `rustc` answers completely; a claim of this family's shape is that a task structure holds a
+  synchronization primitive across a suspension point in an ordering this repository's own
+  determinism or reproducibility policy forbids for a claim made under `Strategy`.
+- **Effects** — not a raw "does this function perform I/O", which an effect-tracking tool could
+  state on its own account; a claim of this family's shape is that an effect occurs from code
+  this repository's own `AuthorityClass` or `PackageKind` policy restricts it from performing.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#17
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What The Family Covers, And Where It Ends · hash: sha256:969f82255955b1191335294de41f89387519df8c7cd146907000f8361cd784f9*
+
+Static facts in this family — the ones a resolved compiler model states without executing
+anything: ownership, borrowing, lifetime, allocation-as-decided, escape-as-provable — are the
+shape of fact `SemanticallyResolved` exists for. Facts that can only be established by running
+the program and watching what it actually does — actual concurrency interleaving, actual
+synchronization order, actual effects performed — are the shape `RuntimeObserved` exists for.
+That split is why this family, and not some other one, is what tests whether the two unused
+levels can be produced through the existing seam at all: it has a producer-shaped candidate for
+each.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#18
+
+*revision: authored · kind: heading · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What `FactVariant::SemanticallyResolved` Obliges · hash: sha256:9b4945c21bd75c0f90aaa4899e1e70c024e3a0c16923d5a6bed237b9f6ef8cce*
+
+## What `FactVariant::SemanticallyResolved` Obliges
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#19
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What `FactVariant::SemanticallyResolved` Obliges · hash: sha256:cd1c2f5da0006688aa0e1c22599b8fafffe204093575b61ed80c0c29ab7440f4*
+
+The variant's doc comment says a fact at this level is "established with resolved names, types
+and references." That sentence has never had to hold against a producer, so this record fixes
+its meaning before one exists to fix it by example instead.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#20
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What `FactVariant::SemanticallyResolved` Obliges · hash: sha256:a0edb102d05c8b0fc9b1dc72e3a3eecf2b345e07e221d73e0ff6939083e6671a*
+
+**A producer claiming `SemanticallyResolved` must have resolved every name occurrence in its
+subject to the declaration it actually binds — including across module and crate boundaries —
+and assigned every typed expression its checked or inferred type, not the syntactic annotation
+where the two differ (a generic parameter, an elided lifetime, a type inferred from usage).**
+Concretely, that means consuming a resolved semantic model — the compiler's own resolved IR, or
+an equivalent tool's semantic model built the same way — rather than a producer's own
+approximation of name or type resolution built by pattern-matching syntax. A producer that
+guesses a name's target from lexical scoping rules it re-implements, or that reports a type
+annotation verbatim without resolving generics or inference, has not met the level regardless
+of how often the guess is right; `Syntactic` is exactly the level for a fact read from the text
+or its parse tree with no name resolution, and a producer that stops at a good guess belongs
+there; overclaiming `SemanticallyResolved` for it is what
+`Guarantee::Satisfies`("the comparison that decides so is this ordering") exists to make a rule
+refuse.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#21
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What `FactVariant::SemanticallyResolved` Obliges · hash: sha256:d585e4b9913abb4c873fafa990e7ef795a0bee3eb3e8d374c74b2f90b19e6c32*
+
+**It does not oblige borrow-checking, lifetime inference, or any runtime observation.** Those
+are either a further static fact a `SemanticallyResolved` producer may or may not also resolve
+— stated separately, per the family grain above, not folded into what the level means generally
+— or they are `RuntimeObserved`'s territory entirely. A producer that resolves names and types
+but does not attempt borrow analysis has still met `SemanticallyResolved`; it has simply not
+produced every fact the family could eventually offer.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#22
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What `FactVariant::SemanticallyResolved` Obliges · hash: sha256:a4ee865af21253644b5838e42e34ec7ce1f1a8b809032a9bcd23e02865b24b18*
+
+**It obliges the same honesty about partial resolution that `Observation` and `Applicability`
+already state elsewhere.** A producer that resolved most but not all of a subject's names —
+because a macro expansion was opaque to it, or a cross-crate reference could not be followed —
+does not report the resolved names as though the subject were fully resolved. It reports
+`Applicability::PartiallySupported` for the subject and states, in its own payload, what was
+not covered — the same shape `Applicability::PartiallySupported`'s own doc comment already
+requires ("what was not covered is recorded separately and is not implied to be clean") — and
+does not fall back to `Syntactic` for the whole subject either, since some of the subject
+genuinely was resolved. A producer that cannot tell whether it resolved a given name — no
+method available to check its own answer — records that item's field as `Observation::Absent`
+or `NotObserved` per `OD-SYNTAX-002`'s distinction, never as a resolved answer it is not sure
+of.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#23
+
+*revision: authored · kind: heading · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#24
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What This Record Does Not Do · hash: sha256:5e2681dabfd2bd8ff55f0c7f5b11b75f9090591e31ac04cb36fda1a966f94fd8*
+
+It does not build a capability, a payload schema, or a crate under `crates/capabilities`. The
+first program-semantics producer is separate work, reserving its own territory, and this record
+is what that work is measured against — the same relationship `ARC-CONFORMANCE-001` holds to
+every capability argument made under it.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#25
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What This Record Does Not Do · hash: sha256:b25c6d3823ec2dae4033e67781ec896d087c401dbb0e59de1556b682abe8ad8a*
+
+It does not add a sixth `FactVariant` level, reorder the five that exist, or change
+`Guarantee`, `Applicability`, `EvidenceClass` or `Observation` in any way. Every type this
+record names is unchanged by it.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#26
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What This Record Does Not Do · hash: sha256:5c3ac71a73adf66f08d42fbbcd6271826867ef0dc56eb5f6348e996155f81090*
+
+It does not decide which crate a program-semantics capability lives in, or whether it is one
+crate or several. `OD-CAPABILITY-002`'s criterion — a capability contract is not a provider's
+property, and lives beside its provider only while contention has not yet named a second one —
+governs that question exactly as it already governs `nomos-cap-syntax` and
+`nomos.cap.module.index`, unchanged by anything here.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#27
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What This Record Does Not Do · hash: sha256:c01b4d63e5aa320dc8af48ed8db0777a059417b669e74b85a61e09aec00d108d*
+
+It does not enumerate every claim this family may eventually make. The five worked shapes above
+are illustration of the boundary test, not a closed list, exactly as `ARC-CONFORMANCE-001`'s own
+four worked examples are illustration and not the definition of a conformance claim.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#28
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / What This Record Does Not Do · hash: sha256:e59d53e4bb16f1edc3d76b77371a6bfb2ed89a6bfe642e0314981a9da6965026*
+
+It does not promote `Observation` out of `nomos-cap-syntax`. That crate is still the only
+provider that needs it, `OD-CONTRACTS-001`'s admission criterion is still not met by one
+provider, and this record only states that a second provider needing the identical shape is
+what would meet it — the same deferred promotion `OD-ANALYSIS-002` already recorded for
+`nomos.cap.module.index`'s contract.
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#29
+
+*revision: authored · kind: heading · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#30
+
+*revision: authored · kind: prose · heading: Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types / Status · hash: sha256:63f31d4f4d714f01a7ac65f2710eb324179621821c9bebca2462d9526104911b*
+
+Closed by `P12-PROGRAM-SEMANTICS`.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 
@@ -22833,305 +23178,6 @@ next touches the relation vocabulary.
 
 Accepted, landed by `P10-PHANTOM-FLOOR`. Amended at version 2 while closing
 `P10-RULES-001-STALE`, in the record's own account of what it left owed.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two · hash: sha256:bbf3c23a88a5bc5a44d3af040396392013ed9e323e264efa9d5ce4a9836f1211*
-
-# A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
-
-## Question
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#3
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:f72e91e5454b9f270f7504ab2bef1f99666e94a13bc107a02c3990744ae42525*
-
-`P12-DRIFT-CAPABILITY` opened against a measurement about this repository's own strongest
-check. `tests/contract/tests/boundaries/bands.rs` authors `BANDS`, a table of every workspace
-member's band, with a doc comment giving the reason by hand: "a band is a design decision and
-there is nothing in the source to infer it from." `tests/contract/tests/boundaries/graph.rs`
-loads the real workspace through `Workspace::Load()` and asserts, among other things, that
-`Test_Dependencies_Should_Run_Strictly_Downward` — every edge in the observed graph runs to a
-strictly lower band than its source — and that `Test_Every_Member_Should_Declare_A_Band` — no
-crate joins the workspace outside the table.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#4
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:4a587775da2f581281c9a3f34ffeea75285944bd26ac87aacf1174ea88acbe5a*
-
-That is real architecture enforcement, and the class of finding it produces — a forbidden
-dependency direction, a same-band edge between two providers of one capability, a crate
-outside the declared ordering — is unavailable to any compiler or linter, because the
-declaration the finding is checked against is not written anywhere the language can read. But
-the check itself has no contract, no provider, no `Applicability`, no `Guarantee`. It knows
-this workspace's crate names by literal string, and `Workspace::Load()` reads `Cargo.toml`
-files directly from a hard-coded root. A second repository wanting the same property has
-nothing to point at; it would have to copy `bands.rs` and `graph.rs` and edit the table by
-hand for its own crates.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#5
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Question · hash: sha256:b41ea0a9b0f2909146ed8e7bad2f49445c90b664ff8975724ba65340708710f1*
-
-The question this record answers is the seam `P12-DRIFT-CAPABILITY`'s own text names: where a
-declared architecture is stated, how the observed one is established as facts, and which of
-those two Nomos owns.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
-
-## The Decision
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / A declared architecture is expressed as data, not as a bespoke Rust test · hash: sha256:3014194fd1ec78df21931a204c923924f4237ef312fb2078e550f98d56c4d864*
-
-### A declared architecture is expressed as data, not as a bespoke Rust test
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#8
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / A declared architecture is expressed as data, not as a bespoke Rust test · hash: sha256:70f91f07162e8ae9ff39285dc0cf889503804892990478ae1d4ef4a72a78224f*
-
-`bands.rs` already says what a declared architecture *is*, in its own doc comment, without
-meaning to state it generally: a design decision, authored because there is nothing in the
-source to derive it from. Stripped of being a Rust `const` table compiled into one crate's
-test binary, what `BANDS` holds is three things — a finite set of named components, a partial
-order over them expressed as a rank per component (the "scaled by ten" comment exists so the
-order can be edited without renumbering everything), and a finite set of named exceptions to
-the strict-downward rule that the order alone cannot express: `CONTRACTS_ALLOWLIST` (one
-component may reach a fixed external set and nothing else), `PLATFORM_ADAPTER` (exactly one
-named component may cross a boundary no other may), and the same-band prohibition
-`graph.rs`'s comments give a reason for twice — two providers of one capability must not be
-able to name each other, because a band forbids edges between its own members and that is
-what stops the second answer from being derivable from the first.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#9
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / A declared architecture is expressed as data, not as a bespoke Rust test · hash: sha256:695a8fa09b0e5d25cd231578f0c62cb2665923f13d441df04be5ef313f428972*
-
-None of that content is Rust-specific, and none of it needs to be discovered from source. A
-declared architecture, generally, is that triple — components, an order over them, and named
-exceptions to it — held as data a governing record or a maintained declaration states, the
-way this repository already holds other declarations (a capability's contract, a corpus
-requirement's site) as data rather than as logic embedded in the test that checks them. The
-seam is exactly the one `OD-CAPABILITY-002` drew for a capability's contract: an agreement
-does not belong to the party enforcing it, and while a declared architecture lives only inside
-the Rust test that reads it, no second party — a second repository, a second language, a
-second workspace — can hold the same agreement without a second copy of the file.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / The observed dependency graph is a fact a capability establishes · hash: sha256:c60210057e2daae1eac009c27fbe240fd81df404fd41ba68640aa482c194a1d5*
-
-### The observed dependency graph is a fact a capability establishes
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#11
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / The observed dependency graph is a fact a capability establishes · hash: sha256:a2c0caafc65ae9be8212cccad80131535738911b54e3fc2975d8fea1c3c47b02*
-
-`OD-RULES-001` already settled the general principle this claim is one instance of: **a rule
-states what it needs and is refused an answer beneath it**, and does not open the file itself.
-`graph.rs` today violates exactly that shape — `Workspace::Load()` parses `Cargo.toml` files
-directly inside the assertion that judges them, the same posture `OD-RULES-001` found and
-corrected for `nomos-rules` reading source text straight instead of through a `FactReader`.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#12
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / The observed dependency graph is a fact a capability establishes · hash: sha256:a830f76144922e4ecacdd2b31c49cae488261eede02615d66ef092cdcd124fcb*
-
-The observed dependency graph — which packages exist, and which package each one names as a
-direct dependency — is not a property a rule is entitled to establish by opening manifests
-itself. It is a fact a capability provider establishes, at a stated `Guarantee`, and a rule
-consumes it through a `FactReader` the way `Check_Completeness_Mirrors` consumes
-`nomos.cap.syntax.items`. The right resolution level is `FactVariant::SemanticallyResolved`,
-not `Syntactic`: a package's real dependency edges are the *resolved* set Cargo's own manifest
-and lockfile resolution produces — optional dependencies, target-`cfg`'d dependencies and
-dev-dependencies are not the same edge, and a provider that only scanned manifest text for
-`dependencies = {...}` blocks could not tell them apart, which is exactly the gap
-`OD-RULES-001` refused `nomos-lang-rust-scan` a semantic floor over for the analogous reason.
-A provider establishing this fact reads Cargo manifests and build metadata — what
-`Workspace::Load()` already does today — but does so behind a capability boundary a rule
-requests rather than as code embedded inside the assertion.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / Where the comparison lives · hash: sha256:f4bf1927cfed66a3c13b4f1c53d4be1dc1cb10fbb61b3c95a2c02ca151b151f5*
-
-### Where the comparison lives
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#14
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / Where the comparison lives · hash: sha256:7c7f960b90a9db6cbbb510112e62ee1f6f1d298a64eaa0aff2a415baaa885fb5*
-
-The comparison is a Nomos rule, not a capability and not a fact by itself. It composes two
-inputs of different kinds — the declared architecture (policy: data this repository or a peer
-commits itself to) and the observed dependency graph (a fact a capability provider
-establishes) — into findings, exactly the general shape `ARC-CONFORMANCE-001` already gives a
-name: a conformance claim, composed from architecture, requirements, history, runtime evidence
-and policy, checked against each other rather than against a language's grammar or type
-system. `ARC-CONFORMANCE-001` names this exact pair, `bands.rs` and `graph.rs`, as its first
-worked example of the shape. This record does not introduce a new kind of claim; it states
-what the two inputs to that already-named claim are, and that one of them must arrive as a
-fact rather than as a direct read.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What happens when a repository declares no architecture · hash: sha256:6ca4178c0a1ded7984ca2123f1770ea9ff97763159ffa82915f775fb9637ffef*
-
-### What happens when a repository declares no architecture
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#16
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What happens when a repository declares no architecture · hash: sha256:2350041688f56f64e0939a17f153a9322e0b4dd2b5d051890fc7b87befe50cfa*
-
-The answer must not be that everything passes, and the vocabulary for saying so already
-exists and is used exactly for this. `Applicability::NotApplicable` — "The rule does not bind
-this subject. This is the only variant that is a positive statement about the absence of a
-judgment" — is the value reported. A repository holding no declared-architecture data gives
-the rule nothing to compare the observed graph against; the rule does not bind that
-repository, and it says so positively rather than reporting `Supported` over a comparison it
-never ran. `Applicability::Display_Label` keeps `NotApplicable` distinct from
-`DisplayLabel::Native` at every consumer, so this can never render identically to a clean
-pass.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#17
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What happens when a repository declares no architecture · hash: sha256:d3b409bc27cc41fc5002f0e7016b2d0fc0b810576d41229e1cbeb9247402111d*
-
-It is deliberately not `MissingCapability`: that variant means no installed provider offers a
-capability the rule requires, and the capability establishing the observed graph can be fully
-present and correct while no architecture has been declared — the gap is in the policy input,
-not the fact input. It is deliberately not `ConfigurationDisabled` either: that variant is a
-deliberate human choice to switch a rule off for a subject that otherwise has one, and a
-repository that has never declared an architecture has not switched anything off. `NotApplicable`
-is the one variant built for a subject the rule was never going to bind in the first place,
-which is what an undeclared architecture is.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What becomes of `boundaries.rs` · hash: sha256:451dfc4f4864d45fb8e2acbc6b2e85a8bad483d610b9288eb7becf49ad69760f*
-
-### What becomes of `boundaries.rs`
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#19
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What becomes of `boundaries.rs` · hash: sha256:94996c4545239299d01636dbca45d9caff6b5aba4c60d9e3bcf64c922cfc422f*
-
-It stays a bespoke guard. `P12-DRIFT-CAPABILITY`'s own `done_when` text is explicit that this
-item does not widen or change `boundaries/bands.rs` or `boundaries/graph.rs` — `P10-SERVICE-SEAM`
-holds that file — and this record does not reach past that boundary. Beyond the territory
-line, the reason is substantive and not only procedural: migrating `bands.rs` and `graph.rs`
-into instances of the general mechanism this record describes needs three things that do not
-exist yet — a capability that establishes the observed dependency graph as a fact at a stated
-`Guarantee`, a place to author a declared architecture as data rather than as a Rust `const`
-table, and a rule that consumes both through the seam `OD-RULES-001` already established for
-every other judgment in this tree. None of those three is built by this record. Stating the
-seam and building the mechanism are different items of work, and building it without first
-stating where the two halves belong is the "widen `boundaries.rs` into a configurable table"
-move `P12-DRIFT-CAPABILITY`'s own `why` text names as the obvious wrong move — the general
-mechanism must not be this repository's own guard wearing a parameter.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#20
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / The Decision / What becomes of `boundaries.rs` · hash: sha256:54b0de1394a872fda11c56ff8007cfb7538bd2ead3360d44d6c52d97dbdffa66*
-
-When the mechanism exists, this repository's own `BANDS`, `CONTRACTS_ALLOWLIST` and
-`PLATFORM_ADAPTER` content is the natural first declaration to migrate into it — it is
-already exactly the triple the general form needs, authored as data in a table for the reason
-`bands.rs` already gives — and `graph.rs`'s five assertions become this repository's own
-instance of the general rule, run over its own declaration, rather than a bespoke one. That
-migration is not committed to here, has no owner and no schedule; it is left for whichever
-future item builds the mechanism and finds this repository the first and most convenient
-place to point it at.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Why This Is A Nomos Claim · hash: sha256:39fa6a7e05148859b1537d817e869a61df18fa38eeb978e6365146aae6c20462*
-
-## Why This Is A Nomos Claim
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#22
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Why This Is A Nomos Claim · hash: sha256:bac2df47d6182519ad452b3e1100cbf608f5c31bc42c597046d88565a71be779*
-
-`ARC-CONFORMANCE-001` draws the line this record's claim sits on the Nomos side of: a
-conformance claim answers whether *this system*, built the way its own records say it should
-be, still holds the shape its own architecture commits it to — a question no compiler,
-linter or language server has any notion of, because none of them models a declared band, a
-same-band prohibition, or a named exception to a strict-downward rule. `bands.rs` and
-`graph.rs` are that record's own first worked example, cited by name: "`graph.rs`'s
-`Test_Dependencies_Should_Run_Strictly_Downward` asserts a dependency ordering no compiler
-enforces, because a band is a design decision authored in `bands.rs` rather than inferred from
-`Cargo.toml`." The test `ARC-CONFORMANCE-001` states for native analysis — that no provider
-exposes the fact, never that writing it natively would be convenient — is satisfied here for
-the same reason it already gave: no compiler has a notion of a declared band, so the
-comparison this record describes is Nomos's to make and not a provider's to be asked for
-instead. This record does not reopen that test or that worked example; it takes the general
-claim `ARC-CONFORMANCE-001` already names and states what its two composed inputs are for this
-one instance of it.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
-
-## What This Record Does Not Do
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#24
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:4ae2c0157fc1dfe60c754b501e8efb2addd1b079672708fba639f42392cd2b32*
-
-It does not touch `tests/contract/tests/boundaries/bands.rs` or
-`tests/contract/tests/boundaries/graph.rs`, and it does not widen either file into a
-configurable table. `P10-SERVICE-SEAM` holds that territory.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#25
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:f023583aa5266f6b1e74b4d362aabcf2c635bc5bd34e3421bb5bfe8098433a45*
-
-It does not build the capability that establishes the observed dependency graph as a fact, the
-data format a declared architecture would be authored in, or the rule that composes the two.
-It states where each belongs; building any of the three is separate work this record does not
-schedule.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#26
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:c60e7fc71cd6a726749f99b542b169cfe408b3b985c84422bbef1510d46a73e1*
-
-It does not commit this repository's own `BANDS` table to a migration date, or require one at
-all. It states only what that table already is, and what it could become once the general
-mechanism exists.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#27
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:4e1996eb31bafe76c8e28b392c7904520afea3ebff8da8c71e95101340a32126*
-
-It does not reopen `ARC-CONFORMANCE-001`, redraw its four worked examples, or change what a
-conformance claim means generally. It applies that record's already-general shape to the one
-claim `P12-DRIFT-CAPABILITY` asked about.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#28
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / What This Record Does Not Do · hash: sha256:0070eced63eddfb6a4742a8937ce607bcc3670c896f970c01ed1996e793d1253*
-
-It does not change `Applicability`, `Guarantee` or `FactVariant`. `NotApplicable` and
-`SemanticallyResolved` are used as they already exist.
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29
-
-*revision: authored · kind: heading · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
-
-## Status
-
-### docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#30
-
-*revision: authored · kind: prose · heading: A declared architecture is data, the observed dependency graph is a fact a capability establishes, and a rule compares the two / Status · hash: sha256:5bdab350d419dee34ad39b8e8c11b0f24803b469bcd517bccf6b30c827b5b41d*
-
-Accepted, landed by `P12-DRIFT-CAPABILITY`.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
