@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:69cb7b922aba2ca3e5e02342f72f042476b64708394e53d5dfeb397a451f7e45",
-  "inputs_digest": "sha256:ccc71d929f452d6cc3cff415f09a6aa6af78f33675d3b3a3e30c5b6bba5e8916",
+  "content_digest": "sha256:2b422de5308aca483d27d74c40b6b5f7ff95aa4625d870c289116db2cbf8f8f3",
+  "inputs_digest": "sha256:6d61889f4180b75af7fc06d79102a72a8a7369dd9bbb441e6895f1852a611c73",
   "sections": [
     [
       "Relations",
-      800
+      804
     ],
     [
       "Decisions",
-      114
+      115
     ]
   ],
   "inputs": [
@@ -1883,6 +1883,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-HOST-001 relates-to OD-HOST-003",
+      "hash": "sha256:0056fb5e677d2fb5fde8e9a7bdd62e1e106089638b171f8bb56b21256d6c3a31"
+    },
+    {
+      "content": "relations",
       "identity": "OD-HOST-001 relates-to OD-RULES-001",
       "hash": "sha256:4a1f0f9e500391b0fdc6c3f6e6a4981e540eff178ebc935b7f704092878a3fed"
     },
@@ -1890,6 +1895,21 @@
       "content": "relations",
       "identity": "OD-HOST-002 relates-to OD-HOST-001",
       "hash": "sha256:4f220ea4bef9738ef03c51c86496a3565ff12c1ce7511a57b027a1232cd4b928"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-002 relates-to OD-HOST-003",
+      "hash": "sha256:5d29513aab0cb11c620bdeb3eee3f44c5c02df15b512a0e342effe84521889ee"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-003 relates-to OD-HOST-001",
+      "hash": "sha256:04a8be6ee8ec3a637babe5c6e875ef40251177fe3ace138e823e7323d4594815"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-003 relates-to OD-HOST-002",
+      "hash": "sha256:c9be9a140831028e89d41dd57e69750d801ea6a25624fff48111f216c8a6595c"
     },
     {
       "content": "relations",
@@ -4255,6 +4275,11 @@
       "content": "nodes",
       "identity": "OD-HOST-002",
       "hash": "sha256:c8107553b29b3851d6501a60ec27559406708689e25166004d71f6d289f8bd53"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-HOST-003",
+      "hash": "sha256:018d47a36c536f4321d2de9a8a6b9e50c1344870f512f86167327bcf2baf1c8e"
     },
     {
       "content": "nodes",

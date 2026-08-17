@@ -65,6 +65,7 @@ profile: domain-specification
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:ea5edc948dd0c5b537c969b4942f827bf989e7fe2732c5aef3b08585f6b39ef0 |
+| docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -581,6 +582,12 @@ profile: domain-specification
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9 | authored | 2 | The state families this applies to |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20 | authored | 2 | What is not privileged state |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25 | authored | 2 | What this constrains |
+| docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1 | authored | 1 | An editor surface is a client of the canonical services, not a parser of the CLI's rendered output |
+| docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4 | authored | 2 | What an editor surface is |
+| docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7 | authored | 2 | What a diagnostic carries |
+| docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#12 | authored | 2 | Which navigations and actions are in scope |
+| docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#16 | authored | 2 | What this does not decide |
+| docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#18 | authored | 2 | What would make this wrong |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -15472,6 +15479,257 @@ evidence, packages, connectors, or the record store — must guarantee once it e
 surface calling through it holds nothing the seam itself cannot regenerate. Building the
 seams still missing for families 2–4 and 6–9 above is future work this record makes
 checkable, not work it does.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1
+
+*revision: authored · kind: heading · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output · hash: sha256:74bb893d7e3fd48545353cd1bbd400767ced965014a30248bedc577fd5d6a37e*
+
+# An editor surface is a client of the canonical services, not a parser of the CLI's rendered output
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#2
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output · hash: sha256:882aa8d4a8ce55a0ef27498ad8ce422a76cd4dc0b0ef31c009550b2be0b453ad*
+
+`OD-HOST-001` gave the work group a seam so a second adapter could call it without
+duplicating platform choice, verb execution or rendering. `OD-HOST-002` stated what any
+seam must guarantee once it exists — a surface holds no state a canonical service cannot
+reconstruct — and named nine state families, most of them still without a seam. An editor
+surface is where both records stop being about a CLI that exits and start being about a
+process that does not: it is the second adapter `OD-HOST-001` anticipated, and it is the
+worst case on both counts that record raises, because it duplicates platform choice, verb
+execution and rendering if the seam is skipped, and unlike `nomos-cli` it can accumulate
+the privileged state `OD-HOST-002` forbids simply by staying open.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#3
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output · hash: sha256:c50a35634a0bf9fd51aa10d3da435877e9bf462797c2252fc9e6f783003c973a*
+
+The content an editor surface would project already exists and is currently unreachable
+from outside `nomos-cli`. `nomos_contracts::Finding`
+(`crates/contracts/nomos-contracts/src/finding.rs:56`) and the vocabularies it carries —
+`Applicability` (`finding/applicability.rs:33`), `EvidenceClass` (`finding/evidence.rs:24`),
+`Guarantee` (`guarantee.rs:23`) — are consumed today only inside `nomos-cli::check::report`
+and `vacuity.rs`. `nomos_capability::Registry` and `Requirement`
+(`crates/substrate/nomos-capability/src/registry.rs`, `requirement.rs:14`) resolve which
+provider satisfies which capability, and only `nomos-cli::check::composition` builds one.
+The governing-record corpus is readable through `nomos-spec-store` and `nomos-spec-project`
+today only via `nomos spec markdown` / `nomos spec record`, both CLI verbs. This is exactly
+`OD-HOST-002`'s families 2, 4 and 8 — capability resolution, finding/requirement state, and
+decision/record state — named there as gaps, not closed there. This record does not close
+them. It states the shape an editor surface must have once they are closed, and what it
+must not do while they are not: fall back to running `nomos` as a subprocess and parsing
+what it printed, which would make the CLI's presentation a protocol and be very hard to
+undo once an editor depended on the text.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4
+
+*revision: authored · kind: heading · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What an editor surface is · hash: sha256:517445505c6ccc7b212b3233bbbf10d52d12c17d888d1063d43d6cc66083fc4d*
+
+## What an editor surface is
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#5
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What an editor surface is · hash: sha256:bad4cf86d234fdfd663bd1f6da5d35871484e7759271af201d1df7cc814dc673*
+
+An editor surface is a client of the same canonical services any other client calls —
+`nomos-work-orchestration` where a seam exists (`OD-HOST-001`), and, as each is built, the
+crates `OD-HOST-002` already named for the families that do not yet have one:
+`nomos-capability` for provider resolution, `nomos-contracts` for findings and their
+vocabulary, `nomos-spec-store` / `nomos-spec-project` for the record set, and
+`nomos-ledger` (via whatever orchestration crate `WorkCommand::Add`'s `ItemKind::Correction`
+ends up routed through) for opening a correction item. Concretely, three obligations:
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#6
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What an editor surface is · hash: sha256:e3b3f17f7e10cd5cb61e52fb2ef99cba42caa8387ea96f66e6b29fbcc821706f*
+
+1. **It consumes canonical services, not a rendered surface.** Every fact an editor shows —
+   an architecture component, a governing requirement, a record, an evidence class, an open
+   item — is obtained by calling the library crate that owns it, the same way
+   `nomos-work-orchestration::Run` is called today. It is never obtained by invoking `nomos`
+   as a subprocess and parsing stdout. A subprocess call onto a rendering command
+   (`nomos check`, `nomos spec markdown`) is the same defect `OD-HOST-001` fixed for the work
+   group, arriving through an integration instead of a copy — the third duplication in that
+   record's list, not a new one.
+2. **Every action is a command through a canonical service.** Moving a dependency behind a
+   canonical capability, creating a trace entry a rule like
+   `nomos-spec-validate::EveryStatementTracesToSource`
+   (`crates/spec/nomos-spec-validate/src/rule/every_statement_traces_to_source.rs:24`) found
+   missing, replacing a leaked vendor type (the family `OD-CONNECTOR-001` names for
+   canonical-service boundaries generally), or opening a correction item
+   (`nomos_ledger::ItemKind::Correction`) — each is issued as a call into the service that
+   already performs it, not as logic that lives only inside the editor adapter. This is
+   `OD-HOST-002`'s second clause, applied to the same surface its ninth state family already
+   flagged as unmet: `CheckCommand`, `SpecCommand` and `request::Command` are parsed and
+   executed directly inside `nomos-cli` today, with no orchestration crate of their own. An
+   editor surface does not fill that gap by reimplementing those commands' logic in the
+   editor process; it is unmet for the editor the same way it is unmet for any second
+   adapter, until an orchestration crate exists for each and the editor calls that.
+3. **It holds no state the services cannot rebuild.** `OD-HOST-002`'s test applies directly,
+   and applies harder here than to any surface that record examined, because an editor is
+   exactly the long-lived process that record says makes accumulation cheap: a resolved
+   capability registry, a `Finding` set, or a rendered record kept in the editor's memory
+   instead of asked for again is privileged state, whether or not it happens to be correct
+   at the moment it is shown. What survives `OD-HOST-002`'s "not privileged" carve-out is
+   unchanged by being in an editor: a cache of an answer a service already gave and can give
+   again, which panel is open, a cursor position, an unsent action the user has not yet
+   confirmed. The line is the same test that record states: if the editor exited right now,
+   is any fact lost that no other client could get back by calling the same canonical
+   service?
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7
+
+*revision: authored · kind: heading · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What a diagnostic carries · hash: sha256:34ea9788d21e6532f5f5f63785811665ea21cc711c3dd77c9fbe0d633f367ae7*
+
+## What a diagnostic carries
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#8
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What a diagnostic carries · hash: sha256:7bcf9dd3079437ba8d41a20333741aa3d33c16d6ebfea56c1fc601d2e05e4b6e*
+
+A message and a span is the floor any linter or language server already provides — and
+notably, it is more than `nomos_contracts::Finding` states positionally today:
+`Finding::locations` is `Vec<String>`, repo-relative paths with no line or column, because
+`identity.rs`'s rule for this workspace is that nothing is identified by its path and line.
+A precise span, where an editor needs one to place a squiggle, comes from the editor's own
+environment — its language server's buffer coordinates — not from a `Span` type this record
+invents; none exists anywhere in this workspace, and this record does not add one.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#9
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What a diagnostic carries · hash: sha256:56b0420ce9885da9ec0d086d799c402401a9b41f8cd425c811ff7d4294d640a0*
+
+What a Nomos diagnostic adds on top of message-and-span is what `Finding` already carries
+and a rendered line already throws away, by that type's own documentation: "every one of
+those answers is lost the moment it becomes prose." Concretely, a diagnostic in this
+architecture is a projection of:
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#10
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What a diagnostic carries · hash: sha256:f3e728e9ae98d194e121d2dfeedafcb596c044100985a055e57c9d0c66dfe3dc*
+
+- **the finding itself** — `rule` (`RuleId`) and `subject`/`subject_name` (`SubjectId`
+  and its preimage), naming which rule and which subject, never derived from where the
+  subject currently sits in a file;
+- **whether the rule reached its subject** — `Applicability`, so a diagnostic never renders
+  "clean" and "not evaluated" the same way; `MissingCapability`, `ProviderUnavailable` and
+  the rest of that enum are load-bearing states, not edge cases a text message would
+  collapse;
+- **how the claim was come by** — `EvidenceClass`, from `AgentJudged` (the floor) to
+  `Authoritative`, so a reader can tell a measurement from a guess without asking a second
+  question;
+- **what the wiring would really do about it** — `GateCategory` (`Review`, `Unreachable`,
+  `Advisory`, `Blocking`), which is not implied by severity and is the field that tells a
+  reader whether ignoring this diagnostic is safe or is a build about to go red;
+  `Finding::Can_Fail_A_Build` is the existing predicate an editor surface calls rather than
+  re-deriving from the other fields;
+- **the governing requirement or record** — the `RuleId` resolved to whatever decided the
+  rule exists, read through `nomos-spec-store` / `nomos-spec-project`, the same way `nomos
+  spec markdown --id <node-id>` reads it today. `Finding` carries no direct pointer to a
+  record id yet; that resolution is part of the seam family 4 and family 8 of `OD-HOST-002`
+  still need, not a claim this record makes as already wired;
+- **the guarantee behind it, where the rule depended on a capability** —
+  `nomos_capability::Requirement::minimum` and the `Guarantee` an installed provider actually
+  offered (`variant`, `soundness`, `completeness`, `incremental`), so a diagnostic backed by
+  a weaker-than-nominal provider says so instead of reading identical to one backed by the
+  strongest;
+- **the correction, if one exists** — an open `nomos_ledger` item of `ItemKind::Correction`
+  addressing this finding's subject, the same kind this item and its own predecessors
+  (`P12-EDITOR-PROJECTION`, `-2`) are, surfaced through the work group's existing seam rather
+  than a new one.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#11
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What a diagnostic carries · hash: sha256:7d8dc512d591e470eb1cdfca44220bcb108c6932ebb44efa070541043faf9b8b*
+
+A diagnostic carrying only text gives up every one of these, which is the gap `Finding`
+already exists to close for `nomos check`'s own output; an editor diagnostic that does not
+project this is a linter's diagnostic wearing this repository's name.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#12
+
+*revision: authored · kind: heading · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / Which navigations and actions are in scope · hash: sha256:72f6960f8bf21c67a2127ecf51bd3e44b21e566989ce8601542841c0a6a5c3ae*
+
+## Which navigations and actions are in scope
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#13
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / Which navigations and actions are in scope · hash: sha256:1095149561ec203cf43139ede9e70f83bf20850613abdde0aac3c3dc91dc100a*
+
+In scope, each naming the service it is a projection or command onto:
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#14
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / Which navigations and actions are in scope · hash: sha256:3082235af8c4a0eba3a2270c2c3fdfa6c2ba76f0357e7af453e482eee53a6179*
+
+- showing, for a symbol under the cursor, the finding(s) about it, their rule, evidence,
+  gate and governing record — a projection of `Finding` plus the record store;
+- showing the open item(s) touching a subject — a projection of `nomos-ledger` through
+  whatever seam exposes `work list`/`show`'s filtering, the same shape
+  `nomos-work-orchestration::BoardView`/`ShowView` already return;
+- moving a dependency behind a canonical capability — a command through `nomos-capability`'s
+  resolution machinery;
+- creating a missing trace entry a rule such as `EveryStatementTracesToSource` found absent —
+  a command through `nomos-spec-validate`'s own mechanism, not a text edit the editor
+  performs by pattern-matching the rule's message;
+- replacing a leaked vendor type — a command through whichever canonical-service boundary
+  the type should have crossed, per `OD-CONNECTOR-001`'s vocabulary for that class of defect;
+- opening a correction item for a finding — a command through the work group's seam,
+  constructing a `WorkCommand::Add` with `ItemKind::Correction`, not a locally-authored
+  ledger edit.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#15
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / Which navigations and actions are in scope · hash: sha256:c8f2ca5a694368e205ce348373c8f91a5ffe25fc526ad745b611a0bae4b92764*
+
+**Explicitly not in scope:** this does not reimplement completion, type information or
+responsiveness that a language server already provides. Symbol resolution, go-to-definition
+for ordinary code references, incremental reparse on keystroke, and the positional
+correlation between a byte offset and a line/column are a language server's job, done by a
+language server, and an editor integration for this architecture composes with one rather
+than replacing it or shadowing its index with a second one computed by this project's own
+tooling. Where this record's diagnostic needs a position, it rides on the coordinates the
+language server the editor is already running supplies; it does not stand up a parallel
+indexer to get one.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#16
+
+*revision: authored · kind: heading · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What this does not decide · hash: sha256:3235fcb63e84a9e29c9f737925b329390df86f72147b39f5f93e21451d413270*
+
+## What this does not decide
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#17
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What this does not decide · hash: sha256:2b8bf82a1f938c403e903aa91b209d02e96e64439c5088706c6109c3ea49fef3*
+
+It does not build the editor, or the orchestration crates families 2, 3, 4, 8 and 9 of
+`OD-HOST-002` still lack — `nomos-capability`, the check pipeline, and the record store each
+need a seam of `nomos-work-orchestration`'s shape before an editor can call them the way
+this record requires, and building any of those crates is not this item's territory. It does
+not pick a transport (a language-server custom extension, IPC, an editor plugin's own RPC) —
+the same way `OD-HOST-001` left rendering and transport to the adapter, this record leaves
+protocol choice to whichever concrete integration is built against the seams once they
+exist. It does not design the correlation between `Finding::locations`' repo-relative paths
+and a language server's positional coordinates; that is part of the concrete integration,
+not of what a diagnostic conceptually carries.
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#18
+
+*revision: authored · kind: heading · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What would make this wrong · hash: sha256:fd1009d67c8d32fbc57bcff2f8986dd86cb7ac92053072b10480809c7a982240*
+
+## What would make this wrong
+
+### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#19
+
+*revision: authored · kind: prose · heading: An editor surface is a client of the canonical services, not a parser of the CLI's rendered output / What would make this wrong · hash: sha256:af4b098d2ee9a4547c3e7d015012e9b9e32e788e59686c45a17761f91fe8abca*
+
+If an editor integration is ever built by shelling out to `nomos check` or `nomos spec
+markdown` and parsing what was printed, that is the failure this record exists to name,
+whether or not the parsing happens to work today. Equally, if an editor session keeps a
+resolved `Finding` set, a capability registry, or a rendered record in memory across calls
+instead of asking the owning service again, that is `OD-HOST-002`'s privileged state,
+arrived at by the surface this record predicted would be the first to have a reason to keep
+it.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

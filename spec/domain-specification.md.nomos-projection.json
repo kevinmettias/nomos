@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:fa6d7560ab601c3386c10da176ab63ff838e20b82c4075645f2e7cdb8b0edba8",
-  "inputs_digest": "sha256:3f19c9727de8457c32a9b6f048f7b724b42a1e11a7584a4c767dcdf94e4a3ff9",
+  "content_digest": "sha256:9bcd37e6f32290d7a2b65e02fc882946568a53b763516fa1f5a695a93539334a",
+  "inputs_digest": "sha256:ad6072808fc77a58287d34fd897953ec0cfd86dc4725c993cc1424841251ed10",
   "sections": [
     [
       "Documents",
-      121
+      122
     ],
     [
       "Sections",
-      1089
+      1095
     ],
     [
       "Source blocks",
-      3961
+      3980
     ]
   ],
   "inputs": [
@@ -294,6 +294,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored",
       "hash": "sha256:ea5edc948dd0c5b537c969b4942f827bf989e7fe2732c5aef3b08585f6b39ef0"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored",
+      "hash": "sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10"
     },
     {
       "content": "documents",
@@ -2849,6 +2854,36 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25",
       "hash": "sha256:d657a91b2e11213fe2bafeace787baf4e6d7ca481c41762d9cd87467affb6f8e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1",
+      "hash": "sha256:e58ad144004c916223c48b7997b18033cadd866e97c99616ece8136e542b9576"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4",
+      "hash": "sha256:e857cbf2240a368fe76c91f0d85317ff82af1f8d43e8ec238ff969e2cd9e3bd4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7",
+      "hash": "sha256:354f55556e10457f95de2eb1b0f3a047f8579426476408a04c3811ca49a4f781"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#12",
+      "hash": "sha256:89b6a91c01868cb76887751216121b3ab1f2c68e160dca0b2f56c94daac94ffa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#16",
+      "hash": "sha256:c15ded1b374e45cfac16dda1b8863637a4440219546c5d0d7375808c120c84a0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#18",
+      "hash": "sha256:4c903a3f39a8db2ffc9a8f1f3afbadc8356eea27c14fbe6e85880ae839c0a0c8"
     },
     {
       "content": "headings",
@@ -14009,6 +14044,101 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#26",
       "hash": "sha256:fcc11415a8acd6058ea9f8cbadabc61184557a70b6787683846d91f7824aab6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1",
+      "hash": "sha256:74bb893d7e3fd48545353cd1bbd400767ced965014a30248bedc577fd5d6a37e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#2",
+      "hash": "sha256:882aa8d4a8ce55a0ef27498ad8ce422a76cd4dc0b0ef31c009550b2be0b453ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#3",
+      "hash": "sha256:c50a35634a0bf9fd51aa10d3da435877e9bf462797c2252fc9e6f783003c973a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4",
+      "hash": "sha256:517445505c6ccc7b212b3233bbbf10d52d12c17d888d1063d43d6cc66083fc4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#5",
+      "hash": "sha256:bad4cf86d234fdfd663bd1f6da5d35871484e7759271af201d1df7cc814dc673"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#6",
+      "hash": "sha256:e3b3f17f7e10cd5cb61e52fb2ef99cba42caa8387ea96f66e6b29fbcc821706f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7",
+      "hash": "sha256:34ea9788d21e6532f5f5f63785811665ea21cc711c3dd77c9fbe0d633f367ae7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#8",
+      "hash": "sha256:7bcf9dd3079437ba8d41a20333741aa3d33c16d6ebfea56c1fc601d2e05e4b6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#9",
+      "hash": "sha256:56b0420ce9885da9ec0d086d799c402401a9b41f8cd425c811ff7d4294d640a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#10",
+      "hash": "sha256:f3e728e9ae98d194e121d2dfeedafcb596c044100985a055e57c9d0c66dfe3dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#11",
+      "hash": "sha256:7d8dc512d591e470eb1cdfca44220bcb108c6932ebb44efa070541043faf9b8b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#12",
+      "hash": "sha256:72f6960f8bf21c67a2127ecf51bd3e44b21e566989ce8601542841c0a6a5c3ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#13",
+      "hash": "sha256:1095149561ec203cf43139ede9e70f83bf20850613abdde0aac3c3dc91dc100a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#14",
+      "hash": "sha256:3082235af8c4a0eba3a2270c2c3fdfa6c2ba76f0357e7af453e482eee53a6179"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#15",
+      "hash": "sha256:c8f2ca5a694368e205ce348373c8f91a5ffe25fc526ad745b611a0bae4b92764"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#16",
+      "hash": "sha256:3235fcb63e84a9e29c9f737925b329390df86f72147b39f5f93e21451d413270"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#17",
+      "hash": "sha256:2b8bf82a1f938c403e903aa91b209d02e96e64439c5088706c6109c3ea49fef3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#18",
+      "hash": "sha256:fd1009d67c8d32fbc57bcff2f8986dd86cb7ac92053072b10480809c7a982240"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#19",
+      "hash": "sha256:af4b098d2ee9a4547c3e7d015012e9b9e32e788e59686c45a17761f91fe8abca"
     },
     {
       "content": "blocks",
