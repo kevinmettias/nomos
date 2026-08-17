@@ -12868,7 +12868,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Authored with no verification predicate (verification: null) -- my own authoring mistake, the same one P12-DUPLICATE-AUTHORITY-2 independently hit and self-corrected. finish refuses unconditionally on that and there is no work verb to set one on an existing item. Also its dependency P12-NO-PRIVILEGED-SURFACE-2 was itself declined and superseded by P12-NO-PRIVILEGED-SURFACE-3 (now Done) for the identical missing-predicate reason. Re-authoring as P12-EDITOR-PROJECTION-3 with a real predicate and depends_on corrected to the actual successors."
+        }
+      },
       "depends_on": [
         "P10-SERVICE-SEAM-2",
         "P12-NO-PRIVILEGED-SURFACE-2"
@@ -12879,7 +12883,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-strand-cleanup",
+        "declined_at": 1787000983
+      }
     },
     {
       "id": "P12-DUPLICATE-AUTHORITY-3",
@@ -12999,6 +13006,45 @@
         },
         "revision": null
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-EDITOR-PROJECTION-3",
+      "title": "The editor surface is the second adapter and the first that does not exit, and the easy version makes rendered text a protocol",
+      "why": "This is P12-EDITOR-PROJECTION, re-authored: its dependencies P10-SERVICE-SEAM and P12-NO-PRIVILEGED-SURFACE were each declined and superseded (by P10-SERVICE-SEAM-2, now Done, and by P12-NO-PRIVILEGED-SURFACE-2, respectively) -- OD-LEDGER-020's remedy for a stranded dependent. The subject and argument are unchanged.\n\nAn editor surface is the second adapter OD-HOST-001 (via P10-SERVICE-SEAM-2) is about, and it is the worst-case one on both counts that record raises. It duplicates platform choice, verb execution and rendering if the seam is not used, and unlike the CLI it does not exit - so it is also the first surface that can accumulate the privileged state P12-NO-PRIVILEGED-SURFACE-2 exists to forbid.\n\nIt is worth deciding rather than deferring because the interesting content is already built and is currently unreachable. Finding, EvidenceClass, Guarantee, Applicability, the requirement registry, the record set, the work ledger and the projection profiles all exist. What none of them has is a way to be looked at from inside the code they are about. Hovering a symbol and being told the architecture component, the governing requirement, the record that decided it, the evidence behind it and the open item that touches it is not new analysis - it is a projection of state this repository already holds, onto a subject the editor already knows.\n\nThe same is true of the actions. Moving a dependency behind a canonical capability, creating a missing trace entry, replacing a leaked vendor type, opening a correction item - each is an engineering refactoring rather than a syntactic one, and each is an existing command with a subject the editor can supply.\n\nThe failure to avoid is the obvious first implementation: an adapter that shells out to the CLI and parses its rendered output. That makes the CLI's presentation a protocol, which is the third duplication in OD-HOST-001's list arriving as an integration rather than as a copy, and it is very hard to undo once an editor depends on the text.",
+      "done_when": "A registered governing record states what an editor surface is in this architecture: which canonical services it consumes, that it consumes them as services rather than by invoking and parsing a rendered surface, and that it holds no state the services cannot rebuild.\n\nIt states what a diagnostic carries beyond a message and a span - the finding, the rule, the governing requirement or record, the evidence class and guarantee, and the correction if one exists - since a diagnostic that carries only text is a linter's diagnostic and gives up everything this repository has that a linter does not.\n\nIt says which navigations and actions are in scope and which are explicitly not, with the negative half stated: this does not reimplement completion, type information or responsiveness that a language server already provides, and it composes with one rather than replacing it.\n\nIt cites OD-HOST-001 for the seam and OD-HOST-002 (via P12-NO-PRIVILEGED-SURFACE-2) for the state rule rather than re-deciding either.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-003",
+          "crates/spec/nomos-spec-store/records/OD-HOST-003.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P10-SERVICE-SEAM-2",
+        "P12-NO-PRIVILEGED-SURFACE-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "nomos",
+          "spec",
+          "freshness",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
