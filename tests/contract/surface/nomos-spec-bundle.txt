@@ -120,8 +120,11 @@ pub struct field nomos_spec_bundle::RecordRelation::target: String
 pub struct field nomos_spec_bundle::Relation::from_node_id: String
 pub struct field nomos_spec_bundle::Relation::relation_type: String
 pub struct field nomos_spec_bundle::Relation::to_node_id: String
+pub struct field nomos_spec_bundle::RelationType::domain: Vec<String>
 pub struct field nomos_spec_bundle::RelationType::inverse_of: Option<String>
+pub struct field nomos_spec_bundle::RelationType::max_per_node: u32
 pub struct field nomos_spec_bundle::RelationType::name: String
+pub struct field nomos_spec_bundle::RelationType::range: Vec<String>
 pub struct field nomos_spec_bundle::RelationType::tier: String
 pub struct field nomos_spec_bundle::SourceBlock::content_hash: String
 pub struct field nomos_spec_bundle::SourceBlock::document: DocumentRef

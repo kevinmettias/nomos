@@ -265,7 +265,13 @@ fn Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row()
         return;
     };
     let root_uid = Root_Suite_Uid(&store);
-    store.Put_Relation_Type("depends_on", "seed").expect("names the type");
+    // `OD-SPEC-012` (`nomos-spec-store`) made domain, range and cardinality required rather
+    // than defaulted, so this test's own ad hoc type now declares them too. `D-130` and the
+    // sibling record it depends on are both decisions, and one dependency per test is all
+    // this fixture ever writes.
+    store
+        .Put_Relation_Type("depends_on", "seed", &["decision"], &["decision"], 4)
+        .expect("names the type");
     store
         .Upsert_Node(NodeRow {
             node_id: "D-130",

@@ -120,8 +120,11 @@ pub(super) fn Insert_Node_History(transaction: &Transaction<'_>, bundle: &Bundle
 
 pub(super) fn Insert_Relation_Types(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
-    let mut insert = transaction
-        .prepare("INSERT INTO relation_types (name, tier, inverse_of) VALUES (?1, ?2, ?3)")?;
+    let mut insert = transaction.prepare(
+        "INSERT INTO relation_types
+             (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+    )?;
 
     for record in bundle.Records()
     {
@@ -131,10 +134,18 @@ pub(super) fn Insert_Relation_Types(transaction: &Transaction<'_>, bundle: &Bund
             continue;
         };
 
+        let domain_json = serde_json::to_string(&relation_type.domain)
+            .map_err(|error| return BundleError::Sql(error.to_string()))?;
+        let range_json = serde_json::to_string(&relation_type.range)
+            .map_err(|error| return BundleError::Sql(error.to_string()))?;
+
         insert.execute(params![
             relation_type.name,
             relation_type.tier,
-            relation_type.inverse_of
+            relation_type.inverse_of,
+            domain_json,
+            range_json,
+            relation_type.max_per_node,
         ])?;
     }
 

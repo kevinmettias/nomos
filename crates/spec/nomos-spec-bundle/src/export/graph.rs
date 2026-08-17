@@ -109,19 +109,37 @@ pub(super) fn Relation_Types(connection: &Connection, records: &mut Vec<Record>)
 {
     use crate::RelationType;
 
-    return Collect(
-        connection,
-        records,
-        "SELECT name, tier, inverse_of FROM relation_types ORDER BY name",
-        |row| {
+    let mut statement = connection.prepare(
+        "SELECT name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node
+         FROM relation_types ORDER BY name",
+    )?;
+    let rows = statement
+        .query_map([], |row| {
             let mut columns = Columns::Of(row);
-            return Ok(Record::RelationType(RelationType {
-                name: columns.Next()?,
-                tier: columns.Next()?,
-                inverse_of: columns.Next()?,
-            }));
-        },
-    );
+            let name = columns.Next()?;
+            let tier = columns.Next()?;
+            let inverse_of = columns.Next()?;
+            let domain_json: String = columns.Next()?;
+            let range_json: String = columns.Next()?;
+            let max_per_node = columns.Next()?;
+
+            return Ok((name, tier, inverse_of, domain_json, range_json, max_per_node));
+        })?
+        .collect::<Result<Vec<_>, _>>()?;
+
+    for (name, tier, inverse_of, domain_json, range_json, max_per_node) in rows
+    {
+        records.push(Record::RelationType(RelationType {
+            name,
+            tier,
+            inverse_of,
+            domain: Decoded(&domain_json)?,
+            range: Decoded(&range_json)?,
+            max_per_node,
+        }));
+    }
+
+    return Ok(());
 }
 
 pub(super) fn Relations(connection: &Connection, records: &mut Vec<Record>) -> Result<(), BundleError>

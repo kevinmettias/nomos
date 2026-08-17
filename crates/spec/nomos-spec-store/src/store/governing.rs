@@ -31,16 +31,59 @@ const RECORDS: &[(&str, &str)] = include!(concat!(env!("OUT_DIR"), "/governing_r
 pub const GOVERNING_RECORD_IDS: &[&str] =
     include!(concat!(env!("OUT_DIR"), "/governing_record_ids.rs"));
 
+/// One seeded relation type, named alongside what `OD-SPEC-012` requires every relation
+/// type to declare: which node kinds it may join at each end, and how many edges of it one
+/// node may carry.
+struct SeedType
+{
+    name: &'static str,
+    inverse: &'static str,
+    domain: &'static [&'static str],
+    range: &'static [&'static str],
+    max_per_node: u32,
+}
+
+/// The two kinds `type:` names in this repository's own governing records.
+///
+/// `OD-SPEC-012` constrains the seed vocabulary against the vocabulary that actually
+/// exists rather than inventing a wider one: every governing record read by
+/// `Seed_Governing_Records` carries `type: decision` or `type: architecture`, and nothing
+/// else. `ADR-ARTIFACT-GRAPH-002`'s vocabulary supersedes this list along with the rest of
+/// the seed table.
+const RECORD_KINDS: &[&str] = &["architecture", "decision"];
+
 /// The relation vocabulary the governing records use.
 ///
 /// Tier `seed` rather than `core` or `extended`: the real vocabulary is ADR-ARTIFACT-
 /// GRAPH-002's, and it arrives with the corpus. Guessing a tier here would put an
 /// invented answer where a recorded one belongs.
-const RELATION_TYPES: &[(&str, &str)] = &[
-    ("supersedes", "superseded_by"),
-    ("superseded_by", "supersedes"),
-    ("affects", "affected_by"),
-    ("affected_by", "affects"),
+///
+/// Each direction of a pair is its own row with its own domain, range and cardinality
+/// rather than one constraint read backwards, because a pair is not always symmetric:
+/// `answers` and `answered_by` join the same two kinds in opposite roles, not the same
+/// role twice.
+const RELATION_TYPES: &[SeedType] = &[
+    SeedType {
+        name: "supersedes",
+        inverse: "superseded_by",
+        domain: RECORD_KINDS,
+        range: RECORD_KINDS,
+        max_per_node: 16,
+    },
+    SeedType {
+        name: "superseded_by",
+        inverse: "supersedes",
+        domain: RECORD_KINDS,
+        range: RECORD_KINDS,
+        max_per_node: 16,
+    },
+    SeedType {
+        name: "affects",
+        inverse: "affected_by",
+        domain: RECORD_KINDS,
+        range: RECORD_KINDS,
+        max_per_node: 64,
+    },
     // Its own inverse, because it is symmetric: two records that bear on each other bear on
     // each other. Added when six product-phase records were first seeded and three of them
     // used a term this vocabulary did not contain — the foreign key refused them, which is
@@ -51,7 +94,25 @@ const RELATION_TYPES: &[(&str, &str)] = &[
     // wrong edge in the graph this system exists to keep honest is worse than a vocabulary
     // one term short. Still a seed term: ADR-ARTIFACT-GRAPH-002's vocabulary arrives with the
     // corpus and supersedes this whole table.
-    ("relates-to", "relates-to"),
+    SeedType {
+        name: "affected_by",
+        inverse: "affects",
+        domain: RECORD_KINDS,
+        range: RECORD_KINDS,
+        max_per_node: 64,
+    },
+    SeedType {
+        name: "relates-to",
+        inverse: "relates-to",
+        domain: RECORD_KINDS,
+        range: RECORD_KINDS,
+        // Measured against the seeded corpus at the moment `OD-SPEC-012` landed: the busiest
+        // record carried 21. 128 is not a guess at where real usage tops out, it is
+        // "comfortably above measured plus room for the corpus to grow" — the cap exists to
+        // catch a joined-the-wrong-node mistake, not to predict a ceiling nobody has reason
+        // to name yet.
+        max_per_node: 128,
+    },
     // The lifecycle edges `OD-SPEC-008` describes and `OD-SPEC-010` rule 4 names: a design
     // answers a request, a result implements a design. Added on the `relates-to` precedent
     // above rather than as a new liberty — the foreign key refuses an unknown term, and the
@@ -59,13 +120,37 @@ const RELATION_TYPES: &[(&str, &str)] = &[
     // states what each edge must resolve to. `OD-SPEC-013`.
     //
     // Still `seed`, for the reason the whole table is: ADR-ARTIFACT-GRAPH-002's vocabulary
-    // arrives with the corpus and supersedes it. Adding these makes the edges writable and
-    // adds no domain, range or cardinality — nothing here stops `implements` joining a suite
-    // to a table row, which is `P10-EDGE-CONSTRAINTS`.
-    ("answers", "answered_by"),
-    ("answered_by", "answers"),
-    ("implements", "implemented_by"),
-    ("implemented_by", "implements"),
+    // arrives with the corpus and supersedes it. Domain and range here are the fix
+    // `P10-EDGE-CONSTRAINTS-2` describes: a design-spec answers a feature-request and
+    // nothing else, so `implements` can no longer join a suite to a table row.
+    SeedType {
+        name: "answers",
+        inverse: "answered_by",
+        domain: &["design-spec"],
+        range: &["feature-request"],
+        max_per_node: 8,
+    },
+    SeedType {
+        name: "answered_by",
+        inverse: "answers",
+        domain: &["feature-request"],
+        range: &["design-spec"],
+        max_per_node: 8,
+    },
+    SeedType {
+        name: "implements",
+        inverse: "implemented_by",
+        domain: &["feature-result"],
+        range: &["design-spec"],
+        max_per_node: 8,
+    },
+    SeedType {
+        name: "implemented_by",
+        inverse: "implements",
+        domain: &["design-spec"],
+        range: &["feature-result"],
+        max_per_node: 8,
+    },
 ];
 
 const SEED_TIER: &str = "seed";
@@ -80,7 +165,7 @@ fn Admissible_Relations() -> String
 {
     return RELATION_TYPES
         .iter()
-        .map(|(name, _)| return *name)
+        .map(|seed| return seed.name)
         .collect::<Vec<&str>>()
         .join(", ");
 }
@@ -108,7 +193,7 @@ fn Admissible_Relations() -> String
 /// where a recorded one belongs. The defect was the diagnosis, not the refusal.
 fn Refuse_Unknown_Relation(path: &str, term: &str) -> Option<StoreError>
 {
-    if RELATION_TYPES.iter().any(|(name, _)| return *name == term)
+    if RELATION_TYPES.iter().any(|seed| return seed.name == term)
     {
         return None;
     }
@@ -172,16 +257,17 @@ pub fn Seed_Governing_Records(store: &mut SpecificationStore) -> Result<SeedRepo
     return Ok(report);
 }
 
-/// Every relation type the seeded records use, and the inverse each is paired with.
+/// Every relation type the seeded records use, its declared constraint, and the inverse
+/// each is paired with.
 fn Declare_The_Relation_Types(store: &mut SpecificationStore) -> Result<(), StoreError>
 {
-    for (name, _) in RELATION_TYPES
+    for seed in RELATION_TYPES
     {
-        store.Put_Relation_Type(name, SEED_TIER)?;
+        store.Put_Relation_Type(seed.name, SEED_TIER, seed.domain, seed.range, seed.max_per_node)?;
     }
-    for (name, inverse) in RELATION_TYPES
+    for seed in RELATION_TYPES
     {
-        store.Pair_Relation_Type(name, inverse)?;
+        store.Pair_Relation_Type(seed.name, seed.inverse)?;
     }
 
     return Ok(());
@@ -283,11 +369,12 @@ mod tests
 
         // And what it could have said instead — every seeded term, so the author does not
         // have to open governing.rs to find out.
-        for (admissible, _) in RELATION_TYPES
+        for seed in RELATION_TYPES
         {
             assert!(
-                cause.contains(admissible),
-                "the refusal must offer `{admissible}`: {cause}"
+                cause.contains(seed.name),
+                "the refusal must offer `{}`: {cause}",
+                seed.name
             );
         }
     }
@@ -300,11 +387,12 @@ mod tests
     #[test]
     fn Test_Every_Seeded_Term_Should_Be_Admitted()
     {
-        for (admissible, _) in RELATION_TYPES
+        for seed in RELATION_TYPES
         {
             assert!(
-                Refuse_Unknown_Relation("docs/records/anything.md", admissible).is_none(),
-                "`{admissible}` is in the vocabulary and must not be refused"
+                Refuse_Unknown_Relation("docs/records/anything.md", seed.name).is_none(),
+                "`{}` is in the vocabulary and must not be refused",
+                seed.name
             );
         }
     }

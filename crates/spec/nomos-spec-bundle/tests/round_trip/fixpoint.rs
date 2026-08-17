@@ -97,6 +97,34 @@ fn Test_Import_Should_Land_Every_Row_The_Bundle_Declared()
     }
 }
 
+/// `OD-SPEC-012`'s constraint columns are not a column the row-count guard would catch —
+/// the row is there either way, and only its values say whether the constraint survived.
+/// `verifies` carries a non-trivial domain, range and cardinality in the populated fixture
+/// specifically so this has something to assert against.
+#[test]
+fn Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip()
+{
+    let source = Populated();
+    let bundle = Export(&source).expect("exports");
+
+    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
+    Import(&mut rebuilt, &bundle).expect("imports");
+
+    let (domain, range, max_per_node): (String, String, i64) = rebuilt
+        .Connection()
+        .query_row(
+            "SELECT domain_kinds_json, range_kinds_json, max_per_node FROM relation_types
+             WHERE name = 'verifies'",
+            [],
+            |row| return Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .expect("reads the constraint back");
+
+    assert_eq!(domain, "[\"concept\"]", "the domain did not survive the round trip");
+    assert_eq!(range, "[\"requirement\"]", "the range did not survive the round trip");
+    assert_eq!(max_per_node, 4, "the cardinality did not survive the round trip");
+}
+
 /// A blob that is not valid UTF-8 must come back byte-exact.
 #[test]
 fn Test_Binary_Blobs_Should_Survive_As_Bytes()

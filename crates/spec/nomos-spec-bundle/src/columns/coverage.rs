@@ -186,6 +186,9 @@ pub(super) const COVERAGE: &[Coverage] = &[
             ("name", Carried::Field("name")),
             ("tier", Carried::Field("tier")),
             ("inverse_of", Carried::Field("inverse_of")),
+            ("domain_kinds_json", Carried::Field("domain")),
+            ("range_kinds_json", Carried::Field("range")),
+            ("max_per_node", Carried::Field("max_per_node")),
         ],
     },
     Coverage {

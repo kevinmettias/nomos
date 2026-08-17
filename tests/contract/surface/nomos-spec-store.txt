@@ -54,9 +54,12 @@ pub enum variant nomos_spec_store::RowScope::Everything
 pub enum variant nomos_spec_store::RowScope::Table { block_uid: i64, table_ordinal: u32, }
 pub enum variant nomos_spec_store::StoreError::Migration { from: u32, cause: String, }
 pub enum variant nomos_spec_store::StoreError::Record { path: String, cause: String, }
+pub enum variant nomos_spec_store::StoreError::RelationCardinality { relation_type: String, node_id: String, max_per_node: u32, }
+pub enum variant nomos_spec_store::StoreError::RelationEndpoint { relation_type: String, role: &'static str, node_id: String, kind: String, admits: Vec<String>, }
 pub enum variant nomos_spec_store::StoreError::Sql(String)
 pub enum variant nomos_spec_store::StoreError::Table { document_uid: i64, ordinal: u32, cause: String, }
 pub enum variant nomos_spec_store::StoreError::TooNew { found: u32, supported: u32, }
+pub enum variant nomos_spec_store::StoreError::UnconstrainedRelationType { name: String, }
 pub enum variant nomos_spec_store::SuiteAuthority::Root
 pub enum variant nomos_spec_store::SuiteAuthority::Sibling
 pub enum variant nomos_spec_store::Table::Blobs
@@ -117,7 +120,7 @@ pub fn nomos_spec_store::SpecificationStore::Open(path: &Path) -> Result<Self, S
 pub fn nomos_spec_store::SpecificationStore::Pair_Relation_Type(&mut self, name: &str, inverse: &str) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Blob(&mut self, content: &[u8]) -> Result<i64, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Relation( &mut self, from_node_id: &str, relation_type: &str, to_node_id: &str, ) -> Result<(), StoreError>
-pub fn nomos_spec_store::SpecificationStore::Put_Relation_Type(&mut self, name: &str, tier: &str) -> Result<(), StoreError>
+pub fn nomos_spec_store::SpecificationStore::Put_Relation_Type( &mut self, name: &str, tier: &str, domain: &[&str], range: &[&str], max_per_node: u32, ) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Row_Lineage( &mut self, row_uid: i64, disposition: &str, target_node_uid: Option<i64>, ) -> Result<(), StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Source_Blocks( &mut self, document_uid: i64, blocks: &[SourceBlock], ) -> Result<usize, StoreError>
 pub fn nomos_spec_store::SpecificationStore::Put_Source_Document( &mut self, path: &str, revision: &str, content: &str, ) -> Result<i64, StoreError>

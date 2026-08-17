@@ -11623,3 +11623,80 @@
       "declined": null
     },
     {
+      "id": "P11-DISPATCH-SPLIT-3",
+      "title": "Engineering readiness and dispatchability are variants of one refusal, told apart only by a word the CLI prints",
+      "why": "This is P11-DISPATCH-SPLIT with the territory the crate-split's own consequence found before a claimant had to discover it the hard way.\n\nItemState carries Ready, Claimed, Blocked, Done and Declined. Whether an item can actually be worked on is not one of them: it is computed as a ClaimRefusal, and two of that enum's variants are turned into display words by the CLI, where DependencyUnmet becomes \"waiting\" and HeldBy becomes \"held\".\n\nThose two words name categorically different facts. A dependency that is unfinished means the work is not ready to be done by anybody, which is a property of the plan and stays true no matter who is looking. A territory held by another session means the work is ready and somebody else is standing on it, which is a property of this second and is false again when a lease lapses. The ledger tells them apart correctly and tells them apart in a match arm that produces a string, so the distinction exists in the presentation and not in the model.\n\nThe consequence is that nothing above the ledger can ask the two questions separately. A caller wanting the work that ought to be done has to attempt a claim and read the refusal, or parse the CLI's words, and the one stored state that looks like the answer does not answer it: Ready means only not claimed, not done, not blocked and not declined. P10-REQUIRABLE-DECLARED sat Ready while carrying two abandonments explaining that its clauses had already landed, which is exactly how it read as available and was redone.\n\nThis is worth separating before a work graph exists rather than after. A design under discussion for this repository puts a scheduler above the board and leaves the board answering only whether a step can acquire what it needs right now, under a one-way invariant: coordination may withhold work that is otherwise ready, and may never make ready what the plan says is not. That invariant cannot be stated against a model where both answers are variants of one refusal, and it cannot be tested at all.\n\nP11-DISPATCH-SPLIT-2 measured two more things that were true of the territory as declared and are fixed here. First, the ledger-side file: ClaimRefusal, Is_Retryable and Describe live in crates/substrate/nomos-ledger/src/claim/refusal.rs, not exclusion.rs, which remains relevant only as a caller (Refusal_From constructs HeldBy and UnknownIndependence there). Second, the CLI-side file: crates/host/nomos-cli/src/work.rs is the command dispatcher; the word-producing match arm (Refusal_Label) lives in its submodule crates/host/nomos-cli/src/work/report.rs, reached by mod report; -- the same crate-split staleness, one directory level further down, on the other side of the split. The fix landed: ClaimRefusal::Layer(&self) -> RefusalLayer in claim/refusal.rs, an exhaustive two-variant classification (Readiness / Dispatch) named after ARC-HARNESS-001's own two owners, tested over the whole refusal set in the OD-CONTRACTS-002 shape, and Refusal_Label in work/report.rs now matches on (refusal.Layer(), refusal) rather than the variant alone. OD-LEDGER-022 records the design. Reissued as -3 rather than hand-finished as -2 because the predicate as declared (no --skip) fails every run on two records_do_not_serialize::snapshot_grain tests that assert a property of the live board's current composition and not of this item's change -- confirmed identical on HEAD via git stash -- the same hazard P10-DECLINED-DEPENDENCY-4 hit one commit prior and resolved the same way.",
+      "done_when": "The two questions are separable in the model rather than in the printing. Whether work is ready to be done, and whether it can be started right now, are answerable independently by a caller above the ledger - without attempting a claim, and without reading prose. Refusals that mean the plan is not ready are distinguishable by type from refusals that mean the resource is busy, and the CLI's words are derived from that distinction rather than being the only place it exists. The one-way invariant is asserted by a test: a condition that only affects dispatch can withhold work that is otherwise ready, and can never make ready work the plan says is not ready. The test states it over the whole refusal set rather than over the two variants somebody remembered, which is the shape OD-CONTRACTS-002 used for its disjointness assertion and the reason that assertion still holds after the enum grew. Where the split is decided, it is recorded, because the decision is about which layer owns which question and that outlives the enum it is expressed in. Not closed by renaming the display strings. Not closed by a derived boolean only the CLI consumes: the point is that something above the ledger can ask.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/exclusion.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/substrate/nomos-ledger/src/claim.rs",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-022.record",
+          "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
+        ],
+        "exit_code": 0,
+        "output_tail": "tep-aed9b159df400af8.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-71b266e859c1b18c.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-c896bf45d2e8f92b.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5afe2e89ab691669.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-692706af76ff13ec.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-2e8cb8fb92432b87.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-e6fc6e0a3b5c1c6f.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-5bdac8a29052025c.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-94d0ea31598682b4.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-ae7829de84097dd3.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-9b7b5bbab0006255.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1786984551,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    }
+  ]
+}

@@ -221,8 +221,10 @@ const GRAPH: &str =
      SELECT uid, 2, 'content_changed', 'wording clarified by D-129', 'sha256:01',
             'sha256:02', '2026-02-01T00:00:00Z' FROM nodes WHERE node_id = 'AGT-EXEC-001';
 
-     INSERT INTO relation_types (name, tier, inverse_of)
-     VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies');
+     INSERT INTO relation_types
+     (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
+     VALUES ('verifies', 'core', 'verified_by', '[\"concept\"]', '[\"requirement\"]', 4),
+            ('verified_by', 'core', 'verifies', '[\"requirement\"]', '[\"concept\"]', 4);
 
      INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
      SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t

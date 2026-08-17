@@ -308,9 +308,15 @@ pub(crate) fn Write_Node(connection: &Connection, node: NodeRow<'_>) -> Result<i
 
 /// Records an edge and its inverse through a caller's transaction.
 ///
+/// Both directions run the same checks, because each is its own row in `relation_types`
+/// with its own domain, range and cardinality — `answers` and `answered_by` are not one
+/// constraint read backwards, they are two, and `OD-SPEC-012` says why.
+///
 /// # Errors
 ///
-/// Returns [`StoreError`] on any SQL failure.
+/// Returns [`StoreError::RelationEndpoint`] if an endpoint's kind is not one the relation
+/// type admits there, [`StoreError::RelationCardinality`] if the edge would exceed the
+/// type's declared cap, and [`StoreError`] on any SQL failure.
 pub(crate) fn Write_Relation(
     connection: &Connection,
     from_node_id: &str,
@@ -318,21 +324,218 @@ pub(crate) fn Write_Relation(
     to_node_id: &str,
 ) -> Result<(), StoreError>
 {
-    connection.execute(
-        "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
-         SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
-         WHERE f.node_id = ?1 AND t.node_id = ?3",
-        params![from_node_id, relation_type, to_node_id],
-    )?;
+    Write_One_Relation(connection, from_node_id, relation_type, to_node_id)?;
 
     if let Some(inverse) = Inverse_Of(connection, relation_type)?
     {
-        connection.execute(
-            "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
-             SELECT f.uid, ?2, t.uid FROM nodes f, nodes t
-             WHERE f.node_id = ?1 AND t.node_id = ?3",
-            params![to_node_id, inverse, from_node_id],
+        Write_One_Relation(connection, to_node_id, &inverse, from_node_id)?;
+    }
+
+    return Ok(());
+}
+
+/// One node, as an edge's endpoint: its surrogate, its kind, and whether it is real yet.
+struct Endpoint
+{
+    uid: i64,
+    kind: String,
+    authority: String,
+}
+
+/// The node named, if one exists.
+///
+/// An edge to an identifier no node holds matches nothing and writes nothing — silently,
+/// at exit 0. That is `Write_Relation`'s existing contract (`OD-SPEC-011` and the sibling
+/// suite tests both rely on it), and this preserves it: a missing endpoint short-circuits
+/// before any constraint is checked, rather than becoming a new refusal.
+fn Fetch_Endpoint(connection: &Connection, node_id: &str) -> Result<Option<Endpoint>, StoreError>
+{
+    return Ok(connection
+        .query_row(
+            "SELECT uid, kind, authority FROM nodes WHERE node_id = ?1",
+            params![node_id],
+            |row| {
+                return Ok(Endpoint {
+                    uid: row.get(0)?,
+                    kind: row.get(1)?,
+                    authority: row.get(2)?,
+                });
+            },
+        )
+        .optional()?);
+}
+
+/// What one relation type declares: the node kinds it admits at each end, and how many
+/// edges of it a node may carry.
+struct Constraint
+{
+    domain: Vec<String>,
+    range: Vec<String>,
+    max_per_node: u32,
+}
+
+/// The declared constraint for a relation type, if the type is registered.
+///
+/// Every type reaching this point is registered through [`super::SpecificationStore::Put_Relation_Type`],
+/// which refuses to register one with nothing declared — so in practice this is always
+/// `Some` for a type the foreign key on `relations.relation_type` would otherwise admit.
+/// It stays an `Option` rather than an assumed row because the caller, not this function,
+/// is where "no such type" is diagnosable.
+fn Fetch_Constraint(
+    connection: &Connection,
+    relation_type: &str,
+) -> Result<Option<Constraint>, StoreError>
+{
+    let found: Option<(String, String, i64)> = connection
+        .query_row(
+            "SELECT domain_kinds_json, range_kinds_json, max_per_node FROM relation_types
+             WHERE name = ?1",
+            params![relation_type],
+            |row| return Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+        )
+        .optional()?;
+    let Some((domain_json, range_json, max_per_node)) = found
+    else
+    {
+        return Ok(None);
+    };
+
+    let domain = Decoded_Kinds(&domain_json)?;
+    let range = Decoded_Kinds(&range_json)?;
+
+    return Ok(Some(Constraint {
+        domain,
+        range,
+        max_per_node: u32::try_from(max_per_node).unwrap_or(u32::MAX),
+    }));
+}
+
+fn Decoded_Kinds(json: &str) -> Result<Vec<String>, StoreError>
+{
+    return serde_json::from_str(json).map_err(|error| return StoreError::Sql(error.to_string()));
+}
+
+/// One edge, checked against its relation type's declared constraint and then written.
+///
+/// A placeholder endpoint (`authority = EXTERNAL`, minted by `Reference_Node` for a target
+/// nothing has ingested yet) is exempt from the domain/range check at its own end: its kind
+/// is the sentinel `unknown`, which is not a fact about the node yet, and `OD-SPEC-012`
+/// records that the check is deferred rather than widened to admit the sentinel as if it
+/// were a real kind. Cardinality is not exempted the same way, because it counts edges from
+/// a real endpoint (the `from` side always resolves to a concrete node by the time this
+/// runs) rather than judging the placeholder's kind.
+fn Write_One_Relation(
+    connection: &Connection,
+    from_node_id: &str,
+    relation_type: &str,
+    to_node_id: &str,
+) -> Result<(), StoreError>
+{
+    use super::EXTERNAL;
+
+    let Some(from) = Fetch_Endpoint(connection, from_node_id)?
+    else
+    {
+        return Ok(());
+    };
+    let Some(to) = Fetch_Endpoint(connection, to_node_id)?
+    else
+    {
+        return Ok(());
+    };
+
+    if let Some(constraint) = Fetch_Constraint(connection, relation_type)?
+    {
+        if from.authority != EXTERNAL
+        {
+            Assert_Admits(relation_type, "domain", from_node_id, &from.kind, &constraint.domain)?;
+        }
+        if to.authority != EXTERNAL
+        {
+            Assert_Admits(relation_type, "range", to_node_id, &to.kind, &constraint.range)?;
+        }
+        Assert_Within_Cardinality(
+            connection,
+            relation_type,
+            from.uid,
+            from_node_id,
+            to.uid,
+            constraint.max_per_node,
         )?;
+    }
+
+    connection.execute(
+        "INSERT OR IGNORE INTO relations (from_node_uid, relation_type, to_node_uid)
+         VALUES (?1, ?2, ?3)",
+        params![from.uid, relation_type, to.uid],
+    )?;
+
+    return Ok(());
+}
+
+/// The endpoint's kind is one the relation type admits at that role, or the refusal names
+/// the type, the role, the endpoint and what would have satisfied it.
+fn Assert_Admits(
+    relation_type: &str,
+    role: &'static str,
+    node_id: &str,
+    kind: &str,
+    admits: &[String],
+) -> Result<(), StoreError>
+{
+    if admits.iter().any(|admitted| return admitted == kind)
+    {
+        return Ok(());
+    }
+
+    return Err(StoreError::RelationEndpoint {
+        relation_type: relation_type.to_owned(),
+        role,
+        node_id: node_id.to_owned(),
+        kind: kind.to_owned(),
+        admits: admits.to_vec(),
+    });
+}
+
+/// A new edge does not push a node past its type's declared cap.
+///
+/// An edge that already exists is not new: re-inserting one a re-ingest already wrote must
+/// stay idempotent, the same property `INSERT OR IGNORE` gives every other edge, so an
+/// existing triple is let through without counting against the cap a second time.
+fn Assert_Within_Cardinality(
+    connection: &Connection,
+    relation_type: &str,
+    from_uid: i64,
+    from_node_id: &str,
+    to_uid: i64,
+    max_per_node: u32,
+) -> Result<(), StoreError>
+{
+    let already: i64 = connection.query_row(
+        "SELECT count(*) FROM relations
+         WHERE from_node_uid = ?1 AND relation_type = ?2 AND to_node_uid = ?3",
+        params![from_uid, relation_type, to_uid],
+        |row| return row.get(0),
+    )?;
+    if already > 0
+    {
+        return Ok(());
+    }
+
+    let carried: i64 = connection.query_row(
+        "SELECT count(*) FROM relations WHERE from_node_uid = ?1 AND relation_type = ?2",
+        params![from_uid, relation_type],
+        |row| return row.get(0),
+    )?;
+    let carried = u32::try_from(carried).unwrap_or(u32::MAX);
+
+    if carried >= max_per_node
+    {
+        return Err(StoreError::RelationCardinality {
+            relation_type: relation_type.to_owned(),
+            node_id: from_node_id.to_owned(),
+            max_per_node,
+        });
     }
 
     return Ok(());

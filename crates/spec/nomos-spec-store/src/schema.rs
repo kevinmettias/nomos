@@ -374,6 +374,36 @@ pub const MIGRATIONS: &[Migration] = &[
             "CREATE INDEX submission_gaps_submission ON submission_gaps(submission_uid)",
         ],
     },
+    Migration {
+        version: 7,
+        name: "relation-type-constraints",
+        statements: &[
+            // `relation_types` gains what `P10-EDGE-CONSTRAINTS-2` says it was missing: which
+            // node kinds it may join at each end, and how many edges of it one node may carry.
+            // Rebuilt rather than widened by `ALTER TABLE ADD COLUMN`, because SQLite only
+            // allows a `NOT NULL` column added that way to carry a caller-invented default,
+            // and a default here would hand every row a constraint nobody declared — the exact
+            // permissiveness this migration exists to close off. There is nothing to carry
+            // across: `relation_types` is populated by application code once the schema is in
+            // place, never by a migration, so this table always holds zero rows when its own
+            // migration runs.
+            //
+            // Domain and range are JSON arrays of node kinds rather than two more foreign-keyed
+            // child tables: a relation type admits a *set* of kinds at each end, a column has
+            // room for one value, and `OD-SPEC-012` records why a JSON column is the honest
+            // size for this rather than a table nothing else joins against.
+            "CREATE TABLE relation_types_next (
+                 name              TEXT PRIMARY KEY,
+                 tier              TEXT NOT NULL,
+                 inverse_of        TEXT REFERENCES relation_types_next(name),
+                 domain_kinds_json TEXT NOT NULL,
+                 range_kinds_json  TEXT NOT NULL,
+                 max_per_node      INTEGER NOT NULL CHECK (max_per_node > 0)
+             )",
+            "DROP TABLE relation_types",
+            "ALTER TABLE relation_types_next RENAME TO relation_types",
+        ],
+    },
 ];
 
 pub struct Migration

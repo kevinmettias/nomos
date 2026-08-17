@@ -358,15 +358,56 @@ impl SpecificationStore
             .optional()?);
     }
 
+    /// Registers a relation type together with what it constrains: the node kinds it may
+    /// join at each end, and how many edges of it one node may carry.
+    ///
+    /// `OD-SPEC-012`: a relation type that declares neither is not a lighter-weight
+    /// registration, it is the absence of the thing this function exists to record — so
+    /// `domain`, `range` and `max_per_node` are required rather than defaulted, and an empty
+    /// declaration is refused here rather than admitted and left permissive downstream.
+    ///
+    /// Idempotent like the rest of seeding: registering the same name twice keeps the first
+    /// declaration rather than erroring or silently overwriting it.
+    ///
     /// # Errors
     ///
-    /// Returns [`StoreError`] on any SQL failure.
-    pub fn Put_Relation_Type(&mut self, name: &str, tier: &str) -> Result<(), StoreError>
+    /// Returns [`StoreError::UnconstrainedRelationType`] if `domain`, `range` or
+    /// `max_per_node` is empty or zero, and [`StoreError`] on any SQL failure.
+    pub fn Put_Relation_Type(
+        &mut self,
+        name: &str,
+        tier: &str,
+        domain: &[&str],
+        range: &[&str],
+        max_per_node: u32,
+    ) -> Result<(), StoreError>
     {
+        if domain.is_empty() || range.is_empty() || max_per_node == 0
+        {
+            return Err(StoreError::UnconstrainedRelationType { name: name.to_owned() });
+        }
+
+        let mut domain_sorted: Vec<&str> = domain.to_vec();
+        domain_sorted.sort_unstable();
+        let mut range_sorted: Vec<&str> = range.to_vec();
+        range_sorted.sort_unstable();
+
+        // Sorted before serializing so the same set of kinds always writes the same bytes,
+        // regardless of the order a caller happened to list them in — the bundle's byte-
+        // identical round trip depends on it exactly the way it depends on every other
+        // ordering in this store being by natural key rather than by insertion order.
+        let domain_json = serde_json::to_string(&domain_sorted)
+            .map_err(|error| return StoreError::Sql(error.to_string()))?;
+        let range_json = serde_json::to_string(&range_sorted)
+            .map_err(|error| return StoreError::Sql(error.to_string()))?;
+
         self.connection.execute(
-            "INSERT OR IGNORE INTO relation_types (name, tier) VALUES (?1, ?2)",
-            params![name, tier],
+            "INSERT OR IGNORE INTO relation_types
+                 (name, tier, domain_kinds_json, range_kinds_json, max_per_node)
+             VALUES (?1, ?2, ?3, ?4, ?5)",
+            params![name, tier, domain_json, range_json, max_per_node],
         )?;
+
         return Ok(());
     }
 
@@ -430,5 +471,130 @@ impl SpecificationStore
     pub fn Connection(&self) -> &Connection
     {
         return &self.connection;
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    fn Node(store: &mut SpecificationStore, node_id: &str, kind: &str)
+    {
+        store
+            .Upsert_Node(NodeRow {
+                node_id,
+                kind,
+                authority: AUTHORED,
+                representation: "record",
+                title: node_id,
+            })
+            .expect("mints a node");
+    }
+
+    /// `OD-SPEC-012`: a relation type declaring nothing is refused where it is registered,
+    /// not left to write an edge that later discovers there was nothing to check.
+    #[test]
+    fn Test_Registering_A_Relation_Type_With_No_Domain_Should_Be_Refused()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+
+        let refusal = store.Put_Relation_Type("nothing", "seed", &[], &["widget"], 1);
+        let message = format!("{refusal:?}");
+
+        assert!(
+            matches!(refusal, Err(StoreError::UnconstrainedRelationType { ref name }) if name == "nothing"),
+            "an empty domain must be refused at registration: {message}"
+        );
+    }
+
+    #[test]
+    fn Test_Registering_A_Relation_Type_With_Zero_Cardinality_Should_Be_Refused()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+
+        let refusal = store.Put_Relation_Type("nothing", "seed", &["widget"], &["widget"], 0);
+
+        assert!(
+            matches!(refusal, Err(StoreError::UnconstrainedRelationType { .. })),
+            "a zero cardinality must be refused at registration: {refusal:?}"
+        );
+    }
+
+    /// The refusal names the type, the endpoint that failed, its kind, and the role it
+    /// failed — everything `done_when` asks a domain/range refusal to say.
+    #[test]
+    fn Test_An_Edge_Whose_Endpoint_Kind_Is_Not_Admitted_Should_Be_Refused_By_Name()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Node(&mut store, "A", "widget");
+        Node(&mut store, "B", "gadget");
+        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 4).expect("registers");
+
+        let error = store.Put_Relation("A", "joins", "B").expect_err("B is a gadget, not a widget");
+
+        let StoreError::RelationEndpoint { relation_type, role, node_id, kind, admits } = error
+        else
+        {
+            panic!("wrong variant: {error:?}");
+        };
+        assert_eq!(relation_type, "joins", "which type");
+        assert_eq!(role, "range", "which end");
+        assert_eq!(node_id, "B", "which endpoint");
+        assert_eq!(kind, "gadget", "what it is");
+        assert_eq!(admits, vec!["widget".to_owned()], "what would satisfy it");
+    }
+
+    /// The refusal names the type, the node that is full, and the cap it declared.
+    #[test]
+    fn Test_An_Edge_Past_The_Declared_Cardinality_Should_Be_Refused_By_Name()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Node(&mut store, "A", "widget");
+        Node(&mut store, "B", "widget");
+        Node(&mut store, "C", "widget");
+        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 1).expect("registers");
+        store.Put_Relation("A", "joins", "B").expect("the first edge fits the cap of 1");
+
+        let error =
+            store.Put_Relation("A", "joins", "C").expect_err("a second edge exceeds the cap of 1");
+
+        let StoreError::RelationCardinality { relation_type, node_id, max_per_node } = error
+        else
+        {
+            panic!("wrong variant: {error:?}");
+        };
+        assert_eq!(relation_type, "joins", "which type");
+        assert_eq!(node_id, "A", "which node is full");
+        assert_eq!(max_per_node, 1, "what cap it declared");
+    }
+
+    /// Re-ingesting the same edge is idempotent, the same property `INSERT OR IGNORE`
+    /// already gives every other edge — it must not count a second time against the cap.
+    #[test]
+    fn Test_Re_Writing_The_Same_Edge_Should_Not_Count_Against_Cardinality()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Node(&mut store, "A", "widget");
+        Node(&mut store, "B", "widget");
+        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 1).expect("registers");
+        store.Put_Relation("A", "joins", "B").expect("first write");
+
+        store.Put_Relation("A", "joins", "B").expect("an idempotent re-write must not refuse");
+    }
+
+    /// A placeholder minted by [`SpecificationStore::Reference_Node`] carries no real kind
+    /// yet, so the domain/range check defers rather than judging it against the sentinel.
+    #[test]
+    fn Test_A_Placeholder_Endpoint_Should_Be_Exempt_From_The_Kind_Check()
+    {
+        let mut store = SpecificationStore::In_Memory().expect("opens");
+        Node(&mut store, "A", "widget");
+        store.Reference_Node("B").expect("mints a placeholder");
+        store.Put_Relation_Type("joins", "seed", &["widget"], &["widget"], 4).expect("registers");
+
+        store
+            .Put_Relation("A", "joins", "B")
+            .expect("a placeholder endpoint is exempt from the range check");
     }
 }

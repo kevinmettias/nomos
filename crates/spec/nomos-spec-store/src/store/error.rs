@@ -31,6 +31,31 @@ pub enum StoreError
         ordinal: u32,
         cause: String,
     },
+    /// A relation type was registered with no domain, no range or no cardinality.
+    ///
+    /// `OD-SPEC-012`: a relation type that admits everything is not a constraint, so
+    /// registering one with nothing declared is refused rather than left permissive.
+    UnconstrainedRelationType
+    {
+        name: String,
+    },
+    /// An edge whose endpoint kind the relation type does not admit at that end.
+    RelationEndpoint
+    {
+        relation_type: String,
+        role: &'static str,
+        node_id: String,
+        kind: String,
+        admits: Vec<String>,
+    },
+    /// An edge that would exceed a relation type's declared cap on how many of it one node
+    /// may carry.
+    RelationCardinality
+    {
+        relation_type: String,
+        node_id: String,
+        max_per_node: u32,
+    },
 }
 
 impl core::fmt::Display for StoreError
@@ -54,6 +79,25 @@ impl core::fmt::Display for StoreError
                 ordinal,
                 cause,
             } => write!(formatter, "document {document_uid} block {ordinal}: {cause}"),
+            Self::UnconstrainedRelationType { name } => write!(
+                formatter,
+                "relation type `{name}` declares no domain, range or cardinality. Every \
+                 relation type must say which node kinds it may join at each end and how \
+                 many edges of it one node may carry; a type that admits everything is not \
+                 a constraint"
+            ),
+            Self::RelationEndpoint { relation_type, role, node_id, kind, admits } => write!(
+                formatter,
+                "`{relation_type}` does not admit `{node_id}` as its {role}: {node_id} is a \
+                 {kind}, and `{relation_type}` admits {} there",
+                admits.join(", ")
+            ),
+            Self::RelationCardinality { relation_type, node_id, max_per_node } => write!(
+                formatter,
+                "`{node_id}` already carries {max_per_node} `{relation_type}` edge(s), which \
+                 is the most `{relation_type}` declares a node may carry; remove one first or \
+                 use a different node"
+            ),
         };
     }
 }
