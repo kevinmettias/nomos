@@ -305,12 +305,14 @@ graph LR
     od_gate_006 -->|"relates-to"| od_gate_001
     od_gate_006 -->|"relates-to"| od_gate_004
     od_gate_006 -->|"relates-to"| od_gate_009
+    od_gate_006 -->|"relates-to"| od_gate_012["OD-GATE-012"]
     od_gate_006 -->|"relates-to"| od_ledger_003
     od_gate_006 -->|"relates-to"| od_project_002
     od_gate_009 -->|"relates-to"| od_determinism_001
     od_gate_009 -->|"relates-to"| od_determinism_002
     od_gate_009 -->|"relates-to"| od_gate_001
     od_gate_009 -->|"relates-to"| od_gate_006
+    od_gate_012 -->|"relates-to"| od_gate_006
     od_ledger_001 -->|"affected_by"| od_ledger_004["OD-LEDGER-004"]
     od_ledger_001 -->|"affected_by"| od_ledger_011
     od_ledger_001 -->|"affected_by"| od_ledger_014["OD-LEDGER-014"]
@@ -692,6 +694,7 @@ graph LR
     od_gate_005
     od_gate_006
     od_gate_009
+    od_gate_012
     od_ledger_001
     od_ledger_002
     od_ledger_003

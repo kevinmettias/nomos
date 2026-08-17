@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:afbb6454e14730d204f48be499cbe4f73188dfc073913271f9220484db704cc9",
-  "inputs_digest": "sha256:5f27d44cd1ed047d820eebf40f6ba9f94184a76453451c5ba6438cdbb6ce6098",
+  "content_digest": "sha256:f1c3c99f51b53690670425abea2d354fa81a34d23a66a2a37659432bd8afe35d",
+  "inputs_digest": "sha256:53c28bd43420b0124a9a3bc5b8268ffd1744c0938351b307cb0f3e0d715f3477",
   "sections": [
     [
       "Relations",
-      654
+      656
     ],
     [
       "Decisions",
-      88
+      89
     ]
   ],
   "inputs": [
@@ -1528,6 +1528,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-006 relates-to OD-GATE-012",
+      "hash": "sha256:2e28afd1db5e594b8da50533075025f2d25b090b4ef23abbeff8bd7938be0696"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-006 relates-to OD-LEDGER-003",
       "hash": "sha256:b30349c77aa236e309df0fb23badc0b141e914de38f47b0062eccc55c39b61c4"
     },
@@ -1555,6 +1560,11 @@
       "content": "relations",
       "identity": "OD-GATE-009 relates-to OD-GATE-006",
       "hash": "sha256:7892895ed494b29170f2b0fd1b7419a91f47fba2c707285e3ce50afeef02075f"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-012 relates-to OD-GATE-006",
+      "hash": "sha256:1af5adefb919da005a674217709e6e130db4ec483f138bd01da180ade781be7e"
     },
     {
       "content": "relations",
@@ -3450,6 +3460,11 @@
       "content": "nodes",
       "identity": "OD-GATE-009",
       "hash": "sha256:ab08646ac661484bf5e8945782236b10017f93892665d7cb045f95f4f7e73eb7"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-GATE-012",
+      "hash": "sha256:4e18dadfc4e9938dd08f286c27a4e79ad68df211d343e5908c64a385575c985b"
     },
     {
       "content": "nodes",

@@ -71,7 +71,14 @@ resolver = "3"
 
 [workspace.package]
 edition = "2024"
-rust-version = "1.85"
+# 1.88 is not a policy choice, it is what this workspace compiles on -- measured directly rather
+# than read from a changelog. `cargo check --workspace --all-targets` under `RUSTUP_TOOLCHAIN=1.85`
+# and `=1.87` both refuse today's nine `&& let` chains with `error[E0658]: let expressions in this
+# position are unstable` (let chains stabilized under edition 2024 in Rust 1.88); the same command
+# under `=1.88.0` exits 0. See `OD-GATE-008`. The `Compatibility floor` lane in
+# `.github/workflows/gate.yml` exercises this number on every run, so the next feature that raises
+# it is reported by CI rather than discovered the way this one was.
+rust-version = "1.88"
 license = "UNLICENSED"
 publish = false
 

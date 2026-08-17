@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4c68e17472e1d480d1a5bb0fe9486b9006d80a9a9c5a15016955ff15e360421a",
-  "inputs_digest": "sha256:45d08174dfacd0782d20e17ff6f3d7d647af77a9aff6caeafef583d90991c494",
+  "content_digest": "sha256:989b4178efab97ddededb871c8ab4cfa29bbc46957efeb07851613e600b76ae1",
+  "inputs_digest": "sha256:afd4c0f51a38e8c1de696e20fea8f06d7ebf28011122df9f8608282e3a1f9d19",
   "sections": [
     [
       "Documents",
-      95
+      96
     ],
     [
       "Sections",
-      874
+      882
     ],
     [
       "Source blocks",
-      3313
+      3345
     ]
   ],
   "inputs": [
@@ -219,6 +219,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored",
       "hash": "sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored",
+      "hash": "sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa"
     },
     {
       "content": "documents",
@@ -2179,6 +2184,46 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38",
       "hash": "sha256:826b11a5f13e89c87c68c6add168eedb08f13db5b0763cc7d6ebea97907964b6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#1",
+      "hash": "sha256:87325069ef2be2b003dc62742643612deb408851921e6c88b2b4ccc72d2e0b63"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#2",
+      "hash": "sha256:b2ae14c6db9b92bdb16b3ae2a7c232e3e08d11f39c5ec74a0dbc9c6501c67b27"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#6",
+      "hash": "sha256:2d58a61769645700dc950b6ee58d9b98347148dcfa9dbb04ad17ffdd503a8512"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#12",
+      "hash": "sha256:35620caf7c2089da43f8d2bd26971d2a4337c0ae0010bd709ac11082815528bb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#21",
+      "hash": "sha256:1032da6da59ac906678a35bd178d5c5a378df8e21bf9b790a417f6e33e9365ee"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#25",
+      "hash": "sha256:5116697e8d078caebad356b3d7ae2552981475caec832e2c235de6ebe5d948d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#29",
+      "hash": "sha256:9e12e1297a41ad60c9c5667ab593726d4aa5edaaa215ed8507083c33673a25a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#31",
+      "hash": "sha256:1f28f7361b4bd09f36fc2ab9ed60edc90c6a5d02e24fcb12f31dcaa72d4f91cc"
     },
     {
       "content": "headings",
@@ -11059,6 +11104,166 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#39",
       "hash": "sha256:bc9606320bd153286deaaa7811deac5563c2555ff84896378f81555f5083aec9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#1",
+      "hash": "sha256:783fbcc24ab46b464cba1237fc506e3b3a064ab6e5d16d13eedab69c686f894f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#3",
+      "hash": "sha256:d0e61ad36f3cb0795fc8e6f3633cf62249ee220b577d3562fac630b75ef12f70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#4",
+      "hash": "sha256:5670b81ace7043894c1cca5ca0a3694d03f6d95f427134308e890be03b0e5b2e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#5",
+      "hash": "sha256:f13b92e841d803d35f4cda607d66597229f5ce86a8c0b6b37dfe4478384ba65f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#7",
+      "hash": "sha256:338624e807b6a2b2fe5f215d68c1d075a2ab6b8c6e98637f4915986ed51827db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#8",
+      "hash": "sha256:938c4312ad1005b6b909af25e54072a8df1fa2d6484be36037cb5a76ff8c321e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#9",
+      "hash": "sha256:8e532052b6a24164c30ee0c2e44cc06c85dd40f83432e592c4d92bb88822c3f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#10",
+      "hash": "sha256:088afb528dc0b68d83e3e241a948c1faab26677f8168df69c17ce50a2cc6fda8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#11",
+      "hash": "sha256:a39c96832ae70cee8f3f00f37dd32c6a7b6c631e4fd192b4ffef35b0bbeeef30"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#13",
+      "hash": "sha256:c58cd055421f09d88e48e5afc0871cdea30ea825ff2e6e542bfb2fae5345169a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#14",
+      "hash": "sha256:ea78f337e8fae629d9322b1a2b883063017dba62a36398a3b23535f15933653f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#15",
+      "hash": "sha256:36a7c92f648c0fadb48d618f3c35ac01b2800330a8d0d719d0d978a4dce51923"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#16",
+      "hash": "sha256:99c03e95192d7aca133c49c0cea01ddc9c13d69e48b27a84d4628cb35cf8e953"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#17",
+      "hash": "sha256:35cad203aca109fe790d70dbbd453adecc2e948ede04fa931c9ea928440e35a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#18",
+      "hash": "sha256:0e1abcb4739842654def440783d21934ae34c75821b14dfd358e75675f0d77ff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#19",
+      "hash": "sha256:a4e7df18600b1c818732abfa0ae98075a5d7f5c638b2f4d06d2069549381d849"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#20",
+      "hash": "sha256:8a5110ab789a8b8618f90823cc644b7e3f27b5b6bb087a30e13b6a332effcd92"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#21",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#22",
+      "hash": "sha256:2f2d8272a7464aaed08f8204dd6b95978d36d62b3d2c3a1dede3af1071f12d18"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#23",
+      "hash": "sha256:441d4bfcabee36f7b5db2c19aee7469e866aa57c61a4e981185e33a24482542f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#24",
+      "hash": "sha256:d0789a7ced7b206c05039315b26ec0bf267824762b174bf6853cfc50ab6a2be8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#25",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#26",
+      "hash": "sha256:c43889856b57bfced019e1919ca310ad65b196f70e1824c58f4123612de200a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#27",
+      "hash": "sha256:bcb0e408fcad2e068f772a2836b13637115a10afcadfbc21b07f8cc00391112f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#28",
+      "hash": "sha256:0c6849c0db1ae5f9f2c1e6221ebfab2cf411eb8ebce2ba2bb152bc2878c354fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#29",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#30",
+      "hash": "sha256:03a42b6f699741b8640dff9a527ac134c8527c4f13bbc93990baa65a04669ebe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#31",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#32",
+      "hash": "sha256:6d07806cfb66f32add5ef855c8f8c49fcc816e16523dfd23de0243173538ad80"
     },
     {
       "content": "blocks",

@@ -50,6 +50,7 @@ profile: domain-specification
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md | authored | 47 | 10 | sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7 |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -447,6 +448,14 @@ profile: domain-specification
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#29 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#35 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38 | authored | 2 | Status |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#1 | authored | 1 | A toolchain pinned for a command this workspace forbids running is pinned for nothing |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#12 | authored | 2 | The Decision |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#21 | authored | 2 | What This Costs |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#25 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#29 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#31 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -11942,6 +11951,274 @@ Closed. `P11-PLATFORM-UNCHECKED` carries it, and it discharges the fourth and la
 instances `OD-GATE-006` measured. The third, `P11-MSRV-UNCHECKED`, is measured but not landed:
 correcting the compatibility floor unmasks clippy findings in files that item does not reserve,
 which `P11-COLLAPSIBLE-UNMASKED` carries.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#1
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing · hash: sha256:783fbcc24ab46b464cba1237fc506e3b3a064ab6e5d16d13eedab69c686f894f*
+
+# A toolchain pinned for a command this workspace forbids running is pinned for nothing
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#2
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#3
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / Question · hash: sha256:d0e61ad36f3cb0795fc8e6f3633cf62249ee220b577d3562fac630b75ef12f70*
+
+`rust-toolchain.toml` pinned this workspace's channel to `nightly`, and its own comment gave one
+reason: `cargo fmt` needs the unstable `brace_style = "AlwaysNextLine"` option to express this
+workspace's Allman brace style. `rustfmt.toml` and `README.md` both state, independently and in
+their own words, that `cargo fmt` **cannot** produce this workspace's style regardless — rustfmt
+has no option that puts a control-flow brace on its own line, so it rewrites the workspace's form
+back to K&R every time it runs — and that `cargo fmt --check` is deliberately not a gate step,
+because a gate holding two mutually contradictory checks can never be green.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#4
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / Question · hash: sha256:5670b81ace7043894c1cca5ca0a3694d03f6d95f427134308e890be03b0e5b2e*
+
+So the toolchain was pinned to enable an option belonging to a command this repository already
+forbids running. That is `OD-GATE-006`'s shape in a new instance: not a declaration nobody
+executes, but a mechanism (`unstable_features`) that is fully wired up and genuinely inert,
+because the one command that would exercise it is banned by two other files.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#5
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / Question · hash: sha256:f13b92e841d803d35f4cda607d66597229f5ce86a8c0b6b37dfe4478384ba65f*
+
+The cost was not confined to this file. Because every build here and in CI used nightly, no
+compiler near the declared compatibility floor was ever pointed at this tree — which is exactly
+how `Cargo.toml`'s `rust-version = "1.85"` came to be false while reading as checked. That gap is
+`P11-MSRV-UNCHECKED`'s subject, not this record's; this record cites its measurement below without
+claiming its outcome.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#6
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#7
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Was Measured · hash: sha256:338624e807b6a2b2fe5f215d68c1d075a2ab6b8c6e98637f4915986ed51827db*
+
+At `3cd2261`, under `P11-MSRV-UNCHECKED`'s own measurement, cited by this item's own why-text:
+`cargo check --workspace --all-targets` on stable `1.88.0` exits `0` with zero errors. The pin is
+not load-bearing for compilation. That measurement is `P11-MSRV-UNCHECKED`'s own to govern; this
+record relies on the number without asserting the record that will carry it.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#8
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Was Measured · hash: sha256:938c4312ad1005b6b909af25e54072a8df1fa2d6484be36037cb5a76ff8c321e*
+
+Searched directly for this record, and found nothing else nightly depends on:
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#9
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Was Measured · hash: sha256:8e532052b6a24164c30ee0c2e44cc06c85dd40f83432e592c4d92bb88822c3f6*
+
+| Checked | Result |
+|---|---|
+| `#![feature(...)]` anywhere in the workspace | none — the one `feature` hit in the tree (`crates/substrate/nomos-workspace/src/variant.rs`) is the `BuildVariant.features` field, an ordinary struct member, not an unstable-feature attribute |
+| `cargo-features = [...]` in any `Cargo.toml` | none |
+| Nightly-only Cargo resolver or workspace setting | none — `resolver = "3"` and `edition = "2024"` are both stable as of 1.85 |
+| A workspace lint requiring nightly (`private_interfaces`, `private_bounds`, `unsafe_code`, the `clippy::*` group levels) | none — all stable lints |
+| `clippy.toml` | one key, `allow-unwrap-in-tests`; nothing nightly-gated |
+| Any `build.rs` reading a nightly-only `rustc`/`cargo` feature | none — the four build scripts (`nomos-spec-store`, `tests/integration`, `nomos-spec-project`, `nomos-cli`) read only `TARGET`, `PROFILE`, `RUSTUP_TOOLCHAIN` and `CARGO_FEATURE_*`, and record whatever string `RUSTUP_TOOLCHAIN` holds without requiring a particular one |
+| `.github/workflows/gate.yml` for any other nightly dependency | none beyond the "Show toolchain" step's comment, which repeats the same spent reason this record retires (see "What This Record Does Not Decide") |
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#10
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Was Measured · hash: sha256:088afb528dc0b68d83e3e241a948c1faab26677f8168df69c17ce50a2cc6fda8*
+
+The nine `&& let` chains `OD-GATE-006` counted are not a nightly dependency either: let chains
+stabilized under edition 2024 in Rust 1.88, which is a stable release and is the same floor this
+record pins.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#11
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Was Measured · hash: sha256:a39c96832ae70cee8f3f00f37dd32c6a7b6c631e4fd192b4ffef35b0bbeeef30*
+
+The pin was buying exactly one thing — an unstable rustfmt option — and that thing was already
+unreachable by policy. Nothing else in the tree depends on a nightly compiler, a nightly-only
+language feature, or nightly-only tool behavior.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#12
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#13
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:c58cd055421f09d88e48e5afc0871cdea30ea825ff2e6e542bfb2fae5345169a*
+
+**Drop to stable, pinned at the exact release the workspace is measured to compile on: `1.88.0`.**
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#14
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:ea78f337e8fae629d9322b1a2b883063017dba62a36398a3b23535f15933653f*
+
+Of the three answers this item named, the other two were considered and are recorded here rather
+than silently passed over.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#15
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:36a7c92f648c0fadb48d618f3c35ac01b2800330a8d0d719d0d978a4dce51923*
+
+**Keep nightly for a different, real reason.** Rejected — the search above found none. A record
+claiming an undisclosed reason exists would be exactly the kind of declaration `OD-GATE-006`
+distrusts: unexecuted, unverifiable, and asserted rather than found.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#16
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:99c03e95192d7aca133c49c0cea01ddc9c13d69e48b27a84d4628cb35cf8e953*
+
+**Keep nightly and lift the `cargo fmt` ban.** Rejected, and by a wide margin — this would mean
+directly contradicting two other files' explicit, reasoned statements (`README.md`'s Conventions
+section and `rustfmt.toml`'s own warning) that `cargo fmt` damages this tree's style on every run,
+for a defect that is architectural (rustfmt has no control-flow-brace option at all) rather than
+configurational. Lifting the ban does not fix the half-rule problem; it would reintroduce a
+gate step this repository already rejected once for being unwinnable. Nothing found while
+preparing this record weighs against the reasoning `README.md` and `rustfmt.toml` already state.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#17
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:35cad203aca109fe790d70dbbd453adecc2e948ede04fa931c9ea928440e35a6*
+
+**Drop to stable.** Chosen. It matches what the workspace already measures true elsewhere
+(`OD-GATE-008`'s floor), it costs nothing the search above could find, and it removes a pin whose
+only stated purpose was already unreachable.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#18
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:0e1abcb4739842654def440783d21934ae34c75821b14dfd358e75675f0d77ff*
+
+`rust-toolchain.toml` now reads:
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#19
+
+*revision: authored · kind: code · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:a4e7df18600b1c818732abfa0ae98075a5d7f5c638b2f4d06d2069549381d849*
+
+```toml
+[toolchain]
+channel = "1.88.0"
+components = ["rustfmt", "clippy"]
+```
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#20
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / The Decision · hash: sha256:8a5110ab789a8b8618f90823cc644b7e3f27b5b6bb087a30e13b6a332effcd92*
+
+pinned to an exact release rather than to the floating name `stable`, for the same reason this
+repository pins GitHub Actions to a commit rather than a tag (`OD-GATE-006`): a floating reference
+changes what every build runs on a morning nobody committed anything.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#21
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#22
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Costs · hash: sha256:2f2d8272a7464aaed08f8204dd6b95978d36d62b3d2c3a1dede3af1071f12d18*
+
+**What the losing side (keeping nightly) would have cost:** nothing measurable was found, which
+is the point of the search above — keeping the pin was buying access to an option no permitted
+command may invoke. The genuine cost of keeping it was invisible and cumulative: every build
+using a channel newer than any declared floor is exactly the condition that let `rust-version`
+sit at a false `1.85` unnoticed, per `OD-GATE-006` and per `P11-MSRV-UNCHECKED`'s own measurement.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#23
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Costs · hash: sha256:441d4bfcabee36f7b5db2c19aee7469e866aa57c61a4e981185e33a24482542f*
+
+**What dropping it costs:** every contributor and every CI run now compiles with a fixed
+`1.88.0` toolchain instead of whatever nightly resolved to that morning. Nightly-only behavior
+nobody has gone looking for could exist and would now surface as a build failure rather than
+silently continuing to work — that risk is accepted rather than eliminated; the search above is
+what was checked, not a proof of absence. `rustfmt.toml`'s `unstable_features = true` and
+`brace_style = "AlwaysNextLine"` keys are now configuration for an option a stable toolchain's
+`rustfmt` refuses outright rather than silently ignores — a louder failure than before if anyone
+ever runs `cargo fmt` here, which is the intended failure mode given the ban already in place.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#24
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Costs · hash: sha256:d0789a7ced7b206c05039315b26ec0bf267824762b174bf6853cfc50ab6a2be8*
+
+`crates/substrate/nomos-workspace/src/variant.rs`'s `BuildVariant.toolchain` field, captured from
+`RUSTUP_TOOLCHAIN` by the `nomos-cli` and `tests/integration` build scripts, will now read a
+stable-release string (e.g. `1.88.0-x86_64-pc-windows-msvc`) instead of a string naming `nightly`.
+Because that field is part of a build variant's identity, any fact cached under a `nightly`
+variant is simply keyed differently going forward — not corrupted, not silently reused for the
+wrong build, which is exactly the property `variant.rs`'s own module comment argues the identity
+exists to hold.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#25
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#26
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Record Does Not Decide · hash: sha256:c43889856b57bfced019e1919ca310ad65b196f70e1824c58f4123612de200a6*
+
+It does not correct `.github/workflows/gate.yml`. That file's "Show toolchain" step carries a
+comment repeating the now-spent reason ("It is nightly because rustfmt's Allman brace option is
+unstable"), and this item's territory does not reach it — `.github/workflows/gate.yml` is
+concurrently claimed by `P11-MSRV-UNCHECKED`, which is already amending that file to add a
+compatibility-floor lane. Whichever item next touches that comment should correct it; this record
+states plainly that it is now stale so the next reader does not have to rediscover that from
+scratch.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#27
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Record Does Not Decide · hash: sha256:bcb0e408fcad2e068f772a2836b13637115a10afcadfbc21b07f8cc00391112f*
+
+It does not decide anything about lifting the `cargo fmt` ban. That question stays answered by
+`README.md`'s Conventions section and `rustfmt.toml`, unchanged in substance here.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#28
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What This Record Does Not Decide · hash: sha256:0c6849c0db1ae5f9f2c1e6221ebfab2cf411eb8ebce2ba2bb152bc2878c354fc*
+
+It does not decide the compatibility floor itself. `P11-MSRV-UNCHECKED` is the item measuring and
+setting `Cargo.toml`'s `rust-version`, under whatever record identifier it registers; this
+record's `1.88.0` toolchain pin tracks that measurement — cited above by commit and by number —
+rather than re-deriving it or asserting the record that will carry it.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#29
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#30
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / What Holds It · hash: sha256:03a42b6f699741b8640dff9a527ac134c8527c4f13bbc93990baa65a04669ebe*
+
+`rust-toolchain.toml` itself, honoured automatically by `cargo` and `rustup` on every invocation
+in this tree and in CI. There is no test asserting the channel is a particular value or is not
+`nightly` — a later editor repinning to nightly (for a real reason or otherwise) is caught by
+nothing mechanical, only by this record and by whatever the item that does it is required to
+search, the same way this one was.
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#31
+
+*revision: authored · kind: heading · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#32
+
+*revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / Status · hash: sha256:6d07806cfb66f32add5ef855c8f8c49fcc816e16523dfd23de0243173538ad80*
+
+Closed. `P11-NIGHTLY-PURPOSE` carries it.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

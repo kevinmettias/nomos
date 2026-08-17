@@ -94,6 +94,37 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: cargo test --workspace
 
+      # The compatibility floor `Cargo.toml` declares. `OD-GATE-006` decided a declaration of
+      # compatibility is incomplete until something compiles it in that configuration; `OD-GATE-008`
+      # is the record that measured this workspace's actual floor (`1.88`) and chose to check it
+      # rather than test it -- `rust-version` is a promise about what a consumer's compiler must be
+      # to build this crate, not about this workspace's own tests passing on one.
+      #
+      # RUSTUP_TOOLCHAIN, not `cargo +1.88.0`. `rust-toolchain.toml` pins a channel, and only
+      # RUSTUP_TOOLCHAIN out-ranks that pin -- a `+toolchain` argument selects among installed
+      # toolchains but does not beat a channel file present in the working directory. Pinned to the
+      # full patch release the floor was measured on, `1.88.0`, rather than `1.88` or `stable`, the
+      # same reasoning this workflow already applies to `actions/checkout` and `cargo-deny`: a
+      # floating reference changes what a lane checks on a morning nobody committed anything.
+      #
+      # `--all-targets`, because several of the `&& let` sites this floor exists for are inside
+      # `tests/`; checking library code alone would under-measure the same defect `OD-GATE-006`
+      # found.
+      #
+      # Linux only, matching `Lint` and `Rules` below, and for the reason `OD-GATE-009` measured
+      # for both: no `cfg(windows)`, `cfg(unix)` or `cfg(target_os = ...)` anywhere in this
+      # workspace, so a compilability question has no host in it and a second run would recheck an
+      # identical token stream.
+      - name: Install compatibility floor toolchain
+        if: matrix.os == 'ubuntu-latest'
+        run: rustup toolchain install 1.88.0 --profile minimal --no-self-update
+
+      - name: Compatibility floor
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          RUSTUP_TOOLCHAIN: 1.88.0
+        run: cargo check --workspace --all-targets
+
       # Windows only, because on Linux `Test` above already covers it.
       #
       # A decided subset, not a copy. Seven of these crates carry a `determinism.rs` and are
