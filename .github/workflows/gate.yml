@@ -69,9 +69,14 @@ jobs:
       - name: Show toolchain
         run: cargo --version && rustc --version
 
-      # Denied lints are part of the gate, not advice. unwrap_used, indexing_slicing
-      # and arithmetic_side_effects all deny: a panic on the analysis path is a
-      # determinism defect, because a replay must reach the same panic at the same step.
+      # Severity is Cargo.toml's job, not this step's. `[workspace.lints.clippy]` denies
+      # unwrap_used, indexing_slicing, arithmetic_side_effects and float_cmp -- a panic on
+      # the analysis path is a determinism defect, because a replay must reach the same panic
+      # at the same step -- and marks clippy::all and clippy::pedantic warn, deliberately
+      # advisory rather than blocking. This step used to add `-- -D warnings`, which promoted
+      # the warn-level lints to hard failures here and nowhere else, so a contributor's own
+      # machine and this gate disagreed about what actually blocked a merge. `OD-GATE-007`
+      # removed the flag rather than mirror it into the table, so severity is stated once.
       #
       # Linux only, and the exclusion is measured rather than assumed. There is no
       # `cfg(windows)`, no `cfg(unix)` and no `cfg(target_os = …)` anywhere in this
@@ -84,7 +89,7 @@ jobs:
       # ignoring every other key, so this step still yields the same argv.
       - name: Lint
         if: matrix.os == 'ubuntu-latest'
-        run: cargo clippy --workspace --all-targets -- -D warnings
+        run: cargo clippy --workspace --all-targets
 
       # The whole suite runs on Linux. On Windows the subset that makes platform-sensitive
       # claims runs instead, below -- running the workspace twice would double the most

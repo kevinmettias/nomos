@@ -10,6 +10,13 @@ use crate::workflow::{RULES_STEP, Workflow};
 /// run … check --root .` — and clippy would stop running before every item's predicate with
 /// nothing saying so. That is why the step `OD-GATE-004` added is named `Rules`.
 ///
+/// The argv no longer carries `-- -D warnings`. `OD-GATE-007` collapsed this workspace's clippy
+/// severity onto `Cargo.toml`'s `[workspace.lints.clippy]` table alone — a bare `cargo clippy`
+/// already denies `unwrap_used`, `indexing_slicing`, `arithmetic_side_effects` and `float_cmp`
+/// there — and removed the flag from this step rather than mirror it into the table, so
+/// severity is stated once. A `-D warnings` reappearing here would be the duplicate authority
+/// that record closed, so its **absence** is what this test now asserts.
+///
 /// # This is a near-duplicate of `gate_covers_finish.rs`'s
 /// `Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step`, and both are kept
 ///
@@ -44,8 +51,10 @@ fn Test_The_Derived_Lint_Step_Should_Still_Be_Clippy()
          clippy silently replaces linting: {argv:?}"
     );
     assert!(
-        argv.iter().any(|argument| return argument == "-D"),
-        "the lint step must still deny warnings, got {argv:?}"
+        !argv.iter().any(|argument| return argument == "-D"),
+        "the lint step should no longer promote its own warnings to errors -- \
+         `Cargo.toml`'s `[workspace.lints.clippy]` table is the one place severity is \
+         decided (OD-GATE-007), got {argv:?}"
     );
 }
 

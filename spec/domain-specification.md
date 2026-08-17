@@ -55,6 +55,7 @@ profile: domain-specification
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md | authored | 47 | 10 | sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7 |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md@authored | docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md | authored | 20 | 7 | sha256:768da13b9c897e7555d8cef881e29b74401b653ed5573655204965491709271d |
 | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md@authored | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md | authored | 42 | 12 | sha256:487f9bddc49b1a1c17e34c0a00e87e5e3907432d8c46b6b45cfb715b6bc31cb3 |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
@@ -81,6 +82,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md@authored | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md | authored | 19 | 8 | sha256:409f9c166337da0afc4471e4c50cd9431117d100ddbc5527846feeb8d7048533 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -105,7 +107,6 @@ profile: domain-specification
 | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md@authored | docs/records/OD-SPEC-009-a-submission-enters-through-one-accept-function-and-every-surface-is-a-transport-onto-it.md | authored | 36 | 10 | sha256:8c3810110e3cfcd4a0ad8e6ade3171c5be53047c3af3fd5bd314060db7d07ee6 |
 | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md@authored | docs/records/OD-SPEC-010-validation-refuses-what-cannot-be-repaired-later-and-no-later-value-overwrites-what-was-submitted.md | authored | 81 | 16 | sha256:19e7d0ce84e849c9187904e55e68435fdfd3ab83704119b7660f5bd71ffafdf0 |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md@authored | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md | authored | 31 | 11 | sha256:d54b7f586b61cf0700462b348521753930fbd6fe1b7b1b0d17f915d4db6884db |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md@authored | docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md | authored | 36 | 14 | sha256:9a0f5a872ff7f769ee63d68312e1af6fdbfbf7c6e18e69652864c6f030e15ffa |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md@authored | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md | authored | 41 | 13 | sha256:8dcf5d25a7f6914387cc79e86eeb50d23edb944694fefdfdefc1d1cd468ae003 |
 | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md@authored | docs/records/OD-SPEC-014-whether-the-spec-graph-and-projection-engine-becomes-shared-kwb-infrastructure.md | authored | 14 | 5 | sha256:227009cdd4296112242bd4f960cab6549a198a1359f288aca43bbec584cc5247 |
 | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md@authored | docs/records/OD-STORE-001-a-document-kind-is-a-behaviour-not-a-label.md | authored | 28 | 8 | sha256:3e2b7309bfc8cd5f7083b3e96924cffe4cebfbd23f7d604f7c1b5fe8d4c339fa |
@@ -493,6 +494,13 @@ profile: domain-specification
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#36 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#41 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#45 | authored | 2 | Status |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#1 | authored | 1 | The workspace lint table decides clippy's severity once, and the gate stops adding its own |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#5 | authored | 2 | Decision |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#9 | authored | 2 | What This Costs |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#13 | authored | 2 | Consequences |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#17 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#19 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#1 | authored | 1 | The compatibility floor is measured by compiling it, and checked rather than tested |
 | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#6 | authored | 2 | What Was Measured |
@@ -766,6 +774,14 @@ profile: domain-specification
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#23 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#28 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#31 | authored | 2 | Status |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#1 | authored | 1 | A third crate-wide territory is declared a serializer rather than narrowed |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#6 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#10 | authored | 2 | What This Costs |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#12 | authored | 2 | Consequences |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#14 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#16 | authored | 2 | What Would Make This Stale |
+| docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#18 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -990,20 +1006,6 @@ profile: domain-specification
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#26 | authored | 2 | What This Does Not Do |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#28 | authored | 2 | Controls |
 | docs/records/OD-SPEC-011-an-unknown-relation-type-is-refused-by-name-rather-than-by-a-foreign-key.md#30 | authored | 2 | Status |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#1 | authored | 1 | A declared constraint says which node kinds a relation type joins, and how many a node may carry |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#2 | authored | 2 | Question |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#5 | authored | 2 | What Was Measured |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#7 | authored | 2 | The Decision |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#8 | authored | 3 | 1. A relation type declares domain, range and cardinality together, or it is refused |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#11 | authored | 3 | 2. Domain, range and cardinality are per named direction, not per pair |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#13 | authored | 3 | 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#17 | authored | 3 | 4. The five seed types declare real constraints, not placeholders |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#21 | authored | 3 | 5. Domain and range travel as JSON columns, not as a second table |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#24 | authored | 3 | 6. The bundle carries the constraint, not just the row |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#26 | authored | 2 | What Happens When `ADR-ARTIFACT-GRAPH-002` Lands |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#28 | authored | 2 | What Was Considered And Rejected |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#33 | authored | 2 | Controls |
-| docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#35 | authored | 2 | Status |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#1 | authored | 1 | A submission is a node, a field is a sequence of attributed rows, and a gap is a row of its own |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#5 | authored | 2 | Why This Record Is Not `OD-SPEC-011` |
@@ -13052,6 +13054,195 @@ Amended to version 2 by `P11-WORKFLOW-TRUST`, which pins what this gate executes
 argument is stated above rather than deleted: a record whose whole subject is claims that
 nothing checks cannot quietly drop the paragraph that turned out to be one.
 
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#1
+
+*revision: authored · kind: heading · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own · hash: sha256:7b5a76d015afd8ba7d8c410f0dca56dfcc1e5100a9100b0b88c7ed9a70e04608*
+
+# The workspace lint table decides clippy's severity once, and the gate stops adding its own
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#2
+
+*revision: authored · kind: heading · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#3
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Question · hash: sha256:cd545bd21494aec9dbbc0cd02f2b3e992ee87ec51331bd42af1c9037613984fc*
+
+`Cargo.toml`'s `[workspace.lints.clippy]` states a severity per lint: `clippy::all` and
+`clippy::pedantic` sit at `warn`, and `float_cmp`, `unwrap_used`, `arithmetic_side_effects`
+and `indexing_slicing` sit at `deny`, because a panic on the analysis path is a determinism
+defect rather than a bug — a replay must reach the same panic at the same step.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#4
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Question · hash: sha256:d06066d0716c56fa8699a796fdcd5edef155aa49857d7a02a6eed08bfc6e9e3f*
+
+`.github/workflows/gate.yml`'s `Lint` step ran `cargo clippy --workspace --all-targets --
+-D warnings`. `-D warnings` promotes every remaining warning to an error, so it did not add a
+new rule — it erased the distinction the table had just drawn. `clippy::all` and
+`clippy::pedantic`, `warn` in the table, were hard failures in CI exactly like the four `deny`
+lints, and nothing said so. A contributor reading `Cargo.toml` to learn what blocks a merge
+learned something false: the stricter of the two rules was the one written down nowhere as
+policy. `OD-GATE-006` named this and deferred it — "The workspace lint table in `Cargo.toml`
+and the gate's `-D warnings` are two authorities for one severity policy, and both of them
+run — that is a disagreement between executors rather than an absent one" — because both
+authorities *executed*, which was a different defect than the one that record was about.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#5
+
+*revision: authored · kind: heading · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#6
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Decision · hash: sha256:cfae38b1524926975efb35807b1e5ec0e1ba46478bcda9218a33190e036a1f58*
+
+**`Cargo.toml`'s `[workspace.lints.clippy]` table is the one place clippy's severity is
+stated. The gate's `Lint` step runs `cargo clippy --workspace --all-targets`, unchanged
+otherwise, with no promotion flag of its own.**
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#7
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Decision · hash: sha256:081ea25df0d4973e68c163860e94383403f763a35a8da26ee2bfe60636d01138*
+
+Chosen over promoting the table to match the gate — setting `all` and `pedantic` to `deny`
+so `-D warnings` becomes redundant there too — because that direction reaches further than
+this disagreement. `-D warnings` is not scoped to `[workspace.lints.clippy]`; it promotes
+every warning the invocation produces, including `[workspace.lints.rust]`'s `unsafe_code`
+(`warn`) and any ordinary rustc warning clippy surfaces along the way. Matching the gate's
+severity inside the clippy table would still have left those outside it silently governed by
+a flag this record was never written to examine. Removing the flag instead collapses onto the
+table that already states a reason for each of its own choices, and it removes exactly the
+authority this record is about — nothing wider.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#8
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Decision · hash: sha256:554003aa015f50a66d69d3ddfb68cc3a9e006ff5926127cfcd0a191392c18d3d*
+
+The table's declared severities do not change. `float_cmp`, `unwrap_used`,
+`arithmetic_side_effects` and `indexing_slicing` are still `deny`, so a bare `cargo clippy` —
+on a contributor's machine or in the gate — still fails on them with no extra flag, unchanged
+by this decision. `clippy::all` and `clippy::pedantic` are still `warn`, and that is now true
+everywhere rather than true only until `-D warnings` was added: a contributor's own machine
+and the gate agree, for the first time, about what actually blocks a merge.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#9
+
+*revision: authored · kind: heading · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#10
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What This Costs · hash: sha256:ca340b626add5dd2337ba65d6092e7e0aabee193398a865e4ebbf7ccf80a9fbf*
+
+**Named rather than discovered.** Measured against the working tree this record was written
+in: `cargo clippy --workspace --all-targets -- -D warnings` (the arrangement being replaced)
+exits 0 with no warnings. `cargo clippy --workspace --all-targets` (the arrangement this
+record adopts) also exits 0 with no warnings — the same command, run without the flag, over
+the same tree. So today the two arrangements reject the identical, empty set: nothing that
+passed the old gate would have failed it, and nothing new passes the new one that failed the
+old one.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#11
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What This Costs · hash: sha256:485f5a313c510cc6585ac6c6a2da50e54199d6a11eb2b2bc43b3c2295d00bc8a*
+
+The cost is forward-looking rather than measured. Before this decision, a `clippy::pedantic`
+finding anywhere in the workspace failed the gate — CI rejected it whether or not `Cargo.toml`
+said so. After this decision, the same finding only warns in CI, exactly as it already only
+warned on a contributor's own machine; it stops a merge only if somebody reads the warning and
+acts on it, or if the finding also trips one of the four `deny` lints. That is a real loss of
+a backstop this repository had, silently, until this record. It is accepted because the
+backstop was never a *stated* policy — `Cargo.toml` never claimed pedantic findings would
+block a merge — and restoring it by raising the table's severity was rejected above for
+reaching into `unsafe_code` and plain rustc warnings this record does not examine. A future
+record is free to raise `clippy::pedantic` to `deny` on its own stated grounds; this one does
+not do it by accident, through a flag scoped to something else.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#12
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What This Costs · hash: sha256:6fc9ecb408df14f2434a82cce393e59c2ffa4f6eac973cb00087b3cd08cbb9dc*
+
+**`unsafe_code` loses the same promotion, unexamined.** `[workspace.lints.rust]`'s
+`unsafe_code = "warn"` was also promoted to a hard failure in CI by the same flag, for the
+same unstated reason. Removing `-D warnings` removes that promotion too. This record does not
+raise `unsafe_code` to `deny` — that table, and that lint, are outside what `Cargo.toml`'s
+`[workspace.lints.clippy]` comment and this item's territory describe — but it is named here
+rather than left for the next reader to find by noticing a workflow diff with no record
+behind it.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#13
+
+*revision: authored · kind: heading · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#14
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Consequences · hash: sha256:a7f216edd984e57a373099b5869f8880ef17455f5b7e51c98ddb37090b7f1eff*
+
+`.github/workflows/gate.yml`'s `Lint` step's `run:` line drops `-- -D warnings`. The step's own
+comment, and `Cargo.toml`'s `[workspace.lints.clippy]` header comment, both point here instead
+of each re-explaining why.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#15
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Consequences · hash: sha256:9e282870dc2916fc75df9855a75b567d0cdd006cf86b44093b9be7dadfe969cf*
+
+`README.md`'s `## Running the gate` section stops reproducing the gate's exact commands; it
+routes to `.github/workflows/gate.yml` instead, which is the one place `OD-LEDGER-003` already
+derives `work finish`'s lint step from. The paragraph naming `unwrap_used`, `indexing_slicing`,
+`arithmetic_side_effects` and `float_cmp` as denied stays, and stays true — `Cargo.toml`'s
+table did not change on that axis.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#16
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / Consequences · hash: sha256:f8db0a0a95d5ab59c2b2428b7c798b00bfd15c9de86a131bd9af0bd45392f1e2*
+
+`nomos_ledger::Derive_Step(&Workflow(), LINT_STEP)` yields an argv one flag shorter than
+before: `cargo clippy --workspace --all-targets`, no trailing `-- -D warnings`.
+`Test_The_Derived_Lint_Step_Should_Still_Be_Clippy`
+(`crates/host/nomos-cli/tests/gate_step/lint_step.rs`) and
+`Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step`
+(`crates/substrate/nomos-ledger/tests/gate_covers_finish/repository_gate.rs`) are updated to
+assert clippy still runs and `-D` no longer does, rather than asserting the flag this record
+removes.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#17
+
+*revision: authored · kind: heading · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#18
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What Holds It · hash: sha256:a9e7de7e2612a469a8d83d848ed3907a0ea9058fe85183ca2ac85a13b39ab095*
+
+The two tests named above, run over the repository's real workflow rather than a fixture — the
+same shape `OD-LEDGER-003` already used to catch a scripted or renamed `Lint` step.
+`crates/substrate/nomos-ledger/src/gate.rs`'s own unit tests use a self-contained fixture
+workflow string and are untouched by this decision; they test `Derive_Step`'s parsing, not
+this repository's severity policy.
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#19
+
+*revision: authored · kind: heading · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md#20
+
+*revision: authored · kind: prose · heading: The workspace lint table decides clippy's severity once, and the gate stops adding its own / What This Record Does Not Decide · hash: sha256:c167dc6e97d00f6ef6352b1180c882f5235dbfbb8961add7acb42ab9db8e31e6*
+
+It does not decide `[workspace.lints.rust]`'s severities, including `unsafe_code`. It does not
+raise `clippy::pedantic` to `deny` to recover the backstop the cost section above names — that
+is a choice with its own cost, for a later record to make on its own stated grounds, not a side
+effect of this one.
+
 ### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#1
 
 *revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested · hash: sha256:3d07da34ec9f89a3c79ce8c8e11c3570bea39fcee898bb573f4d07591ce2ef1d*
@@ -21729,6 +21920,161 @@ while the sentence it had to change had moved to `add_refusal.rs`. The second of
 correct when it was authored, and this record's own subject is why it could not be repaired in
 place.
 
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#1
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed · hash: sha256:c3e81368978c9b609ce70fb946fbf559216d076f52c926d25e742fb3e6c73bce*
+
+# A third crate-wide territory is declared a serializer rather than narrowed
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#2
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#3
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / Question · hash: sha256:f4b8e2f498a256af61370b5fbbbd050c1fca39488547e6ccdd4f445e25bfef03*
+
+`OD-LEDGER-007` established the register: a path two record writers share is contention,
+which territory is for and which resolves when one of them finishes; a path *every* open
+record writer shares is a rule, and it does not resolve on its own, so `KNOWN_SERIALIZERS`
+in `crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs` names it
+with what forces it. `OD-LEDGER-011` closed the two entries that register opened with, and
+the file's own doc comment since then has read the empty list as a state worth naming
+rather than an absence.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#4
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / Question · hash: sha256:6cdac670d20aa0b57f5f24b4aefe6a060105f2082bddc31393737708b4878712*
+
+`Test_Every_Universal_Reservation_Should_Be_Declared` went red with no code change:
+`crates/host/nomos-cli` is reserved by every currently open record-writing item, and the
+register does not say so. Confirmed against a fully committed tree — every uncommitted
+change in the working copy at the time, `stash`ed away, still reproduced the same failure
+— so this is not a symptom of anybody's in-flight work. It is the board.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#5
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / Question · hash: sha256:e8c47b08e0d72230ebd7803737aa0de98d86cc1c4d3becb37eb5a5bda168a392*
+
+Two open items force it: `P10-VACUITY-HOME` and `P10-SERVICE-SEAM`, both reserving
+`crates/host/nomos-cli` whole. Both are asking a question about the crate's own shape.
+`P10-VACUITY-HOME` asks where a guarantee that must hold for every judging command in this
+crate should live — across `check.rs`, `spec.rs`, `work.rs` and whatever the next command
+adds. `P10-SERVICE-SEAM` asks whether the crate needs a seam between choosing a platform,
+running a verb and rendering an outcome, at all six of its current modules and whichever
+carries the answer. Neither item has chosen an implementation. Naming a narrower file for
+either today would not measure the item's actual scope; it would guess at one, and the
+guess could not be corrected later — territory has no `work edit`.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#6
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#7
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / Decision · hash: sha256:307dd2a90b2389a7e99fc25fab927e559c22bc96d01ae3ba95a58cfe2a77fb49*
+
+**`crates/host/nomos-cli` is declared in `KNOWN_SERIALIZERS`, naming both items and why
+each reserves the whole crate rather than a file in it.**
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#8
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / Decision · hash: sha256:fe6e722193d4606e6082d1391947053bc2fe7a22c9140e870d1ad1cc3774184f*
+
+Chosen over narrowing `P10-VACUITY-HOME`'s or `P10-SERVICE-SEAM`'s territory, which
+`OD-LEDGER-007` already refused to do to unblock a different pair, for the same reason:
+narrowing somebody else's open item's territory is a decision made about work that is not
+this item's, on behalf of a holder who has not made it. It is also, here, not obviously
+correct — both items' own `why` sections describe questions the whole crate is the honest
+scope of, not territory authored wider than the work needs.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#9
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / Decision · hash: sha256:7c83b9279de1cdf32ddbd866473a1a9ae2de8bb5d92af09a6ebc8550f625cac6*
+
+The register's own guidance, in the test that found this — "add it with what forces it, or
+remove the coupling" — names both paths as available. This record takes the first because
+the second is not available cheaply: removing it means one of two open items answering an
+architectural question before it has done the work that answers it.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#10
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#11
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / What This Costs · hash: sha256:d9727fff9835f2bb424702bb5b136b28dfe120877c5ff783dfe67c2dbde9c2db*
+
+Every record-writing item whose verification predicate reaches `cargo test -p nomos-ledger`
+carries this exclusion until it clears. That is not new — `OD-LEDGER-007` already named the
+same shape for the first two entries and called it the board's debt rather than a defect in
+the mechanism. What is new is that the register briefly read as empty and was not; a
+contributor who trusted the doc comment's silence over running the suite would have found
+this the way two sessions did, independently, roughly twelve hours apart.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#12
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#13
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / Consequences · hash: sha256:ea0ae036761cec934f08b797739355cdd3eb26c04cbd863cda49de03f0305cab*
+
+`crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs`'s
+`KNOWN_SERIALIZERS` carries one entry, and its file-level doc comment stops describing the
+register as empty.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#14
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#15
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / What Holds It · hash: sha256:f0e58aa51f0678408dae9da776e7572006e9ba0147529724eb2f092f6ff88d41*
+
+`Test_Every_Universal_Reservation_Should_Be_Declared` and
+`Test_Every_Declared_Serializer_Should_Still_Serialize`, the same two tests `OD-LEDGER-007`
+named, run over the repository's real board rather than a fixture.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#16
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed / What Would Make This Stale · hash: sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac*
+
+## What Would Make This Stale
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#17
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / What Would Make This Stale · hash: sha256:1b0ca4c04a0f3a9d5cd8fc4420fbf63592fe2a4d83be469d2a615a3f57580555*
+
+Either open item reaching `Done`, if the other by then no longer reserves the whole crate.
+Either open item being re-authored to a narrower territory by whoever holds or next claims
+it — a decision this record does not make and is not the one to make. Or a third open item
+forcing the same path, which changes the entry's reason rather than removing it.
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#18
+
+*revision: authored · kind: heading · heading: A third crate-wide territory is declared a serializer rather than narrowed / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#19
+
+*revision: authored · kind: prose · heading: A third crate-wide territory is declared a serializer rather than narrowed / What This Record Does Not Decide · hash: sha256:4dfb2c0efdde8c5bec0b99241b2152993e81f303c541284b60549845b9105925*
+
+It does not decide whether `P10-VACUITY-HOME` or `P10-SERVICE-SEAM` is right to reserve the
+whole crate as a matter of good territory authoring — only that neither is the accident
+`OD-LEDGER-011` closed two of, and that deciding otherwise is not this item's to make.
+
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 
 *revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger · hash: sha256:f8c5c2d9a62f8885a1b5399e69827138d3be4b147693b001857ec8c9172fa72a*
@@ -29502,341 +29848,6 @@ it says one record with one bad term must not read as eighteen failures.
 *revision: authored · kind: prose · heading: An unknown relation type is refused by name rather than by a foreign key / Status · hash: sha256:4d14b23d154d4ff70ca5f31ab6f698d8819553c9f33a270c1e7e9ed2b5d4ec9a*
 
 Closed by `P10-VOCABULARY-REFUSAL`.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#1
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry · hash: sha256:0c984ebd76509bc6b59c5ad13ba448918a4ebc456892235b6c54c1d371156e35*
-
-# A declared constraint says which node kinds a relation type joins, and how many a node may carry
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#2
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
-
-## Question
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#3
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Question · hash: sha256:7ec8e9916d1f531c823158f53b861b3e10714ef63113865fb485efb572a5de91*
-
-`relation_types` carried a name, a tier and the name of its inverse, and nothing else.
-`relations` enforced only that both endpoints already existed as nodes and that the triple
-was unique. `OD-SPEC-010` rule 4 requires that an `implements` edge resolve to an accepted
-design and an `answers` edge to an accepted request, and its own text says why that rule
-cannot be the whole answer: it constrains the submission that writes the edge, not the
-graph the edge lands in. Nothing stopped an `implements` edge joining a suite to a table
-row, because nothing in the schema said which kinds of node `implements` was ever about.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#4
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Question · hash: sha256:71bda1eb0eea012d06607069925bd307f2f3ca3113a9cca1abdd130c41c55cb0*
-
-`P10-EDGE-CONSTRAINTS`, twice re-authored, named the defect and stalled on what depended on
-it. `P10-SUBMISSION-LAYOUT` landing closed that dependency; this record is
-`P10-EDGE-CONSTRAINTS-2` closed.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#5
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
-
-## What Was Measured
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#6
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Measured · hash: sha256:08edd251260e6f5b9e51687fcfa52b90a054217f182d63597ca1f7fc03b4dfb1*
-
-The seeded vocabulary is nine rows — five concepts, four of them paired with an inverse:
-`supersedes`/`superseded_by`, `affects`/`affected_by`, `relates-to` (its own inverse),
-`answers`/`answered_by`, `implements`/`implemented_by`. Every governing record this build
-seeds declares `type: decision` or `type: architecture` in its front matter and nothing
-else — a query over the seeded corpus found no third value. The busiest node's `relates-to`
-count, summed across both directions the self-paired type writes, was 21.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#7
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
-
-## The Decision
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#8
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 1. A relation type declares domain, range and cardinality together, or it is refused · hash: sha256:e4f4d80087e006eac3b898078f5b12ce369beb28c022f34a82e5460707db447a*
-
-### 1. A relation type declares domain, range and cardinality together, or it is refused
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#9
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 1. A relation type declares domain, range and cardinality together, or it is refused · hash: sha256:26adc908b9a9b74b77c04324c6eea353a31cb0b6a8239e6111290d5483362eef*
-
-`SpecificationStore::Put_Relation_Type` now takes `domain: &[&str]`, `range: &[&str]` and
-`max_per_node: u32` as required arguments beside the name and tier it always took. An empty
-domain, an empty range or a zero cardinality is `StoreError::UnconstrainedRelationType`,
-raised before anything is written. A relation type that admits everything is not a
-constraint, so a caller that declares nothing is refused at registration rather than
-handed a row that would go on admitting everything downstream — the shape `OD-SPEC-011`
-already used for an unknown term, applied to an unconstrained one.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#10
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 1. A relation type declares domain, range and cardinality together, or it is refused · hash: sha256:0092a16418b6f486e2e04bc41adf22c7c1af38cf3e4ab6efa82171450de143ae*
-
-Domain and range are nullable in neither direction: a type joins a *set* of node kinds at
-each end, which is why they are declared as lists rather than as two more single-valued
-columns. `relations` stays a graph between kinds, not a graph between exact node identities
-— `answers` admits every `design-spec`, not one named design.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#11
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 2. Domain, range and cardinality are per named direction, not per pair · hash: sha256:60e8fcdf825ad250414f8055094fd0886d27bfb08befb2ef9592503bbb3066b6*
-
-### 2. Domain, range and cardinality are per named direction, not per pair
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#12
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 2. Domain, range and cardinality are per named direction, not per pair · hash: sha256:c4c6ca8af40874de07d8cb5e332de993c8862dd3663ed107a861d47dd0885034*
-
-`answers` and `answered_by` are two rows in `relation_types`, each with its own domain,
-range and cardinality, rather than one constraint read backwards. They are not
-symmetric — `answers` runs from a `design-spec` to the `feature-request` it answers, and
-`answered_by` runs the other way — so a single shared declaration would have to pick a
-direction and silently apply it to both. Stating each direction on its own row is the same
-choice `relation_types.inverse_of` already made for the vocabulary itself: two rows, paired,
-rather than one row asked to mean two things depending on which way it is read.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#13
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:8c5ec69122fc425c2154d751f3c08dd323634ba07dcbe459c08656b2f2daeb7b*
-
-### 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#14
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:4604ca2e69e6f4a8c6505eb1e47cdbec5201ab119164505de4928da5b188e532*
-
-`Write_Relation` resolves both endpoints, looks up the relation type's declared constraint,
-and refuses before inserting if an endpoint's kind is not admitted at its role or if the new
-edge would push the writing node's count of that type past its cap. Both refusals —
-[`StoreError::RelationEndpoint`] and [`StoreError::RelationCardinality`] — name the relation
-type, the endpoint or node involved, what it is, and what would have satisfied the check:
-`RelationEndpoint` carries the admitted kinds, `RelationCardinality` carries the declared
-cap.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#15
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:9fff7240590c91423919c93e2adf4652727dfe459cf988526fb46289bad40c2a*
-
-The one exemption is deliberate: an endpoint minted by `Reference_Node` (`nodes.authority =
-EXTERNAL`) carries the sentinel kind `unknown` because nothing has ingested it yet, and
-`unknown` is not a fact about the node — it is the absence of one. Checking a placeholder's
-kind against a declared domain or range would be checking a fact that does not exist yet,
-and admitting the sentinel into every type's domain and range as if it were a real kind
-would have made the constraint report success for a question it never actually asked. So
-the check on that endpoint is deferred, not weakened: `Seed_Governing_Records`'s own
-forward-reference mechanism (`SeedReport.references`, and `OD-SPEC-011`'s reporting of it)
-still marks the placeholder visibly, and a later commit that resolves it writes the real
-node and the real kind then arrives for the *next* edge that endpoint takes part in. The
-cardinality check is not exempted the same way, because it counts edges leaving the real
-`from` endpoint — which, by the time an edge can be written at all, already resolved to a
-concrete row — rather than judging the placeholder's kind.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#16
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 3. The check runs where the edge is written, and is exempt for one case: an unresolved placeholder · hash: sha256:3fdb3eb7f0736b8f8ea7bb68ac04a3842c1dee0214e686640cb6c0ca2485ca29*
-
-An edge to an identifier no node holds at all still writes nothing silently, exactly as
-before this record: that contract belongs to `OD-SPEC-011` and the sibling-suite tests that
-depend on it, and this record does not touch it. Re-inserting an edge that already exists
-does not count a second time against the cap, the same idempotence `INSERT OR IGNORE`
-already gives every other edge in this store.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#17
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:0f8be2db93ec8413b5875f55dc86aec2804b1bc3d28a76812fca7d0595ebfab2*
-
-### 4. The five seed types declare real constraints, not placeholders
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#18
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:35dfb77382298b6e819bdbc350530d2663dc735448b442c9b67a650bafcbd533*
-
-| type | domain | range | max per node |
-|---|---|---|---|
-| `supersedes` / `superseded_by` | decision, architecture | decision, architecture | 16 |
-| `affects` / `affected_by` | decision, architecture | decision, architecture | 64 |
-| `relates-to` | decision, architecture | decision, architecture | 128 |
-| `answers` | design-spec | feature-request | 8 |
-| `answered_by` | feature-request | design-spec | 8 |
-| `implements` | feature-result | design-spec | 8 |
-| `implemented_by` | design-spec | feature-result | 8 |
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#19
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:e47bb2002f127da52237c70dd71abcfa1db68955d3f6cdfa3c3559eb418353fa*
-
-The record kinds (`decision`, `architecture`) are the two values this build's own governing
-records actually carry, not an invented wider set — the same restraint `OD-SPEC-011` already
-applied to the vocabulary itself applies here to what each term admits. The lifecycle
-kinds (`design-spec`, `feature-request`, `feature-result`) are `SubmissionKind`'s three
-labels, and the domain/range pairing on `answers`/`implements` is `OD-SPEC-010` rule 4's own
-statement of what those edges must resolve to — read here as a graph constraint rather than
-restated as a submission-time check, because it is now able to be one, and `submission.rs`'s
-rule 4 remains the separate guarantee it always was: that the *cited target* is not merely
-the right kind but an *accepted* submission of it. A relation type constraint cannot express
-acceptance state; it was never asked to.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#20
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 4. The five seed types declare real constraints, not placeholders · hash: sha256:f8c6fb97c0fde913a167f48f87b352532bc39ae22714e66ea8500e34257ebc7d*
-
-The cardinalities are not predictions of a ceiling. `relates-to`'s cap of 128 sits well
-above the busiest measured node (21) with room for the corpus to grow; the lifecycle types'
-cap of 8 is generous against every resubmission scenario this build's own tests exercise.
-Each cap exists to catch a joined-the-wrong-node mistake becoming an unbounded pile of
-edges, not to assert where real usage will top out — `ADR-ARTIFACT-GRAPH-002`'s vocabulary
-is free to set its own numbers when it supersedes this table.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#21
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 5. Domain and range travel as JSON columns, not as a second table · hash: sha256:4c70835bbe8c3dcbf473ab414032edb8550569e57d117f1e56da171ef8f01d4a*
-
-### 5. Domain and range travel as JSON columns, not as a second table
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#22
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 5. Domain and range travel as JSON columns, not as a second table · hash: sha256:f1ef349c1fa9f6ae37dc922774caa2507d0a3924c931c4e1f85d265f5507107e*
-
-`relation_types` gained `domain_kinds_json`, `range_kinds_json` and `max_per_node`, rebuilt
-in migration 7 rather than widened by `ALTER TABLE ADD COLUMN`: SQLite only allows a
-`NOT NULL` column added that way to carry a caller-invented default, and a default here
-would hand every existing row a constraint nobody declared — the exact permissiveness this
-record exists to close off. There is nothing to carry across regardless: `relation_types` is
-populated by application code once the schema is in place, never by a migration, so the
-table always holds zero rows when its own migration runs.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#23
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 5. Domain and range travel as JSON columns, not as a second table · hash: sha256:0b9e81b2b77ae09c7d8f1dc61d57bc087aaa1a09000da540f3afeb40e710f0bb*
-
-A JSON column rather than a child table keyed on `(relation_type, role, node_kind)`: nothing
-else in this schema joins against a relation type's admitted kinds, so a table would exist
-to be scanned start to finish exactly once per check, in a size in the tens of node kinds at
-most. `nodes.kind` itself is free text with no table of its own for the same reason. Both
-lists are sorted before they are serialized, so the same set of kinds always writes the same
-bytes regardless of the order a caller listed them in — the bundle's byte-identical round
-trip depends on that the same way it depends on every other ordering in this store being by
-natural key rather than by insertion order.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#24
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 6. The bundle carries the constraint, not just the row · hash: sha256:9b187da2c777a42d749ed6dfeb51ed863d8d38ad225c53d3545200a9ff22a154*
-
-### 6. The bundle carries the constraint, not just the row
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#25
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / The Decision / 6. The bundle carries the constraint, not just the row · hash: sha256:1811c14bdd374606b7abe0130543a73f3f929eb41e4ed4db0ac7980adf20bfba*
-
-`nomos-spec-bundle`'s `RelationType` gained `domain: Vec<String>`, `range: Vec<String>` and
-`max_per_node: u32`. The exporter decodes the two JSON columns, the importer re-encodes them,
-and `columns::COVERAGE`'s `relation_types` entry names all three — the guard that would have
-caught a bundle quietly missing this the way `OD-SPEC-011`'s own motivating column-coverage
-mechanism was built to. `crates/spec/nomos-spec-bundle/tests/round_trip/populated.rs`'s fixed
-fixture now declares a non-trivial constraint on its own synthetic type (`verifies`, domain
-`concept`, range `requirement`, cap 4), so the whole existing round-trip suite exercises real
-values rather than only a row's presence, and
-`Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip` asserts those three values
-by name after a full export/import cycle.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#26
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Happens When `ADR-ARTIFACT-GRAPH-002` Lands · hash: sha256:99b8125bcff2357af6ec3116eae9de27f51ecaa6b1bb737677136c1130e84eb3*
-
-## What Happens When `ADR-ARTIFACT-GRAPH-002` Lands
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#27
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Happens When `ADR-ARTIFACT-GRAPH-002` Lands · hash: sha256:29d048ace27bb64018b7c658c07ea150ab0e5fd4bab43c8e0d411c5705354e72*
-
-The corpus's real relation vocabulary supersedes `RELATION_TYPES` in `governing.rs`, exactly
-as `OD-SPEC-011` already says it will. This record adds nothing that decision has to work
-around: every term the real vocabulary introduces registers through the same
-`Put_Relation_Type` this record requires, declaring its own domain, range and cardinality
-the same way the five seed types do here. Nothing about the mechanism is seed-specific — it
-is seed *content* that a wider vocabulary replaces, not a mechanism a wider vocabulary has to
-grow into.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#28
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
-
-## What Was Considered And Rejected
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#29
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:163d9f67b374cd736fc6ac0552c7020e9be26614551db1eb2f24c999a4d453b4*
-
-**Infer domain and range from the edges already present.** Rejected by `done_when` itself:
-an inferred constraint can only ever be as wide as what has already been written, so it
-could never refuse the *first* bad edge of a new kind — exactly the shape `implements`
-joining a suite to a table row would have taken if nobody had joined them yet.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#30
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:f22fba21333af7902b25b355367e7d9b6e67350f70e10524ebe55fddcea16594*
-
-**Leave the constraint on the submission, as `OD-SPEC-010` rule 4 already does.** That rule's
-own text says it cannot be the whole answer: it runs once, at acceptance, over the fields one
-submission cites. It says nothing about an edge written any other way — through
-`Seed_Governing_Records`, through a future authoring surface, or by hand against the store —
-and a constraint that only one caller obeys is not a constraint the graph holds.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#31
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:1f3ddf02da3ec50e6da463907decb9387f841bdce760c2b6334af0c162ecb534*
-
-**Admit the placeholder sentinel `unknown` into every type's declared range.** Rejected in
-decision 3: it would make the check pass by widening what every type admits rather than by
-deferring judgment on a fact that does not exist yet, and it would have to be removed from
-every declaration the day a real `unknown`-shaped kind was ever wanted for something else.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#32
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / What Was Considered And Rejected · hash: sha256:29a1d1b7c51e96f8de40e1a2f0356511d7a098c89e4df7f88767a7bc8f5bcbbb*
-
-**A child table keyed on `(relation_type, role, node_kind)`.** Considered and set aside in
-decision 5 for the same proportionality `nodes.kind` already argues: nothing else in this
-schema needs to join against admitted kinds, so a table for it would be scanned wholesale on
-every check for no query a table earns its keep by answering.
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#33
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
-
-## Controls
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#34
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Controls · hash: sha256:a9880763be9061ee6ad965b1c34fa478adfc32f89958d8dd407187b99b71022b*
-
-| Weakening | What it produces |
-|---|---|
-| infer the constraint from edges already written | never refuses the first edge of a new, wrong kind |
-| leave it to `OD-SPEC-010` rule 4 alone | silent for every edge not written through `Accept_Submission` |
-| admit `unknown` into every domain and range | the check passes by definition on the one endpoint it most needs to defer judgment on |
-| a shared constraint per pair instead of per direction | `answers` and `answered_by` cannot both be stated correctly, because they join in opposite roles |
-| no cardinality cap, domain and range only | `relates-to` keeps the property this record closes for count while leaving it open for volume |
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#35
-
-*revision: authored · kind: heading · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
-
-## Status
-
-### docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md#36
-
-*revision: authored · kind: prose · heading: A declared constraint says which node kinds a relation type joins, and how many a node may carry / Status · hash: sha256:37fd442a8eedf54d8c51e2451291603a294c81dd4ec95fe17e94b92cea26200e*
-
-Closed by `P10-EDGE-CONSTRAINTS-2`.
 
 ### docs/records/OD-SPEC-013-a-submission-is-a-node-a-field-is-a-sequence-of-attributed-rows-and-a-gap-is-a-row.md#1
 

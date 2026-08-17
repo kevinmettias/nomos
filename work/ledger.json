@@ -11087,7 +11087,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "The implementation, tests, record and rendered projections are complete and verified by hand, but the item as authored has two defects only discovered while finishing it: (1) --item crates/host/nomos-cli/src/work.rs names the command dispatcher, not the file the CLI word-derivation actually lives in (crates/host/nomos-cli/src/work/report.rs, reached via mod report;), the same crate-split staleness this item's own text already recorded once for the ledger side; (2) the verification predicate as declared (no --skip) fails every run on two records_do_not_serialize::snapshot_grain tests asserting a property of the live board's current composition rather than anything this item's change reaches -- confirmed identical on HEAD before this item's diff via git stash. P10-DECLINED-DEPENDENCY-4, the immediately preceding commit, hit this exact hazard and resolved it by re-authoring with --skip for the same two tests. Reissuing as P11-DISPATCH-SPLIT-3 with corrected territory and a predicate matching that precedent."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -11119,7 +11123,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-dispatch-split",
+        "declined_at": 1786984461
+      }
     },
     {
       "id": "P13-XVPE-STAGING-NAME",
@@ -11259,16 +11266,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P10-SUBMISSION-LAYOUT"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orch-edge-constraints",
-        "acquired_at": 1786982866,
-        "lease_expires_at": 1786993666
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -11283,7 +11286,31 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-e643c65bbad4483e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-433c47e6dd66b347.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c14312faf4ba080e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a4a043f2643142bd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-30f549b5771eb641.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-5b419e0002ced6ae.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4b668c0f67b59fe5.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8c4ebd0adb5625f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-8363030d0a23c461.exe)\n     Running tests\\durable_load.rs (target\\debug\\deps\\durable_load-cc58b128b79df020.exe)\n     Running tests\\round_trip\\main.rs (target\\debug\\deps\\round_trip-ae1530c6fda35e0c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786984520,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -11594,6 +11621,5 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
-    }
-  ]
-}
+    },
+    {

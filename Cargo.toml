@@ -131,6 +131,14 @@ private_bounds = "deny"
 missing_docs = "allow"
 
 [workspace.lints.clippy]
+# This table is the one place that states what severity every clippy lint in this workspace
+# runs at, for a contributor's own machine and for the gate alike. `.github/workflows/gate.yml`'s
+# `Lint` step runs `cargo clippy --workspace --all-targets` with no promotion flag of its own,
+# so what fails there is exactly what fails a bare `cargo clippy` run here. It did not always:
+# the step used to add `-- -D warnings`, which silently promoted `clippy::all` and
+# `clippy::pedantic` (`warn` below) to hard failures in CI only, and nothing here said so.
+# `OD-GATE-007` is why the flag was removed rather than mirrored into this table as `deny`.
+#
 # `priority = -1` lets the specific lints below override these group levels.
 all = { level = "warn", priority = -1 }
 pedantic = { level = "warn", priority = -1 }

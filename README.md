@@ -231,10 +231,10 @@ must reach the same panic at the same step.
 
 ## Running the gate
 
-```
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
-```
+`.github/workflows/gate.yml` is the gate; its `Lint` and `Test` steps are the two commands to
+run before pushing. This file does not reproduce them — `OD-GATE-007` is why severity in
+particular is stated once, in the workflow and in `[workspace.lints.clippy]` above, and not a
+third time here.
 
 ## This file is hand-authored, and that is a decision
 
