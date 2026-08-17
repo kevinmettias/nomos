@@ -20,6 +20,7 @@
 mod arguments;
 mod check;
 mod corpus;
+mod request;
 mod spec;
 mod work;
 
@@ -42,6 +43,7 @@ fn main() -> std::process::ExitCode
         Some((group, rest)) if group == "work" => Work(rest),
         Some((group, rest)) if group == "spec" => Spec(rest),
         Some((group, rest)) if group == "check" => Check(rest),
+        Some((group, rest)) if group == "request" => Request(rest),
         _ => Usage(),
     };
 
@@ -89,14 +91,30 @@ fn Check(rest: &[String]) -> i32
     return check::Run(&command, &mut stdout, &mut stderr).Value();
 }
 
+/// The request group: submitting a feature request, design spec or feature result through the
+/// one accept function `OD-SPEC-009` decided.
+fn Request(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = request::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return request::ExitCode::Usage.Value();
+    };
+
+    return request::Run(&command, &Corpus_Request(rest), &mut stdout, &mut stderr).Value();
+}
+
 /// What the binary answers when it was not told which group it is being asked for.
 fn Usage() -> i32
 {
     eprintln!(
         "usage: nomos <group> <command>\n\n  \
-         work   coordinate concurrent work over this repository\n  \
-         spec   read the specification store and render its projections\n  \
-         check  run the rules over a tree and report what they find"
+         work    coordinate concurrent work over this repository\n  \
+         spec    read the specification store and render its projections\n  \
+         check   run the rules over a tree and report what they find\n  \
+         request submit a feature request, design spec or feature result"
     );
 
     return work::ExitCode::Usage.Value();

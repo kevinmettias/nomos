@@ -3,7 +3,7 @@ id: OD-SPEC-009
 type: decision
 title: A submission enters through one accept function, and every surface is a transport onto it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - specification-system
@@ -124,8 +124,15 @@ It does not decide the validation rule set, the refusal vocabulary, or the draft
 `OD-SPEC-010`.
 
 It does not decide the physical layout, the table set, or what the accept function writes. That
-is `OD-SPEC-011`, which lands the layout together with the first writer because a table nothing
+is `OD-SPEC-013`, which lands the layout together with the first writer because a table nothing
 writes to may not exist.
+
+(This citation named `OD-SPEC-011` in version 1. That identifier was reserved for the layout
+decision by `P10-REQUEST-LAYOUT`, and was then published for an unrelated decision — an unknown
+relation type refused by name — by a second item that had reserved it independently; nothing
+checked that two items had reserved one identifier. `OD-SPEC-013` is the record the layout
+decision actually landed under. `OD-SPEC-013`'s own *Why This Record Is Not `OD-SPEC-011`*
+section carries the fuller account.)
 
 It does not touch `work/ledger.json`. A submission is not an item, and `OD-SPEC-008` already
 said so.
@@ -146,7 +153,7 @@ is ever built, which is the whole of what it owes them.
 
 ## Consequences
 
-`OD-SPEC-011` can be written against a fixed seam: one accept function, one submission type, one
+`OD-SPEC-013` can be written against a fixed seam: one accept function, one submission type, one
 form contract version travelling with it. That was the last thing the layout item was waiting on
 besides the rule set.
 
@@ -159,5 +166,5 @@ adapter to migrate, which is evidence for that item rather than a decision taken
 
 ## Status
 
-Accepted. The rule set and the physical layout remain open as `OD-SPEC-010` and `OD-SPEC-011`,
+Accepted. The rule set and the physical layout remain open as `OD-SPEC-010` and `OD-SPEC-013`,
 and where the accept function lives remains open as `P10-SERVICE-SEAM`.

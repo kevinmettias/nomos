@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:a7e12580670a7d5e1711b5eba8e1d37c89fb2b214dffb602f7ffba2e0fdba51a",
-  "inputs_digest": "sha256:861b6611741903cc3d1d822cf2109fcaae3508e0f9037de905e3119e8cc4f787",
+  "content_digest": "sha256:ec5e706a5e9e539fccb99b185df149ad70b7fcd8d407241b6a3dccd76c77b5e5",
+  "inputs_digest": "sha256:49956a7884f9b1f47bc0d3ab738400b4272b577b3c734342a94d59358b59b03f",
   "sections": [
     [
       "Relations",
-      680
+      696
     ],
     [
       "Decisions",
-      94
+      96
     ]
   ],
   "inputs": [
@@ -1103,6 +1103,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-COMPLETENESS-001 affected_by OD-COMPLETENESS-004",
+      "hash": "sha256:526c79e2bea9ada73f3880d21a1ad9c30f6a30ddf87138016eabc4cbb292d4c9"
+    },
+    {
+      "content": "relations",
       "identity": "OD-COMPLETENESS-001 relates-to OD-CONTRACTS-002",
       "hash": "sha256:1cb3782db3db029da6f92029cf954649f584d5f2f371de69b5637a7677c92cf2"
     },
@@ -1190,6 +1195,26 @@
       "content": "relations",
       "identity": "OD-COMPLETENESS-002 relates-to OD-SPEC-007",
       "hash": "sha256:1efab4763aeda572f23f5fe6168b0e8f2938caabbe795bd00529552a0c0820e5"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-COMPLETENESS-004 affects OD-COMPLETENESS-001",
+      "hash": "sha256:67e7ba3965cb126bbb7ef58a4520d58ed8b849267a5f3f20cb589846f02a20b2"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-COMPLETENESS-004 relates-to OD-GATE-004",
+      "hash": "sha256:d39be1078ab22ffeccb4d7e1d84844ef7a77dbe3ba4fb37bd5a03a6a909ceff9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-COMPLETENESS-004 relates-to OD-RULES-001",
+      "hash": "sha256:f8f280dafa939c8552c58a813e8a179300f10215f0be878c57559904424e1d4c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-COMPLETENESS-004 relates-to OD-RULES-002",
+      "hash": "sha256:3495efc97d2c6de9be02e9a06737edfe54022171e905d413ce5e12b4e0b51185"
     },
     {
       "content": "relations",
@@ -1495,6 +1520,11 @@
       "content": "relations",
       "identity": "OD-GATE-004 relates-to OD-COMPLETENESS-001",
       "hash": "sha256:433dd34d820b61782b2f95de8950ff2afdde47e99ce713c56cf753c762d4d356"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-004 relates-to OD-COMPLETENESS-004",
+      "hash": "sha256:966a7ea7e0c982e9d7eedddfc6c79ca4b8d514ed2ee8e7132fa62d6965ace739"
     },
     {
       "content": "relations",
@@ -2823,6 +2853,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-001 relates-to OD-COMPLETENESS-004",
+      "hash": "sha256:b15875fb7afe17fdb8b06f78523b6f1dfe601a51bcc6064c10b7ca401c86ac08"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-001 relates-to OD-GATE-001",
       "hash": "sha256:c8d283304e9c1131ad719a29bc080c97cc5a6ad2512b2ca1df11c040ace007e9"
     },
@@ -2865,6 +2900,11 @@
       "content": "relations",
       "identity": "OD-RULES-002 relates-to OD-COMPLETENESS-001",
       "hash": "sha256:2083ec13556f859520dce01ef7fc4ccbf3d0a6ffec4cdd15c57c59556428375c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-002 relates-to OD-COMPLETENESS-004",
+      "hash": "sha256:e419d66d9cce3bc69449c2e5db0b4c98289aed81ab61105ca4992ce6980a8aec"
     },
     {
       "content": "relations",
@@ -3065,6 +3105,11 @@
       "content": "relations",
       "identity": "OD-SPEC-007 relates-to OD-TRACE-002",
       "hash": "sha256:aa88b5cfde70072a436420883804855054b7b2dd30f7ca0a2e712f0f14fe8db4"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-SPEC-007 relates-to OD-TRACE-003",
+      "hash": "sha256:d83f2fe29dcf218769841582b1f8fa5fd50d4ef1ea248a5c5c29269644d4f3c3"
     },
     {
       "content": "relations",
@@ -3358,6 +3403,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-TRACE-001 relates-to OD-TRACE-003",
+      "hash": "sha256:f524447f21986be9af6a07353cb67df562d255ab3569143a2f29118dea5d32c3"
+    },
+    {
+      "content": "relations",
       "identity": "OD-TRACE-001 relates-to OD-TRACE-005",
       "hash": "sha256:57a639c382b4e2f4b6f2dd849c2b5d2f521af3a43b8a029512ab695e0f984943"
     },
@@ -3398,8 +3448,33 @@
     },
     {
       "content": "relations",
+      "identity": "OD-TRACE-002 relates-to OD-TRACE-003",
+      "hash": "sha256:5b0039ddf156e48fccc5515230e7c420a2c892060b17cf920d55f5a53a7d812f"
+    },
+    {
+      "content": "relations",
       "identity": "OD-TRACE-002 relates-to OD-TRACE-005",
       "hash": "sha256:f5756411ff2fe3c6a6593886b0db0d4c1fd736cfb00fd412be6151001ab21775"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-TRACE-003 relates-to OD-SPEC-007",
+      "hash": "sha256:89b32f51bff8f020cf2892b7b27dbe6cea475570af47880221aac6f18f60245c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-TRACE-003 relates-to OD-TRACE-001",
+      "hash": "sha256:789cfa6fa7189777fb48b6d03244e9543db8cb2d3e6e7f70bc0f6b64a21fc555"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-TRACE-003 relates-to OD-TRACE-002",
+      "hash": "sha256:d079f2a1453aa239e128e2d99f9d31401f9a3c4328cc72b9e048416fda2c717d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-TRACE-003 relates-to OD-TRACE-005",
+      "hash": "sha256:a5214e5f603ee91d52b8a9d2e83c6a9e4523f62c902a10cd5a93a29be1e2d0da"
     },
     {
       "content": "relations",
@@ -3415,6 +3490,11 @@
       "content": "relations",
       "identity": "OD-TRACE-005 relates-to OD-TRACE-002",
       "hash": "sha256:55c1d0d685439678b383fada7a85d0c1d768c5814ffe6fb88487be704ac109d9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-TRACE-005 relates-to OD-TRACE-003",
+      "hash": "sha256:aabd40318618ecd521fbd7beb607ce59e9ad65c1d537e52769ec5dcf423f9b10"
     },
     {
       "content": "nodes",
@@ -3540,6 +3620,11 @@
       "content": "nodes",
       "identity": "OD-COMPLETENESS-002",
       "hash": "sha256:e21540ac5d140d5555c2aa8939b6acddf140b4e6241f548b11aff600dff4367e"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-COMPLETENESS-004",
+      "hash": "sha256:4d6ce4f7908605241534e9c474a412a4c33a787f71265731299fc5c5a46bc559"
     },
     {
       "content": "nodes",
@@ -3880,6 +3965,11 @@
       "content": "nodes",
       "identity": "OD-TRACE-002",
       "hash": "sha256:b71a68c7cf5c822bf03a2fc23cc426335fe5a0711ca6fed70acb68b13fe978ec"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-TRACE-003",
+      "hash": "sha256:068863112cf181b55be4f2e798b4c98f2c8f428388794ee5d4f39bb24aca9a96"
     },
     {
       "content": "nodes",

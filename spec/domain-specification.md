@@ -42,6 +42,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:2de6c66157c81460c04202fa550d57a830560e25befd9d6087223a67d6ab5cba |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
@@ -110,6 +111,7 @@ profile: domain-specification
 | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md@authored | docs/records/OD-SYNTAX-002-not-observed-is-not-absent-and-it-is-what-let-the-last-rule-stop-parsing.md | authored | 36 | 9 | sha256:d709970235889a73988a8da5d86b42a1ba5e503826adba05f843be4b1fdce369 |
 | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md@authored | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md | authored | 35 | 10 | sha256:5146b3097c4ce5a7bc2526186c0408aa8a723f180bb4ed78db335537cf53fde7 |
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md@authored | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md | authored | 41 | 11 | sha256:87459b711a6b464f7a80e7614562caef27fd16ba4f904315b529e4aed04c9ff3 |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
 
 ## Sections
@@ -362,6 +364,14 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#44 | authored | 2 | Coordination — One Method, Not Two |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#50 | authored | 2 | What This Does Not Do |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53 | authored | 2 | Status |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1 | authored | 1 | A report that cannot render eleven reasons renders silence instead, and silence reads as clean |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2 | authored | 2 | Question |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4 | authored | 2 | What Was Already True And Is Kept |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8 | authored | 2 | The Decision |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13 | authored | 2 | Whether The Exit Code Should Stop Sharing |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21 | authored | 2 | The Negative Control |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24 | authored | 2 | What This Does Not Do |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26 | authored | 2 | Status |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1 | authored | 1 | An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2 | authored | 2 | Question |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5 | authored | 2 | Decision |
@@ -1032,6 +1042,14 @@ profile: domain-specification
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#33 | authored | 2 | What Is Assessed Today |
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#38 | authored | 2 | What This Does Not Do |
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md#40 | authored | 2 | Status |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#1 | authored | 1 | A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#2 | authored | 2 | Question |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#6 | authored | 2 | The Decision |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#10 | authored | 3 | Why a gap and not a ledger item |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#12 | authored | 3 | Why a gap decays the way a site does, on purpose |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#14 | authored | 3 | The obligation is enforced twice, in the shape every other one here already is |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#16 | authored | 2 | What This Does Not Do |
+| docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#18 | authored | 2 | Status |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1 | authored | 1 | An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#2 | authored | 2 | Question |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#6 | authored | 2 | The Decision |
@@ -8995,6 +9013,268 @@ Stated plainly, because `OD-GATE-001` is about checks that imply more than they 
 Accepted, closed by `P10-MIRROR-DISAGREEMENT`. Sixteen declared universes; four mirrored, each
 claiming its mirror at its own site; twelve declared holes with the number checked; and the
 two guards that disagreed now hold a per-universe equality that names what moved.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean · hash: sha256:5efcaf221cad4a8b50fe1e32dc9765dae874126b60946239d80dde39409eb840*
+
+# A report that cannot render eleven reasons renders silence instead, and silence reads as clean
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#3
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Question · hash: sha256:ed8437089e8b8237908e4b0aa7d4bde5f3a8ac1e50ed9da62069f568a2642bf5*
+
+`nomos_contracts::Applicability` opens by calling itself the load-bearing expression of the
+product's first principle — unknown is not pass — and every `Finding` this workspace produces
+already carries one. `crates/host/nomos-cli/src/check/report.rs`, the surface a person actually
+reads, consumed `Finding::Can_Fail_A_Build` (which reads applicability) and never the field
+itself. Its `Examined` struct carries two denominators on purpose, and its own doc comment
+already makes the argument this record extends: "0 findings over 400 files" and "0 findings
+over 400 files none of which produced a fact" are different claims. That argument stops one
+step short of the eleven-way distinction `Applicability` exists to carry, and the gap is a
+silence with a specific shape — a subject whose provider is missing, whose toolchain is
+absent, whose parse failed, or which needs a model contributes nothing to either denominator
+and produces no distinguishing line in the rendered report.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:5f892b0c104a2e8565aba463b257f643ca05314356e58c508bb8da0cbd3d4132*
+
+## What Was Already True And Is Kept
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#5
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:93369c9860c411247524e8a900fc466594730e5122f732e6ad524ac94ef02494*
+
+Two things this workspace had already got right, named so the remedy below does not quietly
+re-decide them.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#6
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:ec12dabc4a8e46eb63180c07c92b0112fa7a9ae276259dab28330b07b167fdc7*
+
+`nomos-rules` already puts an `Applicability` on every finding it produces, including the
+debt states. `mirror/unread.rs` emits one finding per subject whose syntax fact could not be
+read, before any universe is judged — `Check_Completeness_Mirrors` extends its findings with
+`index.unread.iter().map(Unread_Subject)` unconditionally. So a subject is never dropped
+*silently* at the rule layer today; what was missing sat one layer up, in the surface that
+renders the findings into something a person reads.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#7
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:4fb287e6f984f4ff11f482ee56501a4a719880a58cb209da0febc1cacaf40394*
+
+`Examined`'s two denominators are a property of the walk — decided before a single subject is
+judged — and are orthogonal to what judgment each subject received. That reasoning is
+unchanged and the type is unchanged: `files` and `facts` still answer "did the walk see a
+plausible amount of the world", which a per-subject breakdown cannot answer on its own (a
+tree the walk never entered has no subjects to break down).
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#9
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:705601b31464502259a27ccde2ffa5bddd37d829cedd47f3ce48d570a8e9f1c6*
+
+**The report reads the enum.** `report.rs` gains `Coverage`, a counter per `Applicability`
+variant, built by a match with no wildcard arm — the same shape `Applicability` itself is
+built with, so a twelfth variant fails the build at this match rather than landing in
+whichever bucket happened to be there. `Coverage::Nonzero` is what `Counts` renders: one line
+per bucket the run actually put something in, labelled by `Applicability::Label`.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#10
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:251782b9c5d10402361bff6eb2b4bb009818407a3ca965fcbc3f6166148c58ab*
+
+**Grouping is by variant, not by capability or by language.** This binary registers one
+capability (`nomos_cap_syntax`) and one language (`nomos_lang_rust`); grouping by either
+collapses to a single bucket today and would hide exactly the distinction this record is
+about. `Finding::rule` is already a capability's proxy, so a second grouping remains
+composable when a second capability or language exists to make it informative — nothing here
+forecloses it, and adding one is not this record's subject.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#11
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:67ff56ae7ea9795b9251b58dcf3ae26b40a2ca691cef7f749d8163d893552f93*
+
+**`Examined` is not extended with an integer.** Adding a third `usize` — a bare debt count —
+is the shape this item was opened to stop: one number cannot tell a reader which of eleven
+reasons a subject was not judged for, only that some number of them weren't. `Coverage` is a
+sibling type, not a field, because the two answer different questions and forcing one into
+the other's shape is how a report ends up naive about the general problem while having
+already solved a special case of it (`Examined`'s own history).
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#12
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:7df422de639b10856394e9202f562acbea1126f9cc1666f8d6dca4197faec353*
+
+**The roll-up verdict is `Claim`, read off `Applicability`'s own predicates.**
+`Claim::Complete` when no finding's applicability answers `Is_Coverage_Debt` or
+`Requires_Agent`; `Claim::Incomplete` otherwise. It is computed by asking `Applicability` the
+question directly (`finding.applicability.Is_Coverage_Debt() || …Requires_Agent()`), not by
+re-deriving the same classification from `Coverage`'s counters — one classification, asked
+once, so a change to what counts as debt cannot drift between the verdict and the breakdown
+that explains it. `NotApplicable` and `ConfigurationDisabled` do not flip the verdict, for the
+same reason `Applicability::Is_Coverage_Debt` already excludes them: a rule that does not bind
+and a human's deliberate switch are decisions, not gaps.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:ed50f9ac398c450a35c4745ff3a27a89a5508d1d376353718f2647e638ddb433*
+
+## Whether The Exit Code Should Stop Sharing
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#14
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:6d706b72c785a66d34a135831f0ba48d4377c3742e50dd4c6e911b767c1593ce*
+
+`done_when` asks this directly: complete-and-clean and incomplete-and-nothing-found currently
+share `ExitCode::Ok`, and whether they should stop sharing it is this record's to settle.
+**They keep sharing it.** Measured, not assumed — the measurement is what the decision rests
+on.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#15
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:a5edd6b030aa6d05548266add322c5aed9ec3b892d82be118ef3f372fb931a80*
+
+`nomos check --root .` was run against this workspace both before and after this change.
+Before: 768 files examined, 767 with a syntax fact, 13 findings, 0 blocking, exit 0. After
+(counts moved slightly from unrelated concurrent work in the tree; the shape did not): 770
+files examined, 769 with a syntax fact, 13 findings, 0 blocking, exit 0, and now additionally:
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#16
+
+*revision: authored · kind: code · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:c627bccc9f0fcbe68a036913b3e7ad4d76d37bda9573af8e6529035e1a6bacec*
+
+```
+claim: incomplete
+  Supported: 12
+  DependencyUnavailable: 1
+```
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#17
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:4ccfa31475f52464284ffc7d6b103e0f6c3841a0bbdd9b2ac4daec93b3c57de8*
+
+Twelve of the thirteen findings are `Applicability::Supported` — `Admitted_Gap`, a real
+judgment that a universe declares no mirror, not debt. One is
+`Applicability::DependencyUnavailable`, for `tests/corpus/analysis/gamma/broken.rs`, a fixture
+this workspace keeps deliberately unparseable (`OD-COMPLETENESS-002` measured the same file
+under the same rule). That file is permanent, not incidental: `check.rs`'s own module
+documentation already describes it as printing "on every run".
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#18
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:235840ba60ec8f6f21c3df47439463e5c3654e2a0a00a464e41d5d98d2eb3804*
+
+A run over this actual, real workspace is therefore incomplete-and-nothing-found *today*, on
+every invocation, including the one `OD-GATE-004` wired into `.github/workflows/gate.yml` as
+the `Rules` step. `check.rs`'s own documentation states the policy this decision has to
+respect: "Zero is the only success... Actions fails a step on any non-zero exit... that
+default *is* the policy." A new exit code firing whenever `Claim::Incomplete` holds would
+therefore turn this repository's own gate permanently red, over a gap the workspace has
+already, explicitly chosen to admit rather than close — the same asymmetry
+`OD-COMPLETENESS-001` names about `UNMIRRORED_TOTAL`: a gate that can never be green is a gate
+everybody learns to bypass, and a gate that is red from the moment it is wired teaches the
+same lesson faster.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#19
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:0ea9a47f5e284ccc441787f100aaf709def0816c4c41ded65b7077930b01f090*
+
+`ExitCode::Vacuous` was considered and does not fit: it means the answer is empty because
+*nothing* was judged, and a run that judged twelve subjects and could not judge one is not
+that claim — it is a strictly more informative one, which is exactly why it needs a state of
+its own inside the successful exit rather than a code that already means something narrower.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#20
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:7aeb40584e15d26d6ee46e78229967359980e0906d0b5802d76a28975ca6d631*
+
+So the decision is: **`ExitCode::Ok` continues to mean "nothing found can fail a build",
+unchanged, and does not additionally promise "and nothing was left unjudged."** That second
+promise is now made in the text — `claim: incomplete` and the per-variant breakdown — where a
+reader who wants it can read it, and a future gate step that wants to fail a build over
+`Claim::Incomplete` specifically can be built by parsing that line, deliberately, rather than
+by this record silently repurposing an exit code the gate already treats as a hard boundary.
+Nothing about this decision closes off adding a stricter gate later; it declines to make that
+choice by side effect of a report change that was never asked to touch the gate.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:840eff5ad9138aa365f9c6a2a424eec315a80a0ca0c378a479c41ee058830a02*
+
+## The Negative Control
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#22
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:e9575d6507a712d2bc7cd8d107f4d831214fa2f1182b6fe93c85595b49184738*
+
+`done_when` asks for the test that matters most: a subject the run could not judge must not
+render the same as a subject that was judged clean.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#23
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:3a83c2e3a94d885f677fc1ca01bf561b6111c6e9687d11557e9d0c3a20fc1853*
+
+Two versions exist, both passing. `check::report::tests::Test_A_Coverage_Debt_Subject_Must_Not_Render_The_Same_As_A_Clean_Run`
+constructs a fabricated `Finding` carrying `Applicability::DependencyUnavailable` and asserts
+its rendered `Report` output differs from an empty, clean run's — `claim: incomplete` against
+`claim: complete`, and the variant's label present on one side and absent from the other.
+`check::tests::Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run` is the
+end-to-end version: a real tree with one clean file and one file the real, registered parser
+refuses, run through `Run` exactly as the shipped binary runs it, beside a tree with the clean
+file alone. Both trees exit `ExitCode::Ok` — the assertion `code == clean_code` is in the test
+on purpose, naming the fact this record's exit-code decision rests on — and the rendered text
+still differs, which is the only place left that it can.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#25
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What This Does Not Do · hash: sha256:7c983dad4869c2847e11c6d55ba1cb7dbf2cc3361bdf5944be85a81686870dbf*
+
+- **It does not close the one admitted debt finding.** `broken.rs` stays unparseable by
+  design; this record is about that fact being visible, not about removing it.
+- **It does not add a rule.** `nomos-rules` is unchanged. Every `Applicability` value it was
+  already capable of producing was already reachable before this record; what changed is
+  whether the report downstream could say which one arrived.
+- **It does not change what makes a build fail.** `Finding::Can_Fail_A_Build` and
+  `ExitCode::Violations` are untouched. A debt finding still cannot fail a build, for the
+  reason `Can_Fail_A_Build`'s own doc comment gives — a rule that could not read its subject
+  has reported on the analysis, not on the code.
+- **It does not give the gate a stricter policy.** See above. That is a live, separate
+  decision this record declines to make by accident.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#27
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Status · hash: sha256:537e2d99fb9ed1d931452a739341fad6fe0367500820f9bc3c40a5c1ef9c7276*
+
+Accepted, closed by `P12-COVERAGE-REPORT`. The report reads the enum: every subject that
+received no judgment appears by its `Applicability` variant, in a rendering distinguishable
+from a clean run by a test built for exactly that comparison, and the exit-code question the
+item asked to have settled is settled — not split, and measured against this workspace's own
+permanently-admitted case rather than assumed.
 
 ### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1
 
@@ -30952,6 +31232,199 @@ manner `OD-SPEC-005` and `OD-SPEC-007` recorded their controls.
 *revision: authored · kind: prose · heading: A requirement assessment is one file per requirement, and the corpus comparison does not live in the guard crate / Status · hash: sha256:b4158ac73472d89ab6a70d8d5f349795103b2c140be5e66871a6aef06175adca*
 
 Closed by `P10-TRACE-REGISTRY`.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#1
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record · hash: sha256:bd3df5b7549e3c3028f4d6125550e8b17d96b30cfc498e249f179a63be8e3cd5*
+
+# A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#2
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#3
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / Question · hash: sha256:7ebc9703fc9a792c58ad90118d27547a181f5969a904ab0df731947f9cfe122d*
+
+`OD-TRACE-001` named four verdicts and wrote three of them: `Met`, `Diverges`,
+`NotBinding`, and `Unassessed` held by the absence of an entry and refused as a written
+word. All six entries committed under `tests/contract/requirements` today resolve to one
+of those three writable verdicts, so nothing has yet forced the fourth case the corpus
+actually produces: a requirement that binds this build and is satisfied at some of the
+sites it names and not at others.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#4
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / Question · hash: sha256:c75cda14845b7ddedce7f39481e0ae391ab31c656373db554f2b50f5091dae57*
+
+That case is none of the three. `Met` overclaims — it is exactly the stale `Met`
+`OD-TRACE-001` already names as the guard's blind spot, applied on purpose instead of by
+drift. `Diverges` asserts the departure is deliberate and demands a governing record
+explaining a decision, and there is no decision to explain: unfinished is not one.
+`NotBinding` is false on its face; the requirement does reach this build, which is exactly
+why part of it is satisfied. And the fourth, `Unassessed`, is not available by
+`OD-TRACE-002`'s own reader: writing it would record that somebody looked and did not look,
+which is precisely backwards for a case where somebody looked *hardest* and found the most.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#5
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / Question · hash: sha256:54ff57e6caabb2d3e8ed00df4908e5328251cf1811e4c2d6275d1e578620b901*
+
+`OD-TRACE-001`'s own finding was that met and unmet have the same shape from outside. Absent
+a fourth verdict, this reproduces that property one level in: a requirement somebody
+assessed and found partially satisfied would be stored identically to one nobody has opened
+— both silently uncounted by `FEWEST_ASSESSMENTS`, the one number that says how much of the
+corpus has been examined. That is the defect this record closes, and it is forced by the
+first honest partial assessment rather than by any deadline: the pressure at that moment is
+to write `Met`.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#6
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#7
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision · hash: sha256:0ab8d493ce3e5ec6fa9178c199e90ef707134d64aeb3f44d3c33afcd41cc4647*
+
+**A fifth verdict, `Partial`, and it carries an obligation that is not the record the other
+two non-`Met` verdicts owe.**
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#8
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision · hash: sha256:fa9a85dc87fe529febc25f37220c982f508d880f693d81d7d49696203721b428*
+
+- **`Partial`** — the requirement binds this build and is satisfied at some of the sites
+  the entry names and not at others. The entry names at least one `gap`: a `path#symbol`
+  site — the identical shape `OD-TRACE-002` gave `site`, and checked by the identical
+  predicate — naming where the unsatisfied part of the requirement actually lives.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#9
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision · hash: sha256:9d6fb3f7ab771ef5ff17f4453556d7920e4b07c59926145705a95f115f89bb6b*
+
+`Verdict::Owes_A_Record` stays exactly `Diverges | NotBinding`. `Partial` is deliberately
+excluded, and that exclusion is the point of this record rather than an oversight. `Diverges`
+and `NotBinding` both name a decision — somebody choosing that this build will not do what
+the requirement says — and the record is what makes that decision reviewable. A half-built
+requirement is not that. Demanding a governing record for it would manufacture a reason
+where none exists, which is the reviewer-facing version of the same overclaim `Met` would
+make: a record with no real decision behind it reads as one anyway. So `Partial`'s
+obligation is a **gap**, not a **record**: the entry says what is not satisfied, at a place
+in the workspace, or it is refused.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#10
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision / Why a gap and not a ledger item · hash: sha256:ac5040fa11769b2a6103f422515e288818a5cb68838bde8bcf1e2d92789f2873*
+
+### Why a gap and not a ledger item
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#11
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision / Why a gap and not a ledger item · hash: sha256:9e86bbaccbe0c65b0fcdb7935e7ce77a901009bd5994604c74b5dab52126adb6*
+
+An open ledger item was the other candidate for the obligation, and it is refused here for a
+narrower reason than the record was: an item is closed the moment the work lands, and a
+`Partial` entry that cites one as its only anchor goes silently unverifiable at exactly the
+moment it would need re-reading — the item that would have prompted the re-read is gone.
+Nothing in `work/ledger.json` is checked against this registry today, and inventing that
+check here would widen this item past a fourth verdict into a second guard. A gap has no
+such lifecycle: it is a site, checked the same way every other site here already is, so it
+either keeps resolving or it visibly stops. Nothing prevents an entry from naming a `record`
+or citing an item in prose alongside its verdict — `Test_Every_Named_Record_Should_Exist_And_Be_Registered`
+already reads wider than `OD-TRACE-001` strictly requires, for `Met` as much as for
+anything else — but neither is the obligation `Partial` is checked against.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#12
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision / Why a gap decays the way a site does, on purpose · hash: sha256:3ff98ee75c16b4e4aaa64ecb9f3ff3c036b68e1d33eca951739d7a8002a7a173*
+
+### Why a gap decays the way a site does, on purpose
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#13
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision / Why a gap decays the way a site does, on purpose · hash: sha256:bc397846ff31e8d74bbe324d5a862410c2b70932e49a121b48c03f73850d526b*
+
+`sites` already answers "where is this satisfied", checked by resolving `path#symbol`
+against the workspace: the guard sees a named site vanish, though it cannot see the code at
+a site drift out of meaning what it says — the semantic-drift limit `OD-TRACE-001` already
+takes. A `gap` answers the opposite question, "where is this *not* satisfied", with the
+identical mechanism and the identical limit: the guard sees a named gap vanish or move.
+That is deliberate rather than a reuse of convenience. A prose-only description of what
+remains — "auth is not wired up yet" with no site — could describe nothing by the time
+anyone reads it again, and nothing would notice. A `gap` that is itself a checked site
+cannot do that quietly: if the incomplete code it names is deleted, refactored past
+recognition, or finished and removed, `Unresolved_Gaps` reports it exactly the way
+`Unresolved_Sites` reports a vanished `site`, and the entry is forced back in front of a
+person rather than continuing to describe a state that no longer exists. That closing is not
+automatic promotion to `Met` — the same refusal `OD-TRACE-005` already gives a drifted hash,
+for the same reason: telling "the gap closed, so this is now Met" from "the gap moved, so
+this needs a new one" is reading the code and judging, which stays a human act.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#14
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision / The obligation is enforced twice, in the shape every other one here already is · hash: sha256:ffcc26a47197ad95b32ccd40de02cebe99a903853d2a3e1cd4cb1318b3a331a3*
+
+### The obligation is enforced twice, in the shape every other one here already is
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#15
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / The Decision / The obligation is enforced twice, in the shape every other one here already is · hash: sha256:0088e4102bd0c2d0af449ab8579b6817e297d29ad5790bffbc98fd1cdb91012e*
+
+`Assert_Complete` refuses a `Partial` entry with no `gap` at read time, the same place
+`OD-TRACE-002`'s reader already refuses a `Diverges` entry with no `record`. Separately,
+`Partials_With_No_Gap` — mirroring `Divergences_With_No_Record` exactly — is asserted over
+the committed set by `Test_Every_Partial_Should_Name_A_Gap`, and a resolution check,
+`Unresolved_Gaps`, mirroring `Unresolved_Sites`, is asserted by `Test_Every_Gap_Should_Resolve`.
+Both are vacuous today, because no committed entry is `Partial` — the same vacuity
+`Test_Every_Divergence_Should_Name_A_Governing_Record` already states plainly rather than
+hides, for the identical reason: all six committed entries are `Met` or `Diverges`. Each
+vacuous assertion is kept honest by a control that runs the real predicate — not a copy of
+it — over a constructed entry: `Test_A_Partial_With_No_Gap_Should_Be_Refused` and
+`Test_An_Entry_Naming_A_Vanished_Gap_Should_Be_Reported`, the shape every other assertion in
+this suite already has.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#16
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#17
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / What This Does Not Do · hash: sha256:79eee77c049ba0e37141cb50308b39c3abea9f01f3a638bf42c0cb5558ea76a5*
+
+- **It does not assess a 7th requirement.** No entry under `tests/contract/requirements`
+  changes; `FEWEST_ASSESSMENTS` stays `4` because the committed set did not grow. Populating
+  a real `Partial` entry from a genuine partial audit is a separate item's territory
+  (`P12-TRACE-POPULATION`), not this record's.
+- **It does not reopen semantic drift.** A `gap` is checked exactly like a `site`: text
+  occurring in a file. Code drifting out of actually leaving the requirement unsatisfied,
+  while the named gap symbol stays put, is invisible here for the identical reason a stale
+  `Met` is — `OD-TRACE-001`'s limit, unchanged.
+- **It does not touch the hash machinery `OD-TRACE-005` decided.** A `Partial` entry is
+  eligible for the same `hash:` field and the same `Confirmed`/`Drifted`/`Unhashed` reporting
+  once that field is built; nothing about a fourth verdict changes what that record already
+  settled.
+- **It does not make `Unassessed` writable, or add a sixth verdict.** `Partial` fills the
+  one gap `OD-TRACE-001`'s three writable verdicts left; it does not reopen the question of
+  whether the registry should hold more.
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#18
+
+*revision: authored · kind: heading · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#19
+
+*revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / Status · hash: sha256:aa6e5d012130b038b9ab32e0fd882f5944ac6c963cbb331995da235f40e9662b*
+
+Closed by `P12-TRACE-PARTIAL`.
 
 ### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1
 

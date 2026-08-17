@@ -6558,17 +6558,13 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P10-INTAKE-SURFACE",
         "P10-SUBMISSION-VALIDATION"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orch-submission-layout",
-        "acquired_at": 1786934598,
-        "lease_expires_at": 1786948998
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -6589,7 +6585,40 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ing tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-5827954e69eb5062.exe)\n     Running tests\\durable_load.rs (target\\debug\\deps\\durable_load-c343b036bca791d5.exe)\n     Running tests\\round_trip\\main.rs (target\\debug\\deps\\round_trip-2ea65dc9708a9050.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-8bd1fbfc32b9b1b0.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-c76a21250fc4f29c.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-9cbb18ef193ae40c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-d54067b51c3c36e7.exe)\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-e7df45e268f3c33b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7f6eeb9f724411e2.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-1e7e4a5b93fb1d41.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-f91b522bac265377.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-8a3ca0b783b33ca7.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-d5fbb8c0c64c0700.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786935881,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-submission-layout-s22",

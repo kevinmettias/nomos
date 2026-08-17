@@ -3,7 +3,7 @@ id: OD-SPEC-010
 type: decision
 title: Validation refuses what cannot be repaired later, and no later value overwrites what was submitted
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - specification-system
@@ -36,12 +36,19 @@ including the conditional rules a form contract needs.
 Until the rules are written down the first writer encodes them, and a rule encoded in a
 writer cannot be read, cited or disagreed with. This record states them.
 
-It decides no physical layout, which is `OD-SPEC-011`'s. The intake surface is already
+It decides no physical layout, which is `OD-SPEC-013`'s. The intake surface is already
 decided: `OD-SPEC-009` landed while this record was being written, and put every submission
 through one accept function, with transports forbidden from validating. That makes this record
 the content of the check that function performs, and the two fit without either being bent —
 `OD-SPEC-009` fixed where validation happens and explicitly deferred what it checks, the
 refusal vocabulary and the draft state to here.
+
+(This citation, and the two below, named `OD-SPEC-011` in version 1. That identifier was
+reserved for the layout decision by `P10-REQUEST-LAYOUT`, and was then published for an
+unrelated decision — an unknown relation type refused by name — by a second item that had
+reserved it independently; nothing checked that two items had reserved one identifier.
+`OD-SPEC-013` is the record the layout decision actually landed under. `OD-SPEC-013`'s own
+*Why This Record Is Not `OD-SPEC-011`* section carries the fuller account.)
 
 The rules below are properties of a submission, not of a door. They are the same rules
 whichever transport constructs it and whichever table it lands in. A rule set that had to be
@@ -284,14 +291,14 @@ lenient implementation.
 It binds the shape of attribution and supersession for these three kinds, and it binds them to
 the mechanisms the store already has rather than to new ones.
 
-It binds `OD-SPEC-011` to a layout that can express an attributed sequence per field and a
+It binds `OD-SPEC-013` to a layout that can express an attributed sequence per field and a
 gap as a row. That is a real constraint on the layout and is stated here because the layout
 cannot be judged without it.
 
 ## What This Does Not Decide
 
 It does not decide the physical layout. Which of these are columns, rows or a payload is
-`OD-SPEC-011`'s, and that item lands the layout with its first writer so no table arrives
+`OD-SPEC-013`'s, and that record lands the layout with its first writer so no table arrives
 empty.
 
 It does not decide the intake surface. `OD-SPEC-009` decided it, and nothing above reads a

@@ -42,6 +42,9 @@ nomos-workspace = { workspace = true }
 # these: the spec crates sit beside the kernel rather than above it, and nothing in the
 # product may reach them directly.
 nomos-spec-ingest = { workspace = true }
+# The submission type `request.rs` constructs: `nomos-spec-store` re-exports the accept
+# function but not the value it accepts, because the store does not own what a submission is.
+nomos-spec-model = { workspace = true }
 nomos-spec-project = { workspace = true }
 nomos-spec-store = { workspace = true }
 

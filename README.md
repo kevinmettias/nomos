@@ -190,6 +190,30 @@ store moved (stale) and somebody typed into the file (edited) — exiting 8 for 
 body with no sidecar beside it is a failure rather than a skip, because otherwise deleting
 the sidecar is how an edit stops being caught.
 
+## Submitting a feature request, design spec or feature result
+
+```
+nomos request submit --kind <feature-request|design-spec|feature-result> --id <node-id>
+                      --by <name> [--state draft|accepted] [--contract-version <n>]
+                      --field <name>=<value> [--field <name>=<value> …]
+                      [--gap <question>|<blocked-fields,comma-separated>|<blocking|non-blocking>[|<closed-by>]] …
+                      [--into <directory>]
+```
+
+`OD-SPEC-009` decided there is exactly one door these three born-structured kinds become
+durable through, and that every surface — this CLI verb included — is a transport onto it:
+`submit` constructs a submission from exactly what was typed, with every `--field` value
+carrying origin `submitted`, and hands it to the store's accept function. `OD-SPEC-010` states
+the rule set that function checks and `OD-SPEC-013` decides the layout it writes: a submission
+is a node, a field is a sequence of attributed values, and a decision gap is a row closable
+only by a citation. A refusal names every field that failed, the rule each one failed and what
+would satisfy it — exit 9 — and nothing is stored.
+
+Nothing in this repository persists a specification database, so a submission accepted here
+exists for exactly as long as the invocation runs. `--into` renders the accepted submission
+through the `subject-dossier` profile before the store is gone, which is the one chance a run
+has to take the freshness proof `ARC-SPECDB-002` charges a born-structured object with.
+
 ## Conventions
 
 Function names are `Pascal_Snake_Case` and control flow uses explicit `return` and
