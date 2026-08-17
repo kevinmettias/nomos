@@ -89,6 +89,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md@authored | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md | authored | 31 | 10 | sha256:0f75915bb0a6e047768f8b26509aa5e946b77f20b68f07298aacb082d7709cfa |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md@authored | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md | authored | 19 | 8 | sha256:409f9c166337da0afc4471e4c50cd9431117d100ddbc5527846feeb8d7048533 |
 | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md@authored | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md | authored | 22 | 8 | sha256:ab29d2a1225a5ff3aabc40822a8a4487b9d23f1d2a4be034ab7a664619f74a0e |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md@authored | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md | authored | 20 | 8 | sha256:b9b8e8c69db8cd1669f9965df1e32ba0ee19634968e153e1d5bb50f6ed7e0d80 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -840,6 +841,14 @@ profile: domain-specification
 | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#17 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#19 | authored | 2 | What Would Make This Stale |
 | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#21 | authored | 2 | Status |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#1 | authored | 1 | A repository-wide acceptance pair is a fact about timing, and not only about authoring |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#6 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#9 | authored | 2 | What This Costs |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#11 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#15 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#17 | authored | 2 | What Would Make This Stale |
+| docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#19 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -23748,6 +23757,184 @@ removing it.
 *revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Status · hash: sha256:126f1fac06f6b2e9e1c7437c1bb3564307903e7907371e921a885a6b592d6656*
 
 Closed by `P11-CRATE-SERIALIZER-4`.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#1
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring · hash: sha256:b6adfa8061b031f744fae1c64fa5e3146f182345c75f5be056894ee1c0832e4d*
+
+# A repository-wide acceptance pair is a fact about timing, and not only about authoring
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#2
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#3
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Question · hash: sha256:7c18f6f77f1edc65b17f38ca9e2a1107a83b92175faf44e69022dd449d8ad293*
+
+`OD-LEDGER-011` built `Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once` and
+its control, `Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair`, to derive a
+pair of open record writers that widen *different* crates' public-surface snapshots and are
+otherwise independent, and to panic if none exists — deliberately, at the time: the record's
+own text notes both tests were "confirmed red against the pre-re-authoring board," where a
+missing pair meant every open item still reserved the whole snapshot directory the old way.
+A missing pair was evidence of bad authoring, and the hard failure was the point.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#4
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Question · hash: sha256:9b0730664bf8f8134e47493713f2da1c103dc25ed8f1205755c5cf6cd74abcc0*
+
+`P11-CRATE-SERIALIZER-4` (`OD-LEDGER-029`) narrowed the board to exactly two open record
+writers with satisfied dependencies: `P10-SERVICE-SEAM`, which reserves the whole snapshot
+directory because its own architectural question has not chosen an implementation to name a
+file of, and `P11-NEXT-WORK`, which reserves one narrow file. One item narrowly widening a
+crate's surface and no second, independent item doing the same for a *different* crate is
+not bad authoring — nothing else that could supply the second half is currently open — and
+the two tests panic on exactly this, blocking `P11-NEXT-WORK`'s own predicate on a fact
+about which other items happen to be open rather than on anything wrong with its own
+territory.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#5
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Question · hash: sha256:052e1efd08ada2b73c99df6fae31f770e046e0dff03148f0e95fdc6b56d412d9*
+
+`serializers.rs`'s own history already answers the identical shape of question once:
+`A_Concurrent_Pair`, `OD-LEDGER-007`'s original acceptance search, stopped being an
+acceptance criterion and became `Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel` — a
+report, not a requirement — for the reason stated in its own doc comment: "whether such a
+pair exists is a fact about the board rather than about the mechanism."
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#6
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#7
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Decision · hash: sha256:ca7f1165321e16a583a174bfd3e1c4c0946e625ad20e4584d15f1af6ae83052d*
+
+**`Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once` and
+`Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair` report the pair's absence
+rather than panicking on it, mirroring `serializers.rs`'s own precedent for the same
+shape of fact.** When the board offers a qualifying pair, both tests run exactly as
+`OD-LEDGER-011` built them, claiming through the real ledger against a copy of the real
+board and asserting the same properties. When it does not, each prints why via `eprintln!`
+— naming the same two explanations `OD-LEDGER-011`'s original panic message did, so a
+reader loses no diagnosis — and returns, reporting the test itself as passed.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#8
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Decision · hash: sha256:f92f3424de1e94ce75cdb47613ef7322e4ff44450646742424bc6e2925a7eeec*
+
+**The property this file proves is not otherwise lost.** `crates/substrate/nomos-ledger/tests/exclusion_holds/claiming.rs`'s
+`Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently` and
+`Test_Claiming_Overlapping_Territory_Should_Be_Refused`, and
+`exclusion_holds/validation.rs`'s matching pair, already prove — against fixtures, never
+against the live board — that disjoint territory claims concurrently and overlapping
+territory refuses by name. What `snapshot_grain.rs` uniquely proves is narrower than the
+mechanism: that *this repository's own currently-open items* are still authored the way
+`OD-LEDGER-011` re-authored them, which is exactly the fact that stops being answerable the
+moment fewer than two of them widen different crates' surfaces at once.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#9
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#10
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What This Costs · hash: sha256:66baed986fa0e1b226d94bf8babe19663ed080700ed2aa8e78954440c35299ea*
+
+This is a real weakening, not a bug fix, and is recorded as one. `OD-LEDGER-011` built these
+two tests to fail loudly on a missing pair *because* a missing pair meant something at the
+time — every open item was back on the old authoring. That specific meaning does not survive
+this record: a missing pair now can mean either the old authoring returned, or simply that
+fewer than two currently-open items happen to widen different crates' surfaces, and nothing
+here tells the two apart. The repository loses an early warning for the regression
+`OD-LEDGER-011` closed, for as long as the board's composition makes the pair unavailable to
+demonstrate it with.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#11
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#12
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What Was Considered And Rejected · hash: sha256:0ef7def3c0880217c50460503f69777ae8e5d6efaa9fd74edcc7740d42cd4192*
+
+**Proving the property against a constructed fixture pair instead of downgrading.**
+Considered first, and rejected as a duplicate authority: `exclusion_holds` already proves
+the underlying claim-exclusion mechanism against fixtures with its own negative controls,
+and a second fixture-based proof here would be the same property asserted twice under two
+different files for no reason tied to what this file is actually about. This file's reason
+to exist is the repository's own current authoring, which a fixture cannot speak to by
+construction.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#13
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What Was Considered And Rejected · hash: sha256:cc3cdd50238261b61ec05b789a9b68a8f420e9e2ccc7286e50b66426881329c7*
+
+**Leaving the tests panicking and treating the block as this item's problem to route
+around.** Rejected because there is nothing to route around: no verb edits a claimed item's
+verification predicate, and manufacturing a second open item that narrowly widens an
+unrelated crate's surface purely to satisfy this precondition would be inventing work to
+pass a test, the opposite of what an acceptance criterion is for.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#14
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What Was Considered And Rejected · hash: sha256:a51b0a8e6e74962035dc86653a1747da4a862082d679a6c3a575d0365bc64e4d*
+
+**Waiting for the board to supply a qualifying pair on its own.** Uncertain and unbounded:
+whether one arrives depends on what other sessions choose to author next, which is not a
+condition any item's predicate should be timed against.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#15
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#16
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Controls · hash: sha256:b91b62c51a8a08e4af234eaec6e92bd654eb45709c0879202b439dbb6f2e7307*
+
+| Weakening | What it produces |
+|---|---|
+| leave both tests panicking | `P11-NEXT-WORK`'s (and any similarly-timed item's) predicate blocked on board composition it cannot control |
+| downgrade without the `eprintln!` diagnosis | the pair's absence goes unreported, and a reader has no way to tell "old authoring returned" from "nothing to check right now" |
+| downgrade `exclusion_holds`'s fixture tests instead | the wrong file: those prove the mechanism, not this repository's current authoring, and the two must not be conflated |
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#17
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What Would Make This Stale · hash: sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac*
+
+## What Would Make This Stale
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#18
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / What Would Make This Stale · hash: sha256:8bc09ea4c5054b19908ddb3e7d918cc49f981f1128c3e2a3205b94a8f19aa7e8*
+
+A ledger verb that lets an item's already-declared verification predicate be narrowed after
+authoring, without re-adding the item — at which point a session in this exact position
+could route around the block directly instead of the register absorbing it here.
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#19
+
+*revision: authored · kind: heading · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#20
+
+*revision: authored · kind: prose · heading: A repository-wide acceptance pair is a fact about timing, and not only about authoring / Status · hash: sha256:768fc098f518be75c2bdc99b5728ade0736b34bbc479dd7f77d32bf7b466bf88*
+
+Closed by `P11-SNAPSHOT-PAIR-REPORT`.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

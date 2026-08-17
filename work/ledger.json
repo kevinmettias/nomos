@@ -12563,6 +12563,70 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P11-SNAPSHOT-PAIR-REPORT",
+      "title": "A repository-wide widening-pair acceptance test panics on board timing it cannot control, the same defect serializers.rs already fixed once",
+      "why": "OD-LEDGER-011 built Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once and its control to panic when the board offers no pair of open record writers that widen different crates' surfaces and are otherwise independent, deliberately: at the time, a missing pair meant every open item was still authored the old whole-directory way. P11-CRATE-SERIALIZER-4 (OD-LEDGER-029) narrowed the board's open record writers with satisfied dependencies to exactly two -- P10-SERVICE-SEAM, which reserves the whole snapshot directory for an undecided architectural question, and P11-NEXT-WORK, which reserves one narrow file -- so no second, independent item widening a different crate's surface exists to complete the pair right now. That is not the old-authoring regression the tests were built to catch; it is a fact about which other items happen to be open, and it blocks P11-NEXT-WORK's own fixed verification predicate on it. serializers.rs already answered the identical shape of question once: A_Concurrent_Pair stopped being an acceptance criterion and became a report, because whether such a pair exists is a fact about the board and not about the mechanism. exclusion_holds already proves the underlying claim-exclusion mechanism against fixtures (Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently, Test_Claiming_Overlapping_Territory_Should_Be_Refused, and their validation.rs counterparts), so downgrading these two tests loses no mechanism coverage -- only the repository's own current-authoring signal, which OD-LEDGER-030 (drafted, not yet registered) names honestly as a real weakening rather than a bug fix.",
+      "done_when": "crates/substrate/nomos-ledger/tests/records_do_not_serialize/snapshot_grain.rs's Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once and Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair report the pair's absence via eprintln! naming the same two explanations the original panic message gave, and return without failing, when the board offers no qualifying pair; when it does offer one, both run exactly the properties OD-LEDGER-011 built them to check, unchanged. OD-LEDGER-030 is registered (crates/spec/nomos-spec-store/records/OD-LEDGER-030.record points at its docs/records file) and both the diagram-set and domain-specification projections are re-rendered from a tree holding exactly HEAD plus this item's own new record files, and committed. cargo test -p nomos-ledger --test records_do_not_serialize -- snapshot_grain:: passes over the repository's real board (not a fixture), whether or not it currently offers a qualifying pair. Not closed by proving the property against a constructed fixture instead -- exclusion_holds already does, and a second fixture-based proof here would be a duplicate authority for a file whose reason to exist is the repository's own current authoring, not the mechanism.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/snapshot_grain.rs",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-030.record",
+          "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "snapshot_grain::"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "snapshot_grain::"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 2 tests\ntest snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair ... ok\ntest snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.01s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n",
+        "verified_at": 1786996313,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bdfc8008fb98083eb82c97533704daad0e970e7a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

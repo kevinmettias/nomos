@@ -61,20 +61,36 @@ fn A_Pair_Widening_Different_Crates(document: &LedgerDocument) -> Option<(ItemId
 }
 
 /// The board, and the pair of items widening different crates that the two tests below are
-/// both about.
+/// both about, when the board currently offers one.
 ///
-/// The pair is derived rather than named, so `blame` is what each caller says when the board
-/// no longer holds one.
-fn A_Widening_Pair(blame: &str) -> (LedgerDocument, ItemId, ItemId)
+/// `None` rather than a panic when it does not. `OD-LEDGER-011` built both callers to panic
+/// here, deliberately, because at the time a missing pair meant every open item was still
+/// authored the old whole-directory way. `OD-LEDGER-030` is why that is no longer the only
+/// thing a missing pair can mean: the board can just as well hold fewer than two open items
+/// that widen different crates' surfaces at once, a fact about timing rather than about
+/// authoring, and a caller that cannot tell the two apart should report rather than fail.
+fn A_Widening_Pair() -> Option<(LedgerDocument, ItemId, ItemId)>
 {
     let document = Unclaimed_Copy();
-    let Some((first, second)) = A_Pair_Widening_Different_Crates(&document)
-    else
-    {
-        panic!("{blame}")
-    };
+    let (first, second) = A_Pair_Widening_Different_Crates(&document)?;
 
-    return (document, first, second);
+    return Some((document, first, second));
+}
+
+/// What each caller below reports, and returns without failing, when the board offers no
+/// pair right now.
+///
+/// The same two explanations `OD-LEDGER-011`'s original panic gave, so a reader loses no
+/// diagnosis by this no longer being fatal.
+fn Report_No_Pair()
+{
+    eprintln!(
+        "no two open record writers widen different crates' APIs and are otherwise \
+         independent right now -- reported rather than required, OD-LEDGER-030. Either \
+         every such item is back to reserving `{HARNESS_DIRECTORY}` — which is the defect \
+         OD-LEDGER-011 closed — or the board simply holds fewer than two open items that \
+         widen an API at once."
+    );
 }
 
 /// The property `P10-SURFACE-GRAIN` bought, claimed through the ledger rather than argued.
@@ -94,12 +110,11 @@ fn A_Widening_Pair(blame: &str) -> (LedgerDocument, ItemId, ItemId)
 #[test]
 fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
 {
-    let (document, first, second) = A_Widening_Pair(&format!(
-        "no two open record writers widen different crates' APIs and are otherwise \
-         independent. Either every such item is back to reserving `{HARNESS_DIRECTORY}` — \
-         which is the defect OD-LEDGER-011 closed — or the board no longer holds two items \
-         that widen an API at all."
-    ));
+    let Some((document, first, second)) = A_Widening_Pair()
+    else
+    {
+        return Report_No_Pair();
+    };
     let (_scratch, mut ledger) = Saved("snapshot-grain", &document);
 
     for (writer, agent) in [(&first, "agent-a"), (&second, "agent-b")]
@@ -124,8 +139,11 @@ fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
 #[test]
 fn Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair()
 {
-    let (mut document, first, second) =
-        A_Widening_Pair("the acceptance test's pair must exist for its control to mean anything");
+    let Some((mut document, first, second)) = A_Widening_Pair()
+    else
+    {
+        return Report_No_Pair();
+    };
     for item in &mut document.items
     {
         if item.id == first

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:650ec1167f03eb0476927e3b1955faa080eeea08435855d819698b04ae8ccdff",
-  "inputs_digest": "sha256:772243d568955d0949d73aae78a215f160ee13cdfd9610e1aee3cd3e2d1f771f",
+  "content_digest": "sha256:6c38dba670a385b536cc83b9548ae67a3c75b66c4221b26b9c0e3cf359c4ee1b",
+  "inputs_digest": "sha256:8274e3dd89ce05915766db51c52cbf61f0359e09eea85656834d587f89fc08a6",
   "sections": [
     [
       "Documents",
-      115
+      116
     ],
     [
       "Sections",
-      1048
+      1056
     ],
     [
       "Source blocks",
-      3838
+      3858
     ]
   ],
   "inputs": [
@@ -414,6 +414,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md@authored",
       "hash": "sha256:ab29d2a1225a5ff3aabc40822a8a4487b9d23f1d2a4be034ab7a664619f74a0e"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md@authored",
+      "hash": "sha256:b9b8e8c69db8cd1669f9965df1e32ba0ee19634968e153e1d5bb50f6ed7e0d80"
     },
     {
       "content": "documents",
@@ -4144,6 +4149,46 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#21",
       "hash": "sha256:5f0c87809416e76ba46f7e8a8bed6f15af6bfb48aecbbd43d17cfda17afac66e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#1",
+      "hash": "sha256:dc50d80546d4ad4ac8cd2ab8193896dba686eefb9ee84a19987296328ead8feb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#2",
+      "hash": "sha256:b8e8779ec03613575685baf59245ee52e6511573398f712964352a0f19ef446c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#6",
+      "hash": "sha256:1eafe47ecd97c6194caa8d6eebe9cf0d495e6fe98f4df17010a2c83cc66d1809"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#9",
+      "hash": "sha256:26a7db18c571549484a66a2ee5b15cd89dbdaa37a16a81b9180d748a5cdef8d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#11",
+      "hash": "sha256:04810f72fdfb904d624689f8776473a33bfdb0cc059c189cfc8a21e601d86b7b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#15",
+      "hash": "sha256:96b60b4413f723842e98c07eb0673b500a619aa41b38af0b94fa735e92dedb96"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#17",
+      "hash": "sha256:34d2585d62fcf6be58748b35e6c4d7021b3c22a2463b79ae80df7d26b2062a8e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#19",
+      "hash": "sha256:e08d518b95b28333affa1435465fad978000dc263aa27c5fe17a2df6059613f9"
     },
     {
       "content": "headings",
@@ -18764,6 +18809,106 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#22",
       "hash": "sha256:126f1fac06f6b2e9e1c7437c1bb3564307903e7907371e921a885a6b592d6656"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#1",
+      "hash": "sha256:b6adfa8061b031f744fae1c64fa5e3146f182345c75f5be056894ee1c0832e4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#3",
+      "hash": "sha256:7c18f6f77f1edc65b17f38ca9e2a1107a83b92175faf44e69022dd449d8ad293"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#4",
+      "hash": "sha256:9b0730664bf8f8134e47493713f2da1c103dc25ed8f1205755c5cf6cd74abcc0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#5",
+      "hash": "sha256:052e1efd08ada2b73c99df6fae31f770e046e0dff03148f0e95fdc6b56d412d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#6",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#7",
+      "hash": "sha256:ca7f1165321e16a583a174bfd3e1c4c0946e625ad20e4584d15f1af6ae83052d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#8",
+      "hash": "sha256:f92f3424de1e94ce75cdb47613ef7322e4ff44450646742424bc6e2925a7eeec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#9",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#10",
+      "hash": "sha256:66baed986fa0e1b226d94bf8babe19663ed080700ed2aa8e78954440c35299ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#11",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#12",
+      "hash": "sha256:0ef7def3c0880217c50460503f69777ae8e5d6efaa9fd74edcc7740d42cd4192"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#13",
+      "hash": "sha256:cc3cdd50238261b61ec05b789a9b68a8f420e9e2ccc7286e50b66426881329c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#14",
+      "hash": "sha256:a51b0a8e6e74962035dc86653a1747da4a862082d679a6c3a575d0365bc64e4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#15",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#16",
+      "hash": "sha256:b91b62c51a8a08e4af234eaec6e92bd654eb45709c0879202b439dbb6f2e7307"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#17",
+      "hash": "sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#18",
+      "hash": "sha256:8bc09ea4c5054b19908ddb3e7d918cc49f981f1128c3e2a3205b94a8f19aa7e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#19",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#20",
+      "hash": "sha256:768fc098f518be75c2bdc99b5728ade0736b34bbc479dd7f77d32bf7b466bf88"
     },
     {
       "content": "blocks",
