@@ -64,7 +64,7 @@ profile: domain-specification
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
-| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:ea5edc948dd0c5b537c969b4942f827bf989e7fe2732c5aef3b08585f6b39ef0 |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:ed58186c941e4ff80c3091aefb10e8c06f3eeac2a3f324f27fc6aa74c4594589 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
@@ -15450,15 +15450,15 @@ gap rather than closing it.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#14
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:4687f626a4ee3ad195a56b1a1525543d044bd7685bbc88cfbc9551e5b0c2ddd9*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:7ccbbd24689de9bc9346c7d783c6576b7e195edd8965cdd0610d9d6d3fb9e930*
 
 4. **Finding / requirement state.** `nomos_contracts::Finding`, `Applicability`,
    `EvidenceClass`, `Guarantee` (`crates/contracts/nomos-contracts/src/finding.rs:56`,
    `finding/applicability.rs:33`, `finding/evidence.rs:24`, `guarantee.rs:23`) are what
    `nomos check` produces about a requirement. They are consumed only inside
-   `nomos-cli::check::report` and `vacuity.rs` today; no other crate can ask "what does
-   this repository's rule engine currently say about this subject" without running
-   `nomos check` itself.
+   `nomos-cli::check::report` (imports at `report.rs:4-5`) and `check.rs` itself today; no
+   other crate can ask "what does this repository's rule engine currently say about this
+   subject" without running `nomos check` itself.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#15
 

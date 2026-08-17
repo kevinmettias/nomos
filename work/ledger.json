@@ -13310,6 +13310,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-HOST-002-EVIDENCE",
+      "title": "OD-HOST-002's family-4 file list names vacuity.rs, which no longer consumes Finding/Applicability/EvidenceClass/Guarantee",
+      "why": "Confirmed by direct grep: crates/host/nomos-cli/src/vacuity.rs has zero references to Finding, Applicability, EvidenceClass, or Guarantee -- it now only calls check::Run/spec::Run and inspects their exit codes. OD-HOST-002's family 4 paragraph still names it as a consumer, alongside nomos-cli::check::report which does still import Finding and Applicability (check/report.rs:4-5). The record's substantive claim -- these types are consumed only inside the check group, so no other crate can ask what the rule engine currently says about a subject without running nomos check -- still holds; only the file list is one file wider than current code. Left uncorrected, the next reader trusts a citation that no longer resolves.",
+      "done_when": "OD-HOST-002's family 4 paragraph names crates/host/nomos-cli/src/check/report.rs and check.rs as the consumers, drops vacuity.rs, and states no other substantive change. Version bumped, both required projections (diagram-set, domain-specification) re-rendered and fresh per nomos spec freshness from an isolated worktree at the record set this commit publishes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-e643c65bbad4483e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-433c47e6dd66b347.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c14312faf4ba080e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a4a043f2643142bd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-30f549b5771eb641.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-5b419e0002ced6ae.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4b668c0f67b59fe5.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8c4ebd0adb5625f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787006708,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4f5538f400379dcf5930f8f14f32d8adf35aa09b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -3,7 +3,7 @@ id: OD-HOST-002
 type: decision
 title: A surface holds no state its canonical services cannot reconstruct
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -94,9 +94,9 @@ gap rather than closing it.
    `EvidenceClass`, `Guarantee` (`crates/contracts/nomos-contracts/src/finding.rs:56`,
    `finding/applicability.rs:33`, `finding/evidence.rs:24`, `guarantee.rs:23`) are what
    `nomos check` produces about a requirement. They are consumed only inside
-   `nomos-cli::check::report` and `vacuity.rs` today; no other crate can ask "what does
-   this repository's rule engine currently say about this subject" without running
-   `nomos check` itself.
+   `nomos-cli::check::report` (imports at `report.rs:4-5`) and `check.rs` itself today; no
+   other crate can ask "what does this repository's rule engine currently say about this
+   subject" without running `nomos check` itself.
 
 5. **Evidence — two vocabularies at two layers.** `EvidenceClass` above is the
    contracts-layer provenance strength attached to a `Finding`. `nomos_model::EvidenceRef`

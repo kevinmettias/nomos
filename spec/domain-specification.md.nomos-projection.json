@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:befa67cfa83da0632d2ebc65486494f14658d8d9538b260c8173c684a6c1b087",
-  "inputs_digest": "sha256:ba6befedc51df1e47daf908f4564f806efbb50a0d5a09e4ff331de705ca03120",
+  "content_digest": "sha256:02366a7e84b836dd6e4fb6dbc35faef6aea2f7474829d820241218e34b5d7a0d",
+  "inputs_digest": "sha256:3dcf7512afeabfaab2c4dfd17068d903eb7fdc1340c999e780e6b89f92861985",
   "sections": [
     [
       "Documents",
@@ -293,7 +293,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored",
-      "hash": "sha256:ea5edc948dd0c5b537c969b4942f827bf989e7fe2732c5aef3b08585f6b39ef0"
+      "hash": "sha256:ed58186c941e4ff80c3091aefb10e8c06f3eeac2a3f324f27fc6aa74c4594589"
     },
     {
       "content": "documents",
@@ -14038,7 +14038,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#14",
-      "hash": "sha256:4687f626a4ee3ad195a56b1a1525543d044bd7685bbc88cfbc9551e5b0c2ddd9"
+      "hash": "sha256:7ccbbd24689de9bc9346c7d783c6576b7e195edd8965cdd0610d9d6d3fb9e930"
     },
     {
       "content": "blocks",
