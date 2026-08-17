@@ -165,3 +165,157 @@ fn Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Pi
     );
 }
 
+/// A citation a harness file makes of a specific numbered step in `AGENTS.md`'s loop,
+/// paired with the fragment of that step's own wording the citing prose depends on.
+///
+/// The shape is `AGENTS.md step N: "anchor"`, deliberately not delimited by backticks as a
+/// whole span -- the existence check that walks every code span would otherwise try to
+/// resolve the citation as a repository path the way it resolves every other one.
+fn Step_Citations(text: &str) -> Vec<(u32, String)>
+{
+    let marker = "AGENTS.md step ";
+    let mut citations = Vec::new();
+    let mut rest = text;
+
+    while let Some(start) = rest.find(marker)
+    {
+        rest = &rest[start.saturating_add(marker.len())..];
+        let digits: String = rest.chars().take_while(char::is_ascii_digit).collect();
+        rest = &rest[digits.len()..];
+
+        let Some(step) = digits.parse::<u32>().ok()
+        else
+        {
+            continue;
+        };
+        let Some(after_colon) = rest.strip_prefix(": \"")
+        else
+        {
+            continue;
+        };
+        let Some(end) = after_colon.find('"')
+        else
+        {
+            continue;
+        };
+
+        citations.push((step, after_colon[..end].to_owned()));
+        rest = &after_colon[end.saturating_add(1)..];
+    }
+
+    return citations;
+}
+
+/// One numbered step of `AGENTS.md`'s loop, its continuation lines rejoined into one string.
+///
+/// The loop is the only place in the contract a bare `N. ` opens a line -- checked once,
+/// above `Is_Loop_Step_Marker` -- so finding the marker anywhere in the text is sound rather
+/// than a coincidence this function trusts blindly.
+fn Loop_Step_Text(contract: &str, step: u32) -> Option<String>
+{
+    let marker = format!("{step}. ");
+    let mut lines = contract.lines().skip_while(|line| return !line.starts_with(marker.as_str()));
+    let first = lines.next()?;
+    let mut collected = vec![first[marker.len()..].to_owned()];
+
+    for line in lines
+    {
+        if line.trim().is_empty() || line.starts_with('#') || Is_Loop_Step_Marker(line)
+        {
+            break;
+        }
+        collected.push(line.trim().to_owned());
+    }
+
+    return Some(collected.join(" "));
+}
+
+/// Whether a line opens the next numbered step, which is where [`Loop_Step_Text`] stops
+/// collecting continuation lines.
+fn Is_Loop_Step_Marker(line: &str) -> bool
+{
+    let digits: String = line.chars().take_while(char::is_ascii_digit).collect();
+
+    return !digits.is_empty() && line[digits.len()..].starts_with(". ");
+}
+
+/// `OD-AGENT-003`'s second path, for a procedure that must carry a contract step in its own
+/// words to stay usable: the citation is the promise, and this is what holds it to the step
+/// it names.
+///
+/// [`Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking`]
+/// above is this same defect's one already-fixed instance, asserted by hand because nothing
+/// generic existed yet. This is the generic form -- it does not stop working once that
+/// sentence is edited again, and it holds any citation any skill makes of any step, not
+/// only step 2's.
+///
+/// Fixture-driven for the same reason every derived reader in this suite is: a check whose
+/// failing case has never been observed is `OD-GATE-001`'s defect wearing a new file name.
+#[test]
+fn Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It()
+{
+    assert_eq!(
+        Step_Citations("no citation appears in this prose at all"),
+        Vec::<(u32, String)>::new(),
+        "prose with no citation marker was read as citing a step"
+    );
+    assert_eq!(
+        Step_Citations("see AGENTS.md step 2: \"picked by eye\" for why"),
+        vec![(2, "picked by eye".to_owned())],
+        "a well-formed citation was not read back out of the prose that carries it"
+    );
+
+    let fixture_contract = "## The loop\n\n\
+        1. Read the board.\n\
+        2. Read the board. `nomos work list` names the item to claim next, computed rather\n   \
+           than picked by eye.\n\
+        3. Claim it.\n";
+    let live = Loop_Step_Text(fixture_contract, 2).expect("the fixture names a step 2");
+
+    assert!(
+        live.contains("picked by eye"),
+        "the fixture's own step 2 carries \"picked by eye\" and the reader did not find it: \
+         {live}"
+    );
+
+    let edited_contract = fixture_contract.replace("picked by eye", "chosen by a session");
+    let after_edit =
+        Loop_Step_Text(&edited_contract, 2).expect("step 2 still exists after the edit");
+
+    assert!(
+        !after_edit.contains("picked by eye"),
+        "the edited fixture still reads back the pre-edit wording, so a real edit to \
+         AGENTS.md would never be seen by this check"
+    );
+
+    let contract = readers::Read_Harness_File(CONTRACT);
+    let mut broken = Vec::new();
+    for (file, text) in readers::Harness_Files()
+    {
+        for (step, anchor) in Step_Citations(&text)
+        {
+            match Loop_Step_Text(&contract, step)
+            {
+                Some(current) if current.contains(anchor.as_str()) =>
+                {}
+                Some(current) => broken.push(format!(
+                    "{file} cites {CONTRACT} step {step} for \"{anchor}\", which step {step} \
+                     no longer says -- it now reads: {current}"
+                )),
+                None => broken.push(format!(
+                    "{file} cites {CONTRACT} step {step}, and {CONTRACT}'s loop has no such \
+                     step any more"
+                )),
+            }
+        }
+    }
+
+    assert!(
+        broken.is_empty(),
+        "a harness file quotes a contract step that has moved on without it: {broken:#?}.\n\
+         OD-AGENT-003 admits a procedure carrying a step in its own words only paired with a \
+         citation in exactly this shape, so a paraphrase and the step it paraphrases are held \
+         together mechanically rather than by a reviewer noticing the drift."
+    );
+}
+

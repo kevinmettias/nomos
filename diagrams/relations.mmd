@@ -149,6 +149,7 @@ graph LR
     od_agent_001 -->|"relates-to"| arc_ecosystem_001
     od_agent_001 -->|"relates-to"| arc_harness_001
     od_agent_001 -->|"relates-to"| od_agent_002["OD-AGENT-002"]
+    od_agent_001 -->|"relates-to"| od_agent_003["OD-AGENT-003"]
     od_agent_001 -->|"relates-to"| od_contracts_001
     od_agent_001 -->|"relates-to"| od_gate_001
     od_agent_001 -->|"relates-to"| od_ledger_001
@@ -157,6 +158,8 @@ graph LR
     od_agent_001 -->|"relates-to"| od_project_001
     od_agent_002 -->|"relates-to"| od_agent_001
     od_agent_002 -->|"relates-to"| od_ledger_001
+    od_agent_003 -->|"relates-to"| od_agent_001
+    od_agent_003 -->|"relates-to"| od_ledger_023
     od_analysis_001 -->|"affects"| d_129
     od_analysis_001 -->|"relates-to"| od_analysis_002["OD-ANALYSIS-002"]
     od_analysis_001 -->|"relates-to"| od_capability_001
@@ -547,6 +550,7 @@ graph LR
     od_ledger_022 -->|"relates-to"| od_ledger_020
     od_ledger_022 -->|"relates-to"| od_ledger_024
     od_ledger_023 -->|"relates-to"| od_agent_001
+    od_ledger_023 -->|"relates-to"| od_agent_003
     od_ledger_023 -->|"relates-to"| od_ledger_005
     od_ledger_023 -->|"relates-to"| od_ledger_017
     od_ledger_024 -->|"relates-to"| od_ledger_002
@@ -805,6 +809,7 @@ graph LR
     d_138
     od_agent_001
     od_agent_002
+    od_agent_003
     od_analysis_001
     od_analysis_002
     od_analysis_003

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8463e29c865d79879d0f331f99071b499da311cab63234d367224620e6ae4de1",
-  "inputs_digest": "sha256:15fbe017ce4d1908a9e9884b58c147652a40b292bd1c0c899c7c91a2fa206683",
+  "content_digest": "sha256:487b0f7fbb04c27f54db255c1873aa52ea849a8edc6debc8c266299b3b418272",
+  "inputs_digest": "sha256:8ef7ecf2691e8c786079531e8423608d397ad73dbdb110aec56bf37b024f4809",
   "sections": [
     [
       "Documents",
-      117
+      118
     ],
     [
       "Sections",
-      1067
+      1072
     ],
     [
       "Source blocks",
-      3882
+      3897
     ]
   ],
   "inputs": [
@@ -114,6 +114,11 @@
       "content": "documents",
       "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored",
       "hash": "sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md@authored",
+      "hash": "sha256:9f320881faa41b945d440f86e3851dad8c56f5564b27d481fa52b9a4c8fd84aa"
     },
     {
       "content": "documents",
@@ -1264,6 +1269,31 @@
       "content": "headings",
       "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#20",
       "hash": "sha256:5f00f408ad63fba0513bd2889ee70339c1a7f5fc6067c19accfad41923b140fa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#1",
+      "hash": "sha256:ecfaed8489758491eea370823543bb4dd2e2ab5ba011db7321b5e54f966e4d7b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#2",
+      "hash": "sha256:411066249d9a4fb557f853faeaaf8c295849d29b5c0cadfac8a6d2d7bcb1f793"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#6",
+      "hash": "sha256:39e85fcef312ace95c3fa1be0ab9ef1699683ab46d02c0d1993a1475d9550c7e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#10",
+      "hash": "sha256:5431e17862a2a5679865c4f9b8c33d43ddc033f9c62697b4e773c82e87c5592d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#14",
+      "hash": "sha256:3db2eff38700e4f6d331abc2d019b60dbf43900c2546c8e6a0d0c8dbd2c2e78d"
     },
     {
       "content": "headings",
@@ -8234,6 +8264,81 @@
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#21",
       "hash": "sha256:4142861119b7f69f0f69f4105cc9e4f0b5ed8d192bf9d34f85feea811eaee26d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#1",
+      "hash": "sha256:78f09e736bd8fa996de0dfbdcb1df247fef34da305d358672c2e9d8bfb6e1920"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#3",
+      "hash": "sha256:437cc549d09ad578df069eb0fe28a748b2625ff74ab97362046dc943e82725cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#4",
+      "hash": "sha256:c7dc5aa8a5cdeaf9f2bc7062c5f1d43d916bb0af11ba7a5338381564b0f5676e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#5",
+      "hash": "sha256:04bfe656f837cf3d2f28c308ba1abaac13d42fdbceccca199e5cc872a19fdd48"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#6",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#7",
+      "hash": "sha256:bb6d9166373e83c38c648c53a1da0ee07029478bd188b999cd7bc6b41890359a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#8",
+      "hash": "sha256:68e7aa9c9b831c8d466c04ef188a4bf5257b8a64b6b03f49b26eee840d85462d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#9",
+      "hash": "sha256:96ef82395735668c4bbe07ae378eab245c26020d902d22558887032d6cf48f77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#10",
+      "hash": "sha256:22fc77b55a69c7440927088b4320df4a786c8ad6d23accff7d6c3db0400af9af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#11",
+      "hash": "sha256:2fc3698e4d921d8fc4c000c3f2855a9a1cb8adfadf6c1f0989b072ebd2dc196b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#12",
+      "hash": "sha256:c0aec92289fba678c5d0890a4876074fa1a9026b49cf21f1196b42eee622d7da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#13",
+      "hash": "sha256:550a52faf5fcb09eb3ec46dd4730c4f5bc4071a71007eacc89b09b788d70c218"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#15",
+      "hash": "sha256:88a5dfc67c9731d184b4ee4ddf8f58fbe5ed1fa4b0fbc6ff5a6b4873317abbbd"
     },
     {
       "content": "blocks",

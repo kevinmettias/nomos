@@ -29,6 +29,7 @@ profile: domain-specification
 | docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md@authored | docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md | authored | 15 | 5 | sha256:18175cd5252223b41fc5ac3719fc79e19ebf7889c683e051ab0f9991b960a089 |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md | authored | 21 | 7 | sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81 |
+| docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md@authored | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md | authored | 15 | 5 | sha256:9f320881faa41b945d440f86e3851dad8c56f5564b27d481fa52b9a4c8fd84aa |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
@@ -264,6 +265,11 @@ profile: domain-specification
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#14 | authored | 2 | Where This Lives |
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#17 | authored | 2 | What Is Guarded, And What Is Not |
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#20 | authored | 2 | Status |
+| docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#1 | authored | 1 | A skill routes to a contract step or cites it where a citation is checked |
+| docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#2 | authored | 2 | Question |
+| docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#6 | authored | 2 | The Decision |
+| docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#10 | authored | 2 | What Is Guarded, And What Is Not |
+| docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#14 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1 | authored | 1 | The snapshot in a fact key is a third answer, and it defeats the other two |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#4 | authored | 2 | What Was Found |
@@ -5198,6 +5204,148 @@ stays trustworthy.
 *revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / Status · hash: sha256:4142861119b7f69f0f69f4105cc9e4f0b5ed8d192bf9d34f85feea811eaee26d*
 
 Closed by `P11-AGENT-CONTINUATION`.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#1
+
+*revision: authored · kind: heading · heading: A skill routes to a contract step or cites it where a citation is checked · hash: sha256:78f09e736bd8fa996de0dfbdcb1df247fef34da305d358672c2e9d8bfb6e1920*
+
+# A skill routes to a contract step or cites it where a citation is checked
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#2
+
+*revision: authored · kind: heading · heading: A skill routes to a contract step or cites it where a citation is checked / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#3
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / Question · hash: sha256:437cc549d09ad578df069eb0fe28a748b2625ff74ab97362046dc943e82725cf*
+
+`OD-AGENT-001` refused a documentation tree for agents on the grounds that a summary of a
+checked file is an unchecked copy of it, and it drew the committed agent surface as
+`AGENTS.md`, a `CLAUDE.md` that imports it, and skills under `.claude/skills/`. What it did
+not reach is a skill restating one *step* of `AGENTS.md`'s own loop in its own words. That
+is not a second architecture document — it is a procedure elaborating a single instruction
+the contract already gives, which is exactly the shape `OD-AGENT-001` admits ("a reusable
+multi-step procedure that cannot be reduced to one command plus a pointer", per `CLAUDE.md`'s
+statement of the same rule) — so the restatement it produces was never checked by anything
+`OD-AGENT-001` built.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#4
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / Question · hash: sha256:c7dc5aa8a5cdeaf9f2bc7062c5f1d43d916bb0af11ba7a5338381564b0f5676e*
+
+`P11-NEXT-WORK` gave the concrete instance. `AGENTS.md`'s loop step 2 said "Pick an item, or
+add one"; `.claude/skills/nomos-task/SKILL.md` section 3 said "Choose an item, or author
+one" — one instruction, in two files, in different words. When `OD-LEDGER-023` moved
+selection from a read to a computed `next:` line, step 2's sentence changed to say so.
+Section 3's did not, because nothing pointed from one to the other and nothing compared
+them. The item that exists to stop the contract saying *pick* could close its own
+`done_when` while the skill a session actually opens still said it — a defect one step
+removed from the one `OD-AGENT-001` already refused, at an address that check does not
+reach.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#5
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / Question · hash: sha256:04bfe656f837cf3d2f28c308ba1abaac13d42fdbceccca199e5cc872a19fdd48*
+
+`tests/contract/tests/agent_harness.rs` already runs its route-existence check over every
+skill, so a path a skill names is held to the same standard as a path `AGENTS.md` names.
+What it does not check is *agreement*: a route can point at a file that still exists while
+saying the opposite of what the file now says, and a paraphrase carries no path for that
+check to find in the first place.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#6
+
+*revision: authored · kind: heading · heading: A skill routes to a contract step or cites it where a citation is checked / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#7
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / The Decision · hash: sha256:bb6d9166373e83c38c648c53a1da0ee07029478bd188b999cd7bc6b41890359a*
+
+**A skill adapting one of `AGENTS.md`'s numbered loop steps does it one of two ways, and
+both are held by a mechanical check rather than a reviewer's memory.**
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#8
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / The Decision · hash: sha256:68e7aa9c9b831c8d466c04ef188a4bf5257b8a64b6b03f49b26eee840d85462d*
+
+**Route, by default.** Where a step's instruction is the whole of what the skill needs to
+say, the skill points at the step instead of restating it — "step 2 already answers which
+item to claim; read it there" rather than a second sentence describing how the choice is
+made. There is one copy, and the question of agreement cannot arise because there is
+nothing to disagree. `nomos-task/SKILL.md` section 3 is the fixed instance: the sentence
+that mirrored step 2's selection instruction is gone, and what replaced it is a route plus
+the one thing the route does not cover — that `next:` does not weigh territory overlap with
+a live session, which no step of `AGENTS.md` says and is therefore not a restatement of
+anything.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#9
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / The Decision · hash: sha256:96ef82395735668c4bbe07ae378eab245c26020d902d22558887032d6cf48f77*
+
+**Cite, where a route is not enough.** Some skill content is a real elaboration of a step —
+added detail, a caveat, a reason a plain pointer would strip out — and reducing it to a
+pointer would lose exactly the thing `CLAUDE.md` says earns a skill its place. Content in
+that shape carries an explicit citation of the step it adapts, in the fixed form
+`` AGENTS.md step N: "anchor" ``, where the anchor is a fragment quoted verbatim from that
+step's current wording. The citation is not decoration; it is the thing the mechanical
+check reads.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#10
+
+*revision: authored · kind: heading · heading: A skill routes to a contract step or cites it where a citation is checked / What Is Guarded, And What Is Not · hash: sha256:22fc77b55a69c7440927088b4320df4a786c8ad6d23accff7d6c3db0400af9af*
+
+## What Is Guarded, And What Is Not
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#11
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / What Is Guarded, And What Is Not · hash: sha256:2fc3698e4d921d8fc4c000c3f2855a9a1cb8adfadf6c1f0989b072ebd2dc196b*
+
+`tests/contract/tests/agent_harness.rs` gains a generic check, not a hardcoded assertion
+about step 2: it derives every numbered step's text straight out of `AGENTS.md`'s own loop
+section, finds every `AGENTS.md step N: "anchor"` citation any harness file carries — a
+skill today, potentially `AGENTS.md` or `CLAUDE.md` themselves later — and fails when a
+cited step no longer contains the anchor quoted from it, or no longer exists at all. A
+citation is what makes a paraphrase legible to a machine that cannot judge whether two
+sentences mean the same thing; the anchor is the fragment the machine can check stayed
+true. The check is proven capable of failing over fixture text it constructs itself, not
+only shown passing over the real files, for the same reason every derived check in this
+file already is: a check whose failing case has never been observed is `OD-GATE-001`'s
+defect wearing a new file name.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#12
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / What Is Guarded, And What Is Not · hash: sha256:c0aec92289fba678c5d0890a4876074fa1a9026b49cf21f1196b42eee622d7da*
+
+`Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking`,
+`OD-LEDGER-023`'s own instance check, stays. It is the one case this record's mechanism does
+not need to reach, because that content is now routed rather than cited — but it remains
+the fixed proof that the specific defect this record generalizes was real.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#13
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / What Is Guarded, And What Is Not · hash: sha256:550a52faf5fcb09eb3ec46dd4730c4f5bc4071a71007eacc89b09b788d70c218*
+
+What is not guarded is whether a route or a citation is the *right* choice for a given piece
+of content — whether something reducible to a pointer was actually reduced to one, and
+whether a citation's anchor was chosen well. That is the same judgment call `OD-AGENT-001`
+already declines to mechanize, applied one level down: the check enforces that a citation
+stays true once made, not that a citation should have been made in the first place.
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#14
+
+*revision: authored · kind: heading · heading: A skill routes to a contract step or cites it where a citation is checked / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md#15
+
+*revision: authored · kind: prose · heading: A skill routes to a contract step or cites it where a citation is checked / Status · hash: sha256:88a5dfc67c9731d184b4ee4ddf8f58fbe5ed1fa4b0fbc6ff5a6b4873317abbbd*
+
+Closed by `P11-SKILL-AGREEMENT`.
 
 ### docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1
 

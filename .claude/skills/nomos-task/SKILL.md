@@ -35,14 +35,19 @@ write that field back. A build carrying the guard refuses the verb outright; one
 before it drops the field silently at exit 0. `nomos work validate` prints the file's schema
 beside the build's, so one command tells you which copy you are running.
 
-## 3. Choose an item, or author one
+## 3. Claim what AGENTS.md step 2 names, or author one
 
-`nomos work list` shows the board and why an item cannot be taken. Prefer an item whose
-territory does not overlap what anybody holds.
+Which item to claim is step 2's answer, not this skill's: `nomos work list` prints it on
+the `next:` line, computed from the whole board rather than picked by eye. Read it there.
 
-If you are authoring one, the territory is the part that is hard to change later — there is
-no `work edit`, and widening mid-claim is the failure this repository has already had
-twice. Reserve, in addition to the code you will edit:
+`next:` orders only by id and does not weigh territory overlap with a live session —
+claiming is declared, not enforced, so nothing stops it from naming an item whose files a
+peer already holds. Claiming a different eligible item with cleanly disjoint territory
+instead is still sound judgment; the line names an answer, not a rule against a better one.
+
+If the board names none, you are authoring one. The territory is the part that is hard to
+change later — there is no `work edit`, and widening mid-claim is the failure this
+repository has already had twice. Reserve, in addition to the code you will edit:
 
 - the record identifier under `docs/records/` if the work makes a decision, **and** the
   registration file under `crates/spec/nomos-spec-store/records/` that makes it governing;
