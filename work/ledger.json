@@ -8094,12 +8094,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P12-CONNECTOR-SEAM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orchestrator-P12-CONNECTOR-REPLAY",
+        "acquired_at": 1786924863,
+        "lease_expires_at": 1786932063
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -8258,10 +8262,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orchestrator-P12-PUBLICATION-SCOPE",
+        "acquired_at": 1786924870,
+        "lease_expires_at": 1786932070
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -8702,7 +8710,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory cannot do the work. done_when requires an executable check: 'A check reports ... and reports it as a finding rather than as prose' (ruling out a record's narrative as the deliverable), 'validated against the four instances' with the two closed ones as negative controls (requires actually running the check over fixtures modeling pre-fix and post-fix states, not reasoning through them on paper), and 'An enforcement mechanism it does not understand must be reported as unexamined and never as absent' (an Unknown/Vacuous-style runtime behavior, mirroring nomos-rules' existing Assurance::Unknown pattern, not a sentence in a record). OD-GATE-006 already states the general principle in prose and explicitly declined to build this same mechanical version 'for scope' (its own 'What Was Considered And Rejected' section: 'Require every declaration to name its executor mechanically ... refused here for scope rather than on the merits ... named here so the next reader knows the gap is known'). P12's why restates OD-GATE-006's four instances near-verbatim, so it is asking for the check OD-GATE-006 named and left undone, not a second prose statement of the same decision. The reserved territory is exactly docs/records/OD-GATE-010 and crates/spec/nomos-spec-store/records/OD-GATE-010.record, both spec-store record content with no Rust source, test, or fixture in reach. The check itself has nowhere to live: it needs a new rule/universe under crates/rules/nomos-rules/src (or equivalent), wiring into the nomos check composition root in crates/host/nomos-cli (README.md: 'judges real code and is reachable as nomos check'), and fixtures/corpus territory to exercise the four instances as positive and negative controls (e.g. under tests/corpus or the owning crate's own tests). This item's own verification predicate (cargo test -p nomos-spec-store -p nomos-spec-project -p nomos-contract-tests) only proves a record is registered and projections are fresh; it cannot exercise 'reports ... as a finding' against real fixtures, so closing on it would claim a check that was never built or run - the same failure mode P11-LINT-AUTHORITY was declined for. Reissue with territory widened to the check's actual home (the rules crate, its CLI wiring, and its fixture/corpus territory) plus these two record files for the governing decision."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -8721,9 +8733,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-orchestrator-P12-UNENFORCED-DECLARATION",
+          "reason": "Territory gap, reissuing via decline. done_when requires an executable check ('reports it as a finding rather than as prose', validated by actually running against fixtures for the four instances including negative controls, and epistemic-humility runtime behavior for unrecognized enforcement mechanisms) but territory is exactly two spec-store record files with no Rust source/test/fixture reach. See the decline reason for full detail.",
+          "abandoned_at": 1786925100
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orchestrator-P12-UNENFORCED-DECLARATION",
+        "declined_at": 1786925111
+      }
     },
     {
       "id": "P12-DUPLICATE-AUTHORITY",
