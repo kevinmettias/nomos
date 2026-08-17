@@ -7808,7 +7808,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P11-UNRUN-POLICY"
       ],
@@ -7826,7 +7826,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ut; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-12af7d33e30b5091.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-40615dfeaa699c1a.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-1666548e9971cac2.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-2b36d524fb75e3e5.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-98c4029aeba87827.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-36f3a5dec3d1cdcc.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-2688a97daa268496.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-97ede21a1d8cf99c.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-884719974a7263ab.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-1b718edd868b7d17.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-e195eb668c4efcdd.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1786927747,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [
         {
           "holder": "claude-msrv-s2",
@@ -9111,7 +9136,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -9125,7 +9150,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed out; finished in 0.36s\n\n\nrunning 11 tests\ntest controls::Test_A_Divergence_With_No_Record_Should_Be_Refused ... ok\ntest reader::Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number ... ok\ntest controls::Test_An_Entry_Naming_A_Vanished_Site_Should_Be_Reported ... ok\ntest reader::Test_The_Reader_Should_Refuse_Every_Malformed_Entry ... ok\ntest controls::Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported ... ok\ntest committed::Test_Every_Divergence_Should_Name_A_Governing_Record ... ok\ntest committed::Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It ... ok\ntest reader::Test_The_Reader_Should_Enumerate_The_Directory_It_Is_Given ... ok\ntest committed::Test_The_Assessed_Set_Should_Not_Shrink ... ok\ntest committed::Test_Every_Assessment_Should_Name_A_Site_That_Exists ... ok\ntest committed::Test_Every_Named_Record_Should_Exist_And_Be_Registered ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-2bf6f03006d6e169.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03bb3b77a304179f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-3a2571bf0b9d7834.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-15739aa19297e553.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-92b11eaac815a8cd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ca16a9d136103b26.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-04cd6948a9e9b567.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e8c3aea949064d8.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1786927743,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -9206,12 +9254,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P12-CONFORMANCE-SEAM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orchestrator-P12-CROSS-LANGUAGE",
+        "acquired_at": 1786927207,
+        "lease_expires_at": 1786934407
+      },
       "verification": {
         "argv": [
           "cargo",

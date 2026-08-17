@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1681494ee39d30dffb9ea8487faa40d29c780249d1e16ee023016e792992108f",
-  "inputs_digest": "sha256:39ab52115ce311307949a7f6267ceaf7b061c19a5959127c713d1ecf84eef5e7",
+  "content_digest": "sha256:4c68e17472e1d480d1a5bb0fe9486b9006d80a9a9c5a15016955ff15e360421a",
+  "inputs_digest": "sha256:45d08174dfacd0782d20e17ff6f3d7d647af77a9aff6caeafef583d90991c494",
   "sections": [
     [
       "Documents",
-      94
+      95
     ],
     [
       "Sections",
-      866
+      874
     ],
     [
       "Source blocks",
-      3277
+      3313
     ]
   ],
   "inputs": [
@@ -144,6 +144,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored",
       "hash": "sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored",
+      "hash": "sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd"
     },
     {
       "content": "documents",
@@ -1424,6 +1429,46 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35",
       "hash": "sha256:2a7e7e580721e98cb7f0b4b1a2f27d8dcb5d8b005e66321daaa1bcb4d347f140"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#1",
+      "hash": "sha256:1df6559f31a4f4a8dc2e64af3f1335a72ec12607756873503d1073ae92eb0e91"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#2",
+      "hash": "sha256:5b92449d6adccc1a6d6d9bf377ed286e870157a929600043ebc6cd9fb780b343"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#5",
+      "hash": "sha256:be70d18bd401b2ebdad58cd47c1263de2271d9a36c84ca0b35cd21c07219a257"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#8",
+      "hash": "sha256:36680411d220011ec065319c724b1e97f6004a42537bc07ab54ffb9e8e3c7d5a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#14",
+      "hash": "sha256:3824162dd2e7941a464f36b60907f49405cb0a3327943ce4a46853b7d74a8061"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#21",
+      "hash": "sha256:fb52d2a1aabb2e1116f3432fb0312e838fd345d03162faa01171a64f775f83ce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#28",
+      "hash": "sha256:16ab9e10b7f5d22c73d45012de19294bd55538a4e6751530405a35749795948d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#35",
+      "hash": "sha256:fce4be783bce0d535ec577752843f3026a4d09c8dc060a3bc02fd8bfb172e1b2"
     },
     {
       "content": "headings",
@@ -8149,6 +8194,186 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#36",
       "hash": "sha256:acc51edccf08377da1dfd01ce57b84118d31da6cda9b19ecc8c6bb13051327b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#1",
+      "hash": "sha256:e270786b484ddd4ccf6eb6314d749af2d2b91bfc06110ce67cc52d5ec5a4cfd7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#3",
+      "hash": "sha256:0fbed952d19f92dd923530f5a169747afde4c5498d6b639debd7e4b6ddbb9b17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#4",
+      "hash": "sha256:e1a36c828ca4d2607c7b96f48657a300aabc86708b3f48de8d0751ab139709dd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#5",
+      "hash": "sha256:f78ac05a4933b4097ba171aa3eafbbcf564dbd0e6d0ece3be6fa7aa364e38b61"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#6",
+      "hash": "sha256:29cab12f200595772f020ce4fef21d3b6f2f45029803da0f4c908c3df65e089c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#7",
+      "hash": "sha256:1d285f24db0bb37c4acc83f96e3f786a9df0d0736d820e3ba2ef072d3eee0c51"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#8",
+      "hash": "sha256:96ac39cc91e191540249e3c16705b9288f72acc61fb0b3ec105f8b495461d3ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#9",
+      "hash": "sha256:b8beeec42c4208cd1550c17870b2c1cb1b0a11b534cdc12b587cf1e45ceb2854"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#10",
+      "hash": "sha256:20e6f990ec50b42e752ce383ef0e78dae45924b0cfe29465b7c6153540307c15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#11",
+      "hash": "sha256:eb15f54d8c34fd6e940bfbf85de4e84a84e30244c7f16b30d5db35b674770741"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#12",
+      "hash": "sha256:d8aed95cd3221dcd1ae3ab2a4a3a64f85ba98fabd1f73d6d4e577a7e0870d295"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#13",
+      "hash": "sha256:b6c0b56e75a2094056d5a57cef80b1ed072194d6d0f78ac1bf29a5f08cc01418"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#14",
+      "hash": "sha256:cd23457bc7daa239578a3a89fc7d4a682e1b1dbc570517c67e30ec69a3ff42fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#15",
+      "hash": "sha256:2650bc9308fe47bd3895a74df6949792ca7432c0d52160420ecc59972759877a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#16",
+      "hash": "sha256:6bf544c6cad68ec118cbe84922c66a9997e0de54806e72b6995fefee3d40b968"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#17",
+      "hash": "sha256:879814d9780d13e9709da7ec3c77d259581486093b1fcec9674cbf89e2d596dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#18",
+      "hash": "sha256:d4a269c7a33ac018ac81610b5d40071fb5ac25dcac182be5e329b2074d7bc5c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#19",
+      "hash": "sha256:356d212d12c8b8b5fff71de27d76962b6ddeed331ff03de9a9cc03f43fabd98c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#20",
+      "hash": "sha256:0d56d55fc6c4c54c49453350279789a46657ccdc87d051e76445b8cefeac0754"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#21",
+      "hash": "sha256:72c223d6d5ec9902874a4ff0509fb1dda171e0f3f206049e9c47fe718d62e879"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#22",
+      "hash": "sha256:32ec4ba3bddf5fad3dd24fb7d5b6fd776eb61fbf989644787a6713cd7528724e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#23",
+      "hash": "sha256:5eda6063e2c5d566890e16e547cf4b06d39dd80638622329cce2254922b33664"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#24",
+      "hash": "sha256:2851c867bbf818c61ca183abfa3039949d068a8a66d114aac6f090d25911f266"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#25",
+      "hash": "sha256:b615ac7f94d21f11eef0b7c9c7162e7805ef325faee64c56f0ab3a8203ac4f41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#26",
+      "hash": "sha256:cf740c6985cd9fb91f70b568f097d6f0672dd18496209dfcce94ce3727402025"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#27",
+      "hash": "sha256:e8250f9a8bc9fa5b827c65e1b6252119d155cd8c9c25c248dcd85e6f3fb1bb55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#28",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#29",
+      "hash": "sha256:6bcb7ce2322f99d04e5725f8ae289eb37058f91c36c23a458485ab0d532cc17b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#30",
+      "hash": "sha256:e817953dd13694a576b767fe893209599fdb416e07d094698c008f6280f2295c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#31",
+      "hash": "sha256:4fc8db4d158a8f250c7aa29028e3ff1377295bc62201c2369b8b67bdfd7d86fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#32",
+      "hash": "sha256:fcb4397f31d35834a587605783ee7f6c0f4712172df2a73a2e20beece3fab166"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#33",
+      "hash": "sha256:d9db0e5fc8e023aec0069bd6018c16c3ef5ade63bd18b347099dc5279eaeabc0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#34",
+      "hash": "sha256:c1f4fd10ed7a3293f718f270f2c71852d4af4167727360639c2e91ac5d2f13fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#35",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#36",
+      "hash": "sha256:72a0ff988d00d85f176d1954825f930a6a88df50e32ac03330d41a540ea3bfa7"
     },
     {
       "content": "blocks",

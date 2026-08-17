@@ -8,8 +8,13 @@ use_small_heuristics = "Default"
 
 # Allman / BSD brace placement, matching the sibling xvpe workspace. Both repos
 # deliberately depart from Rust's K&R default. `brace_style = "AlwaysNextLine"` is a
-# nightly-only rustfmt option, so `unstable_features` is enabled here and the
-# toolchain is pinned to nightly via `rust-toolchain.toml`.
+# nightly-only rustfmt option, so `unstable_features` is enabled here — but this
+# workspace's toolchain (`rust-toolchain.toml`) is pinned to stable, and `cargo fmt`
+# is forbidden below regardless, so nothing here ever runs rustfmt with these options
+# live. They stay recorded as the intended style rather than as a working config: on
+# a stable toolchain rustfmt refuses `unstable_features = true` outright ("unstable
+# features are only available on the nightly channel"), which is a louder and safer
+# failure than the silent K&R rewrite the warning below describes. See `OD-GATE-012`.
 #
 # WARNING — this only gets us HALF the rule, and the half it misses is a footgun:
 # `brace_style` governs ITEM braces (fn / impl / struct / trait / mod) and nothing

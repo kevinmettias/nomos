@@ -35,6 +35,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md@authored | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md | authored | 36 | 11 | sha256:54e8c8e7d8328ce45e97b3e117eaf7ed7a547d61a8518b2d638de18b1f2768fc |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
@@ -296,6 +297,14 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#26 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#31 | authored | 2 | What Holds It |
 | docs/records/OD-CAPABILITY-004-an-optional-knowledge-capability-that-is-absent-is-reported-by-the-packet-rather-than-by-the-registry.md#35 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#1 | authored | 1 | A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#5 | authored | 2 | What A Cross-Language Claim Is |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#8 | authored | 2 | What Has To Be True Of Two Providers For Their Facts To Be Comparable At All |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#14 | authored | 2 | The Claim Families, And What They Are Reachable With |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#21 | authored | 2 | What A Cross-Language Check Reports When One Side Has No Provider |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#28 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#35 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -6856,6 +6865,400 @@ Closed by P11-KNOWLEDGE-ABSENT. No successor item is opened, because there is no
 builder to build and an item reserving work nobody has scheduled would be a placeholder on a
 board that refuses them. The obligation in decision 1 binds whichever item builds the first
 one.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#1
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer · hash: sha256:e270786b484ddd4ccf6eb6314d749af2d2b91bfc06110ce67cc52d5ec5a4cfd7*
+
+# A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#2
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#3
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / Question · hash: sha256:0fbed952d19f92dd923530f5a169747afde4c5498d6b639debd7e4b6ddbb9b17*
+
+`crates/languages` holds two providers, `nomos-lang-rust` and `nomos-lang-rust-scan`, and
+`tests/contract/tests/boundaries/bands.rs` puts them at the same band deliberately, forbidding
+an edge between them: "two providers of one capability... this suite's downward rule forbids
+an edge between crates at one band, which is what stops the second answer from being derived
+from the first. Two providers that shared a parser could not disagree." `P8-SECOND-PROVIDER`
+is why that rule has ever been tested at all — it built the second Rust provider so
+`Registry::Resolve` had more than one offer to choose between, and `OD-CAPABILITY-001` settled
+which of several usable offers wins.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#4
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / Question · hash: sha256:e1a36c828ca4d2607c7b96f48657a300aabc86708b3f48de8d0751ab139709dd*
+
+That is a rule about two answers to *one* question: one capability, one subject key space, one
+provider's offer weighed against another's, resolved by selection or fallback. It says nothing
+about two providers answering two *different* languages' questions about two different
+subjects, joined into one claim about how those subjects relate to each other — an FFI call, a
+message one side serializes and the other deserializes, a protocol one side speaks and the
+other answers, a build pairing shipped from two separate toolchains. This repository has the
+mechanism a claim like that would need — `FactVariant`, `Guarantee`, `EvidenceClass`,
+`Applicability`, `Observation`, all provider-neutral by construction — and no second language
+to test it with. Whether two providers' facts actually compose into a claim spanning both, or
+merely sit next to each other in the same store, is unproven, and `OD-ANALYSIS-004` and
+`OD-ANALYSIS-006` already did the equivalent groundwork for two other never-yet-produced
+resolution levels rather than waiting for a producer to discover the shape by trial. This
+record does the same for the cross-language seam, honestly, before a second language exists to
+tempt an implementer into deciding it ad hoc.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#5
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Claim Is · hash: sha256:f78ac05a4933b4097ba171aa3eafbbcf564dbd0e6d0ece3be6fa7aa364e38b61*
+
+## What A Cross-Language Claim Is
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#6
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Claim Is · hash: sha256:29cab12f200595772f020ce4fef21d3b6f2f45029803da0f4c908c3df65e089c*
+
+**It is not a same-capability disagreement.** `P8-SECOND-PROVIDER` and `OD-CAPABILITY-001`
+cover the case where two offers answer the *same* question about the *same* subject — the
+`bands.rs` rule exists exactly so that case stays confined to one band, decided by
+`Selection::Weaker` and fallback, never by one provider deriving from the other. A
+cross-language claim is not that case wearing a different label. There is no ranking between a
+Rust ownership fact and a Python ownership fact the way there is between a parser's answer and
+a scanner's — neither is a weaker or stronger offer of the same fact, because they are not
+offers of the same fact. Nothing in `Registry::Resolve` or `Selection` applies, and nothing
+here reopens that they don't.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#7
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Claim Is · hash: sha256:1d285f24db0bb37c4acc83f96e3f786a9df0d0736d820e3ba2ef072d3eee0c51*
+
+**It is a claim about the seam, not a claim either side's tooling holds.** `ARC-CONFORMANCE-001`
+already generalized the shape: a Nomos conformance claim is "composed from architecture...,
+requirements..., history..., runtime evidence..., and policy... checked against each other
+rather than against a language's grammar or type system," and the record's structural test is
+that Nomos writes native analysis "only where the fact a claim needs is not obtainable from any
+existing provider at all." A cross-language claim qualifies on exactly that test, for a reason
+that is structural rather than a gap in today's tooling: a Rust language server has no model of
+a Python process, a Python type checker has no model of a C library's ownership contract, and
+neither omission is either tool being wrong — the claim was never theirs to make, because
+composing two providers' facts about two different subjects into one claim about how those
+subjects relate is a question only the party that can see both sides can even ask. That party
+is Nomos, exactly as it is the only party that can check the README's band table against the
+workspace or a projection's freshness against its own render history — two of `ARC-CONFORMANCE-001`'s
+four worked examples, cited here because a cross-language seam is the same shape of claim over
+a different pair of inputs.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#8
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What Has To Be True Of Two Providers For Their Facts To Be Comparable At All · hash: sha256:96ac39cc91e191540249e3c16705b9288f72acc61fb0b3ec105f8b495461d3ae*
+
+## What Has To Be True Of Two Providers For Their Facts To Be Comparable At All
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#9
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What Has To Be True Of Two Providers For Their Facts To Be Comparable At All · hash: sha256:b8beeec42c4208cd1550c17870b2c1cb1b0a11b534cdc12b587cf1e45ceb2854*
+
+Two providers each filing facts under `FactVariant`, `Guarantee`, `EvidenceClass`,
+`Applicability` and `Observation` is necessary and not sufficient. That shared vocabulary
+states how strongly each provider's own fact is known — its resolution level, its soundness
+and completeness, how it was come by, whether a judgment was reached. It states nothing about
+whether the Rust fact and the Python fact are facts *about the same thing*. Filing both under
+the same five-question vocabulary is what lets them be compared once there is something to
+compare; it is not itself the something.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#10
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What Has To Be True Of Two Providers For Their Facts To Be Comparable At All · hash: sha256:20e6f990ec50b42e752ce383ef0e78dae45924b0cfe29465b7c6153540307c15*
+
+**A cross-language claim is well-formed only when a correspondence between the two subjects is
+itself declared.** Not inferred by either provider — a Rust provider has no way to discover
+that `alpha::Handle` is the same boundary as Python's `ctypes.c_void_p` binding in `beta.py`,
+because that correspondence is not a fact about either subject's own text, syntax, or resolved
+model; it is a fact about how this repository's own architecture wires the two together, an FFI
+declaration, a shared IDL or schema file, a matched build pairing. `OD-RULES-003` already states
+the parallel case for a different kind of edge: "a declared architecture is data, the observed
+graph is a capability's fact" — a dependency edge is not derived by watching the code, it is
+authored and then checked against what the code does. A cross-language correspondence is the
+same kind of thing: declared, not discovered, and a cross-language capability checks the two
+providers' facts against a correspondence it was handed rather than one it worked out.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#11
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What Has To Be True Of Two Providers For Their Facts To Be Comparable At All · hash: sha256:eb15f54d8c34fd6e940bfbf85de4e84a84e30244c7f16b30d5db35b674770741*
+
+Without that declared correspondence, two syntactic facts about two different-language subjects
+are two unrelated answers, not evidence about a seam — proximity in the store is not
+composition. `OD-CAPABILITY-004` already refused the adjacent version of this mistake when it
+kept an absent optional knowledge packet out of `Applicability`'s vocabulary rather than let an
+empty collection read as a verdict: a fact sitting where a claim was expected is not the claim,
+and a cross-language check that composed two providers' facts merely because both existed would
+be the same conflation one level up — reporting a seam checked when only two unrelated subjects
+were ever looked at.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#12
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What Has To Be True Of Two Providers For Their Facts To Be Comparable At All · hash: sha256:d8aed95cd3221dcd1ae3ab2a4a3a64f85ba98fabd1f73d6d4e577a7e0870d295*
+
+So the criterion has two parts, and a cross-language check that skips either is not making the
+claim it appears to make:
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#13
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What Has To Be True Of Two Providers For Their Facts To Be Comparable At All · hash: sha256:b6c0b56e75a2094056d5a57cef80b1ed072194d6d0f78ac1bf29a5f08cc01418*
+
+1. **The correspondence is declared**, by this repository's own architecture or configuration,
+   naming which subject on each side is claimed to be the same seam — the join a cross-language
+   capability checks against, never one it infers, for the structural reason above: neither
+   side's provider can see the other's subject to infer it from.
+2. **Each side's fact meets the resolution floor the specific claim being made requires** — the
+   next section states which floor each family needs, because "both sides produced *a* fact"
+   is not "both sides produced the fact this claim needs."
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#14
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / The Claim Families, And What They Are Reachable With · hash: sha256:cd23457bc7daa239578a3a89fc7d4a682e1b1dbc570517c67e30ec69a3ff42fa*
+
+## The Claim Families, And What They Are Reachable With
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#15
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / The Claim Families, And What They Are Reachable With · hash: sha256:2650bc9308fe47bd3895a74df6949792ca7432c0d52160420ecc59972759877a*
+
+The WHY names five families. Each is classified against the two resolution levels
+`OD-ANALYSIS-004` and `OD-ANALYSIS-006` already fixed the meaning of, and against `Syntactic`,
+which already has producers today.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#16
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / The Claim Families, And What They Are Reachable With · hash: sha256:6bf544c6cad68ec118cbe84922c66a9997e0de54806e72b6995fefee3d40b968*
+
+**1. FFI ownership compatibility** — which side owns, and which must free, a value crossing the
+boundary. `OD-ANALYSIS-004` already places the shape this needs at `SemanticallyResolved`: "a
+claim of this family's shape is that a value's ownership, once resolved, crosses a boundary
+`bands.rs` declares closed" — the same shape, applied to a declared FFI boundary instead of a
+band boundary, needs a provider that has actually resolved ownership, not one that pattern-matches
+`unsafe` blocks or raw-pointer syntax. Confirming the foreign side actually honors what the
+Rust side declares — that a pointer handed across is not also freed on the far side, at an
+actual call rather than in the declared contract — is `RuntimeObserved`'s territory per
+`OD-ANALYSIS-006`'s split between static and executed facts. **Not reachable today on either
+level.** No `SemanticallyResolved` producer and no `RuntimeObserved` producer exists anywhere
+in this workspace; this family waits on both.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#17
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / The Claim Families, And What They Are Reachable With · hash: sha256:879814d9780d13e9709da7ec3c77d259581486093b1fcec9674cbf89e2d596dc*
+
+**2. Producer/consumer serialization format agreement** — whether both sides read and write the
+same wire shape for one message type: field names, order, declared types, optionality. This is
+the one family with real reach at `Syntactic` today, and only partly. Comparing two sides'
+*spelled* declarations — side A declares four fields, side B declares three, one name differs —
+needs no name resolution and no execution; it is a parse-tree-level comparison of two
+declarations against a declared correspondence, exactly the kind of fact `nomos-cap-syntax`
+already produces on one side today. Reachability stops the moment the comparison must be about
+the two sides' *resolved* types rather than their spellings — a type alias, a generic
+parameter, or an import under a different local name defeats a syntactic comparison, because
+two different spellings naming the same underlying type, or one spelling hiding two different
+underlying types, is exactly what `SemanticallyResolved` exists to settle and `Syntactic`
+cannot. **Partly reachable now** (name, arity and literal-type agreement, syntactically); **the
+harder half needs `SemanticallyResolved` on both sides**, which nothing in this workspace
+produces yet.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#18
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / The Claim Families, And What They Are Reachable With · hash: sha256:d4a269c7a33ac018ac81610b5d40071fb5ac25dcac182be5e329b2074d7bc5c5*
+
+**3. Cross-protocol error propagation** — whether an error raised on one side surfaces correctly
+on the other, in the shape the other side expects. The static half of this — do the two sides'
+declared error vocabularies even have a corresponding case for every case on the other side, an
+exhaustiveness question over two declared enums checked against a declared mapping — is
+reachable the same way family 2's easy half is, once a syntactic cross-language facility exists
+to read both declared vocabularies and the mapping between them. Whether an error actually
+propagates and arrives in the declared shape, rather than merely being declared to, is a claim
+about an execution: `OD-ANALYSIS-006` is explicit that facts "established by running the
+program and watching what it actually does" are `RuntimeObserved`'s shape and no other level's.
+**The mapping-completeness half is reachable once a syntactic cross-language facility exists**
+(none does yet); **the propagation-actually-happens half needs `RuntimeObserved`**, which has no
+producer.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#19
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / The Claim Families, And What They Are Reachable With · hash: sha256:356d212d12c8b8b5fff71de27d76962b6ddeed331ff03de9a9cc03f43fabd98c*
+
+**4. Cross-side threading assumptions** — an assumption that holds on one side (single-threaded
+access, a GIL-serialized call) does not automatically hold on the other (a Rust thread pool
+calling in from several threads at once). `OD-ANALYSIS-006` places actual concurrency
+interleaving and actual synchronization order at `RuntimeObserved` exclusively, and
+`OD-ANALYSIS-004` places the async/concurrency-structure family — the closest static analogue,
+a declared `Send`/`Sync` bound or a documented threading contract — at `SemanticallyResolved`,
+itself without a producer. Neither level has a producer in this workspace, and the family's own
+real claim (that the intended contract is honored across an actual cross-language call
+sequence, not merely declared) is the `RuntimeObserved` half regardless. **Not reachable at any
+level today** — the least reachable of the five, because even its static half waits on a
+producer that does not exist.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#20
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / The Claim Families, And What They Are Reachable With · hash: sha256:0d56d55fc6c4c54c49453350279789a46657ccdc87d051e76445b8cefeac0754*
+
+**5. Separately-built version compatibility** — whether two independently-built components,
+compiled at different times from different commits, agree on the interface they share. This
+family differs in kind from the other four: it is not a claim about program semantics at all,
+but about build and history provenance. `FactKey`'s existing `BuildVariantId` and
+`ConfigurationId` components — named in `OD-ANALYSIS-006` as already sufficient to identify
+"which optimization level, target and feature set the executed binary carried" and "the digest
+of a fully resolved effective policy" — already carry what this family needs to compare. It
+needs no new `FactVariant` level and no language-semantic producer on either side, only a
+producer that reads and compares the two sides' existing build and version metadata against a
+declared correspondence, which sits closer to `ARC-CONFORMANCE-001`'s "history" and "runtime
+evidence" inputs than to a language fact at all. **This is the one family that does not wait on
+a resolution-level producer this record has to name as missing** — the gap here, if any, is a
+producer for the comparison itself, not a resolution level nothing in this workspace can reach.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#21
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Check Reports When One Side Has No Provider · hash: sha256:72c223d6d5ec9902874a4ff0509fb1dda171e0f3f206049e9c47fe718d62e879*
+
+## What A Cross-Language Check Reports When One Side Has No Provider
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#22
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Check Reports When One Side Has No Provider · hash: sha256:32ec4ba3bddf5fad3dd24fb7d5b6fd776eb61fbf989644787a6713cd7528724e*
+
+The common real case is a stack where exactly one language is covered — a Rust-only workspace
+naming a correspondence to a Python client nothing here parses. `done_when` requires
+`Applicability`, not silence, and the specific value matters because two nearby ones read
+similarly and mean different things.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#23
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Check Reports When One Side Has No Provider · hash: sha256:5eda6063e2c5d566890e16e547cf4b06d39dd80638622329cce2254922b33664*
+
+**A cross-language rule binds a subject *pair*** — both halves of a declared correspondence,
+per the criterion above. When one half's language has no installed provider at all, the rule
+cannot evaluate the pair even partially: there is no fact on that side to compose, at any
+`FactVariant`, so there is nothing to check the covered side's fact against. That is exactly
+what `Applicability::MissingCapability` is defined to mean — "no installed provider offers a
+capability the rule requires" — and the report names which side is missing.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#24
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Check Reports When One Side Has No Provider · hash: sha256:2851c867bbf818c61ca183abfa3039949d068a8a66d114aac6f090d25911f266*
+
+**This rules out two answers that read like reasonable alternatives and are not:**
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#25
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Check Reports When One Side Has No Provider · hash: sha256:b615ac7f94d21f11eef0b7c9c7162e7805ef325faee64c56f0ab3a8203ac4f41*
+
+- Reporting the covered side's own fact as though the cross-language claim itself were
+  satisfied. A claim that requires two facts joined at a declared seam is not the same claim as
+  one side's fact alone, and reporting it as satisfied is exactly the silent-pass failure mode
+  `Applicability` exists to prevent — the seam was never checked, only one provider's ordinary
+  business was.
+- `Applicability::NotApplicable`. That variant is "the only variant that is a *positive*
+  statement about the absence of a judgment" — it says the rule does not bind this subject. A
+  cross-language rule over a declared correspondence does bind the subject; the correspondence
+  says so. What is missing is a provider to evaluate one half with, which is `MissingCapability`'s
+  case exactly, not the rule's non-applicability.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#26
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Check Reports When One Side Has No Provider · hash: sha256:cf740c6985cd9fb91f70b568f097d6f0672dd18496209dfcce94ce3727402025*
+
+**Contrast with `Applicability::PartiallySupported`**, which is for a rule "evaluated over part
+of its subject only" when the subject is itself a set — some files in a corpus covered, others
+not. A cross-language pair is a single subject with two required halves; one half missing
+entirely is not partial coverage of many subjects, it is the whole join's precondition failing
+before evaluation starts. `MissingCapability` is the value whose own definition matches that
+failure; `PartiallySupported` would understate it, the same way `OD-CAPABILITY-004` kept a
+similar pair of near-identical-looking reports apart by definition rather than by convenience.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#27
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What A Cross-Language Check Reports When One Side Has No Provider · hash: sha256:e8250f9a8bc9fa5b827c65e1b6252119d155cd8c9c25c248dcd85e6f3fb1bb55*
+
+**If a provider is installed on both sides but one could not run for this particular pair** —
+crashed, timed out, refused the specific subject — that is `Applicability::ProviderUnavailable`
+("a provider that would satisfy the requirement is installed but could not run"), distinct from
+`MissingCapability` for the reason `Applicability`'s own documentation already gives: the remedy
+differs, and a reader who is told to install something when something is already installed and
+merely failed is told the wrong thing to do next.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#28
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#29
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What This Record Does Not Do · hash: sha256:6bcb7ce2322f99d04e5725f8ae289eb37058f91c36c23a458485ab0d532cc17b*
+
+It does not build a cross-language capability, a correspondence-declaration type, or any
+producer for either resolution level named above. The first cross-language capability is
+separate work, reserving its own territory, and this record is what that work is measured
+against — the relationship `OD-ANALYSIS-004` and `OD-ANALYSIS-006` each already hold to the
+first producer in their own domains.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#30
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What This Record Does Not Do · hash: sha256:e817953dd13694a576b767fe893209599fdb416e07d094698c008f6280f2295c*
+
+It does not add a sixth `FactVariant` level, a new `Applicability` variant, or change
+`Guarantee`, `EvidenceClass` or `Observation` in any way. Every type this record names is
+unchanged by it, and the two reports it fixes — `MissingCapability` for a wholly missing side,
+`ProviderUnavailable` for an installed side that could not run — are both variants that already
+exist for exactly this reason.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#31
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What This Record Does Not Do · hash: sha256:4fc8db4d158a8f250c7aa29028e3ff1377295bc62201c2369b8b67bdfd7d86fa*
+
+It does not decide which crate a cross-language capability lives in, or whether it is one crate
+or several. `OD-CAPABILITY-002`'s criterion governs that question when a second language and a
+correspondence declaration both actually exist, unchanged by anything here.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#32
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What This Record Does Not Do · hash: sha256:fcb4397f31d35834a587605783ee7f6c0f4712172df2a73a2e20beece3fab166*
+
+It does not define a correspondence-declaration type as Rust code, a schema format, or an IDL.
+It states that a declared correspondence is what makes two providers' facts comparable at all;
+defining its shape is the first cross-language capability's own work, judged against this
+record the way a program-semantics payload is judged against `OD-ANALYSIS-004`.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#33
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What This Record Does Not Do · hash: sha256:d9db0e5fc8e023aec0069bd6018c16c3ef5ade63bd18b347099dc5279eaeabc0*
+
+It does not enumerate every cross-language claim a future capability may make. The five families
+above are the ones the item that reserved this record named, classified against the resolution
+vocabulary that already exists — illustration of the reachability test, not a closed list,
+exactly as `OD-ANALYSIS-004`'s five worked shapes and `OD-ANALYSIS-006`'s three worked examples
+are illustration and not the definition.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#34
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / What This Record Does Not Do · hash: sha256:c1f4fd10ed7a3293f718f270f2c71852d4af4167727360639c2e91ac5d2f13fc*
+
+It does not reopen `bands.rs`'s same-band rule for `nomos-lang-rust` and `nomos-lang-rust-scan`,
+or `P8-SECOND-PROVIDER`'s finding. That rule governs two providers of one capability; this
+record governs a different case, two providers of two different languages joined by a declared
+seam, and neither changes the other.
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#35
+
+*revision: authored · kind: heading · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md#36
+
+*revision: authored · kind: prose · heading: A cross-language claim is a claim about a declared seam between two providers' facts, not either provider's own answer / Status · hash: sha256:72a0ff988d00d85f176d1954825f930a6a88df50e32ac03330d41a540ea3bfa7*
+
+Closed by `P12-CROSS-LANGUAGE`.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 

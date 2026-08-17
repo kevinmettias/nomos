@@ -1,6 +1,10 @@
-# Pinned to nightly so `cargo fmt` can use the unstable `brace_style =
-# "AlwaysNextLine"` option that expresses the workspace's Allman brace style.
-# See `rustfmt.toml` — and read its warning before running `cargo fmt`.
+# Pinned to an exact stable release rather than to a floating channel name, matching
+# how this repository pins everything else it depends on (see the commit pins in
+# .github/workflows/gate.yml). This used to be "nightly", to let `cargo fmt` use the
+# unstable `brace_style = "AlwaysNextLine"` option — but `cargo fmt` is forbidden in
+# this workspace (see `rustfmt.toml` and README.md's Conventions section), so that
+# reason was pinning a toolchain for a command nobody may run. 1.88.0 is the floor
+# this workspace actually compiles on. See `OD-GATE-012`.
 [toolchain]
-channel = "nightly"
+channel = "1.88.0"
 components = ["rustfmt", "clippy"]
