@@ -3299,10 +3299,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orch-vacuity-home",
+        "acquired_at": 1786988588,
+        "lease_expires_at": 1786999388
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -12413,6 +12417,60 @@
           "exit_code": 0
         },
         "revision": "68f1bea459063b2d20beaab20dc23fc1488806a6"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-ROW-ORDINAL",
+      "title": "Two SQL row ordinals in nomos-spec-store read as unnamed logic, and OD-GATE-013 already said this shape is a real fix",
+      "why": "check-literals, run over crates/spec/nomos-spec-store/src/store/write.rs during OD-GATE-013's investigation, reports two findings that are not the ExitCode-discriminant shape that record excepts: Fetch_Endpoint's row.get(2) at line 361 and Fetch_Constraint's row.get(2) at line 394 are bare SQL column ordinals passed to rusqlite's positional row::get. Neither is a variant's own name spelled as a number -- OD-GATE-013 says explicitly it does not except this shape, citing this exact file as the motivating example of a genuinely fixable literal. crates/contracts/nomos-contracts/src/identity.rs's prior fix (408499a) is the precedent: Digest128's tuple field was renamed from a bare 16 to Digest128::BYTE_LENGTH, an already-public const the type exposed. write.rs's two ordinals have no existing const to reuse -- Endpoint and Constraint are private structs local to this module -- so the fix is a local named constant per query, not a reused one. The same file also carries three function-size findings and two parameter-count findings (Write_Node, Write_One_Relation, Assert_Within_Cardinality, Assert_Admits), left unclaimed here exactly as OD-GATE-013's authoring session left them: pulling a full-function refactor into a two-line literal fix costs far more than the fix itself, and the two problems are independent.",
+      "done_when": "check-literals over exactly crates/spec/nomos-spec-store/src/store/write.rs reports no finding at line 361 or 394 (0 findings total for the file, since those are its only two). The five other rust clean-file checks (nested-call, nesting-depth, function-size, parameter-count, intrafile-duplication) report the same findings they report today -- function-size at Write_Node/Write_One_Relation/Assert_Within_Cardinality and parameter-count at Assert_Admits/Assert_Within_Cardinality are pre-existing and out of this item's scope, not introduced or fixed by it. Fetch_Endpoint and Fetch_Constraint's query column order and Endpoint/Constraint's field order are unchanged; only the two ordinals gain names. cargo test stays green for nomos-spec-store.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/store/write.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest refusals::Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.36s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1786988947,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f0bec5eeb801057e2b274c402b3de7eff11941be"
       },
       "abandoned": [],
       "displaced": [],

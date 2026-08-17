@@ -5,6 +5,7 @@ use rusqlite::{Connection, OptionalExtension, params};
 
 use crate::NodeRow;
 use crate::StoreError;
+use crate::read::columns::Columns;
 
 /// Writes blocks and their typed rows through a caller's transaction.
 ///
@@ -355,10 +356,11 @@ fn Fetch_Endpoint(connection: &Connection, node_id: &str) -> Result<Option<Endpo
             "SELECT uid, kind, authority FROM nodes WHERE node_id = ?1",
             params![node_id],
             |row| {
+                let mut columns = Columns::Of(row);
                 return Ok(Endpoint {
-                    uid: row.get(0)?,
-                    kind: row.get(1)?,
-                    authority: row.get(2)?,
+                    uid: columns.Next()?,
+                    kind: columns.Next()?,
+                    authority: columns.Next()?,
                 });
             },
         )
@@ -372,6 +374,14 @@ struct Constraint
     domain: Vec<String>,
     range: Vec<String>,
     max_per_node: u32,
+}
+
+/// A constraint row, read in the order its `SELECT` names: domain kinds, range kinds,
+/// max per node.
+fn Read_Constraint_Row(row: &rusqlite::Row<'_>) -> rusqlite::Result<(String, String, i64)>
+{
+    let mut columns = Columns::Of(row);
+    return Ok((columns.Next()?, columns.Next()?, columns.Next()?));
 }
 
 /// The declared constraint for a relation type, if the type is registered.
@@ -391,7 +401,7 @@ fn Fetch_Constraint(
             "SELECT domain_kinds_json, range_kinds_json, max_per_node FROM relation_types
              WHERE name = ?1",
             params![relation_type],
-            |row| return Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+            Read_Constraint_Row,
         )
         .optional()?;
     let Some((domain_json, range_json, max_per_node)) = found
