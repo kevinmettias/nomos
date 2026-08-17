@@ -3,7 +3,7 @@ id: OD-PACKAGE-005
 type: decision
 title: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - packages
@@ -75,7 +75,16 @@ guarding against — it is one this repository has already paid for.
 |---|---|---|
 | `Ephemeral` | Should not survive the session that produced it. Not meant to be read again once the process that wrote it exits, let alone committed. | `/build/`, `/release-artifacts/`, `.nomos/`: `.gitignore` calls these "Scratch build roots for generated projections... nothing here is a canonical source." `/work/*.lock`, `/work/*.tmp`: the same file's own comment calls the claims, leases and heartbeats stored there "ephemeral" by name. |
 | `Local` | Meant to persist on the machine that wrote it, and never published — not this commit, not a later one, not by anyone. | `.claude/settings.local.json`: `CLAUDE.md`, "is personal and stays out of git." |
-| `Shared` | Meant to leave the machine: committed, reviewed, and distributed to every clone. | `.github/workflows/gate.yml`, `diagrams/relations.mmd`, `spec/domain-specification.md`, `README.md` — all tracked, all part of what `git clone` hands a new contributor. |
+| `Shared` | Meant to enter repository-distributed state: committed, reviewed, and handed to every clone by `git clone` itself. | `.github/workflows/gate.yml`, `diagrams/relations.mmd`, `spec/domain-specification.md`, `README.md` — all tracked, all part of what `git clone` hands a new contributor. |
+
+**This axis is about repository-distributed state specifically, not every channel bytes could
+leave a machine through.** Every worked case above is a Git example — a clone, a push, a
+review — because that is the evidence this repository actually has. A backup, a cloud-sync
+folder, a diagnostic bundle, a user-initiated export, a remote execution transfer: each is a
+different question about a different boundary, none of them addressed by `Shared` here and
+none of them answered by this record's silence on them. `Shared` names entry into the
+repository's own distributed state; a future asset that needs a policy for one of those other
+channels needs a different, separately-argued scope, not an overloaded reading of this one.
 
 **An asset with no recorded scope defaults to `Local`, and publishing it is refused.** The
 asymmetry is the same shape `OD-PACKAGE-004` already argues for ownership, pointed the same
@@ -110,19 +119,27 @@ else.
   — the case this repository already treats as the canonical `Local` asset — has no
   committed `.gitignore` entry to be defeated in the first place.
 
-**What `Local` actually requires is a refusal at stage or commit time**, not an omission from
-a listing: something that inspects the set of paths about to enter a commit and refuses the
-operation if any of them is declared `Local`, regardless of how the path arrived at that set
-— named explicitly, force-added, or swept in by a wildcard. That check does not exist in
-this repository today, and this record states the requirement it owes rather than building
-it: the procedural version of the same rule already exists as discipline in `AGENTS.md`'s
-loop ("Commit the paths you touched — explicitly, never `git add -A`") and in this skill's
-own operating rule, but discipline followed by a person is exactly the advisory category this
-record is distinguishing itself from — it protects only for as long as everyone remembers to
-follow it, which is the same failure mode as the ignore entry it would replace. A mechanical
-stage-or-commit-time refusal, keyed to a scope declared the same way `OD-PACKAGE-004`
-declares ownership — by the thing placing the asset, not by the asset itself — is what closes
-the gap; this record does not build that mechanism (see "What This Is Not").
+**What `Local` actually requires is a guard on the transition itself** — an asset moving from
+`Local` toward `Shared` requires explicit authorization — evaluated at the moment something
+attempts that transition, not an omission from a listing. That is a statement about the
+transition, not about Git specifically: this repository happens to enforce repository
+distribution through Git, so the concrete case is a refusal that inspects the set of paths
+about to enter a commit and refuses if any of them is declared `Local`, regardless of how the
+path arrived at that set — named explicitly, force-added, or swept in by a wildcard. A
+repository under a different distribution mechanism would need the same guard evaluated at
+whatever moment *that* mechanism commits to sharing state; a CI publish step, a package
+transaction's commit phase, or a repository-host integration's own push hook are each another
+projection of the identical rule. None of these exists in this repository today, and this
+record states the requirement it owes rather than building one: the procedural version of the
+Git-specific case already exists as discipline in `AGENTS.md`'s loop ("Commit the paths you
+touched — explicitly, never `git add -A`") and in this skill's own operating rule, but
+discipline followed by a person is exactly the advisory category this record is
+distinguishing itself from — it protects only for as long as everyone remembers to follow it,
+which is the same failure mode as the ignore entry it would replace. A mechanical
+transition-time refusal, keyed to a scope declared the same way `OD-PACKAGE-004` declares
+ownership — by the thing placing the asset, not by the asset itself — is what closes the gap
+regardless of which projection enforces it; this record does not build any of them (see "What
+This Is Not").
 
 ## Where The Scope Is Declared
 
@@ -177,10 +194,10 @@ is today.
 
 ## What This Is Not
 
-**Not a build of the stage-or-commit-time refusal `Local` is stated to require.** This record
-states the enforcement the scope owes and why a `.gitignore` entry does not meet it; it does
-not add a pre-commit hook, a `git` wrapper, or a check to `nomos work finish`. That is future
-work this record makes nameable, not work it performs.
+**Not a build of the transition-guard `Local` is stated to require, in any projection.** This
+record states the enforcement the scope owes and why a `.gitignore` entry does not meet it; it
+does not add a pre-commit hook, a `git` wrapper, a CI step, or a check to `nomos work finish`.
+That is future work this record makes nameable, not work it performs.
 
 **Not a manifest, and not the first consumer of one**, for the same reason `OD-PACKAGE-004`
 gives for ownership: `OD-PACKAGE-001`'s four-step path to a first manifest reader is
@@ -208,5 +225,10 @@ whichever record adds the instance.
 ## Status
 
 Accepted. Three scopes are named, `Local` defaults for the undeclared case, and five real
-assets are classified against both axes at once. A `Local`-scope refusal at stage or commit
-time remains future work; this record is what makes that work nameable rather than assumed.
+assets are classified against both axes at once. A `Local`-scope transition guard remains
+future work; this record is what makes that work nameable rather than assumed. Amended to
+version 2 by `P13-PACKAGE-REFINE`, which narrowed `Shared` to repository-distributed state
+specifically — every worked case is a Git example, and the prior wording claimed a broader
+"leaves the machine" scope no evidence here supports — and generalized the enforcement
+section from a Git-specific stage-or-commit refusal to a transition guard with Git named as
+one projection among others.

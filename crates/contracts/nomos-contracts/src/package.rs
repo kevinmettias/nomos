@@ -159,6 +159,11 @@ impl PackageKind
     /// Determines whether the deployment profile's isolation requirements apply. This
     /// is a property of the kind rather than of the individual package, so a package
     /// cannot opt itself out of sandboxing by declaring itself trustworthy.
+    ///
+    /// `IntegrationPackage` is deliberately absent: `OD-PACKAGE-003` finds it carrying no
+    /// executable code in nearly every surface it places, and warns that one which started
+    /// carrying its own logic would be exactly the undifferentiated `Plugin` bucket this
+    /// enum's own doc comment refuses to become.
     #[must_use]
     pub const fn Hosts_Foreign_Code(self) -> bool
     {
@@ -170,7 +175,6 @@ impl PackageKind
                 | Self::RuntimeProvider
                 | Self::ModelBackendPackage
                 | Self::AgentExecutorPackage
-                | Self::IntegrationPackage
         );
     }
 }
@@ -216,55 +220,29 @@ mod tests
         (PackageKind::FeaturePack, "FeaturePack"),
     ];
 
-    /// Where a kind sits in `CORPUS_TAXONOMY`.
-    ///
-    /// The match is exhaustive on purpose, and that is the whole mechanism for
-    /// membership: a seventeenth variant makes it non-exhaustive, so this module stops
-    /// compiling and whoever added the kind has to arrive here, beside the table and the
-    /// record it cites, rather than adding a kind these assertions would never visit.
-    const fn Corpus_Position(kind: PackageKind) -> usize
-    {
-        return match kind
-        {
-            PackageKind::KernelModule => 0,
-            PackageKind::ServiceModule => 1,
-            PackageKind::FeatureModule => 2,
-            PackageKind::LanguagePackage => 3,
-            PackageKind::RulePackage => 4,
-            PackageKind::ToolProvider => 5,
-            PackageKind::MetricProvider => 6,
-            PackageKind::RepositoryProvider => 7,
-            PackageKind::RuntimeProvider => 8,
-            PackageKind::ModelBackendPackage => 9,
-            PackageKind::AgentExecutorPackage => 10,
-            PackageKind::ClientPackage => 11,
-            PackageKind::IntegrationPackage => 12,
-            PackageKind::SdkPackage => 13,
-            PackageKind::ProjectionPackage => 14,
-            PackageKind::FeaturePack => 15,
-        };
-    }
-
     /// `Label` is the serialized form and a non-Rust peer reimplements it from the
     /// corpus, so a label that drifts is a divergent wire format rather than a rename.
-    /// This checks every declared kind against the enumeration `OD-PACKAGE-002` fixes:
-    /// the label it serializes as, and the position it holds, so neither a relabelling
-    /// nor a reordering can pass without moving the table.
+    /// This checks every declared kind against the label `OD-PACKAGE-002` fixes.
+    ///
+    /// Ordinal position is deliberately not asserted. `Label` is documented as the wire
+    /// form a peer reimplements; nothing establishes the enum's declaration order as
+    /// protocol-relevant, and asserting it anyway would treat the taxonomy sentence's
+    /// listing order as a wire commitment it was never claimed to be. `CORPUS_TAXONOMY`
+    /// still transcribes the corpus's own order for a reader's benefit. Membership stays
+    /// checkable without an ordinal: `Label`'s own match in `impl PackageKind` is
+    /// exhaustive, so a seventeenth variant makes it non-exhaustive and this module stops
+    /// compiling until whoever added the kind arrives there, beside the labels this test
+    /// checks.
     #[test]
     fn Test_Every_Kind_Should_Carry_The_Label_The_Corpus_Names()
     {
-        for (position, (kind, label)) in CORPUS_TAXONOMY.into_iter().enumerate()
+        for (kind, label) in CORPUS_TAXONOMY
         {
             assert_eq!(
                 kind.Label(),
                 label,
                 "PackageKind::{kind:?} serializes as a label the corpus taxonomy does not \
                  name; OD-PACKAGE-002 fixes the sixteen"
-            );
-            assert_eq!(
-                Corpus_Position(kind),
-                position,
-                "PackageKind::{kind:?} is declared out of the corpus taxonomy's order"
             );
         }
     }
@@ -318,6 +296,16 @@ mod tests
     {
         assert!(!PackageKind::RulePackage.Hosts_Foreign_Code());
         assert!(!PackageKind::LanguagePackage.Hosts_Foreign_Code());
+    }
+
+    /// An `IntegrationPackage` places or wires a peer's connection; `OD-PACKAGE-003`
+    /// finds it carrying no executable code in nearly every surface it places, and one
+    /// that started carrying its own logic would be the undifferentiated `Plugin` bucket
+    /// this enum exists to refuse.
+    #[test]
+    fn Test_Integration_Packages_Should_Not_Host_Foreign_Code()
+    {
+        assert!(!PackageKind::IntegrationPackage.Hosts_Foreign_Code());
     }
 
     #[test]

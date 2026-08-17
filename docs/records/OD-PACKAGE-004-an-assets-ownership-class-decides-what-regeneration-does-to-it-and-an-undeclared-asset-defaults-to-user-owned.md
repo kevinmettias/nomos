@@ -3,7 +3,7 @@ id: OD-PACKAGE-004
 type: decision
 title: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - packages
@@ -143,6 +143,14 @@ The three named here are the classes this repository's own four assets exhibit, 
 `done_when`. A class this repository has not yet produced an instance of is a question for
 whichever record adds the instance, not one this record forecloses.
 
+**Left open:** `GeneratedOwned`'s current wording — "the renderer is the sole author of every
+byte" — is framed around this repository's own single-producer case. A future generated asset
+built from more than one declared source, or through a producer pipeline, would need that
+framing generalized toward "the declared producer(s) hold exclusive authority over the
+canonical content" without weakening the unconditional-overwrite behavior this record actually
+requires. Nothing here has that shape yet, so nothing is changed; noted for whichever record
+adds the first instance that does.
+
 ## Controls
 
 | Weakening | What it produces |
@@ -157,4 +165,6 @@ whichever record adds the instance, not one this record forecloses.
 
 Accepted. Four real assets are classified against the model; a fifth kind of generated file, if
 this repository grows one, is measured against this table rather than invented against a blank
-page.
+page. Amended to version 2 by `P13-PACKAGE-REFINE`, which noted `GeneratedOwned`'s
+single-producer framing as an open question for a future multi-producer asset, without
+changing the three classes or any of the four current assets' classifications.

@@ -100,9 +100,9 @@ profile: domain-specification
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
-| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 37 | 9 | sha256:61d21890285c5239b6ea93d3039af6ecca654c2ba22822041ae17c272e5221a0 |
-| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 26 | 9 | sha256:fee950b9db060e8766b37c6077f80933864691179bb39060352ff4526d95a6ed |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 31 | 10 | sha256:be88ed64620fcc6a28fa0203aaef4414abe8dce9bea22f70465eac520c923411 |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 42 | 10 | sha256:353b96edd0e3cd1cd8ffaa0fa1f645769af77bc91429d1e32caa3326e8887a6e |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 27 | 9 | sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610 |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -935,10 +935,11 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#5 | authored | 2 | What The Corpus Says An IntegrationPackage Is |
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#15 | authored | 2 | This Repository Is The Worked Example |
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#20 | authored | 2 | What An IntegrationPackage Materializes |
-| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#23 | authored | 2 | Ownership, Routed Through `ARC-ECOSYSTEM-001` |
-| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#27 | authored | 2 | What An IntegrationPackage Is Not |
-| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#31 | authored | 2 | What This Costs If Left As Read Today |
-| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#33 | authored | 2 | What This Is Not |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#23 | authored | 2 | Declaring A Placement Is Not Performing One |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#28 | authored | 2 | Ownership, Routed Through `ARC-ECOSYSTEM-001` |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#32 | authored | 2 | What An IntegrationPackage Is Not |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#36 | authored | 2 | What This Costs If Left As Read Today |
+| docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#38 | authored | 2 | What This Is Not |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#1 | authored | 1 | An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#8 | authored | 2 | The Three Classes |
@@ -946,18 +947,18 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#15 | authored | 2 | The Four Assets This Repository Already Carries |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#17 | authored | 2 | What This Costs If Left As Read Today |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#19 | authored | 2 | What This Is Not |
-| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#23 | authored | 2 | Controls |
-| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#24 | authored | 2 | Controls |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#1 | authored | 1 | A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#7 | authored | 2 | The Three Scopes |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#10 | authored | 2 | Enforcement For The Local Scope |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#14 | authored | 2 | Where The Scope Is Declared |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#17 | authored | 2 | How Scope Composes With Ownership |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#21 | authored | 2 | What This Costs If Left As Read Today |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#23 | authored | 2 | What This Is Not |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#28 | authored | 2 | Controls |
-| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#30 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#11 | authored | 2 | Enforcement For The Local Scope |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#15 | authored | 2 | Where The Scope Is Declared |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#18 | authored | 2 | How Scope Composes With Ownership |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#22 | authored | 2 | What This Costs If Left As Read Today |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#24 | authored | 2 | What This Is Not |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#29 | authored | 2 | Controls |
+| docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#31 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -27000,11 +27001,69 @@ exists and what it would carry, without placing a file that has no reader.
 
 ### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#23
 
+*revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Declaring A Placement Is Not Performing One · hash: sha256:64860e6b99b4d2c04292cdde06a9ed2c7458b66ece292e41ef6311861614515d*
+
+## Declaring A Placement Is Not Performing One
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#24
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Declaring A Placement Is Not Performing One · hash: sha256:355a7abb1e6ed6d65b5c6c944fab737b18c41c22e090a2f51922eaf9ba9a80ae*
+
+The table above says "placed" for a row and stops there, which leaves one question
+unanswered: does the `IntegrationPackage` itself write the bytes, or does it say that a write
+should happen and hand the description to something else? The distinction matters the moment
+a real mechanism exists to do either, so it is worth drawing now rather than after the first
+implementation has already picked one by default.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#25
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Declaring A Placement Is Not Performing One · hash: sha256:0fd65404a33e03f22b22182077c0e5d7e74aa2f80ccea7daeacef485510cbed7*
+
+**An `IntegrationPackage` declares a materialization intent — source, target path, the
+ownership class `OD-PACKAGE-004` gives that target, and the publication scope `OD-PACKAGE-005`
+gives it. It does not itself perform the write.** Atomicity, the conflict handling each
+ownership class requires, staging, and rollback are mechanics: they refer to nothing that
+knows what a crate, a rule, a gate, or a peer connection is, the same test `ARC-ECOSYSTEM-001`
+already applies to every other crossing. A `Composed` file's owned-region check, a
+`GeneratedOwned` file's unconditional overwrite, a `UserOwned` file's refusal — none of that
+logic differs because the asset happens to belong to an `IntegrationPackage` rather than a
+`ProjectionPackage` or any future package kind that materializes something. Reimplementing it
+once per package kind is the reuse `D-090` already refuses on cheaper grounds than this one,
+and `ARC-ECOSYSTEM-001`'s adopted `D-091`/`D-122` split says where the mechanics belong once
+they are built: a generic materializer, mechanism-owned, consuming a materialization intent no
+matter which package kind declared it. An `IntegrationPackage` that performed its own writes
+would be teaching itself write mechanics the same way a generic execution primitive is never
+taught what a crate is — the crossing runs backward.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#26
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Declaring A Placement Is Not Performing One · hash: sha256:4163f2e9c21f96a8d5a75403761d355dfdc909cf893f86e12d8f0eb32fb97775*
+
+This changes nothing about `OD-PACKAGE-001`'s four-step path or about the placement table
+above; declaring is still the `IntegrationPackage`'s whole job, and the table's "placed" rows
+name what gets declared, not a claim about which component ends up calling a filesystem write.
+No materializer exists in this workspace today, generic or otherwise, and this record does not
+build one — it states the shape a later one would consume so that the first `IntegrationPackage`
+implementation is not also where write mechanics get invented ad hoc.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#27
+
+*revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Declaring A Placement Is Not Performing One · hash: sha256:d7915453db86dbbd8061b154223ead74a6238db5fe77829edb0e53bf18c4c822*
+
+**Left open:** whether the placement table's per-surface rows — agent contract file, per-agent
+adapter, skills, hooks, MCP registration, CI projections, connector configuration — should
+become a named typed axis (something like an `IntegrationSurfaceKind`) once more than one
+`IntegrationPackage` exists to compare, or whether the table itself remains the right shape
+indefinitely. Nothing today argues either way; it is a question for whoever builds the second
+`IntegrationPackage`; and finds out whether the first one's rows generalize.
+
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#28
+
 *revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:282432c4d87f66b8ed7f7f81fac146082f46eb22ce19e8a74cb0b35db87e11bc*
 
 ## Ownership, Routed Through `ARC-ECOSYSTEM-001`
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#24
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#29
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:b2e350ac9970429a0ea4d3a83a042784d0f9daccd2236896cde74bdded26bd77*
 
@@ -27012,7 +27071,7 @@ exists and what it would carry, without placing a file that has no reader.
 and gives two governed crossings that this table is an instance of rather than a departure
 from:
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#25
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#30
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:9f5e700289f1c1ab88b28da7a7f369e85bb2c627ea96c0e3c0e36fd2ed974330*
 
@@ -27032,7 +27091,7 @@ from:
   primitive's own shape and carries Nomos-specific content across that adapter, exactly as
   `D-130`'s single named adapter already does for linking.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#26
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#31
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / Ownership, Routed Through `ARC-ECOSYSTEM-001` · hash: sha256:624525723e8fcd3af6b0f06bf8a60799d0a030cebf237deadf7c17cdeafc21b2*
 
@@ -27043,13 +27102,13 @@ authorities correctly, which is `AGENTS.md`'s and `CLAUDE.md`'s entire content t
 in this record moves either file or claims a different owner for them; it names the owner
 they already have.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#27
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#32
 
 *revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:af97c8ad946aeeff0e3a75b0a61748f72e0e16ad4cb77c24c4d8ce176330a89c*
 
 ## What An IntegrationPackage Is Not
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#28
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#33
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:8ebe9618f556d225e1e1a2c0f15f8d537f6d8adc959c08c39d724d515de9c389*
 
@@ -27061,7 +27120,7 @@ MCP host; a repository needs a `LanguagePackage` for the languages it is written
 subsuming the other. A Rust repository worked by two different agent harnesses needs one
 `LanguagePackage` and two `IntegrationPackage`s.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#29
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#34
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:8be838302a29fa20fe0ab1016fc111e6b9b1f4f94bcad1f2847ee60b7439c309*
 
@@ -27072,7 +27131,7 @@ An `IntegrationPackage` that started carrying its own correction logic or its ow
 statements would be exactly the undifferentiated bucket `PackageKind`'s own doc comment warns
 against — a `Plugin` in substance, wearing a more specific label.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#30
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#35
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What An IntegrationPackage Is Not · hash: sha256:c13bf4c10c535e63435de7282152218cdcec14ce48e4f5b7b620af332a6d9cd9*
 
@@ -27085,13 +27144,13 @@ shape, at what path." Collapsing the two would mean every peer connection re-der
 rendering logic instead of sharing one, which is the many-installers outcome the item's own
 `why` names as the cost of leaving this undecided.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#31
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#36
 
 *revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Costs If Left As Read Today · hash: sha256:527c7cf177701085ea18c0c957f24ff7fc3834514a8c5475cd5e18c0b7cba766*
 
 ## What This Costs If Left As Read Today
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#32
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#37
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Costs If Left As Read Today · hash: sha256:2c6ddd5be6e192653fe55a439de266e341da65da61a32e0728d0268b97dfbcd2*
 
@@ -27103,13 +27162,13 @@ package seam. What changes is that a later reader — or a later item building t
 inventing surfaces one at a time, and an ownership routing that does not have to be re-argued
 per surface.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#33
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#38
 
 *revision: authored · kind: heading · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:8c096e9ff713a2d91679182618fcba53119b00032e6e47e091a14b7e89a7235f*
 
 ## What This Is Not
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#34
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#39
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:ec6c6f59419f12d25b9c8bbd032f24682d109670b6133b996ee71039e1429c61*
 
@@ -27119,7 +27178,7 @@ record answers what an `IntegrationPackage` would contain if one existed; it doe
 exist, and it does not touch the four-step path `OD-PACKAGE-001` laid out for the seam's first
 consumer.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#35
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#40
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:b9e66e22b0f6e45fe9045f17580945a2247a5836f9ddf29df6a581b95d9e24e1*
 
@@ -27127,7 +27186,7 @@ consumer.
 carries.** Nothing under those paths changes. This record documents their existing ownership
 and shape; it does not edit them.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#36
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#41
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:f96bafc034752eb7d69d55c4a5e8d177ba2fe54d825feef236ceca313ff3e63d*
 
@@ -27136,7 +27195,7 @@ rows above are declared-only because the surfaces are declared-only here; adopti
 separate, later measurement against whichever peer is actually present, not a conclusion this
 record reaches in advance of it.
 
-### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#37
+### docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md#42
 
 *revision: authored · kind: prose · heading: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it / What This Is Not · hash: sha256:7d621b7291dc221d3a92a1bf0628da3f39096393d77c788e6ee64fcf649cc2ac*
 
@@ -27352,11 +27411,23 @@ whichever record adds the instance, not one this record forecloses.
 
 ### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#23
 
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / What This Is Not · hash: sha256:6c7466269778de76bab1fb33bd9474c7dc651b54f23037c33155926b0250db0f*
+
+**Left open:** `GeneratedOwned`'s current wording — "the renderer is the sole author of every
+byte" — is framed around this repository's own single-producer case. A future generated asset
+built from more than one declared source, or through a producer pipeline, would need that
+framing generalized toward "the declared producer(s) hold exclusive authority over the
+canonical content" without weakening the unconditional-overwrite behavior this record actually
+requires. Nothing here has that shape yet, so nothing is changed; noted for whichever record
+adds the first instance that does.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#24
+
 *revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
 
 ## Controls
 
-### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#24
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25
 
 *revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Controls · hash: sha256:8afe395054a211f55c8503e5b0876efde0b1099f9ac03b944400d25af07f17c4*
 
@@ -27368,19 +27439,21 @@ whichever record adds the instance, not one this record forecloses.
 | treat `Composed`'s owned region as `UserOwned` | the drift `OD-PROJECT-001` found in `README.md`'s tables recurs, uncaught, because nothing compares it to its source again |
 | collapse `stale` and `edited` into one conflict outcome for `GeneratedOwned` | a correct file rendered over a moving store and a file someone typed into report identically, which is the confusion `OD-GATE-005` already separated and this record must not re-merge |
 
-### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#25
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26
 
 *revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#27
 
-*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:f9625c1c7810e79bf425364e06ad8b0912edee3978d6de1d4648ac5b452c022e*
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:35b60042fa77dd3c1c40a372c31e9ab917c6d39bcf7f93cf8c89c24f980f6505*
 
 Accepted. Four real assets are classified against the model; a fifth kind of generated file, if
 this repository grows one, is measured against this table rather than invented against a blank
-page.
+page. Amended to version 2 by `P13-PACKAGE-REFINE`, which noted `GeneratedOwned`'s
+single-producer framing as an open question for a future multi-producer asset, without
+changing the three classes or any of the four current assets' classifications.
 
 ### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#1
 
@@ -27457,15 +27530,28 @@ guarding against — it is one this repository has already paid for.
 
 ### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#8
 
-*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / The Three Scopes · hash: sha256:9c03d903e058d92098f84e9c741c0114ce6ae259b7f78bc7dd7613080b58739a*
+*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / The Three Scopes · hash: sha256:7538db16377a103a4cfd68e86d7cdd1ca40602dda41cf09200aee964139eb4e6*
 
 | Scope | What it means | Worked case |
 |---|---|---|
 | `Ephemeral` | Should not survive the session that produced it. Not meant to be read again once the process that wrote it exits, let alone committed. | `/build/`, `/release-artifacts/`, `.nomos/`: `.gitignore` calls these "Scratch build roots for generated projections... nothing here is a canonical source." `/work/*.lock`, `/work/*.tmp`: the same file's own comment calls the claims, leases and heartbeats stored there "ephemeral" by name. |
 | `Local` | Meant to persist on the machine that wrote it, and never published — not this commit, not a later one, not by anyone. | `.claude/settings.local.json`: `CLAUDE.md`, "is personal and stays out of git." |
-| `Shared` | Meant to leave the machine: committed, reviewed, and distributed to every clone. | `.github/workflows/gate.yml`, `diagrams/relations.mmd`, `spec/domain-specification.md`, `README.md` — all tracked, all part of what `git clone` hands a new contributor. |
+| `Shared` | Meant to enter repository-distributed state: committed, reviewed, and handed to every clone by `git clone` itself. | `.github/workflows/gate.yml`, `diagrams/relations.mmd`, `spec/domain-specification.md`, `README.md` — all tracked, all part of what `git clone` hands a new contributor. |
 
 ### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#9
+
+*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / The Three Scopes · hash: sha256:d044c34352263181ad410b5ca82972b37c438ccdfcf4ec547c5d27ae3f7c7449*
+
+**This axis is about repository-distributed state specifically, not every channel bytes could
+leave a machine through.** Every worked case above is a Git example — a clone, a push, a
+review — because that is the evidence this repository actually has. A backup, a cloud-sync
+folder, a diagnostic bundle, a user-initiated export, a remote execution transfer: each is a
+different question about a different boundary, none of them addressed by `Shared` here and
+none of them answered by this record's silence on them. `Shared` names entry into the
+repository's own distributed state; a future asset that needs a policy for one of those other
+channels needs a different, separately-argued scope, not an overloaded reading of this one.
+
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#10
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / The Three Scopes · hash: sha256:0893a9f7382b661f42502ce7ebaecfe2ce3c3aaf7095bf8fa93e2a2dfd7cbbfe*
 
@@ -27480,13 +27566,13 @@ went. Refusing to publish an undeclared asset is the mistake whose cost is cheap
 reversible; publishing one by default is the mistake whose cost is neither. The safe
 direction is `Local`.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#10
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#11
 
 *revision: authored · kind: heading · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Enforcement For The Local Scope · hash: sha256:fb75b3959c56cf44f42964f7933ddc2364d90ff3b71f5470415a322a73e022ce*
 
 ## Enforcement For The Local Scope
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#11
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#12
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Enforcement For The Local Scope · hash: sha256:ca56a825006d24bd5d3b8b97dfeabefa6536240cc0cfe126c900968de1a69a80*
 
@@ -27495,7 +27581,7 @@ why.** An ignore entry is advisory in exactly the sense `OD-PACKAGE-004` uses th
 a self-declared ownership tag: it changes what git *offers* to stage by default and nothing
 else.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#12
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#13
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Enforcement For The Local Scope · hash: sha256:56505ee4df98de4c3f14736c661dead0a8613c24549bf714e7002d8034491037*
 
@@ -27514,31 +27600,39 @@ else.
   — the case this repository already treats as the canonical `Local` asset — has no
   committed `.gitignore` entry to be defeated in the first place.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#13
-
-*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Enforcement For The Local Scope · hash: sha256:a2287f87de6629b7cb998f2115d6338568ba1dd0f835004fc7df19fdfebdcde4*
-
-**What `Local` actually requires is a refusal at stage or commit time**, not an omission from
-a listing: something that inspects the set of paths about to enter a commit and refuses the
-operation if any of them is declared `Local`, regardless of how the path arrived at that set
-— named explicitly, force-added, or swept in by a wildcard. That check does not exist in
-this repository today, and this record states the requirement it owes rather than building
-it: the procedural version of the same rule already exists as discipline in `AGENTS.md`'s
-loop ("Commit the paths you touched — explicitly, never `git add -A`") and in this skill's
-own operating rule, but discipline followed by a person is exactly the advisory category this
-record is distinguishing itself from — it protects only for as long as everyone remembers to
-follow it, which is the same failure mode as the ignore entry it would replace. A mechanical
-stage-or-commit-time refusal, keyed to a scope declared the same way `OD-PACKAGE-004`
-declares ownership — by the thing placing the asset, not by the asset itself — is what closes
-the gap; this record does not build that mechanism (see "What This Is Not").
-
 ### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#14
+
+*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Enforcement For The Local Scope · hash: sha256:e1551ac9b83d7cf344e274cfb695b2b919a7ad101c7313550414d7d0f386e37d*
+
+**What `Local` actually requires is a guard on the transition itself** — an asset moving from
+`Local` toward `Shared` requires explicit authorization — evaluated at the moment something
+attempts that transition, not an omission from a listing. That is a statement about the
+transition, not about Git specifically: this repository happens to enforce repository
+distribution through Git, so the concrete case is a refusal that inspects the set of paths
+about to enter a commit and refuses if any of them is declared `Local`, regardless of how the
+path arrived at that set — named explicitly, force-added, or swept in by a wildcard. A
+repository under a different distribution mechanism would need the same guard evaluated at
+whatever moment *that* mechanism commits to sharing state; a CI publish step, a package
+transaction's commit phase, or a repository-host integration's own push hook are each another
+projection of the identical rule. None of these exists in this repository today, and this
+record states the requirement it owes rather than building one: the procedural version of the
+Git-specific case already exists as discipline in `AGENTS.md`'s loop ("Commit the paths you
+touched — explicitly, never `git add -A`") and in this skill's own operating rule, but
+discipline followed by a person is exactly the advisory category this record is
+distinguishing itself from — it protects only for as long as everyone remembers to follow it,
+which is the same failure mode as the ignore entry it would replace. A mechanical
+transition-time refusal, keyed to a scope declared the same way `OD-PACKAGE-004` declares
+ownership — by the thing placing the asset, not by the asset itself — is what closes the gap
+regardless of which projection enforces it; this record does not build any of them (see "What
+This Is Not").
+
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#15
 
 *revision: authored · kind: heading · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Where The Scope Is Declared · hash: sha256:334b1c2c38462aacbec68e7fcebf27ca7a140efe97f77df42a5108e2af9af223*
 
 ## Where The Scope Is Declared
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#15
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#16
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Where The Scope Is Declared · hash: sha256:70f73dc2742f790ff7c3ef0629e8dbdf43ca2fc86d23eb011d9da38e1e2c0bf0*
 
@@ -27549,7 +27643,7 @@ either. Scope is recorded by whatever places the asset — the package, or a man
 either exists — next to the ownership class it already records there, as one more fact of the
 same kind and at the same site.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#16
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#17
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Where The Scope Is Declared · hash: sha256:5dd64981cc9ff8d7daa9794d34b77c3d73c6b13b8c5ff7ae0e6d7d14930e5f09*
 
@@ -27557,13 +27651,13 @@ This repository builds neither package nor manifest today, the same absence
 `OD-PACKAGE-001` and `OD-PACKAGE-003` already found for ownership's declaration site. Until
 one exists, this record's own tables are where the real assets' scopes are written down.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#17
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#18
 
 *revision: authored · kind: heading · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / How Scope Composes With Ownership · hash: sha256:f2204ce369ab155021958c3aa2ea7ff4bde433248c3fab3663e46d4d29caacde*
 
 ## How Scope Composes With Ownership
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#18
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#19
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / How Scope Composes With Ownership · hash: sha256:b0ee636dc90b010e022bc950b07f71b3bb87f9c6387b5c922dc4a9bdfae25502*
 
@@ -27572,7 +27666,7 @@ at once. The worked cases below are the same four assets `OD-PACKAGE-004` classi
 ownership, plus the `Ephemeral` cases `.gitignore` already names, so that all three scope
 values have at least one grounded instance and not merely a definition.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#19
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#20
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / How Scope Composes With Ownership · hash: sha256:ddc8abdf9a6b276328f36d362ce297c946b547fe11932b321d09e249d9a8b19f*
 
@@ -27584,7 +27678,7 @@ values have at least one grounded instance and not merely a definition.
 | `.claude/settings.local.json` | `UserOwned` | `Local` | `CLAUDE.md`: "is personal and stays out of git." No committed `.gitignore` entry covers it (see Question); prose is today's only barrier. |
 | `/build/`, `/release-artifacts/`, `.nomos/`, `/work/*.lock`, `/work/*.tmp` | `GeneratedOwned` | `Ephemeral` | `.gitignore`: scratch build roots holding "nothing... a canonical source," and coordination state its own comment calls "ephemeral." |
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#20
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#21
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / How Scope Composes With Ownership · hash: sha256:8f3a452fc8f808a196d62ab3a0da862be2ae6704c3b2dffa3ba9a7a6caacf68c*
 
@@ -27599,13 +27693,13 @@ a future `UserOwned` file a person deliberately wants to share — a personal pr
 on purpose — would be `UserOwned` and `Shared` at once, and neither axis would need to change
 shape to say so.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#21
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#22
 
 *revision: authored · kind: heading · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Costs If Left As Read Today · hash: sha256:527c7cf177701085ea18c0c957f24ff7fc3834514a8c5475cd5e18c0b7cba766*
 
 ## What This Costs If Left As Read Today
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#22
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#23
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Costs If Left As Read Today · hash: sha256:e5c32300a31062f7bc689c39cc4d603313ca896101b036c5842e18c35531fb3f*
 
@@ -27619,22 +27713,22 @@ result may ever leave the machine — and a stated default for the asset it does
 recognize, instead of the local/shared line being redrawn per asset, informally, the way it
 is today.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#23
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#24
 
 *revision: authored · kind: heading · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Is Not · hash: sha256:8c096e9ff713a2d91679182618fcba53119b00032e6e47e091a14b7e89a7235f*
 
 ## What This Is Not
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#24
-
-*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Is Not · hash: sha256:95db5aa5b7daa2c8e0b72bf5ad52e60b3de9921d0b51c0dcfcb54ee86052b9e5*
-
-**Not a build of the stage-or-commit-time refusal `Local` is stated to require.** This record
-states the enforcement the scope owes and why a `.gitignore` entry does not meet it; it does
-not add a pre-commit hook, a `git` wrapper, or a check to `nomos work finish`. That is future
-work this record makes nameable, not work it performs.
-
 ### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#25
+
+*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Is Not · hash: sha256:11e130764b6f7c9d088a7a3566e4337a6c4abe483671f819ec3144579819b8ea*
+
+**Not a build of the transition-guard `Local` is stated to require, in any projection.** This
+record states the enforcement the scope owes and why a `.gitignore` entry does not meet it; it
+does not add a pre-commit hook, a `git` wrapper, a CI step, or a check to `nomos work finish`.
+That is future work this record makes nameable, not work it performs.
+
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#26
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Is Not · hash: sha256:2cf183f58f98a82611ca7497dc2df87ad7751430bd83d3266641630e069da793*
 
@@ -27642,7 +27736,7 @@ work this record makes nameable, not work it performs.
 gives for ownership: `OD-PACKAGE-001`'s four-step path to a first manifest reader is
 untouched.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#26
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#27
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Is Not · hash: sha256:61aa7d1ed0fd0a448ee6629318580d78f7016049145f2cd06c7a35aee9e180e8*
 
@@ -27650,7 +27744,7 @@ untouched.
 `tests/contract/tests/boundaries.rs`, and the render commands are unchanged. This record
 documents the scope each asset already has and states the model that generalizes it.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#27
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#28
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / What This Is Not · hash: sha256:d952cb3a1b8654745e6952617fdef6f35461a0d380ee79e9d3bfd7def4011269*
 
@@ -27659,13 +27753,13 @@ ever need.** They are the three this repository's own worked cases exhibit today
 `done_when`. A scope this repository has not yet produced an instance of is a question for
 whichever record adds the instance.
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#28
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#29
 
 *revision: authored · kind: heading · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
 
 ## Controls
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#29
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#30
 
 *revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Controls · hash: sha256:a4e97ff257ffc4ae4e274a68aa9ecfc2485eec21fad31cc213007e1a22102e91*
 
@@ -27677,19 +27771,24 @@ whichever record adds the instance.
 | collapse scope into ownership as combined values | the value set grows with every new asset instead of staying fixed at three scopes composed with three ownership classes, and the combined names describe combinations rather than properties — the failure the why-text for this item states directly |
 | treat `Ephemeral` and `Local` as the same scope | a scratch rebuild root and a personal settings file are asked to obey the same rule even though only one of them is meant to persist on the machine at all; `/build/` is rebuilt and discarded every session, `.claude/settings.local.json` is not |
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#30
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#31
 
 *revision: authored · kind: heading · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#31
+### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#32
 
-*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Status · hash: sha256:6e0906297e4115d1bac2e53d507a52de472df1d6ab097e12251c8fc29334c77e*
+*revision: authored · kind: prose · heading: A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local / Status · hash: sha256:5afdecc05d061b600e867639f637db6cb119e6cb3177ff73c31e072c7018b764*
 
 Accepted. Three scopes are named, `Local` defaults for the undeclared case, and five real
-assets are classified against both axes at once. A `Local`-scope refusal at stage or commit
-time remains future work; this record is what makes that work nameable rather than assumed.
+assets are classified against both axes at once. A `Local`-scope transition guard remains
+future work; this record is what makes that work nameable rather than assumed. Amended to
+version 2 by `P13-PACKAGE-REFINE`, which narrowed `Shared` to repository-distributed state
+specifically — every worked case is a Git example, and the prior wording claimed a broader
+"leaves the machine" scope no evidence here supports — and generalized the enforcement
+section from a Git-specific stage-or-commit refusal to a transition guard with Git named as
+one projection among others.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

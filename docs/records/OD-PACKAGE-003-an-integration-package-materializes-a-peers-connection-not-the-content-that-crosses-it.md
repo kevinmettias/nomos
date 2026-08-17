@@ -3,7 +3,7 @@ id: OD-PACKAGE-003
 type: decision
 title: An IntegrationPackage materializes a peer's connection to Nomos, not the content that crosses it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - packages
@@ -153,6 +153,44 @@ has the `IntegrationPackage` originate policy, a rule, a rendering mechanism, or
 execution semantics. Where none of that applies and the surface is genuinely absent from the
 target repository, the correct answer is declared-only: the package records that the surface
 exists and what it would carry, without placing a file that has no reader.
+
+## Declaring A Placement Is Not Performing One
+
+The table above says "placed" for a row and stops there, which leaves one question
+unanswered: does the `IntegrationPackage` itself write the bytes, or does it say that a write
+should happen and hand the description to something else? The distinction matters the moment
+a real mechanism exists to do either, so it is worth drawing now rather than after the first
+implementation has already picked one by default.
+
+**An `IntegrationPackage` declares a materialization intent — source, target path, the
+ownership class `OD-PACKAGE-004` gives that target, and the publication scope `OD-PACKAGE-005`
+gives it. It does not itself perform the write.** Atomicity, the conflict handling each
+ownership class requires, staging, and rollback are mechanics: they refer to nothing that
+knows what a crate, a rule, a gate, or a peer connection is, the same test `ARC-ECOSYSTEM-001`
+already applies to every other crossing. A `Composed` file's owned-region check, a
+`GeneratedOwned` file's unconditional overwrite, a `UserOwned` file's refusal — none of that
+logic differs because the asset happens to belong to an `IntegrationPackage` rather than a
+`ProjectionPackage` or any future package kind that materializes something. Reimplementing it
+once per package kind is the reuse `D-090` already refuses on cheaper grounds than this one,
+and `ARC-ECOSYSTEM-001`'s adopted `D-091`/`D-122` split says where the mechanics belong once
+they are built: a generic materializer, mechanism-owned, consuming a materialization intent no
+matter which package kind declared it. An `IntegrationPackage` that performed its own writes
+would be teaching itself write mechanics the same way a generic execution primitive is never
+taught what a crate is — the crossing runs backward.
+
+This changes nothing about `OD-PACKAGE-001`'s four-step path or about the placement table
+above; declaring is still the `IntegrationPackage`'s whole job, and the table's "placed" rows
+name what gets declared, not a claim about which component ends up calling a filesystem write.
+No materializer exists in this workspace today, generic or otherwise, and this record does not
+build one — it states the shape a later one would consume so that the first `IntegrationPackage`
+implementation is not also where write mechanics get invented ad hoc.
+
+**Left open:** whether the placement table's per-surface rows — agent contract file, per-agent
+adapter, skills, hooks, MCP registration, CI projections, connector configuration — should
+become a named typed axis (something like an `IntegrationSurfaceKind`) once more than one
+`IntegrationPackage` exists to compare, or whether the table itself remains the right shape
+indefinitely. Nothing today argues either way; it is a question for whoever builds the second
+`IntegrationPackage`; and finds out whether the first one's rows generalize.
 
 ## Ownership, Routed Through `ARC-ECOSYSTEM-001`
 
