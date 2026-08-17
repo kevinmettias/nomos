@@ -209,13 +209,41 @@ fn Show(
     };
     let now = SystemClock.Now();
     let label = Listing_Label(&document, found, now);
+    let current_revision = Current_Revision(ledger);
 
     let _ = writeln!(output, "{} {}", found.id, found.title);
     let _ = writeln!(output, "state: {label}");
     Print_Claim(found, now, output);
-    Print_History(found, output);
+    Print_History(found, current_revision.as_deref(), output);
 
     return ExitCode::Ok;
+}
+
+/// This tree's revision right now, read the same way `nomos_ledger::Finish` reads it when it
+/// stamps a [`nomos_ledger::VerificationRecord`] -- `.git/HEAD`, following one loose ref.
+///
+/// A second reading rather than a shared one: the resolution `nomos_ledger::Finish` uses to
+/// stamp a record is private to that crate's `finish` module, and exposing it would have
+/// meant widening this item's territory into `nomos-ledger`'s `lib.rs`, which nothing here
+/// needed edited otherwise. `docs/records/OD-LEDGER-027-...md` says so.
+///
+/// `None` on any failure -- no `.git` here, a packed ref this build does not chase, or any
+/// other read error. `work show`'s staleness line treats that as its own case rather than as
+/// agreement with a recorded revision.
+fn Current_Revision(ledger: &FileLedger<StdFileSystem, SystemClock, FileLock>) -> Option<String>
+{
+    let head = ledger.Read_File(Path::new(".git/HEAD")).ok()?;
+    let head = head.trim();
+
+    if let Some(ref_path) = head.strip_prefix("ref: ")
+    {
+        return ledger
+            .Read_File(&Path::new(".git").join(ref_path))
+            .ok()
+            .map(|contents| return contents.trim().to_owned());
+    }
+
+    return Some(head.to_owned());
 }
 
 /// Records a new item, refusing a duplicate identifier and a document that would not

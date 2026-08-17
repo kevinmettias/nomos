@@ -80,8 +80,10 @@ profile: domain-specification
 | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md@authored | docs/records/OD-LEDGER-019-abandoning-ends-a-claim-and-declining-ends-an-item-so-one-verb-cannot-do-both.md | authored | 54 | 14 | sha256:ad891bc0cda6f4b7b3140ff61ea51b5d03a65419fe9ab4d3fbf8279a77e6239d |
 | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md@authored | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md | authored | 27 | 12 | sha256:3ebb2bcba88f6c72bbc391ea21070ee09c26d62ed613c9445085c22688fcb962 |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md | authored | 29 | 8 | sha256:b9fc15303e4b06b9d65008a1a854ce62942151af4b55cdd10c832ce057563cf5 |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md@authored | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md | authored | 31 | 10 | sha256:0f75915bb0a6e047768f8b26509aa5e946b77f20b68f07298aacb082d7709cfa |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md@authored | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md | authored | 19 | 8 | sha256:409f9c166337da0afc4471e4c50cd9431117d100ddbc5527846feeb8d7048533 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
@@ -755,6 +757,14 @@ profile: domain-specification
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#38 | authored | 2 | What This Does Not Do |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#41 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md#45 | authored | 2 | Status |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#1 | authored | 1 | A claim refusal is a plan fact or a coordination fact, and Layer says which |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#6 | authored | 3 | Retryability is not this distinction |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#8 | authored | 2 | What Changed |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#15 | authored | 3 | Where the change actually landed, against what the item said |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#18 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#23 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#26 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1 | authored | 1 | A record identifier is allocated once, and add refuses a spent one by naming what spent it |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#5 | authored | 2 | What Was Measured |
@@ -775,6 +785,16 @@ profile: domain-specification
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#23 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#28 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md#31 | authored | 2 | Status |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#1 | authored | 1 | A verification record names HEAD as the tree it ran against, and work show reports when that has moved |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#5 | authored | 2 | What Identifies A Tree |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#10 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#16 | authored | 2 | Staleness Is Reported |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#19 | authored | 2 | Where The Change Actually Landed, Against What The Item Said |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#23 | authored | 2 | What This Costs |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#25 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#27 | authored | 2 | What Would Make This Stale |
+| docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#29 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#1 | authored | 1 | A third crate-wide territory is declared a serializer rather than narrowed |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#6 | authored | 2 | Decision |
@@ -21371,6 +21391,277 @@ reserve. The second item exists because there is no `work edit` and widening a c
 mid-flight is what makes a declared territory worthless; the two territories are disjoint and
 were held at once, which is the arrangement `OD-LEDGER-001` describes.
 
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#1
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which · hash: sha256:1f6d20163dfcc1ce4a6a8d1c90d3e4b7f436c3717d9ef179e5afbb68caa39d40*
+
+# A claim refusal is a plan fact or a coordination fact, and Layer says which
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#2
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#3
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / Question · hash: sha256:5d8ca74d9d1ae00c162e8e066e1de290b6fae819ea6b456c8116b3c533b4b3c3*
+
+`ClaimRefusal` has ten variants, and two of the questions they answer are categorically
+different. `DependencyUnmet` says a dependency is unfinished: a fact about the plan, true no
+matter who asks or when. `HeldBy` says another session holds overlapping territory: a fact
+about this moment, false again the instant a lease lapses. `ARC-HARNESS-001`'s sentence names
+the two owners — "the scheduler decides what should run, coordination decides whether it can
+run now" — and a refusal is always an answer to one of those two questions, never both.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#4
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / Question · hash: sha256:6af04f5d2ff196b8ac811bddd69bd6054822780ac4958bd980ea435f6cbc5d59*
+
+Before this record, that distinction existed in exactly one place: `nomos-cli`'s
+`Refusal_Label`, a match arm that turns four specific variants into the words `waiting`,
+`stranded`, `held` and `lapsed`, and everything else into `snagged`. It is a correct mapping —
+`OD-LEDGER-005` and `OD-LEDGER-020` are the records of the two times it was fixed — but it is
+the *only* place the mapping exists. `ClaimRefusal` itself offers `Describe` (a sentence) and
+`Is_Retryable` (a bool that answers a third, orthogonal question — see below), and neither
+lets a caller other than this one CLI ask which of the two questions a refusal answered.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#5
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / Question · hash: sha256:29558ef8136513f97d9499cf9710e983433823fe7ebb0def044f247958c9cf26*
+
+The cost is concrete for a design already on the table. `ARC-HARNESS-001` assigns "readiness,
+ordering and dispatch mechanics" to coordination and leaves "what should run" to a scheduler
+above the board, under a one-way rule: coordination may withhold work the plan calls ready,
+and coordination alone may never make ready what the plan calls not ready. That rule cannot be
+stated, let alone tested, against a model where both halves of it are strings a CLI happens to
+print — a caller wanting to ask "is this plan-ready" has to attempt a claim and parse prose, or
+reimplement the CLI's match arm and drift from it the next time `ClaimRefusal` grows a variant.
+`P10-REQUIRABLE-DECLARED` is the closest thing to a lived instance: it sat `Ready` while
+carrying two abandonments explaining its clauses had already landed, and `Ready` — "not
+claimed, not done, not blocked, not declined" — was never a readiness answer strong enough to
+say so.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#6
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / Question / Retryability is not this distinction · hash: sha256:2db84f00e46687bf427623de878220731f88599d523b6569fd4dbefc6347094e*
+
+### Retryability is not this distinction
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#7
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / Question / Retryability is not this distinction · hash: sha256:8ac630e0b357270bd7ec0abe0f930f612696bf0739700f8c02f042d778019d01*
+
+`Is_Retryable` looks like it could stand in for the split and does not. `DependencyUnmet` is a
+plan fact and is retryable — the plan itself can change, when the dependency finishes.
+`StillHeld` is a coordination fact and is retryable — the lease is released or it lapses. The
+two axes are independent, and a caller that read `Is_Retryable` as the readiness answer would
+tell a scheduler `DependencyUnmet` "might resolve, so it's not a plan question", which is
+exactly backwards.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#8
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:cc5c047d35aa91a721f01d3630c5dfef6b2910c5a3b70c7e67f51282139b0569*
+
+## What Changed
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#9
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:57ca654d0a68c9387ecb61947f0d27f8420840578fa509703f6974d9501df4ab*
+
+`ClaimRefusal::Layer(&self) -> RefusalLayer`, `crates/substrate/nomos-ledger/src/claim/refusal.rs`.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#10
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:6945042248e3f101576adce5e4bdc365a4003b02f5740b2bd947536c7bbdfd33*
+
+`RefusalLayer` is a two-variant enum: `Readiness` and `Dispatch`, named after `ARC-HARNESS-001`'s
+own two owners rather than invented vocabulary. `Layer` is an exhaustive match with no
+catch-all arm, so a variant `ClaimRefusal` grows in the future must be classified here before
+the crate compiles — the same guard `OD-CONTRACTS-002` put on `Applicability`'s three
+predicates, applied to this type's two.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#11
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:512331a5e536833516646f6d2b81d68769b6da59a12675eab3db9431c4b4e80f*
+
+The classification, and why each variant sits where it does:
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#12
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:5ed220a294b29e30d5ab09a32eb7a27551ebe22a124d59d002461050d3682022*
+
+| Variant | Layer | Why |
+|---|---|---|
+| `NotClaimable` | Readiness | The item's own state — `Done`, `Blocked`, `Declined` — is a codebase fact independent of who is asking. |
+| `DependencyUnmet` | Readiness | Explicitly the record's motivating example: unfinished work, true for everybody. |
+| `DependencyDeclined` | Readiness | `OD-LEDGER-020`'s dead end — a plan fact that will never resolve on its own. |
+| `NoSuchItem` | Readiness | Not being on the board at all is the plan's answer, not coordination's. |
+| `HeldBy` | Dispatch | Another session's live territory — `ARC-HARNESS-001` names territory and leases as coordination's exact subject matter. |
+| `UnknownIndependence` | Dispatch | Whether two *live claims'* territories can be shown disjoint is a question about the current board, not the plan. |
+| `LeaseTooLong` | Dispatch | A lease ceiling is coordination's own policy on this attempt's request, not a fact about the item. |
+| `Lapsed` | Dispatch | A dead holder is a fact about a specific claim's history, resolved by a coordination operation (`takeover`), not by the plan changing. |
+| `StillHeld` | Dispatch | The item's own live claim, ending which is coordination's business. |
+| `LedgerUnusable` | Dispatch | The store *is* the coordination mechanism; being unable to reach it says nothing about the plan. |
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#13
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:14ff7809607749b8c3f22a6b917aa724db362ac573b973e2e5f487eeb8e972e5*
+
+`Is_Readiness` and `Is_Dispatch` are the predicate forms of `Layer`, the shape
+`Applicability::Requires_Agent` already used beside its own classification (`OD-CONTRACTS-002`):
+a caller that needs one side of a two-way question is not made to match on the enum itself.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#14
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed · hash: sha256:413059ec954e35fdfb7dbfa0fedde3cdda2708e427a2371b10293fb39e02ce95*
+
+`nomos-cli`'s `Refusal_Label` (`crates/host/nomos-cli/src/work/report.rs`) now matches on
+`(refusal.Layer(), refusal)` rather than on the variant alone. The four specific words are
+unchanged — this does not rename any display string — but they are now grouped under the
+layer they answer, and the catch-all that used to be one flat arm is now, structurally, "the
+readiness fallback" and "the dispatch fallback" that happen to say the same word today. A
+caller who needs the two catch-all cases apart has `Layer` itself; the CLI's word was never
+the only way to ask, it was just the only place the question had an answer at all.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#15
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed / Where the change actually landed, against what the item said · hash: sha256:ba6494f4727813660fd2d2a00a91c3a5ac88a866f0538a1caca04eb943c08513*
+
+### Where the change actually landed, against what the item said
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#16
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed / Where the change actually landed, against what the item said · hash: sha256:d0253b10b58ec0bd5ea7bc281649f1bf1e92d88c83500b721320c783c9e0f7f3*
+
+The item this record closes named `crates/host/nomos-cli/src/work.rs` as the CLI's territory.
+`work.rs` is the command dispatcher for `nomos work`; the word-producing match arm — what this
+record calls `Refusal_Label` — lives in its submodule `crates/host/nomos-cli/src/work/report.rs`,
+reached from `work.rs` by `mod report;`. This is the same shape the item's own text had already
+found once on the ledger side (`ClaimRefusal` living in `claim/refusal.rs` rather than the
+`exclusion.rs` an earlier reading of this item named): a crate split after a territory
+description was written moved the code the description meant to point at, one directory level
+down, without moving the description. `report.rs` is where the fix had to go, and this record
+is where that is written down for the next reader who greps this item's history and finds
+`work.rs` empty of the thing they are looking for.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#17
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Changed / Where the change actually landed, against what the item said · hash: sha256:243723ef3728aa621e44cc9b85191ceb3b3e8823179bf8463ac883a098e424c2*
+
+Exposing `RefusalLayer` outside `nomos-ledger` also required adding it to two re-export lists —
+`crates/substrate/nomos-ledger/src/claim.rs`'s `pub use refusal::{ClaimRefusal, RefusalLayer};`
+and `crates/substrate/nomos-ledger/src/lib.rs`'s `pub use claim::{Claim, ClaimRefusal,
+RefusalLayer};` — neither of which is new logic; both are one name added to an existing list a
+new public item in an already-exported module always has to join.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#18
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#19
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Holds It · hash: sha256:757cbd9d4f342dd3350de531f2337a08f96b030a197bc81b434f8c0c1784c00a*
+
+`crates/substrate/nomos-ledger/src/claim/refusal.rs`'s `layer_tests` module, over the whole
+refusal set rather than the two variants a caller happens to remember — the shape
+`OD-CONTRACTS-002` used for `Applicability`:
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#20
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Holds It · hash: sha256:d9341f1f499953b8b6a85ca154fff046c27b3aae9bbc7d2d83807035e02b0e6e*
+
+- every `Readiness` variant is asserted a plan fact, every `Dispatch` variant a coordination
+  fact, by name;
+- no refusal answers both `Is_Readiness` and `Is_Dispatch` — the disjointness assertion, run
+  over a hand-written universe of one instance per variant;
+- the universe itself is matched with no wildcard arm, so an eleventh variant stops the build
+  at the list it has to be added to, not silently falling through a catch-all;
+- `Layer` and `Is_Retryable` are shown independent on the pair that proves it — `HeldBy`
+  (`Dispatch`, retryable) and `DependencyUnmet` (`Readiness`, retryable) — so the axis this
+  record adds is not mistaken for the one that was already there.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#21
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Holds It · hash: sha256:4a910ddbd8664e51a9e3f7350748f3569a8e617b9190a7db530de19abf98fac4*
+
+`tests/contract/surface/nomos-ledger.txt` carries the four new public items
+(`RefusalLayer`, its two variants, and `ClaimRefusal::Layer`/`Is_Readiness`/`Is_Dispatch`),
+blessed from the crate's own source rather than hand-typed.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#22
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Holds It · hash: sha256:6131e5dfa6d1fabdc3a7c46064a5d9c222e5c51576b7c26faecf475181c120a3*
+
+`cargo test -p nomos-ledger -p nomos-cli -p nomos-contract-tests` is green except for two
+`records_do_not_serialize::snapshot_grain` tests that assert a property of the *live board* —
+whether two open items currently widen different crates' APIs independently — and fail
+identically on `HEAD` before this change, for board composition this item's territory does not
+reach.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#23
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#24
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What This Record Does Not Decide · hash: sha256:39698d18eebb4eeb0b3371eab709cb00346ac0cc429129dae4cddd3c8fd8a402*
+
+It does not build the scheduler `ARC-HARNESS-001` describes, or wire `Layer` into anything
+that dispatches work without a human running `nomos work claim`. It makes the two questions
+askable in the type system; deciding *what* asks them is `P11-NEXT-WORK`'s territory, named as
+such in `ARC-HARNESS-001`'s own "what this record does not decide" section.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#25
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What This Record Does Not Decide · hash: sha256:671ef62c08f62022e9c985dfa6fb4b5b90b4a60ecb662deba3e4751df83a0b95*
+
+It does not change what any `nomos work` command prints. `Refusal_Label`'s four named words and
+its `snagged` fallback are byte-for-byte what they were; only the code that arrives at them
+changed shape.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#26
+
+*revision: authored · kind: heading · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#27
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Was Considered And Rejected · hash: sha256:a9b7a93733daf8fd61d5f90c0f4e84072f474f986a9d7f4a1b90ab8567d9ff2c*
+
+**A boolean, `Is_Plan_Fact`.** Rejected on the item's own `done_when`: "not closed by a derived
+boolean only the CLI consumes." A single bool is one bit narrower than `RefusalLayer` for no
+saving — the enum costs nothing extra to match on and leaves room to name a third layer later
+without every caller's boolean becoming a lie.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#28
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Was Considered And Rejected · hash: sha256:d95f4a4229f7378c94a793133e74aba300af01c9cd86af45e36bfb92af0c1760*
+
+**Splitting `ClaimRefusal` itself into two nested enums** (`ClaimRefusal::Readiness(..)` /
+`ClaimRefusal::Dispatch(..)`), so the layers are distinguishable by Rust's own type checker
+rather than by a method call. Rejected for this item: every construction site —
+`store/refusal.rs`'s `Contested_By`, `Unmet_Dependency`, `Held_Or_Unready`, `Wrong_Verb`,
+`store/claiming.rs`, `finish/running.rs` — sits outside this item's territory, and restructuring
+the enum's own shape would have to touch every one of them or leave the crate not compiling.
+`Layer` gets the same caller-facing answer — "which of two things is this" — without moving
+territory that belongs to work this item was not authored to also carry.
+
+### docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#29
+
+*revision: authored · kind: prose · heading: A claim refusal is a plan fact or a coordination fact, and Layer says which / What Was Considered And Rejected · hash: sha256:be84945e55617721f284560868f4864bb9b068647ce7800a1b3cf786186888b7*
+
+**Naming the layers after this codebase's own vocabulary** (`Plan` / `Resource`, `Static` /
+`Live`) rather than `ARC-HARNESS-001`'s. Rejected: that record already named the two owners for
+this exact seam — "the scheduler decides what should run, coordination decides whether it can
+run now" — and a second pair of names for the same distinction is the kind of drift a reader
+five records later has to reconcile by hand.
+
 ### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1
 
 *revision: authored · kind: heading · heading: A record identifier is allocated once, and add refuses a spent one by naming what spent it · hash: sha256:dd2104302e3146efb323cf9a4c9c91ab791a651d645606707994a193a4f7f6f8*
@@ -21934,6 +22225,301 @@ Closed. `P11-AMEND-GRAIN` carries it — the third spelling of the item, after
 while the sentence it had to change had moved to `add_refusal.rs`. The second of those was
 correct when it was authored, and this record's own subject is why it could not be repaired in
 place.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#1
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved · hash: sha256:158b7b958941ee197227bdfcd0fbd10de25d2b31a8249993dd84d5b344ad7d66*
+
+# A verification record names HEAD as the tree it ran against, and work show reports when that has moved
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#2
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#3
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Question · hash: sha256:1e372ffe19fb0bdb3c595810984e593364cc28a2f75b59c1cd60b20762f2457b*
+
+`VerificationRecord` carries `argv`, `exit_code`, `output_tail`, `verified_at` and `gate` —
+what ran, what it answered, when, and whether the gate agreed. Nothing in it says what tree
+that predicate ran against. An item finished at unix `N`, and the tree moved under it after —
+a peer lands a module split, a record is amended, the item's own files are edited by the next
+item that reserves them — and `work show` reports exactly what it reported before. "Verified"
+and "was verified once, against something else" are the same three words.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#4
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Question · hash: sha256:953a2b91c1c19c81ca0cd4e9cf6df76e0ae89028322215e2437a7004118c2cc5*
+
+`OD-ANALYSIS-001` already decided this question once, for a different identity: a key
+carrying the wrong thing about a workspace state defeats the reuse the key exists for, and
+the fix there was not to add a coarser answer but to separate *what a fact is computed from*
+from *what tree it was measured against*, and to keep the second as provenance beside the
+fact rather than folded into its identity. `OD-STORE-002` names the same split again, for a
+different family, and gives it a name: `revision`, carried as data, excluded from identity,
+"the revision it was read at." A `VerificationRecord` is not a derived identity — it does not
+need a revision-independent equality — but it is exactly the "provenance, not identity" half
+of that split, missing its provenance.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#5
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Identifies A Tree · hash: sha256:12a1c8ff95d8b5c8175851f7931f63709ecdfd4e1c024ae23b415e3cfcd1105d*
+
+## What Identifies A Tree
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#6
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Identifies A Tree · hash: sha256:490395a61945c6e8b8a832b2a1e3e7b89213df3d56eb7f807dcf89307c1fd193*
+
+Three candidates, each cheap to state and each with a cost the others do not have.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#7
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Identifies A Tree · hash: sha256:10106eff64f4747e347d8177f8f14a9499d315a1258924dbd1d9f4b725bfb8ca*
+
+**A git revision — `HEAD`, read directly.** Cheap: reading `.git/HEAD` and following one
+loose ref costs a file read or two, not a subprocess. It is what CI and every reader already
+speaks — `git log`, a commit hash in a PR, `git diff <rev>`. Its cost is a real one: it is
+silent about a dirty working tree, which is the normal state of this repository while an item
+is being finished — the record is written before the commit that carries the item's own
+change, so the working tree at `verified_at` is, in the ordinary case, ahead of what `HEAD`
+names.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#8
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Identifies A Tree · hash: sha256:70ba709a1684741a0d4b58c280ea66840f68220ac87a2403c863352b259a095e*
+
+**A digest over the item's own reserved territory.** Honest about exactly what the predicate
+could have been affected by, and no more — it does not claim to see a file the item's
+territory never named. Its cost is symmetric with its honesty: it says nothing about the rest
+of the workspace, which is where a peer's breakage actually comes from. Every predicate on
+this board is a `cargo test -p <crate>` invocation, and a crate under test reads every file in
+it, not only the ones an item's territory happened to name — so a digest scoped to an item's
+own territory would not see a shared file in the same crate moving under an item that never
+touched it, which is precisely the "peer lands a module split" case `done_when` names first.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#9
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Identifies A Tree · hash: sha256:c78ffee75eed6ef51016d31b12e7407c6ef365954a45a2667da4de86f04c830e*
+
+**A digest over the whole working tree.** The strongest of the three — it sees everything the
+predicate could possibly have run against. Its cost is that it sees things the predicate could
+not have run against too: it moves on every untracked scratch file, every build artifact
+outside `.gitignore`, every file a concurrent session is mid-edit on in a directory this item
+never reserved, unless the scope is curated by hand — and curating that scope is a second,
+unstated territory declaration living beside the one the ledger already has.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#10
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#11
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Decision · hash: sha256:c216997a0b047b977f97174120724ba2f896b7aebaa4eacda988a2d3c7b57e31*
+
+**`VerificationRecord::revision` is `HEAD`, read directly from `.git/HEAD` (following one
+loose ref if `HEAD` names a branch rather than a commit), through the same `FileLedger`
+filesystem abstraction `Finish` already reads the gate's workflow through.**
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#12
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Decision · hash: sha256:d8bae55bb08f4fe4368a887a9d0aa0b240b6b5a889a69e4b9164cdaee486fc1d*
+
+Chosen for what it does not give up rather than only for what it buys: it answers the
+question this field exists for — has the *committed* tree moved under this item since it was
+verified — which is exactly the shape of all three examples in `done_when`'s own list (a
+peer's module split, a record amendment, the next item's edit to this item's files): each is
+a commit that lands after this one's `verified_at`, and `HEAD` moving is precisely what
+detects a commit landing.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#13
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Decision · hash: sha256:3344b59806d043d057bb2776b0dde5c9ca560f5323b4bb033e33c06bf083824f*
+
+What it gives up is stated rather than hidden: it cannot see the working tree's own dirty
+state, so two verifications against the same `HEAD` with different uncommitted diffs compare
+as identical. A territory digest would close exactly that gap and open the wider one above; a
+whole-tree digest would close both gaps and manufacture noise from every scratch file this
+repository's own working style produces continuously — `AGENTS.md`'s scratch-file guidance
+exists because that noise is real, not hypothetical. `HEAD` is the answer that is honest about
+the one thing every reader already checks by hand today — "did anything land after this" —
+and declines to pretend to answer the finer question neither of the other two answers cleanly
+either.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#14
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Decision · hash: sha256:c9bc42af30db2fed970ff4a4f3facf34b4e02963b7a021a57b5315c92b22a393*
+
+**`None` on any read failure, with no distinction between the failures.** No `.git` at the
+tree the predicate ran in, `HEAD` naming a ref this build does not chase through
+`.git/packed-refs`, or any other I/O error, all collapse to `None`. A reader cannot tell them
+apart, and that is deliberate: none of them is a case this field claims to answer, and
+inventing a value for any of them — guessing, or falling back to a subprocess `git`
+invocation that might not be installed — would be worse than admitting there is nothing here.
+This is the same shape `gate: Option<GateOutcome>` already takes, for the same reason: a
+`None` left visible rather than backfilled.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#15
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Decision · hash: sha256:3bac53b7b75762b4792e933a199587ae7db7c5377c18df44d258635fa7721c1c*
+
+**Never backfilled.** A record written before this field existed keeps `revision: None`
+forever. Computing one after the fact — from the commit nearest `verified_at`, say — would
+manufacture the exact claim this field exists to stop: that a tree was measured when nothing
+measured it.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#16
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Staleness Is Reported · hash: sha256:7a68f1e1c9c487446097a9e8048f399cdd2bdb591812973eef5aac31835d5c1e*
+
+## Staleness Is Reported
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#17
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Staleness Is Reported · hash: sha256:db5cca5096a0186b16d31f3d0372050f20a487ef7e200240b8cda14011defb43*
+
+`done_when` is explicit that a field nothing reads is a comment with a serializer.
+`work show` now prints one of four lines for a `Done` item's verification, computing the
+tree's *current* revision the same way `Finish` computed the recorded one:
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#18
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Staleness Is Reported · hash: sha256:63c52d599a8991382049821c9d819902d156a9ba32286d91ec44953f8b5e52d5*
+
+- **No revision recorded** — the record predates this field, or `HEAD` could not be resolved
+  when it ran. Distinguishing these two would need a reason nothing else here carries; both
+  read as "this field has nothing to say."
+- **Still describes this tree** — the recorded revision equals the current one.
+- **`STALE`** — the recorded revision and the current one differ, naming both.
+- **Cannot tell** — a revision was recorded, but the current tree's revision could not be
+  read. Silence here would read as agreement, which is the one thing this field must not do
+  by omission.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#19
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Where The Change Actually Landed, Against What The Item Said · hash: sha256:d5cccbfb202297eaa0352f4b273344954217975e4d56d626651b9a7cabf3b76a*
+
+## Where The Change Actually Landed, Against What The Item Said
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#20
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Where The Change Actually Landed, Against What The Item Said · hash: sha256:7d4cc773106d1310ef4d3f28b96227e53b15f37546db7233d290bb7b0455aa49*
+
+The item named `crates/substrate/nomos-ledger/src/verification_record.rs` and
+`crates/substrate/nomos-ledger/src/finish/mod.rs`. Both had already moved by the time this
+item was claimed: `verification_record.rs` is `crates/substrate/nomos-ledger/src/verification/record.rs`
+— `verification.rs` at the crate root declares `mod record;` and `mod predicate;` and
+re-exports both — and `finish/mod.rs` is `crates/substrate/nomos-ledger/src/finish.rs`, a
+top-level file that declares the `finish` module's own submodules (`finishing`, `gate_step`,
+`running`, and the rest) the same way `store.rs` and `verification.rs` do. This is the same
+shape `OD-LEDGER-022` found and named for its own territory: a crate split after a territory
+description was written moved the code the description pointed at, one level, without moving
+the description. The field and the resolution both landed in `finish.rs`, where `Finish`
+itself and the record it builds already live.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#21
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Where The Change Actually Landed, Against What The Item Said · hash: sha256:95d155644a83b69c4ba57f642381c2ec165edfea28b125e2a2d53ad7be4a623f*
+
+The item also named `crates/host/nomos-cli/src/work.rs`. The function `work show` prints
+through — `Print_History`, and the verification line inside it — lives in its submodule
+`crates/host/nomos-cli/src/work/listing.rs`, reached from `work.rs` by `mod listing;`.
+Exactly the shape `OD-LEDGER-022` names for `report.rs` beside it. The staleness reporting
+above landed in `listing.rs`.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#22
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / Where The Change Actually Landed, Against What The Item Said · hash: sha256:c57fb8281b21a976d988e635105cb4e38fd8af1639ee241d66f7bde5b28b40ec*
+
+The two crates each read `HEAD` themselves, independently, rather than sharing one reader.
+`nomos-ledger`'s reading is private to `finish.rs`; making it available to `nomos-cli` would
+have meant adding it to `crates/substrate/nomos-ledger/src/lib.rs`'s `pub use finish::{...}`
+list, a file neither this item's territory nor `OD-LEDGER-022`'s named. `OD-LEDGER-022` took
+that step for `RefusalLayer`, because there the alternative was reimplementing a match over
+every `ClaimRefusal` variant in a second crate — a duplication with real drift risk, since a
+variant added to one arm and missed in the other fails silently. Here the duplicated logic is
+under fifteen lines, has no variants to miss, and both readings are exercised by the same kind
+of fixture (a temporary directory `StdFileSystem` reads through), so the two are kept apart
+deliberately rather than merged into a widened territory neither crate's item declared.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#23
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#24
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What This Costs · hash: sha256:4594020d24122ff28c5b3eb1139077d8c52d7b0e1b060430c80a96b37d94942b*
+
+Every predicate that runs `Finish` now reads one or two extra files. Both are local reads
+through a filesystem abstraction already open for the gate's workflow; the cost is not
+measurable against a `cargo test` invocation that is already minutes long.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#25
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#26
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Holds It · hash: sha256:fe1b7ca4e2c0c97e93c0054ffcd638d71c7d0f8601cf8ca35104119b4f72c663*
+
+`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs`'s
+`Fully_Populated` fixture carries a `Some` revision through a round trip, alongside every
+other optional field a `Test_The_Ledger_Should_Round_Trip_Losslessly`-shaped guard depends on
+being present. `crates/substrate/nomos-ledger/src/item/tests.rs`'s
+`Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version` is unaffected by this field —
+it counts `LedgerItem`'s own top-level keys, and `revision` is nested inside `verified`,
+which was already one of them — so `SCHEMA_VERSION`'s bump here is enforced by
+`deny_unknown_fields` and `Test_A_Ledger_Newer_Than_This_Build_Should_Say_So_Rather_Than_Malformed`-shaped
+guards in `persistence.rs`, not by that counting test.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#27
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Would Make This Stale · hash: sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac*
+
+## What Would Make This Stale
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#28
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What Would Make This Stale · hash: sha256:34422b170a67f46d4228a2a1a3d77b7fbd77f7d3820d02a0c80d8f1626db68c5*
+
+A change to how this repository commits work that made `HEAD` no longer the boundary between
+"before this item" and "after it" — for instance, finishing an item after its commit rather
+than before. Nothing in this item's territory changes that ordering, and nothing here assumes
+it will not change; if it does, this record's claim that `HEAD` at `verified_at` names "the
+tree before this item's own change" stops holding and the record needs revisiting, not the
+field.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#29
+
+*revision: authored · kind: heading · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#30
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What This Record Does Not Decide · hash: sha256:a0a7eaf495bbf602ff7c22f3364e1a2bf15a54d8ba663071776099c834b303b7*
+
+Not a subprocess `git` integration, and not a whole-tree or territory-scoped digest — both are
+named above and both were rejected for the concrete costs stated, not because a digest is
+categorically wrong; a later item with a different question (bit-for-bit reproducibility, say)
+may need one of them and would decide that on its own terms.
+
+### docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md#31
+
+*revision: authored · kind: prose · heading: A verification record names HEAD as the tree it ran against, and work show reports when that has moved / What This Record Does Not Decide · hash: sha256:755472594083bba6f077a84281b02d1abe85bf401c7b947c5ff036b92951f68e*
+
+Not a shared `Current_Revision` helper across `nomos-ledger` and `nomos-cli`. Two small,
+independently-tested readings were kept over one shared, exported one, for the reason stated
+above; a third caller needing the same read would be the point at which sharing it stops
+costing more than duplicating it.
 
 ### docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#1
 

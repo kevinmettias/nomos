@@ -111,6 +111,7 @@ fn Test_A_Verified_Done_Item_Should_Be_Accepted()
         output_tail: "test result: ok".to_owned(),
         verified_at: At(NOW),
         gate: None,
+        revision: None,
     });
 
     assert_eq!(Validate(&Document(vec![finished]), At(NOW)), Vec::<String>::new());

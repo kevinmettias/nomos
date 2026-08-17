@@ -209,6 +209,7 @@ pub(crate) fn Finished(id: &str, files: &[&str]) -> LedgerItem
         output_tail: "ok".to_owned(),
         verified_at: At(NOW),
         gate: None,
+        revision: None,
     });
 
     return item;
@@ -241,6 +242,7 @@ pub(crate) fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, 
                 output_tail: "ok".to_owned(),
                 verified_at: At(NOW),
                 gate: None,
+                revision: None,
             }),
         )
         .expect("a release carrying evidence must be accepted");

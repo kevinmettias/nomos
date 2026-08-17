@@ -86,7 +86,8 @@ pub fn Finish<F: FileSystem, C: Clock, L: CrossProcessLock>(
     let ran = Ran_To_Completion(launcher, &command, item)?;
     Refuse_Nonzero(item, ran.code, &ran.tail)?;
 
-    let record = Verified(&predicate.argv, &ran, gate, ledger.Now());
+    let revision = Current_Revision(ledger, working_directory);
+    let record = Verified(&predicate.argv, &ran, gate, ledger.Now(), revision);
     ledger
         .Release(item, finishing.holder, ReleaseOutcome::Finished(record.clone()))
         .map_err(|refusal| FinishRefusal::NotHeld { refusal })?;
@@ -114,7 +115,13 @@ fn Loaded<F: FileSystem, C: Clock, L: CrossProcessLock>(
 ///
 /// It carries the gate's outcome as well as its own, because "this item was verified" is
 /// only true of a tree the gate also accepted.
-fn Verified(argv: &[String], ran: &Ran, gate: GateOutcome, at: Timestamp) -> VerificationRecord
+fn Verified(
+    argv: &[String],
+    ran: &Ran,
+    gate: GateOutcome,
+    at: Timestamp,
+    revision: Option<String>,
+) -> VerificationRecord
 {
     return VerificationRecord {
         argv: argv.to_vec(),
@@ -122,5 +129,33 @@ fn Verified(argv: &[String], ran: &Ran, gate: GateOutcome, at: Timestamp) -> Ver
         output_tail: ran.tail.clone(),
         verified_at: at,
         gate: Some(gate),
+        revision,
     };
+}
+
+/// The tree's current revision, read directly rather than shelled out to `git`.
+///
+/// Reads `.git/HEAD` under `working_directory` (or `.` when the predicate runs where the
+/// caller already is, matching [`Workflow_Path`]'s own fallback) through the ledger's own
+/// [`FileLedger::Read_File`], and follows one loose ref if `HEAD` names one rather than
+/// naming a commit directly. `None` on any failure along the way -- see
+/// [`VerificationRecord::revision`] for why that is not distinguished further.
+fn Current_Revision<F: FileSystem, C: Clock, L: CrossProcessLock>(
+    ledger: &FileLedger<F, C, L>,
+    working_directory: Option<&Path>,
+) -> Option<String>
+{
+    let tree = working_directory.unwrap_or_else(|| return Path::new("."));
+    let head = ledger.Read_File(&tree.join(".git").join("HEAD")).ok()?;
+    let head = head.trim();
+
+    if let Some(ref_path) = head.strip_prefix("ref: ")
+    {
+        return ledger
+            .Read_File(&tree.join(".git").join(ref_path))
+            .ok()
+            .map(|contents| return contents.trim().to_owned());
+    }
+
+    return Some(head.to_owned());
 }

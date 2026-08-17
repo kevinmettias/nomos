@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "items": [
     {
       "id": "P1-MODEL",
@@ -36,7 +36,8 @@
         "exit_code": 0,
         "output_tail": "t block::tests::Test_A_Table_Should_Be_One_Prose_Block ... ok\ntest normalize::tests::Test_A_Known_Digest_Should_Be_Pinned ... ok\ntest normalize::tests::Test_Normalization_Should_Be_Idempotent ... ok\ntest block::tests::Test_Heading_Path_Should_Nest_And_Pop ... ok\ntest normalize::tests::Test_Parse_Should_Refuse_Malformed_Hashes ... ok\ntest block::tests::Test_A_Fenced_Block_Should_Survive_Blank_Lines ... ok\ntest statement::tests::Test_A_Fixed_Point_Should_Be_Recognized ... ok\ntest statement::tests::Test_Canonicalizing_Should_Reach_A_Fixed_Point ... ok\ntest statement::tests::Test_A_Pinned_Statement_Hash_Should_Reproduce ... ok\ntest block::tests::Test_Front_Matter_Should_Not_Become_A_Block ... ok\ntest block::tests::Test_A_Heading_Should_Keep_Its_Marker ... ok\ntest block::tests::Test_Ordinals_Should_Be_Dense_And_One_Based ... ok\ntest normalize::tests::Test_Non_Ascii_Should_Survive ... ok\ntest statement::tests::Test_Malformed_Identifiers_Should_Be_Refused ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_The_Whole_Corpus_Should_Reproduce_When_Available ... ok\ntest Test_The_Sample_Should_Contain_Non_Ascii_Statements ... ok\ntest Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash ... ok\ntest Test_Every_Canonical_Text_Should_Be_A_Fixed_Point ... ok\ntest Test_Every_Block_Of_A_Real_Document_Should_Reproduce_Its_Hashes ... ok\ntest Test_The_Normalizer_Should_Reproduce_The_Discriminating_Hashes ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-6263434c86623942.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-d4efe5215c4b6778.exe)\n   Doc-tests nomos_spec_model\n",
         "verified_at": 1786213047,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -84,7 +85,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 6 tests\ntest Test_The_Whole_Corpus_Should_Reproduce_When_Available ... ok\ntest Test_The_Sample_Should_Contain_Non_Ascii_Statements ... ok\ntest Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash ... ok\ntest Test_Every_Canonical_Text_Should_Be_A_Fixed_Point ... ok\ntest Test_Every_Block_Of_A_Real_Document_Should_Reproduce_Its_Hashes ... ok\ntest Test_The_Normalizer_Should_Reproduce_The_Discriminating_Hashes ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-d4efe5215c4b6778.exe)\n",
         "verified_at": 1786213053,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -127,7 +129,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 4 tests\ntest record::tests::Test_Dispositions_Should_Round_Trip ... ok\ntest record::tests::Test_Only_Preserved_Dispositions_Should_Count_As_Preservation ... ok\ntest schema::tests::Test_No_Migration_Should_Be_Empty ... ok\ntest schema::tests::Test_Versions_Should_Be_Dense_And_Ascending ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 13 tests\ntest Test_Filler_Should_Never_Count_As_Preservation ... ok\ntest Test_Identical_Blobs_Should_Be_Stored_Once ... ok\ntest Test_A_Fresh_Store_Should_Be_At_The_Latest_Version ... ok\ntest Test_A_Failed_Transaction_Should_Roll_Back_Every_Table ... ok\ntest Test_An_Unjustified_Omission_Should_Be_Refused ... ok\ntest Test_Every_Declared_Table_Should_Exist ... ok\ntest Test_Re_Ingesting_A_Document_Should_Be_Idempotent ... ok\ntest Test_Two_Revisions_Of_One_Path_Should_Be_Distinct ... ok\ntest Test_A_Dangling_Reference_Should_Be_Refused ... ok\ntest Test_Block_Hashes_Should_Survive_Storage ... ok\ntest Test_A_Successful_Transaction_Should_Commit_Every_Table ... ok\ntest Test_A_Future_Schema_Version_Should_Be_Refused ... ok\ntest Test_Reopening_Should_Not_Re_Run_Migrations ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-11511dab48bec877.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-69b38be179abad28.exe)\n   Doc-tests nomos_spec_store\n",
         "verified_at": 1786213834,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -170,7 +173,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 7 tests\ntest bundle::tests::Test_Every_Line_Should_End_With_A_Newline_And_No_Carriage_Return ... ok\ntest bundle::tests::Test_A_Reformatted_Bundle_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Newer_Format_Should_Be_Refused ... ok\ntest bundle::tests::Test_An_Altered_Record_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Bundle_Should_Round_Trip_Through_Text ... ok\ntest bundle::tests::Test_An_Empty_Bundle_Should_Still_Be_Well_Formed ... ok\ntest bundle::tests::Test_A_Removed_Record_Should_Be_Refused ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 8 tests\ntest Test_Every_Table_Should_Be_Exercised ... ok\ntest Test_An_Unresolvable_Reference_Should_Be_Refused ... ok\ntest Test_Importing_Into_A_Populated_Store_Should_Be_Refused ... ok\ntest Test_Import_Should_Land_Every_Row_The_Bundle_Declared ... ok\ntest Test_Binary_Blobs_Should_Survive_As_Bytes ... ok\ntest Test_Two_Stores_Of_The_Same_Corpus_Should_Export_Identically ... ok\ntest Test_A_Bundle_Should_Survive_A_Database_Round_Trip_Byte_For_Byte ... ok\ntest Test_A_Row_The_Export_Query_Drops_Should_Fail_The_Export ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-model v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-model)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.34s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-f22493311533ed45.exe)\n     Running tests\\round_trip.rs (target\\debug\\deps\\round_trip-8adab446563dda29.exe)\n   Doc-tests nomos_spec_bundle\n",
         "verified_at": 1786217507,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -213,7 +217,8 @@
         "exit_code": 0,
         "output_tail": "\ntest gate::tests::Test_A_Missing_Document_Should_Be_Reported ... ok\ntest gate::tests::Test_An_Empty_Manifest_Should_Not_Pass ... ok\ntest phases::tests::Test_An_Empty_Statement_File_Should_Not_Pass ... ok\ntest phases::tests::Test_A_Matching_Statement_Should_Ingest_Cleanly ... ok\ntest phases::tests::Test_Catalog_Entities_Should_Become_Nodes_With_Aliases ... ok\ntest phases::tests::Test_A_Divergent_Hash_Should_Be_Reported_By_Id ... ok\ntest phases::tests::Test_Non_Canonical_Text_Should_Be_Reported ... ok\ntest phases::tests::Test_Ingest_Should_Be_Idempotent ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 6 tests\ntest Test_The_Statement_Slice_Should_Contain_Non_Ascii ... ok\ntest Test_Front_Matter_Should_Be_Outside_The_Gate ... ok\ntest Test_An_Altered_Source_Should_Fail_The_Gate ... ok\ntest Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer ... ok\ntest Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks ... ok\ntest Test_Real_Statements_Should_Ingest_Without_Divergence ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 4 tests\ntest Test_I1_Should_Reproduce_Every_Recorded_Block ... ok\ntest Test_The_Whole_Corpus_Should_Ingest_Into_One_Store ... ok\ntest Test_I2_Should_Ingest_Every_Statement_Without_Divergence ... ok\ntest Test_Re_Ingesting_The_Corpus_Should_Be_A_No_Op ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-df2b803a72da1f96.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-a7f963d93477383d.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-0741795cbc67785d.exe)\n   Doc-tests nomos_spec_ingest\n",
         "verified_at": 1786214296,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -256,7 +261,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 8 tests\ntest run::tests::Test_The_Ruleset_Hash_Should_Be_Order_Independent_And_Sensitive ... ok\ntest run::tests::Test_An_Empty_Ruleset_Should_Not_Pass ... ok\ntest run::tests::Test_An_Errored_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Vacuous_Rule_Should_Be_Visible ... ok\ntest run::tests::Test_Violations_Should_Fail_The_Run_And_Be_Listed ... ok\ntest run::tests::Test_A_Rule_Nobody_Declared_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Complete_Satisfied_Run_Should_Pass ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 8 tests\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-f4dec598fefc7a82.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-d0f02b96f1402d2f.exe)\n   Doc-tests nomos_spec_validate\n",
         "verified_at": 1786215189,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -303,7 +309,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 10 tests\ntest Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One ... ok\ntest Test_Authored_Content_Should_Be_Distinguishable_From_An_Ingested_Revision ... ok\ntest Test_An_Unseeded_Store_Should_Hold_None_Of_Them ... ok\ntest Test_Every_Governing_Record_Should_Resolve_By_Id ... ok\ntest Test_Adr_Doc_001_Should_Carry_An_Explicit_Supersession_Edge ... ok\ntest Test_No_Governing_Record_Should_Carry_A_Carriage_Return ... ok\ntest Test_The_Records_Should_Be_Present_As_Disposed_Content ... ok\ntest Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder ... ok\ntest Test_Seeding_Should_Be_Idempotent ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Blocks ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-87a2d04f8517868a.exe)\n",
         "verified_at": 1786218394,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -392,7 +399,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 14 tests\ntest Test_Every_Headline_Clause_Should_Be_Answered_Once ... ok\ntest Test_Every_Restored_Family_Should_Carry_A_Fate ... ok\ntest Test_A_Family_Should_Sum_To_The_Size_The_Counts_Register_Measured ... ok\ntest Test_Every_Quoted_Count_Should_Exist_In_The_Counts_Register ... ok\ntest Test_Every_Entry_Should_Say_What_The_Clause_Resolved_To ... ok\ntest Test_A_Revision_Without_The_Volumes_Should_Be_Refused ... ok\ntest Test_The_Filler_The_Blocklist_Does_Not_See_Should_Be_Named ... ok\ntest Test_The_Records_The_Plan_Calls_New_Should_Be_Relocations ... ok\ntest Test_The_Headline_Should_Reproduce_From_The_Archives ... ok\ntest Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent ... ok\ntest Test_The_Content_That_Really_Went_Should_Be_Named ... ok\ntest Test_The_Summary_Should_Name_What_It_Counted ... ok\ntest Test_Every_Measured_Figure_Should_Reproduce ... ok\ntest Test_An_Ordinary_Pair_Should_Preserve_Every_Member ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.99s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\regression_report.rs (target\\debug\\deps\\regression_report-7eddf9f11408230b.exe)\n",
         "verified_at": 1786236239,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -435,7 +443,8 @@
         "exit_code": 0,
         "output_tail": "st_A_Changed_Profile_Should_Be_Stale ... ok\ntest Test_A_Yaml_Projection_Should_Parse_As_Yaml ... ok\ntest Test_A_Filter_A_Content_Kind_Does_Not_Honour_Should_Be_Refused ... ok\ntest Test_A_Section_That_Selects_Nothing_Should_Be_Refused ... ok\ntest Test_An_Html_Projection_Should_Escape_What_It_Renders ... ok\ntest Test_A_Diagram_Should_Name_Every_Relation_It_Draws ... ok\ntest Test_A_Changed_Store_Should_Be_Stale ... ok\ntest Test_An_Edited_Output_Should_Be_Reported_As_Edited ... ok\ntest Test_A_Section_That_Declares_It_May_Be_Empty_Should_Render ... ok\ntest Test_The_Sidecar_Should_Round_Trip ... ok\ntest Test_A_Selection_Should_Order_By_Identity_Rather_Than_By_Arrival ... ok\ntest Test_An_Output_That_Was_Never_Built_Should_Be_Absent ... ok\ntest Test_A_Context_Pack_Should_Carry_Its_Inputs_Digest ... ok\ntest Test_A_Markdown_Table_Cell_Should_Not_Break_The_Table ... ok\ntest Test_A_Soft_Deleted_Node_Should_Not_Be_Projected ... ok\ntest Test_An_Unchanged_Store_Should_Be_Fresh ... ok\ntest Test_No_Body_Should_Carry_This_Machine ... ok\ntest Test_Every_Shipped_Profile_Should_Render_Content_From_The_Store ... ok\ntest Test_Every_Body_Should_Be_Lf_Utf8_Without_A_Bom ... ok\ntest Test_Every_Body_Should_Declare_Itself_Generated ... ok\ntest Test_A_Rebuild_Should_Be_Byte_Identical ... ok\ntest Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-2d7ca346c39f4246.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-58cf572a0a79c928.exe)\n   Doc-tests nomos_spec_project\n",
         "verified_at": 1786238491,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -477,7 +486,8 @@
         "exit_code": 0,
         "output_tail": "_Read_Its_Declared_Identity ... ok\ntest statement::tests::Test_A_Pinned_Statement_Hash_Should_Reproduce ... ok\ntest statement::tests::Test_Canonicalizing_Should_Reach_A_Fixed_Point ... ok\ntest statement::tests::Test_Malformed_Identifiers_Should_Be_Refused ... ok\ntest statement::tests::Test_Prefix_Should_Be_Everything_Before_The_Number ... ok\ntest statement::tests::Test_Real_Identifiers_Should_Parse ... ok\ntest normalize::tests::Test_Normalization_Should_Be_Idempotent ... ok\ntest record::tests::Test_Missing_Required_Identity_Should_Be_Refused ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 3 tests\ntest Test_Every_Authored_Document_Should_Segment_Past_Its_Front_Matter ... ok\ntest Test_A_Marked_Record_Should_Have_Its_Front_Matter_Skipped ... ok\ntest Test_The_Mark_Should_Not_Change_A_Single_Block ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_The_Whole_Corpus_Should_Reproduce_When_Available ... ok\ntest Test_The_Sample_Should_Contain_Non_Ascii_Statements ... ok\ntest Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash ... ok\ntest Test_Every_Canonical_Text_Should_Be_A_Fixed_Point ... ok\ntest Test_Every_Block_Of_A_Real_Document_Should_Reproduce_Its_Hashes ... ok\ntest Test_The_Normalizer_Should_Reproduce_The_Discriminating_Hashes ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-8be0ef2383460849.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-89e5286106565ee2.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-03f96db1e432acca.exe)\n   Doc-tests nomos_spec_model\n",
         "verified_at": 1786220828,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -518,7 +528,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 11 tests\ntest Test_A_Declared_Capability_With_No_Provider_Should_Say_So ... ok\ntest Test_A_Provider_That_Meets_The_Requirement_Should_Satisfy_It ... ok\ntest Test_A_Provider_Below_The_Requirement_Should_Not_Satisfy_It ... ok\ntest Test_An_Offer_Above_The_Contract_Ceiling_Should_Be_Refused ... ok\ntest Test_An_Unhonoured_Preference_Should_Read_As_Fallback ... ok\ntest Test_An_Undeclared_Capability_Should_Be_Coverage_Debt_And_Not_Not_Applicable ... ok\ntest Test_An_Offer_Against_No_Contract_Should_Be_Refused ... ok\ntest Test_An_Unreadable_Contract_Version_Should_Be_Refused ... ok\ntest Test_Two_Contracts_For_One_Capability_Should_Be_Refused ... ok\ntest Test_No_Unmet_Reason_Should_Ever_Map_To_A_Judgment ... ok\ntest Test_Provider_Selection_Should_Not_Depend_On_Registration_Order ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-4d60604c316cfe41.exe)\n     Running tests\\resolution_never_says_no.rs (target\\debug\\deps\\resolution_never_says_no-f4f3e1c353b7c2d6.exe)\n   Doc-tests nomos_capability\n",
         "verified_at": 1786222366,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -563,7 +574,8 @@
         "exit_code": 0,
         "output_tail": "st_A_Provider_At_The_Requested_Granularity_Should_Not_Report_Broadening ... ok\ntest Test_A_Superseded_Read_Should_Record_Its_Supersession ... ok\ntest Test_Invalidation_Should_Follow_Edges_Transitively ... ok\ntest Test_An_Invalidated_Fact_Should_Stay_Readable_As_History ... ok\ntest Test_A_Read_That_Misses_Should_Record_Its_Miss ... ok\ntest Test_A_Later_Generation_Should_Still_Answer_The_Same_Key ... ok\ntest Test_An_Unrelated_Fact_Should_Be_Retained ... ok\ntest Test_Require_Should_Refuse_A_Provider_Below_The_Requirement ... ok\ntest Test_An_Edge_Recorded_By_A_Missed_Read_Should_Still_Carry_Invalidation ... ok\ntest Test_Every_Component_Should_Reach_The_Key_Digest ... ok\ntest Test_Invalidation_Should_Follow_Dependency_Edges ... ok\ntest Test_Two_Components_Should_Not_Cancel_Each_Other_Out ... ok\ntest Test_Require_Should_Answer_When_The_Registry_Resolves_And_The_Fact_Exists ... ok\ntest Test_Require_Should_Not_Fabricate_A_Fact_The_Store_Does_Not_Hold ... ok\ntest Test_Require_Should_Refuse_A_Fact_Whose_Inputs_Differ ... ok\ntest Test_A_Live_Fact_Should_Have_No_History ... ok\ntest Test_Require_Should_Return_MissingCapability_When_Nothing_Declares_It ... ok\ntest Test_The_Component_List_Should_Cover_Every_Part_Of_The_Key ... ok\ntest Test_The_Same_Question_Twice_Should_Materialize_Once ... ok\ntest Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies ... ok\ntest Test_Every_Read_Should_Record_An_Edge ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-2c894aa384b420f3.exe)\n     Running tests\\fact_identity.rs (target\\debug\\deps\\fact_identity-4fafc4db49dd9245.exe)\n   Doc-tests nomos_analysis\n",
         "verified_at": 1786239408,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -608,7 +620,8 @@
         "exit_code": 0,
         "output_tail": "uld_Reach_The_Same_Facts ... ok\ntest Test_Unrecognized_Files_Should_Be_Skipped_Rather_Than_Failed ... ok\ntest Test_Every_Refusal_Should_Be_Named_And_Explained ... ok\ntest Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown ... ok\ntest Test_The_Corpus_Should_Yield_Syntax_Facts ... ok\ntest Test_Soundness_Should_Hold_Over_The_Whole_Corpus ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.56s\n\n\nrunning 12 tests\ntest Test_The_Granularity_Should_Not_Be_Symbol_Because_A_Failure_Costs_The_Whole_File ... ok\ntest Test_A_Refusal_Should_Name_Where_It_Refused ... ok\ntest Test_Completeness_Should_Be_Unknown_Because_Macros_Hide_Items ... ok\ntest Test_A_Failure_And_An_Empty_File_Should_Never_Be_The_Same_Answer ... ok\ntest Test_Soundness_Should_Not_Report_Things_That_Are_Not_Items ... ok\ntest Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source ... ok\ntest Test_Every_Item_Form_Should_Reach_Its_Own_Kind ... ok\ntest Test_The_Unexpanded_Count_Should_Be_A_Lower_Bound ... ok\ntest Test_The_Unexpanded_Count_Should_Expose_How_Much_Was_Out_Of_Reach ... ok\ntest Test_The_Reading_Should_Not_Depend_On_What_Was_Read_Before ... ok\ntest Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved ... ok\ntest Test_The_Granularity_Should_Be_File_Because_A_Reading_Carries_Nothing_Across ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-92fd0861e3d88db4.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-505df16189b7793f.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-8fd73ab386c9e4ba.exe)\n   Doc-tests nomos_lang_rust\n",
         "verified_at": 1786241422,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -658,7 +671,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 10 tests\ntest Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.13s\n\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.98s\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-db81fa924d1628f6.exe)\n",
         "verified_at": 1786242659,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -703,7 +717,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 16 tests\ntest Test_A_Snapshot_That_Records_Nothing_Should_Be_Refused ... ok\ntest Test_A_Changed_Record_Should_Address_A_Different_Snapshot ... ok\ntest Test_A_Snapshot_Written_And_Reread_Should_Be_Byte_Identical ... ok\ntest Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store ... ok\ntest Test_Every_Document_Kind_Should_Belong_To_Exactly_One_Authority ... ok\ntest Test_A_Reread_Snapshot_Should_Decode_To_What_Was_Committed ... ok\ntest Test_Decoding_Something_That_Is_Not_A_Snapshot_Should_Be_Refused ... ok\ntest Test_An_Absent_Document_Should_Be_Refused_Rather_Than_Empty ... ok\ntest Test_A_Committed_Document_Should_Not_Change_When_Another_Snapshot_Arrives ... ok\ntest Test_Committing_The_Same_Snapshot_Twice_Should_Address_The_Same_Document ... ok\ntest Test_Every_Document_Should_Be_Reachable_From_A_Snapshot ... ok\ntest Test_The_Index_Should_Reach_Every_Recorded_Document ... ok\ntest Test_The_Index_Should_Group_By_Kind_And_Schema ... ok\ntest Test_An_Observed_Document_Should_Not_Enter_An_Authored_Store ... ok\ntest Test_The_Index_Should_Be_Rebuildable_From_The_Documents_Alone ... ok\ntest Test_Two_Stores_Given_The_Same_Snapshots_In_Any_Order_Should_Index_Identically ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-store v0.1.0 (F:\\repos\\nomos\\crates\\kernel\\nomos-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.79s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_store-669dc54b7e689a8d.exe)\n     Running tests\\one_door.rs (target\\debug\\deps\\one_door-9d9791538d04221d.exe)\n   Doc-tests nomos_store\n",
         "verified_at": 1786240088,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -748,7 +763,8 @@
         "exit_code": 0,
         "output_tail": "_One_Path_Changed_Twice_Should_Be_Refused ... ok\ntest workspace::tests::Test_A_Refused_Set_Should_Change_Nothing ... ok\ntest workspace::tests::Test_A_Removal_Should_Take_The_Member_And_A_Second_Should_Not ... ok\ntest workspace::tests::Test_An_Absolute_Path_Should_Be_Refused ... ok\ntest workspace::tests::Test_A_Change_That_Says_Something_New_Should_Advance ... ok\ntest variant::tests::Test_Feature_Order_Should_Not_Change_The_Variant ... ok\ntest workspace::tests::Test_One_Applied_Set_Should_Produce_One_Generation ... ok\ntest workspace::tests::Test_An_Empty_Change_Set_Should_Be_Refused ... ok\ntest snapshot::tests::Test_Insertion_Order_Should_Not_Reach_The_Encoding ... ok\ntest workspace::tests::Test_The_Source_Should_Not_Reach_The_Workspace_Identity ... ok\n\ntest result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 6 tests\ntest Test_The_Permutation_Should_Reorder_Without_Losing_Anything ... ok\ntest Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself ... ok\ntest Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone ... ok\ntest Test_A_Snapshot_Should_Be_Interpretable_Without_The_Tree ... ok\ntest Test_Re_Ingesting_The_Corpus_Should_Advance_Nothing ... ok\ntest Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries has been running for over 60 seconds\ntest Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 81.42s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-workspace v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-workspace)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.45s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workspace-cc694333f2e59cd8.exe)\n     Running tests\\portable.rs (target\\debug\\deps\\portable-b88e97eb199c01c9.exe)\n   Doc-tests nomos_workspace\n",
         "verified_at": 1786244245,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -795,7 +811,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 10 tests\ntest Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest Test_The_Domain_Volumes_Should_Answer_282_And_258 ... ok\ntest Test_A_Table_Without_A_Delimiter_Should_Be_Refused ... ok\ntest Test_A_Table_With_Two_Delimiters_Should_Be_Refused ... ok\ntest Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest Test_The_Store_Should_Answer_Both_Counts ... ok\ntest Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\n\ntest result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-8b75d145481cbc53.exe)\n",
         "verified_at": 1786223570,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -841,7 +858,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 8 tests\ntest Test_An_Archive_Holding_Nothing_Should_Be_Refused_Not_Reported_Empty ... ok\ntest Test_The_v15_Archive_Should_Yield_Its_Records ... ok\ntest Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry ... ok\ntest Test_An_Entry_Should_Be_Addressable_By_Its_Path ... ok\ntest Test_A_Binary_Entry_Should_Refuse_To_Be_Read_As_Text ... ok\ntest Test_An_Archive_Should_List_Its_Files_Sorted ... ok\ntest Test_Reading_Should_Not_Unpack ... ok\ntest Test_Every_Real_Archive_Should_Open_And_Hold_Files ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-b919ac3a2553cb9c.exe)\n",
         "verified_at": 1786225073,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -891,7 +909,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 5 tests\ntest Test_Absent_And_Reworded_Should_Not_Collapse ... ok\ntest Test_The_v15_Records_Should_Be_Ingested_As_Authored_Nodes ... ok\ntest Test_Every_Filler_Block_Should_Carry_A_Lineage_Row ... ok\ntest Test_The_Report_Should_Name_What_It_Lost ... ok\ntest Test_Every_Identifier_Should_Reconcile_By_Name ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-9a18142abc7da213.exe)\n",
         "verified_at": 1786226619,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -941,7 +960,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 6 tests\ntest Test_The_Canonical_Domain_Models_Should_Resolve_By_Name_And_Trace_To_Their_Rows ... ok\ntest Test_Every_Restored_Member_Should_Carry_A_Lineage_To_What_Produced_It ... ok\ntest Test_Every_Restored_Member_Should_Resolve_By_Its_Identifier ... ok\ntest Test_Every_Family_Should_Restore_The_Count_The_Register_Declares ... ok\ntest Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing ... ok\ntest Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.42s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-041670c8391664c9.exe)\n",
         "verified_at": 1786232451,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -988,7 +1008,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 9 tests\ntest Test_A_Statement_Resting_On_A_Plan_Alone_Should_Be_Caught ... ok\ntest Test_Every_Sibling_Schema_Should_Resolve_As_A_Node_In_Its_Own_Suite ... ok\ntest Test_A_Sibling_Record_Should_Resolve_By_Its_Own_Identifier ... ok\ntest Test_Every_Sibling_Suite_Should_Be_Non_Root ... ok\ntest Test_A_Cross_Suite_Relation_Should_Be_An_Ordinary_Row ... ok\ntest Test_No_Statement_Should_Rest_On_A_Game_Plan_Alone ... ok\ntest Test_Re_Ingesting_The_Suites_Should_Change_Nothing ... ok\ntest Test_The_Ecosystem_Store_Should_Report_No_Preservation_Errors ... ok\ntest Test_Every_Game_Plan_Block_Should_Be_Commentary ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.60s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-6e7e7edfd1ddd306.exe)\n",
         "verified_at": 1786233668,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1036,7 +1057,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 12 tests\ntest Test_The_Revision_Set_Should_Be_Ordered_And_Name_Its_Gaps ... ok\ntest Test_A_Scope_The_Revision_Does_Not_Have_Should_Be_Refused ... ok\ntest Test_The_Headline_Counts_Should_Name_Their_Unit_And_Their_Scope ... ok\ntest Test_Fingerprinting_Should_Be_Stable ... ok\ntest Test_v15_Should_Retain_Almost_No_Table_And_No_Code_At_All ... ok\ntest Test_The_Archaeology_Should_Cover_Every_Revision_Exactly_Once ... ok\ntest Test_Dropping_A_Revision_Should_Change_The_Walk ... ok\ntest Test_The_Last_Pair_Should_Carry_Its_Measured_Sizes ... ok\ntest Test_Every_Adjacent_Pair_Should_Yield_The_Four_Sets ... ok\ntest Test_No_Document_Should_Have_Disappeared_And_Come_Back ... ok\ntest Test_The_Last_Pair_Should_Show_The_Whole_Narrative_Tree_Disappearing ... ok\ntest Test_A_Pair_Summary_Should_Name_What_It_Counted ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.34s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-dbbc87a368d07786.exe)\n",
         "verified_at": 1786234226,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1079,7 +1101,8 @@
         "exit_code": 0,
         "output_tail": "efused ... ok\ntest columns::tests::Test_Every_Table_Should_Have_A_Coverage_Entry ... ok\ntest bundle::tests::Test_A_Removed_Record_Should_Be_Refused ... ok\ntest columns::tests::Test_A_Declared_Field_The_Record_Lacks_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Newer_Format_Should_Be_Refused ... ok\ntest bundle::tests::Test_A_Bundle_Should_Round_Trip_Through_Text ... ok\ntest bundle::tests::Test_An_Empty_Bundle_Should_Still_Be_Well_Formed ... ok\ntest bundle::tests::Test_An_Altered_Record_Should_Be_Refused ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 12 tests\ntest Test_A_Row_The_Export_Query_Drops_Should_Fail_The_Export ... ok\ntest Test_Every_Table_Should_Be_Exercised ... ok\ntest Test_A_Column_The_Export_Does_Not_Carry_Should_Fail_The_Export ... ok\ntest Test_The_Bundle_Should_Carry_Typed_Table_Rows ... ok\ntest Test_Import_Should_Land_Every_Row_The_Bundle_Declared ... ok\ntest Test_An_Unresolvable_Reference_Should_Be_Refused ... ok\ntest Test_Importing_Into_A_Populated_Store_Should_Be_Refused ... ok\ntest Test_Two_Stores_Of_The_Same_Corpus_Should_Export_Identically ... ok\ntest Test_Binary_Blobs_Should_Survive_As_Bytes ... ok\ntest Test_A_Lineage_To_A_Table_Row_Should_Survive_The_Round_Trip ... ok\ntest Test_A_Bundle_Should_Survive_A_Database_Round_Trip_Byte_For_Byte ... ok\ntest Test_The_Governing_Records_Should_Survive_The_Bundle ... ok\n\ntest result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-bundle)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.95s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-a632b903f72395d4.exe)\n     Running tests\\round_trip.rs (target\\debug\\deps\\round_trip-d1bb06e969e9ea64.exe)\n   Doc-tests nomos_spec_bundle\n",
         "verified_at": 1786229244,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1125,7 +1148,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 6 tests\ntest Test_Every_Entry_Should_Say_What_It_Counted_And_Over_What ... ok\ntest Test_Entry_Identifiers_Should_Be_Unique ... ok\ntest Test_The_Registered_Families_Should_Be_Exactly_The_Required_Ones ... ok\ntest Test_A_Plan_Figure_Should_Be_Superseded_Exactly_When_It_Differs ... ok\ntest Test_The_Register_Should_Agree_With_The_Store_Census ... ok\ntest Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.40s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s\n     Running tests\\family_counts.rs (target\\debug\\deps\\family_counts-c27f57cecec7061b.exe)\n",
         "verified_at": 1786230184,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1173,7 +1197,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 14 tests\ntest Test_An_Unmeetable_Requirement_Should_Report_Coverage_Debt ... ok\ntest Test_Nothing_In_The_Slice_Should_Invent_An_Identity ... ok\ntest Test_The_Fact_Context_Should_Come_From_The_Workspace ... ok\ntest Test_An_Unchanged_File_Should_Still_Be_Re_Addressed_By_A_Change_Elsewhere ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.49s\n\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-d3c66287d7b06991.exe)\n",
         "verified_at": 1786251587,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1218,7 +1243,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 17 tests\ntest Test_An_Observed_Document_Should_Not_Enter_An_Authored_Store ... ok\ntest Test_A_Changed_Record_Should_Address_A_Different_Snapshot ... ok\ntest Test_A_Committed_Document_Should_Not_Change_When_Another_Snapshot_Arrives ... ok\ntest Test_A_Reread_Snapshot_Should_Decode_To_What_Was_Committed ... ok\ntest Test_A_Snapshot_That_Records_Nothing_Should_Be_Refused ... ok\ntest Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store ... ok\ntest Test_Decoding_Something_That_Is_Not_A_Snapshot_Should_Be_Refused ... ok\ntest Test_Every_Document_Should_Be_Reachable_From_A_Snapshot ... ok\ntest Test_The_Index_Should_Be_Rebuildable_From_The_Documents_Alone ... ok\ntest Test_Two_Stores_Given_The_Same_Snapshots_In_Any_Order_Should_Index_Identically ... ok\ntest Test_The_Index_Should_Reach_Every_Recorded_Document ... ok\ntest Test_An_Absent_Document_Should_Be_Refused_Rather_Than_Empty ... ok\ntest Test_Two_Commits_Under_One_Workspace_State_Should_Both_Be_Reachable ... ok\ntest Test_Committing_The_Same_Snapshot_Twice_Should_Address_The_Same_Document ... ok\ntest Test_The_Index_Should_Group_By_Kind_And_Schema ... ok\ntest Test_Every_Document_Kind_Should_Belong_To_Exactly_One_Authority ... ok\ntest Test_A_Snapshot_Written_And_Reread_Should_Be_Byte_Identical ... ok\n\ntest result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-store v0.1.0 (F:\\repos\\nomos\\crates\\kernel\\nomos-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.69s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_store-669dc54b7e689a8d.exe)\n     Running tests\\one_door.rs (target\\debug\\deps\\one_door-9d9791538d04221d.exe)\n   Doc-tests nomos_store\n",
         "verified_at": 1786260572,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1263,7 +1289,8 @@
         "exit_code": 0,
         "output_tail": "est_A_Preference_That_Cannot_Be_Served_Should_Report_A_Fallback ... ok\ntest Test_Facts_From_Two_Providers_Should_Not_Share_A_Key ... ok\ntest Test_A_Requirement_Only_One_Provider_Satisfies_Should_Resolve_To_That_One ... ok\ntest Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing ... ok\ntest Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_The_Two_Providers_Should_Disagree_About_A_File_Both_Can_Read ... ok\ntest Test_The_Weaker_Provider_Should_Answer_Where_The_Parser_Refuses ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_The_Fact_Context_Should_Come_From_The_Workspace ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_The_Weaker_Provider_Should_Answer_For_The_Whole_Scale_Corpus ... ok\n\ntest result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.27s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.78s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-3a05ca0dd6090e4d.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-20acccc0be755c24.exe)\n   Doc-tests nomos_integration_tests\n",
         "verified_at": 1786261684,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1312,7 +1339,8 @@
         "exit_code": 0,
         "output_tail": "ng_In_The_Slice_Should_Invent_An_Identity ... ok\ntest Test_A_Coarser_Provider_Should_Broaden_The_Invalidation_And_Say_So ... ok\ntest Test_An_Unchanged_File_Should_Keep_Its_Identity_Across_Workspace_States ... ok\ntest Test_A_Change_Nobody_Announced_Should_Still_Not_Be_Served_Stale ... ok\ntest Test_A_Checkout_Should_Invalidate_The_Members_It_Changed_And_No_More ... ok\ntest Test_The_Precision_Corpus_Should_Have_The_Shape_Its_Readme_Claims ... ok\ntest Test_Touching_A_File_Should_Not_Reach_An_Unrelated_Group ... ok\ntest Test_A_Save_That_Changed_Nothing_Should_Invalidate_Nothing ... ok\ntest Test_A_Rollup_Over_A_Refused_Member_Should_Report_A_Degraded_Answer ... ok\ntest Test_Touching_One_File_Should_Recompute_Exactly_Its_Descendants ... ok\ntest Test_The_Fact_Context_Should_Come_From_The_Workspace ... ok\ntest Test_Facts_Should_Materialize_Over_The_Real_Corpus ... ok\ntest Test_A_Derived_Signal_Should_Be_Neither_Silent_Nor_Background_Hum ... ok\ntest Test_A_Second_Run_Should_Materialize_Zero ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.30s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-182bb53448016fc6.exe)\n     Running tests\\fact_identity.rs (target\\debug\\deps\\fact_identity-83964a67786ab7dc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-fa3d8ed04547fee3.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-d3c66287d7b06991.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_integration_tests\n",
         "verified_at": 1786253011,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1380,7 +1408,8 @@
         "exit_code": 0,
         "output_tail": "sed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-capability v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-capability)\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.26s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-182bb53448016fc6.exe)\n     Running tests\\fact_identity.rs (target\\debug\\deps\\fact_identity-83964a67786ab7dc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-1229f9e7e289bc09.exe)\n     Running tests\\resolution_never_says_no.rs (target\\debug\\deps\\resolution_never_says_no-70bdb9fc2fac118b.exe)\n     Running tests\\selection_is_decided.rs (target\\debug\\deps\\selection_is_decided-2de9448a18f0496d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-7c55b876dd85ab8e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-3a05ca0dd6090e4d.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-20acccc0be755c24.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-92fd0861e3d88db4.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-505df16189b7793f.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-8fd73ab386c9e4ba.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-1b25cf3ec708d915.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_capability\n   Doc-tests nomos_contracts\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n",
         "verified_at": 1786266123,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1445,7 +1474,8 @@
         "exit_code": 0,
         "output_tail": "ssed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-cap-syntax v0.1.0 (F:\\repos\\nomos\\crates\\capabilities\\nomos-cap-syntax)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-integration-tests v0.1.0 (F:\\repos\\nomos\\tests\\integration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_syntax-15fece4fc590b71c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0d15ec647d8d8ae9.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-a58c109867fe042c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-7c524ccf5f5374ad.exe)\n     Running tests\\analysis_slice.rs (target\\debug\\deps\\analysis_slice-61dd92c8a1297c60.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust-c0d3013487db468f.exe)\n     Running tests\\corpus.rs (target\\debug\\deps\\corpus-6dea91e8c3074c08.exe)\n     Running tests\\guarantee.rs (target\\debug\\deps\\guarantee-aa5222c5e1f41e84.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_rust_scan-965059082ad6841b.exe)\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n",
         "verified_at": 1786267999,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1488,7 +1518,8 @@
         "exit_code": 0,
         "output_tail": "\nrunning 1 test\ntest metadata::tests::Test_Package_Ids_Should_Parse_In_Every_Format_Cargo_Emits ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 7 tests\ntest Test_The_Workspace_Should_Not_Appear_Empty ... ok\ntest Test_Dependencies_Should_Run_Strictly_Downward ... ok\ntest Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else ... ok\ntest Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace ... ok\ntest Test_Every_Member_Should_Declare_A_Band ... ok\ntest Test_A_Capability_Id_Should_Be_Written_In_One_Crate ... ok\ntest Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 4 tests\ntest Test_A_Run_Should_Report_What_It_Did_Not_Check ... ok\ntest Test_The_Declared_Total_Should_Be_The_Sum_Of_The_Table ... ok\ntest Test_Every_Declared_File_Should_Match_What_It_Declares ... ok\ntest Test_Every_File_That_Reaches_A_Corpus_Should_Be_Declared ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-8b586619daff6c3a.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-65fc9b502d0954b8.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-976c4a88e5d4643f.exe)\n   Doc-tests nomos_contract_tests\n",
         "verified_at": 1786271188,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1537,7 +1568,8 @@
         "exit_code": 0,
         "output_tail": "ledger is valid\n",
         "verified_at": 1786298618,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1583,7 +1615,8 @@
         "exit_code": 0,
         "output_tail": "number_Its_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.92s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-713a0ed9323c79ba.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-26d438937750d159.exe)\n     Running tests\\family_counts.rs (target\\debug\\deps\\family_counts-43616118a16fd54e.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-8f19bf22c70d1ac2.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-f61000b9415d65f5.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-39bb6b339c4bd6c9.exe)\n     Running tests\\regression_report.rs (target\\debug\\deps\\regression_report-7eddf9f11408230b.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-041670c8391664c9.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-dbbc87a368d07786.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-6e7e7edfd1ddd306.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ebede03d52a4360a.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-7f6a76e168ecb3b4.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-88488aeeb729e3ab.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-09e2aa6a27753fde.exe)\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_store\n",
         "verified_at": 1786299069,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1629,7 +1662,8 @@
         "exit_code": 0,
         "output_tail": "e30d2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_model-48edbcc871df3710.exe)\n     Running tests\\byte_order_mark.rs (target\\debug\\deps\\byte_order_mark-55b6c675156f8a5a.exe)\n     Running tests\\normalizer_gate.rs (target\\debug\\deps\\normalizer_gate-b52836aa7b25e28c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_project-3de20786aadc77ad.exe)\n     Running tests\\projections.rs (target\\debug\\deps\\projections-f86a6915fbdf7b4f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-2596f725576ffee8.exe)\n     Running tests\\governing_records_are_present.rs (target\\debug\\deps\\governing_records_are_present-81a2ce5c1466bfe2.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-76ddf6dfcfe2915e.exe)\n     Running tests\\table_rows.rs (target\\debug\\deps\\table_rows-a648d8a02a8e5061.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-843c8339c058e731.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-a58766822646adee.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_store-70f0ad0a6e79ff60.exe)\n     Running tests\\one_door.rs (target\\debug\\deps\\one_door-7137bddc95a4c22d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workspace-b923fa7763130556.exe)\n     Running tests\\portable.rs (target\\debug\\deps\\portable-6288a12c0ad205a2.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_cap_syntax\n   Doc-tests nomos_capability\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust\n   Doc-tests nomos_lang_rust_scan\n   Doc-tests nomos_ledger\n   Doc-tests nomos_model\n   Doc-tests nomos_platform\n   Doc-tests nomos_platform_std\n   Doc-tests nomos_spec_bundle\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_model\n   Doc-tests nomos_spec_project\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_spec_validate\n   Doc-tests nomos_store\n   Doc-tests nomos_workspace\n",
         "verified_at": 1786307763,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1680,7 +1714,8 @@
         "exit_code": 0,
         "output_tail": "eported ... ok\ntest metadata::tests::Test_Package_Ids_Should_Parse_In_Every_Format_Cargo_Emits ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 7 tests\ntest Test_Every_Member_Should_Declare_A_Band ... ok\ntest Test_Dependencies_Should_Run_Strictly_Downward ... ok\ntest Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else ... ok\ntest Test_The_Workspace_Should_Not_Appear_Empty ... ok\ntest Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace ... ok\ntest Test_A_Capability_Id_Should_Be_Written_In_One_Crate ... ok\ntest Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 6 tests\ntest Test_A_Run_Should_Report_What_It_Did_Not_Check ... ok\ntest Test_The_Declared_Total_Should_Be_The_Sum_Of_The_Table ... ok\ntest Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables ... ok\ntest Test_Every_Declared_File_Should_Match_What_It_Declares ... ok\ntest Test_Every_File_That_Reaches_A_Corpus_Should_Be_Declared ... ok\ntest Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.55s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-69b08ffa14dea8aa.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-9c861f6a184827ff.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-1dd9a400fd0d7729.exe)\n     Running tests\\boundaries.rs (target\\debug\\deps\\boundaries-f367a9983b12efc2.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0e377fafb8154895.exe)\n   Doc-tests nomos_contract_tests\n",
         "verified_at": 1786303811,
-        "gate": null
+        "gate": null,
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1751,7 +1786,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1813,7 +1849,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1882,7 +1919,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -1953,7 +1991,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -2019,7 +2058,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2078,7 +2118,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2141,7 +2182,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2201,7 +2243,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2262,7 +2305,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -2327,7 +2371,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2395,7 +2440,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2457,7 +2503,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2528,7 +2575,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -2597,7 +2645,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2666,7 +2715,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -2740,7 +2790,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2802,7 +2853,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -2861,7 +2913,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -2926,7 +2979,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -3010,7 +3064,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -3099,7 +3154,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -3196,7 +3252,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -3259,7 +3316,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -3331,7 +3389,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -3404,7 +3463,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -3465,7 +3525,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -3533,7 +3594,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -3598,7 +3660,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -3677,7 +3740,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -3777,7 +3841,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -3856,7 +3921,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -3929,7 +3995,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [
@@ -3989,7 +4056,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4050,7 +4118,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4116,7 +4185,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4178,7 +4248,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4238,7 +4309,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4298,7 +4370,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4356,7 +4429,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4411,7 +4485,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4469,7 +4544,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4530,7 +4606,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4586,7 +4663,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -4654,7 +4732,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -4762,7 +4841,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4834,7 +4914,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -4904,7 +4985,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -4975,7 +5057,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5034,7 +5117,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5105,7 +5189,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5160,7 +5245,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -5221,7 +5307,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5279,7 +5366,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5334,7 +5422,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5398,7 +5487,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5453,7 +5543,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5508,7 +5599,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5675,7 +5767,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5737,7 +5830,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -5864,7 +5958,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -5974,7 +6069,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6044,7 +6140,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6099,7 +6196,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6156,7 +6254,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6226,7 +6325,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6290,7 +6390,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6353,7 +6454,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6420,7 +6522,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6478,7 +6581,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6532,7 +6636,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6624,7 +6729,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -6796,7 +6902,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -6857,7 +6964,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7064,7 +7172,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7306,7 +7415,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7365,7 +7475,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7425,7 +7536,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7559,7 +7671,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7725,7 +7838,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7793,7 +7907,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7855,7 +7970,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -7928,7 +8044,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8044,7 +8161,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -8108,7 +8226,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8166,7 +8285,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8229,7 +8349,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8294,7 +8415,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8359,7 +8481,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8422,7 +8545,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8485,7 +8609,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8548,7 +8673,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8609,7 +8735,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8670,7 +8797,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8733,7 +8861,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8791,7 +8920,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8854,7 +8984,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -8955,7 +9086,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9018,7 +9150,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9083,7 +9216,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9276,7 +9410,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9339,7 +9474,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9404,7 +9540,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9462,7 +9599,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9525,7 +9663,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9590,7 +9729,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9688,7 +9828,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9716,7 +9857,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -9730,11 +9871,46 @@
           "-p",
           "nomos-cli",
           "-p",
-          "nomos-contract-tests"
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
+        ],
+        "exit_code": 0,
+        "output_tail": "tep-aed9b159df400af8.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-71b266e859c1b18c.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-c896bf45d2e8f92b.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5afe2e89ab691669.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-692706af76ff13ec.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-2e8cb8fb92432b87.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-e6fc6e0a3b5c1c6f.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-5bdac8a29052025c.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-94d0ea31598682b4.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-ae7829de84097dd3.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-9b7b5bbab0006255.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1786985790,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0fa5914d7219bd849e23537a44f4c167a057f0b1"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -9789,7 +9965,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -9958,7 +10135,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -10012,7 +10190,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -10083,7 +10262,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -10156,7 +10336,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -10218,7 +10399,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -10329,7 +10511,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [
         {
@@ -10444,7 +10627,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -10551,7 +10735,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -10606,7 +10791,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -10662,7 +10848,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -10820,7 +11007,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -10945,7 +11133,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -11185,7 +11374,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -11309,7 +11499,8 @@
             "--all-targets"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -11393,7 +11584,8 @@
             "warnings"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -11547,7 +11739,8 @@
             "--all-targets"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -11616,7 +11809,8 @@
             "--all-targets"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],
@@ -11692,7 +11886,8 @@
             "--all-targets"
           ],
           "exit_code": 0
-        }
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],

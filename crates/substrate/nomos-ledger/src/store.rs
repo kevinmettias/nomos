@@ -65,12 +65,20 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// on the next instance of the defect it was built for. Here a forgotten bump can only degrade
 /// a message, and can never cost a field.
 ///
-/// `3` since `OD-LEDGER-019` added [`crate::LedgerItem::declined`]; `2` was
-/// `OD-LEDGER-012`'s [`crate::LedgerItem::displaced`]. The bump is not discretionary:
+/// `4` since `OD-LEDGER-027` added [`crate::VerificationRecord::revision`]; `3` was
+/// `OD-LEDGER-019`'s [`crate::LedgerItem::declined`]; `2` was `OD-LEDGER-012`'s
+/// [`crate::LedgerItem::displaced`]. The bump is not discretionary:
 /// `Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version` counts the keys on a
 /// serialized item, so a field arriving without this number moving is a refusal that
 /// misstates why.
-pub const SCHEMA_VERSION: u32 = 3;
+///
+/// A build older than this one that meets a ledger carrying `revision` refuses it outright
+/// — `deny_unknown_fields` on [`crate::VerificationRecord`] guarantees that mechanically —
+/// and the refusal it prints names both numbers: what the file says and what the build
+/// understands. That is the moment a session running a copied `nomos.exe` built before this
+/// bump meets this change; `nomos work validate` prints the same two numbers on request,
+/// which is how to tell before that moment arrives rather than at it.
+pub const SCHEMA_VERSION: u32 = 4;
 
 /// A ledger stored as a JSON file, coordinated by a lock beside it.
 ///

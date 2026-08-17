@@ -204,6 +204,7 @@ fn Fully_Populated() -> LedgerItem
             argv: vec!["cargo".to_owned(), "--version".to_owned()],
             exit_code: 0,
         }),
+        revision: Some("abc123".to_owned()),
     });
     item.abandoned = vec![Abandonment {
         holder: "agent-b".to_owned(),

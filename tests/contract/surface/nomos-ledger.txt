@@ -160,6 +160,7 @@ pub struct field nomos_ledger::VerificationRecord::argv: Vec<String>
 pub struct field nomos_ledger::VerificationRecord::exit_code: i32
 pub struct field nomos_ledger::VerificationRecord::gate: Option<GateOutcome>
 pub struct field nomos_ledger::VerificationRecord::output_tail: String
+pub struct field nomos_ledger::VerificationRecord::revision: Option<String>
 pub struct field nomos_ledger::VerificationRecord::verified_at: Timestamp
 pub struct nomos_ledger::Abandonment
 pub struct nomos_ledger::Claim

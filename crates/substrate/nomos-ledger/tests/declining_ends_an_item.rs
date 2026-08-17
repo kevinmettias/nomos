@@ -76,6 +76,7 @@ fn Finished_Item(id: &str, files: &[&str]) -> LedgerItem
         output_tail: String::new(),
         verified_at: At(NOW),
         gate: None,
+        revision: None,
     });
     return item;
 }

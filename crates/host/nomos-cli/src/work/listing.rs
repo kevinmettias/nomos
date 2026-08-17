@@ -1,6 +1,6 @@
 //! Printing an item: how it stands on the board, and everything recorded against it.
 
-use nomos_ledger::{Claim_Refusal, ClaimRefusal, ItemState, LedgerDocument, LedgerItem};
+use nomos_ledger::{Claim_Refusal, ClaimRefusal, ItemState, LedgerDocument, LedgerItem, VerificationRecord};
 use nomos_platform::Timestamp;
 
 /// The label this item lists under, or nothing when the filter excludes it.
@@ -82,11 +82,16 @@ pub(super) fn Print_Claim(found: &LedgerItem, now: Timestamp, output: &mut impl 
 /// JSON can find, which is most of the way back to not keeping it. Each displacement line
 /// names the holder a takeover displaced and the window they held — who displaced them is
 /// the next line's holder, or the live claim above.
-pub(super) fn Print_History(found: &LedgerItem, output: &mut impl std::io::Write)
+///
+/// `current_revision` is this tree's revision *right now*, read by the caller the same way
+/// `nomos_ledger::Finish` read it when it stamped the record — `OD-LEDGER-027`'s staleness
+/// half. `None` when it could not be read, which `Print_Verification` reports as its own
+/// case rather than silently treating as agreement.
+pub(super) fn Print_History(found: &LedgerItem, current_revision: Option<&str>, output: &mut impl std::io::Write)
 {
     Print_Displacements(found, output);
     Print_Abandonments(found, output);
-    Print_Verification(found, output);
+    Print_Verification(found, current_revision, output);
 }
 
 /// Every holder a takeover displaced, and the window they held.
@@ -120,7 +125,7 @@ fn Print_Abandonments(found: &LedgerItem, output: &mut impl std::io::Write)
 }
 
 /// The predicate that ended the item, if one has.
-fn Print_Verification(found: &LedgerItem, output: &mut impl std::io::Write)
+fn Print_Verification(found: &LedgerItem, current_revision: Option<&str>, output: &mut impl std::io::Write)
 {
     let Some(record) = &found.verified
     else
@@ -135,6 +140,40 @@ fn Print_Verification(found: &LedgerItem, output: &mut impl std::io::Write)
         record.verified_at.Unix_Seconds(),
         record.exit_code
     );
+
+    Print_Staleness(record, current_revision, output);
+}
+
+/// Whether the tree this record was verified against is the tree being read right now.
+///
+/// `OD-LEDGER-027`'s rule that staleness is reported, not merely storable: `work show` says
+/// something different for each of the four cases below rather than only exposing the
+/// field for somebody willing to read the JSON to compare by hand.
+fn Print_Staleness(
+    record: &VerificationRecord,
+    current_revision: Option<&str>,
+    output: &mut impl std::io::Write,
+)
+{
+    let _ = match (&record.revision, current_revision)
+    {
+        // Written before `OD-LEDGER-027`, or `HEAD` could not be resolved when it ran.
+        // Never backfilled -- see `VerificationRecord::revision`.
+        (None, _) => writeln!(output, "no revision recorded for this verification"),
+        (Some(recorded), Some(current)) if recorded == current =>
+        {
+            writeln!(output, "still describes this tree, at revision {recorded}")
+        }
+        (Some(recorded), Some(current)) => writeln!(
+            output,
+            "STALE: verified against revision {recorded}, this tree is now at {current}"
+        ),
+        (Some(recorded), None) => writeln!(
+            output,
+            "cannot tell: verified against revision {recorded}, this tree's current revision \
+             could not be read"
+        ),
+    };
 }
 
 /// What to call an item in a listing.
