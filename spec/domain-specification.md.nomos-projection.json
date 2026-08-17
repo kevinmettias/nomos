@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:079eaeb0b5e7ded2720e98408f567cfc4ba1250a7afb8f4fd530b5b3e518c4fd",
-  "inputs_digest": "sha256:2e534b39f6ddbbb57b4a036e7435f869ed0d89f0ec80f6fc9fbe76b8e6df35b9",
+  "content_digest": "sha256:052f68495a4505805bd6350622e43d3589b77ac18dcb908ff16e6112adc31d3d",
+  "inputs_digest": "sha256:320b14a5093933caa1987797e45001733afca080b9545fa109c27bc199c4aa75",
   "sections": [
     [
       "Documents",
-      100
+      101
     ],
     [
       "Sections",
-      919
+      926
     ],
     [
       "Source blocks",
-      3463
+      3484
     ]
   ],
   "inputs": [
@@ -104,6 +104,11 @@
       "content": "documents",
       "identity": "docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored",
       "hash": "sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored",
+      "hash": "sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81"
     },
     {
       "content": "documents",
@@ -1119,6 +1124,41 @@
       "content": "headings",
       "identity": "docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#24",
       "hash": "sha256:60688893b66be1b8cd312bbd7e7d1ddd63234c6b001ab95ee5380f4ae2712219"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#1",
+      "hash": "sha256:8efb23037178b363ad337cdbb29fc42171e7c9de5957905a9f3c52e44682c0d4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#2",
+      "hash": "sha256:747d66882918549877b77100c59a9947348c1067f557ac239c3d40644789d266"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#5",
+      "hash": "sha256:7d4eceaf88dd44d861bffc35629b050a03517ed42163997030c760b8b866438f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#8",
+      "hash": "sha256:6caaccf2ffd53f8fa3f3d0a76e54a3a37a9afff6f9bfe97b5748ee0f28b2c9e8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#14",
+      "hash": "sha256:6728dd3a5bf8d688df836f52585f279e11f468e3e372c5e7786efaa0cf04acf9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#17",
+      "hash": "sha256:d9ba98eada68b0d676f30545fc5f1c29e8af5bbde3588654e4afaf7bdc326913"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#20",
+      "hash": "sha256:5f00f408ad63fba0513bd2889ee70339c1a7f5fc6067c19accfad41923b140fa"
     },
     {
       "content": "headings",
@@ -7229,6 +7269,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#25",
       "hash": "sha256:2a74436aca15191b0b848f20535320ecd9ff9df6cc298a71002653ac67e44e63"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#1",
+      "hash": "sha256:1ea85d74ff9ab794fca48f08df27d07e13dc4af6d86c9a2385e9545f0a5a92a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#3",
+      "hash": "sha256:6b249a2d1c4c9eb220d1c994e2277120381393d03fd16f055752a9fbd655eaa9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#4",
+      "hash": "sha256:3701eb62b21218806cc99435a9287d3153d487a18552a1d8dad1f1c52e161ed0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#5",
+      "hash": "sha256:c738f727c7501e2bf406629cf30aef256d1502b010ab003be8581341cbd18227"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#6",
+      "hash": "sha256:d01fea99cf94338c4885a9d470a785a790d6b4b5f90773c0b279f8af95b78dda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#7",
+      "hash": "sha256:5f71353e6c7b8b313e38b5abe7d6756275c1d28d4f389c8dd88d0f9dde9be524"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#9",
+      "hash": "sha256:ce42c0efabfcc5a8f986739de5c8913f80ef68b24a0c4ebe89bb1470350599f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#10",
+      "hash": "sha256:cb56dce2fff3ecf6a057cc8674c4025dd082e72aa88c5e3dda9d73f46994ab05"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#11",
+      "hash": "sha256:75736a75295cb1a476c2a1b8a6db6e84da703a3fafbfcbd36717e43a22ddd527"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#12",
+      "hash": "sha256:9f80a7cd197be8924a4a3607131175ee21d3780656a268be12b709962ac38250"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#13",
+      "hash": "sha256:5e4acfcc3f1b33ab2bf8287a4c6eb94472c2a403184aeebc612fef937f81328e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#14",
+      "hash": "sha256:d77eb6a182cdafce416e8c75163cbb494abe5ef998652fd705e40325dbc29810"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#15",
+      "hash": "sha256:66b54d9b19dafeee5b5836cfe5984243b97aaf2ecbe8e57d412909433cb1ecce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#16",
+      "hash": "sha256:5abf4f3bf2c00c93d212644e666afb12fe3bf874d4fdc82d84e1c472d01e663f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#17",
+      "hash": "sha256:22fc77b55a69c7440927088b4320df4a786c8ad6d23accff7d6c3db0400af9af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#18",
+      "hash": "sha256:2c9db3a248bd842f72dec46a5baf8fc638da5614d3fd221c57b7fd473f97f620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#19",
+      "hash": "sha256:cb876154e96f656106dd6daceae4667b8030bb96600cac82f86be83d8c655908"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#21",
+      "hash": "sha256:4142861119b7f69f0f69f4105cc9e4f0b5ed8d192bf9d34f85feea811eaee26d"
     },
     {
       "content": "blocks",

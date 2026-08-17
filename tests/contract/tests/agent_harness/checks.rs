@@ -3,12 +3,13 @@ use nomos_ledger::LedgerDocument;
 use std::collections::BTreeSet;
 use std::path::Path;
 use crate::readers::{
-    Board, Declared_Skill_Name, Harness_Files, Imports, Missing_Paths, Named_Items, Named_Paths,
-    Read_Harness_File, Restated_Rows, Skill_Directories,
+    Board, Declared_Skill_Name, Gate_Run_Commands, Harness_Files, Imports, Ledger_Verb_Lines,
+    Missing_Paths, Named_Items, Named_Paths, Read_Harness_File, Read_Repo_File,
+    Restated_Gate_Commands, Restated_Ledger_Verb_Lines, Restated_Rows, Skill_Directories,
 };
 use crate::{
-    ADAPTER, ADAPTER_LINE_BUDGET, CONTRACT, CONTRACT_LINE_BUDGET, ROUTED_AUTHORITIES,
-    TEMPORARY_HAZARDS,
+    ADAPTER, ADAPTER_LINE_BUDGET, CONTRACT, CONTRACT_LINE_BUDGET, GATE_WORKFLOW,
+    LEDGER_VERB_REFERENCE, ROUTED_AUTHORITIES, TEMPORARY_HAZARDS,
 };
 
 /// The front door has to be at the door.
@@ -138,6 +139,85 @@ pub(crate) fn Restated_Anywhere(members: &BTreeSet<String>) -> Vec<String>
     }
 
     return restated;
+}
+
+/// The gate's command list is checked where it runs, and nowhere else may hold a copy.
+///
+/// `.github/workflows/gate.yml` is what actually executes the gate, and `OD-AGENT-002`
+/// names it as one of the three shapes a handoff — or any other harness file — must not
+/// restate. Derived from the workflow's own `run:` lines rather than retyped here, the same
+/// way `Restated_Anywhere` derives the crate list from the real workspace instead of a
+/// hand-kept set.
+///
+/// Two or more, not one: a single command named as a routing example — `AGENTS.md` already
+/// does this for `nomos work validate` below — is a reference, not a copy of the list. Two
+/// together is the shape a paste takes.
+#[test]
+fn Test_The_Harness_Should_Not_Restate_The_Gate_Command_List()
+{
+    let commands = Gate_Run_Commands(&Read_Repo_File(GATE_WORKFLOW));
+
+    assert!(
+        !commands.is_empty(),
+        "no `run:` line was found in {GATE_WORKFLOW}, so this check would pass over any \
+         file at all"
+    );
+
+    let mut restated = Vec::new();
+    for (name, text) in Harness_Files()
+    {
+        let found = Restated_Gate_Commands(&text, &commands);
+
+        if found.len() >= 2
+        {
+            restated.push(format!("{name}: {found:#?}"));
+        }
+    }
+
+    assert!(
+        restated.is_empty(),
+        "the harness carries two or more of the gate's own commands: {restated:#?}.\n\
+         OD-AGENT-002 admits naming one command in passing and refuses a copy of the list \
+         `.github/workflows/gate.yml` already runs."
+    );
+}
+
+/// The ledger verb reference is checked where `README.md` already documents it, and nowhere
+/// else may hold a copy.
+///
+/// `OD-AGENT-002` names this as the third shape a handoff must not restate, alongside the
+/// crate table and the gate command list. Matched whole line to whole line, because a
+/// sentence mentioning one verb in a code span is a routing reference and only a pasted
+/// block of the usage lines is the reference itself.
+#[test]
+fn Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference()
+{
+    let verbs = Ledger_Verb_Lines(&Read_Repo_File(LEDGER_VERB_REFERENCE));
+
+    assert!(
+        !verbs.is_empty(),
+        "no `nomos work <verb>` usage line was found in {LEDGER_VERB_REFERENCE}, so this \
+         check would pass over any file at all"
+    );
+
+    let mut restated = Vec::new();
+    for (name, text) in Harness_Files()
+    {
+        let found = Restated_Ledger_Verb_Lines(&text, &verbs);
+
+        if found.len() >= 2
+        {
+            restated.push(format!("{name}: {found:#?}"));
+        }
+    }
+
+    assert!(
+        restated.is_empty(),
+        "the harness carries two or more lines from the ledger verb reference: \
+         {restated:#?}.\n\
+         OD-AGENT-002 admits naming one verb in passing and refuses a copy of the block \
+         README.md already documents."
+    );
 }
 
 /// Routing is the contract's whole job, so every authority it routes to is required.

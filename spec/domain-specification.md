@@ -27,6 +27,7 @@ profile: domain-specification
 | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md@authored | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md | authored | 12 | 5 | sha256:02cb6b1358273b389414b171c1b06ed6aa623ab54affaa823aad98e0c5bb1422 |
 | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md@authored | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md | authored | 12 | 5 | sha256:afa015c0b7cbf5be9095e859fa378842b580438bde4859776f8ff26f21172220 |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md | authored | 21 | 7 | sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81 |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
@@ -235,6 +236,13 @@ profile: domain-specification
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#18 | authored | 2 | The Boundary This Does Not Draw |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#20 | authored | 2 | What Is Guarded, And What Is Not |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#24 | authored | 2 | Status |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#1 | authored | 1 | A handoff carries session-local state and routes to authority for everything else |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#2 | authored | 2 | Question |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#5 | authored | 2 | The Same Defect At A Different Address |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#8 | authored | 2 | The Decision |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#14 | authored | 2 | Where This Lives |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#17 | authored | 2 | What Is Guarded, And What Is Not |
+| docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#20 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1 | authored | 1 | The snapshot in a fact key is a third answer, and it defeats the other two |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#4 | authored | 2 | What Was Found |
@@ -4714,6 +4722,198 @@ nobody measured.
 *revision: authored · kind: prose · heading: An agent instruction file routes to authority rather than restating it / Status · hash: sha256:2a74436aca15191b0b848f20535320ecd9ff9df6cc298a71002653ac67e44e63*
 
 Closed by `P10-AGENT-HARNESS`.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#1
+
+*revision: authored · kind: heading · heading: A handoff carries session-local state and routes to authority for everything else · hash: sha256:1ea85d74ff9ab794fca48f08df27d07e13dc4af6d86c9a2385e9545f0a5a92a4*
+
+# A handoff carries session-local state and routes to authority for everything else
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#2
+
+*revision: authored · kind: heading · heading: A handoff carries session-local state and routes to authority for everything else / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#3
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / Question · hash: sha256:6b249a2d1c4c9eb220d1c994e2277120381393d03fd16f055752a9fbd655eaa9*
+
+A session that exhausts its context has two places to put what it knows, and neither takes
+it. The ledger holds the claim, the territory and the predicate — what a successor needs in
+order to start — but not what this session learned and has not yet earned a record for: the
+hypothesis it ruled out, the command that hangs, the reading of a record that turned out to
+be wrong. The records hold decisions, and none of that is a decision yet.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#4
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / Question · hash: sha256:3701eb62b21218806cc99435a9287d3153d487a18552a1d8dad1f1c52e161ed0*
+
+So the state goes into a prose handoff, and the shape a handoff takes by default is a
+summary of the repository: the crate bands, the gate commands, the ledger verbs, the
+hazards. `OD-AGENT-001` already refused that document once, for the reason that a summary
+of a checked file is an unchecked copy of it, and `tests/contract/tests/agent_harness.rs`
+keeps `AGENTS.md` honest about it. A handoff prompt is the same document at a different
+address, written by a machine at the moment it is least able to check what it is copying —
+mid context-exhaustion, past the point where it would re-read the file it is paraphrasing —
+and read by a successor with no way to tell the copy from the authority it was copied from.
+The successor cannot even fall back to distrust: an instruction file it did not expect
+reads as legitimate.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#5
+
+*revision: authored · kind: heading · heading: A handoff carries session-local state and routes to authority for everything else / The Same Defect At A Different Address · hash: sha256:c738f727c7501e2bf406629cf30aef256d1502b010ab003be8581341cbd18227*
+
+## The Same Defect At A Different Address
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#6
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / The Same Defect At A Different Address · hash: sha256:d01fea99cf94338c4885a9d470a785a790d6b4b5f90773c0b279f8af95b78dda*
+
+`OD-AGENT-001`'s criterion was: a sentence belongs in an agent-facing file exactly when no
+existing authority would be the better place to read it, and no mechanical check already
+asserts it. A handoff that lists the crate bands, the gate steps or the ledger verbs fails
+that criterion for the identical reason `AGENTS.md` would — `README.md`, `.github/workflows/
+gate.yml` and the ledger verb reference in `README.md` already hold each, checked against
+reality, and a copy inside a handoff is checked against nothing. The only thing different
+about a handoff is that nobody wrote it down as a place restatement could happen, because a
+handoff was never a committed file to begin with.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#7
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / The Same Defect At A Different Address · hash: sha256:5f71353e6c7b8b313e38b5abe7d6756275c1d28d4f389c8dd88d0f9dde9be524*
+
+The compression direction cuts the other way from what a summary normally does. Agent-to-
+agent prose is worth compressing — the connective English, the scene-setting, the parts a
+human handoff would spend a paragraph on — but the qualifiers are the expensive part to
+lose. *Unverified*, *failed*, *assumed*, *not run*, and the provenance of a claim (which
+command produced it, against which file) are exactly what a summary drops first, because
+they read as hedges rather than content. They are the content. A successor that receives
+"the corpus test passes" where the session meant "the corpus test passes because no corpus
+is present, per the note in `tests/contract/`" repeats the investigation that already
+happened, or worse, trusts a conclusion nobody reached.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#8
+
+*revision: authored · kind: heading · heading: A handoff carries session-local state and routes to authority for everything else / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#9
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / The Decision · hash: sha256:ce42c0efabfcc5a8f986739de5c8913f80ef68b24a0c4ebe89bb1470350599f6*
+
+**A handoff carries session-local state, and nothing an authority already holds.**
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#10
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / The Decision · hash: sha256:cb56dce2fff3ecf6a057cc8674c4025dd082e72aa88c5e3dda9d73f46994ab05*
+
+Session-local state is what has no other home yet:
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#11
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / The Decision · hash: sha256:75736a75295cb1a476c2a1b8a6db6e84da703a3fafbfcbd36717e43a22ddd527*
+
+- What was tried and rejected — the hypothesis ruled out, the command that hangs, the
+  reading of a record that turned out wrong — stated with its outcome, not just its topic.
+- What was observed and not yet recorded — an error message, a fact about the running
+  environment, a result nobody has filed as a record — carried with the qualifier that
+  marks how sure it is: unverified, assumed, observed once, not reproduced.
+- What the next action is — one concrete step, not a re-derivation of the plan that led to
+  it.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#12
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / The Decision · hash: sha256:9f80a7cd197be8924a4a3607131175ee21d3780656a268be12b709962ac38250*
+
+Everything reconstructible from an authority is a reference to that authority, not a
+paraphrase of it: an item id the ledger can look up, a record id the store can render, a
+commit the log can show, a path a reader can open. Naming `P11-AGENT-CONTINUATION` costs
+four tokens; restating what its territory and predicate say costs a paragraph that is
+already stale the moment the item is edited.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#13
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / The Decision · hash: sha256:5e4acfcc3f1b33ab2bf8287a4c6eb94472c2a403184aeebc612fef937f81328e*
+
+Compression is directional and applies only to the English around these facts, never to the
+facts themselves. A handoff may say "tried three approaches to the gate-command check before
+landing on line-derived matching" in place of a paragraph narrating each attempt. It may not
+turn "the corpus test passed because the corpus is absent, unverified against a populated
+one" into "the corpus test passed" — the second sentence is shorter and false in exactly the
+direction that costs a successor the most.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#14
+
+*revision: authored · kind: heading · heading: A handoff carries session-local state and routes to authority for everything else / Where This Lives · hash: sha256:d77eb6a182cdafce416e8c75163cbb494abe5ef998652fd705e40325dbc29810*
+
+## Where This Lives
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#15
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / Where This Lives · hash: sha256:66b54d9b19dafeee5b5836cfe5984243b97aaf2ecbe8e57d412909433cb1ecce*
+
+The constraint on content is agent-agnostic — any agent working this repository can exhaust
+its context, not only this one — so it is a record, per `AGENTS.md`'s own routing table
+rather than restated inside it: a policy about not duplicating authority cannot itself live
+only in the instruction file it is about, which is the same objection `OD-AGENT-001` raises
+against a documentation tree. `AGENTS.md` gains one routing row and no restatement of this
+decision's reasoning.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#16
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / Where This Lives · hash: sha256:5abf4f3bf2c00c93d212644e666afb12fe3bf874d4fdc82d84e1c472d01e663f*
+
+`CLAUDE.md` gains one line under its list of obvious mistakes, because *how* a handoff gets
+written — at compaction, at session end — is Claude Code's own mechanism, and mechanics are
+what `AGENTS.md`'s closing line already assigns to the adapter file. The line names this
+record and says a handoff must not restate the repository; it does not re-derive the content
+policy CLAUDE.md would otherwise be duplicating this record to state.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#17
+
+*revision: authored · kind: heading · heading: A handoff carries session-local state and routes to authority for everything else / What Is Guarded, And What Is Not · hash: sha256:22fc77b55a69c7440927088b4320df4a786c8ad6d23accff7d6c3db0400af9af*
+
+## What Is Guarded, And What Is Not
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#18
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / What Is Guarded, And What Is Not · hash: sha256:2c9db3a248bd842f72dec46a5baf8fc638da5614d3fd221c57b7fd473f97f620*
+
+`tests/contract/tests/agent_harness.rs` extends the same mechanism it already runs against
+the crate-band table — a derived source of truth compared against every committed harness
+file, in both directions the check can reach. Two more restatement shapes join the one
+already caught: a handoff, or any harness file, that carries two or more of the gate's own
+`run:` commands (derived from `.github/workflows/gate.yml`, not retyped into the test) is
+carrying the gate command list; one that carries two or more of the `nomos work` verb lines
+`README.md` documents is carrying the ledger verb reference. A single command or verb named
+in passing — `AGENTS.md` already names `nomos work validate` once, as a routing example — is
+not a restatement of either list, only a copy of both would be, and the threshold is set
+where an example stops being an example.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#19
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / What Is Guarded, And What Is Not · hash: sha256:cb876154e96f656106dd6daceae4667b8030bb96600cac82f86be83d8c655908*
+
+What is not guarded is a handoff itself, because a handoff is not a committed file — it is
+text a session writes into a prompt or a ledger note at the moment its context runs out, and
+nothing mechanical reads that text before a successor does. What is guarded is the one
+version of this content that is committed: `AGENTS.md` and `CLAUDE.md` naming this policy
+without restating what it forbids, so the routing line a handoff would point a successor to
+stays trustworthy.
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#20
+
+*revision: authored · kind: heading · heading: A handoff carries session-local state and routes to authority for everything else / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md#21
+
+*revision: authored · kind: prose · heading: A handoff carries session-local state and routes to authority for everything else / Status · hash: sha256:4142861119b7f69f0f69f4105cc9e4f0b5ed8d192bf9d34f85feea811eaee26d*
+
+Closed by `P11-AGENT-CONTINUATION`.
 
 ### docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1
 

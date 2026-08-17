@@ -21,6 +21,7 @@ Read the authority. Do not infer the architecture from the code nearest to your 
 | What is canonical specification content? | the specification store, not any file rendered out of it |
 | What formatting and lint rules apply? | `README.md`, `rustfmt.toml`, `clippy.toml` |
 | Which files am I allowed to change? | the territory of the item you hold, and nothing else |
+| What does a handoff carry when my context runs out before an item is done? | `docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md` |
 
 When two of those disagree, the mechanical one wins and the disagreement is a defect worth
 an item.

@@ -22,6 +22,88 @@ pub(crate) fn Read_Harness_File(relative: &str) -> String
     });
 }
 
+/// A committed file read as the source of truth it is, rather than as a harness file.
+///
+/// Used to derive the gate's own command list and the README's own ledger verb reference so
+/// neither has to be retyped as a constant here — the same reason `Board` reads
+/// `work/ledger.json` through the ledger's own type instead of a second parse.
+pub(crate) fn Read_Repo_File(relative: &str) -> String
+{
+    let path = Workspace::Workspace_Root().join(relative);
+
+    return std::fs::read_to_string(&path).unwrap_or_else(|error| {
+        panic!(
+            "cannot read {}: {error}. This check derives what it looks for from this file \
+             rather than retyping it, so an unreadable source leaves nothing to compare \
+             against.",
+            path.display()
+        )
+    });
+}
+
+/// Every command the gate's own `run:` lines carry, derived from the workflow rather than
+/// retyped beside it.
+///
+/// Deliberately not `Derive_Step`: that function wants a step name, and naming every step
+/// here would be its own restatement of the workflow. This reads every `run:` line the
+/// workflow has, whichever step it belongs to.
+pub(crate) fn Gate_Run_Commands(workflow: &str) -> Vec<String>
+{
+    let mut commands: Vec<String> = workflow
+        .lines()
+        .map(str::trim)
+        .filter_map(|line| return line.strip_prefix("run:"))
+        .map(|command| return command.trim().to_owned())
+        .filter(|command| return !command.is_empty())
+        .collect();
+
+    commands.sort();
+    commands.dedup();
+    return commands;
+}
+
+/// The gate commands a text carries verbatim, labelled so a failure can show which ones.
+pub(crate) fn Restated_Gate_Commands(text: &str, commands: &[String]) -> Vec<String>
+{
+    return commands
+        .iter()
+        .filter(|command| return text.contains(command.as_str()))
+        .cloned()
+        .collect();
+}
+
+/// Every `nomos work <verb>` usage line the README's own ledger verb reference carries.
+///
+/// The reference is the fenced block under "Coordinating concurrent work"; every line in it
+/// that opens a verb starts with `nomos work `, which is a shape nothing else in the README
+/// happens to share.
+pub(crate) fn Ledger_Verb_Lines(readme: &str) -> Vec<String>
+{
+    let mut lines: Vec<String> = readme
+        .lines()
+        .map(str::trim)
+        .filter(|line| return line.starts_with("nomos work "))
+        .map(str::to_owned)
+        .collect();
+
+    lines.sort();
+    lines.dedup();
+    return lines;
+}
+
+/// The verb-reference lines a text carries verbatim, matched whole line to whole line so a
+/// sentence that merely mentions a verb (`` `nomos work validate` `` in prose) is not
+/// mistaken for a copy of the block those lines come from.
+pub(crate) fn Restated_Ledger_Verb_Lines(text: &str, verb_lines: &[String]) -> Vec<String>
+{
+    return text
+        .lines()
+        .map(str::trim)
+        .filter(|line| return verb_lines.iter().any(|verb| return verb == line))
+        .map(str::to_owned)
+        .collect();
+}
+
 /// Every committed harness file, as a path and its text.
 ///
 /// The skills are included so that a route added inside one is checked the same way as a

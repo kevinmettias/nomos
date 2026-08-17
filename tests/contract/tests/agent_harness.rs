@@ -92,21 +92,32 @@ const BOARD: &str = "work/ledger.json";
 /// description of the workspace and to the tests that check it, and the gate would stay
 /// green over a routing table that had stopped routing.
 ///
-/// The fifth is a whole record rather than a directory, and is the one entry here that is
-/// not satisfied by its neighbours. `docs/records` already matches any record path, so the
-/// ownership row could be deleted without failing anything while the generic rationale row
-/// survived — and the two questions are different. *Why was it decided that way* is answered
-/// by whichever record argued the case; *which product owns this* is answered by one record
-/// and getting it wrong is how the scope drift `ARC-ECOSYSTEM-001` exists to stop happens
-/// again. Naming the path also puts it under the existence check, so renaming the record
+/// The fifth and sixth are whole records rather than directories, and are the entries here
+/// that are not satisfied by their neighbours. `docs/records` already matches any record
+/// path, so either row could be deleted without failing anything while the generic
+/// rationale row survived — and each answers a question the generic row does not. *Why was
+/// it decided that way* is answered by whichever record argued the case; *which product owns
+/// this* is answered by one record, and getting it wrong is how the scope drift
+/// `ARC-ECOSYSTEM-001` exists to stop happens again; *what does a handoff carry* is answered
+/// by `OD-AGENT-002`, and a routing table that quietly dropped it would leave a session that
+/// exhausts its context with nowhere to be told not to paste the repository into its own
+/// successor. Naming the path also puts it under the existence check, so renaming the record
 /// without fixing the route fails here rather than in a reader's hands.
 const ROUTED_AUTHORITIES: &[&str] = &[
     "README.md",
     "tests/contract",
     "docs/records",
     "docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md",
+    "docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md",
     BOARD,
 ];
+
+/// Where the gate command list lives, so a restatement of it can be derived rather than
+/// retyped beside this test.
+const GATE_WORKFLOW: &str = nomos_ledger::GATE_WORKFLOW;
+
+/// Where the ledger verb reference lives, so a restatement of it can be derived the same way.
+const LEDGER_VERB_REFERENCE: &str = "README.md";
 
 /// Every hazard the harness states because a defect is currently open, and the item that
 /// will close it.

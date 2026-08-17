@@ -1,5 +1,6 @@
 use crate::readers::{
-    Board, Declared_Skill_Name, Imports, Missing_Paths, Named_Items, Restated_Rows,
+    Board, Declared_Skill_Name, Gate_Run_Commands, Imports, Ledger_Verb_Lines, Missing_Paths,
+    Named_Items, Restated_Gate_Commands, Restated_Ledger_Verb_Lines, Restated_Rows,
 };
 
 /// Every check above passes over a file that says nothing, so each is shown failing.
@@ -14,6 +15,8 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
     Assert_The_Import_Check_Reports_An_Adapter_That_Imports_Nothing();
     Assert_The_Skill_Name_Reader_Reports_A_Manifest_Without_Front_Matter();
     Assert_The_Item_Reader_Reports_An_Id_And_Nothing_Else();
+    Assert_The_Gate_Command_Check_Reports_A_Pasted_List();
+    Assert_The_Ledger_Verb_Check_Reports_A_Pasted_Reference();
 }
 
 /// Shown reporting a link to nowhere, and shown not reporting a command or a real path.
@@ -59,6 +62,77 @@ pub(crate) fn Assert_The_Import_Check_Reports_An_Adapter_That_Imports_Nothing()
     assert!(
         !Imports("# Claude Code\n\nThe bands are as follows.", CONTRACT),
         "an adapter with no import was accepted, so it could carry its own contract"
+    );
+}
+
+/// Shown reporting two pasted gate commands together, and shown not reporting one named in
+/// passing.
+pub(crate) fn Assert_The_Gate_Command_Check_Reports_A_Pasted_List()
+{
+    let commands = Gate_Run_Commands(
+        "      - name: Lint\n        run: cargo clippy --workspace --all-targets -- -D warnings\n\
+         \x20     - name: Test\n        run: cargo test --workspace\n",
+    );
+
+    assert_eq!(
+        commands.len(),
+        2,
+        "the fixture workflow has two `run:` lines, and the reader found {}",
+        commands.len()
+    );
+    assert!(
+        Restated_Gate_Commands(
+            "Run the lint and the test step yourself: `cargo clippy --workspace --all-targets \
+             -- -D warnings` and then `cargo test --workspace`.",
+            &commands
+        )
+        .len()
+            >= 2,
+        "a paragraph carrying both commands was not reported, so a pasted gate command list \
+         could hide inside prose"
+    );
+    assert!(
+        Restated_Gate_Commands("never run `cargo fmt` by hand", &commands).is_empty(),
+        "a command that is not one of the gate's own was reported as if it were"
+    );
+}
+
+/// Shown reporting two pasted ledger verb lines together, and shown not reporting one named
+/// in a sentence.
+pub(crate) fn Assert_The_Ledger_Verb_Check_Reports_A_Pasted_Reference()
+{
+    let readme = "nomos work list [--state ready|claimed|blocked|done|declined]\n\
+                   nomos work claim   --item <id> --holder <name> [--lease 2h]\n\
+                   nomos work validate\n";
+    let verbs = Ledger_Verb_Lines(readme);
+
+    assert_eq!(
+        verbs.len(),
+        3,
+        "the fixture README has three verb lines, and the reader found {}",
+        verbs.len()
+    );
+    assert!(
+        Restated_Ledger_Verb_Lines(
+            "```\n\
+             nomos work list [--state ready|claimed|blocked|done|declined]\n\
+             nomos work claim   --item <id> --holder <name> [--lease 2h]\n\
+             ```\n",
+            &verbs
+        )
+        .len()
+            >= 2,
+        "a pasted block carrying two verb lines was not reported, so the reference could be \
+         copied wholesale"
+    );
+    assert!(
+        Restated_Ledger_Verb_Lines(
+            "`nomos work validate` prints the file's schema beside the build's.",
+            &verbs
+        )
+        .is_empty(),
+        "a verb named in a sentence, not on a line of its own, was reported as a copy of the \
+         reference"
     );
 }
 
