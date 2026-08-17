@@ -60,6 +60,7 @@ profile: domain-specification
 | docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md@authored | docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md | authored | 20 | 7 | sha256:768da13b9c897e7555d8cef881e29b74401b653ed5573655204965491709271d |
 | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md@authored | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md | authored | 42 | 12 | sha256:487f9bddc49b1a1c17e34c0a00e87e5e3907432d8c46b6b45cfb715b6bc31cb3 |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md@authored | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md | authored | 22 | 7 | sha256:47c0b032d29826a3aefa121ae2a70bbf8eadb84cd84e530a0692a8bb2ef0b42b |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
@@ -548,6 +549,13 @@ profile: domain-specification
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#29 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#35 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38 | authored | 2 | Status |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#1 | authored | 1 | Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#10 | authored | 2 | Decision |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#14 | authored | 2 | What This Costs |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#17 | authored | 2 | Consequences |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#19 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#21 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#1 | authored | 1 | A toolchain pinned for a command this workspace forbids running is pinned for nothing |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#6 | authored | 2 | What Was Measured |
@@ -14401,6 +14409,210 @@ Closed. `P11-PLATFORM-UNCHECKED` carries it, and it discharges the fourth and la
 instances `OD-GATE-006` measured. The third, `P11-MSRV-UNCHECKED`, is measured but not landed:
 correcting the compatibility floor unmasks clippy findings in files that item does not reserve,
 which `P11-COLLAPSIBLE-UNMASKED` carries.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#1
+
+*revision: authored · kind: heading · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one · hash: sha256:d714b5c2089fefd3424c37d2e61c066f4e42b3889a9efdbcba55cb4c06cc732c*
+
+# Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#2
+
+*revision: authored · kind: heading · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#3
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:d61f055c10d02ecc329495bce9e98663ded43e7f0b4951964c5fc3643fdce7cf*
+
+Five closed defects in this repository share one shape, and none of the five was found by a
+check.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#4
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:8b00cf5adf078d9191a4a052f3b215f7707367362a8aad11ab6a56bf09de0a66*
+
+`DECLARED_RULES`' doc comment cited `Test_A_Rule_Nobody_Declared_Should_Fail_The_Run`, which
+reconciles a synthetic fixture against input it invents. `Test_The_Registry_Should_Match_The_
+Manifest`, in `nomos-spec-validate/tests/preservation_holds.rs`, had validated the real
+registry against the real manifest all along — a second, correct answer to the same question
+the table's comment already claimed to answer, cited by nothing (P10-MIRROR-DISAGREEMENT).
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#5
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:410f9335c71b9a750245df146b2ff088d8ee61b51bc4c1f63ba92b27afb62e6d*
+
+The README's band table, `nomos-contracts`' crate-root doc comment, and `Cargo.toml`'s
+workspace-members comment each described what belongs in band 0, in independently chosen
+wording. The widest of the three sat in a manifest comment nothing parses, so the
+disagreement had no mechanical authority to resolve it against, and nothing constrained what a
+tenth or eleventh module could argue its way into (P10-BAND0-ADMISSION).
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#6
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:a5f13899c555cf08713f52a2d649f871d2748220873b694e0889222739b84b7d*
+
+`work audit` asked `ExclusionLedger::Conflicts` which live claims overlap an item's territory.
+`work list` asked a different function, `Claim_Refusal`, for the same question. They had
+already come apart in both directions before anyone noticed: measured on the live board,
+`audit` called forty-four of fifty-four lines blocked by a claim that had already finished, or
+would never contend for that territory again (P10-AUDIT-STATE).
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#7
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:7001e823ecba3ad9f972183680ecc926ca543e19672b2c944acbc3f6bc1e5d74*
+
+Three call sites — the ledger addressing a claim, the composition root, and the integration
+corpus — each reduced a repository path to a `SubjectId` by hand, with a spelling rule that
+was byte-for-byte identical in all three copies (P10-SUBJECT-HOME).
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#8
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:1f9926447aef3b60282f680ffc70d2f9207ba78f4a193497b3f2ef66dd3fcc3e*
+
+`Cargo.toml`'s `[workspace.lints.clippy]` table stated `clippy::all` and `clippy::pedantic` at
+`warn`. `.github/workflows/gate.yml`'s `Lint` step ran the same command with `-- -D warnings`
+appended, which promoted every one of those `warn`-level findings to a hard CI failure without
+saying so anywhere the table's reader would see it (P11-LINT-AUTHORITY-3, `OD-GATE-007`).
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#9
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Question · hash: sha256:6deba393c58722445ff553ddbb5adb5b3e4507a5d7ba7dcce44a577d325ce021*
+
+Different files, different languages of expression — a doc comment against a test citation, a
+manifest comment against a crate-root comment, one function against a sibling function, three
+copy-pasted call sites, a `Cargo.toml` table against a workflow flag. What is identical across
+all five is the failure mode: two artifacts each independently answer one question, nothing
+compares them, and the pair agrees for as long as nobody edits either — so there is no
+symptom, and no warning, until the edit that breaks the pair looks complete, because its
+author changed the one authority they knew about. `AGENTS.md` already states the resolution
+once a disagreement is found — "when two authorities disagree, the mechanical one wins and the
+disagreement is a defect worth an item" — but nothing finds it. Each of the five above was
+found by a person reading two files side by side, not by a run.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#10
+
+*revision: authored · kind: heading · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#11
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Decision · hash: sha256:cfdbe946646eae8cd180746f3896543380574dbc72ade8a8d6dac820efe45935*
+
+**Two artifacts encode one decision when each is independently readable as the authoritative
+answer to the same question, such that editing one without editing the other changes the
+answer a reader gets, and neither artifact says the other exists.** That is narrower than
+"the same value appears twice" — a value repeated for two different questions is not this
+defect — and it is verified against the five instances above rather than against a definition
+invented for this record: a check, or a reviewer, that does not name all five when applied to
+this repository's history is measuring some other shape.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#12
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Decision · hash: sha256:4f24e3b9a16a71f66b2c12535a7bbf2b10cbb6c2e36005edf7d757126593ae5b*
+
+**A second encoding is not this defect when both sides derive independently from one stated
+external authority, rather than from each other, and a test pins the pair against each other
+so drift between the two is still caught.** `PackageKind`'s Rust variant names and its
+serialized `Label` constants (`crates/contracts/nomos-contracts/src/package.rs`) are the
+worked example: both are transcribed from the package-taxonomy sentence of volume 03 of the
+corpus, in the order that sentence names them, because "a peer reimplementing this enum in
+another language reads the label and never sees this Rust, so a label is a protocol commitment
+rather than a local identifier" — the enum's own doc comment says so, naming the corpus source
+at the site rather than leaving a reader to infer why two spellings exist for one taxonomy.
+`Test_Every_Kind_Should_Carry_The_Label_The_Corpus_Names` pins the two encodings against each
+other, so the pair drifting apart is still a failing test even though "matches one internal
+source of truth" does not apply to either half. Three conditions distinguish this class from
+the defect above, and all three must hold: the derivation is from a named authority outside
+either artifact, the reason is stated in a doc comment or record at the site rather than left
+implicit, and a test — not a check's silent exclusion — holds the two sides together.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#13
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Decision · hash: sha256:3e76bda129a1746018247633e64a30f0cd3e6c75b855a4b06f7b5a0772ebe79a*
+
+Two artifacts that fail to meet all three and still disagree are not a legitimate exception in
+waiting; they are an unfound instance of the class above.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#14
+
+*revision: authored · kind: heading · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#15
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / What This Costs · hash: sha256:27331e55f476973f59661e3c4f7ae331754862a8f2f1296c2890dada0b66ea21*
+
+**No check exists yet.** This record commits to the definition, the validating corpus, and the
+legitimate-exception criterion — the three things the class needed before anything could be
+built against it — and not to the implementation. Every instance named above was found by a
+person, and that stays true until a later item builds a check against this record's
+definition. `OD-GATE-013` accepted the identical shape of cost for a narrower class — a
+checker gap named and bounded by record rather than closed by code — for the same reason: the
+definition has to be right, and validated against real instances, before a check built against
+a wrong definition either misses the five above or flags `PackageKind` as the sixth.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#16
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / What This Costs · hash: sha256:41a5df35f5793b1e8e2f3c5f52a60190a8f04bf461405d016d2ed365e98474b3*
+
+**The definition is stated as a question-and-answer shape, not as a syntactic pattern, and
+that is itself a risk.** A future check applying it has to decide, per candidate pair, whether
+the two sides are "independently readable as the authoritative answer to the same question" —
+a judgment call this record makes five times by citation and does not reduce to a grep. A
+check that instead flags every textual repetition would be noise (most of this repository's
+five instances were textually dissimilar), and a check that requires byte-identical wording
+would have caught none of them.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#17
+
+*revision: authored · kind: heading · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#18
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / Consequences · hash: sha256:28d89e648bba62fdfd26ddb691e018f1a6687bc07fd54bac9606fe70a0e273cc*
+
+None. This record adds a name and a corpus for a defect class this repository has already
+paid to find and fix five times; it changes no code and reserves no additional territory. A
+later item that builds a check against this definition points at it rather than re-deriving
+the shape from the five commits again.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#19
+
+*revision: authored · kind: heading · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#20
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / What Holds It · hash: sha256:0c2bc628a2aa6d9c7f435095460360708856e42aa2a615bc9368a639059ba566*
+
+Nothing mechanical, today. The five instances above were each closed by ordinary review — a
+person reading two artifacts and noticing they answered the same question differently — and
+that is what still holds the boundary this record names, exactly as `OD-GATE-013`'s equivalent
+section says for its narrower class. A sixth instance is found the same way until a check is
+built.
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#21
+
+*revision: authored · kind: heading · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#22
+
+*revision: authored · kind: prose · heading: Two independent encodings of one decision are a named defect class, and a peer-protocol restatement is not one / What This Record Does Not Decide · hash: sha256:868d9b4f2c868555fe4170d34031931fe195d367a319503fdbeaf9dd0fb4681d*
+
+It does not build the check. Where such a check would live — a new rule in `nomos-rules`
+beside `Check_Completeness_Mirrors`, a standalone binary, or something else — and how it would
+be validated to still find all five instances without flagging `PackageKind`, is a later
+item's territory, not this one's. It does not re-open or re-decide any of the five closed
+items cited as corpus; their own records and tests, where they have them, stand as written.
 
 ### docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#1
 

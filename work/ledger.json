@@ -12828,21 +12828,30 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Measured: verification is null on this item (dropped during the P10-SERVICE-SEAM decline/re-authoring that produced -2, unlike the original P12-NO-PRIVILEGED-SURFACE which carried a predicate). work finish refuses at exit 4 (\"has no verification predicate, so it cannot be finished... prose is not a predicate\") regardless of the deliverable's correctness, and finish has no way to attach a predicate to an already-authored item -- no work edit verb exists. Re-authoring as P12-NO-PRIVILEGED-SURFACE-3 with the subject, why, done_when and territory unchanged, adding the verification predicate the done_when text already implies and that this repository's precedent for pure-record items uses (the OD-PROJECT-003 item): nomos spec freshness --into . --require diagram-set --require domain-specification."
+        }
+      },
       "depends_on": [
         "P10-SERVICE-SEAM-2"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orch-no-privileged-surface",
-        "acquired_at": 1786999789,
-        "lease_expires_at": 1787010589
-      },
+      "claim": null,
       "verification": null,
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-orch-no-privileged-surface",
+          "reason": "Verification is null on this item; re-authoring as -3 with a working predicate before declining.",
+          "abandoned_at": 1787000550
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-no-privileged-surface",
+        "declined_at": 1787000550
+      }
     },
     {
       "id": "P12-EDITOR-PROJECTION-2",
@@ -12924,6 +12933,71 @@
           "exit_code": 0
         },
         "revision": "6aabe76bc81cc2ea55e2664242b108f95ee2776e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-NO-PRIVILEGED-SURFACE-3",
+      "title": "Nothing says the official surface holds no state the canonical services cannot rebuild, and one surface makes it invisible",
+      "why": "This is P12-NO-PRIVILEGED-SURFACE-2, re-authored: it carried verification: null (dropped somewhere in the P10-SERVICE-SEAM decline/re-authoring chain, unlike the original P12-NO-PRIVILEGED-SURFACE which had a predicate), so work finish refused with exit 4 (no predicate to run) no matter what the deliverable said. The subject and argument are unchanged from both predecessors; the seam this item constrains is the one OD-HOST-001 records.\n\nOD-HOST-001 records that one crate chose the platform, ran the verb and rendered the answer, and that a second adapter would duplicate all three -- and now a seam (nomos-work-orchestration) exists so a second adapter can call the middle without taking the other two. It is about the duplication. The property that has to survive the fix is different and is not written anywhere: that no surface holds state the canonical services cannot reconstruct.\n\nToday the question is nearly invisible because there is one surface and it is a CLI that exits. It becomes load-bearing the moment a second one exists - an editor session, a long-lived service, a web view - because that surface has a process lifetime and will accumulate things that are cheap to keep and expensive to ask for. Resolved provider selections, an in-memory work graph, connector session state, computed traces. Each is individually reasonable and collectively they are a second copy of the system's state that no other client can read and no test can address.\n\nThe failure mode is not corruption, it is that the official surface quietly becomes the only complete one. Every other client - a script, a peer implementation, a CI step, an agent - then sees a subset, and the gap is discovered by somebody trying to reproduce in the API something the UI already shows.\n\nThis repository has the vocabulary to state the rule and the list to state it over: work graph, capability/provider resolution, fact/analysis state, findings and requirement vocabulary, evidence, package state, external/connector state, decision/record state and control commands -- verified against the real types and modules that hold each, not assumed.",
+      "done_when": "A registered governing record states that the official surface holds no privileged state, and says what that means operationally: every state a surface can display is reconstructable through a canonical service by any client, and every action it can take is a command through one.\n\nIt enumerates the state families this applies to rather than stating the principle abstractly, because a principle with no list is checkable against nothing.\n\nIt says what a surface may legitimately hold that is not privileged state - caches, view state, selections - and what makes the difference, since the rule is unusable if it reads as forbidding a surface from remembering anything.\n\nIt cites OD-HOST-001 as the seam it constrains rather than re-deciding the seam.\n\nAdding a governing record leaves both required projections stale, so both are re-rendered from a tree whose registered records are exactly the ones this commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-HOST-002.record",
+          "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [
+        "P10-SERVICE-SEAM-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "exit_code": 0,
+        "output_tail": "domain-specification: spec/domain-specification.md is current\ndiagram-set: diagrams/relations.mmd is current\nchecked 2 of 18 governed output(s) under .\nnot built here: subject-dossier, subject-contract, subject-model, subject-report, architecture-document, feature-design, api-documentation, requirement-catalog, traceability-matrix, release-specification, implementation-context-pack, mcp-resource, github-markdown, html-site, contract-yaml, offline-bundle\nrequired and current: diagram-set, domain-specification\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\n",
+        "verified_at": 1787000682,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
       },
       "abandoned": [],
       "displaced": [],

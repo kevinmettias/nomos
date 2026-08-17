@@ -360,6 +360,7 @@ graph LR
     od_gate_006 -->|"relates-to"| od_project_002
     od_gate_007 -->|"relates-to"| od_gate_004
     od_gate_007 -->|"relates-to"| od_gate_006
+    od_gate_007 -->|"relates-to"| od_gate_011["OD-GATE-011"]
     od_gate_007 -->|"relates-to"| od_gate_013["OD-GATE-013"]
     od_gate_007 -->|"relates-to"| od_ledger_003
     od_gate_008 -->|"relates-to"| od_gate_006
@@ -369,8 +370,11 @@ graph LR
     od_gate_009 -->|"relates-to"| od_gate_001
     od_gate_009 -->|"relates-to"| od_gate_006
     od_gate_009 -->|"relates-to"| od_gate_008
+    od_gate_011 -->|"relates-to"| od_gate_007
+    od_gate_011 -->|"relates-to"| od_gate_013
     od_gate_012 -->|"relates-to"| od_gate_006
     od_gate_013 -->|"relates-to"| od_gate_007
+    od_gate_013 -->|"relates-to"| od_gate_011
     od_host_001["OD-HOST-001"] -->|"relates-to"| od_host_002["OD-HOST-002"]
     od_host_001 -->|"relates-to"| od_rules_001
     od_host_002 -->|"relates-to"| od_host_001
@@ -844,6 +848,7 @@ graph LR
     od_gate_007
     od_gate_008
     od_gate_009
+    od_gate_011
     od_gate_012
     od_gate_013
     od_host_001

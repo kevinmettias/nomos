@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:b90228c2c045e0b31d0e92e931a5c34eaf8d7d224acbb4af50c941d28aa63f1c",
-  "inputs_digest": "sha256:7c8b7c4ff3ef0b2d492e54200f4d1ca9b6849a2a75ca8157933dd4539f86c620",
+  "content_digest": "sha256:fa6d7560ab601c3386c10da176ab63ff838e20b82c4075645f2e7cdb8b0edba8",
+  "inputs_digest": "sha256:3f19c9727de8457c32a9b6f048f7b724b42a1e11a7584a4c767dcdf94e4a3ff9",
   "sections": [
     [
       "Documents",
-      120
+      121
     ],
     [
       "Sections",
-      1082
+      1089
     ],
     [
       "Source blocks",
-      3939
+      3961
     ]
   ],
   "inputs": [
@@ -269,6 +269,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored",
       "hash": "sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md@authored",
+      "hash": "sha256:47c0b032d29826a3aefa121ae2a70bbf8eadb84cd84e530a0692a8bb2ef0b42b"
     },
     {
       "content": "documents",
@@ -2684,6 +2689,41 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38",
       "hash": "sha256:826b11a5f13e89c87c68c6add168eedb08f13db5b0763cc7d6ebea97907964b6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#1",
+      "hash": "sha256:c38e09660776a884d65eea9de0f5005c641d5bfc8b116c9349a4a508b3637cbb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#2",
+      "hash": "sha256:69a2258ea9bbc7645aa62d5cf0ee07fcdee1213a62175689f43d476fc226d016"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#10",
+      "hash": "sha256:36dc31e242182fe6d1731fc3b000a55d35f531e720ac8440a990400a24908383"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#14",
+      "hash": "sha256:26f6d7068435b40ef765a3a5fb560f0591b16570fe7a02518b37ee11c4888d57"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#17",
+      "hash": "sha256:61151180d7b62b9eb994b0cb0bb169c69043f956f7df80b56286abf6debb11bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#19",
+      "hash": "sha256:a8c9a8798a86472aa52a9d8c9827d72577172081be77387ec44194a996adc9a7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#21",
+      "hash": "sha256:62581449b3bc5525c034d2251bed409f1308477cee2dfd142f271b7c945ba709"
     },
     {
       "content": "headings",
@@ -13404,6 +13444,116 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#39",
       "hash": "sha256:bc9606320bd153286deaaa7811deac5563c2555ff84896378f81555f5083aec9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#1",
+      "hash": "sha256:d714b5c2089fefd3424c37d2e61c066f4e42b3889a9efdbcba55cb4c06cc732c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#3",
+      "hash": "sha256:d61f055c10d02ecc329495bce9e98663ded43e7f0b4951964c5fc3643fdce7cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#4",
+      "hash": "sha256:8b00cf5adf078d9191a4a052f3b215f7707367362a8aad11ab6a56bf09de0a66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#5",
+      "hash": "sha256:410f9335c71b9a750245df146b2ff088d8ee61b51bc4c1f63ba92b27afb62e6d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#6",
+      "hash": "sha256:a5f13899c555cf08713f52a2d649f871d2748220873b694e0889222739b84b7d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#7",
+      "hash": "sha256:7001e823ecba3ad9f972183680ecc926ca543e19672b2c944acbc3f6bc1e5d74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#8",
+      "hash": "sha256:1f9926447aef3b60282f680ffc70d2f9207ba78f4a193497b3f2ef66dd3fcc3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#9",
+      "hash": "sha256:6deba393c58722445ff553ddbb5adb5b3e4507a5d7ba7dcce44a577d325ce021"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#10",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#11",
+      "hash": "sha256:cfdbe946646eae8cd180746f3896543380574dbc72ade8a8d6dac820efe45935"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#12",
+      "hash": "sha256:4f24e3b9a16a71f66b2c12535a7bbf2b10cbb6c2e36005edf7d757126593ae5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#13",
+      "hash": "sha256:3e76bda129a1746018247633e64a30f0cd3e6c75b855a4b06f7b5a0772ebe79a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#14",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#15",
+      "hash": "sha256:27331e55f476973f59661e3c4f7ae331754862a8f2f1296c2890dada0b66ea21"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#16",
+      "hash": "sha256:41a5df35f5793b1e8e2f3c5f52a60190a8f04bf461405d016d2ed365e98474b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#17",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#18",
+      "hash": "sha256:28d89e648bba62fdfd26ddb691e018f1a6687bc07fd54bac9606fe70a0e273cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#19",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#20",
+      "hash": "sha256:0c2bc628a2aa6d9c7f435095460360708856e42aa2a615bc9368a639059ba566"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#21",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md#22",
+      "hash": "sha256:868d9b4f2c868555fe4170d34031931fe195d367a319503fdbeaf9dd0fb4681d"
     },
     {
       "content": "blocks",
