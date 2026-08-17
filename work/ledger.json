@@ -7575,14 +7575,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orch-invalidation-order",
-        "acquired_at": 1786931807,
-        "lease_expires_at": 1786942607
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -7595,7 +7591,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ng 5 tests\ntest Test_A_Lowered_Declaration_Should_Fail_The_Comparison ... ok\ntest Test_A_Matching_Declaration_Should_Pass_The_Comparison ... ok\ntest Test_An_Unrelated_Minor_Version_Should_Fail_The_Comparison ... ok\ntest Test_The_Real_Workflow_Should_Still_Have_The_Install_Step ... ok\ntest Test_The_Declared_Floor_Should_Match_The_Toolchain_The_Gate_Installs ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-6951e715eb8cb8b7.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-14ee60fb17b58b55.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-3bd5c5e8a2eece9a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-2bf6f03006d6e169.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03bb3b77a304179f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-3a2571bf0b9d7834.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-15739aa19297e553.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-92b11eaac815a8cd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ca16a9d136103b26.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-04cd6948a9e9b567.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e8c3aea949064d8.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b67424df197dae04.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1786933005,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

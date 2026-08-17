@@ -29,6 +29,7 @@ profile: domain-specification
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227 |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
@@ -249,6 +250,14 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#19 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#24 | authored | 2 | What Holds It |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#1 | authored | 1 | A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#6 | authored | 2 | What Was Actually Wrong |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#9 | authored | 2 | The Answer |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#15 | authored | 2 | Why The Store Reports Structure Rather Than Ordering Rematerialization |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#18 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#22 | authored | 2 | What Holds It |
+| docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#25 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#1 | authored | 1 | Program-semantics facts are Nomos-owned and are expressed through the existing epistemic types |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#7 | authored | 2 | Program-Semantics Facts Are Nomos-Owned |
@@ -5186,6 +5195,246 @@ does.
 
 Closed by P10-DEPENDENT-EDGE. `P10-DERIVED-FACT` states the same defect and was released
 because its territory could not reach the fix; the measurement it recorded is unchanged.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#1
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away · hash: sha256:ed4f4312b37c47dbd9f06452014163e12ba413ebb2efe1dd25b3a0743b4c84f0*
+
+# A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#2
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#3
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Question · hash: sha256:7dedb0596a4add994ab12c990ac66046871d9bee66d450c74643e83cb28753d3*
+
+`MemoryFactStore::Invalidate` walks dependency edges transitively and gets the hard parts
+right: a seen set guards re-entry, `Invalidate_One` is idempotent, and the traversal is
+deterministic because `dependents` is a `BTreeMap` of `BTreeSet`. `Settle` even sorts
+`InvalidationReport::dependent` before returning it, so the field a caller reads back is
+reproducible.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#4
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Question · hash: sha256:cc2f4f00b9e7104d99cde50dba618eedcbb3e6328eae879f6987c16259c66eb6*
+
+Reproducible is not the same claim as ordered. `dependent` is sorted by `FactKey`'s own
+`Ord` — lexicographically over contract, subject and the rest — which has nothing to do with
+which fact reads which. A caller holding that vector cannot rematerialize from it: for A
+depending on B depending on C, alphabetical order says nothing about which of the three has
+to be recomputed first, and a fact reached through a cycle is written down exactly like one
+reached through an acyclic edge — both are a `FactKey` pushed into one flat list. So a caller
+cannot tell "some valid order exists" from "no order can", and the second case is not an
+error. Mutually recursive subjects are the ordinary shape once facts are computed from other
+facts, and `nomos-analysis` ships a store built for exactly that future.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#5
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Question · hash: sha256:a6eed8a09a51295cb213b9e9a1b7f0a187e38144ccab7961c7e62f16000e8512*
+
+What does a caller need in hand to rematerialize what one invalidation reached, and to know
+when no total order over it exists?
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#6
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Was Actually Wrong · hash: sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7*
+
+## What Was Actually Wrong
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#7
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Was Actually Wrong · hash: sha256:75c4cbb1ebbb2fa8fbdc4ed2f838901ba423150609f404be3e3338eced350736*
+
+Nothing in the walk. `direct` and `dependent` answer *what became stale*, correctly and
+deterministically, and `OD-ANALYSIS-002` is why a real edge exists at all to walk. The gap is
+that dependency *structure* — how the stale facts depend on each other — was never computed
+and never exposed. `MemoryFactStore` already keeps it: `Dependencies_Of` reads back exactly
+the edges `Materialize` recorded, one call per key, and always has. The store was withholding
+an answer it already had the data to give.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#8
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Was Actually Wrong · hash: sha256:f8d346ed263a6ff09db6332363997bd3ea30853d1d3d1c963d53cb0a8bfce13f*
+
+Nothing has noticed because the workspace has one derived fact
+(`nomos.cap.module.index`, `OD-ANALYSIS-002`), and its dependency graph is one edge deep. One
+edge cannot form a cycle and has no order to get wrong.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#9
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / The Answer · hash: sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d*
+
+## The Answer
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#10
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / The Answer · hash: sha256:e68dab16b5f977b89e93ae278c1f15270965662b48ed67b4f51ad56dcfc49f30*
+
+`Condensation_Of(report, store)`, a free function taking the report `Invalidate` returned
+and the store it came from, returning `Vec<RematerializationGroup>`: an ordered list of
+groups, each either one fact or a set of facts that depend on each other and admit no order
+among themselves. `RematerializationGroup::Is_Cycle` says which case a group is without a
+caller having to count.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#11
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / The Answer · hash: sha256:ed6c90f100368425cf2d19e1fcb11b84645311f0250b1a01845c32c8c04ee527*
+
+**It is a free function, not a method on `InvalidationReport`, and that is a decision about
+the report's job, not a convenience.** `direct` and `dependent` are the report's own record
+of what became stale, filled in while the walk runs. The edges between those facts are not
+the walk's to own — they are `store`'s, already public through `Dependencies_Of`, and a
+second copy of them living on the report would be a graph the store already keeps,
+duplicated the moment anyone asks for structure. `Condensation_Of` reads `report.direct` and
+`report.dependent` to know which keys matter and asks `store` what each one depends on among
+them; nothing is computed that either value did not already expose on its own.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#12
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / The Answer · hash: sha256:0622df29710cee2f0a71193f3dbcea788f58477fc0a23a55b5bdcafe52f0c834*
+
+That the crate's own public-surface accounting agrees is confirmation, not the reason: this
+workspace's `tests/contract` surface scanner resolves a `pub use`'d type's associated items
+from the module the `pub use` names, and `InvalidationReport` is re-exported from
+`invalidation`, not from `store`. A method written under `impl InvalidationReport` anywhere
+outside `invalidation/report.rs` compiles, passes every test, and is invisible to
+`tests/contract/surface/nomos-analysis.txt` — the exact failure mode this item exists to
+close, reproduced reflexively by the tool meant to catch it. `Condensation_Of` is declared
+and used as a plain function, so it is a name the scanner resolves the same way it already
+resolves `GenerationCause` and `RematerializationGroup`: directly, by its own name, off the
+`pub use store::{…}` list in `crates/substrate/nomos-analysis/src/lib.rs`.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#13
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / The Answer · hash: sha256:02141ee74ab43c6b976bf306ab3daf3a1069697142a4f38af7f238ede0a48f1f*
+
+**The algorithm is Tarjan's strongly-connected-components search, run over the subgraph
+induced by the invalidated keys.** An edge `u → v` means `u` depends on `v`; a dependency
+that leads outside the invalidated set is not an edge here, because that fact was not
+invalidated and is read as-is rather than rematerialized. Tarjan's completion order is a
+property of the algorithm, not of which node is visited first: a component only finishes
+once every component reachable from it has finished, so appending components to the result
+in finishing order is always a valid order over the condensation — the caller-visible
+guarantee does not depend on `report.dependent`'s traversal order, and the implementation
+never consults it.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#14
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / The Answer · hash: sha256:68d940ef74c807e4eec77cd31ebaa8e0da59058c8902398e4f2721158d5515fe*
+
+**Broadening and the condensation are computed from disjoint inputs.** `Note_Broadening`
+answers how far a cause was widened, keyed on `IncrementalGranularity`; `Condensation_Of`
+answers how the invalidated facts relate to each other, keyed on dependency edges. Neither
+function's body names the other's field.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#15
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Why The Store Reports Structure Rather Than Ordering Rematerialization · hash: sha256:caf099530f699fd0bff8bfd8150e490f6d04944f6d4d21e26aaa55853a469f49*
+
+## Why The Store Reports Structure Rather Than Ordering Rematerialization
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#16
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Why The Store Reports Structure Rather Than Ordering Rematerialization · hash: sha256:918fcf7e3695f31dfb3f9f377194cc3f992dd17afc8c6eeb4d31dc0b2fef4ea0*
+
+`FactStore`'s trait is sealed to three methods: `Current`, `Historical`, `Invalidate`.
+Rematerialization — actually recomputing a stale fact — is deliberately outside it, and this
+item does not bring it in. `Condensation_Of` answers a structural question the store is
+positioned to answer honestly (it holds the edges), and stops there. It does not decide *how*
+a mutually recursive group gets recomputed, because the store has no opinion to have: nothing
+in this crate rematerializes anything yet.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#17
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Why The Store Reports Structure Rather Than Ordering Rematerialization · hash: sha256:2b91e874f0e723361ccb8a7f53ef4a7402914db81f1aa3cb7ed05629ba5f88a2*
+
+What the future rematerialization orchestrator owes, once it exists: rematerializing
+according to `Condensation_Of`'s groups — recomputing each group in the order returned, and
+resolving whatever a cycle's own group needs by whatever means it uses — must produce the
+same current facts as a clean recomputation from nothing. That predicate belongs to the
+orchestrator and is named here rather than asserted here, because there is no orchestrator to
+assert it against yet. `Condensation_Of` only has to be honest about the graph; it is not the
+place that predicate gets proven.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#18
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#19
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Was Considered And Rejected · hash: sha256:d24cc8971bb85f0e1a57ccb72403a24dac71c7c16a1488aeeb0dbfad67454b49*
+
+**Sorting `dependent` into topological order in place.** It would have silently changed a
+field a caller already reads today, and it still could not represent a cycle — a topological
+sort does not exist over a graph that has one, so the function would have had to choose an
+arbitrary order among mutually dependent facts and hand it out looking exactly as valid as an
+acyclic one.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#20
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Was Considered And Rejected · hash: sha256:fc2a223bd037585daa991dfa7b40db65643b5c3c49817c527ac4402c8909c9c5*
+
+**Returning an error when a cycle is found.** A cycle is a shape of the dependency graph, not
+a fault the store can refuse. Mutually recursive facts are the expected result of computing
+facts from facts, and an invalidation that reaches one has not done anything wrong.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#21
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Was Considered And Rejected · hash: sha256:885464795d306bed9060c7547ec3ab925ac5af456b27120e3141a8e31e6c53d2*
+
+**Computing groups eagerly inside `Invalidate` and adding a field to `InvalidationReport`
+for them.** This is the design the report's shipped shape suggests, and it is not available
+inside `MemoryFactStore::Invalidate` and `InvalidationReport` without editing
+`crates/substrate/nomos-analysis/src/fact/memory_store.rs` and
+`crates/substrate/nomos-analysis/src/invalidation/report.rs` directly, neither of which this
+item's territory reaches. Independent of territory, it also pays the condensation's cost on
+every invalidation whether or not a caller ever asks for it, where `Condensation_Of` is paid
+for only on the call.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#22
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#23
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Holds It · hash: sha256:ff5022429e63ad8bf6456e919a14c7bac7a163fab11bc65e11d0cddf7a3fa6b8*
+
+`crates/substrate/nomos-analysis/tests/invalidation_order.rs`, three graphs driven against a
+real `MemoryFactStore`:
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#24
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / What Holds It · hash: sha256:6a4357d77992f155d6d0e244299cf9c93902cbbfb16c78fbb256aeb80748411a*
+
+- **a four-fact chain** condenses into four singleton groups in dependency order — the
+  fact with no dependencies of its own first, the fact that reads it last — asserted without
+  reading `report.dependent`'s incidental traversal order;
+- **a four-fact cycle** condenses into exactly one group naming all four, with
+  `Is_Cycle` true and no order asserted among its members;
+- **a chain that enters and leaves a two-fact cycle** condenses into three groups in one
+  call — the leaf before the cycle, the cycle as one group, the fact that reads the cycle
+  after it — so an acyclic ordering and a mutual-dependency group are shown to coexist in one
+  result rather than being two designs that were only ever tested apart.
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#25
+
+*revision: authored · kind: heading · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#26
+
+*revision: authored · kind: prose · heading: A mutual dependency inside an invalidation is a shape of the graph, and condensation names it rather than sorting it away / Status · hash: sha256:30429f9b7ae24f80c7c4e794529f8ba50940bc53db4ab860726157b1115bb06d*
+
+Closed by P11-INVALIDATION-ORDER.
 
 ### docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md#1
 

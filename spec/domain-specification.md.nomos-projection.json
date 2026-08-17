@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:0561e6a93f6216e817d5e30e81f14bde23145ad00fccc864e9274fb4572cec3a",
-  "inputs_digest": "sha256:b397f4d9f6f30dde87595467614c1cfcafa1712724458950f98cc69dc6aa5362",
+  "content_digest": "sha256:176fb51ed270176939b313c8036542793fa549dbe561ffa96ecc84e6268e80f6",
+  "inputs_digest": "sha256:d265790a7d883c665202e6c860acafc31ef50713015f07a5ac560822b05db28b",
   "sections": [
     [
       "Documents",
-      98
+      99
     ],
     [
       "Sections",
-      904
+      912
     ],
     [
       "Source blocks",
-      3414
+      3440
     ]
   ],
   "inputs": [
@@ -114,6 +114,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored",
       "hash": "sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored",
+      "hash": "sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557"
     },
     {
       "content": "documents",
@@ -1189,6 +1194,46 @@
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#28",
       "hash": "sha256:a2456d82e2a0c1aebd1838e1d538da506a0b1f1e6c7da195fd54c7d5ec249764"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#1",
+      "hash": "sha256:d4a1e80622bdaafb14cd9b1c56d61e9366e66815b9c468ee2ab5bf9705efb12d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#2",
+      "hash": "sha256:0cb063784ff6ea22ce77f6e22d0fd712a4c29c50e804999ea34ef4588bc21974"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#6",
+      "hash": "sha256:42e7c7b47e6998d449d7c9b1f5e0127dbe925c52150552411e8a610acb2bc3c5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#9",
+      "hash": "sha256:d218f620104c1d244915f616c4ac3faf441c3ed1b09101ceaeffb28e96f1cbce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#15",
+      "hash": "sha256:7e5c970051a2f574e52b4485446fd2acfb74b9a31844de2aebd9725df8c4e69e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#18",
+      "hash": "sha256:fd56b7babedb11d8342702ea4edcafe06c82c55e978593f39e1a99f87cd98228"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#22",
+      "hash": "sha256:f61544e18499083d345ede3de83d18b1e0674774f5edf33a22fcdf2b4775b659"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#25",
+      "hash": "sha256:3750897f4391ebc125dd89e302ec43a105649bd4d01680242e94a8ffb184ce65"
     },
     {
       "content": "headings",
@@ -7429,6 +7474,136 @@
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md#29",
       "hash": "sha256:521260881280279afae77be303f830b22af30ce982ad45c32979805aa8878ee8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#1",
+      "hash": "sha256:ed4f4312b37c47dbd9f06452014163e12ba413ebb2efe1dd25b3a0743b4c84f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#3",
+      "hash": "sha256:7dedb0596a4add994ab12c990ac66046871d9bee66d450c74643e83cb28753d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#4",
+      "hash": "sha256:cc2f4f00b9e7104d99cde50dba618eedcbb3e6328eae879f6987c16259c66eb6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#5",
+      "hash": "sha256:a6eed8a09a51295cb213b9e9a1b7f0a187e38144ccab7961c7e62f16000e8512"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#6",
+      "hash": "sha256:8a9dbd7d1ba14d4b0eb8b0420854b595d09b427022c157b703150404dbc018b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#7",
+      "hash": "sha256:75c4cbb1ebbb2fa8fbdc4ed2f838901ba423150609f404be3e3338eced350736"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#8",
+      "hash": "sha256:f8d346ed263a6ff09db6332363997bd3ea30853d1d3d1c963d53cb0a8bfce13f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#9",
+      "hash": "sha256:7e214d0586dae6e3c8048ad52e078ba9f7342d02b6660396be1aa19fe12be24d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#10",
+      "hash": "sha256:e68dab16b5f977b89e93ae278c1f15270965662b48ed67b4f51ad56dcfc49f30"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#11",
+      "hash": "sha256:ed6c90f100368425cf2d19e1fcb11b84645311f0250b1a01845c32c8c04ee527"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#12",
+      "hash": "sha256:0622df29710cee2f0a71193f3dbcea788f58477fc0a23a55b5bdcafe52f0c834"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#13",
+      "hash": "sha256:02141ee74ab43c6b976bf306ab3daf3a1069697142a4f38af7f238ede0a48f1f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#14",
+      "hash": "sha256:68d940ef74c807e4eec77cd31ebaa8e0da59058c8902398e4f2721158d5515fe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#15",
+      "hash": "sha256:caf099530f699fd0bff8bfd8150e490f6d04944f6d4d21e26aaa55853a469f49"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#16",
+      "hash": "sha256:918fcf7e3695f31dfb3f9f377194cc3f992dd17afc8c6eeb4d31dc0b2fef4ea0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#17",
+      "hash": "sha256:2b91e874f0e723361ccb8a7f53ef4a7402914db81f1aa3cb7ed05629ba5f88a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#18",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#19",
+      "hash": "sha256:d24cc8971bb85f0e1a57ccb72403a24dac71c7c16a1488aeeb0dbfad67454b49"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#20",
+      "hash": "sha256:fc2a223bd037585daa991dfa7b40db65643b5c3c49817c527ac4402c8909c9c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#21",
+      "hash": "sha256:885464795d306bed9060c7547ec3ab925ac5af456b27120e3141a8e31e6c53d2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#22",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#23",
+      "hash": "sha256:ff5022429e63ad8bf6456e919a14c7bac7a163fab11bc65e11d0cddf7a3fa6b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#24",
+      "hash": "sha256:6a4357d77992f155d6d0e244299cf9c93902cbbfb16c78fbb256aeb80748411a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#25",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md#26",
+      "hash": "sha256:30429f9b7ae24f80c7c4e794529f8ba50940bc53db4ab860726157b1115bb06d"
     },
     {
       "content": "blocks",

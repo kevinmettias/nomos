@@ -38,6 +38,7 @@ pub enum variant nomos_analysis::ReadOutcome::Absent
 pub enum variant nomos_analysis::ReadOutcome::Degraded(Applicability)
 pub enum variant nomos_analysis::ReadOutcome::Materialized
 pub enum variant nomos_analysis::ReadOutcome::Superseded
+pub fn nomos_analysis::Condensation_Of(report: &InvalidationReport, store: &MemoryFactStore) -> Vec<RematerializationGroup>
 pub fn nomos_analysis::FactError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_analysis::FactIdentity::Digest(&self) -> Digest128
 pub fn nomos_analysis::FactIdentity::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -73,6 +74,7 @@ pub fn nomos_analysis::Reader::Into_Dependencies(self) -> Vec<Dependency>
 pub fn nomos_analysis::Reader::On( store: &'store MemoryFactStore, registry: &'registry Registry, context: Context, ) -> Self
 pub fn nomos_analysis::Reader::Require( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<&MaterializedFact, Applicability>
 pub fn nomos_analysis::Reader::Require_Any( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<(&MaterializedFact, Applicability), Applicability>
+pub fn nomos_analysis::RematerializationGroup::Is_Cycle(&self) -> bool
 pub impl nomos_analysis::FactError implements core::fmt::Display
 pub impl nomos_analysis::FactError implements std::error::Error
 pub impl nomos_analysis::FactIdentity implements core::fmt::Display
@@ -115,6 +117,7 @@ pub struct field nomos_analysis::MaterializedFact::guarantee: Guarantee
 pub struct field nomos_analysis::MaterializedFact::identity: FactIdentity
 pub struct field nomos_analysis::MaterializedFact::payload: FactPayload
 pub struct field nomos_analysis::MaterializedFact::snapshot: SnapshotId
+pub struct field nomos_analysis::RematerializationGroup::members: Vec<FactKey>
 pub struct field nomos_analysis::Supersession::cause: String
 pub struct field nomos_analysis::Supersession::invalidated_at: GenerationId
 pub struct nomos_analysis::Broadening
@@ -130,6 +133,7 @@ pub struct nomos_analysis::InvalidationReport
 pub struct nomos_analysis::MaterializedFact
 pub struct nomos_analysis::MemoryFactStore
 pub struct nomos_analysis::Reader<'store, 'registry>
+pub struct nomos_analysis::RematerializationGroup
 pub struct nomos_analysis::Supersession
 pub trait nomos_analysis::FactReader
 pub trait nomos_analysis::FactStore: sealed::Sealed

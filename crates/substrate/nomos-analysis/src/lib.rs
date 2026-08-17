@@ -19,5 +19,5 @@ pub use fact::{FactError, FactIdentity, FactKey, FactPayload, FactReader, FactSt
 pub use identity::InputDigest;
 pub use reader::ReadOutcome;
 pub use reading::{Dependency, Reader};
-pub use store::GenerationCause;
+pub use store::{Condensation_Of, GenerationCause, RematerializationGroup};
 pub use invalidation::{Broadening, InvalidationReport, Supersession};

@@ -1,8 +1,12 @@
 use crate::FactKey;
+use crate::InvalidationReport;
+use crate::MemoryFactStore;
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, IncrementalGranularity, ProviderId,
     SnapshotId, SubjectId,
 };
+use nomos_contracts::Digest128;
+use std::collections::BTreeMap;
 use std::collections::BTreeSet;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -115,5 +119,206 @@ impl GenerationCause
             Self::SnapshotReplaced { differing, .. } => differing.contains(&key.subject),
             Self::VariantChanged { variant } => key.variant == *variant,
         };
+    }
+}
+
+/// A rematerialization order over some of the facts one invalidation reached.
+///
+/// A group of one is an ordinary fact: nothing it depends on is itself in the invalidated
+/// set, or everything it depends on has already been placed in an earlier group. A group of
+/// more than one is a set of facts that depend on each other — directly, or through others
+/// in the same group — for which no rematerialization order exists, because computing any
+/// one of them needs one of the others first. That is not a fault in the graph; mutually
+/// recursive subjects are the ordinary shape once facts are computed from other facts, and a
+/// caller is entitled to see the group named as one rather than handed a false order over
+/// it. Member order inside such a group carries no meaning; only membership does.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RematerializationGroup
+{
+    pub members: Vec<FactKey>,
+}
+
+impl RematerializationGroup
+{
+    /// Whether this group is a mutual dependency rather than a single ordinary fact.
+    #[must_use]
+    pub fn Is_Cycle(&self) -> bool
+    {
+        return self.members.len() > 1;
+    }
+}
+
+/// The facts `report` invalidated (`direct` together with `dependent`), condensed into
+/// groups a caller can rematerialize in the order returned: a group never depends, through
+/// `store`'s own dependency edges, on a group that comes after it.
+///
+/// This is computed fresh from `store`'s edges among exactly the keys `report` named, not
+/// from the order the walk that produced `report` happened to reach them in — `direct` and
+/// `dependent` are a record of what became stale, this is a separate answer to how the stale
+/// facts depend on one another, and two invalidations that reach the same facts by different
+/// paths produce the same groups in the same order.
+///
+/// A free function taking `report` and `store` together, rather than a method on
+/// `InvalidationReport` alone, because the report by itself names only *which* facts became
+/// stale — the edges between them are the store's, read back through its own
+/// `Dependencies_Of`, and asking for them again here is cheaper than the report carrying a
+/// second copy of a graph the store already keeps.
+///
+/// A dependency that leads outside the facts `report` named is not an edge here: that fact
+/// was not invalidated, so it is read as-is rather than rematerialized, and it forms no
+/// group.
+#[must_use]
+pub fn Condensation_Of(report: &InvalidationReport, store: &MemoryFactStore) -> Vec<RematerializationGroup>
+{
+    let mut nodes: BTreeMap<Digest128, FactKey> = BTreeMap::new();
+    for key in report.direct.iter().chain(report.dependent.iter())
+    {
+        nodes.insert(key.Digest(), key.clone());
+    }
+
+    let mut edges: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
+    for (digest, key) in &nodes
+    {
+        let targets: BTreeSet<Digest128> = store
+            .Dependencies_Of(key)
+            .iter()
+            .map(|dependency| return dependency.key.Digest())
+            .filter(|target| return nodes.contains_key(target))
+            .collect();
+        edges.insert(*digest, targets);
+    }
+
+    let mut tarjan = Tarjan {
+        edges: &edges,
+        counter: 0,
+        indices: BTreeMap::new(),
+        lowlink: BTreeMap::new(),
+        on_stack: BTreeSet::new(),
+        stack: Vec::new(),
+        components: Vec::new(),
+    };
+
+    for digest in nodes.keys()
+    {
+        if !tarjan.indices.contains_key(digest)
+        {
+            tarjan.Visit(*digest);
+        }
+    }
+
+    return tarjan
+        .components
+        .into_iter()
+        .map(|members| {
+            let mut resolved: Vec<FactKey> = members
+                .into_iter()
+                .filter_map(|digest| return nodes.get(&digest).cloned())
+                .collect();
+            resolved.sort();
+
+            return RematerializationGroup { members: resolved };
+        })
+        .collect();
+}
+
+/// Tarjan's strongly-connected-components algorithm, run over the induced subgraph one
+/// invalidation reached.
+///
+/// Completion order is a property of the algorithm itself, not an artifact of which node is
+/// visited first: a component only finishes once every component reachable from it has
+/// finished, so appending components to `components` in finishing order always yields a
+/// valid order over the condensation, regardless of which undiscovered node
+/// `Condensation_Of` hands `Visit` next.
+struct Tarjan<'a>
+{
+    edges: &'a BTreeMap<Digest128, BTreeSet<Digest128>>,
+    counter: usize,
+    indices: BTreeMap<Digest128, usize>,
+    lowlink: BTreeMap<Digest128, usize>,
+    on_stack: BTreeSet<Digest128>,
+    stack: Vec<Digest128>,
+    components: Vec<Vec<Digest128>>,
+}
+
+impl Tarjan<'_>
+{
+    fn Visit(&mut self, node: Digest128)
+    {
+        let index = self.counter;
+        self.counter = self.counter.saturating_add(1);
+        self.indices.insert(node, index);
+        self.lowlink.insert(node, index);
+        self.stack.push(node);
+        self.on_stack.insert(node);
+
+        let targets: Vec<Digest128> = self
+            .edges
+            .get(&node)
+            .map(|set| return set.iter().copied().collect())
+            .unwrap_or_default();
+
+        for target in targets
+        {
+            self.Relax(node, target);
+        }
+
+        let finished = self
+            .lowlink
+            .get(&node)
+            .zip(self.indices.get(&node))
+            .is_some_and(|(low, index)| return low == index);
+        if !finished
+        {
+            return;
+        }
+
+        let mut component = Vec::new();
+        while let Some(member) = self.stack.pop()
+        {
+            self.on_stack.remove(&member);
+            component.push(member);
+            if member == node
+            {
+                break;
+            }
+        }
+        self.components.push(component);
+    }
+
+    /// Lowers `node`'s lowlink against one edge to `target`: recursing into it first if it
+    /// has not been visited, and folding in whichever of `target`'s lowlink (unvisited) or
+    /// index (still on the stack, so part of an in-progress component) applies.
+    fn Relax(&mut self, node: Digest128, target: Digest128)
+    {
+        if !self.indices.contains_key(&target)
+        {
+            self.Visit(target);
+            let Some(target_low) = self.lowlink.get(&target).copied()
+            else
+            {
+                return;
+            };
+            if let Some(entry) = self.lowlink.get_mut(&node)
+            {
+                *entry = (*entry).min(target_low);
+            }
+
+            return;
+        }
+
+        if !self.on_stack.contains(&target)
+        {
+            return;
+        }
+
+        let Some(target_index) = self.indices.get(&target).copied()
+        else
+        {
+            return;
+        };
+        if let Some(entry) = self.lowlink.get_mut(&node)
+        {
+            *entry = (*entry).min(target_index);
+        }
     }
 }
