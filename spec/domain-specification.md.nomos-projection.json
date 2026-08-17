@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5655ec8c1593ee02f7f371e3b003f9b5dca7f2fff45b9c30d09cd12633552b4b",
-  "inputs_digest": "sha256:3f0db77ed8357dd076eeb3ea5abb956f0b09a1a1acf4c03d60125d64151205a9",
+  "content_digest": "sha256:a9de6508b724d5ad1c029f8c247cbef2e50d4e65a9357f9836f3cab064ec2205",
+  "inputs_digest": "sha256:2ad2e3dcc47caf4a5d5adc9169cd0b5bdccc3c890ae416cd9ea7800467621438",
   "sections": [
     [
       "Documents",
-      112
+      113
     ],
     [
       "Sections",
-      1026
+      1033
     ],
     [
       "Source blocks",
-      3779
+      3796
     ]
   ],
   "inputs": [
@@ -264,6 +264,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored",
       "hash": "sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored",
+      "hash": "sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50"
     },
     {
       "content": "documents",
@@ -2624,6 +2629,41 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#31",
       "hash": "sha256:1f28f7361b4bd09f36fc2ab9ed60edc90c6a5d02e24fcb12f31dcaa72d4f91cc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#1",
+      "hash": "sha256:acf7b5d255c896aaea3bb73a9ae71f7f6b7c7e84b5aa8e6e037d55c85faeb912"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#2",
+      "hash": "sha256:0a29db6d16c1bb32e40eb1f81166ca46b2e910c9b88ee4f1ba9f33301d9fca38"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#6",
+      "hash": "sha256:e7da779ebc3699ad9b953ba481f09625c960a9cd9d277bbd3802fad988bd2765"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#9",
+      "hash": "sha256:ecce78eeff855e95903aa8b1a30858322a66350b1ebc450900f6166c614c2a85"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#12",
+      "hash": "sha256:ca007c66b2f251c7679a23d6766d9ffcea1060008bc5a93eeb681004bc514ee7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#14",
+      "hash": "sha256:3c6865529c98cf1805bf46bc4f478e9e1295b2ba5af6053b778d455b17e0b5f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#16",
+      "hash": "sha256:7a780c1a7efb15ce0dbaeec12195d6c1e7df1f427285c6a7be232ce91ecd7f14"
     },
     {
       "content": "headings",
@@ -13069,6 +13109,91 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#32",
       "hash": "sha256:6d07806cfb66f32add5ef855c8f8c49fcc816e16523dfd23de0243173538ad80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#1",
+      "hash": "sha256:2515ece3bd298ba392a8f9227bd2029347013856c93562278761c5771a6ed773"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#3",
+      "hash": "sha256:f288bc5df4cad0d5c4128080a6f09717293953fb343fed21d4ecb1debacea307"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#4",
+      "hash": "sha256:9267cc5ac0b089d1cef984145719610b6976c1c7cc258a2ccec03d6aaa4b7667"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#5",
+      "hash": "sha256:a40ae079c1a6e9c933294cc027c6fd9127895c3cbf8dc68ddd518a8b17b225b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#6",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#7",
+      "hash": "sha256:fc9f42db9f8e244c1cc1885b8ba757e23929a1e000a9d749e1230fd127d69eb1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#8",
+      "hash": "sha256:383c24d2595bd4ad1038548ad3d51f8926e329b9526cdfc2545430f24054bddf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#9",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#10",
+      "hash": "sha256:13fc09a2e82024e75eeca23e83bea7303aba8f3b267265c56f973d8d70557566"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#11",
+      "hash": "sha256:432d2905f8bef4c1deea9158e762bf416c15bb76c1b9e641efd083c291ff178d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#12",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#13",
+      "hash": "sha256:dd74c5a943d4bd96952ae903161258b092afdaae7b629a47534eff42edbccfe1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#14",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#15",
+      "hash": "sha256:8cbecae181b10a7f96f9f05fedb8ce27fe1517d2d662f9411026c107536ec167"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#16",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#17",
+      "hash": "sha256:c366f13411d1819aea7caf5f52c6d7c512a4b8d17f28a9e7267b0c6101c8150f"
     },
     {
       "content": "blocks",

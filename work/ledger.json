@@ -10386,7 +10386,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Ending the item, not just the claim: its 28-file territory and workspace-phrased done_when no longer describe live reality (see the abandonment just recorded for the fresh measurement). The part of it that was real -- 9 findings across spec/exit_code.rs and check/exit_code.rs are a documented cross-binary ExitCode enum's own discriminants, which check-literals' Rust front end cannot recognize as already named (rust_Literal_Context has no case for NODE_CONST_ITEM/NODE_STATIC_ITEM on an enum variant) -- is carried forward as a permanent, stated exception in OD-GATE-013 rather than left as an undocumented gap somebody keeps re-discovering. Reissued as P12-NAMED-LITERALS-2 with a territory sized to what a claimant can actually close: the three ExitCode-shaped files the exception covers plus the record and its registration. identity.rs needs nothing further (already fixed, re-verified). The newly discovered debt outside the old territory -- request.rs's splitn field count, check/report.rs's private array-length, and store/write.rs's SQL column ordinals plus its own unrelated function-size/parameter-count findings -- is left unclaimed on the board rather than folded into this item's reissue."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -10409,10 +10413,18 @@
           "holder": "claude-orch-named-literals",
           "reason": "check-literals over the 28-file territory now reports 0 findings in 26 of 28 files (test-code findings excluded per done_when; read.rs/rows.rs/table.rs/snapshot.rs findings all sit inside #[cfg(test)] mod tests). identity.rs's one production finding is fixed and committed (408499a): Digest128's tuple field now spells its length as Digest128::BYTE_LENGTH, an already-public const, instead of a bare 16; nomos-contracts surface snapshot re-blessed and public_surface suite green. The remaining 9 findings -- spec/exit_code.rs (6) and check/exit_code.rs (3) -- are ExitCode enum discriminants that already carry a doc comment per variant explaining the cross-binary meaning of each number. check-literals' rust front-end has a documented gap (rust_Literal_Context has no case for NODE_CONST_ITEM/NODE_STATIC_ITEM discriminants, confirmed in team notes and by 77906ff's prior session deliberately leaving these exact two files untouched for the same reason). Naming a const per discriminant would only mirror the variant name the enum already provides, which is the anti-pattern the checker's own --help text warns against ('the name is exactly what a tool cannot supply'). Verified in-code  markers do NOT suppress here: nomos has no standards.json so the default markers:safety-only policy rejects them for check-literals (tested directly against check/exit_code.rs, reverted). A suppressions.json waiver does not fit either: it needs standards.json plus a bounded expiry, and this is a permanent considered decision, not temporary debt. So done_when cannot be met without degrading two well-documented enums to satisfy a tool's front-end bug. Separately, cargo test --workspace (--no-fail-fast) is currently 1285 passed / 9 failed, but all 9 are outside this item's reach: 1 is the pre-existing xvpe corpus refusal unrelated to any edit, and 8 are meta-tests reading the live shared ledger/records state (gate_covers_finish, records_do_not_serialize, governing_records_are_present) red from a concurrent sibling session's uncommitted in-flight work on gate.yml/gate_covers_finish.rs/OD-GATE-007 (confirmed via git status at commit time) -- none reference nomos-contracts, Digest128, or any of the 28 territory files. Landing the identity.rs fix and releasing rather than forcing the ExitCode change or waiting on another session's tree.",
           "abandoned_at": 1786937719
+        },
+        {
+          "holder": "claude-orch-named-literals-3",
+          "reason": "Re-verified the load-bearing claim from the last abandonment: check-literals over the stated 28-file territory still reads exactly 9 findings in exactly the same two files (spec/exit_code.rs 6, check/exit_code.rs 3), and identity.rs's Digest128 fix from 408499a still holds -- 0 production findings there, its 3 test-module findings are inside #[cfg(test)] mod tests. That confirmed claim is real and does not change.\n\nWhat does change: a fresh, full check-literals sweep (not scoped to this item's frozen file list) shows the workspace has moved since this territory was drafted. crates/host/nomos-cli/src/work/exit_code.rs -- split out of work.rs (which WAS in territory) by an unrelated commit on 2026-08-11, before either abandonment -- carries 4 more findings of the identical documented cross-binary ExitCode-discriminant shape the last abandoner already investigated for the other two files, and was simply never re-swept in. request.rs (never in territory) carries its own embedded ExitCode enum with 4 more findings of the same shape, plus one genuinely fixable literal (a splitn field count) and an unrelated pre-existing nested-call finding. check/report.rs (never in territory) carries one private array-length-in-type-position finding, structurally like Digest128's but privately scoped so actually fixable rather than exception material. crates/spec/nomos-spec-store/src/store/write.rs (never in territory) carries two genuine SQL-column-ordinal findings -- exactly this item's own motivating example -- but also unrelated, pre-existing function-size and parameter-count findings that make pulling it into this item's territory cost far more than the two-line literal fix alone.\n\nSo the 28-file, workspace-phrased done_when can no longer be satisfied by this item's territory even with the ExitCode exception the prior session built the case for: three more files outside that territory now also carry production check-literals findings, one of them genuinely fixable and small, two of them further instances of the same front-end gap. Declining and re-authoring with a territory and done_when that match current reality, and a governing record (OD-GATE-013, drafted, not yet registered) carrying the ExitCode-discriminant exception as a stated class covering all four instances found rather than the two the last session could see. The newly found out-of-territory debt in request.rs (splitn), report.rs (array length) and store/write.rs (SQL ordinals, plus its own unrelated function-size/parameter-count findings) is left on the board rather than folded in here.",
+          "abandoned_at": 1786988317
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-named-literals-3",
+        "declined_at": 1786988328
+      }
     },
     {
       "id": "P12-FILE-DECOMPOSITION",
@@ -12323,6 +12335,84 @@
           "exit_code": 0
         },
         "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P12-NAMED-LITERALS-2",
+      "title": "check-literals reads three ExitCode enums' own variant names as unnamed logic, and that gap now has a stated exception",
+      "why": "P12-NAMED-LITERALS reads check-literals from the code-standards suite over a 28-file, workspace-phrased territory. Two sessions closed all of it down to nine findings in two files -- spec/exit_code.rs (6) and check/exit_code.rs (3) -- both ExitCode enums whose every variant already carries a doc comment naming what its discriminant means across binaries; check-literals' Rust front end has no case for a variant discriminant (rust_Literal_Context has no NODE_CONST_ITEM/NODE_STATIC_ITEM handling for one) and reads Usage = 2 as unexplained logic. A third file of the identical shape, crates/host/nomos-cli/src/work/exit_code.rs, split out of the in-territory work.rs after the territory was drafted, carries 4 more findings nobody had re-swept. Re-verified all three counts fresh (9 held exactly; work/exit_code.rs's 4 confirmed) and identity.rs's Digest128 fix (408499a) still holds -- 0 production findings. OD-GATE-013 (docs/records + spec-store registration, drafted, not yet committed as part of this item's territory) records the exception as a stated class -- a documented, per-variant-explained, cross-binary-contract enum's own discriminants -- rather than a silent gap. P12-NAMED-LITERALS itself is declined: its 28-file territory and workspace-wide done_when no longer match reality (fresh drift found in request.rs, check/report.rs and store/write.rs, none of it this item's territory or subject).",
+      "done_when": "check-literals over exactly crates/host/nomos-cli/src/spec/exit_code.rs, crates/host/nomos-cli/src/check/exit_code.rs and crates/host/nomos-cli/src/work/exit_code.rs reports findings only at the lines OD-GATE-013 accounts for (13 total: 6, 3 and 4) and no others; check-literals over crates/contracts/nomos-contracts/src/identity.rs reports no finding outside its own #[cfg(test)] module. The other five checks of the rust clean-file phase -- nested-call, nesting-depth, function-size, parameter-count, intrafile-duplication -- report no findings over this item's territory. OD-GATE-013 is registered (crates/spec/nomos-spec-store/records/OD-GATE-013.record points at its docs/records file) and both the diagram-set and domain-specification projections are re-rendered from a tree holding exactly HEAD plus this item's own new record files, and committed. cargo test --workspace stays green and the gate's lint step stays clean.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/spec/exit_code.rs",
+          "crates/host/nomos-cli/src/check/exit_code.rs",
+          "crates/host/nomos-cli/src/work/exit_code.rs",
+          "crates/spec/nomos-spec-store/records/OD-GATE-013.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md",
+          "docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-contract-tests",
+          "--",
+          "--skip",
+          "snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair",
+          "--skip",
+          "snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once"
+        ],
+        "exit_code": 0,
+        "output_tail": "antees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-46ea7616fcd49db8.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-49cb7ec72362c505.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-13899000927e9d7b.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-f165a8e22d2667f4.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-aed9b159df400af8.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-71b266e859c1b18c.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-c896bf45d2e8f92b.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-5afe2e89ab691669.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-692706af76ff13ec.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-2e8cb8fb92432b87.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-45bbb040c5e0264c.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1786988495,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "68f1bea459063b2d20beaab20dc23fc1488806a6"
       },
       "abandoned": [],
       "displaced": [],

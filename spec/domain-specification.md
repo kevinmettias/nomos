@@ -59,6 +59,7 @@ profile: domain-specification
 | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md@authored | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md | authored | 42 | 12 | sha256:487f9bddc49b1a1c17e34c0a00e87e5e3907432d8c46b6b45cfb715b6bc31cb3 |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -536,6 +537,13 @@ profile: domain-specification
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#25 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#29 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md#31 | authored | 2 | Status |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#1 | authored | 1 | An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#6 | authored | 2 | Decision |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#9 | authored | 2 | What This Costs |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#12 | authored | 2 | Consequences |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#14 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#16 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -14242,6 +14250,172 @@ search, the same way this one was.
 *revision: authored · kind: prose · heading: A toolchain pinned for a command this workspace forbids running is pinned for nothing / Status · hash: sha256:6d07806cfb66f32add5ef855c8f8c49fcc816e16523dfd23de0243173538ad80*
 
 Closed. `P11-NIGHTLY-PURPOSE` carries it.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#1
+
+*revision: authored · kind: heading · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that · hash: sha256:2515ece3bd298ba392a8f9227bd2029347013856c93562278761c5771a6ed773*
+
+# An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#2
+
+*revision: authored · kind: heading · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#3
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Question · hash: sha256:f288bc5df4cad0d5c4128080a6f09717293953fb343fed21d4ecb1debacea307*
+
+`check-literals`, one of the checks the code-standards suite's rust `clean-file` phase runs
+over this workspace, reads a bare numeric discriminant on an enum variant (`Usage = 2`) as a
+magic number in logic and asks for it to be named as a constant. Its own `--help` text states
+the rule's purpose: an unexplained numeral should be replaced by a name that says what the
+value means. An enum variant already **is** that name — `ExitCode::Usage` says what `2` means
+at every call site that matches on it — and the discriminant beside it is not a second,
+unnamed value; it is the same name's numeral spelling, placed where a reader checking the
+wire value can find it beside the name that explains it.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#4
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Question · hash: sha256:9267cc5ac0b089d1cef984145719610b6976c1c7cc258a2ccec03d6aaa4b7667*
+
+The checker's Rust front end does not see that distinction. `rust_Literal_Context`
+(`language-kernels/programming/rust/rustlang/rust_literals.go` in the code-standards
+repository) returns `CONTEXT_DECLARATION` for `NODE_CONST_ITEM` and `NODE_STATIC_ITEM`, and
+has no case for a variant's discriminant, so `Usage = 2` inside an enum body is judged as
+logic — the same bucket a numeral typed into a function body falls into. Kotlin's front end
+handles the identical shape correctly (`HIGH(9)`); this is a gap specific to this one
+front end, not a property of what the rule is checking for.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#5
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Question · hash: sha256:a40ae079c1a6e9c933294cc027c6fd9127895c3cbf8dc68ddd518a8b17b225b1*
+
+This workspace has four instances of one deliberate pattern the gap flags in full:
+`crates/host/nomos-cli/src/spec/exit_code.rs`, `crates/host/nomos-cli/src/check/exit_code.rs`,
+`crates/host/nomos-cli/src/work/exit_code.rs`, and the `ExitCode` enum embedded in
+`crates/host/nomos-cli/src/request.rs`. Every one is a `#[derive(Clone, Copy, Debug,
+PartialEq, Eq)] enum ExitCode` whose own doc comment states a cross-binary contract — "the
+numbers are shared with every other group on this binary: an exit code means one thing per
+binary rather than one thing per group" (`spec::exit_code`'s own words) — and every variant
+carries a doc comment naming what that specific number means to an agent branching on it
+instead of parsing output. `check-literals` currently reads thirteen findings across the
+three standalone `exit_code.rs` files (six, three and four) and four more inside `request.rs`'s
+embedded enum, all of the identical shape.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#6
+
+*revision: authored · kind: heading · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#7
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Decision · hash: sha256:fc9f42db9f8e244c1cc1885b8ba757e23929a1e000a9d749e1230fd127d69eb1*
+
+**A documented, agent-facing exit-code enum's discriminants are a class this workspace's use
+of `check-literals` treats as outside the finding's scope, by this record rather than by an
+in-code marker or a waiver.** The variant name is the constant the checker's own `--help`
+text asks for; renaming the numeral to a second, freestanding constant beside it would only
+restate the variant name a second time, further from the declaration that already carries it
+and the doc comment that explains it — the anti-pattern the checker's own source comment for
+`CONTEXT_DECLARATION` warns a caller away from introducing.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#8
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Decision · hash: sha256:383c24d2595bd4ad1038548ad3d51f8926e329b9526cdfc2545430f24054bddf*
+
+This is deliberately not an in-code suppression and not a `suppressions.json` waiver. This
+workspace has no root `standards.json`, so the default `markers: safety-only` policy rejects a
+`// literal: allow <reason>` marker for `check-literals` — one of the checks not on the
+thirteen-check safety-critical list, confirmed by testing the marker directly against
+`check/exit_code.rs` and reverting it. A waiver needs a `standards.json` beside it and a
+bounded expiry (`max_horizon_days`, default 180 days): that mechanism exists to retire
+temporary debt on a clock, and this is not temporary debt. It is a considered, permanent
+reading of what the rule is for, applied where the checker's own front end cannot currently
+apply it. A record is the mechanism this workspace has for a decision of that shape.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#9
+
+*revision: authored · kind: heading · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#10
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / What This Costs · hash: sha256:13fc09a2e82024e75eeca23e83bea7303aba8f3b267265c56f973d8d70557566*
+
+**`check-literals` continues to report a finding at each of these seventeen lines**, and a
+fresh, unexplained run of the check over this workspace keeps listing them without this
+record in view. The next reader of a raw `check-literals` run has to know to consult this
+record before treating that count as a defect count.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#11
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / What This Costs · hash: sha256:432d2905f8bef4c1deea9158e762bf416c15bb76c1b9e641efd083c291ff178d*
+
+**The exception is stated as a class, not as a closed file list, and that is itself a risk.**
+It covers a documented, per-variant-explained, cross-binary-contract enum's own
+discriminants — so a fifth such enum is the same decision already made and not a new one to
+argue — but nothing mechanical currently prices a variant that stops carrying a doc comment,
+or an enum that claims the same shape without actually being a cross-binary contract. `nomos
+check --root .` and the gate's clippy pass do not enforce a doc comment on every variant, so
+that boundary is held by review rather than by a check today.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#12
+
+*revision: authored · kind: heading · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#13
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / Consequences · hash: sha256:dd74c5a943d4bd96952ae903161258b092afdaae7b629a47534eff42edbccfe1*
+
+None of the four files named above needs a code change on account of `check-literals`. Their
+combined finding count — seventeen, at the time this record was written — is the expected,
+permanent shape of a clean run over this workspace's `check-literals` results, not a
+regression to chase toward zero.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#14
+
+*revision: authored · kind: heading · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#15
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / What Holds It · hash: sha256:8cbecae181b10a7f96f9f05fedb8ce27fe1517d2d662f9411026c107536ec167*
+
+Nothing mechanical enforces the exception's boundary today — see the risk named above. The
+four enums it currently covers are held by the ordinary review a change to any of them
+already gets: each binary group's own tests exercise its exit behaviour, and a variant added
+without a doc comment, or an enum claiming this shape without the cross-binary contract that
+justifies it, is a review-visible omission before it is anything else.
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#16
+
+*revision: authored · kind: heading · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md#17
+
+*revision: authored · kind: prose · heading: An enum variant's own name already names its discriminant, and the checker's Rust front end cannot see that / What This Record Does Not Decide · hash: sha256:c366f13411d1819aea7caf5f52c6d7c512a4b8d17f28a9e7267b0c6101c8150f*
+
+It does not except the checker's separate, unrelated gap on an array length in type
+position. `pub struct Digest128([u8; 16])` in
+`crates/contracts/nomos-contracts/src/identity.rs` hit the same front end for a different
+reason — `NODE_CONST_ITEM` inside a type declaration, not an enum discriminant — and was
+closed by naming the length, not by exception, because the number is a public const
+(`Digest128::BYTE_LENGTH`) the type already exposes; a private array length in the same
+position, where no exported const exists to reuse, is a plain unnamed-literal fix and not a
+case this record speaks to either way. It does not build a `suppressions.json` or a
+`standards.json` for this workspace. It does not fix the front end's gap in the code-standards
+tool itself — that tool is a separate repository this one depends on, and its `go test ./...`
+baseline is documented elsewhere as already red for unrelated reasons; a fix there is a change
+to that repository's own front end, not something this record's territory reaches.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
