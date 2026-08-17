@@ -3,7 +3,7 @@
 // Why a claim was refused, beneath the claim it would have been.
 mod refusal;
 
-pub use refusal::ClaimRefusal;
+pub use refusal::{ClaimRefusal, RefusalLayer};
 
 use serde::Deserialize;
 use serde::Serialize;

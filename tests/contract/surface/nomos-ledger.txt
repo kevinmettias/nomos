@@ -1,4 +1,7 @@
+pub const fn nomos_ledger::ClaimRefusal::Is_Dispatch(&self) -> bool
+pub const fn nomos_ledger::ClaimRefusal::Is_Readiness(&self) -> bool
 pub const fn nomos_ledger::ClaimRefusal::Is_Retryable(&self) -> bool
+pub const fn nomos_ledger::ClaimRefusal::Layer(&self) -> RefusalLayer
 pub const fn nomos_ledger::FinishRefusal::Judged_The_Work(&self) -> bool
 pub const fn nomos_ledger::ItemState::Is_Claimable(&self) -> bool
 pub const fn nomos_ledger::ItemState::Is_Finished(&self) -> bool
@@ -16,6 +19,7 @@ pub enum nomos_ledger::FinishRefusal
 pub enum nomos_ledger::GateUnknown
 pub enum nomos_ledger::ItemState
 pub enum nomos_ledger::LedgerError
+pub enum nomos_ledger::RefusalLayer
 pub enum nomos_ledger::ReleaseOutcome
 pub enum variant nomos_ledger::AddRefusal::AlreadyPresent { item: ItemId, }
 pub enum variant nomos_ledger::AddRefusal::AmendmentNotPublished { identifier: String, }
@@ -60,6 +64,8 @@ pub enum variant nomos_ledger::LedgerError::Locked { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Malformed { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Unreadable { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Unrecognized { understood: u32, found: u32, cause: String, }
+pub enum variant nomos_ledger::RefusalLayer::Dispatch
+pub enum variant nomos_ledger::RefusalLayer::Readiness
 pub enum variant nomos_ledger::ReleaseOutcome::Abandoned { reason: String, }
 pub enum variant nomos_ledger::ReleaseOutcome::Finished(VerificationRecord)
 pub fn nomos_ledger::AddRefusal::Describe(&self) -> String

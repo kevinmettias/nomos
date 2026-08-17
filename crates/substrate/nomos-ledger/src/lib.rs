@@ -58,7 +58,7 @@ mod store;
 mod territory;
 mod verification;
 
-pub use claim::{Claim, ClaimRefusal};
+pub use claim::{Claim, ClaimRefusal, RefusalLayer};
 pub use exclusion::{Blocker, ExclusionLedger, Reservation};
 pub use finish::{Abandonment, Declination, Finish, FinishRefusal, Finishing, ReleaseOutcome};
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateOutcome, GateUnknown, LINT_STEP, Workflow_Path};

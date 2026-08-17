@@ -2,7 +2,7 @@
 
 use nomos_ledger::{
     AddRefusal, Claim_Refusal, ClaimRefusal, FileLedger, FinishRefusal, ItemId, ItemState,
-    LedgerDocument, LedgerError, LedgerItem, SCHEMA_VERSION, Territory, Validate,
+    LedgerDocument, LedgerError, LedgerItem, RefusalLayer, SCHEMA_VERSION, Territory, Validate,
 };
 use nomos_platform::Timestamp;
 use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
@@ -132,25 +132,40 @@ pub(super) fn Blocking_Refusal(
 ///
 /// Shared by the listing and the audit for the same reason the refusal itself is: one item
 /// must not be `held` in one report and something else in the other.
-pub(super) const fn Refusal_Label(refusal: &ClaimRefusal) -> &'static str
+///
+/// Matched on [`ClaimRefusal::Layer`] first and the specific variant second, rather than on
+/// the variant alone. `OD-LEDGER-022` is why: the four specific words below already told a
+/// plan fact (`waiting`, `stranded`) apart from a coordination fact (`held`, `lapsed`), and
+/// matching flat let that distinction exist only here, in this function's arm order, where a
+/// caller other than this CLI could not read it.
+///
+/// The two catch-alls below both say `snagged` today, which reads as one arm to
+/// `clippy::match_same_arms` and is merged into one for that reason — but it is not a claim
+/// that a plan fact nothing else names and a coordination fact nothing else names are the same
+/// kind of thing. A caller that needs them apart has [`ClaimRefusal::Layer`] itself, which is
+/// the point of routing through it here rather than matching the variant alone.
+pub(super) fn Refusal_Label(refusal: &ClaimRefusal) -> &'static str
 {
-    return match refusal
+    return match (refusal.Layer(), refusal)
     {
         // Retryable and not the reader's problem to solve: something else has to finish or
         // lapse first. `waiting` rather than `blocked`, because `blocked` is already a state
         // an author sets by hand and conflating them would lose that distinction.
-        ClaimRefusal::DependencyUnmet { .. } => "waiting",
+        (RefusalLayer::Readiness, ClaimRefusal::DependencyUnmet { .. }) => "waiting",
         // Not retryable, and not `waiting`: nothing finishing resolves this, because the
         // dependency it names already answered `Declined` and stays there. `OD-LEDGER-020`.
-        ClaimRefusal::DependencyDeclined { .. } => "stranded",
-        ClaimRefusal::HeldBy { .. } => "held",
+        (RefusalLayer::Readiness, ClaimRefusal::DependencyDeclined { .. }) => "stranded",
+        (RefusalLayer::Dispatch, ClaimRefusal::HeldBy { .. }) => "held",
         // The one word here that names an operation rather than a wait. An item whose holder
         // is gone is not queued behind anybody and is not a dead end either: it is takeable by
         // whoever says so, with `nomos work takeover`.
-        ClaimRefusal::Lapsed { .. } => "lapsed",
-        // Not retryable: somebody has to close a modelling gap. Reporting it as `ready`
-        // would send an agent to discover that by being refused.
-        _ => "snagged",
+        (RefusalLayer::Dispatch, ClaimRefusal::Lapsed { .. }) => "lapsed",
+        // Everything left in either layer: a plan fact nothing else names (the item is not
+        // claimable, or is not on the board at all) or a coordination fact nothing else names
+        // (an unprovable overlap, a lease request coordination refuses, a live claim on the
+        // same item, a store coordination cannot use). Neither is retryable, and the caller
+        // who needs the two apart asks `Layer`, not this word.
+        (_, _) => "snagged",
     };
 }
 
