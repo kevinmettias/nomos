@@ -11074,6 +11074,69 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-XVPE-STAGING-NAME",
+      "title": "D-135 sends new domain-neutral code to XVPE and D-130 gates when Nomos may depend on it, but neither says what a capability Nomos needs before XVPE can hold it is named",
+      "why": "The user directed that Nomos should build domain-neutral capability ahead of XVPE availability rather than wait, but D-130's own Alternatives Considered already rejected vendoring such code locally under its eventual xvpe- name, and the boundary test in tests/contract/tests/boundaries/graph.rs would fail the instant a crate carried that prefix outside nomos-platform-xvpe. The gap is real: D-135 assumes XVPE can receive new domain-neutral code the moment it is written, and says nothing about the case where Nomos needs the capability first.",
+      "done_when": "D-138 is registered and governing, and diagrams/relations.mmd + spec/domain-specification.md are re-rendered fresh over it.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md",
+          "crates/spec/nomos-spec-store/records/D-138.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "exit_code": 0,
+        "output_tail": "domain-specification: spec/domain-specification.md is current\ndiagram-set: diagrams/relations.mmd is current\nchecked 2 of 18 governed output(s) under .\nnot built here: subject-dossier, subject-contract, subject-model, subject-report, architecture-document, feature-design, api-documentation, requirement-catalog, traceability-matrix, release-specification, implementation-context-pack, mcp-resource, github-markdown, html-site, contract-yaml, offline-bundle\nrequired and current: diagram-set, domain-specification\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\n",
+        "verified_at": 1786948089,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

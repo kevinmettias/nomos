@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:682183e379ef86db63950fd97cd7302e2ad69612d0d97b8ffe23f35a1cf1b3b8",
-  "inputs_digest": "sha256:116a163ae585c448817224b8b881a4e79c38a3621d36ae727ae3f64a8addd33a",
+  "content_digest": "sha256:452595e7358d182558c75d766269eeaddc8a39f425e205fe16af118becfbed8e",
+  "inputs_digest": "sha256:ff0c030b521bd59b2370591a54cdd678aeb669963e2989465d58eeab6381f5a4",
   "sections": [
     [
       "Documents",
-      104
+      105
     ],
     [
       "Sections",
-      951
+      956
     ],
     [
       "Source blocks",
-      3560
+      3575
     ]
   ],
   "inputs": [
@@ -99,6 +99,11 @@
       "content": "documents",
       "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md@authored",
       "hash": "sha256:afa015c0b7cbf5be9095e859fa378842b580438bde4859776f8ff26f21172220"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md@authored",
+      "hash": "sha256:18175cd5252223b41fc5ac3719fc79e19ebf7889c683e051ab0f9991b960a089"
     },
     {
       "content": "documents",
@@ -1104,6 +1109,31 @@
       "content": "headings",
       "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#10",
       "hash": "sha256:76920f136ba2b7df066cb47f9e8c45d9a6d2118e2195121aab1f907b331e12f0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#1",
+      "hash": "sha256:3889477d72ae4ddb3c0c86e9d203ae87d655ed03b8a96ad343f45c07019644db"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#2",
+      "hash": "sha256:c4055023bc8e1bf3013e4de245a91203d73de5c76455f8e7b82761aff11f27e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#6",
+      "hash": "sha256:e65500d91443f3382c8c7241a749f9a973151bfb8c11825b71e15a77c7728d18"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#10",
+      "hash": "sha256:fcc62042e1badb8c899e1564e88af7e3c78981b9d83fa782b4ac66601146b12b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#13",
+      "hash": "sha256:86a8a6fbdaa8195c8214d6e585d8117af7b847cfb3c3ae18e61b89dd46f022bc"
     },
     {
       "content": "headings",
@@ -7284,6 +7314,81 @@
       "content": "blocks",
       "identity": "docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#12",
       "hash": "sha256:8892ec48b207d34f3d8ab6e482a7fa29bec6cbf86f7bda9dbe427de08b702705"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#1",
+      "hash": "sha256:106af4e320f728d6832a0d0c793508088f5c30a3756546e61ca88c910ee527c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#2",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#3",
+      "hash": "sha256:cf24abc23fc9608677c472305f55d9107f90c14865ac1a26eda83c3d6a349e0c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#4",
+      "hash": "sha256:4e684da5efead5d7cc8c86fb120d31c48c4317dae6c9bbd35dc23454fec103e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#5",
+      "hash": "sha256:9b9a1be8ca8c66c2601b3ad68a58d7b3558ff2b75ab91467af8feb11b8d35979"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#6",
+      "hash": "sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#7",
+      "hash": "sha256:bb8f5c58ad4b7827586e26a5606594ebd39d7173d0d18b5bbf0f6c559fb0dae5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#8",
+      "hash": "sha256:741058b205a3844a99608ca9b117c87159b41ed076116ac59a705441b2aedc69"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#9",
+      "hash": "sha256:93654aec82d9d96820fa0ab4da47f49f996991e949b3ca38de9a22417b1ba076"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#10",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#11",
+      "hash": "sha256:edbe0fb6b3dd49707950280ddf530ff9d752f72c65c7831c71a73e659fa4be43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#12",
+      "hash": "sha256:51391712d1d519a939983c12b382c3ff8a0aceee07293ea1e208b18d68d2cb17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#13",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#14",
+      "hash": "sha256:91b768a590e336e6d560f574294e923f8939ce43bc20cab4692a435184c6c6a1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#15",
+      "hash": "sha256:e10e19e4456b27a569e70d40528d76951366ca33e15d45dfbfd600e387273b70"
     },
     {
       "content": "blocks",

@@ -26,6 +26,7 @@ profile: domain-specification
 | docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md@authored | docs/records/D-135-designed-for-shared-use-code-defaults-to-xvpe.md | authored | 9 | 5 | sha256:08035d67c34a83d2524169257bb1bc13ce70da58c72cac990ad3303a679ec2b7 |
 | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md@authored | docs/records/D-136-knowledgeworkbench-is-rebuilt-as-a-new-rust-repository.md | authored | 12 | 5 | sha256:02cb6b1358273b389414b171c1b06ed6aa623ab54affaa823aad98e0c5bb1422 |
 | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md@authored | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md | authored | 12 | 5 | sha256:afa015c0b7cbf5be9095e859fa378842b580438bde4859776f8ff26f21172220 |
+| docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md@authored | docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md | authored | 15 | 5 | sha256:18175cd5252223b41fc5ac3719fc79e19ebf7889c683e051ab0f9991b960a089 |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md | authored | 21 | 7 | sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81 |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
@@ -232,6 +233,11 @@ profile: domain-specification
 | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#5 | authored | 2 | Rationale |
 | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#8 | authored | 2 | Consequences |
 | docs/records/D-137-knowledgereferenceid-is-the-one-shape-a-kwb-citation-needs.md#10 | authored | 2 | Alternatives Considered |
+| docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#1 | authored | 1 | A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation |
+| docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#2 | authored | 2 | Decision |
+| docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#6 | authored | 2 | Rationale |
+| docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#10 | authored | 2 | Consequences |
+| docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#13 | authored | 2 | Alternatives Considered |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#1 | authored | 1 | An agent instruction file routes to authority rather than restating it |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#2 | authored | 2 | Question |
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#6 | authored | 2 | The Restatement Is The Defect |
@@ -4541,6 +4547,133 @@ gives a KWB citation and, say, a schema name the same type, so passing one where
 is expected compiles — exactly the `Waiver { Check: path, Path: check }` failure
 `nomos-contracts`'s own `identity.rs` documents as the reason its identities are distinct
 newtypes rather than aliases.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#1
+
+*revision: authored · kind: heading · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation · hash: sha256:106af4e320f728d6832a0d0c793508088f5c30a3756546e61ca88c910ee527c3*
+
+# A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#2
+
+*revision: authored · kind: heading · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#3
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Decision · hash: sha256:cf24abc23fc9608677c472305f55d9107f90c14865ac1a26eda83c3d6a349e0c*
+
+When Nomos needs a domain-neutral capability that `D-135` would otherwise send to XVPE, but
+XVPE cannot yet absorb it — `D-130`'s Phase 5 gate has not opened, or no XVPE session is
+actively building the capability — the capability is built inside this repository under an
+ordinary Nomos-owned crate name. It is never given the `xvpe-` prefix, and no crate anywhere
+in this repository is named as though it already belonged to XVPE.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#4
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Decision · hash: sha256:4e684da5efead5d7cc8c86fb120d31c48c4317dae6c9bbd35dc23454fec103e6*
+
+Migration, when XVPE is ready to hold the capability, is a rename-and-move of the crate into
+XVPE and a corresponding dependency-edge change in Nomos, governed by `D-130` exactly as any
+other adoption: never a path dependency, never before Phase 5, only through the quarantined
+`nomos-platform-xvpe` adapter. Building the capability early reserves nothing about its
+future name and grants no exemption from `D-130`'s boundary test.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#5
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Decision · hash: sha256:9b9a1be8ca8c66c2601b3ad68a58d7b3558ff2b75ab91467af8feb11b8d35979*
+
+The crate's internal design still follows `D-135`'s intent: its public contract carries no
+Nomos-specific vocabulary — no crate, rule, finding, claim, or concept reference — so the
+later rename is mechanical rather than a rewrite.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#6
+
+*revision: authored · kind: heading · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Rationale · hash: sha256:e0682f7fa92faabf4e7019619e38e5c354daf233cff6ff3f9b1890a8982bb2db*
+
+## Rationale
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#7
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Rationale · hash: sha256:bb8f5c58ad4b7827586e26a5606594ebd39d7173d0d18b5bbf0f6c559fb0dae5*
+
+`D-130`'s own Alternatives Considered already rejected vendoring a wanted capability under
+its eventual name ahead of time, calling it a fork with no upstream path. Vendoring under
+the `xvpe-` prefix specifically is the thing that record already declined, not a gap it left
+open. The boundary test in `tests/contract/tests/boundaries/graph.rs` enforces this directly:
+any workspace member whose transitive dependencies include a name starting with `xvpe-`,
+outside `nomos-platform-xvpe`, fails — and a locally defined crate carrying that prefix would
+trip the same assertion the moment anything in this workspace depended on it.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#8
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Rationale · hash: sha256:741058b205a3844a99608ca9b117c87159b41ed076116ac59a705441b2aedc69*
+
+`D-135` answers where new domain-neutral code is authored the first time it is written, but
+answers it under the assumption that XVPE is available to receive it. It does not by itself
+answer the case this record closes: Nomos has a real, present need for a domain-neutral
+capability, and XVPE either cannot build it yet or has no session doing so. Leaving that gap
+unanswered invites exactly the naming shortcut `D-130` already rejected — staging code under
+a name that presumes migration before migration is possible.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#9
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Rationale · hash: sha256:93654aec82d9d96820fa0ab4da47f49f996991e949b3ca38de9a22417b1ba076*
+
+An ordinary Nomos-owned name costs one rename at actual migration time. That is cheap
+relative to a fork under a name the boundary test would otherwise have to be weakened to
+allow, and it keeps `D-130`'s naming guarantee — only `nomos-platform-xvpe` may say `xvpe-` —
+true without exception for as long as this record stands.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#10
+
+*revision: authored · kind: heading · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#11
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Consequences · hash: sha256:edbe0fb6b3dd49707950280ddf530ff9d752f72c65c7831c71a73e659fa4be43*
+
+No change to `D-130`'s boundary test, its Phase 5 gate, or its no-path-dependency rule. No
+change to `D-135`'s authorship default for the case where XVPE can actually receive new work.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#12
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Consequences · hash: sha256:51391712d1d519a939983c12b382c3ff8a0aceee07293ea1e208b18d68d2cb17*
+
+A future item that builds a domain-neutral capability ahead of an XVPE home names it as an
+ordinary Nomos crate and may cite this record for why it is not named `xvpe-<something>`
+despite being a migration candidate. This record creates no tracking mechanism for migration
+candidates; if that bookkeeping becomes real work rather than a naming question, it is a
+separate item once a concrete crate exists to track.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#13
+
+*revision: authored · kind: heading · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#14
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Alternatives Considered · hash: sha256:91b768a590e336e6d560f574294e923f8939ce43bc20cab4692a435184c6c6a1*
+
+Amending `D-130` to carve out an explicit `xvpe-`-named staging exception, with the boundary
+test updated to allow it and a manifest tracking migration intent, was considered and
+rejected here: it revisits reasoning `D-130` already gave for rejecting local staging under
+the target name, for a benefit — an accurate name a little earlier — that a one-time rename
+at real migration time already provides at much lower cost.
+
+### docs/records/D-138-a-capability-nomos-needs-before-xvpe-can-hold-it-is-named-as-nomos-own.md#15
+
+*revision: authored · kind: prose · heading: A capability Nomos needs before XVPE can hold it is named as Nomos's own, and migration is a rename rather than a naming reservation / Alternatives Considered · hash: sha256:e10e19e4456b27a569e70d40528d76951366ca33e15d45dfbfd600e387273b70*
+
+Waiting for XVPE to be able to receive new domain-neutral subsystems before building anything
+Nomos needs from that category was rejected: `D-130`'s own Alternatives Considered already
+rejected waiting for XVPE to stabilize before starting Nomos at all, for the same reason —
+the port-trait pattern makes the dependency optional, so Nomos's own progress does not need
+to pause for XVPE's schedule.
 
 ### docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md#1
 

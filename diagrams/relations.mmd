@@ -100,6 +100,7 @@ graph LR
     d_130 -->|"relates-to"| arc_connector_001
     d_130 -->|"relates-to"| arc_ecosystem_001
     d_130 -->|"relates-to"| d_135
+    d_130 -->|"relates-to"| d_138["D-138"]
     d_130 -->|"relates-to"| od_platform_001
     d_130 -->|"relates-to"| od_spec_014
     d_131 -->|"affects"| arc_specdb_001
@@ -130,6 +131,7 @@ graph LR
     d_135 -->|"relates-to"| d_130
     d_135 -->|"relates-to"| d_136
     d_135 -->|"relates-to"| d_137
+    d_135 -->|"relates-to"| d_138
     d_135 -->|"relates-to"| od_spec_014
     d_136 -->|"relates-to"| arc_ecosystem_001
     d_136 -->|"relates-to"| arc_ecosystem_002
@@ -141,6 +143,8 @@ graph LR
     d_137 -->|"relates-to"| d_136
     d_137 -->|"relates-to"| od_model_002
     d_137 -->|"relates-to"| od_spec_014
+    d_138 -->|"relates-to"| d_130
+    d_138 -->|"relates-to"| d_135
     od_agent_001 -->|"relates-to"| arc_ecosystem_001
     od_agent_001 -->|"relates-to"| arc_harness_001
     od_agent_001 -->|"relates-to"| od_agent_002["OD-AGENT-002"]
@@ -720,6 +724,7 @@ graph LR
     d_135
     d_136
     d_137
+    d_138
     od_agent_001
     od_agent_002
     od_analysis_001
