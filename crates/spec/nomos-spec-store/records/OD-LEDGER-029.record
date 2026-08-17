@@ -1,0 +1,3 @@
+# The registration for OD-LEDGER-029. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md

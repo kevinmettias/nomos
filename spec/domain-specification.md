@@ -88,6 +88,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
 | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md@authored | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md | authored | 31 | 10 | sha256:0f75915bb0a6e047768f8b26509aa5e946b77f20b68f07298aacb082d7709cfa |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md@authored | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md | authored | 19 | 8 | sha256:409f9c166337da0afc4471e4c50cd9431117d100ddbc5527846feeb8d7048533 |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md@authored | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md | authored | 22 | 8 | sha256:ab29d2a1225a5ff3aabc40822a8a4487b9d23f1d2a4be034ab7a664619f74a0e |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -831,6 +832,14 @@ profile: domain-specification
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#14 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#16 | authored | 2 | What Would Make This Stale |
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#18 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#1 | authored | 1 | A crate-wide reservation going stale is not the same event as a new one arriving |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#5 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#10 | authored | 2 | What This Costs |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#12 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#17 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#19 | authored | 2 | What Would Make This Stale |
+| docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#21 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -23535,6 +23544,210 @@ forcing the same path, which changes the entry's reason rather than removing it.
 It does not decide whether `P10-VACUITY-HOME` or `P10-SERVICE-SEAM` is right to reserve the
 whole crate as a matter of good territory authoring — only that neither is the accident
 `OD-LEDGER-011` closed two of, and that deciding otherwise is not this item's to make.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#1
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving · hash: sha256:ed500244ab35d137502060af639b7223ca46681bef8cfad15552730dfa599537*
+
+# A crate-wide reservation going stale is not the same event as a new one arriving
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#2
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#3
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Question · hash: sha256:e782a2d657a4ff3d70ed828d2a21b18161c0b0b4843df8e81807251780447b7d*
+
+`OD-LEDGER-028` named its own expiry condition in advance: `crates/host/nomos-cli`'s entry
+in `KNOWN_SERIALIZERS` would go stale "either open item reaching `Done`, if the other by
+then no longer reserves the whole crate." `P10-VACUITY-HOME` reached `Done` while
+`P11-NEXT-WORK` was in progress, leaving `P10-SERVICE-SEAM` as the only open item still
+reserving the whole crate — one, not two — and
+`Test_Every_Declared_Serializer_Should_Still_Serialize` went red exactly the way that
+record predicted it would.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#4
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Question · hash: sha256:8ed280bf34a1ea03940116cc69c4941902478b4aad047fcd706fc0de4b92dce4*
+
+A second, unrelated fact arrived in the same window. `P11-NEXT-WORK`, in progress on the
+same board, reserves two specific files rather than a whole crate:
+`crates/host/nomos-cli/src/work.rs`, the ledger CLI dispatcher its `next:` line is added
+to, and `tests/contract/surface/nomos-ledger.txt`, the one public-surface snapshot its new
+export changes — `OD-LEDGER-011`'s own settled shape for that territory. Both collide with
+`P10-SERVICE-SEAM`'s whole-crate and whole-directory reservations, for the reason
+`OD-LEDGER-028` already accepted: an item asking whether the crate needs an adapter seam
+cannot yet name which file a not-yet-chosen implementation would touch. Because
+`P11-NEXT-WORK` is the only other currently-open record writer with satisfied
+dependencies, both collisions are universal by
+`Test_Every_Universal_Reservation_Should_Be_Declared`'s own definition — reserved by every
+open record writer, not merely contended between two of them.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#5
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#6
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Decision · hash: sha256:ee7b872dd8f9c52466150b93274e3d578b81cabc3627f8ff6e15d929c41e5d72*
+
+**All three facts are decided together, because they are one register and one commit, not
+three.**
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#7
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Decision · hash: sha256:85a3231c31589c33675f12e4b3781eb5b6356778269202b19e395a8053f9af12*
+
+`crates/host/nomos-cli`'s existing entry is removed. Its coupling does not resolve into
+ordinary contention — `P10-SERVICE-SEAM` alone reserving the whole crate is one item's
+territory, which is what territory is for, not a structural serializer. Restated only if a
+second open item again reserves the crate whole with no narrower file to name.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#8
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Decision · hash: sha256:366a91d1fcfb9e9e83005eaeb823977494f500a4df4c6b943aea1f564bf1c199*
+
+Two entries replace it, one per file `P11-NEXT-WORK` actually touches inside
+`P10-SERVICE-SEAM`'s two broad reservations: `crates/host/nomos-cli/src/work.rs` and
+`tests/contract/surface/nomos-ledger.txt`.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#9
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Decision · hash: sha256:3549defca3c1bd257c7b74750d4eebebabb761b89775d948f3605e9a95e30ee7*
+
+**Each is keyed to the narrower of the two colliding paths, not the directory or crate
+`P10-SERVICE-SEAM` names.** `Covers` — the direction
+`Test_Every_Declared_Serializer_Should_Still_Serialize` checks — is coarser-reserves-finer:
+a reservation `Covers` a declared path only when its own normalized length is no longer
+than the declared path's. `P10-SERVICE-SEAM`'s whole-crate reservation covers a narrow
+declared file; a narrow declared file trivially covers itself when `P11-NEXT-WORK`'s own
+territory is exactly that file. Declaring the *directory* instead would have covered
+`P10-SERVICE-SEAM` the same way but not `P11-NEXT-WORK`, whose own path is longer than the
+directory it sits inside — `Reserving` would then count one writer, not two, and the entry
+would read as declared-but-not-serializing the moment it was written. This asymmetry is
+deliberate: `OD-LEDGER-011`'s own history is why `Covers` is directional rather than the
+symmetric `Paths_Collide` the universal-reservation search uses — a symmetric reading would
+count a narrow reservation as forever reserving the directory around it, and the register
+could never empty by narrowing, only by an item disappearing.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#10
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#11
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What This Costs · hash: sha256:040d7dee0bf15fa5aae781e6ca393e310001b980dff1de7484d539a8077bd025*
+
+Unchanged from `OD-LEDGER-007` and `OD-LEDGER-028`: every record-writing item whose
+verification predicate reaches `cargo test -p nomos-ledger` carries this exclusion until it
+clears. What is new here is the register changing composition rather than only growing —
+the first time an entry born of one pairing has gone stale while a second, unrelated
+pairing arrived inside the same commit's window, and the first time an entry is keyed to
+one side's narrow file rather than the shared crate or directory name, because that is what
+`Covers`'s own direction requires when the two colliding territories are not the same
+spelling.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#12
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#13
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What Was Considered And Rejected · hash: sha256:5dd6be255891ee95a60742e3837f1d075e9fd41b251b3ecf5c95ddc707921fbe*
+
+**Narrowing `P11-NEXT-WORK`'s own territory instead of declaring the coupling.** Available
+here in a way it was not for `OD-LEDGER-007` or `OD-LEDGER-028` — this record's author
+holds `P11-NEXT-WORK` and could narrow it without touching anybody else's open item.
+Rejected because there is nothing left to narrow: both files already name the one thing
+each part of the item's work touches, the same shape `OD-LEDGER-011` settled as correct
+for a public-surface snapshot. The collision is not this item's territory being wider than
+its work; it is `P10-SERVICE-SEAM`'s being exactly as wide as `OD-LEDGER-028` already
+accepted a not-yet-implemented architectural question needs to be.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#14
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What Was Considered And Rejected · hash: sha256:71d66a2defb33a70f0d9c03c99d7991a91f7887802ba017ba0085139e56e1c21*
+
+**Declaring `crates/host/nomos-cli` and `tests/contract/surface` — the directory spellings
+— instead of the two narrow files.** Tried first and found to reproduce
+`Test_Every_Declared_Serializer_Should_Still_Serialize`'s failure one layer over: `Covers`
+does not hold in `P11-NEXT-WORK`'s direction for a path longer than the one declared, so a
+directory-keyed entry counts only `P10-SERVICE-SEAM` and reads as stale immediately. The
+narrow-file keying is not a style choice; it is what makes the entry actually still
+serialize under the check that asks.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#15
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What Was Considered And Rejected · hash: sha256:85f407a118399b37f36b439da3b5dfe96e7271ea4d4e2b5d4213cb0295bb1c06*
+
+**Leaving the stale entry in place until `P10-SERVICE-SEAM` itself resolves.** Rejected
+because `Test_Every_Declared_Serializer_Should_Still_Serialize` is the control that exists
+precisely to catch an over-reporting register, and leaving a known-stale entry in place to
+avoid a second edit is the failure mode that test was built against, restated as a
+convenience.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#16
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What Was Considered And Rejected · hash: sha256:b5358e0797b0f197f95f86202b513b57f0a57e2c3ec8c9fb261165c23876108e*
+
+**Waiting for the two new collisions to resolve on their own, the way ordinary two-item
+contention does.** They will not while both items stay open: each is universal across every
+currently-open record writer with satisfied dependencies, which by the register's own
+definition is a rule, not contention, and a rule does not resolve when one party finishes
+— the next record writer to arrive with a file under either path inherits it too.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#17
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#18
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Controls · hash: sha256:77d5261171acf0a0929710472cdd0606479dde7316f4b6325a0f50475cfa53d5*
+
+| Weakening | What it produces |
+|---|---|
+| leave `crates/host/nomos-cli` declared | `Test_Every_Declared_Serializer_Should_Still_Serialize` fails, an over-reporting register `OD-LEDGER-011`'s own history warns against |
+| leave either new collision undeclared | `Test_Every_Universal_Reservation_Should_Be_Declared` fails, the exact defect this register exists to catch |
+| declare the directory spelling instead of the narrow file | `Test_Every_Declared_Serializer_Should_Still_Serialize` fails again, one layer over: `Covers` does not hold in `P11-NEXT-WORK`'s direction for the coarser path |
+| narrow `P11-NEXT-WORK` below the one file each part of its work touches | a territory authored to guess at independence rather than to measure it |
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#19
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What Would Make This Stale · hash: sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac*
+
+## What Would Make This Stale
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#20
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / What Would Make This Stale · hash: sha256:671cf78664c640574a43f8a1e7adcddbf5ed8afb4884b2a5b6acda11eca0ad80*
+
+The same condition `OD-LEDGER-028` named, applied to each new entry: `P10-SERVICE-SEAM` or
+`P11-NEXT-WORK` reaching `Done` while the other no longer reserves the colliding path, or a
+third open item forcing the same path, which changes an entry's reason rather than
+removing it.
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#21
+
+*revision: authored · kind: heading · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#22
+
+*revision: authored · kind: prose · heading: A crate-wide reservation going stale is not the same event as a new one arriving / Status · hash: sha256:126f1fac06f6b2e9e1c7437c1bb3564307903e7907371e921a885a6b592d6656*
+
+Closed by `P11-CRATE-SERIALIZER-4`.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

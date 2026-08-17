@@ -7562,10 +7562,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-sonnet-next-work",
+        "acquired_at": 1786989513,
+        "lease_expires_at": 1786996713
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -12491,6 +12495,70 @@
           "exit_code": 0
         },
         "revision": "f0bec5eeb801057e2b274c402b3de7eff11941be"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-CRATE-SERIALIZER-4",
+      "title": "The crate-wide serializer register is stale on one entry and missing a second, in the same window",
+      "why": "OD-LEDGER-028 named its own expiry in advance: crates/host/nomos-cli's KNOWN_SERIALIZERS entry goes stale when either of the two items forcing it -- P10-VACUITY-HOME or P10-SERVICE-SEAM -- reaches Done while the other no longer reserves the whole crate. P10-VACUITY-HOME reached Done (this session) and P10-SERVICE-SEAM alone reserving the crate is not a structural serializer, so Test_Every_Declared_Serializer_Should_Still_Serialize now fails exactly the way that record predicted. In the same window, P11-NEXT-WORK's territory (authored before this session, reserving tests/contract/surface/nomos-ledger.txt -- the single-file shape OD-LEDGER-011 already settled for a public-surface snapshot) collides with P10-SERVICE-SEAM's whole-directory reservation of tests/contract/surface, for the identical reason OD-LEDGER-028 already accepted for crates/host/nomos-cli: an item asking whether the crate needs an adapter seam cannot yet name which file of a not-yet-chosen implementation would carry it. Because P11-NEXT-WORK is the only other open record writer with satisfied dependencies, that collision is universal by the register's own definition, and Test_Every_Universal_Reservation_Should_Be_Declared now fails on it. Both facts are confirmed against a fully committed HEAD (e710cf9) with no uncommitted tree changes in the comparison. OD-LEDGER-029 (drafted, not yet registered) decides both together: remove the stale crates/host/nomos-cli entry, add tests/contract/surface naming P10-SERVICE-SEAM and P11-NEXT-WORK.",
+      "done_when": "KNOWN_SERIALIZERS in crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs no longer carries a crates/host/nomos-cli entry, and carries a tests/contract/surface entry naming P10-SERVICE-SEAM and P11-NEXT-WORK and why each reserves the whole directory rather than a file in it, in the (&str, &str) shape the prior entries used. OD-LEDGER-029 is registered (crates/spec/nomos-spec-store/records/OD-LEDGER-029.record points at its docs/records file) and both the diagram-set and domain-specification projections are re-rendered from a tree holding exactly HEAD plus this item's own new record files, and committed. cargo test -p nomos-ledger --test records_do_not_serialize -- serializers:: passes over the repository's real board (not a fixture). Not closed by declaring either entry without naming what forces it -- an entry with no reason is the authoring accident OD-LEDGER-007's register is written in prose specifically to avoid. Not closed by leaving the stale crates/host/nomos-cli entry in place alongside the new one: the register over-reporting is the failure OD-LEDGER-011 already found once.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-029.record",
+          "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "serializers::"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "serializers::"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 5 tests\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest serializers::Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest serializers::Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.01s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.70s\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n",
+        "verified_at": 1786991047,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e710cf91369761f67c6ca254fc33ac2285f3b669"
       },
       "abandoned": [],
       "displaced": [],

@@ -30,25 +30,54 @@ use std::collections::BTreeSet;
 /// both to the artefact — `records/<ID>.record` and `surface/<crate>.txt` — and the two
 /// tests below are what confirmed the entries were gone rather than merely deleted.
 ///
-/// The register emptied and then did not stay empty. `crates/host/nomos-cli` is the third
-/// entry, and `OD-LEDGER-028` is why it is declared rather than narrowed: the two items
-/// forcing it are each deciding something about the crate's own shape, so neither can name
-/// a file inside it without guessing at an implementation it has not chosen. The
-/// declaration is what makes growth a decision either way — narrowing would be a decision
-/// too, made in somebody else's open territory rather than this one.
-const KNOWN_SERIALIZERS: &[(&str, &str)] = &[(
-    "crates/host/nomos-cli",
-    "P10-VACUITY-HOME and P10-SERVICE-SEAM, both open. Each is a whole-crate question by \
-     what it is deciding rather than by how it was scoped: P10-VACUITY-HOME asks where a \
-     guarantee that must hold for every judging command in this crate should live, and \
-     P10-SERVICE-SEAM asks whether the crate's own composition-root shape needs a seam \
-     between choosing a platform, running a verb and rendering its outcome, across all six \
-     of its modules. Neither has chosen an implementation, so neither can name a narrower \
-     file today without guessing at one. OD-LEDGER-028 records why this is declared rather \
-     than narrowed. It comes out the way the two entries above did: when one of the two \
-     reaches Done and the other no longer reserves the whole crate, or when a third open \
-     item shows the same forcing and the entry needs to name three rather than two.",
-)];
+/// The register emptied and then did not stay empty, and the entry that arrived did not
+/// outlast the pairing that forced it. `crates/host/nomos-cli` was declared because
+/// `P10-VACUITY-HOME` and `P10-SERVICE-SEAM` both reserved the whole crate; `P10-VACUITY-HOME`
+/// reached `Done` with `P10-SERVICE-SEAM` alone left reserving it, which is ordinary
+/// territory rather than a structural serializer, and `OD-LEDGER-028` named that exact
+/// condition as the entry's own expiry in advance.
+///
+/// What replaced it is `P10-SERVICE-SEAM` against `P11-NEXT-WORK`, over the same
+/// not-yet-implemented question as before — `P10-SERVICE-SEAM` cannot yet name which file a
+/// second command's adapter would touch, so it reserves `crates/host/nomos-cli` and
+/// `tests/contract/surface` whole — colliding with the two specific files `P11-NEXT-WORK`
+/// *has* chosen: `crates/host/nomos-cli/src/work.rs`, the one file its territory needs
+/// there, and `tests/contract/surface/nomos-ledger.txt`, the single file `OD-LEDGER-011`
+/// already settled as a crate's public-surface-snapshot territory. `Covers` — the
+/// direction [`Test_Every_Declared_Serializer_Should_Still_Serialize`] checks, coarser
+/// reserving finer — is why each entry below is keyed to the narrower of the two colliding
+/// paths rather than the directory: `P10-SERVICE-SEAM`'s broad reservation covers a narrow
+/// declared path, and `P11-NEXT-WORK`'s own path covers itself, so both continue counting
+/// for exactly as long as both items actually do; declaring the directory instead would
+/// stop counting `P11-NEXT-WORK` the moment it was written; that asymmetry is deliberate,
+/// `OD-LEDGER-011`'s own history is why. `OD-LEDGER-029` records the whole change — the
+/// stale entry's removal and both new ones' arrival — together, because the reasoning for
+/// each entry is independent and a reader of one should not have to read another to know
+/// why it is there.
+const KNOWN_SERIALIZERS: &[(&str, &str)] = &[
+    (
+        "crates/host/nomos-cli/src/work.rs",
+        "P10-SERVICE-SEAM and P11-NEXT-WORK, both open. P10-SERVICE-SEAM reserves \
+         crates/host/nomos-cli whole for the reason OD-LEDGER-028 already accepted: its own \
+         question — whether choosing a platform, running a verb and rendering an outcome \
+         need a seam between them — has not chosen an implementation, so it cannot name a \
+         narrower file. P11-NEXT-WORK reserves this one file, the ledger verb dispatcher \
+         its `next:` line is added to. OD-LEDGER-029 records why this is declared rather \
+         than narrowed. It comes out the way the entry above it did: when one of the two \
+         reaches Done and the other no longer reserves the whole crate, or when a third \
+         open item shows the same forcing and the entry needs to name three rather than \
+         two.",
+    ),
+    (
+        "tests/contract/surface/nomos-ledger.txt",
+        "P10-SERVICE-SEAM and P11-NEXT-WORK, both open. P10-SERVICE-SEAM reserves \
+         tests/contract/surface whole for the reason above, over the directory a second \
+         command's adapter surface would live under. P11-NEXT-WORK reserves this one file, \
+         the single file OD-LEDGER-011 already settled as the correct territory for a \
+         crate's own public-surface snapshot. OD-LEDGER-029 records why this is declared \
+         rather than narrowed, on the same terms as the entry above.",
+    ),
+];
 
 /// The paths the register declares, without what forces each of them.
 fn Declared() -> Vec<&'static str>

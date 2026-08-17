@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8cde9df4b24cb15029f5c3f3dd10d546df51c78af5bb6ac151890d6ca84f6772",
-  "inputs_digest": "sha256:f8c006c76a48d34f32d7e20f3cd60136e89e91acae9e5390b9898d8ca63c44e3",
+  "content_digest": "sha256:650ec1167f03eb0476927e3b1955faa080eeea08435855d819698b04ae8ccdff",
+  "inputs_digest": "sha256:772243d568955d0949d73aae78a215f160ee13cdfd9610e1aee3cd3e2d1f771f",
   "sections": [
     [
       "Documents",
-      114
+      115
     ],
     [
       "Sections",
-      1040
+      1048
     ],
     [
       "Source blocks",
-      3816
+      3838
     ]
   ],
   "inputs": [
@@ -409,6 +409,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md@authored",
       "hash": "sha256:409f9c166337da0afc4471e4c50cd9431117d100ddbc5527846feeb8d7048533"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md@authored",
+      "hash": "sha256:ab29d2a1225a5ff3aabc40822a8a4487b9d23f1d2a4be034ab7a664619f74a0e"
     },
     {
       "content": "documents",
@@ -4099,6 +4104,46 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#18",
       "hash": "sha256:fb92736b6a55beee146f9a5dc016a8f690c1eaaaa55d96adb6ef8062ca179994"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#1",
+      "hash": "sha256:0bd42b1f69b4edbaa2972a4e1d6521f0571272c0de107dca8b5be86f08fb108f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#2",
+      "hash": "sha256:6e8b30f26d1affa308808630d8a741447a204cb0ef807cce3826301b5f432bf9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#5",
+      "hash": "sha256:6819b6f6f2a6b0dce308cc7bf5db12f44bc27b89e5684c2feddc5cb470cfb957"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#10",
+      "hash": "sha256:a00267235c05dd3d067d8e09be8268ca7ccd51d45f20dffe6b228bb5076240bc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#12",
+      "hash": "sha256:a41bb2e7abaf80348428303eddcaf6d0ba90f5126ce275080824582f27820752"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#17",
+      "hash": "sha256:10c56111882b1e222191578b312ae09f9b70042e6ad012bb8fb24da3c638abf8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#19",
+      "hash": "sha256:ef3783cb8ef429df0a15c9f0b4750813987ae1e6a62e63f2196b0de6791d2e98"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#21",
+      "hash": "sha256:5f0c87809416e76ba46f7e8a8bed6f15af6bfb48aecbbd43d17cfda17afac66e"
     },
     {
       "content": "headings",
@@ -18609,6 +18654,116 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md#19",
       "hash": "sha256:4dfb2c0efdde8c5bec0b99241b2152993e81f303c541284b60549845b9105925"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#1",
+      "hash": "sha256:ed500244ab35d137502060af639b7223ca46681bef8cfad15552730dfa599537"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#3",
+      "hash": "sha256:e782a2d657a4ff3d70ed828d2a21b18161c0b0b4843df8e81807251780447b7d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#4",
+      "hash": "sha256:8ed280bf34a1ea03940116cc69c4941902478b4aad047fcd706fc0de4b92dce4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#5",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#6",
+      "hash": "sha256:ee7b872dd8f9c52466150b93274e3d578b81cabc3627f8ff6e15d929c41e5d72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#7",
+      "hash": "sha256:85a3231c31589c33675f12e4b3781eb5b6356778269202b19e395a8053f9af12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#8",
+      "hash": "sha256:366a91d1fcfb9e9e83005eaeb823977494f500a4df4c6b943aea1f564bf1c199"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#9",
+      "hash": "sha256:3549defca3c1bd257c7b74750d4eebebabb761b89775d948f3605e9a95e30ee7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#10",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#11",
+      "hash": "sha256:040d7dee0bf15fa5aae781e6ca393e310001b980dff1de7484d539a8077bd025"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#12",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#13",
+      "hash": "sha256:5dd6be255891ee95a60742e3837f1d075e9fd41b251b3ecf5c95ddc707921fbe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#14",
+      "hash": "sha256:71d66a2defb33a70f0d9c03c99d7991a91f7887802ba017ba0085139e56e1c21"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#15",
+      "hash": "sha256:85f407a118399b37f36b439da3b5dfe96e7271ea4d4e2b5d4213cb0295bb1c06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#16",
+      "hash": "sha256:b5358e0797b0f197f95f86202b513b57f0a57e2c3ec8c9fb261165c23876108e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#17",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#18",
+      "hash": "sha256:77d5261171acf0a0929710472cdd0606479dde7316f4b6325a0f50475cfa53d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#19",
+      "hash": "sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#20",
+      "hash": "sha256:671cf78664c640574a43f8a1e7adcddbf5ed8afb4884b2a5b6acda11eca0ad80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md#22",
+      "hash": "sha256:126f1fac06f6b2e9e1c7437c1bb3564307903e7907371e921a885a6b592d6656"
     },
     {
       "content": "blocks",
