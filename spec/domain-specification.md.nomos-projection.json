@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:6c38dba670a385b536cc83b9548ae67a3c75b66c4221b26b9c0e3cf359c4ee1b",
-  "inputs_digest": "sha256:8274e3dd89ce05915766db51c52cbf61f0359e09eea85656834d587f89fc08a6",
+  "content_digest": "sha256:8463e29c865d79879d0f331f99071b499da311cab63234d367224620e6ae4de1",
+  "inputs_digest": "sha256:15fbe017ce4d1908a9e9884b58c147652a40b292bd1c0c899c7c91a2fa206683",
   "sections": [
     [
       "Documents",
-      116
+      117
     ],
     [
       "Sections",
-      1056
+      1067
     ],
     [
       "Source blocks",
-      3858
+      3882
     ]
   ],
   "inputs": [
@@ -384,6 +384,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored",
       "hash": "sha256:b9fc15303e4b06b9d65008a1a854ce62942151af4b55cdd10c832ce057563cf5"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md@authored",
+      "hash": "sha256:62bf063f758eb9add016cf3720f2a90cf662d3a26d740a08e474837ca3d46dea"
     },
     {
       "content": "documents",
@@ -3864,6 +3869,61 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#26",
       "hash": "sha256:0fb56d7a21506c81ce0593d799dc24d677567aa77f9e30e0af0d24484d2c4d03"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#1",
+      "hash": "sha256:c8f5e895f06f98c6043f46c896f64b1103824e91c3cad37624aacb9a24f0383b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#2",
+      "hash": "sha256:a8e314917ab487e67fc8a0cfb0108ab6196dd06c6a13dc7d0a430183a0433a55"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#4",
+      "hash": "sha256:6cb7a8afab44fced338544a95ba0fa71242f829790bc64c63ba691d9b84f7b7a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#8",
+      "hash": "sha256:e061daa3ab612479da7844736a0a1b751d6cd337433f32b0ad27bc4bfae1facd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#9",
+      "hash": "sha256:3c3a74e7ea2181d69655fcca7dab2324fc16735ef25c0b3bc2d7fcf57c10487d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#11",
+      "hash": "sha256:05a5c7fffb15aa9b977b025211e933a2545b6f0583775c5bf07aa2ffa1ebd685"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#13",
+      "hash": "sha256:c1666286831a8e05bd58a336e7bf3b3653bc58d9feb7625debbb15c7e221088a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#15",
+      "hash": "sha256:c863274363f760d60f44814e3efdfd020d58686c50857638ec490c7ae1b11c2e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#17",
+      "hash": "sha256:fee46a1e86865ce8ca455ae93c7e934e94c07718ae37eb08cc5cd758de4cd151"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#21",
+      "hash": "sha256:ec646fe35c2d539258b378eda0f4df7880bb9e89d567e4ef516763cc8e7099e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#23",
+      "hash": "sha256:536c52ef9fd236b440c17d7b086117647534b47af49e7738b2a6e3d6a46efa53"
     },
     {
       "content": "headings",
@@ -17884,6 +17944,126 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#29",
       "hash": "sha256:be84945e55617721f284560868f4864bb9b068647ce7800a1b3cf786186888b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#1",
+      "hash": "sha256:1c90f10470d9663396b4560243690a0a576135d23e5ba5493689fde22240ce42"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#3",
+      "hash": "sha256:73905fa98cc77fe1cd31e0f4b6008a9614aca78bca056dd93271fe5ebb323c80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#4",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#5",
+      "hash": "sha256:06bfb922ab77afea4efa81171b36c6f58a79edc5e592ae887ea02c36f8c47af9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#6",
+      "hash": "sha256:4ffc116994b2682fa51fd9486d86eee2e5891ec9f3d893eb96f782be99c836d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#7",
+      "hash": "sha256:33cdba1abbe6058bb38d974ec278c6c4e569ca7d1f4d2e08278c5acd9e4c306a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#9",
+      "hash": "sha256:6f1c97e74d6e60dc7f8122a071904f4e01f8b9dfabc9286d65d90e59e2b9ab06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#10",
+      "hash": "sha256:02f63aa6667851d7e204bb164222c010ffff41d0adecc2cf2818b185f7e62650"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#11",
+      "hash": "sha256:ae7d1630f40b8aac2a68541b8da7f5faa6e252c9679b439279a642e69b1ffa3d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#12",
+      "hash": "sha256:e3f9a835ac35c6ab64fedacb5e9e3f6e7d4926031d786f5e1c97ec52d0d0d62d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#13",
+      "hash": "sha256:3898a3bb27042886659f2753a9cb030665119772dbafbdd151e98e8dbfeaddeb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#14",
+      "hash": "sha256:8edf3299ed97544c170f3491dec3227ab767ce88cc4f99ac73bb0f862c7ad1c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#15",
+      "hash": "sha256:883a081cc2c791368c66af37700ef4f42f8de3af4ddf42f6c5d11971917decfc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#16",
+      "hash": "sha256:3b00ade1b8b47f33a64e1e7a52475b021a4cf9b4b47c813b132aaed8f7592297"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#17",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#18",
+      "hash": "sha256:006a7ec6e8874ee8107c5eaba4e2f4dcf703a08782473261edf3bf64845e22f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#19",
+      "hash": "sha256:2b32e3eeb5252d4f28cca789737c150df2bb969e7a17d639f1d1e5aa735b645e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#20",
+      "hash": "sha256:358e58e2c264f07e5857c4be4d189ef0076982a93e94510955552eb04a453fdb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#21",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#22",
+      "hash": "sha256:c7b32282cdfc419cad9e756c41d5a5992290e454aa09ed53dacf7d2b69e03cc3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#23",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#24",
+      "hash": "sha256:f3d4953b77c3f24801b57a1ac2dca3df61483f5e23c02b59effe83ff4a859ec9"
     },
     {
       "content": "blocks",

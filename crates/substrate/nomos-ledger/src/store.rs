@@ -24,7 +24,7 @@ use claiming::{Install_Claim, With_Own_Claim};
 use file::{Decide_Under_Lock, Load, Save};
 use verbs::{Add, Decline, Take_Over, Validate_Current};
 
-pub use refusal::Claim_Refusal;
+pub use refusal::{Claim_Refusal, Eligible_Items};
 pub use validation::Validate;
 
 use std::path::{Path, PathBuf};

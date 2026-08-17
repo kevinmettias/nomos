@@ -83,6 +83,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md@authored | docs/records/OD-LEDGER-020-a-declined-dependency-is-a-dead-end-and-a-dependent-may-not-be-told-to-wait.md | authored | 27 | 12 | sha256:3ebb2bcba88f6c72bbc391ea21070ee09c26d62ed613c9445085c22688fcb962 |
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md | authored | 29 | 8 | sha256:b9fc15303e4b06b9d65008a1a854ce62942151af4b55cdd10c832ce057563cf5 |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md@authored | docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md | authored | 24 | 11 | sha256:62bf063f758eb9add016cf3720f2a90cf662d3a26d740a08e474837ca3d46dea |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md@authored | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md | authored | 42 | 11 | sha256:d34cb4980991f1dea453392a7c9146606771d68470cbb42fa3be7af96b5872c7 |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 39 | 12 | sha256:eb130f220e8857ef4f36ac411db06e950f6210ff703608149af6925e7fc60640 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
@@ -784,6 +785,17 @@ profile: domain-specification
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#18 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#23 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md#26 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#1 | authored | 1 | What to work on next is computed from the board, and not read off it |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#8 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#9 | authored | 3 | 1. `Eligible_Items` computes the real answer, once |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#11 | authored | 3 | 2. The order is id, because nothing else is written down yet |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#13 | authored | 3 | 3. The answer surfaces on `work list`, not a new verb |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#15 | authored | 3 | 4. `AGENTS.md` routes through it |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#17 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#21 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#23 | authored | 2 | Status |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#1 | authored | 1 | An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#7 | authored | 2 | What Changed |
@@ -22094,6 +22106,208 @@ territory that belongs to work this item was not authored to also carry.
 this exact seam — "the scheduler decides what should run, coordination decides whether it can
 run now" — and a second pair of names for the same distinction is the kind of drift a reader
 five records later has to reconcile by hand.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#1
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it · hash: sha256:1c90f10470d9663396b4560243690a0a576135d23e5ba5493689fde22240ce42*
+
+# What to work on next is computed from the board, and not read off it
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#2
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#3
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / Question · hash: sha256:73905fa98cc77fe1cd31e0f4b6008a9614aca78bca056dd93271fe5ebb323c80*
+
+Every ledger verb answers *may I have this one* — `Claim`, `Renew`, `Take_Over`, `Decline`
+and the refusal each can give. None answers *which one*. `AGENTS.md`'s loop said "Read the
+board. Pick an item," and the only thing shaped like selection was `work list`'s state
+column, which `README.md` already warns means nothing seconds after it is printed. So the
+choice of what to work on next was made by whichever session read the listing, and two
+sessions reading the same board could differ with nothing recording that they had.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#4
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#5
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / What Was Measured · hash: sha256:06bfb922ab77afea4efa81171b36c6f58a79edc5e592ae887ea02c36f8c47af9*
+
+Two incidents, not a hypothetical cost.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#6
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / What Was Measured · hash: sha256:4ffc116994b2682fa51fd9486d86eee2e5891ec9f3d893eb96f782be99c836d7*
+
+`P10-DECLINE-VERB`'s own rationale records that one subject became three items —
+`P10-REQUIRABLE-DECLARED`, `P10-REQUIRABLE-FLOOR` which delivered the work, and
+`P10-REQUIRABLE-SET` which redid work already landed — because the reasons that would have
+prevented the duplication existed as abandonments on the item and sat behind `work show`
+while the state column still said `Ready`. A session spent a full run duplicating what was
+already committed.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#7
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / What Was Measured · hash: sha256:33cdba1abbe6058bb38d974ec278c6c4e569ca7d1f4d2e08278c5acd9e4c306a*
+
+Separately, three sessions independently reserved `docs/records/OD-LEDGER-020` and two
+reserved `OD-LEDGER-021`, each authored by a session reaching for the next free `OD-LEDGER`
+number off the same snapshot. `work add` refuses a duplicate item id and nothing else, so
+five reservations of two identifiers were recorded before anybody compared them —
+`P11-SELECTION-AUTHORITY`'s decline is the record of that collision, and it is a smaller
+waste than the first incident but the same shape: a choice made from a snapshot by whoever
+was reading it, with no authority above the ledger to make it once.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#8
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#9
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / The Decision / 1. `Eligible_Items` computes the real answer, once · hash: sha256:6f1c97e74d6e60dc7f8122a071904f4e01f8b9dfabc9286d65d90e59e2b9ab06*
+
+### 1. `Eligible_Items` computes the real answer, once
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#10
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / The Decision / 1. `Eligible_Items` computes the real answer, once · hash: sha256:02f63aa6667851d7e204bb164222c010ffff41d0adecc2cf2818b185f7e62650*
+
+`nomos_ledger::store::refusal::Eligible_Items(document, now)` filters `document.items` to
+exactly those `Claim_Refusal(document, &item.id, now) == None` — the same function `Claim`
+and `Listing_Label` already share, so a third opinion about which items are actually
+takeable does not get a chance to disagree with the other two. This is the same discipline
+`OD-LEDGER-005` names for `Claim_Refusal` itself, applied over the whole board instead of
+one item.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#11
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / The Decision / 2. The order is id, because nothing else is written down yet · hash: sha256:ae7d1630f40b8aac2a68541b8da7f5faa6e252c9679b439279a642e69b1ffa3d*
+
+### 2. The order is id, because nothing else is written down yet
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#12
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / The Decision / 2. The order is id, because nothing else is written down yet · hash: sha256:e3f9a835ac35c6ab64fedacb5e9e3f6e7d4926031d786f5e1c97ec52d0d0d62d*
+
+`OD-LEDGER-017` deferred a `priority` field rather than add one that would satisfy the
+letter of `WORK-LEDGER-001` while ageing worst of the three ranking keys the corpus named,
+and left the other two — how many descendants an item unblocks, and conflict risk — as
+derivable from `depends_on` and `territory` rather than built. Building that derivation is
+not this record's subject. `Eligible_Items` sorts by `ItemId` — lexicographic, stable, and
+the one key every item already carries that two sessions reading the same board are
+guaranteed to compare identically. It is the tie-break for as long as no ranking exists to
+replace it, not a ranking of its own.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#13
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / The Decision / 3. The answer surfaces on `work list`, not a new verb · hash: sha256:3898a3bb27042886659f2753a9cb030665119772dbafbdd151e98e8dbfeaddeb*
+
+### 3. The answer surfaces on `work list`, not a new verb
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#14
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / The Decision / 3. The answer surfaces on `work list`, not a new verb · hash: sha256:8edf3299ed97544c170f3491dec3227ab767ce88cc4f99ac73bb0f862c7ad1c1*
+
+`WorkCommand` and its parser (`crates/host/nomos-cli/src/work/command.rs`,
+`crates/host/nomos-cli/src/work/parse.rs`) are outside this item's territory — a
+dedicated `nomos work next` would need both, and the item that reserved this record
+reserved only `crates/host/nomos-cli/src/work.rs`. `List`, the function behind the existing
+`list` verb, is inside that file, so the eligible set's first item is printed as a `next:`
+trailer line on an unfiltered `work list` — the "read the board" call the loop's step 2
+makes. Filtered calls (`--state lapsed` and the like) do not carry it: a filter asks for one
+bucket's rows, and a summary naming an item outside that bucket would contradict the filter
+it is appended to. This is a narrower surface than a verb of its own would be, and is
+recorded as a cost rather than presented as the ideal shape — see below.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#15
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / The Decision / 4. `AGENTS.md` routes through it · hash: sha256:883a081cc2c791368c66af37700ef4f42f8de3af4ddf42f6c5d11971917decfc*
+
+### 4. `AGENTS.md` routes through it
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#16
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / The Decision / 4. `AGENTS.md` routes through it · hash: sha256:3b00ade1b8b47f33a64e1e7a52475b021a4cf9b4b47c813b132aaed8f7592297*
+
+Step 2 of the loop no longer says "pick." It names `nomos work list`'s `next:` line as the
+computed answer, claim what it names, or add an item if it names none.
+`tests/contract/tests/agent_harness.rs` asserts both halves: that the contract no longer
+carries the literal instruction to pick, and that it names the mechanism that replaced it.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#17
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#18
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / What Was Considered And Rejected · hash: sha256:006a7ec6e8874ee8107c5eaba4e2f4dcf703a08782473261edf3bf64845e22f9*
+
+**A dedicated `next` verb.** The better shape — a single unambiguous answer instead of a
+line appended to a general listing — and rejected only on territory, not on merits. Blocked
+by `command.rs` and `parse.rs` sitting outside what this item may touch; a future item
+narrow enough to reserve both, or a widened reissue of this one, can still build it without
+this record's answer changing, because `Eligible_Items` is what a dedicated verb would call
+first.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#19
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / What Was Considered And Rejected · hash: sha256:2b32e3eeb5252d4f28cca789737c150df2bb969e7a17d639f1d1e5aa735b645e*
+
+**A `priority` field, or a derived ranking from `depends_on`/`territory`.** Out of scope by
+`OD-LEDGER-017`'s own terms: the corpus wants a ranking, a bare integer would satisfy the
+letter of the requirement while buying the key that ages worst, and building the derived
+version is its own item's worth of work, not a byproduct of closing this one.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#20
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / What Was Considered And Rejected · hash: sha256:358e58e2c264f07e5857c4be4d189ef0076982a93e94510955552eb04a453fdb*
+
+**Sorting `work list`'s existing rows.** This item's own `done_when` excludes it by name: a
+sorted snapshot is the same snapshot `README.md` already warns means nothing seconds after
+it is read, because sorting does not compute eligibility — it only reorders labels that
+were already correct. `Eligible_Items` re-derives eligibility from `Claim_Refusal` over
+every item; the `next:` line is that computation's output, not a presentation of rows
+`work list` was already printing.
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#21
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#22
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / Controls · hash: sha256:c7b32282cdfc419cad9e756c41d5a5992290e454aa09ed53dacf7d2b69e03cc3*
+
+| Weakening | What it produces |
+|---|---|
+| read `state == Ready` instead of `Claim_Refusal` | the exact defect `Claim_Refusal`'s own doc comment names: a listing calling a held item `ready` |
+| sort `work list`'s rows instead of computing `Eligible_Items` | the presentational fix this item's `done_when` names and rejects |
+| document order instead of `ItemId` order | two sessions computing the same eligible set and reading it in different orders, because `add`'s insertion order is not written down anywhere a second session can reconstruct |
+| leave `AGENTS.md` saying "pick" | the mechanism exists and the contract still tells every session to do the thing the mechanism replaces |
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#23
+
+*revision: authored · kind: heading · heading: What to work on next is computed from the board, and not read off it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md#24
+
+*revision: authored · kind: prose · heading: What to work on next is computed from the board, and not read off it / Status · hash: sha256:f3d4953b77c3f24801b57a1ac2dca3df61483f5e23c02b59effe83ff4a859ec9*
+
+Closed by `P11-NEXT-WORK`.
 
 ### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#1
 

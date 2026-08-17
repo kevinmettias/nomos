@@ -57,6 +57,35 @@ pub fn Claim_Refusal(
     return Contested_By(document, target, now);
 }
 
+/// Every item [`Claim_Refusal`] would grant right now, in the order a session should offer
+/// them.
+///
+/// `Claim_Refusal` already exists so a listing and a claim cannot come to disagree about
+/// whether one item is takeable; this runs that same check over the whole board instead of
+/// one item, so "which one, in what order" stops being a question answered by scanning a
+/// snapshot and starts being a question the ledger answers the same way every time it is
+/// asked. `OD-LEDGER-023`.
+///
+/// Ordered by [`ItemId`] — the one key every item already carries, and the only one two
+/// sessions reading the same board are guaranteed to compare identically. `OD-LEDGER-017`
+/// deferred a `priority` field rather than adding one that would satisfy the letter of
+/// the corpus requirement while ageing worst of the three ranking keys it named; id order
+/// is this function's tie-break for as long as that stands, not a placeholder standing in
+/// for a ranking this function does not attempt.
+#[must_use]
+pub fn Eligible_Items<'a>(document: &'a LedgerDocument, now: Timestamp) -> Vec<&'a LedgerItem>
+{
+    let mut eligible: Vec<&LedgerItem> = document
+        .items
+        .iter()
+        .filter(|item| return Claim_Refusal(document, &item.id, now).is_none())
+        .collect();
+
+    eligible.sort_by(|left, right| return left.id.cmp(&right.id));
+
+    return eligible;
+}
+
 /// The refusal a lapsed item earns, if it is one.
 ///
 /// One implementation, two callers, for the reason [`Claim_Refusal`] itself is a function:
@@ -320,5 +349,110 @@ impl From<&LedgerError> for ClaimRefusal
         return Self::LedgerUnusable {
             cause: error.to_string(),
         };
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Claim;
+    use crate::ItemKind;
+    use crate::ItemOrigin;
+    use crate::Territory;
+
+    fn At(seconds: i64) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(seconds);
+    }
+
+    fn Item(id: &str) -> LedgerItem
+    {
+        return LedgerItem {
+            id: ItemId::New(id),
+            title: "an item".to_owned(),
+            why: "because".to_owned(),
+            done_when: "when it is done".to_owned(),
+            kind: ItemKind::Correction,
+            origin: ItemOrigin::Proposed,
+            territory: Territory::Empty(),
+            state: ItemState::Ready,
+            depends_on: Vec::new(),
+            blocked: None,
+            claim: None,
+            verification: None,
+            verified: None,
+            abandoned: Vec::new(),
+            displaced: Vec::new(),
+            declined: None,
+        };
+    }
+
+    fn Document(items: Vec<LedgerItem>) -> LedgerDocument
+    {
+        return LedgerDocument {
+            schema_version: crate::SCHEMA_VERSION,
+            items,
+        };
+    }
+
+    /// The property [`Eligible_Items`] exists to give a name to: a `Ready` item held back by
+    /// a live overlapping claim is not eligible, and one nothing contests is, in the same
+    /// order [`Claim_Refusal`] would decide each of them individually.
+    #[test]
+    fn Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse()
+    {
+        let mut held = Item("P1-HELD");
+        held.territory = Territory::Of_Files(["a/shared.rs"]);
+        held.state = ItemState::Claimed;
+        held.claim = Some(Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: At(1_000),
+            lease_expires_at: At(9_000),
+        });
+
+        let mut contested = Item("P2-CONTESTED");
+        contested.territory = Territory::Of_Files(["a/shared.rs"]);
+
+        let mut free = Item("P3-FREE");
+        free.territory = Territory::Of_Files(["b/other.rs"]);
+
+        let document = Document(vec![held, contested, free]);
+
+        let eligible: Vec<&str> = Eligible_Items(&document, At(2_000))
+            .into_iter()
+            .map(|item| return item.id.As_Str())
+            .collect();
+
+        assert_eq!(
+            eligible,
+            vec!["P3-FREE"],
+            "P1-HELD is claimed and not Ready, and P2-CONTESTED shares P1-HELD's live \
+             territory -- Claim_Refusal would refuse both, and Eligible_Items must agree \
+             with it rather than compute a second opinion"
+        );
+    }
+
+    /// The tie-break `OD-LEDGER-023` wrote down: id order, not the order items happen to
+    /// sit in the document.
+    #[test]
+    fn Test_Eligible_Items_Should_Order_By_Id_Rather_Than_Document_Order()
+    {
+        let document = Document(vec![Item("P9-LATER"), Item("P1-EARLIER"), Item("P5-MIDDLE")]);
+
+        let eligible: Vec<&str> = Eligible_Items(&document, At(2_000))
+            .into_iter()
+            .map(|item| return item.id.As_Str())
+            .collect();
+
+        assert_eq!(eligible, vec!["P1-EARLIER", "P5-MIDDLE", "P9-LATER"]);
+    }
+
+    #[test]
+    fn Test_Eligible_Items_Should_Be_Empty_Over_An_Empty_Board()
+    {
+        let document = Document(Vec::new());
+
+        assert!(Eligible_Items(&document, At(2_000)).is_empty());
     }
 }

@@ -138,3 +138,30 @@ const LEDGER_VERB_REFERENCE: &str = "README.md";
 /// entry here fails, so the list cannot be emptied to silence a warning that is still true.
 const TEMPORARY_HAZARDS: &[(&str, &str)] = &[];
 
+/// `OD-LEDGER-023`'s half of `P11-NEXT-WORK`'s `done_when`: once selection gains an
+/// authority, the contract stops instructing the agent to pick and names the thing that
+/// picks instead.
+///
+/// A standalone test rather than a case added to `checks.rs`'s registry — that file, like
+/// `readers.rs` and `controls.rs`, sits under `agent_harness/` and outside this item's
+/// territory, which reserves the single file `agent_harness.rs`. It calls the same
+/// `readers::Read_Harness_File` every check in the registry uses, so it is one opinion about
+/// the same text rather than a second reader of it.
+#[test]
+fn Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking()
+{
+    let contract = readers::Read_Harness_File(CONTRACT);
+
+    assert!(
+        !contract.contains("Pick an item"),
+        "AGENTS.md still tells the agent to pick by eye. `nomos_ledger::Eligible_Items` \
+         computes the real answer now (`OD-LEDGER-023`), and the contract must route to it \
+         rather than to a model's judgment"
+    );
+    assert!(
+        contract.contains("next:"),
+        "AGENTS.md's step 2 must name the mechanism that replaced picking -- `nomos work \
+         list`'s `next:` line -- not merely stop saying \"pick\""
+    );
+}
+

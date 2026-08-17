@@ -64,6 +64,6 @@ pub use finish::{Abandonment, Declination, Finish, FinishRefusal, Finishing, Rel
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateOutcome, GateUnknown, LINT_STEP, Workflow_Path};
 pub use item::{DEFAULT_LEASE, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, MAXIMUM_LEASE};
 pub use ledger_error::LedgerError;
-pub use store::{AddRefusal, Claim_Refusal, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate};
+pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate};
 pub use territory::{Normalize_Path, Territory};
 pub use verification::{VerificationPredicate, VerificationRecord};

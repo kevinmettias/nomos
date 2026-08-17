@@ -1,7 +1,8 @@
 //! `nomos work` — the ledger, from a terminal.
 
 use nomos_ledger::{
-    ExclusionLedger, FileLedger, Finish, Finishing, ItemId, LedgerItem, ReleaseOutcome, Territory,
+    Eligible_Items, ExclusionLedger, FileLedger, Finish, Finishing, ItemId, LedgerItem,
+    ReleaseOutcome, Territory,
 };
 use nomos_platform::Clock;
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
@@ -179,8 +180,35 @@ fn List(
     {
         Nothing_Listed(state, output);
     }
+    // Only on the unfiltered board. `--state` asks for one bucket's rows, and a summary
+    // naming an item outside that bucket would contradict the very filter the caller asked
+    // for -- `--state lapsed` is not the place to also learn what is `Ready` elsewhere.
+    if state.is_none()
+    {
+        Print_Next(&document, now, output);
+    }
 
     return ExitCode::Ok;
+}
+
+/// The one line that answers "which one": the first item [`Eligible_Items`] computes from
+/// the whole board.
+///
+/// `OD-LEDGER-023` is why this is a line on `list` rather than a verb of its own —
+/// `WorkCommand` and its parser are outside this item's territory, and a real computed
+/// answer delivered through the one listing surface this item can reach beats a dedicated
+/// verb this item cannot wire up.
+fn Print_Next(
+    document: &nomos_ledger::LedgerDocument,
+    now: nomos_platform::Timestamp,
+    output: &mut impl std::io::Write,
+)
+{
+    let _ = match Eligible_Items(document, now).first()
+    {
+        Some(item) => writeln!(output, "next: {} {}", item.id, item.title),
+        None => writeln!(output, "next: nothing is eligible"),
+    };
 }
 
 /// Reports one item, including what has happened to it.
