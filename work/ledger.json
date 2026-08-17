@@ -7079,7 +7079,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Pre-emptive re-authoring, same shape as P10-DECLINED-DEPENDENCY's measured abandonment. done_when requires ClaimRefusal's refusals to be distinguishable by type (plan-not-ready vs resource-busy), and the enum ClaimRefusal, its Is_Retryable and its Describe are defined in crates/substrate/nomos-ledger/src/claim/refusal.rs (the claim module, moved there by the 2026-08 crate-split), not in exclusion.rs where this item's why-text placed them. exclusion.rs only constructs refusals (HeldBy, NotClaimable, etc); it does not define the type. Re-authored as P11-DISPATCH-SPLIT-2 with claim/refusal.rs added to territory so a claimant is not forced into the same abandon-and-report cycle to discover this. Same subject, same OD-LEDGER-022 reservation, never published by either version."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -7100,7 +7104,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-orch-main",
+        "declined_at": 1786938095
+      }
     },
     {
       "id": "P11-SPENT-IDENTIFIER",
@@ -11018,6 +11025,46 @@
           "nomos-ledger",
           "-p",
           "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P11-DISPATCH-SPLIT-2",
+      "title": "Engineering readiness and dispatchability are variants of one refusal, told apart only by a word the CLI prints",
+      "why": "This is P11-DISPATCH-SPLIT with the territory the crate-split's own consequence found before a claimant had to discover it the hard way.\n\nItemState carries Ready, Claimed, Blocked, Done and Declined. Whether an item can actually be worked on is not one of them: it is computed as a ClaimRefusal, and two of that enum's variants are turned into display words by the CLI at crates/host/nomos-cli/src/work.rs, where DependencyUnmet becomes \"waiting\" and HeldBy becomes \"held\".\n\nThose two words name categorically different facts. A dependency that is unfinished means the work is not ready to be done by anybody, which is a property of the plan and stays true no matter who is looking. A territory held by another session means the work is ready and somebody else is standing on it, which is a property of this second and is false again when a lease lapses. The ledger tells them apart correctly and tells them apart in a match arm that produces a string, so the distinction exists in the presentation and not in the model.\n\nThe consequence is that nothing above the ledger can ask the two questions separately. A caller wanting the work that ought to be done has to attempt a claim and read the refusal, or parse the CLI's words, and the one stored state that looks like the answer does not answer it: Ready means only not claimed, not done, not blocked and not declined. P10-REQUIRABLE-DECLARED sat Ready while carrying two abandonments explaining that its clauses had already landed, which is exactly how it read as available and was redone.\n\nThis is worth separating before a work graph exists rather than after. A design under discussion for this repository puts a scheduler above the board and leaves the board answering only whether a step can acquire what it needs right now, under a one-way invariant: coordination may withhold work that is otherwise ready, and may never make ready what the plan says is not. That invariant cannot be stated against a model where both answers are variants of one refusal, and it cannot be tested at all.\n\nWhat changed since the item was first authored: the enum this item must split, ClaimRefusal, along with its Is_Retryable and Describe methods, is defined in crates/substrate/nomos-ledger/src/claim/refusal.rs (the claim module), not in exclusion.rs. This was measured directly by a claimant on the sibling item P10-DECLINED-DEPENDENCY, which needed the same file for the same reason (a new, differently-retryable ClaimRefusal arm) and found the original territory referenced pre-crate-split line numbers in exclusion.rs. exclusion.rs remains relevant -- it constructs HeldBy, NotClaimable and the other refusals via Contested_By and related functions -- but the type itself, and wherever the plan-vs-resource categorization this item's done_when demands would actually be expressed in the type system, lives in claim/refusal.rs.",
+      "done_when": "The two questions are separable in the model rather than in the printing. Whether work is ready to be done, and whether it can be started right now, are answerable independently by a caller above the ledger - without attempting a claim, and without reading prose. Refusals that mean the plan is not ready are distinguishable by type from refusals that mean the resource is busy, and the CLI's words are derived from that distinction rather than being the only place it exists. The one-way invariant is asserted by a test: a condition that only affects dispatch can withhold work that is otherwise ready, and can never make ready work the plan says is not ready. The test states it over the whole refusal set rather than over the two variants somebody remembered, which is the shape OD-CONTRACTS-002 used for its disjointness assertion and the reason that assertion still holds after the enum grew. Where the split is decided, it is recorded, because the decision is about which layer owns which question and that outlives the enum it is expressed in. Not closed by renaming the display strings. Not closed by a derived boolean only the CLI consumes: the point is that something above the ledger can ask.",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/exclusion.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-022",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-022.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
           "-p",
           "nomos-contract-tests"
         ],
