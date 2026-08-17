@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:f1c3c99f51b53690670425abea2d354fa81a34d23a66a2a37659432bd8afe35d",
-  "inputs_digest": "sha256:53c28bd43420b0124a9a3bc5b8268ffd1744c0938351b307cb0f3e0d715f3477",
+  "content_digest": "sha256:4111f360b1b19c816827802372ad0e5c0c129041322c39c5ea4ed7f8338fa22e",
+  "inputs_digest": "sha256:a9f0212981e253d069bc1c2b4907eecbe3a3df709a6a2eca351325a5154daa53",
   "sections": [
     [
       "Relations",
-      656
+      660
     ],
     [
       "Decisions",
-      89
+      90
     ]
   ],
   "inputs": [
@@ -1523,6 +1523,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-006 relates-to OD-GATE-008",
+      "hash": "sha256:70dd9a193a85ac12a62cd0f20efa936ed62b9f762a73e31ae82eac9a8de67a76"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-006 relates-to OD-GATE-009",
       "hash": "sha256:1e38714821d0e34da4f74ccbb273212771a02a1154ca69309dd213c62b8e2829"
     },
@@ -1543,6 +1548,16 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-008 relates-to OD-GATE-006",
+      "hash": "sha256:d4e2951caee079e9b77999814706c0c46d1dfffa8ca2f0eca376962a5579f18b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-008 relates-to OD-GATE-009",
+      "hash": "sha256:1462d5cb8acb4bd15b9567ede7afd245a1ddde40ce601701651f47b3077f0863"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-009 relates-to OD-DETERMINISM-001",
       "hash": "sha256:5b532554f807fa1e6e82915cefebb5f5617099b63f25407099b9840926203d60"
     },
@@ -1560,6 +1575,11 @@
       "content": "relations",
       "identity": "OD-GATE-009 relates-to OD-GATE-006",
       "hash": "sha256:7892895ed494b29170f2b0fd1b7419a91f47fba2c707285e3ce50afeef02075f"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-009 relates-to OD-GATE-008",
+      "hash": "sha256:47147c76953469a25fd67410a3672c12d2ff7d2d525f8b991af2ff5a0e4cf7ac"
     },
     {
       "content": "relations",
@@ -3455,6 +3475,11 @@
       "content": "nodes",
       "identity": "OD-GATE-006",
       "hash": "sha256:c0d43922f5e398cb5050ee004e71b02384ffb02b7ee13840a4362e3ae851d3f5"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-GATE-008",
+      "hash": "sha256:ee20264ed34768b19bfd3116083999d956f248fbea7388c356aea84df603f647"
     },
     {
       "content": "nodes",

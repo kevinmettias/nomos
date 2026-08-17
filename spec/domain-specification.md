@@ -49,6 +49,7 @@ profile: domain-specification
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md | authored | 47 | 10 | sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7 |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md@authored | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md | authored | 42 | 12 | sha256:487f9bddc49b1a1c17e34c0a00e87e5e3907432d8c46b6b45cfb715b6bc31cb3 |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
@@ -437,6 +438,18 @@ profile: domain-specification
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#36 | authored | 2 | What Was Considered And Rejected |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#41 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#45 | authored | 2 | Status |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#1 | authored | 1 | The compatibility floor is measured by compiling it, and checked rather than tested |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#13 | authored | 2 | The Decision |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#15 | authored | 3 | The number |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#18 | authored | 3 | `cargo check`, not `cargo test` |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#21 | authored | 3 | Two files, one relation, cargo enforces it |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#25 | authored | 3 | The lane |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#29 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#33 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#38 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#41 | authored | 2 | Status |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#1 | authored | 1 | The second operating system is chosen by which claim needs it, and so is the subset that runs there |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#6 | authored | 2 | What Was Measured |
@@ -11641,6 +11654,381 @@ Amended to version 2 by `P11-WORKFLOW-TRUST`, which pins what this gate executes
 `permissions: contents: read`, because every step here reads and none writes. The wrong
 argument is stated above rather than deleted: a record whose whole subject is claims that
 nothing checks cannot quietly drop the paragraph that turned out to be one.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#1
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested · hash: sha256:3d07da34ec9f89a3c79ce8c8e11c3570bea39fcee898bb573f4d07591ce2ef1d*
+
+# The compatibility floor is measured by compiling it, and checked rather than tested
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#2
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#3
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / Question · hash: sha256:8a02b4ab0c3992a54699e5b146a37bdbc3ebcc4feb4d33727ff6705c334aaffe*
+
+`OD-GATE-006` found `rust-version = "1.85"` in `Cargo.toml` false — nine `&& let` chains are in
+this workspace and let chains stabilized in Rust 1.88, so the declared floor cannot compile the
+code that declares it — and named the mechanism: every build here used `rust-toolchain.toml`'s
+nightly pin, so no compiler near the declared floor was ever pointed at this tree. That record
+decided the general principle and named this item to carry the instance. Its own "What This
+Record Does Not Decide" section is explicit about the boundary: *"It does not decide what this
+repository's supported platforms or minimum toolchain **are**. It decides that whatever they are
+declared to be must be exercised. Choosing the floor belongs to `P11-MSRV-UNCHECKED`."*
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#4
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / Question · hash: sha256:290ff515b2745295a438cd5da04d3ecb1eb08ca7206ee9ff61b8484b64a0286a*
+
+Three questions follow from that, and none of them is answered by re-arguing the general
+principle:
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#5
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / Question · hash: sha256:76a3b0c9eb6e316d8c19ae89f411d8d2bb7f80b6dcad87789a77c1b9a80d48ed*
+
+1. What is the floor, established by compiling rather than by reading release notes?
+2. What does the gate lane run to keep it honest — `cargo check` or `cargo test` are different
+   claims, and `rust-version` makes one specific one?
+3. The number now appears in two files, `Cargo.toml` and `.github/workflows/gate.yml`. Is that a
+   second authority for one fact, the shape `OD-LEDGER-003` refuses for the lint argv and
+   `OD-GATE-002` refuses for the surface check?
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#6
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#7
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Measured · hash: sha256:c5e3a640b60d2bf0c7abe178378189e5cb5c403746f78db0e44e0fe268328d59*
+
+At `875b4db`, on a machine carrying `rustup` toolchains `1.85`, `1.87` and `1.88` alongside the
+workspace's own `nightly`/pinned default.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#8
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Measured · hash: sha256:553885c458050b94b70d849f0445781365e32f6bf8af0504c79302d96e2fcfdd*
+
+| Toolchain (`RUSTUP_TOOLCHAIN=`) | `rustc --version` | `cargo check --workspace --all-targets` |
+|---|---|---|
+| `1.85` | `rustc 1.85.1 (4eb161250 2025-03-15)` | **refuses**, `error[E0658]: let expressions in this position are unstable` |
+| `1.87` | `rustc 1.87.0 (17067e9ac 2025-05-09)` | **refuses**, same `E0658`, same sites |
+| `1.88` | `rustc 1.88.0 (6b00bc388 2025-06-23)` | exits `0`, `Finished` \`dev\` profile in 8.94s |
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#9
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Measured · hash: sha256:89ed3e8f074a5100ca33500dd4751e823b7aff724aa9e5322f94cb1e9cbc9e7a*
+
+Both refusals land on the same class of site across ten files, `nomos-platform-std` first:
+`crates/platform/nomos-platform-std/src/filesystem.rs:188`, `.../launcher.rs:241`,
+`.../lock.rs:256`, `.../launcher/tests.rs:121`, and further sites in `nomos-ledger`,
+`nomos-cli`, `tests/contract` and `tests/contract/tests/completeness_universes/mirrors.rs` — the
+same nine call sites `grep -n '&& let'` finds workspace-wide today, confirming `OD-GATE-006`'s
+count is still exact and the defect has not grown or shrunk since that record measured it. The
+floor is exactly `1.88`, the release immediately below it refuses, and this is a repeat of the
+prior session's measurement (`OD-GATE-006`'s "What Was Measured") reproduced independently in
+this tree rather than trusted from the record.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#10
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Measured · hash: sha256:d488c77a5a3c49ef2d3969d04661af499647f601fd7753f15e31d195a4d97492*
+
+A second measurement grounds the third question above. `Cargo.toml`'s `rust-version` was set to
+`1.90` — one above the measured floor — and `cargo check -p nomos-cli` was run under
+`RUSTUP_TOOLCHAIN=1.88`. Cargo itself refused before compiling a single crate:
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#11
+
+*revision: authored · kind: code · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Measured · hash: sha256:98716f53ab22a2dde76075b3bc1a3a78dacafd37c51889afc93060037f790507*
+
+```
+error: rustc 1.88.0 is not supported by the following packages:
+  nomos-analysis@0.1.0 requires rustc 1.90
+  nomos-cli@0.1.0 requires rustc 1.90
+  ...
+```
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#12
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Measured · hash: sha256:be8e301febe4fe4e6ef35cdff2b13791b8d13c876efffa7473d89bb3bf435429*
+
+The experiment was transient — `rust-version` was restored to its measured value immediately
+after, and nothing from it is committed.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#13
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#14
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision · hash: sha256:624eb0eab54c0a59c350e0036697146b521dec7fe4878c8d00ab29a2c14ca0b2*
+
+**The floor is `1.88`, `cargo check --workspace --all-targets` is what exercises it, and the two
+files stating it are not a second authority because cargo itself keeps them in the one relation
+that matters.**
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#15
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / The number · hash: sha256:85d06dc16bd7fd997c4c495113a59b19324d553c5fdde7654edeaa6ebbe8bdb4*
+
+### The number
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#16
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / The number · hash: sha256:aa325518afc93001bdb212fd0dde90e34ec1088982326e8d36c7a758d1e2722c*
+
+`1.88`, matching `Cargo.toml`'s existing two-component style (`"1.85"` before it). Not `1.88.0`:
+the third component names a patch release and `rust-version` states a language/library floor, not
+an exact toolchain — the distinction `rust-toolchain.toml` needs and `Cargo.toml` does not, since
+only the former selects one installable, buildable toolchain rather than describing a boundary
+every equal-or-newer compiler satisfies.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#17
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / The number · hash: sha256:2db3804e3af8e4ade274299bb7acd74ec89e54f7ea814c343c54cd83be945c15*
+
+Established by compiling, not by reading Rust's release notes for when `let`-chains stabilized —
+the table above is the only measurement this record depends on; the changelog is corroboration
+that happens to agree, not the source of the number.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#18
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / `cargo check`, not `cargo test` · hash: sha256:ca6433fa34acda63ef5c662b89dd3674c8ab68f77f214f59db7da6af66297f96*
+
+### `cargo check`, not `cargo test`
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#19
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / `cargo check`, not `cargo test` · hash: sha256:279524d5d88bc8925c2d845839ac3a0b2e87a510b37522c5a0fa084564e39cde*
+
+`rust-version` is Cargo's own contract for what a *consumer's* compiler must be to build this
+crate. A downstream consumer of a library compiles it; they do not run its test suite, and its
+`dev-dependencies` are never part of what they need. `cargo check --workspace --all-targets`
+matches that promise at its own grain: `--all-targets` reaches test and bench sources too —
+several of the nine `&& let` sites this floor exists for are inside `tests/`, so checking library
+code alone would under-measure the same defect `OD-GATE-006` found — while stopping at "does this
+compile", which is exactly as far as the promise `rust-version` makes extends.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#20
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / `cargo check`, not `cargo test` · hash: sha256:3e1b8e610b3d69e22df0ea6d584229d659e1d6a13d68d136646220f19870db5b*
+
+`cargo test` on the floor is a different, larger claim: that this workspace's own test behavior,
+and everything its `dev-dependencies` need, holds on a five-releases-old compiler. Nothing in
+`rust-version`'s contract asks for that, and asserting it here would be inventing an obligation
+this declaration was never understood to carry — the same shape of error `OD-GATE-006` names in
+its own "What Was Considered And Rejected", run the narrow check and let the rest read as though
+it covered more than it does, just inverted: over-claiming what passing means rather than
+under-claiming what was covered.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#21
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / Two files, one relation, cargo enforces it · hash: sha256:0d08518c6f0ae40ad0ea2335c6a865758acbe13fb5e79d400f55a428cf08c17c*
+
+### Two files, one relation, cargo enforces it
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#22
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / Two files, one relation, cargo enforces it · hash: sha256:616f9552a0e3de0b3c5c552c27a5131dea58d20693b0b27c2329d653a79067a4*
+
+`Cargo.toml`'s `rust-version = "1.88"` and the gate lane's `RUSTUP_TOOLCHAIN: 1.88` are not an
+independently-typed pair that a human must remember to keep matched, the shape `OD-LEDGER-003`
+and `OD-GATE-002` both refuse elsewhere in this workspace. The relation that matters —
+*the pinned toolchain must be no older than the declared floor* — is enforced by cargo itself,
+measured above: raise `rust-version` past the lane's pinned toolchain and the very next run of
+that lane refuses immediately, with cargo's own message naming every package and the version it
+now requires, before a line of workspace code is even reached. That is a louder and faster
+failure than a human-maintained cross-reference would produce, and it fires from the side that
+can drift silently — a declared floor rising without the lane being told.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#23
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / Two files, one relation, cargo enforces it · hash: sha256:2d821cda5ddc3173a1672efac8ca6931a1dde75cb1ce3cf27eaadc5e722d74e2*
+
+The other direction — the lane's compiler failing to actually support code the declaration
+claims it does — is not something cargo checks by comparing two numbers; it is what running the
+lane *is*. That was `OD-GATE-006`'s whole finding: a floor nothing compiles reads as checked
+while being false. The lane's `cargo check` at the pinned version is the mechanism for that
+direction, the same way `nightly` failed to be one only because nothing that old was ever
+invoked.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#24
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / Two files, one relation, cargo enforces it · hash: sha256:2b75d50213df3055dc067a25bc1ec6c3ebbfe8a6edd2eff7b8b76ca041636896*
+
+So the number is written twice because it is two different kinds of statement — a promise to
+consumers, and an instruction to a CI runner — and both directions in which they could go out of
+sync are caught by something that runs rather than by a rule that must be remembered. That is the
+test `OD-LEDGER-003` applies to the lint argv and `OD-GATE-002` applies to the surface snapshot,
+passed here for a different pair of files.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#25
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / The lane · hash: sha256:e53bbcdcd8a785004d4349e2f5f4adc2f12a17a7721fd9586a517d775e73c916*
+
+### The lane
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#26
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / The lane · hash: sha256:6de2cceabe306dbda7aba241d5d5e62b9e7a3785532122f9a412394c42766f2e*
+
+Two steps, `ubuntu-latest` only — matching `Lint` and `Rules` above, and for the same measured
+reason `OD-GATE-009` gives them: this workspace has no `cfg(windows)`, `cfg(unix)` or
+`cfg(target_os = ...)` anywhere, so a compilability question has no host in it and a second run on
+Windows would recheck an identical token stream at full cost.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#27
+
+*revision: authored · kind: code · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / The lane · hash: sha256:d911a87b13da2c54d3f3821aa7cf9e4342570739ed1db008b7b6ee557b348c11*
+
+```yaml
+- name: Install compatibility floor toolchain
+  run: rustup toolchain install 1.88.0 --profile minimal --no-self-update
+
+- name: Compatibility floor
+  env:
+    RUSTUP_TOOLCHAIN: 1.88.0
+  run: cargo check --workspace --all-targets
+```
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#28
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / The Decision / The lane · hash: sha256:56f507a2b1f7c99639c225939d9650ac6eb2979b616a20c73ea4b2fb82d23891*
+
+`RUSTUP_TOOLCHAIN`, not `cargo +1.88.0`. `rust-toolchain.toml` pins a channel, and only
+`RUSTUP_TOOLCHAIN` overrides that pin — a `+toolchain` argument selects among installed
+toolchains but does not out-rank a channel file present in the working directory, so it would not
+reliably beat whatever that file names on a given day. Pinned to the full patch release the floor
+was measured on, `1.88.0`, rather than `1.88` or `stable`, so the lane checks the exact compiler
+this record's table names and not whatever "1.88-something" or "stable" resolves to that morning
+— the same reasoning this workflow already applies to `actions/checkout` and `cargo-deny`.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#29
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#30
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What This Record Does Not Decide · hash: sha256:af563eb1f58277e02e85b7c4ee4029cff88ec9f3eea5739ec4e3b630a15726a4*
+
+It does not decide `rust-toolchain.toml`'s channel. That file is outside this item's territory;
+whatever it names, the lane above pins its own toolchain explicitly rather than trusting the
+ambient default, which is what makes the lane's claim independent of that file's future edits.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#31
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What This Record Does Not Decide · hash: sha256:8d9aa6a034d7858a014952fa2d1292ea540946f8fb9a4343f5fdac4fc587c0c1*
+
+It does not decide the drift direction cargo does not catch — a declared floor that is *lower*
+than what the code truly needs, with the gate's own pinned toolchain masking it because the pin
+and the false-low declaration happen to agree. `P11-FLOOR-AGREEMENT` carries that; this record's
+"cargo enforces it" claim above is scoped to the one direction measured, a floor stated *higher*
+than the toolchain in use.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#32
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What This Record Does Not Decide · hash: sha256:da11faa78397a127ff7f29d9f557cf52d69d9f8ff8d270347aaffcd13cf8235c*
+
+It does not decide whether this workspace should track stable as it advances, or drop the
+declaration. Both were live answers to "what should `rust-version` say" and both are rejected
+below rather than left unconsidered.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#33
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#34
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Considered And Rejected · hash: sha256:0cffe895bc332f01b38b1b289d138c4d9ba4b2d8a56614e6c6fe6149712bdf6e*
+
+**Track stable rather than pin a number.** Rejected. `rust-version` with no gate exercising it is
+exactly the false-declaration shape `OD-GATE-006` found; a floor that moves with whatever stable
+happens to be on release day is not compiled against by anything either, unless the lane
+re-resolves "stable" every run — which reintroduces the floating-reference problem this workflow
+already refuses for `actions/checkout` and `cargo-deny`, for the same reason: a lane whose meaning
+changes on a morning nobody committed anything is not a lane anyone can reason about from the
+diff.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#35
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Considered And Rejected · hash: sha256:160772193d69ac5dd7441c1f5505f17cbf0ee05261b5c92181dc425607a4cf82*
+
+**Drop the declaration.** Rejected. `rust-version` is not merely unwanted metadata here; the
+measurement above gives it a true, checked value at negligible cost, and Cargo's own dependency
+resolution consults it (measured directly: raising it past the running toolchain made cargo
+refuse before compiling anything). Deleting a claim that can be made true and cheaply enforced is
+not the same move as deleting `deny.toml`'s ban would have been — the case `OD-GATE-006`
+describes as "the right answer only where the claim is not wanted".
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#36
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Considered And Rejected · hash: sha256:fc6bba913705f18f468af43ea5c733c91da4559bff86d89e735660b78bcb4a83*
+
+**Pin a number.** Chosen, at `1.88`, for the reasons above.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#37
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Was Considered And Rejected · hash: sha256:9f111c1dfffd57e7a2ee5933135015983135a1db0ece2700f6560c071468e335*
+
+**Run the compatibility lane on both operating systems.** Rejected on the same measured basis
+`OD-GATE-009` used for `Lint` and `Rules`: no `cfg` anywhere in the workspace means a second run
+checks an identical token stream, and this workflow already declines to pay that cost where it
+buys no additional coverage.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#38
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#39
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Holds It · hash: sha256:9b56781af4a415c8bff42b546dd9ae43469149ed79093629bf552b6fd2a5eeef*
+
+The lane itself, by running rather than by asserting, on `ubuntu-latest` on every push to `main`
+and `dev` and on every pull request. `Test_The_Workflow_Should_Not_Appear_Empty` and
+`Test_No_Step_In_The_Gate_Should_Excuse_Itself` hold the step the same way they hold every other
+step in this file — it cannot be emptied or given `continue-on-error` without a mechanical
+refusal.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#40
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / What Holds It · hash: sha256:8dbabc692f72c2ba75f6256e0c468884ff4b0ffd59bbe19e4cd4b0f68a0c3f76*
+
+What does **not** hold it is worth stating, the way `OD-GATE-009` states it for the matrix: no
+test asserts `Cargo.toml`'s `rust-version` and the lane's `RUSTUP_TOOLCHAIN` name the same value.
+The one direction that matters is cargo's own refusal, measured above; a `RUSTUP_TOOLCHAIN` typo
+that pins something *newer* than the declared floor would not be caught by cargo at all, since a
+newer compiler than the floor is exactly the permitted case — it would simply mean the lane was
+quietly checking a higher floor than the one it publishes, drifting back toward the condition
+this record exists to end. Nothing here forecloses that; it is named so the next reader does not
+have to rediscover it.
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#41
+
+*revision: authored · kind: heading · heading: The compatibility floor is measured by compiling it, and checked rather than tested / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#42
+
+*revision: authored · kind: prose · heading: The compatibility floor is measured by compiling it, and checked rather than tested / Status · hash: sha256:13f816fa056a16ba90b3a01afe3bb0d7794d75b8f58435ee300bc9e1ceb10a07*
+
+Closed. `P11-MSRV-UNCHECKED` carries it and discharges the third of `OD-GATE-006`'s four
+instances — `rust-version` now states `1.88`, established by compiling rather than by reading
+release notes, and the `Compatibility floor` lane exercises it on every run.
 
 ### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#1
 

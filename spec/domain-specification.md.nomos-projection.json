@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:989b4178efab97ddededb871c8ab4cfa29bbc46957efeb07851613e600b76ae1",
-  "inputs_digest": "sha256:afd4c0f51a38e8c1de696e20fea8f06d7ebf28011122df9f8608282e3a1f9d19",
+  "content_digest": "sha256:b76ffdb1a58d808ca15a2a17ff3c359596f69b7bbf748f11ea657cbf2cb27f2a",
+  "inputs_digest": "sha256:d8ce0513427d689bde048f790b086673424d9b6406b2a60ee3d37099dd348488",
   "sections": [
     [
       "Documents",
-      96
+      97
     ],
     [
       "Sections",
-      882
+      894
     ],
     [
       "Source blocks",
-      3345
+      3387
     ]
   ],
   "inputs": [
@@ -214,6 +214,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored",
       "hash": "sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md@authored",
+      "hash": "sha256:487f9bddc49b1a1c17e34c0a00e87e5e3907432d8c46b6b45cfb715b6bc31cb3"
     },
     {
       "content": "documents",
@@ -2129,6 +2134,66 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#45",
       "hash": "sha256:a8e8cb412a263b158a4502f9d13bdc963e931aac57f544b81e6ba0d5520a10c9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#1",
+      "hash": "sha256:aff84f9f2831d3487e079f5b83e97fe51a99e2e6e5e352ffd7b59577a97ae16b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#2",
+      "hash": "sha256:51426629832a99dbcf1f0550ca571cd06da543bb389b2d363217903327902347"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#6",
+      "hash": "sha256:aed3f9f9899dfa5f2ffc5680bb9949bdf57a1ec798e5bb90a1d4b3e1fcc16bc8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#13",
+      "hash": "sha256:a6f31973dd0c39568d27603ff31991061e141ebc7091be7fb91ee85b59b27439"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#15",
+      "hash": "sha256:26aabfa0b1fc7a6b40700c81b7437c227c51c9be87ed169e3463e1393fabd678"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#18",
+      "hash": "sha256:3248055b46605143e9fdaef1bc498059a5ca2d44182121c940654b5c18efe9d6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#21",
+      "hash": "sha256:c37dd0dd626a30bed9c89a5e95a004862ffe27f78a1d0736fa6fc024e663a839"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#25",
+      "hash": "sha256:03542f3de98c73d5f5624ca0744d375e1963064ccb6a1e15a53a2465b179fcbe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#29",
+      "hash": "sha256:4a6c7fd5dae296b703f3461b68f99a2e6b00df8cd3b7d89f01d9e2064158c6b8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#33",
+      "hash": "sha256:1c9218296cae6d5d86aa01463527d30627cfed77ea2159251fdd99a04563c892"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#38",
+      "hash": "sha256:991f9f35c8299fc54992d346511f689c3cc0f021f334d84a89458d9b14142a76"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#41",
+      "hash": "sha256:f5057f7e3e9aa8c7234795f30d3e05acff7ba7359b7cd21a4ecf378a1b15bb11"
     },
     {
       "content": "headings",
@@ -10909,6 +10974,216 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md#47",
       "hash": "sha256:59623f4ceaff764027fdd976c693d19a11fb1a67446841e02bb728e5c91667a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#1",
+      "hash": "sha256:3d07da34ec9f89a3c79ce8c8e11c3570bea39fcee898bb573f4d07591ce2ef1d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#3",
+      "hash": "sha256:8a02b4ab0c3992a54699e5b146a37bdbc3ebcc4feb4d33727ff6705c334aaffe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#4",
+      "hash": "sha256:290ff515b2745295a438cd5da04d3ecb1eb08ca7206ee9ff61b8484b64a0286a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#5",
+      "hash": "sha256:76a3b0c9eb6e316d8c19ae89f411d8d2bb7f80b6dcad87789a77c1b9a80d48ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#7",
+      "hash": "sha256:c5e3a640b60d2bf0c7abe178378189e5cb5c403746f78db0e44e0fe268328d59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#8",
+      "hash": "sha256:553885c458050b94b70d849f0445781365e32f6bf8af0504c79302d96e2fcfdd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#9",
+      "hash": "sha256:89ed3e8f074a5100ca33500dd4751e823b7aff724aa9e5322f94cb1e9cbc9e7a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#10",
+      "hash": "sha256:d488c77a5a3c49ef2d3969d04661af499647f601fd7753f15e31d195a4d97492"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#11",
+      "hash": "sha256:98716f53ab22a2dde76075b3bc1a3a78dacafd37c51889afc93060037f790507"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#12",
+      "hash": "sha256:be8e301febe4fe4e6ef35cdff2b13791b8d13c876efffa7473d89bb3bf435429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#13",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#14",
+      "hash": "sha256:624eb0eab54c0a59c350e0036697146b521dec7fe4878c8d00ab29a2c14ca0b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#15",
+      "hash": "sha256:85d06dc16bd7fd997c4c495113a59b19324d553c5fdde7654edeaa6ebbe8bdb4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#16",
+      "hash": "sha256:aa325518afc93001bdb212fd0dde90e34ec1088982326e8d36c7a758d1e2722c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#17",
+      "hash": "sha256:2db3804e3af8e4ade274299bb7acd74ec89e54f7ea814c343c54cd83be945c15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#18",
+      "hash": "sha256:ca6433fa34acda63ef5c662b89dd3674c8ab68f77f214f59db7da6af66297f96"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#19",
+      "hash": "sha256:279524d5d88bc8925c2d845839ac3a0b2e87a510b37522c5a0fa084564e39cde"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#20",
+      "hash": "sha256:3e1b8e610b3d69e22df0ea6d584229d659e1d6a13d68d136646220f19870db5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#21",
+      "hash": "sha256:0d08518c6f0ae40ad0ea2335c6a865758acbe13fb5e79d400f55a428cf08c17c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#22",
+      "hash": "sha256:616f9552a0e3de0b3c5c552c27a5131dea58d20693b0b27c2329d653a79067a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#23",
+      "hash": "sha256:2d821cda5ddc3173a1672efac8ca6931a1dde75cb1ce3cf27eaadc5e722d74e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#24",
+      "hash": "sha256:2b75d50213df3055dc067a25bc1ec6c3ebbfe8a6edd2eff7b8b76ca041636896"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#25",
+      "hash": "sha256:e53bbcdcd8a785004d4349e2f5f4adc2f12a17a7721fd9586a517d775e73c916"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#26",
+      "hash": "sha256:6de2cceabe306dbda7aba241d5d5e62b9e7a3785532122f9a412394c42766f2e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#27",
+      "hash": "sha256:d911a87b13da2c54d3f3821aa7cf9e4342570739ed1db008b7b6ee557b348c11"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#28",
+      "hash": "sha256:56f507a2b1f7c99639c225939d9650ac6eb2979b616a20c73ea4b2fb82d23891"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#29",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#30",
+      "hash": "sha256:af563eb1f58277e02e85b7c4ee4029cff88ec9f3eea5739ec4e3b630a15726a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#31",
+      "hash": "sha256:8d9aa6a034d7858a014952fa2d1292ea540946f8fb9a4343f5fdac4fc587c0c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#32",
+      "hash": "sha256:da11faa78397a127ff7f29d9f557cf52d69d9f8ff8d270347aaffcd13cf8235c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#33",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#34",
+      "hash": "sha256:0cffe895bc332f01b38b1b289d138c4d9ba4b2d8a56614e6c6fe6149712bdf6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#35",
+      "hash": "sha256:160772193d69ac5dd7441c1f5505f17cbf0ee05261b5c92181dc425607a4cf82"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#36",
+      "hash": "sha256:fc6bba913705f18f468af43ea5c733c91da4559bff86d89e735660b78bcb4a83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#37",
+      "hash": "sha256:9f111c1dfffd57e7a2ee5933135015983135a1db0ece2700f6560c071468e335"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#38",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#39",
+      "hash": "sha256:9b56781af4a415c8bff42b546dd9ae43469149ed79093629bf552b6fd2a5eeef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#40",
+      "hash": "sha256:8dbabc692f72c2ba75f6256e0c468884ff4b0ffd59bbe19e4cd4b0f68a0c3f76"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#41",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md#42",
+      "hash": "sha256:13f816fa056a16ba90b3a01afe3bb0d7794d75b8f58435ee300bc9e1ceb10a07"
     },
     {
       "content": "blocks",
