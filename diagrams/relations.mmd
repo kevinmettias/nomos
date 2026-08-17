@@ -6,6 +6,7 @@ graph LR
     adr_doc_001["ADR-DOC-001"] -->|"superseded_by"| d_129["D-129"]
     arc_conformance_001["ARC-CONFORMANCE-001"] -->|"relates-to"| arc_ecosystem_001["ARC-ECOSYSTEM-001"]
     arc_conformance_001 -->|"relates-to"| arc_ecosystem_002["ARC-ECOSYSTEM-002"]
+    arc_conformance_001 -->|"relates-to"| od_rules_003["OD-RULES-003"]
     arc_connector_001["ARC-CONNECTOR-001"] -->|"relates-to"| arc_ecosystem_001
     arc_connector_001 -->|"relates-to"| d_130["D-130"]
     arc_connector_001 -->|"relates-to"| od_connector_001["OD-CONNECTOR-001"]
@@ -159,6 +160,7 @@ graph LR
     od_capability_002 -->|"relates-to"| od_capability_001
     od_capability_002 -->|"relates-to"| od_capability_004
     od_capability_002 -->|"relates-to"| od_rules_001
+    od_capability_002 -->|"relates-to"| od_rules_003
     od_capability_002 -->|"relates-to"| od_store_001
     od_capability_002 -->|"relates-to"| od_syntax_001["OD-SYNTAX-001"]
     od_capability_003 -->|"relates-to"| arc_harness_001
@@ -506,12 +508,16 @@ graph LR
     od_rules_001 -->|"relates-to"| od_gate_004
     od_rules_001 -->|"relates-to"| od_model_001
     od_rules_001 -->|"relates-to"| od_package_001
+    od_rules_001 -->|"relates-to"| od_rules_003
     od_rules_001 -->|"relates-to"| od_syntax_001
     od_rules_002 -->|"affects"| od_rules_001
     od_rules_002 -->|"relates-to"| d_134
     od_rules_002 -->|"relates-to"| od_completeness_001
     od_rules_002 -->|"relates-to"| od_gate_001
     od_rules_002 -->|"relates-to"| od_gate_004
+    od_rules_003 -->|"relates-to"| arc_conformance_001
+    od_rules_003 -->|"relates-to"| od_capability_002
+    od_rules_003 -->|"relates-to"| od_rules_001
     od_spec_001 -->|"affects"| arc_specdb_001
     od_spec_001 -->|"relates-to"| d_133
     od_spec_002 -->|"affected_by"| d_132
@@ -674,6 +680,7 @@ graph LR
     od_project_003
     od_rules_001
     od_rules_002
+    od_rules_003
     od_spec_001
     od_spec_002
     od_spec_004

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:d7c4b2b5afe4d9f519d9a87d5d9cea09200237e7f9ece964bdcef1d25483daba",
-  "inputs_digest": "sha256:bef269d3537c4a21b7690fb35a97eb6473d807b9944bb4f57e0ed4fb9453b28b",
+  "content_digest": "sha256:8ddbeddb7141f7c0b7b3009de9e687ade5be8466ff02a595f9dafe5338a86cec",
+  "inputs_digest": "sha256:02846784441289952a01ad2de723ec2dab9ed2c6cf07a0071ac333e8b16854bd",
   "sections": [
     [
       "Documents",
-      89
+      90
     ],
     [
       "Sections",
-      820
+      831
     ],
     [
       "Source blocks",
-      3121
+      3151
     ]
   ],
   "inputs": [
@@ -379,6 +379,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored",
       "hash": "sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored",
+      "hash": "sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f"
     },
     {
       "content": "documents",
@@ -3799,6 +3804,61 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#68",
       "hash": "sha256:802bb9733fa697527b68ec3c57f70b4784729cc805a3041d40514d03c78a686e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1",
+      "hash": "sha256:923eabfa5c5296e58c33d94ea3d1b7628e0a2a27bb35f9f9c374a24f12cd4a45"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2",
+      "hash": "sha256:b1e2246d1c8584430e56dafd7a1aeabee9327bc9604c47f9c1c435fb4ce80c0a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6",
+      "hash": "sha256:a2bee15921c57dcf992254a7b8da1d4a362ac8141a980c9649a5321fcf82719c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7",
+      "hash": "sha256:698d7f40bfe5a51a3772286ebed2412b675a839c50dec6a2e10a859b53539c24"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10",
+      "hash": "sha256:710a81e42a238e614350f1958ce480e38119afd498a6d44581e3e82fa5a1538e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13",
+      "hash": "sha256:bcdf640f97b90f1a35788c2492d13066bab8fa032652ce855c672e25d6046a56"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15",
+      "hash": "sha256:6a85f4cfc7b5f3e1a58987c9e62a3487b21055d926458b5c2fc9de157eb6c2bf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18",
+      "hash": "sha256:6f5e0ba4b64693f265612e793c4b7c228cb7ca488d2bc55c60d5fcafd09a5ce7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21",
+      "hash": "sha256:5a47e0c3b1819d7a79bc97a70721a1810230cedface086fe299fafb0bb6495dd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23",
+      "hash": "sha256:0304d6617a6fbe1e78808ebe15f750ed0584f363734d8029eddd540d86f7974a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29",
+      "hash": "sha256:7f42679f5f0bde00d0eba96272b48db54916a435b2368eea8ebfa5aa029ef27a"
     },
     {
       "content": "headings",
@@ -17369,6 +17429,156 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md#69",
       "hash": "sha256:1ddc55d550ce8f731af680d6a25bea856cce59c8e259d52b0e3b877a12476663"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#1",
+      "hash": "sha256:bbf3c23a88a5bc5a44d3af040396392013ed9e323e264efa9d5ce4a9836f1211"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#3",
+      "hash": "sha256:f72e91e5454b9f270f7504ab2bef1f99666e94a13bc107a02c3990744ae42525"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#4",
+      "hash": "sha256:4a587775da2f581281c9a3f34ffeea75285944bd26ac87aacf1174ea88acbe5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#5",
+      "hash": "sha256:b41ea0a9b0f2909146ed8e7bad2f49445c90b664ff8975724ba65340708710f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#6",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#7",
+      "hash": "sha256:3014194fd1ec78df21931a204c923924f4237ef312fb2078e550f98d56c4d864"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#8",
+      "hash": "sha256:70f91f07162e8ae9ff39285dc0cf889503804892990478ae1d4ef4a72a78224f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#9",
+      "hash": "sha256:695a8fa09b0e5d25cd231578f0c62cb2665923f13d441df04be5ef313f428972"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#10",
+      "hash": "sha256:c60210057e2daae1eac009c27fbe240fd81df404fd41ba68640aa482c194a1d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#11",
+      "hash": "sha256:a2c0caafc65ae9be8212cccad80131535738911b54e3fc2975d8fea1c3c47b02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#12",
+      "hash": "sha256:a830f76144922e4ecacdd2b31c49cae488261eede02615d66ef092cdcd124fcb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#13",
+      "hash": "sha256:f4bf1927cfed66a3c13b4f1c53d4be1dc1cb10fbb61b3c95a2c02ca151b151f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#14",
+      "hash": "sha256:7c7f960b90a9db6cbbb510112e62ee1f6f1d298a64eaa0aff2a415baaa885fb5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#15",
+      "hash": "sha256:6ca4178c0a1ded7984ca2123f1770ea9ff97763159ffa82915f775fb9637ffef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#16",
+      "hash": "sha256:2350041688f56f64e0939a17f153a9322e0b4dd2b5d051890fc7b87befe50cfa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#17",
+      "hash": "sha256:d3b409bc27cc41fc5002f0e7016b2d0fc0b810576d41229e1cbeb9247402111d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#18",
+      "hash": "sha256:451dfc4f4864d45fb8e2acbc6b2e85a8bad483d610b9288eb7becf49ad69760f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#19",
+      "hash": "sha256:94996c4545239299d01636dbca45d9caff6b5aba4c60d9e3bcf64c922cfc422f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#20",
+      "hash": "sha256:54b0de1394a872fda11c56ff8007cfb7538bd2ead3360d44d6c52d97dbdffa66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#21",
+      "hash": "sha256:39fa6a7e05148859b1537d817e869a61df18fa38eeb978e6365146aae6c20462"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#22",
+      "hash": "sha256:bac2df47d6182519ad452b3e1100cbf608f5c31bc42c597046d88565a71be779"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#23",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#24",
+      "hash": "sha256:4ae2c0157fc1dfe60c754b501e8efb2addd1b079672708fba639f42392cd2b32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#25",
+      "hash": "sha256:f023583aa5266f6b1e74b4d362aabcf2c635bc5bd34e3421bb5bfe8098433a45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#26",
+      "hash": "sha256:c60e7fc71cd6a726749f99b542b169cfe408b3b985c84422bbef1510d46a73e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#27",
+      "hash": "sha256:4e1996eb31bafe76c8e28b392c7904520afea3ebff8da8c71e95101340a32126"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#28",
+      "hash": "sha256:0070eced63eddfb6a4742a8937ce607bcc3670c896f970c01ed1996e793d1253"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#29",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md#30",
+      "hash": "sha256:5bdab350d419dee34ad39b8e8c11b0f24803b469bcd517bccf6b30c827b5b41d"
     },
     {
       "content": "blocks",
