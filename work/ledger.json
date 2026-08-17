@@ -6668,7 +6668,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-orch-declined-dependency",
+          "reason": "done_when requires ClaimRefusal to gain a new non-retryable arm and Is_Retryable/Describe to distinguish it, but ClaimRefusal, its Is_Retryable and its Describe are all defined solely in crates/substrate/nomos-ledger/src/claim/refusal.rs (crate::claim module). That file is not in this item's territory (store.rs, exclusion.rs, work.rs, the ledger tests dir, and the surface snapshot only) -- exclusion.rs and work.rs only use/test Is_Retryable and the enum, they do not define them; the why text's 'Is_Retryable in exclusion.rs' predates the 2026-08 crate-split ('Give every substrate type its own file') that moved the type into its own module. No ClaimRefusal variant can be added, and Is_Retryable/Describe cannot be given a case for it, without editing claim/refusal.rs. No in-territory workaround exists: reusing NotClaimable would make Listing_Label fall through to the dependent's own State_Label (ready), the opposite of done_when's 'a word of its own rather than waiting'. claim.rs is currently unclaimed by anyone else and no ledger verb exists to extend a claimed item's territory, so I am stopping rather than writing outside my contract. Recommend re-scoping this item (or a follow-up) to add crates/substrate/nomos-ledger/src/claim/refusal.rs to territory before reclaiming.",
+          "abandoned_at": 1786936440
+        }
+      ],
       "displaced": [],
       "declined": null
     },
@@ -8596,10 +8602,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-orch-trace-population",
+        "acquired_at": 1786936113,
+        "lease_expires_at": 1786946913
+      },
       "verification": {
         "argv": [
           "cargo",
