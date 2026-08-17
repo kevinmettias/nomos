@@ -220,6 +220,7 @@ graph LR
     od_capability_006 -->|"relates-to"| od_rules_003
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
+    od_completeness_001 -->|"affected_by"| od_completeness_004["OD-COMPLETENESS-004"]
     od_completeness_001 -->|"relates-to"| od_contracts_002
     od_completeness_001 -->|"relates-to"| od_determinism_002
     od_completeness_001 -->|"relates-to"| od_gate_001
@@ -238,6 +239,10 @@ graph LR
     od_completeness_002 -->|"relates-to"| od_gate_001
     od_completeness_002 -->|"relates-to"| od_ledger_007["OD-LEDGER-007"]
     od_completeness_002 -->|"relates-to"| od_spec_007
+    od_completeness_004 -->|"affects"| od_completeness_001
+    od_completeness_004 -->|"relates-to"| od_gate_004
+    od_completeness_004 -->|"relates-to"| od_rules_001
+    od_completeness_004 -->|"relates-to"| od_rules_002
     od_connector_001 -->|"relates-to"| arc_connector_001
     od_connector_001 -->|"relates-to"| od_connector_002
     od_connector_001 -->|"relates-to"| od_spec_009
@@ -299,6 +304,7 @@ graph LR
     od_gate_002 -->|"relates-to"| od_store_002
     od_gate_004 -->|"relates-to"| d_134
     od_gate_004 -->|"relates-to"| od_completeness_001
+    od_gate_004 -->|"relates-to"| od_completeness_004
     od_gate_004 -->|"relates-to"| od_gate_001
     od_gate_004 -->|"relates-to"| od_gate_002
     od_gate_004 -->|"relates-to"| od_gate_005
@@ -564,6 +570,7 @@ graph LR
     od_rules_001 -->|"relates-to"| od_capability_002
     od_rules_001 -->|"relates-to"| od_capability_003
     od_rules_001 -->|"relates-to"| od_completeness_001
+    od_rules_001 -->|"relates-to"| od_completeness_004
     od_rules_001 -->|"relates-to"| od_gate_001
     od_rules_001 -->|"relates-to"| od_gate_004
     od_rules_001 -->|"relates-to"| od_model_001
@@ -573,6 +580,7 @@ graph LR
     od_rules_002 -->|"affects"| od_rules_001
     od_rules_002 -->|"relates-to"| d_134
     od_rules_002 -->|"relates-to"| od_completeness_001
+    od_rules_002 -->|"relates-to"| od_completeness_004
     od_rules_002 -->|"relates-to"| od_gate_001
     od_rules_002 -->|"relates-to"| od_gate_004
     od_rules_003 -->|"relates-to"| arc_conformance_001
@@ -710,6 +718,7 @@ graph LR
     od_capability_006
     od_completeness_001
     od_completeness_002
+    od_completeness_004
     od_connector_001
     od_connector_002
     od_contracts_001

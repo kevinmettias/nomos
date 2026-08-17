@@ -6,7 +6,10 @@
 //! satisfied by one that reports everything.
 
 use crate::assessment::{Assessment, Site, Verdict};
-use crate::predicates::{Divergences_With_No_Record, Unresolved_Records, Unresolved_Sites};
+use crate::predicates::{
+    Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records,
+    Unresolved_Sites,
+};
 use nomos_contract_tests::Workspace;
 
 /// The negative control for
@@ -44,6 +47,20 @@ fn Naming(requirement: &str, path: &str, symbol: &str) -> Assessment
             path: path.to_owned(),
             symbol: symbol.to_owned(),
         }],
+        gaps: Vec::new(),
+    };
+}
+
+/// A `Partial` assessment naming one site, one gap, and no record.
+fn Partial_Naming(requirement: &str, gap_path: &str, gap_symbol: &str) -> Assessment
+{
+    return Assessment {
+        verdict: Verdict::Partial,
+        gaps: vec![Site {
+            path: gap_path.to_owned(),
+            symbol: gap_symbol.to_owned(),
+        }],
+        ..Naming(requirement, "README.md", "Nomos")
     };
 }
 
@@ -73,6 +90,7 @@ fn Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported()
         verdict: Verdict::Met,
         record: Some("OD-TRACE-001".to_owned()),
         sites: Vec::new(),
+        gaps: Vec::new(),
     };
     assert!(
         Unresolved_Records(&root, &[real]).is_empty(),
@@ -113,5 +131,58 @@ fn Test_A_Divergence_With_No_Record_Should_Be_Refused()
         Divergences_With_No_Record(&[met]).is_empty(),
         "a Met entry owes no record, and reporting one would make the obligation \
          unstatable rather than merely strict"
+    );
+}
+
+/// The negative control for
+/// [`crate::committed::Test_Every_Gap_Should_Resolve`].
+///
+/// A guard that reported every gap as present would pass that test and catch nothing —
+/// the same defect [`Test_An_Entry_Naming_A_Vanished_Site_Should_Be_Reported`] exists to
+/// catch for `sites`, one field over.
+#[test]
+fn Test_An_Entry_Naming_A_Vanished_Gap_Should_Be_Reported()
+{
+    let root = Workspace::Workspace_Root();
+    let gone = Partial_Naming(
+        "CHK-003",
+        "crates/contracts/nomos-contracts/src/no_such_file.rs",
+        "Applicability",
+    );
+
+    assert_eq!(Unresolved_Gaps(&root, &[gone]).len(), 1);
+}
+
+/// The negative control for
+/// [`crate::committed::Test_Every_Partial_Should_Name_A_Gap`], which is vacuous over the
+/// committed set.
+#[test]
+fn Test_A_Partial_With_No_Gap_Should_Be_Refused()
+{
+    let unnamed = Assessment {
+        verdict: Verdict::Partial,
+        ..Naming(
+            "CHK-003",
+            "crates/contracts/nomos-contracts/src/finding/applicability.rs",
+            "Applicability",
+        )
+    };
+    assert_eq!(Partials_With_No_Gap(std::slice::from_ref(&unnamed)).len(), 1);
+
+    let named = Partial_Naming("CHK-003", "README.md", "Nomos");
+    assert!(
+        Partials_With_No_Gap(&[named]).is_empty(),
+        "a Partial entry naming a gap must not be reported, or the control above proves \
+         only that the function always reports something"
+    );
+
+    let met = Assessment {
+        verdict: Verdict::Met,
+        ..unnamed
+    };
+    assert!(
+        Partials_With_No_Gap(&[met]).is_empty(),
+        "a Met entry owes no gap, and reporting one would make the obligation unstatable \
+         rather than merely strict"
     );
 }

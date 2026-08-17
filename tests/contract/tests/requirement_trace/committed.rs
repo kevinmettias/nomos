@@ -1,7 +1,10 @@
 //! The three things `OD-TRACE-001` said the guard asserts, against the entries this
 //! repository has really committed.
 
-use crate::predicates::{Divergences_With_No_Record, Unresolved_Records, Unresolved_Sites};
+use crate::predicates::{
+    Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records,
+    Unresolved_Sites,
+};
 use crate::registry::Committed;
 use nomos_contract_tests::Workspace;
 
@@ -105,6 +108,50 @@ fn Test_Every_Divergence_Should_Name_A_Governing_Record()
          {unreasoned:#?}.\n\
          A divergence with no record is the state OD-TRACE-001 exists to end. Write the \
          record, register it, and name it here."
+    );
+}
+
+/// Every `Partial` entry names a gap: where the requirement is not yet satisfied.
+///
+/// **This assertion is vacuous today and that is stated rather than hidden.** No committed
+/// entry is `Partial` yet — `FEWEST_ASSESSMENTS`'s floor does not force the case, only the
+/// first honest partial assessment does, per `OD-TRACE-003`. What keeps the vacuity from
+/// being a hole is
+/// [`crate::controls::Test_A_Partial_With_No_Gap_Should_Be_Refused`], which runs this same
+/// function over a synthetic entry. It calls `Partials_With_No_Gap`, not a copy of it, so
+/// the control exercises the guard rather than something written beside it.
+#[test]
+fn Test_Every_Partial_Should_Name_A_Gap()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+    let unnamed = Partials_With_No_Gap(&assessments);
+
+    assert!(
+        unnamed.is_empty(),
+        "these assessments claim Partial and name no gap: {unnamed:#?}.\n\
+         A Partial with no gap is a softer Met, which is the state OD-TRACE-003 exists to \
+         end. Name at least one gap: a site where the unsatisfied part lives."
+    );
+}
+
+/// Every gap a `Partial` entry names still resolves in the workspace.
+///
+/// Also vacuous today, for the same reason as the assertion above. Kept honest by
+/// [`crate::controls::Test_An_Entry_Naming_A_Vanished_Gap_Should_Be_Reported`].
+#[test]
+fn Test_Every_Gap_Should_Resolve()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+    let missing = Unresolved_Gaps(&root, &assessments);
+
+    assert!(
+        missing.is_empty(),
+        "these Partial entries name a gap that is not there: {missing:#?}.\n\
+         Either the unsatisfied part moved, in which case update the entry, or it was \
+         closed, in which case the entry is stale: promote it to Met with real sites, or \
+         re-author it against what the gap became."
     );
 }
 

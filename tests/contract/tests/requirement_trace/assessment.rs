@@ -8,8 +8,10 @@ pub(crate) const REGISTRY: &str = "tests/contract/requirements";
 
 /// What an assessment says about a requirement.
 ///
-/// Four verdicts in `OD-TRACE-001` and three of them here. The fourth, `Unassessed`, is
-/// held by the *absence* of an entry and is refused as a written word by
+/// Four verdicts named in `OD-TRACE-001`, three of them writable there. `OD-TRACE-003`
+/// adds a fifth, `Partial`, for the case those four could not name: a requirement that
+/// binds this build and is satisfied at some of its sites and not at others. `Unassessed`
+/// is still held by the *absence* of an entry and is refused as a written word by
 /// [`crate::registry::Parse`] — a file saying `Unassessed` would be somebody looking and
 /// recording that they had not, which is the one thing this registry must not be able to
 /// express.
@@ -25,6 +27,13 @@ pub(crate) enum Verdict
     /// The requirement is read as not reaching this build, with a record saying why a
     /// corpus requirement does not bind the thing built to enforce it.
     NotBinding,
+    /// The requirement binds this build and is satisfied at some of its sites and not at
+    /// others. Unfinished is not a decision, so — unlike `Diverges` and `NotBinding` —
+    /// this verdict owes no governing record; `OD-TRACE-003` is why. What it owes instead
+    /// is at least one `gap`: a `path#symbol` site naming where the unsatisfied part
+    /// actually lives, checked exactly like `sites` so the entry decays the same visible
+    /// way if the gap closes or moves out from under it.
+    Partial,
 }
 
 impl Verdict
@@ -37,15 +46,22 @@ impl Verdict
             Self::Met => "Met",
             Self::Diverges => "Diverges",
             Self::NotBinding => "NotBinding",
+            Self::Partial => "Partial",
         };
     }
 
     /// Whether a verdict of this kind is owed a governing record.
     ///
-    /// Both non-`Met` verdicts are. Departing from a normative requirement and declaring
-    /// one out of scope are the same act from the corpus's side — somebody deciding this
-    /// build will not do what the requirement says — and the reason is what makes either
-    /// reviewable.
+    /// `Diverges` and `NotBinding` are. Departing from a normative requirement and
+    /// declaring one out of scope are the same act from the corpus's side — somebody
+    /// deciding this build will not do what the requirement says — and the reason is what
+    /// makes either reviewable.
+    ///
+    /// `Partial` is not, even though it is neither `Met` nor a record-owing verdict.
+    /// `OD-TRACE-003` draws that line deliberately: a half-finished requirement is not a
+    /// decision anybody made, so demanding a record for it would demand a reason for
+    /// something that has none. Its obligation is a gap instead — see
+    /// [`Self::Partial`].
     pub(crate) const fn Owes_A_Record(self) -> bool
     {
         return matches!(self, Self::Diverges | Self::NotBinding);
@@ -78,4 +94,12 @@ pub(crate) struct Assessment
     pub(crate) record: Option<String>,
     /// Every place the verdict is about. Never empty.
     pub(crate) sites: Vec<Site>,
+    /// Where the requirement is not yet satisfied, when the verdict is `Partial`.
+    ///
+    /// Checked exactly like `sites` — the same `path#symbol` shape, resolved the same
+    /// way — so a `Partial` entry decays visibly the way a `Met` one does instead of
+    /// quietly becoming a description of nothing. Empty for every other verdict;
+    /// `Partial` requires at least one, enforced by
+    /// [`crate::registry::Assert_Complete`].
+    pub(crate) gaps: Vec<Site>,
 }

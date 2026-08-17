@@ -3,7 +3,7 @@
 //! Held apart from both so the control and the assertion run the same code. A control that
 //! re-implemented the comparison would prove the copy right and say nothing about the guard.
 
-use crate::assessment::{Assessment, Site};
+use crate::assessment::{Assessment, Site, Verdict};
 use std::path::Path;
 
 /// Every site that is not where its entry says it is.
@@ -44,6 +44,47 @@ fn Unresolved(root: &Path, requirement: &str, site: &Site) -> Option<String>
         "{requirement}: {} no longer occurs in {}",
         site.symbol, site.path
     ));
+}
+
+/// Every `Partial` gap that is not where its entry says it is.
+///
+/// The same check `Unresolved_Sites` runs, over `Partial`'s own field, so a partial entry
+/// decays exactly the way a `Met` one does: if the code at a named gap moves or the gap
+/// closes, the entry stops resolving instead of quietly going on describing nothing.
+pub(crate) fn Unresolved_Gaps(root: &Path, assessments: &[Assessment]) -> Vec<String>
+{
+    let mut missing = Vec::new();
+
+    for assessment in assessments
+    {
+        for gap in &assessment.gaps
+        {
+            let unresolved = Unresolved(root, &assessment.requirement, gap);
+            missing.extend(unresolved);
+        }
+    }
+
+    return missing;
+}
+
+/// Every `Partial` entry that names no gap.
+///
+/// The predicate-level half of the same obligation [`crate::registry::Assert_Complete`]
+/// already refuses at read time — kept here, and asserted separately, for the reason
+/// `Divergences_With_No_Record` already is: this suite compares the committed set as well
+/// as reading it, so an obligation the reader enforces is also asserted here rather than
+/// trusted to have been enforced.
+pub(crate) fn Partials_With_No_Gap(assessments: &[Assessment]) -> Vec<String>
+{
+    return assessments
+        .iter()
+        .filter(|assessment| {
+            return assessment.verdict == Verdict::Partial && assessment.gaps.is_empty();
+        })
+        .map(|assessment| {
+            return format!("{}: Partial with no gap", assessment.requirement);
+        })
+        .collect();
 }
 
 /// Every named record that is not a registered governing record.

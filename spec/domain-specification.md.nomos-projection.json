@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a8212823000a37535f092dbb0b1220f3e3ed193cab0aa97bec86d8dfcf059035",
-  "inputs_digest": "sha256:5be88d136dfa21569534ce06cd2c188c5d96f26680c316f6e7bd657f1bd47bb5",
+  "content_digest": "sha256:bf25088daf6a18cfde3ff1bc2d09cb13aa8c803d9fa0a98880f205671508a5d4",
+  "inputs_digest": "sha256:ce73635f8e1af1f10124657b74027a340b0ac5369a6264672820c8d518573649",
   "sections": [
     [
       "Documents",
-      101
+      102
     ],
     [
       "Sections",
-      927
+      935
     ],
     [
       "Source blocks",
-      3491
+      3518
     ]
   ],
   "inputs": [
@@ -179,6 +179,11 @@
       "content": "documents",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored",
       "hash": "sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored",
+      "hash": "sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a"
     },
     {
       "content": "documents",
@@ -1754,6 +1759,46 @@
       "content": "headings",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53",
       "hash": "sha256:c005779c78b345dbfe7fa036a225aa2632408131e67e12c96dc639986d66e604"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1",
+      "hash": "sha256:ab299c9236ffae7d245ef46fbb9fd4b45802ca58c2a5707c988927e9f44c10ed"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2",
+      "hash": "sha256:0852149336ff17c2eebe5f77c95f785400eb0080928ed38f8657b0b409cc67b3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4",
+      "hash": "sha256:9bee31897a69108ec7544d03ccbd082ac8d1839c79e53f44810723fcf6740b94"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8",
+      "hash": "sha256:8502fb6c830568bc7f1137d243064622994edbf1495cbc418e43f0c0858c6b57"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13",
+      "hash": "sha256:9fcbd1132c245024e113deb32254acd8d69d1c44838d7fac1189ab8ac4081487"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21",
+      "hash": "sha256:f3e41a87b5ab09da3baf96be061fb3b83543187e3d159fe6981a84b52535cc6e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24",
+      "hash": "sha256:142d8854146b9a7f099eff4bad46ea535852782dc506ef21b75dc66c47de302e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26",
+      "hash": "sha256:ddb90f1cc64ce865dbce6bb9cfe283d20217c67995386f2481a98ccd2eb19dbf"
     },
     {
       "content": "headings",
@@ -9589,6 +9634,141 @@
       "content": "blocks",
       "identity": "docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#54",
       "hash": "sha256:e6f493d397e38f4ef317f0ef227f46c2d522aa6ca17fe5a198eaa84a4785b6c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1",
+      "hash": "sha256:5efcaf221cad4a8b50fe1e32dc9765dae874126b60946239d80dde39409eb840"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#3",
+      "hash": "sha256:ed8437089e8b8237908e4b0aa7d4bde5f3a8ac1e50ed9da62069f568a2642bf5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4",
+      "hash": "sha256:5f892b0c104a2e8565aba463b257f643ca05314356e58c508bb8da0cbd3d4132"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#5",
+      "hash": "sha256:93369c9860c411247524e8a900fc466594730e5122f732e6ad524ac94ef02494"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#6",
+      "hash": "sha256:ec12dabc4a8e46eb63180c07c92b0112fa7a9ae276259dab28330b07b167fdc7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#7",
+      "hash": "sha256:4fb287e6f984f4ff11f482ee56501a4a719880a58cb209da0febc1cacaf40394"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#9",
+      "hash": "sha256:705601b31464502259a27ccde2ffa5bddd37d829cedd47f3ce48d570a8e9f1c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#10",
+      "hash": "sha256:251782b9c5d10402361bff6eb2b4bb009818407a3ca965fcbc3f6166148c58ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#11",
+      "hash": "sha256:67ff56ae7ea9795b9251b58dcf3ae26b40a2ca691cef7f749d8163d893552f93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#12",
+      "hash": "sha256:7df422de639b10856394e9202f562acbea1126f9cc1666f8d6dca4197faec353"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13",
+      "hash": "sha256:ed50f9ac398c450a35c4745ff3a27a89a5508d1d376353718f2647e638ddb433"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#14",
+      "hash": "sha256:6d706b72c785a66d34a135831f0ba48d4377c3742e50dd4c6e911b767c1593ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#15",
+      "hash": "sha256:a5edd6b030aa6d05548266add322c5aed9ec3b892d82be118ef3f372fb931a80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#16",
+      "hash": "sha256:c627bccc9f0fcbe68a036913b3e7ad4d76d37bda9573af8e6529035e1a6bacec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#17",
+      "hash": "sha256:4ccfa31475f52464284ffc7d6b103e0f6c3841a0bbdd9b2ac4daec93b3c57de8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#18",
+      "hash": "sha256:235840ba60ec8f6f21c3df47439463e5c3654e2a0a00a464e41d5d98d2eb3804"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#19",
+      "hash": "sha256:0ea9a47f5e284ccc441787f100aaf709def0816c4c41ded65b7077930b01f090"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#20",
+      "hash": "sha256:7aeb40584e15d26d6ee46e78229967359980e0906d0b5802d76a28975ca6d631"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21",
+      "hash": "sha256:840eff5ad9138aa365f9c6a2a424eec315a80a0ca0c378a479c41ee058830a02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#22",
+      "hash": "sha256:e9575d6507a712d2bc7cd8d107f4d831214fa2f1182b6fe93c85595b49184738"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#23",
+      "hash": "sha256:3a83c2e3a94d885f677fc1ca01bf561b6111c6e9687d11557e9d0c3a20fc1853"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#25",
+      "hash": "sha256:7c983dad4869c2847e11c6d55ba1cb7dbf2cc3361bdf5944be85a81686870dbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#27",
+      "hash": "sha256:537e2d99fb9ed1d931452a739341fad6fe0367500820f9bc3c40a5c1ef9c7276"
     },
     {
       "content": "blocks",

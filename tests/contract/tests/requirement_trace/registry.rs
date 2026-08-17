@@ -82,13 +82,14 @@ pub(crate) fn Parse(stem: &str, text: &str) -> Result<Assessment, String>
         return "no verdict; an entry with none is not an assessment".to_owned();
     })?;
 
-    Assert_Complete(verdict, read.record.as_deref(), &read.sites)?;
+    Assert_Complete(verdict, read.record.as_deref(), &read.sites, &read.gaps)?;
 
     return Ok(Assessment {
         requirement: stem.to_owned(),
         verdict,
         record: read.record,
         sites: read.sites,
+        gaps: read.gaps,
     });
 }
 
@@ -99,6 +100,7 @@ struct Read
     verdict: Option<Verdict>,
     record: Option<String>,
     sites: Vec<Site>,
+    gaps: Vec<Site>,
 }
 
 /// Every `key: value` line an entry holds, filed under its key.
@@ -133,6 +135,7 @@ fn Read_One(read: &mut Read, line: &str) -> Result<(), String>
         "verdict" => read.verdict = Some(Second_Verdict(read.verdict.as_ref(), value)?),
         "record" => read.record = Some(Second_Record(read.record.as_deref(), value)?),
         "site" => read.sites.push(Read_Site(value)?),
+        "gap" => read.gaps.push(Read_Site(value)?),
         other => return Err(format!("unknown key `{other}`")),
     }
 
@@ -169,7 +172,12 @@ fn Second_Record(held: Option<&str>, value: &str) -> Result<String, String>
 }
 
 /// What an entry owes once its lines have been read.
-fn Assert_Complete(verdict: Verdict, record: Option<&str>, sites: &[Site]) -> Result<(), String>
+fn Assert_Complete(
+    verdict: Verdict,
+    record: Option<&str>,
+    sites: &[Site],
+    gaps: &[Site],
+) -> Result<(), String>
 {
     if sites.is_empty()
     {
@@ -187,14 +195,23 @@ fn Assert_Complete(verdict: Verdict, record: Option<&str>, sites: &[Site]) -> Re
             verdict.Label()
         ));
     }
+    if verdict == Verdict::Partial && gaps.is_empty()
+    {
+        return Err(
+            "Partial with no gap; OD-TRACE-003 makes that not a verdict but a softer Met, \
+             which is the pressure a half-finished requirement creates and the one this \
+             entry must not give in to"
+                .to_owned(),
+        );
+    }
 
     return Ok(());
 }
 
-/// One of the three writable verdicts.
+/// One of the four writable verdicts.
 fn Read_Verdict(value: &str) -> Result<Verdict, String>
 {
-    for verdict in [Verdict::Met, Verdict::Diverges, Verdict::NotBinding]
+    for verdict in [Verdict::Met, Verdict::Diverges, Verdict::NotBinding, Verdict::Partial]
     {
         if value == verdict.Label()
         {
@@ -212,8 +229,8 @@ fn Read_Verdict(value: &str) -> Result<Verdict, String>
     }
 
     return Err(format!(
-        "`{value}` is not a verdict; OD-TRACE-001 names Met, Diverges and NotBinding, and \
-         holds the fourth by absence"
+        "`{value}` is not a verdict; OD-TRACE-001 names Met, Diverges and NotBinding, \
+         OD-TRACE-003 adds Partial, and Unassessed is held by absence"
     ));
 }
 

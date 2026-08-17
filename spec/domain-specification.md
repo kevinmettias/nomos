@@ -42,6 +42,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md@authored | docs/records/OD-CAPABILITY-006-a-cross-language-claim-is-a-claim-about-a-declared-seam-between-two-providers-facts-not-either-providers-own-answer.md | authored | 36 | 8 | sha256:6921af0ffee38a77a00c90bb6ebeebcd97e7db786652bdfdb80f9f854577cdfd |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ae576ae44e0cc42f6fd2a44efd4c144eb6e6563fe999ad97a9d074e9037c1d2a |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:8747b101030932e66b9bcfac31894e7676e3850041148d026bef58c8bfe4d2e8 |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:2de6c66157c81460c04202fa550d57a830560e25befd9d6087223a67d6ab5cba |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
@@ -362,6 +363,14 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#44 | authored | 2 | Coordination — One Method, Not Two |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#50 | authored | 2 | What This Does Not Do |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md#53 | authored | 2 | Status |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1 | authored | 1 | A report that cannot render eleven reasons renders silence instead, and silence reads as clean |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2 | authored | 2 | Question |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4 | authored | 2 | What Was Already True And Is Kept |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8 | authored | 2 | The Decision |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13 | authored | 2 | Whether The Exit Code Should Stop Sharing |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21 | authored | 2 | The Negative Control |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24 | authored | 2 | What This Does Not Do |
+| docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26 | authored | 2 | Status |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1 | authored | 1 | An outward mutation is a command through a canonical service, and absence from the interface is the mechanism rather than a permission check |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#2 | authored | 2 | Question |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#5 | authored | 2 | Decision |
@@ -8995,6 +9004,268 @@ Stated plainly, because `OD-GATE-001` is about checks that imply more than they 
 Accepted, closed by `P10-MIRROR-DISAGREEMENT`. Sixteen declared universes; four mirrored, each
 claiming its mirror at its own site; twelve declared holes with the number checked; and the
 two guards that disagreed now hold a per-universe equality that names what moved.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#1
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean · hash: sha256:5efcaf221cad4a8b50fe1e32dc9765dae874126b60946239d80dde39409eb840*
+
+# A report that cannot render eleven reasons renders silence instead, and silence reads as clean
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#2
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#3
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Question · hash: sha256:ed8437089e8b8237908e4b0aa7d4bde5f3a8ac1e50ed9da62069f568a2642bf5*
+
+`nomos_contracts::Applicability` opens by calling itself the load-bearing expression of the
+product's first principle — unknown is not pass — and every `Finding` this workspace produces
+already carries one. `crates/host/nomos-cli/src/check/report.rs`, the surface a person actually
+reads, consumed `Finding::Can_Fail_A_Build` (which reads applicability) and never the field
+itself. Its `Examined` struct carries two denominators on purpose, and its own doc comment
+already makes the argument this record extends: "0 findings over 400 files" and "0 findings
+over 400 files none of which produced a fact" are different claims. That argument stops one
+step short of the eleven-way distinction `Applicability` exists to carry, and the gap is a
+silence with a specific shape — a subject whose provider is missing, whose toolchain is
+absent, whose parse failed, or which needs a model contributes nothing to either denominator
+and produces no distinguishing line in the rendered report.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#4
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:5f892b0c104a2e8565aba463b257f643ca05314356e58c508bb8da0cbd3d4132*
+
+## What Was Already True And Is Kept
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#5
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:93369c9860c411247524e8a900fc466594730e5122f732e6ad524ac94ef02494*
+
+Two things this workspace had already got right, named so the remedy below does not quietly
+re-decide them.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#6
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:ec12dabc4a8e46eb63180c07c92b0112fa7a9ae276259dab28330b07b167fdc7*
+
+`nomos-rules` already puts an `Applicability` on every finding it produces, including the
+debt states. `mirror/unread.rs` emits one finding per subject whose syntax fact could not be
+read, before any universe is judged — `Check_Completeness_Mirrors` extends its findings with
+`index.unread.iter().map(Unread_Subject)` unconditionally. So a subject is never dropped
+*silently* at the rule layer today; what was missing sat one layer up, in the surface that
+renders the findings into something a person reads.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#7
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What Was Already True And Is Kept · hash: sha256:4fb287e6f984f4ff11f482ee56501a4a719880a58cb209da0febc1cacaf40394*
+
+`Examined`'s two denominators are a property of the walk — decided before a single subject is
+judged — and are orthogonal to what judgment each subject received. That reasoning is
+unchanged and the type is unchanged: `files` and `facts` still answer "did the walk see a
+plausible amount of the world", which a per-subject breakdown cannot answer on its own (a
+tree the walk never entered has no subjects to break down).
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#8
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#9
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:705601b31464502259a27ccde2ffa5bddd37d829cedd47f3ce48d570a8e9f1c6*
+
+**The report reads the enum.** `report.rs` gains `Coverage`, a counter per `Applicability`
+variant, built by a match with no wildcard arm — the same shape `Applicability` itself is
+built with, so a twelfth variant fails the build at this match rather than landing in
+whichever bucket happened to be there. `Coverage::Nonzero` is what `Counts` renders: one line
+per bucket the run actually put something in, labelled by `Applicability::Label`.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#10
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:251782b9c5d10402361bff6eb2b4bb009818407a3ca965fcbc3f6166148c58ab*
+
+**Grouping is by variant, not by capability or by language.** This binary registers one
+capability (`nomos_cap_syntax`) and one language (`nomos_lang_rust`); grouping by either
+collapses to a single bucket today and would hide exactly the distinction this record is
+about. `Finding::rule` is already a capability's proxy, so a second grouping remains
+composable when a second capability or language exists to make it informative — nothing here
+forecloses it, and adding one is not this record's subject.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#11
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:67ff56ae7ea9795b9251b58dcf3ae26b40a2ca691cef7f749d8163d893552f93*
+
+**`Examined` is not extended with an integer.** Adding a third `usize` — a bare debt count —
+is the shape this item was opened to stop: one number cannot tell a reader which of eleven
+reasons a subject was not judged for, only that some number of them weren't. `Coverage` is a
+sibling type, not a field, because the two answer different questions and forcing one into
+the other's shape is how a report ends up naive about the general problem while having
+already solved a special case of it (`Examined`'s own history).
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#12
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Decision · hash: sha256:7df422de639b10856394e9202f562acbea1126f9cc1666f8d6dca4197faec353*
+
+**The roll-up verdict is `Claim`, read off `Applicability`'s own predicates.**
+`Claim::Complete` when no finding's applicability answers `Is_Coverage_Debt` or
+`Requires_Agent`; `Claim::Incomplete` otherwise. It is computed by asking `Applicability` the
+question directly (`finding.applicability.Is_Coverage_Debt() || …Requires_Agent()`), not by
+re-deriving the same classification from `Coverage`'s counters — one classification, asked
+once, so a change to what counts as debt cannot drift between the verdict and the breakdown
+that explains it. `NotApplicable` and `ConfigurationDisabled` do not flip the verdict, for the
+same reason `Applicability::Is_Coverage_Debt` already excludes them: a rule that does not bind
+and a human's deliberate switch are decisions, not gaps.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#13
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:ed50f9ac398c450a35c4745ff3a27a89a5508d1d376353718f2647e638ddb433*
+
+## Whether The Exit Code Should Stop Sharing
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#14
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:6d706b72c785a66d34a135831f0ba48d4377c3742e50dd4c6e911b767c1593ce*
+
+`done_when` asks this directly: complete-and-clean and incomplete-and-nothing-found currently
+share `ExitCode::Ok`, and whether they should stop sharing it is this record's to settle.
+**They keep sharing it.** Measured, not assumed — the measurement is what the decision rests
+on.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#15
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:a5edd6b030aa6d05548266add322c5aed9ec3b892d82be118ef3f372fb931a80*
+
+`nomos check --root .` was run against this workspace both before and after this change.
+Before: 768 files examined, 767 with a syntax fact, 13 findings, 0 blocking, exit 0. After
+(counts moved slightly from unrelated concurrent work in the tree; the shape did not): 770
+files examined, 769 with a syntax fact, 13 findings, 0 blocking, exit 0, and now additionally:
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#16
+
+*revision: authored · kind: code · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:c627bccc9f0fcbe68a036913b3e7ad4d76d37bda9573af8e6529035e1a6bacec*
+
+```
+claim: incomplete
+  Supported: 12
+  DependencyUnavailable: 1
+```
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#17
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:4ccfa31475f52464284ffc7d6b103e0f6c3841a0bbdd9b2ac4daec93b3c57de8*
+
+Twelve of the thirteen findings are `Applicability::Supported` — `Admitted_Gap`, a real
+judgment that a universe declares no mirror, not debt. One is
+`Applicability::DependencyUnavailable`, for `tests/corpus/analysis/gamma/broken.rs`, a fixture
+this workspace keeps deliberately unparseable (`OD-COMPLETENESS-002` measured the same file
+under the same rule). That file is permanent, not incidental: `check.rs`'s own module
+documentation already describes it as printing "on every run".
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#18
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:235840ba60ec8f6f21c3df47439463e5c3654e2a0a00a464e41d5d98d2eb3804*
+
+A run over this actual, real workspace is therefore incomplete-and-nothing-found *today*, on
+every invocation, including the one `OD-GATE-004` wired into `.github/workflows/gate.yml` as
+the `Rules` step. `check.rs`'s own documentation states the policy this decision has to
+respect: "Zero is the only success... Actions fails a step on any non-zero exit... that
+default *is* the policy." A new exit code firing whenever `Claim::Incomplete` holds would
+therefore turn this repository's own gate permanently red, over a gap the workspace has
+already, explicitly chosen to admit rather than close — the same asymmetry
+`OD-COMPLETENESS-001` names about `UNMIRRORED_TOTAL`: a gate that can never be green is a gate
+everybody learns to bypass, and a gate that is red from the moment it is wired teaches the
+same lesson faster.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#19
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:0ea9a47f5e284ccc441787f100aaf709def0816c4c41ded65b7077930b01f090*
+
+`ExitCode::Vacuous` was considered and does not fit: it means the answer is empty because
+*nothing* was judged, and a run that judged twelve subjects and could not judge one is not
+that claim — it is a strictly more informative one, which is exactly why it needs a state of
+its own inside the successful exit rather than a code that already means something narrower.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#20
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Whether The Exit Code Should Stop Sharing · hash: sha256:7aeb40584e15d26d6ee46e78229967359980e0906d0b5802d76a28975ca6d631*
+
+So the decision is: **`ExitCode::Ok` continues to mean "nothing found can fail a build",
+unchanged, and does not additionally promise "and nothing was left unjudged."** That second
+promise is now made in the text — `claim: incomplete` and the per-variant breakdown — where a
+reader who wants it can read it, and a future gate step that wants to fail a build over
+`Claim::Incomplete` specifically can be built by parsing that line, deliberately, rather than
+by this record silently repurposing an exit code the gate already treats as a hard boundary.
+Nothing about this decision closes off adding a stricter gate later; it declines to make that
+choice by side effect of a report change that was never asked to touch the gate.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#21
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:840eff5ad9138aa365f9c6a2a424eec315a80a0ca0c378a479c41ee058830a02*
+
+## The Negative Control
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#22
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:e9575d6507a712d2bc7cd8d107f4d831214fa2f1182b6fe93c85595b49184738*
+
+`done_when` asks for the test that matters most: a subject the run could not judge must not
+render the same as a subject that was judged clean.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#23
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / The Negative Control · hash: sha256:3a83c2e3a94d885f677fc1ca01bf561b6111c6e9687d11557e9d0c3a20fc1853*
+
+Two versions exist, both passing. `check::report::tests::Test_A_Coverage_Debt_Subject_Must_Not_Render_The_Same_As_A_Clean_Run`
+constructs a fabricated `Finding` carrying `Applicability::DependencyUnavailable` and asserts
+its rendered `Report` output differs from an empty, clean run's — `claim: incomplete` against
+`claim: complete`, and the variant's label present on one side and absent from the other.
+`check::tests::Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run` is the
+end-to-end version: a real tree with one clean file and one file the real, registered parser
+refuses, run through `Run` exactly as the shipped binary runs it, beside a tree with the clean
+file alone. Both trees exit `ExitCode::Ok` — the assertion `code == clean_code` is in the test
+on purpose, naming the fact this record's exit-code decision rests on — and the rendered text
+still differs, which is the only place left that it can.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#24
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#25
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / What This Does Not Do · hash: sha256:7c983dad4869c2847e11c6d55ba1cb7dbf2cc3361bdf5944be85a81686870dbf*
+
+- **It does not close the one admitted debt finding.** `broken.rs` stays unparseable by
+  design; this record is about that fact being visible, not about removing it.
+- **It does not add a rule.** `nomos-rules` is unchanged. Every `Applicability` value it was
+  already capable of producing was already reachable before this record; what changed is
+  whether the report downstream could say which one arrived.
+- **It does not change what makes a build fail.** `Finding::Can_Fail_A_Build` and
+  `ExitCode::Violations` are untouched. A debt finding still cannot fail a build, for the
+  reason `Can_Fail_A_Build`'s own doc comment gives — a rule that could not read its subject
+  has reported on the analysis, not on the code.
+- **It does not give the gate a stricter policy.** See above. That is a live, separate
+  decision this record declines to make by accident.
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#26
+
+*revision: authored · kind: heading · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md#27
+
+*revision: authored · kind: prose · heading: A report that cannot render eleven reasons renders silence instead, and silence reads as clean / Status · hash: sha256:537e2d99fb9ed1d931452a739341fad6fe0367500820f9bc3c40a5c1ef9c7276*
+
+Accepted, closed by `P12-COVERAGE-REPORT`. The report reads the enum: every subject that
+received no judgment appears by its `Applicability` variant, in a rendering distinguishable
+from a clean run by a test built for exactly that comparison, and the exit-code question the
+item asked to have settled is settled — not split, and measured against this workspace's own
+permanently-admitted case rather than assumed.
 
 ### docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md#1
 

@@ -16,6 +16,13 @@ fn Test_The_Reader_Should_Refuse_Every_Malformed_Entry()
          reader refuses everything"
     );
 
+    let partial_sound = "verdict: Partial\nsite: README.md#Nomos\ngap: README.md#Nomos\n";
+    assert!(
+        Parse("CHK-003", partial_sound).is_ok(),
+        "a Partial entry naming both a site and a gap must parse, or every Partial \
+         refusal below proves only that the reader refuses every Partial"
+    );
+
     for (stem, text, because) in MALFORMED
     {
         assert!(
@@ -84,6 +91,16 @@ const MALFORMED: &[(&str, &str, &str)] = &[
         "CHK-003",
         "verdict: Diverges\nsite: README.md#Nomos\n",
         "a divergence with no record, refused at read time as well as compared",
+    ),
+    (
+        "CHK-003",
+        "verdict: Partial\nsite: README.md#Nomos\n",
+        "a partial with no gap, refused at read time as well as compared",
+    ),
+    (
+        "CHK-003",
+        "verdict: Partial\nsite: README.md#Nomos\ngap: README.md\n",
+        "a gap with no symbol, refused the same way a site with no symbol is",
     ),
 ];
 
