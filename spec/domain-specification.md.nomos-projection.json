@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:052f68495a4505805bd6350622e43d3589b77ac18dcb908ff16e6112adc31d3d",
-  "inputs_digest": "sha256:320b14a5093933caa1987797e45001733afca080b9545fa109c27bc199c4aa75",
+  "content_digest": "sha256:a8212823000a37535f092dbb0b1220f3e3ed193cab0aa97bec86d8dfcf059035",
+  "inputs_digest": "sha256:5be88d136dfa21569534ce06cd2c188c5d96f26680c316f6e7bd657f1bd47bb5",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      926
+      927
     ],
     [
       "Source blocks",
-      3484
+      3491
     ]
   ],
   "inputs": [
@@ -398,7 +398,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored",
-      "hash": "sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b"
+      "hash": "sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0"
     },
     {
       "content": "documents",
@@ -3973,7 +3973,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26",
-      "hash": "sha256:06b73ba500661a32694e9ba850469c7d6b8dba75bf1707ec5cd8b3676a7fd55f"
+      "hash": "sha256:1d23233a722cc777573688a31ea8bc78770687fdfe6a4a520e0e444aaced9bb8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33",
+      "hash": "sha256:009196650b4507cc90e7782b209765af896faa1492051dee35a432c9afbdd01e"
     },
     {
       "content": "headings",
@@ -18183,12 +18188,47 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:0f77ec702a0054adbf1e1b867b291bd76512bdec02881f5bc6b44821f171857a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#27",
-      "hash": "sha256:60c757dac192ddc276115a9dc4201dbeffb6a8334ade8a5016b15e0e3da2ea1f"
+      "hash": "sha256:082817890997969df00dc5b80a0e58ae5aa5eed2ea06162ef6e9ea433a8e2427"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#28",
+      "hash": "sha256:a6799fe67ca3261dc0d097c0522fc2c1a17776bf894a17483c7d3a09f0a9327c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#29",
+      "hash": "sha256:9e31015d86098cf45659256df4f20d44a17ba3795de5446d29a9afdf9478b959"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#30",
+      "hash": "sha256:ea4865f91eb6ab88ffa3cc2b29b96a873ee23614bcf4b95d4a4346896a0f3e60"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#31",
+      "hash": "sha256:c7aaa089a9428981863b065ae5e3d6b853fce59ab81b2546f85d001264f0f0b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#32",
+      "hash": "sha256:82f5198dc6d9d4045c9a565dae0ff17a19f9341dd9dff9ea337011269b394e72"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#34",
+      "hash": "sha256:03a85d752702f84e2ce9f7ec78da6eba1bb9baff36382862b6777d6f1565029f"
     },
     {
       "content": "blocks",

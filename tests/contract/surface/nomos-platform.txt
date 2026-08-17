@@ -6,6 +6,7 @@ pub enum nomos_platform::ExitOutcome
 pub enum nomos_platform::FileSystemError
 pub enum nomos_platform::LockError
 pub enum variant nomos_platform::ExitOutcome::Exited { code: i32, }
+pub enum variant nomos_platform::ExitOutcome::Stalled { idle_elapsed: std::time::Duration, }
 pub enum variant nomos_platform::ExitOutcome::Terminated
 pub enum variant nomos_platform::ExitOutcome::TimedOut
 pub enum variant nomos_platform::FileSystemError::Denied { path: String, cause: String, }
@@ -16,6 +17,7 @@ pub enum variant nomos_platform::LockError::Unusable { cause: String, }
 pub fn nomos_platform::Clock::Now(&self) -> Timestamp
 pub fn nomos_platform::Command::New(argv: Vec<String>, timeout: std::time::Duration) -> Self
 pub fn nomos_platform::Command::Program(&self) -> Option<&str>
+pub fn nomos_platform::Command::With_Idle_Timeout(mut self, idle_timeout: std::time::Duration) -> Self
 pub fn nomos_platform::CrossProcessLock::Acquire( &self, holder: &str, wait_limit: Duration, stale_after: Duration, ) -> Result<LockAcquisition<Self::Guard>, LockError>
 pub fn nomos_platform::FileSystem::Exists(&self, path: &Path) -> bool
 pub fn nomos_platform::FileSystem::Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
@@ -31,6 +33,7 @@ pub impl nomos_platform::FileSystemError implements std::error::Error
 pub impl nomos_platform::LockError implements core::fmt::Display
 pub impl nomos_platform::LockError implements std::error::Error
 pub struct field nomos_platform::Command::argv: Vec<String>
+pub struct field nomos_platform::Command::idle_timeout: std::time::Duration
 pub struct field nomos_platform::Command::timeout: std::time::Duration
 pub struct field nomos_platform::Command::working_directory: Option<PathBuf>
 pub struct field nomos_platform::LockAcquisition::broke_stale: Option<StaleTakeover>

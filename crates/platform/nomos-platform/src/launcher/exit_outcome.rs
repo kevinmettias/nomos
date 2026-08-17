@@ -2,11 +2,29 @@
 
 /// How a process ended.
 ///
-/// Three outcomes, not an exit code and a bool. A process that was killed for exceeding
-/// its timeout has not failed its predicate — nobody found out whether the predicate
-/// holds — and reporting that as a non-zero exit would turn "we did not learn anything"
-/// into "the check failed", which is the same conflation this whole system exists to
-/// avoid one level up.
+/// Not an exit code and a bool. A process that was killed for exceeding its timeout has
+/// not failed its predicate — nobody found out whether the predicate holds — and
+/// reporting that as a non-zero exit would turn "we did not learn anything" into "the
+/// check failed", which is the same conflation this whole system exists to avoid one
+/// level up.
+///
+/// [`ExitOutcome::TimedOut`] and [`ExitOutcome::Stalled`] are both that non-verdict, and
+/// they are kept apart because their remedies differ. A `TimedOut` process was still
+/// producing output when the wall bound expired — the honest case, whose only remedy is
+/// patience or a bigger budget. A `Stalled` one produced nothing for the whole of its
+/// idle bound while the wall bound still had time left — the case whose remedy is to
+/// find what stopped reading it, not to wait longer for a process that has already gone
+/// quiet. Collapsing them into one value is what let a stalled child and a slow-but-honest
+/// one read identically; see `docs/records/OD-PLATFORM-001` for the cost of that.
+///
+/// Every variant here stays [`Copy`]. A caller that already destructures this type by
+/// value and falls through to read the same place again — `nomos-ledger` does exactly
+/// that when a run produces no verdict — depends on that; a variant carrying owned data
+/// would silently break that call site, which is not this crate's territory to fix.
+/// `idle_elapsed` on [`ExitOutcome::Stalled`] is therefore a [`std::time::Duration`]
+/// rather than a snapshot of the output itself. The output itself is not discarded: it
+/// is still on [`super::ProcessOutput`], captured up to the moment of the kill exactly as
+/// it is for every other outcome.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ExitOutcome
 {
@@ -16,8 +34,18 @@ pub enum ExitOutcome
         /// The exit code.
         code: i32,
     },
-    /// The process exceeded its timeout and was terminated.
+    /// The process was still producing output when the wall bound expired.
     TimedOut,
+    /// The process produced no new output for the idle bound, before the wall bound
+    /// expired. The wall bound and the idle bound coincide unless a caller asked for a
+    /// shorter idle bound with [`super::Command::With_Idle_Timeout`], so this is only
+    /// reachable when they did.
+    Stalled
+    {
+        /// How long the process went without producing anything before it was judged
+        /// stalled and killed.
+        idle_elapsed: std::time::Duration,
+    },
     /// The process was killed by a signal or otherwise ended abnormally.
     Terminated,
 }
@@ -54,6 +82,10 @@ mod tests
         assert!(!ExitOutcome::Exited { code: 1 }.Succeeded());
         assert!(!ExitOutcome::TimedOut.Succeeded());
         assert!(!ExitOutcome::Terminated.Succeeded());
+        assert!(!ExitOutcome::Stalled {
+            idle_elapsed: std::time::Duration::from_secs(1)
+        }
+        .Succeeded());
     }
 
     /// The distinction the enum exists for. A timeout must not be recorded as the
@@ -64,5 +96,30 @@ mod tests
         assert!(!ExitOutcome::TimedOut.Produced_A_Verdict());
         assert!(!ExitOutcome::Terminated.Produced_A_Verdict());
         assert!(ExitOutcome::Exited { code: 1 }.Produced_A_Verdict());
+    }
+
+    /// A stall is no more a verdict than a wall-bound timeout is, and it must stay that
+    /// way for the same reason: nobody found out whether the predicate holds.
+    #[test]
+    fn Test_A_Stall_Should_Not_Count_As_A_Verdict_Either()
+    {
+        let stalled = ExitOutcome::Stalled {
+            idle_elapsed: std::time::Duration::from_secs(30),
+        };
+
+        assert!(!stalled.Produced_A_Verdict());
+        assert!(!stalled.Succeeded());
+    }
+
+    /// The two non-verdicts this type exists to keep apart must actually be different
+    /// values, or `work show` has nothing to tell them apart with.
+    #[test]
+    fn Test_A_Stall_And_A_Timeout_Should_Be_Different_Values()
+    {
+        let stalled = ExitOutcome::Stalled {
+            idle_elapsed: std::time::Duration::from_secs(30),
+        };
+
+        assert_ne!(stalled, ExitOutcome::TimedOut);
     }
 }

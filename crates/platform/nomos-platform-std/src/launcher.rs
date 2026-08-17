@@ -111,6 +111,17 @@ impl Drain
         return self.finished.load(Ordering::Acquire);
     }
 
+    /// How many bytes have been read so far, without copying them.
+    ///
+    /// Cheap on purpose: this is polled once per [`POLL_INTERVAL`] for as long as a
+    /// process runs, to notice whether it is still producing anything. Copying the whole
+    /// buffer that often to answer a question only its length can answer would make the
+    /// idle check itself the thing slowing a loud process down.
+    fn Len(&self) -> usize
+    {
+        return self.collected.lock().map_or(0, |buffer| return buffer.len());
+    }
+
     /// What has been read, as text.
     ///
     /// Lossy rather than strict, which is a change in what gets recorded. `read_to_string`
@@ -150,7 +161,7 @@ impl ProcessLauncher for StdProcessLauncher
         let stdout = child.stdout.take().map(Drain::Reading);
         let stderr = child.stderr.take().map(Drain::Reading);
 
-        let outcome = Waited(&mut child, program, command.timeout)?;
+        let outcome = Waited(&mut child, program, command, stdout.as_ref(), stderr.as_ref())?;
         Settle(stdout.as_ref(), stderr.as_ref());
 
         return Ok(ProcessOutput {
@@ -187,18 +198,43 @@ fn Spawned(command: &Command, program: &str) -> Result<std::process::Child, Stri
         .map_err(|error| return format!("could not start `{program}`: {error}"));
 }
 
-/// Waits for the child, and kills it if it outstays the timeout.
+/// How many bytes have been captured on either stream so far, without copying them.
+///
+/// The sum is what "progress" means here: a process writing only to `stderr`, or only
+/// to `stdout`, is still a process that is producing something, and the idle bound
+/// exists to catch the process that is producing neither.
+fn Combined_Len(stdout: Option<&Drain>, stderr: Option<&Drain>) -> usize
+{
+    return stdout.map_or(0, Drain::Len).saturating_add(stderr.map_or(0, Drain::Len));
+}
+
+/// Waits for the child, and kills it if it outstays its wall bound or goes silent for
+/// its idle bound.
 ///
 /// Kill and then reap. Skipping the wait leaves a zombie on Unix, and a verification
 /// predicate that spawns one per timeout will exhaust the process table of a machine
 /// running an agent fleet.
+///
+/// The idle bound is checked first on every poll, ahead of the wall bound, so that a
+/// process which produced nothing at all is reported as [`ExitOutcome::Stalled`] rather
+/// than [`ExitOutcome::TimedOut`] even in the case where both bounds are about to expire
+/// together — which is exactly what happens when a caller never asked for a shorter idle
+/// bound, since [`Command::New`] starts the two equal. A caller that wants the two
+/// distinguished for a genuinely silent-from-the-start process gets that distinction
+/// for free; a caller that wants to catch a stall *before* the wall bound would otherwise
+/// expire has to ask for a shorter idle bound with [`Command::With_Idle_Timeout`].
 fn Waited(
     child: &mut std::process::Child,
     program: &str,
-    timeout: std::time::Duration,
+    command: &Command,
+    stdout: Option<&Drain>,
+    stderr: Option<&Drain>,
 ) -> Result<ExitOutcome, String>
 {
     let started = Instant::now();
+    let mut last_progress = started;
+    let mut last_len = Combined_Len(stdout, stderr);
+
     let outcome = loop
     {
         match child.try_wait()
@@ -213,7 +249,23 @@ fn Waited(
             {}
             Err(error) => return Err(format!("could not wait for `{program}`: {error}")),
         }
-        if started.elapsed() >= timeout
+
+        let current_len = Combined_Len(stdout, stderr);
+        if current_len > last_len
+        {
+            last_len = current_len;
+            last_progress = Instant::now();
+        }
+
+        let idle_elapsed = last_progress.elapsed();
+        if idle_elapsed >= command.idle_timeout
+        {
+            Stopped(child, program)?;
+
+            break ExitOutcome::Stalled { idle_elapsed };
+        }
+
+        if started.elapsed() >= command.timeout
         {
             Stopped(child, program)?;
 
@@ -226,7 +278,13 @@ fn Waited(
     return Ok(outcome);
 }
 
-/// Kills a child that outran its budget, and reaps it.
+/// Kills a child that outran its budget, along with whatever it spawned, and reaps it.
+///
+/// A direct kill only ever reaches the one process this launcher started. `cargo test`
+/// starts the compiled test binary as its own child, and killing `cargo` alone leaves
+/// that binary running — which is the process that was actually hanging, still there
+/// after the thing watching it believes the hang is over. [`Kill_Tree`] is what reaches
+/// the whole tree instead of the one process at its root.
 ///
 /// A child that ended between the last poll and this kill is already in the state the kill was
 /// after, and the platforms disagree about how they say so: Unix reports success against a
@@ -238,7 +296,7 @@ fn Waited(
 /// dropped.
 fn Stopped(child: &mut std::process::Child, program: &str) -> Result<(), String>
 {
-    if let Err(cause) = child.kill()
+    if let Err(cause) = Kill_Tree(child)
         && cause.kind() != std::io::ErrorKind::InvalidInput
     {
         return Err(format!("`{program}` outran its timeout and could not be killed: {cause}"));
@@ -249,6 +307,46 @@ fn Stopped(child: &mut std::process::Child, program: &str) -> Result<(), String>
         .map_err(|cause| return format!("could not reap `{program}` after killing it: {cause}"))?;
 
     return Ok(());
+}
+
+/// Kills a child and every process it spawned, where the platform can be asked to.
+///
+/// `Child::kill` is `TerminateProcess` on Windows and `SIGKILL` on Unix, and both reach
+/// only the one process named by the handle or the pid — neither walks down to what that
+/// process started. `taskkill /T` does: given a pid it walks the process tree rooted
+/// there and terminates every process in it, which is what "kill the child" has to mean
+/// when the child is `cargo test` and the thing actually hanging is the test binary
+/// `cargo` spawned underneath it.
+///
+/// `cfg!(windows)` rather than `#[cfg(windows)]`: this workspace's gate lints only the
+/// Linux leg on the strength of there being no conditionally-compiled code for it to
+/// miss, and a compile-time `#[cfg]` here would make that no longer true. The runtime
+/// check keeps both branches ordinary, always-compiled Rust, so nothing about this
+/// function is invisible to the leg that does not run it.
+///
+/// A `taskkill` that cannot run at all — wrong platform, not on `PATH`, the process
+/// already gone — is not reported as this function's own failure. [`Child::kill`] below
+/// is the fallback that actually matters for those cases, and it already carries its own
+/// accounting for "the process was already gone" via the `InvalidInput` the caller
+/// checks for.
+fn Kill_Tree(child: &mut std::process::Child) -> std::io::Result<()>
+{
+    if cfg!(windows)
+    {
+        let tree_killed = std::process::Command::new("taskkill")
+            .args(["/T", "/F", "/PID", &child.id().to_string()])
+            .stdin(std::process::Stdio::null())
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .status();
+
+        if matches!(tree_killed, Ok(status) if status.success())
+        {
+            return Ok(());
+        }
+    }
+
+    return child.kill();
 }
 
 /// Gives the readers a bounded moment to finish what is left in the pipes.

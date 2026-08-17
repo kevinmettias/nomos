@@ -244,6 +244,139 @@ fn A_Slow_Program() -> Vec<String>
     return vec!["sleep".to_owned(), "7".to_owned()];
 }
 
+/// The distinction `P11-EXEC-IDLE` exists for: a child that produces nothing at all for
+/// its idle bound is a different fact from a child that is still working when the wall
+/// bound expires, and the two must not collapse into the same value.
+///
+/// `With_Idle_Timeout` gives this command an idle bound shorter than its wall bound, so
+/// the idle bound is what ends the wait — the control below is what proves the wall
+/// bound alone would not have.
+#[test]
+fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
+{
+    let silent = Command::New(A_Silent_Program(), Duration::from_secs(30))
+        .With_Idle_Timeout(Duration::from_secs(1));
+    let started = Instant::now();
+    let output = StdProcessLauncher.Run(&silent).unwrap();
+
+    assert!(
+        matches!(output.outcome, ExitOutcome::Stalled { .. }),
+        "a program producing nothing for its idle bound should report Stalled, not {:?}",
+        output.outcome
+    );
+    assert!(!output.outcome.Produced_A_Verdict());
+    assert!(
+        started.elapsed() < Duration::from_secs(10),
+        "the idle bound did not terminate the program — it waited nearly the full 30-second \
+         wall bound instead"
+    );
+}
+
+/// The control for the test above: a short idle bound must not turn a program that is
+/// genuinely still working into a stall. Progress keeps resetting the idle clock, so this
+/// must still end at the wall bound, exactly as it did before an idle bound existed.
+#[test]
+fn Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled()
+{
+    let progressing =
+        Command::New(A_Slow_Program(), Duration::from_secs(1)).With_Idle_Timeout(Duration::from_secs(5));
+    let started = Instant::now();
+    let output = StdProcessLauncher.Run(&progressing).unwrap();
+
+    assert_eq!(
+        output.outcome,
+        ExitOutcome::TimedOut,
+        "a program still producing output when the wall bound expired must not be reported \
+         as stalled"
+    );
+    assert!(
+        started.elapsed() < Duration::from_secs(7),
+        "the wall bound did not terminate the program, it waited for it"
+    );
+}
+
+/// A program that runs for a while and produces nothing on either stream.
+///
+/// Redirected inside its own shell rather than left to inherit stdio, so what this
+/// launcher's pipes see is genuinely nothing — not merely "nothing yet", the way
+/// [`A_Slow_Program`]'s own first line is.
+fn A_Silent_Program() -> Vec<String>
+{
+    if cfg!(windows)
+    {
+        return vec![
+            "cmd".to_owned(),
+            "/C".to_owned(),
+            "ping -n 30 127.0.0.1 >nul 2>&1".to_owned(),
+        ];
+    }
+
+    return vec!["sleep".to_owned(), "30".to_owned()];
+}
+
+/// A kill that reaches only the direct child is not the kill `cargo test` needs: the
+/// hanging process is usually the compiled test binary a step above `cargo` spawned, and
+/// Windows does not cascade a terminated process's own kill to what it started. `cmd`
+/// running `ping` as its own child reproduces that shape at two processes deep — this
+/// launcher's direct child is `cmd`, and `ping` is what `cmd` itself started and waited
+/// on, exactly as `cargo` starts and waits on its test binary.
+///
+/// `ping`'s output is redirected to a marker file rather than captured, so what is being
+/// asked is not "did the launcher see more output" but "did anything in the tree keep
+/// running after the launcher returned" — a question a kill that only reached `cmd` would
+/// answer wrong, because `ping` would still be there appending to the file on its own
+/// schedule.
+///
+/// Windows only. There is nothing platform-specific about the claim, but proving it
+/// without `taskkill` would need a mechanism this item's territory does not build; see
+/// `docs/records/OD-PLATFORM-001` for the scope this leaves open.
+#[test]
+fn Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child()
+{
+    if !cfg!(windows)
+    {
+        return;
+    }
+
+    let mut marker = std::env::temp_dir();
+    marker.push(format!("nomos-launcher-tree-{}.txt", std::process::id()));
+    let _ = std::fs::remove_file(&marker);
+
+    let nested = Command::New(
+        vec![
+            "cmd".to_owned(),
+            "/C".to_owned(),
+            format!("ping -n 30 127.0.0.1 > {}", marker.display()),
+        ],
+        Duration::from_secs(2),
+    );
+
+    let output = StdProcessLauncher.Run(&nested).unwrap();
+    assert!(
+        !output.outcome.Produced_A_Verdict(),
+        "the wait must have ended at a bound, not at the program's own completion"
+    );
+
+    let right_after_kill = Bytes_Written(&marker);
+    std::thread::sleep(Duration::from_millis(1_500));
+    let settled = Bytes_Written(&marker);
+
+    Cleared(&marker);
+
+    assert_eq!(
+        right_after_kill, settled,
+        "the marker file kept growing after the launcher returned, so `ping` was still \
+         running under a `cmd` this launcher believed it had already killed"
+    );
+}
+
+/// How many bytes a file holds, or zero if it cannot be read — a marker file that a
+/// killed tree never got to create is itself evidence the tree is dead.
+fn Bytes_Written(path: &Path) -> u64
+{
+    return std::fs::metadata(path).map_or(0, |metadata| return metadata.len());
+}
+
 /// A grandchild holding the pipe open must not hold the launcher open.
 ///
 /// Found while fixing the defect above rather than reported with it. The child exits

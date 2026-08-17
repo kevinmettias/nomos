@@ -85,7 +85,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 37 | 9 | sha256:61d21890285c5239b6ea93d3039af6ecca654c2ba22822041ae17c272e5221a0 |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 26 | 9 | sha256:fee950b9db060e8766b37c6077f80933864691179bb39060352ff4526d95a6ed |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 31 | 10 | sha256:be88ed64620fcc6a28fa0203aaef4414abe8dce9bea22f70465eac520c923411 |
-| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 27 | 8 | sha256:64a179d09dd936ff05ee3db64204767d91bc10b3543e263b2bf0ae106cf3398b |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
@@ -805,7 +805,8 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#14 | authored | 2 | The Decision |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#19 | authored | 2 | What The Port Still Does Not Say |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#22 | authored | 2 | Consequences |
-| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26 | authored | 2 | Status |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26 | authored | 2 | Amendment: One Non-Verdict Was Two Facts Wearing The Same Name |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33 | authored | 2 | Status |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1 | authored | 1 | The repository's README is not the suite's overview, and stays hand-authored |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#2 | authored | 2 | Question |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#6 | authored | 2 | Two Documents, One Name |
@@ -23651,17 +23652,133 @@ evidence that fitted rather than evidence that told anyone anything.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26
 
+*revision: authored · kind: heading · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:0f77ec702a0054adbf1e1b867b291bd76512bdec02881f5bc6b44821f171857a*
+
+## Amendment: One Non-Verdict Was Two Facts Wearing The Same Name
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#27
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:082817890997969df00dc5b80a0e58ae5aa5eed2ea06162ef6e9ea433a8e2427*
+
+`TimedOut` answered "nobody found out" for two different reasons that call for different
+remedies: a predicate genuinely still working when the wall bound expired, and a predicate
+that produced nothing at all while something else — a hung reader, a deadlocked test case,
+a child blocked writing into a pipe nobody drained — kept it from ever finishing. `wait` and
+`fix the reader` are not the same action, and a value that cannot say which was needed sends
+every holder to the same one: raise the timeout. `P11-EXEC-IDLE` is the item that measured
+this against the board, in `P10-LAUNCHER-PIPE`'s own history: a predicate that passes in 103
+seconds by hand was recorded as `TimedOut` twice at 600 seconds because the launcher read no
+pipe until the child exited. The drain was fixed by this record's original decision; the
+classification was not.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#28
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:a6799fe67ca3261dc0d097c0522fc2c1a17776bf894a17483c7d3a09f0a9327c*
+
+**A command now carries two bounds.** `Command::timeout` is unchanged — the wall bound,
+regardless of whether the process is producing anything. `Command::idle_timeout` is new:
+how long the process may go without producing any new output before it is judged to have
+stalled. `Command::New` starts the two equal, so a caller that never asks for the
+distinction gets exactly the wait it asked for before — the two bounds expire together and
+the process is judged once, at the wall bound, exactly as `TimedOut` always meant.
+`Command::With_Idle_Timeout` is what gives a caller a shorter idle bound; without it, the
+idle bound cannot fire ahead of the wall bound, because it cannot be shorter than the wall
+bound. Progress resets it: every poll compares how much has been captured on either stream
+against the last poll, and any increase moves the idle clock back to now.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#29
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:9e31015d86098cf45659256df4f20d44a17ba3795de5446d29a9afdf9478b959*
+
+**`ExitOutcome::Stalled { idle_elapsed }` is new, sitting beside the unchanged `TimedOut`.**
+`TimedOut` keeps its exact shape and meaning: the process was still within its idle bound —
+producing, or default-configured so the two bounds coincide — when the wall bound expired.
+`Stalled` is only reachable when a caller asked for an idle bound shorter than the wall
+bound and the process went silent for the whole of it. The two are driven apart by a test in
+`nomos-platform-std`: one child that produces nothing under a one-second idle bound and a
+thirty-second wall bound reports `Stalled` in well under ten seconds; the control — the same
+wall-genuinely-slow program this record's original test already used, now given a five-second
+idle bound it never approaches — still reports `TimedOut`, proving the idle bound does not
+turn honest, ongoing work into a false stall.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#30
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:ea4865f91eb6ab88ffa3cc2b29b96a873ee23614bcf4b95d4a4346896a0f3e60*
+
+**`ExitOutcome` stays `Copy`, and that bounded what `Stalled` could carry.**
+`nomos-ledger`'s own finishing code destructures `output.outcome` by value and, on the
+non-`Exited` arm, reads `output.outcome` a second time to build `FinishRefusal::NoVerdict` —
+which only compiles because `ExitOutcome` is `Copy`. A variant holding a `String` or a
+`Vec<String>` would end that silently, in a file this item's territory does not include and
+must not widen into. `Stalled` therefore carries only `idle_elapsed: std::time::Duration` —
+itself `Copy` — rather than the output or the argv. That is not evidence discarded: both are
+already retained exactly as they were for every other outcome, on `ProcessOutput.stdout` /
+`.stderr`, captured up to the moment of the kill regardless of how the wait ended, and the
+argv was never the launcher's to lose — it is the caller's own `Command`, held by whoever
+already built it. What `Stalled` needed to add was the one fact that lived only inside the
+wait loop: how long the silence had gone on. Verified directly rather than assumed: this
+distinction survives, unmodified, into what `nomos-ledger` prints for a predicate that never
+answered —
+`P11-EXEC-IDLE's predicate produced no verdict (Stalled { idle_elapsed: 45s }), so whether
+the work is finished is still unknown`, against `... (TimedOut), so ...` for the wall-bound
+case — with zero changes to `nomos-ledger`, because `{outcome:?}` was already how
+`FinishRefusal::NoVerdict` was described.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#31
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:c7aaa089a9428981863b065ae5e3d6b853fce59ab81b2546f85d001264f0f0b5*
+
+**Termination now reaches the process tree, not only the process this launcher started.**
+A direct `Child::kill` on Windows is `TerminateProcess` against one handle; it does not
+cascade to whatever that process itself started, and does not need to for most predicates —
+but a `cargo test` killed this way leaves its compiled test binary running underneath it,
+which is the process that was actually hanging. `taskkill /T /F /PID` is used instead: given
+a pid it walks the tree rooted there and terminates every process in it. Chosen as a runtime
+branch — `if cfg!(windows)`, not `#[cfg(windows)]` — because this workspace's gate lints only
+its Linux leg on the measured strength of there being no conditionally-compiled code
+anywhere for that leg to miss; a compile-time `#[cfg]` here would have made that no longer
+true for the one function that needed platform-specific behavior. `taskkill` failing to run
+at all — wrong platform, not on `PATH`, the process already gone — falls back to the direct
+`Child::kill`, unchanged from before this amendment. Proven with a test spawning `cmd`
+running `ping` as `cmd`'s own child: killing only `cmd` would leave `ping` writing to a
+marker file for the whole of its own thirty seconds; this launcher's kill stops the writes
+within the same poll the wait loop ends on.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#32
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:82f5198dc6d9d4045c9a565dae0ff17a19f9341dd9dff9ea337011269b394e72*
+
+**What this leaves open.** `nomos-ledger` does not ask for an idle bound shorter than the
+wall bound anywhere it runs a predicate, so a real `work finish` still classifies a stall
+that develops partway through a long, otherwise-quiet run as `TimedOut` rather than
+`Stalled` — the idle bound only earns its keep for a caller that configures it, and wiring a
+useful default into the ledger's own predicate execution is a decision about how much
+silence a real predicate should tolerate, not a fact about the launcher, and is left to
+whichever item takes it up. The tree-kill mechanism is Windows-only, matching where this
+crate's own tests actually run and where this repository is developed; a Unix mechanism
+would need process-group setup at spawn time through APIs this workspace's zero-`#[cfg]`
+property does not yet have a precedent for threading through cleanly, and is not built here
+for the same reason the original conformance-suite gap above is not closed: one
+implementation was measured, and a mechanism written for a platform nobody tested it against
+would be a claim rather than a finding.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33
+
 *revision: authored · kind: heading · heading: A port that names its outcomes says nothing about how they are obtained / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#27
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#34
 
-*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Status · hash: sha256:60c757dac192ddc276115a9dc4201dbeffb6a8334ade8a5016b15e0e3da2ea1f*
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Status · hash: sha256:03a85d752702f84e2ce9f7ec78da6eba1bb9baff36382862b6777d6f1565029f*
 
 Accepted for the implementation that exists. The port-level question is open and named
 above rather than left implicit: the property is unstated in the trait, unenforced for any
-future implementation, and guarded only where it was fixed.
+future implementation, and guarded only where it was fixed. `P11-EXEC-IDLE` narrowed one
+part of that gap — the non-verdict `ExitOutcome` reports is no longer one value doing two
+jobs — without closing it: the conformance-suite question from the original decision is
+still open, and the idle bound this amendment adds is available to a caller rather than
+applied on the caller's behalf.
 
 ### docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1
 
