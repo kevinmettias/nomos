@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:26f92e71b74fd59f3a1eaa909d6f769d478ac8e6d0c2a88bcdc495c816e7550d",
-  "inputs_digest": "sha256:8fd0f47ef911b93fb784d821a2b1916f9e49e96240643a1e46bfd2894491255c",
+  "content_digest": "sha256:682183e379ef86db63950fd97cd7302e2ad69612d0d97b8ffe23f35a1cf1b3b8",
+  "inputs_digest": "sha256:116a163ae585c448817224b8b881a4e79c38a3621d36ae727ae3f64a8addd33a",
   "sections": [
     [
       "Documents",
-      103
+      104
     ],
     [
       "Sections",
-      943
+      951
     ],
     [
       "Source blocks",
-      3539
+      3560
     ]
   ],
   "inputs": [
@@ -529,6 +529,11 @@
       "content": "documents",
       "identity": "docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored",
       "hash": "sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored",
+      "hash": "sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1"
     },
     {
       "content": "documents",
@@ -5194,6 +5199,46 @@
       "content": "headings",
       "identity": "docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#18",
       "hash": "sha256:c87bbaa002e8731c6821c6b67eea110077b256a0da172e7569df0b863467b412"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#1",
+      "hash": "sha256:028450457457604f9c2266dd7ba5279efc6c1b19261290cb1630b328a661f9d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#2",
+      "hash": "sha256:2bfa47fc266ee170e32ec851c8812730400b56f5cdd3364c674c357d06d0dc88"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#5",
+      "hash": "sha256:a2c8e25c4728921a4da8b9ddb2da8084e52dc5f4a81ab7f55936443d1235a389"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#8",
+      "hash": "sha256:6b97466d3c40b62ecf194fb6058d14b46c05819c3c744df3778092bde1aa9aca"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#13",
+      "hash": "sha256:84f2bc40e01e217002d2484ff822610b622a1986bba7bf5fec75a82d61ed9cfe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#16",
+      "hash": "sha256:b6e1a6a2579cfbb15be661f2d084cea041426411d57aea1fd04b93ea5f28853e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#18",
+      "hash": "sha256:d2d9e981b351086e3eb17baaae785dd1d3b88e916b1e7b16334fded09073125a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#20",
+      "hash": "sha256:22660eab73c1694ebe7420b3045efe78e820ec43de00c93d3c2e877195c1ba8c"
     },
     {
       "content": "headings",
@@ -22799,6 +22844,111 @@
       "content": "blocks",
       "identity": "docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#19",
       "hash": "sha256:aa6e5d012130b038b9ab32e0fd882f5944ac6c963cbb331995da235f40e9662b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#1",
+      "hash": "sha256:db491bfbf5c0db58711a4ae471ba347e8046f0f7838ee1830ba23c0fd48b8f3b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#3",
+      "hash": "sha256:6c7605756024c80eda9731fa1109960a1e822da6dcd4e34b666a1f5159f0318b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#4",
+      "hash": "sha256:2f63960847ab4a32e30f1aa947b0778e898eae8ef8cfba52e6c9660dfa7dc009"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#5",
+      "hash": "sha256:ce9e70978aa7e675e98fbf5f3a244053dae36fc91759e56fe22b95d890b4b446"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#6",
+      "hash": "sha256:eb07b9413dd9b8ed2264040799c5c87b8e0320d7ece00260b2c51e6bcd0ce821"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#7",
+      "hash": "sha256:eb3810de8c4a2a6c547fad5f533ed2cf11633a749263a646eafb33625f74b9e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#8",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#9",
+      "hash": "sha256:b1976b96ed56d84bfd85937e51451f3e23fa9a73984ef41ddd088778c717cfff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#10",
+      "hash": "sha256:82d03f0d5bb25fa3c48dd7f022ae2fc4fb60ab728e65dca5c33efbf45f9e6a60"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#11",
+      "hash": "sha256:7d18f78e7338917469ff83b6e19bd8ef231f76c8ed13efe6dce670ab21009552"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#12",
+      "hash": "sha256:40d9c2925f2c81b62edd87c791bb6a2b4c099f28dac09b62bafb16a36e6ae239"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#13",
+      "hash": "sha256:5eb80c6dce88c337a0072418a8649af5a221031e9dbf3e1e95e7b7dc0928ad53"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#14",
+      "hash": "sha256:4d066a18f458564460c45170315672f112d4ec03e5bb7e616389e403e2e47274"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#15",
+      "hash": "sha256:bfa90fd117c0fbe91aba39b474765a6d94f884cbf215e6c689a9747563c7b084"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#16",
+      "hash": "sha256:d126cc4e33f0129dca0b6fdfa40fd8eb2c5d065f05cd78720fca35c0b6ce3529"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#17",
+      "hash": "sha256:eff93ad0d961eb09847eec0ae337874307c94ff8e93ee93eba5442dec5d26644"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#18",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#19",
+      "hash": "sha256:fffce2d90f77ee05270b9428e8b371e13f7e81fa889159c2107d2e4f12a6e6e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#21",
+      "hash": "sha256:69d72fcac4ece7fad192241ffeebad403d5c77aae170025f49c51b07950a1c42"
     },
     {
       "content": "blocks",

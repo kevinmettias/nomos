@@ -88,6 +88,12 @@ const MALFORMED: &[(&str, &str, &str)] = &[
         "a stem that is not a requirement identifier",
     ),
     (
+        "US-CHK-001",
+        "verdict: Met\nsite: README.md#Nomos\n",
+        "a User Story identifier; OD-TRACE-004 keeps a User Story out of this registry's \
+         assessable population",
+    ),
+    (
         "CHK-003",
         "verdict: Diverges\nsite: README.md#Nomos\n",
         "a divergence with no record, refused at read time as well as compared",
@@ -108,12 +114,21 @@ const MALFORMED: &[(&str, &str, &str)] = &[
 #[test]
 fn Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number()
 {
-    for accepted in ["CHK-003", "EVID-001", "CAP-002", "WORK-LEDGER-005", "US-CHK-001"]
+    for accepted in ["CHK-003", "EVID-001", "CAP-002", "WORK-LEDGER-005"]
     {
         assert!(Is_Requirement_Id(accepted), "{accepted} is a requirement id");
     }
 
-    for refused in ["CHK-3", "CHK-0003", "chk-003", "003", "CHK-", "-003", "CHK-00A"]
+    for refused in [
+        "CHK-3",
+        "CHK-0003",
+        "chk-003",
+        "003",
+        "CHK-",
+        "-003",
+        "CHK-00A",
+        "US-CHK-001",
+    ]
     {
         assert!(!Is_Requirement_Id(refused), "{refused} is not a requirement id");
     }

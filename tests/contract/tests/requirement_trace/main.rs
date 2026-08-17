@@ -26,6 +26,18 @@
 //! against a status quo that is unreadable in all 363. `OD-TRACE-001` takes that trade
 //! explicitly and this suite does not re-argue it.
 //!
+//! # What Is Assessable
+//!
+//! A Requirement statement, at `authority: canonical-normative-record` — the 363 above. The
+//! v14 corpus also carries User Story statements, and `OD-TRACE-004` decided those are not a
+//! second population this registry reads: a User Story's own id is the requirement's id with
+//! `US-` prepended (`US-AGT-001` beside `AGT-001`), and [`Is_Requirement_Id`] refuses that
+//! shape for the reason the record gives — a User Story is narrative evidence for a
+//! requirement's own assessment, the way `OD-CONTRACTS-002` already used `US-CHK-001` to
+//! argue what `CHK-003` requires, not a second decision surface with its own verdict.
+//!
+//! [`Is_Requirement_Id`]: crate::registry::Is_Requirement_Id
+//!
 //! # Unassessed is a state, not a gap
 //!
 //! Absence of an entry means nobody looked, and that is the honest description of most of

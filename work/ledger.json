@@ -8602,14 +8602,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-orch-trace-population",
-        "acquired_at": 1786936113,
-        "lease_expires_at": 1786946913
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -8622,7 +8618,32 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "requirement_trace"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 15 tests\ntest controls::Test_A_Divergence_With_No_Record_Should_Be_Refused ... ok\ntest controls::Test_An_Entry_Naming_A_Vanished_Gap_Should_Be_Reported ... ok\ntest controls::Test_A_Partial_With_No_Gap_Should_Be_Refused ... ok\ntest reader::Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number ... ok\ntest controls::Test_An_Entry_Naming_A_Vanished_Site_Should_Be_Reported ... ok\ntest reader::Test_The_Reader_Should_Refuse_Every_Malformed_Entry ... ok\ntest committed::Test_Every_Partial_Should_Name_A_Gap ... ok\ntest committed::Test_Every_Divergence_Should_Name_A_Governing_Record ... ok\ntest committed::Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It ... ok\ntest committed::Test_The_Assessed_Set_Should_Not_Shrink ... ok\ntest controls::Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported ... ok\ntest reader::Test_The_Reader_Should_Enumerate_The_Directory_It_Is_Given ... ok\ntest committed::Test_Every_Gap_Should_Resolve ... ok\ntest committed::Test_Every_Assessment_Should_Name_A_Site_That_Exists ... ok\ntest committed::Test_Every_Named_Record_Should_Exist_And_Be_Registered ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e8c3aea949064d8.exe)\n",
+        "verified_at": 1786936524,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "exit_code": 0
+        }
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

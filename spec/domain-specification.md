@@ -112,6 +112,7 @@ profile: domain-specification
 | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md@authored | docs/records/OD-TRACE-001-a-requirement-assessment-is-committed-here-because-the-corpus-is-not-on-ci.md | authored | 35 | 10 | sha256:5146b3097c4ce5a7bc2526186c0408aa8a723f180bb4ed78db335537cf53fde7 |
 | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md@authored | docs/records/OD-TRACE-002-a-requirement-assessment-is-one-file-per-requirement-and-the-corpus-comparison-does-not-live-in-the-guard-crate.md | authored | 41 | 11 | sha256:87459b711a6b464f7a80e7614562caef27fd16ba4f904315b529e4aed04c9ff3 |
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
 
 ## Sections
@@ -1050,6 +1051,14 @@ profile: domain-specification
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#14 | authored | 3 | The obligation is enforced twice, in the shape every other one here already is |
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#16 | authored | 2 | What This Does Not Do |
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md#18 | authored | 2 | Status |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#1 | authored | 1 | A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#2 | authored | 2 | Question |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#5 | authored | 2 | What A User Story Already Is, In This Repository |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#8 | authored | 2 | The Decision |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#13 | authored | 2 | The Shape, Enforced Rather Than Only Decided |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#16 | authored | 2 | Why Not Widen `FEWEST_ASSESSMENTS`'s Population Instead |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#18 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#20 | authored | 2 | Status |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1 | authored | 1 | An assessment carries the hash it was made against, the comparison runs in tests/integration, and a drifted Met is a finding, not a silent flip |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#2 | authored | 2 | Question |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#6 | authored | 2 | The Decision |
@@ -31425,6 +31434,207 @@ this suite already has.
 *revision: authored · kind: prose · heading: A requirement half satisfied is Partial, and its obligation is a gap checked like a site, not a governing record / Status · hash: sha256:aa6e5d012130b038b9ab32e0fd882f5944ac6c963cbb331995da235f40e9662b*
 
 Closed by `P12-TRACE-PARTIAL`.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#1
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement · hash: sha256:db491bfbf5c0db58711a4ae471ba347e8046f0f7838ee1830ba23c0fd48b8f3b*
+
+# A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#2
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#3
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / Question · hash: sha256:6c7605756024c80eda9731fa1109960a1e822da6dcd4e34b666a1f5159f0318b*
+
+`OD-TRACE-001` declared the registry's population in prose — "the v14 corpus carries 363
+requirements in 61 families at `authority: canonical-normative-record`" — and never named
+the corpus's other statement kind. The v14 corpus also carries User Story statements: the
+ingest catalog's own vocabulary is `Requirement` and `User Story`
+(`crates/spec/nomos-spec-ingest/src/phases/statements.rs`), and the corpus's own naming
+convention writes a User Story's id as `US-` in front of the requirement id it narrates —
+`US-AGT-001` beside `AGT-001`, `US-CHK-001` beside `CHK-003`
+(`crates/spec/nomos-spec-ingest/tests/corpus/statements-slice.yaml`,
+`crates/spec/nomos-spec-model/tests/corpus/statements.json`). `Is_Requirement_Id` checks
+shape only — uppercase family segments, then three digits — and that shape admits `US-CHK-001`
+by accident: nothing wrote the check with User Story in mind, and nothing decided whether one
+belongs in the population `FEWEST_ASSESSMENTS` counts.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#4
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / Question · hash: sha256:2f63960847ab4a32e30f1aa947b0778e898eae8ef8cfba52e6c9660dfa7dc009*
+
+Whichever answer is right, it must not stay implicit. A User Story admitted without a
+decision reports coverage of a population nobody chose — the overstatement `OD-TRACE-002`
+already refused when it kept the corpus comparison out of the guard entirely, one level up.
+A User Story that genuinely binds and is excluded is unmeasured. This record picks a side and
+states the reason.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#5
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / What A User Story Already Is, In This Repository · hash: sha256:ce9e70978aa7e675e98fbf5f3a244053dae36fc91759e56fe22b95d890b4b446*
+
+## What A User Story Already Is, In This Repository
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#6
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / What A User Story Already Is, In This Repository · hash: sha256:eb07b9413dd9b8ed2264040799c5c87b8e0320d7ece00260b2c51e6bcd0ce821*
+
+Not hypothetical. `OD-CONTRACTS-002` already read one. Deciding whether `CHK-003` binds this
+build, it cited `US-CHK-001`'s acceptance text directly: "applicable, not-applicable and
+unsupported counts are shown; agent-required and correctable combinations are identified."
+That citation did one job — it told the record what "reported" has to mean for `CHK-003`'s
+seventh category, agent-required, because the requirement's own text does not say and the
+story's acceptance criteria do. `OD-CONTRACTS-002` never produced a second assessment for
+`US-CHK-001` itself, never gave it a verdict, and never treated it as owing one. It read as a
+lens on `CHK-003`, not as a second subject.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#7
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / What A User Story Already Is, In This Repository · hash: sha256:eb3810de8c4a2a6c547fad5f533ed2cf11633a749263a646eafb33625f74b9e4*
+
+That is the shape a User Story has by construction. Its text is "As a `<persona>`, I can
+`<capability>`. Acceptance: `<criteria>`" — a scenario told from a persona's side, existing to
+make a requirement's own acceptance concrete for a human reader. It is not a second
+specification of behavior independent of the requirement it narrates; the corpus's own id
+convention says as much structurally, by spelling a User Story's id as the requirement's id
+with a prefix rather than as an identifier of its own.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#8
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#9
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Decision · hash: sha256:b1976b96ed56d84bfd85937e51451f3e23fa9a73984ef41ddd088778c717cfff*
+
+**This registry's assessable population is Requirement statements, at `authority:
+canonical-normative-record`. A User Story statement is not a second member of that
+population, and `Is_Requirement_Id` refuses its shape rather than admitting it by accident.**
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#10
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Decision · hash: sha256:82d03f0d5bb25fa3c48dd7f022ae2fc4fb60ab728e65dca5c33efbf45f9e6a60*
+
+A verdict here is a claim about whether a *site in this workspace* satisfies a *norm the
+corpus states*. `Met`, `Diverges`, `NotBinding` and `Partial` are all decisions (or the
+absence of one) about that relationship, and `Diverges`/`NotBinding` each owe a governing
+record because they assert somebody chose the departure. None of that is coherent read
+against a User Story:
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#11
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Decision · hash: sha256:7d18f78e7338917469ff83b6e19bd8ef231f76c8ed13efe6dce670ab21009552*
+
+- **`Met` would duplicate, not add.** A User Story's acceptance criteria restate the
+  requirement it narrates in a persona's voice. An entry for `US-CHK-001` reading `Met` beside
+  an entry for `CHK-003` reading `Met` is one fact, filed twice under two identifiers,
+  inflating `FEWEST_ASSESSMENTS` without adding anything a reader could learn from `CHK-003`'s
+  own entry.
+- **`Diverges` and `NotBinding` have no decision to name.** Both verdicts assert somebody
+  chose that this build will not do what the statement says. Nobody decides against a
+  persona's story independently of deciding against the requirement it narrates; the decision,
+  if there is one, is `CHK-003`'s to record, not `US-CHK-001`'s to record a second time.
+- **`Partial` fares no better.** `OD-TRACE-003` gave `Partial` a gap instead of a record
+  because unfinished is not a decision. A User Story half-satisfied is `CHK-003` half-satisfied,
+  read from the persona's side — the same fact through the same shape, not a distinct one.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#12
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Decision · hash: sha256:40d9c2925f2c81b62edd87c791bb6a2b4c099f28dac09b62bafb16a36e6ae239*
+
+So a User Story is not a statement this registry holds to `Met`/`Diverges`/`NotBinding`/
+`Partial` on its own. It remains exactly what `OD-CONTRACTS-002` already used it as:
+authoring evidence a Requirement's own entry, or the governing record behind a `Diverges` or
+`Partial` gap, may cite in prose to say what the requirement's acceptance concretely means.
+Nothing here forbids that citation; the registry's `record:` and `gap:` fields already accept
+free-form paths and reasoning, and a User Story id inside that prose is not a stem the reader
+parses.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#13
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Shape, Enforced Rather Than Only Decided · hash: sha256:5eb80c6dce88c337a0072418a8649af5a221031e9dbf3e1e95e7b7dc0928ad53*
+
+## The Shape, Enforced Rather Than Only Decided
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#14
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Shape, Enforced Rather Than Only Decided · hash: sha256:4d066a18f458564460c45170315672f112d4ec03e5bb7e616389e403e2e47274*
+
+`Is_Requirement_Id` refuses a stem whose leading `-`-delimited segment is `US`. The corpus's
+own convention makes that check exact rather than a guess: a User Story's id is always the
+requirement's own id with `US-` prepended, so the leading segment is the tell, and refusing it
+there is refusing the kind rather than pattern-matching one family's spelling. A file named
+`US-CHK-001.assessment` is refused by `Parse` at read time, the same way every other
+non-entry shape in this registry already is — `OD-TRACE-002`'s rule, that a lenient reader
+here would turn a mismatch into an assessment nobody chose to count.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#15
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / The Shape, Enforced Rather Than Only Decided · hash: sha256:bfa90fd117c0fbe91aba39b474765a6d94f884cbf215e6c689a9747563c7b084*
+
+`Test_A_Requirement_Identifier_Should_Be_A_Family_And_A_Number` moves `US-CHK-001` from its
+accepted list to its refused list, so the test that names the population and this decision
+cannot silently drift apart again.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#16
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / Why Not Widen `FEWEST_ASSESSMENTS`'s Population Instead · hash: sha256:d126cc4e33f0129dca0b6fdfa40fd8eb2c5d065f05cd78720fca35c0b6ce3529*
+
+## Why Not Widen `FEWEST_ASSESSMENTS`'s Population Instead
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#17
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / Why Not Widen `FEWEST_ASSESSMENTS`'s Population Instead · hash: sha256:eff93ad0d961eb09847eec0ae337874307c94ff8e93ee93eba5442dec5d26644*
+
+The alternative — admit `US-` ids and give a User Story its own, weaker obligation ("Met"
+without a site requirement, say) — was considered and rejected. It would need a fifth
+distinction inside `Verdict` or a parallel enum, doubling the shape this registry already
+has, to hold a fact that the Requirement-side entry already states. `OD-SPEC-007` and
+`OD-TRACE-002` both chose the narrower shape when a wider one was available for the identical
+reason: a second place to say the same thing is a second place for it to disagree with the
+first, and nothing here needs a User Story to disagree with the requirement it narrates in
+order to be useful.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#18
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#19
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / What This Record Does Not Do · hash: sha256:fffce2d90f77ee05270b9428e8b371e13f7e81fa889159c2107d2e4f12a6e6e2*
+
+- **It does not assess a User Story.** No entry under `tests/contract/requirements` is
+  authored or changed by this record; `FEWEST_ASSESSMENTS` stays where the committed set
+  leaves it.
+- **It does not forbid citing a User Story.** `OD-CONTRACTS-002`'s citation of `US-CHK-001`
+  stands as the model for how one belongs in this registry's reasoning — inside a Requirement
+  entry's `record:` prose, not as a stem of its own.
+- **It does not reach the other 60 families' worth of User Stories.** The refusal is
+  structural, by id shape, so it holds for all of them without naming each.
+- **It does not reopen `Verdict`.** Four writable verdicts stand as `OD-TRACE-001` and
+  `OD-TRACE-003` left them; this record narrows the population they apply to, not the shapes
+  themselves.
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#20
+
+*revision: authored · kind: heading · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md#21
+
+*revision: authored · kind: prose · heading: A User Story is narrative evidence for a requirement's own assessment, not a second assessable statement / Status · hash: sha256:69d72fcac4ece7fad192241ffeebad403d5c77aae170025f49c51b07950a1c42*
+
+Closed by `P12-TRACE-POPULATION`.
 
 ### docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md#1
 

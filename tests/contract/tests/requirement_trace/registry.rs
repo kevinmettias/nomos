@@ -270,6 +270,13 @@ fn Read_Site(value: &str) -> Result<Site, String>
 /// The shape every family in the corpus uses — `CHK-003`, `EVID-001`, `WORK-LEDGER-005`.
 /// Checked because the stem *is* the identity, so a mistyped one would silently create a
 /// requirement the corpus does not have and count it toward the floor.
+///
+/// A stem whose leading segment is `US` is refused rather than matched. The corpus writes a
+/// User Story's own id as `US-` in front of the requirement id it narrates — `US-AGT-001`
+/// beside `AGT-001`, `US-CHK-001` beside `CHK-003` — so the leading segment is the shape's
+/// own tell for the kind. `OD-TRACE-004` decided a User Story is narrative evidence for a
+/// requirement's own assessment, not a second statement this registry assesses, and this
+/// check is what keeps that decision and this reader from disagreeing.
 pub(crate) fn Is_Requirement_Id(stem: &str) -> bool
 {
     let Some((family, number)) = stem.rsplit_once('-')
@@ -282,6 +289,10 @@ pub(crate) fn Is_Requirement_Id(stem: &str) -> bool
         return false;
     }
     if family.is_empty()
+    {
+        return false;
+    }
+    if family.split('-').next() == Some("US")
     {
         return false;
     }
