@@ -13,6 +13,7 @@ nomos-cap-syntax = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-lang-rust = { workspace = true }
+nomos-lang-rust-scan = { workspace = true }
 nomos-model = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }

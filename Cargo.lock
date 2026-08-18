@@ -318,6 +318,7 @@ dependencies = [
  "nomos-capability",
  "nomos-contracts",
  "nomos-lang-rust",
+ "nomos-lang-rust-scan",
  "nomos-model",
  "nomos-rules",
  "nomos-workspace",

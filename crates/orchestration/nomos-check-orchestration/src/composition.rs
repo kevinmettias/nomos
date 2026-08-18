@@ -26,6 +26,12 @@ pub fn Registered() -> Result<Registry, RegistryError>
 
     registry.Declare(nomos_cap_syntax::Capability_Contract())?;
     registry.Offer(nomos_lang_rust::Provider_Offer())?;
+    // The second offer against the same capability. No selection mechanism is added
+    // alongside it -- `OD-HOST-004` decided a second offer is composition, not choice, and
+    // `nomos_capability::Registry::Resolve` ranks between the two on its own: the parser's
+    // guarantee is strictly stronger on every axis the scanner differs on, so it remains
+    // the offer `Resolve` chooses with no preference named.
+    registry.Offer(nomos_lang_rust_scan::Provider_Offer())?;
 
     return Ok(registry);
 }
