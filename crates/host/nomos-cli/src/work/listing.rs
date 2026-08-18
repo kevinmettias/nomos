@@ -33,7 +33,12 @@ pub(super) fn Nothing_Listed(state: Option<&str>, output: &mut impl std::io::Wri
     };
 }
 
-/// One item's line: its identifier, what it may be called now, its holder, and its title.
+/// One item's line: its identifier, what it may be called now, its kind and origin, its
+/// holder, and its title.
+///
+/// `kind` and `origin` sit right after the claimability label and before the holder and
+/// title, the same two fixed-width columns `work show`'s own `kind: {:?}  origin: {:?}`
+/// prints for the field it reads them from -- `OD-LEDGER-024`'s follow-on, closed here.
 pub(super) fn Print_Listing(item: &LedgerItem, label: &str, output: &mut impl std::io::Write)
 {
     let holder = item
@@ -41,7 +46,11 @@ pub(super) fn Print_Listing(item: &LedgerItem, label: &str, output: &mut impl st
         .as_ref()
         .map_or_else(String::new, |claim| return format!("  [{}]", claim.holder));
 
-    let _ = writeln!(output, "{:<13} {:<9}{holder}  {}", item.id, label, item.title);
+    let _ = writeln!(
+        output,
+        "{:<13} {:<9}{:<11?} {:<9?}{holder}  {}",
+        item.id, label, item.kind, item.origin, item.title
+    );
 }
 
 /// The live claim, if there is one.

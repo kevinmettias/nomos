@@ -320,13 +320,21 @@ pub(super) fn Report_Validation(
 /// labels with and `claim` refuses with — `OD-LEDGER-005`. An item reported here is exactly
 /// an item `list` calls `waiting`, `held` or `snagged`, with the same word, and there is no
 /// way for the two to drift because they are one answer read twice.
+/// One blocked item's line: its identifier, the refusal label, its kind and origin, and
+/// the refusal's own description.
+///
+/// `kind` and `origin` sit between the label and the description, the same two columns
+/// [`super::listing::Print_Listing`] added for the same reason -- `OD-LEDGER-024`'s
+/// follow-on, closed here.
 pub(super) fn Print_Blocked(item: &LedgerItem, refusal: &ClaimRefusal, output: &mut impl std::io::Write)
 {
     let _ = writeln!(
         output,
-        "{:<13} {:<9} {}",
+        "{:<13} {:<9} {:<11?} {:<9?} {}",
         item.id,
         Refusal_Label(refusal),
+        item.kind,
+        item.origin,
         // `Describe` directly, and no local rephrasing. Its held arm used to name the
         // blocker where the subject belongs, so this line phrased that one arm itself;
         // `OD-LEDGER-014` fixed the library and deleted the workaround in the same commit,
