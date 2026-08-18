@@ -14568,10 +14568,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "loop-agent",
+        "acquired_at": 1787069803,
+        "lease_expires_at": 1787077003
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -14643,6 +14647,41 @@
         },
         "revision": "d6a79d211719ec907809921044bbc9c033346baf"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-D130-REVERIFY",
+      "title": "D-130's compile-instability premise is now false for the crates it named, and the record has not been re-checked against current XVPE state",
+      "why": "D-130's rationale for the Phase-5 gate is explicitly build-instability: 'XVPE does not currently compile. Its own error log ends with a dataflow crate failing on 62 errors, and the in-flight refactor is concentrated in exactly the crates Nomos would want: dataflow, scheduling, serialization.' Checked directly against f:/repos/xvpe at dev HEAD 557dada32: cargo check -p xvpe-dataflow -p xvpe-scheduling -p xvpe-task-host -p xvpe-clock succeeds with warnings only, no errors; cargo check -p xvpe-serialization -- the third crate D-130 named -- also succeeds. That specific premise no longer holds for the crates the record named as blocking. Two of the record's other stated caveats were checked the same way and remain true, unchanged: no storage or package crate exists anywhere in xvpe's 112-member workspace list, and xvpe-telemetry's Cargo.toml still depends on xvpe-os-backend-desktop. The workspace as a whole is organized as crates/engine/{foundations,simulation,runtime,presentation} -- a full game/rendering engine (render, audio, physics, animation, camera, HUD, materials, scene), not a narrow generic-platform library, which is relevant context D-130 does not currently state. A person requested this reverification directly, after independently observing that D-130's stated blocker looked stale and asking for it to be checked against the real tree rather than assumed.",
+      "done_when": "D-130 is either reaffirmed or amended, citing current evidence rather than the original error log: a cargo check run (or note of one) against a specific pinned xvpe commit SHA, covering at minimum the crates the record already names as genuine candidates -- dataflow, scheduling, serialization, the graph/hazard/cycle-witness algorithms -- stating plainly which of the record's original blocking conditions still hold (storage crate absent, package crate absent, xvpe-telemetry's desktop-backend dependency) and which do not (the three named crates' compile failures). If amended, it either narrows the Phase-5 gate to a condition tied to verified compile stability of specific named crates rather than a fixed phase number, or states explicitly why compiling is necessary but not sufficient and the phase gate stands as-is. This item does not itself create nomos-platform-xvpe or take any Nomos crate dependency on xvpe -- that is separate work gated behind whatever this decision concludes, the same way D-091's adoption decided direction without moving nomos-contracts::PackageKind.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/D-130-no-xvpe-dependency-before-phase-5.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null
