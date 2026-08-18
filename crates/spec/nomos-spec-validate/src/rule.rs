@@ -5,12 +5,14 @@
 mod changed_wording_is_justified;
 mod every_block_has_a_disposition;
 mod every_statement_traces_to_source;
+mod no_undeclared_filler_template;
 mod outcome;
 mod result;
 
 pub(crate) use changed_wording_is_justified::ChangedWordingIsJustified;
 pub(crate) use every_block_has_a_disposition::EveryBlockHasADisposition;
 pub(crate) use every_statement_traces_to_source::EveryStatementTracesToSource;
+pub(crate) use no_undeclared_filler_template::NoUndeclaredFillerTemplate;
 pub use outcome::RuleOutcome;
 pub use result::RuleResult;
 use nomos_spec_store::SpecificationStore;

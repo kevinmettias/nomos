@@ -2,8 +2,8 @@
 id: OD-SPEC-004
 type: decision
 title: The filler blocklist misses the wording that hollowed 44 restored members
-status: open
-version: 1
+status: accepted
+version: 2
 authority: canonical-normative-record
 tags:
   - preservation
@@ -93,8 +93,30 @@ Adding the governed pattern to `FILLER_PATTERNS` is deliberately not done here. 
 P3-OVERLAY's territory, it would move that item's measured figures from 99 documents to
 206, and doing it silently would leave the class unaddressed while making it look handled.
 
+## Resolution
+
+Option 1: a repetition census with the blocklist retained as the naming layer.
+`NSV-PRESERVE-004` (`crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs`)
+groups `source_blocks` rows of kind `prose` by exact text — a heading is its own block and
+excluding it *is* the "section title elided" this record already specified, not a second
+mechanism for it — and treats a group carried by `SHARED_BY` (3) or more sections the same
+way `archaeology::Shared_Templates` already treats one for the cross-revision regression
+report: a template. A template `Is_Filler` names is accounted for; one it does not is the
+violation. The blocklist keeps its job — naming which pattern a template matched, for a
+lineage row that has to say why — and stops being the only test standing between an
+ordinary editorial sentence and a hollowed corpus walking past it clean, which is what
+option 2 would have left true for the next generator's next sentence and what option 3
+would have conceded outright.
+
+This does not add the governed wording to `FILLER_PATTERNS`. That remains P3-OVERLAY's
+territory, unchanged by this resolution: the repetition census finds an undeclared template
+by what it *is*, not by widening the list of sentences it is checked against, so the two
+items still measure different things and neither substitutes for the other.
+
 ## Status
 
-Open. The regression report already reports the undeclared templates by name, so nothing is
-blocked on this; what is open is whether the preservation ledger keeps a test that this
-corpus has already walked past.
+Accepted. `NSV-PRESERVE-004` joined `DECLARED_RULES`
+(`crates/spec/nomos-spec-validate/src/run.rs`) and `Registered()`
+(`crates/spec/nomos-spec-validate/src/preserve.rs`) beside the other four preservation
+rules, so the class this record measured — a hollowing pattern nobody had written down yet
+— now fails a validation run rather than passing one silently.

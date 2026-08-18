@@ -252,3 +252,52 @@ fn Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously()
     assert!(!vacuous.contains(&"NSV-PRESERVE-001"), "the heading rule examined nothing");
     assert!(!vacuous.contains(&"NSV-PRESERVE-002"), "the block rule examined nothing");
 }
+
+/// A document whose paragraph body repeats, verbatim, across three sections — the shape
+/// `OD-SPEC-004` measured hollowing 44 restored members with one undeclared adjective.
+const REPEATED_UNDECLARED: &str = "---\nid: X\n---\n# Title\n\n## A\n\nRepeated body.\n\n## B\n\nRepeated body.\n\n## C\n\nRepeated body.\n";
+
+/// The same shape, but the repeated text is one `FILLER_PATTERNS` already names.
+const REPEATED_DECLARED: &str = "---\nid: X\n---\n# Title\n\n## A\n\nThis section groups related specification material.\n\n## B\n\nThis section groups related specification material.\n\n## C\n\nThis section groups related specification material.\n";
+
+/// The rule that would have caught v15.0's hollowed sections: a body carried by
+/// `SHARED_BY` or more sections, with no declared pattern naming it, is a template
+/// nobody accounted for.
+#[test]
+fn Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004()
+{
+    let mut store = SpecificationStore::In_Memory().expect("opens");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_UNDECLARED).expect("ingests");
+
+    let run = Validate(&store, &Registered());
+
+    assert!(!run.Passed(), "an undeclared template must not pass");
+    let violations = run.Violations();
+    assert!(
+        violations.iter().any(|violation| violation.detail.contains("Repeated body.")),
+        "the violation must name the repeated text: {violations:?}"
+    );
+}
+
+/// The negative control. The same repetition shape, naming a pattern `Is_Filler` already
+/// declares, must not violate — the blocklist stays the naming layer, not a second gate.
+#[test]
+fn Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004()
+{
+    let mut store = SpecificationStore::In_Memory().expect("opens");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_DECLARED).expect("ingests");
+
+    let run = Validate(&store, &Registered());
+
+    let template_rule = run
+        .results
+        .iter()
+        .find(|result| result.id == "NSV-PRESERVE-004")
+        .expect("the rule ran");
+
+    assert!(
+        matches!(template_rule.outcome, RuleOutcome::Satisfied { .. }),
+        "a declared pattern must not violate: {:?}",
+        template_rule.outcome
+    );
+}

@@ -27,6 +27,7 @@ pub const DECLARED_RULES: &[&str] = &[
     "NSV-PRESERVE-001",
     "NSV-PRESERVE-002",
     "NSV-PRESERVE-003",
+    "NSV-PRESERVE-004",
     "NSV-PRESERVE-006",
 ];
 
