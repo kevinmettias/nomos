@@ -14131,7 +14131,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory too narrow to close the defect. Supplying SPEC_RELATIONS's relation_types INSERT with domain_kinds_json/range_kinds_json/max_per_node (matching OD-SPEC-012 and the P13-GRAPH-EDGES-FIXTURE precedent) fixes the NOT NULL panic and Test_Projection_Output_Should_Meet_Its_Declared_Strategy now passes, but two more tests (controls::Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins, domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy) still fail: the fixture now actually reaches Export for the first time, and its bundle bytes include the new columns, so the digest no longer matches tests/integration/tests/determinism/goldens.rs's committed BUNDLE_GOLDEN. goldens.rs's own doc comment on BUNDLE_GOLDEN describes exactly this situation -- a schema/encoding change legitimately re-addresses the golden and it must be recaptured by an item whose territory reaches nomos-integration-tests -- but that file is outside this item's declared territory (spec_productions.rs only), so I am not entitled to write the recapture. Successor is P13-SPEC-PRODUCTIONS-FIXTURE-2 with goldens.rs added to territory. Confirmed against clean checkout by stashing this claim's SQL edit and rerunning: original 3 failures (all the same NOT NULL panic) reproduce exactly, so the golden mismatch is caused by this fix, not pre-existing."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -14148,9 +14152,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-loop-spec-productions",
+          "reason": "Territory too narrow: fix requires goldens.rs too. Re-authoring -2 with widened territory.",
+          "abandoned_at": 1787035961
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop-spec-productions",
+        "declined_at": 1787035969
+      }
     },
     {
       "id": "P13-CONFIG-ID-DEDUP-2",
@@ -14267,6 +14280,65 @@
           "exit_code": 0
         },
         "revision": "d40f18e8087a2576a2ba4b5bec6e04d5bf7d27e9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-SPEC-PRODUCTIONS-FIXTURE-2",
+      "title": "SPEC_RELATIONS catches up to OD-SPEC-012, and the bundle golden it moves catches up with it",
+      "why": "P13-SPEC-PRODUCTIONS-FIXTURE's SPEC_RELATIONS relation_types INSERT (tests/integration/tests/determinism/spec_productions.rs, around line 157) wrote name/tier/inverse_of only. OD-SPEC-012/P10-EDGE-CONSTRAINTS-2 added NOT NULL relation_types.domain_kinds_json and range_kinds_json (plus max_per_node) with no default, which every real production writer (Put_Relation_Type) already supplies but this hand-rolled SQL never learned about, so Populate_Spec_Edges panicked with a NOT NULL constraint failure on clean HEAD, failing 3 of 11 determinism tests. Supplying the two JSON columns and max_per_node (matching P13-GRAPH-EDGES-FIXTURE's precedent in nomos-spec-project's own fixture, and OD-SPEC-012's declared-constraint shape) fixes the panic, but the fixture's bundle export now runs for the first time and its bytes include the new columns, so tests/integration/tests/determinism/goldens.rs's committed BUNDLE_GOLDEN -- captured before OD-SPEC-012 landed -- no longer matches. goldens.rs's own doc comment on BUNDLE_GOLDEN names this exact workflow: an encoding change made from a territory that does not reach nomos-integration-tests (crates/spec) legitimately re-addresses the golden, and it is recaptured by a later item whose territory does. P13-SPEC-PRODUCTIONS-FIXTURE was declined for exactly this: its territory did not include goldens.rs. This item's territory covers both files so the recapture can land with the fix that requires it.",
+      "done_when": "cargo test --no-fail-fast -p nomos-integration-tests --test determinism passes on a clean checkout (0 failed). SPEC_RELATIONS's relation_types INSERT supplies domain_kinds_json, range_kinds_json and max_per_node consistent with OD-SPEC-012's declared-constraint shape for the relation types the fixture uses, and goldens.rs's BUNDLE_GOLDEN is recaptured to match the bundle bytes that fix produces, with a doc comment noting why it moved (matching the file's own PARSED_GOLDEN/BUNDLE_GOLDEN precedent comments).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/determinism/spec_productions.rs",
+          "tests/integration/tests/determinism/goldens.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "determinism"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "determinism"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 11 tests\ntest declarations::Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered ... ok\ntest controls::Test_A_Domain_That_Does_Not_Repeat_Itself_Should_Fail_The_Harness ... ok\ntest domains::Test_Snapshot_Serialization_Should_Meet_Its_Declared_Strategy ... ok\ntest controls::Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins ... ok\ntest domains::Test_The_Scanner_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Corrections_Should_Meet_Their_Declared_Strategy ... ok\ntest domains::Test_The_Fact_Cache_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Parser_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_The_Rollup_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Projection_Output_Should_Meet_Its_Declared_Strategy ... ok\ntest domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-af7999a815c60b32.exe)\n",
+        "verified_at": 1787036031,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e424a9ce52cfeb08b1f2df9705968891ecf3c391"
       },
       "abandoned": [],
       "displaced": [],

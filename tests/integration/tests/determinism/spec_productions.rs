@@ -154,9 +154,11 @@ const SPEC_RELATIONS: &str =
     "INSERT INTO node_aliases (alias, node_uid)
      SELECT 'AGT-010', uid FROM nodes WHERE node_id = 'AGT-EXEC-001';
 
-     INSERT INTO relation_types (name, tier, inverse_of)
-     VALUES ('verifies', 'core', 'verified_by'), ('verified_by', 'core', 'verifies'),
-            ('affects', 'extended', NULL);
+     INSERT INTO relation_types
+         (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
+     VALUES ('verifies', 'core', 'verified_by', '[\"concept\"]', '[\"requirement\"]', 8),
+            ('verified_by', 'core', 'verifies', '[\"requirement\"]', '[\"concept\"]', 8),
+            ('affects', 'extended', NULL, '[\"decision\"]', '[\"requirement\"]', 8);
 
      INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
      SELECT f.uid, 'verifies', t.uid FROM nodes f, nodes t

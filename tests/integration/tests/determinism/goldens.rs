@@ -56,5 +56,18 @@ pub(crate) const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 /// stays narrower than the gate and that the gate at push time is what closes the gap, so
 /// this is the designed outcome rather than a defect somebody let through — and this comment
 /// is the sentence that decision expects somebody to read.
-pub(crate) const BUNDLE_GOLDEN: &str = "0d43f057b74822e3ab0d4305d3187f14";
+///
+/// Moved a second time by `P13-SPEC-PRODUCTIONS-FIXTURE-2`. `OD-SPEC-012`/`P10-EDGE-CONSTRAINTS-2`
+/// added `relation_types.domain_kinds_json`, `range_kinds_json` and `max_per_node`
+/// (`NOT NULL`, no default); `tests/integration/tests/determinism/spec_productions.rs`'s
+/// `SPEC_RELATIONS` fixture had never learned the two JSON columns, so its raw
+/// `INSERT INTO relation_types` failed its `NOT NULL` constraint before `Export` ever ran —
+/// this golden was never actually being compared against that fixture's real bytes, only
+/// pinned at whatever `Export` had last produced before those columns existed. Supplying the
+/// three columns (matching `Put_Relation_Type`'s own shape, the same pattern
+/// `P13-GRAPH-EDGES-FIXTURE` already used for `nomos-spec-project`'s sibling fixture) let the
+/// bundle build for the first time under the current schema, and its bytes now include the
+/// domain/range/cardinality `SpecificationBundle`'s `RelationType` carries per
+/// `OD-SPEC-012` decision 6 — a real encoding change this constant had not yet seen.
+pub(crate) const BUNDLE_GOLDEN: &str = "6d4589efb6920ec2294231ef235b63cf";
 pub(crate) const PROJECTION_GOLDEN: &str = "9cecf39961bbd638111f82382eafd643";
