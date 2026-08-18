@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:805fd7327194faf01fa7d246f8a1c088276e2e38b2a5f19853209910f02cd9c7",
-  "inputs_digest": "sha256:a2d0bef7dbf61b57bd96fc26ebaccd1a602a5191c019f68649d9455e50396a4f",
+  "content_digest": "sha256:80d1e745d0b73ab76b5d5f44b89eba6fea9f95db67ee28f89f37b515ebc828d3",
+  "inputs_digest": "sha256:de3abbeb5b5382debac20cbab423369b0d0a4e2e5abefcb177bfea859f92d802",
   "sections": [
     [
       "Documents",
-      128
+      127
     ],
     [
       "Sections",
-      1132
+      1127
     ],
     [
       "Source blocks",
-      4091
+      4077
     ]
   ],
   "inputs": [
@@ -509,11 +509,6 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored",
       "hash": "sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9"
-    },
-    {
-      "content": "documents",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored",
-      "hash": "sha256:07242e446fd3e4b88cb34ed829ce8918c7d128b514bfbc75d596e8a96273720f"
     },
     {
       "content": "documents",
@@ -4914,31 +4909,6 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15",
       "hash": "sha256:5f5e461e043e46446a741040f609d13626895dae460ee8677dd547128dfa566a"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1",
-      "hash": "sha256:0dea6c48c8ad222a82cb60976e8485a700d70795b83fd2da42776821c2572669"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#2",
-      "hash": "sha256:04d1f471fac4c22d29ad65ca72214402e5b584f0892a04247c7794b56683da2f"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#6",
-      "hash": "sha256:95e94f6652fca38b6da25476a4c4f45fa52457eaebed84454b5281adc34d24f5"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#11",
-      "hash": "sha256:5549e35f78d95afd8dd880d172ccba09a6b967d9f1e007895148de3f4f4edf8f"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#13",
-      "hash": "sha256:83c8b14bdcd8700e815fc3a22f65dd6b04e7c449f8f7d87b10dee943abdc9e53"
     },
     {
       "content": "headings",
@@ -21744,76 +21714,6 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#16",
       "hash": "sha256:3da7b6c268e2fb338484fcc5d53c3083685b83db13a3abf2a19da544457119e0"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1",
-      "hash": "sha256:0708517bc612545b4dde1a0503275b9e42029594826ea1303e00559e40b22e1f"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#2",
-      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#3",
-      "hash": "sha256:1a3dfa102dcf49446ba2495d072ad1c0cc6216985510126a3e2631422157d0a6"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#4",
-      "hash": "sha256:a7637ad13d2640065b7a2e7b9d1b0b2e2719bde6a78a1af7b581b538403dd564"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#5",
-      "hash": "sha256:ead0bcf68b8898dda05a9598ebe0b68f433f963634ca848799b890566bd8692f"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#6",
-      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#7",
-      "hash": "sha256:b2af829b7c83466c515706e6a7a3b6ac0fb55d701ec109e3c6293b4d666e3236"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#8",
-      "hash": "sha256:bdb7b064ff6aa3c05211bfdb5a14b941d4208c070e884efde9a68ee822e35cf3"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#9",
-      "hash": "sha256:81ca1bc7ff4255119084989b5529ceb781a565ef13f876182876c812af693a0b"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#10",
-      "hash": "sha256:4036f52e8e2fe818b603039d204cdcd808f47456c0afd6e68046e4717d2d63f8"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#11",
-      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#12",
-      "hash": "sha256:1b58d717f16c34d97057b754991917e5b21c6370110b398846af2d0b4597bc04"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#13",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#14",
-      "hash": "sha256:58415abf218f40e58a4a92c76633afd0b8538329610640a7f920ae6c1104e195"
     },
     {
       "content": "blocks",
