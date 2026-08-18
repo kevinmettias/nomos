@@ -14852,6 +14852,70 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-EXITCODE-ALL-MIRROR",
+      "title": "ExitCode::All is a declared universe with no mirror, because promoting it out of a private census needed this table's own row",
+      "why": "OD-GATE-004 measured, while wiring nomos check as a gate step, that turning check.rs's ExitCode into a real declared universe (a pub const fn All() inherent method, the shape nomos-rules finds by name) required a row in tests/contract/tests/completeness_universes.rs classifying it -- a file outside that item's territory. So it left the census private, as Every_Exit_Code() in crates/host/nomos-cli/src/check/tests.rs, and said promoting it was worth doing by whoever holds that file next. tests/contract/tests/completeness_universes/table.rs is now a directory (table.rs inside it) and D-134's mirror idiom has since closed the identical shape of gap five times over (P13-COMPONENT-ALL-MIRROR, P13-ROWKIND-ALL-MIRROR, P13-ENUM-MIRRORS-BATCH, P13-SHIPPED-MIGRATIONS-MIRROR) for other closed enums. Every_Exit_Code() is confirmed still private and still doing exactly what OD-GATE-004 described: a 5-element array of ExitCode iterated by Test_Only_Ok_Should_Carry_The_Passing_Exit_Code and Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With, with a doc comment explaining why it is not ExitCode::All().",
+      "done_when": "check/exit_code.rs's ExitCode declares a pub const fn All() -> &'static [Self] inherent method returning its five variants, with a 'Mirrored by' doc-comment claim naming a real exhaustive-match test. check/tests.rs's private Every_Exit_Code() census is removed and its call sites (Test_Only_Ok_Should_Carry_The_Passing_Exit_Code, Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With) read ExitCode::All() instead, and the claimed mirror test -- an exhaustive match over every ExitCode variant with no wildcard arm, so it fails to compile rather than merely fails to pass if a variant is added without a matching arm -- exists for real in that file. tests/contract/tests/completeness_universes/table.rs gains a new row for ExitCode::All with Standing::Mirrored naming that test; UNMIRRORED_TOTAL is unchanged since this universe was never an admitted hole in the table, only invisible to the scanner. cargo test --no-fail-fast -p nomos-cli -p nomos-contract-tests --test completeness_universes passes, and nomos check no longer needs an exemption for ExitCode's policy census because there is no more private census to exempt.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check/exit_code.rs",
+          "crates/host/nomos-cli/src/check/tests.rs",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest hole_size::Test_Some_Universes_Should_Actually_Be_Mirrored ... ok\ntest hole_size::Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared ... ok\ntest hole_size::Test_The_Three_Instances_Should_Have_Failed_This_Check ... ok\ntest mirrors::Test_Every_Named_Mirror_Should_Exist_In_The_Source ... ok\ntest derivation::Test_The_Declared_Table_Should_Match_What_Is_Derived ... ok\ntest claims::Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.39s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n",
+        "verified_at": 1787087330,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4f1eefd21567aa790aacfa224d60a035e7752575"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

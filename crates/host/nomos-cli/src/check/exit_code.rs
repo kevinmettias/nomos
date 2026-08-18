@@ -35,4 +35,24 @@ impl ExitCode
     {
         return self as i32;
     }
+
+    /// Every code this group can leave the process with.
+    ///
+    /// Mirrored by `Test_Every_ExitCode_Should_Be_Matched_Exhaustively`, an exhaustive match
+    /// over every variant with no wildcard arm, in `crates/host/nomos-cli/src/check/tests.rs`.
+    /// It fails to compile, not merely to pass, if a variant is added here without being added
+    /// there. It is also what `Test_Only_Ok_Should_Carry_The_Passing_Exit_Code` and
+    /// `Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With` iterate in
+    /// that same file — the gate step's whole exit-code policy rests on this list.
+    #[must_use]
+    pub const fn All() -> &'static [Self]
+    {
+        return &[
+            Self::Ok,
+            Self::Violations,
+            Self::Usage,
+            Self::Unreadable,
+            Self::Vacuous,
+        ];
+    }
 }

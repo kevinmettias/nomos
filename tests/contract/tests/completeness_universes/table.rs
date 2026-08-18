@@ -104,6 +104,17 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_Every_DocumentKind_Should_Be_Matched_Exhaustively",
         },
     },
+    // `OD-GATE-004`: this was a private census array (`Every_Exit_Code`) in
+    // crates/host/nomos-cli/src/check/tests.rs, kept private because promoting it to
+    // ExitCode::All() needed exactly this row, in a file outside that item's territory.
+    Universe {
+        path: "crates/host/nomos-cli/src/check/exit_code.rs",
+        name: "ExitCode::All",
+        kind: UniverseKind::Enumeration,
+        standing: Standing::Mirrored {
+            by: "Test_Every_ExitCode_Should_Be_Matched_Exhaustively",
+        },
+    },
     Universe {
         path: "crates/spec/nomos-spec-ingest/src/reconciliation/overlay.rs",
         name: "FILLER_PATTERNS",

@@ -10,43 +10,6 @@
 use super::*;
 use super::parsing::USAGE;
 
-/// ---- the exit-code policy the gate step rests on ----
-///
-/// Every code this group can leave the process with, written twice on purpose.
-///
-/// The array is what the assertions below iterate. [`Labelled`] is an exhaustive `match`,
-/// so a variant added to [`ExitCode`] fails to compile *there* — which is the only
-/// mechanism available without a derive that a code-adder cannot walk past, and it stops
-/// them inside the function they have to extend. What the match does not force is adding
-/// the new code to this array; that residual is closed from the other side by
-/// `Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With`, which
-/// compares the array against the usage text a person reads.
-///
-/// # Why this is not `ExitCode::All()`
-///
-/// That was the tidier shape and it was tried. An `All()` in an inherent implementation is
-/// a *declared universe* — `nomos-rules` finds it by that exact name — so the enum this
-/// gate step's policy rests on would need a row in
-/// `tests/contract/tests/completeness_universes.rs` saying what compares the list against
-/// the reality it enumerates. Measured: without that row,
-/// `Test_The_Declared_Table_Should_Match_What_Is_Derived` and
-/// `Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror` go red naming
-/// `ExitCode::All`, and the scanned total goes from sixteen universes to seventeen. That
-/// file is outside `P10-CHECK-GATE`'s territory, so the census stays private here, where
-/// it is not a universe at all. Promoting it is worth doing by whoever holds that file
-/// next — the mechanism refusing an unclassified list is the rule working, not an
-/// obstacle.
-fn Every_Exit_Code() -> [ExitCode; 5]
-{
-    return [
-        ExitCode::Ok,
-        ExitCode::Violations,
-        ExitCode::Usage,
-        ExitCode::Unreadable,
-        ExitCode::Vacuous,
-    ];
-}
-
 /// A code's name, as an exhaustive match, so that adding one stops the build here.
 fn Labelled(code: ExitCode) -> &'static str
 {
@@ -60,6 +23,42 @@ fn Labelled(code: ExitCode) -> &'static str
     };
 }
 
+/// `ExitCode::All()`'s own mirror, named in its doc comment.
+///
+/// The match has no wildcard arm. A variant added to [`ExitCode`] without a matching arm
+/// added here fails this file to *compile*, not merely to pass — the property `D-134` asks
+/// a closed enum's mirror to have, and the shape `DocumentKind::All` and `Component::All`
+/// already close it with. This used to be a private census array in this file
+/// (`Every_Exit_Code`), kept private because promoting it to `ExitCode::All()` needed a row
+/// in `tests/contract/tests/completeness_universes/table.rs`, a file outside the item that
+/// wired the gate step's territory; that row now exists.
+#[test]
+fn Test_Every_ExitCode_Should_Be_Matched_Exhaustively()
+{
+    fn Ordinal(code: ExitCode) -> usize
+    {
+        return match code
+        {
+            ExitCode::Ok => 0,
+            ExitCode::Violations => 1,
+            ExitCode::Usage => 2,
+            ExitCode::Unreadable => 3,
+            ExitCode::Vacuous => 4,
+        };
+    }
+
+    for (index, code) in ExitCode::All().iter().enumerate()
+    {
+        assert_eq!(
+            Ordinal(*code),
+            index,
+            "{} is not matched at the position ExitCode::All() puts it, so the exhaustive \
+             match and the universe have drifted apart",
+            Labelled(*code)
+        );
+    }
+}
+
 /// The whole exit-code policy as one assertion, and the reason the workflow needs no
 /// branch.
 ///
@@ -71,7 +70,7 @@ fn Labelled(code: ExitCode) -> &'static str
 #[test]
 fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
 {
-    for code in Every_Exit_Code()
+    for code in ExitCode::All().iter().copied()
     {
         assert_eq!(
             code.Value() == 0,
@@ -98,7 +97,7 @@ fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
         .split_once("exit codes:")
         .expect("the usage text documents the exit codes");
     let documented = Sorted(spelled.split_whitespace().filter_map(|word| word.parse().ok()));
-    let implemented = Sorted(Every_Exit_Code().iter().map(|code| code.Value()));
+    let implemented = Sorted(ExitCode::All().iter().map(|code| code.Value()));
 
     assert!(
         !documented.is_empty(),
