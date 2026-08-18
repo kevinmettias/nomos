@@ -130,4 +130,36 @@ mod tests
 
         assert_eq!(labels.len(), ChangeSource::All().len());
     }
+
+    /// `ChangeSource::All()`'s own mirror, named in the doc comment above it.
+    ///
+    /// The match has no wildcard arm. A variant added to `ChangeSource` without a matching
+    /// arm added here fails this file to *compile*, not merely to pass — the property
+    /// D-134 asks a closed enum's mirror to have.
+    #[test]
+    fn Test_Every_ChangeSource_Should_Be_Matched_Exhaustively()
+    {
+        fn Ordinal(source: ChangeSource) -> usize
+        {
+            return match source
+            {
+                ChangeSource::Correction => 0,
+                ChangeSource::IdeEdit => 1,
+                ChangeSource::GitCheckout => 2,
+                ChangeSource::AgentEdit => 3,
+                ChangeSource::CodeGenerator => 4,
+            };
+        }
+
+        for (index, source) in ChangeSource::All().iter().enumerate()
+        {
+            assert_eq!(
+                Ordinal(*source),
+                index,
+                "{} is not matched at the position ChangeSource::All() puts it, so the \
+                 exhaustive match and the universe have drifted apart",
+                source.Label()
+            );
+        }
+    }
 }

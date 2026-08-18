@@ -85,6 +85,12 @@ impl Sibling
         };
     }
 
+    /// Every specification not this repository's own.
+    ///
+    /// Mirrored by `Test_Every_Sibling_Should_Be_Matched_Exhaustively`, an exhaustive
+    /// match over every variant with no wildcard arm, in
+    /// `crates/spec/nomos-spec-ingest/src/siblings/tests.rs`. It fails to compile, not
+    /// merely to pass, if a variant is added here without being added there.
     #[must_use]
     pub const fn All() -> &'static [Self]
     {

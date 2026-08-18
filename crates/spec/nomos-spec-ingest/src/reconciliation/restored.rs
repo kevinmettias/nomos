@@ -87,6 +87,11 @@ impl Restored
         };
     }
 
+    /// Every family a restoration pass can recover.
+    ///
+    /// Mirrored by `Test_Every_Restored_Should_Be_Matched_Exhaustively`, an exhaustive
+    /// match over every variant with no wildcard arm, in this file. It fails to compile,
+    /// not merely to pass, if a variant is added here without being added there.
     #[must_use]
     pub const fn All() -> &'static [Self]
     {
@@ -101,5 +106,47 @@ impl Restored
             Self::GlossaryTerm,
             Self::CanonicalDomainModel,
         ];
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `Restored::All()`'s own mirror, named in the doc comment above it.
+    ///
+    /// The match has no wildcard arm. A variant added to `Restored` without a matching arm
+    /// added here fails this file to *compile*, not merely to pass — the property D-134
+    /// asks a closed enum's mirror to have.
+    #[test]
+    fn Test_Every_Restored_Should_Be_Matched_Exhaustively()
+    {
+        fn Ordinal(restored: Restored) -> usize
+        {
+            return match restored
+            {
+                Restored::RoadmapMilestone => 0,
+                Restored::Scenario => 1,
+                Restored::Service => 2,
+                Restored::AppendixD => 3,
+                Restored::AppendixH => 4,
+                Restored::HeadlessInventory => 5,
+                Restored::IdeProfile => 6,
+                Restored::GlossaryTerm => 7,
+                Restored::CanonicalDomainModel => 8,
+            };
+        }
+
+        for (index, restored) in Restored::All().iter().enumerate()
+        {
+            assert_eq!(
+                Ordinal(*restored),
+                index,
+                "{} is not matched at the position Restored::All() puts it, so the \
+                 exhaustive match and the universe have drifted apart",
+                restored.Label()
+            );
+        }
     }
 }

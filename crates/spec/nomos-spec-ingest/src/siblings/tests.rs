@@ -186,3 +186,33 @@ fn Test_A_Qualified_Identifier_Should_Name_Its_Suite()
         "xvpe-spec-seed:target-adapter.schema.json"
     );
 }
+
+/// `Sibling::All()`'s own mirror, named in the doc comment above it.
+///
+/// The match has no wildcard arm. A variant added to `Sibling` without a matching arm
+/// added here fails this file to *compile*, not merely to pass — the property D-134 asks a
+/// closed enum's mirror to have.
+#[test]
+fn Test_Every_Sibling_Should_Be_Matched_Exhaustively()
+{
+    fn Ordinal(sibling: Sibling) -> usize
+    {
+        return match sibling
+        {
+            Sibling::Xvpe => 0,
+            Sibling::Kwb => 1,
+            Sibling::Ecosystem => 2,
+        };
+    }
+
+    for (index, sibling) in Sibling::All().iter().enumerate()
+    {
+        assert_eq!(
+            Ordinal(*sibling),
+            index,
+            "{} is not matched at the position Sibling::All() puts it, so the exhaustive \
+             match and the universe have drifted apart",
+            sibling.Suite_Id()
+        );
+    }
+}

@@ -38,6 +38,11 @@ impl Content
         };
     }
 
+    /// Every content a profile section can select.
+    ///
+    /// Mirrored by `Test_Every_Content_Should_Be_Matched_Exhaustively`, an exhaustive
+    /// match over every variant with no wildcard arm, in this file. It fails to compile,
+    /// not merely to pass, if a variant is added here without being added there.
     #[must_use]
     pub const fn All() -> &'static [Self]
     {
@@ -53,5 +58,48 @@ impl Content
             Self::Lineage,
             Self::Omissions,
         ];
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `Content::All()`'s own mirror, named in the doc comment above it.
+    ///
+    /// The match has no wildcard arm. A variant added to `Content` without a matching arm
+    /// added here fails this file to *compile*, not merely to pass — the property D-134
+    /// asks a closed enum's mirror to have.
+    #[test]
+    fn Test_Every_Content_Should_Be_Matched_Exhaustively()
+    {
+        fn Ordinal(content: Content) -> usize
+        {
+            return match content
+            {
+                Content::Suites => 0,
+                Content::Documents => 1,
+                Content::Headings => 2,
+                Content::Blocks => 3,
+                Content::Rows => 4,
+                Content::Nodes => 5,
+                Content::Statements => 6,
+                Content::Relations => 7,
+                Content::Lineage => 8,
+                Content::Omissions => 9,
+            };
+        }
+
+        for (index, content) in Content::All().iter().enumerate()
+        {
+            assert_eq!(
+                Ordinal(*content),
+                index,
+                "{} is not matched at the position Content::All() puts it, so the \
+                 exhaustive match and the universe have drifted apart",
+                content.Label()
+            );
+        }
     }
 }

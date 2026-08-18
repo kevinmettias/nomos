@@ -41,6 +41,12 @@ impl ChangeSource
         };
     }
 
+    /// Every source a change can be observed from.
+    ///
+    /// Mirrored by `Test_Every_ChangeSource_Should_Be_Matched_Exhaustively`, an exhaustive
+    /// match over every variant with no wildcard arm, in
+    /// `crates/substrate/nomos-workspace/src/change.rs`. It fails to compile, not merely
+    /// to pass, if a variant is added here without being added there.
     #[must_use]
     pub const fn All() -> &'static [Self]
     {

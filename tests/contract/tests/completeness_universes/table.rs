@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 11;
+pub(crate) const UNMIRRORED_TOTAL: usize = 4;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -100,9 +100,8 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/kernel/nomos-store/src/document/kind.rs",
         name: "DocumentKind::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a variant added without adding it here drops out of every guard built \
-                   on All(), and OD-STORE-001 makes a document kind a behaviour",
+        standing: Standing::Mirrored {
+            by: "Test_Every_DocumentKind_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
@@ -118,24 +117,24 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/spec/nomos-spec-ingest/src/family.rs",
         name: "Family::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a family added without adding it here is never overlaid",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Family_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
         path: "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
         name: "Restored::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a restored kind added without adding it here is never restored",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Restored_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
         path: "crates/spec/nomos-spec-ingest/src/siblings.rs",
         name: "Sibling::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a sibling suite added without adding it here is never run",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Sibling_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
@@ -159,16 +158,16 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/spec/nomos-spec-project/src/projection/content.rs",
         name: "Content::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a content kind added without adding it here is never rendered",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Content_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
         path: "crates/spec/nomos-spec-project/src/projection/format.rs",
         name: "Format::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a format added without adding it here is never offered",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Format_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
@@ -192,8 +191,8 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/substrate/nomos-workspace/src/change/source.rs",
         name: "ChangeSource::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a change source added without adding it here is never walked",
+        standing: Standing::Mirrored {
+            by: "Test_Every_ChangeSource_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
