@@ -6,74 +6,50 @@
 //! rendering function, throwing the structure away on the way in and reconstructing it by
 //! parsing text on the way out.
 //!
-//! Only [`SpecOutcome::Profiles`] and [`SpecOutcome::Sources`] carry a real, computed
-//! answer in this increment -- the other seven verbs still execute entirely inside
+//! [`SpecOutcome::Profiles`], [`SpecOutcome::Sources`], [`SpecOutcome::Record`],
+//! [`SpecOutcome::Table`] and [`SpecOutcome::Markdown`] carry a real, computed answer.
+//! [`SpecOutcome::Markdown`] reuses `nomos-spec-store`'s own [`RecordProjection`] and
+//! [`EditError`] rather than a type of this crate's own — `Record_Markdown` already returns
+//! exactly that shape, and a second type here would only restate it. The remaining three
+//! verbs (`Render`, `Freshness`, `Preview`, `Commit`) still execute entirely inside
 //! `nomos-cli::spec`, and [`NotYetMigrated`] marks the outcome vocabulary reserved for them
 //! without pretending they have moved.
 
-use crate::corpus::Absence;
+mod record;
+mod sources;
+mod table;
+
+pub use record::{RecordAnswer, RecordRefusal};
+pub use sources::SourcesAnswer;
+pub use table::{TableAnswer, TableRefusal};
+
 use nomos_spec_project::{Profile, ProjectError};
-use nomos_spec_store::StoreError;
-
-/// What went into this store, and what did not.
-///
-/// The rendering-free half of `nomos-cli::spec::verb::listing::Sources`: everything that
-/// function used to write directly, kept here as data so a second caller can render it its
-/// own way instead of parsing the lines `nomos-cli` happened to print.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct SourcesAnswer
-{
-    /// One line per input the assembly read, in the order it was read.
-    pub read: Vec<String>,
-    /// Every input the assembly expected and did not find.
-    pub absent: Vec<Absence>,
-}
-
-impl SourcesAnswer
-{
-    /// Whether anything this store was expected to hold is missing.
-    #[must_use]
-    pub fn Is_Complete(&self) -> bool
-    {
-        return self.absent.is_empty();
-    }
-
-    /// Every absence, one after another.
-    #[must_use]
-    pub fn Describe_Absences(&self) -> String
-    {
-        return self
-            .absent
-            .iter()
-            .map(Absence::Describe)
-            .collect::<Vec<String>>()
-            .join("\n");
-    }
-}
+use nomos_spec_store::{EditError, RecordProjection, StoreError};
 
 /// This verb has not moved into `nomos-spec-orchestration` yet.
 ///
 /// `nomos-cli::spec` still parses, assembles a store for, and dispatches this command
 /// entirely on its own -- calling [`crate::Run`] with it would be premature, so nothing
-/// does. Three future increments replace each marked variant's payload with the outcome its
-/// verb actually produces, the same way this increment replaced `Profiles` and `Sources`'
-/// own markers with real data.
+/// does. Two future increments replace each marked variant's payload with the outcome its
+/// verb actually produces, the same way earlier increments replaced `Profiles`, `Sources`,
+/// `Record`, `Table` and `Markdown`'s own markers with real data.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct NotYetMigrated;
 
 /// What a `nomos spec` verb produced.
 pub enum SpecOutcome
 {
-    /// `nomos spec record` -- not yet migrated.
-    Record(NotYetMigrated),
-    /// `nomos spec table` -- not yet migrated.
-    Table(NotYetMigrated),
+    /// `nomos spec record` -- the one document behind an identifier, or why none answered.
+    Record(Result<RecordAnswer, RecordRefusal>),
+    /// `nomos spec table` -- the rows a table request selected, or why none answered.
+    Table(Result<TableAnswer, TableRefusal>),
     /// `nomos spec render` -- not yet migrated.
     Render(NotYetMigrated),
     /// `nomos spec freshness` -- not yet migrated.
     Freshness(NotYetMigrated),
-    /// `nomos spec markdown` -- not yet migrated.
-    Markdown(NotYetMigrated),
+    /// `nomos spec markdown` -- a record rendered from the store's own rows, or why it could
+    /// not be.
+    Markdown(Result<RecordProjection, EditError>),
     /// `nomos spec preview` -- not yet migrated.
     Preview(NotYetMigrated),
     /// `nomos spec commit` -- not yet migrated.

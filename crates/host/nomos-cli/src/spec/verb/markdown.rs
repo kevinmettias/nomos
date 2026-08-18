@@ -15,8 +15,7 @@ pub(in crate::spec) fn Markdown(
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let revision = request.revision.as_deref();
-    let projection = match assembly.store.Record_Markdown(&request.id, revision)
+    let projection = match nomos_spec_orchestration::Markdown(assembly, request)
     {
         Ok(projection) => projection,
         Err(error) => return Report_Edit_Error(assembly, &error, channels.notes),

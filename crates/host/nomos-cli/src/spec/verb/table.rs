@@ -1,105 +1,67 @@
-//! Selecting one table out of one document and printing it.
+//! Rendering `nomos spec table`'s answer, or the refusal saying why it has none.
+//!
+//! Resolving the address and reading the rows is `nomos-spec-orchestration::Table`'s job
+//! now. This module keeps only the writing and the `ExitCode` a rendering layer is
+//! responsible for.
 
-use crate::spec::{Assembly, TableRequest, Channels, ExitCode, DocumentSource, TableLine, RowCensus, Report_Store_Error, Vanished, RowScope, PathMatch, Absent_Or};
+use crate::spec::{Assembly, TableRequest, Channels, ExitCode, DocumentSource, TableLine, RowCensus, Report_Store_Error, PathMatch, Absent_Or};
+use nomos_spec_orchestration::{TableAnswer, TableRefusal};
 
 /// Phase 2's other half: the real rows.
 pub(in crate::spec) fn Table(assembly: &Assembly, request: &TableRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    let (uid, tier) = match Addressed(assembly, request, channels.notes)
+    return match nomos_spec_orchestration::Table(assembly, request)
     {
-        Ok(addressed) => addressed,
-        Err(code) => return code,
+        Ok(answer) => Printed_Answer(request, &answer, channels),
+        Err(TableRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),
+        Err(TableRefusal::NoSuchDocument) => No_Such_Document(assembly, &request.document, channels.notes),
+        Err(TableRefusal::AmbiguousDocument { matched, tier }) =>
+        {
+            Several_Documents(&request.document, matched, tier, channels.notes)
+        }
+        Err(TableRefusal::NoRows { document, tier, census }) =>
+        {
+            Unselected(assembly, request, &document, tier, census, channels.notes)
+        }
     };
-
-    let read = match Read_Table(assembly, uid, request, channels.notes)
-    {
-        Ok(read) => read,
-        Err(code) => return code,
-    };
-
-    Note_Document(&read, tier, &request.document, channels.notes);
-
-    if read.lines.is_empty()
-    {
-        return Unselected(assembly, request, &read, channels.notes);
-    }
-
-    return Printed(&read.lines, request, channels);
 }
 
-/// A document, the rows the narrowing selected from it, and the census of the whole of it.
-///
-/// The census counts the document rather than the selection deliberately: it is what
-/// distinguishes "this document has no tables" from "the block you named has none".
-pub(super) struct ReadTable
+/// The rows an address resolved to, with a note saying which document they came from.
+pub(super) fn Printed_Answer(request: &TableRequest, answer: &TableAnswer, channels: &mut Channels<'_>) -> ExitCode
 {
-    /// The document itself.
-    found: DocumentSource,
-    /// The rows under the current narrowing.
-    lines: Vec<TableLine>,
-    /// Every pipe line in the document, by kind.
-    census: RowCensus,
+    Note_Document(&answer.document, answer.census, answer.tier, &request.document, channels.notes);
+
+    return Printed(&answer.lines, request, channels);
 }
 
-/// Everything a `table` run reads, or the code saying which read failed.
-pub(super) fn Read_Table(
-    assembly: &Assembly,
-    uid: i64,
-    request: &TableRequest,
-    notes: &mut dyn std::io::Write,
-) -> Result<ReadTable, ExitCode>
-{
-    let found = match assembly.store.Document(uid)
-    {
-        Ok(Some(found)) => found,
-        Ok(None) => return Err(Report_Store_Error(&Vanished(uid), notes)),
-        Err(error) => return Err(Report_Store_Error(&error, notes)),
-    };
-    let lines = match assembly.store.Table_Lines(uid, request.block, request.table)
-    {
-        Ok(lines) => lines,
-        Err(error) => return Err(Report_Store_Error(&error, notes)),
-    };
-    let census = match assembly.store.Row_Census(RowScope::Document(uid))
-    {
-        Ok(census) => census,
-        Err(error) => return Err(Report_Store_Error(&error, notes)),
-    };
-
-    return Ok(ReadTable {
-        found,
-        lines,
-        census,
-    });
-}
-
-/// A document that was read and carried no row the narrowing selected.
+/// A document that resolved and was read, and the request's own narrowing selected no rows.
 pub(super) fn Unselected(
     assembly: &Assembly,
     request: &TableRequest,
-    read: &ReadTable,
+    document: &DocumentSource,
+    tier: PathMatch,
+    census: RowCensus,
     notes: &mut dyn std::io::Write,
 ) -> ExitCode
 {
+    Note_Document(document, census, tier, &request.document, notes);
+
     let _ = writeln!(
         notes,
         "{} carries no table row{}.",
-        read.found.path,
+        document.path,
         Narrowed(request.block, request.table)
     );
 
     // The document was read, so this is an answer rather than a shortfall — unless the
     // narrowing selected a table that is not there, which the census makes visible either
     // way.
-    return Nothing_Selected(assembly, read.census.lines, notes);
+    return Nothing_Selected(assembly, census.lines, notes);
 }
 
 /// Which document was read, how it was matched, and how many pipe lines it carries.
-pub(super) fn Note_Document(read: &ReadTable, tier: PathMatch, asked: &str, notes: &mut dyn std::io::Write)
+pub(super) fn Note_Document(found: &DocumentSource, census: RowCensus, tier: PathMatch, asked: &str, notes: &mut dyn std::io::Write)
 {
-    let found = &read.found;
-    let census = &read.census;
-
     if tier != PathMatch::Exact
     {
         let _ = writeln!(notes, "{asked} matched {} by {}", found.path, tier.Label());
@@ -111,28 +73,6 @@ pub(super) fn Note_Document(read: &ReadTable, tier: PathMatch, asked: &str, note
          {} separator",
         found.path, found.revision, census.lines, census.header, census.content, census.separator
     );
-}
-
-/// The one document an address names, or the message saying why it names none or several.
-pub(super) fn Addressed(
-    assembly: &Assembly,
-    request: &TableRequest,
-    notes: &mut dyn std::io::Write,
-) -> Result<(i64, PathMatch), ExitCode>
-{
-    let revision = request.revision.as_deref();
-    let (matched, tier) = match assembly.store.Documents_Named(&request.document, revision)
-    {
-        Ok(found) => found,
-        Err(error) => return Err(Report_Store_Error(&error, notes)),
-    };
-
-    return match matched.as_slice()
-    {
-        [uid] => Ok((*uid, tier)),
-        [] => Err(No_Such_Document(assembly, &request.document, notes)),
-        many => Err(Several_Documents(&request.document, many.len(), tier, notes)),
-    };
 }
 
 /// An address that names nothing in this store.

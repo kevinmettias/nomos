@@ -27,17 +27,6 @@ pub(super) fn Absent_Or(
     return ExitCode::Absent;
 }
 
-/// A document that resolved and then could not be read back.
-///
-/// Its own function because the situation is a store defect rather than a caller's
-/// mistake: the surrogate came out of a query against the same connection.
-pub(super) fn Vanished(uid: i64) -> StoreError
-{
-    return StoreError::Sql(format!(
-        "document {uid} resolved and then could not be read back from the same connection"
-    ));
-}
-
 pub(super) fn Report_Store_Error(error: &StoreError, notes: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(notes, "{error}");

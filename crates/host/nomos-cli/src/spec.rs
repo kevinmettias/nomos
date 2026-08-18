@@ -27,13 +27,15 @@
 //! [`SpecCommand`], its six `*Request` types and the corpus-assembly plumbing
 //! ([`Assemble`], [`Assembly`], [`CorpusRequest`]) all moved verbatim to
 //! `nomos-spec-orchestration` — `OD-HOST-002`'s family-9 seam, the same shape
-//! `nomos-check-orchestration` already built for `nomos check`. Only [`SpecCommand::
-//! Profiles`] and [`SpecCommand::Sources`] are wired through that crate's own
-//! [`nomos_spec_orchestration::Run`] so far: `spec/verb/listing.rs`'s `Profiles` and
-//! `Sources` now delegate their computation to it and keep only the writing. The other
-//! seven verbs are untouched, still executed by this module's own [`Dispatch`] exactly as
-//! before. [`Note_Absences`] stays here too — it writes text, and writing is this crate's
-//! job, not the orchestration crate's.
+//! `nomos-check-orchestration` already built for `nomos check`. Five verbs are wired
+//! through that crate's own [`nomos_spec_orchestration::Run`] so far:
+//! [`SpecCommand::Profiles`] and [`SpecCommand::Sources`] (increment 1), and
+//! [`SpecCommand::Record`], [`SpecCommand::Table`] and [`SpecCommand::Markdown`]
+//! (increment 2). `spec/verb/{listing,record,table,markdown}.rs` now delegate their
+//! resolution to it and keep only the writing. The other four verbs are untouched, still
+//! executed by this module's own [`Dispatch`] exactly as before. [`Note_Absences`] stays
+//! here too — it writes text, and writing is this crate's job, not the orchestration
+//! crate's.
 
 mod parsing;
 mod reporting;
@@ -42,7 +44,7 @@ mod verb;
 mod tests;
 
 pub use parsing::Parse;
-use reporting::{Absent_Or, Report_Project_Error, Report_Store_Error, Vanished};
+use reporting::{Absent_Or, Report_Project_Error, Report_Store_Error};
 use verb::{
     Commit, Empty_Section, EmptySection, Freshness_Of, Markdown, Placed, Preview, Profiles,
     Record, Render, Report_Build_Error, Report_Edit_Error, Resolved, Sources, Table,
@@ -60,7 +62,7 @@ use crate::arguments::{Named_Value, Named_Values, Required};
 use nomos_spec_orchestration::corpus::{Assemble, Assembly, CorpusRequest};
 use nomos_spec_project::{Build, Catalogue, Check, Output, Profile, ProjectError, SIDECAR_SUFFIX, Stamp};
 use nomos_spec_store::{
-    CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch, RecordProjection, RowCensus, RowScope,
+    CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch, RecordProjection, RowCensus,
     StoreError, TableLine,
 };
 use std::path::{Path, PathBuf};

@@ -1,6 +1,11 @@
 pub const nomos_spec_orchestration::corpus::DEFAULT_REVISION: &str
+pub enum nomos_spec_orchestration::RecordRefusal
 pub enum nomos_spec_orchestration::SpecCommand
 pub enum nomos_spec_orchestration::SpecOutcome
+pub enum nomos_spec_orchestration::TableRefusal
+pub enum variant nomos_spec_orchestration::RecordRefusal::Ambiguous { id: String, documents: Vec<DocumentSource>, }
+pub enum variant nomos_spec_orchestration::RecordRefusal::NotFound { id: String, revision: Option<String>, node: Option<NodeSummary>, }
+pub enum variant nomos_spec_orchestration::RecordRefusal::Store(StoreError)
 pub enum variant nomos_spec_orchestration::SpecCommand::Commit(CommitRequest)
 pub enum variant nomos_spec_orchestration::SpecCommand::Freshness(FreshnessRequest)
 pub enum variant nomos_spec_orchestration::SpecCommand::Markdown(RecordRequest)
@@ -12,18 +17,25 @@ pub enum variant nomos_spec_orchestration::SpecCommand::Sources
 pub enum variant nomos_spec_orchestration::SpecCommand::Table(TableRequest)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Commit(NotYetMigrated)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Freshness(NotYetMigrated)
-pub enum variant nomos_spec_orchestration::SpecOutcome::Markdown(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Markdown(Result<RecordProjection, EditError>)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Preview(NotYetMigrated)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Profiles(Result<Vec<Profile>, ProjectError>)
-pub enum variant nomos_spec_orchestration::SpecOutcome::Record(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Record(Result<RecordAnswer, RecordRefusal>)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Render(NotYetMigrated)
 pub enum variant nomos_spec_orchestration::SpecOutcome::Sources(Result<SourcesAnswer, StoreError>)
-pub enum variant nomos_spec_orchestration::SpecOutcome::Table(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Table(Result<TableAnswer, TableRefusal>)
+pub enum variant nomos_spec_orchestration::TableRefusal::AmbiguousDocument { matched: usize, tier: PathMatch, }
+pub enum variant nomos_spec_orchestration::TableRefusal::NoRows { document: DocumentSource, tier: PathMatch, census: RowCensus, }
+pub enum variant nomos_spec_orchestration::TableRefusal::NoSuchDocument
+pub enum variant nomos_spec_orchestration::TableRefusal::Store(StoreError)
+pub fn nomos_spec_orchestration::Markdown(assembly: &Assembly, request: &RecordRequest) -> Result<RecordProjection, EditError>
 pub fn nomos_spec_orchestration::Profiles() -> Result<Vec<Profile>, ProjectError>
+pub fn nomos_spec_orchestration::Record(assembly: &Assembly, request: &RecordRequest) -> Result<RecordAnswer, RecordRefusal>
 pub fn nomos_spec_orchestration::Run(command: &SpecCommand, request: &CorpusRequest) -> SpecOutcome
 pub fn nomos_spec_orchestration::Sources(assembly: &Assembly) -> SourcesAnswer
 pub fn nomos_spec_orchestration::SourcesAnswer::Describe_Absences(&self) -> String
 pub fn nomos_spec_orchestration::SourcesAnswer::Is_Complete(&self) -> bool
+pub fn nomos_spec_orchestration::Table(assembly: &Assembly, request: &TableRequest) -> Result<TableAnswer, TableRefusal>
 pub fn nomos_spec_orchestration::corpus::Absence::Describe(&self) -> String
 pub fn nomos_spec_orchestration::corpus::Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
 pub fn nomos_spec_orchestration::corpus::Assembly::Describe_Absences(&self) -> String
@@ -36,6 +48,8 @@ pub struct field nomos_spec_orchestration::EditRequest::rename: Option<String>
 pub struct field nomos_spec_orchestration::FreshnessRequest::into: PathBuf
 pub struct field nomos_spec_orchestration::FreshnessRequest::profile: Option<String>
 pub struct field nomos_spec_orchestration::FreshnessRequest::require: Vec<String>
+pub struct field nomos_spec_orchestration::RecordAnswer::document: DocumentSource
+pub struct field nomos_spec_orchestration::RecordAnswer::id: String
 pub struct field nomos_spec_orchestration::RecordRequest::id: String
 pub struct field nomos_spec_orchestration::RecordRequest::revision: Option<String>
 pub struct field nomos_spec_orchestration::RenderRequest::into: PathBuf
@@ -43,6 +57,10 @@ pub struct field nomos_spec_orchestration::RenderRequest::profile: String
 pub struct field nomos_spec_orchestration::RenderRequest::subject: Option<String>
 pub struct field nomos_spec_orchestration::SourcesAnswer::absent: Vec<Absence>
 pub struct field nomos_spec_orchestration::SourcesAnswer::read: Vec<String>
+pub struct field nomos_spec_orchestration::TableAnswer::census: RowCensus
+pub struct field nomos_spec_orchestration::TableAnswer::document: DocumentSource
+pub struct field nomos_spec_orchestration::TableAnswer::lines: Vec<TableLine>
+pub struct field nomos_spec_orchestration::TableAnswer::tier: PathMatch
 pub struct field nomos_spec_orchestration::TableRequest::block: Option<u32>
 pub struct field nomos_spec_orchestration::TableRequest::document: String
 pub struct field nomos_spec_orchestration::TableRequest::revision: Option<String>
@@ -61,9 +79,11 @@ pub struct nomos_spec_orchestration::CommitRequest
 pub struct nomos_spec_orchestration::EditRequest
 pub struct nomos_spec_orchestration::FreshnessRequest
 pub struct nomos_spec_orchestration::NotYetMigrated
+pub struct nomos_spec_orchestration::RecordAnswer
 pub struct nomos_spec_orchestration::RecordRequest
 pub struct nomos_spec_orchestration::RenderRequest
 pub struct nomos_spec_orchestration::SourcesAnswer
+pub struct nomos_spec_orchestration::TableAnswer
 pub struct nomos_spec_orchestration::TableRequest
 pub struct nomos_spec_orchestration::corpus::Absence
 pub struct nomos_spec_orchestration::corpus::Assembly

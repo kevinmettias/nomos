@@ -1,12 +1,20 @@
 //! Running one `nomos spec` verb, apart from parsing its arguments or rendering what it
 //! found.
 
+mod markdown;
+mod record;
+mod table;
+
 use nomos_spec_project::{Catalogue, Profile, ProjectError};
 use nomos_spec_store::StoreError;
 
 use crate::command::SpecCommand;
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
 use crate::outcome::{NotYetMigrated, SourcesAnswer, SpecOutcome};
+
+pub use markdown::Markdown;
+pub use record::Record;
+pub use table::Table;
 
 /// The shipped projection catalogue.
 ///
@@ -44,7 +52,7 @@ pub fn Sources(assembly: &Assembly) -> SourcesAnswer
 ///
 /// [`SpecCommand::Profiles`] never assembles a store, matching
 /// [`Profiles`]'s own guarantee. Every other variant assembles one from `request` first --
-/// including the seven not yet migrated, so that a caller asking `nomos-spec-orchestration`
+/// including the four not yet migrated, so that a caller asking `nomos-spec-orchestration`
 /// for one of them fails on the same store-assembly error a fully migrated verb would,
 /// rather than succeeding vacuously before reaching the part that is not built yet.
 #[must_use]
@@ -71,11 +79,23 @@ fn Outcome_For(command: &SpecCommand, assembled: Result<Assembly, StoreError>) -
     return match command
     {
         SpecCommand::Sources => SpecOutcome::Sources(assembled.map(|assembly| return Sources(&assembly))),
-        SpecCommand::Record(_) => SpecOutcome::Record(NotYetMigrated),
-        SpecCommand::Table(_) => SpecOutcome::Table(NotYetMigrated),
+        SpecCommand::Record(request) => SpecOutcome::Record(
+            assembled
+                .map_err(crate::outcome::RecordRefusal::Store)
+                .and_then(|assembly| return Record(&assembly, request)),
+        ),
+        SpecCommand::Table(request) => SpecOutcome::Table(
+            assembled
+                .map_err(crate::outcome::TableRefusal::Store)
+                .and_then(|assembly| return Table(&assembly, request)),
+        ),
         SpecCommand::Render(_) => SpecOutcome::Render(NotYetMigrated),
         SpecCommand::Freshness(_) => SpecOutcome::Freshness(NotYetMigrated),
-        SpecCommand::Markdown(_) => SpecOutcome::Markdown(NotYetMigrated),
+        SpecCommand::Markdown(request) => SpecOutcome::Markdown(
+            assembled
+                .map_err(nomos_spec_store::EditError::Store)
+                .and_then(|assembly| return Markdown(&assembly, request)),
+        ),
         SpecCommand::Preview(_) => SpecOutcome::Preview(NotYetMigrated),
         SpecCommand::Commit(_) => SpecOutcome::Commit(NotYetMigrated),
         SpecCommand::Profiles => SpecOutcome::Profiles(Profiles()),

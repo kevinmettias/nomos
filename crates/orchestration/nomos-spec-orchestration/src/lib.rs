@@ -3,23 +3,25 @@
 //!
 //! `OD-HOST-002` names family 9's `SpecCommand` half as the one remaining command group with
 //! no orchestration crate the way `WorkCommand` and, since `nomos-check-orchestration`,
-//! `CheckCommand` each have one. This crate is that seam's first increment: the
-//! [`SpecCommand`] vocabulary and its `*Request` types move here verbatim from
-//! `nomos-cli::spec::command` and `nomos-cli::spec::request`, the corpus-assembly plumbing
-//! every verb needs ([`corpus::Assemble`], moved from `nomos-cli::corpus`) moves with them,
-//! and the two verbs that touch no store or touch one only to describe it —
-//! [`SpecCommand::Profiles`] and [`SpecCommand::Sources`] — are wired all the way through.
+//! `CheckCommand` each have one. This crate is that seam: the [`SpecCommand`] vocabulary and
+//! its `*Request` types moved here verbatim from `nomos-cli::spec::command` and
+//! `nomos-cli::spec::request`, the corpus-assembly plumbing every verb needs
+//! ([`corpus::Assemble`], moved from `nomos-cli::corpus`) moved with them, and five verbs are
+//! now wired all the way through: [`SpecCommand::Profiles`] and [`SpecCommand::Sources`]
+//! (increment 1), and [`SpecCommand::Record`], [`SpecCommand::Table`] and
+//! [`SpecCommand::Markdown`] (increment 2) — the three read-only verbs that resolve an
+//! identifier or an address against the store and hand back what they found, or a typed
+//! refusal saying why nothing did.
 //!
 //! # What stays out, and why
 //!
-//! The other seven verbs (`Record`, `Table`, `Render`, `Freshness`, `Markdown`, `Preview`,
-//! `Commit`) are unchanged: `nomos-cli::spec` still parses, assembles a store for, and
-//! dispatches them entirely on its own, through the same `spec/verb/*.rs` functions it
-//! always has. [`SpecOutcome`] reserves a variant for each of them
-//! ([`outcome::NotYetMigrated`]) so the vocabulary this crate will eventually carry is
-//! visible now, rather than growing the enum's shape three more times as each increment
-//! lands. Migrating their logic here is explicitly future work — three more increments,
-//! not this one.
+//! The other four verbs (`Render`, `Freshness`, `Preview`, `Commit`) are unchanged:
+//! `nomos-cli::spec` still parses, assembles a store for, and dispatches them entirely on
+//! its own, through the same `spec/verb/*.rs` functions it always has. [`SpecOutcome`]
+//! reserves a variant for each of them ([`outcome::NotYetMigrated`]) so the vocabulary this
+//! crate will eventually carry is visible now, rather than growing the enum's shape twice
+//! more as each increment lands. Migrating their logic here is explicitly future work — two
+//! more increments, not this one.
 //!
 //! Argument parsing (`spec/parsing.rs`), exit-code mapping (`spec/exit_code.rs`) and text
 //! rendering (`spec/reporting.rs`, and `Note_Absences`'s own decision about *whether* to
@@ -39,6 +41,6 @@ mod run;
 mod tests;
 
 pub use command::SpecCommand;
-pub use outcome::{NotYetMigrated, SourcesAnswer, SpecOutcome};
+pub use outcome::{NotYetMigrated, RecordAnswer, RecordRefusal, SourcesAnswer, SpecOutcome, TableAnswer, TableRefusal};
 pub use request::{CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest};
-pub use run::{Profiles, Run, Sources};
+pub use run::{Markdown, Profiles, Record, Run, Sources, Table};
