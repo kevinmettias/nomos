@@ -384,10 +384,12 @@ graph LR
     od_host_001["OD-HOST-001"] -->|"relates-to"| od_host_002["OD-HOST-002"]
     od_host_001 -->|"relates-to"| od_host_003["OD-HOST-003"]
     od_host_001 -->|"relates-to"| od_host_004
+    od_host_001 -->|"relates-to"| od_host_005["OD-HOST-005"]
     od_host_001 -->|"relates-to"| od_rules_001
     od_host_002 -->|"relates-to"| od_host_001
     od_host_002 -->|"relates-to"| od_host_003
     od_host_002 -->|"relates-to"| od_host_004
+    od_host_002 -->|"relates-to"| od_host_005
     od_host_003 -->|"relates-to"| od_host_001
     od_host_003 -->|"relates-to"| od_host_002
     od_host_004 -->|"relates-to"| arc_harness_001
@@ -395,6 +397,8 @@ graph LR
     od_host_004 -->|"relates-to"| od_host_001
     od_host_004 -->|"relates-to"| od_host_002
     od_host_004 -->|"relates-to"| od_package_006
+    od_host_005 -->|"relates-to"| od_host_001
+    od_host_005 -->|"relates-to"| od_host_002
     od_ledger_001 -->|"affected_by"| od_ledger_004["OD-LEDGER-004"]
     od_ledger_001 -->|"affected_by"| od_ledger_011
     od_ledger_001 -->|"affected_by"| od_ledger_014["OD-LEDGER-014"]
@@ -881,6 +885,7 @@ graph LR
     od_host_002
     od_host_003
     od_host_004
+    od_host_005
     od_ledger_001
     od_ledger_002
     od_ledger_003

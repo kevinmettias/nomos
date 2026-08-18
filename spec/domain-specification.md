@@ -67,6 +67,7 @@ profile: domain-specification
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 29 | 6 | sha256:95a9bc9275ea24b17ac4458927631e589405b0813779a6945f42240a47af2f1f |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
+| docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md@authored | docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md | authored | 11 | 4 | sha256:a33c6e7760f69293086948c66c604f52e898dacaf8e330533626c16e6703a1da |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -599,6 +600,10 @@ profile: domain-specification
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#6 | authored | 2 | What flips the answer |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#11 | authored | 2 | Why not build the mechanism now |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#13 | authored | 2 | Alternatives considered |
+| docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#1 | authored | 1 | Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration |
+| docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#8 | authored | 2 | What Would Decide It |
+| docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#10 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -16117,6 +16122,110 @@ more likely it is decided by whichever shape the second rule happens to need, ra
 a recorded choice checkable in advance. This record is written before that rule exists so
 the criterion, and not the accident of what the second rule turns out to want, decides the
 shape.
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#1
+
+*revision: authored · kind: heading · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration · hash: sha256:694e889f9ea5aa7b3af7270798d559877cedc7f903959bd7ccd560f0e97381a4*
+
+# Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#2
+
+*revision: authored · kind: heading · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#3
+
+*revision: authored · kind: prose · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Question · hash: sha256:876b5f6c595ddd7b64d77fd1a349f8ba55e3d468f3fa1b247f9733ecfd7bb417*
+
+`OD-HOST-002`'s family 9 names four control-command groups a surface holds no privileged
+logic for once each has a seam: `WorkCommand`, `CheckCommand`, `SpecCommand` and
+`request::Command`. The first three each closed as their own dedicated crate at band 40 —
+`nomos-work-orchestration`, `nomos-check-orchestration`, `nomos-spec-orchestration` — and
+`P13-HOST-002-SPEC-DONE` narrowed family 9's remaining gap to `request::Command` alone,
+still one hand-parsed verb (`Submit`) inside `nomos-cli::request` with no orchestration
+crate a second adapter could depend on.
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#4
+
+*revision: authored · kind: prose · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Question · hash: sha256:5df5a27ba86b072f801e6e0c4837040d1c00b72719bc3c0991f0ae0c4d0c9e40*
+
+Following the same shape for a fourth time — a new `nomos-request-orchestration` crate at
+band 40 — runs into a constraint the first three never faced: `crates/host/nomos-cli/src/
+request.rs` already assembles the specification store through `nomos_spec_orchestration::
+corpus::{Assemble, Assembly, CorpusRequest}` and writes its submission through
+`nomos_spec_store::Accept_Submission`, the exact store `nomos-spec-orchestration` already
+owns. `tests/contract/tests/boundaries/graph.rs::Test_Dependencies_Should_Run_Strictly_
+Downward` asserts `dependency_band < band`, strictly — equal-band edges fail the test, the
+same rule that keeps `nomos-lang-rust` and `nomos-lang-rust-scan` from naming each other. A
+`nomos-request-orchestration` at band 40 could not depend on `nomos-spec-orchestration`,
+also band 40, to reach the corpus assembly and store submission `request::Command`
+actually needs — unlike `work`, `check` and `spec`, which never cross-depend on each
+other's domains at all.
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#5
+
+*revision: authored · kind: prose · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Question · hash: sha256:77b8bc3dfa6c9263b50e4b981b7671aae85f7155becff43ae7ca809586bf91a8*
+
+Two shapes both close the gap without breaking that rule, and nothing on the board or in a
+governing record has chosen between them:
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#6
+
+*revision: authored · kind: prose · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Question · hash: sha256:0c33656904968cf8eb33aa8330184533a0439f85d4c2242ff075b0fa06b54133*
+
+**A fourth crate at a band strictly above 40** (41, or a new intermediate band), depending
+on `nomos-spec-orchestration` the way `nomos-cli` (band 90) already does. This keeps
+`request::Command`'s seam as its own crate, matching the other three command groups in
+kind, but breaks the pattern that all four orchestration crates so far sit at one band as
+peers, and needs its own placement rationale rather than reusing band 40's.
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#7
+
+*revision: authored · kind: prose · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Question · hash: sha256:6c9a0d39200da54093dd472f5bbaddc69201cb7ce8c523bf3f1098ac1ac54ab3*
+
+**A `Submit` verb added to `nomos-spec-orchestration` itself**, alongside `SpecCommand`'s
+nine. This reuses the corpus assembly and `Accept_Submission` call directly, at no new
+band and no new crate, but narrows what "one crate per `OD-HOST-002` command group" means:
+`nomos-spec-orchestration`'s own module doc and `README.md` row currently describe it as
+exactly `SpecCommand`'s crate, and either would need to say it answers a second command
+type as well — the same store, but a `nomos request submit` invocation is not a `nomos
+spec` verb by the CLI's own naming.
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#8
+
+*revision: authored · kind: heading · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#9
+
+*revision: authored · kind: prose · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / What Would Decide It · hash: sha256:590e8f98db6fa8af9981ae66d141ab9bce8bfdb127c3077109e3a1be116a5203*
+
+Whether `request::Command` is, architecturally, a fifth `SpecCommand`-adjacent verb over
+the same store — in which case folding it in is the smaller, more defensible move — or a
+genuinely separate command group that happens to share a dependency, the same way a
+`WorkCommand` verb and a `CheckCommand` verb might one day both need `nomos-capability`
+without either becoming the other's sibling. `request.rs`'s own module doc calls it
+"submitting a feature request, design spec or feature result through the one accept door
+`OD-SPEC-009` decided" — a description that reads as the specification store's own
+front door, not a clearly separate domain, which is why this record does not resolve the
+question by inspection alone.
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#10
+
+*revision: authored · kind: heading · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-005-whether-request-commands-seam-is-its-own-crate-or-a-verb-inside-spec-orchestration.md#11
+
+*revision: authored · kind: prose · heading: Whether request::Command's orchestration seam is its own crate or a verb inside nomos-spec-orchestration / Status · hash: sha256:76c03540ca5dfa1b96856b05a7864a8fecf7326e572c7d6fbdd32e053f475d19*
+
+Open. `request::Command`'s seam does not build itself until this is decided — building
+either shape first would decide the question by whichever a session happened to reach for,
+the exact accretion `OD-HOST-004` and this record's own reasoning both warn against.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
