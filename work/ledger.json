@@ -15474,6 +15474,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SPEC-ORCH-README-CATCHUP",
+      "title": "README's nomos-spec-orchestration row still describes increment 1 of 4, all four are done",
+      "why": "README.md's band-40 table row for nomos-spec-orchestration reads: 'Increment 1 of 4 closing family 9's SpecCommand half; the other seven verbs still execute inside nomos-cli.' P13-SPEC-ORCHESTRATION-2/3/4 (commits 8a59abe, d90c757, bf05cbf) moved Record/Table/Markdown, then Render/Freshness, then Preview/Commit into the crate, closing all nine verbs -- confirmed directly against crates/orchestration/nomos-spec-orchestration/src/command.rs (all nine SpecCommand variants) and nomos-cli/src/spec.rs's own module doc, the same evidence P13-HOST-002-SPEC-DONE used to amend OD-HOST-002's family 9 for the same staleness. The README row was never revisited after increment 1 shipped it.",
+      "done_when": "The nomos-spec-orchestration row in README.md's band table states that all nine SpecCommand verbs are answered by the crate (no longer 'increment 1 of 4' or naming seven verbs as still inside nomos-cli), in one sentence of the same length and register as the row's current form. No other README row, table, or file changes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 9 tests\ntest band_zero::Test_Band_Zero_Should_Be_Described_In_One_Place ... ok\ntest readme::Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band ... ok\ntest graph::Test_Dependencies_Should_Run_Strictly_Downward ... ok\ntest graph::Test_Every_Member_Should_Declare_A_Band ... ok\ntest graph::Test_Contracts_Should_Depend_On_The_Allowlist_And_Nothing_Else ... ok\ntest graph::Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace ... ok\ntest graph::Test_The_Workspace_Should_Not_Appear_Empty ... ok\ntest capabilities::Test_A_Capability_Id_Should_Be_Written_In_One_Crate ... ok\ntest reachability::Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-3a2571bf0b9d7834.exe)\n",
+        "verified_at": 1787091979,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c843d1d0debb6558d84cd88d3f084b3132158b3b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
