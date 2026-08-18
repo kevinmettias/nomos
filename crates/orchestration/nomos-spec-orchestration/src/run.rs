@@ -1,8 +1,10 @@
 //! Running one `nomos spec` verb, apart from parsing its arguments or rendering what it
 //! found.
 
+mod commit;
 mod freshness;
 mod markdown;
+mod preview;
 mod record;
 mod render;
 mod table;
@@ -13,10 +15,12 @@ use nomos_spec_store::StoreError;
 
 use crate::command::SpecCommand;
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
-use crate::outcome::{FreshnessRefusal, NotYetMigrated, RenderRefusal, SourcesAnswer, SpecOutcome};
+use crate::outcome::{CommitRefusal, FreshnessRefusal, PreviewRefusal, RenderRefusal, SourcesAnswer, SpecOutcome};
 
+pub use commit::Commit;
 pub use freshness::Freshness;
 pub use markdown::Markdown;
+pub use preview::Preview;
 pub use record::Record;
 pub use render::Render;
 pub use table::Table;
@@ -55,20 +59,21 @@ pub fn Sources(assembly: &Assembly) -> SourcesAnswer
 
 /// Runs one `nomos spec` verb over a corpus request, and hands back what it found.
 ///
-/// Generic over [`FileSystem`] for the two verbs that place or read a governed output on
-/// disk ([`SpecCommand::Render`], [`SpecCommand::Freshness`]) -- see `run::render` and
-/// `run::freshness`'s own documentation for why those two, and not the other seven, earned
-/// that seam. Every other variant ignores `filesystem` entirely; it is threaded through all
-/// nine here regardless, the same way `nomos_work_orchestration::Run` takes `F`, `C`, `L`
-/// and `P` for every [`nomos_ledger`] verb even the ones that touch none of them, because one
-/// generic `Run` a caller can depend on without also depending on `nomos-platform-std` is
-/// worth more than sparing the seven that do not need `F` a type parameter.
+/// Generic over [`FileSystem`] for the four verbs that place or read a file at a path this
+/// crate does not fully own ([`SpecCommand::Render`], [`SpecCommand::Freshness`],
+/// [`SpecCommand::Preview`], [`SpecCommand::Commit`]) -- see `run::render`, `run::freshness`,
+/// `run::preview` and `run::commit`'s own documentation for why those four, and not the
+/// other five, earned that seam. Every other variant ignores `filesystem` entirely; it is
+/// threaded through all nine here regardless, the same way `nomos_work_orchestration::Run`
+/// takes `F`, `C`, `L` and `P` for every [`nomos_ledger`] verb even the ones that touch none
+/// of them, because one generic `Run` a caller can depend on without also depending on
+/// `nomos-platform-std` is worth more than sparing the five that do not need `F` a type
+/// parameter.
 ///
 /// [`SpecCommand::Profiles`] never assembles a store, matching
-/// [`Profiles`]'s own guarantee. Every other variant assembles one from `request` first --
-/// including the two not yet migrated, so that a caller asking `nomos-spec-orchestration`
-/// for one of them fails on the same store-assembly error a fully migrated verb would,
-/// rather than succeeding vacuously before reaching the part that is not built yet.
+/// [`Profiles`]'s own guarantee. Every other variant assembles one from `request` first, so
+/// a caller asking `nomos-spec-orchestration` for any of them fails on the same
+/// store-assembly error every other verb would rather than a bespoke one.
 #[must_use]
 pub fn Run<F: FileSystem>(command: &SpecCommand, request: &CorpusRequest, filesystem: &F) -> SpecOutcome
 {
@@ -122,8 +127,19 @@ fn Outcome_For<F: FileSystem>(
                 .map_err(nomos_spec_store::EditError::Store)
                 .and_then(|assembly| return Markdown(&assembly, request)),
         ),
-        SpecCommand::Preview(_) => SpecOutcome::Preview(NotYetMigrated),
-        SpecCommand::Commit(_) => SpecOutcome::Commit(NotYetMigrated),
+        SpecCommand::Preview(request) => SpecOutcome::Preview(
+            assembled
+                .map_err(nomos_spec_store::EditError::Store)
+                .map_err(PreviewRefusal::Edit)
+                .and_then(|assembly| return Preview(&assembly, request, filesystem)),
+        ),
+        SpecCommand::Commit(request) => SpecOutcome::Commit(
+            assembled
+                .map_err(nomos_spec_store::EditError::Store)
+                .map_err(PreviewRefusal::Edit)
+                .map_err(CommitRefusal::from)
+                .and_then(|mut assembly| return Commit(&mut assembly, request, filesystem)),
+        ),
         SpecCommand::Profiles => SpecOutcome::Profiles(Profiles()),
     };
 }

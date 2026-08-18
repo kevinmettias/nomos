@@ -22,24 +22,25 @@
 //! [`ExitCode::Absent`] rather than printing nothing and succeeding. See
 //! [`nomos_spec_orchestration::corpus`].
 //!
-//! # What moved to `nomos-spec-orchestration`, and what did not
+//! # What moved to `nomos-spec-orchestration`
 //!
 //! [`SpecCommand`], its six `*Request` types and the corpus-assembly plumbing
 //! ([`Assemble`], [`Assembly`], [`CorpusRequest`]) all moved verbatim to
 //! `nomos-spec-orchestration` — `OD-HOST-002`'s family-9 seam, the same shape
-//! `nomos-check-orchestration` already built for `nomos check`. Seven verbs are wired
-//! through that crate's own [`nomos_spec_orchestration::Run`] so far:
+//! `nomos-check-orchestration` already built for `nomos check`. All nine verbs are wired
+//! through that crate's own [`nomos_spec_orchestration::Run`], built over four increments:
 //! [`SpecCommand::Profiles`] and [`SpecCommand::Sources`] (increment 1);
 //! [`SpecCommand::Record`], [`SpecCommand::Table`] and [`SpecCommand::Markdown`]
-//! (increment 2); and [`SpecCommand::Render`] and [`SpecCommand::Freshness`] (increment 3),
-//! generic over [`nomos_platform::FileSystem`] — see that crate's own documentation for why
-//! those two verbs specifically earned that seam. `spec/verb/{listing,record,table,markdown,
-//! render,freshness}.rs` now delegate their resolution to it and keep only the writing, over
+//! (increment 2); [`SpecCommand::Render`] and [`SpecCommand::Freshness`] (increment 3); and
+//! [`SpecCommand::Preview`] and [`SpecCommand::Commit`] (increment 4) — the last four generic
+//! over [`nomos_platform::FileSystem`], see that crate's own documentation for why those four
+//! specifically earned that seam. `spec/verb/{listing,record,table,markdown,render,freshness,
+//! editing}.rs` all delegate resolution (and, for `render` and `editing::Commit`, writing) to
+//! it and keep only the `ExitCode` a rendering layer is responsible for, over
 //! `nomos_platform_std::StdFileSystem` as the concrete platform this composition root
-//! chooses — the same choice `nomos-cli::work` already makes for the ledger. The other two
-//! verbs (`Preview`, `Commit`) are untouched, still executed by this module's own
-//! [`Dispatch`] exactly as before. [`Note_Absences`] stays here too — it writes text, and
-//! writing is this crate's job, not the orchestration crate's.
+//! chooses — the same choice `nomos-cli::work` already makes for the ledger.
+//! [`Note_Absences`] stays here too — it writes text, and writing text is this crate's job,
+//! not the orchestration crate's.
 
 mod parsing;
 mod reporting;

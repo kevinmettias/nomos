@@ -6,8 +6,10 @@ use nomos_platform_std::StdFileSystem;
 
 use crate::corpus::CorpusRequest;
 use crate::command::SpecCommand;
-use crate::outcome::{FreshnessRefusal, NotYetMigrated, RecordRefusal, RenderRefusal, SpecOutcome, TableRefusal, Verdict};
-use crate::request::{EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest};
+use crate::outcome::{
+    FreshnessRefusal, PreviewRefusal, RecordRefusal, RenderRefusal, Reproduction, SpecOutcome, TableRefusal, Verdict,
+};
+use crate::request::{CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest};
 use crate::run::{Profiles, Run};
 
 /// A corpus request naming no corpus at all, so every test below runs on a machine that
@@ -343,19 +345,119 @@ fn Test_Run_Of_Freshness_Should_Refuse_An_Unexamined_Requirement()
     assert_eq!(only.as_deref(), Some(EMBEDDED_PROFILE));
 }
 
-#[test]
-fn Test_Run_Of_An_Unmigrated_Verb_Should_Answer_Its_Marker()
+/// A governing record, rendered from the store's own rows -- the same bytes
+/// `Run(Markdown, ..)` would answer, fetched here so a preview/commit test can stage an
+/// edited copy of something real rather than an invented fixture.
+fn Governing_Markdown(id: &str) -> String
 {
-    let request = SpecCommand::Preview(EditRequest {
-        id: "D-129".to_owned(),
-        from: PathBuf::from("staged.md"),
-        rename: None,
-    });
+    let outcome = Run(
+        &SpecCommand::Markdown(RecordRequest { id: id.to_owned(), revision: None }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+    let SpecOutcome::Markdown(projection) = outcome
+    else
+    {
+        panic!("Run(Markdown, ..) must answer SpecOutcome::Markdown");
+    };
 
-    let outcome = Run(&request, &No_Corpus(), &StdFileSystem);
+    return projection.expect("a governing record is embedded even with no corpus").markdown;
+}
 
+/// A canonical heading rename -- the same edit
+/// `crates/host/nomos-cli/tests/authoring_surface.rs` stages against a real record on disk,
+/// here staged against a governing record's own embedded copy so this crate's tests need no
+/// corpus and touch no file this repository tracks.
+fn Renamed_Decision_Heading(markdown: &str) -> String
+{
+    return markdown.replace("## Decision", "## The decision");
+}
+
+#[test]
+fn Test_Run_Of_Preview_Should_Describe_A_Staged_Edit_And_Write_Nothing()
+{
+    let edited = Renamed_Decision_Heading(&Governing_Markdown("D-132"));
+    let staged = Scratch("preview").join("staged.md");
+    std::fs::write(&staged, &edited).expect("writes the staged edit");
+
+    let outcome = Run(
+        &SpecCommand::Preview(EditRequest {
+            id: "D-132".to_owned(),
+            from: staged,
+            rename: None,
+        }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+
+    let SpecOutcome::Preview(preview) = outcome
+    else
+    {
+        panic!("Run(Preview, ..) must answer SpecOutcome::Preview");
+    };
+    let preview = preview.expect("a canonical heading rename previews cleanly");
+
+    assert!(preview.Wording_Moved(), "a heading rename must count as wording moved");
+    assert!(preview.Describe().contains("normative wording moved"), "{}", preview.Describe());
+}
+
+#[test]
+fn Test_Run_Of_Preview_Should_Refuse_A_Staged_File_That_Cannot_Be_Read()
+{
+    let missing = PathBuf::from("no-such-staged-file-anywhere.md");
+    let outcome = Run(
+        &SpecCommand::Preview(EditRequest {
+            id: "D-132".to_owned(),
+            from: missing.clone(),
+            rename: None,
+        }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+
+    let SpecOutcome::Preview(Err(PreviewRefusal::Unreadable { path, .. })) = outcome
+    else
+    {
+        panic!("a --from naming nothing must refuse PreviewRefusal::Unreadable");
+    };
+    assert_eq!(path, missing);
+}
+
+#[test]
+fn Test_Run_Of_Commit_Should_Write_The_Record_And_Close_The_Round_Trip()
+{
+    let edited = Renamed_Decision_Heading(&Governing_Markdown("D-132"));
+    let into = Scratch("commit");
+    let staged = into.join("staged.md");
+    std::fs::write(&staged, &edited).expect("writes the staged edit");
+
+    let outcome = Run(
+        &SpecCommand::Commit(CommitRequest {
+            edit: EditRequest {
+                id: "D-132".to_owned(),
+                from: staged,
+                rename: None,
+            },
+            into: into.clone(),
+        }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+
+    let SpecOutcome::Commit(answer) = outcome
+    else
+    {
+        panic!("Run(Commit, ..) must answer SpecOutcome::Commit");
+    };
+    let answer = answer.expect("a canonical heading rename commits cleanly");
+
+    assert_eq!(answer.report.node_id, "D-132");
+    assert!(answer.vacated.is_none(), "this edit did not rename the record's path");
+    let written = std::fs::read_to_string(&answer.destination).expect("the record was written");
+    assert_eq!(written, edited, "the bytes on disk must be exactly what was staged");
     assert!(
-        matches!(outcome, SpecOutcome::Preview(NotYetMigrated)),
-        "Preview has not moved into this crate yet"
+        matches!(answer.reproduction, Ok(Reproduction::Matched { .. })),
+        "the round trip must close: {:?}",
+        answer.reproduction
     );
 }

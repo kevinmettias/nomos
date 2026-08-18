@@ -1,22 +1,32 @@
-//! Previewing an edit and committing one.
+//! Rendering `nomos spec preview`'s and `nomos spec commit`'s answers, or the refusal saying
+//! why one has none.
+//!
+//! Staging the edit, checking it against the store and -- for a commit -- applying the
+//! transaction and writing its bytes where the record belongs is
+//! `nomos-spec-orchestration::{Preview, Commit}`'s job now, through
+//! `nomos-platform-std::StdFileSystem` -- the same composition-root choice `nomos-cli::work`
+//! already makes for the ledger. This module keeps only the writing of *text about* what
+//! happened and the `ExitCode` a rendering layer is responsible for.
 
 use crate::spec::{Assembly, EditRequest, Channels, ExitCode, EPHEMERAL, CommitRequest, EditPreview, CommitReport, Path, EditError, Absent_Or};
+use nomos_platform::FileSystemError;
+use nomos_platform_std::StdFileSystem;
+use nomos_spec_orchestration::{CommitAnswer, CommitRefusal, PreviewRefusal, Reproduction, VacateOutcome, Vacated};
 
 /// The preview, printed, changing nothing.
 pub(in crate::spec) fn Preview(assembly: &Assembly, request: &EditRequest, channels: &mut Channels<'_>) -> ExitCode
 {
-    let staged = match Staged_Text(&request.from, channels.notes)
+    return match nomos_spec_orchestration::Preview(assembly, request, &StdFileSystem)
     {
-        Ok(text) => text,
-        Err(code) => return code,
+        Ok(preview) => Described(&preview, channels),
+        Err(PreviewRefusal::Unreadable { path, error }) => Unreadable(&path, &error, channels.notes),
+        Err(PreviewRefusal::Edit(error)) => Report_Edit_Error(assembly, &error, channels.notes),
     };
+}
 
-    let preview = match Previewed(assembly, request, &staged, channels.notes)
-    {
-        Ok(preview) => preview,
-        Err(code) => return code,
-    };
-
+/// What committing this edit would change, printed, with nothing yet written.
+fn Described(preview: &EditPreview, channels: &mut Channels<'_>) -> ExitCode
+{
     let _ = writeln!(channels.output, "{}", preview.Describe());
     let _ = writeln!(channels.notes, "nothing was written. {EPHEMERAL}");
 
@@ -30,64 +40,68 @@ pub(in crate::spec) fn Commit(
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let text = match Staged_Text(&request.edit.from, channels.notes)
+    return match nomos_spec_orchestration::Commit(assembly, request, &StdFileSystem)
     {
-        Ok(text) => text,
-        Err(code) => return code,
-    };
+        Ok(answer) => Reported(assembly, &answer, channels),
+        Err(CommitRefusal::Unreadable { path, error }) => Unreadable(&path, &error, channels.notes),
+        Err(CommitRefusal::Edit(error)) => Report_Edit_Error(assembly, &error, channels.notes),
+        Err(CommitRefusal::Refused { preview, error }) => Refused(assembly, &preview, &error, channels),
+        Err(CommitRefusal::Unwritable { preview, report: _, path, error }) =>
+        {
+            let _ = writeln!(channels.output, "{}", preview.Describe());
 
-    let preview = match Previewed(assembly, &request.edit, &text, channels.notes)
-    {
-        Ok(preview) => preview,
-        Err(code) => return code,
+            Unwritable(&path, &error, channels.notes)
+        }
     };
+}
+
+/// An edit that previewed cleanly, printed, ahead of the store's own refusal to commit it.
+///
+/// The preview is shown regardless: an author who has already seen what their edit would
+/// change should not lose that view because the store found a reason, after the fact, not to
+/// apply it.
+fn Refused(assembly: &Assembly, preview: &EditPreview, error: &EditError, channels: &mut Channels<'_>) -> ExitCode
+{
     let _ = writeln!(channels.output, "{}", preview.Describe());
 
-    return Committed(assembly, &Staged { preview, text }, request, channels);
+    return Report_Edit_Error(assembly, error, channels.notes);
 }
 
-/// An edit the store has already checked, and the bytes it was checked against.
-///
-/// The two travel together because the preview is what proves the edit admissible and the
-/// text is what lands on disk, and writing one without the other is the half-done commit
-/// this surface exists to prevent.
-pub(super) struct Staged
+/// What committing changed, once the store accepted the transaction and its bytes landed.
+fn Reported(assembly: &Assembly, answer: &CommitAnswer, channels: &mut Channels<'_>) -> ExitCode
 {
-    /// The edit as the store checked it.
-    preview: EditPreview,
-    /// The bytes that were staged.
-    text: String,
-}
-
-/// The edit written where the author expects it, and the round trip closed behind it.
-pub(super) fn Committed(
-    assembly: &mut Assembly,
-    staged: &Staged,
-    request: &CommitRequest,
-    channels: &mut Channels<'_>,
-) -> ExitCode
-{
-    let renamed = staged.preview.Rename().map(|(before, _)| return before.to_owned());
-    let report = match assembly.store.Commit_Edit(&staged.preview)
+    let _ = writeln!(channels.output, "{}", answer.preview.Describe());
+    Report_Commit(&answer.report, channels.output);
+    if let Some(vacated) = &answer.vacated
     {
-        Ok(report) => report,
-        Err(error) => return Report_Edit_Error(assembly, &error, channels.notes),
-    };
-
-    let destination = request.into.join(&report.path);
-    let vacated = renamed.map(|path| return request.into.join(path));
-    if let Some(code) = Written(&destination, &staged.text, vacated.as_deref(), channels)
-    {
-        return code;
+        Report_Vacated(vacated, channels);
     }
+    let _ = writeln!(channels.notes, "{EPHEMERAL}");
 
-    Report_Commit(&report, channels.output);
+    return match &answer.reproduction
+    {
+        Ok(Reproduction::Matched { hash }) =>
+        {
+            let _ = writeln!(channels.output, "the store renders it back as the same bytes ({hash})");
 
-    return Reproduced(assembly, &request.edit.id, &staged.text, channels);
+            ExitCode::Ok
+        }
+        Ok(Reproduction::Mismatched { hash }) =>
+        {
+            let _ = writeln!(
+                channels.notes,
+                "the commit succeeded and the store renders {hash} rather than what was \
+                 committed, so the round trip does not close here"
+            );
+
+            ExitCode::Stale
+        }
+        Err(error) => Report_Edit_Error(assembly, error, channels.notes),
+    };
 }
 
 /// What the commit changed, counted.
-pub(super) fn Report_Commit(report: &CommitReport, output: &mut dyn std::io::Write)
+fn Report_Commit(report: &CommitReport, output: &mut dyn std::io::Write)
 {
     let _ = writeln!(
         output,
@@ -101,137 +115,42 @@ pub(super) fn Report_Commit(report: &CommitReport, output: &mut dyn std::io::Wri
     );
 }
 
-/// Writes the committed record where the author expects it, and vacates the path a rename
-/// left.
-///
-/// Deleting the old file is part of the rename rather than left to the author: two files
-/// declaring one identifier is what `Test_Every_Canonical_Record_On_Disk_Should_Be_Governing`
-/// would report as a phantom record, and a rename that needs a follow-up step is a rename
-/// somebody will half-do.
-pub(super) fn Written(
-    destination: &Path,
-    staged: &str,
-    vacated: Option<&Path>,
-    channels: &mut Channels<'_>,
-) -> Option<ExitCode>
-{
-    if let Some(code) = Placed(destination, staged, channels.notes)
-    {
-        return Some(code);
-    }
-
-    if let Some(old) = vacated
-    {
-        Vacated(destination, old, channels);
-    }
-
-    return None;
-}
-
-/// The record's own bytes, under a directory that is made if it is not there.
-pub(in crate::spec) fn Placed(destination: &Path, staged: &str, notes: &mut dyn std::io::Write) -> Option<ExitCode>
-{
-    if let Some(parent) = destination.parent()
-        && let Err(error) = std::fs::create_dir_all(parent)
-    {
-        let _ = writeln!(notes, "cannot create {}: {error}", parent.display());
-
-        return Some(ExitCode::Unwritable);
-    }
-
-    if let Err(error) = std::fs::write(destination, staged)
-    {
-        let _ = writeln!(notes, "cannot write {}: {error}", destination.display());
-
-        return Some(ExitCode::Unwritable);
-    }
-
-    return None;
-}
-
-/// The path a rename left behind, removed.
+/// The path a rename vacated, reported as whatever became of removing it.
 ///
 /// A failure here is reported and not fatal: the new file is already written, so the run
 /// succeeded at the edit and failed at the tidying, and saying so is more use than an exit
 /// code that suggests nothing landed.
-pub(super) fn Vacated(destination: &Path, old: &Path, channels: &mut Channels<'_>)
+fn Report_Vacated(vacated: &Vacated, channels: &mut Channels<'_>)
 {
-    match std::fs::remove_file(old)
+    match &vacated.outcome
     {
-        Ok(()) => drop(writeln!(channels.output, "vacated {}", old.display())),
-        Err(error) if error.kind() == std::io::ErrorKind::NotFound => (),
-        Err(error) => drop(writeln!(
-            channels.notes,
-            "{} was written and {} could not be removed ({error}), so two files now declare \
-             this record",
-            destination.display(),
-            old.display()
-        )),
+        VacateOutcome::Removed =>
+        {
+            let _ = writeln!(channels.output, "vacated {}", vacated.path.display());
+        }
+        VacateOutcome::AlreadyGone => (),
+        VacateOutcome::Failed(message) =>
+        {
+            let _ = writeln!(channels.notes, "{message}");
+        }
     }
 }
 
-/// The round trip, closed on the way out: the store is asked to render what was just
-/// committed, and the answer is compared with it.
-pub(super) fn Reproduced(
-    assembly: &Assembly,
-    id: &str,
-    staged: &str,
-    channels: &mut Channels<'_>,
-) -> ExitCode
+/// `--from` named a file this build could not read.
+fn Unreadable(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
 {
-    let _ = writeln!(channels.notes, "{EPHEMERAL}");
+    let _ = writeln!(notes, "cannot read {}: {error}", path.display());
 
-    return match assembly.store.Record_Markdown(id, None)
-    {
-        Ok(projection) if projection.markdown == staged =>
-        {
-            let _ = writeln!(
-                channels.output,
-                "the store renders it back as the same bytes ({})",
-                projection.projected_hash
-            );
-
-            ExitCode::Ok
-        }
-        Ok(projection) =>
-        {
-            let _ = writeln!(
-                channels.notes,
-                "the commit succeeded and the store renders {} rather than what was committed, \
-                 so the round trip does not close here",
-                projection.projected_hash
-            );
-
-            ExitCode::Stale
-        }
-        Err(error) => Report_Edit_Error(assembly, &error, channels.notes),
-    };
+    return ExitCode::Usage;
 }
 
-pub(super) fn Staged_Text(from: &Path, notes: &mut dyn std::io::Write) -> Result<String, ExitCode>
+/// The store accepted the transaction and its bytes could not be written where the record
+/// belongs.
+fn Unwritable(path: &Path, error: &FileSystemError, notes: &mut dyn std::io::Write) -> ExitCode
 {
-    return std::fs::read_to_string(from).map_err(|error| {
-        let _ = writeln!(notes, "cannot read {}: {error}", from.display());
+    let _ = writeln!(notes, "cannot write {}: {error}", path.display());
 
-        return ExitCode::Usage;
-    });
-}
-
-pub(super) fn Previewed(
-    assembly: &Assembly,
-    request: &EditRequest,
-    staged: &str,
-    notes: &mut dyn std::io::Write,
-) -> Result<EditPreview, ExitCode>
-{
-    let rename = request.rename.as_deref();
-
-    return assembly
-        .store
-        .Claim_For_Edit(&request.id, None)
-        .and_then(|claimed| return claimed.Stage(staged, rename))
-        .and_then(|edit| return edit.Preview(&assembly.store))
-        .map_err(|error| return Report_Edit_Error(assembly, &error, notes));
+    return ExitCode::Unwritable;
 }
 
 /// The code an authoring refusal reports.
