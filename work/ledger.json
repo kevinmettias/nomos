@@ -15716,6 +15716,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ADD-PLUGIN-SKILL",
+      "title": "Adding a second provider, capability, package format or rule has no worked recipe, only a git diff to reverse-engineer",
+      "why": "Investigating what infrastructure a second language provider or second rule would need (OD-PACKAGE-007's split) found the mechanics -- what a provider crate exports (PROVIDER, Declared_Guarantee, Provider_Offer, Materialize), where it gets composed into a real Registry (nomos-check-orchestration::composition::Registered, not only tests/integration's test-only duplicate), how OD-HOST-004 lets a second rule join with one more unconditional call in Run() -- exist only as OD-HOST-004's prose and nomos-lang-rust-scan's own introducing diff. Nothing routes a contributor to either; the only way to get the recipe today is to reverse-engineer a git diff. This is exactly the kind of reusable multi-step procedure CLAUDE.md says earns a skill, matching nomos-task and nomos-spec-change's existing shape.",
+      "done_when": ".claude/skills/nomos-add-plugin/SKILL.md exists, discoverable, covering: (1) a second provider of an existing capability -- the four exported convention functions, band placement, and which composition root (nomos-check-orchestration vs tests/integration's test-only duplicate) actually needs the new Registry::Offer line; (2) a capability contract that does not exist yet -- pull it below every provider before a second one needs it, not after; (3) a second rule -- same crate, same function shape, one more unconditional call in Run() per OD-HOST-004, and the point at which that stops being true; (4) a second language's package manifest -- depend on nomos-package directly per OD-PACKAGE-007, never on nomos-lang-package. Every path and symbol the skill names is real (cargo test -p nomos-contract-tests --test agent_harness verifies this structurally), and the skill cites governing records for why rather than re-arguing their reasoning, per OD-AGENT-003.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking ... ok\ntest checks::Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest checks::Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest checks::Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest checks::Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest checks::Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference ... ok\ntest checks::Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Gate_Command_List ... ok\ntest checks::Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03bb3b77a304179f.exe)\n",
+        "verified_at": 1787095029,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "47152e326c821e5ce66cac4a79d57eb6db1597d1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
