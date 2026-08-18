@@ -13290,7 +13290,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -13306,7 +13306,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "--test",
+          "projections"
+        ],
+        "exit_code": 0,
+        "output_tail": "A_Changed_Store_Should_Be_Stale ... ok\ntest freshness::Test_An_Unchanged_Store_Should_Be_Fresh ... ok\ntest determinism::Test_Every_Body_Should_Be_Lf_Utf8_Without_A_Bom ... ok\ntest subjects::Test_A_Whole_Store_Profile_Should_Render_Exactly_What_It_Did_Before ... ok\ntest subjects::Test_An_Identity_Should_Select_One_Node_Where_A_Prefix_Selects_Two ... ok\ntest freshness::Test_The_Sidecar_Should_Round_Trip ... ok\ntest freshness::Test_An_Output_That_Was_Never_Built_Should_Be_Absent ... ok\ntest freshness::Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused ... ok\ntest freshness::Test_An_Edited_Output_Should_Be_Reported_As_Edited ... ok\ntest determinism::Test_Every_Body_Should_Declare_Itself_Generated ... ok\ntest determinism::Test_No_Body_Should_Carry_This_Machine ... ok\ntest catalogue::Test_Every_Shipped_Profile_Should_Render_Content_From_The_Store ... ok\ntest determinism::Test_A_Rebuild_Should_Be_Byte_Identical ... ok\ntest subjects::Test_An_Unresolved_Template_Should_Not_Be_Built ... ok\ntest subjects::Test_One_Profile_Should_Serve_Every_Subject ... ok\ntest subjects::Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format ... ok\ntest determinism::Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original ... ok\ntest determinism::Test_Insertion_Order_Should_Not_Reach_The_Output ... ok\ntest rebuildability::Test_A_Seeded_Store_Should_Answer_For_Exactly_The_Declared_Content_Kinds ... ok\ntest rebuildability::Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store ... ok\ntest rebuildability::Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content ... ok\ntest renderers::Test_The_Governing_Records_Should_Project_As_A_Document_Suite ... ok\n\ntest result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.26s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\projections\\main.rs (target\\debug\\deps\\projections-91a00061d9a9372a.exe)\n",
+        "verified_at": 1787011996,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1f00bc14048b398ee7d4bc0a8235cf82523acef3"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
