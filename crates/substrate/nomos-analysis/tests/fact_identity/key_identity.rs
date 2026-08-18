@@ -13,6 +13,42 @@ fn Fact_From(key: &FactKey, snapshot: SnapshotId) -> MaterializedFact
     return fact;
 }
 
+/// `Component::All()`'s own mirror, named in the doc comment above it.
+///
+/// The match has no wildcard arm. A variant added to `Component` without a matching arm
+/// added here fails this file to *compile*, not merely to pass — the property D-134 asks a
+/// closed enum's mirror to have.
+#[test]
+fn Test_Every_Component_Should_Be_Matched_Exhaustively()
+{
+    fn Ordinal(component: Component) -> usize
+    {
+        return match component
+        {
+            Component::Contract => 0,
+            Component::ContractVersion => 1,
+            Component::Subject => 2,
+            Component::SemanticInputs => 3,
+            Component::Provider => 4,
+            Component::ProviderVersion => 5,
+            Component::Guarantee => 6,
+            Component::Variant => 7,
+            Component::Configuration => 8,
+        };
+    }
+
+    for (index, component) in Component::All().iter().enumerate()
+    {
+        assert_eq!(
+            Ordinal(*component),
+            index,
+            "{} is not matched at the position Component::All() puts it, so the exhaustive \
+             match and the universe have drifted apart",
+            component.Label()
+        );
+    }
+}
+
 #[test]
 fn Test_The_Component_List_Should_Cover_Every_Part_Of_The_Key()
 {

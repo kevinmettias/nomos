@@ -14343,6 +14343,70 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-COMPONENT-ALL-MIRROR",
+      "title": "Component::All is a declared universe with no mirror, and D-134 prices exactly this gap",
+      "why": "D-134's own consequences section says an unmirrored universe 'makes each one a line of output with a named risk instead of a silence' rather than closing it outright, and tests/contract/tests/completeness_universes/table.rs already classifies crates/substrate/nomos-analysis/src/component.rs's Component::All (9 variants) as Standing::Unmirrored with a stated risk ('a component added without adding it here is left out of fact identity, and OD-ANALYSIS-001 makes that a reuse defect'). Component is a closed enum, so its reality is a compile-time property: an exhaustive match with no wildcard arm is a real mirror in D-134's sense (compares the declaration against what it claims to enumerate), the same shape crates/substrate/nomos-ledger/src/item/tests.rs already uses for a similar enum, and RowKind::Label's own match at crates/spec/nomos-spec-model/src/table/row_kind.rs is already exhaustive without a wildcard as a working local precedent for the pattern.",
+      "done_when": "component.rs declares its mirror at the site in a doc comment above Component::All (the 'Mirrored by TestName' idiom D-134 established, e.g. as seen above DECLARED_RULES in crates/spec/nomos-spec-validate/src/run.rs). A real test (in component.rs itself as a unit test, or in crates/substrate/nomos-analysis/tests/fact_identity/key_identity.rs alongside the file's existing Component::All usages -- whichever fits the crate's existing test organization) exhaustively matches every Component variant with no wildcard arm, so the test fails to compile if a variant is added to the enum without being added to the match. tests/contract/tests/completeness_universes/table.rs's Component::All row changes from Standing::Unmirrored to Standing::Mirrored { by: \"<the new test's name>\" } and UNMIRRORED_TOTAL is decremented from 13 to 12 to match. cargo test -p nomos-contract-tests --test completeness_universes and cargo test -p nomos-analysis both pass; nomos check no longer reports Component::All as an advisory finding.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/component.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/key_identity.rs",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest hole_size::Test_Some_Universes_Should_Actually_Be_Mirrored ... ok\ntest hole_size::Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared ... ok\ntest hole_size::Test_The_Three_Instances_Should_Have_Failed_This_Check ... ok\ntest mirrors::Test_Every_Named_Mirror_Should_Exist_In_The_Source ... ok\ntest derivation::Test_The_Declared_Table_Should_Match_What_Is_Derived ... ok\ntest claims::Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.43s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-15739aa19297e553.exe)\n",
+        "verified_at": 1787036523,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ce67c9e7a1829fe693d0dab6c1532657bacff592"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

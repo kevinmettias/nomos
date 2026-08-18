@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 13;
+pub(crate) const UNMIRRORED_TOTAL: usize = 12;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -185,9 +185,8 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/substrate/nomos-analysis/src/component.rs",
         name: "Component::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a component added without adding it here is left out of fact identity, \
-                   and OD-ANALYSIS-001 makes that a reuse defect",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Component_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {
