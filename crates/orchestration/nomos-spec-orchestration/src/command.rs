@@ -1,14 +1,18 @@
 //! Every verb `nomos spec` answers.
+//!
+//! Moved verbatim from `nomos-cli::spec::command`, the same way `nomos_check_orchestration
+//! ::CheckCommand` moved from `nomos-cli::check::command`: a second adapter wanting this
+//! vocabulary previously had to depend on `nomos-cli` itself to get it.
 
-use crate::spec::request::CommitRequest;
-use crate::spec::request::EditRequest;
-use crate::spec::request::FreshnessRequest;
-use crate::spec::request::RenderRequest;
-use crate::spec::request::TableRequest;
-use crate::spec::request::RecordRequest;
+use crate::request::CommitRequest;
+use crate::request::EditRequest;
+use crate::request::FreshnessRequest;
+use crate::request::RenderRequest;
+use crate::request::TableRequest;
+use crate::request::RecordRequest;
 /// What to read.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) enum SpecCommand
+pub enum SpecCommand
 {
     /// Print a record's source, byte for byte.
     Record(RecordRequest),

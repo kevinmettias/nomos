@@ -80,6 +80,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // Same band as `nomos-work-orchestration`: both are the middle of a three-crate seam
     // between a composition root and the substrate it orchestrates. `OD-HOST-002`.
     ("nomos-check-orchestration", 40),
+    // Assembles the specification store from the embedded governing records and a
+    // caller-named corpus, and answers the `SpecCommand` verbs that touch no store or
+    // only describe one, apart from choosing a platform or rendering the answer. Same
+    // band as its two siblings above: the middle of a three-crate seam, increment 1 of 4
+    // closing family 9's `SpecCommand` half. `OD-HOST-002`.
+    ("nomos-spec-orchestration", 40),
     ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.

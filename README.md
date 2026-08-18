@@ -49,6 +49,7 @@ band, and `tests/contract` asserts it.
 | 35 | `nomos-corrections` | `CorrectionCandidate`, `CorrectionPlan`, and the deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change. No agent, no model backend. |
 | 40 | `nomos-work-orchestration` | Runs a `nomos work` verb against a caller-chosen platform and hands back a typed outcome — generic over `nomos-platform`'s traits, so a second adapter can depend on it without also depending on `nomos-platform-std` or on how `nomos-cli` renders an answer. |
 | 40 | `nomos-check-orchestration` | Composes the capability registry, ingests already-walked source into facts and judges it, and hands back a typed outcome — apart from choosing a platform, walking a tree or rendering the answer. |
+| 40 | `nomos-spec-orchestration` | Assembles the specification store from the embedded governing records and a caller-named corpus, and hands back typed outcomes for the `SpecCommand` verbs that touch no store or only describe one — apart from choosing a platform or rendering the answer. Increment 1 of 4 closing family 9's `SpecCommand` half; the other seven verbs still execute inside `nomos-cli`. |
 | 90 | `nomos-cli` | The `nomos` binary. |
 | 100 | `nomos-contract-tests` | The assertions in `tests/contract`. Observes the workspace; nothing observes it. |
 | 100 | `nomos-integration-tests` | The vertical slice, driving the product through its seams. Its peer, not its layer. |

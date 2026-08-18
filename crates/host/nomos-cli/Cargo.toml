@@ -48,12 +48,16 @@ nomos-work-orchestration = { workspace = true }
 # tree and renders; this crate composes and judges, over source and a build variant this
 # crate hands it as values. `OD-HOST-002`.
 nomos-check-orchestration = { workspace = true }
+# The seam between the `SpecCommand` vocabulary, the shared corpus-assembly plumbing every
+# spec verb needs, and the two verbs that touch no store or only describe one --
+# `spec.rs` still parses, assembles and dispatches the other seven verbs on its own, over a
+# store this crate hands it as a value. `OD-HOST-002`.
+nomos-spec-orchestration = { workspace = true }
 # The specification system. A composition root is the only place permitted to name
 # these: the spec crates sit beside the kernel rather than above it, and nothing in the
-# product may reach them directly.
-nomos-spec-ingest = { workspace = true }
-# The submission type `request.rs` constructs: `nomos-spec-store` re-exports the accept
-# function but not the value it accepts, because the store does not own what a submission is.
+# product may reach them directly. The submission type `request.rs` constructs comes from
+# `nomos-spec-model`: `nomos-spec-store` re-exports the accept function but not the value
+# it accepts, because the store does not own what a submission is.
 nomos-spec-model = { workspace = true }
 nomos-spec-project = { workspace = true }
 nomos-spec-store = { workspace = true }

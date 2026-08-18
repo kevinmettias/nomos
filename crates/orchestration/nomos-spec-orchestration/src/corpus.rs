@@ -16,6 +16,11 @@
 //! read nothing because a check that cannot find its subject returned early instead of
 //! saying so. A read command that prints an empty table for a corpus it never had is the
 //! same defect wearing a different hat.
+//!
+//! Moved verbatim from `nomos-cli::corpus` — every command in `nomos-cli::spec` needed
+//! this assembly, so a second adapter wanting a `SpecificationStore` had to reimplement it
+//! rather than call it. `main.rs`, `request.rs` and `vacuity.rs`'s own uses of it moved
+//! with it, importing from here instead of from a module `nomos-cli` no longer has.
 
 mod roots;
 mod volumes;
@@ -30,9 +35,9 @@ mod absence;
 mod request;
 mod assembly;
 
-pub(crate) use absence::Absence;
-pub(crate) use request::CorpusRequest;
-pub(crate) use assembly::Assembly;
+pub use absence::Absence;
+pub use request::CorpusRequest;
+pub use assembly::Assembly;
 
 use nomos_spec_ingest::{
     Ingest_Catalog, Ingest_Source_Document, Ingest_Statements, IngestError, Parse_Catalog, Parse_Statements,
@@ -53,7 +58,7 @@ use std::path::{Path, PathBuf};
 /// Returns [`StoreError`] if the database cannot be opened or the embedded records cannot
 /// be seeded. A corpus that cannot be read is not an error: it is an absence, because the
 /// commands over this store still have a true answer to give without it.
-pub(crate) fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
+pub fn Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
 {
     use roots::Corpus_Root;
     use volumes::Ingest_Volumes;

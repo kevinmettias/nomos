@@ -3,7 +3,7 @@
 use std::path::PathBuf;
 /// Which projection is being built, and where it lands.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct RenderRequest
+pub struct RenderRequest
 {
     /// A shipped profile identifier.
     pub profile: String,

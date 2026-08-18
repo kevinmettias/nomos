@@ -3,7 +3,7 @@
 use crate::corpus::Absence;
 use nomos_spec_store::SpecificationStore;
 /// A store, what went into it, and what did not.
-pub(crate) struct Assembly
+pub struct Assembly
 {
     pub store: SpecificationStore,
     /// One line per input that was read, in the order it was read.

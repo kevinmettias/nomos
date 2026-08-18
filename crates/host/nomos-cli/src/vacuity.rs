@@ -193,10 +193,10 @@ mod tests
             "OD-GATE-003-VACUITY-GUARD-TEST-NONEXISTENT".to_owned(),
         ];
         let command = crate::spec::Parse(&arguments).expect("parses");
-        let request = crate::corpus::CorpusRequest {
+        let request = nomos_spec_orchestration::corpus::CorpusRequest {
             variable: "NOMOS_VACUITY_GUARD_TEST_CORPUS_UNSET".to_owned(),
             root: None,
-            revision: crate::corpus::DEFAULT_REVISION.to_owned(),
+            revision: nomos_spec_orchestration::corpus::DEFAULT_REVISION.to_owned(),
         };
         let mut output = Vec::new();
         let mut notes = Vec::new();

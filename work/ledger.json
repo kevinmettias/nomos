@@ -13524,6 +13524,73 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SPEC-ORCHESTRATION-1",
+      "title": "OD-HOST-002's family-9 SpecCommand half gets its crate, starting with the two verbs that mutate nothing",
+      "why": "OD-HOST-002 names SpecCommand as still parsed and executed directly inside nomos-cli, with no orchestration crate the way WorkCommand and now CheckCommand have one. This is increment 1 of 4 closing that gap: it creates crates/orchestration/nomos-spec-orchestration at band 40, moves SpecCommand and its Request vocabulary verbatim, relocates the shared corpus-assembly plumbing (corpus::Assemble and its supporting modules) that every spec verb needs, and wires through only the two verbs that mutate nothing -- Profiles and Sources. The other seven verbs (Record, Table, Render, Freshness, Markdown, Preview, Commit) stay exactly as they are today, called directly by nomos-cli, and are explicitly out of scope: three future increments migrate them.",
+      "done_when": "crates/orchestration/nomos-spec-orchestration exists at band 40: SpecCommand (moved verbatim from spec/command.rs) and its six *Request structs (moved verbatim from spec/request/*.rs); the corpus module (Assemble, Assembly, Absence, CorpusRequest, DEFAULT_REVISION and its roots/volumes/layer plumbing) moved verbatim from nomos-cli's corpus.rs, made pub for cross-crate use; a SpecOutcome enum with one variant per SpecCommand variant, where only Profiles(Result<Vec<Profile>, ProjectError>) and Sources(Result<SourcesAnswer, StoreError>) carry real computed data and the other seven carry an explicit not-yet-migrated marker; and Profiles()/Sources(&Assembly)/Run(&SpecCommand, &CorpusRequest) functions. nomos-cli::spec keeps its exact Run/Dispatch control flow and Note_Absences (a rendering function, stays local per the check-orchestration precedent of not moving rendering), but spec/verb/listing.rs's Profiles and Sources bodies delegate their computation to the new crate and keep only text formatting and ExitCode mapping locally; main.rs, request.rs and vacuity.rs switch their corpus:: imports to the new crate's since nomos-cli's own corpus.rs is deleted. The other seven SpecCommand verbs are untouched, still calling their original spec/verb/*.rs functions directly. Cargo.toml, README.md and tests/contract/tests/boundaries/bands.rs gain the new crate's band-40 row; tests/contract/surface gains its blessed snapshot.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-spec-orchestration",
+          "crates/host/nomos-cli",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/surface",
+          "tests/contract/tests/boundaries/bands.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "s.rs (target\\debug\\deps\\add_guarantees_what_it_says-b807b92917ea5a90.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-12fcb2463df10309.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-85314c8424527d78.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-6b1de4283d6bd332.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-4d443c49e72464da.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-0b475c684cede024.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-360f8a7d85772bf5.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-89427fd544ce8b86.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-26349ba75bdf562d.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-47fff7b728e96c28.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_orchestration-40ab8b05332daaee.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_orchestration\n",
+        "verified_at": 1787014606,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e83c6f8c96eaf3b38e7be4a659836c8f72245b9f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

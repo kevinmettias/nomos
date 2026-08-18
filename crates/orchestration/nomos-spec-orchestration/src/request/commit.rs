@@ -1,10 +1,10 @@
 //! What `nomos spec commit` was asked for.
 
 use std::path::PathBuf;
-use crate::spec::request::EditRequest;
+use crate::request::EditRequest;
 /// An edit, and the tree its record's own path is written under.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct CommitRequest
+pub struct CommitRequest
 {
     /// What is being committed.
     pub edit: EditRequest,

@@ -55,6 +55,11 @@ members = [
     # walking a tree or rendering the answer. `OD-HOST-002`.
     "crates/orchestration/nomos-check-orchestration",
 
+    # Band 40 — orchestration. Assembling the specification store from the embedded
+    # governing records and a caller-named corpus, and answering what it holds, apart
+    # from choosing a platform or rendering the answer. `OD-HOST-002`.
+    "crates/orchestration/nomos-spec-orchestration",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -110,6 +115,7 @@ nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
 nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
+nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

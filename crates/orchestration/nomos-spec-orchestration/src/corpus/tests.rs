@@ -68,7 +68,7 @@ fn Test_A_Corpus_Pointed_At_Nothing_Should_Name_The_Path_It_Was_Pointed_At()
 #[test]
 fn Test_An_Empty_Corpus_Root_Should_Account_For_Each_Input_Separately()
 {
-    let root = std::env::temp_dir().join("nomos-cli-empty-corpus-root");
+    let root = std::env::temp_dir().join("nomos-spec-orchestration-empty-corpus-root");
     std::fs::create_dir_all(&root).expect("creates");
 
     let assembly = Assemble(&Request(Some(root))).expect("assembles");
@@ -106,7 +106,7 @@ fn Test_A_Readable_Volume_Should_Reach_The_Store_And_Not_Be_Reported_Absent()
 /// One readable domain volume, carrying a table so the store has rows to hold.
 fn A_Corpus_With_One_Volume() -> std::path::PathBuf
 {
-    let root = std::env::temp_dir().join("nomos-cli-one-volume-corpus");
+    let root = std::env::temp_dir().join("nomos-spec-orchestration-one-volume-corpus");
     let volumes = root.join(DOMAIN_VOLUMES);
     std::fs::create_dir_all(&volumes).expect("creates");
     std::fs::write(

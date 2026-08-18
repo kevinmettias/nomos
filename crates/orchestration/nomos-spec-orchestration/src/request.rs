@@ -6,6 +6,9 @@
 //!
 //! Grouped rather than flat because these six were the largest single thing at this level
 //! and they are all the same thing: the argument shape of one subcommand.
+//!
+//! Moved verbatim from `nomos-cli::spec::request`, alongside [`crate::command::SpecCommand`]
+//! that carries them.
 
 mod commit;
 mod edit;
@@ -14,9 +17,9 @@ mod record;
 mod render;
 mod table;
 
-pub(crate) use commit::CommitRequest;
-pub(crate) use edit::EditRequest;
-pub(crate) use freshness::FreshnessRequest;
-pub(crate) use record::RecordRequest;
-pub(crate) use render::RenderRequest;
-pub(crate) use table::TableRequest;
+pub use commit::CommitRequest;
+pub use edit::EditRequest;
+pub use freshness::FreshnessRequest;
+pub use record::RecordRequest;
+pub use render::RenderRequest;
+pub use table::TableRequest;

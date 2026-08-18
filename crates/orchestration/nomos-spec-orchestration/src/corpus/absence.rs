@@ -6,7 +6,7 @@
 /// discover the variable's name, the path, and what is missing from the answer they just
 /// received — and the last of those is the one they will not think to ask about.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub(crate) struct Absence
+pub struct Absence
 {
     /// What is missing, as a person would name it.
     pub subject: String,

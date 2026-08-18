@@ -19,7 +19,7 @@
 //! will not exist a moment later, is still a true stamp of what this store held.
 
 use crate::arguments::{Named_Value, Named_Values, Required};
-use crate::corpus::{Assemble, Assembly, CorpusRequest};
+use nomos_spec_orchestration::corpus::{Assemble, Assembly, CorpusRequest};
 
 use nomos_spec_model::{
     DecisionGap, FieldValue, Origin, Severity, Submission, SubmissionKind, SubmissionState,

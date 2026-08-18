@@ -1,6 +1,10 @@
 //! What this build can render, and what it was assembled from.
+//!
+//! `Profiles` and `Sources` compute nothing themselves any more -- both delegate to
+//! `nomos-spec-orchestration`, `OD-HOST-002`'s family-9 seam, and keep only the text
+//! formatting and the `ExitCode` a rendering layer is responsible for.
 
-use crate::spec::{Assembly, ExitCode, ProjectError, Channels, Catalogue, Report_Project_Error, Profile};
+use crate::spec::{Assembly, ExitCode, ProjectError, Channels, Report_Project_Error, Profile};
 
 /// A section that selected nothing, as the projection machinery reported it.
 pub(in crate::spec) struct EmptySection<'a>
@@ -50,13 +54,13 @@ pub(in crate::spec) fn Empty_Section(
 
 pub(in crate::spec) fn Profiles(channels: &mut Channels<'_>) -> ExitCode
 {
-    let catalogue = match Catalogue::Shipped()
+    let profiles = match nomos_spec_orchestration::Profiles()
     {
-        Ok(catalogue) => catalogue,
+        Ok(profiles) => profiles,
         Err(error) => return Report_Project_Error(&error, channels.notes),
     };
 
-    for profile in catalogue.Profiles()
+    for profile in &profiles
     {
         let _ = writeln!(
             channels.output,
@@ -87,23 +91,25 @@ pub(super) fn Sections(profile: &Profile) -> String
 /// description: a script can ask whether the store it is about to read is whole.
 pub(in crate::spec) fn Sources(assembly: &Assembly, output: &mut dyn std::io::Write) -> ExitCode
 {
-    for line in &assembly.read
+    let answer = nomos_spec_orchestration::Sources(assembly);
+
+    for line in &answer.read
     {
         let _ = writeln!(output, "read: {line}");
     }
 
-    if assembly.Is_Complete()
+    if answer.Is_Complete()
     {
         let _ = writeln!(output, "nothing this store expects is missing");
 
         return ExitCode::Ok;
     }
 
-    let _ = writeln!(output, "{}", assembly.Describe_Absences());
+    let _ = writeln!(output, "{}", answer.Describe_Absences());
     let _ = writeln!(
         output,
         "{} of this store's sources were not read",
-        assembly.absent.len()
+        answer.absent.len()
     );
 
     return ExitCode::Absent;

@@ -19,7 +19,6 @@
 
 mod arguments;
 mod check;
-mod corpus;
 mod request;
 mod spec;
 mod vacuity;
@@ -32,8 +31,8 @@ use std::path::PathBuf;
 /// The same variable the corpus-gated tests read, and named here for the same reason they
 /// name it: the corpus is a tree this repository does not contain, so nothing can be
 /// inferred about where it is. It is spelled once, in the composition root, and passed to
-/// [`corpus::Assemble`] as data — which is what lets the whole read surface be exercised
-/// on a machine that has no corpus at all.
+/// [`nomos_spec_orchestration::corpus::Assemble`] as data — which is what lets the whole
+/// read surface be exercised on a machine that has no corpus at all.
 const CORPUS_VARIABLE: &str = "NOMOS_V14_CORPUS";
 
 fn main() -> std::process::ExitCode
@@ -145,14 +144,14 @@ fn Work_Directory() -> PathBuf
 /// being given is a supported state and produces an absence rather than an error, because
 /// the governing records are embedded and there are real questions this binary can still
 /// answer.
-fn Corpus_Request(rest: &[String]) -> corpus::CorpusRequest
+fn Corpus_Request(rest: &[String]) -> nomos_spec_orchestration::corpus::CorpusRequest
 {
-    return corpus::CorpusRequest {
+    return nomos_spec_orchestration::corpus::CorpusRequest {
         variable: CORPUS_VARIABLE.to_owned(),
         root: arguments::Named_Value(rest, "--corpus")
             .map(PathBuf::from)
             .or_else(|| return std::env::var_os(CORPUS_VARIABLE).map(PathBuf::from)),
         revision: arguments::Named_Value(rest, "--corpus-revision")
-            .unwrap_or_else(|| return corpus::DEFAULT_REVISION.to_owned()),
+            .unwrap_or_else(|| return nomos_spec_orchestration::corpus::DEFAULT_REVISION.to_owned()),
     };
 }

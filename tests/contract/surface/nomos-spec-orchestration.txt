@@ -1,0 +1,70 @@
+pub const nomos_spec_orchestration::corpus::DEFAULT_REVISION: &str
+pub enum nomos_spec_orchestration::SpecCommand
+pub enum nomos_spec_orchestration::SpecOutcome
+pub enum variant nomos_spec_orchestration::SpecCommand::Commit(CommitRequest)
+pub enum variant nomos_spec_orchestration::SpecCommand::Freshness(FreshnessRequest)
+pub enum variant nomos_spec_orchestration::SpecCommand::Markdown(RecordRequest)
+pub enum variant nomos_spec_orchestration::SpecCommand::Preview(EditRequest)
+pub enum variant nomos_spec_orchestration::SpecCommand::Profiles
+pub enum variant nomos_spec_orchestration::SpecCommand::Record(RecordRequest)
+pub enum variant nomos_spec_orchestration::SpecCommand::Render(RenderRequest)
+pub enum variant nomos_spec_orchestration::SpecCommand::Sources
+pub enum variant nomos_spec_orchestration::SpecCommand::Table(TableRequest)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Commit(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Freshness(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Markdown(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Preview(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Profiles(Result<Vec<Profile>, ProjectError>)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Record(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Render(NotYetMigrated)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Sources(Result<SourcesAnswer, StoreError>)
+pub enum variant nomos_spec_orchestration::SpecOutcome::Table(NotYetMigrated)
+pub fn nomos_spec_orchestration::Profiles() -> Result<Vec<Profile>, ProjectError>
+pub fn nomos_spec_orchestration::Run(command: &SpecCommand, request: &CorpusRequest) -> SpecOutcome
+pub fn nomos_spec_orchestration::Sources(assembly: &Assembly) -> SourcesAnswer
+pub fn nomos_spec_orchestration::SourcesAnswer::Describe_Absences(&self) -> String
+pub fn nomos_spec_orchestration::SourcesAnswer::Is_Complete(&self) -> bool
+pub fn nomos_spec_orchestration::corpus::Absence::Describe(&self) -> String
+pub fn nomos_spec_orchestration::corpus::Assemble(request: &CorpusRequest) -> Result<Assembly, StoreError>
+pub fn nomos_spec_orchestration::corpus::Assembly::Describe_Absences(&self) -> String
+pub fn nomos_spec_orchestration::corpus::Assembly::Is_Complete(&self) -> bool
+pub struct field nomos_spec_orchestration::CommitRequest::edit: EditRequest
+pub struct field nomos_spec_orchestration::CommitRequest::into: PathBuf
+pub struct field nomos_spec_orchestration::EditRequest::from: PathBuf
+pub struct field nomos_spec_orchestration::EditRequest::id: String
+pub struct field nomos_spec_orchestration::EditRequest::rename: Option<String>
+pub struct field nomos_spec_orchestration::FreshnessRequest::into: PathBuf
+pub struct field nomos_spec_orchestration::FreshnessRequest::profile: Option<String>
+pub struct field nomos_spec_orchestration::FreshnessRequest::require: Vec<String>
+pub struct field nomos_spec_orchestration::RecordRequest::id: String
+pub struct field nomos_spec_orchestration::RecordRequest::revision: Option<String>
+pub struct field nomos_spec_orchestration::RenderRequest::into: PathBuf
+pub struct field nomos_spec_orchestration::RenderRequest::profile: String
+pub struct field nomos_spec_orchestration::RenderRequest::subject: Option<String>
+pub struct field nomos_spec_orchestration::SourcesAnswer::absent: Vec<Absence>
+pub struct field nomos_spec_orchestration::SourcesAnswer::read: Vec<String>
+pub struct field nomos_spec_orchestration::TableRequest::block: Option<u32>
+pub struct field nomos_spec_orchestration::TableRequest::document: String
+pub struct field nomos_spec_orchestration::TableRequest::revision: Option<String>
+pub struct field nomos_spec_orchestration::TableRequest::table: Option<u32>
+pub struct field nomos_spec_orchestration::corpus::Absence::cause: String
+pub struct field nomos_spec_orchestration::corpus::Absence::cost: String
+pub struct field nomos_spec_orchestration::corpus::Absence::expected: String
+pub struct field nomos_spec_orchestration::corpus::Absence::subject: String
+pub struct field nomos_spec_orchestration::corpus::Assembly::absent: Vec<Absence>
+pub struct field nomos_spec_orchestration::corpus::Assembly::read: Vec<String>
+pub struct field nomos_spec_orchestration::corpus::Assembly::store: SpecificationStore
+pub struct field nomos_spec_orchestration::corpus::CorpusRequest::revision: String
+pub struct field nomos_spec_orchestration::corpus::CorpusRequest::root: Option<PathBuf>
+pub struct field nomos_spec_orchestration::corpus::CorpusRequest::variable: String
+pub struct nomos_spec_orchestration::CommitRequest
+pub struct nomos_spec_orchestration::EditRequest
+pub struct nomos_spec_orchestration::FreshnessRequest
+pub struct nomos_spec_orchestration::NotYetMigrated
+pub struct nomos_spec_orchestration::RecordRequest
+pub struct nomos_spec_orchestration::RenderRequest
+pub struct nomos_spec_orchestration::SourcesAnswer
+pub struct nomos_spec_orchestration::TableRequest
+pub struct nomos_spec_orchestration::corpus::Absence
+pub struct nomos_spec_orchestration::corpus::Assembly
+pub struct nomos_spec_orchestration::corpus::CorpusRequest

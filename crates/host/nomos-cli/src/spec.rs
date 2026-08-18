@@ -19,7 +19,21 @@
 //! The store is assembled per invocation and most of it comes from a corpus that is not in
 //! this repository. Every command therefore reports what the store was missing, and a
 //! command whose answer is empty *because* something was missing says so and exits
-//! [`ExitCode::Absent`] rather than printing nothing and succeeding. See [`crate::corpus`].
+//! [`ExitCode::Absent`] rather than printing nothing and succeeding. See
+//! [`nomos_spec_orchestration::corpus`].
+//!
+//! # What moved to `nomos-spec-orchestration`, and what did not
+//!
+//! [`SpecCommand`], its six `*Request` types and the corpus-assembly plumbing
+//! ([`Assemble`], [`Assembly`], [`CorpusRequest`]) all moved verbatim to
+//! `nomos-spec-orchestration` — `OD-HOST-002`'s family-9 seam, the same shape
+//! `nomos-check-orchestration` already built for `nomos check`. Only [`SpecCommand::
+//! Profiles`] and [`SpecCommand::Sources`] are wired through that crate's own
+//! [`nomos_spec_orchestration::Run`] so far: `spec/verb/listing.rs`'s `Profiles` and
+//! `Sources` now delegate their computation to it and keep only the writing. The other
+//! seven verbs are untouched, still executed by this module's own [`Dispatch`] exactly as
+//! before. [`Note_Absences`] stays here too — it writes text, and writing is this crate's
+//! job, not the orchestration crate's.
 
 mod parsing;
 mod reporting;
@@ -35,17 +49,15 @@ use verb::{
 };
 
 mod exit_code;
-mod request;
-mod command;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use request::{
-    CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest,
+pub(crate) use nomos_spec_orchestration::{
+    CommitRequest, EditRequest, FreshnessRequest, RecordRequest, RenderRequest, SpecCommand,
+    TableRequest,
 };
-pub(crate) use command::SpecCommand;
 
 use crate::arguments::{Named_Value, Named_Values, Required};
-use crate::corpus::{Assemble, Assembly, CorpusRequest};
+use nomos_spec_orchestration::corpus::{Assemble, Assembly, CorpusRequest};
 use nomos_spec_project::{Build, Catalogue, Check, Output, Profile, ProjectError, SIDECAR_SUFFIX, Stamp};
 use nomos_spec_store::{
     CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch, RecordProjection, RowCensus, RowScope,
