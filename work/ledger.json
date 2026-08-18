@@ -14588,6 +14588,64 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-INTEGRATION-SURFACE-STALE",
+      "title": "nomos-integration-tests' public-surface snapshot went stale under P13-CONFIG-ID-DEDUP-2 and nothing reblessed it",
+      "why": "P13-CONFIG-ID-DEDUP-2 (commit 292ad08) deleted tests/integration/src/context.rs's own Resolved_Configuration/Configuration_Rendering and re-exported nomos_check_orchestration::Resolved_Configuration in their place, which is a real public-surface change to nomos-integration-tests -- but that item's territory never included tests/contract/surface/nomos-integration-tests.txt, so nobody reblessed it. cargo test -p nomos-contract-tests --test public_surface now fails on clean HEAD: 'nomos-integration-tests + pub use nomos_check_orchestration::Resolved_Configuration - pub fn ... Configuration_Rendering - pub fn ... Resolved_Configuration'. This is a gate-relevant defect and the orchestrating session's own authoring mistake (the territory should have included the snapshot the first time), not a new architectural finding.",
+      "done_when": "tests/contract/surface/nomos-integration-tests.txt is reblessed (NOMOS_SURFACE_BLESS=nomos-integration-tests) to reflect the real, current public surface of nomos-integration-tests. cargo test -p nomos-contract-tests --test public_surface passes with 0 failures.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-integration-tests.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest scanner::Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve ... ok\ntest scanner::Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export ... ok\ntest scanner::Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones ... ok\ntest bless::Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest bless::Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest snapshots::Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest snapshots::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest snapshots::Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-04cd6948a9e9b567.exe)\n",
+        "verified_at": 1787038238,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d6a79d211719ec907809921044bbc9c033346baf"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

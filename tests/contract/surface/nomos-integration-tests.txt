@@ -17,7 +17,6 @@ pub enum variant nomos_integration_tests::CrossEnvironment::SecondProcessAndGold
 pub enum variant nomos_integration_tests::Edited::Advanced { applied: Applied, invalidated: InvalidationReport, }
 pub enum variant nomos_integration_tests::Edited::Unchanged { applied: Applied, }
 pub fn nomos_integration_tests::Child_Variable() -> String
-pub fn nomos_integration_tests::Configuration_Rendering(registry: &Registry) -> String
 pub fn nomos_integration_tests::Corpus::Groups(&self) -> Vec<String>
 pub fn nomos_integration_tests::Corpus::In_Group(&self, group: &str) -> Vec<&SourceFile>
 pub fn nomos_integration_tests::Corpus::Rewrite(&mut self, path: &str, source: &str) -> bool
@@ -30,7 +29,6 @@ pub fn nomos_integration_tests::Production::State(&self) -> Vec<Vec<u8>>
 pub fn nomos_integration_tests::Public_Items(payload: &[u8]) -> Result<(u32, u32), String>
 pub fn nomos_integration_tests::Registered() -> Registry
 pub fn nomos_integration_tests::Report_Line(domain: &str, digest: &str) -> String
-pub fn nomos_integration_tests::Resolved_Configuration(registry: &Registry) -> ConfigurationId
 pub fn nomos_integration_tests::RunReport::Answered_By(&self, provider: &str) -> usize
 pub fn nomos_integration_tests::RunReport::Recomputed(&self) -> Vec<String>
 pub fn nomos_integration_tests::RunReport::Recomputed_For(&self, capability: &str) -> Vec<String>
@@ -96,3 +94,4 @@ pub struct nomos_integration_tests::Verification
 
 # re-exports of items declared outside this crate
 pub use corpus::Subject_Of_Path
+pub use nomos_check_orchestration::Resolved_Configuration
