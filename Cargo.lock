@@ -393,6 +393,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-lang-package"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-lang-rust",
+ "nomos-lang-rust-scan",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-lang-rust"
 version = "0.1.0"
 dependencies = [

@@ -48,6 +48,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // crates at one band, which is what stops the second answer from being derived from
     // the first. Two providers that shared a parser could not disagree.
     ("nomos-lang-rust-scan", 25),
+    // The first installable-unit manifest format: PackageId, PackageKind and PKG-007's
+    // four version domains, given a reader that refuses what it cannot resolve. Above
+    // the two language providers it registers -- it must be able to name them -- and
+    // well clear of rules, which it does not touch. `OD-PACKAGE-001`.
+    ("nomos-lang-package", 26),
     // The spec system sits beside the kernel, not above it. It reaches the product only
     // through a KnowledgeCapability, so nothing in the product may name it directly.
     ("nomos-spec-model", 11),

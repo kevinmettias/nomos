@@ -1,0 +1,20 @@
+{
+  "package_id": "nomos.lang.rust",
+  "package_kind": "LanguagePackage",
+  "package_version": { "major": 1, "minor": 0, "patch": 0 },
+  "protocol_range": {
+    "minimum": { "major": 1, "minor": 0 },
+    "maximum": { "major": 1, "minor": 0 }
+  },
+  "language_versions": ["2015", "2018", "2021", "2024"],
+  "providers": [
+    {
+      "provider_id": "nomos.lang.rust.syn",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 }
+    },
+    {
+      "provider_id": "nomos.lang.rust.scan",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 }
+    }
+  ]
+}

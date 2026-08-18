@@ -45,6 +45,7 @@ band, and `tests/contract` asserts it.
 | 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
 | 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`, and the module rollup derived from them — the one fact in this workspace computed from other facts. |
 | 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |
+| 26 | `nomos-lang-package` | The first `LanguagePackage` manifest format and its refusing reader — `PackageId`, `PackageKind` and `PKG-007`'s four version domains, given a real consumer. |
 | 30 | `nomos-rules` | A rule as a pure function whose subject is an argument: source it is handed, and facts it reads through a `FactReader`. |
 | 35 | `nomos-corrections` | `CorrectionCandidate`, `CorrectionPlan`, and the deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change. No agent, no model backend. |
 | 40 | `nomos-work-orchestration` | Runs a `nomos work` verb against a caller-chosen platform and hands back a typed outcome — generic over `nomos-platform`'s traits, so a second adapter can depend on it without also depending on `nomos-platform-std` or on how `nomos-cli` renders an answer. |

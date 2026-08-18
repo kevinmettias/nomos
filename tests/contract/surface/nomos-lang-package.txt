@@ -1,0 +1,48 @@
+pub const fn nomos_lang_package::PackageVersion::New(major: u16, minor: u16, patch: u16) -> Self
+pub const fn nomos_lang_package::ProtocolRange::Is_Ordered(&self) -> bool
+pub const fn nomos_lang_package::ProtocolRange::New(minimum: ContractVersion, maximum: ContractVersion) -> Self
+pub const fn nomos_lang_package::RustEdition::Label(self) -> &'static str
+pub const nomos_lang_package::KNOWN_PROVIDERS: [&str; 2]
+pub enum nomos_lang_package::ManifestError
+pub enum nomos_lang_package::RustEdition
+pub enum variant nomos_lang_package::ManifestError::EmptyList { at: String, field: String, }
+pub enum variant nomos_lang_package::ManifestError::InvertedProtocolRange { at: String, }
+pub enum variant nomos_lang_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
+pub enum variant nomos_lang_package::ManifestError::MissingField { at: String, field: String, }
+pub enum variant nomos_lang_package::ManifestError::NotJson { at: String, cause: String, }
+pub enum variant nomos_lang_package::ManifestError::UnknownPackageKind { at: String, found: String, }
+pub enum variant nomos_lang_package::ManifestError::Unreadable { at: String, cause: String, }
+pub enum variant nomos_lang_package::ManifestError::UnresolvedProvider { at: String, provider: String, }
+pub enum variant nomos_lang_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
+pub enum variant nomos_lang_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub enum variant nomos_lang_package::RustEdition::Edition2015
+pub enum variant nomos_lang_package::RustEdition::Edition2018
+pub enum variant nomos_lang_package::RustEdition::Edition2021
+pub enum variant nomos_lang_package::RustEdition::Edition2024
+pub fn nomos_lang_package::Is_Known(provider: &str) -> bool
+pub fn nomos_lang_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_package::PackageVersion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_package::Parse_Manifest(text: &str, at: &str) -> Result<LanguagePackage, ManifestError>
+pub fn nomos_lang_package::Read_Manifest(path: &Path) -> Result<LanguagePackage, ManifestError>
+pub fn nomos_lang_package::RustEdition::Of_Label(label: &str) -> Option<Self>
+pub fn nomos_lang_package::RustEdition::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_lang_package::ManifestError implements core::fmt::Display
+pub impl nomos_lang_package::PackageVersion implements core::fmt::Display
+pub impl nomos_lang_package::RustEdition implements core::fmt::Display
+pub struct field nomos_lang_package::LanguagePackage::language_versions: Vec<RustEdition>
+pub struct field nomos_lang_package::LanguagePackage::package_id: PackageId
+pub struct field nomos_lang_package::LanguagePackage::package_kind: PackageKind
+pub struct field nomos_lang_package::LanguagePackage::package_version: PackageVersion
+pub struct field nomos_lang_package::LanguagePackage::protocol_range: ProtocolRange
+pub struct field nomos_lang_package::LanguagePackage::providers: Vec<ProviderRegistration>
+pub struct field nomos_lang_package::PackageVersion::major: u16
+pub struct field nomos_lang_package::PackageVersion::minor: u16
+pub struct field nomos_lang_package::PackageVersion::patch: u16
+pub struct field nomos_lang_package::ProtocolRange::maximum: ContractVersion
+pub struct field nomos_lang_package::ProtocolRange::minimum: ContractVersion
+pub struct field nomos_lang_package::ProviderRegistration::provider: ProviderId
+pub struct field nomos_lang_package::ProviderRegistration::tool_version: PackageVersion
+pub struct nomos_lang_package::LanguagePackage
+pub struct nomos_lang_package::PackageVersion
+pub struct nomos_lang_package::ProtocolRange
+pub struct nomos_lang_package::ProviderRegistration

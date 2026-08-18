@@ -33,6 +33,12 @@ members = [
     "crates/languages/nomos-lang-rust",
     "crates/languages/nomos-lang-rust-scan",
 
+    # Band 2 — package manifests. The first installable-unit manifest format: PackageId,
+    # PackageKind and PKG-007's four version domains, given a real reader that refuses
+    # what it cannot resolve. Above the language providers it registers, since it names
+    # them; below rules, which it does not touch. `OD-PACKAGE-001`.
+    "crates/packages/nomos-lang-package",
+
     # Band 3 — rules. The first thing here that judges code rather than paperwork. A
     # rule is a pure function from source text to findings: it names no language
     # provider and opens no file, so the caller decides what tree is being judged and a
@@ -111,6 +117,7 @@ nomos-analysis = { path = "crates/substrate/nomos-analysis" }
 nomos-cap-syntax = { path = "crates/capabilities/nomos-cap-syntax" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
+nomos-lang-package = { path = "crates/packages/nomos-lang-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }

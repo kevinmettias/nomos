@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 12;
+pub(crate) const UNMIRRORED_TOTAL: usize = 13;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -196,6 +196,19 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         kind: UniverseKind::Enumeration,
         standing: Standing::Unmirrored {
             risk: "a change source added without adding it here is never walked",
+        },
+    },
+    Universe {
+        path: "crates/packages/nomos-lang-package/src/known_providers.rs",
+        name: "KNOWN_PROVIDERS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Unmirrored {
+            risk: "a third Rust language provider crate added to the workspace is not added \
+                   to this list automatically, so its registrations are refused by \
+                   Providers_Field until somebody notices and extends it by hand — the two \
+                   entries it holds today are pulled from nomos-lang-rust's and \
+                   nomos-lang-rust-scan's own PROVIDER constants rather than retyped, which \
+                   bounds the risk to additions rather than drift on the existing two",
         },
     },
 ];
