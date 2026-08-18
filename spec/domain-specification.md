@@ -59,7 +59,7 @@ profile: domain-specification
 | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md@authored | docs/records/OD-GATE-006-a-declaration-of-enforcement-is-incomplete-until-something-executes-it-in-every-environment-the-claim-needs.md | authored | 47 | 10 | sha256:e6682c077a3bb26f15df4ddae0c5232e3d172fe5e10243a86d37b3de2dc91ea7 |
 | docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md@authored | docs/records/OD-GATE-007-the-workspace-lint-table-decides-clippys-severity-once-and-the-gate-stops-adding-its-own.md | authored | 20 | 7 | sha256:768da13b9c897e7555d8cef881e29b74401b653ed5573655204965491709271d |
 | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md@authored | docs/records/OD-GATE-008-the-compatibility-floor-is-measured-by-compiling-it-and-checked-rather-than-tested.md | authored | 42 | 12 | sha256:487f9bddc49b1a1c17e34c0a00e87e5e3907432d8c46b6b45cfb715b6bc31cb3 |
-| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a |
+| docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored | docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md | authored | 39 | 11 | sha256:e7928920516de1582bb942c18289ff4d423e0d5e7df46dc54ef02d68af8d6308 |
 | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md@authored | docs/records/OD-GATE-011-two-independent-encodings-of-one-decision-are-a-named-defect-class-and-a-peer-protocol-restatement-is-not-one.md | authored | 22 | 7 | sha256:47c0b032d29826a3aefa121ae2a70bbf8eadb84cd84e530a0692a8bb2ef0b42b |
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
@@ -14578,15 +14578,25 @@ and on every pull request.
 
 ### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#37
 
-*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Holds It · hash: sha256:b3775771ddc6c3cfca298193f8a22d8b1784bb5b3cf6c8be91719d89f7242b44*
+*revision: authored · kind: prose · heading: The second operating system is chosen by which claim needs it, and so is the subset that runs there / What Holds It · hash: sha256:3fca9eef95a65287a1de8720cd24f843ec9b690b17b4f7f6169b139cee5079b7*
 
 What does **not** hold it should be said plainly. No test asserts that the matrix still has two
 entries in it, so a later editor can delete `windows-latest` and every guard in this repository
 stays green. The same is true of the per-step `if:` conditions: nothing checks that the
 `Determinism` step still runs somewhere. This record and the comments beside the steps are the
 whole of the defence, which is exactly the shape `OD-GATE-006` was written about, one level up.
-It is named here rather than quietly left, and `P12-UNENFORCED-DECLARATION` is open against the
-class.
+It is named here rather than quietly left. `P12-UNENFORCED-DECLARATION` proposed the general
+check; it was declined, not left open — its territory reserved only two spec-store record
+files, with no reach into a Rust source, test or fixture, and could not build the executable
+check its own `done_when` demanded. The decline asked for reissue with territory widened to the
+check's actual home (a new rule under `nomos-rules`, its `nomos check` wiring, and fixture
+territory for positive and negative controls), and no item has reissued it. `OD-GATE-006`'s own
+reasoning is why that reissue is not a foregone mechanical follow-up: it refused the same check
+"for scope" because there is no natural enumeration of "declarations" to read across a CI
+workflow, a ban policy and a compatibility floor, and inventing one would put a second authority
+beside the files that already make each claim. The gap `P12-UNENFORCED-DECLARATION` named is
+real and still unclosed; whether it is buildable as one general check or four instance-specific
+ones is not decided here.
 
 ### docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#38
 

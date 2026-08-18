@@ -3,7 +3,7 @@ id: OD-GATE-009
 type: decision
 title: The second operating system is chosen by which claim needs it, and so is the subset that runs there
 status: closed
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -165,8 +165,18 @@ entries in it, so a later editor can delete `windows-latest` and every guard in 
 stays green. The same is true of the per-step `if:` conditions: nothing checks that the
 `Determinism` step still runs somewhere. This record and the comments beside the steps are the
 whole of the defence, which is exactly the shape `OD-GATE-006` was written about, one level up.
-It is named here rather than quietly left, and `P12-UNENFORCED-DECLARATION` is open against the
-class.
+It is named here rather than quietly left. `P12-UNENFORCED-DECLARATION` proposed the general
+check; it was declined, not left open — its territory reserved only two spec-store record
+files, with no reach into a Rust source, test or fixture, and could not build the executable
+check its own `done_when` demanded. The decline asked for reissue with territory widened to the
+check's actual home (a new rule under `nomos-rules`, its `nomos check` wiring, and fixture
+territory for positive and negative controls), and no item has reissued it. `OD-GATE-006`'s own
+reasoning is why that reissue is not a foregone mechanical follow-up: it refused the same check
+"for scope" because there is no natural enumeration of "declarations" to read across a CI
+workflow, a ban policy and a compatibility floor, and inventing one would put a second authority
+beside the files that already make each claim. The gap `P12-UNENFORCED-DECLARATION` named is
+real and still unclosed; whether it is buildable as one general check or four instance-specific
+ones is not decided here.
 
 ## Status
 

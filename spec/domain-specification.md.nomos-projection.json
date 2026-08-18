@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:f4dc81bfc493af3ed4fd18e87c1a66085f3d654ac0144b364d8d8c7dcebf61d4",
-  "inputs_digest": "sha256:ea90414f4c79fe6e1886f45f3ae5670f1ccca666fcbdfc47a68579d089a23d05",
+  "content_digest": "sha256:1c4b39e68ff95619761c16b9712e62a76bb3bdbf29f3dcb07d6e2b3123507492",
+  "inputs_digest": "sha256:2a9cd2fbf02c191cc7d157b2b19dd67fcaf8ef29060f6d1fbd42cd4236da5a19",
   "sections": [
     [
       "Documents",
@@ -268,7 +268,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md@authored",
-      "hash": "sha256:b22311076434fe982240c884fdf4481ad4d929014967ad32d2050da08679518a"
+      "hash": "sha256:e7928920516de1582bb942c18289ff4d423e0d5e7df46dc54ef02d68af8d6308"
     },
     {
       "content": "documents",
@@ -13693,7 +13693,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-009-the-second-operating-system-is-chosen-by-which-claim-needs-it-and-so-is-the-subset-that-runs-there.md#37",
-      "hash": "sha256:b3775771ddc6c3cfca298193f8a22d8b1784bb5b3cf6c8be91719d89f7242b44"
+      "hash": "sha256:3fca9eef95a65287a1de8720cd24f843ec9b690b17b4f7f6169b139cee5079b7"
     },
     {
       "content": "blocks",
