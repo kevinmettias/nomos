@@ -14727,6 +14727,75 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SHIPPED-MIGRATIONS-MIRROR",
+      "title": "SHIPPED and MIGRATIONS are declared universes with no mirror, the same D-134-priced gap the enum mirrors already closed",
+      "why": "tests/contract/tests/completeness_universes/table.rs classifies four Standing::Unmirrored rows; a prior survey found FILLER_PATTERNS and KNOWN_PROVIDERS each need a real design decision first (OD-SPEC-004 and a workspace-provider-category question respectively), but SHIPPED (crates/spec/nomos-spec-project/src/catalogue.rs, 18 name/include_str! pairs) and MIGRATIONS (crates/spec/nomos-spec-store/src/schema.rs) are both mechanically closeable now: SHIPPED's reality is a directory walk over profiles/*.json that already matches one-for-one, and MIGRATIONS' reality is already compared bidirectionally against Table::All() by crates/spec/nomos-spec-store/tests/store_holds.rs, just not named as MIGRATIONS' own claimed mirror at its declaration site. Both rows live in the same table.rs file, so per this repo's established lesson (P13-ENUM-MIRRORS-BATCH) they batch into one item rather than two concurrent claims on the same file.",
+      "done_when": "catalogue.rs's SHIPPED carries a 'Mirrored by' doc comment and a new #[test] in crates/spec/nomos-spec-project/tests/projections/catalogue.rs walks profiles/*.json (excluding README.md) and asserts its stems equal SHIPPED's names in both directions. schema.rs's MIGRATIONS carries a 'Mirrored by Test_Every_Table_In_The_Schema_Should_Be_Declared' doc comment citing the existing bidirectional comparison in store_holds.rs. tests/contract/tests/completeness_universes/table.rs changes both rows from Standing::Unmirrored to Standing::Mirrored with their named tests, and UNMIRRORED_TOTAL drops from 4 to 2. cargo test --no-fail-fast -p nomos-spec-project -p nomos-spec-store -p nomos-contract-tests --test completeness_universes passes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/src/catalogue.rs",
+          "crates/spec/nomos-spec-project/tests/projections/catalogue.rs",
+          "crates/spec/nomos-spec-store/src/schema.rs",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest hole_size::Test_Some_Universes_Should_Actually_Be_Mirrored ... ok\ntest hole_size::Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared ... ok\ntest hole_size::Test_The_Three_Instances_Should_Have_Failed_This_Check ... ok\ntest mirrors::Test_Every_Named_Mirror_Should_Exist_In_The_Source ... ok\ntest derivation::Test_The_Declared_Table_Should_Match_What_Is_Derived ... ok\ntest claims::Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.39s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n",
+        "verified_at": 1787086069,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d7a52fd2ae461020b69f9c53f8849884246282d9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

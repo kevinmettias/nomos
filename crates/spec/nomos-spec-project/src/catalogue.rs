@@ -2,6 +2,12 @@ use crate::Profile;
 use crate::ProjectError;
 use std::collections::{BTreeMap, BTreeSet};
 
+/// Every profile this build ships, as a name and the file's contents at build time.
+///
+/// Mirrored by `Test_Every_Profile_File_Should_Be_Shipped`, which walks `profiles/` on disk
+/// and compares its `.json` stems against these names in both directions: a file with no
+/// entry here is a profile `nomos spec profiles` cannot see, and an entry with no file is a
+/// name this list carries for nothing.
 pub const SHIPPED: &[(&str, &str)] = &[
     // Subject-addressed: one node, projected four ways. They share one selection and
     // differ only in format, which is the claim being made -- four artefacts about a

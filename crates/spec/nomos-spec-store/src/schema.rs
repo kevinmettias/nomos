@@ -4,6 +4,14 @@
 //! feature in a schema dump and is not one — the sibling `KnowledgeWorkbench` measured
 //! that directly and states the rule as "a schema is not a feature".
 
+/// Mirrored by `Test_Every_Table_In_The_Schema_Should_Be_Declared`.
+///
+/// The same test `Table::All` already claims, and not a stray duplicate of that claim:
+/// `SpecificationStore::In_Memory()` builds its schema from nothing but applying every
+/// entry of this list in order, so the live schema that test compares against `Table::All()`
+/// is entirely and exclusively this list's own effect. A table this list stops creating, or
+/// creates under a name `Table::All()` does not carry, fails that same comparison — there is
+/// no schema state this list could reach that the existing test would not see.
 pub const MIGRATIONS: &[Migration] = &[
     Migration {
     version: 1,

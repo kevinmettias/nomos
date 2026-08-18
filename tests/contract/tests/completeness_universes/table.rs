@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 4;
+pub(crate) const UNMIRRORED_TOTAL: usize = 2;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -149,9 +149,8 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/spec/nomos-spec-project/src/catalogue.rs",
         name: "SHIPPED",
         kind: UniverseKind::Constant,
-        standing: Standing::Unmirrored {
-            risk: "a profile that exists and is not shipped is invisible to `nomos spec \
-                   profiles`, and nothing compares this against the renderers",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Profile_File_Should_Be_Shipped",
         },
     },
     Universe {
@@ -174,9 +173,8 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/spec/nomos-spec-store/src/schema.rs",
         name: "MIGRATIONS",
         kind: UniverseKind::Constant,
-        standing: Standing::Unmirrored {
-            risk: "nothing compares the migration list against the schema it is supposed \
-                   to produce, which is the same axis Table::All sits on",
+        standing: Standing::Mirrored {
+            by: "Test_Every_Table_In_The_Schema_Should_Be_Declared",
         },
     },
     Universe {

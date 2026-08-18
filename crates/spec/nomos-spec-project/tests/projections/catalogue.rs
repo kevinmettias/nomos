@@ -6,12 +6,11 @@
 
 use crate::store::{For_Building, Populated, Shipped};
 use nomos_spec_project::{Build, Content, Format};
+use std::collections::BTreeSet;
 
 #[test]
 fn Test_Every_Shipped_Profile_Should_Parse_And_Be_Distinct()
 {
-    use std::collections::BTreeSet;
-
     let catalogue = Shipped();
 
     assert_eq!(
@@ -25,6 +24,56 @@ fn Test_Every_Shipped_Profile_Should_Parse_And_Be_Distinct()
         .map(|profile| return profile.id.as_str())
         .collect();
     assert_eq!(identifiers.len(), 18, "two profiles share an identifier");
+}
+
+/// `SHIPPED`'s reality: what files actually sit in `profiles/`. A profile added there and
+/// not to `SHIPPED` is invisible to `nomos spec profiles`; a name kept in `SHIPPED` after its
+/// file is gone is a shipped identifier with no `include_str!` behind it that still compiled
+/// because the constant, not the file, is what the build reads.
+#[test]
+fn Test_Every_Profile_File_Should_Be_Shipped()
+{
+    use nomos_spec_project::SHIPPED;
+
+    let declared: BTreeSet<String> =
+        SHIPPED.iter().map(|(name, _)| return (*name).to_owned()).collect();
+    let on_disk = Profile_File_Stems();
+
+    let undeclared: Vec<&String> = on_disk.difference(&declared).collect();
+    let vanished: Vec<&String> = declared.difference(&on_disk).collect();
+
+    assert!(!on_disk.is_empty(), "no profile files were found, so this checked nothing");
+    assert!(
+        undeclared.is_empty(),
+        "these files sit in profiles/ with no entry in SHIPPED, so `nomos spec profiles` \
+         cannot see them: {undeclared:#?}"
+    );
+    assert!(
+        vanished.is_empty(),
+        "SHIPPED names these profiles and no file backs them: {vanished:#?}"
+    );
+}
+
+/// Every `.json` file stem under `profiles/`, read from disk rather than from `SHIPPED`.
+/// `README.md` lives in the same directory and is excluded — it documents the profiles, it
+/// is not one.
+fn Profile_File_Stems() -> BTreeSet<String>
+{
+    let directory = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("profiles");
+    let entries = std::fs::read_dir(&directory)
+        .unwrap_or_else(|error| panic!("reads {}: {error}", directory.display()));
+
+    return entries
+        .filter_map(|entry| return entry.ok())
+        .map(|entry| return entry.path())
+        .filter(|path| return path.extension().is_some_and(|extension| extension == "json"))
+        .filter_map(|path| {
+            return path
+                .file_stem()
+                .and_then(|stem| return stem.to_str())
+                .map(|stem| return stem.to_owned());
+        })
+        .collect();
 }
 
 #[test]
