@@ -15348,6 +15348,74 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SERIALIZER-REGISTER-EMPTY",
+      "title": "The crate-wide serializer register is stale on both entries the pair that forced them already closed",
+      "why": "KNOWN_SERIALIZERS in crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs carries two entries -- crates/host/nomos-cli/src/work.rs and tests/contract/surface/nomos-ledger.txt -- OD-LEDGER-029 declared because P10-SERVICE-SEAM and P11-NEXT-WORK, both open at the time, collided universally on each. P10-SERVICE-SEAM was since abandoned and re-authored as P10-SERVICE-SEAM-2, which reached Done; P11-NEXT-WORK reached Done separately. nomos work show confirms both against a fully committed HEAD (5901f2a): P10-SERVICE-SEAM is declined, P10-SERVICE-SEAM-2 and P11-NEXT-WORK are done. Test_Every_Declared_Serializer_Should_Still_Serialize now fails on both entries, for exactly the expiry condition OD-LEDGER-029's own text named in advance. The board currently holds zero Ready or Claimed items, so no third open item forces either path -- the register empties rather than replaces, unlike OD-LEDGER-029's own shape.",
+      "done_when": "KNOWN_SERIALIZERS in crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs no longer carries the crates/host/nomos-cli/src/work.rs or tests/contract/surface/nomos-ledger.txt entries, and its file-level doc comment stops describing them as live. OD-LEDGER-031 is registered (crates/spec/nomos-spec-store/records/OD-LEDGER-031.record points at its docs/records file) and both the diagram-set and domain-specification projections are re-rendered from a tree holding exactly HEAD plus this item's own new record files, and committed. cargo test -p nomos-ledger --test records_do_not_serialize -- serializers::Test_Every_Declared_Serializer_Should_Still_Serialize --exact passes over the repository's real board. Scoped to this one test rather than the whole serializers:: module because three other tests in that module (Test_Every_Universal_Reservation_Should_Be_Declared, Test_An_Undeclared_Serializer_Should_Be_Found, Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel) are independently red right now on a board-timing fact this item's territory cannot reach: zero open record writers exist at all. Not closed by leaving either entry in place: an over-reporting register is the failure OD-LEDGER-011 already found once.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-031.record",
+          "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "serializers::Test_Every_Declared_Serializer_Should_Still_Serialize",
+          "--exact"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize",
+          "--",
+          "serializers::Test_Every_Declared_Serializer_Should_Still_Serialize",
+          "--exact"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 1 test\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.01s\n\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-ledger)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.76s\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n",
+        "verified_at": 1787091511,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5901f2a731dc065240ea493f95cf9e8f9c7c8c64"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

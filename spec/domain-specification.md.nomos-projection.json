@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:af1c6b617015cc398cfd2f847796252acfcda6c2359908cb76fbe645b378d18e",
-  "inputs_digest": "sha256:15ea1ec2788287fdae678f646d96c7012f521334a812502a2d10e7ff355f904f",
+  "content_digest": "sha256:c15cd43d9f1356d04bd7effbebc6fd415c489ea9f612e3e28ef6e5c66a5ae6f4",
+  "inputs_digest": "sha256:5d3d8a0ba59b8a069f62bb9dd376cd70a0ee87a863695e99621c293673ec28e4",
   "sections": [
     [
       "Documents",
-      123
+      125
     ],
     [
       "Sections",
-      1104
+      1116
     ],
     [
       "Source blocks",
-      4020
+      4047
     ]
   ],
   "inputs": [
@@ -457,6 +457,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md@authored",
+      "hash": "sha256:13bc9a8a9f32e0d46c78adb4f917e5bb47fc79932a8c2bcac5b1f19c0306e7e9"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored",
       "hash": "sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962"
     },
@@ -489,6 +494,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored",
       "hash": "sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored",
+      "hash": "sha256:d97dfe5c8b42ad15a919d89d42665d5db79c8324643a9df8142a8ba14709f80d"
     },
     {
       "content": "documents",
@@ -4457,6 +4467,41 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#1",
+      "hash": "sha256:7801d52912e0e323b46416cf36ec1d47da322f77cda5c29417e8a56420b25002"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#2",
+      "hash": "sha256:a61bf1663031619a572776eaa60f0b3f37d3460fe91ac17b71d4aa22eac7479f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#5",
+      "hash": "sha256:7bbed0489e56873a4dfc8f090bd321f8c20c25a7e13db0ce4064e0e3120e3d5e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#8",
+      "hash": "sha256:5839978ff8b6b642205fc39d429361fc3865fc23210538b28228c6c40efd3c1b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#10",
+      "hash": "sha256:987775bb1d7887d849cc290d2f4a5381c828f948e1a12f71fa9bd6b013095867"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#12",
+      "hash": "sha256:f6477011337bcda8c52ff901c74b1ef3b84a5546b4ceb96e659d3ad4c39f5ce0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#14",
+      "hash": "sha256:9fe47df9c37a7370077364a701398b8bcf180c9e9f48cc39e496da217f38f5cb"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1",
       "hash": "sha256:d854d2d5072c0ba6069567f321d6ae052ea2afa66f7b8e82f62e5aadb302ebf7"
     },
@@ -4774,6 +4819,31 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#31",
       "hash": "sha256:a60c897a8046388ad19702f6df8d5b8879f87b35a1e91f7f50dd539b9f358e71"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#1",
+      "hash": "sha256:8fec06d429422cdc5a926e685db95beb111a3548fed271e6b42084b92acf44c0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#2",
+      "hash": "sha256:e2292b7fd80936af166f9ebe81411b9c26e4abd7b455bcad5884f4702fddc394"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#6",
+      "hash": "sha256:3cf06a0d2adb276d553b8b3b0ae9c15160f7f22218cc212ae755093ba25fddf3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#9",
+      "hash": "sha256:dc2725adc9cd360f59306f82f618101155b5a394d2ae4bdfdc10892a0cee28fa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11",
+      "hash": "sha256:5a80da2a6e8922b26b91924bf3120dfda00f5fb86bcb2246ce77257dbf7c2e7f"
     },
     {
       "content": "headings",
@@ -19947,6 +20017,81 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#1",
+      "hash": "sha256:6c73c7ff10eb930f5d6b57d8cc141729c166876674e1a2036c6acf991d412356"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#3",
+      "hash": "sha256:ec68411afcaec803b66a6a653bd23d8cca380008f1f77cd0aba55a771da502b6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#4",
+      "hash": "sha256:691a7ce02ef7f5c0cef5569c4f17f55428130ecbbe6ce8ecb6017f99d7ab90ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#5",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#6",
+      "hash": "sha256:5960d93bdb39ff390b7f84d95ebdc5a9187ebef886ba92c8885adb11fac74ffb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#7",
+      "hash": "sha256:224eb715ed9fd1f944815c5a95f21a1e2504b295e7a1aadf1c15b1ea24dfbd9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#8",
+      "hash": "sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#9",
+      "hash": "sha256:801744f3475ef5b28b36613c939ab6fcfa07585097adc05a58a372a6ed32fa04"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#10",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#11",
+      "hash": "sha256:32beecffffb2e90ccacb9ae3aca1d9455ab3547e37e813a6b39813a1724ef489"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#12",
+      "hash": "sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#13",
+      "hash": "sha256:ff60c5d25acfe3523f0875fdbcb16a6b427874dcc15d0db21153c5c83d59f525"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#15",
+      "hash": "sha256:ce796ce7803bc6081b932e6bcc5adf585a18599250a0cfcf0cdcc703a8e86f31"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1",
       "hash": "sha256:f8c5c2d9a62f8885a1b5399e69827138d3be4b147693b001857ec8c9172fa72a"
     },
@@ -21294,6 +21439,66 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#32",
       "hash": "sha256:5afdecc05d061b600e867639f637db6cb119e6cb3177ff73c31e072c7018b764"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#1",
+      "hash": "sha256:2a5c50ebaf8c0ec31d1705268782ec5a434456f16f40c3806842539ec47d5568"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#3",
+      "hash": "sha256:79fa802a7588439b44b4e4bc3c8ce7e8045d6283830cf5447131a53f7f7d19d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#4",
+      "hash": "sha256:6bbe042eace49cb61a74d235c8928766191d3ab0bf978e1c361b295d6c868356"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#5",
+      "hash": "sha256:2d61699e92c08f49337e7f02fdab94235627f854b6009e7b1152296e7f04c9d2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#6",
+      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#7",
+      "hash": "sha256:ec4776ebc825531f8c823e6a43875d687d5729431ffc16f2fc7f784db24873e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#8",
+      "hash": "sha256:69e7ae157ac774f4eb8c7e696a2fb2f341aac24c5be662722fee5db0120a2873"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#9",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#10",
+      "hash": "sha256:e32c88154af714eede0cd008a6e323b9b3d13cf651404bbe16cab8d4c6a5683e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#12",
+      "hash": "sha256:513e9ccfe6c51db541f5bc95962d407613176ad48639f80f0525ce6ce2200931"
     },
     {
       "content": "blocks",

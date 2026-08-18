@@ -20,7 +20,7 @@ use std::collections::BTreeSet;
 /// and the intended direction of travel is that it empties — see `OD-LEDGER-007` for what
 /// each entry would take.
 ///
-/// # Two entries closed, and a third arrived
+/// # Empty, then not, then empty again
 ///
 /// The first two came out in `P10-SURFACE-GRAIN`, in the commit that earned each of them.
 /// `crates/spec/nomos-spec-store` was a code coupling until `OD-SPEC-007` dissolved it and
@@ -37,47 +37,15 @@ use std::collections::BTreeSet;
 /// territory rather than a structural serializer, and `OD-LEDGER-028` named that exact
 /// condition as the entry's own expiry in advance.
 ///
-/// What replaced it is `P10-SERVICE-SEAM` against `P11-NEXT-WORK`, over the same
-/// not-yet-implemented question as before — `P10-SERVICE-SEAM` cannot yet name which file a
-/// second command's adapter would touch, so it reserves `crates/host/nomos-cli` and
-/// `tests/contract/surface` whole — colliding with the two specific files `P11-NEXT-WORK`
-/// *has* chosen: `crates/host/nomos-cli/src/work.rs`, the one file its territory needs
-/// there, and `tests/contract/surface/nomos-ledger.txt`, the single file `OD-LEDGER-011`
-/// already settled as a crate's public-surface-snapshot territory. `Covers` — the
-/// direction [`Test_Every_Declared_Serializer_Should_Still_Serialize`] checks, coarser
-/// reserving finer — is why each entry below is keyed to the narrower of the two colliding
-/// paths rather than the directory: `P10-SERVICE-SEAM`'s broad reservation covers a narrow
-/// declared path, and `P11-NEXT-WORK`'s own path covers itself, so both continue counting
-/// for exactly as long as both items actually do; declaring the directory instead would
-/// stop counting `P11-NEXT-WORK` the moment it was written; that asymmetry is deliberate,
-/// `OD-LEDGER-011`'s own history is why. `OD-LEDGER-029` records the whole change — the
-/// stale entry's removal and both new ones' arrival — together, because the reasoning for
-/// each entry is independent and a reader of one should not have to read another to know
-/// why it is there.
-const KNOWN_SERIALIZERS: &[(&str, &str)] = &[
-    (
-        "crates/host/nomos-cli/src/work.rs",
-        "P10-SERVICE-SEAM and P11-NEXT-WORK, both open. P10-SERVICE-SEAM reserves \
-         crates/host/nomos-cli whole for the reason OD-LEDGER-028 already accepted: its own \
-         question — whether choosing a platform, running a verb and rendering an outcome \
-         need a seam between them — has not chosen an implementation, so it cannot name a \
-         narrower file. P11-NEXT-WORK reserves this one file, the ledger verb dispatcher \
-         its `next:` line is added to. OD-LEDGER-029 records why this is declared rather \
-         than narrowed. It comes out the way the entry above it did: when one of the two \
-         reaches Done and the other no longer reserves the whole crate, or when a third \
-         open item shows the same forcing and the entry needs to name three rather than \
-         two.",
-    ),
-    (
-        "tests/contract/surface/nomos-ledger.txt",
-        "P10-SERVICE-SEAM and P11-NEXT-WORK, both open. P10-SERVICE-SEAM reserves \
-         tests/contract/surface whole for the reason above, over the directory a second \
-         command's adapter surface would live under. P11-NEXT-WORK reserves this one file, \
-         the single file OD-LEDGER-011 already settled as the correct territory for a \
-         crate's own public-surface snapshot. OD-LEDGER-029 records why this is declared \
-         rather than narrowed, on the same terms as the entry above.",
-    ),
-];
+/// What replaced it was `P10-SERVICE-SEAM` against `P11-NEXT-WORK`, over the same
+/// not-yet-implemented question as before, keyed to the two narrow files `OD-LEDGER-029`
+/// records why it chose over the directory spelling. That pairing has since closed too:
+/// `P10-SERVICE-SEAM` was abandoned and re-authored as `P10-SERVICE-SEAM-2`, which reached
+/// `Done`, and `P11-NEXT-WORK` reached `Done` separately. `OD-LEDGER-031` records the
+/// removal — this time with no third open item taking the collision's place, so the
+/// register empties rather than replaces, the state this comment described once before,
+/// between `OD-LEDGER-011` and `OD-LEDGER-028`.
+const KNOWN_SERIALIZERS: &[(&str, &str)] = &[];
 
 /// The paths the register declares, without what forces each of them.
 fn Declared() -> Vec<&'static str>

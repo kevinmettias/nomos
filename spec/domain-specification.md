@@ -97,6 +97,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md@authored | docs/records/OD-LEDGER-028-a-third-crate-wide-territory-is-declared-a-serializer-rather-than-narrowed.md | authored | 19 | 8 | sha256:409f9c166337da0afc4471e4c50cd9431117d100ddbc5527846feeb8d7048533 |
 | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md@authored | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md | authored | 22 | 8 | sha256:ab29d2a1225a5ff3aabc40822a8a4487b9d23f1d2a4be034ab7a664619f74a0e |
 | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md@authored | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md | authored | 20 | 8 | sha256:b9b8e8c69db8cd1669f9965df1e32ba0ee19634968e153e1d5bb50f6ed7e0d80 |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md@authored | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md | authored | 15 | 7 | sha256:13bc9a8a9f32e0d46c78adb4f917e5bb47fc79932a8c2bcac5b1f19c0306e7e9 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -104,6 +105,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 42 | 10 | sha256:353b96edd0e3cd1cd8ffaa0fa1f645769af77bc91429d1e32caa3326e8887a6e |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 27 | 9 | sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610 |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 12 | 5 | sha256:d97dfe5c8b42ad15a919d89d42665d5db79c8324643a9df8142a8ba14709f80d |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -902,6 +904,13 @@ profile: domain-specification
 | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#15 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#17 | authored | 2 | What Would Make This Stale |
 | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md#19 | authored | 2 | Status |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#1 | authored | 1 | The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#5 | authored | 2 | Decision |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#8 | authored | 2 | What This Costs |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#10 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#12 | authored | 2 | What Would Make This Stale |
+| docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#14 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -966,6 +975,11 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#24 | authored | 2 | What This Is Not |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#29 | authored | 2 | Controls |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#31 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#1 | authored | 1 | Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#6 | authored | 2 | Current Position |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#9 | authored | 2 | What Would Decide It |
+| docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -25536,6 +25550,123 @@ could route around the block directly instead of the register absorbing it here.
 
 Closed by `P11-SNAPSHOT-PAIR-REPORT`.
 
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#1
+
+*revision: authored · kind: heading · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done · hash: sha256:6c73c7ff10eb930f5d6b57d8cc141729c166876674e1a2036c6acf991d412356*
+
+# The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#2
+
+*revision: authored · kind: heading · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#3
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Question · hash: sha256:ec68411afcaec803b66a6a653bd23d8cca380008f1f77cd0aba55a771da502b6*
+
+`OD-LEDGER-029` declared two `KNOWN_SERIALIZERS` entries — `crates/host/nomos-cli/src/work.rs`
+and `tests/contract/surface/nomos-ledger.txt` — each forced by `P10-SERVICE-SEAM` and
+`P11-NEXT-WORK` together, both open at the time the record was written. `P10-SERVICE-SEAM`
+was since abandoned and re-authored as `P10-SERVICE-SEAM-2`, which reached `Done`;
+`P11-NEXT-WORK` reached `Done` in a separate window. Neither of the two items the entries
+name is open any longer, and `Test_Every_Declared_Serializer_Should_Still_Serialize` fails
+on both entries, for the exact condition `OD-LEDGER-029`'s own "What Would Make This Stale"
+section named in advance: "`P10-SERVICE-SEAM` or `P11-NEXT-WORK` reaching `Done` while the
+other no longer reserves the colliding path."
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#4
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Question · hash: sha256:691a7ce02ef7f5c0cef5569c4f17f55428130ecbbe6ce8ecb6017f99d7ab90ad*
+
+Confirmed against a fully committed HEAD (`5901f2a`) with `nomos work show` for both items
+and no uncommitted tree changes: `P10-SERVICE-SEAM` reads `declined` (abandoned, re-authored
+as `P10-SERVICE-SEAM-2`), and `P10-SERVICE-SEAM-2` and `P11-NEXT-WORK` both read `done`.
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#5
+
+*revision: authored · kind: heading · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#6
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Decision · hash: sha256:5960d93bdb39ff390b7f84d95ebdc5a9187ebef886ba92c8885adb11fac74ffb*
+
+**Both entries are removed, and nothing replaces them.**
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#7
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Decision · hash: sha256:224eb715ed9fd1f944815c5a95f21a1e2504b295e7a1aadf1c15b1ea24dfbd9c*
+
+Unlike `OD-LEDGER-029`, which paired one entry's removal with two arriving in the same
+window, no third open item currently forces either path — the board holds zero `Ready` or
+`Claimed` items, so no open record writer collides with anything. The register empties to
+nothing, the direction `OD-LEDGER-007` named as its intended trajectory and the state
+`crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs`'s own doc
+comment described once before, between `OD-LEDGER-011` and `OD-LEDGER-028`.
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#8
+
+*revision: authored · kind: heading · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#9
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / What This Costs · hash: sha256:801744f3475ef5b28b36613c939ab6fcfa07585097adc05a58a372a6ed32fa04*
+
+Nothing new. An entry leaving the register removes an exclusion rather than adding one;
+every item whose predicate reaches `cargo test -p nomos-ledger` is freed of this particular
+coupling. `OD-LEDGER-007`'s framing holds: the register is a debt list, and this is a
+repayment, not a new debt.
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#10
+
+*revision: authored · kind: heading · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#11
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / What Holds It · hash: sha256:32beecffffb2e90ccacb9ae3aca1d9455ab3547e37e813a6b39813a1724ef489*
+
+`Test_Every_Declared_Serializer_Should_Still_Serialize`, the same test `OD-LEDGER-029`
+named, run over the repository's real board. `Test_Every_Universal_Reservation_Should_Be_Declared`,
+`Test_An_Undeclared_Serializer_Should_Be_Found` and
+`Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel` are not evidence for or against
+this decision: all three currently fail independently of it, because the board holds zero
+open record writers at all — the `writers.len() >= 2` guard is a board-timing fact rather
+than a code or record defect, the same shape `OD-LEDGER-030` named for a different pair of
+tests, and it is unrelated to whether these two entries still serialize.
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#12
+
+*revision: authored · kind: heading · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / What Would Make This Stale · hash: sha256:2f4d20c044651775d268147e19bda2989ce353025969c061575ae4a06ace3fac*
+
+## What Would Make This Stale
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#13
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / What Would Make This Stale · hash: sha256:ff60c5d25acfe3523f0875fdbcb16a6b427874dcc15d0db21153c5c83d59f525*
+
+A pair of open items again forcing `crates/host/nomos-cli/src/work.rs`,
+`tests/contract/surface/nomos-ledger.txt`, or any other path every open record writer
+shares — the same condition that produced the entries this record removes.
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#14
+
+*revision: authored · kind: heading · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#15
+
+*revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Status · hash: sha256:ce796ce7803bc6081b932e6bcc5adf585a18599250a0cfcf0cdcc703a8e86f31*
+
+Closed by `P13-SERIALIZER-REGISTER-EMPTY`.
+
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 
 *revision: authored · kind: heading · heading: A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger · hash: sha256:f8c5c2d9a62f8885a1b5399e69827138d3be4b147693b001857ec8c9172fa72a*
@@ -28018,6 +28149,111 @@ specifically — every worked case is a Git example, and the prior wording claim
 "leaves the machine" scope no evidence here supports — and generalized the enforcement
 section from a Git-specific stage-or-commit refusal to a transition guard with Git named as
 one projection among others.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#1
+
+*revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions · hash: sha256:2a5c50ebaf8c0ec31d1705268782ec5a434456f16f40c3806842539ec47d5568*
+
+# Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#2
+
+*revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#3
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Question · hash: sha256:79fa802a7588439b44b4e4bc3c8ce7e8045d6283830cf5447131a53f7f7d19d5*
+
+`crates/packages/nomos-lang-package/src/known_providers.rs` declares `KNOWN_PROVIDERS`, a
+two-element array pulling `nomos_lang_rust::PROVIDER` and `nomos_lang_rust_scan::PROVIDER`
+by reference rather than retyping either string. `reader.rs` calls `Is_Known` against it
+before accepting a manifest's `ProviderRegistration`, so a manifest naming a provider not
+in the array is refused, not silently misregistered.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#4
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Question · hash: sha256:6bbe042eace49cb61a74d235c8928766191d3ab0bf978e1c361b295d6c868356*
+
+`tests/contract/tests/completeness_universes/table.rs` classifies `KNOWN_PROVIDERS` as an
+unmirrored declared universe: nothing compares it against an independently-discoverable
+reality the way `Table::All`, `SHIPPED` or `MIGRATIONS` are compared against theirs. Its
+named risk is narrow — "a third Rust language provider crate added to the workspace is not
+added to this list automatically... until somebody notices and extends it by hand" — and it
+is bounded to additions rather than drift on the two entries that exist today, because both
+are pulled from their own crates' `PROVIDER` constants rather than copied.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#5
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Question · hash: sha256:2d61699e92c08f49337e7f02fdab94235627f854b6009e7b1152296e7f04c9d2*
+
+The open question is whether that bound is good enough permanently, or whether
+`nomos-lang-package` should grow a generalized registration mechanism — each provider crate
+declaring itself into a shared registry this crate discovers, rather than a literal array a
+person extends by hand at this crate's own declaration site.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#6
+
+*revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#7
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Current Position · hash: sha256:ec4776ebc825531f8c823e6a43875d687d5729431ffc16f2fc7f784db24873e8*
+
+`OD-HOST-004` decided a directly analogous shape for `nomos_check_orchestration`: a second
+hand-written `Declare_And_Offer` call is not the seam-by-accretion failure its originating
+item warned about, because participation there depends on the request, and a registry
+already exists underneath (`nomos_capability::Registry`) for exactly the case where
+selection — not mere enumeration — is needed. `KNOWN_PROVIDERS` is not that shape: it does
+no ranking or selection, only membership-checking, so `OD-HOST-004`'s decision does not
+transfer directly. It is offered here as relevant precedent for the same underlying
+judgment — that hand-accretion is not automatically a defect at low count — not as a
+decision already made for this crate.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#8
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Current Position · hash: sha256:69e7ae157ac774f4eb8c7e696a2fb2f341aac24c5be662722fee5db0120a2873*
+
+Two real Rust language provider crates exist in this workspace today
+(`nomos-lang-rust`, `nomos-lang-rust-scan`), and the array holding them is one line each,
+pulled rather than retyped. Building a self-registering mechanism now would be designed
+against a population of two, with no third provider crate to check the design against.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#9
+
+*revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#10
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / What Would Decide It · hash: sha256:e32c88154af714eede0cd008a6e323b9b3d13cf651404bbe16cab8d4c6a5683e*
+
+A third real Rust language provider crate joining this workspace is the natural trigger:
+at that point, either "one more line, pulled not retyped" still holds and the array stays
+hand-maintained, or the friction of a person having to notice and extend it by hand becomes
+the cost this record predicted, and a registration mechanism earns its place. `OD-PACKAGE-001`
+governs what such a provider crate would need to be a real `LanguagePackage` participant in
+the first place; this record only covers how `nomos-lang-package` would come to know about
+its `ProviderId`.
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11
+
+*revision: authored · kind: heading · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#12
+
+*revision: authored · kind: prose · heading: Whether KNOWN_PROVIDERS needs a self-registering mechanism, or stays hand-maintained bounded to additions / Status · hash: sha256:513e9ccfe6c51db541f5bc95962d407613176ad48639f80f0525ce6ce2200931*
+
+Open. Revisit when a third Rust language provider crate is added to this workspace, or if
+the two-entry array is found to have drifted despite being pulled rather than retyped.
+Recorded here so the intent is legible rather than lost between sessions, not because
+either provider crate's shape has moved.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 
