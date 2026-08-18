@@ -3,7 +3,7 @@ id: OD-HOST-002
 type: decision
 title: A surface holds no state its canonical services cannot reconstruct
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - host
@@ -69,34 +69,42 @@ gap rather than closing it.
    fresh, renders the returned `WorkOutcome`, and exits. This is the demonstration the
    other families are held to.
 
-2. **Capability / provider resolution — no seam yet.** `nomos_capability::Registry`,
-   `Requirement`, `ProviderOffer`, `Resolution` (`crates/substrate/nomos-capability/src/
-   registry.rs`, `requirement.rs`, `provider_offer.rs`, `resolution.rs`) decide which
-   provider satisfies which capability. Today only `nomos-cli::check::composition::
-   Registered` and `Resolved_Configuration`
-   (`crates/host/nomos-cli/src/check/composition.rs:15,59`) build this registry and hash
-   it into a `ConfigurationId`; no crate outside `nomos-cli` can obtain the same resolved
-   registry. A second surface has two options — reimplement `composition.rs`, or accept
-   whatever `nomos-cli` computed as fact — and both are the failure this record forbids.
+2. **Capability / provider resolution — a working seam, since `nomos-check-orchestration`.**
+   `nomos_capability::Registry`, `Requirement`, `ProviderOffer`, `Resolution`
+   (`crates/substrate/nomos-capability/src/registry.rs`, `requirement.rs`,
+   `provider_offer.rs`, `resolution.rs`) decide which provider satisfies which capability.
+   `nomos_check_orchestration::Registered` and `Resolved_Configuration`
+   (`crates/orchestration/nomos-check-orchestration/src/composition.rs`) build this
+   registry and hash it into a `ConfigurationId`, callable by any crate that depends on
+   `nomos-check-orchestration` rather than only from inside `nomos-cli`. This is the same
+   duplication `tests/integration/src/context.rs`'s own rendering of a registry was
+   already named against under band 100, where this crate cannot reach it — moving the
+   canonical copy did not remove that second one, and this record does not ask it to.
 
-3. **Fact / analysis state — per-invocation only today, and only because the CLI
-   exits.** `nomos_analysis::Context`, `MemoryFactStore`, and the fact-invalidation
+3. **Fact / analysis state — a working seam, over the one input a caller must still
+   supply.** `nomos_analysis::Context`, `MemoryFactStore`, and the fact-invalidation
    machinery (`Condensation_Of`, `RematerializationGroup` in
    `crates/substrate/nomos-analysis/src/store.rs:136,171`) hold the facts a check run
-   reasons over. `nomos-cli::check::facts::Prepare`
-   (`crates/host/nomos-cli/src/check/facts.rs`) builds this fresh per call and drops it
-   when `check::Run` returns. It is stateless across invocations only because `nomos-cli`
-   happens to exit; a long-lived surface running this same code path in place, rather
-   than through a callable service, reaches the identical failure with a longer
-   lifetime.
+   reasons over. `nomos_check_orchestration::Run`
+   (`crates/orchestration/nomos-check-orchestration/src/run.rs`) builds this from already-
+   walked source and a caller-supplied build variant and hands back a
+   `CheckOutcome`, reconstructable by any client that walks the same tree — the directory
+   walk itself stays a composition-root concern
+   (`nomos-cli::check::sources::Walked`), the same exception
+   `nomos-cli::work::Published_Records` already has for a directory listing
+   `nomos_platform::FileSystem` has no port for.
 
-4. **Finding / requirement state.** `nomos_contracts::Finding`, `Applicability`,
-   `EvidenceClass`, `Guarantee` (`crates/contracts/nomos-contracts/src/finding.rs:56`,
-   `finding/applicability.rs:33`, `finding/evidence.rs:24`, `guarantee.rs:23`) are what
-   `nomos check` produces about a requirement. They are consumed only inside
-   `nomos-cli::check::report` (imports at `report.rs:4-5`) and `check.rs` itself today; no
-   other crate can ask "what does this repository's rule engine currently say about this
-   subject" without running `nomos check` itself.
+4. **Finding / requirement state — a working seam.** `nomos_contracts::Finding`,
+   `Applicability`, `EvidenceClass`, `Guarantee`
+   (`crates/contracts/nomos-contracts/src/finding.rs:56`, `finding/applicability.rs:33`,
+   `finding/evidence.rs:24`, `guarantee.rs:23`) are what `nomos check` produces about a
+   requirement. `nomos_check_orchestration::Run` runs `nomos_rules::
+   Check_Completeness_Mirrors` over a real `nomos_analysis::Reader` and returns them inside
+   `CheckOutcome::Judged`, alongside `Examined` and `Claim`
+   (`crates/orchestration/nomos-check-orchestration/src/outcome.rs`) — the roll-up
+   judgment a second adapter needs without re-deriving it. `nomos-cli::check::report`
+   keeps only the rendering half: `Coverage`, a pure grouping of `findings` for a text
+   reader, computed fresh at render time rather than carried as a second fact.
 
 5. **Evidence — two vocabularies at two layers.** `EvidenceClass` above is the
    contracts-layer provenance strength attached to a `Finding`. `nomos_model::EvidenceRef`
@@ -127,15 +135,16 @@ gap rather than closing it.
    of decisions already taken. A surface showing "why was this decided" reads the store
    again; it does not cache a rendered history of records it has shown once.
 
-9. **Control commands.** `WorkCommand`
-   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`) is the one command
-   vocabulary that already routes through a seam. `SpecCommand`
-   (`crates/host/nomos-cli/src/spec/command.rs:11`), `CheckCommand`
-   (`crates/host/nomos-cli/src/check/command.rs:6`) and `request::Command`
-   (`crates/host/nomos-cli/src/request.rs:65`) are parsed and executed directly inside
-   `nomos-cli` today, with no equivalent orchestration crate. Until each has one, this
+9. **Control commands — two of four now route through a seam.** `WorkCommand`
+   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`) and `CheckCommand`
+   (`crates/orchestration/nomos-check-orchestration/src/command.rs:11`, moved verbatim
+   from `nomos-cli::check::command`) each name a crate a second adapter can depend on
+   without also taking `nomos-cli`'s argument parsing, exit codes or rendering.
+   `SpecCommand` (`crates/host/nomos-cli/src/spec/command.rs:11`) and `request::Command`
+   (`crates/host/nomos-cli/src/request.rs:65`) are still parsed and executed directly
+   inside `nomos-cli`, with no equivalent orchestration crate. Until each has one, this
    record's second clause — every action is a command through a canonical service — is
-   unmet for three of the four command groups. Naming that gap is what makes the rule
+   unmet for the remaining two command groups. Naming that gap is what makes the rule
    checkable rather than already true by assumption.
 
 ## What is not privileged state
@@ -164,9 +173,10 @@ forbids.
 ## What this constrains
 
 This record adds no seam and reopens none. `OD-HOST-001` decided that
-`nomos-work-orchestration` is the seam for the work group; this record states what any
-seam — that one, or one not yet built for capability resolution, fact state, findings,
-evidence, packages, connectors, or the record store — must guarantee once it exists: a
-surface calling through it holds nothing the seam itself cannot regenerate. Building the
-seams still missing for families 2–4 and 6–9 above is future work this record makes
-checkable, not work it does.
+`nomos-work-orchestration` is the seam for the work group, and `nomos-check-orchestration`
+— built after this record first shipped, closing families 2–4 and the `CheckCommand` half
+of family 9 — is the second demonstration rather than a third decision: this record states
+what any seam must guarantee once it exists, and does not itself build one. A surface
+calling through either seam holds nothing the seam itself cannot regenerate. Building the
+seams still missing for families 6–8 and the `SpecCommand`/`request::Command` half of
+family 9 above is future work this record makes checkable, not work it does.

@@ -43,6 +43,11 @@ nomos-workspace = { workspace = true }
 # platform traits, so a second adapter can depend on it without also depending on
 # `nomos-platform-std` or on how this crate prints an answer. `OD-HOST-001`.
 nomos-work-orchestration = { workspace = true }
+# The seam between composing the capability registry, ingesting a walk into facts and
+# judging them, and finding that walk or rendering what came of it — `check.rs` walks the
+# tree and renders; this crate composes and judges, over source and a build variant this
+# crate hands it as values. `OD-HOST-002`.
+nomos-check-orchestration = { workspace = true }
 # The specification system. A composition root is the only place permitted to name
 # these: the spec crates sit beside the kernel rather than above it, and nothing in the
 # product may reach them directly.

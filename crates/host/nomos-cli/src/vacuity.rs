@@ -5,7 +5,7 @@
 //! already argues, correctly, that the guard itself belongs with the caller that chose the
 //! subject — "did I see a plausible amount of the world" is a question only that caller can
 //! answer, and this module does not move it: `check::sources::Walked` and
-//! `check::facts::Nothing_Materialized` still decide `check`'s answer, and
+//! `nomos_check_orchestration::Run` still decide `check`'s answer, and
 //! `spec::reporting::Absent_Or` still decides `spec`'s. What was missing was not the guard,
 //! it was a place the guard's *existence* is recorded where the next author is standing —
 //! two independent doc comments, each readable only by whoever opened that one module,
@@ -119,7 +119,7 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
     return match group
     {
         Group::Check => Stance::Guarded {
-            decided_in: "check::sources::Walked / check::facts::Nothing_Materialized",
+            decided_in: "check::sources::Walked / nomos_check_orchestration::Run",
         },
         Group::Spec => Stance::Guarded {
             decided_in: "spec::reporting::Absent_Or",

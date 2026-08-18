@@ -1,53 +1,14 @@
 //! What this module promises, exercised.
+//!
+//! What used to compose the registry, ingest a walk and judge it by hand
+//! (`Composed::Over(sources).Findings(sources)`) moved with that composition to
+//! `nomos-check-orchestration`'s own test suite -- it is a statement about that crate's
+//! seam now, not about this one. What is left here is black-box: every test below drives
+//! `Run` end to end, over a real temporary tree, the way the shipped binary is actually
+//! called.
 
 use super::*;
-use nomos_contracts::{Applicability, GateCategory};
 use super::parsing::USAGE;
-
-/// The composition this command really ships, over sources a test wrote by hand.
-///
-/// Not a stub. The registry holds the real contract and the real parser's real offer,
-/// and the store holds facts the real provider produced — which is what makes every
-/// assertion below a statement about the shipped binary rather than about a fixture.
-struct Composed
-{
-    registry: Registry,
-    store: MemoryFactStore,
-    context: Context,
-}
-
-impl Composed
-{
-    fn Over(sources: &[SourceFile]) -> Self
-    {
-        use super::facts::Ingested;
-
-        let registry = Registered().expect("the fixture composition is this binary's own");
-        let mut refused = Vec::new();
-        let context = Ingested(sources, Path::new("."), &registry, &mut refused)
-            .expect("the fixture is a valid tree");
-        let mut store = MemoryFactStore::New();
-        let _written = Materialize_Syntax(sources, &context, &mut store);
-
-        return Self {
-            registry,
-            store,
-            context,
-        };
-    }
-
-    fn Findings(&self, sources: &[SourceFile]) -> Vec<Finding>
-    {
-        let mut reader = Reader::On(&self.store, &self.registry, self.context.clone());
-
-        return Check_Completeness_Mirrors(sources, &mut reader);
-    }
-}
-
-fn Source(path: &str, text: &str) -> SourceFile
-{
-    return SourceFile::New(path, Subject_Of_Path(path), text);
-}
 
 /// ---- the exit-code policy the gate step rests on ----
 ///
@@ -193,89 +154,6 @@ fn Test_A_Missing_Root_Should_Be_Unreadable()
     let mut stderr = Vec::new();
 
     assert_eq!(Run(&command, &mut stdout, &mut stderr), ExitCode::Unreadable);
-}
-
-#[test]
-fn Test_A_Blocking_Finding_Should_Exit_Nonzero()
-{
-    let sources = vec![Source(
-        "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
-    )];
-    let findings = Composed::Over(&sources).Findings(&sources);
-    let mut stdout = Vec::new();
-
-    assert_eq!(
-        Report(&findings, Examined { files: 1, facts: 1 }, &mut stdout),
-        ExitCode::Violations
-    );
-}
-
-/// An advisory finding is reported and does not stop anybody. Twelve of them exist
-/// in this workspace today, and a gate that can never be green is one everybody
-/// learns to bypass.
-#[test]
-fn Test_An_Advisory_Finding_Should_Not_Fail_The_Run()
-{
-    let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
-    let findings = Composed::Over(&sources).Findings(&sources);
-    let mut stdout = Vec::new();
-
-    assert_eq!(
-        Report(&findings, Examined { files: 1, facts: 1 }, &mut stdout),
-        ExitCode::Ok
-    );
-    assert!(!findings.is_empty(), "there is something to report");
-}
-
-/// The counts are part of the result. Without them, a broken walk and a clean tree
-/// render the same line.
-#[test]
-fn Test_The_Report_Should_Say_How_Much_Was_Looked_At()
-{
-    let mut stdout = Vec::new();
-
-    let _code = Report(&[], Examined { files: 41, facts: 39 }, &mut stdout);
-
-    let rendered = String::from_utf8(stdout).expect("output is utf-8");
-
-    assert!(rendered.contains("41 file(s) examined"), "{rendered}");
-    assert!(rendered.contains("39 with a syntax fact"), "{rendered}");
-}
-
-/// ---- the shipped binary consults a fact ----
-///
-/// The assertion `P10-FACT-BYPASS` turns on. The parser this command registers really
-/// produces the fact, and the rule's verdict really depends on it: with the defining
-/// file's fact in the store the claim resolves and nothing is reported, and with it
-/// withheld the claim does not resolve. Same text, same rule, different store.
-#[test]
-fn Test_The_Composed_Command_Should_Resolve_A_Mirror_Through_A_Real_Fact()
-{
-    let declaring = Source(
-        "a.rs",
-        "/// Mirrored by `Test_The_Real_Provider_Found_This`.\n\
-         pub const T: &[&str] = &[];\n",
-    );
-    let checking = Source(
-        "b.rs",
-        "#[cfg(test)]\nmod tests\n{\n    #[test]\n    fn Test_The_Real_Provider_Found_This()\n    {\n    }\n}\n",
-    );
-    let whole = vec![declaring.clone(), checking.clone()];
-    let resolved = Composed::Over(&whole).Findings(&whole);
-    // The store is told about the declaring file only; the rule is handed both.
-    let short = Composed::Over(&[declaring]).Findings(&whole);
-
-    assert!(
-        resolved.is_empty(),
-        "the registered parser must find the check in b.rs: {resolved:?}"
-    );
-    assert!(
-        short
-            .iter()
-            .any(|finding| return finding.subject_name == "T"),
-        "with b.rs's fact withheld the claim must not resolve: {short:?}"
-    );
 }
 
 /// A list of codes in ascending order, so that two of them can be compared as sets.
@@ -450,30 +328,4 @@ fn A_Tree_With_A_Phantom_Beside_A_Refusal() -> PathBuf
     std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
 
     return root;
-}
-
-/// The floor is the rule's, and the run this command composes meets it.
-///
-/// Asserted here because this is the only place in the workspace where the rule's
-/// requirement and a real provider's offer are both nameable. If it ever failed, every
-/// subject would be reported unread and the command would report that it could not run
-/// — which is honest, and is not what anybody installed it for.
-#[test]
-fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
-{
-    let sources = vec![Source("a.rs", "pub const T: &[&str] = &[];\n")];
-    let findings = Composed::Over(&sources).Findings(&sources);
-
-    assert!(
-        findings
-            .iter()
-            .all(|finding| return finding.applicability == Applicability::Supported),
-        "the registered parser must serve nomos_rules::Syntax_Requirement: {findings:?}"
-    );
-    assert!(
-        findings
-            .iter()
-            .all(|finding| return finding.gate == GateCategory::Advisory),
-        "{findings:?}"
-    );
 }

@@ -1,34 +1,22 @@
 //! Every file under the root the run is to judge.
 
-use super::{Path, Write, SourceFile, ExitCode, PathBuf, Subject_Of_Path};
+use super::{Path, PathBuf, SourceFile, Subject_Of_Path};
 
-/// The Rust sources under the root.
+/// The Rust sources under the root, or `None` if the root is not a directory.
 ///
-/// A walk that found nothing is a refusal rather than a clean result: a run that judged no
-/// file renders exactly like a run that judged every file and found nothing to say.
-pub(super) fn Walked(root: &Path, stderr: &mut impl Write) -> Result<Vec<SourceFile>, ExitCode>
+/// A directory that is walked and turns out empty is not this function's decision any
+/// more: `nomos_check_orchestration::CheckOutcome` is where "not a directory" and "found
+/// nothing" become distinguishable typed answers, so this stays the walk and nothing else
+/// -- the same division `nomos-cli::work::Published_Records` draws around the directory
+/// listing `nomos_platform::FileSystem` has no port for.
+pub(super) fn Walked(root: &Path) -> Option<Vec<SourceFile>>
 {
     if !root.is_dir()
     {
-        let _ignored = writeln!(stderr, "cannot read `{}`: not a directory", root.display());
-
-        return Err(ExitCode::Unreadable);
+        return None;
     }
 
-    let sources = Read_Sources(root);
-    if sources.is_empty()
-    {
-        let _ignored = writeln!(
-            stderr,
-            "no Rust source found under `{}`, so nothing was judged.\n\
-             A clean result here would mean only that the walk found nothing.",
-            root.display()
-        );
-
-        return Err(ExitCode::Vacuous);
-    }
-
-    return Ok(sources);
+    return Some(Read_Sources(root));
 }
 
 /// Every `.rs` file under `root`, with its text and the subject its facts are filed under.

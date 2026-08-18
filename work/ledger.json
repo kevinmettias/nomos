@@ -13456,6 +13456,74 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CHECK-ORCHESTRATION",
+      "title": "OD-HOST-002's gaps 2, 3, 4 and CheckCommand's half of gap 9 close the way work's already did",
+      "why": "OD-HOST-001 built nomos-work-orchestration as the seam between choosing a platform, running a verb and rendering its outcome, and OD-HOST-002 named four more state families that have no such seam yet: capability/provider resolution (composition.rs's Registered/Resolved_Configuration, callable only inside nomos-cli), fact/analysis state (facts.rs's Prepare and syntax materialization, rebuilt fresh per call only because the CLI happens to exit), finding/requirement state (the Check_Completeness_Mirrors call sequenced inside check.rs's Run, with Finding/Applicability reachable nowhere else), and family 9's CheckCommand half (parsed and executed directly inside nomos-cli, with no orchestration crate the way WorkCommand has one). A second surface wanting any of these has two options today -- reimplement check.rs, or accept whatever nomos-cli computed as fact -- and OD-HOST-002 forbids both.",
+      "done_when": "crates/orchestration/nomos-check-orchestration exists at band 40: CheckCommand (moved verbatim from check/command.rs) and a CheckOutcome enum naming the pipeline's real branches as typed data (Unreadable, Contradictory(RegistryError), NoSource, NoFacts{files}, Judged{findings,examined,claim}), plus Examined and Claim moved from check/report.rs. A Run entry point takes already-walked sources and composes capability registry composition (Registered/Resolved_Configuration moved from check/composition.rs), fact ingestion and syntax materialization (moved from check/facts.rs) and the Check_Completeness_Mirrors call over a nomos_analysis::Reader (moved from check.rs's own Run), returning CheckOutcome and writing nothing. nomos-cli::check becomes a composition root and renderer only: it keeps check/parsing.rs, check/sources.rs's directory walk (no FileSystem directory-listing port exists, the same exception work.rs's Published_Records already has), check/exit_code.rs and the rendering half of check/report.rs (Report/Counts/Coverage, turning a CheckOutcome into text and an ExitCode), calls the orchestration crate's entry point once, and matches the returned CheckOutcome to render. tests/integration/src/context.rs's own registry-composition duplication is untouched -- OD-HOST-002 already names it as a real, separately-owned duplication. Cargo.toml, README.md and tests/contract/tests/boundaries/bands.rs gain the new crate's band-40 row; tests/contract/surface gains its snapshot. OD-HOST-002 is amended (version bumped) so families 2, 3 and 4 and the CheckCommand half of family 9 describe the new seam the way family 1 already describes nomos-work-orchestration, rather than describing a gap that no longer exists.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/host/nomos-cli",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/surface",
+          "tests/contract/tests/boundaries/bands.rs",
+          "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "\\debug\\deps\\abandon_is_readable-1f07e87d1ebfdbdf.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-638afd5b4f899056.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-3db5d8686786e3e8.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-c1090d607e8255e1.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-19681ed27c72fa24.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-d5560376c3368a31.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-4d60ac6b8ed7cb86.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-8bbddf04b1016e63.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-b07015b922c117c5.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-b612c824e5c425c7.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-b7ebed9f1f594bdf.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1787013289,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b2aae2c5d29c943404211d1091c4055460f1db1d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

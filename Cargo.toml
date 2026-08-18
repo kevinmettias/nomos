@@ -50,6 +50,11 @@ members = [
     # every composition root that could call it. `OD-HOST-001`.
     "crates/orchestration/nomos-work-orchestration",
 
+    # Band 40 — orchestration. Composing the capability registry, ingesting
+    # already-walked source into facts and judging it, apart from choosing a platform,
+    # walking a tree or rendering the answer. `OD-HOST-002`.
+    "crates/orchestration/nomos-check-orchestration",
+
     # Band 1 — the specification system. Reaches the product only through a
     # KnowledgeCapability, never directly.
     "crates/spec/nomos-spec-model",
@@ -104,6 +109,7 @@ nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
+nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }

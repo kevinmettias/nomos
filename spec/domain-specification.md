@@ -64,7 +64,7 @@ profile: domain-specification
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
-| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:ed58186c941e4ff80c3091aefb10e8c06f3eeac2a3f324f27fc6aa74c4594589 |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:3c11ee49be7fb50e863faf186a9559e9eb0009b2ab57b02b0d5a5ad8f86e0464 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
@@ -15422,44 +15422,52 @@ gap rather than closing it.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#12
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:8868951ab69e2ace7b6f76f7b427fb346fd9f0d5d2c02fcaf80363372ee8275b*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:f036271754344c2f5e09e31c0b78fd0e2919d5a0e00cee549b82d4ee5386a99f*
 
-2. **Capability / provider resolution — no seam yet.** `nomos_capability::Registry`,
-   `Requirement`, `ProviderOffer`, `Resolution` (`crates/substrate/nomos-capability/src/
-   registry.rs`, `requirement.rs`, `provider_offer.rs`, `resolution.rs`) decide which
-   provider satisfies which capability. Today only `nomos-cli::check::composition::
-   Registered` and `Resolved_Configuration`
-   (`crates/host/nomos-cli/src/check/composition.rs:15,59`) build this registry and hash
-   it into a `ConfigurationId`; no crate outside `nomos-cli` can obtain the same resolved
-   registry. A second surface has two options — reimplement `composition.rs`, or accept
-   whatever `nomos-cli` computed as fact — and both are the failure this record forbids.
+2. **Capability / provider resolution — a working seam, since `nomos-check-orchestration`.**
+   `nomos_capability::Registry`, `Requirement`, `ProviderOffer`, `Resolution`
+   (`crates/substrate/nomos-capability/src/registry.rs`, `requirement.rs`,
+   `provider_offer.rs`, `resolution.rs`) decide which provider satisfies which capability.
+   `nomos_check_orchestration::Registered` and `Resolved_Configuration`
+   (`crates/orchestration/nomos-check-orchestration/src/composition.rs`) build this
+   registry and hash it into a `ConfigurationId`, callable by any crate that depends on
+   `nomos-check-orchestration` rather than only from inside `nomos-cli`. This is the same
+   duplication `tests/integration/src/context.rs`'s own rendering of a registry was
+   already named against under band 100, where this crate cannot reach it — moving the
+   canonical copy did not remove that second one, and this record does not ask it to.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#13
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:3432f2ec1347c66678a41eaa22ac94fc0e3471d0e7a4a011eeca6602a6342d74*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:e21ed614d8d777aad0a6860ce5da0d7de6e07030ca11c109bd33794179c4a943*
 
-3. **Fact / analysis state — per-invocation only today, and only because the CLI
-   exits.** `nomos_analysis::Context`, `MemoryFactStore`, and the fact-invalidation
+3. **Fact / analysis state — a working seam, over the one input a caller must still
+   supply.** `nomos_analysis::Context`, `MemoryFactStore`, and the fact-invalidation
    machinery (`Condensation_Of`, `RematerializationGroup` in
    `crates/substrate/nomos-analysis/src/store.rs:136,171`) hold the facts a check run
-   reasons over. `nomos-cli::check::facts::Prepare`
-   (`crates/host/nomos-cli/src/check/facts.rs`) builds this fresh per call and drops it
-   when `check::Run` returns. It is stateless across invocations only because `nomos-cli`
-   happens to exit; a long-lived surface running this same code path in place, rather
-   than through a callable service, reaches the identical failure with a longer
-   lifetime.
+   reasons over. `nomos_check_orchestration::Run`
+   (`crates/orchestration/nomos-check-orchestration/src/run.rs`) builds this from already-
+   walked source and a caller-supplied build variant and hands back a
+   `CheckOutcome`, reconstructable by any client that walks the same tree — the directory
+   walk itself stays a composition-root concern
+   (`nomos-cli::check::sources::Walked`), the same exception
+   `nomos-cli::work::Published_Records` already has for a directory listing
+   `nomos_platform::FileSystem` has no port for.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#14
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:7ccbbd24689de9bc9346c7d783c6576b7e195edd8965cdd0610d9d6d3fb9e930*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:e763aa921311313518ffa5ab9707d25426f3c32b0fc1dc5bc90db1a2dfba421f*
 
-4. **Finding / requirement state.** `nomos_contracts::Finding`, `Applicability`,
-   `EvidenceClass`, `Guarantee` (`crates/contracts/nomos-contracts/src/finding.rs:56`,
-   `finding/applicability.rs:33`, `finding/evidence.rs:24`, `guarantee.rs:23`) are what
-   `nomos check` produces about a requirement. They are consumed only inside
-   `nomos-cli::check::report` (imports at `report.rs:4-5`) and `check.rs` itself today; no
-   other crate can ask "what does this repository's rule engine currently say about this
-   subject" without running `nomos check` itself.
+4. **Finding / requirement state — a working seam.** `nomos_contracts::Finding`,
+   `Applicability`, `EvidenceClass`, `Guarantee`
+   (`crates/contracts/nomos-contracts/src/finding.rs:56`, `finding/applicability.rs:33`,
+   `finding/evidence.rs:24`, `guarantee.rs:23`) are what `nomos check` produces about a
+   requirement. `nomos_check_orchestration::Run` runs `nomos_rules::
+   Check_Completeness_Mirrors` over a real `nomos_analysis::Reader` and returns them inside
+   `CheckOutcome::Judged`, alongside `Examined` and `Claim`
+   (`crates/orchestration/nomos-check-orchestration/src/outcome.rs`) — the roll-up
+   judgment a second adapter needs without re-deriving it. `nomos-cli::check::report`
+   keeps only the rendering half: `Coverage`, a pure grouping of `findings` for a text
+   reader, computed fresh at render time rather than carried as a second fact.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#15
 
@@ -15508,17 +15516,18 @@ gap rather than closing it.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#19
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:7dc8560575fb7fad8e329a554ceddf8465eb147433e61f7525ee1a0e52ebd7e5*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:32bfec890281da37f39fee03cbe981d73510131e4daee55d4fbf3d6c52b5654a*
 
-9. **Control commands.** `WorkCommand`
-   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`) is the one command
-   vocabulary that already routes through a seam. `SpecCommand`
-   (`crates/host/nomos-cli/src/spec/command.rs:11`), `CheckCommand`
-   (`crates/host/nomos-cli/src/check/command.rs:6`) and `request::Command`
-   (`crates/host/nomos-cli/src/request.rs:65`) are parsed and executed directly inside
-   `nomos-cli` today, with no equivalent orchestration crate. Until each has one, this
+9. **Control commands — two of four now route through a seam.** `WorkCommand`
+   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`) and `CheckCommand`
+   (`crates/orchestration/nomos-check-orchestration/src/command.rs:11`, moved verbatim
+   from `nomos-cli::check::command`) each name a crate a second adapter can depend on
+   without also taking `nomos-cli`'s argument parsing, exit codes or rendering.
+   `SpecCommand` (`crates/host/nomos-cli/src/spec/command.rs:11`) and `request::Command`
+   (`crates/host/nomos-cli/src/request.rs:65`) are still parsed and executed directly
+   inside `nomos-cli`, with no equivalent orchestration crate. Until each has one, this
    record's second clause — every action is a command through a canonical service — is
-   unmet for three of the four command groups. Naming that gap is what makes the rule
+   unmet for the remaining two command groups. Naming that gap is what makes the rule
    checkable rather than already true by assumption.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20
@@ -15572,15 +15581,16 @@ forbids.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#26
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What this constrains · hash: sha256:fcc11415a8acd6058ea9f8cbadabc61184557a70b6787683846d91f7824aab6e*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What this constrains · hash: sha256:ddbf53e30d23b02e6557136bf2419f8d306df466004e03588d0a93d615f5757e*
 
 This record adds no seam and reopens none. `OD-HOST-001` decided that
-`nomos-work-orchestration` is the seam for the work group; this record states what any
-seam — that one, or one not yet built for capability resolution, fact state, findings,
-evidence, packages, connectors, or the record store — must guarantee once it exists: a
-surface calling through it holds nothing the seam itself cannot regenerate. Building the
-seams still missing for families 2–4 and 6–9 above is future work this record makes
-checkable, not work it does.
+`nomos-work-orchestration` is the seam for the work group, and `nomos-check-orchestration`
+— built after this record first shipped, closing families 2–4 and the `CheckCommand` half
+of family 9 — is the second demonstration rather than a third decision: this record states
+what any seam must guarantee once it exists, and does not itself build one. A surface
+calling through either seam holds nothing the seam itself cannot regenerate. Building the
+seams still missing for families 6–8 and the `SpecCommand`/`request::Command` half of
+family 9 above is future work this record makes checkable, not work it does.
 
 ### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1
 

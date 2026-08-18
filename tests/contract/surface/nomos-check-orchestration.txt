@@ -1,0 +1,20 @@
+pub enum nomos_check_orchestration::CheckOutcome
+pub enum nomos_check_orchestration::Claim
+pub enum variant nomos_check_orchestration::CheckOutcome::Contradictory(RegistryError)
+pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, }
+pub enum variant nomos_check_orchestration::CheckOutcome::NoFacts { files: usize, }
+pub enum variant nomos_check_orchestration::CheckOutcome::NoSource
+pub enum variant nomos_check_orchestration::CheckOutcome::Unreadable
+pub enum variant nomos_check_orchestration::Claim::Complete
+pub enum variant nomos_check_orchestration::Claim::Incomplete
+pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
+pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError>
+pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
+pub fn nomos_check_orchestration::Run(sources: &[SourceFile], variant: BuildVariant) -> CheckOutcome
+pub impl nomos_check_orchestration::Claim implements core::fmt::Display
+pub struct field nomos_check_orchestration::CheckCommand::root: PathBuf
+pub struct field nomos_check_orchestration::Examined::facts: usize
+pub struct field nomos_check_orchestration::Examined::files: usize
+pub struct nomos_check_orchestration::CheckCommand
+pub struct nomos_check_orchestration::Examined

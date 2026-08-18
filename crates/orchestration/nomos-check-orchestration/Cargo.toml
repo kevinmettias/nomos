@@ -1,0 +1,21 @@
+[package]
+name = "nomos-check-orchestration"
+version = "0.1.0"
+description = "Band 40. Composes the capability registry, ingests already-walked source into facts and runs the completeness rule over them, and hands back what was found -- the seam a second adapter calls without choosing a platform, walking a tree or rendering the answer."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-analysis = { workspace = true }
+nomos-cap-syntax = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-lang-rust = { workspace = true }
+nomos-model = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-workspace = { workspace = true }
+
+[lints]
+workspace = true

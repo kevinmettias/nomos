@@ -310,12 +310,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-check-orchestration"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-syntax",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-lang-rust",
+ "nomos-model",
+ "nomos-rules",
+ "nomos-workspace",
+]
+
+[[package]]
 name = "nomos-cli"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
  "nomos-cap-syntax",
  "nomos-capability",
+ "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-ledger",

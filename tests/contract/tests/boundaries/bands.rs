@@ -75,6 +75,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // composition root that could call it — `nomos-cli` today, and whatever a second
     // adapter is tomorrow. `OD-HOST-001`.
     ("nomos-work-orchestration", 40),
+    // Composes the capability registry, ingests already-walked source into facts and
+    // judges it, apart from choosing a platform, walking a tree or rendering the answer.
+    // Same band as `nomos-work-orchestration`: both are the middle of a three-crate seam
+    // between a composition root and the substrate it orchestrates. `OD-HOST-002`.
+    ("nomos-check-orchestration", 40),
     ("nomos-cli", 90),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.

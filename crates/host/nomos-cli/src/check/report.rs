@@ -1,28 +1,16 @@
-//! Saying what was found, over how much, what would fail a build, and what the run could
-//! not judge.
+//! Turning what `nomos_check_orchestration` produced — or a walk decision made before it
+//! was ever called — into text and an [`ExitCode`].
+//!
+//! `Coverage` and this rendering stayed here on purpose: `nomos_check_orchestration::
+//! CheckOutcome::Judged` carries `findings`, `examined` and `claim` — the judgment itself —
+//! and a coverage breakdown is a pure, re-derivable grouping of `findings` for a text
+//! reader, not a second fact a caller could need without also wanting to print it.
+//! `Examined` and `Claim` moved out because they are exactly that second kind: a judgment a
+//! second adapter would otherwise have to re-derive rather than read off `CheckOutcome`.
 
-use super::{Finding, Write, ExitCode};
+use super::{ExitCode, Finding, Path, Write};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined};
 use nomos_contracts::Applicability;
-
-/// How much of the world this run actually saw.
-///
-/// Two denominators and not one. "0 findings over 400 files" and "0 findings over 400
-/// files none of which produced a fact" are different claims, and the second is a broken
-/// run — the prototype reported the first shape for a check that had walked nothing, and
-/// the defect was invisible because the report had no place to put the number that would
-/// have shown it. That reasoning still holds and is unchanged by `OD-COMPLETENESS-004`:
-/// it is a property of the walk, decided before a single subject is judged, and it is
-/// orthogonal to what judgment each subject received. [`Coverage`], below, is the type
-/// that carries the eleven-way answer to the second question — deliberately not a third
-/// field here, for the reason its own doc comment gives.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(super) struct Examined
-{
-    /// Files the walk read.
-    pub(super) files: usize,
-    /// Files a syntax fact was materialized for.
-    pub(super) facts: usize,
-}
 
 /// How many subjects this run placed in each [`Applicability`] state.
 ///
@@ -31,7 +19,7 @@ pub(super) struct Examined
 /// compiling rather than landing silently in whichever bucket the match happened to fall
 /// through to.
 ///
-/// `OD-COMPLETENESS-004` is why this exists beside [`Examined`] rather than growing it by
+/// `OD-COMPLETENESS-004` is why this exists beside `Examined` rather than growing it by
 /// one more integer. Two denominators can tell a clean tree from a broken walk; neither one
 /// integer nor a third can tell which of eleven reasons a subject was not judged for, and
 /// that is the distinction a reader needs to tell an unexamined subject from a clean one.
@@ -141,52 +129,62 @@ impl Coverage
     }
 }
 
-/// Whether this run reached a judgment about everything it touched.
-///
-/// Not implied by zero blocking findings. [`Claim::Incomplete`] is a fact about the run's
-/// reach, not about severity, and `OD-COMPLETENESS-004` records that this build keeps it a
-/// fact reported in the text rather than a fact the exit code carries — see the record for
-/// why splitting the exit code here is not the remedy.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(super) enum Claim
+/// Turns what [`nomos_check_orchestration::Run`] produced — or a walk decision the
+/// composition root made before ever calling it — into text and an [`ExitCode`].
+pub(super) fn Render(root: &Path, outcome: &CheckOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    /// No subject fell into a debt or agent-required state. Deliberate absences —
-    /// [`Applicability::NotApplicable`] and [`Applicability::ConfigurationDisabled`] — do
-    /// not break this, for the same reason [`Applicability::Is_Coverage_Debt`] excludes
-    /// them: a decision is not a gap.
-    Complete,
-    /// At least one subject fell into [`Applicability::Is_Coverage_Debt`] or
-    /// [`Applicability::Requires_Agent`]. The run did not reach a judgment about it, and
-    /// that is a different claim from reaching one and finding it clean.
-    Incomplete,
-}
-
-impl core::fmt::Display for Claim
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+    return match outcome
     {
-        return formatter.write_str(match self
+        CheckOutcome::Unreadable =>
         {
-            Self::Complete => "complete",
-            Self::Incomplete => "incomplete",
-        });
-    }
-}
+            let _ignored = writeln!(
+                stderr,
+                "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
+                 workspace state",
+                root.display()
+            );
 
-/// The roll-up verdict, read off [`Applicability`]'s own predicates rather than
-/// re-derived from [`Coverage`]'s counters — one classification, asked once, so a change to
-/// what counts as debt cannot drift between the two.
-fn Claim_Of(findings: &[Finding]) -> Claim
-{
-    let unjudged = findings.iter().any(|finding| {
-        return finding.applicability.Is_Coverage_Debt() || finding.applicability.Requires_Agent();
-    });
+            ExitCode::Unreadable
+        }
+        CheckOutcome::Contradictory(error) =>
+        {
+            let _ignored = writeln!(
+                stderr,
+                "this build's own composition is contradictory, so no fact it produced would \
+                 have been offered by anybody: {error}"
+            );
 
-    return if unjudged { Claim::Incomplete } else { Claim::Complete };
+            ExitCode::Unreadable
+        }
+        CheckOutcome::NoSource =>
+        {
+            let _ignored = writeln!(
+                stderr,
+                "no Rust source found under `{}`, so nothing was judged.\n\
+                 A clean result here would mean only that the walk found nothing.",
+                root.display()
+            );
+
+            ExitCode::Vacuous
+        }
+        CheckOutcome::NoFacts { files } =>
+        {
+            let _ignored = writeln!(
+                stderr,
+                "{files} file(s) were read under `{}` and no syntax fact was materialized for \
+                 any of them, so no mirror claim could be resolved.\n\
+                 A clean result here would mean only that the analysis never ran.",
+                root.display()
+            );
+
+            ExitCode::Vacuous
+        }
+        CheckOutcome::Judged { findings, examined, claim } => Report(findings, *examined, *claim, stdout),
+    };
 }
 
 /// Renders the findings and decides the exit code.
-pub(super) fn Report(findings: &[Finding], examined: Examined, stdout: &mut impl Write) -> ExitCode
+fn Report(findings: &[Finding], examined: Examined, claim: Claim, stdout: &mut impl Write) -> ExitCode
 {
     for finding in findings
     {
@@ -197,7 +195,7 @@ pub(super) fn Report(findings: &[Finding], examined: Examined, stdout: &mut impl
         .iter()
         .filter(|finding| return finding.Can_Fail_A_Build())
         .count();
-    Counts(findings, blocking, examined, stdout);
+    Counts(findings, blocking, examined, claim, stdout);
 
     if blocking > 0
     {
@@ -215,7 +213,7 @@ pub(super) fn Report(findings: &[Finding], examined: Examined, stdout: &mut impl
 /// reached a judgment about everything and "0 findings" over a run that could not judge a
 /// third of it are a third pair a reader must not be left to conflate, which is what the
 /// claim line and the coverage breakdown below say.
-pub(super) fn Counts(findings: &[Finding], blocking: usize, examined: Examined, stdout: &mut impl Write)
+fn Counts(findings: &[Finding], blocking: usize, examined: Examined, claim: Claim, stdout: &mut impl Write)
 {
     let found = findings.len();
     let _ignored = writeln!(
@@ -226,7 +224,6 @@ pub(super) fn Counts(findings: &[Finding], blocking: usize, examined: Examined, 
         examined.facts
     );
 
-    let claim = Claim_Of(findings);
     let _ignored = writeln!(stdout, "claim: {claim}");
 
     let coverage = Coverage::Of(findings);
@@ -240,6 +237,7 @@ pub(super) fn Counts(findings: &[Finding], blocking: usize, examined: Examined, 
 mod tests
 {
     use super::*;
+    use nomos_check_orchestration::Claim_Of;
     use nomos_contracts::{Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
 
     fn Finding_With(applicability: Applicability) -> Finding
@@ -331,19 +329,36 @@ mod tests
         assert_eq!(Claim_Of(&[Finding_With(Applicability::Supported)]), Claim::Complete);
     }
 
+    /// The counts are part of the result. Without them, a broken walk and a clean tree
+    /// render the same line.
+    #[test]
+    fn Test_The_Report_Should_Say_How_Much_Was_Looked_At()
+    {
+        let mut stdout = Vec::new();
+
+        let _code = Report(&[], Examined { files: 41, facts: 39 }, Claim::Complete, &mut stdout);
+
+        let rendered = String::from_utf8(stdout).expect("output is utf-8");
+
+        assert!(rendered.contains("41 file(s) examined"), "{rendered}");
+        assert!(rendered.contains("39 with a syntax fact"), "{rendered}");
+    }
+
     /// The negative control `OD-COMPLETENESS-004` asks for: a subject the run could not
     /// judge must render distinguishably from a subject that was judged clean, in the
     /// rendered text a person actually reads — not only in a field nobody prints.
     #[test]
     fn Test_A_Coverage_Debt_Subject_Must_Not_Render_The_Same_As_A_Clean_Run()
     {
+        let clean_examined = Examined { files: 1, facts: 1 };
         let mut clean_stdout = Vec::new();
-        let _clean_code = Report(&[], Examined { files: 1, facts: 1 }, &mut clean_stdout);
+        let _clean_code = Report(&[], clean_examined, Claim_Of(&[]), &mut clean_stdout);
         let clean_rendered = String::from_utf8(clean_stdout).expect("utf-8");
 
         let debt = vec![Finding_With(Applicability::DependencyUnavailable)];
+        let debt_examined = Examined { files: 1, facts: 0 };
         let mut debt_stdout = Vec::new();
-        let _debt_code = Report(&debt, Examined { files: 1, facts: 0 }, &mut debt_stdout);
+        let _debt_code = Report(&debt, debt_examined, Claim_Of(&debt), &mut debt_stdout);
         let debt_rendered = String::from_utf8(debt_stdout).expect("utf-8");
 
         assert_ne!(
