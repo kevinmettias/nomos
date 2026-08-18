@@ -15774,6 +15774,318 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-PACKAGEKIND-CONSUMER-STALE",
+      "title": "PackageKind's doc comment still claims no consumer exists; nomos-package's reader is now one",
+      "why": "crates/contracts/nomos-contracts/src/package.rs's PackageKind doc comment says 'No code outside this crate names PackageKind, and none is written to make it look used' and that the enum 'gains its first consumer when something reads a declared package manifest and refuses one it cannot resolve.' P13-PACKAGE-GENERIC-CORE (OD-PACKAGE-007) landed nomos-package's reader.rs, whose Package_Kind_Field does exactly that: it deserializes a manifest's package_kind against PackageKind and returns ManifestError::WrongPackageKind when it is not PackageKind::LanguagePackage. The doc comment's premise is now false for LanguagePackage, though RulePackage and the other fourteen kinds remain genuinely unconsumed.",
+      "done_when": "PackageKind's doc comment in crates/contracts/nomos-contracts/src/package.rs states that nomos-package's reader (crates/packages/nomos-package/src/reader.rs) is LanguagePackage's real consumer, refusing a manifest whose package_kind resolves to anything else, while noting the other fifteen kinds -- RulePackage included -- remain unconsumed. cargo test --no-fail-fast -p nomos-contracts passes (doc comment only; no behavioral change).",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/package.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts"
+        ],
+        "exit_code": 0,
+        "output_tail": "test guarantee::tests::Test_Guarantee_Should_Satisfy_An_Equal_Requirement ... ok\ntest guarantee::tests::Test_Syntactic_Should_Not_Satisfy_A_Semantic_Requirement ... ok\ntest guarantee::tests::Test_Unknown_Soundness_Should_Not_Satisfy_A_Soundness_Requirement ... ok\ntest guarantee::tests::Test_Unrequired_Properties_Should_Not_Be_Demanded ... ok\ntest identity::generation_id::tests::Test_Generation_Should_Advance_And_Never_Wrap ... ok\ntest identity::tests::Test_Digest_Debug_Should_Contain_The_Hex_Form ... ok\ntest identity::tests::Test_Digest_Should_Render_As_Thirty_Two_Hex_Characters ... ok\ntest identity::tests::Test_Digest_Should_Zero_Pad_Every_Byte ... ok\ntest package::tests::Test_Display_Should_Render_The_Serialized_Label ... ok\ntest package::tests::Test_Integration_Packages_Should_Not_Host_Foreign_Code ... ok\ntest package::tests::Test_Every_Kind_Should_Carry_The_Label_The_Corpus_Names ... ok\ntest package::tests::Test_Kernel_Modules_Should_Not_Be_Optional ... ok\ntest package::tests::Test_Labels_Should_Be_Distinct ... ok\ntest package::tests::Test_Provider_Kinds_Should_Be_Recognized_As_Hosting_Foreign_Code ... ok\ntest package::tests::Test_Rule_And_Language_Packages_Should_Not_Host_Foreign_Code ... ok\ntest peer::availability::tests::Test_Silence_Should_Never_Read_As_Knowledge ... ok\ntest peer::availability::tests::Test_Unavailability_Should_Carry_Its_Reason_Into_The_Description ... ok\ntest peer::synchronization_state::tests::Test_Divergence_Should_Require_An_Authorized_Decision ... ok\ntest peer::synchronization_state::tests::Test_Unavailable_Should_Not_Read_As_Current ... ok\n\ntest result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-8a61c7a28e29334f.exe)\n   Doc-tests nomos_contracts\n",
+        "verified_at": 1787095277,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d80256e23b0c3fd4f3a9b5c3c6a8c3214b4651da"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-SCAN-PROVIDER-COMPOSE",
+      "title": "nomos-lang-rust-scan's offer reaches the real composition root, not just tests/integration's duplicate",
+      "why": "crates/orchestration/nomos-check-orchestration/src/composition.rs::Registered() only calls registry.Offer(nomos_lang_rust::Provider_Offer()); nomos-lang-rust-scan's own Provider_Offer() is only ever called from tests/integration/src/composition.rs's test-only duplicate composition. The nomos-add-plugin skill flags this directly: nomos-lang-rust-scan's offer exists only in that test-only duplicate, so the second provider is already wired into nomos check is not yet true of the production path. OD-HOST-004 already decided a second Offer call needs no selection mechanism -- this is composition, not choice.",
+      "done_when": "crates/orchestration/nomos-check-orchestration/Cargo.toml depends on nomos-lang-rust-scan (workspace = true). composition.rs::Registered() calls registry.Offer(nomos_lang_rust_scan::Provider_Offer()) alongside the existing rust offer. src/tests.rs's fixtures (Findings_Over and friends) still pass with Registry::Resolve now choosing among two syntax providers for the same capability -- if selection behavior changes, the test fixtures are updated to state which provider they require, not loosened. cargo test --no-fail-fast -p nomos-check-orchestration passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest tests::Test_Conflicting_Paths_Should_Be_Unreadable ... ok\ntest tests::Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts ... ok\ntest tests::Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings ... ok\ntest tests::Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete ... ok\ntest tests::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\ntest tests::Test_The_Composed_Crate_Should_Resolve_A_Mirror_Through_A_Real_Fact ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-4fc44f271721a3d5.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1787095307,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d80256e23b0c3fd4f3a9b5c3c6a8c3214b4651da"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULE-PACKAGE-QUESTION",
+      "title": "Log ARCH-002's still-open RulePackage half as open intent now that nomos-package exists",
+      "why": "OD-PACKAGE-001 accepted ARCH-001 and ARCH-002 as corpus requirements: a LanguagePackage and a RulePackage must each be independently versioned. OD-PACKAGE-007 (P13-PACKAGE-GENERIC-CORE) satisfied ARCH-001 by splitting nomos-package as a language-agnostic manifest core with nomos-lang-package as its Rust wrapper. ARCH-002's RulePackage half is untouched: nomos-rules holds exactly one rule function, no manifest, no provider model, and PackageKind::RulePackage has no consumer anywhere in the workspace. Building a RulePackage manifest crate now would be designed against a population of one rule, the same trap OD-PACKAGE-006 already named for KNOWN_PROVIDERS. Whether nomos-package's existing generic core makes a RulePackage wrapper cheap enough to build now regardless, or whether it should wait for a second rule the way OD-PACKAGE-006 waits for a third provider, is undecided.",
+      "done_when": "OD-PACKAGE-008 is registered and governing, and diagrams/relations.mmd + spec/domain-specification.md are re-rendered fresh over it.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-008.record",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-rule-package-question",
+        "acquired_at": 1787095112,
+        "lease_expires_at": 1787102312
+      },
+      "verification": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-REGISTRY-DECISION",
+      "title": "OD-PACKAGE-006 resolves: a generic provider-registration base type is built now, for a second language's package crate, not for a third same-language provider",
+      "why": "OD-PACKAGE-006 left open whether nomos-lang-package's KNOWN_PROVIDERS array needs a self-registering mechanism, and named a third same-language provider crate as the trigger to revisit -- explicitly declining to build it 'designed against a population of two.' A person has since given explicit direction to invest now in the infrastructure and base types a language or rule plugin needs, specifically so that plugin can be developed on a separate thread from nomos proper, rather than waiting for a third Rust provider that may never arrive before a genuinely new language does. nomos-add-plugin's own section 2 already states the operative principle for exactly this situation -- pull a contract out at the moment a second party is expected to offer against it, not only once one actually has -- and a second language's package crate, already load-bearing in README's own band table at band 26, is exactly that expected second party for provider registration, even though no second language crate exists yet. OD-PACKAGE-006's original trigger, a third same-language Rust provider, remains unmet and is not what resolves this; the direction is resolved instead by the already-endorsed extract-early principle applied to registration specifically, per explicit request.",
+      "done_when": "OD-PACKAGE-006's status moves from open to accepted, stating: a generic provider-registration base type belongs at nomos-package's band (24) rather than being reinvented per-language the way nomos-lang-package's KNOWN_PROVIDERS array is today, motivated by enabling a second language's package crate to reuse it rather than by a third same-language provider (which remains OD-PACKAGE-006's original, still-unmet trigger and is explicitly not what resolves this). It names the concrete shape a follow-on capability item must produce: a registry type in nomos-package that a package crate populates with its own known providers, with nomos-lang-package refactored to become its first real consumer. diagrams/relations.mmd and spec/domain-specification.md are re-rendered and current per nomos spec freshness, verified from an isolated worktree at the record set this commit publishes. Closed by the record alone: no crate changes, and neither nomos-package nor nomos-lang-package is touched.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-006"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "loop-agent",
+        "acquired_at": 1787095278,
+        "lease_expires_at": 1787102478
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULE-PACKAGE-DECISION",
+      "title": "nomos-rules gains a declared rule-registration contract now, ahead of a second rule, so a rule package can be built independently",
+      "why": "OD-HOST-004 decided nomos_check_orchestration::run::Run stays hand-written for as long as every rule it calls runs unconditionally, and named the flip criterion as conditionality, not cardinality: Run needs a declared selection mechanism the moment a rule's participation is meant to vary by request rather than by whether the crate merely knows about it. crates/rules/nomos-rules holds exactly one rule today and has no package or registration contract of its own -- unlike the capability side, which already separated nomos-cap-syntax from its first provider so a second provider could offer against a contract that was never any one provider's property. A person has given explicit direction to invest now in the base types and contracts a rule plugin needs, specifically so a rule package can be designed and built on a separate thread from nomos proper's own work, before nomos-rules' second rule exists to force the question by accretion. This is the same extract-early principle nomos-add-plugin section 2 already states for capability contracts -- pull the contract out at the moment a second party is expected to offer against it, not only once one actually has -- applied to rules: a rule package is the expected second party, and OD-HOST-004's own flip criterion (participation varying by request) is what a rule-package system introduces by construction, once which packages are loaded can vary per invocation.",
+      "done_when": "A new record under OD-RULES decides that nomos-rules gains a declared rule-registration contract -- a RuleId/RulePackage-shaped type mirroring how ProviderId/ProviderOffer let nomos_capability::Registry accept an offer without knowing the provider's crate in advance -- built now rather than waiting for a second rule to force it by accretion, and states why this does not contradict OD-HOST-004: OD-HOST-004's hand-written Run() remains correct for the rules a package system has not yet made conditional, and the new registry is additive infrastructure a rule package can register against, not a retraction of OD-HOST-004's finding for the single rule that exists today. It relates to OD-HOST-004, D-135 and the nomos-add-plugin skill's section 2 principle, is registered in crates/spec/nomos-spec-store/records/, and diagrams/relations.mmd and spec/domain-specification.md are re-rendered and current per nomos spec freshness, verified from an isolated worktree at the record set this commit publishes. Closed by the record alone: no crate changes, and nomos-rules is not touched.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-REGISTRY-BASE",
+      "title": "nomos-package gains a generic provider-registration type, and nomos-lang-package becomes its first real consumer",
+      "why": "P13-PACKAGE-REGISTRY-DECISION resolves OD-PACKAGE-006 to build a generic provider-registration base type at nomos-package's band now, so a second language's package crate does not reinvent nomos-lang-package's hand-maintained KNOWN_PROVIDERS array. nomos-package (band 24) is the language-agnostic manifest core and depends on nothing above nomos-contracts; nomos-lang-package (band 26) wraps it with Rust-specific KNOWN_PROVIDERS today. This item builds the shared type and makes nomos-lang-package its first real consumer, so the base infrastructure exists before a second language's package crate needs to duplicate it.",
+      "done_when": "nomos-package exposes a generic provider-registration type (name and exact shape decided by the implementer against nomos-package's existing PackageManifest/Parse_Manifest/Read_Manifest conventions and OD-PACKAGE-006's accepted resolution) that a package crate populates with its own known providers' PROVIDER constants, pulled by reference. nomos-lang-package's known_providers.rs is refactored to build its KNOWN_PROVIDERS through this shared type instead of a bespoke array, with no behavior change to Is_Known's refusal semantics. Band ordering is unchanged (nomos-package stays band 24, below nomos-lang-package at 26) and tests/contract/tests/boundaries/bands.rs, tests/contract/surface and README.md are updated if the public surface of either crate changes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/packages/nomos-package",
+          "crates/packages/nomos-lang-package",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P13-PACKAGE-REGISTRY-DECISION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-package",
+          "-p",
+          "nomos-lang-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-RULE-PACKAGE-BASE",
+      "title": "nomos-rules gains a RuleId and registration contract for a future rule package to register against",
+      "why": "P13-RULE-PACKAGE-DECISION's new OD-RULES record decides nomos-rules gains a declared rule-registration contract now, ahead of a second rule, so a rule package can be designed and built independently against a stable contract. This item builds that contract: a RuleId/RulePackage-shaped type and a minimal registry a rule package crate registers against, mirroring nomos_capability::Registry's shape (declared contracts, offers accepted without the registry knowing the provider crate in advance) without yet requiring nomos_check_orchestration::run::Run to change its own composition -- OD-HOST-004's hand-written Run() remains correct for the one rule that exists today.",
+      "done_when": "crates/rules/nomos-rules exposes a RuleId type and a registration contract (a RulePackage-shaped offer type plus a minimal Registry a rule package crate registers against) a future rule package crate implements, following the same four-export convention nomos-add-plugin section 1 documents for capability providers (an id constant, a declared guarantee/requirement, an offer/registration function, and the actual work function), adapted to a rule's existing Check_Completeness_Mirrors(sources, facts) -> Vec<Finding> shape. This item ships the base contract only -- nomos_check_orchestration::run::Run is not touched, and OD-HOST-004's decision that Run() stays hand-written until a rule's participation varies by request is unchanged; the new registry exists for a future rule package to register against, not to replace today's one direct call. tests/contract/surface/nomos-rules.txt is updated if the crate's public surface grows a new export.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules",
+          "tests/contract/surface"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P13-RULE-PACKAGE-DECISION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
