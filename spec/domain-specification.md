@@ -18,7 +18,7 @@ profile: domain-specification
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
-| docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored | docs/records/D-130-no-xvpe-dependency-before-phase-5.md | authored | 15 | 5 | sha256:03bfce3f9975bfbf71d7db386bc0111aa9462f24836bad4195ea0a2c6000a10b |
+| docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored | docs/records/D-130-no-xvpe-dependency-before-phase-5.md | authored | 20 | 6 | sha256:bdf0569224ca6b8b8524f1217f056e7fcbbe40ee65d530d3732c1f5a65ebd0d6 |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md@authored | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md | authored | 18 | 6 | sha256:52ac14153a8e5741c1adf31bef3d15ecaaa5ae2548e5cff1b2714430c091c91c |
 | docs/records/D-132-the-plan-is-a-game-plan.md@authored | docs/records/D-132-the-plan-is-a-game-plan.md | authored | 18 | 5 | sha256:2792ff01e2e1a01aa2dec6f047ebc1bae3ceee8a124b2c1e31c53c190f4f8c2c |
 | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md@authored | docs/records/D-133-the-read-surface-assembles-its-store-and-names-what-is-missing.md | authored | 22 | 6 | sha256:c213c15cd3c026704b1c20907af9e1689b203b1e60d94e222cdcef97e02ea552 |
@@ -215,6 +215,7 @@ profile: domain-specification
 | docs/records/D-130-no-xvpe-dependency-before-phase-5.md#5 | authored | 2 | Rationale |
 | docs/records/D-130-no-xvpe-dependency-before-phase-5.md#9 | authored | 2 | Consequences |
 | docs/records/D-130-no-xvpe-dependency-before-phase-5.md#13 | authored | 2 | Alternatives Considered |
+| docs/records/D-130-no-xvpe-dependency-before-phase-5.md#16 | authored | 2 | Amendment: The Build-Instability Premise Resolved; The Gate Did Not |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#1 | authored | 1 | A byte order mark belongs to the front matter fence |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#2 | authored | 2 | Decision |
 | docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#4 | authored | 2 | Why It Had To Be Settled First |
@@ -3678,6 +3679,62 @@ path, and the algorithms are not yet on any critical path.
 
 Waiting for XVPE to stabilize before starting Nomos was rejected. The port traits make the
 dependency optional, so there is nothing to wait for.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#16
+
+*revision: authored · kind: heading · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Build-Instability Premise Resolved; The Gate Did Not · hash: sha256:0882ecd2b4c1e4078bd15e5d11267ee347712f8ac85d6cc433b492c08f010534*
+
+## Amendment: The Build-Instability Premise Resolved; The Gate Did Not
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#17
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Build-Instability Premise Resolved; The Gate Did Not · hash: sha256:90b1c95ccdcaa37e5297f565cfee50715b56dde7e42f8314956a5d111e9f0577*
+
+The rationale above cited a specific, dated fact: a dataflow crate failing on 62 errors,
+with the in-flight refactor concentrated in dataflow, scheduling and serialization.
+Checked directly against xvpe dev at commit `557dada32ed0c33c7c2fde09b5320d3fdbc94d91`,
+`cargo check -p xvpe-dataflow -p xvpe-scheduling -p xvpe-task-host -p xvpe-clock -p
+xvpe-serialization` succeeds, warnings only. All five crates compile clean, including the
+three this record named as blocking. The genuine candidates already identified above live
+inside them: `hazard_detector.rs`, `cycle_witness.rs` and `topological.rs` sit in
+`xvpe-scheduling`; dirty propagation sits in `xvpe-dataflow`. The specific instability this
+record was written against no longer describes the tree.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#18
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Build-Instability Premise Resolved; The Gate Did Not · hash: sha256:1a8bf1ecc687135a7869ccdde0a62d1252fa80523dab8d150194a063aa074ff2*
+
+That does not lift the gate, because two of this record's other conditions are unchanged
+and neither is a build-stability question. xvpe's workspace — 112 members at this
+commit — still contains no storage crate and no package crate; a clean compile cannot
+adopt a crate that was never written. `xvpe-telemetry`'s `Cargo.toml` still names
+`xvpe-os-backend-desktop` as a direct dependency, exactly as it did when this record was
+accepted. A third fact sharpens the same point rather than adding a new one: xvpe as a
+whole is organized as `crates/engine/{foundations,simulation,runtime,presentation}` —
+rendering, audio, physics, animation, camera, HUD, materials and scene crates sit beside
+the ones Nomos would actually want, inside one workspace. A `path` dependency does not
+select the crates that happen to compile today; it selects the workspace, and this is a
+full game engine's workspace, not a narrow platform library's.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#19
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Build-Instability Premise Resolved; The Gate Did Not · hash: sha256:5938429190dec85c620e216ac5feadc479d24a991847254211f41383da0f6c22*
+
+The phase gate is therefore not narrowed to a compile-stability condition on the named
+crates. Compiling is necessary — an XVPE that does not build would be disqualified on that
+fact alone — but this reverification is the demonstration that it is not sufficient: the
+exact crates this record called out now compile cleanly, and the record's other reasons to
+wait are untouched by that. Phase 5 stands as the gate, unconditioned on whichever phase
+number the tree happens to be build-stable at, because what Phase 5 is waiting for — a
+storage crate, a package crate, and an adoption path that does not pull a desktop OS
+backend or a rendering engine in behind it — is not a fact about whether `cargo check`
+currently exits zero.
+
+### docs/records/D-130-no-xvpe-dependency-before-phase-5.md#20
+
+*revision: authored · kind: prose · heading: Nomos takes no XVPE dependency before Phase 5, and never by path / Amendment: The Build-Instability Premise Resolved; The Gate Did Not · hash: sha256:ae7ccc7a68687780e2c47692c96ac0ab03869f1e7318e00a60f41216eb43b3b7*
+
+Checked 2026-08-18 against xvpe dev HEAD `557dada32ed0c33c7c2fde09b5320d3fdbc94d91`.
 
 ### docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md#1
 

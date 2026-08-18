@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:be5bbcdebb5c428424155d6a1f8789b62da6b9eae4e743ab89a9fc8bf2cb6b84",
-  "inputs_digest": "sha256:0627b99cfb773055c334c7d72d3ec75a4da6173cab91b8864c5d1a9180963033",
+  "content_digest": "sha256:4f6f17c42eebd805ef5271dbfc96f4962ea8c1c9565e37025168ea91b5ca1604",
+  "inputs_digest": "sha256:b8b6be1d2efb3f54fdc2dc7980bd912003b215dd5d91eb6b363231551fcd0a68",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1102
+      1103
     ],
     [
       "Source blocks",
-      4012
+      4017
     ]
   ],
   "inputs": [
@@ -63,7 +63,7 @@
     {
       "content": "documents",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md@authored",
-      "hash": "sha256:03bfce3f9975bfbf71d7db386bc0111aa9462f24836bad4195ea0a2c6000a10b"
+      "hash": "sha256:bdf0569224ca6b8b8524f1217f056e7fcbbe40ee65d530d3732c1f5a65ebd0d6"
     },
     {
       "content": "documents",
@@ -1019,6 +1019,11 @@
       "content": "headings",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#13",
       "hash": "sha256:4a259f3cd27c4c101753481fa191c3098be574f4424dcb9575ee659a2a401964"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#16",
+      "hash": "sha256:18e59a7c741b951eef8acfe970c61d2204778c21a4d5267536429fdb6ed58df6"
     },
     {
       "content": "headings",
@@ -7549,6 +7554,31 @@
       "content": "blocks",
       "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#15",
       "hash": "sha256:ad7818690ce0542ea1cf0176ae4fea5ef39f2ca8e052bd8ab375f8901446f290"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#16",
+      "hash": "sha256:0882ecd2b4c1e4078bd15e5d11267ee347712f8ac85d6cc433b492c08f010534"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#17",
+      "hash": "sha256:90b1c95ccdcaa37e5297f565cfee50715b56dde7e42f8314956a5d111e9f0577"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#18",
+      "hash": "sha256:1a8bf1ecc687135a7869ccdde0a62d1252fa80523dab8d150194a063aa074ff2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#19",
+      "hash": "sha256:5938429190dec85c620e216ac5feadc479d24a991847254211f41383da0f6c22"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/D-130-no-xvpe-dependency-before-phase-5.md#20",
+      "hash": "sha256:ae7ccc7a68687780e2c47692c96ac0ab03869f1e7318e00a60f41216eb43b3b7"
     },
     {
       "content": "blocks",

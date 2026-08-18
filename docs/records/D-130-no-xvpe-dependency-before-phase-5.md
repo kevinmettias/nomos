@@ -3,7 +3,7 @@ id: D-130
 type: decision
 title: Nomos takes no XVPE dependency before Phase 5, and never by path
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - platform
@@ -60,3 +60,39 @@ path, and the algorithms are not yet on any critical path.
 
 Waiting for XVPE to stabilize before starting Nomos was rejected. The port traits make the
 dependency optional, so there is nothing to wait for.
+
+## Amendment: The Build-Instability Premise Resolved; The Gate Did Not
+
+The rationale above cited a specific, dated fact: a dataflow crate failing on 62 errors,
+with the in-flight refactor concentrated in dataflow, scheduling and serialization.
+Checked directly against xvpe dev at commit `557dada32ed0c33c7c2fde09b5320d3fdbc94d91`,
+`cargo check -p xvpe-dataflow -p xvpe-scheduling -p xvpe-task-host -p xvpe-clock -p
+xvpe-serialization` succeeds, warnings only. All five crates compile clean, including the
+three this record named as blocking. The genuine candidates already identified above live
+inside them: `hazard_detector.rs`, `cycle_witness.rs` and `topological.rs` sit in
+`xvpe-scheduling`; dirty propagation sits in `xvpe-dataflow`. The specific instability this
+record was written against no longer describes the tree.
+
+That does not lift the gate, because two of this record's other conditions are unchanged
+and neither is a build-stability question. xvpe's workspace — 112 members at this
+commit — still contains no storage crate and no package crate; a clean compile cannot
+adopt a crate that was never written. `xvpe-telemetry`'s `Cargo.toml` still names
+`xvpe-os-backend-desktop` as a direct dependency, exactly as it did when this record was
+accepted. A third fact sharpens the same point rather than adding a new one: xvpe as a
+whole is organized as `crates/engine/{foundations,simulation,runtime,presentation}` —
+rendering, audio, physics, animation, camera, HUD, materials and scene crates sit beside
+the ones Nomos would actually want, inside one workspace. A `path` dependency does not
+select the crates that happen to compile today; it selects the workspace, and this is a
+full game engine's workspace, not a narrow platform library's.
+
+The phase gate is therefore not narrowed to a compile-stability condition on the named
+crates. Compiling is necessary — an XVPE that does not build would be disqualified on that
+fact alone — but this reverification is the demonstration that it is not sufficient: the
+exact crates this record called out now compile cleanly, and the record's other reasons to
+wait are untouched by that. Phase 5 stands as the gate, unconditioned on whichever phase
+number the tree happens to be build-stable at, because what Phase 5 is waiting for — a
+storage crate, a package crate, and an adoption path that does not pull a desktop OS
+backend or a rendering engine in behind it — is not a fact about whether `cargo check`
+currently exits zero.
+
+Checked 2026-08-18 against xvpe dev HEAD `557dada32ed0c33c7c2fde09b5320d3fdbc94d91`.
