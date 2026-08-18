@@ -1,3 +1,5 @@
+pub const fn nomos_package::KnownProviders::As_Slice(&self) -> &'static [&'static str]
+pub const fn nomos_package::KnownProviders::New(providers: &'static [&'static str]) -> Self
 pub const fn nomos_package::PackageVersion::New(major: u16, minor: u16, patch: u16) -> Self
 pub const fn nomos_package::ProtocolRange::Is_Ordered(&self) -> bool
 pub const fn nomos_package::ProtocolRange::New(minimum: ContractVersion, maximum: ContractVersion) -> Self
@@ -12,6 +14,7 @@ pub enum variant nomos_package::ManifestError::Unreadable { at: String, cause: S
 pub enum variant nomos_package::ManifestError::UnresolvedProvider { at: String, provider: String, }
 pub enum variant nomos_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
 pub enum variant nomos_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub fn nomos_package::KnownProviders::Is_Known(&self, provider: &str) -> bool
 pub fn nomos_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_package::PackageVersion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_package::Parse_Manifest( text: &str, at: &str, known_providers: &[&str], ) -> Result<PackageManifest, ManifestError>
@@ -31,6 +34,7 @@ pub struct field nomos_package::ProtocolRange::maximum: ContractVersion
 pub struct field nomos_package::ProtocolRange::minimum: ContractVersion
 pub struct field nomos_package::ProviderRegistration::provider: ProviderId
 pub struct field nomos_package::ProviderRegistration::tool_version: PackageVersion
+pub struct nomos_package::KnownProviders(&'static [&'static str])
 pub struct nomos_package::PackageManifest
 pub struct nomos_package::PackageVersion
 pub struct nomos_package::ProtocolRange

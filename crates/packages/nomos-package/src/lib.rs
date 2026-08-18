@@ -14,15 +14,22 @@
 //! future sibling) depends on this crate directly, supplies its own known-providers list
 //! and resolves `language_versions`' raw labels against whatever typed domain its own
 //! ecosystem actually needs.
+//!
+//! [`KnownProviders`] is `OD-PACKAGE-006`'s generic base for that allowlist itself: a
+//! package crate builds one from its own providers' `PROVIDER` constants, pulled by
+//! reference, instead of hand-rolling the array and the membership check
+//! `nomos-lang-package::KNOWN_PROVIDERS` used to.
 
 #![forbid(unsafe_code)]
 
+mod known_providers;
 mod manifest;
 mod protocol_range;
 mod provider_registration;
 mod reader;
 mod version;
 
+pub use known_providers::KnownProviders;
 pub use manifest::PackageManifest;
 pub use protocol_range::ProtocolRange;
 pub use provider_registration::ProviderRegistration;

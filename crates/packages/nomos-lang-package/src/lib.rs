@@ -50,7 +50,13 @@
 //! `KNOWN_PROVIDERS`, and a second language's package crate can now depend on
 //! `nomos-package` directly without this crate, or Rust's two providers, in the way.
 //! This crate's own public surface -- `LanguagePackage`, `Parse_Manifest`,
-//! `Read_Manifest`, `RustEdition`, `KNOWN_PROVIDERS`, `Is_Known` -- is unchanged.
+//! `Read_Manifest`, `RustEdition`, `KNOWN_PROVIDERS`, `Is_Known` -- is unchanged in name.
+//!
+//! `OD-PACKAGE-006` later moved how `KNOWN_PROVIDERS` is *built* to `nomos-package` too:
+//! it is assembled through `nomos_package::KnownProviders`, the generic
+//! provider-registration base type, rather than as a bespoke array this crate checked on
+//! its own. `KNOWN_PROVIDERS` itself is still `&[&str]` and `Is_Known`'s refusal semantics
+//! are unchanged; only how the list is built moved.
 
 #![forbid(unsafe_code)]
 

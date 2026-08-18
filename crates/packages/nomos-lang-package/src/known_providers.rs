@@ -3,6 +3,13 @@
 //! A short, closed list rather than an open string. A manifest naming a provider this
 //! package does not actually carry would be exactly the "manifest with no reader"
 //! `OD-PACKAGE-001` warns against, one level down: a registration nothing resolves.
+//!
+//! `OD-PACKAGE-006`'s resolution: the list is built through
+//! [`nomos_package::KnownProviders`], the generic provider-registration base type this
+//! crate is the first real consumer of, instead of a bespoke array this crate assembled
+//! and checked on its own. `Is_Known`'s refusal semantics are unchanged.
+
+use nomos_package::KnownProviders;
 
 /// Every `ProviderId` a manifest read by this crate may register.
 ///
@@ -12,7 +19,8 @@
 /// string can drift apart, unnoticed until something compares them. Depending on both
 /// provider crates directly is what a manifest crate above them in the band order is
 /// for.
-pub const KNOWN_PROVIDERS: [&str; 2] = [nomos_lang_rust::PROVIDER, nomos_lang_rust_scan::PROVIDER];
+pub const KNOWN_PROVIDERS: &[&str] =
+    KnownProviders::New(&[nomos_lang_rust::PROVIDER, nomos_lang_rust_scan::PROVIDER]).As_Slice();
 
 /// Whether a provider identifier is one this package may register.
 #[must_use]

@@ -1,5 +1,5 @@
 pub const fn nomos_lang_package::RustEdition::Label(self) -> &'static str
-pub const nomos_lang_package::KNOWN_PROVIDERS: [&str; 2]
+pub const nomos_lang_package::KNOWN_PROVIDERS: &[&str]
 pub enum nomos_lang_package::RustEdition
 pub enum variant nomos_lang_package::RustEdition::Edition2015
 pub enum variant nomos_lang_package::RustEdition::Edition2018

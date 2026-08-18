@@ -3,7 +3,10 @@
 //! extracted from.
 
 use nomos_contracts::{ContractVersion, PackageId, PackageKind, ProviderId};
-use nomos_package::{ManifestError, PackageManifest, PackageVersion, Parse_Manifest, ProtocolRange, ProviderRegistration};
+use nomos_package::{
+    KnownProviders, ManifestError, PackageManifest, PackageVersion, Parse_Manifest, ProtocolRange,
+    ProviderRegistration,
+};
 
 const KNOWN_PROVIDERS: [&str; 2] = ["nomos.lang.python.ast", "nomos.lang.python.scan"];
 
@@ -87,6 +90,27 @@ fn Test_A_Provider_Not_In_The_Callers_Allowlist_Is_Refused()
     assert_eq!(
         refused,
         ManifestError::UnresolvedProvider { at: "test".to_owned(), provider: "nomos.lang.rust.syn".to_owned() }
+    );
+}
+
+/// `OD-PACKAGE-006`'s generic allowlist type, populated with a non-Rust provider set and
+/// pulled through by reference the same way `nomos-lang-package::KNOWN_PROVIDERS` pulls
+/// Rust's -- proof this base type serves a second language, not only the one it was
+/// generalized from.
+#[test]
+fn Test_A_Known_Providers_Allowlist_Resolves_Through_The_Generic_Reader()
+{
+    let known_providers = KnownProviders::New(&["nomos.lang.python.ast", "nomos.lang.python.scan"]);
+
+    let manifest =
+        Parse_Manifest(&Well_Formed(), "test", known_providers.As_Slice()).expect("parses");
+
+    assert_eq!(
+        manifest.providers,
+        vec![ProviderRegistration {
+            provider: ProviderId::New("nomos.lang.python.ast"),
+            tool_version: PackageVersion::New(0, 1, 0),
+        }]
     );
 }
 

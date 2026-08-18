@@ -43,7 +43,7 @@ pub fn Read_Manifest(path: &Path) -> Result<LanguagePackage, ManifestError>
 /// Returns [`ManifestError`] on every malformed input; see the enum for the named cases.
 pub fn Parse_Manifest(text: &str, at: &str) -> Result<LanguagePackage, ManifestError>
 {
-    let generic = nomos_package::Parse_Manifest(text, at, &KNOWN_PROVIDERS)?;
+    let generic = nomos_package::Parse_Manifest(text, at, KNOWN_PROVIDERS)?;
     let language_versions = Resolved_Editions(&generic.language_versions, at)?;
 
     return Ok(LanguagePackage {
