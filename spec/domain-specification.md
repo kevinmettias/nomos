@@ -108,6 +108,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 12 | 5 | sha256:d97dfe5c8b42ad15a919d89d42665d5db79c8324643a9df8142a8ba14709f80d |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 16 | 6 | sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9 |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 14 | 5 | sha256:07242e446fd3e4b88cb34ed829ce8918c7d128b514bfbc75d596e8a96273720f |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -993,6 +994,11 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#10 | authored | 2 | What this does not decide |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#13 | authored | 2 | What Holds It |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1 | authored | 1 | Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#6 | authored | 2 | Current Position |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#11 | authored | 2 | What Would Decide It |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#13 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -28576,6 +28582,174 @@ the one case it already had.
 *revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:3da7b6c268e2fb338484fcc5d53c3083685b83db13a3abf2a19da544457119e0*
 
 Closed by `P13-PACKAGE-GENERIC-CORE`.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#1
+
+*revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one · hash: sha256:0708517bc612545b4dde1a0503275b9e42029594826ea1303e00559e40b22e1f*
+
+# Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#2
+
+*revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#3
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Question · hash: sha256:1a3dfa102dcf49446ba2495d072ad1c0cc6216985510126a3e2631422157d0a6*
+
+`OD-PACKAGE-001` accepted `ARCH-001` and `ARCH-002` as corpus requirements binding this
+build: a `LanguagePackage` and a `RulePackage` must each be independently versioned, in the
+sense both requirements actually specify — a declared manifest carrying `PKG-007`'s four
+version domains, not a Cargo `version` field. `OD-PACKAGE-007` (`P13-PACKAGE-GENERIC-CORE`)
+satisfied `ARCH-001`'s mechanism: `nomos-package` (band 24) now holds `PackageVersion`,
+`ProtocolRange`, `ProviderRegistration` and `ManifestError` as a language-agnostic core, and
+`nomos-lang-package` is a thin Rust-specific wrapper over it that never depends on Rust for
+anything but its own `RustEdition` version-label domain.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#4
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Question · hash: sha256:a7637ad13d2640065b7a2e7b9d1b0b2e2719bde6a78a1af7b581b538403dd564*
+
+`ARCH-002`'s `RulePackage` half is untouched by that work. Measured directly at HEAD:
+`crates/rules/nomos-rules` declares exactly one rule, `Check_Completeness_Mirrors`, with a
+stable id (`COMPLETENESS_MIRROR`) and a contract citation (`CONTRACT_RECORD = "D-134"`,
+`CONTRACT_RECORD_VERSION = 2`) that `tests/contract/tests/rule_contract_citation.rs` checks
+against the record's own front matter on every run. That citation discharges `PKG-014`'s
+traceability requirement in the narrow sense of "checked, not merely asserted in prose," but
+there is no manifest anywhere: no `PackageId` for a rule package, no `PackageKind::RulePackage`
+consumer anywhere in the workspace, and nothing that reads a declared `RulePackage` manifest
+the way `nomos-lang-package::reader` reads a `LanguagePackage` one. The only occurrence of
+`RulePackage` outside `nomos-contracts` itself is a negative test in
+`crates/packages/nomos-lang-package/tests/manifest.rs` asserting that the Rust reader
+*refuses* a manifest declaring `RulePackage` as its kind — proof the seam is absent, not a use
+of it.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#5
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Question · hash: sha256:ead0bcf68b8898dda05a9598ebe0b68f433f963634ca848799b890566bd8692f*
+
+The question `nomos-package`'s existence raises directly: does the generic core built for
+`ARCH-001` make an `ARCH-002` wrapper crate — a `nomos-rule-package`, shaped like
+`nomos-lang-package` but for rules — cheap enough to build now regardless of how many rules
+exist to shape it against, or should it wait for a second rule the same way `OD-PACKAGE-006`
+waits for a third provider before building `KNOWN_PROVIDERS` a self-registering mechanism?
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#6
+
+*revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#7
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Current Position · hash: sha256:b2af829b7c83466c515706e6a7a3b6ac0fb55d701ec109e3c6293b4d666e3236*
+
+`nomos-package`'s three reused types are already rule-agnostic on inspection, not merely
+Rust-agnostic. `PackageVersion` is major/minor/patch with no language or rule content.
+`ProtocolRange` is a pair of `nomos_contracts::ContractVersion`, already shared. And
+`ProviderRegistration` pairs a `nomos_contracts::ProviderId` with a `PackageVersion` — nothing
+about it names a language provider specifically, so a `RulePackage` manifest listing the
+`ToolProvider`s a rule's enhanced implementation depends on could reuse the same type
+unchanged. A `nomos-rule-package` wrapper would not need to touch `nomos-package`'s core at
+all; it would only need to supply its own equivalent of `KNOWN_PROVIDERS` and its own
+version-label domain, exactly the shape `OD-PACKAGE-007` reserved for a second language.
+That lowers the mechanical cost of building the wrapper below what it was before
+`OD-PACKAGE-007` landed.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#8
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Current Position · hash: sha256:bdb7b064ff6aa3c05211bfdb5a14b941d4208c070e884efde9a68ee822e35cf3*
+
+Cost is not the only variable, and the harder one points the other way. `ARCH-002`'s contents
+list is not `ARCH-001`'s. `LanguagePackage`'s contents are declarations: identity, recognition,
+mappings, registrations, requirements, compatibility — exactly what
+`nomos-lang-package::LanguagePackage` already models as fields. `RulePackage`'s contents —
+rule identity/version, normative specification, applicability semantics, required canonical
+capabilities, deterministic judgment implementations, optional enhanced implementations,
+external diagnostic mappings, correction and suppression contracts, evidence schema,
+examples/counterexamples, conformance fixtures, evaluation corpus, agent-guidance fragments,
+presentation/protocol metadata — is a longer and structurally different bundle: several of
+those fields are data corpora and executable fixtures, not manifest-shaped declarations at
+all, and `OD-PACKAGE-001` already noted a Rust crate can carry them only as opaque bytes no
+version comparison can reason about. `nomos-rules` today has exactly one rule and exhibits
+none of the variation a manifest schema would need to generalize over — one applicability
+shape, one judgment implementation, no enhanced implementation, no external diagnostic
+mapping, no correction or suppression contract. A schema built from a population of one rule
+would be `Check_Completeness_Mirrors`'s own shape wearing a general name, the same trap
+`OD-PACKAGE-006` named for `KNOWN_PROVIDERS` at a population of two providers — and this
+population is smaller than that one.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#9
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Current Position · hash: sha256:81ca1bc7ff4255119084989b5529ceb781a565ef13f876182876c812af693a0b*
+
+`OD-HOST-004` is relevant precedent for the opposite conclusion in a different shape, the same
+way `OD-PACKAGE-006` used it: a second hand-written call was not treated as seam-by-accretion
+because participation there depended on the request and a registry already existed
+underneath. That does not transfer here either. A `RulePackage` manifest is not a
+selection mechanism over existing rules; it would be a new declared-artifact format for a
+domain this workspace has observed exactly once. There is no second rule to check field
+boundaries against, the way `nomos-lang-package`'s split was checked against `nomos-rules`
+existing already as a second, structurally different consumer of `nomos-contracts` before
+`nomos-package` was extracted.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#10
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Current Position · hash: sha256:4036f52e8e2fe818b603039d204cdcd808f47456c0afd6e68046e4717d2d63f8*
+
+A separate, narrower question is in flight on the board at the time of this writing and is
+worth distinguishing rather than leaving this record to look silently at odds with it: the
+`P13-RULE-PACKAGE-DECISION` item proposes a rule-*registration* contract — a `RuleId` and a
+`Registry` a rule crate offers into, mirroring `nomos_capability::Registry`'s shape — built
+ahead of a second rule, on explicit direction to extract early the way `nomos-add-plugin`
+section 2 states. That is `Run()`'s discovery mechanism, the `OD-HOST-004` axis of the
+problem (participation varying by request), not `ARCH-002`'s independently-versioned
+*manifest* with `PKG-007`'s four version domains, which is this record's question. The two
+can be decided on different schedules without contradiction: a rule could gain a declared
+registration contract before it gains a versioned manifest, the same way `nomos-lang-rust`
+registered with `nomos_capability::Registry` long before `nomos-lang-package` gave it a
+manifest to be named in. Whether that registration contract, once built, changes the
+population this record reasons from is itself a fact for a later reader to check, not one
+this record assumes.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#11
+
+*revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#12
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / What Would Decide It · hash: sha256:1b58d717f16c34d97057b754991917e5b21c6370110b398846af2d0b4597bc04*
+
+A second rule joining `crates/rules/nomos-rules` — or a second rule crate — is the natural
+trigger, the same role a third provider plays for `OD-PACKAGE-006`, adjusted down by one
+because rules number one today rather than two. At that point either the two rules turn out
+to share enough manifest-shaped structure (applicability semantics, capability requirements,
+evidence schema) that a thin `nomos-rule-package` wrapper over `nomos-package`'s existing core
+is a proportionate build the same way `nomos-lang-package` was, or the second rule's shape
+diverges enough from `Check_Completeness_Mirrors`'s that no single schema built from the first
+alone would have fit it — in which case the wait was load-bearing rather than merely cautious.
+Either outcome also gives `PackageKind::RulePackage` the first consumer `OD-PACKAGE-001` said
+it was waiting for, closing that half of the condition recorded on `PackageKind` itself.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#13
+
+*revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#14
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:58415abf218f40e58a4a92c76633afd0b8538329610640a7f920ae6c1104e195*
+
+Open. Revisit when a second rule (function or crate) is added under `crates/rules/`, or if
+`ARCH-002`'s contents list is found to need a manifest sooner for a reason unrelated to rule
+count. Recorded here so the asymmetry between `ARCH-001`'s now-satisfied mechanism and
+`ARCH-002`'s untouched one is legible rather than silently inherited by whichever item next
+touches `crates/rules/nomos-rules` or `crates/contracts/nomos-contracts/src/package.rs`.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 
