@@ -310,6 +310,36 @@ mod tests
         }
     }
 
+    /// `RowKind::All()`'s own mirror, named in the doc comment above it.
+    ///
+    /// The match has no wildcard arm. A variant added to `RowKind` without a matching arm
+    /// added here fails this file to *compile*, not merely to pass — the property D-134
+    /// asks a closed enum's mirror to have.
+    #[test]
+    fn Test_Every_RowKind_Should_Be_Matched_Exhaustively()
+    {
+        fn Ordinal(kind: RowKind) -> usize
+        {
+            return match kind
+            {
+                RowKind::Header => 0,
+                RowKind::Content => 1,
+                RowKind::Separator => 2,
+            };
+        }
+
+        for (index, kind) in RowKind::All().iter().enumerate()
+        {
+            assert_eq!(
+                Ordinal(*kind),
+                index,
+                "{} is not matched at the position RowKind::All() puts it, so the exhaustive \
+                 match and the universe have drifted apart",
+                kind.Label()
+            );
+        }
+    }
+
     #[test]
     fn Test_Cells_Should_Split_And_Trim()
     {

@@ -14407,6 +14407,70 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ROWKIND-ALL-MIRROR",
+      "title": "RowKind::All is a declared universe with no mirror, the same D-134-priced gap P13-COMPONENT-ALL-MIRROR just closed",
+      "why": "tests/contract/tests/completeness_universes/table.rs classifies crates/spec/nomos-spec-model/src/table/row_kind.rs's RowKind::All (3 variants) as Standing::Unmirrored with a stated risk ('a row kind added without adding it here escapes the row census, which D-132 makes the single home for those numbers'). RowKind is a closed enum, so its reality is a compile-time property exactly like Component::All was: an exhaustive match with no wildcard arm is a real mirror in D-134's sense. P13-COMPONENT-ALL-MIRROR (commit 7717cde) just closed the identical shape of gap in nomos-analysis's Component::All, using an exhaustive-match test named in a 'Mirrored by' doc comment and a Standing flip in the same shared table.rs -- this item repeats that exact pattern for a second closed-enum universe, once table.rs is free again.",
+      "done_when": "row_kind.rs declares its mirror at the site in a doc comment above RowKind::All (the 'Mirrored by TestName' idiom). A real test exhaustively matches every RowKind variant with no wildcard arm, so it fails to compile if a variant is added without updating the match -- placed in row_kind.rs itself as a unit test, or in table.rs's existing #[cfg(test)] mod tests if that fits the crate's test organization better. tests/contract/tests/completeness_universes/table.rs's RowKind::All row changes from Standing::Unmirrored to Standing::Mirrored { by: \"<the new test's name>\" } and UNMIRRORED_TOTAL is decremented from 12 to 11. cargo test -p nomos-spec-model -p nomos-contract-tests --test completeness_universes passes; nomos check no longer reports RowKind::All as an advisory finding.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model/src/table/row_kind.rs",
+          "crates/spec/nomos-spec-model/src/table.rs",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-model",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest hole_size::Test_Some_Universes_Should_Actually_Be_Mirrored ... ok\ntest hole_size::Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared ... ok\ntest hole_size::Test_The_Three_Instances_Should_Have_Failed_This_Check ... ok\ntest mirrors::Test_Every_Named_Mirror_Should_Exist_In_The_Source ... ok\ntest derivation::Test_The_Declared_Table_Should_Match_What_Is_Derived ... ok\ntest claims::Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.25s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n",
+        "verified_at": 1787036818,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7717cded45121d5afabd5f9dab0e23c8c5a3a11d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

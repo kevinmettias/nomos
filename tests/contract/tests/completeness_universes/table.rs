@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 12;
+pub(crate) const UNMIRRORED_TOTAL: usize = 11;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -142,9 +142,8 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         path: "crates/spec/nomos-spec-model/src/table/row_kind.rs",
         name: "RowKind::All",
         kind: UniverseKind::Enumeration,
-        standing: Standing::Unmirrored {
-            risk: "a row kind added without adding it here escapes the row census, which \
-                   D-132 makes the single home for those numbers",
+        standing: Standing::Mirrored {
+            by: "Test_Every_RowKind_Should_Be_Matched_Exhaustively",
         },
     },
     Universe {

@@ -48,6 +48,11 @@ impl RowKind
     }
 
     /// Every kind, so a census cannot quietly omit one.
+    ///
+    /// Mirrored by `Test_Every_RowKind_Should_Be_Matched_Exhaustively`, an exhaustive
+    /// match over every variant with no wildcard arm, in
+    /// `crates/spec/nomos-spec-model/src/table.rs`. It fails to compile, not merely to
+    /// pass, if a variant is added here without being added there.
     #[must_use]
     pub const fn All() -> &'static [Self]
     {
