@@ -54,12 +54,20 @@ const FEATURE_PACK_LABEL: &str = "FeaturePack";
 /// consistency. `Test_Every_Kind_Should_Carry_The_Label_The_Corpus_Names` pins the
 /// result, and its table is where a seventeenth kind has to be argued for.
 ///
-/// # Nothing consumes this, and what it is waiting for
+/// # One kind has a consumer now; the other fifteen still wait
 ///
-/// No code outside this crate names `PackageKind`, and none is written to make it look
-/// used. The reason is not a forgotten call site: this workspace contains no installable
-/// unit for a consumer to be about. No package manifest exists on disk, nothing installs
-/// or resolves one, and `PackageId` is likewise declared and never constructed.
+/// `nomos-package`'s reader (`crates/packages/nomos-package/src/reader.rs`) is
+/// `LanguagePackage`'s real consumer: `Package_Kind_Field` deserializes a manifest's
+/// `package_kind` against this enum and the reader returns
+/// `ManifestError::WrongPackageKind` when the resolved kind is anything other than
+/// `PackageKind::LanguagePackage`. That is this enum's first consumer, landed by
+/// `P13-PACKAGE-GENERIC-CORE` (`OD-PACKAGE-007`).
+///
+/// The other fifteen kinds — `RulePackage` included — remain genuinely unconsumed. No
+/// code outside this crate names them, and none is written to make them look used: this
+/// workspace contains no installable unit of any of those kinds for a consumer to be
+/// about, no manifest declaring one exists on disk, and `PackageId` is likewise declared
+/// and never constructed.
 ///
 /// `ARCH-001` and `ARCH-002` require a `LanguagePackage` and a `RulePackage` to be
 /// independently versioned, and `PKG-007` requires a package's own version, the Nomos
@@ -69,15 +77,16 @@ const FEATURE_PACK_LABEL: &str = "FeaturePack";
 /// workspace publishes. `OD-PACKAGE-001` accepts both requirements and records that the
 /// missing thing is the package rather than the attribute.
 ///
-/// This enum gains its first consumer when something reads a declared package manifest
-/// and refuses one it cannot resolve — a reader that maps a manifest to a `PackageId`, a
-/// `PackageKind` and `PKG-007`'s version domains. That is the change to watch for; until
-/// it lands the declaration is a protocol commitment held deliberately, which is also why
-/// `OD-PACKAGE-001` recorded that four of the labels below then followed the game plan's
-/// spelling rather than volume 03's. That divergence cost nothing while nobody read them
-/// and had to be settled before anybody did; `OD-PACKAGE-002` settled it, and the labels
-/// are volume 03's. Having no consumer is still this enum's condition, and it is
-/// `OD-PACKAGE-001`'s open subject rather than something the spelling repair touched.
+/// Each remaining kind gains its consumer when something reads a declared package
+/// manifest of that kind and refuses one it cannot resolve, the way the reader above now
+/// does for `LanguagePackage`. That is the change to watch for per kind; until one lands
+/// for a given kind, that kind's declaration is a protocol commitment held deliberately,
+/// which is also why `OD-PACKAGE-001` recorded that four of the labels below then
+/// followed the game plan's spelling rather than volume 03's. That divergence cost
+/// nothing while nobody read them and had to be settled before anybody did;
+/// `OD-PACKAGE-002` settled it, and the labels are volume 03's. Having no consumer is
+/// still fifteen of this enum's sixteen conditions, and it is `OD-PACKAGE-001`'s open
+/// subject rather than something the spelling repair touched.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum PackageKind
 {
