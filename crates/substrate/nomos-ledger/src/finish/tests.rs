@@ -1,6 +1,7 @@
 //! What this module promises, exercised.
 
 use super::*;
+use nomos_platform::ProcessOutput;
 
 #[test]
 fn Test_Short_Output_Should_Be_Kept_Whole()
@@ -157,4 +158,159 @@ fn Every_Refusal(item: ItemId) -> Vec<FinishRefusal>
             cause: "locked".to_owned(),
         },
     ];
+}
+
+/// [`Commanded`] must give every predicate it builds an idle bound of its own, or a real
+/// `nomos-ledger` stall is indistinguishable from honest work until the wall bound -- the
+/// gap `OD-PLATFORM-001` left open for whichever item wired a default in.
+#[test]
+fn Test_Commanded_Should_Give_The_Predicate_An_Idle_Bound_Shorter_Than_The_Wall_Bound()
+{
+    let runner = Runner {
+        working_directory: None,
+        timeout: std::time::Duration::from_secs(600),
+    };
+
+    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+
+    assert!(command.idle_timeout < command.timeout, "an idle bound equal to the wall bound can never fire first");
+    assert_eq!(command.idle_timeout, std::time::Duration::from_secs(300));
+}
+
+/// A launcher standing in for the real one: it never sees a live process, and instead
+/// answers as the real launcher would once its own idle-vs-wall arithmetic has run its
+/// course. What is under test here is `running.rs`'s wiring -- that it hands the launcher
+/// an idle bound shorter than the wall bound -- not the polling loop that turns silence
+/// into `Stalled`, which is `nomos-platform-std`'s own territory and already proven there.
+struct Simulated
+{
+    /// Whether the predicate this stands in for ever produces output again after it
+    /// starts.
+    keeps_producing: bool,
+}
+
+impl ProcessLauncher for &Simulated
+{
+    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    {
+        let outcome = if self.keeps_producing
+        {
+            // Progress keeps resetting the idle clock, so only the wall bound can ever
+            // catch this one -- exactly today's behaviour, unaffected by the idle bound
+            // `Commanded` now sets.
+            ExitOutcome::TimedOut
+        }
+        else if command.idle_timeout < command.timeout
+        {
+            // Silent from the start, so the idle bound -- shorter than the wall bound --
+            // is what actually catches it.
+            ExitOutcome::Stalled {
+                idle_elapsed: command.idle_timeout,
+            }
+        }
+        else
+        {
+            // No idle bound of its own: the pre-`OD-PLATFORM-001` behaviour, where a
+            // silent predicate can only ever be judged at the wall bound.
+            ExitOutcome::TimedOut
+        };
+
+        return Ok(ProcessOutput {
+            outcome,
+            stdout: String::new(),
+            stderr: String::new(),
+        });
+    }
+}
+
+/// The property this item exists for: a predicate that goes silent well before its wall
+/// timeout is reported as `Stalled`, not eventually `TimedOut`, once it runs through
+/// `Commanded`'s wiring.
+#[test]
+fn Test_A_Silent_Predicate_Should_Surface_As_Stalled_Not_Timed_Out()
+{
+    let item = ItemId::New("T-1");
+    let runner = Runner {
+        working_directory: None,
+        timeout: std::time::Duration::from_secs(600),
+    };
+    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+    let launcher = Simulated { keeps_producing: false };
+
+    let result = Ran_To_Completion(&&launcher, &command, &item);
+
+    assert!(
+        matches!(
+            result,
+            Err(FinishRefusal::NoVerdict {
+                outcome: ExitOutcome::Stalled { .. },
+                ..
+            })
+        ),
+        "a predicate silent from the start should be caught by the idle bound, not the wall bound"
+    );
+}
+
+/// The control for the test above: a predicate that keeps producing output right up to
+/// its wall bound is genuinely slow, not stalled, and must still read as `TimedOut`. The
+/// idle bound only ever catches silence -- it must never turn ongoing work into a false
+/// stall.
+#[test]
+fn Test_A_Predicate_That_Keeps_Producing_Should_Still_Report_Timed_Out()
+{
+    let item = ItemId::New("T-1");
+    let runner = Runner {
+        working_directory: None,
+        timeout: std::time::Duration::from_secs(600),
+    };
+    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+    let launcher = Simulated { keeps_producing: true };
+
+    let result = Ran_To_Completion(&&launcher, &command, &item);
+
+    assert!(
+        matches!(
+            result,
+            Err(FinishRefusal::NoVerdict {
+                outcome: ExitOutcome::TimedOut,
+                ..
+            })
+        ),
+        "ongoing output must never be reported as a stall"
+    );
+}
+
+/// A launcher for a predicate that exits immediately, standing in for the ordinary case
+/// this item must leave undisturbed.
+struct ExitsPromptly;
+
+impl ProcessLauncher for &ExitsPromptly
+{
+    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    {
+        return Ok(ProcessOutput {
+            outcome: ExitOutcome::Exited { code: 0 },
+            stdout: "all good".to_owned(),
+            stderr: String::new(),
+        });
+    }
+}
+
+/// A predicate that exits promptly reaches a verdict exactly as it did before this item:
+/// the idle bound this module now sets must not disturb the case that was never in
+/// question.
+#[test]
+fn Test_A_Predicate_That_Exits_Promptly_Should_Still_Reach_A_Verdict()
+{
+    let item = ItemId::New("T-1");
+    let runner = Runner {
+        working_directory: None,
+        timeout: std::time::Duration::from_secs(600),
+    };
+    let command = Commanded(vec!["a-predicate".to_owned()], runner);
+
+    let ran = Ran_To_Completion(&&ExitsPromptly, &command, &item).expect("a zero exit is a verdict");
+
+    assert_eq!(ran.code, 0);
+    assert_eq!(ran.tail, "all good");
 }

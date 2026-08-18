@@ -121,10 +121,42 @@ pub(super) fn Ran_To_Completion(
 }
 
 /// A command as this module builds them: what to run, where, and how long to wait.
+///
+/// Every command this module hands to a launcher gets an idle bound half its wall bound,
+/// rather than the two coinciding as [`Command::New`] alone would leave them. Left alone,
+/// `nomos-ledger` was exactly the caller `OD-PLATFORM-001` named as still open: the one
+/// place a real predicate runs, asking for no idle bound of its own, so a hung reader or a
+/// deadlocked test case was indistinguishable from honest work all the way out to the wall
+/// bound — 600 seconds, by [`crate::VerificationPredicate`]'s own default, before a stall
+/// was even reported as anything other than a slow `TimedOut`.
+///
+/// Half was chosen over a smaller fraction because this module cannot tell a healthy
+/// predicate's own rhythm from a stalled one before running it: `cargo test --workspace`,
+/// the shape of predicate this ledger runs most, can go quiet for a real stretch mid-build
+/// on one large crate without anything being wrong. A quarter of the wall bound risks
+/// judging that stretch a stall; half leaves as much silence tolerated as the whole
+/// pre-`OD-PLATFORM-001` wait allowed for genuinely slow work, while still cutting what a
+/// truly hung predicate costs an author in two — 600 seconds of silence is now caught at
+/// 300 rather than 600, without the gate step (bounded by the same `runner.timeout`, see
+/// [`Runner`]) or the predicate itself ever waiting longer than before for the case that
+/// actually finishes.
 pub(super) fn Commanded(argv: Vec<String>, runner: Runner<'_>) -> Command
 {
-    let mut command = Command::New(argv, runner.timeout);
+    let mut command = Command::New(argv, runner.timeout).With_Idle_Timeout(Idle_Timeout(runner.timeout));
     command.working_directory = runner.working_directory.map(std::path::Path::to_path_buf);
 
     return command;
+}
+
+/// Half the wall bound, rounded down. See [`Commanded`] for why half and not some other
+/// fraction.
+///
+/// `checked_div` rather than `/`: dividing by the constant `2` cannot itself fail, but this
+/// workspace denies raw arithmetic (`arithmetic_side_effects`) uniformly rather than judging
+/// each call site's safety by eye, so the fallback -- unreachable, since division by a
+/// nonzero constant always succeeds -- is the wall bound itself, never a shorter idle bound
+/// silently produced by a wrapped or truncated calculation.
+fn Idle_Timeout(timeout: std::time::Duration) -> std::time::Duration
+{
+    return timeout.checked_div(2).unwrap_or(timeout);
 }

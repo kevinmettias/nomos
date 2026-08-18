@@ -14020,6 +14020,230 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-LEDGER-IDLE-BOUND",
+      "title": "nomos-ledger's Finish never gives a predicate an idle bound distinct from its wall bound",
+      "why": "OD-PLATFORM-001 built ExitOutcome::Stalled and Command::With_Idle_Timeout precisely so a stalled process could be told apart from one legitimately taking a long time, and named wiring a real default into the ledger's own predicate execution as a decision left to whichever item takes it up. crates/substrate/nomos-ledger/src/finish/running.rs's Commanded builds every Command through Command::New alone and never calls With_Idle_Timeout, so idle_timeout always equals timeout: a real predicate that hangs silently is reported as the same TimedOut a predicate that ran the full wall bound producing output would be, which is exactly the ambiguity the memory nomos-shell-and-gate-traps and this workspace's own Runner comment describe as costly to diagnose.",
+      "done_when": "crates/substrate/nomos-ledger/src/finish/running.rs's Commanded (or Runner) threads an idle bound shorter than the wall timeout into every Command it builds for Finish's gate step and predicate run, using Command::With_Idle_Timeout. The chosen default and the reasoning for its value are stated in a doc comment beside the change. A test proves the property end to end: a fake launcher or a real child process that stops producing output well before the wall timeout elapses is reported through Finish as an idle-triggered Stalled outcome (FinishRefusal::NoVerdict carrying ExitOutcome::Stalled) rather than only ever reaching TimedOut at the wall bound. Existing Finish tests continue to pass unchanged in the case where a predicate keeps producing output or exits promptly.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/finish/running.rs",
+          "crates/substrate/nomos-ledger/src/finish/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "predicate cargo test -p nomos-ledger includes tests/records_do_not_serialize, an integration suite that panics whenever the live board has fewer than two open docs/records-claiming items (see OD-LEDGER-007) -- true right now for reasons unrelated to this item's territory. Superseded by P13-LEDGER-IDLE-BOUND-2 with a predicate scoped to --lib, which is what this item's own files are covered by."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop-idle-bound",
+          "reason": "predicate cargo test -p nomos-ledger includes tests/records_do_not_serialize, an integration suite that panics whenever the live board has fewer than two open docs/records-claiming items (see OD-LEDGER-007) -- true right now for reasons unrelated to this item's territory. Superseded by P13-LEDGER-IDLE-BOUND-2 with a predicate scoped to --lib, which is what this item's own files are covered by.",
+          "abandoned_at": 1787035534
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-loop-idle-bound",
+        "declined_at": 1787035539
+      }
+    },
+    {
+      "id": "P13-CONFIG-ID-DEDUP",
+      "title": "tests/integration hand-rolls its own ConfigurationId rendering beside nomos-check-orchestration's canonical one",
+      "why": "OD-HOST-002 named tests/integration/src/context.rs's own Resolved_Configuration/Configuration_Rendering as a second, independently hand-written encoding of the same policy digest nomos-check-orchestration::composition already computes canonically, and explicitly declined to converge them from where that record's own item stood. nomos-check-orchestration already exports Resolved_Configuration publicly (crates/orchestration/nomos-check-orchestration/src/lib.rs:49), tests/integration does not yet depend on nomos-check-orchestration at all, and band ordering permits band 100 depending on band 40 -- so nothing blocks the convergence except that nobody has done it.",
+      "done_when": "tests/integration/src/context.rs's own Resolved_Configuration and Configuration_Rendering functions are deleted; tests/integration/Cargo.toml depends on nomos-check-orchestration; every caller in tests/integration (context.rs's own tests, slice.rs, lib.rs's re-export) uses nomos_check_orchestration::Resolved_Configuration instead. lib.rs no longer re-exports a Configuration_Rendering that does not exist. cargo test -p nomos-integration-tests passes with the same behavior the existing Resolved_Configuration tests assert (equal composition -> equal id, differing composition -> differing id) now proven against the canonical implementation instead of the deleted duplicate.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/src/context.rs",
+          "tests/integration/src/lib.rs",
+          "tests/integration/src/slice.rs",
+          "tests/integration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-loop-config-dedup",
+          "reason": "Predicate as authored (cargo test --no-fail-fast -p nomos-integration-tests) is blocked by a pre-existing, unrelated defect: the crate's determinism::spec_productions test target fails a NOT NULL constraint on relation_types.domain_kinds_json even on clean HEAD before this item's edit (confirmed by stashing the edit and re-running at d40f18e -- same 3 failures). Same defect class P13-GRAPH-EDGES-FIXTURE already closed once in a sibling crate; recorded here as P13-SPEC-PRODUCTIONS-FIXTURE so it does not disappear with this session's context or ride in silently on this item's commit. The work itself (deleting context.rs's duplicate Resolved_Configuration/Configuration_Rendering, depending on nomos-check-orchestration, repointing lib.rs and the tests) is complete and verified: cargo clippy --workspace --all-targets is clean and cargo test --no-fail-fast -p nomos-integration-tests --lib --test analysis_slice passes in full, including the property tests this item's own done_when names. Re-authoring with a predicate scoped to what this change actually reaches, leaving the unrelated determinism target for P13-SPEC-PRODUCTIONS-FIXTURE.",
+          "abandoned_at": 1787035489
+        }
+      ],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-SPEC-PRODUCTIONS-FIXTURE",
+      "title": "A schema constraint that reached every real writer never reached tests/integration's own hand-rolled SQL, and cargo test -p nomos-integration-tests --test determinism fails on clean HEAD",
+      "why": "Found while verifying P13-CONFIG-ID-DEDUP: cargo test --no-fail-fast -p nomos-integration-tests fails 3 of 11 tests in the determinism suite, reproduced on a fully clean checkout by stashing every working-tree change (including this item's own edit) and rerunning at d40f18e -- same 3 failures, so the defect is baked into committed HEAD and unrelated to any in-flight session. Root cause is the same shape P13-GRAPH-EDGES-FIXTURE already closed once in a sibling crate: tests/integration/tests/determinism/spec_productions.rs's SPEC_RELATIONS constant (its INSERT INTO relation_types statement, around line 157) writes name/tier/inverse_of only. OD-SPEC-012/P10-EDGE-CONSTRAINTS-2 added a NOT NULL relation_types.domain_kinds_json column (and range_kinds_json) with no default, which every production writer supplies but this fixture's raw SQL never learned about. All three failures share one panic: Populate_Spec_Edges at spec_productions.rs:145, the fixture aliases, relation types and relations store: SqliteFailure(Error { code: ConstraintViolation, extended_code: 1299 }, Some(\"NOT NULL constraint failed: relation_types.domain_kinds_json\")). Recorded rather than fixed inline because it sits outside P13-CONFIG-ID-DEDUP's own territory (tests/integration/src/*, Cargo.toml) and must not disappear with that session's context or ride in silently on an unrelated item's commit.",
+      "done_when": "cargo test --no-fail-fast -p nomos-integration-tests --test determinism passes on a clean checkout (0 failed). SPEC_RELATIONS's relation_types INSERT supplies domain_kinds_json and range_kinds_json values consistent with OD-SPEC-012's declared-constraint shape for the 'verifies'/'verified_by'/'affects' relation types the fixture already uses, or the fixture is otherwise brought current with the schema this repository's real writers already satisfy.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/determinism/spec_productions.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "determinism"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CONFIG-ID-DEDUP-2",
+      "title": "tests/integration hand-rolls its own ConfigurationId rendering beside nomos-check-orchestration's canonical one",
+      "why": "P13-CONFIG-ID-DEDUP re-authored: same subject, corrected predicate. OD-HOST-002 named tests/integration/src/context.rs's own Resolved_Configuration/Configuration_Rendering as a second, independently hand-written encoding of the same policy digest nomos-check-orchestration::composition already computes canonically, and explicitly declined to converge them from where that record's own item stood. nomos-check-orchestration already exports Resolved_Configuration publicly (crates/orchestration/nomos-check-orchestration/src/lib.rs:49), tests/integration did not yet depend on nomos-check-orchestration at all, and band ordering permits band 100 depending on band 40 -- so nothing blocked the convergence except that nobody had done it. P13-CONFIG-ID-DEDUP's predicate (cargo test --no-fail-fast -p nomos-integration-tests) was blocked by a pre-existing, unrelated defect: the crate's determinism::spec_productions test target fails a NOT NULL constraint on relation_types.domain_kinds_json even on clean HEAD before any edit (confirmed by stashing the edit and re-running at d40f18e). That defect is recorded separately as P13-SPEC-PRODUCTIONS-FIXTURE and is not this item's to fix. Re-authoring with a predicate scoped to what this change actually reaches: the crate's lib tests (context.rs's own Resolved_Configuration property tests) and the analysis_slice integration suite (which exercises Slice::Composed, the caller in slice.rs), leaving the unrelated determinism target out.",
+      "done_when": "tests/integration/src/context.rs's own Resolved_Configuration and Configuration_Rendering functions are deleted; tests/integration/Cargo.toml depends on nomos-check-orchestration; every caller in tests/integration (context.rs's own tests, slice.rs, lib.rs's re-export) uses nomos_check_orchestration::Resolved_Configuration instead. lib.rs no longer re-exports a Configuration_Rendering that does not exist. cargo test --no-fail-fast -p nomos-integration-tests --lib --test analysis_slice passes with the same behavior the existing Resolved_Configuration tests assert (equal composition -> equal id, differing composition -> differing id) now proven against the canonical implementation instead of the deleted duplicate.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/src/context.rs",
+          "tests/integration/src/lib.rs",
+          "tests/integration/src/slice.rs",
+          "tests/integration/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-config-dedup",
+        "acquired_at": 1787035561,
+        "lease_expires_at": 1787042761
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-tests",
+          "--lib",
+          "--test",
+          "analysis_slice"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-LEDGER-IDLE-BOUND-2",
+      "title": "nomos-ledger's Finish never gives a predicate an idle bound distinct from its wall bound",
+      "why": "OD-PLATFORM-001 built ExitOutcome::Stalled and Command::With_Idle_Timeout precisely so a stalled process could be told apart from one legitimately taking a long time, and named wiring a real default into the ledger's own predicate execution as a decision left to whichever item takes it up. crates/substrate/nomos-ledger/src/finish/running.rs's Commanded builds every Command through Command::New alone and never calls With_Idle_Timeout, so idle_timeout always equals timeout: a real predicate that hangs silently is reported as the same TimedOut a predicate that ran the full wall bound producing output would be. Supersedes the declined P13-LEDGER-IDLE-BOUND, whose predicate (cargo test -p nomos-ledger, unscoped) included tests/records_do_not_serialize, an integration suite that panics whenever the live board has fewer than two open items claiming docs/records/ territory (OD-LEDGER-007) -- true right now for reasons this item's own territory does not touch. This item's predicate is scoped to --lib, which is exactly what its two files are covered by.",
+      "done_when": "crates/substrate/nomos-ledger/src/finish/running.rs's Commanded (or Runner) threads an idle bound shorter than the wall timeout into every Command it builds for Finish's gate step and predicate run, using Command::With_Idle_Timeout. The chosen default and the reasoning for its value are stated in a doc comment beside the change. A test proves the property end to end: a fake launcher that stops producing output well before the wall timeout elapses is reported through Finish's running machinery as an idle-triggered Stalled outcome (FinishRefusal::NoVerdict carrying ExitOutcome::Stalled) rather than only ever reaching TimedOut at the wall bound. Existing Finish tests continue to pass unchanged in the case where a predicate keeps producing output or exits promptly.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/finish/running.rs",
+          "crates/substrate/nomos-ledger/src/finish/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--lib"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--lib"
+        ],
+        "exit_code": 0,
+        "output_tail": "An_Empty_Board ... ok\ntest store::refusal::tests::Test_Eligible_Items_Should_Order_By_Id_Rather_Than_Document_Order ... ok\ntest store::refusal::tests::Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse ... ok\ntest territory::tests::Test_A_Directory_Should_Contain_Its_Files ... ok\ntest territory::tests::Test_A_Leading_Digit_Group_Should_Not_Be_An_Ordinal ... ok\ntest territory::tests::Test_A_Longer_Ordinal_Should_Be_A_Different_Record ... ok\ntest territory::tests::Test_A_Path_Without_A_Record_Identifier_Should_Be_Untouched ... ok\ntest territory::tests::Test_A_Pattern_Should_Make_Comparison_Unknown ... ok\ntest territory::tests::Test_A_Record_Identifier_And_Its_File_Should_Be_One_Subject ... ok\ntest territory::tests::Test_A_Sibling_With_A_Shared_Prefix_Should_Not_Be_Contained ... ok\ntest territory::tests::Test_Ambiguous_Paths_Should_Be_Reported ... ok\ntest territory::tests::Test_An_Empty_Territory_Should_Be_Empty ... ok\ntest territory::tests::Test_Different_Paths_Should_Be_Different_Subjects ... ok\ntest territory::tests::Test_Distinct_Territories_Should_Be_Disjoint ... ok\ntest territory::tests::Test_Mismatched_Resolutions_Should_Be_Unknown ... ok\ntest territory::tests::Test_One_File_Written_Two_Ways_Should_Overlap ... ok\ntest territory::tests::Test_Reserving_A_Record_Should_Exclude_The_Writer_Of_Its_File ... ok\ntest territory::tests::Test_Spellings_Of_One_Path_Should_Be_One_Subject ... ok\ntest territory::tests::Test_The_Reduction_Should_Not_Escape_The_Record_Directory ... ok\ntest territory::tests::Test_The_Repository_Root_Should_Contain_Everything ... ok\ntest territory::tests::Test_The_Serialized_Form_Should_Show_Paths ... ok\ntest territory::tests::Test_Two_Records_Should_Still_Be_Two_Subjects ... ok\n\ntest result: ok. 63 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-9f0da988d67699df.exe)\n",
+        "verified_at": 1787035591,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d40f18e8087a2576a2ba4b5bec6e04d5bf7d27e9"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
