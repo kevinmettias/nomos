@@ -14471,6 +14471,96 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ENUM-MIRRORS-BATCH",
+      "title": "Seven more closed-enum universes are unmirrored, the same D-134-priced gap P13-COMPONENT-ALL-MIRROR and P13-ROWKIND-ALL-MIRROR already closed twice",
+      "why": "tests/contract/tests/completeness_universes/table.rs classifies seven more UniverseKind::Enumeration universes as Standing::Unmirrored, each a small closed enum with an All() enumerator exactly like Component::All (closed by P13-COMPONENT-ALL-MIRROR, commit 7717cde) and RowKind::All (closed by P13-ROWKIND-ALL-MIRROR, commit 8399a4d): DocumentKind::All (crates/kernel/nomos-store/src/document/kind.rs), Family::All (crates/spec/nomos-spec-ingest/src/family.rs), Restored::All (crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs), Sibling::All (crates/spec/nomos-spec-ingest/src/siblings.rs), Content::All (crates/spec/nomos-spec-project/src/projection/content.rs), Format::All (crates/spec/nomos-spec-project/src/projection/format.rs), and ChangeSource::All (crates/substrate/nomos-workspace/src/change/source.rs). Because every one of these items would otherwise edit the same shared tests/contract/tests/completeness_universes/table.rs and could only ever run one at a time, batching all seven into one item is what actually buys concurrency back rather than seven more serialized rounds of the identical fix.",
+      "done_when": "Each of the seven enums declares its mirror at the site via a 'Mirrored by TestName' doc comment above its All(). Each gets a real exhaustive match test with no wildcard arm over its own variants, placed wherever fits that crate's existing test organization (unit test in the same file, or its crate's existing #[cfg(test)] module) -- seven distinct tests, not one shared one, since they are seven distinct claims. tests/contract/tests/completeness_universes/table.rs's rows for DocumentKind::All, Family::All, Restored::All, Sibling::All, Content::All, Format::All and ChangeSource::All each change from Standing::Unmirrored to Standing::Mirrored { by: \"<that enum's test name>\" }, and UNMIRRORED_TOTAL is decremented from 11 to 4 (seven closed). cargo test --no-fail-fast -p nomos-store -p nomos-spec-ingest -p nomos-spec-project -p nomos-workspace -p nomos-contract-tests --test completeness_universes passes. nomos check no longer reports any of the seven as advisory findings.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-store/src/document/kind.rs",
+          "crates/spec/nomos-spec-ingest/src/family.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings.rs",
+          "crates/spec/nomos-spec-project/src/projection/content.rs",
+          "crates/spec/nomos-spec-project/src/projection/format.rs",
+          "crates/substrate/nomos-workspace/src/change/source.rs",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-loop-enum-mirrors",
+        "acquired_at": 1787037020,
+        "lease_expires_at": 1787044220
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-store",
+          "-p",
+          "nomos-spec-ingest",
+          "-p",
+          "nomos-spec-project",
+          "-p",
+          "nomos-workspace",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CHECK-RULE-SEAM",
+      "title": "nomos-check-orchestration hand-calls one rule and hand-declares one capability, and nothing decides what the second one does to Run()",
+      "why": "run.rs::Run() hand-calls Check_Completeness_Mirrors by name and composition.rs::Registered() hand-declares exactly one capability contract against exactly one provider offer -- correct at nomos-rules' current size, its first and only shipped rule, but nothing on the board or in a governing record decides what adding a second rule or a second capability/provider pair does to either function. Two shapes are both plausible from here: Run() could gain a declared rule-selection mechanism driven by what a request asks for, or it could grow a second hand-written call beside the first, then a third, deciding the seam by accretion rather than by a recorded choice. OD-HOST-002 already treats this crate's composition as reconstructable state and names the registry-rendered-twice duplication in tests/integration/src/context.rs without settling this question, which is a different one: not whether the state is privileged, but whether the composition mechanism itself scales past one entry by design or by habit. ARC-HARNESS-001 and D-135 are the precedent for deciding a seam like this before code accretes across it rather than after.",
+      "done_when": "A new record under OD-HOST decides, for nomos-check-orchestration's Registered() and Run(), whether a second rule or a second capability/provider pair must be admitted through a declared selection mechanism -- the rule or provider a request needs, resolved from a declaration rather than named in the function body -- or whether hand-written composition remains correct at that size too, and states the concrete criterion, for example a count or a property of the second entry, that would flip the answer, so the choice is checkable rather than re-argued when nomos-rules ships its second rule. It is registered in crates/spec/nomos-spec-store/records/, relates to OD-HOST-001, OD-HOST-002 and D-135, and diagrams/relations.mmd and spec/domain-specification.md are re-rendered and current per nomos spec freshness, verified from an isolated worktree at the record set this commit publishes. Closed by the record alone: no crate changes, no rule is added, and nomos-check-orchestration is not touched.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-004",
+          "crates/spec/nomos-spec-store/records/OD-HOST-004.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
