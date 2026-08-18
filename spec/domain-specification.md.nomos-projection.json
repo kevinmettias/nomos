@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4f6f17c42eebd805ef5271dbfc96f4962ea8c1c9565e37025168ea91b5ca1604",
-  "inputs_digest": "sha256:b8b6be1d2efb3f54fdc2dc7980bd912003b215dd5d91eb6b363231551fcd0a68",
+  "content_digest": "sha256:af1c6b617015cc398cfd2f847796252acfcda6c2359908cb76fbe645b378d18e",
+  "inputs_digest": "sha256:15ea1ec2788287fdae678f646d96c7012f521334a812502a2d10e7ff355f904f",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1103
+      1104
     ],
     [
       "Source blocks",
-      4017
+      4020
     ]
   ],
   "inputs": [
@@ -538,7 +538,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored",
-      "hash": "sha256:421d04fd8bdf4cb6157a328b91317129f76e38d0a8a1a2e90f1c364fc72787f6"
+      "hash": "sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85"
     },
     {
       "content": "documents",
@@ -5223,7 +5223,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#19",
-      "hash": "sha256:885a8b7a57393529075119f652e34f16503a1a3f4d717e959385c300fead19e2"
+      "hash": "sha256:3d387ce6cba6d075ed2f2c0025bd2eda79ef3274fb06b50b76b4109079bd6f2a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#22",
+      "hash": "sha256:b00cc93d5f86d1afdc3633b4a9a34eff1b6f2d72f851978b07c255c9dd6b1513"
     },
     {
       "content": "headings",
@@ -23003,12 +23008,27 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#19",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5d8184015dfef929c99053e3163c9dcd5080bb6652e3bcaddfdecb6fe0ddab17"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#20",
-      "hash": "sha256:4e77fe19dec938aca405b0b084cb7c35d6bf0ebcd3caed2de020c62ab728aeba"
+      "hash": "sha256:a95d0e87f6aa9caac776b4a077973ea479d04a8449a8721537624a629acfbf4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#21",
+      "hash": "sha256:688e550c832a4e0f3994624e60df4fd90a2435b90cb5629ed031f1c46dfa58f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#23",
+      "hash": "sha256:9ecdd7a08390abc69dd0016a72164b72d4b96a5c83cb6eb4c799b81ab432fe6c"
     },
     {
       "content": "blocks",

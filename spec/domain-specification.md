@@ -113,7 +113,7 @@ profile: domain-specification
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
-| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 20 | 6 | sha256:421d04fd8bdf4cb6157a328b91317129f76e38d0a8a1a2e90f1c364fc72787f6 |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md@authored | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md | authored | 23 | 7 | sha256:3dfa5c2c114fe21031fc4c337d8f4b4cf9179cf6b316899f97b79c86c8b9cb2f |
 | docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md@authored | docs/records/OD-SPEC-006-docs-records-remains-the-authoring-substrate.md | authored | 23 | 7 | sha256:b6a159ab369e778c8c6123d527c1f9b0b4fc9e225aa50f8d2be62e00cbeb6a9a |
 | docs/records/OD-SPEC-007-a-record-is-registered-by-its-own-file-and-the-count-becomes-a-floor.md@authored | docs/records/OD-SPEC-007-a-record-is-registered-by-its-own-file-and-the-count-becomes-a-floor.md | authored | 48 | 9 | sha256:1e3f777ae3755f96c67fb37a80de3a4ac6e1fc5f5418bf2554da5f938cd19d71 |
@@ -1055,7 +1055,8 @@ profile: domain-specification
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#5 | authored | 2 | The Measurement |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#12 | authored | 2 | Why It Matters |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#15 | authored | 2 | What Would Close It |
-| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#19 | authored | 2 | Status |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#19 | authored | 2 | Resolution |
+| docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#22 | authored | 2 | Status |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#1 | authored | 1 | Six governing records were never in the store, and the store's own validation had never seen them |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#5 | authored | 2 | What Was Found |
@@ -31040,17 +31041,51 @@ P3-OVERLAY's territory, it would move that item's measured figures from 99 docum
 
 ### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#19
 
+*revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Resolution · hash: sha256:5d8184015dfef929c99053e3163c9dcd5080bb6652e3bcaddfdecb6fe0ddab17*
+
+## Resolution
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#20
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Resolution · hash: sha256:a95d0e87f6aa9caac776b4a077973ea479d04a8449a8721537624a629acfbf4e*
+
+Option 1: a repetition census with the blocklist retained as the naming layer.
+`NSV-PRESERVE-004` (`crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs`)
+groups `source_blocks` rows of kind `prose` by exact text — a heading is its own block and
+excluding it *is* the "section title elided" this record already specified, not a second
+mechanism for it — and treats a group carried by `SHARED_BY` (3) or more sections the same
+way `archaeology::Shared_Templates` already treats one for the cross-revision regression
+report: a template. A template `Is_Filler` names is accounted for; one it does not is the
+violation. The blocklist keeps its job — naming which pattern a template matched, for a
+lineage row that has to say why — and stops being the only test standing between an
+ordinary editorial sentence and a hollowed corpus walking past it clean, which is what
+option 2 would have left true for the next generator's next sentence and what option 3
+would have conceded outright.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#21
+
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Resolution · hash: sha256:688e550c832a4e0f3994624e60df4fd90a2435b90cb5629ed031f1c46dfa58f4*
+
+This does not add the governed wording to `FILLER_PATTERNS`. That remains P3-OVERLAY's
+territory, unchanged by this resolution: the repetition census finds an undeclared template
+by what it *is*, not by widening the list of sentences it is checked against, so the two
+items still measure different things and neither substitutes for the other.
+
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#22
+
 *revision: authored · kind: heading · heading: The filler blocklist misses the wording that hollowed 44 restored members / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#20
+### docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md#23
 
-*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Status · hash: sha256:4e77fe19dec938aca405b0b084cb7c35d6bf0ebcd3caed2de020c62ab728aeba*
+*revision: authored · kind: prose · heading: The filler blocklist misses the wording that hollowed 44 restored members / Status · hash: sha256:9ecdd7a08390abc69dd0016a72164b72d4b96a5c83cb6eb4c799b81ab432fe6c*
 
-Open. The regression report already reports the undeclared templates by name, so nothing is
-blocked on this; what is open is whether the preservation ledger keeps a test that this
-corpus has already walked past.
+Accepted. `NSV-PRESERVE-004` joined `DECLARED_RULES`
+(`crates/spec/nomos-spec-validate/src/run.rs`) and `Registered()`
+(`crates/spec/nomos-spec-validate/src/preserve.rs`) beside the other four preservation
+rules, so the class this record measured — a hollowing pattern nobody had written down yet
+— now fails a validation run rather than passing one silently.
 
 ### docs/records/OD-SPEC-005-six-governing-records-were-never-in-the-store.md#1
 

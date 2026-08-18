@@ -15076,14 +15076,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-nomos-preserve-004",
-        "acquired_at": 1787087630,
-        "lease_expires_at": 1787094830
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -15096,7 +15092,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "exit_code": 0,
+        "output_tail": "ty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.81s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-b91882f9705d3be2.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-57f26477296ecf13.exe)\n     Running tests\\family_counts\\main.rs (target\\debug\\deps\\family_counts-0d6551e8953f8961.exe)\n     Running tests\\gate_holds.rs (target\\debug\\deps\\gate_holds-b5ea4afc81bd7b71.exe)\n     Running tests\\overlay.rs (target\\debug\\deps\\overlay-1ca11b4be69ec8f5.exe)\n     Running tests\\real_corpus.rs (target\\debug\\deps\\real_corpus-4cef0bf42080529e.exe)\n     Running tests\\regression_report\\main.rs (target\\debug\\deps\\regression_report-f2b6e7608b1a7ca9.exe)\n     Running tests\\restoration.rs (target\\debug\\deps\\restoration-c37ddda2e96814aa.exe)\n     Running tests\\revisions.rs (target\\debug\\deps\\revisions-3f881ebab8687f1c.exe)\n     Running tests\\siblings.rs (target\\debug\\deps\\siblings-aa491999edd2b154.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_ingest\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787088030,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a320a9a6faceabbea9415f1f812eb87e8cab5bef"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -15120,14 +15139,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-provider-category-question",
-        "acquired_at": 1787087898,
-        "lease_expires_at": 1787095098
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "target/debug/nomos.exe",
@@ -15139,6 +15154,106 @@
           "diagram-set",
           "--require",
           "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "exit_code": 0,
+        "output_tail": "domain-specification: spec/domain-specification.md is current\ndiagram-set: diagrams/relations.mmd is current\nchecked 2 of 18 governed output(s) under .\nnot built here: subject-dossier, subject-contract, subject-model, subject-report, architecture-document, feature-design, api-documentation, requirement-catalog, traceability-matrix, release-specification, implementation-context-pack, mcp-resource, github-markdown, html-site, contract-yaml, offline-bundle\nrequired and current: diagram-set, domain-specification\nabsent: the v14 authoring corpus\n  expected: a directory named by NOMOS_V14_CORPUS, holding 01_authoring/domain_volumes/, 01_authoring/source_lineage/normative-source-statements.yaml and 02_machine/catalog/catalog.json\n  cause:    NOMOS_V14_CORPUS is not set, and no --corpus was given\n  so:       the corpus documents, their table rows, the normative statements and the node catalog are not in this store. What this command can answer is what this repository authors about itself, and nothing else\n",
+        "verified_at": 1787088087,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-VALIDATE-PATTERN-REFUSAL",
+      "title": "Validate never refuses a hand-edited territory carrying a pattern, the completeness gap OD-LEDGER-013 named and left open",
+      "why": "OD-LEDGER-013 withdrew work add --territory-pattern as a usage error but deliberately kept Territory::patterns and its Unknown-intersection semantics, because a hand-edited or future-authoring-surface-written document could still arrive carrying one and must fail closed rather than compare as touching nothing. The record's own text: 'Refuse patterns in Validate, so the document rejects one too. This is the more complete answer... It is not done here because Validate lives in store.rs, which is outside P10-PATTERN-BRICK's territory... this is a completeness gap and not a hole. It is worth an item.' Confirmed still true: crates/substrate/nomos-ledger/src/store/validation.rs's Check_Territory checks Ambiguous_Paths() and empty territory, but never inspects item.territory.patterns -- a hand-edited ledger document with a non-empty patterns array on a workable item passes validate today. The design itself is already fully settled by OD-LEDGER-013 (keep the field, keep Unknown semantics for existing comparisons, work add stays refusing the flag) -- this item only adds the one missing Check_* function validation.rs's own existing pattern already follows for every other rule (Check_Dependencies, Check_State, Check_Predicate).",
+      "done_when": "validation.rs gains a new Check_Pattern (or folded into Check_Territory) that reports a violation for any item whose territory.patterns is non-empty, naming the item id and the pattern, in the same style the other Check_* functions use (format!, pushed to violations). A unit test in validation.rs's own test module (or a sibling tests file, matching the existing convention in that crate) constructs a LedgerItem with a non-empty territory.patterns and asserts Validate reports it. cargo test --no-fail-fast -p nomos-ledger passes, including the existing test fixtures that legitimately carry \"patterns\": [] (empty) which must keep passing unaffected.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/validation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-sonnet-validate-pattern-refusal",
+        "acquired_at": 1787088118,
+        "lease_expires_at": 1787095318
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-KIND-ORIGIN-LISTING",
+      "title": "kind and origin print only via work show, never work list or work audit, the display gap OD-LEDGER-024 named as follow-on",
+      "why": "OD-LEDGER-024 gave every ledger item a closed kind and origin field and said: 'It does not add ordering over kind or origin to work list or work audit beyond what work show now prints. A reader wanting to prioritize Decision work over Cleanup work today still reads show per item; building that into a listing is follow-on, not this record's done_when.' Confirmed still true: crates/host/nomos-cli/src/work.rs prints kind/origin in work show's per-item detail; crates/host/nomos-cli/src/work/listing.rs (work list's Print_Listing) and crates/host/nomos-cli/src/work/report.rs (work audit) print neither field anywhere in their per-item output. This is explicitly scoped by the record as display only -- not the ordering/ranking question OD-LEDGER-017's deferred priority field and OD-LEDGER-022/024's scheduler-classification gap are about, which stay out of this item's scope entirely.",
+      "done_when": "work list's per-item line (Print_Listing in listing.rs) and work audit's per-item report (report.rs) each print the item's kind and origin alongside what they already print, in a format consistent with each command's existing column/line style (read both files' current output shape before choosing the exact placement -- do not redesign either command's layout beyond adding these two fields). No new sorting, filtering, or ranking behavior is added -- items still print in whatever order each command already uses. cargo test --no-fail-fast -p nomos-cli passes, including any existing snapshot/golden-output tests for work list or work audit, which must be updated to include the new fields if they assert exact output text.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work/listing.rs",
+          "crates/host/nomos-cli/src/work/report.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-kind-origin-listing",
+        "acquired_at": 1787088117,
+        "lease_expires_at": 1787095317
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
         ],
         "timeout_seconds": 600
       },
