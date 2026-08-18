@@ -66,6 +66,7 @@ profile: domain-specification
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:3c11ee49be7fb50e863faf186a9559e9eb0009b2ab57b02b0d5a5ad8f86e0464 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -589,6 +590,11 @@ profile: domain-specification
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#12 | authored | 2 | Which navigations and actions are in scope |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#16 | authored | 2 | What this does not decide |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#18 | authored | 2 | What would make this wrong |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#1 | authored | 1 | A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#3 | authored | 2 | The decision |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#6 | authored | 2 | What flips the answer |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#11 | authored | 2 | Why not build the mechanism now |
+| docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#13 | authored | 2 | Alternatives considered |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -15842,6 +15848,161 @@ resolved `Finding` set, a capability registry, or a rendered record in memory ac
 instead of asking the owning service again, that is `OD-HOST-002`'s privileged state,
 arrived at by the surface this record predicted would be the first to have a reason to keep
 it.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#1
+
+*revision: authored · kind: heading · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence · hash: sha256:c739a2d35ebae6ab5b72c053a5cd86df5ea223126333203495368810096a56a4*
+
+# A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#2
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence · hash: sha256:85fb28939f1910b154b7cd8f7c460d4458e3af63ef13f8501e82f2eb3edacc73*
+
+`nomos_check_orchestration::run::Run` hand-calls `nomos_rules::Check_Completeness_Mirrors`
+by name. `nomos_check_orchestration::composition::Registered` hand-declares exactly one
+capability contract and hands exactly one provider offer against it. Both are correct at
+the crate's current size — its first and only shipped rule, against its first and only
+capability — but nothing on the board or in a governing record decided what happens to
+either function when a second rule or a second capability/provider pair arrives. Two
+shapes are both plausible: a declared selection mechanism driven by what a request asks
+for, or a second hand-written call beside the first, then a third, deciding the seam by
+accretion rather than by a recorded choice.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#3
+
+*revision: authored · kind: heading · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#4
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / The decision · hash: sha256:b07f2cbbc931e3274cf0ae81d1d5a4baab3e1fe9adfe82f966b60d4a74c29771*
+
+**Registered() never needs a selection mechanism, at any count.** It does not select
+anything today, and adding a second `Declare`/`Offer` pair would not make it start.
+`nomos_capability::Registry` (`crates/substrate/nomos-capability/src/registry.rs`) already
+holds an arbitrary number of declared capabilities and an arbitrary number of offers per
+capability, and it is already the declared, generic mechanism that picks among them:
+`Registry::Resolve` ranks the offers standing against whatever `Requirement` a caller
+states and returns a `Selection`, per `OD-CAPABILITY-001`'s "the registry ranks; the caller
+spends." `Registered` only feeds that mechanism data. A second `Declare_And_Offer` call —
+for a second provider against the same capability, or for an unrelated second capability
+entirely — is one more line writing into a structure engineered to hold more than one of
+each, not a new hand-written selection. This is the same shape `OD-HOST-001` already found
+correct: "naming a concrete provider in a composition root was never the defect." Nothing
+about a second pair changes that.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#5
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / The decision · hash: sha256:3bf69d7f37c468b5d7e695f1d3e96b3e5f5473f684df2f4702c081b5b3a65fb1*
+
+**Run() stays hand-written for as long as every rule it calls runs unconditionally, on
+every invocation.** Unlike `Registered`, `Run` has no registry standing behind its one
+call: `Check_Completeness_Mirrors` is invoked directly, and there is no `Rule` type, trait,
+or collection a second rule would be added *to*. But a second hand-written call beside the
+first is not the seam-by-accretion failure this record's originating item warned about as
+long as both calls are unconditional — every rule the crate knows about runs on every
+`sources`/`variant` pair `Run` is given, the same way the first rule does today, and a list
+of unconditional calls does not become a selection problem by growing longer. `Run` takes
+no field today that could vary that set per request, and while that stays true, a third and
+a fourth hand-written call are the same kind of statement as the first two: composition,
+not choice.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#6
+
+*revision: authored · kind: heading · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / What flips the answer · hash: sha256:b9527663a3b210cb5c2cf938fced84364139fed15bdad3040661115b945aab83*
+
+## What flips the answer
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#7
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / What flips the answer · hash: sha256:602ab04c81d309a980827d7e8a5d3d9402b47d7545d9f69e65e93ebdb755e7c1*
+
+The criterion is not a count of rules or of capability/provider pairs. It is whether the
+next entry's participation is unconditional or is meant to vary by request.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#8
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / What flips the answer · hash: sha256:f585a2d58891a63347afa4b1690140a159ea4cdbe808991f0fab2e4b257b03f4*
+
+`Registered` never flips: `Registry::Resolve` already resolves per `Requirement`, and every
+rule that asks stays free to state its own floor (`nomos_rules::Syntax_Requirement` is
+`Check_Completeness_Mirrors`'s own, not `Registered`'s or `Run`'s) — no future capability
+count changes what `Registered` itself has to do, because it was never the layer that chose.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#9
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / What flips the answer · hash: sha256:c665e63e42a392a63b7f7791eb17c13b2a46a98a857369580fed018197fb7a17*
+
+`Run` flips the first time a rule (or a group of rules) is meant to run for *some* check
+invocations and not others — selected by something the request states, rather than by
+whether the crate happens to know about it. At that point, adding the choice as a
+hand-written `if`/`match` naming rules by branch is exactly the accretion this record
+exists to head off: a second arm, then a third, each decided in the function body instead
+of against a declaration. The fix at that point is a declared selection mechanism — a
+request-carried name or property, resolved against something `Run`'s caller states rather
+than something `Run`'s body names — the same division `ARC-HARNESS-001` draws between what
+should run (a question with an answer that depends on the codebase and the request) and how
+a step is performed once chosen.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#10
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / What flips the answer · hash: sha256:1ef60150a281334e5048464f09a34c79406e296ebe4e89d4185fe44134fc92cd*
+
+Concretely: when `nomos-rules` ships its second rule, ask whether it is meant to run on
+every `nomos check` the way `Check_Completeness_Mirrors` does today. If yes, `Run` gains one
+more hand-written call and this record still holds. If the answer is "only when the request
+asks for it" — a subset of checks, a per-language rule, an opt-in — `Run` needs the
+mechanism before that rule ships, not after a second and third conditional accrete beside
+it.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#11
+
+*revision: authored · kind: heading · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Why not build the mechanism now · hash: sha256:5482c7c18d5aed12350c4a2edb786390442bd114632f9dd159d0d75c9ecb3b52*
+
+## Why not build the mechanism now
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#12
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Why not build the mechanism now · hash: sha256:6414afcfb3445f5805a5f333ec7e27e884dd327e389c9bdb2e65648bd7619dad*
+
+`D-135` records the same caution in the adjacent case of deciding a subsystem's home too
+early: inferring a need for generic machinery from a wish that it might be needed, rather
+than from a demonstrated one, produces the evidence a proof gate wants by paying the cost
+the gate exists to avoid. A rule-selection mechanism built before any rule needs to be
+selected — as opposed to merely added — would be exactly that: machinery justified by "a
+second rule might need it" rather than by a second rule that does. `nomos-rules` itself
+records the matching restraint on its own side of this seam: it shipped with exactly one
+rule "because a single check that is honest end to end is worth more than three that are
+nearly wired," not because a selection mechanism was waiting for a second entry to arrive.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#13
+
+*revision: authored · kind: heading · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Alternatives considered · hash: sha256:6119e2aff3b6be5a33828ecca3eb841a560afba6f55b735b57a5a63ab16310bc*
+
+## Alternatives considered
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#14
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Alternatives considered · hash: sha256:3e90f97f1951aa64b458fc193d50c2f404932f2337c071e3c59639afa8b48eef*
+
+**A flat count threshold** — for example, "hand-written composition is correct through two
+entries, and a third requires a mechanism." Rejected: nothing about a third unconditional
+rule differs in kind from a second one, and a threshold picked by count rather than by
+property would be re-argued the moment a real third entry showed up unconditional, which is
+the exact re-litigation this item exists to prevent.
+
+### docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md#15
+
+*revision: authored · kind: prose · heading: A second rule or provider is composed by hand until its participation depends on the request, not merely on its existence / Alternatives considered · hash: sha256:2cae576700de19c21abc326cf827aaef45f8c85225074c220d7b7d96e414eccb*
+
+**Deciding it only when `nomos-rules` ships its second rule.** Rejected on `ARC-HARNESS-
+001`'s reasoning applied one layer down: the longer a seam like this is left unstated, the
+more likely it is decided by whichever shape the second rule happens to need, rather than by
+a recorded choice checkable in advance. This record is written before that rule exists so
+the criterion, and not the accident of what the second rule turns out to want, decides the
+shape.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

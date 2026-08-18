@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:10717954c703076a547207e40f113496070f332542ecb0c5c6912f4c57b7181f",
-  "inputs_digest": "sha256:1dcb8b9f55e6c9afc58250c1ec6d3cee2ee598bd35e6a204a356d07c2502ede1",
+  "content_digest": "sha256:9b4793272a1028dbeac1cf53614240c693a2a9d79540cc7787fe3a58752c5b56",
+  "inputs_digest": "sha256:8a04fe103681efdffe83aa9bcf3b0316535a79948553ef27f4a4ab37c9e0ecbf",
   "sections": [
     [
       "Relations",
-      808
+      816
     ],
     [
       "Decisions",
-      115
+      116
     ]
   ],
   "inputs": [
@@ -240,6 +240,11 @@
       "content": "relations",
       "identity": "ARC-HARNESS-001 relates-to OD-CONTRACTS-002",
       "hash": "sha256:647a436fe3fcb83630b91cecb071ff52d3c959a7e410bdf48396ff1619e09499"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-HARNESS-001 relates-to OD-HOST-004",
+      "hash": "sha256:9989df1a5259b94c687f005d6963f47b8a9e71cdc5341bf9c31222036b140f3d"
     },
     {
       "content": "relations",
@@ -680,6 +685,11 @@
       "content": "relations",
       "identity": "D-135 relates-to D-138",
       "hash": "sha256:84d2f2c6ab4b859eb3814cdd9a0e9b01a02c6b3c4a3d0069741797be7c3c0dab"
+    },
+    {
+      "content": "relations",
+      "identity": "D-135 relates-to OD-HOST-004",
+      "hash": "sha256:66aab33dc53dc9994af031c8a21c279b5ae8213b9954526dfc3ab11c047a4769"
     },
     {
       "content": "relations",
@@ -1903,6 +1913,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-HOST-001 relates-to OD-HOST-004",
+      "hash": "sha256:83f79a424614166f2620d304231b277c92e748157866047959dda7c97c9a25c8"
+    },
+    {
+      "content": "relations",
       "identity": "OD-HOST-001 relates-to OD-RULES-001",
       "hash": "sha256:4a1f0f9e500391b0fdc6c3f6e6a4981e540eff178ebc935b7f704092878a3fed"
     },
@@ -1918,6 +1933,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-HOST-002 relates-to OD-HOST-004",
+      "hash": "sha256:1b6b5ce7884005efd2268a6b9aad0beb602ff8795af1aec8530ae0615dcf4b94"
+    },
+    {
+      "content": "relations",
       "identity": "OD-HOST-003 relates-to OD-HOST-001",
       "hash": "sha256:04a8be6ee8ec3a637babe5c6e875ef40251177fe3ace138e823e7323d4594815"
     },
@@ -1925,6 +1945,26 @@
       "content": "relations",
       "identity": "OD-HOST-003 relates-to OD-HOST-002",
       "hash": "sha256:c9be9a140831028e89d41dd57e69750d801ea6a25624fff48111f216c8a6595c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-004 relates-to ARC-HARNESS-001",
+      "hash": "sha256:24443828d030f9fae09c84e10eec94c21f281c951a0645dc762e341ccf65c525"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-004 relates-to D-135",
+      "hash": "sha256:9080094c0114d19afa3cecae1dab1310d0b4c11ecfbd1a8ad295cb724ca0d71b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-004 relates-to OD-HOST-001",
+      "hash": "sha256:36059951186a51bb14db1cf6996bb8ffc537a4bbfa327d70205b4045b91ef2ae"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-004 relates-to OD-HOST-002",
+      "hash": "sha256:a934b1112b2188da45a00c5d29f37ff327a0dd463c385d57f17418c0cb7af1a7"
     },
     {
       "content": "relations",
@@ -4300,6 +4340,11 @@
       "content": "nodes",
       "identity": "OD-HOST-003",
       "hash": "sha256:018d47a36c536f4321d2de9a8a6b9e50c1344870f512f86167327bcf2baf1c8e"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-HOST-004",
+      "hash": "sha256:21a3c90d93277fc2aa759f3f541516bb9dc9a905f99cda581610d8e62750bc8c"
     },
     {
       "content": "nodes",
