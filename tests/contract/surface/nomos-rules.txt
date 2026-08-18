@@ -2,20 +2,31 @@ pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONTRACT_RECORD: &str
 pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
 pub enum nomos_rules::Reading
+pub enum nomos_rules::RuleRegistryError
 pub enum nomos_rules::UniverseKind
 pub enum variant nomos_rules::Reading::Observed(Vec<DeclaredUniverse>)
 pub enum variant nomos_rules::Reading::Unobserved { because: String, }
+pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::RuleRegistry::New() -> Self
+pub fn nomos_rules::RuleRegistry::Offer(&mut self, offer: RuleOffer) -> Result<(), RuleRegistryError>
+pub fn nomos_rules::RuleRegistry::Offered(&self, rule: &RuleId) -> Option<&RuleOffer>
+pub fn nomos_rules::RuleRegistry::Offers(&self) -> impl Iterator<Item = &RuleOffer>
 pub fn nomos_rules::SourceFile::New(path: impl Into<String>, subject: SubjectId, text: impl Into<String>) -> Self
 pub fn nomos_rules::Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
 pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
 pub struct field nomos_rules::DeclaredUniverse::kind: UniverseKind
 pub struct field nomos_rules::DeclaredUniverse::name: String
 pub struct field nomos_rules::DeclaredUniverse::path: String
+pub struct field nomos_rules::RuleOffer::contract_record: String
+pub struct field nomos_rules::RuleOffer::contract_record_version: u32
+pub struct field nomos_rules::RuleOffer::rule: RuleId
 pub struct field nomos_rules::SourceFile::path: String
 pub struct field nomos_rules::SourceFile::subject: SubjectId
 pub struct field nomos_rules::SourceFile::text: String
 pub struct nomos_rules::DeclaredUniverse
+pub struct nomos_rules::RuleOffer
+pub struct nomos_rules::RuleRegistry
 pub struct nomos_rules::SourceFile

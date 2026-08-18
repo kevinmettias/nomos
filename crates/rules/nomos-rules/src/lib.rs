@@ -46,6 +46,13 @@
 //! One rule: [`Check_Completeness_Mirrors`]. Scope is one rule and not three —
 //! `P10-FIRST-CHECK` says so explicitly, because a single check that is honest end to
 //! end is worth more than three that are nearly wired.
+//!
+//! [`RuleRegistry`] is a second thing, deliberately not a second rule: `OD-RULES-004`
+//! extracted a registration contract now, ahead of a second rule, so a rule package can be
+//! designed and built against a stated shape rather than by copying this crate's own
+//! hand-written composition. It is additive and unconsulted — `Run()` still calls
+//! `Check_Completeness_Mirrors` directly, exactly as `OD-HOST-004` decided, and nothing
+//! here changes what runs on any given `nomos check`.
 
 #![forbid(unsafe_code)]
 
@@ -53,6 +60,7 @@ mod declared_universe;
 mod facts;
 mod mirror;
 mod reading;
+mod registry;
 mod universe;
 
 use nomos_capability::Requirement;
@@ -61,6 +69,7 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
+pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
 pub use universe::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.
