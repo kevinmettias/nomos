@@ -1,19 +1,24 @@
 //! Running one `nomos spec` verb, apart from parsing its arguments or rendering what it
 //! found.
 
+mod freshness;
 mod markdown;
 mod record;
+mod render;
 mod table;
 
+use nomos_platform::FileSystem;
 use nomos_spec_project::{Catalogue, Profile, ProjectError};
 use nomos_spec_store::StoreError;
 
 use crate::command::SpecCommand;
 use crate::corpus::{Assemble, Assembly, CorpusRequest};
-use crate::outcome::{NotYetMigrated, SourcesAnswer, SpecOutcome};
+use crate::outcome::{FreshnessRefusal, NotYetMigrated, RenderRefusal, SourcesAnswer, SpecOutcome};
 
+pub use freshness::Freshness;
 pub use markdown::Markdown;
 pub use record::Record;
+pub use render::Render;
 pub use table::Table;
 
 /// The shipped projection catalogue.
@@ -50,13 +55,22 @@ pub fn Sources(assembly: &Assembly) -> SourcesAnswer
 
 /// Runs one `nomos spec` verb over a corpus request, and hands back what it found.
 ///
+/// Generic over [`FileSystem`] for the two verbs that place or read a governed output on
+/// disk ([`SpecCommand::Render`], [`SpecCommand::Freshness`]) -- see `run::render` and
+/// `run::freshness`'s own documentation for why those two, and not the other seven, earned
+/// that seam. Every other variant ignores `filesystem` entirely; it is threaded through all
+/// nine here regardless, the same way `nomos_work_orchestration::Run` takes `F`, `C`, `L`
+/// and `P` for every [`nomos_ledger`] verb even the ones that touch none of them, because one
+/// generic `Run` a caller can depend on without also depending on `nomos-platform-std` is
+/// worth more than sparing the seven that do not need `F` a type parameter.
+///
 /// [`SpecCommand::Profiles`] never assembles a store, matching
 /// [`Profiles`]'s own guarantee. Every other variant assembles one from `request` first --
-/// including the four not yet migrated, so that a caller asking `nomos-spec-orchestration`
+/// including the two not yet migrated, so that a caller asking `nomos-spec-orchestration`
 /// for one of them fails on the same store-assembly error a fully migrated verb would,
 /// rather than succeeding vacuously before reaching the part that is not built yet.
 #[must_use]
-pub fn Run(command: &SpecCommand, request: &CorpusRequest) -> SpecOutcome
+pub fn Run<F: FileSystem>(command: &SpecCommand, request: &CorpusRequest, filesystem: &F) -> SpecOutcome
 {
     if let SpecCommand::Profiles = command
     {
@@ -66,15 +80,19 @@ pub fn Run(command: &SpecCommand, request: &CorpusRequest) -> SpecOutcome
     let assembly = match Assemble(request)
     {
         Ok(assembly) => assembly,
-        Err(error) => return Outcome_For(command, Err(error)),
+        Err(error) => return Outcome_For(command, Err(error), filesystem),
     };
 
-    return Outcome_For(command, Ok(assembly));
+    return Outcome_For(command, Ok(assembly), filesystem);
 }
 
 /// Every non-`Profiles` variant's outcome, given the assembly its verb needs (or the error
 /// that kept one from being built).
-fn Outcome_For(command: &SpecCommand, assembled: Result<Assembly, StoreError>) -> SpecOutcome
+fn Outcome_For<F: FileSystem>(
+    command: &SpecCommand,
+    assembled: Result<Assembly, StoreError>,
+    filesystem: &F,
+) -> SpecOutcome
 {
     return match command
     {
@@ -89,8 +107,16 @@ fn Outcome_For(command: &SpecCommand, assembled: Result<Assembly, StoreError>) -
                 .map_err(crate::outcome::TableRefusal::Store)
                 .and_then(|assembly| return Table(&assembly, request)),
         ),
-        SpecCommand::Render(_) => SpecOutcome::Render(NotYetMigrated),
-        SpecCommand::Freshness(_) => SpecOutcome::Freshness(NotYetMigrated),
+        SpecCommand::Render(request) => SpecOutcome::Render(
+            assembled
+                .map_err(RenderRefusal::Store)
+                .and_then(|assembly| return Render(&assembly, request, filesystem)),
+        ),
+        SpecCommand::Freshness(request) => SpecOutcome::Freshness(
+            assembled
+                .map_err(FreshnessRefusal::Store)
+                .and_then(|assembly| return Freshness(&assembly, request, filesystem)),
+        ),
         SpecCommand::Markdown(request) => SpecOutcome::Markdown(
             assembled
                 .map_err(nomos_spec_store::EditError::Store)

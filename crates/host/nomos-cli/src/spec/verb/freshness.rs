@@ -1,138 +1,48 @@
-//! Whether a committed projection still stands against the store it came from.
+//! Rendering `nomos spec freshness`'s answer, or the refusal saying why it examined nothing.
+//!
+//! `D-128`'s check, run over what `nomos-platform-std::StdFileSystem` holds. Resolving which
+//! profiles to look at and comparing each one against the store is
+//! `nomos-spec-orchestration::Freshness`'s job now; this module keeps the census over the
+//! answer -- how many were checked, which requirements were kept -- and the `ExitCode` a
+//! rendering layer is responsible for.
+//!
+//! The branch that earns its own case is the half-present pair. A body with no sidecar
+//! beside it is a failure rather than something skipped, because otherwise deleting the
+//! sidecar is how an edit stops being caught, and a check teaches that trick to the first
+//! person who trips over it.
 
-use crate::spec::{Catalogue, Profile, ExitCode, Assembly, FreshnessRequest, Channels, Report_Project_Error, Path, SIDECAR_SUFFIX, Rendered, Check, Report_Build_Error};
+use crate::spec::{Assembly, Profile, FreshnessRequest, Channels, ExitCode, Report_Store_Error, Path, SIDECAR_SUFFIX, Report_Build_Error, No_Such_Profile};
+use nomos_platform_std::StdFileSystem;
+use nomos_spec_orchestration::{FreshnessAnswer, FreshnessRefusal, ProfileOutcome, Verdict};
 
-/// The shipped profile that identifier names, or the message saying which ones exist.
-pub(in crate::spec) fn Resolved<'a>(
-    catalogue: &'a Catalogue,
-    profile: &str,
-    notes: &mut dyn std::io::Write,
-) -> Result<&'a Profile, ExitCode>
-{
-    let Some(declared) = catalogue.Named(profile)
-    else
-    {
-        let _ = writeln!(
-            notes,
-            "no shipped profile is named {profile}. There are {}: {}",
-            catalogue.Profiles().len(),
-            catalogue
-                .Profiles()
-                .iter()
-                .map(|shipped| return shipped.id.clone())
-                .collect::<Vec<String>>()
-                .join(", ")
-        );
-
-        return Err(ExitCode::NotFound);
-    };
-
-    return Ok(declared);
-}
-
-/// `D-128`'s check, run over what is on disk.
-///
-/// [`nomos_spec_project::Check`] shipped with the renderers and was reachable from that
-/// crate's own unit tests and from nothing else, so a hand edit to a generated output was
-/// detectable in principle and detected by nobody — the shape `OD-GATE-001` is about. This
-/// is the command that runs it.
-///
-/// The branch that earns its own case is the half-present pair. A body with no sidecar
-/// beside it is a failure rather than something skipped, because otherwise deleting the
-/// sidecar is how an edit stops being caught, and a check teaches that trick to the first
-/// person who trips over it.
+/// `D-128`'s check, run.
 pub(in crate::spec) fn Freshness_Of(
     assembly: &Assembly,
     request: &FreshnessRequest,
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let catalogue = match Catalogue::Shipped()
+    return match nomos_spec_orchestration::Freshness(assembly, request, &StdFileSystem)
     {
-        Ok(catalogue) => catalogue,
-        Err(error) => return Report_Project_Error(&error, channels.notes),
+        Ok(answer) => Reported(assembly, &answer, request, channels),
+        Err(FreshnessRefusal::Store(error)) => Report_Store_Error(&error, channels.notes),
+        Err(FreshnessRefusal::NoSuchProfile { requested, known }) => No_Such_Profile(&requested, &known, channels.notes),
+        Err(FreshnessRefusal::RequirementUnexamined { requested, only }) =>
+        {
+            Unexamined(&requested, only.as_deref(), channels.notes)
+        }
+        Err(FreshnessRefusal::Project(error)) => Report_Build_Error(assembly, &error, channels.notes),
     };
-
-    let only = request.profile.as_deref();
-    let (required, wanted) = match Examined(&catalogue, request, channels.notes)
-    {
-        Ok(examined) => examined,
-        Err(code) => return code,
-    };
-
-    let mut census = Census::Over(wanted.len(), required);
-    let worst = census.Survey(assembly, &wanted, &request.into, channels);
-
-    return census.Report(&request.into, only, worst, channels.output);
 }
 
-/// Which profiles this run will look at, and which of them it was promised.
-///
-/// Both are resolved before any disk is read, so an unknown identifier stays a question
-/// about a profile rather than becoming an answer about a file.
-pub(super) fn Examined<'a>(
-    catalogue: &'a Catalogue,
-    request: &FreshnessRequest,
-    notes: &mut dyn std::io::Write,
-) -> Result<(Vec<&'a str>, Vec<&'a Profile>), ExitCode>
-{
-    let only = request.profile.as_deref();
-    let required = Required_Profiles(catalogue, &request.require, notes)?;
-
-    let wanted: Vec<&Profile> = match only
-    {
-        Some(id) => vec![Resolved(catalogue, id, notes)?],
-        None => catalogue.Profiles().iter().collect(),
-    };
-
-    Every_Requirement_Examined(&required, &wanted, only, notes)?;
-
-    return Ok((required, wanted));
-}
-
-/// The profiles a run was told it must find, resolved before any disk is read.
-///
-/// Resolving first is what keeps an unknown `--require` a question about a profile rather
-/// than an answer about a file. Reporting `diagram-sett` as a missing output would send a
-/// reader looking for something that was never nameable, and the catalogue already knows
-/// how to refuse an identifier by listing the ones that exist.
-pub(super) fn Required_Profiles<'a>(
-    catalogue: &'a Catalogue,
-    require: &[String],
-    notes: &mut dyn std::io::Write,
-) -> Result<Vec<&'a str>, ExitCode>
-{
-    let mut required: Vec<&str> = Vec::new();
-
-    for id in require
-    {
-        required.push(Resolved(catalogue, id, notes)?.id.as_str());
-    }
-
-    return Ok(required);
-}
-
-/// Refuses a run that was promised an output it would never have looked at.
+/// A requirement outside the profile a run was narrowed to.
 ///
 /// `--profile a --require b` asks for one profile to be examined and a different one to be
 /// guaranteed. Answering it would mean reporting success over a requirement nothing
-/// checked, which is the shape this flag exists against — so it is a usage error and not a
+/// checked, which is the shape this flag exists against -- so it is a usage error and not a
 /// quiet pass.
-pub(super) fn Every_Requirement_Examined(
-    required: &[&str],
-    wanted: &[&Profile],
-    only: Option<&str>,
-    notes: &mut dyn std::io::Write,
-) -> Result<(), ExitCode>
+fn Unexamined(unexamined: &str, only: Option<&str>, notes: &mut dyn std::io::Write) -> ExitCode
 {
-    let Some(unexamined) = required
-        .iter()
-        .find(|id| return !wanted.iter().any(|profile| return profile.id == **id))
-    else
-    {
-        return Ok(());
-    };
-
     let _ = writeln!(
         notes,
         "--require {unexamined} cannot hold while --profile {} narrows this run to one \
@@ -141,36 +51,40 @@ pub(super) fn Every_Requirement_Examined(
         only.unwrap_or("<none>")
     );
 
-    return Err(ExitCode::Usage);
+    return ExitCode::Usage;
 }
 
-/// One profile's answer, or [`None`] when neither half of the pair is on disk.
-pub(super) fn Verdict(
+/// Every profile the run examined, and what this repository was promised.
+fn Reported(
     assembly: &Assembly,
-    profile: &Profile,
-    into: &Path,
+    answer: &FreshnessAnswer,
+    request: &FreshnessRequest,
     channels: &mut Channels<'_>,
-) -> Option<ExitCode>
+) -> ExitCode
 {
-    let body_path = into.join(&profile.output);
-    let sidecar_path = into.join(format!("{}{SIDECAR_SUFFIX}", profile.output));
-    let body = std::fs::read_to_string(&body_path).ok();
-    let sidecar = std::fs::read_to_string(&sidecar_path).ok();
+    let mut census = Census::Over(answer.examined.len(), &answer.required);
 
-    return match (body, sidecar)
+    for outcome in &answer.examined
     {
-        (None, None) => None,
-        (Some(_), None) => Some(Unstamped(profile, channels.output)),
-        (None, Some(_)) => Some(Unbodied(profile, channels.output)),
-        (Some(body), Some(sidecar)) =>
-        {
-            let rendered = Rendered {
-                body: &body,
-                sidecar: &sidecar,
-            };
+        let code = census.Record(outcome, assembly, channels);
+        census.worst = Worse(census.worst, code);
+    }
 
-            Some(Compared(assembly, profile, &rendered, channels))
-        }
+    return census.Report(&request.into, request.profile.as_deref(), channels.output);
+}
+
+/// One profile's verdict, printed, and the code it contributes to the run.
+///
+/// `None` for [`Verdict::Absent`] -- printed only once its promise is known, by
+/// [`Census::Record`].
+fn Printed(assembly: &Assembly, outcome: &ProfileOutcome, channels: &mut Channels<'_>) -> Option<ExitCode>
+{
+    return match &outcome.verdict
+    {
+        Verdict::Absent => None,
+        Verdict::Unstamped => Some(Unstamped(&outcome.profile, channels.output)),
+        Verdict::Unbodied => Some(Unbodied(&outcome.profile, channels.output)),
+        Verdict::Compared(result) => Some(Compared(assembly, &outcome.profile, result, channels)),
     };
 }
 
@@ -179,7 +93,7 @@ pub(super) fn Verdict(
 /// A failure rather than something skipped, because otherwise deleting the sidecar is how
 /// an edit stops being caught, and a check that skipped it would teach that trick to the
 /// first person who tripped over it.
-pub(super) fn Unstamped(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
+fn Unstamped(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(
         output,
@@ -192,7 +106,7 @@ pub(super) fn Unstamped(profile: &Profile, output: &mut dyn std::io::Write) -> E
 }
 
 /// A stamp with no body beside it: a governed output was deleted or never written.
-pub(super) fn Unbodied(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
+fn Unbodied(profile: &Profile, output: &mut dyn std::io::Write) -> ExitCode
 {
     let _ = writeln!(
         output,
@@ -204,20 +118,18 @@ pub(super) fn Unbodied(profile: &Profile, output: &mut dyn std::io::Write) -> Ex
     return ExitCode::Stale;
 }
 
-/// The comparison itself, with a store that may not be whole.
-pub(super) fn Compared(
+/// The comparison itself, already computed -- printed, with a store that may not be whole.
+fn Compared(
     assembly: &Assembly,
     profile: &Profile,
-    rendered: &Rendered<'_>,
+    result: &Result<nomos_spec_project::Freshness, nomos_spec_project::ProjectError>,
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let body = Some(rendered.body);
-    let sidecar = Some(rendered.sidecar);
-    let freshness = match Check(&assembly.store, profile, body, sidecar)
+    let freshness = match result
     {
         Ok(freshness) => freshness,
-        Err(error) => return Report_Build_Error(assembly, &error, channels.notes),
+        Err(error) => return Report_Build_Error(assembly, error, channels.notes),
     };
 
     let report = freshness.Report(&profile.output);
@@ -237,7 +149,7 @@ pub(super) fn Compared(
 /// site about which of the two absences was being reported, and the two are not close:
 /// one is a broken promise and the other is a profile nobody builds here.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(super) enum Promise
+enum Promise
 {
     /// Promised, so an absence is an output that was never written or has been deleted.
     Required,
@@ -248,7 +160,7 @@ pub(super) enum Promise
 impl Promise
 {
     /// Whether a profile's identifier is in the required list.
-    pub(super) const fn Of(required: bool) -> Self
+    const fn Of(required: bool) -> Self
     {
         if required
         {
@@ -264,7 +176,7 @@ impl Promise
 /// A freshness command that prints nothing over a directory holding no outputs reads
 /// exactly like one that checked everything and was happy, which is the defect the whole
 /// group exists to avoid.
-pub(super) struct Census<'a>
+struct Census<'a>
 {
     /// How many profiles this run was going to look for.
     wanted: usize,
@@ -273,16 +185,18 @@ pub(super) struct Census<'a>
     /// Those absent from the build root and not promised by anyone.
     unbuilt: Vec<&'a str>,
     /// Those this run was told must be present.
-    required: Vec<&'a str>,
+    required: &'a [String],
     /// Those it was promised and did not get a current output for, whether because
     /// nothing was on disk or because what was there did not hold up.
     unmet: Vec<&'a str>,
+    /// The worst code any profile examined so far has contributed.
+    worst: ExitCode,
 }
 
 impl<'a> Census<'a>
 {
     /// An empty census over a run that is about to look at `wanted` profiles.
-    fn Over(wanted: usize, required: Vec<&'a str>) -> Self
+    fn Over(wanted: usize, required: &'a [String]) -> Self
     {
         return Self {
             wanted,
@@ -290,71 +204,42 @@ impl<'a> Census<'a>
             unbuilt: Vec::new(),
             required,
             unmet: Vec::new(),
+            worst: ExitCode::Ok,
         };
     }
 
-    /// Every wanted profile, examined, counted, and reduced to one code for the run.
-    fn Survey(
-        &mut self,
-        assembly: &Assembly,
-        wanted: &[&'a Profile],
-        into: &Path,
-        channels: &mut Channels<'_>,
-    ) -> ExitCode
-    {
-        let mut worst = ExitCode::Ok;
-
-        for profile in wanted
-        {
-            let found = Verdict(assembly, profile, into, channels);
-            let code = self.Record(profile, found, channels.output);
-            worst = Worse(worst, code);
-        }
-
-        return worst;
-    }
-
-    /// One profile's outcome, counted, and the code it contributes to the run.
+    /// One profile's outcome, printed, counted, and reduced to one code for the run.
     ///
     /// A promise is kept only by an output that is current. A half-present pair or an
     /// edited body has already printed its own line, and carrying that into the
     /// requirement summary is what stops the summary reporting a requirement as met by a
     /// file that just failed.
-    fn Record(
-        &mut self,
-        profile: &'a Profile,
-        found: Option<ExitCode>,
-        output: &mut dyn std::io::Write,
-    ) -> ExitCode
+    fn Record(&mut self, outcome: &'a ProfileOutcome, assembly: &Assembly, channels: &mut Channels<'_>) -> ExitCode
     {
-        let promise = Promise::Of(self.required.contains(&profile.id.as_str()));
+        let promise = Promise::Of(self.required.iter().any(|id| return *id == outcome.profile.id));
+        let found = Printed(assembly, outcome, channels);
 
         let Some(code) = found
         else
         {
-            return self.Absent(profile, promise, output);
+            return self.Absent(outcome, promise, channels.output);
         };
 
         self.checked = self.checked.saturating_add(1);
         if promise == Promise::Required && !matches!(code, ExitCode::Ok)
         {
-            self.unmet.push(profile.id.as_str());
+            self.unmet.push(&outcome.profile.id);
         }
 
         return code;
     }
 
     /// A profile with neither half on disk: a broken promise, or simply not built here.
-    fn Absent(
-        &mut self,
-        profile: &'a Profile,
-        promise: Promise,
-        output: &mut dyn std::io::Write,
-    ) -> ExitCode
+    fn Absent(&mut self, outcome: &'a ProfileOutcome, promise: Promise, output: &mut dyn std::io::Write) -> ExitCode
     {
         if promise == Promise::Optional
         {
-            self.unbuilt.push(profile.id.as_str());
+            self.unbuilt.push(&outcome.profile.id);
 
             return ExitCode::Ok;
         }
@@ -363,20 +248,14 @@ impl<'a> Census<'a>
             output,
             "{}: required here, and neither {} nor its stamp is on disk, so an output this \
              repository promises to ship was never written or has been deleted",
-            profile.id, profile.output
+            outcome.profile.id, outcome.profile.output
         );
-        self.unmet.push(profile.id.as_str());
+        self.unmet.push(&outcome.profile.id);
 
         return ExitCode::Stale;
     }
 
-    fn Report(
-        &self,
-        into: &Path,
-        only: Option<&str>,
-        worst: ExitCode,
-        output: &mut dyn std::io::Write,
-    ) -> ExitCode
+    fn Report(&self, into: &Path, only: Option<&str>, output: &mut dyn std::io::Write) -> ExitCode
     {
         let _ = writeln!(
             output,
@@ -393,7 +272,7 @@ impl<'a> Census<'a>
 
         self.Requirements(output);
 
-        return self.Outcome(into, only, worst, output);
+        return self.Outcome(into, only, output);
     }
 
     /// The code the run reports, once everything it looked at has been named.
@@ -403,23 +282,17 @@ impl<'a> Census<'a>
     /// three is the ordinary case and not a failure. A profile that was *required* is
     /// neither: it has already been reported as a missing promise, and letting this answer
     /// for it would downgrade that finding to a lookup miss.
-    fn Outcome(
-        &self,
-        into: &Path,
-        only: Option<&str>,
-        worst: ExitCode,
-        output: &mut dyn std::io::Write,
-    ) -> ExitCode
+    fn Outcome(&self, into: &Path, only: Option<&str>, output: &mut dyn std::io::Write) -> ExitCode
     {
         let Some(id) = only
         else
         {
-            return worst;
+            return self.worst;
         };
 
         if self.checked != 0 || !self.unmet.is_empty()
         {
-            return worst;
+            return self.worst;
         }
 
         let _ = writeln!(
@@ -463,7 +336,7 @@ impl<'a> Census<'a>
 /// [`ExitCode::Stale`] beats [`ExitCode::Absent`] deliberately: a definite finding about
 /// one output is more actionable than a machine that could not check another, and the
 /// text above has already said both.
-pub(super) const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
+const fn Worse(carried: ExitCode, found: ExitCode) -> ExitCode
 {
     return match (carried, found)
     {

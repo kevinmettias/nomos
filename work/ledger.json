@@ -13659,6 +13659,70 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SPEC-ORCHESTRATION-3",
+      "title": "OD-HOST-002's family-9 SpecCommand half moves Render and Freshness, generic over FileSystem",
+      "why": "Render and Freshness are the only two nomos-spec-orchestration verbs left touching raw std::fs from nomos-cli, and the seam a second adapter would call has to decide once whether that becomes FileSystem-generic before Preview and Commit land on top of the same choice",
+      "done_when": "nomos-spec-orchestration::Run and the two verb functions carry Render/Freshness logic generic over nomos_platform::FileSystem, SpecOutcome::Render and ::Freshness carry typed outcomes instead of NotYetMigrated, nomos-cli's spec/verb/{render,freshness}.rs delegate to them and keep only parsing/exit-code/text rendering, and the FileSystem-genericity decision is written down in a doc comment at the decision point",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/spec/verb/render.rs",
+          "crates/host/nomos-cli/src/spec/verb/freshness.rs",
+          "crates/orchestration/nomos-spec-orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "s.rs (target\\debug\\deps\\add_guarantees_what_it_says-c83ea6f35e055907.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-ab94085e8047f1eb.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-9ae33d86198a2ea6.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-77c022e10c3ec7cd.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-773252631ef6a60d.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-c271e3165b727af4.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-5638014ada6dba2d.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-6f21feb0c3d2dc63.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-cc653b14d5b1191f.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-16e3b87dd6e94c59.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6de7c117e50af0e9.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2d3fa4eea983fada.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6fd5d6ddd8065539.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-78140b3e0a30f3fe.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-e6e28111cf44d96c.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-86828ba6d107bd76.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-81db3ebc061bb28d.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-0f842de40a9ebe8a.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f727927700d7b942.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_orchestration-8dbeff91e2e8c1f8.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_orchestration\n",
+        "verified_at": 1787016610,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8a59abef1ffd0f013abaa70050585e305ba387c2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

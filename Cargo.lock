@@ -504,6 +504,8 @@ dependencies = [
 name = "nomos-spec-orchestration"
 version = "0.1.0"
 dependencies = [
+ "nomos-platform",
+ "nomos-platform-std",
  "nomos-spec-ingest",
  "nomos-spec-project",
  "nomos-spec-store",

@@ -1,9 +1,13 @@
 //! What this crate promises, exercised at the two seams `nomos-cli` now calls through.
 
+use std::path::PathBuf;
+
+use nomos_platform_std::StdFileSystem;
+
 use crate::corpus::CorpusRequest;
 use crate::command::SpecCommand;
-use crate::outcome::{NotYetMigrated, RecordRefusal, SpecOutcome, TableRefusal};
-use crate::request::{RecordRequest, TableRequest};
+use crate::outcome::{FreshnessRefusal, NotYetMigrated, RecordRefusal, RenderRefusal, SpecOutcome, TableRefusal, Verdict};
+use crate::request::{EditRequest, FreshnessRequest, RecordRequest, RenderRequest, TableRequest};
 use crate::run::{Profiles, Run};
 
 /// A corpus request naming no corpus at all, so every test below runs on a machine that
@@ -16,6 +20,26 @@ fn No_Corpus() -> CorpusRequest
         revision: "v14.36".to_owned(),
     };
 }
+
+/// A build root under this process's own temporary directory, unique per test, so
+/// `Render` and `Freshness` can be exercised against a real, disk-backed
+/// `nomos-platform-std::StdFileSystem` the same way `nomos-cli` runs them.
+fn Scratch(name: &str) -> PathBuf
+{
+    let root = std::env::temp_dir().join(format!(
+        "nomos-spec-orchestration-{name}-{}",
+        std::process::id()
+    ));
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("a scratch build root");
+
+    return root;
+}
+
+/// A profile that builds from the embedded governing records alone, so a test naming it
+/// needs no corpus -- the same profile `crates/host/nomos-cli/tests/read_surface.rs` uses
+/// for the same reason.
+const EMBEDDED_PROFILE: &str = "domain-specification";
 
 #[test]
 fn Test_Profiles_Should_List_What_This_Build_Ships()
@@ -37,7 +61,7 @@ fn Test_Run_Of_Profiles_Should_Never_Touch_A_Store()
     // *without* the failure path corpus assembly could have taken ever being reachable --
     // asserted by `Test_Profiles_Should_List_What_This_Build_Ships` proving `Profiles()`
     // alone already returns the same answer, unconditionally.
-    let outcome = Run(&SpecCommand::Profiles, &No_Corpus());
+    let outcome = Run(&SpecCommand::Profiles, &No_Corpus(), &StdFileSystem);
 
     let SpecOutcome::Profiles(profiles) = outcome
     else
@@ -50,7 +74,7 @@ fn Test_Run_Of_Profiles_Should_Never_Touch_A_Store()
 #[test]
 fn Test_Run_Of_Sources_Should_Report_The_Corpus_As_Absent_When_None_Is_Named()
 {
-    let outcome = Run(&SpecCommand::Sources, &No_Corpus());
+    let outcome = Run(&SpecCommand::Sources, &No_Corpus(), &StdFileSystem);
 
     let SpecOutcome::Sources(answer) = outcome
     else
@@ -79,7 +103,7 @@ fn Test_Run_Of_Record_Should_Resolve_A_Governing_Record_With_No_Corpus()
         revision: None,
     });
 
-    let outcome = Run(&request, &No_Corpus());
+    let outcome = Run(&request, &No_Corpus(), &StdFileSystem);
 
     let SpecOutcome::Record(answer) = outcome
     else
@@ -108,6 +132,7 @@ fn Test_Run_Of_Record_Should_Tell_An_Unsourced_Node_From_An_Unknown_One()
             revision: None,
         }),
         &No_Corpus(),
+        &StdFileSystem,
     );
     let SpecOutcome::Record(Err(RecordRefusal::NotFound { node, .. })) = known
     else
@@ -122,6 +147,7 @@ fn Test_Run_Of_Record_Should_Tell_An_Unsourced_Node_From_An_Unknown_One()
             revision: None,
         }),
         &No_Corpus(),
+        &StdFileSystem,
     );
     let SpecOutcome::Record(Err(RecordRefusal::NotFound { node, .. })) = unknown
     else
@@ -142,6 +168,7 @@ fn Test_Run_Of_Table_Should_Refuse_An_Address_Nothing_Matches()
             revision: None,
         }),
         &No_Corpus(),
+        &StdFileSystem,
     );
 
     let SpecOutcome::Table(Err(TableRefusal::NoSuchDocument)) = outcome
@@ -160,6 +187,7 @@ fn Test_Run_Of_Markdown_Should_Render_A_Governing_Record_Back_Out()
             revision: None,
         }),
         &No_Corpus(),
+        &StdFileSystem,
     );
 
     let SpecOutcome::Markdown(projection) = outcome
@@ -173,18 +201,161 @@ fn Test_Run_Of_Markdown_Should_Render_A_Governing_Record_Back_Out()
 }
 
 #[test]
-fn Test_Run_Of_An_Unmigrated_Verb_Should_Answer_Its_Marker()
+fn Test_Run_Of_Render_Should_Place_A_Projection_Built_With_No_Corpus()
 {
-    let request = SpecCommand::Freshness(crate::request::FreshnessRequest {
-        into: std::path::PathBuf::from("build"),
-        profile: None,
-        require: Vec::new(),
+    let into = Scratch("render");
+    let request = SpecCommand::Render(RenderRequest {
+        profile: EMBEDDED_PROFILE.to_owned(),
+        into: into.clone(),
+        subject: None,
     });
 
-    let outcome = Run(&request, &No_Corpus());
+    let outcome = Run(&request, &No_Corpus(), &StdFileSystem);
+
+    let SpecOutcome::Render(answer) = outcome
+    else
+    {
+        panic!("Run(Render, ..) must answer SpecOutcome::Render");
+    };
+    let answer = answer.expect("domain-specification builds from the embedded records alone");
+
+    assert_eq!(answer.id, EMBEDDED_PROFILE);
+    let body = std::fs::read_to_string(&answer.body).expect("the body was written");
+    assert!(body.starts_with("---\nnomos_generated: true\n"), "{:?}", body.get(..40));
+    let sidecar = std::fs::read_to_string(&answer.sidecar).expect("the sidecar was written");
+    assert!(sidecar.contains("\"profile\": \"domain-specification\""), "{sidecar:.200}");
+}
+
+#[test]
+fn Test_Run_Of_Render_Should_Refuse_An_Unknown_Profile()
+{
+    let into = Scratch("render-unknown");
+    let request = SpecCommand::Render(RenderRequest {
+        profile: "no-such-profile".to_owned(),
+        into,
+        subject: None,
+    });
+
+    let outcome = Run(&request, &No_Corpus(), &StdFileSystem);
+
+    let SpecOutcome::Render(Err(RenderRefusal::NoSuchProfile { requested, known })) = outcome
+    else
+    {
+        panic!("an unknown profile must refuse NoSuchProfile");
+    };
+    assert_eq!(requested, "no-such-profile");
+    assert!(known.iter().any(|id| return id == EMBEDDED_PROFILE), "{known:?}");
+}
+
+#[test]
+fn Test_Run_Of_Freshness_Should_Report_A_Freshly_Rendered_Output_As_Current()
+{
+    let into = Scratch("freshness-current");
+    let render = Run(
+        &SpecCommand::Render(RenderRequest {
+            profile: EMBEDDED_PROFILE.to_owned(),
+            into: into.clone(),
+            subject: None,
+        }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+    assert!(matches!(render, SpecOutcome::Render(Ok(_))), "the fixture did not render");
+
+    let outcome = Run(
+        &SpecCommand::Freshness(FreshnessRequest {
+            into,
+            profile: Some(EMBEDDED_PROFILE.to_owned()),
+            require: Vec::new(),
+        }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+
+    let SpecOutcome::Freshness(answer) = outcome
+    else
+    {
+        panic!("Run(Freshness, ..) must answer SpecOutcome::Freshness");
+    };
+    let answer = answer.expect("a resolvable single profile does not refuse");
+    let [outcome] = answer.examined.as_slice()
+    else
+    {
+        panic!("--profile narrows this run to exactly one profile: {:?}", answer.examined.len());
+    };
+    assert!(
+        matches!(&outcome.verdict, Verdict::Compared(Ok(freshness)) if freshness.Is_Fresh()),
+        "{:?}",
+        outcome.verdict
+    );
+}
+
+#[test]
+fn Test_Run_Of_Freshness_Should_Report_An_Empty_Build_Root_As_Absent()
+{
+    let into = Scratch("freshness-absent");
+
+    let outcome = Run(
+        &SpecCommand::Freshness(FreshnessRequest {
+            into,
+            profile: Some(EMBEDDED_PROFILE.to_owned()),
+            require: Vec::new(),
+        }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+
+    let SpecOutcome::Freshness(answer) = outcome
+    else
+    {
+        panic!("Run(Freshness, ..) must answer SpecOutcome::Freshness");
+    };
+    let answer = answer.expect("a resolvable single profile does not refuse");
+    let [outcome] = answer.examined.as_slice()
+    else
+    {
+        panic!("--profile narrows this run to exactly one profile: {:?}", answer.examined.len());
+    };
+    assert!(matches!(outcome.verdict, Verdict::Absent), "{:?}", outcome.verdict);
+}
+
+#[test]
+fn Test_Run_Of_Freshness_Should_Refuse_An_Unexamined_Requirement()
+{
+    let into = Scratch("freshness-unexamined");
+
+    let outcome = Run(
+        &SpecCommand::Freshness(FreshnessRequest {
+            into,
+            profile: Some(EMBEDDED_PROFILE.to_owned()),
+            require: vec!["diagram-set".to_owned()],
+        }),
+        &No_Corpus(),
+        &StdFileSystem,
+    );
+
+    let SpecOutcome::Freshness(Err(FreshnessRefusal::RequirementUnexamined { requested, only })) = outcome
+    else
+    {
+        panic!("a requirement outside --profile's narrowing must refuse RequirementUnexamined");
+    };
+    assert_eq!(requested, "diagram-set");
+    assert_eq!(only.as_deref(), Some(EMBEDDED_PROFILE));
+}
+
+#[test]
+fn Test_Run_Of_An_Unmigrated_Verb_Should_Answer_Its_Marker()
+{
+    let request = SpecCommand::Preview(EditRequest {
+        id: "D-129".to_owned(),
+        from: PathBuf::from("staged.md"),
+        rename: None,
+    });
+
+    let outcome = Run(&request, &No_Corpus(), &StdFileSystem);
 
     assert!(
-        matches!(outcome, SpecOutcome::Freshness(NotYetMigrated)),
-        "Freshness has not moved into this crate yet"
+        matches!(outcome, SpecOutcome::Preview(NotYetMigrated)),
+        "Preview has not moved into this crate yet"
     );
 }

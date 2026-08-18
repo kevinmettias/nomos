@@ -27,15 +27,19 @@
 //! [`SpecCommand`], its six `*Request` types and the corpus-assembly plumbing
 //! ([`Assemble`], [`Assembly`], [`CorpusRequest`]) all moved verbatim to
 //! `nomos-spec-orchestration` — `OD-HOST-002`'s family-9 seam, the same shape
-//! `nomos-check-orchestration` already built for `nomos check`. Five verbs are wired
+//! `nomos-check-orchestration` already built for `nomos check`. Seven verbs are wired
 //! through that crate's own [`nomos_spec_orchestration::Run`] so far:
-//! [`SpecCommand::Profiles`] and [`SpecCommand::Sources`] (increment 1), and
+//! [`SpecCommand::Profiles`] and [`SpecCommand::Sources`] (increment 1);
 //! [`SpecCommand::Record`], [`SpecCommand::Table`] and [`SpecCommand::Markdown`]
-//! (increment 2). `spec/verb/{listing,record,table,markdown}.rs` now delegate their
-//! resolution to it and keep only the writing. The other four verbs are untouched, still
-//! executed by this module's own [`Dispatch`] exactly as before. [`Note_Absences`] stays
-//! here too — it writes text, and writing is this crate's job, not the orchestration
-//! crate's.
+//! (increment 2); and [`SpecCommand::Render`] and [`SpecCommand::Freshness`] (increment 3),
+//! generic over [`nomos_platform::FileSystem`] — see that crate's own documentation for why
+//! those two verbs specifically earned that seam. `spec/verb/{listing,record,table,markdown,
+//! render,freshness}.rs` now delegate their resolution to it and keep only the writing, over
+//! `nomos_platform_std::StdFileSystem` as the concrete platform this composition root
+//! chooses — the same choice `nomos-cli::work` already makes for the ledger. The other two
+//! verbs (`Preview`, `Commit`) are untouched, still executed by this module's own
+//! [`Dispatch`] exactly as before. [`Note_Absences`] stays here too — it writes text, and
+//! writing is this crate's job, not the orchestration crate's.
 
 mod parsing;
 mod reporting;
@@ -46,8 +50,8 @@ mod tests;
 pub use parsing::Parse;
 use reporting::{Absent_Or, Report_Project_Error, Report_Store_Error};
 use verb::{
-    Commit, Empty_Section, EmptySection, Freshness_Of, Markdown, Placed, Preview, Profiles,
-    Record, Render, Report_Build_Error, Report_Edit_Error, Resolved, Sources, Table,
+    Commit, Empty_Section, EmptySection, Freshness_Of, Markdown, No_Such_Profile, Preview,
+    Profiles, Record, Render, Report_Build_Error, Report_Edit_Error, Sources, Table,
 };
 
 mod exit_code;
@@ -60,7 +64,7 @@ pub(crate) use nomos_spec_orchestration::{
 
 use crate::arguments::{Named_Value, Named_Values, Required};
 use nomos_spec_orchestration::corpus::{Assemble, Assembly, CorpusRequest};
-use nomos_spec_project::{Build, Catalogue, Check, Output, Profile, ProjectError, SIDECAR_SUFFIX, Stamp};
+use nomos_spec_project::{Profile, ProjectError, SIDECAR_SUFFIX, Stamp};
 use nomos_spec_store::{
     CommitReport, DocumentSource, EditError, EditPreview, NodeSummary, PathMatch, RecordProjection, RowCensus,
     StoreError, TableLine,
@@ -78,15 +82,6 @@ struct Channels<'a>
     output: &'a mut dyn std::io::Write,
     /// Everything about it.
     notes: &'a mut dyn std::io::Write,
-}
-
-/// Both halves of a rendered output, as they are on disk.
-struct Rendered<'a>
-{
-    /// The projection itself.
-    body: &'a str,
-    /// The stamp beside it.
-    sidecar: &'a str,
 }
 
 /// Runs a command, writing content to `output` and everything about it to `notes`.

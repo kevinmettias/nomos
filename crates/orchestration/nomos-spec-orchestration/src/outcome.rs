@@ -7,19 +7,23 @@
 //! parsing text on the way out.
 //!
 //! [`SpecOutcome::Profiles`], [`SpecOutcome::Sources`], [`SpecOutcome::Record`],
-//! [`SpecOutcome::Table`] and [`SpecOutcome::Markdown`] carry a real, computed answer.
-//! [`SpecOutcome::Markdown`] reuses `nomos-spec-store`'s own [`RecordProjection`] and
-//! [`EditError`] rather than a type of this crate's own — `Record_Markdown` already returns
-//! exactly that shape, and a second type here would only restate it. The remaining three
-//! verbs (`Render`, `Freshness`, `Preview`, `Commit`) still execute entirely inside
-//! `nomos-cli::spec`, and [`NotYetMigrated`] marks the outcome vocabulary reserved for them
-//! without pretending they have moved.
+//! [`SpecOutcome::Table`], [`SpecOutcome::Markdown`], [`SpecOutcome::Render`] and
+//! [`SpecOutcome::Freshness`] carry a real, computed answer. [`SpecOutcome::Markdown`] reuses
+//! `nomos-spec-store`'s own [`RecordProjection`] and [`EditError`] rather than a type of this
+//! crate's own — `Record_Markdown` already returns exactly that shape, and a second type
+//! here would only restate it. The remaining two verbs (`Preview`, `Commit`) still execute
+//! entirely inside `nomos-cli::spec`, and [`NotYetMigrated`] marks the outcome vocabulary
+//! reserved for them without pretending they have moved.
 
+mod freshness;
 mod record;
+mod render;
 mod sources;
 mod table;
 
+pub use freshness::{FreshnessAnswer, FreshnessRefusal, ProfileOutcome, Verdict};
 pub use record::{RecordAnswer, RecordRefusal};
+pub use render::{RenderAnswer, RenderRefusal};
 pub use sources::SourcesAnswer;
 pub use table::{TableAnswer, TableRefusal};
 
@@ -30,9 +34,9 @@ use nomos_spec_store::{EditError, RecordProjection, StoreError};
 ///
 /// `nomos-cli::spec` still parses, assembles a store for, and dispatches this command
 /// entirely on its own -- calling [`crate::Run`] with it would be premature, so nothing
-/// does. Two future increments replace each marked variant's payload with the outcome its
+/// does. One future increment replaces each marked variant's payload with the outcome its
 /// verb actually produces, the same way earlier increments replaced `Profiles`, `Sources`,
-/// `Record`, `Table` and `Markdown`'s own markers with real data.
+/// `Record`, `Table`, `Markdown`, `Render` and `Freshness`'s own markers with real data.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct NotYetMigrated;
 
@@ -43,10 +47,11 @@ pub enum SpecOutcome
     Record(Result<RecordAnswer, RecordRefusal>),
     /// `nomos spec table` -- the rows a table request selected, or why none answered.
     Table(Result<TableAnswer, TableRefusal>),
-    /// `nomos spec render` -- not yet migrated.
-    Render(NotYetMigrated),
-    /// `nomos spec freshness` -- not yet migrated.
-    Freshness(NotYetMigrated),
+    /// `nomos spec render` -- the projection built and placed, or why it was not.
+    Render(Result<RenderAnswer, RenderRefusal>),
+    /// `nomos spec freshness` -- every profile examined and what was found, or why nothing
+    /// was examined at all.
+    Freshness(Result<FreshnessAnswer, FreshnessRefusal>),
     /// `nomos spec markdown` -- a record rendered from the store's own rows, or why it could
     /// not be.
     Markdown(Result<RecordProjection, EditError>),
