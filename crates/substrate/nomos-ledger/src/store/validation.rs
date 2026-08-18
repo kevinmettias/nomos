@@ -23,6 +23,7 @@ pub fn Validate(document: &LedgerDocument, now: Timestamp) -> Vec<String>
         Check_State(item, &mut violations);
         Check_Predicate(item, &mut violations);
         Check_Territory(item, &mut violations);
+        Check_Pattern(item, &mut violations);
     }
 
     let overlapping = Overlapping_Claims(document, now);
@@ -139,6 +140,29 @@ fn Check_Territory(item: &LedgerItem, violations: &mut Vec<String>)
         violations.push(format!(
             "{} is workable but reserves nothing, so it excludes nobody",
             item.id
+        ));
+    }
+}
+
+/// A territory that still carries an unexpanded pattern.
+///
+/// `OD-LEDGER-013` withdrew `work add --territory-pattern`, the only authoring surface that
+/// ever put a value in [`crate::Territory::patterns`], and kept the field itself so a
+/// document that arrives with one anyway — hand-edited, or written by some future authoring
+/// surface — still fails closed: every comparison touching a pattern answers
+/// [`nomos_model::Intersection::Unknown`] rather than comparing as excluding nothing. That
+/// guard covers claiming, but a pattern sitting in a `Ready` or `Claimed` item was never
+/// refused by `Validate` itself, which is the gap the record named and left open. This closes
+/// it: any non-empty `patterns` is reported, regardless of state, because the field is only
+/// ever non-empty by a hand edit that this check exists to catch.
+fn Check_Pattern(item: &LedgerItem, violations: &mut Vec<String>)
+{
+    if !item.territory.patterns.is_empty()
+    {
+        violations.push(format!(
+            "{}'s territory carries unexpanded pattern(s) {:?}, which compare as unknown \
+             rather than as touching nothing and must not reach the board that way",
+            item.id, item.territory.patterns
         ));
     }
 }

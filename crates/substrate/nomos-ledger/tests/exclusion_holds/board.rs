@@ -420,6 +420,30 @@ pub(crate) fn Board_At(
     return (directory, ledger);
 }
 
+/// A board written straight to disk, bypassing `Save`'s own validation gate.
+///
+/// `Validate` now refuses a territory carrying a pattern — `P13-VALIDATE-PATTERN-REFUSAL`
+/// closing the completeness gap `OD-LEDGER-013` named — so `Save` refuses to write a document
+/// [`Patterned`] appears in, the same way it already refuses one with any other violation.
+/// That is the correct behaviour for the store's own write path, but the two tests this
+/// serves are not about that path: they pin the fail-closed *comparison* semantics
+/// `OD-LEDGER-013` kept, over a document that record already says "stays reachable by
+/// hand-editing". This is that hand edit, done for real: the file lands on disk in the shape
+/// a person's editor would have left it, with no store operation ever given the chance to
+/// reject it on the way in.
+pub(crate) fn Board_Written_By_Hand(
+    name: &str,
+    items: Vec<LedgerItem>,
+) -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
+{
+    let directory = Temp_Dir(name);
+    let text = serde_json::to_string_pretty(&Document(items)).expect("a document serializes");
+    std::fs::write(directory.join("ledger.json"), text).expect("test needs to write the ledger");
+    let ledger = Ledger_At(&directory, &AT_NOW);
+
+    return (directory, ledger);
+}
+
 pub(crate) fn Ledger_At<Clock: nomos_platform::Clock>(
     directory: &Path,
     clock: Clock,

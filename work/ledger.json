@@ -15201,14 +15201,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "superseded by P13-VALIDATE-PATTERN-REFUSAL-2: same fix, corrected territory (adds the shared test-helper files under tests/exclusion_holds/) and a predicate scoped to --test exclusion_holds instead of the whole crate, to avoid an unrelated pre-existing failure in records_do_not_serialize."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-sonnet-validate-pattern-refusal",
-        "acquired_at": 1787088118,
-        "lease_expires_at": 1787095318
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -15220,9 +15220,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-sonnet-validate-pattern-refusal",
+          "reason": "territory only reserved crates/substrate/nomos-ledger/src/store/validation.rs, but the correct implementation needed shared test-helper additions across tests/exclusion_holds/{board,claiming,validation}.rs too; also the item's predicate (cargo test -p nomos-ledger) pulls in an unrelated pre-existing failing suite, records_do_not_serialize, confirmed via git stash A/B unrelated to this change. Abandoning to re-author -2 with corrected territory and a predicate scoped to the test binary the new tests actually live in.",
+          "abandoned_at": 1787088829
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "orchestrator",
+        "declined_at": 1787088829
+      }
     },
     {
       "id": "P13-KIND-ORIGIN-LISTING",
@@ -15274,6 +15283,67 @@
           "exit_code": 0
         },
         "revision": "8d8aab73cc09a795ec26ffc93aefaafd761c76e1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-VALIDATE-PATTERN-REFUSAL-2",
+      "title": "Validate never refuses a hand-edited territory carrying a pattern, the completeness gap OD-LEDGER-013 named and left open",
+      "why": "Same as P13-VALIDATE-PATTERN-REFUSAL, declined only for territory/predicate scope, not for the design: OD-LEDGER-013 kept Territory::patterns and its Unknown-intersection semantics deliberately, so a hand-edited document carrying one still fails closed, but Validate's Check_Territory never inspected item.territory.patterns. The implementation is already written and correct (Check_Pattern added to validation.rs, tests added to the exclusion_holds integration suite); this item corrects the original's territory, which missed the shared test-helper files the tests needed, and narrows the predicate off the whole -p nomos-ledger crate (which pulls in an unrelated, pre-existing failing suite, records_do_not_serialize -- confirmed via git stash A/B unaffected by this change) onto the exact test binary the new tests live in.",
+      "done_when": "validation.rs's Validate calls a new Check_Pattern that reports a violation for any item whose territory.patterns is non-empty, naming the item id and the pattern(s). tests/exclusion_holds/validation.rs gains Test_Validate_Should_Refuse_A_Territory_Carrying_A_Pattern and its negative control Test_Validate_Should_Accept_A_Territory_With_No_Pattern, using a Patterned(...) test-helper constructor added to the shared fixtures in tests/exclusion_holds/board.rs and tests/exclusion_holds/claiming.rs. cargo test --no-fail-fast -p nomos-ledger --test exclusion_holds passes in full.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/validation.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/claiming.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/validation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "exclusion_holds"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "exclusion_holds"
+        ],
+        "exit_code": 0,
+        "output_tail": "An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves ... ok\ntest finishing::Test_An_Abandoned_Item_Should_Return_To_Ready_And_Stop_Excluding ... ok\ntest records::Test_Ordinary_Shared_Territory_Should_Still_Be_Accepted ... ok\ntest records::Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted ... ok\ntest finishing::Test_An_Item_Abandoned_Twice_Should_Keep_Both_Reasons ... ok\ntest takeover::Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused ... ok\ntest takeover::Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item ... ok\ntest records::Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything ... ok\ntest takeover::Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over ... ok\ntest takeover::Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed ... ok\ntest records::Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted ... ok\ntest takeover::Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors ... ok\ntest takeover::Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly ... ok\ntest finishing::Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work ... ok\ntest finishing::Test_Finishing_Should_Succeed_When_The_Predicate_Passes ... ok\ntest finishing::Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails ... ok\ntest concurrency::Test_Two_Concurrent_Claims_Should_Both_Survive ... ok\ntest concurrency::Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted ... ok\ntest concurrency::Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran ... ok\ntest concurrency::Test_A_Release_Should_Not_Erase_A_Claim_Taken_While_It_Ran ... ok\ntest concurrency::Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran ... ok\n\ntest result: ok. 71 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-da7f1fa9457ac951.exe)\n",
+        "verified_at": 1787088871,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8195e7fcaa94996310a23ee5d8d092fcc4de336a"
       },
       "abandoned": [],
       "displaced": [],

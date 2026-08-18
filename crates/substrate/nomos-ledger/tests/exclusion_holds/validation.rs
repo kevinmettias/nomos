@@ -79,6 +79,40 @@ fn Test_Incomparable_Territory_Should_Be_Reported_Not_Ignored()
     );
 }
 
+/// `OD-LEDGER-013` withdrew the only authoring surface that put a value in
+/// `territory.patterns` and kept the field so a hand-edited document still fails closed.
+/// `Validate` is the completeness gap the record named and left open: a pattern must be
+/// refused wherever it is authored, not just where a claim tries to compare against it.
+#[test]
+fn Test_Validate_Should_Refuse_A_Territory_Carrying_A_Pattern()
+{
+    let document = Document(vec![Patterned("T-1", &["src/a.rs"], "crates/spec/**")]);
+
+    let violations = Validate(&document, At(NOW));
+
+    assert!(
+        violations
+            .iter()
+            .any(|violation| violation.contains("T-1") && violation.contains("crates/spec/**")),
+        "a territory carrying a pattern must be refused, got: {violations:?}"
+    );
+}
+
+/// The negative control. An ordinary item with an empty `patterns` vec — the shape every
+/// item in the real ledger carries today — must not trip the new check.
+#[test]
+fn Test_Validate_Should_Accept_A_Territory_With_No_Pattern()
+{
+    let document = Document(vec![Item("T-1", &["src/a.rs"])]);
+
+    let violations = Validate(&document, At(NOW));
+
+    assert!(
+        !violations.iter().any(|violation| violation.contains("pattern")),
+        "an empty patterns vec must not be reported, got: {violations:?}"
+    );
+}
+
 // ---------------------------------------------------------------------------
 // Acceptance 2 — an item cannot be done without recorded verification.
 // ---------------------------------------------------------------------------

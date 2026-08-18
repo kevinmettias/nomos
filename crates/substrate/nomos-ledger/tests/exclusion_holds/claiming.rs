@@ -43,85 +43,65 @@ fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
 ///
 /// `P10-PATTERN-BRICK` found this by reading `territory.rs` rather than from an incident: a
 /// single entry in `patterns` short-circuits `Territory::Intersect` to `Unknown` before a
-/// single path is compared, and `Unknown` refuses non-retryably.
+/// single path is compared, and `Unknown` refuses non-retryably. At the time that record was
+/// written, `Validate` did not look at `patterns` at all, so a pattern item on a quiet board
+/// claimed perfectly normally, and only *then* did every other claim start failing — one
+/// agent quietly acquired the power to stop every other session, and learned nothing about
+/// having done so. `OD-LEDGER-013` named that gap and left it for `Validate` to close.
 ///
-/// # The item's own description of this was one clause too strong, and the correction matters
-///
-/// `P10-PATTERN-BRICK` says the item "can never be claimed by anyone, its own holder
-/// included". Measured here, that is not what happens, because `Conflicts` compares only
-/// against items holding an **active claim**. So a pattern item on a quiet board claims
-/// perfectly normally — asserted below, because it is the step that makes the rest possible.
-///
-/// The real shape is worse than an item nobody can take, and this is the finding:
-///
-/// 1. the pattern item is claimable exactly when the board is quiet, so nothing warns the
-///    agent who takes it;
-/// 2. from that moment every other claim is refused against it, including territory sharing
-///    no path with it at all;
-/// 3. and the refusal is the non-retryable one, which by `README.md`'s exit-code contract
-///    tells each refused agent to stop and fetch a person rather than pick up another item.
-///
-/// So one agent quietly acquires the power to stop every other session, and learns nothing
-/// about having done so. `OD-LEDGER-013` withdrew `--territory-pattern` on the strength of
-/// this. The state stays reachable by hand-editing the document, which is why this test can
-/// still construct it, and why the `Unknown` in `Territory::Intersect` is kept rather than
-/// relaxed: withdrawing the flag removes the way in, not the guard.
+/// `P13-VALIDATE-PATTERN-REFUSAL` closes it: `Validate` now refuses any document whose
+/// territory carries a pattern, and every verb ends by saving the whole document, so the
+/// quiet first claim is gone. The board is `LedgerUnusable` from the moment the pattern
+/// lands, not from the moment somebody happens to claim it — no ordering makes it safe, and
+/// now no ordering makes it *quiet* either. The state stays reachable by hand-editing the
+/// document, which is why this test still constructs it directly rather than through `Save`.
 #[test]
-fn Test_A_Held_Pattern_Should_Refuse_Every_Other_Claim_On_The_Board()
+fn Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unusable()
 {
-    let (_directory, mut ledger) = Board_At("pattern-brick", vec![
+    let (_directory, mut ledger) = Board_Written_By_Hand("pattern-brick", vec![
         Patterned("T-1", &["src/a.rs"], "crates/spec/**"),
         Item("T-2", &["docs/unrelated.md"]),
         Item("T-3", &["tests/also-unrelated.rs"]),
     ]);
-    // 1. It claims without complaint. Nothing is held yet, so nothing is compared, so the
-    //    pattern is never consulted. This is the step the item's description missed.
-    Take(&mut ledger, "T-1", "agent-a");
 
-    // 2. And now the board is shut. `docs/unrelated.md` shares nothing with `src/a.rs` or
-    //    with `crates/spec/**`, and is refused anyway — the short-circuit runs before any
-    //    path is looked at, so being unrelated is no defence.
-    for (item, holder) in [("T-2", "agent-b"), ("T-3", "agent-c")]
+    // Every item is refused the same way, including the pattern item itself and territory
+    // sharing no path with it at all: the refusal is about the document, not about what any
+    // one claim would have compared against.
+    for (item, holder) in [("T-1", "agent-a"), ("T-2", "agent-b"), ("T-3", "agent-c")]
     {
-        let collateral = Refused(&mut ledger, item, holder);
-        Is_Collateral_Damage(item, &collateral);
+        let refusal = Refused(&mut ledger, item, holder);
+        Is_Ledger_Unusable(item, &refusal);
     }
 }
 
-/// A claim refused for no reason of its own: unanswerable rather than contended, and
-/// non-retryable, which is what tells the agent to stop and fetch a person. One held pattern
-/// therefore reads to every other session as a broken ledger.
-fn Is_Collateral_Damage(item: &str, refusal: &ClaimRefusal)
+/// A claim refused for no reason of its own: the document itself is invalid, not contended,
+/// and the refusal is non-retryable, which is what tells the agent to stop and fetch a
+/// person. One hand-edited pattern therefore reads to every session as a broken ledger.
+fn Is_Ledger_Unusable(item: &str, refusal: &ClaimRefusal)
 {
     assert!(
-        matches!(refusal, ClaimRefusal::UnknownIndependence { .. }),
+        matches!(refusal, ClaimRefusal::LedgerUnusable { .. }),
         "{item}: {refusal:?}"
     );
     assert!(!refusal.Is_Retryable(), "{item}: {}", refusal.Describe());
 }
 
-/// And it shuts in the other direction too, once anything at all is held.
-///
-/// The complement of the test above, and together they are why the state has no safe
-/// ordering: claim the pattern first and it stops everyone else; claim anything else first
-/// and the pattern item can never be taken. There is no sequence in which the board both
-/// carries a pattern and keeps working.
+/// The same finding regardless of where the pattern item sits in the document, so the
+/// refusal is provably about the pattern and not about position.
 #[test]
-fn Test_A_Pattern_Item_Should_Be_Unclaimable_Once_Anything_Is_Held()
+fn Test_A_Pattern_Item_Should_Refuse_Every_Claim_Wherever_It_Sits()
 {
-    let (_directory, mut ledger) = Board_At("pattern-brick-reverse", vec![
+    let (_directory, mut ledger) = Board_Written_By_Hand("pattern-brick-reverse", vec![
         Item("T-1", &["docs/unrelated.md"]),
         Patterned("T-2", &["src/b.rs"], "crates/spec/**"),
     ]);
-    Take(&mut ledger, "T-1", "agent-a");
 
-    let refused = Refused(&mut ledger, "T-2", "agent-b");
+    let refused = Refused(&mut ledger, "T-1", "agent-a");
 
-    assert!(matches!(refused, ClaimRefusal::UnknownIndependence { .. }), "{refused:?}");
+    assert!(matches!(refused, ClaimRefusal::LedgerUnusable { .. }), "{refused:?}");
     assert!(
         !refused.Is_Retryable(),
-        "and waiting will not help: `docs/unrelated.md` is disjoint from `src/b.rs`, so the \
-         refusal is not contention and no lease expiring resolves it"
+        "and waiting will not help: no lease expiring repairs an invalid document"
     );
 }
 
