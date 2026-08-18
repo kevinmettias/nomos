@@ -14085,7 +14085,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P13-CONFIG-ID-DEDUP-2: same amendment, same territory, predicate corrected to --lib --test analysis_slice, which drops the crate's determinism::spec_productions test target -- a pre-existing, unrelated NOT NULL constraint failure on relation_types.domain_kinds_json present on clean HEAD, tracked separately as P13-SPEC-PRODUCTIONS-FIXTURE. No claim was held past abandon."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -14108,7 +14112,10 @@
         }
       ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "claude-loop-config-dedup",
+        "declined_at": 1787035670
+      }
     },
     {
       "id": "P13-SPEC-PRODUCTIONS-FIXTURE",
