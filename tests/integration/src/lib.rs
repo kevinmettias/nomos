@@ -38,9 +38,8 @@ mod surface;
 mod verification;
 
 pub use composition::Registered;
-pub use context::{
-    Configuration_Rendering, Host_Variant, Resolved_Configuration, CONFIGURATION_SCHEMA,
-};
+pub use context::{Host_Variant, CONFIGURATION_SCHEMA};
+pub use nomos_check_orchestration::Resolved_Configuration;
 pub use corpus::{Corpus, Name_Keys, SourceFile, Subject_Of_Path, Walk};
 pub use determinism::{Child_Variable, Digest_In, Report_Line};
 pub use run_report::{Edited, Recompute, Resolved, RunReport};

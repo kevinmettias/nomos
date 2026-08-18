@@ -14,8 +14,12 @@
 //! The snapshot comes from [`nomos_workspace::Workspace`] and is the slice's own doing. The
 //! other two are here.
 
+#[cfg(test)]
 use nomos_capability::Registry;
-use nomos_contracts::{ConfigurationId, Guarantee};
+#[cfg(test)]
+use nomos_check_orchestration::Resolved_Configuration;
+#[cfg(test)]
+use nomos_contracts::Guarantee;
 use nomos_workspace::BuildVariant;
 
 /// The schema of the configuration rendering below.
@@ -42,91 +46,6 @@ pub fn Host_Variant() -> BuildVariant
             .split(',')
             .filter(|feature| return !feature.is_empty()),
     );
-}
-
-/// A guarantee as one field, by its four stable labels.
-///
-/// Written out rather than derived. `{guarantee:?}` would put a `Debug` implementation
-/// between the data and the digest, and a `Debug` output is not a stable format — a
-/// derive's spacing changing in a point release would re-address every fact in the store.
-fn Rendered_Guarantee(guarantee: Guarantee) -> String
-{
-    return format!(
-        "{}/{}/{}/{}",
-        guarantee.variant.Label(),
-        guarantee.soundness.Label(),
-        guarantee.completeness.Label(),
-        guarantee.incremental.Label()
-    );
-}
-
-/// The effective policy of one composition, written out.
-///
-/// # Why the registry is the configuration
-///
-/// [`ConfigurationId`] is documented as "a digest of a fully resolved effective policy",
-/// and for an analysis run the resolved policy *is* which capabilities are declared and
-/// which providers may answer for them, at what versions and under what guarantees. That is
-/// exactly what a [`Registry`] holds once composition is finished. Inventing a second
-/// policy object beside it would give the run two answers to what it is configured to do.
-///
-/// Contract summaries are deliberately absent: prose is documentation, and rewording a
-/// sentence must not invalidate a corpus.
-///
-/// Line-oriented and tab-separated, hand-written, for the reason every payload in this
-/// system is: nothing derived may sit between the data and its digest.
-#[must_use]
-pub fn Configuration_Rendering(registry: &Registry) -> String
-{
-    let mut rendered = String::new();
-    rendered.push_str(CONFIGURATION_SCHEMA);
-    rendered.push('\n');
-
-    for contract in registry.Declared()
-    {
-        rendered.push_str("capability\t");
-        rendered.push_str(contract.id.As_Str());
-        rendered.push('\t');
-        rendered.push_str(&contract.version.to_string());
-        rendered.push('\t');
-        rendered.push_str(&Rendered_Guarantee(contract.ceiling));
-        rendered.push('\n');
-        Render_The_Offers(&mut rendered, registry, &contract.id);
-    }
-
-    return rendered;
-}
-
-/// Every offer against one capability, in the order the registry holds them.
-fn Render_The_Offers(
-    rendered: &mut String,
-    registry: &Registry,
-    capability: &nomos_contracts::CapabilityId,
-)
-{
-    for offer in registry.Offers(capability)
-    {
-        rendered.push_str("offer\t");
-        rendered.push_str(capability.As_Str());
-        rendered.push('\t');
-        rendered.push_str(offer.provider.As_Str());
-        rendered.push('\t');
-        rendered.push_str(&offer.version.to_string());
-        rendered.push('\t');
-        rendered.push_str(&Rendered_Guarantee(offer.guarantee));
-        rendered.push('\n');
-    }
-}
-
-/// The identity of that policy.
-#[must_use]
-pub fn Resolved_Configuration(registry: &Registry) -> ConfigurationId
-{
-    use nomos_model::Content_Digest;
-
-    return ConfigurationId::From_Digest(Content_Digest(
-        Configuration_Rendering(registry).as_bytes(),
-    ));
 }
 
 #[cfg(test)]

@@ -380,6 +380,7 @@ dependencies = [
  "nomos-analysis",
  "nomos-cap-syntax",
  "nomos-capability",
+ "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-corrections",
  "nomos-lang-rust",
