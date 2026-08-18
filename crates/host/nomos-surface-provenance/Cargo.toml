@@ -1,0 +1,19 @@
+[package]
+name = "nomos-surface-provenance"
+version = "0.1.0"
+description = "Band 91. A report over this repository's own git history: OD-STORE-002's worked-case join between tests/contract/surface/<crate>.txt and docs/records/, for a caller-given commit range. Never gated."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "nomos-surface-provenance"
+path = "src/main.rs"
+
+[dependencies]
+nomos-platform = { workspace = true }
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

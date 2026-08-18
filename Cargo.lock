@@ -569,6 +569,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-surface-provenance"
+version = "0.1.0"
+dependencies = [
+ "nomos-platform",
+ "nomos-platform-std",
+]
+
+[[package]]
 name = "nomos-work-orchestration"
 version = "0.1.0"
 dependencies = [

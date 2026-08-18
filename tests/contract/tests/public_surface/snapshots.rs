@@ -15,7 +15,7 @@ use std::path::Path;
 ///
 /// Declared rather than derived from the absence of `src/lib.rs`, so that a crate losing
 /// its library — which is a large change — cannot quietly lose its snapshot with it.
-const WITHOUT_A_LIBRARY: &[&str] = &["nomos-cli"];
+const WITHOUT_A_LIBRARY: &[&str] = &["nomos-cli", "nomos-surface-provenance"];
 
 /// The assertion.
 #[test]

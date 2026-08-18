@@ -78,6 +78,12 @@ members = [
     # Band 10 — host. Composition roots and binaries.
     "crates/host/nomos-cli",
 
+    # Band 91. A report over this repository's own git history, run by a human on
+    # demand and invoked from nowhere else in this workspace: OD-STORE-002's Worked
+    # Case join between a crate's tests/contract/surface/ snapshot and docs/records/,
+    # for a caller-given commit range. Bin-only, like nomos-cli.
+    "crates/host/nomos-surface-provenance",
+
     # Assertions about the workspace itself: dependency bands, the contracts
     # allowlist, and module reachability.
     "tests/contract",

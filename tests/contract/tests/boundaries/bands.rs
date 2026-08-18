@@ -92,6 +92,14 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // closing family 9's `SpecCommand` half. `OD-HOST-002`.
     ("nomos-spec-orchestration", 40),
     ("nomos-cli", 90),
+    // A report over this repository's own git history, not over the workspace's crate
+    // graph — OD-STORE-002's Worked Case join between a crate's surface snapshot and
+    // docs/records/, for a caller-given commit range. Above nomos-cli because it is a
+    // second, unrelated composition root rather than something nomos-cli depends on;
+    // below the observers at 100 because it depends on nomos-platform and
+    // nomos-platform-std like any other host-band binary, not because anything below
+    // it may name it.
+    ("nomos-surface-provenance", 91),
     // The contract tests sit at the top: they observe the workspace and nothing
     // observes them.
     ("nomos-contract-tests", 100),

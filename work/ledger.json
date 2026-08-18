@@ -14796,6 +14796,62 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-SURFACE-PROVENANCE",
+      "title": "OD-STORE-002 worked-case query becomes a report, not a gate",
+      "why": "OD-STORE-002 Worked Case names a join: does a crates tests/contract/surface/C.txt blob differ between a commit ranges endpoints, and does any commit in that range touch docs/records/. No code anywhere in this workspace shells to git; the two committed series sit unqueried next to each other. Two checks before building this: first, the same record own What A Temporal Claim Is Evidence Of section says a temporal or cross-revision claim must never gate the change that produced the observation it depends on, so the output has to be a report a human reads, never a cargo test wired into the gate workflow or into any crates default test suite -- P3-REGRESSION already established the report-not-gate shape for a cross-revision finding in this workspace. Second, a measured false-positive class already exists: of 59 commits touching tests/contract/surface/ across this repository history, 21 (36 percent) touch zero paths under docs/records/ in that same commit, including 27b3ed9 which reblessed a stale mirror with no accompanying decision to record. The join read literally over single-commit ranges is genuinely noisy, but the record leaves the choice of range to the caller rather than deciding a default, and OD-STORE-002 already classifies this whole class of finding as EvidenceClass Derived, read alongside a live check and never substituted for one -- so a human choosing the range and reading the findings, rather than the tool inferring record-worthiness itself, is exactly the reading the record already commits to. Nothing about the join itself needs a fresh design decision; only its delivery as an always-passing, explicitly-invoked report does.",
+      "done_when": "A new bin-only crate nomos-surface-provenance (crates/host/nomos-surface-provenance, band 91, no src/lib.rs, matching nomos-cli shape) implements OD-STORE-002 Worked Case query exactly, for a caller-given pair of git revisions --since and --until and a crate name with a tests/contract/surface/<crate>.txt snapshot: whether the blob at that path differs between the two revisions (git diff <since> <until> --name-only -- tests/contract/surface/<crate>.txt, nonempty means yes) and whether any commit in <since>..<until> touches docs/records/ (git log <since>..<until> --format=%H -- docs/records/, nonempty means yes). A finding is reported exactly when the first is yes and the second is no. With no --crate flag every crate holding a tests/contract/surface/<name>.txt file is checked, names discovered from that directory filenames; one or more --crate <name> flags narrow the set. Findings render to stdout naming the crate and the commits that touched its surface file in range, so a reader can judge each one -- including a reblessing-only change like 27b3ed9 -- without the tool asserting a verdict about record-worthiness itself. The two git invocations run through nomos_platform ProcessLauncher (nomos_platform_std StdProcessLauncher wired in main.rs), so the join logic itself is unit-tested (cargo test -p nomos-surface-provenance) against a fake launcher returning fixed argv-matched output, never against this repository own real git history, whose completeness the gate workflow does not guarantee (actions/checkout there sets no fetch-depth, so a CI checkout may be shallow). The binary exits 0 whenever it ran a query to completion, whether or not a finding was reported, and a non-zero code only for a usage error (missing --since or --until) or a launcher failure -- a finding existing may never produce a non-zero exit. Nothing in the gate workflow, the root Cargo.toml build, or any other crate test suite invokes this binary; it is run by a human on demand. The crate joins the workspace members list in Cargo.toml (under the Band 10 -- host comment, beside nomos-cli), README band table at band 91 with a one-line description, and tests/contract/tests/boundaries/bands.rs BANDS at the same band and description; tests/contract/tests/public_surface/snapshots.rs WITHOUT_A_LIBRARY gains nomos-surface-provenance beside nomos-cli, since it has no library target. tests/contract/tests/boundaries/readme.rs, graph.rs and reachability.rs pass unmodified against the new crate.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-surface-provenance",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/public_surface/snapshots.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-surface-provenance"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 18 tests\ntest arguments::tests::Test_A_Minimal_Line_Parses_With_No_Crates_Named ... ok\ntest arguments::tests::Test_Since_And_Until_Are_Required ... ok\ntest discovery::tests::Test_The_Snapshot_Path_Is_Repository_Relative ... ok\ntest arguments::tests::Test_Crate_Repeats_And_Root_Are_Read ... ok\ntest evaluate::tests::Test_A_Blank_Diff_Means_No_Finding ... ok\ntest evaluate::tests::Test_A_Changed_Surface_With_A_Records_Commit_Is_Not_A_Finding ... ok\ntest evaluate::tests::Test_A_Bad_Revision_Is_An_Error_Not_A_Finding ... ok\ntest git::tests::Test_Path_History_Carries_Hash_And_Subject ... ok\ntest evaluate::tests::Test_A_Changed_Surface_With_No_Records_Commit_Is_A_Finding ... ok\ntest git::tests::Test_Endpoint_Diff_Compares_The_Two_Trees_Directly ... ok\ntest discovery::tests::Test_This_Repositorys_Own_Surface_Directory_Yields_Its_Crates ... ok\ntest git::tests::Test_Records_Touched_Scopes_To_Docs_Records_Only ... ok\ntest report::tests::Test_A_Finding_Is_Named_With_Its_Commits ... ok\ntest tests::Test_A_Missing_Since_Is_A_Usage_Error_Before_Anything_Runs ... ok\ntest report::tests::Test_A_Clean_Crate_Is_Named_But_Not_Flagged ... ok\ntest discovery::tests::Test_A_Missing_Directory_Refuses_Rather_Than_Reporting_Empty ... ok\ntest tests::Test_An_Unknown_Crate_Name_Is_A_Usage_Error ... ok\ntest tests::Test_A_Finding_Reaches_The_Rendered_Report_And_Still_Exits_Ok ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos_surface_provenance-7a637cefd2c87366.exe)\n",
+        "verified_at": 1787086837,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1dfa37a07355bb18881d0439587bf2b361cb8143"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
