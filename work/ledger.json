@@ -14916,6 +14916,236 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-NSV-PRESERVE-004-TEST",
+      "title": "test",
+      "why": "test",
+      "done_when": "test",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate",
+          "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "connectivity test for --amends path spelling, superseded by the real item"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude",
+        "declined_at": 1787087465
+      }
+    },
+    {
+      "id": "P13-NSV-PRESERVE-004",
+      "title": "OD-SPEC-004's filler test becomes the repetition census it already recommends, or admits it isn't a preservation guarantee",
+      "why": "OD-SPEC-004 measured a quantified, undeclared miss: the governed wording template hollows 132 v15.0 documents and 44 restored members, none of it caught because the live filler test is blocklist substring matching alone. The record itself lists three closing options and recommends option 1 -- a repetition census with the blocklist retained as the naming layer -- and says nothing is blocked on adopting it, since the archaeology module's regression-report tooling (crates/spec/nomos-spec-ingest/src/archaeology/census.rs) already implements exactly that shape for cross-revision reporting: Shared_Templates groups by repeated body text at or above SHARED_BY (3) sections and Is_Filler supplies the declared/undeclared label. Nothing turns that recommendation into the ruleset nomos-spec-validate actually enforces: NSV-PRESERVE-004 is discussed only in this record's own prose, absent from both DECLARED_RULES (crates/spec/nomos-spec-validate/src/run.rs) and Registered() (crates/spec/nomos-spec-validate/src/preserve.rs), which today only claim NSV-PRESERVE-001/002/003/006. That is the crate correctly refusing to claim a rule nobody decided the shape of, per OD-COMPLETENESS-002 -- not an oversight -- so closing it requires making the decision the record already leans toward, not silently adding a rule.",
+      "done_when": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md gains a top-level '## Resolution' section adopting option 1 exactly as its own '## What Would Close It' section recommends (a repetition census with the blocklist retained as the naming layer), and its frontmatter status changes from open to accepted. crates/spec/nomos-spec-validate/src/rule/ gains a new rule file implementing the Rule trait with Id() returning \"NSV-PRESERVE-004\" and Describe() naming the check; its Evaluate(&self, store: &SpecificationStore) groups source_blocks rows by normalized_hash, counts DISTINCT document_uid per group, treats a group whose distinct-document count is at or above nomos_spec_ingest::SHARED_BY (3) as a template, and reports a violation for a template whose text nomos_spec_ingest::Is_Filler returns None for (the undeclared case) -- one violation per undeclared template, naming the section/document count it spans, never one per row. A template Is_Filler already matches is not a violation: the blocklist stays the naming layer, not a second gate. NSV-PRESERVE-004 is added to DECLARED_RULES in run.rs and to the Vec returned by Registered() in preserve.rs, beside the existing four. nomos-spec-validate's Cargo.toml moves nomos-spec-ingest from [dev-dependencies] to [dependencies] (band 13 before band 14 already permits this), since the new rule reuses Is_Filler and SHARED_BY rather than redefining them. A unit test proves the rule flags only the undeclared case: an in-memory SpecificationStore seeded with >=3 blocks sharing a normalized_hash whose text Is_Filler does not match reports one violation, and a second fixture whose shared text Is_Filler does match reports none. cargo test -p nomos-spec-validate -p nomos-spec-ingest passes, and the existing registry-vs-manifest reconciliation in run.rs still holds with five declared rules instead of four. diagrams/relations.mmd and spec/domain-specification.md (plus their .nomos-projection.json sidecars) are re-rendered from a worktree holding exactly the record set this commit publishes, per OD-GATE-005, and nomos spec freshness --into . --require diagram-set --require domain-specification exits 0 in that worktree.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate",
+          "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "done_when misstated the SHARED_BY threshold as distinct-document count instead of section (row) count, which the record and archaeology/census.rs both use. Superseded by P13-NSV-PRESERVE-004-2 with the corrected threshold."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-nomos-preserve-004",
+          "reason": "done_when misstated the SHARED_BY threshold as distinct-document count; the record and archaeology/census.rs both define it as section (row) count. Re-adding corrected.",
+          "abandoned_at": 1787087604
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-nomos-preserve-004",
+        "declined_at": 1787087609
+      }
+    },
+    {
+      "id": "P13-UNIVERSE-SUBJECT-QUALIFY",
+      "title": "Two universes sharing a bare name in different crates share one SubjectId, the qualified-name fix D-134 named and left unwritten",
+      "why": "D-134's own text says: 'Two universes sharing a name in different crates would share a subject identity. Nothing in this workspace does today. The fix is a qualified name, not a path, and it is not written yet.' crates/rules/nomos-rules/src/mirror/verdict.rs's Judge/Shortcoming builds a completeness-mirror Finding's subject as SubjectId::From_Digest(Content_Digest(universe.name.as_bytes())) -- the bare DeclaredUniverse.name only, with no crate qualifier -- so two universes named identically in different crates (e.g. two enums both ending in ::All whose owning type shares a name, or two identically-named constants) would hash to the same SubjectId and be indistinguishable in nomos check's findings, suppressions, or any history keyed on subject. Confirmed this is still live: DeclaredUniverse.path is documented 'for reporting; never identity' and DeclaredUniverse.name is documented 'the stable name... A universe that moves file keeps it' -- so the fix per D-134's own words is a qualified name (a stable crate/suite qualifier prepended to name), not the raw path, which is why locations already carries universe.path separately for reporting and must stay untouched. The existing completeness_universes/table.rs comparisons (claims.rs, derivation.rs) already key on (path, name) tuples and are unaffected -- this item is contained to subject construction, not the declared-universe scan or table.rs.",
+      "done_when": "crates/rules/nomos-rules/src/mirror/verdict.rs's Shortcoming (or a new helper beside it) derives a stable qualifier from universe.path -- the crate or test-suite directory the path names (e.g. crates/spec/nomos-spec-store/src/table.rs yields nomos-spec-store, tests/contract/src/gates.rs yields nomos-contract-tests), by splitting the path on its /src/ or /tests/ segment and taking the leaf directory name before it, not by reading Cargo.toml or the filesystem (this rule stays a pure function over the syntax facts it is handed). SubjectId::From_Digest is built from Content_Digest of the qualified string (qualifier + universe.name, e.g. \"nomos-spec-store::Table::All\"), not universe.name alone. subject_name and locations are unchanged (still universe.name and universe.path respectively), since D-134 only names subject identity as the gap, not reporting. A unit test in nomos-rules proves two DeclaredUniverse values with the same name and different path (in different crate directories) now produce different SubjectId values, where they previously collided. cargo test --no-fail-fast -p nomos-rules passes, and the existing nomos-rules and nomos-contract-tests completeness_universes suites are unaffected (their comparisons key on (path, name), not on SubjectId).",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/mirror/verdict.rs",
+          "crates/rules/nomos-rules/src/mirror/tests"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": ":tests::judgments::Test_Two_Crates_Sharing_A_Bare_Universe_Name_Should_Not_Share_A_Subject ... ok\ntest mirror::tests::scoping::Test_A_Name_Spelled_In_A_Comment_Should_Still_Withhold_The_Block ... ok\ntest mirror::tests::scoping::Test_With_No_Provider_Admitted_No_Claim_Should_Be_A_Phantom ... ok\ntest universe::tests::Test_A_Constant_Slice_Should_Be_Found ... ok\ntest mirror::tests::scoping::Test_A_Phantom_In_A_Read_Subject_Should_Block_Though_Another_Subject_Was_Unread ... ok\ntest mirror::tests::reads_a_fact::Test_A_Mirror_Should_Resolve_Only_Through_A_Fact ... ok\ntest universe::tests::Test_A_Declared_Mirror_Should_Be_Read_Off_The_Doc_Comment ... ok\ntest mirror::tests::scoping::Test_An_Admitted_Gap_Should_Not_Inherit_The_Indexs_Doubt ... ok\ntest mirror::tests::scoping::Test_Two_Claims_Under_One_Shortfall_Should_Be_Judged_Separately ... ok\ntest universe::tests::Test_A_File_That_Declares_Nothing_Should_Be_Observed_And_Empty ... ok\ntest mirror::tests::scoping::Test_A_Phantom_Should_Still_Block_When_Every_Subject_Was_Read ... ok\ntest universe::tests::Test_A_List_With_No_Documentation_Should_Claim_No_Mirror ... ok\ntest universe::tests::Test_A_Payload_From_A_Blind_Provider_Should_Not_Read_As_No_Mirror ... ok\ntest universe::tests::Test_A_Private_List_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Scalar_Constant_Should_Not_Be_A_Universe ... ok\ntest universe::tests::Test_A_Trait_Impl_Should_Not_Claim_The_Type ... ok\ntest universe::tests::Test_An_All_Should_Be_Attributed_To_Its_Type ... ok\ntest universe::tests::Test_An_All_That_Takes_A_Receiver_Should_Not_Be_A_Universe ... ok\n\ntest result: ok. 42 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-d8b5b2c7fdfc8471.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787087915,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4b2faefdf38e726efeb92df746c51d52e65fa519"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-NSV-PRESERVE-004-2",
+      "title": "OD-SPEC-004's filler test becomes the repetition census it already recommends, or admits it isn't a preservation guarantee",
+      "why": "OD-SPEC-004 measured a quantified, undeclared miss: the governed wording template hollows 132 v15.0 documents and 44 restored members, none of it caught because the live filler test is blocklist substring matching alone. The record itself lists three closing options and recommends option 1 -- a repetition census with the blocklist retained as the naming layer -- and says nothing is blocked on adopting it, since the archaeology module's regression-report tooling (crates/spec/nomos-spec-ingest/src/archaeology/census.rs) already implements exactly that shape for cross-revision reporting: Shared_Templates groups by repeated body text and treats repetition.sections >= SHARED_BY (3, a count of sections/rows, not distinct documents) as a template, with Is_Filler supplying the declared/undeclared label. Nothing turns that recommendation into the ruleset nomos-spec-validate actually enforces: NSV-PRESERVE-004 is discussed only in this record's own prose, absent from both DECLARED_RULES (crates/spec/nomos-spec-validate/src/run.rs) and Registered() (crates/spec/nomos-spec-validate/src/preserve.rs), which today only claim NSV-PRESERVE-001/002/003/006. That is the crate correctly refusing to claim a rule nobody decided the shape of, per OD-COMPLETENESS-002 -- not an oversight -- so closing it requires making the decision the record already leans toward, not silently adding a rule.",
+      "done_when": "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md gains a top-level '## Resolution' section adopting option 1 exactly as its own '## What Would Close It' section recommends (a repetition census with the blocklist retained as the naming layer), and its frontmatter status changes from open to accepted. crates/spec/nomos-spec-validate/src/rule/ gains a new rule file implementing the Rule trait with Id() returning \"NSV-PRESERVE-004\" and Describe() naming the check; its Evaluate(&self, store: &SpecificationStore) groups source_blocks rows by normalized_hash, and for a group whose row count (sections, matching archaeology's repetition.sections) is at or above nomos_spec_ingest::SHARED_BY (3) treats it as a template. A template violates the rule when nomos_spec_ingest::Is_Filler over its shared text returns None (the undeclared case) -- one violation per undeclared template, naming the section count and the distinct document count it spans, never one per row. A template Is_Filler already matches is not a violation: the blocklist stays the naming layer, not a second gate. NSV-PRESERVE-004 is added to DECLARED_RULES in run.rs and to the Vec returned by Registered() in preserve.rs, beside the existing four. nomos-spec-validate's Cargo.toml moves nomos-spec-ingest from [dev-dependencies] to [dependencies] (band 13 before band 14 already permits this), since the new rule reuses Is_Filler and SHARED_BY rather than redefining them. tests/preservation_holds.rs (already dev-depending on nomos-spec-ingest for real ingestion fixtures) gains a positive and a negative case: a document ingested with >=3 sections whose body block text is identical and not matched by Is_Filler reports one NSV-PRESERVE-004 violation, and the same shape with text Is_Filler does match reports none. cargo test -p nomos-spec-validate -p nomos-spec-ingest passes, and Test_The_Registry_Should_Match_The_Manifest in tests/preservation_holds.rs still holds with five declared rules instead of four. diagrams/relations.mmd and spec/domain-specification.md (plus their .nomos-projection.json sidecars) are re-rendered from a worktree holding exactly the record set this commit publishes, per OD-GATE-005, and nomos spec freshness --into . --require diagram-set --require domain-specification exits 0 in that worktree.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate",
+          "docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-nomos-preserve-004",
+        "acquired_at": 1787087630,
+        "lease_expires_at": 1787094830
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-ingest"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-PROVIDER-CATEGORY-QUESTION",
+      "title": "Log the KNOWN_PROVIDERS self-registration question as open intent, gated by a third provider crate",
+      "why": "tests/contract/tests/completeness_universes/table.rs classifies KNOWN_PROVIDERS (crates/packages/nomos-lang-package/src/known_providers.rs) as Standing::Unmirrored, and P13-SHIPPED-MIGRATIONS-MIRROR's survey found it needs a real design decision first -- a workspace-provider-category question -- rather than being mechanically closeable the way SHIPPED and MIGRATIONS were. OD-HOST-004 decided a related shape (hand-accretion is not automatically a defect at low count) for a different crate's selection registry; KNOWN_PROVIDERS only does membership-checking, not selection, so that precedent is relevant context, not a transferable decision. With only two real Rust provider crates in the workspace today, there is no third to design a registration mechanism against.",
+      "done_when": "OD-PACKAGE-006 is registered and governing, and diagrams/relations.mmd + spec/domain-specification.md are re-rendered fresh over it.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-006.record",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-provider-category-question",
+        "acquired_at": 1787087898,
+        "lease_expires_at": 1787095098
+      },
+      "verification": {
+        "argv": [
+          "target/debug/nomos.exe",
+          "spec",
+          "freshness",
+          "--into",
+          ".",
+          "--require",
+          "diagram-set",
+          "--require",
+          "domain-specification"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

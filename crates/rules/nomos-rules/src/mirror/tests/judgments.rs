@@ -198,3 +198,38 @@ fn Test_A_Test_Named_Only_In_Prose_Should_Not_Resolve()
 
     assert_eq!(Only(&findings).gate, GateCategory::Blocking);
 }
+
+/// `D-134`'s qualified-name fix, proven end to end. `verdict.rs` used to hash
+/// `universe.name` alone into the finding's subject, so two universes sharing a bare
+/// name in different crates — same constant name, different `crates/.../src/...` roots
+/// — would collide onto one `SubjectId` and become indistinguishable in every finding,
+/// suppression, or history keyed on it. Real crate paths, not the synthetic single-
+/// segment paths the rest of this suite uses, because the qualifier is derived from the
+/// `/src/` split and a path without one stays deliberately unqualified.
+#[test]
+fn Test_Two_Crates_Sharing_A_Bare_Universe_Name_Should_Not_Share_A_Subject()
+{
+    let store = Source(
+        "crates/spec/nomos-spec-store/src/table.rs",
+        "pub const TABLES: &[&str] = &[];\n",
+    );
+    let project = Source(
+        "crates/spec/nomos-spec-project/src/table.rs",
+        "pub const TABLES: &[&str] = &[];\n",
+    );
+
+    let findings = Findings_Over(&[store, project]);
+
+    let [store_finding, project_finding] = findings.as_slice()
+    else
+    {
+        panic!("expected exactly two findings: {findings:?}");
+    };
+
+    assert_eq!(store_finding.subject_name, project_finding.subject_name, "{findings:?}");
+    assert_ne!(
+        store_finding.subject, project_finding.subject,
+        "two universes named `TABLES` in different crates must not collide onto one \
+         subject: {findings:?}"
+    );
+}

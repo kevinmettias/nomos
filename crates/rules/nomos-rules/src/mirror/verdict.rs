@@ -26,6 +26,11 @@ pub(super) fn Judge(universe: &DeclaredUniverse, index: &CheckIndex<'_>) -> Opti
 /// could have been missed — and stays `Supported` however short the index is. Only a claim
 /// that failed to resolve inherits the doubt. The evidence is `Derived` either way: computed
 /// from source by a deterministic rule, and no stronger than that source.
+///
+/// The subject is hashed from the *qualified* name (`D-134`), not `universe.name` alone.
+/// Two universes named alike in two different crates are two different subjects; without
+/// the qualifier they would hash to the same one and be indistinguishable in every finding,
+/// suppression, or history keyed on it.
 pub(super) fn Shortcoming(universe: &DeclaredUniverse, verdict: Judgment) -> Finding
 {
     let Judgment {
@@ -34,9 +39,15 @@ pub(super) fn Shortcoming(universe: &DeclaredUniverse, verdict: Judgment) -> Fin
         summary,
     } = verdict;
 
+    let qualified = match Qualifier_Of(&universe.path)
+    {
+        Some(qualifier) => format!("{qualifier}::{}", universe.name),
+        None => universe.name.clone(),
+    };
+
     return Finding {
         rule: RuleId::New(COMPLETENESS_MIRROR),
-        subject: SubjectId::From_Digest(Content_Digest(universe.name.as_bytes())),
+        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: universe.name.clone(),
         applicability,
         evidence: EvidenceClass::Derived,
@@ -44,6 +55,43 @@ pub(super) fn Shortcoming(universe: &DeclaredUniverse, verdict: Judgment) -> Fin
         summary,
         locations: vec![universe.path.clone()],
     };
+}
+
+/// The crate or test-suite directory a universe's path belongs to, if the path names one.
+///
+/// A pure function of the path string — no filesystem access and no `Cargo.toml` read.
+/// `universe.rs`'s module doc explains why this crate carries no parser and reads no
+/// files; the same discipline applies here. This workspace's real paths are
+/// `crates/<band>/<crate-name>/src/...` or `<suite-root>/src/...` /
+/// `<suite-root>/tests/...` (`tests/contract/tests/completeness_universes/table.rs`'s
+/// `UNIVERSES` has no exception among its nineteen entries), so the qualifier is the path
+/// segment immediately before the last `/src/` or `/tests/` marker — the crate or suite
+/// directory the file lives in, which stays the same as the file moves within it and
+/// differs across crates that happen to share a bare universe name.
+///
+/// `None` when neither marker is present. Every real universe path in this workspace has
+/// one; a path without either is a synthetic fixture path from a unit test (`"a.rs"`,
+/// `"b/c.rs"`), not a shape this rule is ever really handed. Guessing a qualifier there —
+/// say, the whole path — would turn "the same universe moved file" into two identities,
+/// which is exactly what this module's own same-universe-keeps-one-identity test pins
+/// against. `None` leaves the name unqualified instead, which is the old behaviour and
+/// the right one for a path that names no crate at all.
+fn Qualifier_Of(path: &str) -> Option<&str>
+{
+    let split_at = ["/src/", "/tests/"]
+        .iter()
+        .filter_map(|marker| return path.rfind(marker))
+        .max()?;
+
+    let before = &path[..split_at];
+    let leaf = before.rsplit('/').next()?;
+
+    if leaf.is_empty()
+    {
+        return None;
+    }
+
+    return Some(leaf);
 }
 
 /// How the universe's shortfall is reported.
