@@ -104,6 +104,19 @@ use std::collections::BTreeSet;
 /// The rule's stable identifier.
 pub const COMPLETENESS_MIRROR: &str = "completeness-mirror";
 
+/// The record whose contract this rule implements.
+///
+/// `PKG-014` requires every rule implementation be traceable to one contract version and
+/// mechanically checked for consistency with it. `D-134` is that contract, and
+/// `tests/contract/tests/rule_contract_citation.rs` reads the record's own front matter on
+/// every run and compares it against [`CONTRACT_RECORD_VERSION`], so an amendment this
+/// implementation has not caught up to fails the check rather than sitting asserted only in
+/// prose.
+pub const CONTRACT_RECORD: &str = "D-134";
+
+/// The version of [`CONTRACT_RECORD`] this implementation was written against.
+pub const CONTRACT_RECORD_VERSION: u32 = 2;
+
 /// Judges every declared universe in `sources`, resolving claimed mirrors against facts.
 ///
 /// `facts` is the second half of the subject and not a service the rule reaches out to.

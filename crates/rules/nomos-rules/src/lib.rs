@@ -58,7 +58,7 @@ mod universe;
 use nomos_capability::Requirement;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
 
-pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR};
+pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
 pub use universe::{UniverseKind, Universes_In};
