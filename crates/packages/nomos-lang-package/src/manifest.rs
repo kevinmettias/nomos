@@ -1,7 +1,8 @@
 //! The first `LanguagePackage` manifest shape.
 
-use crate::{PackageVersion, ProtocolRange, ProviderRegistration, RustEdition};
+use crate::RustEdition;
 use nomos_contracts::{PackageId, PackageKind};
+use nomos_package::{PackageVersion, ProtocolRange, ProviderRegistration};
 
 /// A `LanguagePackage`: registration and translation boundary for one language
 /// ecosystem, per `ARCH-001`.

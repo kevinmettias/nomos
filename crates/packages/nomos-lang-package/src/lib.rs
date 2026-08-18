@@ -41,21 +41,26 @@
 //!
 //! `nomos-contracts` gains no consumer from this: `PackageId` and `PackageKind` are read
 //! here, never constructed for it to write back, and no code in that crate changes.
+//!
+//! # What moved to `nomos-package`
+//!
+//! `OD-PACKAGE-007` split `PackageVersion`, `ProtocolRange`, `ProviderRegistration` and
+//! `ManifestError` into `nomos-package`, the language-agnostic core this crate wraps:
+//! this crate never depended on Rust in those four types, only in `RustEdition` and
+//! `KNOWN_PROVIDERS`, and a second language's package crate can now depend on
+//! `nomos-package` directly without this crate, or Rust's two providers, in the way.
+//! This crate's own public surface -- `LanguagePackage`, `Parse_Manifest`,
+//! `Read_Manifest`, `RustEdition`, `KNOWN_PROVIDERS`, `Is_Known` -- is unchanged.
 
 #![forbid(unsafe_code)]
 
 mod known_providers;
 mod language_version;
 mod manifest;
-mod protocol_range;
-mod provider_registration;
 mod reader;
-mod version;
 
 pub use known_providers::{Is_Known, KNOWN_PROVIDERS};
 pub use language_version::RustEdition;
 pub use manifest::LanguagePackage;
-pub use protocol_range::ProtocolRange;
-pub use provider_registration::ProviderRegistration;
+pub use nomos_package::{PackageVersion, ProtocolRange, ProviderRegistration};
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest};
-pub use version::PackageVersion;

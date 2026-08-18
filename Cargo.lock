@@ -400,6 +400,7 @@ dependencies = [
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-lang-rust-scan",
+ "nomos-package",
  "serde",
  "serde_json",
 ]
@@ -447,6 +448,15 @@ dependencies = [
  "blake3",
  "nomos-contracts",
  "serde",
+]
+
+[[package]]
+name = "nomos-package"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

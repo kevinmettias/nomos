@@ -38,6 +38,12 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // provider that offers against it. Not beside the providers: an agreement that lives
     // with one party to it is that party's to change, and the other cannot see the file.
     ("nomos-cap-syntax", 23),
+    // The language-agnostic manifest core PKG-007's four version domains name, minus
+    // any typed version-domain abstraction or provider allowlist a specific language
+    // would supply. Below the language providers deliberately: it names none of them,
+    // so a second language's package crate can depend on this one without also
+    // depending on Rust's. `OD-PACKAGE-007`.
+    ("nomos-package", 24),
     // Language providers sit above analysis because they produce the facts it stores,
     // and nothing sits above them but a composition root. They reach each other not at
     // all: two languages are two providers of one capability, and the registry is the
@@ -48,10 +54,11 @@ pub(crate) const BANDS: &[(&str, u32)] = &[
     // crates at one band, which is what stops the second answer from being derived from
     // the first. Two providers that shared a parser could not disagree.
     ("nomos-lang-rust-scan", 25),
-    // The first installable-unit manifest format: PackageId, PackageKind and PKG-007's
-    // four version domains, given a reader that refuses what it cannot resolve. Above
-    // the two language providers it registers -- it must be able to name them -- and
-    // well clear of rules, which it does not touch. `OD-PACKAGE-001`.
+    // The Rust installable-unit manifest format: PackageId, PackageKind and PKG-007's
+    // four version domains, given a reader that refuses what it cannot resolve. Wraps
+    // nomos-package's generic core with RustEdition resolution. Above the two language
+    // providers it registers -- it must be able to name them -- and well clear of
+    // rules, which it does not touch. `OD-PACKAGE-001`, `OD-PACKAGE-007`.
     ("nomos-lang-package", 26),
     // The spec system sits beside the kernel, not above it. It reaches the product only
     // through a KnowledgeCapability, so nothing in the product may name it directly.

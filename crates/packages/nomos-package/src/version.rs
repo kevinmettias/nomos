@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 /// Three components, deliberately unlike `ContractVersion`'s two. A contract's version
 /// only has to say whether it stays compatible with an existing consumer, so two
 /// components are enough; a package release is a broader claim, and this type is not
-/// only used for a `LanguagePackage`'s own version -- [`crate::ProviderRegistration`]
+/// only used for a package's own version -- [`crate::ProviderRegistration`]
 /// reuses it for a registered provider's tool version, which is `PKG-007`'s fourth
 /// domain and a different question again, carried in a different field.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]

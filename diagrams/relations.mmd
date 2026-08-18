@@ -397,6 +397,7 @@ graph LR
     od_host_004 -->|"relates-to"| od_host_001
     od_host_004 -->|"relates-to"| od_host_002
     od_host_004 -->|"relates-to"| od_package_006
+    od_host_004 -->|"relates-to"| od_package_007["OD-PACKAGE-007"]
     od_host_005 -->|"relates-to"| od_host_001
     od_host_005 -->|"relates-to"| od_host_002
     od_ledger_001 -->|"affected_by"| od_ledger_004["OD-LEDGER-004"]
@@ -621,6 +622,7 @@ graph LR
     od_model_002 -->|"relates-to"| od_model_001
     od_model_002 -->|"relates-to"| od_store_002
     od_package_001 -->|"affected_by"| d_132
+    od_package_001 -->|"affected_by"| od_package_007
     od_package_001 -->|"relates-to"| arc_harness_001
     od_package_001 -->|"relates-to"| d_134
     od_package_001 -->|"relates-to"| od_ledger_017
@@ -659,6 +661,10 @@ graph LR
     od_package_006 -->|"relates-to"| d_134
     od_package_006 -->|"relates-to"| od_host_004
     od_package_006 -->|"relates-to"| od_package_001
+    od_package_006 -->|"relates-to"| od_package_007
+    od_package_007 -->|"affects"| od_package_001
+    od_package_007 -->|"relates-to"| od_host_004
+    od_package_007 -->|"relates-to"| od_package_006
     od_platform_001 -->|"relates-to"| arc_harness_001
     od_platform_001 -->|"relates-to"| d_130
     od_platform_001 -->|"relates-to"| od_gate_001
@@ -925,6 +931,7 @@ graph LR
     od_package_004
     od_package_005
     od_package_006
+    od_package_007
     od_platform_001
     od_project_001
     od_project_002

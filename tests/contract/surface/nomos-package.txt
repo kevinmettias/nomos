@@ -1,0 +1,37 @@
+pub const fn nomos_package::PackageVersion::New(major: u16, minor: u16, patch: u16) -> Self
+pub const fn nomos_package::ProtocolRange::Is_Ordered(&self) -> bool
+pub const fn nomos_package::ProtocolRange::New(minimum: ContractVersion, maximum: ContractVersion) -> Self
+pub enum nomos_package::ManifestError
+pub enum variant nomos_package::ManifestError::EmptyList { at: String, field: String, }
+pub enum variant nomos_package::ManifestError::InvertedProtocolRange { at: String, }
+pub enum variant nomos_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
+pub enum variant nomos_package::ManifestError::MissingField { at: String, field: String, }
+pub enum variant nomos_package::ManifestError::NotJson { at: String, cause: String, }
+pub enum variant nomos_package::ManifestError::UnknownPackageKind { at: String, found: String, }
+pub enum variant nomos_package::ManifestError::Unreadable { at: String, cause: String, }
+pub enum variant nomos_package::ManifestError::UnresolvedProvider { at: String, provider: String, }
+pub enum variant nomos_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
+pub enum variant nomos_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub fn nomos_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_package::PackageVersion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_package::Parse_Manifest( text: &str, at: &str, known_providers: &[&str], ) -> Result<PackageManifest, ManifestError>
+pub fn nomos_package::Read_Manifest(path: &Path, known_providers: &[&str]) -> Result<PackageManifest, ManifestError>
+pub impl nomos_package::ManifestError implements core::fmt::Display
+pub impl nomos_package::PackageVersion implements core::fmt::Display
+pub struct field nomos_package::PackageManifest::language_versions: Vec<String>
+pub struct field nomos_package::PackageManifest::package_id: PackageId
+pub struct field nomos_package::PackageManifest::package_kind: PackageKind
+pub struct field nomos_package::PackageManifest::package_version: PackageVersion
+pub struct field nomos_package::PackageManifest::protocol_range: ProtocolRange
+pub struct field nomos_package::PackageManifest::providers: Vec<ProviderRegistration>
+pub struct field nomos_package::PackageVersion::major: u16
+pub struct field nomos_package::PackageVersion::minor: u16
+pub struct field nomos_package::PackageVersion::patch: u16
+pub struct field nomos_package::ProtocolRange::maximum: ContractVersion
+pub struct field nomos_package::ProtocolRange::minimum: ContractVersion
+pub struct field nomos_package::ProviderRegistration::provider: ProviderId
+pub struct field nomos_package::ProviderRegistration::tool_version: PackageVersion
+pub struct nomos_package::PackageManifest
+pub struct nomos_package::PackageVersion
+pub struct nomos_package::ProtocolRange
+pub struct nomos_package::ProviderRegistration

@@ -1,4 +1,4 @@
-//! One provider a `LanguagePackage` registers, and the tool version behind it.
+//! One provider a package registers, and the tool version behind it.
 
 use crate::PackageVersion;
 use nomos_contracts::ProviderId;
@@ -15,10 +15,8 @@ pub struct ProviderRegistration
 {
     /// The provider this registers.
     pub provider: ProviderId,
-    /// The version of the tool behind that provider. For `nomos-lang-rust` and
-    /// `nomos-lang-rust-scan` today, this is that crate's own `Cargo.toml` `version` --
-    /// which `OD-PACKAGE-001` is explicit is not the package version, the protocol
-    /// range, or a language version, but is exactly this domain: what build of the tool
-    /// is answering.
+    /// The version of the tool behind that provider -- what build of the tool is
+    /// answering, which `OD-PACKAGE-001` is explicit is not the package version, the
+    /// protocol range, or a language version, but exactly this domain.
     pub tool_version: PackageVersion,
 }

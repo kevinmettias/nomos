@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1c4b39e68ff95619761c16b9712e62a76bb3bdbf29f3dcb07d6e2b3123507492",
-  "inputs_digest": "sha256:2a9cd2fbf02c191cc7d157b2b19dd67fcaf8ef29060f6d1fbd42cd4236da5a19",
+  "content_digest": "sha256:80d1e745d0b73ab76b5d5f44b89eba6fea9f95db67ee28f89f37b515ebc828d3",
+  "inputs_digest": "sha256:de3abbeb5b5382debac20cbab423369b0d0a4e2e5abefcb177bfea859f92d802",
   "sections": [
     [
       "Documents",
-      126
+      127
     ],
     [
       "Sections",
-      1121
+      1127
     ],
     [
       "Source blocks",
-      4061
+      4077
     ]
   ],
   "inputs": [
@@ -504,6 +504,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored",
       "hash": "sha256:d97dfe5c8b42ad15a919d89d42665d5db79c8324643a9df8142a8ba14709f80d"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored",
+      "hash": "sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9"
     },
     {
       "content": "documents",
@@ -4874,6 +4879,36 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11",
       "hash": "sha256:5a80da2a6e8922b26b91924bf3120dfda00f5fb86bcb2246ce77257dbf7c2e7f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1",
+      "hash": "sha256:3da99059d8222b1f34729045fe03ccd89e0d6a8c8b63a8320be351feb1585e91"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#2",
+      "hash": "sha256:b04255f664afef1917578466d141eb373273fc5e770c89d261ce60fc1489dc68"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#6",
+      "hash": "sha256:3f9136a6358ecbac092ce83309b84a3d33ce6d41a7172d3aa0592b65c026dd35"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#10",
+      "hash": "sha256:eda3f1924c676773c1dc91eeb98a6b2ccc8d324bbe9c77dc1302168753e83dc2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#13",
+      "hash": "sha256:7d8ef662cb4e05d065925541878cf6329943fe4494019c26e79b9fd80ae89e17"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15",
+      "hash": "sha256:5f5e461e043e46446a741040f609d13626895dae460ee8677dd547128dfa566a"
     },
     {
       "content": "headings",
@@ -21599,6 +21634,86 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#12",
       "hash": "sha256:513e9ccfe6c51db541f5bc95962d407613176ad48639f80f0525ce6ce2200931"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1",
+      "hash": "sha256:a18daa20ce8bbc9c0db89df66331e84cf8c2bef826a3199861cab2baa5a52d20"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#3",
+      "hash": "sha256:09c40170bee261336d7a91fe9582ba8b85149eb6970f9b13f07d9184cf87620e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#4",
+      "hash": "sha256:0e2b72350bc9132e377eb79c987ab12aefe3016c939ecaffe7630295dfbe964c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#5",
+      "hash": "sha256:5bb5354a0cfff2dd3420e118e3546fd198c81f8b54e457de58043f8b03c38883"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#6",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#7",
+      "hash": "sha256:9e95ceb25010c7a36eb73c4d9fae770186b75bfffd4ca5ffd281e6698aa45fc3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#8",
+      "hash": "sha256:4784f99756f67b8737ab501190ff175eb83bdd5eed67ff5b1f748c3cba8135a7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#9",
+      "hash": "sha256:50203b4373ae5665f66ea0606d7f6c8d252b39682681b167f6e67d03982461df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#10",
+      "hash": "sha256:3235fcb63e84a9e29c9f737925b329390df86f72147b39f5f93e21451d413270"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#11",
+      "hash": "sha256:947675fb72b9d8e351d91f54ea78b8e300fcd709f6abab2ea13be2f7282a1f5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#12",
+      "hash": "sha256:fac56b55b1257e26647b61af02bf7111d0849e5f0558790be552d074a19babc0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#13",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#14",
+      "hash": "sha256:8d65d77c61f669f9fb638bbe30f0db3be4f306cd68e88c6ad694955f1e045451"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#16",
+      "hash": "sha256:3da7b6c268e2fb338484fcc5d53c3083685b83db13a3abf2a19da544457119e0"
     },
     {
       "content": "blocks",

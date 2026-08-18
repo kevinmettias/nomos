@@ -43,9 +43,10 @@ band, and `tests/contract` asserts it.
 | 21 | `nomos-capability` | The contract registry whose answer is never a bare no. |
 | 22 | `nomos-analysis` | Fact identity, fact readers, the fact store, and invalidation. |
 | 23 | `nomos-cap-syntax` | A capability contract, housed below every provider that offers against it. |
+| 24 | `nomos-package` | The language-agnostic manifest core: `PackageId`, `PackageKind` and `PKG-007`'s four version domains, minus any typed version-domain abstraction or provider allowlist a specific language would supply. Depends on nothing above `nomos-contracts`. |
 | 25 | `nomos-lang-rust` | Recognition and syntax facts from `syn`, and the module rollup derived from them — the one fact in this workspace computed from other facts. |
 | 25 | `nomos-lang-rust-scan` | The second provider of that capability. Same band, so neither may name the other. |
-| 26 | `nomos-lang-package` | The first `LanguagePackage` manifest format and its refusing reader — `PackageId`, `PackageKind` and `PKG-007`'s four version domains, given a real consumer. |
+| 26 | `nomos-lang-package` | The Rust `LanguagePackage` manifest format and its refusing reader — wraps `nomos-package`'s generic core with `RustEdition` resolution and this workspace's two Rust providers. |
 | 30 | `nomos-rules` | A rule as a pure function whose subject is an argument: source it is handed, and facts it reads through a `FactReader`. |
 | 35 | `nomos-corrections` | `CorrectionCandidate`, `CorrectionPlan`, and the deterministic preview, stage, validate, commit and rollback lifecycle over a workspace change. No agent, no model backend. |
 | 40 | `nomos-work-orchestration` | Runs a `nomos work` verb against a caller-chosen platform and hands back a typed outcome — generic over `nomos-platform`'s traits, so a second adapter can depend on it without also depending on `nomos-platform-std` or on how `nomos-cli` renders an answer. |

@@ -15647,6 +15647,75 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-PACKAGE-GENERIC-CORE",
+      "title": "nomos-lang-package's language-agnostic core moves to its own crate, so a second language never depends on Rust to read its own manifest",
+      "why": "Investigating what a second (non-Rust) language provider would need to reuse for its own package manifest found nomos-lang-package is not generic despite its name: Cargo.toml names nomos-lang-rust and nomos-lang-rust-scan as direct dependencies, KNOWN_PROVIDERS pulls their PROVIDER constants directly, and RustEdition is a closed four-variant Rust-edition enum the reader resolves language_versions against by name. A second language's package crate could not depend on this crate without also depending on Rust's two providers. PackageVersion, ProtocolRange, ProviderRegistration and ManifestError, by contrast, are already fully language-agnostic on inspection -- none names Rust or imports a provider crate. OD-PACKAGE-007 records the split this finding motivates.",
+      "done_when": "A new crate crates/packages/nomos-package (band 24) carries PackageVersion, ProtocolRange, ProviderRegistration and ManifestError (moved verbatim) plus a PackageManifest type with language_versions: Vec<String> (raw labels, no typed version-domain abstraction invented) and providers: Vec<ProviderRegistration>. Its Parse_Manifest(text, at, known_providers: &[&str]) and Read_Manifest(path, known_providers: &[&str]) take the provider allowlist as a parameter and depend on nothing above nomos-contracts/serde/serde_json. nomos-lang-package keeps its exact existing public surface unchanged -- Parse_Manifest(text, at) and Read_Manifest(path) keep their current signatures, LanguagePackage keeps language_versions: Vec<RustEdition>, RustEdition/KNOWN_PROVIDERS/Is_Known stay where they are -- calling into nomos-package internally and resolving RustEdition itself, reusing (not redefining) PackageVersion/ProtocolRange/ProviderRegistration/ManifestError via re-export. crates/packages/nomos-lang-package/tests/manifest.rs passes unchanged, byte for byte, as the behavior-preservation proof. Cargo.toml (workspace members and [workspace.dependencies]), README.md and tests/contract/tests/boundaries/bands.rs gain nomos-package's band-24 row; tests/contract/surface gains nomos-package's snapshot and nomos-lang-package's is reblessed if its rendering changes. nomos-package's own test suite exercises Parse_Manifest/Read_Manifest with a known_providers list of its own (not Rust's), proving the split works for a provider set other than the one it was extracted from.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-007.record",
+          "crates/packages/nomos-package",
+          "crates/packages/nomos-lang-package",
+          "Cargo.toml",
+          "README.md",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/surface",
+          "docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-package",
+          "-p",
+          "nomos-lang-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-package",
+          "-p",
+          "nomos-lang-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "e_Versions_Are_Never_Resolved_To_A_Typed_Domain ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-2bf6f03006d6e169.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03bb3b77a304179f.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-3a2571bf0b9d7834.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-15739aa19297e553.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-92b11eaac815a8cd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ca16a9d136103b26.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-04cd6948a9e9b567.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6e8c3aea949064d8.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-43695c5ec5ad83ec.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b67424df197dae04.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_package-20a8a52219e5575b.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-f2767433da3cd3df.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_package-45d9d9fd3b4f1989.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-247c1b348fed0507.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_lang_package\n   Doc-tests nomos_package\n",
+        "verified_at": 1787094653,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b511e0d2fda115a87574e3d819005fc48587c883"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

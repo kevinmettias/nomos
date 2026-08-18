@@ -107,6 +107,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 27 | 9 | sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610 |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 12 | 5 | sha256:d97dfe5c8b42ad15a919d89d42665d5db79c8324643a9df8142a8ba14709f80d |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 16 | 6 | sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9 |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
@@ -986,6 +987,12 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#6 | authored | 2 | Current Position |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md#11 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1 | authored | 1 | The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#6 | authored | 2 | The decision |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#10 | authored | 2 | What this does not decide |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#13 | authored | 2 | What Holds It |
+| docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -28415,6 +28422,160 @@ Open. Revisit when a third Rust language provider crate is added to this workspa
 the two-entry array is found to have drifted despite being pulled rather than retyped.
 Recorded here so the intent is legible rather than lost between sessions, not because
 either provider crate's shape has moved.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#1
+
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest · hash: sha256:a18daa20ce8bbc9c0db89df66331e84cf8c2bef826a3199861cab2baa5a52d20*
+
+# The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#2
+
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#3
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Question · hash: sha256:09c40170bee261336d7a91fe9582ba8b85149eb6970f9b13f07d9184cf87620e*
+
+`OD-PACKAGE-001` built `nomos-lang-package` (band 26) as "the first `LanguagePackage` manifest
+format," naming `nomos-lang-rust` and `nomos-lang-rust-scan` as its first subject. What that
+record did not settle, because nothing forced the question yet, is what the *second* language's
+package would depend on.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#4
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Question · hash: sha256:0e2b72350bc9132e377eb79c987ab12aefe3016c939ecaffe7630295dfbe964c*
+
+Checked directly against the crate as it stands: `crates/packages/nomos-lang-package`'s
+`Cargo.toml` names `nomos-lang-rust` and `nomos-lang-rust-scan` as direct dependencies, and
+`known_providers.rs`'s `KNOWN_PROVIDERS` constant is `[nomos_lang_rust::PROVIDER,
+nomos_lang_rust_scan::PROVIDER]` — pulled from those crates' own constants rather than a
+parameter the reader takes. `language_version.rs`'s `RustEdition` is a four-variant closed enum
+of Rust editions, and `reader.rs::Language_Versions_Field` resolves every `language_versions`
+entry against it by name. A second language's package crate could not depend on
+`nomos-lang-package` at all without also depending on Rust's two providers and being told every
+manifest it reads recognizes only Rust editions — the crate is not a generic manifest reader
+that happens to have been exercised on Rust first; it is a Rust reader, and its name is the only
+generic thing about it.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#5
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Question · hash: sha256:5bb5354a0cfff2dd3420e118e3546fd198c81f8b54e457de58043f8b03c38883*
+
+Everything else `PKG-007`'s four version domains name is already language-agnostic and was
+verified as such by reading each type directly: `PackageVersion` (major/minor/patch, no Rust
+content), `ProtocolRange` (a pair of `nomos_contracts::ContractVersion`, reused rather than
+retyped), and `ProviderRegistration` (a `nomos_contracts::ProviderId` plus a `PackageVersion`).
+None of the three names Rust, imports a language provider crate, or would need to change for a
+second language. `reader.rs`'s own `ManifestError` variants are also already general —
+`UnresolvedProvider`, `MalformedVersion` and the rest read as prose that names no language.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#6
+
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#7
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / The decision · hash: sha256:9e95ceb25010c7a36eb73c4d9fae770186b75bfffd4ca5ffd281e6698aa45fc3*
+
+**A new crate, `nomos-package` (band 24, below `nomos-lang-rust`/`nomos-lang-rust-scan` at 25
+and above `nomos-cap-syntax` at 23), carries the language-agnostic core**:
+`PackageVersion`, `ProtocolRange`, `ProviderRegistration` (moved verbatim, unchanged), a
+`PackageManifest` type carrying `language_versions: Vec<String>` (raw, non-empty, unresolved
+labels — no typed edition domain at this layer, because there is no one typed shape a version
+label takes across languages: Rust's four editions, a semver string, a single integer and a
+date-stamped release are all real shapes a future language's package might need, and inventing
+a generic version-domain type now would be designing against a population of one, the same
+caution `OD-PACKAGE-006` already states for `KNOWN_PROVIDERS`), and `ManifestError` (moved
+verbatim). `Parse_Manifest` and `Read_Manifest` take one more parameter than their
+`nomos-lang-package` counterparts: `known_providers: &[&str]`, supplied by the caller rather
+than hardcoded, so this crate never depends on any specific provider crate. `nomos-package`
+depends only on `nomos-contracts`, `serde` and `serde_json` — nothing above band 0.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#8
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / The decision · hash: sha256:4784f99756f67b8737ab501190ff175eb83bdd5eed67ff5b1f748c3cba8135a7*
+
+**`nomos-lang-package` becomes a thin Rust-specific wrapper over it**, keeping its exact
+existing public surface: `Parse_Manifest(text, at)` and `Read_Manifest(path)` keep their
+current two- and one-argument signatures (never taking `known_providers` from a caller — that
+is this crate's whole reason to exist over the generic one), `LanguagePackage` keeps
+`language_versions: Vec<RustEdition>`, and `RustEdition`, `KNOWN_PROVIDERS` and `Is_Known` all
+stay exactly where they are. Internally, `Parse_Manifest` calls `nomos_package::Parse_Manifest`
+with `KNOWN_PROVIDERS`, then resolves each raw `language_versions` label against
+`RustEdition::Of_Label`, refusing with the same `ManifestError::MalformedVersion` shape
+(same field name, same indexed position, same cause wording) the reader produced before this
+change — a behavior-preserving move, not a new refusal. `PackageVersion`, `ProtocolRange`,
+`ProviderRegistration` and `ManifestError` are re-exported from `nomos-package` rather than
+redefined, so the two crates cannot drift on what these four types mean.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#9
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / The decision · hash: sha256:50203b4373ae5665f66ea0606d7f6c8d252b39682681b167f6e67d03982461df*
+
+**A second language's package crate depends on `nomos-package` directly, never on
+`nomos-lang-package`.** It supplies its own version-label type and parsing (its own
+`RustEdition`-shaped enum, or a raw string, or whatever its ecosystem's version scheme actually
+needs) and its own known-providers list, the same two things `nomos-lang-package` supplies for
+Rust. Nothing under `crates/packages/` should ever need to depend on another language's package
+crate to read its own manifest.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#10
+
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / What this does not decide · hash: sha256:3235fcb63e84a9e29c9f737925b329390df86f72147b39f5f93e21451d413270*
+
+## What this does not decide
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#11
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / What this does not decide · hash: sha256:947675fb72b9d8e351d91f54ea78b8e300fcd709f6abab2ea13be2f7282a1f5a*
+
+This is not `OD-PACKAGE-006`'s question answered. Whether `KNOWN_PROVIDERS`-shaped lists need a
+self-registering mechanism once a third provider exists is unrelated to whether the *reader*
+that resolves them needs to import specific provider crates — this record removes the second
+problem; the first stays open exactly as `OD-PACKAGE-006` left it.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#12
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / What this does not decide · hash: sha256:fac56b55b1257e26647b61af02bf7111d0849e5f0558790be552d074a19babc0*
+
+This does not build a second language's manifest format, a typed version-domain abstraction, or
+`PKG-022`'s larger field list. It builds the seam a second language's package crate would depend
+on, the same way `OD-HOST-001` built a seam before a second adapter existed to call it.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#13
+
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#14
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / What Holds It · hash: sha256:8d65d77c61f669f9fb638bbe30f0db3be4f306cd68e88c6ad694955f1e045451*
+
+`crates/packages/nomos-lang-package/tests/manifest.rs` is unchanged by this record and must
+still pass byte-for-byte: it is the behavior-preservation proof, asserting the exact same
+`ManifestError` variants, field names and cause text this crate produced before the split.
+`crates/packages/nomos-package`'s own test suite exercises the generic reader directly, with a
+`known_providers` list of its own choosing rather than Rust's, so the split is proven to work
+for *some* provider set other than the one it was extracted from — not only reproven against
+the one case it already had.
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#15
+
+*revision: authored · kind: heading · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md#16
+
+*revision: authored · kind: prose · heading: The language-agnostic manifest core is its own crate, so a second language does not depend on Rust to read its own manifest / Status · hash: sha256:3da7b6c268e2fb338484fcc5d53c3083685b83db13a3abf2a19da544457119e0*
+
+Closed by `P13-PACKAGE-GENERIC-CORE`.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

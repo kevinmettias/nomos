@@ -26,6 +26,13 @@ members = [
     # its only provider.
     "crates/capabilities/nomos-cap-syntax",
 
+    # Band 2 — the language-agnostic manifest core. PackageId, PackageKind and PKG-007's
+    # four version domains, minus any typed version-domain abstraction or provider
+    # allowlist a specific language would supply -- those are a language-specific
+    # package crate's own job. Below the language providers: it names none of them.
+    # `OD-PACKAGE-007`.
+    "crates/packages/nomos-package",
+
     # Band 2 — language providers. The first crates that read code this workspace did
     # not write. Each one offers a capability through the registry and is named by
     # nothing below it, so a language can be added or dropped without a recompile
@@ -33,10 +40,12 @@ members = [
     "crates/languages/nomos-lang-rust",
     "crates/languages/nomos-lang-rust-scan",
 
-    # Band 2 — package manifests. The first installable-unit manifest format: PackageId,
+    # Band 2 — package manifests. The Rust installable-unit manifest format: PackageId,
     # PackageKind and PKG-007's four version domains, given a real reader that refuses
-    # what it cannot resolve. Above the language providers it registers, since it names
-    # them; below rules, which it does not touch. `OD-PACKAGE-001`.
+    # what it cannot resolve. Wraps nomos-package's generic core with RustEdition
+    # resolution and this workspace's two Rust providers. Above the language providers it
+    # registers, since it names them; below rules, which it does not touch.
+    # `OD-PACKAGE-001`, `OD-PACKAGE-007`.
     "crates/packages/nomos-lang-package",
 
     # Band 3 — rules. The first thing here that judges code rather than paperwork. A
@@ -123,6 +132,7 @@ nomos-analysis = { path = "crates/substrate/nomos-analysis" }
 nomos-cap-syntax = { path = "crates/capabilities/nomos-cap-syntax" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
+nomos-package = { path = "crates/packages/nomos-package" }
 nomos-lang-package = { path = "crates/packages/nomos-lang-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
