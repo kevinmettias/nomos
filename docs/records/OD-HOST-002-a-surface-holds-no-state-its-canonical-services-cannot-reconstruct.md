@@ -3,7 +3,7 @@ id: OD-HOST-002
 type: decision
 title: A surface holds no state its canonical services cannot reconstruct
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - host
@@ -135,17 +135,28 @@ gap rather than closing it.
    of decisions already taken. A surface showing "why was this decided" reads the store
    again; it does not cache a rendered history of records it has shown once.
 
-9. **Control commands — two of four now route through a seam.** `WorkCommand`
-   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`) and `CheckCommand`
+9. **Control commands — three of four now route through a seam.** `WorkCommand`
+   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`), `CheckCommand`
    (`crates/orchestration/nomos-check-orchestration/src/command.rs:11`, moved verbatim
-   from `nomos-cli::check::command`) each name a crate a second adapter can depend on
-   without also taking `nomos-cli`'s argument parsing, exit codes or rendering.
-   `SpecCommand` (`crates/host/nomos-cli/src/spec/command.rs:11`) and `request::Command`
-   (`crates/host/nomos-cli/src/request.rs:65`) are still parsed and executed directly
-   inside `nomos-cli`, with no equivalent orchestration crate. Until each has one, this
-   record's second clause — every action is a command through a canonical service — is
-   unmet for the remaining two command groups. Naming that gap is what makes the rule
-   checkable rather than already true by assumption.
+   from `nomos-cli::check::command`) and `SpecCommand`
+   (`crates/orchestration/nomos-spec-orchestration/src/command.rs:15`, moved verbatim from
+   `nomos-cli::spec::command` over four increments — `Profiles`/`Sources`, then
+   `Record`/`Table`/`Markdown`, then `Render`/`Freshness` generic over
+   `nomos_platform::FileSystem`, then `Preview`/`Commit`) each name a crate a second
+   adapter can depend on without also taking `nomos-cli`'s argument parsing, exit codes or
+   rendering. `nomos-cli::spec`'s own module doc records the move in full and
+   `nomos-cli::spec::Run` now only dispatches to `nomos_spec_orchestration::Run` and
+   renders what it returns, the same shape `nomos-cli::work` and `nomos-cli::check`
+   already have. `request::Command`
+   (`crates/host/nomos-cli/src/request.rs:65`) is the one command group still parsed and
+   executed directly inside `nomos-cli`, with no equivalent orchestration crate — a single
+   `Submit` verb, thin enough that its transport already calls only canonical services
+   (`nomos_spec_orchestration::corpus::Assemble`, `nomos_spec_store::Accept_Submission`)
+   and holds no state of its own, but still not callable by a second adapter without
+   depending on `nomos-cli` itself to get `Command`, `SubmitRequest` and their parsing.
+   Until it has a seam too, this record's second clause — every action is a command
+   through a canonical service — is unmet for that one remaining command group. Naming
+   that gap is what makes the rule checkable rather than already true by assumption.
 
 ## What is not privileged state
 
@@ -173,10 +184,28 @@ forbids.
 ## What this constrains
 
 This record adds no seam and reopens none. `OD-HOST-001` decided that
-`nomos-work-orchestration` is the seam for the work group, and `nomos-check-orchestration`
-— built after this record first shipped, closing families 2–4 and the `CheckCommand` half
-of family 9 — is the second demonstration rather than a third decision: this record states
-what any seam must guarantee once it exists, and does not itself build one. A surface
-calling through either seam holds nothing the seam itself cannot regenerate. Building the
-seams still missing for families 6–8 and the `SpecCommand`/`request::Command` half of
-family 9 above is future work this record makes checkable, not work it does.
+`nomos-work-orchestration` is the seam for the work group; `nomos-check-orchestration` and
+`nomos-spec-orchestration` — each built after this record first shipped, closing families
+2–4 and the `CheckCommand` and `SpecCommand` halves of family 9 — are the second and third
+demonstration rather than a fourth decision: this record states what any seam must
+guarantee once it exists, and does not itself build one. A surface calling through any of
+the three seams holds nothing the seam itself cannot regenerate. Building the seams still
+missing for families 6–8 and the `request::Command` remainder of family 9 above is future
+work this record makes checkable, not work it does.
+
+## Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names
+
+Family 9 above, as first written, named `SpecCommand` and `request::Command` together as
+the two command groups with no orchestration crate. `SpecCommand`'s seam has since closed,
+over four increments, none of which touched this record: `nomos-spec-orchestration`
+answers all nine verbs (`Profiles`, `Sources`, `Record`, `Table`, `Markdown`, `Render`,
+`Freshness`, `Preview`, `Commit`), and `nomos-cli::spec.rs`'s own module doc states the
+move in full, including the reasoning `Render`, `Freshness`, `Preview` and `Commit` earned
+genericity over `nomos_platform::FileSystem` where `Profiles`, `Sources`, `Record`,
+`Table` and `Markdown` did not. This record's text describing that gap as still open was
+stale against a codebase that had already closed it.
+
+`request::Command` was not touched by that work and is not stale: it remains one verb
+(`Submit`), parsed and dispatched entirely inside `nomos-cli::request`, with no crate a
+second adapter could depend on to reach it without also taking `nomos-cli`. It is the one
+piece of family 9 this record still names as open.

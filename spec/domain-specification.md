@@ -64,7 +64,7 @@ profile: domain-specification
 | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md@authored | docs/records/OD-GATE-012-a-toolchain-pinned-for-a-command-this-workspace-forbids-running-is-pinned-for-nothing.md | authored | 32 | 8 | sha256:7e415cc70febf6bbbcc01cafffc5866abb03ee5d83ddfad6b829ea224bfcc9aa |
 | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md@authored | docs/records/OD-GATE-013-an-enum-variants-own-name-already-names-its-discriminant-and-the-checkers-rust-front-end-cannot-see-that.md | authored | 17 | 7 | sha256:db6c652a9e6a7ddad8f6d701642e08c3a91d0f38c07839fdf7b5c5fc9e6ffa50 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 16 | 5 | sha256:e3d0afb3cabc0ab33a09a700e110b803806d3c4e063673d8c18ca7adc84c3012 |
-| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 26 | 5 | sha256:3c11ee49be7fb50e863faf186a9559e9eb0009b2ab57b02b0d5a5ad8f86e0464 |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 29 | 6 | sha256:95a9bc9275ea24b17ac4458927631e589405b0813779a6945f42240a47af2f1f |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 15 | 5 | sha256:bcf1bfd865c60493754d4a765742627fd4c18504722d27a065b5201be2ac218f |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 36 | 9 | sha256:86d202ce7dedd842300f8a4b2fe9f233f28009b3db705bad1060f84ebd240922 |
@@ -587,6 +587,7 @@ profile: domain-specification
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9 | authored | 2 | The state families this applies to |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20 | authored | 2 | What is not privileged state |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#25 | authored | 2 | What this constrains |
+| docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#27 | authored | 2 | Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1 | authored | 1 | An editor surface is a client of the canonical services, not a parser of the CLI's rendered output |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#4 | authored | 2 | What an editor surface is |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#7 | authored | 2 | What a diagnostic carries |
@@ -15594,19 +15595,30 @@ gap rather than closing it.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#19
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:32bfec890281da37f39fee03cbe981d73510131e4daee55d4fbf3d6c52b5654a*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / The state families this applies to · hash: sha256:1138e21bc326b82989cb51de28f21d8cba880113ad024400ac6f762725a6bb28*
 
-9. **Control commands — two of four now route through a seam.** `WorkCommand`
-   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`) and `CheckCommand`
+9. **Control commands — three of four now route through a seam.** `WorkCommand`
+   (`crates/orchestration/nomos-work-orchestration/src/command.rs:15`), `CheckCommand`
    (`crates/orchestration/nomos-check-orchestration/src/command.rs:11`, moved verbatim
-   from `nomos-cli::check::command`) each name a crate a second adapter can depend on
-   without also taking `nomos-cli`'s argument parsing, exit codes or rendering.
-   `SpecCommand` (`crates/host/nomos-cli/src/spec/command.rs:11`) and `request::Command`
-   (`crates/host/nomos-cli/src/request.rs:65`) are still parsed and executed directly
-   inside `nomos-cli`, with no equivalent orchestration crate. Until each has one, this
-   record's second clause — every action is a command through a canonical service — is
-   unmet for the remaining two command groups. Naming that gap is what makes the rule
-   checkable rather than already true by assumption.
+   from `nomos-cli::check::command`) and `SpecCommand`
+   (`crates/orchestration/nomos-spec-orchestration/src/command.rs:15`, moved verbatim from
+   `nomos-cli::spec::command` over four increments — `Profiles`/`Sources`, then
+   `Record`/`Table`/`Markdown`, then `Render`/`Freshness` generic over
+   `nomos_platform::FileSystem`, then `Preview`/`Commit`) each name a crate a second
+   adapter can depend on without also taking `nomos-cli`'s argument parsing, exit codes or
+   rendering. `nomos-cli::spec`'s own module doc records the move in full and
+   `nomos-cli::spec::Run` now only dispatches to `nomos_spec_orchestration::Run` and
+   renders what it returns, the same shape `nomos-cli::work` and `nomos-cli::check`
+   already have. `request::Command`
+   (`crates/host/nomos-cli/src/request.rs:65`) is the one command group still parsed and
+   executed directly inside `nomos-cli`, with no equivalent orchestration crate — a single
+   `Submit` verb, thin enough that its transport already calls only canonical services
+   (`nomos_spec_orchestration::corpus::Assemble`, `nomos_spec_store::Accept_Submission`)
+   and holds no state of its own, but still not callable by a second adapter without
+   depending on `nomos-cli` itself to get `Command`, `SubmitRequest` and their parsing.
+   Until it has a seam too, this record's second clause — every action is a command
+   through a canonical service — is unmet for that one remaining command group. Naming
+   that gap is what makes the rule checkable rather than already true by assumption.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#20
 
@@ -15659,16 +15671,46 @@ forbids.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#26
 
-*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What this constrains · hash: sha256:ddbf53e30d23b02e6557136bf2419f8d306df466004e03588d0a93d615f5757e*
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / What this constrains · hash: sha256:73dc84d6663a1677067e83f1bb726d7d2ca9a8fc38f1f5158b18a4ba8fa5900c*
 
 This record adds no seam and reopens none. `OD-HOST-001` decided that
-`nomos-work-orchestration` is the seam for the work group, and `nomos-check-orchestration`
-— built after this record first shipped, closing families 2–4 and the `CheckCommand` half
-of family 9 — is the second demonstration rather than a third decision: this record states
-what any seam must guarantee once it exists, and does not itself build one. A surface
-calling through either seam holds nothing the seam itself cannot regenerate. Building the
-seams still missing for families 6–8 and the `SpecCommand`/`request::Command` half of
-family 9 above is future work this record makes checkable, not work it does.
+`nomos-work-orchestration` is the seam for the work group; `nomos-check-orchestration` and
+`nomos-spec-orchestration` — each built after this record first shipped, closing families
+2–4 and the `CheckCommand` and `SpecCommand` halves of family 9 — are the second and third
+demonstration rather than a fourth decision: this record states what any seam must
+guarantee once it exists, and does not itself build one. A surface calling through any of
+the three seams holds nothing the seam itself cannot regenerate. Building the seams still
+missing for families 6–8 and the `request::Command` remainder of family 9 above is future
+work this record makes checkable, not work it does.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#27
+
+*revision: authored · kind: heading · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names · hash: sha256:8136910253fa4223416af69bc1b73b940ebb23f097902869d6f81fdd95c72412*
+
+## Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#28
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names · hash: sha256:816f8c8e8166f2954d18bf58c9c052dd8a13784afe29c2b3de67a6e9b9cc6ac6*
+
+Family 9 above, as first written, named `SpecCommand` and `request::Command` together as
+the two command groups with no orchestration crate. `SpecCommand`'s seam has since closed,
+over four increments, none of which touched this record: `nomos-spec-orchestration`
+answers all nine verbs (`Profiles`, `Sources`, `Record`, `Table`, `Markdown`, `Render`,
+`Freshness`, `Preview`, `Commit`), and `nomos-cli::spec.rs`'s own module doc states the
+move in full, including the reasoning `Render`, `Freshness`, `Preview` and `Commit` earned
+genericity over `nomos_platform::FileSystem` where `Profiles`, `Sources`, `Record`,
+`Table` and `Markdown` did not. This record's text describing that gap as still open was
+stale against a codebase that had already closed it.
+
+### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#29
+
+*revision: authored · kind: prose · heading: A surface holds no state its canonical services cannot reconstruct / Amendment: SpecCommand's Seam Closed; request::Command Is the One Gap Family 9 Still Names · hash: sha256:e637a5bba657ac8de7cde767c551c6804d6887c09020ee77806274145c354ed9*
+
+`request::Command` was not touched by that work and is not stale: it remains one verb
+(`Submit`), parsed and dispatched entirely inside `nomos-cli::request`, with no crate a
+second adapter could depend on to reach it without also taking `nomos-cli`. It is the one
+piece of family 9 this record still names as open.
 
 ### docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md#1
 
