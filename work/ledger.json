@@ -19692,6 +19692,58 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-CLI-CARGO-GATE-COMMENT-STALE",
+      "title": "nomos-cli's Cargo.toml still says gate.rs reads no disk and chooses no platform",
+      "why": "The comment on the nomos-gate-orchestration dependency says gate.rs 'Reads no disk and chooses no platform, so unlike check.rs there is nothing else for this composition root to assemble.' P13-GATE-RUN-FIRST-INCREMENT-3 landed gate/sources.rs (walks the tree, deliberate twin of check/sources.rs) and gate/composition.rs (Host_Variant, deliberate twin of check/composition.rs) so that nomos gate run can call nomos_check_orchestration::Run. The claim is now false for run, though still true for plan.",
+      "done_when": "The comment on nomos-gate-orchestration in crates/host/nomos-cli/Cargo.toml describes the real current state: plan still reads no disk and chooses no platform, but run does both, the same way check.rs does, since P13-GATE-RUN-FIRST-INCREMENT-3. No functional change -- this is a comment-only correction. cargo build -p nomos-cli succeeds (Cargo.toml parses).",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "build",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "build",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s\n",
+        "verified_at": 1787169577,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fe07f9e8e54985cc49dcc0779c9d6bdc14915e91"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

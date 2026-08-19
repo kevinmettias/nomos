@@ -54,9 +54,12 @@ nomos-check-orchestration = { workspace = true }
 # store this crate hands it as a value. `OD-HOST-002`.
 nomos-spec-orchestration = { workspace = true }
 # The seam for the first-class Gate object ARC-ROADMAP-001 names -- `gate.rs` parses argv
-# and renders what came back; this crate composes the rule registry and reports it. Reads
-# no disk and chooses no platform, so unlike `check.rs` there is nothing else for this
-# composition root to assemble. `P13-GATE-ORCHESTRATION-1`, `P13-GATE-ORCHESTRATION-2`.
+# and renders what came back; this crate composes the rule registry and reports it.
+# `plan` still reads no disk and chooses no platform. `run` reads both, the same way
+# `check.rs` does, since it walks a tree and calls `nomos-check-orchestration::Run` itself
+# -- `gate-orchestration` and `check-orchestration` are both band 40 and neither may depend
+# on the other, so that composition lives here rather than in either orchestration crate.
+# `P13-GATE-ORCHESTRATION-1`, `P13-GATE-ORCHESTRATION-2`, `P13-GATE-RUN-FIRST-INCREMENT-3`.
 nomos-gate-orchestration = { workspace = true }
 # The specification system. A composition root is the only place permitted to name
 # these: the spec crates sit beside the kernel rather than above it, and nothing in the
