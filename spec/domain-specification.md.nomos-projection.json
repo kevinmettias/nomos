@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:11802dea59716c61533be7cf75d7a4b6f1045bfcb7f2be015ff459c1e6dd84fb",
-  "inputs_digest": "sha256:406fb3d0278107f37bed48c9752ea60075d79c8f5860c1fa90c00b52c38661ec",
+  "content_digest": "sha256:1cca761fca1eb1ca6ad9bc7489f4b31b7fb32951fa43486a46fbb298255f4916",
+  "inputs_digest": "sha256:98eff1960e8f983469e7914fd808523dc01bfaaa779b5be5af391993c542a3ae",
   "sections": [
     [
       "Documents",
-      136
+      137
     ],
     [
       "Sections",
-      1185
+      1190
     ],
     [
       "Source blocks",
-      4245
+      4260
     ]
   ],
   "inputs": [
@@ -589,6 +589,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored",
       "hash": "sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored",
+      "hash": "sha256:aad6f73159d0761db0032e0770bef784047ead801942da93128256841cb50337"
     },
     {
       "content": "documents",
@@ -5604,6 +5609,31 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#17",
       "hash": "sha256:b631da4aaecff8f4afa5cbff906ba8a8082bd9412d08b188feb26e4ded58a8c6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#1",
+      "hash": "sha256:79c4797ab50719be7f66110c725024fc93e691e1f055bfb0680b9dfb27a29e20"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#2",
+      "hash": "sha256:a745ec70a91931ffa79e73dc723b695df87225b758ce4b04375338ee49022795"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#6",
+      "hash": "sha256:2a9d2ef0e371852f5cc73881c4e994a0cef6dc2896f6bbd753290bfff17b4310"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#10",
+      "hash": "sha256:2fabcc856e19dbc9786a5656a54d427359580b459501a07b10e69edf49d1e932"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#14",
+      "hash": "sha256:055b8eb01d94d3fbdf9652b98cfeca9a0d022d515fe8e1ac0925dd8586fbba3c"
     },
     {
       "content": "headings",
@@ -24354,6 +24384,81 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#18",
       "hash": "sha256:5c7e22709885f1eb5ead37b124109cd427123600dd7a8332b8379276bb2563a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#1",
+      "hash": "sha256:7b4eb0fa06a2ef9722cef06e1af13b31b841f7bea569b30b8f85e048f6e80535"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#3",
+      "hash": "sha256:f79a44c559413b9326faacfee7fabd061e7f2acfb617baa35cf4f79dc4c46fcc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#4",
+      "hash": "sha256:32002788c39de618077b67abd9e19063a0773390fdaf773dd1f44bf5eb58789f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#5",
+      "hash": "sha256:4c95694d10f41a25ac942cc43d6617fa0a2e3893aa97869d71a6e3258345dbcc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#6",
+      "hash": "sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#7",
+      "hash": "sha256:cb739cd909f1a2e06d5a9531ad864eb4a563a3022718f82b8ef7d3e901d2d771"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#8",
+      "hash": "sha256:fe0573612884b1165601894b5198445e43e0c27cacea370518a05f2225efbb89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#9",
+      "hash": "sha256:c3c67a871e0d40dd07e48124d4266667a9be38d4a464d34e98a1c051ba97acb8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#10",
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#11",
+      "hash": "sha256:4b2c295fb52a92acd304d0d45052ff27ef81bcc66d358893c3c2919850d66610"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#12",
+      "hash": "sha256:b64f88bd85f91becc71892a271badcd7fdda027efc88351eace03eb725509b40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#13",
+      "hash": "sha256:c090c5dbfd029493156528740a08478f7fa684718f50698d3a12697f59aaa103"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#14",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#15",
+      "hash": "sha256:185d936c7aafcd69b3291179851f22bee823700636dcc06330fe30188ad79e61"
     },
     {
       "content": "blocks",

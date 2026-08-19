@@ -59,6 +59,7 @@ graph LR
     arc_roadmap_001 -->|"relates-to"| od_package_008["OD-PACKAGE-008"]
     arc_roadmap_001 -->|"relates-to"| od_rules_001["OD-RULES-001"]
     arc_roadmap_001 -->|"relates-to"| od_rules_002["OD-RULES-002"]
+    arc_roadmap_001 -->|"relates-to"| od_rules_007["OD-RULES-007"]
     arc_roadmap_001 -->|"relates-to"| od_trace_001["OD-TRACE-001"]
     arc_roadmap_001 -->|"relates-to"| od_trace_002["OD-TRACE-002"]
     arc_specdb_001 -->|"affected_by"| d_129
@@ -156,6 +157,7 @@ graph LR
     d_135 -->|"relates-to"| od_rules_004["OD-RULES-004"]
     d_135 -->|"relates-to"| od_rules_005["OD-RULES-005"]
     d_135 -->|"relates-to"| od_rules_006
+    d_135 -->|"relates-to"| od_rules_007
     d_135 -->|"relates-to"| od_spec_014
     d_136 -->|"relates-to"| arc_ecosystem_001
     d_136 -->|"relates-to"| arc_ecosystem_002
@@ -216,6 +218,7 @@ graph LR
     od_analysis_007 -->|"relates-to"| d_135
     od_analysis_007 -->|"relates-to"| od_analysis_004
     od_analysis_007 -->|"relates-to"| od_capability_008["OD-CAPABILITY-008"]
+    od_analysis_007 -->|"relates-to"| od_rules_007
     od_capability_001 -->|"relates-to"| arc_harness_001
     od_capability_001 -->|"relates-to"| od_analysis_001
     od_capability_001 -->|"relates-to"| od_capability_002
@@ -266,6 +269,7 @@ graph LR
     od_capability_008 -->|"relates-to"| od_capability_001
     od_capability_008 -->|"relates-to"| od_capability_007
     od_capability_008 -->|"relates-to"| od_package_006
+    od_capability_008 -->|"relates-to"| od_rules_007
     od_completeness_001 -->|"affected_by"| d_134
     od_completeness_001 -->|"affected_by"| od_completeness_002
     od_completeness_001 -->|"affected_by"| od_completeness_004["OD-COMPLETENESS-004"]
@@ -770,15 +774,25 @@ graph LR
     od_rules_004 -->|"relates-to"| od_rules_001
     od_rules_004 -->|"relates-to"| od_rules_005
     od_rules_004 -->|"relates-to"| od_rules_006
+    od_rules_004 -->|"relates-to"| od_rules_007
     od_rules_005 -->|"relates-to"| d_135
     od_rules_005 -->|"relates-to"| od_capability_007
     od_rules_005 -->|"relates-to"| od_package_006
     od_rules_005 -->|"relates-to"| od_rules_004
     od_rules_005 -->|"relates-to"| od_rules_006
+    od_rules_005 -->|"relates-to"| od_rules_007
     od_rules_006 -->|"relates-to"| d_134
     od_rules_006 -->|"relates-to"| d_135
     od_rules_006 -->|"relates-to"| od_rules_004
     od_rules_006 -->|"relates-to"| od_rules_005
+    od_rules_006 -->|"relates-to"| od_rules_007
+    od_rules_007 -->|"relates-to"| arc_roadmap_001
+    od_rules_007 -->|"relates-to"| d_135
+    od_rules_007 -->|"relates-to"| od_analysis_007
+    od_rules_007 -->|"relates-to"| od_capability_008
+    od_rules_007 -->|"relates-to"| od_rules_004
+    od_rules_007 -->|"relates-to"| od_rules_005
+    od_rules_007 -->|"relates-to"| od_rules_006
     od_spec_001 -->|"affects"| arc_specdb_001
     od_spec_001 -->|"relates-to"| d_133
     od_spec_002 -->|"affected_by"| d_132
@@ -1017,6 +1031,7 @@ graph LR
     od_rules_004
     od_rules_005
     od_rules_006
+    od_rules_007
     od_spec_001
     od_spec_002
     od_spec_004

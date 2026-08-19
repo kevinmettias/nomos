@@ -18212,6 +18212,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-RULE-IR-QUESTION",
+      "title": "Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one",
+      "why": "An external review of this workspace's dev branch argued nomos-proto (the retired Go predecessor) is 'almost a miniature proof' of a rule-compiler-plus-whole-program-optimizer architecture, and proposed registering that as a governing decision ahead of the Gate model. Verified directly against nomos-proto: no rule compiler, IR, or whole-program optimizer exists there -- it is independent Go judgment functions plus a shared driver/harness plus self-describing declarative metadata (Check, Rule, Inputs), and one of its own standards docs explicitly disclaims whole-program analysis. What the prototype does validate -- heterogeneous per-check dependencies (measured: 31/35/22/24 checks by input kind) and a shared driver extracted once real duplication existed (measured: sixteen checks) -- is evidence for explicit dependency declaration and demand-driven shared planning, which OD-RULES-005 and the analysis-planner roadmap item already cover, not evidence for a Rule IR. nomos-rules holds exactly two rules today (Check_Completeness_Mirrors, Check_Naming_Convention), neither exhibiting control flow, reusable subcomputations, or correction loops a capability requirement can't already express -- the same population-of-two shape OD-RULES-005/006 and OD-CAPABILITY-008 already declined to design ahead of. ARC-ROADMAP-001 stays as committed: Gate consumes canonical outcomes (findings/coverage/applicability) and is unaffected by whether a future rule's evidence comes from syntax, a dependency-graph capability, or eventually something requiring a richer program representation.",
+      "done_when": "OD-RULES-007 is registered in crates/spec/nomos-spec-store/records/ with status: open (not accepted -- this logs the question and its triggers, it does not decide it), names the concrete triggers requiring two or more real rules to exhibit (shared multi-step derived computation not expressible as ordinary facts; rule-local control flow that must be planner-visible; correction/recheck loops with reusable semantics; reusable subworkflows/procedures; planner-visible native operations with declared effects; optimization opportunities fact-demand union alone can't obtain), explicitly corrects the record of what nomos-proto does and does not validate, and both diagram-set and domain-specification projections are re-rendered and pass their freshness checks (rendered/verified outside ledger territory, per OD-GATE-005).",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md",
+          "crates/spec/nomos-spec-store/records/OD-RULES-007.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-e643c65bbad4483e.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-433c47e6dd66b347.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c14312faf4ba080e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-d6ecb11a387c468a.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-a4a043f2643142bd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-30f549b5771eb641.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-5b419e0002ced6ae.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-4b668c0f67b59fe5.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-5f786069b772789f.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8c4ebd0adb5625f.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787124821,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2ce30dd49aa358c5ec3217bdc446f2db2e06120f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

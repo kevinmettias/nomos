@@ -124,6 +124,7 @@ profile: domain-specification
 | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md@authored | docs/records/OD-RULES-004-a-rule-package-registers-into-a-declared-registry-extracted-before-a-second-rule-needs-it.md | authored | 17 | 6 | sha256:35e6671b64241f3b351b2f75159a6860300ee83d671151305c075f1a1dd398a6 |
 | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md@authored | docs/records/OD-RULES-005-whether-a-rules-offer-needs-a-measured-inputs-classification-or-waits-for-a-caching-consumer.md | authored | 13 | 5 | sha256:3bcc3aad22947f89bb1436da5b44db13aabd4af1c97a60dbdab28899bbdad057 |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md@authored | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md | authored | 18 | 6 | sha256:5e7bde3ad034017040659d44bc4b044696c4a0b33830e8596bd67906a2d2ac4c |
+| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 15 | 5 | sha256:aad6f73159d0761db0032e0770bef784047ead801942da93128256841cb50337 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 23 | 7 | sha256:481ffd62b02df705439b4ef914adb21e24894d1d3f0295754fc13f7d95c89c85 |
@@ -1132,6 +1133,11 @@ profile: domain-specification
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#9 | authored | 2 | What Would Decide It |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#12 | authored | 2 | Resolution |
 | docs/records/OD-RULES-006-whether-ruleoffer-needs-a-declared-enforcementplacementrationale-or-waits-for-a-second-rule.md#17 | authored | 2 | Status |
+| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#1 | authored | 1 | Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one |
+| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#6 | authored | 2 | Current Position |
+| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#10 | authored | 2 | What Would Decide It |
+| docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#14 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -33057,6 +33063,154 @@ governing contract, which a field on a runtime registration struct would not clo
 second, independent trigger this record also named — a rule package's own review process
 needing this as a mechanical gate — has still not arrived, and would still argue for
 building the field on its own evidence rather than this comparison's, should it arrive.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#1
+
+*revision: authored · kind: heading · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one · hash: sha256:7b4eb0fa06a2ef9722cef06e1af13b31b841f7bea569b30b8f85e048f6e80535*
+
+# Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#2
+
+*revision: authored · kind: heading · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#3
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Question · hash: sha256:f79a44c559413b9326faacfee7fabd061e7f2acfb617baa35cf4f79dc4c46fcc*
+
+An external architecture review of this workspace argued, from reading
+`code-standards`/`nomos-proto`'s README and design comments, that the prototype is "almost a
+miniature proof" of an architecture where a rule compiles into a typed program (loops,
+branches, procedures, fixpoints, joins) and the complete selected rule set is compiled
+together into one globally optimized execution plan — and proposed registering that as a
+governing decision ahead of the product Gate contract.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#4
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Question · hash: sha256:32002788c39de618077b67abd9e19063a0773390fdaf773dd1f44bf5eb58789f*
+
+Measured directly against `nomos-proto` rather than accepted on read: no rule compiler, rule
+IR, or whole-program optimizer exists anywhere in it. It is independent Go judgment functions
+plus a shared execution driver/harness (`driver.Run_File_Judgment` /
+`Run_Module_Judgment`) plus self-describing declarative metadata (`checkspec.Check`,
+`rulespec.Rule`, `checkspec.Inputs`). One of its own standards documents explicitly disclaims
+whole-program analysis as out of scope for a single check. What the prototype does
+demonstrate, confirmed against its own numbers — `kernel/checks/checkspec/inputs.go`: 31 of
+277 registered checks read the whole corpus, 35 resolve per-check options, 22 read
+`standards.json` limits, 24 walk the tree themselves; commit `5857241f8`: a shared driver
+extracted once sixteen checks had independently duplicated the same collection/parse/
+judge/coverage loop — is that check dependencies are heterogeneous and that shared execution
+structure emerges once duplication is real. That is evidence for explicit dependency
+declaration and demand-driven shared planning. It is not evidence for a rule program IR.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#5
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Question · hash: sha256:4c95694d10f41a25ac942cc43d6617fa0a2e3893aa97869d71a6e3258345dbcc*
+
+`nomos-rules` holds exactly two rules today, `Check_Completeness_Mirrors` and
+`Check_Naming_Convention`. Neither exhibits rule-local control flow, a reusable
+subcomputation, or a correction/recheck loop that a capability requirement plus the (not yet
+built) analysis planner cannot already express. Building a Rule Program IR now would be
+designing a general execution model from a population of two rules, neither of which needs
+it — the same shape `OD-RULES-005`, `OD-RULES-006` and `OD-CAPABILITY-008` already declined
+to build ahead of, and the specific mistake `D-135` names: inferring genericity from a wish
+rather than a demonstrated concrete need.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#6
+
+*revision: authored · kind: heading · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Current Position · hash: sha256:3410589a125ce4b264969343987e63e029f80de6e30da91448b149ee4405900f*
+
+## Current Position
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#7
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Current Position · hash: sha256:cb739cd909f1a2e06d5a9531ad864eb4a563a3022718f82b8ef7d3e901d2d771*
+
+`ARC-ROADMAP-001` is unaffected by this question either way and is not reopened by it. Gate
+consumes canonical outcomes — findings, coverage, applicability — produced by whatever a rule
+already is; it does not depend on whether a rule's evidence came from a syntax capability, a
+future dependency-graph capability, or eventually something needing a richer program
+representation. A deep future rule can demand a new capability without changing Gate, and Gate
+work already in progress (`P13-GATE-ORCHESTRATION-1`) is correctly built against
+`nomos_rules::RuleRegistry` as it exists today, not against a hypothetical IR.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#8
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Current Position · hash: sha256:fe0573612884b1165601894b5198445e43e0c27cacea370518a05f2225efbb89*
+
+The corrected three-way split this record leaves standing:
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#9
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Current Position · hash: sha256:c3c67a871e0d40dd07e48124d4266667a9be38d4a464d34e98a1c051ba97acb8*
+
+1. **Needed now, and already underway or roadmapped:** explicit rule requirements (already
+   real — `Syntax_Requirement()`), fact dependency tracking, applicability, coverage, and the
+   shared analysis planner named on `ARC-ROADMAP-001`'s near-term tier.
+2. **Allowed to emerge when a real rule demands it:** new capability families — a
+   dependency-graph capability, resolved symbols, effects, and so on — each an ordinary
+   analysis/capability addition, not a phase. `OD-ANALYSIS-007` already governs the general
+   version of this question for program-semantics capabilities specifically.
+3. **Deferred, per `ARC-ROADMAP-001`:** architecture discovery/inference, feature topology,
+   path tracing, Atlas-style projections, and — this record's own subject — a Rule Program IR
+   and whole-rule-set compilation.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#10
+
+*revision: authored · kind: heading · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#11
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / What Would Decide It · hash: sha256:4b2c295fb52a92acd304d0d45052ff27ef81bcc66d358893c3c2919850d66610*
+
+Two or more real rules — native, or from a future rule package — exhibiting at least one of:
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#12
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / What Would Decide It · hash: sha256:b64f88bd85f91becc71892a271badcd7fdda027efc88351eace03eb725509b40*
+
+- a shared multi-step derived computation that cannot be captured as an ordinary fact the
+  planner materializes once and several rules read;
+- rule-local control flow (branching, iteration, procedures) that must be visible to the
+  planner to schedule or cache correctly, rather than being opaque inside one judgment
+  function;
+- a correction/recheck loop with reusable semantics across more than one rule, rather than
+  each rule's correction being a one-off;
+- a reusable subworkflow or procedure two or more rules genuinely share, the way
+  `nomos-proto`'s sixteen duplicated driver loops did before extraction;
+- a planner-visible native operation with declared effects that an ordinary capability
+  requirement cannot express;
+- an optimization opportunity — common-subexpression elimination across judgments, traversal
+  fusion, batched external invocation — that fact-demand union alone cannot obtain, because
+  the redundancy is in judgment structure rather than in fact acquisition.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#13
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / What Would Decide It · hash: sha256:c090c5dbfd029493156528740a08478f7fa684718f50698d3a12697f59aaa103*
+
+Any one of these, demonstrated by real rules rather than argued from a taxonomy, is the
+trigger. Until then, a Rule Program IR is speculative architecture with no case to check its
+shape against, the same standing `OD-RULES-005` and `OD-CAPABILITY-008` already hold for their
+own questions.
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#14
+
+*revision: authored · kind: heading · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md#15
+
+*revision: authored · kind: prose · heading: Whether heterogeneous rule populations justify a structured Rule Program/IR and global rule-compilation layer, or wait for two rules that actually need one / Status · hash: sha256:185d936c7aafcd69b3291179851f22bee823700636dcc06330fe30188ad79e61*
+
+Open. This question is deliberately left open rather than resolved either way: no rule in
+this workspace today needs anything a capability requirement and the (not yet built) analysis
+planner cannot already express. Revisit when two or more real rules exhibit one of the
+triggers above.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
