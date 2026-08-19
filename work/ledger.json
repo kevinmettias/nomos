@@ -17913,14 +17913,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-lifetime-elide",
-        "acquired_at": 1787122221,
-        "lease_expires_at": 1787129421
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -17931,7 +17927,82 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Report_Whether_The_Board_Is_Parallel ... ok\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair ... ok\ntest record_directory::Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory ... ok\ntest snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest identifier_and_file::Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest serializers::Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest identifier_and_file::Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder ... ok\ntest sharing_a_record::Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest record_exclusion::Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.22s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-9f0da988d67699df.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-b7c376552463c63c.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-da7f1fa9457ac951.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-2e5a5ed1fbbe02e7.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1787122445,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ed03cf60d61a488880588162fb6a4b4c9b8d2277"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-EXITCODE-ALL-CFGTEST",
+      "title": "cargo clippy --workspace --all-targets -- -D warnings is red on clean HEAD: ExitCode::All is dead code outside cfg(test)",
+      "why": "cargo clippy --workspace --all-targets -- -D warnings, the gate command work finish derives, is red on clean HEAD (4b2faef, P13-EXITCODE-ALL-MIRROR): dead_code on ExitCode::All in crates/host/nomos-cli/src/check/exit_code.rs. ExitCode is pub(crate), so its dead_code lint applies regardless of visibility, unlike the library-crate All() mirrors (DocumentKind, ChangeSource, Table, etc.) that a pub fn shields from this lint. All()'s only call sites are ExitCode::All() in crates/host/nomos-cli/src/check/tests.rs, a module the crate itself gates with #[cfg(test)] at check.rs:98-99 -- so the plain (non-test) bin build genuinely never calls it. Reproduced isolated with cargo clippy -p nomos-cli --all-targets -- -D warnings, same single error, and it blocks work finish for every item in the workspace, not just ones touching nomos-cli.",
+      "done_when": "ExitCode::All is reachable exactly where it is really called from (check/tests.rs, already #[cfg(test)]) without dead_code firing on the plain bin build; cargo clippy --workspace --all-targets -- -D warnings exits 0; cargo test -p nomos-cli stays green, including Test_Every_ExitCode_Should_Be_Matched_Exhaustively.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check/exit_code.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Refuse ... ok\ntest Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It ... ok\ntest Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 5 tests\ntest Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover ... ok\ntest Test_A_Lapsed_Item_Should_List_As_Lapsed_And_Be_Takeable ... ok\ntest Test_Show_Should_Report_The_Claim_A_Takeover_Displaced ... ok\ntest Test_Taking_Over_A_Lapsed_Item_Should_Record_The_Claim_It_Displaced ... ok\ntest Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_Not_Held ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-9ff055cc3671f308.exe)\n     Running tests\\abandon_is_readable.rs (target\\debug\\deps\\abandon_is_readable-f113f886532f254e.exe)\n     Running tests\\add_guarantees_what_it_says.rs (target\\debug\\deps\\add_guarantees_what_it_says-64bfbf8a855725f5.exe)\n     Running tests\\authoring_surface.rs (target\\debug\\deps\\authoring_surface-fb0618f5d899bb27.exe)\n     Running tests\\check_command.rs (target\\debug\\deps\\check_command-bf4e23cc71c5a5d5.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-5c19b556973e3f5d.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-4c0c2f15532bb47f.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-685b2f409a256d10.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-8b9272540824505e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-7588c19676840830.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-0070037a250a504f.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-ffd1feb714e7ec0a.exe)\n",
+        "verified_at": 1787122458,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ed03cf60d61a488880588162fb6a4b4c9b8d2277"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

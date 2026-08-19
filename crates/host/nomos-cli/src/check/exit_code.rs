@@ -44,6 +44,7 @@ impl ExitCode
     /// there. It is also what `Test_Only_Ok_Should_Carry_The_Passing_Exit_Code` and
     /// `Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With` iterate in
     /// that same file — the gate step's whole exit-code policy rests on this list.
+    #[cfg(test)]
     #[must_use]
     pub const fn All() -> &'static [Self]
     {

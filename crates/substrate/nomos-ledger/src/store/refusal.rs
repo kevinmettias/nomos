@@ -73,7 +73,7 @@ pub fn Claim_Refusal(
 /// is this function's tie-break for as long as that stands, not a placeholder standing in
 /// for a ranking this function does not attempt.
 #[must_use]
-pub fn Eligible_Items<'a>(document: &'a LedgerDocument, now: Timestamp) -> Vec<&'a LedgerItem>
+pub fn Eligible_Items(document: &LedgerDocument, now: Timestamp) -> Vec<&LedgerItem>
 {
     let mut eligible: Vec<&LedgerItem> = document
         .items
