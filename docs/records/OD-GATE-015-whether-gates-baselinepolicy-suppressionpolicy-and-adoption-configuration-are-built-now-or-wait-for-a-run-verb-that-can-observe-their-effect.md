@@ -3,7 +3,7 @@ id: OD-GATE-015
 type: decision
 title: Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect
 status: open
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - gate
@@ -138,32 +138,49 @@ run`. `run`'s own disposition, whichever of the three it comes to, has no consum
 build it actually gates. A `BaselinePolicy` or `SuppressionPolicy` added today would still
 sit beside a disposition nothing outside this record's own tests observes.
 
+## `run` Gets A Real Caller: What Changed And What Did Not
+
+`P13-GATE-RUN-CI-CALLER` gave this record's own named trigger exactly what it asked for: a
+real caller whose build `run`'s disposition gates. Verified directly against the real
+workflow file, not assumed: `.github/workflows/gate.yml`'s `Rules` step now invokes `cargo
+run --quiet -p nomos-cli --bin nomos -- gate run --root .`, and Actions fails that step —
+and so the whole gate job — on any non-zero exit, the identical zero-is-the-only-success
+policy `OD-GATE-004` already established for `check`. This repository's own pull requests
+now succeed or fail on `Disposition`'s reduction rather than on `check`'s exit code taken
+directly. The first named trigger has fired, in full — not the narrower "`run` exists" sense
+`P13-GATE-014-015-RUN-TRIGGER-FIRED` recorded, which left the caller itself still absent.
+
+The second, independent trigger has not. The switch landed the same day it was proposed,
+against a `Rules` step that had never yet failed on a real finding through this path — no
+debt has had the chance to accumulate, and no false-positive or rationale friction has been
+observed, because the step is new. Nothing yet argues for which of `SUP-*`, `BASELINE-*` or
+`ADOPT-CONFIG-*` to build first, or that any should be built now rather than waited on
+further.
+
 ## What Would Decide It
 
 The first named trigger — `Gate` gaining a `run` verb — has fired: `run` is real, and
 `Disposition`'s reduction is exactly the seam a suppression hook or a baseline's
 tolerated-debt scope would sit inside, closing the risk of shaping either policy type
-around a `Plan`-only `Gate` that never judged anything. What has not fired is the deeper
-condition that trigger was standing in for: a real caller whose build `run`'s disposition
-actually gates. `run` exists, but nothing depends on what it says — `OD-GATE-004`'s own CI
-step still enforces this repository through `nomos check`, not through `Gate`. Baseline and
-suppression policy shaped against a `run` nobody's build depends on would repeat the exact
-mistake this record already declined once, one layer further in.
+around a `Plan`-only `Gate` that never judged anything. What has now also fired is the
+deeper condition that trigger was standing in for: a real caller whose build `run`'s
+disposition actually gates — this repository's own CI, since `P13-GATE-RUN-CI-CALLER`.
+Baseline and suppression policy would no longer be shaped against a `run` nobody's build
+depends on.
 
-A second, independent trigger particular to this question, unchanged by `run`'s arrival: a
+A second, independent trigger particular to this question, unchanged by either landing: a
 real caller — this repository's own CI, or a consuming repository — accumulating enough
 existing debt, or enough false-positive/rationale friction, that an unconditional
 `Blocking` gate becomes impractical to adopt. That caller's own shape of debt would still
 argue for which of the three concerns to build first, rather than building all three
-speculatively from the corpus's naming alone.
+speculatively from the corpus's naming alone. Nothing has accumulated yet.
 
 ## Status
 
-Open. `Gate` has a real `run` verb and a real disposition now
-(`P13-GATE-RUN-FIRST-INCREMENT-3`, `P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the
-risk of shaping baseline or suppression policy around a `Plan`-only `Gate`. No caller in
-this workspace observes that disposition yet: `OD-GATE-004`'s CI step enforces through
-`nomos check` directly, not through `Gate`. Revisit when `gate run` gains a real caller
-whose build its disposition gates, or when a real caller's accumulated debt or exemption
-need names a concrete shape for one of the three concerns above — and treat that as a
-trigger for the concern it names, not for all three at once.
+Open. `Gate` has a real `run` verb and a real disposition (`P13-GATE-RUN-FIRST-INCREMENT-3`,
+`P13-GATE-014-015-RUN-TRIGGER-FIRED`), and now a real caller whose build it gates:
+`.github/workflows/gate.yml`'s `Rules` step invokes `gate run`, not `check`, since
+`P13-GATE-RUN-CI-CALLER`. This record's first named trigger has fired. Revisit when a real
+caller's accumulated debt or exemption need names a concrete shape for one of the three
+concerns above — unchanged from before this landing — and treat that as a trigger for the
+concern it names, not for all three at once.

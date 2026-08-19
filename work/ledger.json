@@ -19858,6 +19858,61 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-014-015-RUN-CALLER-LANDED",
+      "title": "OD-GATE-014 and OD-GATE-015: gate run's Rules-step caller landed, and it fires one record's trigger but not the other's",
+      "why": "P13-GATE-RUN-CI-CALLER (24e6cea) switched .github/workflows/gate.yml's Rules step from invoking `nomos check` directly to invoking `nomos gate run`, giving Gate's run verb its first real caller. Both OD-GATE-014 and OD-GATE-015 were left describing that step as still invoking `nomos check` directly -- true when each was last revised, false now, verified against the real workflow file rather than assumed. This is the same kind of staleness P13-GATE-014-015-RUN-TRIGGER-FIRED itself corrected one landing ago, for the same two records, and the same discipline applies: read them again against the real thing rather than leave them describing a caller that no longer exists.\n\nThe two records are not affected equally. OD-GATE-015's own named trigger -- \"a real caller whose build run's disposition gates\" -- is exactly what this caller is: Actions fails the Rules step (and so the whole gate job) on any non-zero exit, and gate run's exit code now comes from Disposition's reduction rather than from check's exit code taken directly. That is this record's first trigger fired, in the full sense, not the narrower \"run exists\" sense P13-GATE-014-015-RUN-TRIGGER-FIRED recorded. OD-GATE-014's own trigger is a caller that needs to evaluate fewer than every rule or fewer than every file -- CI still runs `gate run --root .` unconditionally over everything, the identical shape it always judged, so switching which subcommand runs it does not fire OD-GATE-014's trigger at all. The two records need different updates for that reason, not a shared paragraph.",
+      "done_when": "Both records are edited through nomos spec preview / nomos spec commit (never hand-edited), each gains a new section after its existing \"`run` Arrived: What Changed And What Did Not\" section, front matter version bumps 2 -> 3, and both stay status: open -- this item settles what changed, not whether to build any of ScopeSelector/RuleSelector/BaselinePolicy/SuppressionPolicy/AdoptionConfig, per the same user direction P13-GATE-014-015-RUN-TRIGGER-FIRED already cited.\n\nOD-GATE-014 gains a section titled \"`run` Gets A Real Caller: What Changed And What Did Not\" stating, verified against .github/workflows/gate.yml rather than assumed: the Rules step now invokes `gate run --root .`, not `check`, since P13-GATE-RUN-CI-CALLER, and this repository's own build now depends on Gate's disposition. It states plainly that this does not fire this record's own primary trigger: the caller judges everything unconditionally, `--root .` unchanged, so a real caller needing fewer than every rule or every file still does not exist. Status section is corrected to no longer say the Rules step invokes check directly, and cites P13-GATE-RUN-CI-CALLER alongside the existing P13-GATE-RUN-FIRST-INCREMENT-3 / P13-GATE-014-015-RUN-TRIGGER-FIRED citations; the revisit condition (a caller wanting a subset) is unchanged.\n\nOD-GATE-015 gains a section with the same title stating, verified the same way: the Rules step's switch to `gate run` means Actions now fails the whole gate job on gate run's non-zero exit, so this repository's own pull requests succeed or fail on Disposition's reduction rather than check's exit code taken directly -- this record's first named trigger (\"a real caller whose build run's disposition gates\") has fired, in full, not just in the narrower \"run exists\" sense the prior landing recorded. It states plainly that the second, independent trigger (a real caller's accumulated debt or false-positive/rationale friction naming a concrete shape for one of SUP-*/BASELINE-*/ADOPT-CONFIG-*) has not fired: the caller is new, nothing has yet accumulated. Status section is rewritten to say the first trigger has fired and cite P13-GATE-RUN-CI-CALLER, while the revisit condition (accumulated debt naming a concrete shape) is unchanged and the record stays open.\n\nPreservation: cargo test --no-fail-fast -p nomos-spec-validate passes with NOMOS_V14_CORPUS, NOMOS_SPEC_ARCHIVES and NOMOS_RUST_CORPUS all set (not run corpus-unset only), since a corpus-unset run of a preservation test returns early and reports ok without checking anything.\n\nProjections re-rendered from a scratch worktree holding exactly the registered record set this commit publishes (OD-GATE-005's discipline, not the shared working tree) via `nomos spec render --profile diagram-set --into .` and `nomos spec render --profile domain-specification --into .`, verified fresh via `nomos spec freshness --into . --require diagram-set --require domain-specification` (must exit 0) before copying diagrams/relations.mmd, diagrams/relations.mmd.nomos-projection.json, spec/domain-specification.md and spec/domain-specification.md.nomos-projection.json back and committing them alongside the two edited records and work/ledger.json.\n\ncargo test --no-fail-fast -p nomos-spec-validate passes (this item's own predicate, run corpus-set per the paragraph above).",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md",
+          "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest run::tests::Test_The_Ruleset_Hash_Should_Be_Order_Independent_And_Sensitive ... ok\ntest run::tests::Test_An_Empty_Ruleset_Should_Not_Pass ... ok\ntest run::tests::Test_An_Errored_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_A_Declared_But_Unregistered_Rule_Should_Fail_The_Run ... ok\ntest run::tests::Test_Violations_Should_Fail_The_Run_And_Be_Listed ... ok\ntest run::tests::Test_A_Complete_Satisfied_Run_Should_Pass ... ok\ntest run::tests::Test_A_Vacuous_Rule_Should_Be_Visible ... ok\ntest run::tests::Test_A_Rule_Nobody_Declared_Should_Fail_The_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 11 tests\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1787173310,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "24e6ceac7686e4157631df44eb6a11caa57a41c2"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

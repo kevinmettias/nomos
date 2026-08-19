@@ -3,7 +3,7 @@ id: OD-GATE-014
 type: decision
 title: Whether Gate's ScopeSelector and RuleSelector are built now, or wait for a caller that needs to select less than everything
 status: open
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - gate
@@ -89,6 +89,23 @@ assumed: the `Rules` step — `OD-GATE-004`'s own CI step — still invokes `car
 -p nomos-cli --bin nomos -- check --root .`. `nomos check` directly, not `nomos gate run` or
 `nomos gate plan`. This repository's own enforcement does not go through `Gate` at all yet.
 
+## `run` Gets A Real Caller: What Changed And What Did Not
+
+`P13-GATE-RUN-CI-CALLER` gave `run` its first real caller. Verified directly against the
+real workflow file, not assumed: `.github/workflows/gate.yml`'s `Rules` step now invokes
+`cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .`, not `check`. This
+repository's own build now depends on `Gate`'s disposition rather than on `check`'s exit
+code taken directly — the deeper condition `OD-GATE-015`'s own trigger names, resolved for
+that record by this same change.
+
+It does not resolve this record's own trigger. The caller CI gained judges everything the
+walk finds, unconditionally, over the whole tree — `--root .`, unchanged, still written out
+explicitly so narrowing it stays visible in a diff. Nothing about the switch from `check` to
+`gate run` asks for fewer than every registered rule or fewer than every file; it is the
+identical unconditional shape `run` already had, wearing a different name in the step's
+`run:` line. This record's own primary trigger — a real caller that needs to evaluate a
+subset — remains exactly as unmet as before.
+
 ## What Would Decide It
 
 The risk `run`'s absence posed — building either selector type against a hypothetical `run`
@@ -98,18 +115,22 @@ and primary trigger, which remains exactly as unmet as before: a real caller tha
 evaluate fewer than all registered rules, or fewer than every file a root contains — this
 repository's own CI wanting to run only one rule over a subset of paths, or a second,
 genuinely different repository or configuration wanting a different rule set than this one.
-Nothing calls `gate run` at all yet, so no such caller exists to name either selector's real
-shape. `run` existing only means that shape, whenever a caller arrives to want it, can now be
-checked against a real reduction pipeline instead of a hypothetical one — the same way
-`Check_Naming_Convention`'s arrival gave `OD-RULES-006` a second rule to compare rationale
-against instead of one.
+`gate run` now has a caller, but that caller — this repository's own CI — wants exactly what
+`run` already gives it: everything. No such caller exists yet to name either selector's real
+shape. `run` existing, and now being called, only means that shape, whenever a caller arrives
+to want it, can now be checked against a real reduction pipeline instead of a hypothetical
+one — the same way `Check_Naming_Convention`'s arrival gave `OD-RULES-006` a second rule to
+compare rationale against instead of one.
 
 ## Status
 
 Open. `Gate` has a real `run` verb now (`P13-GATE-RUN-FIRST-INCREMENT-3`,
 `P13-GATE-014-015-RUN-TRIGGER-FIRED`), which closes the risk of shaping a selector around a
-`run` that did not yet exist. It still has no real caller: `OD-GATE-004`'s CI step invokes
-`nomos check` directly, not `Gate`, and no consuming repository has adopted `Gate`. Revisit
-when `gate run` gains a real caller that needs to evaluate fewer than every registered rule
-over fewer than every file — this repository's own CI switching to it and wanting a subset,
-or a second repository wanting a different rule set.
+`run` that did not yet exist, and `run` has gained its first real caller
+(`P13-GATE-RUN-CI-CALLER`): `.github/workflows/gate.yml`'s `Rules` step now invokes `gate
+run`, not `check`, and this repository's own build now depends on its disposition. That
+caller still judges everything, unconditionally — it does not need to evaluate fewer than
+every registered rule over fewer than every file, so this record's own primary trigger
+remains unmet. Revisit when `gate run` gains a caller that needs to evaluate fewer than
+every registered rule over fewer than every file — this repository's own CI wanting a
+subset, or a second repository wanting a different rule set.
