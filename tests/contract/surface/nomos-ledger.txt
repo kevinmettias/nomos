@@ -83,7 +83,7 @@ pub fn nomos_ledger::Claim::Has_Lapsed(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::ClaimRefusal::Describe(&self) -> String
 pub fn nomos_ledger::Claim_Refusal( document: &LedgerDocument, item: &ItemId, now: Timestamp, ) -> Option<ClaimRefusal>
 pub fn nomos_ledger::Derive_Step(workflow: &str, step: &str) -> Result<Vec<String>, GateUnknown>
-pub fn nomos_ledger::Eligible_Items<'a>(document: &'a LedgerDocument, now: Timestamp) -> Vec<&'a LedgerItem>
+pub fn nomos_ledger::Eligible_Items(document: &LedgerDocument, now: Timestamp) -> Vec<&LedgerItem>
 pub fn nomos_ledger::ExclusionLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Release( &mut self, item: &ItemId, holder: &str, outcome: ReleaseOutcome, ) -> Result<(), ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Renew(&mut self, item: &ItemId, holder: &str, lease: Duration) -> Result<Reservation, ClaimRefusal>

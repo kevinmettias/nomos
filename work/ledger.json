@@ -18006,6 +18006,112 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-LEDGER-SURFACE-REBLESS",
+      "title": "nomos-ledger's public-surface snapshot is stale after P13-LEDGER-LIFETIME-ELIDE elided a lifetime",
+      "why": "",
+      "done_when": "tests/contract/surface/nomos-ledger.txt matches nomos-ledger's real public surface (Eligible_Items with no explicit lifetime); cargo test -p nomos-contract-tests --test public_surface passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "empty why field from a shell quoting error; replaced by P13-LEDGER-SURFACE-REBLESS-2"
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-surface-rebless",
+          "reason": "why text was empty due to a shell quoting error in the add command; re-authoring under a fresh id with correct text",
+          "abandoned_at": 1787122578
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-surface-rebless",
+        "declined_at": 1787122579
+      }
+    },
+    {
+      "id": "P13-LEDGER-SURFACE-REBLESS-2",
+      "title": "nomos-ledger's public-surface snapshot is stale after P13-LEDGER-LIFETIME-ELIDE elided a lifetime",
+      "why": "P13-LEDGER-LIFETIME-ELIDE (commit 1fa8a8c, this session) elided a needless lifetime on nomos_ledger::Eligible_Items to clear a red gate, which narrowed the crate public surface -- the signature tests/contract/surface/nomos-ledger.txt checked in no longer matches. tests/contract/tests/public_surface/snapshots.rs::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot now fails: the real surface drops the explicit lifetime the checked-in snapshot still names. P13-LEDGER-LIFETIME-ELIDE's own predicate (cargo test -p nomos-ledger) does not reach this file, which lives in a different crate (nomos-contract-tests), so the item finished without catching its own side effect. This is my own regression from this session, not a peer's.",
+      "done_when": "tests/contract/surface/nomos-ledger.txt matches nomos-ledger's real public surface (Eligible_Items with no explicit lifetime); cargo test -p nomos-contract-tests --test public_surface passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 8 tests\ntest scanner::Test_An_Unfollowable_Re_Export_Should_Be_Reported_While_Its_Siblings_Resolve ... ok\ntest scanner::Test_The_Scanner_Should_Find_Real_Exports_And_Stop_At_Restricted_Ones ... ok\ntest scanner::Test_A_Crate_Visible_Helper_Should_Not_Be_An_Export ... ok\ntest snapshots::Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot ... ok\ntest bless::Test_Blessing_One_Crate_Should_Leave_Another_Crates_Snapshot_Byte_Identical ... ok\ntest bless::Test_A_Bless_Naming_No_Crate_Should_Be_Refused_Rather_Than_Widened ... ok\ntest snapshots::Test_Every_Snapshot_Should_Belong_To_A_Crate_That_Has_One ... ok\ntest snapshots::Test_Every_Member_Should_Be_Snapshotted_Or_Declared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-04cd6948a9e9b567.exe)\n",
+        "verified_at": 1787122637,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1fa8a8c6a71447cb745e057e03ae8585033a4e2a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
