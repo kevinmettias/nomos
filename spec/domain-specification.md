@@ -110,7 +110,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 16 | 6 | sha256:002bf8b3eb0d2b37459e2db671092341f12b498413eb29078351cc623202f7f6 |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 16 | 6 | sha256:34a10502da7ccee01b768adbdb67dd71f28209b6bc4ae2afc512b343bf59ebb9 |
-| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 19 | 6 | sha256:6b5a01da7549134b0f7cce0d44245687e46660f6e07242861e692c30522e7d3f |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md | authored | 25 | 7 | sha256:1093eeee323b45e67655bf6800dfe6effa8f0c561ed1f34ca89791aecfc04fba |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md@authored | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md | authored | 14 | 5 | sha256:8e66ebc7fa4c6ee44260128c0f37957605f33a078676edb3c504d701d929362f |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
@@ -1016,7 +1016,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#6 | authored | 2 | Current Position |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#11 | authored | 2 | Corroborating Evidence |
 | docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#16 | authored | 2 | What Would Decide It |
-| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18 | authored | 2 | Resolution |
+| docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#24 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1 | authored | 1 | The manifest JSON carries its own schema version, distinct from PKG-007's four content domains |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#6 | authored | 2 | The Decision |
@@ -29158,19 +29159,98 @@ it was waiting for, closing that half of the condition recorded on `PackageKind`
 
 ### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18
 
+*revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Resolution · hash: sha256:5d8184015dfef929c99053e3163c9dcd5080bb6652e3bcaddfdecb6fe0ddab17*
+
+## Resolution
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#19
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Resolution · hash: sha256:35b06c3f9bd460f4d7f17db26b38802cc793c68a9fd92541b966c8779016da35*
+
+Accepted, on the trigger this record itself named. `crates/rules/nomos-rules/src/naming.rs`
+(`Check_Naming_Convention`, `P13-RULE-NAMING-CONVENTION`) is now the second rule this record
+waited for, and the field-by-field comparison against `ARCH-002`'s contents list is possible
+on real evidence rather than a population of one.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#20
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Resolution · hash: sha256:9167da989ca863909d23ec07996e4b93d22a76ecb095de5c1a0d734b541655e5*
+
+The two rules converge on some fields and diverge sharply on others, and the divergence lands
+exactly where `ARCH-002` and `PKG-007` care most. Convergent: both state
+`required canonical capabilities` as `crate::Syntax_Requirement()`, unchanged between them;
+both carry a `deterministic judgment implementation` of the same shape, a pure function of
+`&[SourceFile]` and a `FactReader` returning `Vec<Finding>`; both use the same
+`evidence schema`, `EvidenceClass::Derived`; neither has an `optional enhanced
+implementation`, an `external diagnostic mapping`, or a `correction and suppression
+contract`; both carry `examples/counterexamples` only as hand-written fixture text inside
+their own `#[cfg(test)]` modules, not as an external evaluation corpus — `mirror.rs`'s three
+historical instances live in its own test fixtures the same way `naming.rs`'s do, so this is
+convergence in shape, not merely absence in both.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#21
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Resolution · hash: sha256:a6344258f55b694cec64db861f9e9d02037592aa29007c7dfdd54d3c1d416984*
+
+Divergent, and divergent on `identity/version` and `normative specification` themselves —
+`ARCH-002`'s first two contents and the two `PKG-007` names directly: `Check_Completeness_
+Mirrors` cites a versioned governing record through `nomos_rules::CONTRACT_RECORD` /
+`CONTRACT_RECORD_VERSION` (`"D-134"`, version 2), mechanically checked against that record's
+own front matter by `tests/contract/tests/rule_contract_citation.rs`. `Check_Naming_
+Convention` deliberately has neither — its own module doc's `# Why this has no
+CONTRACT_RECORD` section states its contract is `README.md`'s Conventions section, prose
+with no `version:` field the citation mechanism could read, and that `PKG-014`'s
+traceability requirement is accordingly not mechanically checked for it, "the same way it was
+not checked for the first one before that citation existed." This is not a superficial
+difference the way a naming or module-layout choice would be: `nomos_rules::CONTRACT_RECORD`
+is a single crate-level constant today, not a per-rule field, so the citation mechanism itself
+is singular and already shaped around exactly one rule having a versioned contract. A second
+rule that structurally lacks one is the concrete case `ARCH-002`'s independent-versioning
+requirement and `PKG-007`'s four version domains assume will not happen — a manifest domain
+built from `mirror.rs`'s shape alone would have a `contract_record`/`contract_record_version`
+pair with nothing for `Check_Naming_Convention` to put in it.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#22
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Resolution · hash: sha256:441ca6962cd7749b9c9c3e0a6e872a2916983f0db63ab8321eba3fca940296ce*
+
+That is the second outcome this record's own "What Would Decide It" section named: the
+second rule's shape diverges enough from `Check_Completeness_Mirrors`'s that no single schema
+built from the first alone would have fit it. The wait was load-bearing, not merely cautious.
+No `nomos-rule-package` crate is scaffolded now.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#23
+
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Resolution · hash: sha256:ca0b39ec9fc7a6c93efe827d727d04b0383f4d5deb33a70d127027adb2d43e08*
+
+One prediction that section made does not hold, and is corrected here rather than left to
+read as settled: it stated "either outcome also gives `PackageKind::RulePackage` the first
+consumer `OD-PACKAGE-001` said it was waiting for." That is true of the outcome not taken —
+scaffolding a wrapper crate with a reader that resolves `PackageKind::RulePackage` would have
+been a real consumer — but not of this one. Declining to build leaves `RulePackage` exactly
+as unconsumed as `OD-PACKAGE-001` and `crates/contracts/nomos-contracts/src/package.rs`'s own
+module doc already found: no manifest, no reader, no `PackageId` constructed. That half of the
+condition recorded on `PackageKind` stays open, and this resolution does not close it.
+
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#24
+
 *revision: authored · kind: heading · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#19
+### docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#25
 
-*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:58415abf218f40e58a4a92c76633afd0b8538329610640a7f920ae6c1104e195*
+*revision: authored · kind: prose · heading: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one / Status · hash: sha256:c0e5c21cc4148d2bfacaee3388645a82c761364a31209e3208196b812510de2f*
 
-Open. Revisit when a second rule (function or crate) is added under `crates/rules/`, or if
-`ARCH-002`'s contents list is found to need a manifest sooner for a reason unrelated to rule
-count. Recorded here so the asymmetry between `ARCH-001`'s now-satisfied mechanism and
-`ARCH-002`'s untouched one is legible rather than silently inherited by whichever item next
-touches `crates/rules/nomos-rules` or `crates/contracts/nomos-contracts/src/package.rs`.
+Accepted. The trigger this record named — a second rule under `crates/rules/` — has arrived
+and was compared against the first on real evidence: the two converge on capability
+requirements, judgment shape and evidence schema, and diverge on identity/version and
+normative specification, the two contents `ARCH-002` and `PKG-007` name first. `RulePackage`
+stays a bare rule bounded to what has been observed rather than gaining a manifest crate.
+Revisit again if a third rule, or `Check_Naming_Convention` itself, is found to need a
+version-bearing contract citation — the concrete case that would mean the population this
+resolution reasoned from was mid-transition rather than settled — or if `ARCH-002`'s contents
+list is found to need a manifest sooner for a reason unrelated to rule count.
 
 ### docs/records/OD-PACKAGE-009-the-manifest-json-carries-its-own-schema-version-distinct-from-pkg-007s-four-content-domains.md#1
 

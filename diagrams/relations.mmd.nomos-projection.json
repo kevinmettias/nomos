@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:ebc7f7e36b7ff831e21e483de1d241110edfcd6967681613ad749ac68bfee82d",
-  "inputs_digest": "sha256:5f8a8ee02d35d8ace33f08a7166431ef39cc391aa3792b037c513b213f35e06e",
+  "content_digest": "sha256:dafe85f9615bc385bf287e8e91398f0de574fb07472d8f7e2a9f03ecd654bc4c",
+  "inputs_digest": "sha256:6c720fcc0608ddb6131c4f5041e18a6be332892a151505165a76f77ff6119db7",
   "sections": [
     [
       "Relations",
-      882
+      884
     ],
     [
       "Decisions",
@@ -655,6 +655,11 @@
       "content": "relations",
       "identity": "D-134 relates-to OD-PACKAGE-006",
       "hash": "sha256:29aecec77e72ae16a7e8392db8a1cb4b11b9298bd75b32c364f6f38cad45d078"
+    },
+    {
+      "content": "relations",
+      "identity": "D-134 relates-to OD-PACKAGE-008",
+      "hash": "sha256:3afccaeb035e90e5ac7db4785c48ea99ed6fc07b31d239915458a6ec8e1be8dd"
     },
     {
       "content": "relations",
@@ -3450,6 +3455,11 @@
       "content": "relations",
       "identity": "OD-PACKAGE-007 relates-to OD-PACKAGE-009",
       "hash": "sha256:0602cc292113e3d560ec9e20947f5a9a019cf930766646688377632df8a71eef"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-008 relates-to D-134",
+      "hash": "sha256:be5dbf1e09130bc568af6330b222997af54712737878dbc0f45e59e1c86bebab"
     },
     {
       "content": "relations",

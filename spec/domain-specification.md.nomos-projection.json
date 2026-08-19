@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1aca6ea52f13c6484d9a27853f89a052fead03f076c2ecb8e0a18c61b888ff15",
-  "inputs_digest": "sha256:a70060f993d6724bf2c61e7d72818e495bf10e2be720a5c441db66d4fb5a8358",
+  "content_digest": "sha256:639968d7753f856f0ca40c2bb0de2ca59dabde7302bea46800bd12d50ef99055",
+  "inputs_digest": "sha256:3f854e2da998f546332cbc7bba5f472fd5374cd2e67481a0cef5c65cd8fecaac",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      1166
+      1167
     ],
     [
       "Source blocks",
-      4189
+      4195
     ]
   ],
   "inputs": [
@@ -523,7 +523,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md@authored",
-      "hash": "sha256:6b5a01da7549134b0f7cce0d44245687e46660f6e07242861e692c30522e7d3f"
+      "hash": "sha256:1093eeee323b45e67655bf6800dfe6effa8f0c561ed1f34ca89791aecfc04fba"
     },
     {
       "content": "documents",
@@ -5028,7 +5028,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18",
-      "hash": "sha256:f3e2627ca09599716fff6d0e14d7398ec5dcbe7973b15624b989c41b98983842"
+      "hash": "sha256:dee17932f461467ee1943f26ae7526e38a5851647cb6185eb15c01e53b14c27a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#24",
+      "hash": "sha256:5e477b4d1fa4e73c58dff9e0ebc6b4cf2ae90c8ad3904c95039edb2194580c17"
     },
     {
       "content": "headings",
@@ -22188,12 +22193,42 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#18",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5d8184015dfef929c99053e3163c9dcd5080bb6652e3bcaddfdecb6fe0ddab17"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#19",
-      "hash": "sha256:58415abf218f40e58a4a92c76633afd0b8538329610640a7f920ae6c1104e195"
+      "hash": "sha256:35b06c3f9bd460f4d7f17db26b38802cc793c68a9fd92541b966c8779016da35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#20",
+      "hash": "sha256:9167da989ca863909d23ec07996e4b93d22a76ecb095de5c1a0d734b541655e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#21",
+      "hash": "sha256:a6344258f55b694cec64db861f9e9d02037592aa29007c7dfdd54d3c1d416984"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#22",
+      "hash": "sha256:441ca6962cd7749b9c9c3e0a6e872a2916983f0db63ab8321eba3fca940296ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#23",
+      "hash": "sha256:ca0b39ec9fc7a6c93efe827d727d04b0383f4d5deb33a70d127027adb2d43e08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#24",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-008-whether-rulepackage-needs-its-manifest-crate-now-that-nomos-package-exists.md#25",
+      "hash": "sha256:c0e5c21cc4148d2bfacaee3388645a82c761364a31209e3208196b812510de2f"
     },
     {
       "content": "blocks",

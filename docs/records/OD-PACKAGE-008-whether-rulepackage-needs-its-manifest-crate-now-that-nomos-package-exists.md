@@ -2,8 +2,8 @@
 id: OD-PACKAGE-008
 type: decision
 title: Whether RulePackage needs its manifest crate now that nomos-package exists, or stays a bare rule bounded to a population of one
-status: open
-version: 2
+status: accepted
+version: 3
 authority: canonical-normative-record
 tags:
   - packages
@@ -15,6 +15,8 @@ relations:
   - target: OD-PACKAGE-006
     type: relates-to
   - target: OD-PACKAGE-007
+    type: relates-to
+  - target: D-134
     type: relates-to
 ---
 
@@ -149,10 +151,65 @@ alone would have fit it — in which case the wait was load-bearing rather than 
 Either outcome also gives `PackageKind::RulePackage` the first consumer `OD-PACKAGE-001` said
 it was waiting for, closing that half of the condition recorded on `PackageKind` itself.
 
+## Resolution
+
+Accepted, on the trigger this record itself named. `crates/rules/nomos-rules/src/naming.rs`
+(`Check_Naming_Convention`, `P13-RULE-NAMING-CONVENTION`) is now the second rule this record
+waited for, and the field-by-field comparison against `ARCH-002`'s contents list is possible
+on real evidence rather than a population of one.
+
+The two rules converge on some fields and diverge sharply on others, and the divergence lands
+exactly where `ARCH-002` and `PKG-007` care most. Convergent: both state
+`required canonical capabilities` as `crate::Syntax_Requirement()`, unchanged between them;
+both carry a `deterministic judgment implementation` of the same shape, a pure function of
+`&[SourceFile]` and a `FactReader` returning `Vec<Finding>`; both use the same
+`evidence schema`, `EvidenceClass::Derived`; neither has an `optional enhanced
+implementation`, an `external diagnostic mapping`, or a `correction and suppression
+contract`; both carry `examples/counterexamples` only as hand-written fixture text inside
+their own `#[cfg(test)]` modules, not as an external evaluation corpus — `mirror.rs`'s three
+historical instances live in its own test fixtures the same way `naming.rs`'s do, so this is
+convergence in shape, not merely absence in both.
+
+Divergent, and divergent on `identity/version` and `normative specification` themselves —
+`ARCH-002`'s first two contents and the two `PKG-007` names directly: `Check_Completeness_
+Mirrors` cites a versioned governing record through `nomos_rules::CONTRACT_RECORD` /
+`CONTRACT_RECORD_VERSION` (`"D-134"`, version 2), mechanically checked against that record's
+own front matter by `tests/contract/tests/rule_contract_citation.rs`. `Check_Naming_
+Convention` deliberately has neither — its own module doc's `# Why this has no
+CONTRACT_RECORD` section states its contract is `README.md`'s Conventions section, prose
+with no `version:` field the citation mechanism could read, and that `PKG-014`'s
+traceability requirement is accordingly not mechanically checked for it, "the same way it was
+not checked for the first one before that citation existed." This is not a superficial
+difference the way a naming or module-layout choice would be: `nomos_rules::CONTRACT_RECORD`
+is a single crate-level constant today, not a per-rule field, so the citation mechanism itself
+is singular and already shaped around exactly one rule having a versioned contract. A second
+rule that structurally lacks one is the concrete case `ARCH-002`'s independent-versioning
+requirement and `PKG-007`'s four version domains assume will not happen — a manifest domain
+built from `mirror.rs`'s shape alone would have a `contract_record`/`contract_record_version`
+pair with nothing for `Check_Naming_Convention` to put in it.
+
+That is the second outcome this record's own "What Would Decide It" section named: the
+second rule's shape diverges enough from `Check_Completeness_Mirrors`'s that no single schema
+built from the first alone would have fit it. The wait was load-bearing, not merely cautious.
+No `nomos-rule-package` crate is scaffolded now.
+
+One prediction that section made does not hold, and is corrected here rather than left to
+read as settled: it stated "either outcome also gives `PackageKind::RulePackage` the first
+consumer `OD-PACKAGE-001` said it was waiting for." That is true of the outcome not taken —
+scaffolding a wrapper crate with a reader that resolves `PackageKind::RulePackage` would have
+been a real consumer — but not of this one. Declining to build leaves `RulePackage` exactly
+as unconsumed as `OD-PACKAGE-001` and `crates/contracts/nomos-contracts/src/package.rs`'s own
+module doc already found: no manifest, no reader, no `PackageId` constructed. That half of the
+condition recorded on `PackageKind` stays open, and this resolution does not close it.
+
 ## Status
 
-Open. Revisit when a second rule (function or crate) is added under `crates/rules/`, or if
-`ARCH-002`'s contents list is found to need a manifest sooner for a reason unrelated to rule
-count. Recorded here so the asymmetry between `ARCH-001`'s now-satisfied mechanism and
-`ARCH-002`'s untouched one is legible rather than silently inherited by whichever item next
-touches `crates/rules/nomos-rules` or `crates/contracts/nomos-contracts/src/package.rs`.
+Accepted. The trigger this record named — a second rule under `crates/rules/` — has arrived
+and was compared against the first on real evidence: the two converge on capability
+requirements, judgment shape and evidence schema, and diverge on identity/version and
+normative specification, the two contents `ARCH-002` and `PKG-007` name first. `RulePackage`
+stays a bare rule bounded to what has been observed rather than gaining a manifest crate.
+Revisit again if a third rule, or `Check_Naming_Convention` itself, is found to need a
+version-bearing contract citation — the concrete case that would mean the population this
+resolution reasoned from was mid-transition rather than settled — or if `ARCH-002`'s contents
+list is found to need a manifest sooner for a reason unrelated to rule count.
