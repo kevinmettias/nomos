@@ -18912,6 +18912,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-BASELINE-SUPPRESSION-QUESTION",
+      "title": "Whether Gate's BaselinePolicy, SuppressionPolicy and adoption configuration are built now, or wait for a run verb that can observe their effect",
+      "why": "ARC-ROADMAP-001 names baselines/suppressions/adoption as near-term but does not order or scope them, and nomos-gate-orchestration/src/lib.rs already lists BaselinePolicy/SuppressionPolicy among the WF-001 clauses this crate's first increment deliberately does not touch -- but nothing states this as an open decision with a trigger the way OD-GATE-014 does for ScopeSelector/RuleSelector. Verified directly: GatePlan (outcome.rs) is report-only ('what a gate would evaluate, without evaluating it'), Finding::Can_Fail_A_Build (nomos-contracts/src/finding.rs:95-98) has no suppression hook, and nomos-corrections has no debt-tracking concept to hang a baseline off -- there is no caller today that either policy type could observably affect. The v14 corpus specifies this far more richly than ARC-ROADMAP-001's one-line bullet: 14 requirements across four families (SUP-*, SUP-EVID-*, BASELINE-*, ADOPT-CONFIG-*), none of which overlap OD-TRACE-002's six formally assessed entries, checked directly against the corpus and against OD-TRACE-002.",
+      "done_when": "A new OD-GATE decision record, sibling in shape to OD-GATE-014, states the question, cites the corpus's four requirement families and their requirement counts, gives its current-position reasoning (no caller can observe either policy's effect while GatePlan is report-only and Can_Fail_A_Build has no suppression hook), names its trigger (Gate gaining a run verb, the same second trigger OD-GATE-014 already names), and states plainly that baseline, suppression and adoption are three separable concerns that should reopen as up to three build items rather than one when the trigger fires -- registered as governing, related to ARC-ROADMAP-001 and OD-GATE-014, with diagram-set and domain-specification re-rendered fresh from the publishing record set.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-015.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Census_Should_Narrow_To_One_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-24e890adbbdbd7ff.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03e4f2f6b2b5235a.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6f45b4c663e8f582.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-cccb4093ee8d4117.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c30a05f2ef47daed.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-50863f332dc9a75e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-06bc2ccbc9aebf45.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-f701bf4e7baf7e3d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-e9fd68fc190e7ac8.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-9a4c16cab1f4ab9b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787161263,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a45f09bbfcf2c4c289f5a42086cc36ccccf820e1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

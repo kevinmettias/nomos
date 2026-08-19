@@ -58,6 +58,7 @@ graph LR
     arc_roadmap_001 -->|"relates-to"| od_analysis_008["OD-ANALYSIS-008"]
     arc_roadmap_001 -->|"relates-to"| od_gate_004["OD-GATE-004"]
     arc_roadmap_001 -->|"relates-to"| od_gate_014["OD-GATE-014"]
+    arc_roadmap_001 -->|"relates-to"| od_gate_015["OD-GATE-015"]
     arc_roadmap_001 -->|"relates-to"| od_package_008["OD-PACKAGE-008"]
     arc_roadmap_001 -->|"relates-to"| od_rules_001["OD-RULES-001"]
     arc_roadmap_001 -->|"relates-to"| od_rules_002["OD-RULES-002"]
@@ -158,6 +159,7 @@ graph LR
     d_135 -->|"relates-to"| od_analysis_008
     d_135 -->|"relates-to"| od_capability_007["OD-CAPABILITY-007"]
     d_135 -->|"relates-to"| od_gate_014
+    d_135 -->|"relates-to"| od_gate_015
     d_135 -->|"relates-to"| od_host_004
     d_135 -->|"relates-to"| od_rules_004["OD-RULES-004"]
     d_135 -->|"relates-to"| od_rules_005["OD-RULES-005"]
@@ -432,7 +434,11 @@ graph LR
     od_gate_013 -->|"relates-to"| od_gate_011
     od_gate_014 -->|"relates-to"| arc_roadmap_001
     od_gate_014 -->|"relates-to"| d_135
+    od_gate_014 -->|"relates-to"| od_gate_015
     od_gate_014 -->|"relates-to"| od_host_004
+    od_gate_015 -->|"relates-to"| arc_roadmap_001
+    od_gate_015 -->|"relates-to"| d_135
+    od_gate_015 -->|"relates-to"| od_gate_014
     od_host_001["OD-HOST-001"] -->|"relates-to"| od_host_002["OD-HOST-002"]
     od_host_001 -->|"relates-to"| od_host_003["OD-HOST-003"]
     od_host_001 -->|"relates-to"| od_host_004
@@ -992,6 +998,7 @@ graph LR
     od_gate_012
     od_gate_013
     od_gate_014
+    od_gate_015
     od_host_001
     od_host_002
     od_host_003
