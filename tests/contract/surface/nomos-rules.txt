@@ -1,6 +1,8 @@
 pub const nomos_rules::COMPLETENESS_MIRROR: &str
 pub const nomos_rules::CONTRACT_RECORD: &str
 pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD: &str
+pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::DEPENDENCY_DIRECTION: &str
 pub const nomos_rules::NAMING_CONVENTION: &str
 pub enum nomos_rules::Reading

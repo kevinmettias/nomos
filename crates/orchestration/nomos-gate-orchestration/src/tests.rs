@@ -2,7 +2,7 @@
 
 use crate::{GateCommand, GateOutcome, Run};
 use nomos_contracts::RuleId;
-use nomos_rules::{COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION, NAMING_CONVENTION};
+use nomos_rules::{COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION, NAMING_CONVENTION};
 use std::path::PathBuf;
 
 fn Command() -> GateCommand
@@ -10,8 +10,12 @@ fn Command() -> GateCommand
     return GateCommand { root: PathBuf::from(".") };
 }
 
+/// The whole plan, by identity and in `RuleId` order, rather than by length. A count agrees
+/// with itself: this registry composed two of the three shipped rules until
+/// `P13-GATE-REGISTRY-THIRD-RULE`, and an assertion on `plan.rules.len()` would have been
+/// green throughout.
 #[test]
-fn Test_A_Plan_Should_Hold_Both_Shipped_Rules()
+fn Test_A_Plan_Should_Hold_All_Three_Shipped_Rules()
 {
     let GateOutcome::Planned(plan) = Run(&Command())
     else
@@ -22,9 +26,36 @@ fn Test_A_Plan_Should_Hold_Both_Shipped_Rules()
     let ids: Vec<RuleId> = plan.rules.iter().map(|offer| return offer.rule.clone()).collect();
     assert_eq!(
         ids,
-        vec![RuleId::New(COMPLETENESS_MIRROR), RuleId::New(NAMING_CONVENTION)],
+        vec![
+            RuleId::New(COMPLETENESS_MIRROR),
+            RuleId::New(DEPENDENCY_DIRECTION),
+            RuleId::New(NAMING_CONVENTION)
+        ],
         "in RuleId order: {ids:?}"
     );
+}
+
+/// `Check_Dependency_Direction` cites a versioned record, unlike `Check_Naming_Convention`'s
+/// sentinel, so its offer carries the real citation rather than a placeholder.
+/// `tests/contract/tests/rule_contract_citation.rs` is what keeps that citation honest against
+/// `OD-RULES-003`'s own front matter; this asserts the offer carries it at all.
+#[test]
+fn Test_The_Dependency_Rule_Should_Carry_Its_Real_Contract_Citation()
+{
+    let GateOutcome::Planned(plan) = Run(&Command())
+    else
+    {
+        panic!("this crate's own registration must not be contradictory");
+    };
+
+    let dependency = plan
+        .rules
+        .iter()
+        .find(|offer| return offer.rule == RuleId::New(DEPENDENCY_DIRECTION))
+        .expect("the dependency rule must be registered");
+
+    assert_eq!(dependency.contract_record, DEPENDENCY_CONTRACT_RECORD);
+    assert_eq!(dependency.contract_record_version, DEPENDENCY_CONTRACT_RECORD_VERSION);
 }
 
 #[test]

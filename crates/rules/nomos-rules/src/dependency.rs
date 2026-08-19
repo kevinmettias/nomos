@@ -44,6 +44,26 @@ use nomos_contracts::{
 /// This rule's own identifier.
 pub const DEPENDENCY_DIRECTION: &str = "dependency-direction";
 
+/// The record this implementation's contract is written in.
+///
+/// `PKG-014` requires every rule implementation be traceable to one contract version and
+/// mechanically checked for consistency with it, and `OD-PACKAGE-001` measured what happens
+/// without it: the requirement sits asserted in the record's own prose and nowhere in the
+/// crate that implements it. `tests/contract/tests/rule_contract_citation.rs` reads
+/// `OD-RULES-003`'s own front matter on every run and compares it against
+/// [`DEPENDENCY_CONTRACT_RECORD_VERSION`], so an amendment this implementation has not caught
+/// up to is a red test rather than silent drift.
+///
+/// The name carries the rule's prefix where `mirror.rs`'s [`crate::CONTRACT_RECORD`] does
+/// not. That asymmetry is deliberate: the unprefixed pair was this crate's only citation when
+/// it was written and is published, and renaming a published constant for symmetry is churn
+/// with no defect behind it. A third cited rule is the point at which extracting a shared
+/// citation shape stops being a generalization from two.
+pub const DEPENDENCY_CONTRACT_RECORD: &str = "OD-RULES-003";
+
+/// The version of [`DEPENDENCY_CONTRACT_RECORD`] this implementation was written against.
+pub const DEPENDENCY_CONTRACT_RECORD_VERSION: u32 = 1;
+
 /// This workspace's own declared architecture, copied from
 /// `tests/contract/tests/boundaries/bands.rs`'s `BANDS` at the time this rule was
 /// written. See this module's own doc comment for why a copy and not a shared source.

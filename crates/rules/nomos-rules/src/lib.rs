@@ -82,7 +82,7 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 
 pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
 pub use declared_universe::DeclaredUniverse;
-pub use dependency::{Check_Dependency_Direction, DEPENDENCY_DIRECTION};
+pub use dependency::{Check_Dependency_Direction, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION};
 pub use naming::{Check_Naming_Convention, NAMING_CONVENTION};
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};

@@ -19209,6 +19209,75 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-GATE-REGISTRY-THIRD-RULE",
+      "title": "Gate's registry composes two of the three shipped rules, so nomos gate plan and nomos check disagree about what this workspace enforces",
+      "why": "Measured at 21838d4, not inferred. `nomos gate plan` prints `rules: 2`. `nomos-check-orchestration::run::Run` calls three -- Check_Completeness_Mirrors, Check_Naming_Convention and Check_Dependency_Direction, the last wired by P13-DEPENDENCY-WIRE-1. `nomos-gate-orchestration::composition::Registered` offers only the first two; DEPENDENCY_DIRECTION is exported from nomos_rules and never offered.\n\nGate's own lib.rs is honest about this and names it as separate work its increment did not do. Nothing else is. The board carries no item for it, and the board is otherwise empty -- so the one acknowledged gap in the newest crate is undiscoverable through the only place that is supposed to make work discoverable. That is the register the ledger exists to be.\n\nIt is also OD-GATE-001's shape. GatePlan is the answer to 'what rules exist' and it is now a smaller answer than the run it describes, which is worse than no answer: a caller reading the plan concludes dependency direction is unenforced when it is enforced on every check.\n\nFour commits on 2026-08-19 swept the three-rule count through nomos-rules' lib.rs, dependency.rs, OD-RULES-007, OD-GATE-014, nomos-add-plugin and gate's lib.rs. The sweep corrected prose and left two claims standing: composition.rs's own function doc still says 'Registers this workspace's two shipped rules', and README.md's band table still says nomos-lang-rust-cargo is 'Not yet composed into nomos-check-orchestration::Run' when it is composed -- Cargo dependency, Provider_Offer, Materialize_Workspace and the rule call are all present. tests/contract asserts the band structure, not that sentence, which is why nothing caught it.\n\nThe citation is the part that is not merely mechanical. RuleOffer requires contract_record and contract_record_version. OD-PACKAGE-001 measured that an uncited rule left PKG-014's traceability requirement asserted in prose and nowhere in the crate, and tests/contract/tests/rule_contract_citation.rs is the mechanical check that closed it for D-134. Registering the third rule with an inline version literal nobody checks would reopen exactly that, one rule later. OD-RULES-003 is this rule's contract and it is a versioned record, so it can be cited properly, unlike Check_Naming_Convention's README.md sentinel.",
+      "done_when": "`nomos gate plan` reports three rules, and the plan's contents are asserted rather than counted.\n\nCheck_Dependency_Direction cites OD-RULES-003 by constants beside the rule, the shape mirror.rs already uses, not by a literal in the composition root. A version cited in a composition root drifts silently; a version cited beside the implementation is where whoever amends the record will be looking.\n\nThat citation is mechanically checked. rule_contract_citation.rs checks both shipped citations against the records' own front matter, not one of them, so the second is not a claim nothing verifies. Its own module doc says 'one shipped rule' and stops being true here.\n\ncomposition.rs's function doc names three. The gate crate's own test stops being named Test_A_Plan_Should_Hold_Both_Shipped_Rules and asserts all three RuleOffers, in RuleId order, with the dependency rule's citation among them.\n\nREADME.md's nomos-lang-rust-cargo row stops saying the provider is not composed.\n\nThe nomos-rules surface snapshot carries the new constants.\n\nNot closed by registering the rule and leaving the citation unchecked, and not closed by editing the doc sentences without changing what Registered returns.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/rules/nomos-rules/src/dependency.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "d; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos\\tests\\contract)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-ba26010218b9369a.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-b6a919c83495906a.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-9b4ba99267ad7b29.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-79a1d447f8c6147f.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-2bd85cba02738766.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-159e2fe69a5ad412.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-917d8b08d0dd1ebc.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-d0efddf1c4b552cb.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-977598538a0d39a5.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b8a0b605f044d8b0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-19fcd04039452cd8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-5ee5782d7d98a48e.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_rules\n",
+        "verified_at": 1787162732,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "21838d4fc95c5e1662bbc629e5dde2e14d7459a5"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

@@ -1,5 +1,5 @@
-//! `nomos-rules`' one shipped rule cites the record and version its contract was
-//! implemented against, and this checks the citation rather than trusting it.
+//! Every `nomos-rules` rule that cites a versioned contract cites one that exists, at the
+//! version the record itself declares -- checked rather than trusted.
 //!
 //! `OD-PACKAGE-001` measured that `RuleId::New(COMPLETENESS_MIRROR)` cited no contract
 //! version anywhere, which left `PKG-014`'s traceability requirement -- "mechanically
@@ -8,31 +8,81 @@
 //! and `CONTRACT_RECORD_VERSION` are the citation; this file is the mechanical check, so an
 //! amendment to `D-134` the implementation has not caught up to is a red test rather than a
 //! silent drift.
+//!
+//! [`CITATIONS`] is why this file iterates rather than naming one rule. Written for the
+//! mirror rule alone, it stayed green while `Check_Dependency_Direction` shipped and was
+//! composed into `nomos check`, because a check aimed at one subject cannot notice a second
+//! -- the shape `Check_Completeness_Mirrors` itself exists to catch in declared lists.
+//! `Check_Naming_Convention` is deliberately absent: `naming.rs`'s own "why this has no
+//! `CONTRACT_RECORD`" section says its contract is `README.md` prose, and a record-less rule
+//! has no front matter to compare against. That absence is a fact about the rule, not a hole
+//! in this file, and a fourth rule carrying a real record means a row below.
 
 use nomos_contract_tests::Workspace;
 use std::path::Path;
 
-/// The cited version must match the record's own front matter, or the citation is a claim
+/// Every rule citation in `nomos-rules`: the constant's own name, the record it names, and
+/// the version it claims that record is at.
+///
+/// The name is carried so a failure says which citation is wrong rather than only which
+/// record it was wrong about.
+const CITATIONS: &[(&str, &str, u32)] = &[
+    (
+        "nomos_rules::CONTRACT_RECORD",
+        nomos_rules::CONTRACT_RECORD,
+        nomos_rules::CONTRACT_RECORD_VERSION,
+    ),
+    (
+        "nomos_rules::DEPENDENCY_CONTRACT_RECORD",
+        nomos_rules::DEPENDENCY_CONTRACT_RECORD,
+        nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION,
+    ),
+];
+
+/// Every cited version must match its record's own front matter, or the citation is a claim
 /// nothing verifies.
 #[test]
-fn Test_The_Cited_Version_Should_Match_The_Records_Own_Front_Matter()
+fn Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter()
 {
     let root = Workspace::Workspace_Root();
-    let version = Record_Version(&root, nomos_rules::CONTRACT_RECORD).unwrap_or_else(|| {
-        panic!(
-            "no document under docs/records/ starting with \"{}-\" declares a front-matter \
-             version",
-            nomos_rules::CONTRACT_RECORD
-        )
-    });
 
+    for (constant, record, cited) in CITATIONS
+    {
+        let version = Record_Version(&root, record).unwrap_or_else(|| {
+            panic!(
+                "no document under docs/records/ named {record}- declares a front-matter \
+                 version, so {constant} cites nothing checkable"
+            )
+        });
+
+        assert_eq!(
+            version, *cited,
+            "{constant} cites {record} version {cited}, but the record itself is now at \
+             version {version}. The rule's contract citation has not caught up to the \
+             amendment."
+        );
+    }
+}
+
+/// The control the iteration needs. A citation table that has fallen behind the rules it
+/// covers cannot be told from a complete one by reading it, so the row count is stated here
+/// and has to be raised deliberately.
+///
+/// Not a mirror in `Check_Completeness_Mirrors`' sense -- there is no fact to resolve a Rust
+/// constant list against -- but the same failure that rule exists to prevent: a row silently
+/// missing, and every assertion above passing by not looking at it. This file was written
+/// for one rule and stayed green through a second shipping.
+#[test]
+fn Test_The_Citation_Table_Should_Cover_Every_Cited_Rule()
+{
     assert_eq!(
-        version, nomos_rules::CONTRACT_RECORD_VERSION,
-        "nomos_rules::CONTRACT_RECORD_VERSION cites {} version {}, but the record itself is \
-         now at version {version}. The rule's contract citation has not caught up to the \
-         amendment.",
-        nomos_rules::CONTRACT_RECORD,
-        nomos_rules::CONTRACT_RECORD_VERSION
+        CITATIONS.len(),
+        2,
+        "nomos-rules ships three rules, two of which cite a versioned record: \
+         Check_Completeness_Mirrors cites D-134 and Check_Dependency_Direction cites \
+         OD-RULES-003. Check_Naming_Convention cites README.md prose and has no front matter \
+         to compare against. A rule added with a real record needs a row in CITATIONS and \
+         this number raised with it."
     );
 }
 
@@ -73,20 +123,21 @@ fn Write_Fixture_Record(root: &Path, record: &str, version: u32)
     std::fs::write(path, text).expect("writes a fixture record");
 }
 
-/// The record must still exist under the identifier `nomos-rules` cites, or the version
+/// Every cited record must still exist under the identifier it is cited by, or the version
 /// comparison above is quietly reading nothing.
 #[test]
-fn Test_The_Cited_Record_Should_Still_Exist()
+fn Test_Every_Cited_Record_Should_Still_Exist()
 {
     let root = Workspace::Workspace_Root();
 
-    assert!(
-        Record_Path(&root, nomos_rules::CONTRACT_RECORD).is_some(),
-        "nomos_rules::CONTRACT_RECORD names {}, but no document under docs/records/ starts \
-         with \"{}-\"",
-        nomos_rules::CONTRACT_RECORD,
-        nomos_rules::CONTRACT_RECORD
-    );
+    for (constant, record, _) in CITATIONS
+    {
+        assert!(
+            Record_Path(&root, record).is_some(),
+            "{constant} names {record}, but no document under docs/records/ has a filename \
+             starting with it"
+        );
+    }
 }
 
 /// The document under `docs/records/` whose filename starts with `{record}-`.

@@ -18,11 +18,12 @@
 //! (`OD-RULES-004`) -- its own module doc says plainly that nothing consults it. This crate is
 //! `Gate`'s own seam, the same shape `nomos-work-orchestration`, `nomos-check-orchestration`
 //! and `nomos-spec-orchestration` each are for their own verb group, and its first increment
-//! gives `RuleRegistry` a real consumer: [`Run`] composes a real registry from two of this
-//! workspace's three shipped rules and reports what it holds as [`GatePlan`]. `Gate`'s own
-//! registry has not been extended to the third, `Check_Dependency_Direction` -- that is real,
-//! current behavior, not a doc bug, and closing it is separate work this increment does not
-//! do.
+//! gives `RuleRegistry` a real consumer: [`Run`] composes a real registry from all three of
+//! this workspace's shipped rules and reports what it holds as [`GatePlan`]. It composed only
+//! two until `P13-GATE-REGISTRY-THIRD-RULE`, which is worth keeping written down: a plan
+//! smaller than the run it describes reads as "dependency direction is unenforced" to a
+//! caller for whom it is enforced on every check, so the registry being *whole* is the claim
+//! here, not the registry merely existing.
 //!
 //! # What this increment is not
 //!
