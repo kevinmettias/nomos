@@ -19,17 +19,19 @@ use crate::board::{Claimed, Project_Onto_Records, Saved, Unclaimed_Copy, Writer_
 ///
 /// `OD-LEDGER-007` records the restatement and why the stronger property was given up
 /// rather than manufactured.
+///
+/// It no longer refuses a board with fewer than two writers. "Every record writer can be
+/// claimed at once" is true of a board with one and true of a board with none, and
+/// `OD-LEDGER-032` measured what demanding otherwise cost: red on 26 of the last 30 commits,
+/// for a reason no commit contained. The teeth are proved on a constructed subject instead
+/// — `super::sharing_a_record::Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused`
+/// builds two writers on one record and requires the refusal, so this passing over an empty
+/// board is not the same as nothing being checked anywhere.
 #[test]
 fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
 {
     let mut document = Unclaimed_Copy();
     let writers = Writer_Ids(&document);
-    assert!(
-        writers.len() >= 2,
-        "fewer than two open record writers, so a claim of independence would be a claim \
-         about nothing; got {}",
-        writers.len()
-    );
     Project_Onto_Records(&mut document, &writers);
 
     // Every one of them, not a pair. A pair could be independent by accident; all of them

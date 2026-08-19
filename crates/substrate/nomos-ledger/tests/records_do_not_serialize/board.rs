@@ -130,27 +130,71 @@ pub(crate) fn Claimed(ledger: &mut Board, writer: &ItemId, agent: &str, blame: &
 /// shared reading is what every ledger these tests open is read against.
 static AT_NOW: FixedClock = FixedClock(NOW);
 
-/// The board, and the identifiers of the first two open items that write records.
+/// A board holding two open record writers, and their identifiers.
 ///
 /// Every contest below needs exactly this: a copy nobody holds, and two writers to set
-/// against each other. A board without two of them cannot host a contest, so that is a
-/// panic rather than a test that passes having contested nothing.
+/// against each other. The pair is *constructed* rather than taken from the live board,
+/// which `OD-LEDGER-032` decided and which costs nothing here: both callers overwrite both
+/// territories before contesting anything, so neither ever read what the real items
+/// reserved. Borrowing them made the contest possible only while somebody happened to be
+/// mid-work, and impossible on a board at rest.
+///
+/// This is not the same choice as `OD-LEDGER-004`'s. That record reads the *real* board
+/// where the real board is the subject — what the items actually say — and this is not one
+/// of those places.
 pub(crate) fn Two_Record_Writers() -> (LedgerDocument, ItemId, ItemId)
 {
-    let document = Unclaimed_Copy();
-    let writers: Vec<ItemId> = Record_Writers(&document)
-        .iter()
-        .map(|item| return item.id.clone())
-        .take(2)
-        .collect();
+    let document = Constructed_Writers(2);
+    let writers = Writer_Ids(&document);
 
     let (Some(first), Some(second)) = (writers.first().cloned(), writers.get(1).cloned())
     else
     {
-        panic!("the board must hold two open record writers for a contest to be possible")
+        panic!("a board this function built with two writers must hold two")
     };
 
     return (document, first, second);
+}
+/// A board carrying exactly `count` open record writers, constructed rather than borrowed.
+///
+/// `OD-LEDGER-032` is why this exists. Every control in this file used to take its subject
+/// from `Unclaimed_Copy`, which meant a control could only prove the search had teeth on a
+/// board that happened to be busy. On a board at rest — the normal end state of finished
+/// work, and what CI checks out — the control found nothing to widen, reported nothing, and
+/// failed for a reason no commit contained.
+///
+/// Built from real items rather than from literals, so the shape stays whatever
+/// `LedgerItem` is today: a field added to that struct cannot leave this constructor
+/// compiling against a shape the real board no longer has. Every item is reopened as
+/// `Ready`, stripped of its claim and its dependencies, and pointed at a record of its own
+/// under a `docs/records/OD-CONSTRUCTED-` identifier that no real record uses.
+///
+/// # Panics
+///
+/// If the real ledger carries fewer than `count` items at all. It carries hundreds, and a
+/// board that did not could not have produced the defect this file measures.
+pub(crate) fn Constructed_Writers(count: usize) -> LedgerDocument
+{
+    let mut document = Real_Ledger();
+
+    assert!(
+        document.items.len() >= count,
+        "the real ledger must carry at least {count} items to build a subject from; got {}",
+        document.items.len()
+    );
+    document.items.truncate(count);
+
+    for (ordinal, item) in document.items.iter_mut().enumerate()
+    {
+        item.state = ItemState::Ready;
+        item.claim = None;
+        item.depends_on.clear();
+        item.blocked = None;
+        item.territory =
+            Territory::Of_Files([format!("{RECORD_DIRECTORY}/OD-CONSTRUCTED-{ordinal:03}")]);
+    }
+
+    return document;
 }
 
 /// Puts a doctored board on disk and lets two agents contest it, first come first served.

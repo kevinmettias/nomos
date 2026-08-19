@@ -106,6 +106,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md@authored | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md | authored | 22 | 8 | sha256:ab29d2a1225a5ff3aabc40822a8a4487b9d23f1d2a4be034ab7a664619f74a0e |
 | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md@authored | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md | authored | 20 | 8 | sha256:b9b8e8c69db8cd1669f9965df1e32ba0ee19634968e153e1d5bb50f6ed7e0d80 |
 | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md@authored | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md | authored | 15 | 7 | sha256:13bc9a8a9f32e0d46c78adb4f917e5bb47fc79932a8c2bcac5b1f19c0306e7e9 |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md@authored | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md | authored | 35 | 9 | sha256:8b99c94d98fdfc2f28901faef55e6d8589203ed121e1d8de16673266842cc199 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -978,6 +979,15 @@ profile: domain-specification
 | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#10 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#12 | authored | 2 | What Would Make This Stale |
 | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#14 | authored | 2 | Status |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#1 | authored | 1 | An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#12 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#18 | authored | 2 | The Precedent This Follows |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#21 | authored | 2 | What This Does Not Say |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#25 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#31 | authored | 2 | What Holds It |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#34 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -27258,6 +27268,283 @@ shares — the same condition that produced the entries this record removes.
 *revision: authored · kind: prose · heading: The crate-wide serializer register empties again when the pair forcing both of its entries reaches Done / Status · hash: sha256:ce796ce7803bc6081b932e6bcc5adf585a18599250a0cfcf0cdcc703a8e86f31*
 
 Closed by `P13-SERIALIZER-REGISTER-EMPTY`.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#1
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject · hash: sha256:9cd229e8c6834f06c7d1830db323221e638b816cc2a8ed2f9c73d1110421aa63*
+
+# An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#2
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#3
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / Question · hash: sha256:b37d8d81e7d57fad993bf95c95c29588e51abbf2e0b4d07a8e123c273d368d1c*
+
+`OD-LEDGER-004` decided that the acceptance suite for `P10-RECORD-LOCK` reads the repository's
+own `work/ledger.json` rather than a fixture, and the reasoning is right: "the defect was never
+in the comparison code, which had always compared paths correctly, so a fixture proving two
+invented territories disjoint would have passed on the day the board was fully blocked." The
+defect lived in what the items *said*, so the items are the subject.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#4
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / Question · hash: sha256:0fd3329ac7f8d4da103f2d4971611d54d67a7a43026af4bfa7d8753a9a54edcb*
+
+Anti-vacuity guards were then added on top, each demanding the board hold at least two open
+record-writing items. Nobody asked what those guards say about a board with nothing open.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#5
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / Question · hash: sha256:c23f83e95447c422f5353dd3f8c6b2ffed7b867646ab87d725e1cdc8b47199cb*
+
+A board with nothing open is not an edge case. It is what finished work looks like, and it is
+what CI checks out, because the ledger is a file in the tree.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#6
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#7
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Measured · hash: sha256:323d6ff5beaa2d401d9b4882310b726183cf4b8299ac4967331a6e0cfc0bd2f9*
+
+Every commit's own committed `work/ledger.json` was read and its open items whose territory
+reserves anything under `docs/records` were counted, over the last thirty commits of `dev`:
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#8
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Measured · hash: sha256:9a79bcac156e012fb8913bc81c516891cc6a0e72e911092fcfaf9f7b10bd7d0a*
+
+| Open record writers in the committed ledger | Commits |
+|---|---|
+| 0 or 1 | **26 of 30** |
+| 2 | 3 of 30 (`ed03cf6`, `1fa8a8c`, `ce76c96`, inside seven minutes on 2026-08-18) |
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#9
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Measured · hash: sha256:b0ba01a6f5509d9b79d61474b3fda234aeb7d52dbf1186337d6169eccb8d9959*
+
+Seven assertions in `crates/substrate/nomos-ledger/tests/records_do_not_serialize` fail below
+two. Reproduced on a clean tree at `4823e31`: `7 passed; 7 failed`, every failure of the form
+*"fewer than two open items reserve a record, so the concurrency this file measures cannot be
+observed; got 0"*.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#10
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Measured · hash: sha256:7cc9bf50470363424ff94cf969d0843ab89bfeb3e99754029b539bb12e6f9359*
+
+The gate's `Test` step is `cargo test --workspace`. So that step has been red on nearly every
+commit of this branch, and red for something no commit contains — a property of which sessions
+happened to be mid-work when the commit was made. A gate answering a question about the
+committer's calendar is not a gate, and one that is red for reasons unrelated to the change
+trains everybody to stop reading it.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#11
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Measured · hash: sha256:f6ab5f365fc6418e4ab561d2f158d117f059030db812bd79246220f9f87603cf*
+
+Separately measured while closing this, because it changes the shape of the answer: with
+*one* open record writer, `Undeclared_Serializers` reported that writer's entire territory —
+eight paths, including the record registration and the seven test files the item was itself
+editing — as structural serializers. Below two, the search does not merely weaken; it inverts.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#12
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#13
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Decision · hash: sha256:1ded2291a7ec844bd87689a75521db4c431774f53c7246d2482221d8efa20029*
+
+An assertion whose subject is live coordination state stays an assertion, is honest when that
+state is empty, and proves it can fail on a subject built for the purpose rather than by
+requiring the live state to be populated.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#14
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Decision · hash: sha256:75bc5b613472f9c0c04e4caae11ce2bb35ff9c9825241977c01895124e00b5f2*
+
+Three shapes follow, and each guard takes exactly one.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#15
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Decision · hash: sha256:2c42447134bc245e0643fa5f3a770c5e387c319f3b63e370136f91b1f8546676*
+
+| Shape | Applies when | Here |
+|---|---|---|
+| **Honest assertion** | the claim is true of an empty subject | `Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory`, `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer`, `Test_Every_Universal_Reservation_Should_Be_Declared` |
+| **Constructed control** | the claim's teeth must be shown | `Test_An_Item_Reserving_The_Whole_Record_Directory_Should_Be_Found`, `Test_An_Undeclared_Serializer_Should_Be_Found`, `Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused` |
+| **Report, not assertion** | the figure is worth knowing and is not a property of the code | `Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel` |
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#16
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Decision · hash: sha256:6ccb84b268ef8d69712dc54a1c0bbdfffcd01e59d2b43eac3139190160338ea3*
+
+"No open item reserves the whole record directory" is *true* of a board with no open items.
+"Every record writer can be claimed at once" is true of a board with one and of a board with
+none. Reporting those as failures is not rigour; it is the assertion answering a different
+question from the one it states.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#17
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Decision · hash: sha256:a2e74009f597cb4aac566a97187746c436bf78a5be32196e61d1ac20eae2f5bd*
+
+A control shares the search the assertion makes rather than reimplementing it beside it —
+`Directory_Reservers` and `Undeclared_Serializers` are each called by both — so the control
+exercises the code that will actually be wrong when it is wrong.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#18
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Precedent This Follows · hash: sha256:13b79dba7a6c5c31cf6454d7ed05f584b013fac4776b8f825f47894ee898af1b*
+
+## The Precedent This Follows
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#19
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Precedent This Follows · hash: sha256:e2dfe48a80d02048a173b8d09d6d16255e7fa680dd79d758f5359c3d5ac8eea2*
+
+`tests/contract/tests/rule_contract_citation.rs` already does exactly this: the real records
+are checked, and `Test_A_Mismatched_Version_Should_Fail_The_Comparison` writes a fixture record
+under a scratch root to prove the comparison fires. The real subject and the adversarial
+subject are different subjects, and demanding that the real one be adversarial is what breaks.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#20
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / The Precedent This Follows · hash: sha256:c48ec90a82dd839f2f23506f46e3bba0d886622ff8153d85f74f9af474a69e2f*
+
+`OD-LEDGER-004` also already reconstructs the pre-fix authoring in memory — the board as it was
+on the day the defect existed — precisely to show the acceptance test cannot pass vacuously.
+That reconstruction is this record's shape, applied once, before anybody named it.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#21
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What This Does Not Say · hash: sha256:5ae5bde988901d3ff3611bfa517395d5fa20eddc18c4c306d7b7907603703db4*
+
+## What This Does Not Say
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#22
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What This Does Not Say · hash: sha256:ed75e94a584fc54d4313a04cf9a04de3376eec0b7f263abe7b53489fb586c381*
+
+It does not say a test may pass over an absent subject. `OD-GATE-001` governs that and it is
+not weakened here: the corpus gates report an absence rather than swallowing it, and
+`AGENTS.md` states plainly that a test which cannot find its corpus passes having read nothing.
+The distinction is that an *absent* subject means the check could not run, while an *empty*
+subject means the check ran and the answer is that there is nothing wrong. A board at rest is
+the second. What is forbidden is not knowing which of the two you have, which is why every
+honest assertion above is paired with a control that fails.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#23
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What This Does Not Say · hash: sha256:3c115f428eb4963b0dfdf947d54d0472747413801a8934d248bf6a3fc1a13b61*
+
+It does not weaken `OD-LEDGER-004`. Where the real board is the subject, the real board is
+still read. `Two_Record_Writers` stopped reading it only because both of its callers overwrite
+both territories before contesting anything — they never read what the real items reserved, so
+borrowing them bought nothing and cost a green tree at rest.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#24
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What This Does Not Say · hash: sha256:19c35aa031200c2248cc65775660f778b413ae4f7def132d916f1ee286d9562c*
+
+It does not touch `OD-LEDGER-007`'s debt register or `KNOWN_SERIALIZERS`, which is empty and
+stays empty. Nothing here declares a serializer to silence a search.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#25
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Considered And Rejected · hash: sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b*
+
+## What Was Considered And Rejected
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#26
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Considered And Rejected · hash: sha256:1bf4fba22a9f2cf2b528ee2fda71f1dcf0169063bbdeb3732c9cd0fe741922d0*
+
+**Lower the threshold from two to one.** Rejected on the measurement: one writer inverts the
+universal search into eight false positives. Two is not the problem; reading a number that
+changes without the tree changing is.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#27
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Considered And Rejected · hash: sha256:9ad0331a6d0d4fc13f1f62ed63517fe63298efa1583269ffdb0f4642693d0408*
+
+**Skip the guards when the board is at rest.** Rejected, and it is the tempting one. A skip is
+indistinguishable at the console from a pass, which is the class `OD-GATE-001` exists for. A
+constructed control runs every time and costs nothing.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#28
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Considered And Rejected · hash: sha256:59edd2133a6e66ac8cd57effa8dbad93834f7e2ed3a1f3602ed45a76f38f272c*
+
+**Make the guards conditional on an environment variable.** Rejected for the same reason plus
+one more: the variable would be unset in CI, which is the one place the answer matters.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#29
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Considered And Rejected · hash: sha256:7f956a65c7076e4530802dfc2de788c2c082ff4c90e670036547a3fc1322ccca*
+
+**Delete the guards.** Rejected. The file exists because a property nobody exercised turned out
+not to hold; the guards are how it stays exercised. They are moved onto subjects that exist,
+not removed.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#30
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Was Considered And Rejected · hash: sha256:059b6aba3b4134be7c5b682219555f8b8bd7fff9c8cc54e0602b50d413482523*
+
+**Keep the ledger out of the repository so CI cannot read it.** Rejected as far larger than this
+question and contrary to `OD-LEDGER-001` — territory is declared in a file everyone can read,
+and that file being in the tree is what makes the declaration reviewable.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#31
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#32
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Holds It · hash: sha256:8dea7894a7f79033149ed03f7f9e5ca2efb2650030d36f56144f984522a0886e*
+
+The suite itself: seven assertions that were failing now pass, and three constructed controls
+prove the searches still find what they are for. Measured both directions rather than argued —
+with the closed defect reintroduced (one open item reserving `docs/records`),
+`Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory` and
+`Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` both fail, and the first names the
+offender.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#33
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What Holds It · hash: sha256:1addecd9eaa3e6049bcd7892095939e07d9f01f1c0f6d9ef8b4308ab81971039*
+
+What does **not** hold it should be said plainly. Nothing stops the next author from adding an
+assertion over the live board with a population precondition on it, and the 26-of-30 number is
+the kind that only gets measured when somebody goes looking. This record and the doc comments
+beside each guard are the whole of the defence.
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#34
+
+*revision: authored · kind: heading · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#35
+
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / Status · hash: sha256:90f23309d3c903e0085c0e7e1b3053213c7acf407596462ad80efc5a3cfe22d7*
+
+Accepted. `P13-QUIESCENT-BOARD-RED` carries it. The gate's `Test` step being red for reasons
+unrelated to the commit is `OD-LEDGER-003`'s scoping gap seen from the other side: `work finish`
+runs the item's own predicate, so a workspace-wide failure no item's predicate names can persist
+across many green finishes — measured on 2026-08-19 at a full day for an unrelated failure, and
+at nearly the whole branch for this one.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

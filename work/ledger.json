@@ -19442,6 +19442,68 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-QUIESCENT-BOARD-RED",
+      "title": "Seven guards fail whenever the board is at rest, so the gate's Test step is red on nearly every commit for a reason no commit contains",
+      "why": "Measured across the last 30 commits of dev, reading each commit's own committed work/ledger.json and counting open items whose territory reserves anything under docs/records:\n\n  26 of 30 commits carry 0 or 1 open record writers\n   3 of 30 carry 2 (ed03cf6, 1fa8a8c, ce76c96, all within seven minutes on 2026-08-18)\n\ncrates/substrate/nomos-ledger/tests/records_do_not_serialize has seven assertions that fail below two. Reproduced on a clean tree at 4823e31: cargo test -p nomos-ledger --test records_do_not_serialize reports 7 passed, 7 failed, every failure of the form 'fewer than two open items reserve a record, so the concurrency this file measures cannot be observed; got 0'.\n\nThe gate's Test step is cargo test --workspace. CI checks out the commit, which carries the ledger as a file. So the step has been red on nearly every commit of this branch, and red for a reason that is not a property of the commit at all -- it is a property of which sessions happened to be mid-work when the commit was made. A gate answering a question about the committer's calendar is not a gate.\n\nThe guards are not wrong and this is not a request to delete them. OD-LEDGER-004 chose to read the real board deliberately: 'the defect was never in the comparison code, which had always compared paths correctly, so a fixture proving two invented territories disjoint would have passed on the day the board was fully blocked.' That reasoning is exactly right about the positive assertions. The anti-vacuity guards were then added on top, and nobody asked what they say about a board with nothing open -- which is not an edge case but the normal end state of finished work. The board is quiescent by design right now; every item on it is Done or Declined.\n\nSo two true things collide. A guard that lets an assertion pass over an empty subject is the defect this repository names most often -- 'a test that cannot find its corpus passes' is in AGENTS.md, and OD-GATE-001 is the record. And a guard whose verdict is a function of live coordination state makes a green tree impossible at rest, which is worse, because the failure is unrelated to anything the committer did and so trains everyone to ignore the step.\n\nPrecedent exists in this same gate for the shape that resolves it: the step named 'Corpus gates (reports what did not run)' reports an absence loudly instead of failing on it, and AGENTS.md points at tests/contract/ for the size of that hole. Absence reported is not absence hidden.",
+      "done_when": "cargo test --workspace is green on a tree whose board is quiescent, and still red on a board carrying the defect OD-LEDGER-004 closed.\n\nBoth halves are required and the second is the one that is easy to lose. Restoring docs/records to a single open item must still fail, and the item shows that measured -- not argued -- exactly as OD-LEDGER-004 showed it.\n\nThe record decides how an assertion over live coordination state is allowed to behave when that state is empty, and it decides it as a class rather than for these seven call sites. It says which of the three shapes each guard takes: an assertion that is honest over an empty board and stays an assertion; a non-vacuity proof moved to a reconstructed fixture, which OD-LEDGER-004 already builds for the pre-fix authoring; or an absence reported the way the gate's own corpus step reports one. It says what the losing shapes give up, not only what the winner buys.\n\nNothing is silenced. A guard that is deleted, downgraded to a warning nobody reads, or made conditional on an environment variable has hidden the class rather than answered it, and the record must say so about itself.\n\nThe 26-of-30 measurement is repeated after the change and stated: the point is that the number stops mattering, not that it improves.\n\nOD-LEDGER-032 is written and registered under crates/spec/nomos-spec-store/records/, and both required projections are re-rendered per OD-GATE-005 from a worktree holding exactly the records this commit publishes.\n\nNot closed by raising or lowering the threshold. Two is not the problem; reading a number that changes without the tree changing is.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/board.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/main.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/record_directory.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/record_exclusion.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/sharing_a_record.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/identifier_and_file.rs",
+          "docs/records/OD-LEDGER-032",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-032.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "d_Should_Still_Collide ... ok\ntest serializers::Test_Every_Declared_Serializer_Should_Still_Serialize ... ok\ntest identifier_and_file::Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier ... ok\ntest serializers::Test_Every_Universal_Reservation_Should_Be_Declared ... ok\ntest serializers::Test_The_Old_Authoring_Should_Offer_No_Concurrent_Pair ... ok\ntest serializers::Test_An_Undeclared_Serializer_Should_Be_Found ... ok\ntest snapshot_grain::Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once ... ok\ntest record_directory::Test_No_Open_Item_Should_Reserve_The_Whole_Record_Directory ... ok\ntest snapshot_grain::Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair ... ok\ntest serializers::Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel ... ok\ntest record_directory::Test_An_Item_Reserving_The_Whole_Record_Directory_Should_Be_Found ... ok\ntest sharing_a_record::Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused ... ok\ntest identifier_and_file::Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder ... ok\ntest record_exclusion::Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-9f0da988d67699df.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-b7c376552463c63c.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-da7f1fa9457ac951.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-2e5a5ed1fbbe02e7.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-e02314411601679d.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1787165057,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4823e31fe766d91df7fca2dfed59e17e8d528d98"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }

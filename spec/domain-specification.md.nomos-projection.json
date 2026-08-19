@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:70eb59e9ea177e16fe5ea5e1d29270b49752b3de7534f00e7eb899fb81fa7698",
-  "inputs_digest": "sha256:5364baf6b1aeff453748dbdb3450c7acd6fc3a6d59c12cfcf4c3349febe1cb8c",
+  "content_digest": "sha256:95fc9c8091a84f8442fb0cfc716701ad0ad79f01a229b6178c6790ed71c48ca7",
+  "inputs_digest": "sha256:d7eba6bd7282f5aaaa6ec81cf590de5e4ae6ca1b44ff6383f2e0d095e1d515b7",
   "sections": [
     [
       "Documents",
-      140
+      141
     ],
     [
       "Sections",
-      1209
+      1218
     ],
     [
       "Source blocks",
-      4310
+      4345
     ]
   ],
   "inputs": [
@@ -499,6 +499,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md@authored",
       "hash": "sha256:13bc9a8a9f32e0d46c78adb4f917e5bb47fc79932a8c2bcac5b1f19c0306e7e9"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md@authored",
+      "hash": "sha256:8b99c94d98fdfc2f28901faef55e6d8589203ed121e1d8de16673266842cc199"
     },
     {
       "content": "documents",
@@ -4834,6 +4839,51 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#14",
       "hash": "sha256:9fe47df9c37a7370077364a701398b8bcf180c9e9f48cc39e496da217f38f5cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#1",
+      "hash": "sha256:07ebefe21dcf0986f5f3090cf35d91793fdaf8ce9347bb6664cb91c6deb98727"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#2",
+      "hash": "sha256:bbc800a5d5f713ee93e0540113fa3ea0b8bb2444fe94f6dd928b93086cc4322c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#6",
+      "hash": "sha256:d76c2b810d9855db0db484078957d4dd6bb03fb0d19d86a4c33d16d017355de2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#12",
+      "hash": "sha256:dd725d37ddaf7c2ba679489352b8c2c3201837a8cde63a6577d90d4802973b59"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#18",
+      "hash": "sha256:bdf3e134e105898879c70abbf88d37ffd4814fe6515d346395b7ae2de78f2850"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#21",
+      "hash": "sha256:8f53ec146f38cea4023bdc62622ed44ba4c2ee57978ddd7f8c013005b2173784"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#25",
+      "hash": "sha256:9a33a1dd43ed7b08ebd52b2e4c93d4c16e28dc09b9549d12e4d54802b5e44ea2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#31",
+      "hash": "sha256:9b28f6451b450c838421150e60d81ee041d7cdaa5f7d24c50371ecfde22f6fe8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#34",
+      "hash": "sha256:045f1cdf50bfd87c280adb7f790e52f7421d1e09eba549fc18170280dde1c3f0"
     },
     {
       "content": "headings",
@@ -21334,6 +21384,181 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md#15",
       "hash": "sha256:ce796ce7803bc6081b932e6bcc5adf585a18599250a0cfcf0cdcc703a8e86f31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#1",
+      "hash": "sha256:9cd229e8c6834f06c7d1830db323221e638b816cc2a8ed2f9c73d1110421aa63"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#3",
+      "hash": "sha256:b37d8d81e7d57fad993bf95c95c29588e51abbf2e0b4d07a8e123c273d368d1c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#4",
+      "hash": "sha256:0fd3329ac7f8d4da103f2d4971611d54d67a7a43026af4bfa7d8753a9a54edcb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#5",
+      "hash": "sha256:c23f83e95447c422f5353dd3f8c6b2ffed7b867646ab87d725e1cdc8b47199cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#7",
+      "hash": "sha256:323d6ff5beaa2d401d9b4882310b726183cf4b8299ac4967331a6e0cfc0bd2f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#8",
+      "hash": "sha256:9a79bcac156e012fb8913bc81c516891cc6a0e72e911092fcfaf9f7b10bd7d0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#9",
+      "hash": "sha256:b0ba01a6f5509d9b79d61474b3fda234aeb7d52dbf1186337d6169eccb8d9959"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#10",
+      "hash": "sha256:7cc9bf50470363424ff94cf969d0843ab89bfeb3e99754029b539bb12e6f9359"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#11",
+      "hash": "sha256:f6ab5f365fc6418e4ab561d2f158d117f059030db812bd79246220f9f87603cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#12",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#13",
+      "hash": "sha256:1ded2291a7ec844bd87689a75521db4c431774f53c7246d2482221d8efa20029"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#14",
+      "hash": "sha256:75bc5b613472f9c0c04e4caae11ce2bb35ff9c9825241977c01895124e00b5f2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#15",
+      "hash": "sha256:2c42447134bc245e0643fa5f3a770c5e387c319f3b63e370136f91b1f8546676"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#16",
+      "hash": "sha256:6ccb84b268ef8d69712dc54a1c0bbdfffcd01e59d2b43eac3139190160338ea3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#17",
+      "hash": "sha256:a2e74009f597cb4aac566a97187746c436bf78a5be32196e61d1ac20eae2f5bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#18",
+      "hash": "sha256:13b79dba7a6c5c31cf6454d7ed05f584b013fac4776b8f825f47894ee898af1b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#19",
+      "hash": "sha256:e2dfe48a80d02048a173b8d09d6d16255e7fa680dd79d758f5359c3d5ac8eea2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#20",
+      "hash": "sha256:c48ec90a82dd839f2f23506f46e3bba0d886622ff8153d85f74f9af474a69e2f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#21",
+      "hash": "sha256:5ae5bde988901d3ff3611bfa517395d5fa20eddc18c4c306d7b7907603703db4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#22",
+      "hash": "sha256:ed75e94a584fc54d4313a04cf9a04de3376eec0b7f263abe7b53489fb586c381"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#23",
+      "hash": "sha256:3c115f428eb4963b0dfdf947d54d0472747413801a8934d248bf6a3fc1a13b61"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#24",
+      "hash": "sha256:19c35aa031200c2248cc65775660f778b413ae4f7def132d916f1ee286d9562c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#25",
+      "hash": "sha256:9b4075b9453d430c94a70d5903ec6355d1d5c9dc042de6a29f9d60cdec34152b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#26",
+      "hash": "sha256:1bf4fba22a9f2cf2b528ee2fda71f1dcf0169063bbdeb3732c9cd0fe741922d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#27",
+      "hash": "sha256:9ad0331a6d0d4fc13f1f62ed63517fe63298efa1583269ffdb0f4642693d0408"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#28",
+      "hash": "sha256:59edd2133a6e66ac8cd57effa8dbad93834f7e2ed3a1f3602ed45a76f38f272c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#29",
+      "hash": "sha256:7f956a65c7076e4530802dfc2de788c2c082ff4c90e670036547a3fc1322ccca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#30",
+      "hash": "sha256:059b6aba3b4134be7c5b682219555f8b8bd7fff9c8cc54e0602b50d413482523"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#31",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#32",
+      "hash": "sha256:8dea7894a7f79033149ed03f7f9e5ca2efb2650030d36f56144f984522a0886e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#33",
+      "hash": "sha256:1addecd9eaa3e6049bcd7892095939e07d9f01f1c0f6d9ef8b4308ab81971039"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#34",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#35",
+      "hash": "sha256:90f23309d3c903e0085c0e7e1b3053213c7acf407596462ad80efc5a3cfe22d7"
     },
     {
       "content": "blocks",

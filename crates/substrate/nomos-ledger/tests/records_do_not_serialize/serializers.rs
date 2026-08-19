@@ -1,8 +1,8 @@
 //! What still serializes them, named rather than assumed.
 
 use crate::board::{
-    Is_Open, Only_Records, Paths_Collide, RECORD_DIRECTORY, Record_Writers, Unclaimed_Copy,
-    Writer_Ids, Covers,
+    Constructed_Writers, Is_Open, Only_Records, Paths_Collide, RECORD_DIRECTORY, Record_Writers,
+    Unclaimed_Copy, Writer_Ids, Covers,
 };
 use nomos_ledger::{ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};
 use std::collections::BTreeSet;
@@ -150,19 +150,18 @@ fn A_Concurrent_Pair(document: &LedgerDocument) -> Option<(ItemId, ItemId)>
 /// something a rule forces, and it does not resolve: the next record writer will reserve it
 /// too. That is a structural serializer, and both of the ones in the register arrived
 /// without anybody noticing.
+///
+/// Honest over a board with fewer than two writers rather than refusing one.
+/// [`Undeclared_Serializers`] answers "nothing" there, because "reserved by *all* of them"
+/// is a claim about a population and one item is not a population — with a single writer
+/// every path it happens to reserve would read as universal, which is a false positive, not
+/// a weaker true answer. `OD-LEDGER-032` measured the cost of demanding two instead: red on
+/// 26 of the last 30 commits, for a reason no commit contained. The search's teeth are
+/// proved by `Test_An_Undeclared_Serializer_Should_Be_Found`, on a subject built for it.
 #[test]
 fn Test_Every_Universal_Reservation_Should_Be_Declared()
 {
     let document = Unclaimed_Copy();
-    let writers = Record_Writers(&document);
-
-    assert!(
-        writers.len() >= 2,
-        "fewer than two open record writers, so nothing can be reserved by all of them and \
-         this passes having compared nothing; got {}",
-        writers.len()
-    );
-
     let undeclared = Undeclared_Serializers(&document);
 
     assert!(
@@ -219,10 +218,15 @@ fn Reserving(writers: &[&LedgerItem], declared: &str) -> usize
 /// asserts the search finds it. Confirmed by construction rather than by reasoning that it
 /// would be found: the whole point of this file is that a property nobody exercised turned
 /// out not to hold.
+///
+/// The subject is built rather than borrowed from the live board. It used to widen whatever
+/// `Unclaimed_Copy` happened to hold, which meant the control proved the search had teeth
+/// only while somebody was mid-work and proved nothing — while failing — on a board at rest.
+/// `OD-LEDGER-032`.
 #[test]
 fn Test_An_Undeclared_Serializer_Should_Be_Found()
 {
-    let mut document = Unclaimed_Copy();
+    let mut document = Constructed_Writers(2);
     let writers = Writer_Ids(&document);
     let invented = "crates/invented/shared-by-everyone";
     for item in &mut document.items
@@ -247,10 +251,25 @@ fn Test_An_Undeclared_Serializer_Should_Be_Found()
 ///
 /// Universal rather than pairwise. A path two items share is contention; a path all of them
 /// share is a rule.
+///
+/// Nothing, below two writers, and that is the answer rather than a refusal to answer.
+/// "Reserved by all of them" is a claim about a population, and one item is not one: with a
+/// single writer every path it happens to reserve is trivially reserved by all writers, so
+/// the search reports its whole territory as structural. Measured while closing
+/// `OD-LEDGER-032` — one open item produced eight false positives, including the record
+/// registration and the seven test files the item itself was editing. A false positive here
+/// is worse than silence, because the remedy it demands is to remove a coupling that does
+/// not exist.
 fn Undeclared_Serializers(document: &LedgerDocument) -> BTreeSet<String>
 {
     let writers = Record_Writers(document);
     let declared = Declared();
+
+    if writers.len() < 2
+    {
+        return BTreeSet::new();
+    }
+
     let Some(first) = writers.first()
     else
     {
@@ -295,6 +314,10 @@ fn Serializes(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bo
 /// and it is not a property of this code: it depends on which items happen to be open. So
 /// it prints, in both directions, and the line's absence would itself be visible — the
 /// same shape `OD-GATE-001` settled on for the corpus gates.
+///
+/// It said all of that and then asserted the count was non-zero anyway, which is the defect
+/// `OD-LEDGER-032` records in miniature: the reasoning that condemns the assertion was
+/// already written above it. Reporting is now the whole of what this does.
 #[test]
 fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
 {
@@ -316,10 +339,6 @@ fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
         counted.structural,
         counted.structural,
         counted.blocked.saturating_sub(counted.structural)
-    );
-    assert!(
-        !writers.is_empty(),
-        "no open item writes a record, so this reported on nothing"
     );
 }
 
