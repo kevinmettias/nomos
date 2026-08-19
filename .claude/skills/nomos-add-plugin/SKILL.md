@@ -52,12 +52,12 @@ see §3) is one more hand-written line in `crates/orchestration/nomos-check-orch
 src/composition.rs::Registered()`. `OD-HOST-004` already decided this needs no selection
 mechanism at any count: the registry ranks, the caller states a `Requirement`, one more
 `Offer` call is composition, not choice. Check `Registered()` as it stands before adding
-your line — as of `OD-PACKAGE-007`, it registers only `nomos_lang_rust::Provider_Offer()`
-for real; `nomos-lang-rust-scan`'s own offer exists only in `tests/integration/src/
-composition.rs`'s test-only duplicate, so "the second provider is already wired into
-`nomos check`" is not yet true of the production path — confirm which composition root
-your new provider actually needs to reach before assuming a sibling's registration proves
-the pattern end-to-end.
+your line — as of commit `fb46438`, both `nomos_lang_rust::Provider_Offer()` and
+`nomos_lang_rust_scan::Provider_Offer()` reach the production composition root, so a third
+offer follows an already-proven pattern rather than an untested one. Confirm this yourself
+against `crates/orchestration/nomos-check-orchestration/src/composition.rs` rather than
+trusting this sentence — it goes stale the moment a new provider lands and nobody re-reads
+it, which is exactly how it went stale once already.
 
 **Package registration**: if this provider is meant to be selectable through a
 `LanguagePackage`-shaped manifest, its `KNOWN_PROVIDERS` array (`nomos-lang-package`'s
@@ -86,19 +86,26 @@ expected to offer against it, not only once one actually has.
 
 ## 3. A second rule
 
-Much smaller than a provider. As of this writing `crates/rules/nomos-rules` holds one rule,
-`Check_Completeness_Mirrors(sources: &[SourceFile], facts: &mut dyn FactReader) ->
-Vec<Finding>` — a second rule is a second function of that same shape inside the same
-crate, not a new crate or a new band. There is no `Rule` trait; match the signature.
+Much smaller than a provider. `crates/rules/nomos-rules` holds two rules today,
+`Check_Completeness_Mirrors` and `Check_Naming_Convention` — both
+`fn(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>` — a third rule is a
+third function of that same shape inside the same crate, not a new crate or a new band.
+There is no `Rule` trait; match the signature.
 
 **Wiring it in**: `crates/orchestration/nomos-check-orchestration/src/run.rs`'s `Run`
-function calls the existing rule unconditionally (`let findings = Check_Completeness_Mirrors(sources, &mut
-reader);`). `OD-HOST-004` decided `Run()` stays hand-written, and a second unconditional
-call beside the first is composition, not the accretion the record warns about — add your
-own `let more_findings = Your_Rule(sources, &mut reader);` and fold both into the
-`CheckOutcome::Judged` it returns. **This stops being true the moment your rule is meant to
-run only for some invocations** (a per-language rule, an opt-in, a subset) — at that point
-read `OD-HOST-004` in full before writing an `if`; it names the declared selection
+function calls every rule it knows about unconditionally:
+
+```rust
+let mut findings = Check_Completeness_Mirrors(sources, &mut reader);
+findings.extend(Check_Naming_Convention(sources, &mut reader));
+```
+
+`OD-HOST-004` decided `Run()` stays hand-written, and one more unconditional call beside the
+existing ones is composition, not the accretion the record warns about — add your own
+`findings.extend(Your_Rule(sources, &mut reader));` and fold the result into the
+`CheckOutcome::Judged` `Run` returns. **This stops being true the moment your rule is meant
+to run only for some invocations** (a per-language rule, an opt-in, a subset) — at that
+point read `OD-HOST-004` in full before writing an `if`; it names the declared selection
 mechanism that case needs instead.
 
 **State your own floor.** `nomos_rules::Syntax_Requirement` is `Check_Completeness_Mirrors`'s

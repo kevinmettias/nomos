@@ -17666,6 +17666,275 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-ANALYSIS-CAPABILITY-QUESTION",
+      "title": "Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce",
+      "why": "OD-ANALYSIS-004 settled what a program-semantics capability must say -- the five existing epistemic types, never a domain-local substitute -- and what FactVariant::SemanticallyResolved obliges a producer to have done, but deliberately does not pick which capability gets built first: its five worked shapes (ownership crossing a closed boundary, lifetime/allocation against a performance policy, escape past a module boundary, a forbidden synchronization ordering, a restricted effect) are named as illustration of the boundary test, not a closed list, and its own \"What This Record Does Not Do\" section states the first producer is separate work reserving its own territory. crates/capabilities holds exactly one crate (nomos-cap-syntax), FactVariant orders one real value against nothing, and no rule in this workspace (Check_Naming_Convention, Check_Completeness_Mirrors) reads past Syntactic/Approximate today -- picking one of the five shapes and building a crate for it now, on the strength of the worked examples alone, would be exactly the D-135 mistake of inferring a whole capability domain from a wish rather than a demonstrated concrete need.",
+      "done_when": "A new record under OD-ANALYSIS states whether the first program-semantics capability is picked and built now or waits for a rule that needs the evidence it would produce. It follows OD-CAPABILITY-008's shape (Question / Current Position / What Would Decide It / Status), relates to OD-ANALYSIS-004, OD-CAPABILITY-008 and D-135, and states the concrete trigger that would flip the answer. Registered in crates/spec/nomos-spec-store/records/, and diagrams/relations.mmd and spec/domain-specification.md (with sidecars) are re-rendered and fresh per nomos spec freshness --require diagram-set --require domain-specification, verified from an isolated worktree holding exactly the record set this commit publishes. Closed by the record alone: no crate changes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-007.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-analysis-007",
+        "acquired_at": 1787122042,
+        "lease_expires_at": 1787129242
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-SKILL-COMPOSITION-STALE",
+      "title": "nomos-add-plugin's provider/rule composition claims are stale after the scan provider and second rule wired",
+      "why": "SKILL.md section 1 still says composition.rs registers only nomos_lang_rust for real and that nomos-lang-rust-scan's offer exists only in tests/integration; that became false at fb46438 (P13-SCAN-PROVIDER-COMPOSE). Section 3 still says nomos-rules holds one rule and that Run() calls it alone; that became false at 439ab21 (P13-CHECK-NAMING-WIRE-2). A session or person following this skill today is told to distrust an already-proven pattern and shown an example that no longer matches run.rs.",
+      "done_when": "SKILL.md sections 1 and 3 describe composition.rs and run.rs as they actually stand -- both providers and both rules named as reaching production composition -- and the run.rs code example matches the real function body.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?=.*Check_Naming_Convention)(?!.*own offer exists only in `tests/integration)(?!.*holds one rule,)(?!.*calls the existing rule unconditionally).*\\z",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "rg",
+          "-U",
+          "--pcre2",
+          "-q",
+          "(?s)\\A(?=.*Check_Naming_Convention)(?!.*own offer exists only in `tests/integration)(?!.*holds one rule,)(?!.*calls the existing rule unconditionally).*\\z",
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "exit_code": 0,
+        "output_tail": "",
+        "verified_at": 1787122210,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b164fbf202c0b3220e5ae4a8239a6e175d7657c0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-CORE-ROADMAP-RECONCILIATION",
+      "title": "Determine and record the near-term implementation boundary for production Nomos Core, before architecture/feature intelligence and rich clients",
+      "why": "Two sessions of external architecture review, subagent verification against current HEAD, and a structural survey of the 363-requirement v14 corpus (61 families, read directly from NOMOS_V14_CORPUS's requirements directory) converged independently on the same two-tier split: a headless enforcement core (kernel/identity, analysis+invalidation substrate, language/provider/capability, rules, applicability+coverage, gates, baselines/suppressions/adoption, corrections, workflow orchestration, application-service boundary, CLI/API/MCP projections, model-backend/agent-executor infrastructure, production hardening) versus deferred consuming systems (architecture discovery, feature topology/path tracing, placement analysis, runtime/debug/test intelligence, Atlas, desktop/web/mobile). This is a sequencing/boundary decision, not new implementation commitments, and it must not duplicate or contradict ARC-ECOSYSTEM-001 (ecosystem ownership), OD-PACKAGE-008 (RulePackage manifest stays declined), or OD-GATE-004/OD-RULES-001/OD-RULES-002 (this repository's own CI gate step, a narrower and different thing than the product-level Gate object this record scopes as near-term).",
+      "done_when": "ARC-ROADMAP-001 is accepted and registered in crates/spec/nomos-spec-store/records/, states the near/later two-tier boundary as a structural claim (not a numbered internal sequence the corpus survey did not establish item-by-item), explicitly defers EGRAPH to a non-precluding kernel constraint rather than a build commitment pending a second real consumer, explicitly distinguishes the product-level Gate object from OD-GATE-004's CI step, states the 363-requirement corpus remains normative while this record and the external game-plan document are sequencing aids (citing D-132, OD-TRACE-001, OD-TRACE-002, and that formal per-requirement assessment population stays separate governed work), and both diagram-set and domain-specification projections are re-rendered and pass their freshness checks.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/",
+          "crates/spec/nomos-spec-store/records/ARC-ROADMAP-001.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory mis-scoped to the whole docs/records/ directory, repeating the P10-RECORD-LOCK defect; re-adding as P13-CORE-ROADMAP-RECONCILIATION-2 with a single named file path."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "claude",
+        "declined_at": 1787122112
+      }
+    },
+    {
+      "id": "P13-CORE-ROADMAP-RECONCILIATION-2",
+      "title": "Determine and record the near-term implementation boundary for production Nomos Core, before architecture/feature intelligence and rich clients",
+      "why": "Two sessions of external architecture review, subagent verification against current HEAD, and a structural survey of the 363-requirement v14 corpus (61 families, read directly from the requirements directory) converged independently on the same two-tier split: a headless enforcement core (kernel/identity, analysis+invalidation substrate, language/provider/capability, rules, applicability+coverage, gates, baselines/suppressions/adoption, corrections, workflow orchestration, application-service boundary, CLI/API/MCP projections, model-backend/agent-executor infrastructure, production hardening) versus deferred consuming systems (architecture discovery, feature topology/path tracing, placement analysis, runtime/debug/test intelligence, Atlas, desktop/web/mobile). This is a sequencing/boundary decision, not new implementation commitments, and it must not duplicate or contradict ARC-ECOSYSTEM-001 (ecosystem ownership), OD-PACKAGE-008 (RulePackage manifest stays declined), or OD-GATE-004/OD-RULES-001/OD-RULES-002 (this repository's own CI gate step, a narrower and different thing than the product-level Gate object this record scopes as near-term).",
+      "done_when": "ARC-ROADMAP-001 is accepted and registered in crates/spec/nomos-spec-store/records/, states the near/later two-tier boundary as a structural claim (not a numbered internal sequence the corpus survey did not establish item-by-item), explicitly defers EGRAPH to a non-precluding kernel constraint rather than a build commitment pending a second real consumer, explicitly distinguishes the product-level Gate object from OD-GATE-004's CI step, states the 363-requirement corpus remains normative while this record and the external game-plan document are sequencing aids (citing D-132, OD-TRACE-001, OD-TRACE-002, and that formal per-requirement assessment population stays separate governed work), and both diagram-set and domain-specification projections are re-rendered and pass their freshness checks.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md",
+          "crates/spec/nomos-spec-store/records/ARC-ROADMAP-001.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory over-reserved diagrams/relations.mmd and spec/domain-specification.md, which OD-GATE-005 says no item should reserve. Re-adding as -3 with just the two record files."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-roadmap",
+          "reason": "Territory over-reserved diagrams/relations.mmd and spec/domain-specification.md; nomos-spec-change skill confirms those are derived and reserved by nobody per OD-GATE-005. Re-adding with only the two record files.",
+          "abandoned_at": 1787122148
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-roadmap",
+        "declined_at": 1787122154
+      }
+    },
+    {
+      "id": "P13-CORE-ROADMAP-RECONCILIATION-3",
+      "title": "Determine and record the near-term implementation boundary for production Nomos Core, before architecture/feature intelligence and rich clients",
+      "why": "Two sessions of external architecture review, subagent verification against current HEAD, and a structural survey of the 363-requirement v14 corpus (61 families, read directly from the requirements directory) converged independently on the same two-tier split: a headless enforcement core (kernel/identity, analysis+invalidation substrate, language/provider/capability, rules, applicability+coverage, gates, baselines/suppressions/adoption, corrections, workflow orchestration, application-service boundary, CLI/API/MCP projections, model-backend/agent-executor infrastructure, production hardening) versus deferred consuming systems (architecture discovery, feature topology/path tracing, placement analysis, runtime/debug/test intelligence, Atlas, desktop/web/mobile). This is a sequencing/boundary decision, not new implementation commitments, and it must not duplicate or contradict ARC-ECOSYSTEM-001 (ecosystem ownership), OD-PACKAGE-008 (RulePackage manifest stays declined), or OD-GATE-004/OD-RULES-001/OD-RULES-002 (this repository's own CI gate step, a narrower and different thing than the product-level Gate object this record scopes as near-term).",
+      "done_when": "ARC-ROADMAP-001 is accepted and registered in crates/spec/nomos-spec-store/records/, states the near/later two-tier boundary as a structural claim (not a numbered internal sequence the corpus survey did not establish item-by-item), explicitly defers EGRAPH to a non-precluding kernel constraint rather than a build commitment pending a second real consumer, explicitly distinguishes the product-level Gate object from OD-GATE-004's CI step, states the 363-requirement corpus remains normative while this record and the external game-plan document are sequencing aids (citing D-132, OD-TRACE-001, OD-TRACE-002, and that formal per-requirement assessment population stays separate governed work), and both diagram-set and domain-specification projections are re-rendered and pass their freshness checks (rendered/verified outside ledger territory, per OD-GATE-005).",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md",
+          "crates/spec/nomos-spec-store/records/ARC-ROADMAP-001.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-roadmap",
+        "acquired_at": 1787122172,
+        "lease_expires_at": 1787129372
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P13-LEDGER-LIFETIME-ELIDE",
+      "title": "cargo clippy --workspace --all-targets -- -D warnings is red on clean HEAD: an elidable lifetime in Eligible_Items",
+      "why": "cargo clippy --workspace --all-targets -- -D warnings, the exact command work finish derives from .github/workflows/gate.yml, exits 101 on clean HEAD (b164fbf): needless_lifetimes on Eligible_Items in crates/substrate/nomos-ledger/src/store/refusal.rs, an explicit 'a' lifetime clippy can elide. Reproduced isolated with cargo clippy -p nomos-ledger --all-targets -- -D warnings, same single error. git log on the file shows its last edit was P11-NEXT-WORK, well before this session, so this is pre-existing gate redness rather than a live claims conflict -- and it blocks work finish for every item in the workspace, not just ones touching nomos-ledger.",
+      "done_when": "Eligible_Items in crates/substrate/nomos-ledger/src/store/refusal.rs no longer names an explicit lifetime clippy flags as needless; cargo clippy --workspace --all-targets -- -D warnings exits 0; cargo test -p nomos-ledger stays green.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/store/refusal.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-lifetime-elide",
+        "acquired_at": 1787122221,
+        "lease_expires_at": 1787129421
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
