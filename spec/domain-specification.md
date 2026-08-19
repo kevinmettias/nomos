@@ -38,6 +38,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md | authored | 23 | 7 | sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 38 | 8 | sha256:d44936bdfee31770dd5c295dfd8b5c31ee3fd0f843aa2f0878024e7e7e977227 |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 12 | 5 | sha256:7b868459b4901509f831d98949e39dd926a2a649fc7ab419ad983c06f799c1a1 |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 18 | 7 | sha256:d56cc8fc4c76215a1ee11ef40613912d0ee3ed7cbacc083d8750e7e8afea113f |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -355,6 +356,13 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#5 | authored | 2 | Current Position |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#8 | authored | 2 | What Would Decide It |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#11 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#1 | authored | 1 | Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#2 | authored | 2 | Question |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#4 | authored | 2 | What Was Found |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#8 | authored | 2 | Why The Clone Is There |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#10 | authored | 2 | Why It Is Deferred Rather Than Fixed Here |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#13 | authored | 2 | What Would Decide It |
+| docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#17 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -7765,6 +7773,176 @@ Open. No rule in this workspace needs a `SemanticallyResolved` or `RuntimeObserv
 today, so nothing picks among `OD-ANALYSIS-004`'s five illustrative shapes yet. Revisit when a
 rule's own subject names the fact it needs, or when an architecture, requirement or policy
 record names a specific program-semantics claim a conformance check must make.
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#1
+
+*revision: authored · kind: heading · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists · hash: sha256:253604dc63aa5f8ea0ba67bef1d9f1992edbf7334431452813d6841173861908*
+
+# Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#2
+
+*revision: authored · kind: heading · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#3
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Question · hash: sha256:fc19cd999e6a280bb66348ab6d9f3d75dc844a1315f5e21da7ecfa9de68a70d3*
+
+`ARC-ROADMAP-001` records that two independent architecture reviews measured eight
+performance claims against `crates/substrate/nomos-analysis`, and that six were confirmed as
+real hazards deliberately left for later work. None of the six is named in a record of its
+own; the count exists only in that aggregate. This record names one of them, traced to
+ground during ordinary work on this crate, so it is an accepted cost with a stated trigger
+rather than a number nobody can check.
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#4
+
+*revision: authored · kind: heading · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Was Found · hash: sha256:15aff610a28e9081dbdb5862a5c1fcd5ea7ea61ca42b6d9d8dca2a51abcc33b4*
+
+## What Was Found
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#5
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Was Found · hash: sha256:f23a808e8f3d2020962e91c05525b6ab2756b91e52733a9db8a01bdccaeac88a*
+
+`MemoryFactStore::Invalidate`
+(`crates/substrate/nomos-analysis/src/fact/memory_store.rs`) clones `self.dependents` — the
+full reverse-dependency index, one entry per fact this store has ever recorded a dependency
+edge against — on every call, before the walk that actually uses it:
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#6
+
+*revision: authored · kind: code · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Was Found · hash: sha256:c3451a4001419a635ddb11836fb50da4c86335af553f5a5b611f485f39e29adb*
+
+```rust
+let dependents = self.dependents.clone();
+let propagation = self
+    .propagation
+    .take()
+    .expect("propagation implementation is always present between calls");
+propagation.Spread(&dependents, roots, &mut |consumer| {
+    seen.insert(consumer);
+    if !self.Invalidate_One(consumer, from, &described)
+    {
+        return false;
+    }
+    ...
+});
+```
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#7
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Was Found · hash: sha256:1f6c7071785886113c271aec29db469c280f630a87aa096aa3cb1f6deb167f6d*
+
+The clone's cost is `O(the whole store's dependents map)` — every fact with a recorded
+dependent, not just the ones a given invalidation's frontier actually reaches. A store
+carrying a large corpus pays this on every edit, independent of how small that edit's own
+reach is, which is the opposite of what an incremental store exists to guarantee.
+`OD-ANALYSIS-001` measured a comparable shape (a fact-key component recomputing 9,440 facts
+per keystroke over a six-file corpus) before it was fixed; this clone has not been measured
+at that scale, which is exactly why this record states a trigger rather than a number.
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#8
+
+*revision: authored · kind: heading · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Why The Clone Is There · hash: sha256:a7629e03de8b2a85bfff5e7b03bc0ec2cb35a881d135fc85c8b59fe8c813552f*
+
+## Why The Clone Is There
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#9
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Why The Clone Is There · hash: sha256:47dc218d577a3cb0e3bc77afda651c2ee9a1f85ef51c89480cfa456589d4a23a*
+
+Not an oversight. The comment immediately above it explains the constraint:
+`DependencyPropagation::Spread` takes `dependents: &BTreeMap<Digest128,
+BTreeSet<Digest128>>` — an immutable borrow — while its own `on_reach` callback needs `&mut
+self` for `Invalidate_One` and `self.keys`. Rust's borrow checker refuses a live immutable
+borrow of `self.dependents` coexisting with a closure that mutates `self`, so the two ways
+to satisfy both sides are: clone `dependents` out of `self` before the walk (what this store
+does), or restructure `Invalidate` into two passes — collect the reachable digest set under
+an immutable borrow, release it, then apply every invalidation afterward without a live
+borrow across the callback.
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#10
+
+*revision: authored · kind: heading · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Why It Is Deferred Rather Than Fixed Here · hash: sha256:fe30224e08cedd2e1a2b708e98fb3b6b949b2e312194279ab67bae88ca79b31d*
+
+## Why It Is Deferred Rather Than Fixed Here
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#11
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Why It Is Deferred Rather Than Fixed Here · hash: sha256:eba0cf4b8ea1c2d806a2295169bb23ea438cc52ae76dae8dab82895b6fd3cba9*
+
+`DependencyPropagation` (`crates/substrate/nomos-analysis/src/propagation.rs`) is not
+ordinary internal plumbing. Its module doc names it as the mechanism `D-130` marks an XVPE
+candidate, deliberately kept free of fact-identity vocabulary per `D-135` and `D-138` so a
+later move is a rename rather than a rewrite. `LocalGraphPropagation` is its only
+implementation today — a population of one, the same shape `D-122` and `D-130` already name
+as the reason no second implementation exists yet, and the same shape this workspace has
+repeatedly declined to design ahead of elsewhere (`OD-PACKAGE-006`, `OD-PACKAGE-008`,
+`OD-RULES-007`). Two fixes are available and neither is free of that risk:
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#12
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Why It Is Deferred Rather Than Fixed Here · hash: sha256:1416b58728b0c57d0ac49d05296f3876c57de47bed26eb757ed3c638162b80cc*
+
+- **Change `Spread`'s own signature** so an implementation is not handed a borrow that
+  conflicts with `Invalidate`'s need for `&mut self` — for example, taking ownership of
+  `dependents`, or returning a reachable set rather than calling back into the store at all.
+  This is exactly the seam `D-130` cares about matching against a second real party before
+  it is redesigned; changing it now would be shaping the interface from the one
+  implementation that exists, not from evidence a second one disagrees with it.
+- **Restructure `Invalidate` into two passes without touching `DependencyPropagation` at
+  all** — collect the reachable digests under the existing borrow, drop it, then mutate.
+  This does not touch the seam and is a real candidate for a future item, but it is its own
+  scoped correction with its own risk (the callback's early-decline semantics, tested in
+  `propagation.rs`'s own suite, would need to survive being split across two passes) and is
+  not something this record's job is to design inline.
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#13
+
+*revision: authored · kind: heading · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Would Decide It · hash: sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658*
+
+## What Would Decide It
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#14
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Would Decide It · hash: sha256:edb612ef0f2179a68df9903b5f417d9c1c4f248c9a7f25f6cef1b07160590397*
+
+Either of:
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#15
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Would Decide It · hash: sha256:b8652aff9a334f3f8fece5c8c712ff6033d9961fa975316bc2c4bfcf4433f66f*
+
+- **A second real `DependencyPropagation` implementation.** Its own shape would show
+  whether `Spread`'s signature is what forces the clone, or whether the clone is an
+  accident of how `LocalGraphPropagation` alone was integrated — the same evidence bar
+  `D-130`'s own adoption trigger already names.
+- **Measured evidence the cost is live in a real run** — a corpus and an edit-invalidate
+  workload large enough that this clone shows up the way `OD-ANALYSIS-001`'s snapshot
+  component did, rather than argued from complexity alone.
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#16
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / What Would Decide It · hash: sha256:01ed0676c7a8b0c8bad530ea4e189f84106a0b468e4ccb615f193caa0b0e7563*
+
+Until either arrives, the clone stands as a named, accepted cost rather than a silent one.
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#17
+
+*revision: authored · kind: heading · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#18
+
+*revision: authored · kind: prose · heading: Invalidate clones the whole dependents map on every call, and the fix is deferred until a second propagation implementation exists / Status · hash: sha256:1c0053458af95466b149a8820f8bca9d3d398af2dad6e2404ba46a69150a605d*
+
+Open. Revisit when a second `DependencyPropagation` implementation exists to check the
+seam's shape against, or when a real workload measures this clone's cost rather than its
+complexity.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 

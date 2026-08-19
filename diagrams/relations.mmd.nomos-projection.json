@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:cf3512f03dc56e480cd6feed65f511294038feaedf452f5b5a13d16977e124fd",
-  "inputs_digest": "sha256:00dd1655def5aee7f340d4e9b48aa135dd17eb6bb30f57c41d2ea98bd250d6c5",
+  "content_digest": "sha256:285d95965a11e76172722166390841cb38e902d48fae783eddbe0bb4dd3ff118",
+  "inputs_digest": "sha256:ed6fc812c1591bb4a3473bd3979534e865ff18294d0415378538d1c57e6d8013",
   "sections": [
     [
       "Relations",
-      926
+      936
     ],
     [
       "Decisions",
-      130
+      131
     ]
   ],
   "inputs": [
@@ -275,6 +275,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to D-132",
       "hash": "sha256:f384bb2996fa7794ea819defc1efba71c0e4ffe23ca01a10be2e5940bb727fe7"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-ANALYSIS-008",
+      "hash": "sha256:9ee3e16db3025e256c61e15d203219ed751a3c86232e80e241c237ee4b0077e3"
     },
     {
       "content": "relations",
@@ -588,6 +593,11 @@
     },
     {
       "content": "relations",
+      "identity": "D-130 relates-to OD-ANALYSIS-008",
+      "hash": "sha256:8dae3f8063a1d76e845432da3f1a3acadac75b6979274418f1a4ff39976117fa"
+    },
+    {
+      "content": "relations",
       "identity": "D-130 relates-to OD-PLATFORM-001",
       "hash": "sha256:4ec9c0a647888b21f06c37b733afc7a9316dfeb185b07a3b54cdc226c55155e0"
     },
@@ -768,6 +778,11 @@
     },
     {
       "content": "relations",
+      "identity": "D-135 relates-to OD-ANALYSIS-008",
+      "hash": "sha256:c49d67fe1b99f43bbee3ae7f4edd42c5f9acd7e7cdad5e553fa1f20e292042d0"
+    },
+    {
+      "content": "relations",
       "identity": "D-135 relates-to OD-CAPABILITY-007",
       "hash": "sha256:b10cbd57705bc52b18b12f54c56d616a6ca88a66de08f1111bead12386c8f228"
     },
@@ -865,6 +880,11 @@
       "content": "relations",
       "identity": "D-138 relates-to D-135",
       "hash": "sha256:0b95e4ed5e5079e9c6b6dbbc31eba8f7bd9de1481d05be91f4846df33bac4fe5"
+    },
+    {
+      "content": "relations",
+      "identity": "D-138 relates-to OD-ANALYSIS-008",
+      "hash": "sha256:fbf30386e1c82552cc625eee665d1581f82e3fb922d0f013f326c9d232a10107"
     },
     {
       "content": "relations",
@@ -988,6 +1008,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-ANALYSIS-002 relates-to OD-ANALYSIS-008",
+      "hash": "sha256:95473d80d99206a99621a776dfe12c21cc9852565347b279aade8ead86365e58"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ANALYSIS-002 relates-to OD-CAPABILITY-002",
       "hash": "sha256:51f10834cce03a375ef5373aa6056bd14c03166275250bf458982b17e7f9d75e"
     },
@@ -1105,6 +1130,31 @@
       "content": "relations",
       "identity": "OD-ANALYSIS-007 relates-to OD-RULES-007",
       "hash": "sha256:2ce06bca506bf8b286da7ed0a6c81563087bb15db2863987f78c1209a4c0714c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-008 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:e514d308636b8a4c9e882d14896733f67bb14d7f901befb2347db87a15294f68"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-008 relates-to D-130",
+      "hash": "sha256:48ca9786340c7604fc9e60fe46783a34317bdedddc3eae6201996f6e20430322"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-008 relates-to D-135",
+      "hash": "sha256:62c6b685322b79447de70a5cc6798cea2cff7406fdb7be5591f3a94a83eb36d7"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-008 relates-to D-138",
+      "hash": "sha256:fea4452badec89585e9f4bdd33af15fc08a7ea7f6318fa6c4142018e2d30c2ac"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-008 relates-to OD-ANALYSIS-002",
+      "hash": "sha256:8be99636eefe6aa45f9cb5592a88d0c4032a5c56b1eaead08da5294db8f9e987"
     },
     {
       "content": "relations",
@@ -4745,6 +4795,11 @@
       "content": "nodes",
       "identity": "OD-ANALYSIS-007",
       "hash": "sha256:00acf6428f22967cec19c4be441370a56c5280ec19b66d35e1b3101141008582"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-ANALYSIS-008",
+      "hash": "sha256:3198994eae9b057968283b690a23e81fee072eff666c36116bbddbead13c1f7a"
     },
     {
       "content": "nodes",

@@ -1,0 +1,3 @@
+# The registration for OD-ANALYSIS-008. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md

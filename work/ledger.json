@@ -18853,6 +18853,65 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P13-DEPENDENTS-CLONE-HAZARD",
+      "title": "MemoryFactStore::Invalidate clones the whole dependents map every call; the hazard is real and left deferred rather than silently unaddressed",
+      "why": "memory_store.rs:353 clones self.dependents (the reverse-dependency index over every fact this store has ever materialized a dependency edge for) on every single Invalidate call, regardless of how much of the graph that invalidation actually reaches. The comment right above it explains why -- DependencyPropagation::Spread takes an immutable &BTreeMap while its own on_reach callback needs &mut self for Invalidate_One and self.keys, a live conflict the borrow checker refuses without either cloning or restructuring the call -- but nothing records this as a measured, deliberately-accepted cost the way ARC-ROADMAP-001 already does in aggregate for six other confirmed nomos-analysis hazards. This session traced it to ground: it is real, it is O(the whole store's dependents map) per invalidation rather than O(what that invalidation reaches), and DependencyPropagation is a population-of-one seam (D-130/D-135/D-138) this workspace has already declined to redesign ahead of a second real implementation.",
+      "done_when": "A new OD-ANALYSIS decision record states the hazard, why the clone exists (the borrow conflict), what was considered, and a concrete trigger for revisiting it (a second real DependencyPropagation implementation, or measured evidence the cost is live in a real run) -- registered as governing, related to ARC-ROADMAP-001, D-130, D-135 and D-138, with diagram-set and domain-specification re-rendered fresh from the publishing record set.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md",
+          "crates/spec/nomos-spec-store/records/OD-ANALYSIS-008.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Should_Be_Findable_By_Its_Content ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-24e890adbbdbd7ff.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-03e4f2f6b2b5235a.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-6f45b4c663e8f582.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-cccb4093ee8d4117.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-c30a05f2ef47daed.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-50863f332dc9a75e.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-06bc2ccbc9aebf45.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-f701bf4e7baf7e3d.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-e9fd68fc190e7ac8.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-9a4c16cab1f4ab9b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-ee111bd537ecd137.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-2919ec68747ddb5b.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-99272398d303e3e7.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-756fcac740cd78ad.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-259eb839edee86c9.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1787160496,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c8e260fbf8b43bf43e3d333a47c375c673fbae98"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
